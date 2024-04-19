@@ -89,7 +89,7 @@ namespace sdr::properties
                                 }
                                 else
                                 {
-                                    moItemSet->MergeValue(rSet.Get(nWhich), true);
+                                    moItemSet->MergeValue(rSet.Get(nWhich));
                                 }
                             }
 

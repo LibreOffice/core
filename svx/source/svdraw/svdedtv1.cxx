@@ -927,12 +927,12 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                 if(SfxItemState::INVALID == aIter.GetItemState(false))
                     rAttr.InvalidateItem(nWhich);
                 else
-                    rAttr.MergeValue(rSet.Get(nWhich), true);
+                    rAttr.MergeValue(rSet.Get(nWhich));
             }
             else if(SfxItemState::SET == aIter.GetItemState(false))
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
-                rAttr.MergeValue(rItem, true);
+                rAttr.MergeValue(rItem);
             }
 
             if (comphelper::LibreOfficeKit::isActive())

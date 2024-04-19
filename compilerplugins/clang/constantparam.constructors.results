@@ -1,40 +1,44 @@
-accessibility/source/extended/AccessibleBrowseBoxHeaderCell.cxx:120
+accessibility/source/extended/AccessibleBrowseBoxHeaderCell.cxx:116
     class tools::Rectangle getRectangle(class vcl::IAccessibleTableProvider *,int,_Bool,_Bool)
     _Bool _bRowBar
     isRowBarCell()
-basctl/source/inc/dlged.hxx:202
+basctl/source/inc/dlged.hxx:201
     void basctl::DlgEditor::printPage(int,class Printer *,const class rtl::OUString &)
     const class rtl::OUString & 
     CreateQualifiedName()
 basic/inc/sbobjmod.hxx:88
     void SbUserFormModuleInstance::SbUserFormModuleInstance(class SbUserFormModule *,const class rtl::OUString &,const struct com::sun::star::script::ModuleInfo &,_Bool)
     _Bool bIsVBACompat
-    IsVBACompat()
-binaryurp/source/bridge.hxx:102
+    IsVBASupport()
+basic/source/sbx/sbxexec.cxx:234
+    class tools::SvRef<class SbxVariable> Assign(class SbxObject *,class SbxObject *,const char16_t **,_Bool)
+    _Bool bCompatible
+    IsOptionCompatible()
+binaryurp/source/bridge.hxx:103
     class com::sun::star::uno::UnoInterfaceReference binaryurp::Bridge::registerIncomingInterface(const class rtl::OUString &,const class com::sun::star::uno::TypeDescription &)
     const class rtl::OUString & oid
     readOid()
-bridges/source/jni_uno/nativethreadpool.cxx:40
-    void (anonymous namespace)::Pool::Pool(const class rtl::Reference<class jvmaccess::VirtualMachine> &,struct _jmethodID *,struct _uno_ThreadPool *)
+bridges/source/jni_uno/nativethreadpool.cxx:41
+    void (anonymous namespace)::Pool::Pool(class rtl::Reference<class jvmaccess::VirtualMachine>,struct _jmethodID *,struct _uno_ThreadPool *)
     struct _uno_ThreadPool * thePool
     uno_threadpool_create()
-chart2/source/controller/inc/CommandDispatchContainer.hxx:81
-    void chart::CommandDispatchContainer::setChartDispatch(const class com::sun::star::uno::Reference<class com::sun::star::frame::XDispatch> &,const class o3tl::sorted_vector<class rtl::OUString, struct std::less<class rtl::OUString>, find_unique, true> &)
-    const class o3tl::sorted_vector<class rtl::OUString, struct std::less<class rtl::OUString>, find_unique, true> & rChartCommands
-    impl_getAvailableCommands()
-chart2/source/view/axes/VCartesianAxis.cxx:416
+chart2/source/view/axes/VCartesianAxis.cxx:408
     class rtl::OUString getTextLabelString(const class chart::FixedNumberFormatter &,const class com::sun::star::uno::Sequence<class rtl::OUString> *,const struct chart::TickInfo *,_Bool,class Color &,_Bool &)
     _Bool bComplexCat
     isComplexCategoryAxis()
+chart2/source/view/inc/ShapeFactory.hxx:83
+    class rtl::Reference<class SvxShapeGroup> chart::ShapeFactory::createGroup2D(const class rtl::Reference<class SvxDrawPage> &,const class rtl::OUString &)
+    const class rtl::OUString & aName
+    ""
 connectivity/inc/sdbcx/VKeyColumn.hxx:37
     void connectivity::sdbcx::OKeyColumn::OKeyColumn(_Bool)
     _Bool _bCase
     isCaseSensitive()
 connectivity/inc/sdbcx/VKeyColumn.hxx:38
-    void connectivity::sdbcx::OKeyColumn::OKeyColumn(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,int,_Bool,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    void connectivity::sdbcx::OKeyColumn::OKeyColumn(class rtl::OUString,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,int,_Bool,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     _Bool _bCase
     isCaseSensitive()
-connectivity/source/commontools/TColumnsHelper.cxx:47
+connectivity/source/commontools/TColumnsHelper.cxx:45
     void connectivity::OColumnsHelperImpl::OColumnsHelperImpl(_Bool)
     _Bool _bCase
     isCaseSensitive()
@@ -46,6 +50,14 @@ connectivity/source/drivers/evoab2/NTable.hxx:34
     void connectivity::evoab::OEvoabTable::OEvoabTable(class connectivity::sdbcx::OCollection *,class connectivity::evoab::OEvoabConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & CatalogName
     ""
+connectivity/source/drivers/firebird/View.hxx:27
+    void connectivity::firebird::View::View(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
+    _Bool _bCaseSensitive
+    isCaseSensitive()
+connectivity/source/drivers/mysqlc/mysqlc_view.hxx:38
+    void connectivity::mysqlc::View::View(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
+    _Bool _bCaseSensitive
+    isCaseSensitive()
 connectivity/source/inc/calc/CTable.hxx:55
     void connectivity::calc::OCalcTable::OCalcTable(class connectivity::sdbcx::OCollection *,class connectivity::calc::OCalcConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & Description
@@ -86,23 +98,31 @@ connectivity/source/inc/hsqldb/HView.hxx:40
     void connectivity::hsqldb::HView::HView(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
     _Bool _bCaseSensitive
     isCaseSensitive()
-connectivity/source/inc/OColumn.hxx:67
-    void connectivity::OColumn::OColumn(const class rtl::OUString &,const class rtl::OUString &,int,int,int,int,int)
-    const class rtl::OUString & _aTableName
+connectivity/source/inc/OColumn.hxx:68
+    void connectivity::OColumn::OColumn(class rtl::OUString,const class rtl::OUString &,int,int,int,int,int)
+    class rtl::OUString _aTableName
     ""
-connectivity/source/manager/mdrivermanager.cxx:144
+connectivity/source/manager/mdrivermanager.cxx:140
     const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDriver> & drivermanager::(anonymous namespace)::ExtractDriverFromAccess::operator()(const struct drivermanager::DriverAccess &) const
     const struct drivermanager::DriverAccess & _rAccess
     ExtractDriverFromAccess()
-connectivity/source/manager/mdrivermanager.cxx:152
+connectivity/source/manager/mdrivermanager.cxx:148
     const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDriver> & drivermanager::(anonymous namespace)::ExtractDriverFromCollectionElement::operator()(const struct std::pair<const class rtl::OUString, class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDriver> > &) const
     const struct std::pair<const class rtl::OUString, class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDriver> > & _rElement
     ExtractDriverFromCollectionElement()
-dbaccess/source/core/api/RowSetRow.hxx:39
-    void dbaccess::ORowSetOldRowHelper::ORowSetOldRowHelper(const class rtl::Reference<class connectivity::ORowVector<class connectivity::ORowSetValue> > &)
-    const class rtl::Reference<class connectivity::ORowVector<class connectivity::ORowSetValue> > & _rRow
+cppuhelper/inc/compbase2.hxx:71
+    class com::sun::star::uno::Any WeakComponentImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class cppuhelper::WeakComponentImplHelperBase2 *)
+    struct cppu::class_data * cd
+    class_data_get()
+cui/inc/dlgname.hxx:39
+    void SvxNameDialog::SvxNameDialog(class weld::Window *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    const class rtl::OUString & rTitle
+    ""
+dbaccess/source/core/api/RowSetRow.hxx:40
+    void dbaccess::ORowSetOldRowHelper::ORowSetOldRowHelper(class rtl::Reference<class connectivity::ORowVector<class connectivity::ORowSetValue> >)
+    class rtl::Reference<class connectivity::ORowVector<class connectivity::ORowSetValue> > _aRow
     ORowSetRow()
-dbaccess/source/core/inc/ModelImpl.hxx:311
+dbaccess/source/core/inc/ModelImpl.hxx:374
     void dbaccess::ODatabaseModelImpl::modelIsDisposing(const _Bool,struct dbaccess::ODatabaseModelImpl::ResetModelAccess)
     const _Bool _wasInitialized
     impl_isInitialized()
@@ -119,18 +139,18 @@ dbaccess/source/ui/inc/indexes.hxx:74
     const struct dbaui::GrantIndexAccess & 
     GrantIndexAccess()
 dbaccess/source/ui/inc/sqlmessage.hxx:88
-    void dbaui::OSQLMessageBox::OSQLMessageBox(class weld::Window *,const class dbtools::SQLExceptionInfo &,enum dbaui::MessBoxStyle,const class rtl::OUString &)
-    const class rtl::OUString & _rHelpURL
+    void dbaui::OSQLMessageBox::OSQLMessageBox(class weld::Window *,const class dbtools::SQLExceptionInfo &,enum dbaui::MessBoxStyle,class rtl::OUString)
+    class rtl::OUString _sHelpURL
     ""
 dbaccess/source/ui/inc/TableCopyHelper.hxx:98
-    void dbaui::OTableCopyHelper::pasteTable(const class TransferableDataHelper &,class std::basic_string_view<char16_t, struct std::char_traits<char16_t> >,const class utl::SharedUNOComponent<class com::sun::star::sdbc::XConnection, class utl::DisposableComponent> &)
-    const class utl::SharedUNOComponent<class com::sun::star::sdbc::XConnection, class utl::DisposableComponent> & _xConnection
+    void dbaui::OTableCopyHelper::pasteTable(const class TransferableDataHelper &,class std::basic_string_view<char16_t>,const class utl::SharedUNOComponent<class com::sun::star::sdbc::XConnection> &)
+    const class utl::SharedUNOComponent<class com::sun::star::sdbc::XConnection> & _xConnection
     ensureConnection()
 dbaccess/source/ui/inc/TableWindowData.hxx:65
     _Bool dbaui::OTableWindowData::init(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool)
     _Bool _bAllowQueries
     allowQueries()
-dbaccess/source/ui/inc/WCPage.hxx:56
+dbaccess/source/ui/inc/WCPage.hxx:55
     void dbaui::OCopyTable::OCopyTable(class weld::Container *,class dbaui::OCopyTableWizard *)
     class weld::Container * pParent
     CreatePageContainer()
@@ -139,30 +159,34 @@ dbaccess/source/ui/uno/copytablewizard.cxx:196
     const class dbaui::OCopyTableWizard & _rDialog
     impl_getDialog_throw()
 desktop/source/deployment/gui/dp_gui_dependencydialog.hxx:38
-    void dp_gui::DependencyDialog::DependencyDialog(class weld::Window *,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
+    void dp_gui::DependencyDialog::DependencyDialog(class weld::Window *,const class std::vector<class rtl::OUString> &)
     class weld::Window * parent
     activeDialog()
-desktop/source/deployment/inc/dp_interact.h:57
+desktop/source/deployment/inc/dp_interact.h:58
     void dp_misc::ProgressLevel::update(const class com::sun::star::uno::Any &) const
     const class com::sun::star::uno::Any & status
     Any()
-editeng/source/editeng/impedit3.cxx:152
-    void lcl_DrawRedLines(class OutputDevice *,long,const class Point &,unsigned long,unsigned long,const long *,const class WrongList *,struct o3tl::strong_int<short, struct Degree10Tag>,const class Point &,_Bool,_Bool)
+editeng/source/editeng/impedit3.cxx:145
+    void lcl_DrawRedLines(class OutputDevice &,long,const class Point &,unsigned long,unsigned long,class std::span<const int>,const class WrongList *,struct o3tl::strong_int<short, struct FractionTag<10> >,const class Point &,_Bool,_Bool)
     _Bool bVertical
-    IsVertical()
-editeng/source/misc/svxacorr.cxx:2807
+    IsEffectivelyVertical()
+editeng/source/misc/svxacorr.cxx:2899
     _Bool SvxAutocorrWordList::CompareSvxAutocorrWordList::operator()(const class SvxAutocorrWord &,const class SvxAutocorrWord &) const
     const class SvxAutocorrWord & lhs
     CompareSvxAutocorrWordList()
-emfio/inc/mtftools.hxx:663
+emfio/inc/mtftools.hxx:782
+    void emfio::MtfTools::DrawRoundRect(const class tools::Rectangle &,const class Size &)
+    const class tools::Rectangle & rRect
+    ReadRectangle()
+emfio/inc/mtftools.hxx:820
     void emfio::MtfTools::ExcludeClipRect(const class tools::Rectangle &)
     const class tools::Rectangle & rRect
     ReadRectangle()
-extensions/source/dbpilots/controlwizard.hxx:110
+extensions/source/dbpilots/controlwizard.hxx:109
     _Bool dbp::OControlWizard::updateContext(const struct dbp::OAccessRegulator &)
     const struct dbp::OAccessRegulator & 
     OAccessRegulator()
-extensions/source/dbpilots/controlwizard.hxx:111
+extensions/source/dbpilots/controlwizard.hxx:110
     void dbp::OControlWizard::setFormConnection(const struct dbp::OAccessRegulator &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool)
     const struct dbp::OAccessRegulator & 
     OAccessRegulator()
@@ -182,28 +206,28 @@ extensions/source/logging/filehandler.cxx:111
     void logging::(anonymous namespace)::FileHandler::leaveMethod(class logging::ComponentMethodGuard<class logging::(anonymous namespace)::FileHandler>::Access)
     class logging::ComponentMethodGuard<class logging::(anonymous namespace)::FileHandler>::Access 
     Access()
-extensions/source/propctrlr/fontdialog.hxx:35
+extensions/source/propctrlr/fontdialog.hxx:36
     void pcr::ControlCharacterDialog::ControlCharacterDialog(class weld::Window *,const class SfxItemSet &)
     class weld::Window * pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     class weld::Window * _pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     const class rtl::OUString & _sExplanation
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & _sDetailLabel
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    class rtl::OUString _sDetailLabel
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & _sMasterLabel
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    class rtl::OUString _sMasterLabel
     ""
 extensions/source/propctrlr/listselectiondlg.hxx:37
-    void pcr::ListSelectionDialog::ListSelectionDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const class rtl::OUString &)
+    void pcr::ListSelectionDialog::ListSelectionDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,class rtl::OUString,const class rtl::OUString &)
     class weld::Window * _pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/taborder.hxx:58
@@ -214,34 +238,46 @@ extensions/source/propctrlr/taborder.hxx:58
     void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
     const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> & _rxControlCont
     impl_getContextControlContainer_nothrow()
+extensions/source/update/check/updatecheck.hxx:146
+    _Bool UpdateCheck::storeReleaseNote(signed char,const class rtl::OUString &)
+    const class rtl::OUString & rURL
+    ""
 extensions/source/update/check/updateprotocol.hxx:33
     _Bool checkForUpdates(struct UpdateInfo &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XInteractionHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> &)
     const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> & rxProvider
     createProvider()
-forms/source/component/ListBox.cxx:1541
-    class com::sun::star::uno::Any lcl_getSingleSelectedEntryAny(const class com::sun::star::uno::Sequence<short> &,const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > &)
-    const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > & _rStringList
+forms/source/component/ListBox.cxx:1549
+    class com::sun::star::uno::Any lcl_getSingleSelectedEntryAny(const class com::sun::star::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
+    const class std::vector<class connectivity::ORowSetValue> & _rStringList
     impl_getValues()
-forms/source/component/ListBox.cxx:1557
-    class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> lcl_getMultiSelectedEntriesAny(const class com::sun::star::uno::Sequence<short> &,const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > &)
-    const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > & _rStringList
+forms/source/component/ListBox.cxx:1565
+    class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> lcl_getMultiSelectedEntriesAny(const class com::sun::star::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
+    const class std::vector<class connectivity::ORowSetValue> & _rStringList
     impl_getValues()
 forms/source/xforms/computedexpression.hxx:74
     _Bool xforms::ComputedExpression::_evaluate(const class xforms::EvaluationContext &,const class rtl::OUString &)
     const class rtl::OUString & sExpression
     _getExpressionForEvaluation()
-idl/inc/parser.hxx:66
+idl/inc/parser.hxx:65
     void SvIdlParser::Read(const class SvStringHashEntry *)
     const class SvStringHashEntry * 
     SvHash_module()
-include/avmedia/mediaplayer.hxx:51
+include/avmedia/mediaplayer.hxx:49
     void avmedia::MediaFloater::setURL(const class rtl::OUString &,const class rtl::OUString &,_Bool)
     const class rtl::OUString & rReferer
     ""
-include/basic/basmgr.hxx:138
-    void BasicManager::BasicManager(class SotStorage &,const class rtl::OUString &,class StarBASIC *,const class rtl::OUString *,_Bool)
-    const class rtl::OUString & rBaseURL
-    ""
+include/basegfx/utils/bgradient.hxx:41
+    void basegfx::BColorStop::BColorStop(const class basegfx::BColorStop &)
+    const class basegfx::BColorStop & 
+    front()
+include/comphelper/compbase.hxx:117
+    class com::sun::star::uno::Any WeakComponentImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class comphelper::WeakComponentImplHelperBase *)
+    struct cppu::class_data * cd
+    class_data_get()
+include/comphelper/compbase.hxx:174
+    class com::sun::star::uno::Any WeakImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class comphelper::WeakImplHelperBase *)
+    struct cppu::class_data * cd
+    class_data_get()
 include/comphelper/propertybag.hxx:107
     void comphelper::PropertyBag::addVoidProperty(const class rtl::OUString &,const class com::sun::star::uno::Type &,int,int)
     int _nHandle
@@ -254,27 +290,27 @@ include/connectivity/dbtools.hxx:181
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> getConnection_withFeedback(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &)
     const class rtl::OUString & _rPwd
     ""
-include/connectivity/dbtools.hxx:699
+include/connectivity/dbtools.hxx:703
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> createSDBCXColumn(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class rtl::OUString &,_Bool,_Bool,_Bool,_Bool,int)
     _Bool _bCase
     isCaseSensitive()
-include/connectivity/PColumn.hxx:126
+include/connectivity/PColumn.hxx:124
     void connectivity::parse::OOrderColumn::OOrderColumn(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,_Bool,_Bool)
     _Bool _bCase
     isCaseSensitive()
-include/connectivity/PColumn.hxx:133
+include/connectivity/PColumn.hxx:131
     void connectivity::parse::OOrderColumn::OOrderColumn(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool)
     _Bool _bCase
     isCaseSensitive()
-include/connectivity/sdbcx/VView.hxx:65
-    void connectivity::sdbcx::OView::OView(_Bool,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDatabaseMetaData> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & _rCommand
+include/connectivity/sdbcx/VView.hxx:64
+    void connectivity::sdbcx::OView::OView(_Bool,const class rtl::OUString &,class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDatabaseMetaData>,class rtl::OUString,class rtl::OUString,class rtl::OUString)
+    class rtl::OUString _sCommand
     ""
-include/drawinglayer/tools/primitive2dxmldump.hxx:42
+include/drawinglayer/tools/primitive2dxmldump.hxx:45
     class std::unique_ptr<struct _xmlDoc, struct xmlDocDeleter> drawinglayer::Primitive2dXmlDump::dumpAndParse(const class drawinglayer::primitive2d::Primitive2DContainer &,const class rtl::OUString &)
     const class rtl::OUString & rStreamName
     ""
-include/editeng/editview.hxx:358
+include/editeng/editview.hxx:387
     void EditView::InitLOKSpecialPositioning(enum MapUnit,const class tools::Rectangle &,const class Point &)
     const class Point & rVisDocStartPos
     Point()
@@ -282,35 +318,35 @@ include/editeng/scripttypeitem.hxx:36
     const class SfxPoolItem * SvxScriptSetItem::GetItemOfScript(unsigned short,const class SfxItemSet &,enum SvtScriptType)
     unsigned short nSlotId
     Which()
-include/editeng/svxacorr.hxx:47
-    _Bool CompareSvStringsISortDtor::operator()(const class rtl::OUString &,class std::basic_string_view<char16_t, struct std::char_traits<char16_t> >) const
-    const class rtl::OUString & lhs
+include/editeng/svxacorr.hxx:50
+    _Bool CompareSvStringsISortDtor::operator()(class std::basic_string_view<char16_t>,class std::basic_string_view<char16_t>) const
+    class std::basic_string_view<char16_t> lhs
     Compare()
-include/editeng/swafopt.hxx:47
+include/editeng/swafopt.hxx:48
     _Bool editeng::CompareAutoCompleteString::operator()(class editeng::IAutoCompleteString *const &,class editeng::IAutoCompleteString *const &) const
     class editeng::IAutoCompleteString *const & lhs
     Compare()
-include/formula/FormulaCompiler.hxx:292
-    void formula::FormulaCompiler::fillAddInToken(class std::__debug::vector<struct com::sun::star::sheet::FormulaOpCodeMapEntry, class std::allocator<struct com::sun::star::sheet::FormulaOpCodeMapEntry> > &,_Bool) const
+include/formula/FormulaCompiler.hxx:342
+    void formula::FormulaCompiler::fillAddInToken(class std::vector<struct com::sun::star::sheet::FormulaOpCodeMapEntry> &,_Bool) const
     _Bool _bIsEnglish
     isEnglish()
-include/o3tl/sorted_vector.hxx:331
-    _Bool o3tl::less_ptr_to::operator()(type-parameter-?-? *const &,type-parameter-?-? *const &) const
-    type-parameter-?-? *const & lhs
-    Compare()
-include/o3tl/sorted_vector.hxx:339
-    _Bool o3tl::less_uniqueptr_to::operator()(const unique_ptr<type-parameter-?-?, default_delete<type-parameter-?-?> > &,const unique_ptr<type-parameter-?-?, default_delete<type-parameter-?-?> > &) const
-    const unique_ptr<type-parameter-?-?, default_delete<type-parameter-?-?> > & lhs
-    Compare()
-include/o3tl/sorted_vector.hxx:353
-    pair<typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_unique, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator, _Bool> o3tl::find_unique::operator()(typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_unique, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator,typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_unique, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator,const type-parameter-?-? &)
-    typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_unique, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator first
+include/i18nutil/searchopt.hxx:116
+    void i18nutil::SearchOptions2::SearchOptions2(const int,class rtl::OUString,class rtl::OUString,struct com::sun::star::lang::Locale,const int,const int,const int,const enum TransliterationFlags &,const short,const int)
+    class rtl::OUString replaceString_
+    ""
+include/o3tl/sorted_vector.hxx:30
+    auto o3tl::find_unique::operator()(type-parameter-?-?,type-parameter-?-?,const type-parameter-?-? &)
+    type-parameter-?-? first
     Find_t()
-include/o3tl/sorted_vector.hxx:370
-    pair<typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_partialorder_ptrequals, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator, _Bool> o3tl::find_partialorder_ptrequals::operator()(typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_partialorder_ptrequals, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator,typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_partialorder_ptrequals, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator,const type-parameter-?-? &)
-    typename sorted_vector<type-parameter-?-?, type-parameter-?-?, find_partialorder_ptrequals, std::is_copy_constructible<type-parameter-?-?>::value>::const_iterator first
+include/o3tl/sorted_vector.hxx:318
+    _Bool o3tl::less_ptr_to::operator()(const type-parameter-?-? &,const type-parameter-?-? &) const
+    const type-parameter-?-? & lhs
+    Compare()
+include/o3tl/sorted_vector.hxx:330
+    auto o3tl::find_partialorder_ptrequals::operator()(type-parameter-?-?,type-parameter-?-?,const type-parameter-?-? &)
+    type-parameter-?-? first
     Find_t()
-include/oox/helper/attributelist.hxx:143
+include/oox/helper/attributelist.hxx:145
     class rtl::OUString oox::AttributeList::getXString(int,const class rtl::OUString &) const
     const class rtl::OUString & rDefault
     ""
@@ -318,130 +354,146 @@ include/oox/mathml/importutils.hxx:212
     void oox::formulaimport::XmlStream::skipElementInternal(int,_Bool)
     int token
     currentToken()
-include/opencl/openclconfig.hxx:36
-    void OpenCLConfig::ImplMatcher::ImplMatcher(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & rOSVersion
+include/opencl/openclconfig.hxx:37
+    void OpenCLConfig::ImplMatcher::ImplMatcher(class rtl::OUString,class rtl::OUString,class rtl::OUString,class rtl::OUString,class rtl::OUString)
+    class rtl::OUString aOSVersion
     ""
-include/opencl/openclconfig.hxx:36
-    void OpenCLConfig::ImplMatcher::ImplMatcher(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & rDevice
+include/opencl/openclconfig.hxx:37
+    void OpenCLConfig::ImplMatcher::ImplMatcher(class rtl::OUString,class rtl::OUString,class rtl::OUString,class rtl::OUString,class rtl::OUString)
+    class rtl::OUString aDevice
     ""
 include/opencl/openclwrapper.hxx:61
     _Bool buildProgramFromBinary(const char *,struct openclwrapper::GPUEnv *,const char *,int)
     const char * buildOption
     ""
-include/registry/registry.hxx:409
+include/registry/registry.hxx:154
+    enum RegError Registry::destroy(const class rtl::OUString &)
+    const class rtl::OUString & registryName
+    ""
+include/registry/registry.hxx:391
     enum RegError RegistryKey::getKeyNames(const class rtl::OUString &,class RegistryKeyNames &)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:435
+include/registry/registry.hxx:414
     enum RegError RegistryKey::setValue(const class rtl::OUString &,enum RegValueType,void *,unsigned int)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:449
+include/registry/registry.hxx:428
     enum RegError RegistryKey::setLongListValue(const class rtl::OUString &,const int *,unsigned int)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:462
+include/registry/registry.hxx:441
     enum RegError RegistryKey::setStringListValue(const class rtl::OUString &,char **,unsigned int)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:475
+include/registry/registry.hxx:454
     enum RegError RegistryKey::setUnicodeListValue(const class rtl::OUString &,char16_t **,unsigned int)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:488
+include/registry/registry.hxx:467
     enum RegError RegistryKey::getValueInfo(const class rtl::OUString &,enum RegValueType *,unsigned int *)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:500
+include/registry/registry.hxx:479
     enum RegError RegistryKey::getValue(const class rtl::OUString &,void *)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:511
+include/registry/registry.hxx:490
     enum RegError RegistryKey::getLongListValue(const class rtl::OUString &,class RegistryValueList<int> &)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:522
+include/registry/registry.hxx:501
     enum RegError RegistryKey::getStringListValue(const class rtl::OUString &,class RegistryValueList<char *> &)
     const class rtl::OUString & keyName
     ""
-include/registry/registry.hxx:533
+include/registry/registry.hxx:512
     enum RegError RegistryKey::getUnicodeListValue(const class rtl::OUString &,class RegistryValueList<char16_t *> &)
     const class rtl::OUString & keyName
     ""
-include/registry/writer.hxx:72
-    void typereg::Writer::Writer(enum typereg_Version,const class rtl::OUString &,const class rtl::OUString &,enum RTTypeClass,_Bool,const class rtl::OUString &,unsigned short,unsigned short,unsigned short,unsigned short)
-    const class rtl::OUString & fileName
-    ""
-include/registry/writer.hxx:131
-    void typereg::Writer::setFieldData(unsigned short,const class rtl::OUString &,const class rtl::OUString &,enum RTFieldAccess,const class rtl::OUString &,const class rtl::OUString &,const class RTConstValue &)
-    const class rtl::OUString & fileName
-    ""
-include/sfx2/dinfdlg.hxx:86
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool)
+include/sfx2/dinfdlg.hxx:96
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
     _Bool bUseUserData
     IsUseUserData()
-include/sfx2/dinfdlg.hxx:86
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool)
+include/sfx2/dinfdlg.hxx:96
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
     _Bool bUseThumbnailSave
     IsUseThumbnailSave()
-include/sfx2/dinfdlg.hxx:385
+include/sfx2/dinfdlg.hxx:445
     void CustomPropertiesWindow::AddLine(const class rtl::OUString &,const class com::sun::star::uno::Any &)
     const class rtl::OUString & sName
     ""
-include/sfx2/docfile.hxx:257
+include/sfx2/docfile.hxx:276
     _Bool SfxMedium::SignContents_Impl(class weld::Window *,_Bool,_Bool,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &,const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &,const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &,const class rtl::OUString &)
     _Bool bHasValidDocumentSignature
     HasValidSignatures()
-include/sfx2/docfile.hxx:268
+include/sfx2/docfile.hxx:287
     _Bool SfxMedium::SignDocumentContentUsingCertificate(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &)
     _Bool bHasValidDocumentSignature
     HasValidSignatures()
-include/sfx2/lokhelper.hxx:112
-    void SfxLokHelper::notifyAllViews(int,const class rtl::OString &)
-    const class rtl::OString & rPayload
-    ""
-include/sfx2/objsh.hxx:648
-    void SfxObjectShell::DoDraw(class OutputDevice *,const class Point &,const class Size &,const class JobSetup &,unsigned short)
+include/sfx2/objsh.hxx:675
+    void SfxObjectShell::DoDraw(class OutputDevice *,const class Point &,const class Size &,const class JobSetup &,unsigned short,_Bool)
     const class JobSetup & rSetup
     JobSetup()
-include/sfx2/sfxhelp.hxx:40
-    _Bool SfxHelp::Start_Impl(const class rtl::OUString &,const class vcl::Window *,const class rtl::OUString &)
-    const class rtl::OUString & rKeyword
-    ""
-include/sfx2/sidebar/ResourceManager.hxx:94
-    void sfx2::sidebar::ResourceManager::StorePanelExpansionState(class std::basic_string_view<char16_t, struct std::char_traits<char16_t> >,const _Bool,const class sfx2::sidebar::Context &)
+include/sfx2/sidebar/ResourceManager.hxx:96
+    void sfx2::sidebar::ResourceManager::StorePanelExpansionState(class std::basic_string_view<char16_t>,const _Bool,const class sfx2::sidebar::Context &)
     const class sfx2::sidebar::Context & rContext
     maContextAccess()
+include/svl/itemprop.hxx:74
+    _Bool SfxItemPropertyMapCompare::operator()(const struct SfxItemPropertyMapEntry *,const struct SfxItemPropertyMapEntry *) const
+    const struct SfxItemPropertyMapEntry * lhs
+    Compare()
+include/svl/itemprop.hxx:170
+    _Bool SfxItemPropertyMapCompare2::operator()(const struct SfxItemPropertyMapEntry &,const struct SfxItemPropertyMapEntry &) const
+    const struct SfxItemPropertyMapEntry & lhs
+    Compare()
 include/svl/sharecontrolfile.hxx:62
     void svt::ShareControlFile::RemoveEntry(const class o3tl::enumarray<enum LockFileComponent, class rtl::OUString> &)
     const class o3tl::enumarray<enum LockFileComponent, class rtl::OUString> & aOptionalSpecification
     GenerateOwnEntry()
 include/svtools/ehdl.hxx:35
-    void SfxErrorContext::SfxErrorContext(unsigned short,class weld::Window *,const struct std::pair<const char *, class ErrCode> *,const class std::locale &)
+    void SfxErrorContext::SfxErrorContext(unsigned short,class weld::Window *,const struct std::pair<struct TranslateId, class ErrCode> *,const class std::locale &)
     const class std::locale & rResLocaleP
     SvtResLocale()
-include/svx/charmap.hxx:150
+include/svx/charmap.hxx:152
     void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
     int n1
     FirstInView()
-include/svx/charmap.hxx:150
+include/svx/charmap.hxx:152
     void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
     int n2
     LastInView()
-include/svx/colorwindow.hxx:114
-    void ColorWindow::ColorWindow(const class rtl::OUString &,const class std::shared_ptr<class PaletteManager> &,class ColorStatus &,unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,const class MenuOrToolMenuButton &,const class std::function<class weld::Window *(void)> &,const class std::function<void (const class rtl::OUString &, const struct std::pair<class Color, class rtl::OUString> &)> &)
-    const class rtl::OUString & rCommand
+include/svx/colorwindow.hxx:112
+    void ColorWindow::ColorWindow(class rtl::OUString,class std::shared_ptr<class PaletteManager>,class ColorStatus &,unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,const class MenuOrToolMenuButton &,class std::function<class weld::Window *(void)>,class std::function<void (const class rtl::OUString &, const struct NamedColor &)>)
+    class rtl::OUString rCommand
     ""
-include/svx/svdtrans.hxx:63
+include/svx/hlnkitem.hxx:67
+    void SvxHyperlinkItem::SvxHyperlinkItem(class TypedWhichId<class SvxHyperlinkItem>,class rtl::OUString,class rtl::OUString,class rtl::OUString,class rtl::OUString,enum SvxLinkInsertMode,enum HyperDialogEvent,const class SvxMacroTableDtor *,class rtl::OUString)
+    class rtl::OUString aReplacementText
+    ""
+include/svx/svdtrans.hxx:49
     void RotateXPoly(class XPolyPolygon &,const class Point &,double,double)
     const class Point & rRef
     Point()
-include/unotools/wincodepage.hxx:31
-    unsigned short utl_getWinTextEncodingFromLangStr(const class rtl::OUString &,_Bool)
-    const class rtl::OUString & sLanguage
-    utl_getLocaleForGlobalDefaultEncoding()
+include/svx/unoshape.hxx:603
+    void SvxOle2Shape::SvxOle2Shape(class SdrObject *,class rtl::OUString)
+    class rtl::OUString referer
+    ""
+include/svx/xftshcit.hxx:37
+    void XFormTextShadowColorItem::XFormTextShadowColorItem(const class rtl::OUString &,const class Color &)
+    const class rtl::OUString & rName
+    ""
+include/svx/xsflclit.hxx:28
+    void XSecondaryFillColorItem::XSecondaryFillColorItem(const class rtl::OUString &,const class Color &)
+    const class rtl::OUString & rName
+    ""
+include/tools/bigint.hxx:48
+    void BigInt::MultBig(const class BigInt &,class BigInt &) const
+    const class BigInt & rB
+    MakeBig()
+include/unotools/charclass.hxx:157
+    struct com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(int,const class rtl::OUString &,int,int,const class rtl::OUString &,int,const class rtl::OUString &) const
+    const class rtl::OUString & userDefinedCharactersStart
+    ""
 include/vbahelper/vbahelper.hxx:119
     class rtl::OUString extractStringFromAny(const class com::sun::star::uno::Any &,const class rtl::OUString &,_Bool)
     const class rtl::OUString & rDefault
@@ -462,105 +514,97 @@ include/vcl/dockwin.hxx:50
     void EndDockingData::EndDockingData(const class tools::Rectangle &,_Bool,_Bool)
     _Bool bCancelled
     IsDockingCanceled()
-include/vcl/FilterConfigItem.hxx:79
+include/vcl/FilterConfigItem.hxx:81
     class rtl::OUString FilterConfigItem::ReadString(const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & rDefault
     ""
+include/vcl/glyphitemcache.hxx:98
+    unsigned long SalLayoutGlyphsCache::GlyphsCost::operator()(const class SalLayoutGlyphs &) const
+    const class SalLayoutGlyphs & 
+    ValueSize()
 include/vcl/graphictools.hxx:278
-    void SvtGraphicFill::SvtGraphicFill(const class tools::PolyPolygon &,class Color,double,enum SvtGraphicFill::FillRule,enum SvtGraphicFill::FillType,const struct SvtGraphicFill::Transform &,_Bool,enum SvtGraphicFill::HatchType,class Color,enum SvtGraphicFill::GradientType,class Color,class Color,int,const class Graphic &)
+    void SvtGraphicFill::SvtGraphicFill(class tools::PolyPolygon,class Color,double,enum SvtGraphicFill::FillRule,enum SvtGraphicFill::FillType,const struct SvtGraphicFill::Transform &,_Bool,enum SvtGraphicFill::HatchType,class Color,enum SvtGraphicFill::GradientType,class Color,class Color,int,class Graphic)
     class Color aFillColor
     Color()
-include/vcl/opengl/OpenGLHelper.hxx:54
-    int OpenGLHelper::LoadShaders(const class rtl::OUString &,const class rtl::OUString &,class std::basic_string_view<char, struct std::char_traits<char> >,class std::basic_string_view<char, struct std::char_traits<char> >)
-    class std::basic_string_view<char, struct std::char_traits<char> > rDigest
+include/vcl/opengl/OpenGLHelper.hxx:57
+    int OpenGLHelper::LoadShaders(const class rtl::OUString &,const class rtl::OUString &,class std::basic_string_view<char>,class std::basic_string_view<char>)
+    class std::basic_string_view<char> rDigest
     ""
-include/vcl/outdev.hxx:1589
-    class Bitmap OutputDevice::GetDownsampledBitmap(const class Size &,const class Point &,const class Size &,const class Bitmap &,long,long)
-    const class Point & rSrcPt
-    Point()
-include/vcl/print.hxx:640
+include/vcl/print.hxx:583
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setSubgroupControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rHelpId
     ""
-include/vcl/print.hxx:656
+include/vcl/print.hxx:599
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,int,const class com::sun::star::uno::Sequence<unsigned char> &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:667
+include/vcl/print.hxx:610
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:675
+include/vcl/print.hxx:618
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setEditControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/toolbox.hxx:420
+include/vcl/toolbox.hxx:410
     void ToolBox::SetHelpText(struct o3tl::strong_int<unsigned short, struct ToolBoxItemIdTag>,const class rtl::OUString &)
     const class rtl::OUString & rText
     ""
-include/vcl/toolkit/field.hxx:313
-    class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,const class rtl::OUString &,int,const class LocaleDataWrapper &)
+include/vcl/toolkit/field.hxx:320
+    class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,class std::basic_string_view<char16_t>,int,const class LocaleDataWrapper &)
     _Bool bDuration
     IsDuration()
-include/vcl/toolkit/field.hxx:313
-    class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,const class rtl::OUString &,int,const class LocaleDataWrapper &)
+include/vcl/toolkit/field.hxx:320
+    class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,class std::basic_string_view<char16_t>,int,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-include/vcl/toolkit/field.hxx:418
-    int DateFormatter::GetDateArea(enum ExtDateFieldFormat,const class rtl::OUString &,int,const class LocaleDataWrapper &)
+include/vcl/toolkit/field.hxx:426
+    int DateFormatter::GetDateArea(enum ExtDateFieldFormat &,class std::basic_string_view<char16_t>,int,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
 include/vcl/toolkit/svlbitm.hxx:115
-    void SvLBoxString::SvLBoxString(const class rtl::OUString &)
-    const class rtl::OUString & rText
+    void SvLBoxString::SvLBoxString(class rtl::OUString)
+    class rtl::OUString aText
     ""
 include/vcl/toolkit/unowrap.hxx:70
     class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> UnoWrapperBase::CreateAccessible(class Menu *,_Bool)
     _Bool bIsMenuBar
     IsMenuBar()
-include/vcl/transfer.hxx:320
+include/vcl/transfer.hxx:313
     class com::sun::star::uno::Any TransferableDataHelper::GetAny(enum SotClipboardFormatId,const class rtl::OUString &) const
     const class rtl::OUString & rDestDoc
     ""
-include/vcl/transfer.hxx:358
-    class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &)
-    const class rtl::OUString & rDestDoc
-    ""
-include/vcl/virdev.hxx:164
+include/vcl/virdev.hxx:128
     _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
-include/vcl/weld.hxx:635
-    void weld::ComboBoxEntry::ComboBoxEntry(const class rtl::OUString &)
-    const class rtl::OUString & rString
+include/vcl/weld.hxx:685
+    void weld::ComboBoxEntry::ComboBoxEntry(class rtl::OUString)
+    class rtl::OUString _aString
     ""
-include/vcl/weld.hxx:713
-    void weld::ComboBox::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
-    const class rtl::OUString & rId
-    ""
-include/vcl/weld.hxx:2334
+include/vcl/weld.hxx:2525
     void weld::Toolbar::append_separator(const class rtl::OUString &)
     const class rtl::OUString & rId
     ""
-include/xmloff/txtparae.hxx:407
+include/xmloff/txtparae.hxx:417
     void XMLTextParagraphExport::exportTextStyles(_Bool,_Bool)
     _Bool bProg
     IsShowProgress()
-include/xmloff/txtparae.hxx:457
+include/xmloff/txtparae.hxx:467
     void XMLTextParagraphExport::collectTextAutoStyles(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool)
     _Bool bIsProgress
     IsShowProgress()
-include/xmloff/txtparae.hxx:487
+include/xmloff/txtparae.hxx:497
     void XMLTextParagraphExport::exportText(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool)
     _Bool bIsProgress
     IsShowProgress()
-include/xmloff/xmlexp.hxx:279
-    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
-    const class rtl::OUString & implementationName
+include/xmloff/xmlexp.hxx:283
+    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
+    class rtl::OUString implementationName
     ""
-include/xmloff/xmlexp.hxx:279
-    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
-    const class rtl::OUString & rFileName
+include/xmloff/xmlexp.hxx:283
+    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
+    class rtl::OUString fileName
     ""
 include/xmloff/XMLFontStylesContext.hxx:51
     void XMLFontStylesContext::XMLFontStylesContext(class SvXMLImport &,unsigned short)
@@ -610,47 +654,59 @@ lotuswordpro/source/filter/lwpbreaksoverride.hxx:128
     void LwpBreaksOverride::OverrideUseNextStyle(_Bool)
     _Bool bVal
     IsUseNextStyle()
-opencl/source/opencl_device.cxx:432
-    void (anonymous namespace)::LogWriter::text(const class rtl::OString &)
-    const class rtl::OString & rText
+o3tl/qa/test-lru_map.cxx:312
+    unsigned long cost_is_value::operator()(int)
+    int i
+    ValueSize()
+opencl/source/opencl_device.cxx:430
+    void (anonymous namespace)::LogWriter::text(class std::basic_string_view<char>)
+    class std::basic_string_view<char> rText
     ""
-opencl/source/openclwrapper.cxx:707
-    struct _cl_device_id * findDeviceIdByDeviceString(class std::basic_string_view<char16_t, struct std::char_traits<char16_t> >,const class std::__debug::vector<struct OpenCLPlatformInfo, class std::allocator<struct OpenCLPlatformInfo> > &)
-    const class std::__debug::vector<struct OpenCLPlatformInfo, class std::allocator<struct OpenCLPlatformInfo> > & rPlatforms
+opencl/source/openclwrapper.cxx:704
+    struct _cl_device_id * findDeviceIdByDeviceString(class std::basic_string_view<char16_t>,const class std::vector<struct OpenCLPlatformInfo> &)
+    const class std::vector<struct OpenCLPlatformInfo> & rPlatforms
     fillOpenCLInfo()
 reportdesign/source/ui/dlg/Condition.hxx:129
     void rptui::Condition::setConditionIndex(unsigned long,unsigned long)
     unsigned long _nCondCount
     impl_getConditionCount()
-sal/qa/osl/file/osl_File.cxx:377
+sal/qa/osl/file/osl_File.cxx:373
     class rtl::OString outputError(const class rtl::OString &,const class rtl::OString &,const char *)
     const char * msg
     ""
-sc/inc/rangeseq.hxx:99
-    _Bool ScByteSequenceToString::GetString(class rtl::OUString &,const class com::sun::star::uno::Any &,unsigned short)
-    unsigned short nEncoding
-    osl_getThreadTextEncoding()
-sc/inc/table.hxx:788
+sc/inc/formularesult.hxx:44
+    void sc::FormulaResultValue::FormulaResultValue(class svl::SharedString,_Bool)
+    _Bool bMultiLine
+    IsMultiline()
+sc/inc/table.hxx:516
+    void ScTable::CommentNotifyAddressChange(short,int,short,int)
+    int nRow2
+    MaxRow()
+sc/inc/table.hxx:853
     void ScTable::SetOptimalHeightOnly(class sc::RowHeightContext &,int,int,class ScProgress *,unsigned long)
     int nEndRow
     MaxRow()
-sc/inc/typedstrdata.hxx:42
+sc/inc/typedstrdata.hxx:64
     _Bool ScTypedStrData::LessCaseInsensitive::operator()(const class ScTypedStrData &,const class ScTypedStrData &) const
     const class ScTypedStrData & left
     LessCaseInsensitive()
-sc/qa/extras/check_xcell_ranges_query.cxx:38
+sc/inc/viewopti.hxx:113
+    void ScViewOptions::SetGridColor(const class Color &,const class rtl::OUString &)
+    const class rtl::OUString & rName
+    ""
+sc/qa/extras/sccheck_xcell_ranges_query.cxx:36
     void sc_apitest::CheckXCellRangesQuery::_queryEmptyCells(const class rtl::OUString &)
     const class rtl::OUString & expected
     ""
-sc/qa/unit/helper/qahelper.hxx:193
-    class tools::SvRef<class ScDocShell> ScBootstrapFixture::saveAndReload(class ScDocShell *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum SfxFilterFlags,const class rtl::OUString *)
-    const class rtl::OUString & rUserData
+sc/qa/unit/helper/scfiltertestbase.hxx:54
+    class rtl::Reference<class ScDocShell> ScFilterTestBase::loadDoc(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum SfxFilterFlags,enum SotClipboardFormatId,int)
+    const class rtl::OUString & rTypeName
     ""
-sc/source/core/data/documen3.cxx:1755
+sc/source/core/data/documen3.cxx:1757
     _Bool lcl_AddTwipsWhile(long &,long,int &,int,const class ScTable *,_Bool)
     int nEndRow
     MaxRow()
-sc/source/core/tool/token.cxx:4818
+sc/source/core/tool/token.cxx:4968
     void appendTokenByType(struct ScSheetLimits &,struct sc::TokenStringContext &,class rtl::OUStringBuffer &,const class formula::FormulaToken &,const class ScAddress &,_Bool)
     _Bool bFromRangeName
     IsFromRangeName()
@@ -662,14 +718,6 @@ sc/source/filter/excel/xltoolbar.hxx:46
     _Bool ScTBC::ImportToolBarControl(class ScCTBWrapper &,const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> &,class CustomToolBarImportHelper &,_Bool)
     _Bool bIsMenuBar
     IsMenuToolbar()
-sc/source/filter/inc/workbookhelper.hxx:166
-    class ScRangeData * oox::xls::WorkbookHelper::createNamedRangeObject(class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,int,int) const
-    const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> & rTokens
-    ApiTokenSequence()
-sc/source/filter/inc/workbookhelper.hxx:175
-    class ScRangeData * oox::xls::WorkbookHelper::createLocalNamedRangeObject(class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,int,int,int) const
-    const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> & rTokens
-    ApiTokenSequence()
 sc/source/filter/inc/xechart.hxx:798
     void XclExpChChart3d::Convert(const class ScfPropertySet &,_Bool)
     _Bool b3dWallChart
@@ -678,7 +726,7 @@ sc/source/filter/inc/xestream.hxx:287
     void XclExpXmlStream::XclExpXmlStream(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,_Bool,_Bool)
     _Bool bExportTemplate
     isExportTemplate()
-sc/source/filter/inc/xestyle.hxx:145
+sc/source/filter/inc/xestyle.hxx:147
     _Bool CheckItems(const class XclExpRoot &,const class SfxItemSet &,short,_Bool)
     _Bool bDeep
     IsStyleXF()
@@ -702,82 +750,66 @@ sc/source/filter/inc/xlescher.hxx:423
     _Bool XclControlHelper::FillMacroDescriptor(struct com::sun::star::script::ScriptEventDescriptor &,enum XclTbxEventType,const class rtl::OUString &,class SfxObjectShell *)
     enum XclTbxEventType eEventType
     DoGetEventType()
-sc/source/filter/oox/formulabuffer.cxx:317
-    void processSheetFormulaCells(class ScDocumentImport &,struct oox::xls::FormulaBuffer::SheetItem &,class SvNumberFormatter &,const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::ExternalLinkInfo> &,_Bool)
-    _Bool bGeneratorKnownGood
-    isGeneratorKnownGood()
-sc/source/ui/inc/AccessibleCsvControl.hxx:445
-    void ScAccessibleCsvCell::ScAccessibleCsvCell(class ScCsvGrid &,const class rtl::OUString &,int,int)
+sc/source/ui/inc/AccessibleCsvControl.hxx:417
+    void ScAccessibleCsvCell::ScAccessibleCsvCell(class ScCsvGrid &,class rtl::OUString,int,int)
     class ScCsvGrid & rGrid
     implGetGrid()
+sc/source/ui/inc/docfunc.hxx:180
+    _Bool ScDocFunc::EnterMatrix(const class ScRange &,const class ScMarkData *,const class ScTokenArray *,const class rtl::OUString &,_Bool,_Bool,const class rtl::OUString &,const enum formula::FormulaGrammar::Grammar)
+    const class rtl::OUString & rFormulaNmsp
+    ""
+sc/source/ui/inc/viewfunc.hxx:283
+    void ScViewFunc::InsertTableLink(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,class std::basic_string_view<char16_t>)
+    const class rtl::OUString & rFilter
+    ""
+sc/source/ui/inc/viewfunc.hxx:283
+    void ScViewFunc::InsertTableLink(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,class std::basic_string_view<char16_t>)
+    const class rtl::OUString & rOptions
+    ""
+sc/source/ui/inc/viewfunc.hxx:286
+    void ScViewFunc::InsertAreaLink(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    const class rtl::OUString & rFilter
+    ""
+sc/source/ui/inc/viewfunc.hxx:286
+    void ScViewFunc::InsertAreaLink(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    const class rtl::OUString & rOptions
+    ""
 sc/source/ui/vba/vbasheetobject.hxx:174
     void ScVbaButton::ScVbaButton(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> &)
     const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> & rxFormIC
     createForm()
-sc/source/ui/vba/vbawindows.cxx:106
-    void (anonymous namespace)::WindowEnumImpl::WindowEnumImpl(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Any &)
-    const class com::sun::star::uno::Any & aApplication
+sc/source/ui/vba/vbawindows.cxx:111
+    void (anonymous namespace)::WindowEnumImpl::WindowEnumImpl(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class com::sun::star::uno::Any)
+    class com::sun::star::uno::Any aApplication
     Application()
-sd/source/filter/eppt/eppt.hxx:177
-    unsigned int PPTWriter::ImplInsertBookmarkURL(const class rtl::OUString &,const unsigned int,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & rStringVer2
+sd/source/console/PresenterConfigurationAccess.hxx:116
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &)
+    const class rtl::OUString & rsPathToNode
     ""
-sd/source/filter/eppt/pptx-animations.cxx:563
-    void (anonymous namespace)::NodeContext::initValid(_Bool,_Bool)
+sd/source/filter/eppt/pptx-animations-nodectx.hxx:49
+    void oox::core::NodeContext::initValid(_Bool,_Bool)
     _Bool bHasValidChild
     initChildNodes()
-sd/source/filter/xml/sdxmlwrp.cxx:136
+sd/source/filter/xml/sdxmlwrp.cxx:137
     const struct (anonymous namespace)::XML_SERVICES * getServices(_Bool,_Bool,unsigned long)
     _Bool bDraw
     IsDraw()
-sd/source/ui/annotations/annotationtag.cxx:164
-    void sd::(anonymous namespace)::AnnotationHdl::AnnotationHdl(const class rtl::Reference<class sd::SmartTag> &,const class com::sun::star::uno::Reference<class com::sun::star::office::XAnnotation> &,const class Point &)
+sd/source/ui/annotations/annotationtag.cxx:162
+    void sd::(anonymous namespace)::AnnotationHdl::AnnotationHdl(const class rtl::Reference<class sd::SmartTag> &,const class rtl::Reference<class sd::Annotation> &,const class Point &)
     const class Point & rPnt
     Point()
 sd/source/ui/slidesorter/cache/SlsRequestFactory.hxx:31
     void sd::slidesorter::cache::RequestFactory::operator()(class sd::slidesorter::cache::RequestQueue &,const class std::shared_ptr<class sd::slidesorter::cache::CacheContext> &)
     class sd::slidesorter::cache::RequestQueue & rRequestQueue
     RequestFactory()
-sdext/source/pdfimport/inc/contentsink.hxx:130
-    void pdfi::ContentSink::strokePath(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> & rPath
-    readPath()
-sdext/source/pdfimport/inc/contentsink.hxx:132
-    void pdfi::ContentSink::fillPath(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> & rPath
-    readPath()
-sdext/source/pdfimport/inc/contentsink.hxx:134
-    void pdfi::ContentSink::eoFillPath(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> & rPath
-    readPath()
-sdext/source/pdfimport/inc/contentsink.hxx:137
-    void pdfi::ContentSink::intersectClip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> & rPath
-    readPath()
-sdext/source/pdfimport/inc/contentsink.hxx:139
-    void pdfi::ContentSink::intersectEoClip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> & rPath
-    readPath()
 sdext/source/pdfimport/inc/contentsink.hxx:151
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool)
     const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> & xBitmap
     readImageImpl()
-sdext/source/presenter/PresenterConfigurationAccess.hxx:116
-    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &)
-    const class rtl::OUString & rsPathToNode
-    ""
-sfx2/source/inc/versdlg.hxx:51
+sfx2/source/inc/versdlg.hxx:52
     void SfxVersionDialog::SfxVersionDialog(class weld::Window *,class SfxViewFrame *,_Bool)
     _Bool 
     IsSaveVersionOnClose()
-slideshow/source/engine/opengl/TransitionImpl.cxx:636
-    class std::shared_ptr<class OGLTransitionImpl> makeSimpleTransition(const class std::__debug::vector<class Primitive, class std::allocator<class Primitive> > &,const class std::__debug::vector<class Primitive, class std::allocator<class Primitive> > &,const class std::__debug::vector<class std::shared_ptr<class Operation>, class std::allocator<class std::shared_ptr<class Operation> > > &,const struct TransitionSettings &)
-    const struct TransitionSettings & rSettings
-    TransitionSettings()
-slideshow/source/engine/opengl/TransitionImpl.cxx:2033
-    class std::shared_ptr<class OGLTransitionImpl> makeGlitterTransition(const class std::__debug::vector<class Primitive, class std::allocator<class Primitive> > &,const class std::__debug::vector<class Primitive, class std::allocator<class Primitive> > &,const struct TransitionSettings &)
-    const struct TransitionSettings & rSettings
-    TransitionSettings()
 slideshow/source/inc/transitionfactory.hxx:61
     class std::shared_ptr<class slideshow::internal::AnimationActivity> createShapeTransition(const struct slideshow::internal::ActivitiesFactory::CommonParameters &,const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeManager> &,const class basegfx::B2DVector &,const class com::sun::star::uno::Reference<class com::sun::star::animations::XTransitionFilter> &)
     const struct slideshow::internal::ActivitiesFactory::CommonParameters & rParms
@@ -786,34 +818,54 @@ soltools/cpp/cpp.h:212
     void peektokens(struct tokenrow *,char *)
     char * 
     ""
-starmath/inc/cursor.hxx:185
+starmath/inc/cursor.hxx:187
     void SmCursor::Draw(class OutputDevice &,class Point,_Bool)
     _Bool isCaretVisible
     IsCursorVisible()
-starmath/inc/token.hxx:199
-    void SmColorTokenTableEntry::SmColorTokenTableEntry(const char *,enum SmTokenType,unsigned int)
-    const char * name
+starmath/inc/token.hxx:195
+    void SmColorTokenTableEntry::SmColorTokenTableEntry(class rtl::OUString,enum SmTokenType,unsigned int)
+    class rtl::OUString name
     ""
-store/source/lockbyte.cxx:269
+starmath/source/mathtype.hxx:42
+    _Bool LessMathTypeFont::operator()(const class MathTypeFont &,const class MathTypeFont &) const
+    const class MathTypeFont & rValue1
+    Compare()
+store/source/lockbyte.cxx:258
     void store::(anonymous namespace)::FileHandle::CloseFile::operator()(struct store::(anonymous namespace)::FileHandle &) const
     struct store::(anonymous namespace)::FileHandle & rFile
     destructor_type()
-store/source/lockbyte.cxx:495
+store/source/lockbyte.cxx:484
     void store::(anonymous namespace)::FileMapping::UnmapFile::operator()(struct store::(anonymous namespace)::FileMapping &) const
     struct store::(anonymous namespace)::FileMapping & rMapping
     destructor_type()
-store/source/lockbyte.cxx:827
+store/source/lockbyte.cxx:806
     void store::(anonymous namespace)::ResourceHolder::ResourceHolder<T>(const type-parameter-?-? &)
     const type-parameter-?-? & value
     T()
-svx/inc/dragmt3d.hxx:91
+svl/source/items/itemprop.cxx:62
+    _Bool Compare::operator()(class std::basic_string_view<char16_t>,const struct SfxItemPropertyMapEntry *) const
+    class std::basic_string_view<char16_t> lhs
+    Compare()
+svl/source/items/itemprop.cxx:348
+    _Bool Compare::operator()(class std::basic_string_view<char16_t>,const struct SfxItemPropertyMapEntry &) const
+    class std::basic_string_view<char16_t> lhs
+    Compare()
+svx/inc/dragmt3d.hxx:90
     void E3dDragRotate::E3dDragRotate(class SdrDragView &,const class SdrMarkList &,enum E3dDragConstraint,_Bool)
     _Bool bFull
     IsSolidDragging()
-svx/inc/dragmt3d.hxx:108
+svx/inc/dragmt3d.hxx:107
     void E3dDragMove::E3dDragMove(class SdrDragView &,const class SdrMarkList &,enum SdrHdlKind,enum E3dDragConstraint,_Bool)
     _Bool bFull
     IsSolidDragging()
+svx/source/dialog/langbox.cxx:204
+    _Bool NaturalStringSorterCompare::operator()(const class rtl::OUString &,const class rtl::OUString &) const
+    const class rtl::OUString & rLHS
+    NaturalStringSorterCompare()
+svx/source/dialog/langbox.cxx:221
+    _Bool GenericFirst::operator()(const struct EntryData &,const struct EntryData &) const
+    const struct EntryData & e1
+    Compare()
 svx/source/inc/treevisitor.hxx:29
     void TreeVisitor::TreeVisitor<ELEMENT, NODEINFO, PROCESSOR>(type-parameter-?-?)
     type-parameter-?-? _nodeInfo
@@ -826,47 +878,31 @@ svx/source/inc/xmlxtimp.hxx:42
     _Bool SvxXMLXTableImport::load(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,_Bool *)
     const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> & xTable
     createInstance()
-svx/source/svdraw/svdmodel.cxx:1817
-    void addPair(class std::__debug::vector<struct std::pair<class rtl::OUString, class com::sun::star::uno::Any>, class std::allocator<struct std::pair<class rtl::OUString, class com::sun::star::uno::Any> > > &,const class rtl::OUString &,const type-parameter-?-?)
-    const type-parameter-?-? val
-    IsAnchoredTextOverflowLegacy()
-sw/inc/ftnidx.hxx:38
+sw/inc/ftnidx.hxx:39
     _Bool CompareSwFootnoteIdxs::operator()(class SwTextFootnote *const &,class SwTextFootnote *const &) const
     class SwTextFootnote *const & lhs
     Compare()
-sw/inc/ndarr.hxx:73
-    _Bool CompareSwOutlineNodes::operator()(class SwNode *const &,class SwNode *const &) const
-    class SwNode *const & lhs
+sw/inc/ndarr.hxx:75
+    _Bool CompareSwOutlineNodes::operator()(const class SwNode *,const class SwNode *) const
+    const class SwNode * lhs
     Compare()
-sw/inc/shellio.hxx:165
-    void SwReader::SwReader(class SvStream &,const class rtl::OUString &,const class rtl::OUString &,class SwPaM &)
-    const class rtl::OUString & rFilename
-    ""
 sw/inc/shellio.hxx:167
-    void SwReader::SwReader(const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,const class rtl::OUString &,class SwPaM &)
-    const class rtl::OUString & rFilename
+    void SwReader::SwReader(class SvStream &,class rtl::OUString,const class rtl::OUString &,class SwPaM &)
+    class rtl::OUString aFilename
     ""
-sw/inc/shellio.hxx:461
-    class SvStream & Writer::OutLong(class SvStream &,long)
-    class SvStream & rStrm
-    Strm()
-sw/inc/shellio.hxx:462
-    class SvStream & Writer::OutULong(class SvStream &,unsigned long)
-    class SvStream & rStrm
-    Strm()
+sw/inc/shellio.hxx:169
+    void SwReader::SwReader(class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage>,class rtl::OUString,class SwPaM &)
+    class rtl::OUString aFilename
+    ""
 sw/inc/tblsel.hxx:47
     _Bool CompareSwSelBoxes::operator()(class SwTableBox *const &,class SwTableBox *const &) const
     class SwTableBox *const & lhs
     Compare()
-sw/inc/tox.hxx:188
-    class SwContentFrame * SwTOXType::FindContentFrame(const class SwDoc &,const class SwRootFrame &,const _Bool) const
-    const _Bool isReadOnlyAvailable
-    IsReadOnlyAvailable()
-sw/source/core/access/acctable.cxx:102
+sw/source/core/access/acctable.cxx:101
     void SwAccessibleTableData_Impl::SwAccessibleTableData_Impl(class SwAccessibleMap &,const class SwTabFrame *,_Bool,_Bool)
     _Bool bIsInPagePreview
     IsInPagePreview()
-sw/source/core/crsr/crstrvl.cxx:628
+sw/source/core/crsr/crstrvl.cxx:615
     void lcl_MakeFieldLst(class SetGetExpFields &,const class SwFieldType &,const _Bool,const _Bool)
     const _Bool bInReadOnly
     IsReadOnlyAvailable()
@@ -874,67 +910,67 @@ sw/source/core/graphic/grfatr.cxx:48
     _Bool lcl_IsHoriOnEvenPages(enum MirrorGraph,_Bool)
     _Bool bToggle
     IsGrfToggle()
-sw/source/core/inc/anchoredobjectposition.hxx:182
+sw/source/core/inc/anchoredobjectposition.hxx:183
     long objectpositioning::SwAnchoredObjectPosition::AdjustVertRelPos(const long,const _Bool,const _Bool,const class SwFrame &,const long,const _Bool,const _Bool) const
     const _Bool bFollowTextFlow
     DoesObjFollowsTextFlow()
-sw/source/core/inc/layact.hxx:200
+sw/source/core/inc/layact.hxx:223
     void SwLayIdle::SwLayIdle(class SwRootFrame *,class SwViewShellImp *)
     class SwViewShellImp * pImp
     Imp()
-sw/source/core/inc/swfont.hxx:77
+sw/source/core/inc/swfont.hxx:80
     void SwSubFont::DrawText_(class SwDrawTextInfo &,const _Bool)
     const _Bool bGrey
     IsGreyWave()
-sw/source/core/inc/wrong.hxx:83
-    void SwWrongArea::SwWrongArea(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XStringKeyMap> &,int,int,class SwWrongList *)
-    const class rtl::OUString & rType
+sw/source/core/inc/wrong.hxx:82
+    void SwWrongArea::SwWrongArea(class rtl::OUString,const class com::sun::star::uno::Reference<class com::sun::star::container::XStringKeyMap> &,int,int,class SwWrongList *)
+    class rtl::OUString aType
     ""
-sw/source/core/inc/wrong.hxx:325
+sw/source/core/inc/wrong.hxx:324
     void SwWrongList::Insert(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XStringKeyMap> &,int,int,unsigned short)
     const class rtl::OUString & rType
     ""
-sw/source/core/layout/laycache.cxx:950
+sw/source/core/layout/laycache.cxx:947
     _Bool (anonymous namespace)::SdrObjectCompare::operator()(const class SdrObject *,const class SdrObject *) const
     const class SdrObject * pF1
     Compare()
-sw/source/core/layout/laycache.cxx:958
+sw/source/core/layout/laycache.cxx:955
     _Bool (anonymous namespace)::FlyCacheCompare::operator()(const class SwFlyCache *,const class SwFlyCache *) const
     const class SwFlyCache * pC1
     Compare()
-sw/source/core/text/guess.hxx:47
-    _Bool SwTextGuess::Guess(const class SwTextPortion &,class SwTextFormatInfo &,const unsigned short)
+sw/source/core/text/guess.hxx:48
+    _Bool SwTextGuess::Guess(const class SwTextPortion &,class SwTextFormatInfo &,const unsigned short,int)
     const unsigned short nHeight
     Height()
-sw/source/core/text/inftxt.hxx:401
+sw/source/core/text/inftxt.hxx:405
     void SwTextPaintInfo::DrawPostIts(_Bool) const
     _Bool bScript
     IsScript()
-sw/source/core/text/inftxt.hxx:542
+sw/source/core/text/inftxt.hxx:560
     void SwTextFormatInfo::Left(const long)
     const long nNew
     Left()
-sw/source/core/text/inftxt.hxx:544
+sw/source/core/text/inftxt.hxx:562
     void SwTextFormatInfo::Right(const long)
     const long nNew
     Right()
-sw/source/core/text/inftxt.hxx:546
+sw/source/core/text/inftxt.hxx:564
     void SwTextFormatInfo::First(const long)
     const long nNew
     FirstLeft()
-sw/source/core/text/inftxt.hxx:566
+sw/source/core/text/inftxt.hxx:584
     void SwTextFormatInfo::ChkNoHyph(const unsigned char,const unsigned char)
     const unsigned char bEnd
     CntEndHyph()
-sw/source/core/text/inftxt.hxx:566
+sw/source/core/text/inftxt.hxx:584
     void SwTextFormatInfo::ChkNoHyph(const unsigned char,const unsigned char)
     const unsigned char bMid
     CntMidHyph()
-sw/source/core/text/itrpaint.hxx:48
-    void SwTextPainter::DrawTextLine(const class SwRect &,class SwSaveClip &,const _Bool)
+sw/source/core/text/itrpaint.hxx:51
+    void SwTextPainter::DrawTextLine(const class SwRect &,class SwSaveClip &,const _Bool,class std::optional<class SwTaggedPDFHelper> &,class std::optional<class SwTaggedPDFHelper> &,_Bool)
     const _Bool bUnderSz
     IsUndersized()
-sw/source/core/txtnode/modeltoviewhelper.cxx:52
+sw/source/core/txtnode/modeltoviewhelper.cxx:54
     _Bool (anonymous namespace)::sortfieldresults::operator()(const struct (anonymous namespace)::FieldResult &,const struct (anonymous namespace)::FieldResult &) const
     const struct (anonymous namespace)::FieldResult & rOne
     Compare()
@@ -942,66 +978,74 @@ sw/source/filter/html/swcss1.hxx:84
     void SwCSS1Parser::SwCSS1Parser(class SwDoc *,const class SwHTMLParser &,const unsigned int *,const class rtl::OUString &,_Bool)
     _Bool bNewDoc
     IsNewDoc()
-sw/source/filter/html/swhtml.hxx:914
-    void SwHTMLParser::SwHTMLParser(class SwDoc *,class SwPaM &,class SvStream &,const class rtl::OUString &,const class rtl::OUString &,_Bool,class SfxMedium *,_Bool,_Bool,const class rtl::OUString &)
+sw/source/filter/html/swhtml.hxx:921
+    void SwHTMLParser::SwHTMLParser(class SwDoc *,class SwPaM &,class SvStream &,class rtl::OUString,class rtl::OUString,_Bool,class SfxMedium *,_Bool,_Bool,const class rtl::OUString &)
     _Bool bReadUTF8
     IsReadUTF8()
-sw/source/filter/inc/wrtswtbl.hxx:204
-    _Bool SwWriteTableColLess::operator()(const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > &,const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > &)
-    const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > & lhs
+sw/source/filter/inc/wrtswtbl.hxx:205
+    _Bool SwWriteTableColLess::operator()(const type-parameter-?-? &,const type-parameter-?-? &) const
+    const type-parameter-?-? & lhs
     Compare()
-sw/source/filter/ww8/docxattributeoutput.cxx:6338
-    _Bool (anonymous namespace)::OUStringIgnoreCase::operator()(const class rtl::OUString &,class std::basic_string_view<char16_t, struct std::char_traits<char16_t> >) const
-    const class rtl::OUString & lhs
+sw/source/filter/ww8/docxattributeoutput.cxx:6650
+    _Bool (anonymous namespace)::OUStringIgnoreCase::operator()(class std::basic_string_view<char16_t>,class std::basic_string_view<char16_t>) const
+    class std::basic_string_view<char16_t> lhs
     Compare()
-sw/source/filter/ww8/docxexport.hxx:276
+sw/source/filter/ww8/docxexport.hxx:300
     void DocxExport::DocxExport(class DocxExportFilter &,class SwDoc &,class std::shared_ptr<class SwUnoCursor> &,class SwPaM &,_Bool,_Bool)
     _Bool bTemplate
     isExportTemplate()
-sw/source/filter/ww8/wrtww8.hxx:269
+sw/source/filter/ww8/wrtww8.hxx:271
     void WW8_WrPlcSepx::WriteSepx(class SvStream &) const
     class SvStream & rStrm
     Strm()
-sw/source/filter/ww8/ww8scan.hxx:1538
+sw/source/filter/ww8/ww8scan.hxx:1539
     void WW8Fib::Write(class SvStream &)
     class SvStream & rStrm
     Strm()
-sw/source/filter/xml/xmlimp.hxx:126
+sw/source/filter/xml/xmlimp.hxx:123
     void SwXMLImport::InsertStyles(_Bool)
     _Bool bAuto
     IsAutomaticStyle()
-sw/source/filter/xml/xmltble.cxx:92
+sw/source/filter/xml/xmltble.cxx:91
     _Bool (anonymous namespace)::SwXMLTableColumnCmpWidth_Impl::operator()(class SwXMLTableColumn_Impl *const &,class SwXMLTableColumn_Impl *const &) const
     class SwXMLTableColumn_Impl *const & lhs
     Compare()
 sw/source/filter/xml/xmltexti.hxx:38
-    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SvXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
+    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SwXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
     _Bool bInsertM
     IsInsertMode()
 sw/source/filter/xml/xmltexti.hxx:38
-    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SvXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
+    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SwXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
     _Bool bStylesOnlyM
     IsStylesOnlyMode()
 sw/source/filter/xml/xmltexti.hxx:38
-    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SvXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
+    void SwXMLTextImportHelper::SwXMLTextImportHelper(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,class SwXMLImport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,_Bool,_Bool,_Bool)
     _Bool bBlockM
     IsBlockMode()
 sw/source/ui/vba/vbadocuments.cxx:52
-    void (anonymous namespace)::DocumentEnumImpl::DocumentEnumImpl(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XEnumeration> &,const class com::sun::star::uno::Any &)
-    const class com::sun::star::uno::Any & aApplication
+    void (anonymous namespace)::DocumentEnumImpl::DocumentEnumImpl(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XEnumeration> &,class com::sun::star::uno::Any)
+    class com::sun::star::uno::Any aApplication
     Application()
-sw/source/uibase/inc/swuipardlg.hxx:34
-    void SwParaDlg::SwParaDlg(class weld::Window *,class SwView &,const class SfxItemSet &,unsigned char,const class rtl::OUString *,_Bool,const class rtl::OString &)
-    const class rtl::OString & sDefPage
-    ""
 sw/source/uibase/lingu/sdrhhcwrap.hxx:42
     void SdrHHCWrapper::SdrHHCWrapper(class SwView *,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,const class vcl::Font *,int,_Bool)
     _Bool bInteractive
     IsInteractive()
-toolkit/inc/helper/unopropertyarrayhelper.hxx:38
+sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:1688
+    void lcl_MoveBorderPropertiesToFrame(class std::vector<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &,_Bool)
+    _Bool bIsRTFImport
+    IsRTFImport()
+sw/source/writerfilter/rtftok/rtflookahead.hxx:28
+    void writerfilter::rtftok::RTFLookahead::RTFLookahead(class SvStream &,unsigned long)
+    class SvStream & rStream
+    Strm()
+toolkit/inc/helper/unopropertyarrayhelper.hxx:37
     void UnoPropertyArrayHelper::UnoPropertyArrayHelper(const class com::sun::star::uno::Sequence<int> &)
     const class com::sun::star::uno::Sequence<int> & rIDs
     ImplGetPropertyIds()
+ucb/source/ucp/file/filtask.hxx:193
+    _Bool fileaccess::TaskManager::MyPropertyLess::operator()(const class fileaccess::TaskManager::MyProperty &,const class fileaccess::TaskManager::MyProperty &) const
+    const class fileaccess::TaskManager::MyProperty & rKey1
+    Compare()
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:36
     class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,_Bool)
     const class rtl::OUString & sHelpURL
@@ -1010,95 +1054,91 @@ vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:43
     class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,int)
     const class rtl::OUString & sHelpURL
     ""
-vcl/inc/fontinstance.hxx:78
-    _Bool LogicalFontInstance::GetGlyphBoundRect(unsigned short,class tools::Rectangle &,_Bool) const
+vcl/inc/font/LogicalFontInstance.hxx:108
+    _Bool LogicalFontInstance::GetGlyphOutline(unsigned int,class basegfx::B2DPolyPolygon &,_Bool) const
     _Bool 
     IsVertical()
-vcl/inc/fontinstance.hxx:79
-    _Bool LogicalFontInstance::GetGlyphOutline(unsigned short,class basegfx::B2DPolyPolygon &,_Bool) const
-    _Bool 
-    IsVertical()
-vcl/inc/unx/fc_fontoptions.hxx:33
-    void FontConfigFontOptions::SyncPattern(const class rtl::OString &,unsigned int,unsigned int,_Bool)
-    _Bool bEmbolden
-    NeedsArtificialBold()
-vcl/inc/WidgetDrawInterface.hxx:88
-    _Bool vcl::WidgetDrawInterface::getNativeControlRegion(enum ControlType,enum ControlPart,const class tools::Rectangle &,enum ControlState,const class ImplControlValue &,const class rtl::OUString &,class tools::Rectangle &,class tools::Rectangle &)
-    const class rtl::OUString & aCaption
-    ""
-vcl/skia/gdiimpl.cxx:936
+vcl/inc/iconview.hxx:64
+    void IconView::DumpEntryAndSiblings(class tools::JsonWriter &,class SvTreeListEntry *)
+    class SvTreeListEntry * pEntry
+    First()
+vcl/inc/qt5/QtFrame.hxx:139
+    void QtFrame::QtFrame(class QtFrame *,enum SalFrameStyleFlags,_Bool)
+    _Bool bUseCairo
+    useCairo()
+vcl/inc/skia/utils.hxx:175
+    struct SkSamplingOptions makeSamplingOptions(enum BmpScaleFlag,class SkMatrix,int)
+    enum BmpScaleFlag scalingType
+    goodScalingQuality()
+vcl/inc/skia/utils.hxx:224
+    struct SkSamplingOptions makeSamplingOptions(const struct SalTwoRect &,int,int,_Bool)
+    _Bool isGPU
+    isGPU()
+vcl/skia/gdiimpl.cxx:943
     _Bool (anonymous namespace)::LessThan::operator()(const class basegfx::B2DPoint &,const class basegfx::B2DPoint &) const
     const class basegfx::B2DPoint & point1
     Compare()
-vcl/source/control/field2.cxx:393
-    void ImplPatternProcessStrictModify(class Edit *,const class rtl::OString &,const class rtl::OUString &,_Bool)
+vcl/source/control/field2.cxx:398
+    void ImplPatternProcessStrictModify(class Edit *,const class rtl::OString &,class std::basic_string_view<char16_t>,_Bool)
     _Bool bSameMask
     ImplIsSameMask()
-vcl/source/control/field2.cxx:1230
+vcl/source/control/field2.cxx:1302
     _Bool ImplDateProcessKeyInput(const class KeyEvent &,enum ExtDateFieldFormat,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field2.cxx:2228
+vcl/source/control/field2.cxx:2271
     _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
     _Bool bStrictFormat
     IsStrictFormat()
-vcl/source/control/field2.cxx:2228
+vcl/source/control/field2.cxx:2271
     _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
     _Bool bDuration
     IsDuration()
-vcl/source/control/field2.cxx:2228
+vcl/source/control/field2.cxx:2271
     _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:916
+vcl/source/control/field.cxx:923
     _Bool ImplMetricProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     _Bool bUseThousandSep
     IsUseThousandSep()
-vcl/source/control/field.cxx:916
+vcl/source/control/field.cxx:923
     _Bool ImplMetricProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
-    const class LocaleDataWrapper & rWrapper
-    ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:1638
-    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
-    _Bool bUseThousandSep
-    IsUseThousandSep()
-vcl/source/control/field.cxx:1638
-    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()
 vcl/source/control/field.cxx:1645
+    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
+    _Bool bUseThousandSep
+    IsUseThousandSep()
+vcl/source/control/field.cxx:1645
+    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
+    const class LocaleDataWrapper & rWrapper
+    ImplGetLocaleDataWrapper()
+vcl/source/control/field.cxx:1652
     _Bool ImplCurrencyGetValue(const class rtl::OUString &,long &,unsigned short,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/imivctl.hxx:405
+vcl/source/control/imivctl.hxx:404
     void SvxIconChoiceCtrl_Impl::SetColumn(unsigned short,const class SvxIconChoiceCtrlColumnInfo &)
     const class SvxIconChoiceCtrlColumnInfo & 
     SvxIconChoiceCtrlColumnInfo()
-vcl/source/edit/vclmedit.cxx:101
+vcl/source/edit/vclmedit.cxx:103
     void ImpVclMEdit::Enable(_Bool)
     _Bool bEnable
     IsEnabled()
-vcl/source/treelist/iconview.cxx:246
-    void lcl_DumpEntryAndSiblings(class tools::JsonWriter &,class SvTreeListEntry *,class SvTreeListBox *)
-    class SvTreeListEntry * pEntry
-    First()
-vcl/unx/gtk3/gtk3gtkinst.cxx:9811
+vcl/source/text/TextLayoutCache.cxx:46
+    unsigned long vcl::text::(anonymous namespace)::TextLayoutCacheCost::operator()(const class std::shared_ptr<const class vcl::text::TextLayoutCache> &) const
+    const class std::shared_ptr<const class vcl::text::TextLayoutCache> & item
+    ValueSize()
+vcl/unx/gtk3/gtkinst.cxx:13878
     _Bool (anonymous namespace)::CompareGtkTreePath::operator()(const struct _GtkTreePath *,const struct _GtkTreePath *) const
     const struct _GtkTreePath * lhs
     Compare()
-vcl/unx/kf5/KF5SalFrame.hxx:32
-    void KF5SalFrame::KF5SalFrame(class KF5SalFrame *,enum SalFrameStyleFlags,_Bool)
-    _Bool bUseCairo
-    useCairo()
-writerfilter/source/rtftok/rtflookahead.hxx:28
-    void writerfilter::rtftok::RTFLookahead::RTFLookahead(class SvStream &,unsigned long)
-    class SvStream & rStream
-    Strm()
 writerperfect/qa/unit/WpftLoader.hxx:70
     void writerperfect::test::WpftLoader::WpftLoader(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::document::XFilter> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XDesktop2> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
     const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> & rxInputStream
     createDummyInput()
-xmlhelp/source/cxxhelp/provider/urlparameter.cxx:292
+xmlhelp/source/cxxhelp/provider/urlparameter.cxx:295
     void (anonymous namespace)::InputStreamTransformer::InputStreamTransformer(class chelp::URLParameter *,class chelp::Databases *,_Bool)
     _Bool isRoot
     isRoot()
@@ -1106,15 +1146,15 @@ xmlhelp/source/cxxhelp/provider/urlparameter.hxx:214
     _Bool chelp::URLParameter::name(_Bool)
     _Bool modulePresent
     module()
-xmloff/source/style/xmlexppr.cxx:97
+xmloff/source/style/xmlexppr.cxx:95
     _Bool (anonymous namespace)::ComparePropertyState::operator()(const struct XMLPropertyState &,const struct XMLPropertyState &)
     const struct XMLPropertyState & lhs
     Compare()
-xmloff/source/style/XMLFontAutoStylePool.cxx:122
-    _Bool (anonymous namespace)::XMLFontAutoStylePoolEntryCmp_Impl::operator()(const class std::unique_ptr<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl, struct std::default_delete<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl> > &,const class std::unique_ptr<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl, struct std::default_delete<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl> > &) const
-    const class std::unique_ptr<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl, struct std::default_delete<class (anonymous namespace)::XMLFontAutoStylePoolEntry_Impl> > & r1
+xmloff/source/style/XMLFontAutoStylePool.cxx:126
+    _Bool (anonymous namespace)::XMLFontAutoStylePoolEntryCmp_Impl::operator()(const type-parameter-?-? &,const type-parameter-?-? &) const
+    const type-parameter-?-? & r1
     Compare()
 xmloff/source/text/XMLTextListAutoStylePool.cxx:123
-    _Bool (anonymous namespace)::XMLTextListAutoStylePoolEntryCmp_Impl::operator()(const class std::unique_ptr<class XMLTextListAutoStylePoolEntry_Impl, struct std::default_delete<class XMLTextListAutoStylePoolEntry_Impl> > &,const class std::unique_ptr<class XMLTextListAutoStylePoolEntry_Impl, struct std::default_delete<class XMLTextListAutoStylePoolEntry_Impl> > &) const
-    const class std::unique_ptr<class XMLTextListAutoStylePoolEntry_Impl, struct std::default_delete<class XMLTextListAutoStylePoolEntry_Impl> > & r1
+    _Bool (anonymous namespace)::XMLTextListAutoStylePoolEntryCmp_Impl::operator()(const type-parameter-?-? &,const type-parameter-?-? &) const
+    const type-parameter-?-? & r1
     Compare()

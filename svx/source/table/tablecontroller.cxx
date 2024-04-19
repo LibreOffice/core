@@ -2432,12 +2432,12 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
                         if(SfxItemState::INVALID == nState)
                             rAttr.InvalidateItem(nWhich);
                         else
-                            rAttr.MergeValue(rSet.Get(nWhich), true);
+                            rAttr.MergeValue(rSet.Get(nWhich));
                     }
                     else if(SfxItemState::SET == nState)
                     {
                         const SfxPoolItem& rItem = rSet.Get(nWhich);
-                        rAttr.MergeValue(rItem, true);
+                        rAttr.MergeValue(rItem);
                     }
 
                     nWhich = aIter.NextWhich();

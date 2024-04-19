@@ -335,8 +335,7 @@ namespace basegfx
             bool bStartRound,
             bool bEndRound,
             bool bStartSquare,
-            bool bEndSquare,
-            basegfx::triangulator::B2DTriangleVector* pTriangles)
+            bool bEndSquare)
         {
             // create polygon for edge
             // Unfortunately, while it would be geometrically correct to not add
@@ -565,15 +564,6 @@ namespace basegfx
                     }
                 }
 
-                if(nullptr != pTriangles)
-                {
-                    const basegfx::triangulator::B2DTriangleVector aResult(
-                        basegfx::triangulator::triangulate(
-                            aBezierPolygon));
-                    pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
-                    aBezierPolygon.clear();
-                }
-
                 // return
                 return aBezierPolygon;
             }
@@ -671,15 +661,6 @@ namespace basegfx
 
                 // close and return
                 aEdgePolygon.setClosed(true);
-
-                if(nullptr != pTriangles)
-                {
-                    const basegfx::triangulator::B2DTriangleVector aResult(
-                        basegfx::triangulator::triangulate(
-                            aEdgePolygon));
-                    pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
-                    aEdgePolygon.clear();
-                }
 
                 return aEdgePolygon;
             }
@@ -946,8 +927,7 @@ namespace basegfx
                                     bFirst && eCap == css::drawing::LineCap_ROUND,
                                     bLast && eCap == css::drawing::LineCap_ROUND,
                                     bFirst && eCap == css::drawing::LineCap_SQUARE,
-                                    bLast && eCap == css::drawing::LineCap_SQUARE,
-                                    nullptr));
+                                    bLast && eCap == css::drawing::LineCap_SQUARE));
                         }
                         else
                         {
@@ -958,8 +938,7 @@ namespace basegfx
                                     false,
                                     false,
                                     false,
-                                    false,
-                                    nullptr));
+                                    false));
                         }
 
                         // prepare next step

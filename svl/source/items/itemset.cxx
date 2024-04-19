@@ -1846,7 +1846,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
     }
 }
 
-void SfxItemSet::MergeValue(const SfxPoolItem& rAttr, bool bIgnoreDefaults)
+void SfxItemSet::MergeValue(const SfxPoolItem& rAttr)
 {
     if (IsDisabledItem(&rAttr))
         // is IsDisabledItem, nothing to do
@@ -1856,7 +1856,7 @@ void SfxItemSet::MergeValue(const SfxPoolItem& rAttr, bool bIgnoreDefaults)
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
-        MergeItem_Impl(begin() + nOffset, &rAttr, bIgnoreDefaults);
+        MergeItem_Impl(begin() + nOffset, &rAttr, /*bIgnoreDefaults*/true);
     }
 }
 

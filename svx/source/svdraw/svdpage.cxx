@@ -68,7 +68,7 @@ SdrObjList::SdrObjList()
 {
 }
 
-void SdrObjList::impClearSdrObjList(bool bBroadcast)
+void SdrObjList::impClearSdrObjList()
 {
     SdrModel* pSdrModelFromRemovedSdrObject(nullptr);
 
@@ -82,22 +82,20 @@ void SdrObjList::impClearSdrObjList(bool bBroadcast)
         // to delete the object and thus refresh visualisations
         pObj->GetViewContact().flushViewObjectContacts();
 
-        if(bBroadcast)
+        if(nullptr == pSdrModelFromRemovedSdrObject)
         {
-            if(nullptr == pSdrModelFromRemovedSdrObject)
-            {
-                pSdrModelFromRemovedSdrObject = &pObj->getSdrModelFromSdrObject();
-            }
-
-            // sent remove hint (after removal, see RemoveObject())
-            // TTTT SdrPage not needed, can be accessed using SdrObject
-            SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, getSdrPageFromSdrObjList());
-            pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+            pSdrModelFromRemovedSdrObject = &pObj->getSdrModelFromSdrObject();
         }
+
+        // sent remove hint (after removal, see RemoveObject())
+        // TTTT SdrPage not needed, can be accessed using SdrObject
+        SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, getSdrPageFromSdrObjList());
+        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+
         pObj->setParentOfSdrObject(nullptr);
     }
 
-    if(bBroadcast && nullptr != pSdrModelFromRemovedSdrObject)
+    if(nullptr != pSdrModelFromRemovedSdrObject)
     {
         pSdrModelFromRemovedSdrObject->SetChanged();
     }
@@ -106,7 +104,7 @@ void SdrObjList::impClearSdrObjList(bool bBroadcast)
 void SdrObjList::ClearSdrObjList()
 {
     // clear SdrObjects with broadcasting
-    impClearSdrObjList(true);
+    impClearSdrObjList();
 }
 
 SdrObjList::~SdrObjList()

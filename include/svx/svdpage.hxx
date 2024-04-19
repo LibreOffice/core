@@ -75,10 +75,8 @@ private:
     SAL_DLLPRIVATE static void impChildInserted(SdrObject const & rChild);
 
     // tdf#116879 Clear SdrObjList, no Undo done. Used from destructor, but also
-    // from other places. When used from destructor, suppress broadcasts
-    // to not get callbacks to evtl. derived objects already in destruction
-    // (e.g. SdrPage)
-    SAL_DLLPRIVATE void impClearSdrObjList(bool bBroadcast);
+    // from other places.
+    SAL_DLLPRIVATE void impClearSdrObjList();
 
 protected:
     // protected constructor to make clear that this class should only

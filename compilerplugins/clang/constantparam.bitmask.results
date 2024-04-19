@@ -4,7 +4,7 @@ codemaker/source/javamaker/classfile.hxx:152
 codemaker/source/javamaker/classfile.hxx:167
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
-dbaccess/source/filter/xml/xmlExport.hxx:163
+dbaccess/source/filter/xml/xmlExport.hxx:162
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
 include/basegfx/polygon/b2dpolygontools.hxx:145
@@ -13,37 +13,37 @@ include/basegfx/polygon/b2dpolygontools.hxx:145
 include/framework/framelistanalyzer.hxx:185
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:467
+include/sfx2/objsh.hxx:489
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
-include/svtools/brwbox.hxx:510
+include/svtools/brwbox.hxx:514
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
 include/vcl/wizardmachine.hxx:139
     void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
-sc/inc/rangelst.hxx:47
-    void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,const class ScDocument &,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
-    enum ScRefFlags nFlags setBits=0x8000 clearBits=0x7f80
-sc/inc/rangeutl.hxx:168
+sc/inc/rangeutl.hxx:169
     void ScRangeStringConverter::GetStringFromAddress(class rtl::OUString &,const class ScAddress &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool,enum ScRefFlags)
     enum ScRefFlags nFormatFlags setBits=0x8008 clearBits=0x7ff0
 sc/inc/xmlwrap.hxx:88
-    _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
+    _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCodeMsg &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/view/cellsh1.cxx:103
+sc/source/ui/view/cellsh1.cxx:106
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
-    enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sc/source/ui/view/cellsh1.cxx:126
+    enum InsertDeleteFlags nFlagsMask setBits=0x487f clearBits=0x3600
+sc/source/ui/view/cellsh1.cxx:129
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
-    enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sw/source/core/view/viewsh.cxx:719
+    enum InsertDeleteFlags nFlagsMask setBits=0x487f clearBits=0x3600
+starmath/inc/mathml/export.hxx:199
+    void SmMLExport::SmMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
+    enum SvXMLExportFlags nExportFlags setBits=0x8000 clearBits=0x7a00
+sw/source/core/view/viewsh.cxx:830
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:689
+sw/source/filter/html/swhtml.hxx:698
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
-sw/source/filter/ww8/wrtw8esh.cxx:1545
+sw/source/filter/ww8/wrtw8esh.cxx:1542
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:31

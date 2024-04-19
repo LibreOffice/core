@@ -278,7 +278,7 @@ public:
     void                        Intersect( const SfxItemSet& rSet );
     void                        MergeValues( const SfxItemSet& rSet );
     void                        Differentiate( const SfxItemSet& rSet );
-    void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
+    void                        MergeValue( const SfxPoolItem& rItem);
 
     SfxItemPool*                GetPool() const { return m_pPool; }
     const WhichRangesContainer & GetRanges() const { return m_aWhichRanges; }

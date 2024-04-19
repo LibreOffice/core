@@ -20,6 +20,8 @@ with io.open("workdir/loplugin.constantparam.log", "r") as txt:
             returnType = normalizeTypeParams(tokens[0])
             nameAndParams = normalizeTypeParams(tokens[1])
             sourceLocation = tokens[2]
+            # the cxx should actually ignore these
+            if sourceLocation.startswith("workdir/"): continue
             paramName = tokens[3]
             paramType = normalizeTypeParams(tokens[4])
             callValue = tokens[5]

@@ -83,7 +83,7 @@ namespace sdr::properties
                     }
                     else
                     {
-                        moMergedItemSet->MergeValue(rSet.Get(nWhich), true);
+                        moMergedItemSet->MergeValue(rSet.Get(nWhich));
                     }
 
                     nWhich = aIter.NextWhich();
