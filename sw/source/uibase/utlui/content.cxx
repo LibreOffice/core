@@ -379,18 +379,22 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         case ContentTypeId::TABLE:
             m_sTypeToken = "table";
             m_bEdit = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::FRAME:
             m_sTypeToken = "frame";
             m_bEdit = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::GRAPHIC:
             m_sTypeToken = "graphic";
             m_bEdit = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::OLE:
             m_sTypeToken = "ole";
             m_bEdit = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::TEXTFIELD:
             m_bEdit = true;
@@ -407,16 +411,19 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
                         DocumentSettingId::PROTECT_BOOKMARKS);
             m_bEdit = true;
             m_bDelete = !bProtectedBM;
+            m_bRenamable = !bProtectedBM;
         }
         break;
         case ContentTypeId::REGION:
             m_sTypeToken = "region";
             m_bEdit = true;
             m_bDelete = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::INDEX:
             m_bEdit = true;
             m_bDelete = true;
+            m_bRenamable = true;
         break;
         case ContentTypeId::REFERENCE:
             m_bEdit = false;
@@ -432,6 +439,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         case ContentTypeId::DRAWOBJECT:
             m_sTypeToken = "drawingobject";
             m_bEdit = true;
+            m_bRenamable = true;
         break;
         default: break;
     }
@@ -1819,15 +1827,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
             const bool bDeletable = pType->IsDeletable()
                     && ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
-            const bool bRenamable = bEditable && !bReadonly &&
-                    (ContentTypeId::TABLE == nContentType ||
-                     ContentTypeId::FRAME == nContentType ||
-                     ContentTypeId::GRAPHIC == nContentType ||
-                     ContentTypeId::OLE == nContentType ||
-                     (ContentTypeId::BOOKMARK == nContentType && !bProtectBM) ||
-                     ContentTypeId::REGION == nContentType ||
-                     ContentTypeId::INDEX == nContentType ||
-                     ContentTypeId::DRAWOBJECT == nContentType);
+            const bool bRenamable
+                = !bReadonly
+                  && (pType->IsRenamable()
+                      || (ContentTypeId::BOOKMARK == nContentType && !bProtectBM));
+
             // Choose which Delete entry to show.
             if (bDeletable)
             {
@@ -1932,12 +1936,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     xPop->set_active("protectsection", bProtected);
                     xPop->set_active("hidesection", bHidden);
                 }
-                else if (bEditable)
+                else
                     bRemoveEditEntry = false;
-                //Rename object
-                if (bRenamable)
-                    bRemoveRenameEntry = false;
             }
+            if (bRenamable)
+                bRemoveRenameEntry = false;
         }
         else
         {
