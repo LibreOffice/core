@@ -948,7 +948,7 @@ void SfxObjectShell::DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet,
     ucsdet_close(ucd);
 }
 
-void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCharSet, OUString& separators, sal_Unicode cStringDelimiter, bool bForceCommonSeps, bool bAllowMultipleSeps)
+void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCharSet, OUString& separators, sal_Unicode cStringDelimiter)
 {
     OUString sLine;
     std::vector<std::unordered_map<sal_Unicode, sal_uInt32>> aLinesCharsCount;
@@ -968,9 +968,8 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
     if (!cStringDelimiter)
         cStringDelimiter = '\"';
 
-    if (bForceCommonSeps)
-        for (sal_Int32 nComSepIdx = sCommonSeps.getLength() - 1; nComSepIdx >= 0; nComSepIdx --)
-            usetCommonSeps.insert(sCommonSeps[nComSepIdx]);
+    for (sal_Int32 nComSepIdx = sCommonSeps.getLength() - 1; nComSepIdx >= 0; nComSepIdx --)
+        usetCommonSeps.insert(sCommonSeps[nComSepIdx]);
     aLinesCharsCount.reserve(nMaxLinesToProcess);
     separators = "";
 
@@ -1008,7 +1007,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
                 continue;
 
             // If restricted only to common separators then skip the rest
-            if (bForceCommonSeps && usetCommonSeps.find(*p) == usetCommonSeps.end())
+            if (usetCommonSeps.find(*p) == usetCommonSeps.end())
                 continue;
 
             auto it_elem = aCharsCount.find(*p);
@@ -1067,34 +1066,22 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
             sInitSeps += OUStringChar(it->first);
 
     // If forced to most common or there are multiple separators then pick up only the most common by importance.
-    if (bForceCommonSeps || sInitSeps.getLength() > 1)
+    sal_Int32 nInitSepIdx;
+    sal_Int32 nComSepIdx;
+    for (nComSepIdx = 0; nComSepIdx < sCommonSeps.getLength(); nComSepIdx++)
     {
-        sal_Int32 nInitSepIdx;
-        sal_Int32 nComSepIdx;
-        for (nComSepIdx = 0; nComSepIdx < sCommonSeps.getLength(); nComSepIdx++)
+        sal_Unicode c = sCommonSeps[nComSepIdx];
+        for (nInitSepIdx = sInitSeps.getLength() - 1; nInitSepIdx >= 0; nInitSepIdx --)
         {
-            sal_Unicode c = sCommonSeps[nComSepIdx];
-            for (nInitSepIdx = sInitSeps.getLength() - 1; nInitSepIdx >= 0; nInitSepIdx --)
+            if (c == sInitSeps[nInitSepIdx])
             {
-                if (c == sInitSeps[nInitSepIdx])
-                {
-                    separators += OUStringChar(c);
-                    break;
-                }
-            }
-
-            if (!bAllowMultipleSeps && nInitSepIdx >= 0)
+                separators += OUStringChar(c);
                 break;
+            }
         }
-    }
 
-    // If there are no most common separators then keep the initial list.
-    if (!bForceCommonSeps && !separators.getLength())
-    {
-        if (bAllowMultipleSeps)
-            separators = sInitSeps;
-        else
-            separators = OUStringChar(sInitSeps[0]);
+        if (nInitSepIdx >= 0)
+            break;
     }
 
     stream.Seek(nInitPos);
