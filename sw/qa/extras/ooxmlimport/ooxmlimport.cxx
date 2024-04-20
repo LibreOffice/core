@@ -175,6 +175,9 @@ xray ThisComponent.DrawPage(1).getByIndex(0).String
 xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 */
     uno::Reference<drawing::XShapes> xShapes(getShape(2), uno::UNO_QUERY);
+    // The groupshape should be in the foreground, not the background.
+    CPPUNIT_ASSERT(getProperty<bool>(xShapes, "Opaque"));
+
     uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("TEXT1\n"), xShape->getString());
     // we want to test the textbox is on the first page (it was put onto another page without the fix),

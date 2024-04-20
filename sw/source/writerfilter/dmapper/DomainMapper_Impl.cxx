@@ -4696,6 +4696,27 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 }
             }
 
+            uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aGrabBag;
+            xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+
+            for (const auto& rProp : aGrabBag)
+            {
+                if (rProp.Name == "VML-Z-ORDER")
+                {
+                    sal_Int64 zOrder(0);
+                    rProp.Value >>= zOrder;
+
+                    text::TextContentAnchorType nAnchorType
+                        = text::TextContentAnchorType_AT_PARAGRAPH;
+                    xShapePropertySet->getPropertyValue(getPropertyName(PROP_ANCHOR_TYPE))
+                        >>= nAnchorType;
+
+                    const uno::Any aOpaque(nAnchorType == text::TextContentAnchorType_AS_CHARACTER
+                                           || (zOrder >= 0 && !IsInHeaderFooter()));
+                    xShapePropertySet->setPropertyValue(getPropertyName(PROP_OPAQUE), aOpaque);
+                }
+            }
             // A GroupShape doesn't implement text::XTextRange, but appending
             // an empty reference to the stacks still makes sense, because this
             // way bToRemove can be set, and we won't end up with duplicated
