@@ -975,10 +975,18 @@ namespace emfio
                 if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
                 {
                     aSize.AdjustWidth(1 );
-                    tools::Long nDotLen = ImplMap( aSize ).Width();
-                    pLineStyle->aLineInfo.SetDistance( nDotLen );
-                    pLineStyle->aLineInfo.SetDotLen( nDotLen );
-                    pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
+                    tools::Long nDashLen, nDotLen = ImplMap( aSize ).Width();
+                    const bool bFail = o3tl::checked_multiply<tools::Long>(nDotLen, 3, nDashLen);
+                    if (!bFail)
+                    {
+                        pLineStyle->aLineInfo.SetDistance( nDotLen );
+                        pLineStyle->aLineInfo.SetDotLen( nDotLen );
+                        pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
+                    }
+                    else
+                    {
+                        SAL_WARN("emfio", "DotLen too long: " << nDotLen);
+                    }
                 }
             }
         }
