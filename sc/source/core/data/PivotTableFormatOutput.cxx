@@ -98,7 +98,7 @@ void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField
         {
             if (!rSelection.nIndices.empty() && rSelection.nField == rOutputField.nDimension)
             {
-                if (rSelection.nIndices.size() > 1)
+                if (rSelection.nIndices.size() > nSelectionIndex)
                     rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
                 else
                     rOutputField.nIndex = rSelection.nIndices[0];
