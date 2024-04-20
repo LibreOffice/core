@@ -1398,47 +1398,43 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-#ifdef MACOSX
     // On some operating systems (Linux on LO Jenkins CI), the `/mask/` string is not added to XPath
     // As a result tests are failing. On my Ubuntu 20.04 the `/mask/` string was added
-    // I would leave this test case for macOS to make sure there is no regression at least on one platform.
+
+    OString aPrefix = aXPathPrefix;
+    if (countXPathNodes(pDocument, aXPathPrefix + "mask"))
+        aPrefix += "mask/";
 
     // These values come from the fix for tdf#88163
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 5);
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
+    assertXPath(pDocument, aPrefix + "polypolygoncolor", 5);
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
                 "m7257 1836h320v3628h-320z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[1]", "color"_ostr, "#ff0000");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path"_ostr,
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
                 "m7257 5976h320v321h-320z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]", "color"_ostr, "#00ff00");
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[2]", "color"_ostr, "#00ff00");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[3]/polypolygon", "path"_ostr,
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[3]/polypolygon", "path"_ostr,
                 "m10203 5976h320v321h-320z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[3]", "color"_ostr, "#8080ff");
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[3]", "color"_ostr, "#8080ff");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group", 5);
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/polypolygoncolor", "color"_ostr,
-                "#00ff00");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/textsimpleportion", "text"_ostr, "ABCD");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+    assertXPath(pDocument, aPrefix + "group", 5);
+    assertXPath(pDocument, aPrefix + "group[1]/polypolygoncolor", "color"_ostr, "#00ff00");
+    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "text"_ostr, "ABCD");
+    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "fontcolor"_ostr, "#000000");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group[2]/polypolygoncolor", "color"_ostr,
-                "#8080ff");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[2]/textsimpleportion", "text"_ostr, "MMMM");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[2]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+    assertXPath(pDocument, aPrefix + "group[2]/polypolygoncolor", "color"_ostr, "#8080ff");
+    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "text"_ostr, "MMMM");
+    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "fontcolor"_ostr, "#000000");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/polypolygoncolor", "color"_ostr,
+    assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor", "color"_ostr,
                 "#ff8000");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/polypolygoncolor/polypolygon",
+    assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor/polypolygon",
                 "path"_ostr, "m1067 1067h1317v473h-1317z");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/textsimpleportion", "text"_ostr,
-                "OOOO");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/textsimpleportion",
-                "fontcolor"_ostr, "#000000");
-#endif
+    assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "text"_ostr, "OOOO");
+    assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor"_ostr,
+                "#000000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPaletteWMF)
