@@ -1823,10 +1823,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             const bool bProtected = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsProtect();
             const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
                     && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
-            const bool bEditable = pType->IsEditable() &&
-                    ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
-            const bool bDeletable = pType->IsDeletable()
-                    && ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+            const bool bEditable
+                = !bReadonly && pType->IsEditable()
+                  && ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
+            const bool bDeletable = !bReadonly && pType->IsDeletable()
+                                    && ((bVisible && !bProtected && !bProtectBM)
+                                        || ContentTypeId::REGION == nContentType);
             const bool bRenamable
                 = !bReadonly
                   && (pType->IsRenamable()
@@ -1899,7 +1901,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 }
                 bRemoveCopyEntry = false;
             }
-            else if (!bReadonly && bEditable)
+            else if (bEditable)
             {
                 if(ContentTypeId::INDEX == nContentType)
                 {
