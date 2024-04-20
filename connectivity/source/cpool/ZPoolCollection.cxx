@@ -76,7 +76,6 @@ OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContex
     m_xManager = DriverManager::create( m_xContext );
 
     m_xProxyFactory = ProxyFactory::create( m_xContext );
-
     Reference<XPropertySet> xProp(getConfigPoolRoot(),UNO_QUERY);
     if ( xProp.is() )
         xProp->addPropertyChangeListener(getEnablePoolingNodeName(),this);
@@ -371,9 +370,9 @@ void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ )
 {
 }
 
-void SAL_CALL OPoolCollection::notifyTermination( const EventObject& /*Event*/ )
+void SAL_CALL OPoolCollection::notifyTermination( const EventObject& Event )
 {
-    clearDesktop();
+    disposing(Event);
 }
 
 void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
@@ -402,6 +401,10 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
             TOOLS_WARN_EXCEPTION("connectivity.cpool", "");
         }
     }
+    m_xConfigNode.clear();
+    m_xProxyFactory.clear();
+    m_xManager.clear();
+    m_xContext.clear();
 }
 
 void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeEvent& evt )
