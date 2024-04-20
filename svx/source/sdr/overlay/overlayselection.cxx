@@ -40,11 +40,7 @@ struct B2DPointCompare
 {
     bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
     {
-        if (lhs.getX() < rhs.getX())
-            return true;
-        if (lhs.getX() > rhs.getX())
-            return false;
-        return lhs.getY() < rhs.getY();
+        return std::make_pair(lhs.getX(), lhs.getY()) < std::make_pair(rhs.getX(), rhs.getY());
     }
 };
 
@@ -52,11 +48,7 @@ struct B2DPointCompareYThenX
 {
     bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
     {
-        if (lhs.getY() < rhs.getY())
-            return true;
-        if (lhs.getY() > rhs.getY())
-            return false;
-        return lhs.getX() < rhs.getX();
+        return std::make_pair(lhs.getY(), lhs.getX()) < std::make_pair(rhs.getY(), rhs.getX());
     }
 };
 
