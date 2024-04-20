@@ -561,7 +561,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMe
 
 OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                                         uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                        bool bIgnoreType, bool bAllowDeepDetection )
+                                        bool bIgnoreType )
 {
     OUString aFilterName;
 
@@ -581,7 +581,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         uno::Sequence< beans::PropertyValue > aTempMD( aMediaDescr );
 
         // get TypeName
-        OUString aTypeName = xTypeDetection->queryTypeByDescriptor(aTempMD, bAllowDeepDetection);
+        OUString aTypeName = xTypeDetection->queryTypeByDescriptor(aTempMD, /*bAllowDeepDetection*/true);
 
         // get FilterName
         for (const auto& prop : aTempMD)
