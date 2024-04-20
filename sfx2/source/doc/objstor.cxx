@@ -1100,7 +1100,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
     stream.Seek(nInitPos);
 }
 
-void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions, bool bForceDetect)
+void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions)
 {
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     std::u16string_view aSeps;
@@ -1110,7 +1110,7 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
     OUString aOrigFilterOpts = aFilterOptions;
     bool bDelimiter = false, bCharSet = false, bRest = false; // This indicates the presence of the token even if empty ;)
 
-    if (aFilterOptions.isEmpty() && !bForceDetect)
+    if (aFilterOptions.isEmpty())
         return;
     const std::u16string_view aDetect = u"DETECT";
     sal_Int32 nPos = 0;
@@ -1128,7 +1128,7 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
         aRest = std::basic_string_view<sal_Unicode>(aOrigFilterOpts.getStr() + nPos, aOrigFilterOpts.getLength() - nPos);
 
     // Detect charset
-    if (bForceDetect || aCharSet == aDetect)
+    if (aCharSet == aDetect)
     {
         SvStreamEndian endian;
         DetectCharSet(stream, eCharSet, endian);
@@ -1141,7 +1141,7 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
 
     //Detect separators
     aFilterOptions = "";
-    if (bForceDetect || aSeps == aDetect)
+    if (aSeps == aDetect)
     {
         OUString separators;
         DetectCsvSeparators(stream, eCharSet, separators, static_cast<sal_Unicode>(o3tl::toInt32(aDelimiter)));
@@ -1159,22 +1159,22 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
         aFilterOptions = aSeps;
 
     OUStringChar cComma = u',';
-    if (bDelimiter || bForceDetect)
+    if (bDelimiter)
         aFilterOptions += cComma + aDelimiter;
-    if (bCharSet || bForceDetect)
-        aFilterOptions += cComma + (aCharSet == aDetect || bForceDetect ? OUString::number(eCharSet) : aCharSet);
+    if (bCharSet)
+        aFilterOptions += cComma + (aCharSet == aDetect ? OUString::number(eCharSet) : aCharSet);
     if (bRest)
         aFilterOptions += cComma + aRest;
 }
 
-void SfxObjectShell::DetectFilterOptions(SfxMedium* pMedium, bool bForceDetect)
+void SfxObjectShell::DetectFilterOptions(SfxMedium* pMedium)
 {
     std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
     SfxItemSet& rSet = pMedium->GetItemSet();
     const SfxStringItem* pOptions = rSet.GetItem(SID_FILE_FILTEROPTIONS, false);
 
-    // Skip if filter options are missing and the detection is not enforced
-    if (!bForceDetect && (!pFilter || !pOptions))
+    // Skip if filter options are missing
+    if (!pFilter || !pOptions)
         return;
 
     if (pFilter->GetName() == "Text - txt - csv (StarCalc)")
@@ -1187,7 +1187,7 @@ void SfxObjectShell::DetectFilterOptions(SfxMedium* pMedium, bool bForceDetect)
             return;
 
         OUString aFilterOptions = pOptions->GetValue();
-        DetectCsvFilterOptions(*pInStream, aFilterOptions, bForceDetect);
+        DetectCsvFilterOptions(*pInStream, aFilterOptions);
         rSet.Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aFilterOptions));
     }
 }
