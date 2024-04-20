@@ -1305,9 +1305,9 @@ void GraphicExport::writeSvgExtension(OUString const& rSvgRelId)
     mpFS->endElementNS( XML_a, XML_extLst);
 }
 
-void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia)
+void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects)
 {
-    OUString sRelId = writeToStorage(rGraphic, bRelPathToMedia);
+    OUString sRelId = writeToStorage(rGraphic, /*bRelPathToMedia*/false);
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
@@ -1315,7 +1315,7 @@ void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEf
 
     if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Svg)
     {
-        OUString sSvgRelId = writeToStorage(rGraphic, bRelPathToMedia, TypeHint::SVG);
+        OUString sSvgRelId = writeToStorage(rGraphic, /*bRelPathToMedia*/false, TypeHint::SVG);
         writeSvgExtension(sSvgRelId);
     }
 

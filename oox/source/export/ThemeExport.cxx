@@ -619,7 +619,7 @@ void ThemeExport::writeBlip(model::BlipFill const& rBlipFill)
         return;
     oox::drawingml::GraphicExport aExporter(mpFS, mpFilterBase, meDocumentType);
     Graphic aGraphic(rBlipFill.mxGraphic);
-    aExporter.writeBlip(aGraphic, rBlipFill.maBlipEffects, false);
+    aExporter.writeBlip(aGraphic, rBlipFill.maBlipEffects);
 }
 
 void ThemeExport::writeBlipFill(model::BlipFill const& rBlipFill)

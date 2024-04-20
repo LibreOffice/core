@@ -276,7 +276,7 @@ public:
 
     OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false, TypeHint eHint = TypeHint::Detect);
 
-    void writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia = false);
+    void writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects);
     void writeSvgExtension(OUString const& rSvgRelId);
 };
 
