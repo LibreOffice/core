@@ -1313,7 +1313,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
     if( !pEditSet )
         return;
     GetFromEditItemSet( GetItemSet(), *pEditSet );
-    mxVisible.reset();
+    InvalidateCaches();
 }
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
@@ -1356,7 +1356,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 if (SfxPoolItem::areSame( pThisItem, pOldItem ))
                 {
                     rThisSet.ClearItem( nSubWhich );
-                    mxVisible.reset();
+                    InvalidateCaches();
                 }
             }
             else if ( eOldState != SfxItemState::INVALID )
@@ -1365,7 +1365,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 if ( *pThisItem == rThisSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )
                 {
                     rThisSet.ClearItem( nSubWhich );
-                    mxVisible.reset();
+                    InvalidateCaches();
                 }
             }
         }
@@ -1386,7 +1386,7 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
     SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
-    mxVisible.reset();
+    InvalidateCaches();
 }
 
 static SfxStyleSheetBase* lcl_CopyStyleToPool
@@ -1648,7 +1648,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         GetItemSet().SetParent(nullptr);
         pStyle = nullptr;
     }
-    mxVisible.reset();
+    InvalidateCaches();
 }
 
 bool ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
@@ -1678,7 +1678,7 @@ bool ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
         pStyle = nullptr;
         bNameChanged = true;
     }
-    mxVisible.reset();
+    InvalidateCaches();
     return bNameChanged;
 }
 
@@ -1691,7 +1691,7 @@ void ScPatternAttr::StyleToName()
         moName = pStyle->GetName();
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
-        mxVisible.reset();
+        InvalidateCaches();
     }
 }
 
@@ -1717,10 +1717,24 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 }
 
+sal_uInt32 ScPatternAttr::GetNumberFormatKey() const
+{
+    if (!mxNumberFormatKey.has_value())
+        mxNumberFormatKey = getNumberFormatKey(GetItemSet());
+    return *mxNumberFormatKey;
+}
+
+LanguageType ScPatternAttr::GetLanguageType() const
+{
+    if (!mxLanguageType.has_value())
+        mxLanguageType = getLanguageType(GetItemSet());
+    return *mxLanguageType;
+}
+
 sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {
-    sal_uInt32 nFormat = getNumberFormatKey(GetItemSet());
-    LanguageType eLang = getLanguageType(GetItemSet());
+    sal_uInt32 nFormat = GetNumberFormatKey();
+    LanguageType eLang = GetLanguageType();
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
     else if ( pFormatter )
@@ -1730,8 +1744,8 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 
 sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext ) const
 {
-    sal_uInt32 nFormat = getNumberFormatKey(GetItemSet());
-    LanguageType eLang = getLanguageType(GetItemSet());
+    sal_uInt32 nFormat = GetNumberFormatKey();
+    LanguageType eLang = GetLanguageType();
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
     else
@@ -1758,12 +1772,12 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
         if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT) == SfxItemState::SET)
             eLang = getLanguageType(*pCondSet);
         else
-            eLang = getLanguageType(GetItemSet());
+            eLang = GetLanguageType();
     }
     else
     {
-        nFormat = getNumberFormatKey(GetItemSet());
-        eLang = getLanguageType(GetItemSet());
+        nFormat = GetNumberFormatKey();
+        eLang = GetLanguageType();
     }
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
@@ -1785,12 +1799,12 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext,
         if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT) == SfxItemState::SET)
             eLang = getLanguageType(*pCondSet);
         else
-            eLang = getLanguageType(GetItemSet());
+            eLang = GetLanguageType();
     }
     else
     {
-        nFormat = getNumberFormatKey(GetItemSet());
-        eLang = getLanguageType(GetItemSet());
+        nFormat = GetNumberFormatKey();
+        eLang = GetLanguageType();
     }
 
     return rContext.NFGetFormatForLanguageIfBuiltIn(nFormat, eLang);
@@ -1862,6 +1876,13 @@ void ScPatternAttr::SetPAKey(sal_uInt64 nKey)
 sal_uInt64 ScPatternAttr::GetPAKey() const
 {
     return mnPAKey;
+}
+
+void ScPatternAttr::InvalidateCaches()
+{
+    mxVisible.reset();
+    mxNumberFormatKey.reset();
+    mxLanguageType.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

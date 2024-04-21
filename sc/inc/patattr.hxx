@@ -128,6 +128,8 @@ class SC_DLLPUBLIC ScPatternAttr final
     SfxItemSet                  maLocalSfxItemSet;
     std::optional<OUString>     moName;
     mutable std::optional<bool> mxVisible;
+    mutable std::optional<sal_uInt32> mxNumberFormatKey;
+    mutable std::optional<LanguageType> mxLanguageType;
     ScStyleSheet*               pStyle;
     CellAttributeHelper*        pCellAttributeHelper;
     sal_uInt64                  mnPAKey;
@@ -268,6 +270,9 @@ public:
 
 private:
     bool                    CalcVisible() const;
+    sal_uInt32              GetNumberFormatKey() const;
+    LanguageType            GetLanguageType() const;
+    void                    InvalidateCaches();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
