@@ -106,7 +106,7 @@ public:
 protected:
     ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
         const ScQueryParam& rParam, bool bReverseSearch );
-    void InitPosStart();
+    void InitPosStart(sal_uInt8 nSortedBinarySearch = 0x00);
     void InitPosFinish( SCROW beforeRow, SCROW lastRow, bool bFirstMatch );
     void IncPos() { IncPosImpl<false>(); }
     bool IncPosFast() { return IncPosImpl<true>(); }

@@ -11555,14 +11555,10 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         // range lookup <= or >=
         SCCOL nCol;
         SCROW nRow;
-        bool bLessOrEqual = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL;
-        // we can use binary search if the SearchMode is searchbasc or searchbdesc
-        if ((static_cast<SearchMode>(nSearchMode) == searchbasc && !bLessOrEqual) ||
-            (static_cast<SearchMode>(nSearchMode) == searchbdesc && bLessOrEqual) ||
+        bool bBinarySearch = static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc;
+        if ((bBinarySearch && (nOpCode == SC_OPCODE_X_LOOKUP || nOpCode == SC_OPCODE_X_MATCH)) ||
             ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext))
         {
-            // search for the first LessOrEqual value if SearchMode is desc or
-            // search for the first GreaterOrEqual value if SearchMode is asc
             ScQueryCellIteratorSortedCache aCellIter(rDoc, rContext, rParam.nTab, rParam, false, false);
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetLookupMode(nOpCode);
@@ -11575,7 +11571,6 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         }
         else
         {
-            // search for the last LessOrEqual value or GreaterOrEqual value
             bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
             ScQueryCellIteratorDirect aCellIter(rDoc, rContext, rParam.nTab, rParam, false, bReverse);
 

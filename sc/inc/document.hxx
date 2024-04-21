@@ -1404,7 +1404,7 @@ public:
                         doesn't already exist. */
     ScLookupCache & GetLookupCache( const ScRange & rRange, ScInterpreterContext* pContext );
     ScSortedRangeCache & GetSortedRangeCache( const ScRange & rRange, const ScQueryParam& param,
-                                              ScInterpreterContext* pContext );
+                                              ScInterpreterContext* pContext, sal_uInt8 nSortedBinarySearch = 0x00 );
                     /** Only ScLookupCache dtor uses RemoveLookupCache(), do
                         not use elsewhere! */
     void            RemoveLookupCache( ScLookupCache & rCache );
