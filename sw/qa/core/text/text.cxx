@@ -125,7 +125,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf156146)
 
     uno::Reference<container::XIndexAccess> const xLevels1(
         getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
-    uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1["FirstLineIndent"].get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1["IndentAt"].get<sal_Int32>());
@@ -155,7 +154,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
 
     uno::Reference<container::XIndexAccess> const xLevels1(
         getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
-    uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-4001), props1["FirstLineIndent"].get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), props1["IndentAt"].get<sal_Int32>());
