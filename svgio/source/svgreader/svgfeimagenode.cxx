@@ -46,11 +46,6 @@ void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
             readLocalCssStyle(aContent);
             break;
         }
-        case SVGToken::In:
-        {
-            maIn = aContent.trim();
-            break;
-        }
         case SVGToken::Result:
         {
             maResult = aContent.trim();
@@ -79,12 +74,6 @@ void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
 void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                            const SvgFilterNode* pParent) const
 {
-    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
-        = pParent->findGraphicSource(maIn))
-    {
-        rTarget = *rSource;
-    }
-
     BitmapEx aBitmapEx;
 
     if (!maData.isEmpty())

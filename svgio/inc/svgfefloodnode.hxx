@@ -27,7 +27,6 @@ namespace svgio::svgreader
 class SvgFeFloodNode final : public SvgFilterNode
 {
 private:
-    OUString maIn;
     OUString maResult;
     SvgNumber maX;
     SvgNumber maY;

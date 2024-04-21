@@ -49,11 +49,6 @@ void SvgFeFloodNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
             readLocalCssStyle(aContent);
             break;
         }
-        case SVGToken::In:
-        {
-            maIn = aContent.trim();
-            break;
-        }
         case SVGToken::Result:
         {
             maResult = aContent.trim();
@@ -144,12 +139,6 @@ void SvgFeFloodNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
 
     if (fWidth <= 0.0 || fHeight <= 0.0)
         return;
-
-    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
-        = pParent->findGraphicSource(maIn))
-    {
-        rTarget = *rSource;
-    }
 
     const double fX(maX.solve(*this, NumberType::xcoordinate));
     const double fY(maY.solve(*this, NumberType::ycoordinate));

@@ -27,7 +27,6 @@ namespace svgio::svgreader
 class SvgFeImageNode final : public SvgFilterNode
 {
 private:
-    OUString maIn;
     OUString maResult;
     OUString maUrl; // external link
     OUString maData; // base64 data
