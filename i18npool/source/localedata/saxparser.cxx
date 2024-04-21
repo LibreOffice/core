@@ -190,7 +190,6 @@ public: // ExtendedDocumentHandler
     printf( "parsing document %s started\n", theLocale.c_str());
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
     of.writeAsciiString("#include <rtl/ustring.hxx>\n\n\n");
-    of.writeAsciiString("#include <stdio.h>\n\n");
     of.writeAsciiString("extern \"C\" {\n\n");
     }
 
