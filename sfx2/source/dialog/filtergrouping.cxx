@@ -402,10 +402,7 @@ namespace sfx2
 
     const sal_Unicode s_cWildcardSeparator( ';' );
 
-    static OUString getSeparatorString()
-    {
-        return ";";
-    }
+    constexpr OUString SEPARATOR = u";"_ustr;
 
     namespace {
 
@@ -438,7 +435,7 @@ namespace sfx2
             }
 
             if ( !_rToBeExtended.isEmpty() )
-                _rToBeExtended += getSeparatorString();
+                _rToBeExtended += SEPARATOR;
             _rToBeExtended += _rWC;
         }
     };

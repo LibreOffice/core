@@ -51,20 +51,9 @@ namespace dbaccess
     using ::com::sun::star::sdb::DatabaseRegistrationEvent;
     using ::com::sun::star::uno::XAggregation;
 
-    static OUString getConfigurationRootPath()
-    {
-        return "org.openoffice.Office.DataAccess/RegisteredNames";
-    }
-
-    static OUString getLocationNodeName()
-    {
-        return "Location";
-    }
-
-    static OUString getNameNodeName()
-    {
-        return "Name";
-    }
+    constexpr OUString CONF_ROOT_PATH = u"org.openoffice.Office.DataAccess/RegisteredNames"_ustr;
+    constexpr OUString LOCATION = u"Location"_ustr;
+    constexpr OUString NAME = u"Name"_ustr;
 
     // DatabaseRegistrations - declaration
     typedef ::cppu::WeakImplHelper<   XDatabaseRegistrations
@@ -147,7 +136,7 @@ namespace dbaccess
         ,m_aRegistrationListeners( m_aMutex )
     {
         m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-            m_aContext, getConfigurationRootPath() );
+            m_aContext, CONF_ROOT_PATH );
     }
 
     DatabaseRegistrations::~DatabaseRegistrations()
@@ -162,7 +151,7 @@ namespace dbaccess
             ::utl::OConfigurationNode aNodeForName = m_aConfigurationRoot.openNode( nodeName );
 
             OUString sTestName;
-            OSL_VERIFY( aNodeForName.getNodeValue( getNameNodeName() ) >>= sTestName );
+            OSL_VERIFY( aNodeForName.getNodeValue( NAME ) >>= sTestName );
             if ( sTestName == _rName )
                 return aNodeForName;
         }
@@ -196,7 +185,7 @@ namespace dbaccess
         }
 
         ::utl::OConfigurationNode aNewNode( m_aConfigurationRoot.createNode( sNewNodeName ) );
-        aNewNode.setNodeValue( getNameNodeName(), Any( _rName ) );
+        aNewNode.setNodeValue( NAME, Any( _rName ) );
         return aNewNode;
     }
 
@@ -251,7 +240,7 @@ namespace dbaccess
         for ( auto const & name : aProgrammaticNames )
         {
             ::utl::OConfigurationNode aRegistrationNode = m_aConfigurationRoot.openNode( name );
-            OSL_VERIFY( aRegistrationNode.getNodeValue( getNameNodeName() ) >>= *pDisplayName );
+            OSL_VERIFY( aRegistrationNode.getNodeValue( NAME ) >>= *pDisplayName );
             ++pDisplayName;
         }
 
@@ -265,7 +254,7 @@ namespace dbaccess
         ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(Name);
 
         OUString sLocation;
-        OSL_VERIFY( aNodeForName.getNodeValue( getLocationNodeName() ) >>= sLocation );
+        OSL_VERIFY( aNodeForName.getNodeValue( LOCATION ) >>= sLocation );
         sLocation = SvtPathOptions().SubstituteVariable( sLocation );
 
         return sLocation;
@@ -280,7 +269,7 @@ namespace dbaccess
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_not_exist(Name);
 
         // register
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), Any( Location ) );
+        aDataSourceRegistration.setNodeValue( LOCATION, Any( Location ) );
         m_aConfigurationRoot.commit();
 
         // notify
@@ -298,7 +287,7 @@ namespace dbaccess
 
         // obtain properties for notification
         OUString sLocation;
-        OSL_VERIFY( aNodeForName.getNodeValue( getLocationNodeName() ) >>= sLocation );
+        OSL_VERIFY( aNodeForName.getNodeValue( LOCATION ) >>= sLocation );
 
         // revoke
         if  (   aNodeForName.isReadonly()
@@ -327,10 +316,10 @@ namespace dbaccess
 
         // obtain properties for notification
         OUString sOldLocation;
-        OSL_VERIFY( aDataSourceRegistration.getNodeValue( getLocationNodeName() ) >>= sOldLocation );
+        OSL_VERIFY( aDataSourceRegistration.getNodeValue( LOCATION ) >>= sOldLocation );
 
         // change
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), Any( NewLocation ) );
+        aDataSourceRegistration.setNodeValue( LOCATION, Any( NewLocation ) );
         m_aConfigurationRoot.commit();
 
         // notify

@@ -36,50 +36,21 @@ namespace offapp
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
 
-
-    static OUString getConnectionPoolNodeName()
-    {
-        return "org.openoffice.Office.DataAccess/ConnectionPool";
-    }
-
-
-    static OUString getEnablePoolingNodeName()
-    {
-        return "EnablePooling";
-    }
-
-
-    static OUString getDriverSettingsNodeName()
-    {
-        return "DriverSettings";
-    }
-
-
-    static OUString getDriverNameNodeName()
-    {
-        return "DriverName";
-    }
-
-
-    static OUString getEnableNodeName()
-    {
-        return "Enable";
-    }
-
-
-    static OUString getTimeoutNodeName()
-    {
-        return "Timeout";
-    }
+    constexpr OUString CONNECTIONPOOL_NODENAME = u"org.openoffice.Office.DataAccess/ConnectionPool"_ustr;
+    constexpr OUString ENABLE_POOLING = u"EnablePooling"_ustr;
+    constexpr OUString DRIVER_SETTINGS = u"DriverSettings"_ustr;
+    constexpr OUString DRIVER_NAME = u"DriverName"_ustr;
+    constexpr OUString ENABLE = u"Enable"_ustr;
+    constexpr OUString TIMEOUT = u"Timeout"_ustr;
 
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {
         // the config node where all pooling relevant info are stored under
         OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+            ::comphelper::getProcessComponentContext(), CONNECTIONPOOL_NODENAME, -1, OConfigurationTreeRoot::CM_READONLY);
 
         // the global "enabled" flag
-        Any aEnabled = aConnectionPoolRoot.getNodeValue(getEnablePoolingNodeName());
+        Any aEnabled = aConnectionPoolRoot.getNodeValue(ENABLE_POOLING);
         bool bEnabled = true;
         aEnabled >>= bEnabled;
         _rFillItems.Put(SfxBoolItem(SID_SB_POOLING_ENABLED, bEnabled));
@@ -94,7 +65,7 @@ namespace offapp
         }
 
         // then look for which of them settings are stored in the configuration
-        OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(getDriverSettingsNodeName());
+        OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(DRIVER_SETTINGS);
 
         Sequence< OUString > aDriverKeys = aDriverSettings.getNodeNames();
         const OUString* pDriverKeys = aDriverKeys.getConstArray();
@@ -104,7 +75,7 @@ namespace offapp
             // the name of the driver in this round
             OConfigurationNode aThisDriverSettings = aDriverSettings.openNode(*pDriverKeys);
             OUString sThisDriverName;
-            aThisDriverSettings.getNodeValue(getDriverNameNodeName()) >>= sThisDriverName;
+            aThisDriverSettings.getNodeValue(DRIVER_NAME) >>= sThisDriverName;
 
             // look if we (resp. the driver manager) know this driver
             // doing O(n) search here, which is expensive, but this doesn't matter in this small case ...
@@ -126,8 +97,8 @@ namespace offapp
             }
 
             // now fill this entry with the settings from the configuration
-            aThisDriverSettings.getNodeValue(getEnableNodeName()) >>= aLookup->bEnabled;
-            aThisDriverSettings.getNodeValue(getTimeoutNodeName()) >>= aLookup->nTimeoutSeconds;
+            aThisDriverSettings.getNodeValue(ENABLE) >>= aLookup->bEnabled;
+            aThisDriverSettings.getNodeValue(TIMEOUT) >>= aLookup->nTimeoutSeconds;
         }
 
         _rFillItems.Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, aSettings));
@@ -138,7 +109,7 @@ namespace offapp
     {
         // the config node where all pooling relevant info are stored under
         OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName());
+            ::comphelper::getProcessComponentContext(), CONNECTIONPOOL_NODENAME);
 
         if (!aConnectionPoolRoot.isValid())
             // already asserted by the OConfigurationTreeRoot
@@ -151,7 +122,7 @@ namespace offapp
         if (pEnabled)
         {
             bool bEnabled = pEnabled->GetValue();
-            aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(bEnabled));
+            aConnectionPoolRoot.setNodeValue(ENABLE_POOLING, Any(bEnabled));
             bNeedCommit = true;
         }
 
@@ -159,7 +130,7 @@ namespace offapp
         const DriverPoolingSettingsItem* pDriverSettings = _rSourceItems.GetItem<DriverPoolingSettingsItem>(SID_SB_DRIVER_TIMEOUTS);
         if (pDriverSettings)
         {
-            OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(getDriverSettingsNodeName());
+            OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(DRIVER_SETTINGS);
             if (!aDriverSettings.isValid())
                 return;
 
@@ -179,9 +150,9 @@ namespace offapp
                     aThisDriverSettings = aDriverSettings.createNode(newSetting.sName);
 
                 // set the values
-                aThisDriverSettings.setNodeValue(getDriverNameNodeName(), Any(sThisDriverName));
-                aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(newSetting.bEnabled));
-                aThisDriverSettings.setNodeValue(getTimeoutNodeName(), Any(newSetting.nTimeoutSeconds));
+                aThisDriverSettings.setNodeValue(DRIVER_NAME, Any(sThisDriverName));
+                aThisDriverSettings.setNodeValue(ENABLE, Any(newSetting.bEnabled));
+                aThisDriverSettings.setNodeValue(TIMEOUT, Any(newSetting.nTimeoutSeconds));
             }
             bNeedCommit = true;
         }

@@ -34,10 +34,7 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString >& rMap )
 }
 
 namespace {
-    OUString getCDATAString()
-    {
-        return "CDATA";
-    }
+    constexpr OUString CDATA = u"CDATA"_ustr;
 }
 
 sal_Int16 SAL_CALL SaxAttrList::getLength()
@@ -51,12 +48,12 @@ OUString SAL_CALL SaxAttrList::getNameByIndex( sal_Int16 i_nIndex )
 
 OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex)
 {
-    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? getCDATAString() : OUString();
+    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? CDATA : OUString();
 }
 
 OUString SAL_CALL SaxAttrList::getTypeByName( const OUString& i_rName )
 {
-    return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? getCDATAString() : OUString();
+    return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? CDATA : OUString();
 }
 
 OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex )

@@ -43,30 +43,11 @@ using namespace ::osl;
 using namespace connectivity;
 
 
-static OUString getConnectionPoolNodeName()
-{
-    return "org.openoffice.Office.DataAccess/ConnectionPool";
-}
-
-static OUString getEnablePoolingNodeName()
-{
-    return "EnablePooling";
-}
-
-static OUString getDriverNameNodeName()
-{
-    return "DriverName";
-}
-
-static OUString getDriverSettingsNodeName()
-{
-    return "DriverSettings";
-}
-
-static OUString getEnableNodeName()
-{
-    return "Enable";
-}
+constexpr OUString CONNECTIONPOOL_NODENAME = u"org.openoffice.Office.DataAccess/ConnectionPool"_ustr;
+constexpr OUString ENABLE_POOLING = u"EnablePooling"_ustr;
+constexpr OUString DRIVER_NAME = u"DriverName"_ustr;
+constexpr OUString DRIVER_SETTINGS = u"DriverSettings"_ustr;
+constexpr OUString ENABLE = u"Enable"_ustr;
 
 
 OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContext)
@@ -78,7 +59,7 @@ OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContex
     m_xProxyFactory = ProxyFactory::create( m_xContext );
     Reference<XPropertySet> xProp(getConfigPoolRoot(),UNO_QUERY);
     if ( xProp.is() )
-        xProp->addPropertyChangeListener(getEnablePoolingNodeName(),this);
+        xProp->addPropertyChangeListener(ENABLE_POOLING,this);
     // attach as desktop listener to know when we have to release our pools
     osl_atomic_increment( &m_refCount );
     {
@@ -193,7 +174,7 @@ bool OPoolCollection::isDriverPoolingEnabled(std::u16string_view _sDriverImplNam
     bool bEnabled = false;
     Reference<XInterface> xConnectionPoolRoot = getConfigPoolRoot();
     // then look for which of them settings are stored in the configuration
-    Reference< XNameAccess > xDirectAccess(openNode(getDriverSettingsNodeName(),xConnectionPoolRoot),UNO_QUERY);
+    Reference< XNameAccess > xDirectAccess(openNode(DRIVER_SETTINGS,xConnectionPoolRoot),UNO_QUERY);
 
     if(xDirectAccess.is())
     {
@@ -207,7 +188,7 @@ bool OPoolCollection::isDriverPoolingEnabled(std::u16string_view _sDriverImplNam
             {
                 _rxDriverNode = openNode(*pDriverKeys,xDirectAccess);
                 if(_rxDriverNode.is())
-                    getNodeValue(getEnableNodeName(),_rxDriverNode) >>= bEnabled;
+                    getNodeValue(ENABLE,_rxDriverNode) >>= bEnabled;
                 break;
             }
         }
@@ -223,7 +204,7 @@ bool OPoolCollection::isPoolingEnabled()
     // the global "enabled" flag
     bool bEnabled = false;
     if(xConnectionPoolRoot.is())
-        getNodeValue(getEnablePoolingNodeName(),xConnectionPoolRoot) >>= bEnabled;
+        getNodeValue(ENABLE_POOLING,xConnectionPoolRoot) >>= bEnabled;
     return bEnabled;
 }
 
@@ -232,7 +213,7 @@ Reference<XInterface> const & OPoolCollection::getConfigPoolRoot()
     if(!m_xConfigNode.is())
         m_xConfigNode = createWithProvider(
             css::configuration::theDefaultProvider::get(m_xContext),
-            getConnectionPoolNodeName());
+            CONNECTIONPOOL_NODENAME);
     return m_xConfigNode;
 }
 
@@ -279,7 +260,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
     {
         Reference<XPropertySet> xProp(_xDriverNode,UNO_QUERY);
         if(xProp.is())
-            xProp->addPropertyChangeListener(getEnableNodeName(),this);
+            xProp->addPropertyChangeListener(ENABLE,this);
         rtl::Reference<OConnectionPool> pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
         m_aPools.emplace(_sImplName,pConnectionPool);
         pRet = pConnectionPool.get();
@@ -390,11 +371,11 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
             if(Source.Source == m_xConfigNode)
             {
                 if ( xProp.is() )
-                    xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
+                    xProp->removePropertyChangeListener(ENABLE_POOLING,this);
                 m_xConfigNode.clear();
             }
             else if ( xProp.is() )
-                xProp->removePropertyChangeListener(getEnableNodeName(),this);
+                xProp->removePropertyChangeListener(ENABLE,this);
         }
         catch(const Exception&)
         {
@@ -428,7 +409,7 @@ void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeE
         if(!bEnabled)
         {
             OUString sThisDriverName;
-            getNodeValue(getDriverNameNodeName(),evt.Source) >>= sThisDriverName;
+            getNodeValue(DRIVER_NAME,evt.Source) >>= sThisDriverName;
             // 1st release the driver
             // look if we already have a proxy for this driver
             MapDriver2DriverRef::iterator aLookup = m_aDriverProxies.begin();

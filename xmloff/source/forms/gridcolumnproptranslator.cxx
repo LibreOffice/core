@@ -39,15 +39,9 @@ namespace xmloff
 
     namespace
     {
-        OUString getParaAlignProperty()
-        {
-            return "ParaAdjust";
-        }
+        constexpr OUString PARA_ADJUST = u"ParaAdjust"_ustr;
 
-        OUString getAlignProperty()
-        {
-            return "Align";
-        }
+        constexpr OUString ALIGN = u"Align"_ustr;
 
         sal_Int32 findStringElement( const Sequence< OUString >& _rNames, const OUString& _rName )
         {
@@ -149,15 +143,15 @@ namespace xmloff
 
             sal_Int32 nOldLength = aProperties.getLength();
             aProperties.realloc( nOldLength + 1 );
-            aProperties.getArray()[ nOldLength ] = getPropertyByName( getParaAlignProperty() );
+            aProperties.getArray()[ nOldLength ] = getPropertyByName( PARA_ADJUST );
 
             return aProperties;
         }
 
         Property SAL_CALL OMergedPropertySetInfo::getPropertyByName( const OUString& aName )
         {
-            if ( aName == getParaAlignProperty() )
-                return Property( getParaAlignProperty(), -1,
+            if ( aName == PARA_ADJUST )
+                return Property( PARA_ADJUST, -1,
                     ::cppu::UnoType<ParagraphAdjust>::get(), 0 );
 
             if ( !m_xMasterInfo.is() )
@@ -168,7 +162,7 @@ namespace xmloff
 
         sal_Bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name )
         {
-            if ( Name == getParaAlignProperty() )
+            if ( Name == PARA_ADJUST )
                 return true;
 
             if ( !m_xMasterInfo.is() )
@@ -251,13 +245,13 @@ namespace xmloff
         Sequence< OUString > aTranslatedNames( aPropertyNames );
         Sequence< Any >             aTranslatedValues( aValues );
 
-        sal_Int32 nParaAlignPos = findStringElement( aTranslatedNames, getParaAlignProperty() );
+        sal_Int32 nParaAlignPos = findStringElement( aTranslatedNames, PARA_ADJUST );
         if ( nParaAlignPos != -1 )
         {
             if (aTranslatedNames.getLength() != aTranslatedValues.getLength())
                     throw css::lang::IllegalArgumentException(
                         "lengths do not match", getXWeak(), -1);
-            aTranslatedNames.getArray()[ nParaAlignPos ] = getAlignProperty();
+            aTranslatedNames.getArray()[ nParaAlignPos ] = ALIGN;
             valueParaAdjustToAlign( aTranslatedValues.getArray()[ nParaAlignPos ] );
         }
 
@@ -271,9 +265,9 @@ namespace xmloff
             return aValues;
 
         Sequence< OUString > aTranslatedNames( aPropertyNames );
-        sal_Int32 nAlignPos = findStringElement( aTranslatedNames, getParaAlignProperty() );
+        sal_Int32 nAlignPos = findStringElement( aTranslatedNames, PARA_ADJUST );
         if ( nAlignPos != -1 )
-            aTranslatedNames.getArray()[ nAlignPos ] = getAlignProperty();
+            aTranslatedNames.getArray()[ nAlignPos ] = ALIGN;
 
         aValues = m_xGridColumn->getPropertyValues( aPropertyNames );
         if ( nAlignPos != -1 )

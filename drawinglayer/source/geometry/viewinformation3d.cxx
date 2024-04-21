@@ -70,50 +70,15 @@ namespace drawinglayer::geometry
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
-            static OUString getNamePropertyObjectTransformation()
-            {
-                return "ObjectTransformation";
-            }
-
-            static OUString getNamePropertyOrientation()
-            {
-                return "Orientation";
-            }
-
-            static OUString getNamePropertyProjection()
-            {
-                return "Projection";
-            }
-
-            static OUString getNamePropertyProjection_30()
-            {
-                return "Projection30";
-            }
-
-            static OUString getNamePropertyProjection_31()
-            {
-                return "Projection31";
-            }
-
-            static OUString getNamePropertyProjection_32()
-            {
-                return "Projection32";
-            }
-
-            static OUString getNamePropertyProjection_33()
-            {
-                return "Projection33";
-            }
-
-            static OUString getNamePropertyDeviceToView()
-            {
-                return "DeviceToView";
-            }
-
-            static OUString getNamePropertyTime()
-            {
-                return "Time";
-            }
+            static constexpr OUString OBJECT_TRANSFORMATION = u"ObjectTransformation"_ustr;
+            static constexpr OUString ORIENTATION = u"Orientation"_ustr;
+            static constexpr OUString PROJECTION = u"Projection"_ustr;
+            static constexpr OUString PROJECTION30 = u"Projection30"_ustr;
+            static constexpr OUString PROJECTION31 = u"Projection31"_ustr;
+            static constexpr OUString PROJECTION32 = u"Projection32"_ustr;
+            static constexpr OUString PROJECTION33 = u"Projection33"_ustr;
+            static constexpr OUString DEVICE_TO_VIEW = u"DeviceToView"_ustr;
+            static constexpr OUString TIME = u"Time"_ustr;
 
             // a central PropertyValue parsing method to allow transportation of
             // all ViewParameters using UNO API
@@ -133,19 +98,19 @@ namespace drawinglayer::geometry
                 {
                     const beans::PropertyValue& rProp = rViewParameters[a];
 
-                    if(rProp.Name == getNamePropertyObjectTransformation())
+                    if(rProp.Name == OBJECT_TRANSFORMATION)
                     {
                         css::geometry::AffineMatrix3D aAffineMatrix3D;
                         rProp.Value >>= aAffineMatrix3D;
                         maObjectTransformation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                     }
-                    else if(rProp.Name == getNamePropertyOrientation())
+                    else if(rProp.Name == ORIENTATION)
                     {
                         css::geometry::AffineMatrix3D aAffineMatrix3D;
                         rProp.Value >>= aAffineMatrix3D;
                         maOrientation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                     }
-                    else if(rProp.Name == getNamePropertyProjection())
+                    else if(rProp.Name == PROJECTION)
                     {
                         // projection may be defined using a frustum in which case the last line of
                         // the 4x4 matrix is not (0,0,0,1). Since AffineMatrix3D does not support that,
@@ -164,37 +129,37 @@ namespace drawinglayer::geometry
                         maProjection.set(3, 2, f_32);
                         maProjection.set(3, 3, f_33);
                     }
-                    else if(rProp.Name == getNamePropertyProjection_30())
+                    else if(rProp.Name == PROJECTION30)
                     {
                         double f_30(0.0);
                         rProp.Value >>= f_30;
                         maProjection.set(3, 0, f_30);
                     }
-                    else if(rProp.Name == getNamePropertyProjection_31())
+                    else if(rProp.Name == PROJECTION31)
                     {
                         double f_31(0.0);
                         rProp.Value >>= f_31;
                         maProjection.set(3, 1, f_31);
                     }
-                    else if(rProp.Name == getNamePropertyProjection_32())
+                    else if(rProp.Name == PROJECTION32)
                     {
                         double f_32(0.0);
                         rProp.Value >>= f_32;
                         maProjection.set(3, 2, f_32);
                     }
-                    else if(rProp.Name == getNamePropertyProjection_33())
+                    else if(rProp.Name == PROJECTION33)
                     {
                         double f_33(1.0);
                         rProp.Value >>= f_33;
                         maProjection.set(3, 3, f_33);
                     }
-                    else if(rProp.Name == getNamePropertyDeviceToView())
+                    else if(rProp.Name == DEVICE_TO_VIEW)
                     {
                         css::geometry::AffineMatrix3D aAffineMatrix3D;
                         rProp.Value >>= aAffineMatrix3D;
                         maDeviceToView = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                     }
-                    else if(rProp.Name == getNamePropertyTime())
+                    else if(rProp.Name == TIME)
                     {
                         rProp.Value >>= mfViewTime;
                     }
