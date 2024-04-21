@@ -1614,16 +1614,167 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160517)
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160517.svg");
 
     assertXPath(pDocument,
-            "/primitive2D/transform/bitmap"_ostr, "height"_ostr, "100");
+            "/primitive2D/transform/bitmap"_ostr, "height"_ostr, "110");
     assertXPath(pDocument,
-            "/primitive2D/transform/bitmap"_ostr, "width"_ostr, "100");
+            "/primitive2D/transform/bitmap"_ostr, "width"_ostr, "110");
     assertXPath(pDocument,
-            "/primitive2D/transform/bitmap/data"_ostr, 100);
+            "/primitive2D/transform/bitmap/data"_ostr, 110);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/bitmap"_ostr, "xy11"_ostr, "110");
+    assertXPath(pDocument,
+            "/primitive2D/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy13"_ostr, "10");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy22"_ostr, "110");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy23"_ostr, "10");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D//transform/bitmap"_ostr, "xy33"_ostr, "1");
 
     // Check the color of a pixel in the middle
-    const OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/bitmap/data[50]"_ostr, "row"_ostr);
+    const OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/bitmap/data[55]"_ostr, "row"_ostr);
     std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
-    CPPUNIT_ASSERT_EQUAL(OUString("008100"), aPixels[50]);
+    CPPUNIT_ASSERT_EQUAL(OUString("008100"), aPixels[55]);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testArithmeticComposite)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/arithmetic.svg");
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "height"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "width"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap/data"_ostr, 150);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy11"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy13"_ostr, "50");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy22"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy23"_ostr, "50");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy33"_ostr, "1");
+
+    // Check the colors in the diagonal
+    OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[25]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff8000"), aPixels[25]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[75]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff8000"), aPixels[75]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[125]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aPixels[125]);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testArithmeticComposite2)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/arithmetic2.svg");
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "height"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "width"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap/data"_ostr, 150);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy11"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy13"_ostr, "20");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy22"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy23"_ostr, "20");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy33"_ostr, "1");
+
+    // Check the colors in the diagonal
+    OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[25]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aPixels[25]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[75]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff8000"), aPixels[75]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[125]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("008000"), aPixels[125]);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160726)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160726.svg");
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "height"_ostr, "250");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "width"_ostr, "250");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap/data"_ostr, 250);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy11"_ostr, "250");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy13"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy22"_ostr, "250");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy23"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy33"_ostr, "1");
+
+    // Check the colors in the diagonal
+    OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[50]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aPixels[50]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[125]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ffff00"), aPixels[125]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[200]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ffff00"), aPixels[200]);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149880)

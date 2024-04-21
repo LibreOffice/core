@@ -66,10 +66,6 @@ VCL_DLLPUBLIC BitmapEx CanvasTransformBitmap( const BitmapEx& rBitmap,
                                   ::basegfx::B2DRectangle const & rDestRect,
                                   ::basegfx::B2DHomMatrix const & rLocalTransform );
 
-VCL_DLLPUBLIC BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
-                                ::basegfx::B2DRectangle const & rBitmapRect,
-                                ::basegfx::B2DRectangle const & rDestRect );
-
 VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, AlphaMask & rNewMask);
 
 VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap, BitmapEx & aBmpEx, basegfx::B2DPolyPolygon const & rClipPath);

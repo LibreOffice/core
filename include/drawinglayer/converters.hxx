@@ -33,15 +33,15 @@ namespace drawinglayer
 //           for any content (e.g. gradients)
 AlphaMask DRAWINGLAYER_DLLPUBLIC createAlphaMask(
     drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
-    const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
-    sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels, bool bUseLuminance = false);
+    const geometry::ViewInformation2D& rViewInformation2D, const basegfx::B2DRange& rTargetRange,
+    sal_uInt32 nMaxSquarePixels, bool bUseLuminance = false);
 
 // Helper for convertPrimitive2DContainerToBitmapEx below, but can be also used
 // directly
 BitmapEx DRAWINGLAYER_DLLPUBLIC convertToBitmapEx(
     drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
-    const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
-    sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation = false);
+    const geometry::ViewInformation2D& rViewInformation2D, const basegfx::B2DRange& rTargetRange,
+    sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation = false);
 
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
 // using default parameters

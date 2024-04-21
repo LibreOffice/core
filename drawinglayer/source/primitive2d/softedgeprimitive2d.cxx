@@ -174,7 +174,8 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         // Otherwise, blurring of edges will fail in cases like running in a
         // slideshow or exporting to PDF.
         const BitmapEx aBitmapEx(::drawinglayer::convertToBitmapEx(
-            std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
+            std::move(xEmbedSeq), aViewInformation2D,
+            basegfx::B2DRange(0, 0, nDiscreteClippedWidth, nDiscreteClippedHeight),
             nMaximumQuadraticPixels, true));
 
         if (aBitmapEx.IsEmpty())

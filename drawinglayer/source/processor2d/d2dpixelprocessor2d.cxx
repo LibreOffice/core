@@ -1060,8 +1060,9 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_B2
 
     // use new mode to create AlphaChannel (not just AlphaMask) for transparency channel
     const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
-        std::move(xEmbedSeq), aEmptyViewInformation2D, nDiscreteClippedWidth,
-        nDiscreteClippedHeight, nMaximumQuadraticPixels, true));
+        std::move(xEmbedSeq), aEmptyViewInformation2D,
+        basegfx::B2DRange(0, 0, nDiscreteClippedWidth, nDiscreteClippedHeight),
+        nMaximumQuadraticPixels, true));
     sal::systools::COMReference<ID2D1Bitmap> pRetval;
 
     if (aAlpha.IsEmpty())

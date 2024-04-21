@@ -148,13 +148,17 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
 void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                                const SvgFilterNode* pParent) const
 {
+    const drawinglayer::primitive2d::Primitive2DContainer* pSource
+        = pParent->findGraphicSource(maIn);
+    const drawinglayer::primitive2d::Primitive2DContainer* pSource2
+        = pParent->findGraphicSource(maIn2);
+
     if (maOperator != Operator::Arithmetic)
     {
         basegfx::B2DPolyPolygon aPolyPolygon, aPolyPolygon2;
 
         // Process maIn2 first
-        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
-            = pParent->findGraphicSource(maIn2))
+        if (pSource2)
         {
             rTarget.append(*pSource2);
             drawinglayer::processor2d::ContourExtractor2D aExtractor(
@@ -164,8 +168,7 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
             aPolyPolygon2 = basegfx::utils::mergeToSinglePolyPolygon(rResult);
         }
 
-        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
-            = pParent->findGraphicSource(maIn))
+        if (pSource)
         {
             rTarget.append(*pSource);
             drawinglayer::processor2d::ContourExtractor2D aExtractor(
@@ -209,31 +212,53 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
     else
     {
         basegfx::B2DRange aRange, aRange2;
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        if (pSource)
+        {
+            aRange = pSource->getB2DRange(aViewInformation2D);
+        }
+
+        if (pSource2)
+        {
+            aRange2 = pSource2->getB2DRange(aViewInformation2D);
+        }
+
+        const sal_uInt32 nX1 = std::min(aRange.getMinX(), aRange2.getMinX());
+        const sal_uInt32 nY1 = std::min(aRange.getMinY(), aRange2.getMinY());
+        const sal_uInt32 nX2 = std::max(aRange.getMaxX(), aRange2.getMaxX());
+        const sal_uInt32 nY2 = std::max(aRange.getMaxY(), aRange2.getMaxY());
+
+        const basegfx::B2DRange aBaseRange(nX1, nY1, nX1 + nX2, nY1 + nY2);
+
         BitmapEx aBmpEx, aBmpEx2;
 
-        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
-            = pParent->findGraphicSource(maIn))
+        if (pSource)
         {
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            aRange = pSource->getB2DRange(aViewInformation2D);
-            aBmpEx = convertToBitmapEx(pSource);
+            drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource);
+            aBmpEx = drawinglayer::convertToBitmapEx(
+                std::move(aSource), aViewInformation2D, aBaseRange,
+                aBaseRange.getWidth() * aBaseRange.getHeight());
+        }
+        else
+        {
+            aBmpEx = drawinglayer::convertToBitmapEx(
+                std::move(rTarget), aViewInformation2D, aBaseRange,
+                aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
-        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
-            = pParent->findGraphicSource(maIn2))
+        if (pSource2)
         {
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            aRange2 = pSource2->getB2DRange(aViewInformation2D);
-            aBmpEx2 = convertToBitmapEx(pSource2);
+            drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource2);
+            aBmpEx2 = drawinglayer::convertToBitmapEx(
+                std::move(aSource), aViewInformation2D, aBaseRange,
+                aBaseRange.getWidth() * aBaseRange.getHeight());
         }
-
-        basegfx::B2DRectangle aBaseRect(std::min(aRange.getMinX(), aRange2.getMinX()),
-                                        std::min(aRange.getMinY(), aRange2.getMinY()),
-                                        std::max(aRange.getMaxX(), aRange2.getMaxX()),
-                                        std::max(aRange.getMaxY(), aRange2.getMaxY()));
-
-        aBmpEx = vcl::bitmap::DrawBitmapInRect(aBmpEx, aRange, aBaseRect);
-        aBmpEx2 = vcl::bitmap::DrawBitmapInRect(aBmpEx2, aRange2, aBaseRect);
+        else
+        {
+            aBmpEx2 = drawinglayer::convertToBitmapEx(
+                std::move(rTarget), aViewInformation2D, aBaseRange,
+                aBaseRange.getWidth() * aBaseRange.getHeight());
+        }
 
         BitmapArithmeticBlendFilter aArithmeticFilter(aBmpEx, aBmpEx2);
         BitmapEx aResBmpEx = aArithmeticFilter.execute(maK1.getNumber(), maK2.getNumber(),
@@ -242,7 +267,7 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
                 aResBmpEx, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                               aBaseRect.getRange(), aBaseRect.getMinimum())));
+                               aBaseRange.getRange(), aBaseRange.getMinimum())));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }
