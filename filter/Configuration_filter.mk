@@ -39,9 +39,7 @@ $(call gb_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Trace_StartRange,$*,FIT)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		RESPONSEFILE=`$(gb_MKTEMP)` && \
-		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(basename $(notdir $(filter %.xcu,$^))))) && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
 			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 		 	fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
@@ -82,9 +80,7 @@ $(call gb_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Trace_StartRange,$*,FIF)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		RESPONSEFILE=`$(gb_MKTEMP)` && \
-		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(basename $(notdir $(filter %.xcu,$^))))) && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
 			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
@@ -115,12 +111,8 @@ $(call gb_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Trace_StartRange,$*,FIO)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		RESPONSEFILE=`$(gb_MKTEMP)` && \
-		RESPONSEFILE2=`$(gb_MKTEMP)` && \
-		echo "items=$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter frameloaders,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),)))))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
-		echo "items=$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter contenthandlers,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),)))))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE2} && \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter frameloaders,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),))))))) && \
+		RESPONSEFILE2=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter contenthandlers,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),))))))) && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
 			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
@@ -151,9 +143,7 @@ $(call gb_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Trace_StartRange,$*,FII)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		RESPONSEFILE=`$(gb_MKTEMP)` && \
-		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(basename $(notdir $(filter %.xcu,$^))))) && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
 			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
@@ -199,9 +189,7 @@ $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),FIU)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		RESPONSEFILE=`$(gb_MKTEMP)` && \
-		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
-			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),items=$(subst $(WHITESPACE),$(COMMA),$(basename $(notdir $(filter %.xcu,$^))))) && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
 			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
