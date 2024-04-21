@@ -352,7 +352,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_INS_CELL:
             {
                 InsCellCmd eCmd=INS_NONE;
-                size_t nCount = 0;
 
                 if ( pReqArgs )
                 {
@@ -386,20 +385,21 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                         VclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
-                        pDlg->StartExecuteAsync([pDlg, pTabViewShell, &nCount](sal_Int32 nResult){
+                        pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
                                 SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
                                 InsCellCmd eTmpCmd = pDlg->GetInsCellCmd();
-                                nCount = pDlg->GetCount();
-                                InsertCells(pTabViewShell, aRequest, eTmpCmd, nCount);
+                                size_t nInsCount = pDlg->GetCount();
+                                InsertCells(pTabViewShell, aRequest, eTmpCmd, nInsCount);
                             }
                             pDlg->disposeOnce();
                         });
+                        break;
                     }
                 }
 
-                InsertCells(pTabViewShell, rReq, eCmd, nCount);
+                InsertCells(pTabViewShell, rReq, eCmd);
             }
             break;
 
