@@ -85,7 +85,7 @@ $(call gb_CustomTarget_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(1
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(call gb_CustomTarget_get_workdir,$(1))/misc/$(3)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,GPF,1)
 	$(GPERF) --compare-strncmp --switch=2 --readonly-tables $$< \
-		| sed -e 's/char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $$@
+		| sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, 0/g' > $$@
 
 endef
 
