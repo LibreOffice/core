@@ -1254,7 +1254,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
 }
 
 ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, const ScQueryParam& param,
-                                                     ScInterpreterContext* pContext )
+                                                     ScInterpreterContext* pContext, sal_uInt8 nSortedBinarySearch )
 {
     assert(mxScSortedRangeCache);
     ScSortedRangeCache::HashKey key = ScSortedRangeCache::makeHashKey(rRange, param);
@@ -1281,7 +1281,7 @@ ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, con
     auto [findIt, bInserted] = mxScSortedRangeCache->aCacheMap.emplace(key, nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext, invalid);
+        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext, invalid, nSortedBinarySearch);
         StartListeningArea(rRange, false, findIt->second.get());
     }
     return *findIt->second;

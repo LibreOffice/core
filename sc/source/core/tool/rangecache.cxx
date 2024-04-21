@@ -51,7 +51,7 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
 
 ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                                        const ScQueryParam& param, ScInterpreterContext* context,
-                                       bool invalid)
+                                       bool invalid, sal_uInt8 nSortedBinarySearch)
     : maRange(rRange)
     , mpDoc(pDoc)
     , mValid(false)
@@ -113,8 +113,23 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                     return;
             }
         }
-        std::stable_sort(rowData.begin(), rowData.end(),
-                         [](const RowData& d1, const RowData& d2) { return d1.value < d2.value; });
+
+        if (nSortedBinarySearch == 0x00) //nBinarySearchDisabled = 0x00
+        {
+            std::stable_sort(
+                rowData.begin(), rowData.end(),
+                [](const RowData& d1, const RowData& d2) { return d1.value < d2.value; });
+        }
+        else if (nSortedBinarySearch == 0x01) //nSearchbAscd
+        {
+            // expected it is already sorted properly in Ascd mode.
+        }
+        else /*(nSortedBinarySearch == 0x02) nSearchbDesc*/
+        {
+            // expected it is already sorted properly in Desc mode, just need to reverse.
+            std::reverse(rowData.begin(), rowData.end());
+        }
+
         if (needsDescending(entry.eOp))
             for (auto it = rowData.rbegin(); it != rowData.rend(); ++it)
                 mSortedRows.emplace_back(it->row);
@@ -155,10 +170,24 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
         }
         CollatorWrapper& collator
             = ScGlobal::GetCollator(mValueType == ValueType::StringsCaseSensitive);
-        std::stable_sort(rowData.begin(), rowData.end(),
-                         [&collator](const RowData& d1, const RowData& d2) {
-                             return collator.compareString(d1.string, d2.string) < 0;
-                         });
+
+        if (nSortedBinarySearch == 0x00) //nBinarySearchDisabled = 0x00
+        {
+            std::stable_sort(rowData.begin(), rowData.end(),
+                             [&collator](const RowData& d1, const RowData& d2) {
+                                 return collator.compareString(d1.string, d2.string) < 0;
+                             });
+        }
+        else if (nSortedBinarySearch == 0x01) //nSearchbAscd
+        {
+            // expected it is already sorted properly in Asc mode.
+        }
+        else /*(nSortedBinarySearch == 0x02) nSearchbDesc*/
+        {
+            // expected it is already sorted properly in Desc mode, just need to reverse.
+            std::reverse(rowData.begin(), rowData.end());
+        }
+
         if (needsDescending(entry.eOp))
             for (auto it = rowData.rbegin(); it != rowData.rend(); ++it)
                 mSortedRows.emplace_back(it->row);

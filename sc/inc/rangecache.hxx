@@ -46,7 +46,8 @@ class ScSortedRangeCache final : public SvtListener
 public:
     /// MUST be new'd because Notify() deletes.
     ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& param,
-                       ScInterpreterContext* context, bool invalid = false);
+                       ScInterpreterContext* context, bool invalid = false,
+                       sal_uInt8 nSortedBinarySearch = 0x00);
 
     /// Returns if the cache is usable.
     bool isValid() const { return mValid; }

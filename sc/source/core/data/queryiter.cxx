@@ -287,7 +287,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
     {
         // This should be all in AccessBase::InitPos(), but that one can't call
         // BinarySearch(), so do it this way instead.
-        AccessBase::InitPosStart();
+        AccessBase::InitPosStart(nSortedBinarySearch);
         ScQueryOp& op = maParam.GetEntry(0).eOp;
         SCROW beforeRow = -1;
         SCROW lastRow = -1;
@@ -300,18 +300,14 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
                 // non-matching position using SC_LESS and the start position
                 // is the one after it.
                 lastRow = nRow;
-                // BinarySearch() looks for the first match for XLOOKUP/XMATCH
-                if (nSearchOpCode != SC_OPCODE_X_LOOKUP && nSearchOpCode != SC_OPCODE_X_MATCH)
-                {
-                    ScQueryOp saveOp = op;
-                    op = SC_LESS;
-                    if( BinarySearch( nCol, true ))
-                        beforeRow = nRow;
-                    // If BinarySearch() returns false, there was no match, which means
-                    // there's no value smaller. In that case BinarySearch() has set
-                    // the position to the first row in the range.
-                    op = saveOp; // back to SC_EQUAL
-                }
+                ScQueryOp saveOp = op;
+                op = SC_LESS;
+                if( BinarySearch( nCol, true ))
+                    beforeRow = nRow;
+                // If BinarySearch() returns false, there was no match, which means
+                // there's no value smaller. In that case BinarySearch() has set
+                // the position to the first row in the range.
+                op = saveOp; // back to SC_EQUAL
             }
             else if( maParam.GetEntry(0).GetQueryItem().mbMatchEmpty
                 && rDoc.IsEmptyData(nCol, maParam.nRow1, nCol, maParam.nRow2, nTab))
@@ -321,14 +317,33 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
                 beforeRow = -1;
                 lastRow = maParam.nRow2;
             }
+            AccessBase::InitPosFinish(beforeRow, lastRow, false/*bFirstMatch*/);
         }
         else
         {   // The range is from the start up to and including the last matching.
-            if( BinarySearch( nCol ))
+            if (BinarySearch(nCol))
+            {
                 lastRow = nRow;
+                if (nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH)
+                {
+                    ScQueryOp saveOp = op;
+                    op = SC_LESS;
+                    if (BinarySearch(nCol, true))
+                        beforeRow = nRow;
+                    op = saveOp;
+                }
+            }
+            if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
+                (lastRow == beforeRow || beforeRow == -1))
+            {
+                beforeRow = -1;
+                AccessBase::InitPosFinish(beforeRow, lastRow, true/*bFirstMatch*/);
+            }
+            else
+            {
+                AccessBase::InitPosFinish(beforeRow, lastRow, false/*bFirstMatch*/);
+            }
         }
-        AccessBase::InitPosFinish(beforeRow, lastRow,
-            (nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH));
     }
 }
 
@@ -531,15 +546,8 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
                 {
                     if (fLastInRangeValue <= nCellVal)
                     {
-                        if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
-                            nSortedBinarySearch != nSearchbDesc && fLastInRangeValue == nCellVal &&
-                            aIndexer.getLowIndex() != i)
-                            bDone = true;
-                        else
-                        {
-                            fLastInRangeValue = nCellVal;
-                            nLastInRange = i;
-                        }
+                        fLastInRangeValue = nCellVal;
+                        nLastInRange = i;
                     }
                     else if (fLastInRangeValue >= nCellVal)
                     {
@@ -581,15 +589,8 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
                         aCellStr);
                 if (nTmp <= 0)
                 {
-                    if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
-                        nSortedBinarySearch != nSearchbDesc && nTmp == 0 &&
-                        aIndexer.getLowIndex() != i)
-                        bDone = true;
-                    else
-                    {
-                        aLastInRangeString = aCellStr;
-                        nLastInRange = i;
-                    }
+                    aLastInRangeString = aCellStr;
+                    nLastInRange = i;
                 }
                 else if (nTmp > 0)
                 {
@@ -657,11 +658,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
             {
                 found = i;
                 nLastInRange = i;
-                if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
-                    (nSortedBinarySearch == nSearchbAscd && (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL)))
-                    bDone = true;
-                else // But keep searching to find the last matching one.
-                    nLo = nMid + 1;
+                nLo = nMid + 1;
             }
             else if (bAscending)
             {
@@ -1215,11 +1212,11 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
 // over indexes of the sorted cache (which is a stable sort of the cell contents) in the range
 // that fits the query condition and then that is mapped to rows. This will result in iterating
 // over only matching rows in their sorted order (and for equal rows in their row order).
-void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosStart()
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosStart(sal_uInt8 nSortedBinarySearch)
 {
     ScRange aSortedRangeRange( nCol, maParam.nRow1, nTab, nCol, maParam.nRow2, nTab );
     // We want all matching values first in the sort order,
-    SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext ));
+    SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext, nSortedBinarySearch ));
     // InitPosFinish() needs to be called after this, ScQueryCellIteratorBase::InitPos()
     // will handle that
 }
