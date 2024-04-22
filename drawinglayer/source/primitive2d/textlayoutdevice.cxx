@@ -179,8 +179,17 @@ void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontA
         = getVclFontFromFontAttribute(rFontAttribute, fFontScaleX, fFontScaleY, 0.0, rLocale);
     setFont(aFont);
     Size aFontSize = aFont.GetFontSize();
-    mnFontScalingFixY = fFontScaleY / aFontSize.Height();
-    mnFontScalingFixX = fFontScaleX / (aFontSize.Width() ? aFontSize.Width() : aFontSize.Height());
+    if (aFontSize.Height())
+    {
+        mnFontScalingFixY = fFontScaleY / aFontSize.Height();
+        // aFontSize.Width() is 0 for uninformly scaled fonts: see getVclFontFromFontAttribute
+        mnFontScalingFixX
+            = fFontScaleX / (aFontSize.Width() ? aFontSize.Width() : aFontSize.Height());
+    }
+    else
+    {
+        mnFontScalingFixX = mnFontScalingFixY = 0;
+    }
 }
 
 double TextLayouterDevice::getOverlineOffset() const
