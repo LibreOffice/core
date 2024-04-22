@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 
 // Global header
-
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/safeint.hxx>
@@ -29,10 +28,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-
 // Project-local header
-
-
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 
@@ -116,8 +112,8 @@ namespace accessibility
 
     bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
     {
-        DBG_ASSERT( 0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild),
-                "AccessibleParaManager::IsReferencable: invalid index" );
+        assert(0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild)
+               && "AccessibleParaManager::IsReferencable: invalid index");
 
         if( 0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild) )
         {
