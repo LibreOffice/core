@@ -205,6 +205,35 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf157216)
+{
+    createSdImpressDoc("pptx/tdf157216.pptx");
+    uno::Reference<beans::XPropertySet> xFlowchartShape(getShapeFromPage(0, 0));
+    uno::Sequence<beans::PropertyValue> aProps;
+    xFlowchartShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
+
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : aProps)
+    {
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+    }
+
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    for (beans::PropertyValue const& rProp : aPathProps)
+    {
+        if (rProp.Name == "GluePoints")
+        {
+            seqGluePoints
+                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+        }
+    }
+
+    sal_Int32 nCountGluePoints = seqGluePoints.getLength();
+    // The Flowchart: Punched Tape has 4 glue points.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nCountGluePoints);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
 {
     createSdImpressDoc("pptx/tdf156718.pptx");
