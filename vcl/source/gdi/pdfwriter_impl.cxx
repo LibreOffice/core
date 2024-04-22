@@ -9124,9 +9124,15 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         }
 
         double aOrigin[2] = { 0.0, 0.0 };
-        if (auto* pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("MediaBox"_ostr)))
+
+        // tdf#160714 use crop box for bounds of embedded PDF object
+        // If there is no crop box, fallback to the media box just to be safe.
+        auto* pBoundsArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("CropBox"_ostr));
+        if (!pBoundsArray)
+            pBoundsArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("MediaBox"_ostr));
+        if (pBoundsArray)
         {
-            const auto& rElements = pArray->GetElements();
+            const auto& rElements = pBoundsArray->GetElements();
             if (rElements.size() >= 4)
             {
                 // get x1, y1 of the rectangle.
@@ -9239,9 +9245,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             // Now transform the object: rotate around the center and make sure that the rotation
             // doesn't affect the aspect ratio.
             basegfx::B2DHomMatrix aMat;
-            aMat.translate(-0.5 * aBBox.getWidth() - aOrigin[0], -0.5 * aBBox.getHeight() - aOrigin[1]);
+            aMat.translate((-0.5 * aBBox.getWidth() / fMagicScaleFactor) - aOrigin[0], (-0.5 * aBBox.getHeight() / fMagicScaleFactor) - aOrigin[1]);
             aMat.rotate(basegfx::deg2rad(nAngle));
-            aMat.translate(0.5 * nWidth, 0.5 * nHeight);
+            aMat.translate(0.5 * nWidth / fMagicScaleFactor, 0.5 * nHeight / fMagicScaleFactor);
 
             aLine.append(" /Matrix [ ");
             aLine.append(aMat.a());
