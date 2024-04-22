@@ -30,6 +30,20 @@ static sal_uInt8 lcl_calculate(const sal_uInt8 aColor, const sal_uInt8 aColor2)
     return result * 255.0;
 }
 
+static BitmapColor premultiply(const BitmapColor c)
+{
+    return BitmapColor(ColorAlpha, vcl::bitmap::premultiply(c.GetRed(), c.GetAlpha()),
+                       vcl::bitmap::premultiply(c.GetGreen(), c.GetAlpha()),
+                       vcl::bitmap::premultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
+}
+
+static BitmapColor unpremultiply(const BitmapColor c)
+{
+    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(c.GetRed(), c.GetAlpha()),
+                       vcl::bitmap::unpremultiply(c.GetGreen(), c.GetAlpha()),
+                       vcl::bitmap::unpremultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
+}
+
 BitmapEx BitmapScreenBlendFilter::execute()
 {
     if (maBitmapEx.IsEmpty() || maBitmapEx2.IsEmpty())
@@ -63,14 +77,15 @@ BitmapEx BitmapScreenBlendFilter::execute()
                 Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
                 for (tools::Long x(0); x < nWidth; ++x)
                 {
-                    BitmapColor i1 = maBitmapEx.GetPixelColor(x, y);
-                    BitmapColor i2 = maBitmapEx2.GetPixelColor(x, y);
+                    BitmapColor i1 = premultiply(maBitmapEx.GetPixelColor(x, y));
+                    BitmapColor i2 = premultiply(maBitmapEx2.GetPixelColor(x, y));
                     sal_uInt8 r(lcl_calculate(i1.GetRed(), i2.GetRed()));
                     sal_uInt8 g(lcl_calculate(i1.GetGreen(), i2.GetGreen()));
                     sal_uInt8 b(lcl_calculate(i1.GetBlue(), i2.GetBlue()));
                     sal_uInt8 a(lcl_calculate(i1.GetAlpha(), i2.GetAlpha()));
 
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(r, g, b));
+                    pWriteAccess->SetPixelOnData(
+                        pScanline, x, unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
                     pAlphaWriteAccess->SetPixelOnData(pScanAlpha, x, BitmapColor(a));
                 }
             }
