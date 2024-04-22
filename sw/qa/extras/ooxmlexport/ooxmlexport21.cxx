@@ -511,6 +511,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
                 "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
+{
+    //Unit test for bug fix in tdf#154369
+    // Docx file contains ordered list formatted with Heading 1 style, font color set as Accent 1 from theme
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected result: A & B bullets display same green color #527d55 as the paragraph
+    // - Actual result: A & B bullets display black color, while the paragraph is green color #527d55
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                "expand"_ostr, "A.");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
+                "color"_ostr, "00527d55");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                "expand"_ostr, "B.");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
+                "color"_ostr, "00527d55");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
