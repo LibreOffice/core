@@ -141,10 +141,10 @@ void WebpFilterTest::testRoundtrip(bool lossy)
         }
         AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
         BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 19));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(19, 0));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(64), pAccessAlpha->GetPixelIndex(19, 19));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 19));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(19, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(191), pAccessAlpha->GetPixelIndex(19, 19));
     }
 
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -192,8 +192,8 @@ void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
         {
             AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
             BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 9));
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 0));
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 9));
         }
     }
 }
