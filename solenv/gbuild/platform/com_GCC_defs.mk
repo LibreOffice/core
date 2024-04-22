@@ -228,7 +228,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 gb_PrecompiledHeader_ignore_flags_for_flags_file := -Wunused-macros
 
 # optimization level
-gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
+gb_COMPILERNOOPTFLAGS := -O0 -Wp,-U_FORTIFY_SOURCE -fstrict-aliasing -fstrict-overflow
 gb_COMPILERDEBUGOPTFLAGS := -Og
 
 ifeq ($(OS),ANDROID)
