@@ -241,7 +241,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                 for (tools::Long x = 0; x < access->Width(); ++x)
                 {
                     memcpy(dstB, src, 3);
-                    *dstA = 255 - *(src + 3);
+                    *dstA = *(src + 3);
                     src += 4;
                     dstB += 3;
                     dstA += 1;
@@ -273,7 +273,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                     for (tools::Long x = 0; x < accessAlpha->Width(); ++x)
                     {
                         sal_uInt8 a = src[3];
-                        accessAlpha->SetPixelIndex(y, x, 255 - a);
+                        accessAlpha->SetPixelIndex(y, x, a);
                         src += 4;
                     }
                 }
