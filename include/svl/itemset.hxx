@@ -37,6 +37,7 @@ SVL_DLLPUBLIC size_t getUsedSfxItemSetCount();
 SVL_DLLPUBLIC size_t getAllocatedSfxPoolItemHolderCount();
 SVL_DLLPUBLIC size_t getUsedSfxPoolItemHolderCount();
 SVL_DLLPUBLIC void listSfxPoolItemsWithHighestUsage(sal_uInt16);
+SVL_DLLPUBLIC void listSfxItemSetUsage();
 #endif
 
 // ItemSet/ItemPool helpers

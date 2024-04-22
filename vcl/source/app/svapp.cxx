@@ -211,6 +211,7 @@ Application::~Application()
     // List SfxPoolItems with highest RefCounts, these are the best
     // candidates to add a ItemInstanceManager mechanism
     listSfxPoolItemsWithHighestUsage(20);
+    listSfxItemSetUsage();
 #endif
 }
 

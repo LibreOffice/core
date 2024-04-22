@@ -49,8 +49,25 @@ size_t getUsedSfxItemSetCount() { return nUsedSfxItemSetCount; }
 size_t getAllocatedSfxPoolItemHolderCount() { return nAllocatedSfxPoolItemHolderCount; }
 size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
 
+// <WhichID, <number of entries, typeid_name>>
 typedef std::unordered_map<sal_uInt16, std::pair<sal_uInt32, const char*>> HightestUsage;
 static HightestUsage aHightestUsage;
+
+// <TotalCount, <number of entries, sum of used count>>
+typedef std::unordered_map<sal_uInt16, std::pair<sal_uInt32, sal_uInt32>> ItemArrayUsage;
+static ItemArrayUsage aItemArrayUsage;
+
+static void addArrayUsage(sal_uInt16 nCount, sal_uInt16 nTotalCount)
+{
+    ItemArrayUsage::iterator aHit(aItemArrayUsage.find(nTotalCount));
+    if (aHit == aItemArrayUsage.end())
+    {
+        aItemArrayUsage.insert({nTotalCount, {1, nCount}});
+        return;
+    }
+    aHit->second.first++;
+    aHit->second.second += nCount;
+}
 
 static void addUsage(const SfxPoolItem& rCandidate)
 {
@@ -86,6 +103,42 @@ void listSfxPoolItemsWithHighestUsage(sal_uInt16 nNum)
         if (++a >= nNum)
             break;
     }
+}
+
+SVL_DLLPUBLIC void listSfxItemSetUsage()
+{
+    struct sorted {
+        sal_uInt16 nTotalCount;
+        sal_uInt32 nAppearances;
+        sal_uInt32 nAllUsedCount;
+        sorted(sal_uInt16 _nTotalCount, sal_uInt32 _nAppearances, sal_uInt32 _nAllUsedCount)
+            : nTotalCount(_nTotalCount), nAppearances(_nAppearances), nAllUsedCount(_nAllUsedCount) {}
+        bool operator<(const sorted& rDesc) const { return nTotalCount > rDesc.nTotalCount; }
+    };
+    std::vector<sorted> aSorted;
+    aSorted.reserve(aItemArrayUsage.size());
+    for (const auto& rEntry : aItemArrayUsage)
+        aSorted.emplace_back(rEntry.first, rEntry.second.first, rEntry.second.second);
+    std::sort(aSorted.begin(), aSorted.end());
+    SAL_INFO("svl.items", "ITEM: List of " << aItemArrayUsage.size() << " SfxItemPool TotalCounts with usages:");
+    double fAllFillRatePercent(0.0);
+    sal_uInt32 nUsed(0);
+    sal_uInt32 nAllocated(0);
+    for (const auto& rEntry : aSorted)
+    {
+        const sal_uInt32 nAllCount(rEntry.nAppearances * rEntry.nTotalCount);
+        const double fFillRatePercent(0 == nAllCount ? 0.0 : (static_cast<double>(rEntry.nAllUsedCount) / static_cast<double>(nAllCount)) * 100.0);
+        SAL_INFO("svl.items",
+            " TotalCount: " << rEntry.nTotalCount
+            << " Appearances: " << rEntry.nAppearances
+            << " FillRate(%): " << fFillRatePercent);
+        fAllFillRatePercent += fFillRatePercent;
+        nUsed += rEntry.nAllUsedCount;
+        nAllocated += rEntry.nTotalCount * rEntry.nAppearances;
+    }
+    SAL_INFO("svl.items", " Average FillRate(%): " << fAllFillRatePercent / aItemArrayUsage.size());
+    SAL_INFO("svl.items", " Used: " << nUsed << " Allocated: " << nAllocated);
+    SAL_INFO("svl.items", " Average Used/Allocated(%): " << (static_cast<double>(nUsed) / static_cast<double>(nAllocated)) * 100.0);
 }
 #endif
 // NOTE: Only needed for one Item in SC (see notes below for
@@ -826,6 +879,7 @@ SfxItemSet::~SfxItemSet()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount--;
+    addArrayUsage(Count(), TotalCount());
 #endif
     // cleanup items. No std::fill needed, we are done with this ItemSet.
     // the callback is not set in destructor, so no worries about that
