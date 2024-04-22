@@ -1358,8 +1358,9 @@ struct XMLTextParagraphExport::DocumentListNodes
         for (const auto& node : nodes)
         {
             assert(node.getLength() == 3);
-            docListNodes.push_back({ node[0].get<sal_Int32>(), node[1].get<sal_uInt64>(),
-                                     node[2].get<OUString>() });
+            docListNodes.push_back({ .index = node[0].get<sal_Int32>(),
+                                     .style_id = node[1].get<sal_uInt64>(),
+                                     .list_id = node[2].get<OUString>() });
         }
 
         std::sort(docListNodes.begin(), docListNodes.end(),
