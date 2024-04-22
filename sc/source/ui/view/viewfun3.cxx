@@ -894,7 +894,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     //  undo: save all or no content
     InsertDeleteFlags nContFlags = InsertDeleteFlags::NONE;
-    if (nFlags & InsertDeleteFlags::CONTENTS)
+    // tdf#160765 - save content for undo when pasting notes, even if no content was changed
+    if (nFlags & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES))
         nContFlags |= InsertDeleteFlags::CONTENTS;
     if (nFlags & InsertDeleteFlags::ATTRIB)
         nContFlags |= InsertDeleteFlags::ATTRIB;
