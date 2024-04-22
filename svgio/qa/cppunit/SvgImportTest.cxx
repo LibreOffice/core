@@ -176,24 +176,48 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155819)
     assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, 4);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testFilterFeBlend)
+CPPUNIT_TEST_FIXTURE(Test, testNormalBlend)
 {
-    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/filterFeBlend.svg");
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/normalBlend.svg");
 
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]"_ostr, "color"_ostr, "#8a2be2");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "height"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "width"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "minx"_ostr, "70");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "miny"_ostr, "70");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxx"_ostr, "170");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxy"_ostr, "170");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]"_ostr, "color"_ostr, "#ffd700");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "height"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "width"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "minx"_ostr, "30");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "miny"_ostr, "30");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxx"_ostr, "130");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxy"_ostr, "130");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "height"_ostr, "170");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "width"_ostr, "170");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap/data"_ostr, 170);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy11"_ostr, "170");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy13"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy22"_ostr, "170");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy23"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy33"_ostr, "1");
+
+    // Check the colors in the diagonal
+    OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[40]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ffd700"), aPixels[40]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[85]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ffd700"), aPixels[85]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[130]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("8a2be2"), aPixels[130]);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFeColorMatrix)
