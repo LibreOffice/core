@@ -246,6 +246,41 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteallfootnotes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_FOOTNOTES">Delete All Footnotes</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallendnotes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_ENDNOTES">Delete All Endnotes</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deletefootnote">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_FOOTNOTE">Delete Footnote</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteendnote">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ENDNOTE">Delete Endnote</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="502">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

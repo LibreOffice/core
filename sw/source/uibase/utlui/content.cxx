@@ -403,7 +403,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         case ContentTypeId::FOOTNOTE:
         case ContentTypeId::ENDNOTE:
             m_bEdit = true;
-            m_bDelete = false;
+            m_bDelete = true;
         break;
         case ContentTypeId::BOOKMARK:
         {
@@ -1198,6 +1198,11 @@ IMPL_LINK(SwContentTree, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
+    // Prevent trying to bring entry to attention when handling document change. The mouse over
+    // entry might not be valid, for example, when the mouse pointer is on an entry that is deleted
+    // in the document by an undo/redo.
+    if (m_bDocHasChanged)
+        return false;
     if (m_eState == State::HIDDEN)
         return false;
     if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
@@ -1703,7 +1708,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
          bRemoveDeleteIndexEntry= true,
          bRemoveDeleteCommentEntry = true,
          bRemoveDeleteDrawingObjectEntry = true,
-         bRemoveDeleteFieldEntry = true;
+         bRemoveDeleteFieldEntry = true,
+         bRemoveDeleteAllFootnotesEntry = true,
+         bRemoveDeleteAllEndnotesEntry = true,
+         bRemoveDeleteFootnoteEntry = true,
+         bRemoveDeleteEndnoteEntry = true;
     bool bRemoveRenameEntry = true;
     bool bRemoveSelectEntry = true;
     bool bRemoveToggleExpandEntry = true;
@@ -1878,6 +1887,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     case ContentTypeId::TEXTFIELD:
                         bRemoveDeleteFieldEntry = false;
                     break;
+                    case ContentTypeId::FOOTNOTE:
+                        bRemoveDeleteFootnoteEntry = false;
+                    break;
+                    case ContentTypeId::ENDNOTE:
+                        bRemoveDeleteEndnoteEntry = false;
+                    break;
                     default: break;
                 }
             }
@@ -1958,10 +1973,17 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 bRemoveToggleExpandEntry
                     = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
             }
-            else if (State::HIDDEN != m_eState && nContentType == ContentTypeId::POSTIT
+            else if (State::HIDDEN != m_eState
                      && !m_pActiveShell->GetView().GetDocShell()->IsReadOnly()
                      && pType->GetMemberCount() > 0)
-                bRemovePostItEntries = false;
+            {
+                if (nContentType == ContentTypeId::POSTIT)
+                    bRemovePostItEntries = false;
+                else if (nContentType == ContentTypeId::FOOTNOTE)
+                    bRemoveDeleteAllFootnotesEntry = false;
+                else if (nContentType == ContentTypeId::ENDNOTE)
+                    bRemoveDeleteAllEndnotesEntry = false;
+            }
         }
     }
 
@@ -2018,7 +2040,16 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("deletedrawingobject");
     if (bRemoveDeleteFieldEntry)
         xPop->remove("deletefield");
+    if (bRemoveDeleteAllFootnotesEntry)
+        xPop->remove("deleteallfootnotes");
+    if (bRemoveDeleteAllEndnotesEntry)
+        xPop->remove("deleteallendnotes");
+    if (bRemoveDeleteFootnoteEntry)
+        xPop->remove("deletefootnote");
+    if (bRemoveDeleteEndnoteEntry)
+        xPop->remove("deleteendnote");
 
+    // bRemoveDeleteEntry is used in determining seperator 2
     bool bRemoveDeleteEntry =
             bRemoveDeleteChapterEntry &&
             bRemoveDeleteTableEntry &&
@@ -2032,7 +2063,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteIndexEntry &&
             bRemoveDeleteCommentEntry &&
             bRemoveDeleteDrawingObjectEntry &&
-            bRemoveDeleteFieldEntry;
+            bRemoveDeleteFieldEntry &&
+            bRemoveDeleteAllFootnotesEntry &&
+            bRemoveDeleteAllEndnotesEntry &&
+            bRemoveDeleteFootnoteEntry &&
+            bRemoveDeleteEndnoteEntry;
 
     if (bRemoveRenameEntry)
         xPop->remove(OUString::number(502));
@@ -4864,6 +4899,13 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
 IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUString)
 {
+    // Prevent tool tip handling when handling document change. The entry that was present when
+    // the tooltip signal was fired might no longer be valid by the time it gets here. For example,
+    // when the mouse pointer is on an entry in the tree that is deleted in the document by an
+    // undo/redo. Please see similar note in MouseMoveHdl.
+    if (m_bDocHasChanged)
+        return OUString();
+
     ContentTypeId nType;
     bool bContent = false;
     void* pUserData = weld::fromId<void*>(m_xTreeView->get_id(rEntry));
@@ -5008,6 +5050,51 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     if (!m_xTreeView->get_selected(xFirst.get()))
         return; // this shouldn't happen, but better to be safe than ...
 
+    if (rSelectedPopupEntry == "deleteallfootnotes" || rSelectedPopupEntry == "deleteallendnotes")
+    {
+        if (!lcl_IsContentType(*xFirst, *m_xTreeView))
+            return;
+
+        //MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
+
+        m_pActiveShell->AssureStdMode();
+
+        SwCursor* pCursor = m_pActiveShell->getShellCursor(true);
+
+        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xFirst));
+        const auto nCount = pCntType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        m_pActiveShell->EnterAddMode();
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwTextFootnoteContent* pTextFootnoteCnt =
+                    static_cast<const SwTextFootnoteContent*>(pCntType->GetMember(i));
+            if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
+            {
+                if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
+                {
+                    const SwTextFootnote* pTextFootnote = pTextAttr->GetFootnote().GetTextFootnote();
+                    if (!pTextFootnote)
+                        continue;
+                    const SwTextNode& rTextNode = pTextFootnote->GetTextNode();
+                    auto nStart = pTextAttr->GetStart();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart + 1);
+                    m_pActiveShell->SetMark();
+                    m_pActiveShell->SttSelect();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart);
+                    m_pActiveShell->EndSelect();
+                }
+            }
+        }
+        m_pActiveShell->LeaveAddMode();
+        m_pActiveShell->EndAction();
+
+        m_pActiveShell->DelRight();
+
+        return;
+    }
+
     if (rSelectedPopupEntry == "protectsection" || rSelectedPopupEntry == "hidesection")
     {
         SwRegionContent* pCnt = weld::fromId<SwRegionContent*>(m_xTreeView->get_id(*xFirst));
@@ -5055,7 +5142,9 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
              rSelectedPopupEntry == "deleteindex" ||
              rSelectedPopupEntry == "deletecomment" ||
              rSelectedPopupEntry == "deletedrawingobject" ||
-             rSelectedPopupEntry == "deletefield")
+             rSelectedPopupEntry == "deletefield" ||
+             rSelectedPopupEntry == "deletefootnote" ||
+             rSelectedPopupEntry == "deleteendnote")
     {
         EditEntry(*xFirst, EditEntryMode::DELETE);
         return;
@@ -5701,8 +5790,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         break;
         case ContentTypeId::FOOTNOTE:
         case ContentTypeId::ENDNOTE:
-            if (EditEntryMode::EDIT == nMode)
+        {
+            if (nMode == EditEntryMode::DELETE)
+                m_pActiveShell->DelRight();
+            else if (EditEntryMode::EDIT == nMode)
                 nSlot = FN_FORMAT_FOOTNOTE_DLG;
+        }
         break;
         default: break;
     }
