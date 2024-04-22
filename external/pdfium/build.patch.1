@@ -15,8 +15,8 @@ index 31564f45f..5858549ef 100644
 --- a/core/fxge/dib/cfx_cmyk_to_srgb.cpp	2020-09-10 17:32:37.165872018 +0200
 +++ b/core/fxge/dib/cfx_cmyk_to_srgb.cpp	2020-09-10 17:33:15.870395738 +0200
 @@ -1740,10 +1740,12 @@
-   uint8_t y1 = static_cast<int>(y * 255.f + rounding_offset);
-   uint8_t k1 = static_cast<int>(k * 255.f + rounding_offset);
+   uint8_t y1 = static_cast<int>(y * 255.f + kRoundingOffset);
+   uint8_t k1 = static_cast<int>(k * 255.f + kRoundingOffset);
  
 +#ifndef _WIN32
    DCHECK_EQ(c1, FXSYS_roundf(c * 255));
@@ -25,8 +25,8 @@ index 31564f45f..5858549ef 100644
    DCHECK_EQ(k1, FXSYS_roundf(k * 255));
 +#endif
  
-   uint8_t r;
-   uint8_t g;
+   FX_RGB<uint8_t> int_results = AdobeCMYK_to_sRGB1(c1, m1, y1, k1);
+   // Multiply by a constant rather than dividing because division is much
 diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
 index 2e7a72aa1..65fb3deaa 100644
 --- a/core/fxcodec/jpx/cjpx_decoder.cpp
@@ -40,10 +40,10 @@ index 2e7a72aa1..65fb3deaa 100644
  }
  
  void sycc_to_rgb(int offset,
-diff --git a/third_party/base/containers/span.h b/third_party/base/containers/span.h
+diff --git a/core/fxcrt/span.h b/core/fxcrt/span.h
 index 435fafa85..d8e8bfbc4 100644
---- a/third_party/base/containers/span.h
-+++ b/third_party/base/containers/span.h
+--- a/core/fxcrt/span.h
++++ b/core/fxcrt/span.h
 @@ -211,7 +211,7 @@ class TRIVIAL_ABI GSL_POINTER span {
  #else
    template <typename Container,
@@ -54,18 +54,18 @@ index 435fafa85..d8e8bfbc4 100644
  #endif
  
 @@ -225,7 +225,7 @@ class TRIVIAL_ABI GSL_POINTER span {
-   // Conversions from spans of compatible types: this allows a span<T> to be
-   // seamlessly used as a span<const T>, but not the other way around.
-   template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
--  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
-+  span(const span<U>& other) : span(other.data(), other.size()) {}
+             size_t M,
+             typename R,
+             typename = internal::EnableIfLegalSpanConversion<U, T>>
+-  constexpr span(const span<U, M, R>& other)
++  span(const span<U, M, R>& other)
+       : span(other.data(), other.size()) {}
+ 
    span& operator=(const span& other) noexcept {
-     if (this != &other) {
-       data_ = other.data_;
-diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
+diff --git a/core/fxcrt/numerics/safe_conversions_impl.h b/core/fxcrt/numerics/safe_conversions_impl.h
 index 44c921a14..0152a89b7 100644
---- a/third_party/base/numerics/safe_conversions_impl.h
-+++ b/third_party/base/numerics/safe_conversions_impl.h
+--- a/core/fxcrt/numerics/safe_conversions_impl.h
++++ b/core/fxcrt/numerics/safe_conversions_impl.h
 @@ -89,7 +89,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
  
  // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.

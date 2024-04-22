@@ -8,9 +8,9 @@ pdfium/core/fpdfdoc/cpdf_formcontrol.cpp:134: undefined reference to `fxcrt::Str
    // NOLINTNEXTLINE(runtime/explicit)
 -  constexpr StringViewTemplate(const CharType& ch) noexcept
 +  StringViewTemplate(const CharType& ch) noexcept
-       : m_Span(reinterpret_cast<const UnsignedType*>(&ch), 1u) {}
+       : m_Span(
+             reinterpret_span<const UnsignedType>(pdfium::span_from_ref(ch))) {}
  
-   StringViewTemplate& operator=(const CharType* src) {
 --- pdfium/core/fxge/cfx_face.cpp.orig	2025-11-11 13:42:28.181052508 +0100
 +++ pdfium/core/fxge/cfx_face.cpp	2025-11-11 13:45:12.583343976 +0100
 @@ -227,7 +227,7 @@
