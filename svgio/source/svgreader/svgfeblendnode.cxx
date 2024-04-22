@@ -24,6 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/BitmapDarkenBlendFilter.hxx>
 #include <vcl/BitmapMultiplyBlendFilter.hxx>
 #include <vcl/BitmapScreenBlendFilter.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -78,6 +79,10 @@ void SvgFeBlendNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
                 else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"multiply"))
                 {
                     maMode = Mode::Multiply;
+                }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"darken"))
+                {
+                    maMode = Mode::Darken;
                 }
             }
             break;
@@ -171,6 +176,11 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
         {
             BitmapMultiplyBlendFilter aMultiplyBlendFilter(aBmpEx, aBmpEx2);
             aResBmpEx = aMultiplyBlendFilter.execute();
+        }
+        else if (maMode == Mode::Darken)
+        {
+            BitmapDarkenBlendFilter aDarkenBlendFilter(aBmpEx, aBmpEx2);
+            aResBmpEx = aDarkenBlendFilter.execute();
         }
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(

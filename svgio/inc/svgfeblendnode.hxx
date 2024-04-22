@@ -26,6 +26,7 @@ namespace svgio::svgreader
 {
 enum class Mode
 {
+    Darken,
     Multiply,
     Normal,
     Screen
