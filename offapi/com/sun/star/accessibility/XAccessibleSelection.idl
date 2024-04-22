@@ -117,7 +117,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to
             the result of
-            XAccessibleRelationSet::getAccessibleChildCount()-1.
+            XAccessibleSelection::getSelectedAccessibleChildCount()-1.
     */
     XAccessible getSelectedAccessibleChild ([in] hyper nSelectedChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
