@@ -176,8 +176,7 @@ void GlowPrimitive2D::create2DDecomposition(
     // I have now added a helper that just creates the mask without having
     // to render the content, use it, it's faster
     const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
-        std::move(xEmbedSeq), aViewInformation2D,
-        basegfx::B2DRange(0, 0, nDiscreteClippedWidth, nDiscreteClippedHeight),
+        std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
         nMaximumQuadraticPixels));
 
     if (aAlpha.IsEmpty())

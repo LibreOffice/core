@@ -73,7 +73,7 @@ bool implPrepareConversion(drawinglayer::primitive2d::Primitive2DContainer& rSeq
 
 AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& rSequence,
                               const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-                              const Size& rSizePixel, const Point& rPoint, bool bUseLuminance)
+                              const Size& rSizePixel, bool bUseLuminance)
 {
     ScopedVclPtrInstance<VirtualDevice> pContent;
 
@@ -122,11 +122,12 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
 
     // get alpha channel from vdev
     pContent->EnableMapMode(false);
+    const Point aEmptyPoint;
 
     // Convert from transparency->alpha.
     // FIXME in theory I should be able to directly construct alpha by using black as background
     // and white as foreground, but that doesn't work for some reason.
-    Bitmap aContentBitmap = pContent->GetBitmap(rPoint, rSizePixel);
+    Bitmap aContentBitmap = pContent->GetBitmap(aEmptyPoint, rSizePixel);
     aContentBitmap.Invert();
 
     return AlphaMask(aContentBitmap);
@@ -137,39 +138,34 @@ namespace drawinglayer
 {
 AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                           const geometry::ViewInformation2D& rViewInformation2D,
-                           const basegfx::B2DRange& rTargetRange,
+                          sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
                           sal_uInt32 nMaxSquarePixels, bool bUseLuminance)
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
-    sal_uInt32 nDiscreteWidth = rTargetRange.getWidth();
-    sal_uInt32 nDiscreteHeight = rTargetRange.getHeight();
 
     if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
     {
         return AlphaMask();
     }
 
-    const Point aPoint(rTargetRange.getMinX(), rTargetRange.getMinY());
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
 
-    return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, aPoint, bUseLuminance);
+    return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, bUseLuminance);
 }
 
 BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                            const geometry::ViewInformation2D& rViewInformation2D,
-                           const basegfx::B2DRange& rTargetRange,
+                           sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
                            sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation)
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
-    sal_uInt32 nDiscreteWidth = rTargetRange.getWidth();
-    sal_uInt32 nDiscreteHeight = rTargetRange.getHeight();
 
     if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
     {
         return BitmapEx();
     }
 
-    const Point aPoint(rTargetRange.getMinX(), rTargetRange.getMinY());
+    const Point aEmptyPoint;
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
 
     // Create target VirtualDevice. Go back to using a simple RGB
@@ -228,7 +224,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     pContentProcessor->process(aSequence);
 
     // create final BitmapEx result (content)
-    Bitmap aRetval(pContent->GetBitmap(aPoint, aSizePixel));
+    Bitmap aRetval(pContent->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
     static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
@@ -249,7 +245,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     // Create the AlphaMask using a method that does this always correct (also used
     // now in GlowPrimitive2D and ShadowPrimitive2D which both only need the
     // AlphaMask to do their job, so speeding that up, too).
-    AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, aPoint, false));
+    AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, false));
 
 #ifdef DBG_UTIL
     if (bDoSaveForVisualControl)
@@ -360,7 +356,7 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
         primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
         BitmapEx aBitmapEx(convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
-                                             basegfx::B2DRange(0, 0, nDiscreteWidth, nDiscreteHeight),
+                                             nDiscreteWidth, nDiscreteHeight,
                                              nMaximumQuadraticPixels));
 
         if (aBitmapEx.IsEmpty())

@@ -136,7 +136,8 @@ namespace drawinglayer::primitive2d
                     convertToBitmapEx(
                         std::move(xEmbedSeq),
                         aViewInformation2D,
-                        basegfx::B2DRange(0, 0, mnDiscreteWidth, mnDiscreteHeight),
+                        mnDiscreteWidth,
+                        mnDiscreteHeight,
                         mnDiscreteWidth * mnDiscreteHeight));
 
                 if(!aBitmapEx.IsEmpty())
@@ -196,7 +197,8 @@ namespace drawinglayer::primitive2d
             return convertToBitmapEx(
                         std::move(xEmbedSeq),
                         aViewInformation2D,
-                        basegfx::B2DRange(0, 0, nWidth, nHeight),
+                        nWidth,
+                        nHeight,
                         nWidth * nHeight);
         }
 

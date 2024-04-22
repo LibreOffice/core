@@ -2524,11 +2524,9 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // limitation to paint the content
     const auto aViewInformation2D(geometry::createViewInformation2D({}));
     const sal_uInt32 nMaximumQuadraticPixels(500000);
-    const BitmapEx aBitmapEx(
-        convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
-                          basegfx::B2DRange(0, 0, basegfx::fround(aDiscreteRange.getWidth()),
-                                            basegfx::fround(aDiscreteRange.getHeight())),
-                          nMaximumQuadraticPixels));
+    const BitmapEx aBitmapEx(convertToBitmapEx(
+        std::move(xEmbedSeq), aViewInformation2D, basegfx::fround(aDiscreteRange.getWidth()),
+        basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
     // add to target metafile (will create MetaFloatTransparentAction)
     mpOutputDevice->DrawBitmapEx(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),

@@ -223,12 +223,8 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
             aRange2 = pSource2->getB2DRange(aViewInformation2D);
         }
 
-        const sal_uInt32 nX1 = std::min(aRange.getMinX(), aRange2.getMinX());
-        const sal_uInt32 nY1 = std::min(aRange.getMinY(), aRange2.getMinY());
-        const sal_uInt32 nX2 = std::max(aRange.getMaxX(), aRange2.getMaxX());
-        const sal_uInt32 nY2 = std::max(aRange.getMaxY(), aRange2.getMaxY());
-
-        const basegfx::B2DRange aBaseRange(nX1, nY1, nX1 + nX2, nY1 + nY2);
+        const basegfx::B2DRange aBaseRange(0, 0, std::max(aRange.getMaxX(), aRange2.getMaxX()),
+                                           std::max(aRange.getMaxY(), aRange2.getMaxY()));
 
         BitmapEx aBmpEx, aBmpEx2;
 
@@ -236,28 +232,28 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
         {
             drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource);
             aBmpEx = drawinglayer::convertToBitmapEx(
-                std::move(aSource), aViewInformation2D, aBaseRange,
-                aBaseRange.getWidth() * aBaseRange.getHeight());
+                std::move(aSource), aViewInformation2D, aBaseRange.getWidth(),
+                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
         }
         else
         {
             aBmpEx = drawinglayer::convertToBitmapEx(
-                std::move(rTarget), aViewInformation2D, aBaseRange,
-                aBaseRange.getWidth() * aBaseRange.getHeight());
+                std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(),
+                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
         if (pSource2)
         {
             drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource2);
             aBmpEx2 = drawinglayer::convertToBitmapEx(
-                std::move(aSource), aViewInformation2D, aBaseRange,
-                aBaseRange.getWidth() * aBaseRange.getHeight());
+                std::move(aSource), aViewInformation2D, aBaseRange.getWidth(),
+                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
         }
         else
         {
             aBmpEx2 = drawinglayer::convertToBitmapEx(
-                std::move(rTarget), aViewInformation2D, aBaseRange,
-                aBaseRange.getWidth() * aBaseRange.getHeight());
+                std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(),
+                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
         BitmapArithmeticBlendFilter aArithmeticFilter(aBmpEx, aBmpEx2);

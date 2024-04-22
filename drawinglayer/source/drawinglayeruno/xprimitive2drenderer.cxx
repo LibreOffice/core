@@ -147,7 +147,8 @@ namespace drawinglayer::unorenderer
                         convertToBitmapEx(
                             std::move(xEmbedSeq),
                             aViewInformation2D,
-                            basegfx::B2DRange(0, 0, nDiscreteWidth, nDiscreteHeight),
+                            nDiscreteWidth,
+                            nDiscreteHeight,
                             MaximumQuadraticPixels));
 
                     if(!aBitmapEx.IsEmpty())
