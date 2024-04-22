@@ -277,6 +277,7 @@
 #include <core/fxcrt/autonuller.h>
 #include <core/fxcrt/autorestorer.h>
 #include <core/fxcrt/binary_buffer.h>
+#include <core/fxcrt/byteorder.h>
 #include <core/fxcrt/bytestring.h>
 #include <core/fxcrt/cfx_bitstream.h>
 #include <core/fxcrt/cfx_datetime.h>
@@ -286,7 +287,12 @@
 #include <core/fxcrt/cfx_read_only_vector_stream.h>
 #include <core/fxcrt/cfx_seekablestreamproxy.h>
 #include <core/fxcrt/cfx_timer.h>
+#include <core/fxcrt/check.h>
+#include <core/fxcrt/check_op.h>
 #include <core/fxcrt/code_point_view.h>
+#include <core/fxcrt/compiler_specific.h>
+#include <core/fxcrt/containers/adapters.h>
+#include <core/fxcrt/containers/contains.h>
 #include <core/fxcrt/css/cfx_css.h>
 #include <core/fxcrt/css/cfx_csscolorvalue.h>
 #include <core/fxcrt/css/cfx_csscomputedstyle.h>
@@ -309,6 +315,7 @@
 #include <core/fxcrt/css/cfx_cssvaluelist.h>
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
 #include <core/fxcrt/data_vector.h>
+#include <core/fxcrt/debug/alias.h>
 #include <core/fxcrt/fileaccess_iface.h>
 #include <core/fxcrt/fixed_size_data_vector.h>
 #include <core/fxcrt/fx_2d_size.h>
@@ -329,14 +336,22 @@
 #include <core/fxcrt/fx_system.h>
 #include <core/fxcrt/fx_unicode.h>
 #include <core/fxcrt/maybe_owned.h>
+#include <core/fxcrt/notreached.h>
+#include <core/fxcrt/numerics/clamped_math.h>
+#include <core/fxcrt/numerics/safe_conversions.h>
+#include <core/fxcrt/numerics/safe_math.h>
 #include <core/fxcrt/observed_ptr.h>
 #include <core/fxcrt/pauseindicator_iface.h>
+#include <core/fxcrt/ptr_util.h>
+#include <core/fxcrt/raw_span.h>
 #include <core/fxcrt/retain_ptr.h>
 #include <core/fxcrt/scoped_set_insertion.h>
+#include <core/fxcrt/span.h>
 #include <core/fxcrt/span_util.h>
 #include <core/fxcrt/stl_util.h>
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
+#include <core/fxcrt/string_template.h>
 #include <core/fxcrt/string_view_template.h>
 #include <core/fxcrt/unowned_ptr.h>
 #include <core/fxcrt/unowned_ptr_exclusion.h>
@@ -468,19 +483,6 @@
 #include <third_party/agg23/agg_rasterizer_scanline_aa.h>
 #include <third_party/agg23/agg_renderer_scanline.h>
 #include <third_party/agg23/agg_scanline_u.h>
-#include <third_party/base/check.h>
-#include <third_party/base/check_op.h>
-#include <third_party/base/compiler_specific.h>
-#include <third_party/base/containers/adapters.h>
-#include <third_party/base/containers/contains.h>
-#include <third_party/base/containers/span.h>
-#include <third_party/base/debug/alias.h>
-#include <third_party/base/memory/aligned_memory.h>
-#include <third_party/base/memory/ptr_util.h>
-#include <third_party/base/notreached.h>
-#include <third_party/base/numerics/clamped_math.h>
-#include <third_party/base/numerics/safe_conversions.h>
-#include <third_party/base/numerics/safe_math.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

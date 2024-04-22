@@ -12,41 +12,6 @@ index 31564f45f..5858549ef 100644
  
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(/*depth=*/0, doc->GetRoot(), &unsupported);
-diff --git a/third_party/base/containers/span.h b/third_party/base/containers/span.h
-index 435fafa85..d8e8bfbc4 100644
---- a/third_party/base/containers/span.h
-+++ b/third_party/base/containers/span.h
-@@ -211,7 +211,7 @@ class TRIVIAL_ABI GSL_POINTER span {
- #else
-   template <typename Container,
-             typename = internal::EnableIfSpanCompatibleContainer<Container, T>>
--  constexpr span(Container& container)
-+  span(Container& container)
-       : span(container.data(), container.size()) {}
- #endif
- 
-@@ -225,7 +225,7 @@ class TRIVIAL_ABI GSL_POINTER span {
-   // Conversions from spans of compatible types: this allows a span<T> to be
-   // seamlessly used as a span<const T>, but not the other way around.
-   template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
--  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
-+  span(const span<U>& other) : span(other.data(), other.size()) {}
-   span& operator=(const span& other) noexcept {
-     if (this != &other) {
-       data_ = other.data_;
-diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
-index 44c921a14..0152a89b7 100644
---- a/third_party/base/numerics/safe_conversions_impl.h
-+++ b/third_party/base/numerics/safe_conversions_impl.h
-@@ -89,7 +89,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
- 
- // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
- // Alternately, the usage could be restructured for "consteval if" in C++23.
--#define IsConstantEvaluated() (__builtin_is_constant_evaluated())
-+#define IsConstantEvaluated() (false)
- 
- // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
- // some accelerated runtime paths to release builds until this can be forced
 diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
 index 9dd4256d7..949d65830 100644
 --- a/third_party/libopenjpeg/openjpeg.c
