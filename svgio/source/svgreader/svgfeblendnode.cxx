@@ -24,6 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/BitmapMultiplyBlendFilter.hxx>
 #include <vcl/BitmapScreenBlendFilter.hxx>
 #include <vcl/BitmapTools.hxx>
 
@@ -74,6 +75,10 @@ void SvgFeBlendNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
                 {
                     maMode = Mode::Screen;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"multiply"))
+                {
+                    maMode = Mode::Multiply;
+                }
             }
             break;
         }
@@ -105,7 +110,7 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
             rTarget.append(*pSource);
         }
     }
-    else if (maMode == Mode::Screen)
+    else
     {
         basegfx::B2DRange aRange, aRange2;
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
@@ -156,8 +161,17 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
                 aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
-        BitmapScreenBlendFilter aScreenBlendFilter(aBmpEx, aBmpEx2);
-        BitmapEx aResBmpEx = aScreenBlendFilter.execute();
+        BitmapEx aResBmpEx;
+        if (maMode == Mode::Screen)
+        {
+            BitmapScreenBlendFilter aScreenBlendFilter(aBmpEx, aBmpEx2);
+            aResBmpEx = aScreenBlendFilter.execute();
+        }
+        else if (maMode == Mode::Multiply)
+        {
+            BitmapMultiplyBlendFilter aMultiplyBlendFilter(aBmpEx, aBmpEx2);
+            aResBmpEx = aMultiplyBlendFilter.execute();
+        }
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
