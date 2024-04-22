@@ -40,6 +40,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdfread.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cmath>
 
@@ -4580,7 +4581,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
         = { // Rotation by $\theta$ $cos(\theta), sin(\theta), -sin(\theta), cos(\theta)$
             0, -1, 1, 0,
             // Translate x,y
-            -aOrigin[1] - aSize[1] / 2 + aSize[0] / 2, aOrigin[0] + aSize[0] / 2 + aSize[1] / 2
+            -aOrigin[1] - aSize[1] / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR / 2
+                + aSize[0] / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR / 2,
+            aOrigin[0] + aSize[0] / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR / 2
+                + aSize[1] / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR / 2
           };
 
     for (sal_Int32 nIdx = 0; nIdx < 6; ++nIdx)
