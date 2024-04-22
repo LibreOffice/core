@@ -9,6 +9,8 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 
+gb_COMPILEROPTFLAGS := -O2 -mtune=generic
+
 include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:
