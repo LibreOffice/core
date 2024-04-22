@@ -10,6 +10,9 @@
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DPPC
 
+gb_COMPILEROPTFLAGS := -O2 \
+		       $(if $(filter powerpc64le-unknown-linux-gnu,$(HOST_PLATFORM)),-mtune=powerpc64le)
+
 include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:
