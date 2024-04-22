@@ -116,9 +116,13 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl))
         return;
+
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
-    StringRef filename = getFilenameOfLocation(expansionLoc);
+    std::string filename = getFilenameOfLocation(expansionLoc).str();
+    loplugin::normalizeDotDotInFilePath(filename);
     if (!loplugin::hasPathnamePrefix(filename, SRCDIR "/"))
+        return;
+    if (loplugin::hasPathnamePrefix(filename, WORKDIR "/"))
         return;
     filename = filename.substr(strlen(SRCDIR)+1);
 
@@ -149,8 +153,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
         aInfo.paramType = functionDecl->getParamDecl(paramIndex)->getType().getCanonicalType().getAsString();
 
     aInfo.callValue = callValue;
-    aInfo.sourceLocation = filename.str() + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
+    aInfo.sourceLocation = filename + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
 
     callSet.insert(aInfo);
 }
