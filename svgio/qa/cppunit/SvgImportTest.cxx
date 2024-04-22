@@ -1909,6 +1909,50 @@ CPPUNIT_TEST_FIXTURE(Test, testDarkenBlend)
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), aPixels[125]);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLightenBlend)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/lightenBlend.svg");
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "height"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "width"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap/data"_ostr, 150);
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy11"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy13"_ostr, "20");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy22"_ostr, "150");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy23"_ostr, "20");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/bitmap"_ostr, "xy33"_ostr, "1");
+
+    // Check the colors in the diagonal
+    OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[25]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aPixels[25]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[75]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("ff8000"), aPixels[75]);
+
+    sDataRow = getXPath(pDocument, "/primitive2D/transform/transform/bitmap/data[125]"_ostr, "row"_ostr);
+    aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("008000"), aPixels[125]);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149880)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf149880.svg");
