@@ -433,6 +433,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_vector_stream \
     UnpackedTarball/pdfium/core/fxcrt/fx_memory_malloc \
     UnpackedTarball/pdfium/core/fxcrt/widetext_buffer \
+    UnpackedTarball/pdfium/core/fxcrt/debug/alias \
+    UnpackedTarball/pdfium/core/fxcrt/string_template \
 ))
 
 # fxge
@@ -568,12 +570,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 ))
 endif
 
-# pdfium_base
-$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/base/debug/alias \
-    UnpackedTarball/pdfium/third_party/base/memory/aligned_memory \
-))
-
 $(eval $(call gb_Library_use_externals,pdfium,\
     libjpeg \
     lcms2 \
@@ -664,7 +660,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_windowsrenderdevice \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
     UnpackedTarball/pdfium/core/fxcrt/fx_folder_windows \
-    UnpackedTarball/pdfium/third_party/base/win/win_util \
+    UnpackedTarball/pdfium/core/fxcrt/win/win_util \
+    UnpackedTarball/pdfium/core/fxcrt/code_point_view \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_windowsrenderdevice \
 ))
 

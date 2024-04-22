@@ -18,8 +18,6 @@ pdfium_patches += constexpr-template.patch
 
 pdfium_patches += system-abseil.diff
 
-pdfium_patches += include.patch
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
@@ -35,9 +33,8 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigIntegerUtils.cc third_party/bigint/BigIntegerUtils.cpp && \
     mv third_party/bigint/BigUnsigned.cc third_party/bigint/BigUnsigned.cpp && \
     mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp && \
-    mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp && \
-    mv third_party/base/memory/aligned_memory.cc third_party/base/memory/aligned_memory.cpp && \
-    mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp && \
+    mv core/fxcrt/debug/alias.cc core/fxcrt/debug/alias.cpp && \
+    mv core/fxcrt/win/win_util.cc core/fxcrt/win/win_util.cpp && \
     mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
     mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp && \
     mv third_party/abseil-cpp/absl/types/bad_variant_access.cc third_party/abseil-cpp/absl/types/bad_variant_access.cpp \
