@@ -286,11 +286,13 @@ void FrameView::Update(SdOptions const * pOptions)
     if (pDrawDocument->GetDocumentType() == DocumentType::Impress)
     {
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
+        SetDragStripes( officecfg::Office::Impress::Layout::Display::Guide::get() );
         SetNoDragXorPolys ( !officecfg::Office::Impress::Layout::Display::Contour::get() );
     }
     else
     {
         mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
+        SetDragStripes( officecfg::Office::Draw::Layout::Display::Guide::get() );
         SetNoDragXorPolys ( !officecfg::Office::Draw::Layout::Display::Contour::get() );
     }
 
@@ -302,7 +304,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetOFrmSnap( pOptions->IsSnapFrame() );
     SetOPntSnap( pOptions->IsSnapPoints() );
     SetHlplVisible( pOptions->IsHelplines() );
-    SetDragStripes( pOptions->IsDragStripes() );
     SetPlusHandlesAlwaysVisible( pOptions->IsHandlesBezier() );
     SetSnapMagneticPixel( pOptions->GetSnapArea() );
     SetMarkedHitMovesAlways( pOptions->IsMarkedHitMovesAlways() );

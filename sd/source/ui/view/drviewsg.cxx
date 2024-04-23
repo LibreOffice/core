@@ -26,6 +26,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/ImageMapInfo.hxx>
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <app.hrc>
 
@@ -103,6 +105,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
 
     switch( nSlot )
     {
@@ -137,7 +141,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_HELPLINES_MOVE:
         {
-            pOptions->SetDragStripes( !mpDrawView->IsDragStripes() );
+            if ( GetDoc()->GetDocumentType() == DocumentType::Impress )
+                officecfg::Office::Impress::Layout::Display::Guide::set(!mpDrawView->IsDragStripes(), batch);
+            else
+                officecfg::Office::Draw::Layout::Display::Guide::set(!mpDrawView->IsDragStripes(), batch);
         }
         break;
 
@@ -192,6 +199,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     if( bDefault )
         return;
 
+    batch->commit();
     pOptions->StoreConfig();
 
     // Saves the configuration IMMEDIATELY
