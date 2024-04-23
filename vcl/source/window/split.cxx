@@ -460,10 +460,10 @@ void Splitter::StartDrag()
 
     StartSplit();
 
-    // Tracking starten
+    // Start tracking
     StartTracking();
 
-    // Start-Position ermitteln
+    // Determine start position
     maDragPos = mpRefWin->GetPointerPosPixel();
     ImplSplitMousePos( maDragPos );
     if ( mbHorzSplit )
