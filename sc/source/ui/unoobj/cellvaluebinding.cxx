@@ -286,7 +286,12 @@ namespace calc
                 OUString sText;
                 aValue >>= sText;
                 if ( m_xCellText.is() )
+                {
+                    // might call back into us via modified(EventObject&)
+                    aGuard.unlock();
                     m_xCellText->setString( sText );
+                    aGuard.lock();
+                }
             }
             break;
 
@@ -302,7 +307,12 @@ namespace calc
                 double nCellValue = bValue ? 1.0 : 0.0;
 
                 if ( m_xCell.is() )
+                {
+                    // might call back into us via modified(EventObject&)
+                    aGuard.unlock();
                     m_xCell->setValue( nCellValue );
+                    aGuard.lock();
+                }
 
                 setBooleanFormat();
             }
@@ -315,7 +325,12 @@ namespace calc
                 double nValue = 0;
                 aValue >>= nValue;
                 if ( m_xCell.is() )
+                {
+                    // might call back into us via modified(EventObject&)
+                    aGuard.unlock();
                     m_xCell->setValue( nValue );
+                    aGuard.lock();
+                }
             }
             break;
 
@@ -327,7 +342,12 @@ namespace calc
                 aValue >>= nValue;      // list index from control layer (0-based)
                 ++nValue;               // the list position value in the cell is 1-based
                 if ( m_xCell.is() )
+                {
+                    // might call back into us via modified(EventObject&)
+                    aGuard.unlock();
                     m_xCell->setValue( nValue );
+                    aGuard.lock();
+                }
             }
             break;
 
@@ -341,7 +361,10 @@ namespace calc
                 {
                     Sequence<Any> aInner(1);                            // one empty element
                     Sequence< Sequence<Any> > aOuter( &aInner, 1 );     // one row
+                    // might call back into us via modified(EventObject&)
+                    aGuard.unlock();
                     xData->setDataArray( aOuter );
+                    aGuard.lock();
                 }
             }
             break;
