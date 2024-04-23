@@ -297,18 +297,18 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="600">
+      <object class="GtkCheckMenuItem" id="showcomments">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_SHOW">Show All</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_SHOW">Show Comments</property>
         <property name="use-underline">True</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="601">
+      <object class="GtkCheckMenuItem" id="showresolvedcomments">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_HIDE">Hide All</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_SHOW_RESOLVED">Show Resolved Comments</property>
         <property name="use-underline">True</property>
       </object>
     </child>

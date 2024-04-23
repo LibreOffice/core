@@ -1978,7 +1978,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                      && pType->GetMemberCount() > 0)
             {
                 if (nContentType == ContentTypeId::POSTIT)
+                {
+                    const SwViewOption* m_pViewOpt = m_pActiveShell->GetViewOptions();
+                    xPop->set_active("showcomments", m_pViewOpt->IsPostIts());
+                    xPop->set_active("showresolvedcomments", m_pViewOpt->IsResolvedPostIts());
                     bRemovePostItEntries = false;
+                }
                 else if (nContentType == ContentTypeId::FOOTNOTE)
                     bRemoveDeleteAllFootnotesEntry = false;
                 else if (nContentType == ContentTypeId::ENDNOTE)
@@ -2009,8 +2014,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemovePostItEntries)
     {
-        xPop->remove(OUString::number(600));
-        xPop->remove(OUString::number(601));
+        xPop->remove("showcomments");
+        xPop->remove("showresolvedcomments");
         xPop->remove(OUString::number(602));
     }
 
@@ -5032,6 +5037,17 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry)
 {
+
+    if(rSelectedPopupEntry == "showcomments")
+    {
+            m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_TOGGLE_NOTES);
+            return;
+    }
+    if(rSelectedPopupEntry == "showresolvedcomments")
+    {
+            m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_TOGGLE_RESOLVED_NOTES);
+            return;
+    }
     if (rSelectedPopupEntry == "copy")
     {
         CopyOutlineSelections();
@@ -5286,12 +5302,6 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         case 502 :
             EditEntry(*xFirst, EditEntryMode::RENAME);
         break;
-        case 600:
-            m_pActiveShell->GetView().GetPostItMgr()->Show();
-            break;
-        case 601:
-            m_pActiveShell->GetView().GetPostItMgr()->Hide();
-            break;
         case 602:
             {
                 m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
