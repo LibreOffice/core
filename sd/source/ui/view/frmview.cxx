@@ -286,10 +286,12 @@ void FrameView::Update(SdOptions const * pOptions)
     if (pDrawDocument->GetDocumentType() == DocumentType::Impress)
     {
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
+        SetNoDragXorPolys ( !officecfg::Office::Impress::Layout::Display::Contour::get() );
     }
     else
     {
         mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
+        SetNoDragXorPolys ( !officecfg::Office::Draw::Layout::Display::Contour::get() );
     }
 
     SetGridVisible( pOptions->IsGridVisible() );
@@ -306,7 +308,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetMarkedHitMovesAlways( pOptions->IsMarkedHitMovesAlways() );
     SetMoveOnlyDragging( pOptions->IsMoveOnlyDragging() );
     SetSlantButShear( pOptions->IsMoveOnlyDragging() );
-    SetNoDragXorPolys ( !pOptions->IsMoveOutline() );
     SetCrookNoContortion( pOptions->IsCrookNoContortion() );
     SetAngleSnapEnabled( pOptions->IsRotate() );
     SetBigOrtho( pOptions->IsBigOrtho() );
