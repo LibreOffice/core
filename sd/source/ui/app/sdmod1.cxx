@@ -21,7 +21,9 @@
 #include <svl/intitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/syslocale.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <osl/diagnose.h>
 #include <vcl/commandevent.hxx>
@@ -52,6 +54,9 @@
 #include <FactoryIds.hxx>
 #include <memory>
 #include <slideshow.hxx>
+
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::Reference;
@@ -126,9 +131,21 @@ void SdModule::Execute(SfxRequest& rReq)
                                 DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
 
                                 PutItem( *pItem );
-                                SdOptions* pOptions = GetSdOptions( eDocType );
-                                if(pOptions)
-                                    pOptions->SetMetric( static_cast<sal_uInt16>(eUnit) );
+                                SvtSysLocale aSysLocale;
+                                std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                                    comphelper::ConfigurationChanges::create());
+
+                                if (eDocType == DocumentType::Impress)
+                                    if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                                        officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::set(static_cast<sal_uInt16>(eUnit), batch);
+                                    else
+                                        officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::set(static_cast<sal_uInt16>(eUnit), batch);
+                                else
+                                    if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                                        officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::set(static_cast<sal_uInt16>(eUnit), batch);
+                                else
+                                        officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::set(static_cast<sal_uInt16>(eUnit), batch);
+                                batch->commit();
                                 rReq.Done();
                             }
                         }
@@ -313,9 +330,18 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         if(pDocSh)
         {
             DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
+            SvtSysLocale aSysLocale;
 
-            SdOptions* pOptions = GetSdOptions(eDocType);
-            rItemSet.Put( SfxUInt16Item( SID_ATTR_METRIC, pOptions->GetMetric() ) );
+            if (eDocType == DocumentType::Impress)
+                if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                    rItemSet.Put( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get() ) );
+                else
+                    rItemSet.Put( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get() ) );
+            else
+                if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                    rItemSet.Put( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get() ) );
+                else
+                    rItemSet.Put( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get() ) );
         }
     }
 

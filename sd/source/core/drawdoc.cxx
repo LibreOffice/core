@@ -36,6 +36,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Draw.hxx>
 
 #include <sfx2/linkmgr.hxx>
 #include <Outliner.hxx>
@@ -53,6 +54,8 @@
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -156,12 +159,19 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     sal_Int32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
+    SvtSysLocale aSysLocale;
 
     // Allow UI scale only for draw documents.
     if( eType == DocumentType::Draw )
-        SetUIUnit( static_cast<FieldUnit>(pOptions->GetMetric()), Fraction( nX, nY ) );  // user-defined
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get()), Fraction( nX, nY ) );  // user-defined
+        else
+            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( nX, nY ) );  // user-defined
     else
-        SetUIUnit( static_cast<FieldUnit>(pOptions->GetMetric()), Fraction( 1, 1 ) );    // default
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), Fraction( 1, 1 ) );    // default
+        else
+                        SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
 
     SetScaleUnit(MapUnit::Map100thMM);
     SetDefaultFontHeight(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100));

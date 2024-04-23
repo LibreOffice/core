@@ -141,18 +141,6 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 
         pOptions = pImpressOptions;
     }
-    if( pOptions )
-    {
-        sal_uInt16 nMetric = pOptions->GetMetric();
-
-        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-        SdDrawDocument* pDoc = nullptr;
-        if (pDocSh)
-            pDoc = pDocSh->GetDoc();
-
-        if( nMetric != 0xffff && pDoc && eDocType == pDoc->GetDocumentType() )
-            PutItem( SfxUInt16Item( SID_ATTR_METRIC, nMetric ) );
-    }
 
     return pOptions;
 }

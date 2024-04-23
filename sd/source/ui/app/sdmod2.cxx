@@ -24,6 +24,8 @@
 #include <svl/inethist.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/flagitem.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -60,6 +62,9 @@
 #include <sdpage.hxx>
 #include <sdabstdlg.hxx>
 #include <svl/intitem.hxx>
+
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 /** retrieves the page that is currently painted. This will only be the master page
     if the current drawn view only shows the master page*/
@@ -468,10 +473,20 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     aRet.Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
 
     FieldUnit nMetric = FieldUnit(0xffff);
+    SvtSysLocale aSysLocale;
     if( pFrameView)
         nMetric = pDoc->GetUIUnit();
     else
-        nMetric = static_cast<FieldUnit>(pOptions->GetMetric());
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+            else
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+            else
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
 
     if( nMetric == FieldUnit(0xffff) )
         nMetric = GetFieldUnit();
@@ -572,7 +587,22 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     {
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
-        pOptions->SetMetric( pItem->GetValue() );
+
+        SvtSysLocale aSysLocale;
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::set(pItem->GetValue(), batch);
+            else
+                officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::set(pItem->GetValue(), batch);
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::set(pItem->GetValue(), batch);
+            else
+                officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::set(pItem->GetValue(), batch);
+        batch->commit();
+
     }
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     // Default-Tabulator
@@ -700,7 +730,19 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Only if also the document type matches...
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
     {
-        FieldUnit eUIUnit = static_cast<FieldUnit>(pOptions->GetMetric());
+        FieldUnit eUIUnit;
+        SvtSysLocale aSysLocale;
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+            else
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+            else
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
+
         pDoc->SetUIUnit(eUIUnit);
 
         if (pViewShell)
