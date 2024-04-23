@@ -341,6 +341,36 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
+void SfxLokHelper::setViewReadOnly(int nId, bool readOnly)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            LOK_INFO("lok.readonlyview", "SfxLokHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
+            pViewShell->SetLokReadOnlyView(readOnly);
+            return;
+        }
+    }
+}
+
+void SfxLokHelper::setAllowChangeComments(int nId, bool allow)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
+            pViewShell->SetAllowChangeComments(allow);
+            return;
+        }
+    }
+}
+
 void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
 {
     std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
