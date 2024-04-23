@@ -456,7 +456,7 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
         CheckWin32Error("MsiGetPropertyW",
                         MsiGetPropertyW(hInstall, L"InstMSUBinary", sInstMSUBinary, &nCCh));
         WriteLog(hInstall, "Got InstMSUBinary value:",
-                 sInstMSUBinary); // KB2999226|Windows61-KB2999226-x64msu
+                 sInstMSUBinary); // KB2999226|Windows61_KB2999226_x64msu
         const wchar_t* sBinaryName = wcschr(sInstMSUBinary, L'|');
         if (!sBinaryName)
             throw std::exception("No KB number in InstMSUBinary!");

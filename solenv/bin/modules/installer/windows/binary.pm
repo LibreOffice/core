@@ -48,7 +48,8 @@ sub update_binary_table
         my $binaryfilename = $binaryfile->{'Name'};
         my $binaryfiledata = $binaryfilename;
 
-        $binaryfilename =~ s/\.//g;  # removing "." in filename: "abc.dll" to "abcdll" in name column
+        $binaryfilename =~ s/\.//g;     # removing "." in filename: "a-b-c.dll" to "a-b-cdll" in name column
+        $binaryfilename =~ s/\-/\_/g;   # converting "-" to "_" in filename: "a-b-cdll" to "a_b_cdll" in name column
 
         my %binary = ();
 
