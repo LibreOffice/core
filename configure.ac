@@ -15296,6 +15296,9 @@ AC_SUBST(PERL)
 
 if test -n "$TMPDIR"; then
     TEMP_DIRECTORY="$TMPDIR"
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+       TEMP_DIRECTORY=$(wslpath -m "$TEMP_DIRECTORY")
+    fi
 else
     TEMP_DIRECTORY="/tmp"
 fi
@@ -15426,8 +15429,10 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     # append strawberry tools dir to PATH (for e.g. windres, ar)
     LO_PATH="$LO_PATH:$STRAWBERRY_TOOLS"
     # temp-dir needs to be in windows realm, hardcode for now
-    mkdir -p tmp
-    TEMP_DIRECTORY="$BUILDDIR/tmp"
+    if test "$TEMP_DIRECTORY" = /tmp; then
+        mkdir -p tmp
+        TEMP_DIRECTORY="$BUILDDIR/tmp"
+    fi
 fi
 
 # Keep in sync with list of files far up, at AC_MSG_CHECKING([for
