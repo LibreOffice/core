@@ -65,8 +65,6 @@ class formatCharacter(UITestCase):
                 xLangFontCTL = xDialog.getChild("cbCTLLanguage")
                 self.assertEqual(get_state_as_dict(xLangFontCTL)["Text"], "[None]")
 
-
-
    def test_format_character_tab_font_effects(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
@@ -114,47 +112,6 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xUnderline)["SelectEntryText"], "Single")
                 self.assertEqual(get_state_as_dict(xEmphasis)["SelectEntryText"], "Dot")
                 self.assertEqual(get_state_as_dict(xPosition)["SelectEntryText"], "Below text")
-
-
-
-   def test_format_character_tab_hyperlink(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-
-            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-
-                xURL = xDialog.getChild("urled")
-                xURL.executeAction("TYPE", mkPropertyValues({"TEXT":"libreoffice.org"}))
-                xTexted = xDialog.getChild("texted")
-                xTexted.executeAction("TYPE", mkPropertyValues({"TEXT":"LibreOffice"}))
-                xName = xDialog.getChild("nameed")
-                xName.executeAction("TYPE", mkPropertyValues({"TEXT":"hyperlink"}))
-
-                xVisited = xDialog.getChild("visitedlb")
-                select_by_text(xVisited, "Bullets")
-                xUnVisited = xDialog.getChild("unvisitedlb")
-                select_by_text(xUnVisited, "Bullets")
-
-
-            self.xUITest.executeCommand(".uno:GoLeft")
-            self.assertEqual(document.Text.String[0:11], "LibreOffice")
-
-            with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
-                xURL = xDialog.getChild("urled")
-                xTexted = xDialog.getChild("texted")
-                xName = xDialog.getChild("nameed")
-                xVisited = xDialog.getChild("visitedlb")
-                xUnVisited = xDialog.getChild("unvisitedlb")
-
-                self.assertEqual(get_state_as_dict(xURL)["Text"], "http://libreoffice.org/")
-                self.assertEqual(get_state_as_dict(xTexted)["Text"], "LibreOffice")
-                self.assertEqual(get_state_as_dict(xName)["Text"], "hyperlink")
-                self.assertEqual(get_state_as_dict(xVisited)["SelectEntryText"], "Bullets")
-                self.assertEqual(get_state_as_dict(xUnVisited)["SelectEntryText"], "Bullets")
-
 
    def test_format_character_tab_asian_layout(self):
         with self.ui_test.create_doc_in_start_center("writer"):
@@ -221,8 +178,6 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xFitToLine)["Selected"], "true")
                 self.assertEqual(get_state_as_dict(xNoHyphenation)["Selected"], "true")
 
-
-
    def test_format_character_tab_position_scalewidthsb(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
@@ -239,7 +194,5 @@ class formatCharacter(UITestCase):
                 select_pos(xTabs, "2")
                 xScalewidth = xDialog.getChild("scalewidthsb")
                 self.assertEqual(get_state_as_dict(xScalewidth)["Text"], "101%")
-
-
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

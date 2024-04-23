@@ -221,10 +221,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="hyperlink">
+              <object class="GtkLabel" id="background">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="characterproperties|hyperlink">Hyperlink</property>
+                <property name="label" translatable="yes" context="characterproperties|background">Highlighting</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -245,37 +245,13 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="background">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="characterproperties|background">Highlighting</property>
-              </object>
-              <packing>
-                <property name="position">5</property>
-                <property name="tab-fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child type="tab">
               <object class="GtkLabel" id="borders">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="characterproperties|borders">Borders</property>
               </object>
               <packing>
-                <property name="position">6</property>
+                <property name="position">5</property>
                 <property name="tab-fill">False</property>
               </packing>
             </child>
