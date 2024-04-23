@@ -667,8 +667,6 @@ void Window::SetVisibleXY(double fX, double fY)
 double Window::GetVisibleWidth() const
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Width() > maViewSize.Width() )
-        aWinSize.setWidth( maViewSize.Width() );
     return
         maViewSize.Width() == 0 ? 0 : (static_cast<double>(aWinSize.Width()) / maViewSize.Width());
 }
@@ -680,8 +678,6 @@ double Window::GetVisibleWidth() const
 double Window::GetVisibleHeight() const
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Height() > maViewSize.Height() )
-        aWinSize.setHeight( maViewSize.Height() );
     return maViewSize.Height() == 0
         ? 0 : (static_cast<double>(aWinSize.Height()) / maViewSize.Height());
 }
@@ -705,7 +701,7 @@ Point Window::GetVisibleCenter()
  */
 double Window::GetScrlLineWidth() const
 {
-    return (GetVisibleWidth() * SCROLL_LINE_FACT);
+    return std::min(1.0, GetVisibleWidth()) * SCROLL_LINE_FACT;
 }
 
 /**
@@ -714,7 +710,7 @@ double Window::GetScrlLineWidth() const
  */
 double Window::GetScrlLineHeight() const
 {
-    return (GetVisibleHeight() * SCROLL_LINE_FACT);
+    return std::min(1.0, GetVisibleHeight()) * SCROLL_LINE_FACT;
 }
 
 /**
@@ -723,7 +719,7 @@ double Window::GetScrlLineHeight() const
  */
 double Window::GetScrlPageWidth() const
 {
-    return (GetVisibleWidth() * SCROLL_PAGE_FACT);
+    return std::min(1.0, GetVisibleWidth()) * SCROLL_PAGE_FACT;
 }
 
 /**
@@ -732,7 +728,7 @@ double Window::GetScrlPageWidth() const
  */
 double Window::GetScrlPageHeight() const
 {
-    return (GetVisibleHeight() * SCROLL_PAGE_FACT);
+    return std::min(1.0, GetVisibleHeight()) * SCROLL_PAGE_FACT;
 }
 
 /**

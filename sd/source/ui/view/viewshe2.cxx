@@ -63,6 +63,19 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+inline double getViewToScrollScalarForPanAcrossPages(sal_uInt16 nTotalPages, double fVisibleHeight,
+                                                     ::tools::Long nScrollRangeMax)
+{
+    // fTotalScrollableRange is (1 - fVisibleHeight) for all of the
+    // pages except the last one. Because switch to the next page
+    // happens when the view reaches bottom.
+    double fTotalScrollableRange = (nTotalPages - 1) * (1 - fVisibleHeight) + 1.0;
+    return nScrollRangeMax / fTotalScrollableRange;
+}
+}
+
 namespace sd {
 
 /**
@@ -72,7 +85,7 @@ void ViewShell::UpdateScrollBars()
 {
     if (mpHorizontalScrollBar)
     {
-        ::tools::Long nW = static_cast<::tools::Long>(mpContentWindow->GetVisibleWidth() * 32000);
+        ::tools::Long nW = static_cast<::tools::Long>(std::min(1.0, mpContentWindow->GetVisibleWidth()) * 32000);
         ::tools::Long nX = static_cast<::tools::Long>(mpContentWindow->GetVisibleX() * 32000);
         mpHorizontalScrollBar->SetVisibleSize(nW);
         mpHorizontalScrollBar->SetThumbPos(nX);
@@ -85,10 +98,32 @@ void ViewShell::UpdateScrollBars()
 
     if (mpVerticalScrollBar)
     {
-        ::tools::Long nH = static_cast<::tools::Long>(mpContentWindow->GetVisibleHeight() * 32000);
-        ::tools::Long nY = static_cast<::tools::Long>(mpContentWindow->GetVisibleY() * 32000);
+        if (CanPanAcrossPages())
+        {
+            SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
+            sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) / 2;
+            sal_uInt16 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
 
-        if(IsPageFlipMode()) // ie in zoom mode where no panning
+            // nRangeMax is max int, and not ::tools::Long since the underlying
+            // implementation weld::Scrollbar uses int
+            ::tools::Long nRangeMax = std::numeric_limits<int>::max();
+            double fVisibleHeight = std::min(mpContentWindow->GetVisibleHeight(), 1.0);
+            double fMappingFactor
+                = getViewToScrollScalarForPanAcrossPages(nTotalPages, fVisibleHeight, nRangeMax);
+            double fVisibleY = std::max(0.0, mpContentWindow->GetVisibleY());
+            double fCurrentThumbPos = nCurPage * (1 - fVisibleHeight) + fVisibleY;
+            double fScrollLineHeight
+                = mpContentWindow->GetScrlLineHeight() * (1.0 - fVisibleHeight);
+            double fScrollPageHeight
+                = mpContentWindow->GetScrlPageHeight() * (1.0 - fVisibleHeight);
+
+            mpVerticalScrollBar->SetRange(Range(0, nRangeMax));
+            mpVerticalScrollBar->SetVisibleSize(fVisibleHeight * fMappingFactor);
+            mpVerticalScrollBar->SetThumbPos(fCurrentThumbPos * fMappingFactor);
+            mpVerticalScrollBar->SetLineSize(fScrollLineHeight * fMappingFactor);
+            mpVerticalScrollBar->SetPageSize(fScrollPageHeight * fMappingFactor);
+        }
+        else if (IsPageFlipMode()) // ie in zoom mode where no panning
         {
             SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
             sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) / 2;
@@ -99,8 +134,11 @@ void ViewShell::UpdateScrollBars()
             mpVerticalScrollBar->SetLineSize(256);
             mpVerticalScrollBar->SetPageSize(256);
         }
-        else
+        else // single page pan mode
         {
+            ::tools::Long nH = static_cast<::tools::Long>(std::min(1.0, mpContentWindow->GetVisibleHeight()) * 32000);
+            ::tools::Long nY = static_cast<::tools::Long>(mpContentWindow->GetVisibleY() * 32000);
+
             mpVerticalScrollBar->SetRange(Range(0,32000));
             mpVerticalScrollBar->SetVisibleSize(nH);
             mpVerticalScrollBar->SetThumbPos(nY);
@@ -180,18 +218,8 @@ IMPL_LINK_NOARG(ViewShell, VScrollHdl, weld::Scrollbar&, void)
  */
 void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
 {
-    if(IsPageFlipMode())
+    auto doScrollView = [&](double fY)
     {
-        SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
-        sal_uInt16 nNewPage = static_cast<sal_uInt16>(pVScroll->GetThumbPos())/256;
-        if( nCurPage != nNewPage )
-            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
-    }
-    else //panning mode
-    {
-        double fY = static_cast<double>(pVScroll->GetThumbPos()) / pVScroll->GetRange().Len();
-
         ::sd::View* pView = GetView();
         OutlinerView* pOLV = nullptr;
 
@@ -222,7 +250,44 @@ void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
 
         if (mbHasRulers)
             UpdateVRuler();
+    };
 
+    if (CanPanAcrossPages())
+    {
+        SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
+        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        sal_uInt16 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+
+        double fVisibleHeight = mpContentWindow->GetVisibleHeight();
+        double fMappingFactor = getViewToScrollScalarForPanAcrossPages(nTotalPages, fVisibleHeight,
+                                                                       pVScroll->GetRange().Max());
+
+        double fScrollableDistancePerPage = 1 - std::min(fVisibleHeight, 1.0);
+
+        sal_uInt16 nNewPage
+            = std::min((pVScroll->GetThumbPos() / fMappingFactor) / fScrollableDistancePerPage,
+                       static_cast<double>(nTotalPages - 1));
+
+        if (nCurPage != nNewPage)
+            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
+
+        double fNewPageStart = nNewPage * fScrollableDistancePerPage;
+        double fY = (pVScroll->GetThumbPos() / fMappingFactor) - fNewPageStart;
+
+        doScrollView(fY);
+    }
+    else if (IsPageFlipMode())
+    {
+        SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
+        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        sal_uInt16 nNewPage = static_cast<sal_uInt16>(pVScroll->GetThumbPos())/256;
+        if( nCurPage != nNewPage )
+            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
+    }
+    else // single page panning mode
+    {
+        double fY = static_cast<double>(pVScroll->GetThumbPos()) / pVScroll->GetRange().Len();
+        doScrollView(fY);
     }
 }
 

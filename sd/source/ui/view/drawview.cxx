@@ -407,6 +407,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if ( mnPOCHSmph == 0 && eHintKind == SdrHintKind::PageOrderChange )
         {
             mpDrawViewShell->ResetActualPage();
+            mpDrawViewShell->UpdateScrollBars();
         }
         else if ( eHintKind == SdrHintKind::LayerChange || eHintKind == SdrHintKind::LayerOrderChange )
         {

@@ -111,6 +111,13 @@ private:
 
 namespace sd {
 
+/// When true, scrolling to bottom of a page switches to the next page.
+bool ViewShell::CanPanAcrossPages() const
+{
+    return dynamic_cast<const DrawViewShell*>(this) && mpContentWindow &&
+        mpContentWindow->GetVisibleHeight() < 1.0;
+}
+
 bool ViewShell::IsPageFlipMode() const
 {
     return dynamic_cast< const DrawViewShell *>( this ) !=  nullptr && mpContentWindow &&
