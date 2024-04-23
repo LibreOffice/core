@@ -104,7 +104,6 @@ vcl::KeyCode const ReservedKeys[]
                 vcl::KeyCode(KEY_F2,KEY_SHIFT)          ,
                 vcl::KeyCode(KEY_F4,KEY_MOD1)           ,
                 vcl::KeyCode(KEY_F4,KEY_MOD2)           ,
-                vcl::KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2)  ,
                 vcl::KeyCode(KEY_F6,0)                  ,
                 vcl::KeyCode(KEY_F6,KEY_MOD1)           ,
                 vcl::KeyCode(KEY_F6,KEY_SHIFT)          ,
