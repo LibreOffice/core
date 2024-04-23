@@ -43,6 +43,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
@@ -706,7 +707,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         AccessibleRelation accRelation;
                         for(int i=0; i<nRelCount ; i++)
                         {
-                            if( pRrelationSet->getRelation(i).RelationType == 6 )
+                            if (pRrelationSet->getRelation(i).RelationType == AccessibleRelationType::LABELED_BY)
                             {
                                 accRelation = pRrelationSet->getRelation(i);
                                 paccRelation = &accRelation;
@@ -721,17 +722,17 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
 
                         XAccessible* pXAcc = static_cast<XAccessible*>(pRAcc.get());
 
-                        Reference<XAccessibleContext> pRLebelContext = pXAcc->getAccessibleContext();
-                        if(!pRLebelContext.is())
+                        Reference<XAccessibleContext> xLabelContext = pXAcc->getAccessibleContext();
+                        if (!xLabelContext.is())
                             return S_FALSE;
 
-                        pRrelationSet = pRLebelContext->getAccessibleRelationSet();
+                        pRrelationSet = xLabelContext->getAccessibleRelationSet();
                         nRelCount = pRrelationSet->getRelationCount();
 
                         paccRelation = nullptr;
                         for(int j=0; j<nRelCount ; j++)
                         {
-                            if( pRrelationSet->getRelation(j).RelationType == 5 )
+                            if (pRrelationSet->getRelation(j).RelationType == AccessibleRelationType::LABEL_FOR)
                             {
                                 accRelation = pRrelationSet->getRelation(j);
                                 paccRelation = &accRelation;
@@ -746,7 +747,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                                 return S_FALSE;
                         }
 
-                        Reference<XAccessibleExtendedComponent> pRXIE(pRLebelContext,UNO_QUERY);
+                        Reference<XAccessibleExtendedComponent> pRXIE(xLabelContext, UNO_QUERY);
                         if(!pRXIE.is())
                             return S_FALSE;
 
