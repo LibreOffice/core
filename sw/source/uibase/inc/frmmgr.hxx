@@ -73,7 +73,7 @@ public:
     //CopyCtor for dialogs to check the metrics
     SW_DLLPUBLIC SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, SfxItemSet aSet );
 
-    void                SetAnchor(RndStdIds eId);
+    SW_DLLPUBLIC void SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;
 
     void                SetHorzOrientation(sal_Int16 eOrient);
