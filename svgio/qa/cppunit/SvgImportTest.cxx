@@ -1960,6 +1960,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156837)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, "3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160773)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160773.svg");
+
+    // tdf#160773 Check there is a rectangle
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/polypolygoncolor"_ostr, "color"_ostr, "#ff0000");
+
+    // tdf#159661 Check there is text in the right position
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "x"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "y"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "height"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "width"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "text"_ostr, "Red");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf156271.svg");
