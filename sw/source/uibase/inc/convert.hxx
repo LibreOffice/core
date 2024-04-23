@@ -47,7 +47,6 @@ class SwConvertTableDlg final : public SfxDialogController
     sal_uInt8 m_nIndex;
     sal_uInt8 m_nDfltStylePos;
     bool m_bCoreDataChanged : 1;
-    bool m_bSetAutoFormat : 1;
 
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
@@ -95,8 +94,6 @@ public:
                    SwTableAutoFormat const*& prTAFormat);
 
     std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const;
-
-    void Apply();
 
     virtual ~SwConvertTableDlg() override;
 };

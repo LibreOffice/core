@@ -156,80 +156,43 @@ void SvStream::writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize)
 
 void SvLockBytes::close()
 {
-    m_pStream = nullptr;
+    (void)this;
 }
 
 
 // virtual
-ErrCode SvLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, std::size_t nCount,
-                            std::size_t * pRead) const
+ErrCode SvLockBytes::ReadAt(sal_uInt64 const , void * , std::size_t ,
+                            std::size_t * ) const
 {
-    if (!m_pStream)
-    {
-        OSL_FAIL("SvLockBytes::ReadAt(): Bad stream");
-        return ERRCODE_NONE;
-    }
-
-    m_pStream->Seek(nPos);
-    std::size_t nTheRead = m_pStream->ReadBytes(pBuffer, nCount);
-    if (pRead)
-        *pRead = nTheRead;
-    return m_pStream->GetErrorCode();
+    OSL_FAIL("SvLockBytes::ReadAt(): Bad stream");
+    return ERRCODE_NONE;
 }
 
 // virtual
-ErrCode SvLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer, std::size_t nCount,
-                             std::size_t * pWritten)
+ErrCode SvLockBytes::WriteAt(sal_uInt64 const , const void * , std::size_t ,
+                             std::size_t * )
 {
-    if (!m_pStream)
-    {
-        OSL_FAIL("SvLockBytes::WriteAt(): Bad stream");
-        return ERRCODE_NONE;
-    }
-
-    m_pStream->Seek(nPos);
-    std::size_t nTheWritten = m_pStream->WriteBytes(pBuffer, nCount);
-    if (pWritten)
-        *pWritten = nTheWritten;
-    return m_pStream->GetErrorCode();
+    OSL_FAIL("SvLockBytes::WriteAt(): Bad stream");
+    return ERRCODE_NONE;
 }
 
 // virtual
 ErrCode SvLockBytes::Flush() const
 {
-    if (!m_pStream)
-    {
-        OSL_FAIL("SvLockBytes::Flush(): Bad stream");
-        return ERRCODE_NONE;
-    }
-
-    m_pStream->Flush();
-    return m_pStream->GetErrorCode();
+    OSL_FAIL("SvLockBytes::Flush(): Bad stream");
+    return ERRCODE_NONE;
 }
 
 // virtual
-ErrCode SvLockBytes::SetSize(sal_uInt64 const nSize)
+ErrCode SvLockBytes::SetSize(sal_uInt64)
 {
-    if (!m_pStream)
-    {
-        OSL_FAIL("SvLockBytes::SetSize(): Bad stream");
-        return ERRCODE_NONE;
-    }
-
-    m_pStream->SetStreamSize(nSize);
-    return m_pStream->GetErrorCode();
+    OSL_FAIL("SvLockBytes::SetSize(): Bad stream");
+    return ERRCODE_NONE;
 }
 
-ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat) const
+ErrCode SvLockBytes::Stat(SvLockBytesStat *) const
 {
-    if (!m_pStream)
-    {
-        OSL_FAIL("SvLockBytes::Stat(): Bad stream");
-        return ERRCODE_NONE;
-    }
-
-    if (pStat)
-        pStat->nSize = m_pStream->TellEnd();
+    OSL_FAIL("SvLockBytes::Stat(): Bad stream");
     return ERRCODE_NONE;
 }
 
@@ -330,12 +293,6 @@ SvStream::SvStream() :
 SvStream::SvStream( SvLockBytes* pLockBytesP ) : SvStream()
 {
     m_xLockBytes = pLockBytesP;
-    if( pLockBytesP ) {
-        const SvStream* pStrm = pLockBytesP->GetStream();
-        if( pStrm ) {
-            SetError( pStrm->GetErrorCode() );
-        }
-    }
     SetBufferSize( 256 );
 }
 

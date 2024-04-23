@@ -34,8 +34,8 @@ private:
     std::unique_ptr<weld::SpinButton> m_xNumberOfCols;
 
     // These are arbitrarily chosen.
-    const size_t MAX_INS_ROWS = 4000;
-    const size_t MAX_INS_COLS = 4000;
+    static constexpr size_t MAX_INS_ROWS = 4000;
+    static constexpr size_t MAX_INS_COLS = 4000;
 
 public:
     ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove);

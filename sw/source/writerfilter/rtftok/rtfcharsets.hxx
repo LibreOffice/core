@@ -18,7 +18,7 @@ struct RTFEncoding
     int codepage;
 };
 extern RTFEncoding const aRTFEncodings[];
-extern int nRTFEncodings;
+extern int const nRTFEncodings;
 
 /// Font name can contain special suffixes used
 /// to determine encoding for given font table entry

@@ -51,7 +51,7 @@ RTFEncoding const aRTFEncodings[] = {
     { 255, 850 }, // OEM
 };
 
-int nRTFEncodings = std::size(aRTFEncodings);
+int const nRTFEncodings = std::size(aRTFEncodings);
 
 RTFFontNameSuffix const aRTFFontNameSuffixes[] = {
     { "Baltic", RTL_TEXTENCODING_MS_1257 },   { "CE", RTL_TEXTENCODING_MS_1250 },

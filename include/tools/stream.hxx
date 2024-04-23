@@ -105,7 +105,6 @@ mechanism to allow asynchronous fetching of data.
 */
 class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) SvLockBytes: public SvRefBase
 {
-    SvStream * m_pStream;
     bool m_bSync;
 
 protected:
@@ -113,11 +112,9 @@ protected:
 
 public:
 
-    SvLockBytes() : m_pStream(nullptr), m_bSync(false) {}
+    SvLockBytes() : m_bSync(false) {}
 
     virtual ~SvLockBytes() override { close(); }
-
-    const SvStream * GetStream() const { return m_pStream; }
 
     void            SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
     bool            IsSynchronMode() const { return m_bSync; }

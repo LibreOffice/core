@@ -102,7 +102,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_nIndex(0)
     , m_nDfltStylePos(0)
     , m_bCoreDataChanged(false)
-    , m_bSetAutoFormat(false)
     , m_xTableTable(new SwTableAutoFormatTable)
     , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
     , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
@@ -217,14 +216,10 @@ void SwConvertTableDlg::Init()
 
     m_xLbFormat->connect_changed(LINK(this, SwConvertTableDlg, SelFormatHdl));
 
-    m_nIndex = 0;
-    if (!m_bSetAutoFormat)
-    {
-        // Then the list to be expanded by the entry "- none -".
-        m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
-        m_nDfltStylePos = 1;
-        m_nIndex = 255;
-    }
+    // Then the list to be expanded by the entry "- none -".
+    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
+    m_nDfltStylePos = 1;
+    m_nIndex = 255;
 
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
     {
@@ -295,7 +290,6 @@ IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
         }
 
         m_aWndPreview.NotifyChange(rData);
-        Apply();
         mxTAutoFormat = FillAutoFormatOfIndex();
     }
 }
@@ -309,7 +303,6 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
         m_nIndex = nSelPos - m_nDfltStylePos;
         m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
         UpdateChecks((*m_xTableTable)[m_nIndex], true);
-        Apply();
         mxTAutoFormat = FillAutoFormatOfIndex();
     }
     else
@@ -328,12 +321,6 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
             m_aWndPreview.NotifyChange(aTmp);
         UpdateChecks(aTmp, false);
     }
-}
-
-void SwConvertTableDlg::Apply()
-{
-    if (m_bSetAutoFormat)
-        m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Toggleable&, rButton, void)

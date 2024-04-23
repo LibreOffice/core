@@ -56,6 +56,13 @@ for fieldInfo, assignValues in fieldAssignDict.items():
         continue
     if "?" in assignValues:
         continue
+    # ignore some random noise, no idea why this does not get filtered out by the normal checks in the C++
+    if v2.startswith("ux-gnu/") or v2.startswith(":") or v2.startswith(".h:") or v2.startswith("bxml/"):
+        continue
+    if v2.startswith("ib.h:") or v2.startswith("freetype/") or v2.startswith("k/") or v2.startswith("n.h"):
+        continue
+    if v2.startswith("pango/") or v2.startswith("t.h") or v2.startswith("h:"):
+        continue
     #if len(assignValues - set(["0", "1", "-1", "nullptr"])) > 0:
     #    continue
     # ignore things which are locally declared but are actually redeclarations of things from 3rd party code

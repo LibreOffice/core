@@ -426,6 +426,10 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
             bPotentiallyAssignedTo = true;
             break;
         }
+        else if (isa<DeclRefExpr>(parent)) // things like o3tl::convertNarrowing pass members as template params
+        {
+            break;
+        }
         else {
             bPotentiallyAssignedTo = true;
             bDump = true;

@@ -25,9 +25,9 @@ using namespace com::sun::star;
 namespace writerfilter::rtftok
 {
 std::unordered_map<OString, RTFSymbol> RTFTokenizer::s_aRTFControlWords;
-bool RTFTokenizer::s_bControlWordsInitialised;
+bool RTFTokenizer::s_bControlWordsInitialised = false;
 std::vector<RTFMathSymbol> RTFTokenizer::s_aRTFMathControlWords;
-bool RTFTokenizer::s_bMathControlWordsSorted;
+bool RTFTokenizer::s_bMathControlWordsSorted = false;
 
 RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
                            uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
