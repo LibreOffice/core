@@ -1034,7 +1034,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         {
             SvxColumnItem aColItem(static_cast<const SvxColumnItem&>(pReqArgs->Get(nSlot)));
 
-            if( m_bSetTabColFromDoc || (!bSect && rSh.GetTableFormat()) )
+            if( m_bSetTabColFromDoc || m_bSetTabRowFromDoc || (!bSect && rSh.GetTableFormat()) )
             {
                 OSL_ENSURE(aColItem.Count(), "ColDesc is empty!!");
 
