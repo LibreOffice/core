@@ -62,6 +62,16 @@ namespace emfio
             rInStream.ReadFloat(rXForm.eM22);
             rInStream.ReadFloat(rXForm.eDx);
             rInStream.ReadFloat(rXForm.eDy);
+            if (std::isnan(rXForm.eM11) ||
+                std::isnan(rXForm.eM12) ||
+                std::isnan(rXForm.eM21) ||
+                std::isnan(rXForm.eM22) ||
+                std::isnan(rXForm.eDx) ||
+                std::isnan(rXForm.eDy))
+            {
+                SAL_WARN("emfio", "XForm member isnan, ignoring");
+                rXForm = XForm();
+            }
         }
         return rInStream;
     }
