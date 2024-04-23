@@ -7232,26 +7232,24 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     }
 }
 
-static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool readOnly)
+static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const bool readOnly)
 {
     comphelper::ProfileZone aZone("doc_setViewReadOnly");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    doc_setView(pThis, nId);
-    SfxViewShell::Current()->SetLokReadOnlyView(readOnly);
+    SfxLokHelper::setViewReadOnly(nId, readOnly);
 }
 
-static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool allow)
+static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const bool allow)
 {
     comphelper::ProfileZone aZone("doc_setAllowChangeComments");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    doc_setView(pThis, nId);
-    SfxViewShell::Current()->SetAllowChangeComments(allow);
+    SfxLokHelper::setAllowChangeComments(nId, allow);
 }
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
