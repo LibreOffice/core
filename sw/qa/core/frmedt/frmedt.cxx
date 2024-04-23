@@ -250,6 +250,41 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testInsertOnGrfNodeAsChar)
+{
+    // Given a selected as-char image:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    {
+        SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+        SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+        aFrameSet.Put(aAnchor);
+        Graphic aGrf;
+        pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
+    }
+
+    // When inserting another as-char image:
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+    aFrameSet.Put(aAnchor);
+    Graphic aGrf;
+    // Without the accompanying fix in place, this call crashed, we try to set a graphic node as an
+    // anchor of an as-char image (which should be a text node).
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
+
+    // Then make sure that the anchor of the second image is next to the first anchor:
+    CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats());
+    sw::FrameFormats<sw::SpzFrameFormat*>& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
+    const sw::SpzFrameFormat& rFormat1 = *rFormats[0];
+    const SwPosition* pAnchor1 = rFormat1.GetAnchor().GetContentAnchor();
+    const sw::SpzFrameFormat& rFormat2 = *rFormats[1];
+    const SwPosition* pAnchor2 = rFormat2.GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT_EQUAL(pAnchor1->nNode, pAnchor2->nNode);
+    CPPUNIT_ASSERT_EQUAL(pAnchor1->GetContentIndex() + 1, pAnchor2->GetContentIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
