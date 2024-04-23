@@ -214,6 +214,16 @@ namespace sdr::overlay
                 aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
             }
 
+            aRetval.resize(nCount);
+            for(sal_uInt32 a(0);a < nCount; a++)
+            {
+                basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
+                aRetval[a] =
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(std::move(aPolygon)),
+                        aRGBColor);
+            }
+
             basegfx::B2DPolyPolygon aPolyPolygon;
             aPolyPolygon.reserve(nCount);
             for(sal_uInt32 a(0);a < nCount; a++)
