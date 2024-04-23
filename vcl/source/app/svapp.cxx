@@ -98,31 +98,15 @@ void InitSettings(ImplSVData* pSVData);
 // keycodes handled internally by VCL
 vcl::KeyCode const ReservedKeys[]
 {
-                vcl::KeyCode(KEY_F1,0)                  ,
-                vcl::KeyCode(KEY_F1,KEY_SHIFT)          ,
-                vcl::KeyCode(KEY_F1,KEY_MOD1)           ,
-                vcl::KeyCode(KEY_F2,KEY_SHIFT)          ,
-                vcl::KeyCode(KEY_F4,KEY_MOD1)           ,
-                vcl::KeyCode(KEY_F4,KEY_MOD2)           ,
-                vcl::KeyCode(KEY_F6,0)                  ,
-                vcl::KeyCode(KEY_F6,KEY_MOD1)           ,
-                vcl::KeyCode(KEY_F6,KEY_SHIFT)          ,
-                vcl::KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT) ,
-                vcl::KeyCode(KEY_F10,0)
-#ifdef UNX
-                ,
-                vcl::KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1),
-                vcl::KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1)
-#endif
+                vcl::KeyCode(KEY_F1,0)                  , // Help
+                vcl::KeyCode(KEY_F1,KEY_SHIFT)          , // Context help
+                vcl::KeyCode(KEY_F2,KEY_SHIFT)          , // Activate extended tooltips
+                vcl::KeyCode(KEY_F4,KEY_MOD1)           , // Close document
+                vcl::KeyCode(KEY_F4,KEY_MOD2)           , // Close document
+                vcl::KeyCode(KEY_F6,0)                  , // Set focus to next visible subwindow
+                vcl::KeyCode(KEY_F6,KEY_MOD1)           , // Set focus to the document canvas/data source
+                vcl::KeyCode(KEY_F6,KEY_SHIFT)          , // Set focus to previous subwindow
+                vcl::KeyCode(KEY_F10,0)                   // Activate the first menu
 };
 
 extern "C" {
