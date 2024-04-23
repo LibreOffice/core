@@ -370,15 +370,9 @@ FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
                 return new FormulaStringOpToken(eOp, std::move(aSS));
         }
         case svSingleRef :
-            if (eOp == ocPush)
-                return new ScSingleRefToken(rLimits, aRef.Ref1 );
-            else
-                return new ScSingleRefToken(rLimits, aRef.Ref1, eOp );
+            return new ScSingleRefToken(rLimits, aRef.Ref1, eOp);
         case svDoubleRef :
-            if (eOp == ocPush)
-                return new ScDoubleRefToken(rLimits, aRef );
-            else
-                return new ScDoubleRefToken(rLimits, aRef, eOp );
+            return new ScDoubleRefToken(rLimits, aRef, eOp);
         case svMatrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
