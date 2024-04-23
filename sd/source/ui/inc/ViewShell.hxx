@@ -381,6 +381,7 @@ public:
     */
     virtual void ShowUIControls (bool bVisible);
     bool IsPageFlipMode() const;
+    bool CanPanAcrossPages() const;
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
