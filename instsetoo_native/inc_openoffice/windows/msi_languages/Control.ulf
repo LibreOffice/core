@@ -56,7 +56,7 @@ en-US = "Specify a network location for the server image of the product."
 en-US = "Enter the network location or click Change to browse to a location. Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
 
 [OOO_CONTROL_21]
-en-US = "{&MSSansBold8}Network Location"
+en-US = "{&DialogDefaultBold}Network Location"
 
 [OOO_CONTROL_22]
 en-US = "&Install"
