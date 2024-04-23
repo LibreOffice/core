@@ -14318,7 +14318,8 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "
         OOO_JUNIT_JAR=$with_junit
     fi
     if test "$_os" = "WINNT"; then
-        OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
+        PathFormat "$OOO_JUNIT_JAR"
+        OOO_JUNIT_JAR="$formatted_path"
     fi
     printf 'import org.junit.Before;' > conftest.java
     if $JAVACOMPILER -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
@@ -14354,7 +14355,8 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "
             HAMCREST_JAR=$with_hamcrest
         fi
         if test "$_os" = "WINNT"; then
-            HAMCREST_JAR=`cygpath -m "$HAMCREST_JAR"`
+            PathFormat "$HAMCREST_JAR"
+            HAMCREST_JAR="$formatted_path"
         fi
         if $JAVACOMPILER -classpath "$HAMCREST_JAR" conftest.java >&5 2>&5; then
             AC_MSG_RESULT([$HAMCREST_JAR])
