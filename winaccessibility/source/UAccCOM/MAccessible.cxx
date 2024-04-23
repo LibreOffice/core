@@ -1792,7 +1792,7 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
     for(sal_Int32 i=0 ; i<nRelations ; i++)
     {
         AccessibleRelation accRelation = pRrelationSet->getRelation(i);
-        if(accRelation.RelationType == 7)
+        if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
         {
             Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
             return static_cast<XAccessible*>(xTargets[0].get());
@@ -1861,7 +1861,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             for(int i=0 ; i<nRel ; i++)
             {
                 AccessibleRelation accRelation = pRrelationSet->getRelation(i);
-                if(accRelation.RelationType == 7)
+                if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
                 {
                     Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
 
