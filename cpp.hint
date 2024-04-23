@@ -46,3 +46,18 @@
         void TestBody();                                                       \
     };                                                                         \
     void TestName::TestBody()
+
+// From sw/qa/inc/swmodeltestbase.hxx
+// To allow searching for the test names, where they are defined using the macros
+#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
+    class TestName : public BaseClass {                                    \
+    public:                                                                \
+        void verify() override;                                            \
+    };                                                                     \
+    void TestName::verify()
+
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_FODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
