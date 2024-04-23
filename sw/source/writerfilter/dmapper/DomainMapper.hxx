@@ -24,11 +24,13 @@
 #include "SettingsTable.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
+#include <rtl/ref.hxx>
 
 #include <map>
 #include <vector>
 #include <memory>
 
+class SwXTextDocument;
 namespace com::sun::star{
     namespace beans{
         struct PropertyValue;
@@ -73,7 +75,7 @@ class DomainMapper : public LoggedProperties, public LoggedTable,
 public:
     DomainMapper(const css::uno::Reference<css::uno::XComponentContext>& xContext,
                  css::uno::Reference<css::io::XInputStream> const& xInputStream,
-                 css::uno::Reference<css::lang::XComponent> const& xModel,
+                 rtl::Reference<SwXTextDocument> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
                  utl::MediaDescriptor const & rMediaDesc);

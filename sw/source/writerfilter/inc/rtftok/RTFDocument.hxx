@@ -16,6 +16,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <unotools/mediadescriptor.hxx>
 
+class SwXTextDocument;
+
 namespace writerfilter::rtftok
 {
 /// The RTFDocument opens and resolves the RTF document.
@@ -36,7 +38,7 @@ public:
     static RTFDocument::Pointer_t
     createDocument(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                    css::uno::Reference<css::io::XInputStream> const& xInputStream,
-                   css::uno::Reference<css::lang::XComponent> const& xDstDoc,
+                   rtl::Reference<SwXTextDocument> const& xDstDoc,
                    css::uno::Reference<css::frame::XFrame> const& xFrame,
                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
                    const utl::MediaDescriptor& rMediaDescriptor);

@@ -55,6 +55,7 @@
 #include "rtftokenizer.hxx"
 #include "rtflookahead.hxx"
 #include "rtfcharsets.hxx"
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
@@ -276,7 +277,7 @@ static void lcl_DestinationToMath(OUStringBuffer* pDestinationText,
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
                                  uno::Reference<io::XInputStream> const& xInputStream,
-                                 uno::Reference<lang::XComponent> const& xDstDoc,
+                                 rtl::Reference<SwXTextDocument> const& xDstDoc,
                                  uno::Reference<frame::XFrame> const& xFrame,
                                  uno::Reference<task::XStatusIndicator> const& xStatusIndicator,
                                  const utl::MediaDescriptor& rMediaDescriptor)
@@ -334,12 +335,10 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
 
-    m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
+    m_xModelFactory = m_xDstDoc;
 
-    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
-        m_xDstDoc, uno::UNO_QUERY);
-    if (xDocumentPropertiesSupplier.is())
-        m_xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    if (m_xDstDoc)
+        m_xDocumentProperties = m_xDstDoc->getDocumentProperties();
 
     m_pGraphicHelper = std::make_shared<oox::GraphicHelper>(m_xContext, xFrame, oox::StorageRef());
 
@@ -1020,10 +1019,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         if (m_xModelFactory.is())
             xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                        uno::UNO_QUERY);
-        uno::Reference<drawing::XDrawPageSupplier> const xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
-        if (xDrawSupplier.is())
+        if (m_xDstDoc)
         {
-            uno::Reference<drawing::XShapes> xShapes = xDrawSupplier->getDrawPage();
+            uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
             if (xShapes.is())
                 xShapes->add(xShape);
         }
@@ -3263,10 +3261,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 = m_xDocumentProperties;
 
             // These are the real document properties.
-            uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
-                m_xDstDoc, uno::UNO_QUERY);
-            if (xDocumentPropertiesSupplier.is())
-                m_xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+            if (m_xDstDoc)
+                m_xDocumentProperties = m_xDstDoc->getDocumentProperties();
 
             if (m_xDocumentProperties.is())
             {

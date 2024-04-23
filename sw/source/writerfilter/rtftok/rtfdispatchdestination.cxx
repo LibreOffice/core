@@ -31,6 +31,7 @@
 #include "rtfsdrimport.hxx"
 #include "rtfskipdestination.hxx"
 #include "rtftokenizer.hxx"
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
@@ -614,15 +615,13 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShapes> xGroupShape(
                         m_xModelFactory->createInstance("com.sun.star.drawing.GroupShape"),
                         uno::UNO_QUERY);
-                    uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc,
-                                                                             uno::UNO_QUERY);
-                    if (xDrawSupplier.is())
+                    if (m_xDstDoc)
                     {
                         uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
                         // set default VertOrient before inserting
                         uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
                             ->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::NONE));
-                        xDrawSupplier->getDrawPage()->add(xShape);
+                        m_xDstDoc->getDrawPage()->add(xShape);
                     }
                     m_pSdrImport->pushParent(xGroupShape);
                     m_aStates.top().setCreatedShapeGroup(true);

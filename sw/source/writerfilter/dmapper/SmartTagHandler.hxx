@@ -11,7 +11,9 @@
 #include <vector>
 
 #include "LoggedResources.hxx"
+#include <rtl/ref.hxx>
 
+class SwXTextDocument;
 namespace com::sun::star
 {
 namespace rdf
@@ -42,7 +44,7 @@ class SmartTagHandler : public LoggedProperties
 
 public:
     SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
-                    const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
+                    const rtl::Reference<SwXTextDocument>& xTextDocument);
     ~SmartTagHandler() override;
 
     void lcl_attribute(Id nId, Value& rValue) override;

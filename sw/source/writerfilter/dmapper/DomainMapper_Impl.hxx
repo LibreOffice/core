@@ -55,6 +55,8 @@
 #include "FormControlHelper.hxx"
 #include <map>
 
+class SwXTextDocument;
+
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -532,7 +534,7 @@ private:
     DomainMapper&                                                                   m_rDMapper;
     writerfilter::ooxml::OOXMLDocument* m_pOOXMLDocument;
     OUString m_aBaseUrl;
-    css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
+    rtl::Reference<SwXTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
@@ -693,7 +695,7 @@ public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
             css::uno::Reference < css::uno::XComponentContext > xContext,
-            css::uno::Reference< css::lang::XComponent > const& xModel,
+            rtl::Reference< SwXTextDocument > const& xModel,
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor const & rMediaDesc);
     ~DomainMapper_Impl();
@@ -716,7 +718,7 @@ public:
     {
         return m_xTextFactory;
     }
-    const css::uno::Reference<css::text::XTextDocument>& GetTextDocument() const
+    const rtl::Reference<SwXTextDocument>& GetTextDocument() const
     {
         return m_xTextDocument;
     }

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <rtl/ref.hxx>
 #include "TblStylePrHandler.hxx"
 
 #include "DomainMapper.hxx"
@@ -27,6 +28,7 @@
 #include "FontTable.hxx"
 #include "LoggedResources.hxx"
 
+class SwXTextDocument;
 namespace com::sun::star::text { class XTextDocument; }
 
 
@@ -88,7 +90,7 @@ class StyleSheetTable :
     std::unique_ptr<StyleSheetTable_Impl> m_pImpl;
 
 public:
-    StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
+    StyleSheetTable(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> const& xTextDocument, bool bIsNewDoc);
     virtual ~StyleSheetTable() override;
 
     void ReApplyInheritedOutlineLevelFromChapterNumbering();

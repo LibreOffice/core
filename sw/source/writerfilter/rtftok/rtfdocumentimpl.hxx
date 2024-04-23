@@ -688,7 +688,7 @@ public:
     using Pointer_t = tools::SvRef<RTFDocumentImpl>;
     RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
-                    css::uno::Reference<css::lang::XComponent> const& xDstDoc,
+                    rtl::Reference<SwXTextDocument> const& xDstDoc,
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
                     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
                     const utl::MediaDescriptor& rMediaDescriptor);
@@ -814,7 +814,7 @@ private:
 
     css::uno::Reference<css::uno::XComponentContext> const& m_xContext;
     css::uno::Reference<css::io::XInputStream> const& m_xInputStream;
-    css::uno::Reference<css::lang::XComponent> const& m_xDstDoc;
+    rtl::Reference<SwXTextDocument> const& m_xDstDoc;
     css::uno::Reference<css::frame::XFrame> const& m_xFrame;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xModelFactory;

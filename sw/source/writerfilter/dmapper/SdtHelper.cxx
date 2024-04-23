@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <unotxdoc.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -506,9 +507,7 @@ void SdtHelper::createDateContentControl()
         xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::Any(sFullDate));
     }
 
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_rDM_Impl.GetTextDocument(),
-                                                                  uno::UNO_QUERY);
-    uno::Reference<util::XRefreshable> xRefreshable(xTextFieldsSupplier->getTextFields(),
+    uno::Reference<util::XRefreshable> xRefreshable(m_rDM_Impl.GetTextDocument()->getTextFields(),
                                                     uno::UNO_QUERY);
     xRefreshable->refresh();
 

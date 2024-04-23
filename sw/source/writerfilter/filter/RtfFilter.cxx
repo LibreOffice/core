@@ -39,6 +39,7 @@
 
 #include <dmapper/DomainMapperFactory.hxx>
 #include <rtftok/RTFDocument.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -50,7 +51,8 @@ class RtfFilter
                                   lang::XInitialization, lang::XServiceInfo>
 {
     uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
+    uno::Reference<lang::XComponent> m_xSrcDoc;
+    rtl::Reference<SwXTextDocument> m_xDstDoc;
 
 public:
     explicit RtfFilter(uno::Reference<uno::XComponentContext> xContext);
@@ -100,8 +102,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     uno::Reference<beans::XPropertySet> xDocProps;
     if (m_xDstDoc.is()) // not in cppunittest?
     {
-        xDocProps.set(m_xDstDoc, uno::UNO_QUERY);
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
+        m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
     }
     comphelper::ScopeGuard g([xDocProps] {
         if (xDocProps.is()) // not in cppunittest?
@@ -188,7 +189,8 @@ void RtfFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
 
 void RtfFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
-    m_xDstDoc = xDoc;
+    m_xDstDoc = dynamic_cast<SwXTextDocument*>(xDoc.get());
+    assert(m_xDstDoc);
 }
 
 void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)

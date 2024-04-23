@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_precompiled_header,sw_writerfilter,sw/inc/pch/preco
 
 $(eval $(call gb_Library_set_include,sw_writerfilter,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/writerfilter/inc \
     -I$(SRCDIR)/sw/source/writerfilter \
 ))
@@ -45,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,sw_writerfilter,\
     sot \
     svt \
 	svxcore \
+    sw \
     tl \
     utl \
     vcl \

@@ -131,6 +131,7 @@
 
 #include <unicode/errorcode.h>
 #include <unicode/regex.h>
+#include <unotxdoc.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -325,14 +326,14 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference<uno::XComponentContext> xContext,
-            uno::Reference<lang::XComponent> const& xModel,
+            rtl::Reference<SwXTextDocument> const& xModel,
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor const & rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_pOOXMLDocument(nullptr),
-        m_xTextDocument( xModel, uno::UNO_QUERY ),
-        m_xTextFactory( xModel, uno::UNO_QUERY ),
+        m_xTextDocument( xModel ),
+        m_xTextFactory( xModel ),
         m_xComponentContext(std::move( xContext )),
         m_bForceGenericFields(officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bIsDecimalComma( false ),
@@ -438,12 +439,8 @@ writerfilter::ooxml::OOXMLDocument* DomainMapper_Impl::getDocumentReference() co
 
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
 {
-    if(!m_xPageStyles1.is())
-    {
-        uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
-        if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles1;
-    }
+    if(!m_xPageStyles1.is() && m_xTextDocument)
+        m_xTextDocument->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles1;
     return m_xPageStyles1;
 }
 
@@ -476,23 +473,15 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
 
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetCharacterStyles()
 {
-    if(!m_xCharacterStyles.is())
-    {
-        uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
-        if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
-    }
+    if(!m_xCharacterStyles.is() && m_xTextDocument)
+        m_xTextDocument->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
     return m_xCharacterStyles;
 }
 
 uno::Reference<container::XNameContainer> const& DomainMapper_Impl::GetParagraphStyles()
 {
-    if (!m_xParagraphStyles.is())
-    {
-        uno::Reference<style::XStyleFamiliesSupplier> xSupplier(m_xTextDocument, uno::UNO_QUERY);
-        if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>= m_xParagraphStyles;
-    }
+    if (!m_xParagraphStyles.is() && m_xTextDocument)
+        m_xTextDocument->getStyleFamilies()->getByName("ParagraphStyles") >>= m_xParagraphStyles;
     return m_xParagraphStyles;
 }
 
@@ -836,22 +825,22 @@ void DomainMapper_Impl::RemoveLastParagraph( )
               (sizeof(SAL_NEWLINE_STRING) - 1 == 2 && xCursor->getString() == "\n")))
             return;
 
-        uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY_THROW);
+        if (!m_xTextDocument)
+            return;
+
         static constexpr OUString RecordChanges(u"RecordChanges"_ustr);
 
         comphelper::ScopeGuard redlineRestore(
-            [xDocProps, aPreviousValue = xDocProps->getPropertyValue(RecordChanges)]()
-            { xDocProps->setPropertyValue(RecordChanges, aPreviousValue); });
+            [this, aPreviousValue = m_xTextDocument->getPropertyValue(RecordChanges)]()
+            { m_xTextDocument->setPropertyValue(RecordChanges, aPreviousValue); });
 
         // disable redlining, otherwise we might end up with an unwanted recorded operations
-        xDocProps->setPropertyValue(RecordChanges, uno::Any(false));
+        m_xTextDocument->setPropertyValue(RecordChanges, uno::Any(false));
 
         if (xParagraph)
         {
             // move all anchored objects to the previous paragraph
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(GetTextDocument(),
-                                                                         uno::UNO_QUERY_THROW);
-            auto xDrawPage = xDrawPageSupplier->getDrawPage();
+            auto xDrawPage = m_xTextDocument->getDrawPage();
             if (xDrawPage && xDrawPage->hasElements())
             {
                 // Cursor already spans two paragraphs
@@ -4381,12 +4370,11 @@ bool DomainMapper_Impl::CopyTemporaryNotes(
 
 void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
 {
-    uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
-    uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
+    rtl::Reference< SwXTextDocument> xTextDoc( GetTextDocument() );
     uno::Reference< text::XFootnote > xNote;
     if  (GetFootnoteCount() > 0)
     {
-        auto xFootnotes = xFootnotesSupplier->getFootnotes();
+        auto xFootnotes = xTextDoc->getFootnotes();
         if ( m_nFirstFootnoteIndex > 0 )
         {
             uno::Reference< text::XFootnote > xFirstNote;
@@ -4404,7 +4392,7 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
     }
     if  (GetEndnoteCount() > 0)
     {
-        auto xEndnotes = xEndnotesSupplier->getEndnotes();
+        auto xEndnotes = xTextDoc->getEndnotes();
         if ( m_nFirstEndnoteIndex > 0 )
         {
             uno::Reference< text::XFootnote > xFirstNote;
@@ -4450,15 +4438,13 @@ void DomainMapper_Impl::PopFootOrEndnote()
     // content of the footnotes were inserted after the first footnote in temporary footnotes,
     // restore the content of the actual footnote by copying its content from the first
     // (remaining) temporary footnote and remove the temporary footnote.
-    uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
-    uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
     bool bCopied = false;
-    if ( IsInFootOrEndnote() && ( ( IsInFootnote() && GetFootnoteCount() > -1 && xFootnotesSupplier.is() ) ||
-         ( !IsInFootnote() && GetEndnoteCount() > -1 && xEndnotesSupplier.is() ) ) )
+    if ( m_xTextDocument && IsInFootOrEndnote() && ( ( IsInFootnote() && GetFootnoteCount() > -1 ) ||
+         ( !IsInFootnote() && GetEndnoteCount() > -1 ) ) )
     {
         uno::Reference< text::XFootnote > xNoteFirst, xNoteLast;
-        auto xFootnotes = xFootnotesSupplier->getFootnotes();
-        auto xEndnotes = xEndnotesSupplier->getEndnotes();
+        auto xFootnotes = m_xTextDocument->getFootnotes();
+        auto xEndnotes = m_xTextDocument->getEndnotes();
         if ( ( ( IsInFootnote() && xFootnotes->getCount() > 1 &&
                        ( xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xNoteLast ) ) ||
                ( !IsInFootnote() && xEndnotes->getCount() > 1 &&
@@ -4943,12 +4929,11 @@ void DomainMapper_Impl::PopShapeContext()
     const uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
     // Remove the shape if required (most likely replacement shape for OLE object)
     // or anchored to a discarded header or footer
-    if ( m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter )
+    if ( m_xTextDocument && (m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter) )
     {
         try
         {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(m_xTextDocument, uno::UNO_QUERY_THROW);
-            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+            uno::Reference<drawing::XDrawPage> xDrawPage = m_xTextDocument->getDrawPage();
             if ( xDrawPage.is() )
                 xDrawPage->remove( xShape );
         }
@@ -5046,7 +5031,7 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
 
         // Set the target document.
         uno::Reference<document::XImporter> xImporter(xDocxFilter, uno::UNO_QUERY);
-        xImporter->setTargetDocument(m_xTextDocument);
+        xImporter->setTargetDocument(static_cast<SfxBaseModel*>(m_xTextDocument.get()));
 
         // Set the import parameters.
         uno::Reference<embed::XHierarchicalStorageAccess> xStorageAccess(m_xDocumentStorage,
@@ -5598,7 +5583,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     try
     {
         sal_Int32 nKey = 0;
-        uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
+        uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( static_cast<cppu::OWeakObject*>(m_xTextDocument.get()), uno::UNO_QUERY_THROW );
         if( bDetectFormat )
         {
             uno::Reference< util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);
@@ -5930,8 +5915,9 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
 uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
 {
     // query master, create if not available
-    uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+    if (!m_xTextDocument)
+        throw uno::RuntimeException();
+    uno::Reference< container::XNameAccess > xFieldMasterAccess = m_xTextDocument->getTextFieldMasters();
     uno::Reference< beans::XPropertySet > xMaster;
     OUString sFieldMasterService( OUString::createFromAscii(pFieldMasterService) );
     OUStringBuffer aFieldMasterName;
@@ -6698,8 +6684,7 @@ void DomainMapper_Impl::handleAuthor
         //Lines, Manager, NameofApplication, ODMADocId, Pages,
         //Security,
     };
-    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xTextDocument, uno::UNO_QUERY);
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = m_xTextDocument->getDocumentProperties();
     uno::Reference<beans::XPropertySet>  xUserDefinedProps(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
     //search for a field mapping
@@ -7157,12 +7142,12 @@ void DomainMapper_Impl::handleToc
         }
 
         uno::Reference<container::XIndexAccess> xChapterNumberingRules;
-        if (auto xSupplier = GetTextDocument().query<text::XChapterNumberingSupplier>())
-            xChapterNumberingRules = xSupplier->getChapterNumberingRules();
+        if (m_xTextDocument)
+            xChapterNumberingRules = m_xTextDocument->getChapterNumberingRules();
         uno::Reference<container::XNameContainer> xStyles;
-        if (auto xStylesSupplier = GetTextDocument().query<style::XStyleFamiliesSupplier>())
+        if (m_xTextDocument)
         {
-            auto xStyleFamilies = xStylesSupplier->getStyleFamilies();
+            auto xStyleFamilies = m_xTextDocument->getStyleFamilies();
             xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xStyles;
         }
 
@@ -7994,8 +7979,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     bool bStyleRef = aIt->second.eFieldId == FIELD_STYLEREF;
 
                     // Do we need a GetReference (default) or a GetExpression field?
-                    uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY );
-                    uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+                    uno::Reference< container::XNameAccess > xFieldMasterAccess = GetTextDocument()->getTextFieldMasters();
 
                     if (!xFieldMasterAccess->hasByName(
                             "com.sun.star.text.FieldMaster.SetExpression."
@@ -8012,10 +7996,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                             uno::Any aStyleDisplayName;
 
-                            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(
-                                GetTextDocument(), uno::UNO_QUERY_THROW);
                             uno::Reference<container::XNameAccess> xStyleFamilies
-                                = xStylesSupplier->getStyleFamilies();
+                                = GetTextDocument()->getStyleFamilies();
                             uno::Reference<container::XNameAccess> xStyles;
                             xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES))
                                 >>= xStyles;
@@ -8555,7 +8537,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                 }
                 else if (pContext->m_bSetDateValue)
                 {
-                    uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
+                    uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( static_cast<cppu::OWeakObject*>(m_xTextDocument.get()), uno::UNO_QUERY_THROW );
 
                     uno::Reference<util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);
                     xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
@@ -9332,12 +9314,13 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
 
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn )
 {
+    if (!m_xTextDocument)
+        throw uno::RuntimeException();
     if( !m_bLineNumberingSet )
     {
         try
         {
-            uno::Reference< text::XLineNumberingProperties > xLineProperties( m_xTextDocument, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProperties = xLineProperties->getLineNumberingProperties();
+            uno::Reference< beans::XPropertySet > xProperties = m_xTextDocument->getLineNumberingProperties();
             uno::Any aTrue( uno::Any( true ));
             xProperties->setPropertyValue( getPropertyName( PROP_IS_ON                  ), aTrue);
             xProperties->setPropertyValue( getPropertyName( PROP_COUNT_EMPTY_LINES      ), aTrue );
@@ -9352,8 +9335,7 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
         {}
     }
     m_bLineNumberingSet = true;
-    uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
     uno::Reference<container::XNameContainer> xStyles;
     xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
     lcl_linenumberingHeaderFooter( xStyles, "Header", this );
@@ -9608,8 +9590,7 @@ void DomainMapper_Impl::ApplySettingsTable()
             }
             rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
             xBox->insertByIndex(sal_Int32(0), uno::Any(comphelper::containerToSequence(aViewProps)));
-            uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
-            xViewDataSupplier->setViewData(xBox);
+            m_xTextDocument->setViewData(xBox);
         }
 
         uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
@@ -9683,6 +9664,8 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
     sal_Int32 nRet = 0;
     if ( nListId < 0 )
         return nRet;
+    if ( !m_xTextDocument )
+        return nRet;
 
     try
     {
@@ -9692,8 +9675,7 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         auto const pList(GetListTable()->GetList(nListId));
         assert(pList);
         const OUString aListName = pList->GetStyleName();
-        const uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
-        const uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        const uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         const uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);

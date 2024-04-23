@@ -45,6 +45,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -93,7 +94,8 @@ class WriterFilter
                                   lang::XInitialization, lang::XServiceInfo>
 {
     uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
+    uno::Reference<lang::XComponent> m_xSrcDoc;
+    rtl::Reference<SwXTextDocument> m_xDstDoc;
     uno::Sequence<uno::Any> m_xInitializationArguments;
 
 public:
@@ -156,10 +158,9 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
     }
     if (m_xDstDoc.is())
     {
-        uno::Reference<beans::XPropertySet> const xDocProps(m_xDstDoc, uno::UNO_QUERY);
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
-        comphelper::ScopeGuard g([xDocProps] {
-            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(false));
+        m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
+        comphelper::ScopeGuard g([this] {
+            m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(false));
         });
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
@@ -196,11 +197,10 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
             writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator,
                                                                       bSkipImages, rDescriptor));
 
-        uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
+        uno::Reference<frame::XModel> xModel(static_cast<SfxBaseModel*>(m_xDstDoc.get()));
         pDocument->setModel(xModel);
 
-        uno::Reference<drawing::XDrawPageSupplier> xDrawings(m_xDstDoc, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawings->getDrawPage(), uno::UNO_SET_THROW);
+        uno::Reference<drawing::XDrawPage> xDrawPage(m_xDstDoc->getDrawPage(), uno::UNO_SET_THROW);
         pDocument->setDrawPage(xDrawPage);
 
         try
@@ -248,7 +248,8 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         // Adding the saved embedding document to document's grab bag
         aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
 
-        oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(m_xDstDoc, aGrabBagProperties);
+        oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(
+            static_cast<SfxBaseModel*>(m_xDstDoc.get()), aGrabBagProperties);
 
         writerfilter::ooxml::OOXMLStream::Pointer_t pVBAProjectStream(
             writerfilter::ooxml::OOXMLDocumentFactory::createStream(
@@ -295,7 +296,8 @@ void WriterFilter::cancel() {}
 
 void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
-    m_xDstDoc = xDoc;
+    m_xDstDoc = dynamic_cast<SwXTextDocument*>(xDoc.get());
+    assert(m_xDstDoc);
 
     // Set some compatibility options that are valid for the DOCX format
     uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY);

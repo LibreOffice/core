@@ -18,6 +18,7 @@
 #include <ooxml/resourceids.hxx>
 
 #include <sal/log.hxx>
+#include <unotxdoc.hxx>
 
 namespace
 {
@@ -38,10 +39,10 @@ namespace writerfilter::dmapper
 using namespace ::com::sun::star;
 
 SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xComponentContext,
-                                 const uno::Reference<text::XTextDocument>& xTextDocument)
+                                 const rtl::Reference<SwXTextDocument>& xTextDocument)
     : LoggedProperties("SmartTagHandler")
     , m_xComponentContext(std::move(xComponentContext))
-    , m_xDocumentMetadataAccess(xTextDocument, uno::UNO_QUERY)
+    , m_xDocumentMetadataAccess(xTextDocument)
 {
 }
 

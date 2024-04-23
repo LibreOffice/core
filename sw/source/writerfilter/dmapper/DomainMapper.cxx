@@ -91,6 +91,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -107,7 +108,7 @@ struct
 
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference<io::XInputStream> const& xInputStream,
-                            uno::Reference<lang::XComponent> const& xModel,
+                            rtl::Reference<SwXTextDocument> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
                             utl::MediaDescriptor const & rMediaDesc) :
@@ -149,14 +150,15 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     // Initialize RDF metadata, to be able to add statements during the import.
     try
     {
-        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY_THROW);
-        uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-        OUString aBaseURL = rMediaDesc.getUnpackedValueOrDefault("URL", OUString());
-        const uno::Reference<frame::XModel> xModel_(xModel,
-            uno::UNO_QUERY_THROW);
-        const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xContext, xModel_, aBaseURL, u""));
-        const uno::Reference<task::XInteractionHandler> xHandler;
-        xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+        if (xModel)
+        {
+            uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+            OUString aBaseURL = rMediaDesc.getUnpackedValueOrDefault("URL", OUString());
+            const uno::Reference<frame::XModel> xModel_(static_cast<SfxBaseModel*>(xModel.get()));
+            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xContext, xModel_, aBaseURL, u""));
+            const uno::Reference<task::XInteractionHandler> xHandler;
+            xModel->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+        }
     }
     catch (const uno::Exception&)
     {
@@ -192,9 +194,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                                 xContext);
 
         uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );
-        uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier( xModel, uno::UNO_QUERY_THROW);
-        xImporter->importProperties(m_pImpl->m_xDocumentStorage,
-                                    xPropSupplier->getDocumentProperties());
+        if (xModel)
+            xImporter->importProperties(m_pImpl->m_xDocumentStorage,
+                                        xModel->getDocumentProperties());
     }
     catch( const uno::Exception& ) {}
 }
@@ -211,18 +213,13 @@ DomainMapper::~DomainMapper()
         // Remove temporary footnotes and endnotes
         m_pImpl->RemoveTemporaryFootOrEndnotes();
 
-        uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
         sal_Int32 nIndexes = 0;
-        if( xIndexesSupplier.is() )
-        {
-            uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
-            nIndexes = xIndexes->getCount();
-        }
+        if ( m_pImpl->GetTextDocument() )
+            nIndexes = m_pImpl->GetTextDocument()->getDocumentIndexes()->getCount();
         // If we have page references, those need updating as well, similar to the indexes.
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
-        if(xTextFieldsSupplier.is())
+        if ( m_pImpl->GetTextDocument() )
         {
-            uno::Reference<container::XEnumeration> xEnumeration = xTextFieldsSupplier->getTextFields()->createEnumeration();
+            uno::Reference<container::XEnumeration> xEnumeration = m_pImpl->GetTextDocument()->getTextFields()->createEnumeration();
             while(xEnumeration->hasMoreElements())
             {
                 ++nIndexes;
@@ -231,12 +228,10 @@ DomainMapper::~DomainMapper()
         }
 
         mbHasControls |= m_pImpl->m_pSdtHelper->hasElements();
-        if ( nIndexes || mbHasControls )
+        if ( (nIndexes || mbHasControls) && m_pImpl->GetTextDocument())
         {
             //index update has to wait until first view is created
-            uno::Reference< document::XEventBroadcaster > xBroadcaster(xIndexesSupplier, uno::UNO_QUERY);
-            if (xBroadcaster.is())
-                xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener(nIndexes, mbHasControls)));
+            m_pImpl->GetTextDocument()->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener(nIndexes, mbHasControls)));
         }
 
 
@@ -261,14 +256,12 @@ DomainMapper::~DomainMapper()
         // Add the saved w:doNotHyphenateCaps setting
         aProperties["NoHyphenateCaps"] <<= m_pImpl->GetSettingsTable()->GetNoHyphenateCaps();
 
-        uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
-        if (xDocProps.is())
+        if (m_pImpl->GetTextDocument())
         {
-            comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+            comphelper::SequenceAsHashMap aGrabBag(m_pImpl->GetTextDocument()->getPropertyValue("InteropGrabBag"));
             aGrabBag.update(aProperties);
-            xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            m_pImpl->GetTextDocument()->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
-
         // tdf#138782: for docs created in MS Word 2010 and older (compatibilityMode <= 14)
         m_pImpl->SetDocumentSettingsProperty(
             "AddFrameOffsets",
@@ -1404,19 +1397,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             try
             {
                 uno::Reference<beans::XPropertySet> xFtnEdnSettings;
-                if (m_pImpl->IsInFootnoteProperties())
+                if (m_pImpl->GetTextDocument())
                 {
-                    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(
-                        m_pImpl->GetTextDocument(), uno::UNO_QUERY);
-                    if (xFootnotesSupplier.is())
-                        xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
-                }
-                else
-                {
-                    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(
-                        m_pImpl->GetTextDocument(), uno::UNO_QUERY);
-                    if (xEndnotesSupplier.is())
-                        xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
+                    if (m_pImpl->IsInFootnoteProperties())
+                        xFtnEdnSettings = m_pImpl->GetTextDocument()->getFootnoteSettings();
+                    else
+                        xFtnEdnSettings = m_pImpl->GetTextDocument()->getEndnoteSettings();
                 }
                 if (xFtnEdnSettings.is())
                 {
@@ -2453,11 +2439,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         resolveSprmProps(*this, rSprm);
         LineNumberSettings aSettings = m_pImpl->GetLineNumberSettings();
         m_pImpl->SetLineNumberSettings( aSettings );
+        if (!m_pImpl->GetTextDocument())
+            break;
         //apply settings at XLineNumberingProperties
         try
         {
-            uno::Reference< text::XLineNumberingProperties > xLineNumberingProperties( m_pImpl->GetTextDocument(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xLineNumberingPropSet = xLineNumberingProperties->getLineNumberingProperties();
+            uno::Reference< beans::XPropertySet > xLineNumberingPropSet = m_pImpl->GetTextDocument()->getLineNumberingProperties();
             if( aSettings.nInterval == 0 )
                 xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_IS_ON ), uno::Any(false) );
             else
@@ -2804,17 +2791,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         try
         {
             uno::Reference< beans::XPropertySet >  xFtnEdnSettings;
-            if( m_pImpl->IsInFootnoteProperties() )
+            if (m_pImpl->GetTextDocument())
             {
-                uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                if (xFootnotesSupplier.is())
-                    xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
-            }
-            else
-            {
-                uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                if (xEndnotesSupplier.is())
-                    xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
+                if( m_pImpl->IsInFootnoteProperties() )
+                    xFtnEdnSettings = m_pImpl->GetTextDocument()->getFootnoteSettings();
+                else
+                    xFtnEdnSettings = m_pImpl->GetTextDocument()->getEndnoteSettings();
             }
             if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId && xFtnEdnSettings.is())
             {

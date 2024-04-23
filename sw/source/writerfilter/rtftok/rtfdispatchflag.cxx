@@ -27,6 +27,7 @@
 
 #include "rtfsdrimport.hxx"
 #include "rtfskipdestination.hxx"
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
@@ -1102,13 +1103,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::UNO_QUERY);
                 m_aStates.top().getDrawingObject().setShape(xShape);
             }
-            uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropertySet(
                 m_aStates.top().getDrawingObject().getShape(), uno::UNO_QUERY);
             m_aStates.top().getDrawingObject().setPropertySet(xPropertySet);
-            if (xDrawSupplier.is())
+            if (m_xDstDoc)
             {
-                uno::Reference<drawing::XShapes> xShapes = xDrawSupplier->getDrawPage();
+                uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
                 if (xShapes.is() && nKeyword != RTFKeyword::DPTXBX)
                 {
                     // set default VertOrient before inserting

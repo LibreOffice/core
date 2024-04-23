@@ -65,6 +65,7 @@
 #include "PropertyMapHelper.hxx"
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <unotxdoc.hxx>
 #include <utility>
 
 #include <frozen/bits/defines.h>
@@ -1199,31 +1200,27 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
         // Set footnote line width to zero, document has no footnote separator.
         Insert(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, uno::Any(sal_Int32(0)));
     }
-    if ( rDM_Impl.m_bHasFtnSep )
+    if ( rDM_Impl.m_bHasFtnSep && rDM_Impl.GetTextDocument() )
     {
         //If default paragraph style is RTL, footnote separator should be right aligned
         //and for RTL locales, LTR default paragraph style should present a left aligned footnote separator
         try
         {
-            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
-            if ( xStylesSupplier.is() )
+            uno::Reference<container::XNameAccess> xStyleFamilies = rDM_Impl.GetTextDocument()->getStyleFamilies();
+            uno::Reference<container::XNameAccess> xParagraphStyles;
+            if ( xStyleFamilies.is() )
+                xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
+            uno::Reference<beans::XPropertySet> xStandard;
+            if ( xParagraphStyles.is() )
+                xParagraphStyles->getByName("Standard") >>= xStandard;
+            if ( xStandard.is() )
             {
-                uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
-                uno::Reference<container::XNameAccess> xParagraphStyles;
-                if ( xStyleFamilies.is() )
-                    xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
-                uno::Reference<beans::XPropertySet> xStandard;
-                if ( xParagraphStyles.is() )
-                    xParagraphStyles->getByName("Standard") >>= xStandard;
-                if ( xStandard.is() )
-                {
-                    sal_Int16 aWritingMode(0);
-                    xStandard->getPropertyValue( getPropertyName(PROP_WRITING_MODE) ) >>= aWritingMode;
-                    if( aWritingMode == text::WritingMode2::RL_TB )
-                        Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::Any( sal_Int16(text::HorizontalAdjust_RIGHT) ), false );
-                    else
-                        Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::Any( sal_Int16(text::HorizontalAdjust_LEFT) ), false );
-                }
+                sal_Int16 aWritingMode(0);
+                xStandard->getPropertyValue( getPropertyName(PROP_WRITING_MODE) ) >>= aWritingMode;
+                if( aWritingMode == text::WritingMode2::RL_TB )
+                    Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::Any( sal_Int16(text::HorizontalAdjust_RIGHT) ), false );
+                else
+                    Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::Any( sal_Int16(text::HorizontalAdjust_LEFT) ), false );
             }
         }
         catch ( const uno::Exception& ) {}
@@ -1420,7 +1417,7 @@ void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::v
 
 void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::Any>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
-    uno::Reference<text::XTextTablesSupplier> xTextDocument(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
+    rtl::Reference<SwXTextDocument> xTextDocument(rDM_Impl.GetTextDocument());
     uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
     for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
     {
@@ -1824,10 +1821,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         // refer to ww8 import process function "SwWW8ImplReader::SetDocumentGrid"
         try
         {
-            uno::Reference< beans::XPropertySet > xDocProperties;
-            xDocProperties.set( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
-            Insert(PROP_GRID_STANDARD_MODE, uno::Any(true));
-            xDocProperties->setPropertyValue("DefaultPageMode", uno::Any(false));
+            if (rDM_Impl.GetTextDocument())
+            {
+                Insert(PROP_GRID_STANDARD_MODE, uno::Any(true));
+                rDM_Impl.GetTextDocument()->setPropertyValue("DefaultPageMode", uno::Any(false));
+            }
         }
         catch ( const uno::Exception& )
         {

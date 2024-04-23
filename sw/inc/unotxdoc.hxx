@@ -224,9 +224,6 @@ private:
     // is implemented.
     bool m_bApplyPagePrintSettingsFromXPagePrintable;
 
-    using SfxBaseModel::addEventListener;
-    using SfxBaseModel::removeEventListener;
-
     /** abstract SdrModel provider */
     virtual SdrModel& getSdrModelFromUnoModel() const override;
 
@@ -256,6 +253,9 @@ public:
     rtl::Reference< SwXBodyText > getBodyText();
     virtual void SAL_CALL reformat() override;
 
+    using SfxBaseModel::addEventListener;
+    using SfxBaseModel::removeEventListener;
+
     //XModel
     virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual OUString SAL_CALL getURL(  ) override;
@@ -278,21 +278,21 @@ public:
     virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) override;
 
     //XLineNumberingProperties
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getLineNumberingProperties() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getLineNumberingProperties() override;
 
     //XChapterNumberingSupplier
-    virtual css::uno::Reference< css::container::XIndexReplace >  SAL_CALL getChapterNumberingRules() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XIndexReplace >  SAL_CALL getChapterNumberingRules() override;
 
     //XNumberingRulesSupplier
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getNumberingRules() override;
 
     //XFootnotesSupplier
     SW_DLLPUBLIC virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getFootnotes() override;
-    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getFootnoteSettings() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getFootnoteSettings() override;
 
     //XEndnotesSupplier
-    virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getEndnotes() override;
-    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getEndnoteSettings() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getEndnotes() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getEndnoteSettings() override;
 
     // XContentControlsSupplier
     SW_DLLPUBLIC css::uno::Reference<css::container::XIndexAccess> SAL_CALL getContentControls() override;
@@ -316,8 +316,8 @@ public:
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getReferenceMarks() override;
 
     // css::text::XTextFieldsSupplier
-    virtual css::uno::Reference< css::container::XEnumerationAccess >  SAL_CALL getTextFields() override;
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextFieldMasters() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XEnumerationAccess >  SAL_CALL getTextFields() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextFieldMasters() override;
 
     // css::text::XTextEmbeddedObjectsSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getEmbeddedObjects() override;
@@ -329,16 +329,16 @@ public:
     SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextSections() override;
 
     // css::text::XTextTablesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextTables() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextTables() override;
 
     // css::text::XTextGraphicObjectsSupplier
     SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getGraphicObjects() override;
 
     // css::text::XTextFramesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextFrames() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextFrames() override;
 
     //XStyleFamiliesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getStyleFamilies() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getStyleFamilies() override;
 
     //XAutoStylesSupplier
     virtual css::uno::Reference< css::style::XAutoStyles > SAL_CALL getAutoStyles(  ) override;
@@ -361,11 +361,11 @@ public:
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages() override;
 
     // css::text::XDocumentIndexesSupplier
-    virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getDocumentIndexes() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getDocumentIndexes() override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     SW_DLLPUBLIC virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;

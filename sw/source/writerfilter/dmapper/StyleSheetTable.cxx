@@ -52,6 +52,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -271,7 +272,7 @@ struct ListCharStylePropertyMap_t
 struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
-    uno::Reference< text::XTextDocument>    m_xTextDocument;
+    rtl::Reference<SwXTextDocument>         m_xTextDocument;
     uno::Reference< beans::XPropertySet>    m_xTextDefaults;
     std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
     std::map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
@@ -283,7 +284,7 @@ struct StyleSheetTable_Impl
     bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
 
-    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc);
+    StyleSheetTable_Impl(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> xTextDocument, bool bIsNewDoc);
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
@@ -296,7 +297,7 @@ struct StyleSheetTable_Impl
 
 
 StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
-        uno::Reference< text::XTextDocument> xTextDocument,
+        rtl::Reference< SwXTextDocument> xTextDocument,
         bool const bIsNewDoc)
     :       m_rDMapper( rDMapper ),
             m_xTextDocument(std::move( xTextDocument )),
@@ -383,7 +384,7 @@ void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XS
 }
 
 StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
-        uno::Reference< text::XTextDocument> const& xTextDocument,
+        rtl::Reference< SwXTextDocument> const& xTextDocument,
         bool const bIsNewDoc)
 : LoggedProperties("StyleSheetTable")
 , LoggedTable("StyleSheetTable")
@@ -840,13 +841,12 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
         // We can put all latent style info directly to the document interop
         // grab bag, as we can be sure that only a single style entry has
         // latent style info.
-        uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
-        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(xPropertySet->getPropertyValue("InteropGrabBag").get< uno::Sequence<beans::PropertyValue> >());
+        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(m_pImpl->m_xTextDocument->getPropertyValue("InteropGrabBag").get< uno::Sequence<beans::PropertyValue> >());
         beans::PropertyValue aValue;
         aValue.Name = "latentStyles";
         aValue.Value <<= aLatentStyles;
         aGrabBag.push_back(aValue);
-        xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
+        m_pImpl->m_xTextDocument->setPropertyValue("InteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
     }
 
     m_pImpl->m_pCurrentEntry = StyleSheetEntryPtr();
@@ -900,11 +900,11 @@ uno::Sequence< OUString > PropValVector::getNames()
 
 void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
 {
+    if (!m_pImpl->m_xTextDocument)
+        return;
     try
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
         uno::Reference<container::XNameContainer> xParaStyles;
         xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
 
@@ -954,11 +954,11 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
  */
 void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
 {
+    if (!m_pImpl->m_xTextDocument)
+        return;
     try
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
-        uno::Reference< lang::XMultiServiceFactory > xDocFactory(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
-        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
         uno::Reference<container::XNameContainer> xParaStyles;
         xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xParaStyles;
 
@@ -1059,8 +1059,9 @@ void StyleSheetTable::ApplyClonedTOCStyles()
     SAL_INFO("writerfilter.dmapper", "Applying cloned styles to make TOC work");
     // ignore header / footer, irrelevant for ToX
     // text frames
-    uno::Reference<text::XTextFramesSupplier> const xDocTFS(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XEnumerationAccess> const xFrames(xDocTFS->getTextFrames(), uno::UNO_QUERY_THROW);
+    if (!m_pImpl->m_xTextDocument)
+        throw uno::RuntimeException();
+    uno::Reference<container::XEnumerationAccess> const xFrames(m_pImpl->m_xTextDocument->getTextFrames(), uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumeration> const xFramesEnum(xFrames->createEnumeration());
     while (xFramesEnum->hasMoreElements())
     {
@@ -1094,11 +1095,11 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 
 void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries)
 {
+    if (!m_pImpl->m_xTextDocument)
+        return;
     try
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
         uno::Reference<container::XNameContainer> xCharStyles;
         uno::Reference<container::XNameContainer> xParaStyles;
         uno::Reference<container::XNameContainer> xNumberingStyles;
@@ -1151,7 +1152,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     else
                     {
                         bInsert = true;
-                        xStyle.set(xDocFactory->createInstance(
+                        xStyle.set(m_pImpl->m_xTextDocument->createInstance(
                                      bParaStyle ?
                                         getPropertyName( PROP_SERVICE_PARA_STYLE ) :
                                         (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : getPropertyName( PROP_SERVICE_CHAR_STYLE ))),
@@ -1460,14 +1461,13 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             if (!aTableStylesVec.empty())
             {
                 // If we had any table styles, add a new document-level InteropGrabBag entry for them.
-                uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
-                uno::Any aAny = xPropertySet->getPropertyValue("InteropGrabBag");
+                uno::Any aAny = m_pImpl->m_xTextDocument->getPropertyValue("InteropGrabBag");
                 auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
                 beans::PropertyValue aValue;
                 aValue.Name = "tableStyles";
                 aValue.Value <<= comphelper::containerToSequence(aTableStylesVec);
                 aGrabBag.push_back(aValue);
-                xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
+                m_pImpl->m_xTextDocument->setPropertyValue("InteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
             }
         }
     }
@@ -1737,8 +1737,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             SetDefaultParaProps(PROP_PARA_WIDOWS, aTwo);
             SetDefaultParaProps(PROP_PARA_ORPHANS, aTwo);
 
-            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
-            uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+            uno::Reference<container::XNameAccess> xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
             uno::Reference<container::XNameAccess> xParagraphStyles;
             xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
             uno::Reference<beans::XPropertySet> xDefault;
@@ -1797,10 +1796,11 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     //create a new one otherwise
     const uno::Reference< container::XNameContainer >& xCharStyles = m_pImpl->m_rDMapper.GetCharacterStyles();
     sListLabel = m_pImpl->m_rDMapper.GetUnusedCharacterStyleName();
-    uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+    if (!m_pImpl->m_xTextDocument)
+        throw uno::RuntimeException();
     try
     {
-        uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
+        uno::Reference< style::XStyle > xStyle( m_pImpl->m_xTextDocument->createInstance(
             getPropertyName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
         uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
         for( const auto& rCharProp : rCharProperties)

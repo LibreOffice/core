@@ -52,21 +52,21 @@
 
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "rtfdocumentimpl.hxx"
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
 namespace writerfilter::rtftok
 {
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
-                           uno::Reference<lang::XComponent> const& xDstDoc)
+                           rtl::Reference<SwXTextDocument> const& xDstDoc)
     : m_rImport(rDocument)
     , m_bTextFrame(false)
     , m_bTextGraphicObject(false)
     , m_bFakePict(false)
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
-    if (xDrawings.is())
-        m_aParents.push(xDrawings->getDrawPage());
+    if (xDstDoc)
+        m_aParents.push(xDstDoc->getDrawPage());
     m_aGraphicZOrderHelpers.push(writerfilter::dmapper::GraphicZOrderHelper());
 }
 

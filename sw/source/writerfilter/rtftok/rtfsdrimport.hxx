@@ -14,7 +14,9 @@
 
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <tools/ref.hxx>
+#include <rtl/ref.hxx>
 
+class SwXTextDocument;
 namespace com::sun::star
 {
 namespace beans
@@ -42,8 +44,7 @@ class RTFShape;
 class RTFSdrImport final : public virtual SvRefBase
 {
 public:
-    RTFSdrImport(RTFDocumentImpl& rDocument,
-                 css::uno::Reference<css::lang::XComponent> const& xDstDoc);
+    RTFSdrImport(RTFDocumentImpl& rDocument, rtl::Reference<SwXTextDocument> const& xDstDoc);
     ~RTFSdrImport() override;
 
     enum ShapeOrPict
