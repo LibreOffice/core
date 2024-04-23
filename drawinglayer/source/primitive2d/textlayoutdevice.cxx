@@ -188,7 +188,7 @@ void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontA
     }
     else
     {
-        mnFontScalingFixX = mnFontScalingFixY = 0;
+        mnFontScalingFixX = mnFontScalingFixY = 1.0;
     }
 }
 
