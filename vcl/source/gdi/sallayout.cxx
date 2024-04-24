@@ -216,7 +216,10 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
 }
 
 // No need to expand to the next pixel, when the character only covers its tiny fraction
-static double trimInsignificant(double n) { return std::round(n * 1e5) / 1e5; }
+static double trimInsignificant(double n)
+{
+    return std::abs(n) >= 0x1p53 ? n : std::round(n * 1e5) / 1e5;
+}
 
 bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 {
@@ -243,10 +246,19 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
             bRet = true;
         }
     }
-    rRect = tools::Rectangle(rtl::math::approxFloor(trimInsignificant(aUnion.getMinX())),
-                             rtl::math::approxFloor(trimInsignificant(aUnion.getMinY())),
-                             rtl::math::approxCeil(trimInsignificant(aUnion.getMaxX())),
-                             rtl::math::approxCeil(trimInsignificant(aUnion.getMaxY())));
+    if (aUnion.isEmpty())
+    {
+        rRect = {};
+    }
+    else
+    {
+        double l = rtl::math::approxFloor(trimInsignificant(aUnion.getMinX())),
+               t = rtl::math::approxFloor(trimInsignificant(aUnion.getMinY())),
+               r = rtl::math::approxCeil(trimInsignificant(aUnion.getMaxX())),
+               b = rtl::math::approxCeil(trimInsignificant(aUnion.getMaxY()));
+        assert(std::isfinite(l) && std::isfinite(t) && std::isfinite(r) && std::isfinite(b));
+        rRect = tools::Rectangle(l, t, r, b);
+    }
 
     return bRet;
 }
