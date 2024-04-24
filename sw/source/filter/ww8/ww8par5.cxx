@@ -3477,7 +3477,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     }
 
     if (m_pPaM->GetPoint()->GetContentIndex())
-        AppendTextNode(*m_pPaM->GetPoint());
+        FinalizeTextNode(*m_pPaM->GetPoint());
 
     const SwPosition* pPos = m_pPaM->GetPoint();
 

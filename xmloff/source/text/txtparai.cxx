@@ -1789,6 +1789,46 @@ void XMLParaContext::endFastElement(sal_Int32 )
                                                true,
                                                mbOutlineContentVisible);
 
+    bool bEmptyHints = false;
+    XMLHint_Impl* pMarkerStyleHint = nullptr;
+    if (m_xHints)
+    {
+        uno::Reference<text::XTextRangeCompare> xCompare(xTxtImport->GetText(), uno::UNO_QUERY);
+        if (xCompare.is())
+        {
+            try
+            {
+                for (const auto& pHint : m_xHints->GetHints())
+                {
+                    if (xCompare->compareRegionStarts(pHint->GetStart(), pHint->GetEnd()) == 0)
+                    {
+                        bEmptyHints = true;
+
+                        // Is this the trailing empty span, defining the paragraph mark properties?
+                        // Convert it to the marker style, for backward compatibility with documents
+                        // created between commits 6249858a8972aef077e0249bd93cfe8f01bce4d6 and
+                        // 1a88efa8e02a6d765dab13c7110443bb9e6acecf, where the trailing empty spans
+                        // were used to store the marker formatting
+                        if (!m_aMarkerStyleName.hasValue()
+                            && xCompare->compareRegionStarts(pHint->GetStart(), xEnd) == 0)
+                        {
+                            if (auto pStyle = GetImport().GetTextImport()->FindAutoCharStyle(
+                                    static_cast<XMLStyleHint_Impl*>(pHint.get())->GetStyleName()))
+                            {
+                                m_aMarkerStyleName = pStyle->GetAutoName();
+                                pMarkerStyleHint = pHint.get();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("xmloff.text", "");
+            }
+        }
+    }
+
     if (m_aMarkerStyleName.hasValue())
     {
         if (auto xPropSet = xStart.query<css::beans::XPropertySet>())
@@ -1850,26 +1890,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
     {
         bool bSetNoFormatAttr = false;
         uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
-        int nEmptyHints = 0;
-        uno::Reference<text::XTextRangeCompare> xCompare(xTxtImport->GetText(), uno::UNO_QUERY);
-        if (xCompare.is())
-        {
-            try
-            {
-                for (const auto& pHint : m_xHints->GetHints())
-                {
-                    if (xCompare->compareRegionStarts(pHint->GetStart(), pHint->GetEnd()) == 0)
-                    {
-                        ++nEmptyHints;
-                    }
-                }
-            }
-            catch (const uno::Exception&)
-            {
-                TOOLS_WARN_EXCEPTION("xmloff.text", "");
-            }
-        }
-        if (nEmptyHints > 0 || m_aMarkerStyleName.hasValue())
+        if (bEmptyHints || m_aMarkerStyleName.hasValue())
         {
             // We have at least one empty hint, then make try to ask the cursor to not upgrade our character
             // attributes to paragraph-level formatting, which would lead to incorrect rendering.
@@ -1888,6 +1909,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
             switch( pHint->GetType() )
             {
             case XMLHintType::XML_HINT_STYLE:
+                if (pHint != pMarkerStyleHint) // already processed above
                 {
                     const OUString& rStyleName =
                             static_cast<XMLStyleHint_Impl *>(pHint)->GetStyleName();

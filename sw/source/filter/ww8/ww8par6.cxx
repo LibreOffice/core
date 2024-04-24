@@ -881,7 +881,7 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
                 if( txtNode->Len() == 0 )
                     insert = false;
         if( insert )
-            mrReader.AppendTextNode(*mrReader.m_pPaM->GetPoint());
+            mrReader.FinalizeTextNode(*mrReader.m_pPaM->GetPoint());
     }
 
     ww::WordVersion eVer = mrReader.GetFib().GetFIBVersion();
@@ -2528,7 +2528,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
                     {
                         // The two fly frames would have the same anchor position, leading to
                         // potentially overlapping text, prevent that.
-                        AppendTextNode(*pPoint);
+                        FinalizeTextNode(*pPoint);
                     }
                 }
             }

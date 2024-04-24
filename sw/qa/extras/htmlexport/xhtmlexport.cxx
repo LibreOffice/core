@@ -178,9 +178,9 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(
-        aStream.indexOf("<p class=\"paragraph-P6\"><a href=\"#__RefHeading__82004_486970805\" "
+        aStream.indexOf("<p class=\"paragraph-P5\"><a href=\"#__RefHeading__82004_486970805\" "
                         "class=\"text-Internet_20_link\">Introduction</a></p><p "
-                        "class=\"paragraph-P7\"> </p>")
+                        "class=\"paragraph-P6\"> </p>")
         != -1);
 }
 

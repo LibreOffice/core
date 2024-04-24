@@ -2477,7 +2477,7 @@ void wwSectionManager::SetHdFt(wwSection const &rSection, int nSect,
 
 }
 
-void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
+void SwWW8ImplReader::FinalizeTextNode(SwPosition& rPos, bool bAddNew)
 {
     SwTextNode* pText = m_pPaM->GetPointNode().GetTextNode();
 
@@ -2564,7 +2564,8 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
 
     m_bFirstPara = false;
 
-    m_rDoc.getIDocumentContentOperations().AppendTextNode(rPos);
+    if (bAddNew)
+        m_rDoc.getIDocumentContentOperations().AppendTextNode(rPos);
 
     // We can flush all anchored graphics at the end of a paragraph.
     m_xAnchorStck->Flush();
@@ -3480,13 +3481,13 @@ void SwWW8ImplReader::simpleAddTextToParagraph(std::u16string_view aAddString)
         else
         {
             m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString.copy(0, nCharsLeft));
-            AppendTextNode(*m_pPaM->GetPoint());
+            FinalizeTextNode(*m_pPaM->GetPoint());
             m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString.copy(nCharsLeft));
         }
     }
     else
     {
-        AppendTextNode(*m_pPaM->GetPoint());
+        FinalizeTextNode(*m_pPaM->GetPoint());
         m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString);
     }
 
@@ -3557,7 +3558,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
                 && (m_bFirstPara || m_bFirstParaOfPage))
         {
             IsTemp = false;
-            AppendTextNode(*m_pPaM->GetPoint());
+            FinalizeTextNode(*m_pPaM->GetPoint());
             pTemp->SetAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
         }
 
@@ -3636,7 +3637,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                 // Always insert a txtnode for a column break, e.g. ##
                 SwContentNode *pCntNd=m_pPaM->GetPointContentNode();
                 if (pCntNd!=nullptr && pCntNd->Len()>0) // if par is empty not break is needed
-                    AppendTextNode(*m_pPaM->GetPoint());
+                    FinalizeTextNode(*m_pPaM->GetPoint());
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
             }
             break;
@@ -4105,7 +4106,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             }
             if (bSplit)
             {
-                AppendTextNode(*m_pPaM->GetPoint());
+                FinalizeTextNode(*m_pPaM->GetPoint());
             }
         }
 
@@ -4220,7 +4221,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                 // to insert a text node.
                 if (!bStartLine && !m_xAnchorStck->empty())
                 {
-                    AppendTextNode(*m_pPaM->GetPoint());
+                    FinalizeTextNode(*m_pPaM->GetPoint());
                 }
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM,
                     SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
@@ -4233,7 +4234,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     m_xPreviousNode.reset();
 
     if (m_pPaM->GetPoint()->GetContentIndex())
-        AppendTextNode(*m_pPaM->GetPoint());
+        FinalizeTextNode(*m_pPaM->GetPoint());
 
     if (!m_bInHyperlink)
         bJoined = JoinNode(*m_pPaM);

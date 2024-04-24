@@ -39,6 +39,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -1331,12 +1332,14 @@ struct XMLTextParagraphExport::DocumentListNodes
 {
     struct NodeData
     {
+        std::ptrdiff_t order;
         sal_Int32 index; // see SwNode::GetIndex and SwNodeOffset
         sal_uInt64 style_id; // actually a pointer to NumRule
         OUString list_id;
     };
     std::vector<NodeData> docListNodes;
-    DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel)
+    DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel,
+                      const std::vector<sal_Int32>& aDocumentNodeOrder)
     {
         // Sequence of nodes, each of them represented by three-element sequence,
         // corresponding to NodeData members
@@ -1358,13 +1361,18 @@ struct XMLTextParagraphExport::DocumentListNodes
         for (const auto& node : nodes)
         {
             assert(node.getLength() == 3);
-            docListNodes.push_back({ .index = node[0].get<sal_Int32>(),
+            sal_Int32 nodeIndex = node[0].get<sal_Int32>();
+            auto nodeOrder = std::distance(
+                aDocumentNodeOrder.begin(),
+                std::find(aDocumentNodeOrder.begin(), aDocumentNodeOrder.end(), nodeIndex));
+            docListNodes.push_back({ .order = nodeOrder,
+                                     .index = nodeIndex,
                                      .style_id = node[1].get<sal_uInt64>(),
                                      .list_id = node[2].get<OUString>() });
         }
 
         std::sort(docListNodes.begin(), docListNodes.end(),
-                  [](const NodeData& lhs, const NodeData& rhs) { return lhs.index < rhs.index; });
+                  [](const NodeData& lhs, const NodeData& rhs) { return lhs.order < rhs.order; });
     }
     bool ShouldSkipListId(const Reference<XTextContent>& xTextContent) const
     {
@@ -1385,10 +1393,9 @@ struct XMLTextParagraphExport::DocumentListNodes
                 return false;
             }
 
-            auto it = std::lower_bound(docListNodes.begin(), docListNodes.end(), index,
-                                       [](const NodeData& lhs, sal_Int32 rhs)
-                                       { return lhs.index < rhs; });
-            if (it == docListNodes.end() || it->index != index)
+            auto it = std::find_if(docListNodes.begin(), docListNodes.end(),
+                                   [index](const NodeData& el) { return el.index == index; });
+            if (it == docListNodes.end())
                 return false;
 
             // We need to write the id, when there will be continuation of the list either with
@@ -1616,9 +1623,7 @@ const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
 const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
     XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
 
-// This function replaces the text portion iteration during auto style
-// collection.
-void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
+void XMLTextParagraphExport::collectTextAutoStylesAndNodeExportOrder(bool bIsProgress)
 {
     GetExport().GetShapeExport(); // make sure the graphics styles family is added
 
@@ -1628,60 +1633,11 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
     const bool bAutoStyles = true;
     const bool bExportContent = false;
 
-    // Export AutoStyles:
-    Reference< XAutoStylesSupplier > xAutoStylesSupp( GetExport().GetModel(), UNO_QUERY );
-    if ( xAutoStylesSupp.is() )
+    if (auto xTextDocument = GetExport().GetModel().query<XTextDocument>())
     {
-        Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
-        const auto collectFamily = [this, &xAutoStyleFamilies](const OUString& sName,
-                                                               XmlStyleFamily nFamily) {
-            Any aAny = xAutoStyleFamilies->getByName( sName );
-            Reference< XAutoStyleFamily > xAutoStyles = *o3tl::doAccess<Reference<XAutoStyleFamily>>(aAny);
-            Reference < XEnumeration > xAutoStylesEnum( xAutoStyles->createEnumeration() );
-
-            while ( xAutoStylesEnum->hasMoreElements() )
-            {
-                aAny = xAutoStylesEnum->nextElement();
-                Reference< XAutoStyle > xAutoStyle = *o3tl::doAccess<Reference<XAutoStyle>>(aAny);
-                Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
-                Add( nFamily, xPSet, {}, true );
-            }
-        };
-        collectFamily("CharacterStyles", XmlStyleFamily::TEXT_TEXT);
-        collectFamily("RubyStyles", XmlStyleFamily::TEXT_RUBY);
-        collectFamily("ParagraphStyles", XmlStyleFamily::TEXT_PARAGRAPH);
-    }
-
-    // Export Field AutoStyles:
-    Reference< XTextFieldsSupplier > xTextFieldsSupp( GetExport().GetModel(), UNO_QUERY );
-    if ( xTextFieldsSupp.is() )
-    {
-        Reference< XEnumerationAccess > xTextFields = xTextFieldsSupp->getTextFields();
-        Reference < XEnumeration > xTextFieldsEnum( xTextFields->createEnumeration() );
-
-        while ( xTextFieldsEnum->hasMoreElements() )
-        {
-            Any aAny = xTextFieldsEnum->nextElement();
-            Reference< XTextField > xTextField = *o3tl::doAccess<Reference<XTextField>>(aAny);
-            exportTextField( xTextField, bAutoStyles, bIsProgress,
-                !xAutoStylesSupp.is(), nullptr );
-            try
-            {
-                Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
-                Reference < XText > xText;
-                Any a = xSet->getPropertyValue("TextRange");
-                a >>= xText;
-                if ( xText.is() )
-                {
-                    exportText( xText, true, bIsProgress, bExportContent );
-                    GetExport().GetTextParagraphExport()
-                        ->collectTextAutoStyles( xText );
-                }
-            }
-            catch (Exception&)
-            {
-            }
-        }
+        bInDocumentNodeOrderCollection = true;
+        collectTextAutoStyles(xTextDocument->getText(), bIsProgress);
+        bInDocumentNodeOrderCollection = false;
     }
 
     // Export text frames:
@@ -1728,47 +1684,11 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             }
         }
 
-    sal_Int32 nCount;
-    // AutoStyles for sections
-    Reference< XTextSectionsSupplier > xSectionsSupp( GetExport().GetModel(), UNO_QUERY );
-    if ( xSectionsSupp.is() )
-    {
-        Reference< XIndexAccess > xSections( xSectionsSupp->getTextSections(), UNO_QUERY );
-        if ( xSections.is() )
-        {
-            nCount = xSections->getCount();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                Any aAny = xSections->getByIndex( i );
-                Reference< XTextSection > xSection = *o3tl::doAccess<Reference<XTextSection>>(aAny);
-                Reference < XPropertySet > xPSet( xSection, uno::UNO_QUERY );
-                Add( XmlStyleFamily::TEXT_SECTION, xPSet );
-            }
-        }
-    }
-
-    // AutoStyles for tables (Note: suppress autostyle collection for paragraphs in exportTable)
-    Reference< XTextTablesSupplier > xTablesSupp( GetExport().GetModel(), UNO_QUERY );
-    if ( xTablesSupp.is() )
-    {
-        Reference< XIndexAccess > xTables( xTablesSupp->getTextTables(), UNO_QUERY );
-        if ( xTables.is() )
-        {
-            nCount = xTables->getCount();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                Any aAny = xTables->getByIndex( i );
-                Reference< XTextTable > xTable = *o3tl::doAccess<Reference<XTextTable>>(aAny);
-                exportTable( xTable, true, true );
-            }
-        }
-    }
-
     Reference< XNumberingRulesSupplier > xNumberingRulesSupp( GetExport().GetModel(), UNO_QUERY );
     if ( xNumberingRulesSupp.is() )
     {
         Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
-        nCount = xNumberingRules->getCount();
+        sal_Int32 nCount = xNumberingRules->getCount();
         // Custom outline assignment lost after re-importing sxw (#i73361#)
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -1894,14 +1814,36 @@ bool XMLTextParagraphExport::ExportListId() const
            && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012;
 }
 
+void XMLTextParagraphExport::RecordNodeIndex(const css::uno::Reference<css::text::XTextContent>& xTextContent)
+{
+    if (!bInDocumentNodeOrderCollection)
+        return;
+    if (auto xPropSet = xTextContent.query<css::beans::XPropertySet>())
+    {
+        try
+        {
+            sal_Int32 index = 0;
+            // See SwXParagraph::Impl::GetPropertyValues_Impl
+            xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
+            assert(std::find(maDocumentNodeOrder.begin(), maDocumentNodeOrder.end(), index)
+                   == maDocumentNodeOrder.end());
+            maDocumentNodeOrder.push_back(index);
+        }
+        catch (css::beans::UnknownPropertyException&)
+        {
+            // That's absolutely fine!
+        }
+    }
+}
+
 bool XMLTextParagraphExport::ShouldSkipListId(const Reference<XTextContent>& xTextContent)
 {
     if (!mpDocumentListNodes)
     {
         if (ExportListId())
-            mpDocumentListNodes.reset(new DocumentListNodes(GetExport().GetModel()));
+            mpDocumentListNodes.reset(new DocumentListNodes(GetExport().GetModel(), maDocumentNodeOrder));
         else
-            mpDocumentListNodes.reset(new DocumentListNodes({}));
+            mpDocumentListNodes.reset(new DocumentListNodes({}, {}));
     }
 
     return mpDocumentListNodes->ShouldSkipListId(xTextContent);
@@ -1952,6 +1894,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         {
             if( bAutoStyles )
             {
+                RecordNodeIndex(xTxtCntnt);
                 exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
                                             aPrevNumInfo, aNextNumInfo,
                                             bAutoStyles );
@@ -2323,7 +2266,6 @@ void XMLTextParagraphExport::exportParagraph(
 
     Reference < XEnumerationAccess > xEA( rTextContent, UNO_QUERY );
     Reference < XEnumeration > xTextEnum = xEA->createEnumeration();
-    const bool bHasPortions = xTextEnum.is();
 
     Reference < XEnumeration> xContentEnum;
     Reference < XContentEnumerationAccess > xCEA( rTextContent, UNO_QUERY );
@@ -2357,22 +2299,10 @@ void XMLTextParagraphExport::exportParagraph(
 
     bool bPrevCharIsSpace(true); // true because whitespace at start is ignored
 
-    if( bAutoStyles )
-    {
-        if( bHasContentEnum )
-            exportTextContentEnumeration(
-                                    xContentEnum, bAutoStyles, xSection,
-                                    bIsProgress );
-        if ( bHasPortions )
-        {
-            exportTextRangeEnumeration(xTextEnum, bAutoStyles, bIsProgress, bPrevCharIsSpace);
-        }
-    }
-    else
     {
         enum XMLTokenEnum eElem =
             0 < nOutlineLevel ? XML_H : XML_P;
-        SvXMLElementExport aElem( GetExport(), eExtensionNS == TextPNS::EXTENSION ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_TEXT, eElem,
+        SvXMLElementExport aElem( GetExport(), !bAutoStyles, eExtensionNS == TextPNS::EXTENSION ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_TEXT, eElem,
                                   true, false );
         if( bHasContentEnum )
         {

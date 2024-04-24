@@ -2402,7 +2402,7 @@ void WW8TabDesc::CreateSwTable()
     }
 
     if (bInsNode)
-        m_pIo->AppendTextNode(*pPoint);
+        m_pIo->FinalizeTextNode(*pPoint);
 
     m_xTmpPos = m_pIo->m_rDoc.CreateUnoCursor(*m_pIo->m_pPaM->GetPoint());
 
@@ -3497,6 +3497,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 
 void SwWW8ImplReader::TabCellEnd()
 {
+    FinalizeTextNode(*m_pPaM->GetPoint(), false);
+
     if (m_nInTable && m_xTableDesc)
         m_xTableDesc->TableCellEnd();
 

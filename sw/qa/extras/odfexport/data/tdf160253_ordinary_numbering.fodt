@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <text:list-style style:name="L1">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="space"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
+  <text:list-style style:name="L2">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="space" fo:text-indent="-0.5cm" fo:margin-left="1cm"/>
+    </style:list-level-properties>
+   </text:list-level-style-bullet>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:list xml:id="list1" text:style-name="L1">
+    <text:list-item>
+     <text:p>a</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>b</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p>c<text:note text:id="ftn1" text:note-class="endnote"><text:note-citation>i</text:note-citation><text:note-body>
+      <text:list text:style-name="L2">
+       <text:list-item>
+        <text:p>xyz</text:p>
+       </text:list-item>
+      </text:list></text:note-body></text:note></text:p>
+   <text:list text:continue-list="list1" text:style-name="L1">
+    <text:list-item>
+     <text:p>d</text:p>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>
