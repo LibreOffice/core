@@ -33,6 +33,7 @@
 #include <sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <rtl/math.hxx>
 
 #include <i18nlangtag/lang.h>
 
@@ -214,12 +215,15 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
     return (bAllOk && bOneOk);
 }
 
+// No need to expand to the next pixel, when the character only covers its tiny fraction
+static double trimInsignificant(double n) { return std::round(n * 1e5) / 1e5; }
+
 bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 {
     bool bRet = false;
-    rRect.SetEmpty();
 
-    tools::Rectangle aRectangle;
+    basegfx::B2DRectangle aUnion;
+    basegfx::B2DRectangle aRectangle;
 
     DevicePoint aPos;
     const GlyphItem* pGlyph;
@@ -230,22 +234,19 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
         // get bounding rectangle of individual glyph
         if (pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
         {
-            if (!aRectangle.IsEmpty())
+            if (!aRectangle.isEmpty())
             {
-                aRectangle.AdjustLeft(std::floor(aPos.getX()));
-                aRectangle.AdjustRight(std::ceil(aPos.getX()));
-                aRectangle.AdjustTop(std::floor(aPos.getY()));
-                aRectangle.AdjustBottom(std::ceil(aPos.getY()));
-
+                aRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos));
                 // merge rectangle
-                if (rRect.IsEmpty())
-                    rRect = aRectangle;
-                else
-                    rRect.Union(aRectangle);
+                aUnion.expand(aRectangle);
             }
             bRet = true;
         }
     }
+    rRect = tools::Rectangle(rtl::math::approxFloor(trimInsignificant(aUnion.getMinX())),
+                             rtl::math::approxFloor(trimInsignificant(aUnion.getMinY())),
+                             rtl::math::approxCeil(trimInsignificant(aUnion.getMaxX())),
+                             rtl::math::approxCeil(trimInsignificant(aUnion.getMaxY())));
 
     return bRet;
 }

@@ -21,10 +21,10 @@
 
 #include <sal/config.h>
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
-#include <tools/gen.hxx>
 
 #include "font/FontSelectPattern.hxx"
 #include "glyphid.hxx"
@@ -59,7 +59,7 @@ struct GlyphBoundRectCacheHash
     }
 };
 
-typedef o3tl::lru_map<GlyphBoundRectCacheKey, tools::Rectangle,
+typedef o3tl::lru_map<GlyphBoundRectCacheKey, basegfx::B2DRectangle,
                       GlyphBoundRectCacheHash> GlyphBoundRectCache;
 
 class ImplFontCache
@@ -86,8 +86,8 @@ public:
                             LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
 
-    bool GetCachedGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
-    void CacheGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
+    bool GetCachedGlyphBoundRect(const LogicalFontInstance*, sal_GlyphId, basegfx::B2DRectangle&);
+    void CacheGlyphBoundRect(const LogicalFontInstance*, sal_GlyphId, basegfx::B2DRectangle&);
 
     void                Invalidate();
 };
