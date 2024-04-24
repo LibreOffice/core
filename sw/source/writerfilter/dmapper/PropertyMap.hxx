@@ -19,6 +19,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/text/XText.hpp>
@@ -37,6 +38,7 @@
 #include <set>
 #include <deque>
 
+class SwXTextSection;
 namespace com::sun::star {
     namespace beans {
         struct PropertyValue;
@@ -320,7 +322,7 @@ private:
     void ApplySectionProperties( const css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
 
     /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
-    void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
+    void ApplyProtectionProperties( rtl::Reference<SwXTextSection>& xSection, DomainMapper_Impl& rDM_Impl );
 
     css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties(const css::uno::Reference<css::beans::XPropertySet>& xPageStyle,
                                                                          DomainMapper_Impl& rDM_Impl);

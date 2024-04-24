@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -44,7 +45,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextSection
 > SwXTextSection_Base;
 
-class SwXTextSection final
+class SW_DLLPUBLIC SwXTextSection final
     : public SwXTextSection_Base
 {
 

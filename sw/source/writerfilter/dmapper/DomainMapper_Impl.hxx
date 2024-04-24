@@ -57,6 +57,7 @@
 
 class SwXTextDocument;
 class SwXDocumentSettings;
+class SwXTextSection;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -810,7 +811,7 @@ public:
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
     void appendStarMath( const Value& v);
     void adjustLastPara(sal_Int8 nAlign);
-    css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
+    rtl::Reference<SwXTextSection> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
 
     /// AutoText import: each entry is placed in the separate section
     void appendGlossaryEntry();

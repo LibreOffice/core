@@ -135,6 +135,7 @@
 #include <SwXDocumentSettings.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unobookmark.hxx>
+#include <unosection.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -3640,12 +3641,12 @@ static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
     }
 }
 
-uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
+rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange > const & xBefore )
 {
-    uno::Reference< beans::XPropertySet > xRet;
+    rtl::Reference< SwXTextSection > xSection;
     if (m_aTextAppendStack.empty())
-        return xRet;
+        return xSection;
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if(xTextAppend.is())
     {
@@ -3672,13 +3673,11 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             // to the newly appended paragraph, which will be kept in the end.
             copyAllProps(xEndPara, xNewPara);
 
-            uno::Reference< text::XTextContent > xSection( m_xTextDocument->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
+            xSection = m_xTextDocument->createTextSection();
             xSection->attach(xCursor);
 
             // Remove the extra paragraph (last inside the section)
             xEndPara->dispose();
-
-            xRet.set(xSection, uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
         {
@@ -3686,7 +3685,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
     }
 
-    return xRet;
+    return xSection;
 }
 
 void DomainMapper_Impl::appendGlossaryEntry()

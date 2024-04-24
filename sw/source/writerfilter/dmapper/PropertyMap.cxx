@@ -65,6 +65,7 @@
 #include "PropertyMapHelper.hxx"
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <unosection.hxx>
 #include <unotxdoc.hxx>
 #include <utility>
 
@@ -769,7 +770,7 @@ void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XP
     }
 }
 
-void SectionPropertyMap::ApplyProtectionProperties( uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::ApplyProtectionProperties( rtl::Reference< SwXTextSection >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
     {
@@ -1582,7 +1583,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         && !rDM_Impl.IsInComments())
     {
         //todo: insert a section or access the already inserted section
-        uno::Reference< beans::XPropertySet > xSection =
+        rtl::Reference< SwXTextSection > xSection =
             rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if ( xSection.is() )
         {
@@ -1616,7 +1617,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 auto xTextAppend = rDM_Impl.GetCurrentXText();
                 uno::Reference<container::XEnumerationAccess> const xCursor(
                     xTextAppend->createTextCursorByRange(
-                        uno::Reference<text::XTextContent>(xSection, uno::UNO_QUERY_THROW)->getAnchor()),
+                        uno::Reference<text::XTextContent>(static_cast<cppu::OWeakObject*>(xSection.get()), uno::UNO_QUERY_THROW)->getAnchor()),
                     uno::UNO_QUERY_THROW);
                 uno::Reference<container::XEnumeration> const xEnum(
                         xCursor->createEnumeration());
@@ -1707,7 +1708,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     else if (!rDM_Impl.IsInComments())
     {
-        uno::Reference< beans::XPropertySet > xSection;
+        rtl::Reference< SwXTextSection > xSection;
         ApplyProtectionProperties( xSection, rDM_Impl );
 
         //get the properties and create appropriate page styles

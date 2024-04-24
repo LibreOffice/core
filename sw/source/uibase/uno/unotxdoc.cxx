@@ -176,6 +176,7 @@
 #include <unocontentcontrol.hxx>
 #include <unoport.hxx>
 #include <unobookmark.hxx>
+#include <unosection.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1680,6 +1681,13 @@ rtl::Reference< SwXBookmark > SwXTextDocument::createFieldmark()
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return SwXFieldmark::CreateXFieldmark(GetDocOrThrow(), nullptr);
+}
+
+rtl::Reference< SwXTextSection > SwXTextDocument::createTextSection()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXTextSection::CreateXTextSection(nullptr, false);
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
