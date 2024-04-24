@@ -129,7 +129,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_HELPLINES_VISIBLE: // not here yet!
         {
-            pOptions->SetHelplines( !mpDrawView->IsHlplVisible() );
+            if ( GetDoc()->GetDocumentType() == DocumentType::Impress )
+                officecfg::Office::Impress::Layout::Display::Guide::set(!mpDrawView->IsHlplVisible(), batch);
+            else
+                officecfg::Office::Draw::Layout::Display::Guide::set(!mpDrawView->IsHlplVisible(), batch);
         }
         break;
 
