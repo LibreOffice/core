@@ -464,7 +464,7 @@ rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
     {
         ScDocumentUniquePtr pClipDoc(new ScDocument(SCDOCMODE_CLIP));
         // This takes care of the input line and calls CopyToClipMultiRange() for us.
-        CopyToClip(pClipDoc.get(), /*bCut=*/false, /*bApi=*/true);
+        CopyToClip(pClipDoc.get(), aRange, /*bCut=*/false, /*bApi=*/true);
         TransferableObjectDescriptor aObjDesc;
         return new ScTransferObj(std::move(pClipDoc), std::move(aObjDesc));
     }
