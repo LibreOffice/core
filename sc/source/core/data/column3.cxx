@@ -2359,6 +2359,11 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
 
 void ScColumn::SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
 {
+    if (!pEditText)
+    {
+        return;
+    }
+
     pEditText->NormalizeString(GetDoc().GetSharedStringPool());
     std::vector<SCROW> aNewSharedRows;
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, false);
