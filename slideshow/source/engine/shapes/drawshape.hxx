@@ -30,6 +30,8 @@
 #include "viewshape.hxx"
 #include <hyperlinkarea.hxx>
 
+#include <vcl/virdev.hxx>
+
 #include <optional>
 #include <vector>
 
@@ -42,6 +44,22 @@ namespace slideshow::internal
         class  DrawShapeSubsetting;
         class  DrawShape;
         typedef ::std::shared_ptr< DrawShape > DrawShapeSharedPtr;
+
+        /** This Struct store data needed to make Animation from Graphic.
+            If the Animation is too big, we won't load all of it at once.
+            From time to time we load small parts until it is completely loaded.
+            Because of it, we have to keep some data alive until the animation
+            is fully loaded.
+         */
+        struct DelayedGraphicLoader
+        {
+            sal_uInt16 mnLoadedFrames = 0;
+            ::std::shared_ptr<Graphic> mpGraphic;
+            ScopedVclPtrInstance<VirtualDevice> mpVDev;
+            ScopedVclPtrInstance<VirtualDevice> mpVDevMask;
+
+            DelayedGraphicLoader(std::shared_ptr<Graphic> pGraphic);
+        };
 
         /** This class is the representation of a draw document's
             XShape, and implements the Shape, AnimatableShape, and
@@ -107,7 +125,8 @@ namespace slideshow::internal
                 const css::uno::Reference< css::drawing::XShape >&    xShape,
                 const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                 double                                     nPrio,
-                const Graphic&                             rGraphic,
+                std::shared_ptr<Graphic>                   pGraphic,
+
                 const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
             virtual css::uno::Reference< css::drawing::XShape > getXShape() const override;
@@ -199,6 +218,19 @@ namespace slideshow::internal
             */
             GDIMetaFileSharedPtr const & forceScrollTextMetaFile();
 
+            /** extract some Animation Frames from the Graphic
+                set in DelayedGraphicLoader.
+
+                @param nFrameCount
+                Load this many frames.
+
+                @param nLastToLoad
+                If nLastToLoad > nFrameCount + loadedFrames then
+                Load frames until this frame.
+             */
+            void getSomeAnimationFramesFromGraphic(::std::size_t nFrameCount,
+                                                   ::std::size_t nLastToLoad = 0);
+
         private:
             /** Create a shape for the given XShape
 
@@ -251,7 +283,7 @@ namespace slideshow::internal
             DrawShape( const css::uno::Reference< css::drawing::XShape >&    xShape,
                        css::uno::Reference< css::drawing::XDrawPage > xContainingPage,
                        double                                       nPrio,
-                       const Graphic&                               rGraphic,
+                       std::shared_ptr<Graphic>                     pGraphic,
                        const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;
 
             /** Private copy constructor
@@ -282,6 +314,7 @@ namespace slideshow::internal
              */
             mutable VectorOfMtfAnimationFrames                                      maAnimationFrames;
             ::std::size_t                                                           mnCurrFrame;
+            ::std::unique_ptr<DelayedGraphicLoader>                                 mpGraphicLoader; //to load more Frames later
 
             /// Metafile of currently active frame (static for shapes w/o intrinsic animation)
             mutable GDIMetaFileSharedPtr                                            mpCurrMtf;

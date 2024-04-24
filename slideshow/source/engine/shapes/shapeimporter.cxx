@@ -311,9 +311,8 @@ ShapeSharedPtr ShapeImporter::createShape(
         // fetch readily transformed and color-modified
         // graphic
 
-
-        Graphic aGraphic(
-            xGraphicObject->GetTransformedGraphic(
+        std::shared_ptr<Graphic> pGraphic
+            = ::std::make_shared<Graphic>(xGraphicObject->GetTransformedGraphic(
                 xGraphicObject->GetPrefSize(),
                 xGraphicObject->GetPrefMapMode(),
                 aGraphAttrs ) );
@@ -321,7 +320,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         return DrawShape::create( xCurrShape,
                                   mxPage,
                                   mnAscendingPrio,
-                                  aGraphic,
+                                  pGraphic,
                                   mrContext );
     }
     else

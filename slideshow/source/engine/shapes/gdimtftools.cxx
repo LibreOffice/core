@@ -248,101 +248,119 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 
 bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                               sal_uInt32&                   o_rLoopCount,
-                              const Graphic&                rGraphic )
+                              std::shared_ptr<Graphic>      pGraphic,
+                              ScopedVclPtrInstance<VirtualDevice>& pVDev,
+                              ScopedVclPtrInstance<VirtualDevice>& pVDevMask,
+                              sal_uInt16&                   mnLoadedFrames,
+                              sal_uInt16                    nFramesToLoad )
 {
-    o_rFrames.clear();
+    bool bFirstRun = mnLoadedFrames == 0;
+    if (bFirstRun)
+        o_rFrames.clear();
 
-    if( !rGraphic.IsAnimated() )
+    if( !pGraphic->IsAnimated() )
         return false;
 
     // some loop invariants
-    ::Animation   aAnimation( rGraphic.GetAnimation() );
+    ::Animation   aAnimation( pGraphic->GetAnimation() );
     const Point aEmptyPoint;
     const Size  aAnimSize( aAnimation.GetDisplaySizePixel() );
 
-    // setup VDev, into which all bitmaps are painted (want to
-    // normalize animations to n bitmaps of same size. An Animation,
-    // though, can contain bitmaps of varying sizes and different
-    // update modes)
-    ScopedVclPtrInstance< VirtualDevice > pVDev;
-    pVDev->SetOutputSizePixel( aAnimSize );
-    pVDev->EnableMapMode( false );
+    if (bFirstRun)
+    {
+        // setup VDev, into which all bitmaps are painted (want to
+        // normalize animations to n bitmaps of same size. An Animation,
+        // though, can contain bitmaps of varying sizes and different
+        // update modes)
+        pVDev->SetOutputSizePixel(aAnimSize);
+        pVDev->EnableMapMode(false);
 
-    // setup mask VDev (alpha VDev is currently rather slow)
-    ScopedVclPtrInstance<VirtualDevice> pVDevMask(DeviceFormat::WITHOUT_ALPHA);
-    pVDevMask->SetOutputSizePixel( aAnimSize );
-    pVDevMask->EnableMapMode( false );
+        // setup mask VDev (alpha VDev is currently rather slow)
+        pVDevMask->SetOutputSizePixel(aAnimSize);
+        pVDevMask->EnableMapMode(false);
 
-    // tdf#156630 make erase calls fill with transparency
-    pVDev->SetBackground( Wallpaper( COL_BLACK ) );
-    pVDevMask->SetBackground( Wallpaper( COL_ALPHA_TRANSPARENT ) );
+        // tdf#156630 make erase calls fill with transparency
+        pVDev->SetBackground(Wallpaper(COL_BLACK));
+        pVDevMask->SetBackground(Wallpaper(COL_ALPHA_TRANSPARENT));
 
-    o_rLoopCount = aAnimation.GetLoopCount();
-
-    for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
+        o_rLoopCount = aAnimation.GetLoopCount();
+    }
+    sal_uInt16 nCount = aAnimation.Count();
+    if (!bFirstRun && mnLoadedFrames + nFramesToLoad < nCount)
+        nCount = mnLoadedFrames + nFramesToLoad;
+    for (sal_uInt16 i = mnLoadedFrames; i < nCount; ++i)
     {
         const AnimationFrame& rAnimationFrame( aAnimation.Get(i) );
-        switch(rAnimationFrame.meDisposal)
+        bool bCalculateNow = !bFirstRun || i < nFramesToLoad;
+        if (bCalculateNow)
         {
-            case Disposal::Not:
+            switch (rAnimationFrame.meDisposal)
             {
-                pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
-                                    rAnimationFrame.maBitmapEx);
-                AlphaMask aMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
-
-                if( aMask.IsEmpty() )
+                case Disposal::Not:
                 {
-                    const tools::Rectangle aRect(aEmptyPoint,
-                                          pVDevMask->GetOutputSizePixel());
-                    const Wallpaper aWallpaper(COL_BLACK);
-                    pVDevMask->DrawWallpaper(aRect,
-                                            aWallpaper);
+                    pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                                        rAnimationFrame.maBitmapEx);
+                    AlphaMask aMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
+
+                    if (aMask.IsEmpty())
+                    {
+                        const tools::Rectangle aRect(aEmptyPoint, pVDevMask->GetOutputSizePixel());
+                        const Wallpaper aWallpaper(COL_BLACK);
+                        pVDevMask->DrawWallpaper(aRect, aWallpaper);
+                    }
+                    else
+                    {
+                        BitmapEx aTmpMask(aMask.GetBitmap(), aMask);
+                        pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aTmpMask);
+                    }
+                    break;
                 }
-                else
+
+                case Disposal::Back:
                 {
-                    BitmapEx aTmpMask(aMask.GetBitmap(), aMask);
-                    pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel,
-                                            aTmpMask );
+                    // #i70772# react on no mask
+                    const AlphaMask aMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
+                    const Bitmap& rContent(rAnimationFrame.maBitmapEx.GetBitmap());
+
+                    pVDevMask->Erase();
+                    pVDev->DrawBitmap(rAnimationFrame.maPositionPixel, rContent);
+
+                    if (aMask.IsEmpty())
+                    {
+                        const tools::Rectangle aRect(rAnimationFrame.maPositionPixel,
+                                                     rContent.GetSizePixel());
+                        pVDevMask->SetFillColor(COL_BLACK);
+                        pVDevMask->SetLineColor();
+                        pVDevMask->DrawRect(aRect);
+                    }
+                    else
+                    {
+                        pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask.GetBitmap());
+                    }
+                    break;
                 }
-                break;
-            }
 
-            case Disposal::Back:
-            {
-                // #i70772# react on no mask
-                const AlphaMask aMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
-                const Bitmap & rContent(rAnimationFrame.maBitmapEx.GetBitmap());
-
-                pVDevMask->Erase();
-                pVDev->DrawBitmap(rAnimationFrame.maPositionPixel, rContent);
-
-                if(aMask.IsEmpty())
+                case Disposal::Previous:
                 {
-                    const tools::Rectangle aRect(rAnimationFrame.maPositionPixel, rContent.GetSizePixel());
-                    pVDevMask->SetFillColor( COL_BLACK);
-                    pVDevMask->SetLineColor();
-                    pVDevMask->DrawRect(aRect);
+                    pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                                        rAnimationFrame.maBitmapEx);
+                    pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
+                                          rAnimationFrame.maBitmapEx.GetAlphaMask().GetBitmap());
+                    break;
                 }
-                else
-                {
-                    pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask.GetBitmap());
-                }
-                break;
-            }
-
-            case Disposal::Previous :
-            {
-                pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
-                                    rAnimationFrame.maBitmapEx);
-                pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
-                                      rAnimationFrame.maBitmapEx.GetAlphaMask().GetBitmap());
-                break;
             }
         }
-
         // extract current aVDev content into a new animation
         // frame
-        GDIMetaFileSharedPtr pMtf = std::make_shared<GDIMetaFile>();
+        GDIMetaFileSharedPtr pMtf;
+        if (bFirstRun)
+        {
+            pMtf = std::make_shared<GDIMetaFile>();
+        }
+        else
+        {
+            pMtf = o_rFrames[i].mpMtf;
+        }
         bool useAlphaMask = false;
 #if defined(MACOSX) || defined(IOS)
         useAlphaMask = true;
@@ -351,52 +369,58 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         if( SkiaHelper::isVCLSkiaEnabled())
             useAlphaMask = true;
 #endif
-        if( useAlphaMask )
+        if (bCalculateNow)
         {
-            AlphaMask aAlphaMask(pVDevMask->GetBitmap(aEmptyPoint, aAnimSize));
-            pMtf->AddAction(
-                new MetaBmpExAction( aEmptyPoint,
-                                     BitmapEx(
-                                         pVDev->GetBitmap(
-                                             aEmptyPoint,
-                                             aAnimSize ),
-                                         aAlphaMask)));
+            if( useAlphaMask )
+            {
+                AlphaMask aAlphaMask(pVDevMask->GetBitmap(aEmptyPoint, aAnimSize));
+                pMtf->AddAction(
+                    new MetaBmpExAction( aEmptyPoint,
+                                         BitmapEx(
+                                             pVDev->GetBitmap(
+                                                 aEmptyPoint,
+                                                 aAnimSize ),
+                                             aAlphaMask)));
+            }
+            else
+            {
+                Bitmap aAlphaMask = pVDevMask->GetBitmap(aEmptyPoint, aAnimSize);
+                aAlphaMask.Invert(); // convert from transparency to alpha
+                pMtf->AddAction(
+                    new MetaBmpExAction( aEmptyPoint,
+                                         BitmapEx(
+                                             pVDev->GetBitmap(
+                                                 aEmptyPoint,
+                                                 aAnimSize ),
+                                             aAlphaMask)));
+            }
+            mnLoadedFrames = i+1;
         }
-        else
+        if (bFirstRun)
         {
-            Bitmap aAlphaMask = pVDevMask->GetBitmap(aEmptyPoint, aAnimSize);
-            aAlphaMask.Invert(); // convert from transparency to alpha
-            pMtf->AddAction(
-                new MetaBmpExAction( aEmptyPoint,
-                                     BitmapEx(
-                                         pVDev->GetBitmap(
-                                             aEmptyPoint,
-                                             aAnimSize ),
-                                         aAlphaMask)));
+            // setup mtf dimensions and pref map mode (for
+            // simplicity, keep it all in pixel. the metafile
+            // renderer scales it down to (1, 1) box anyway)
+            pMtf->SetPrefMapMode(MapMode());
+            pMtf->SetPrefSize(aAnimSize);
+
+            // Take care of special value for MultiPage TIFFs. ATM these shall just
+            // show their first page for _quite_ some time.
+            sal_Int32 nWaitTime100thSeconds(rAnimationFrame.mnWait);
+            if (ANIMATION_TIMEOUT_ON_CLICK == nWaitTime100thSeconds)
+            {
+                // ATM the huge value would block the timer, so use a long
+                // time to show first page (whole day)
+                nWaitTime100thSeconds = 100 * 60 * 60 * 24;
+            }
+
+            // There are animated GIFs with no WaitTime set. Take 0.1 sec, the
+            // same duration that is used by the edit view.
+            if (nWaitTime100thSeconds == 0)
+                nWaitTime100thSeconds = 10;
+
+            o_rFrames.emplace_back(pMtf, nWaitTime100thSeconds / 100.0);
         }
-
-        // setup mtf dimensions and pref map mode (for
-        // simplicity, keep it all in pixel. the metafile
-        // renderer scales it down to (1, 1) box anyway)
-        pMtf->SetPrefMapMode( MapMode() );
-        pMtf->SetPrefSize( aAnimSize );
-
-        // Take care of special value for MultiPage TIFFs. ATM these shall just
-        // show their first page for _quite_ some time.
-        sal_Int32 nWaitTime100thSeconds(rAnimationFrame.mnWait);
-        if( ANIMATION_TIMEOUT_ON_CLICK == nWaitTime100thSeconds )
-        {
-            // ATM the huge value would block the timer, so use a long
-            // time to show first page (whole day)
-            nWaitTime100thSeconds = 100 * 60 * 60 * 24;
-        }
-
-        // There are animated GIFs with no WaitTime set. Take 0.1 sec, the
-        // same duration that is used by the edit view.
-        if( nWaitTime100thSeconds == 0 )
-            nWaitTime100thSeconds = 10;
-
-        o_rFrames.emplace_back( pMtf, nWaitTime100thSeconds / 100.0 );
     }
 
     return !o_rFrames.empty();

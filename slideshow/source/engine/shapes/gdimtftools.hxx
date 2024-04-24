@@ -27,6 +27,8 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 
+#include <vcl/virdev.hxx>
+
 #include <tools.hxx>
 
 #include <utility>
@@ -101,6 +103,8 @@ namespace slideshow::internal
         sal_Int32 getNextActionOffset( MetaAction * pCurrAct );
 
         /** Extract a vector of animation frames from given Graphic.
+            It can be used to extract only a few frames, and can be
+            called later to extract more. (If the Animation is big)
 
             @param o_rFrames
             Resulting vector of animated metafiles
@@ -108,12 +112,28 @@ namespace slideshow::internal
             @param o_rLoopCount
             Number of times the bitmap animation shall be repeated
 
-            @param rGraphic
+            @param pGraphic
             Input graphic object, to extract animations from
+
+            @param pVDev, pVDevMask
+            Virtual devices. We don't want to create new everytime we load some frames.
+
+            @param nLoadedFrames
+            The count of loaded Frames.
+
+            @param nFramesToLoad
+            The count of Frames need to be extracted now.
+            Bigger nFramesToLoad not result an error, the function will
+            stop extracting at the end of the animation anyway.
          */
+
         bool getAnimationFromGraphic(VectorOfMtfAnimationFrames& o_rFrames,
                                      sal_uInt32&                 o_rLoopCount,
-                                     const Graphic&              rGraphic);
+                                     std::shared_ptr<Graphic>    pGraphic,
+                                     ScopedVclPtrInstance<VirtualDevice> &pVDev,
+                                     ScopedVclPtrInstance<VirtualDevice> &pVDevMask,
+                                     sal_uInt16&                 nLoadedFrames,
+                                     sal_uInt16                  nFramesToLoad);
 
         /** Retrieve scroll text animation rectangles from given metafile
 

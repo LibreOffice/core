@@ -343,6 +343,7 @@ namespace slideshow::internal
             mxPage( xContainingPage ),
             maAnimationFrames(), // empty, we don't have no intrinsic animation
             mnCurrFrame(0),
+            mpGraphicLoader(),
             mpCurrMtf(),
             mnCurrMtfLoadFlags( bForeignSource
                                 ? MTF_LOAD_FOREIGN_SOURCE : MTF_LOAD_NONE ),
@@ -418,12 +419,13 @@ namespace slideshow::internal
         DrawShape::DrawShape( const uno::Reference< drawing::XShape >&      xShape,
                               uno::Reference< drawing::XDrawPage > xContainingPage,
                               double                                        nPrio,
-                              const Graphic&                                rGraphic,
+                              std::shared_ptr<Graphic>                      pGraphic,
                               const SlideShowContext&                       rContext ) :
             mxShape( xShape ),
             mxPage(std::move( xContainingPage )),
             maAnimationFrames(),
             mnCurrFrame(0),
+            mpGraphicLoader(),
             mpCurrMtf(),
             mnCurrMtfLoadFlags( MTF_LOAD_NONE ),
             maCurrentShapeUnitBounds(),
@@ -450,12 +452,25 @@ namespace slideshow::internal
             mbDrawingLayerAnim( false ),
             mbContainsPageField( false )
         {
-            ENSURE_OR_THROW( rGraphic.IsAnimated(),
+            ENSURE_OR_THROW( pGraphic->IsAnimated(),
                               "DrawShape::DrawShape(): Graphic is no animation" );
 
-            getAnimationFromGraphic( maAnimationFrames,
-                                     mnAnimationLoopCount,
-                                     rGraphic );
+            ::Animation aAnimation(pGraphic->GetAnimation());
+            const Size aAnimSize(aAnimation.GetDisplaySizePixel());
+            tools::Long nBitmapPixels = aAnimSize.getWidth() * aAnimSize.getHeight();
+
+            tools::Long nFramesToLoad = aAnimation.Count();
+
+            // if the Animation is bigger then 5 million pixels, we do not load the
+            // whole animation now.
+            if (nBitmapPixels * aAnimation.Count() > 5000000)
+            {
+                nFramesToLoad = 5000000 / nBitmapPixels;
+                if (nFramesToLoad < 10)
+                    nFramesToLoad = 10;
+            }
+            mpGraphicLoader = ::std::make_unique<DelayedGraphicLoader>(pGraphic);
+            getSomeAnimationFramesFromGraphic(nFramesToLoad);
 
             ENSURE_OR_THROW( !maAnimationFrames.empty() &&
                               maAnimationFrames.front().mpMtf,
@@ -475,6 +490,7 @@ namespace slideshow::internal
             maAnimationFrames(), // don't copy animations for subsets,
                                  // only the current frame!
             mnCurrFrame(0),
+            mpGraphicLoader(),
             mpCurrMtf( rSrc.mpCurrMtf ),
             mnCurrMtfLoadFlags( rSrc.mnCurrMtfLoadFlags ),
             maCurrentShapeUnitBounds(),
@@ -550,13 +566,13 @@ namespace slideshow::internal
             const uno::Reference< drawing::XShape >&    xShape,
             const uno::Reference< drawing::XDrawPage >& xContainingPage,
             double                                      nPrio,
-            const Graphic&                              rGraphic,
+            std::shared_ptr<Graphic>                    pGraphic,
             const SlideShowContext&                     rContext )
         {
             DrawShapeSharedPtr pShape( new DrawShape(xShape,
                                                      xContainingPage,
                                                      nPrio,
-                                                     rGraphic,
+                                                     pGraphic,
                                                      rContext) );
 
             if( pShape->hasIntrinsicAnimation() )
@@ -846,6 +862,10 @@ namespace slideshow::internal
         {
             ENSURE_OR_RETURN_VOID( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );
+
+            // Load 1 more frame if needed. (make sure the current frame is loded)
+            if (mpGraphicLoader)
+                getSomeAnimationFramesFromGraphic(1, nCurrFrame);
 
             if( mnCurrFrame != nCurrFrame )
             {
@@ -1234,6 +1254,34 @@ namespace slideshow::internal
                                                   DocTreeNode::NodeType eNodeType ) const // throw ShapeLoadFailedException
         {
             return maSubsetting.getSubsetTreeNode( rParentNode, nNodeIndex, eNodeType );
+        }
+
+        void DrawShape::getSomeAnimationFramesFromGraphic(::std::size_t nFrameCount,
+                                                          ::std::size_t nLastToLoad /* = 0*/)
+        {
+            OSL_ASSERT(mpGraphicLoader);
+
+            //load nFrameCount frames or to nLastToLoad
+            ::std::size_t nFramesToLoad = nFrameCount;
+            if (nLastToLoad > mpGraphicLoader->mnLoadedFrames + nFrameCount)
+                nFramesToLoad = nLastToLoad - mpGraphicLoader->mnLoadedFrames;
+
+            getAnimationFromGraphic(maAnimationFrames, mnAnimationLoopCount,
+                                    mpGraphicLoader->mpGraphic, mpGraphicLoader->mpVDev,
+                                    mpGraphicLoader->mpVDevMask, mpGraphicLoader->mnLoadedFrames,
+                                    nFramesToLoad);
+
+            // If the Animation is fully loaded, no need to load anymore.
+            if (mpGraphicLoader->mnLoadedFrames >= maAnimationFrames.size())
+            {
+                mpGraphicLoader.reset();
+            }
+        }
+
+        DelayedGraphicLoader::DelayedGraphicLoader(std::shared_ptr<Graphic> pGraphic)
+            : mpGraphic(pGraphic)
+            , mpVDevMask(DeviceFormat::WITHOUT_ALPHA)
+        {
         }
 }
 
