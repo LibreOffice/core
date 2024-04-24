@@ -134,6 +134,7 @@
 #include <unotxdoc.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <SwXTextDefaults.hxx>
+#include <unobookmark.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -875,13 +876,8 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                 if (sBookmarkNameAfterRemoval.isEmpty())
                 {
                     // Yes, it was removed. Restore
-                    uno::Reference<text::XTextContent> xBookmark(
-                        m_xTextDocument->createInstance("com.sun.star.text.Bookmark"),
-                        uno::UNO_QUERY_THROW);
-
-                    uno::Reference<container::XNamed> xBkmNamed(xBookmark,
-                                                                uno::UNO_QUERY_THROW);
-                    xBkmNamed->setName(sLastBookmarkName);
+                    rtl::Reference<SwXBookmark> xBookmark(m_xTextDocument->createBookmark());
+                    xBookmark->setName(sLastBookmarkName);
                     xTextAppend->insertTextContent(xCursor, xBookmark, !xCursor->isCollapsed());
                 }
             }
@@ -8914,7 +8910,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
         {
             if (m_xTextDocument)
             {
-                uno::Reference< text::XTextContent > xBookmark( m_xTextDocument->createInstance( "com.sun.star.text.Bookmark" ), uno::UNO_QUERY_THROW );
+                rtl::Reference<SwXBookmark> xBookmark( m_xTextDocument->createBookmark() );
                 uno::Reference< text::XTextCursor > xCursor;
                 uno::Reference< text::XText > xText = aBookmarkIter->second.m_xTextRange->getText();
                 if( aBookmarkIter->second.m_bIsStartOfText && !bIsAfterDummyPara)
@@ -8944,10 +8940,9 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                         xCursor->gotoRange(xStart, true );
                     }
                 }
-                uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
                 //todo: make sure the name is not used already!
-                xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
+                xBookmark->setName( aBookmarkIter->second.m_sBookmarkName );
                 xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
             }
             m_aBookmarkMap.erase( aBookmarkIter );
@@ -9088,9 +9083,8 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
                 }
 
                 // create a new bookmark using specific bookmark name pattern for permissions
-                uno::Reference< text::XTextContent > xPerm(m_xTextDocument->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNamed > xPermNamed(xPerm, uno::UNO_QUERY_THROW);
-                xPermNamed->setName(aPermIter->second.createBookmarkName());
+                rtl::Reference< SwXBookmark > xPerm(m_xTextDocument->createBookmark());
+                xPerm->setName(aPermIter->second.createBookmarkName());
 
                 // add new bookmark
                 const bool bAbsorb = !xCursor->isCollapsed();

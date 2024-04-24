@@ -1667,6 +1667,14 @@ rtl::Reference< SwXTextDefaults > SwXTextDocument::createTextDefaults()
     return new SwXTextDefaults(&GetDocOrThrow());
 }
 
+rtl::Reference< SwXBookmark > SwXTextDocument::createBookmark()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXBookmark::CreateXBookmark(GetDocOrThrow(), nullptr);
+}
+
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);

@@ -107,6 +107,7 @@ class SwXLinkTargetSupplier;
 class SwXRedlines;
 class SwXDocumentSettings;
 class SwXTextDefaults;
+class SwXBookmark;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -511,6 +512,7 @@ public:
 
     SW_DLLPUBLIC rtl::Reference<SwXDocumentSettings> createDocumentSettings();
     SW_DLLPUBLIC rtl::Reference<SwXTextDefaults> createTextDefaults();
+    SW_DLLPUBLIC rtl::Reference<SwXBookmark> createBookmark();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
