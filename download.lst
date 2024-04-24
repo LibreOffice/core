@@ -177,8 +177,8 @@ FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.012.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SERIF_HEBREW_SHA256SUM := e45c149d6c29b38b8981401f875ab4304e73a366312783c41c082eb5366d3921
-FONT_NOTO_SERIF_HEBREW_TARBALL := NotoSerifHebrew-v2.003.zip
+FONT_NOTO_SERIF_HEBREW_SHA256SUM := 99523f4f21051495f18cbd5169ed0d1e9b395eefe770fece1844a4a7a00c46da
+FONT_NOTO_SERIF_HEBREW_TARBALL := NotoSerifHebrew-v2.004.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
