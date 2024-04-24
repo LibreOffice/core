@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -101,7 +102,7 @@ public: // TODO: make data members private
     vcl::font::PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
-    bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
+    bool GetGlyphBoundRect(sal_GlyphId, basegfx::B2DRectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
     bool GetGlyphOutlineUntransformed(sal_GlyphId, basegfx::B2DPolyPolygon&) const;
 

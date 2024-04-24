@@ -561,12 +561,12 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     {
                         // We need glyph's advance, top bearing, and height to
                         // correct y offset.
-                        tools::Rectangle aRect;
+                        basegfx::B2DRectangle aRect;
                         // Get cached bound rect value for the font,
                         GetFont().GetGlyphBoundRect(nGlyphIndex, aRect, true);
 
-                        nXOffset = -(aRect.Top() / nXScale  + ( pHbPositions[i].y_advance
-                                    + ( aRect.GetHeight() / nXScale ) ) / 2 );
+                        nXOffset = -(aRect.getMinX() / nXScale  + ( pHbPositions[i].y_advance
+                                    + ( aRect.getHeight() / nXScale ) ) / 2.0 );
                     }
 
                 }
