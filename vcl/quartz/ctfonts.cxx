@@ -89,27 +89,6 @@ void CoreTextFont::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
     rxFontMetric->SetMinKashida(GetKashidaWidth());
 }
 
-bool CoreTextFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
-{
-    CGGlyph nCGGlyph = nId;
-
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
-    const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(mpCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
-
-    // Apply font rotation to non-vertical glyphs.
-    if (mfFontRotation && !bVertical)
-        aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
-
-    tools::Long xMin = floor(aCGRect.origin.x);
-    tools::Long yMin = floor(aCGRect.origin.y);
-    tools::Long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
-    tools::Long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
-    rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
-    return true;
-}
-
 namespace {
 
 // callbacks from CTFontCreatePathForGlyph+CGPathApply for GetGlyphOutline()
