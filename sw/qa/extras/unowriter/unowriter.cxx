@@ -42,6 +42,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1198,6 +1199,31 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     xCellRange->setPropertyValue(sBackColor, aRefColor);
     aColor = xTableCursor->getPropertyValue(sBackColor);
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf141525)
+{
+    // Unit test for tdf#141525:
+    // Checks if "Line with Arrow/Circle" is inserted with correct end points
+    createSwDoc();
+
+    // Insert "Line with Arrow/Circle" shape with CTRL key
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, ".uno:LineArrowCircle", aArgs);
+
+    // Asserts line shape has been inserted into the doc
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), getShape(1)->getShapeType());
+
+    // Asserts end of line has a circle
+    // Without the test, "Line Starts with Arrow" is inserted
+    // i.e. the circle is missing from the line end point
+    // - Expected: "Circle"
+    // - Actual: ""
+    CPPUNIT_ASSERT_EQUAL(OUString("Circle"), getProperty<OUString>(getShape(1), "LineEndName"));
+    // Asserts start of line has an arrow
+    CPPUNIT_ASSERT_EQUAL(OUString("Arrow"), getProperty<OUString>(getShape(1), "LineStartName"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
