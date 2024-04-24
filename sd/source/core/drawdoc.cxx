@@ -171,7 +171,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
             SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), Fraction( 1, 1 ) );    // default
         else
-                        SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
+            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
 
     SetScaleUnit(MapUnit::Map100thMM);
     SetDefaultFontHeight(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100));
@@ -219,8 +219,16 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     // Set DefTab and SpellOptions for the SD module
-    sal_uInt16 nDefTab = pOptions->GetDefTab();
-    SetDefaultTabulator( nDefTab );
+    if (eType == DocumentType::Impress)
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            SetDefaultTabulator( static_cast<sal_uInt16>(officecfg::Office::Impress::Layout::Other::TabStop::Metric::get()) );
+        else
+            SetDefaultTabulator( static_cast<sal_uInt16>(officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::get()) );
+    else
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            SetDefaultTabulator( static_cast<sal_uInt16>(officecfg::Office::Draw::Layout::Other::TabStop::Metric::get()) );
+        else
+            SetDefaultTabulator( static_cast<sal_uInt16>(officecfg::Office::Draw::Layout::Other::TabStop::NonMetric::get()) );
 
     try
     {

@@ -466,14 +466,28 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     aRet.Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
 
     sal_uInt16 nDefTab = 0;
+    SvtSysLocale aSysLocale;
+
     if( pFrameView)
         nDefTab = pDoc->GetDefaultTabulator();
     else
-        nDefTab = pOptions->GetDefTab();
+    {
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                nDefTab = officecfg::Office::Impress::Layout::Other::TabStop::Metric::get();
+            else
+                nDefTab = officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::get();
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                nDefTab = officecfg::Office::Draw::Layout::Other::TabStop::Metric::get();
+            else
+                nDefTab = officecfg::Office::Draw::Layout::Other::TabStop::NonMetric::get();
+    }
+
     aRet.Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
 
     FieldUnit nMetric = FieldUnit(0xffff);
-    SvtSysLocale aSysLocale;
+
     if( pFrameView)
         nMetric = pDoc->GetUIUnit();
     else
@@ -551,6 +565,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     bool bNewDefTab = false;
     bool bNewPrintOptions = false;
     bool bMiscOptions = false;
+    SvtSysLocale aSysLocale;
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = nullptr;
@@ -588,7 +603,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
 
-        SvtSysLocale aSysLocale;
         std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create());
         if (eDocType == DocumentType::Impress)
@@ -604,12 +618,36 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         batch->commit();
 
     }
-    sal_uInt16 nDefTab = pOptions->GetDefTab();
+    sal_uInt16 nDefTab;
+    if (eDocType == DocumentType::Impress)
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            nDefTab = officecfg::Office::Impress::Layout::Other::TabStop::Metric::get();
+        else
+            nDefTab = officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::get();
+    else
+        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+            nDefTab = officecfg::Office::Draw::Layout::Other::TabStop::Metric::get();
+        else
+            nDefTab = officecfg::Office::Draw::Layout::Other::TabStop::NonMetric::get();
+
     // Default-Tabulator
     if( const SfxUInt16Item* pItem = rSet.GetItemIfSet( SID_ATTR_DEFTABSTOP, false ) )
     {
         nDefTab = pItem->GetValue();
-        pOptions->SetDefTab( nDefTab );
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                officecfg::Office::Impress::Layout::Other::TabStop::Metric::set(nDefTab, batch);
+            else
+                officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::set(nDefTab, batch);
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                officecfg::Office::Draw::Layout::Other::TabStop::Metric::set(nDefTab, batch);
+            else
+                officecfg::Office::Draw::Layout::Other::TabStop::NonMetric::set(nDefTab, batch);
+        batch->commit();
 
         bNewDefTab = true;
     }
@@ -731,7 +769,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
     {
         FieldUnit eUIUnit;
-        SvtSysLocale aSysLocale;
         if (eDocType == DocumentType::Impress)
             if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
                 eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
