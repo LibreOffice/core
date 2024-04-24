@@ -1713,6 +1713,13 @@ rtl::Reference< SwXTextFrame > SwXTextDocument::createTextFrame()
     return SwXTextFrame::CreateXTextFrame(GetDocOrThrow(), nullptr);
 }
 
+rtl::Reference< SwXTextGraphicObject > SwXTextDocument::createTextGraphicObject()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXTextGraphicObject::CreateXTextGraphicObject(GetDocOrThrow(), nullptr);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);

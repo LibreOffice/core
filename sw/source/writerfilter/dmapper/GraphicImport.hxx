@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+class SwXTextGraphicObject;
 namespace com::sun::star {
     namespace uno
     {
@@ -67,14 +68,14 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     std::unique_ptr<GraphicImport_Impl> m_pImpl;
 
     css::uno::Reference<css::uno::XComponentContext>     m_xComponentContext;
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
+    rtl::Reference<SwXTextDocument> m_xTextDoc;
 
-    css::uno::Reference<css::text::XTextContent> m_xGraphicObject;
+    rtl::Reference<SwXTextGraphicObject> m_xGraphicObject;
 
     css::uno::Reference<css::drawing::XShape> m_xShape;
     void ProcessShapeOptions(Value const & val);
 
-    css::uno::Reference<css::text::XTextContent>
+    rtl::Reference<SwXTextGraphicObject>
             createGraphicObject(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                 css::uno::Reference<css::beans::XPropertySet> const & xShapeProps);
 
@@ -82,7 +83,7 @@ class GraphicImport : public LoggedProperties, public LoggedTable
 
 public:
     explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext>  xComponentContext,
-                            css::uno::Reference<css::lang::XMultiServiceFactory> xTextFactory,
+                            rtl::Reference<SwXTextDocument> xTextDoc,
                             DomainMapper& rDomainMapper,
                             GraphicImportType & rGraphicImportType,
                             std::pair<OUString, OUString>& rPositionOffsets,

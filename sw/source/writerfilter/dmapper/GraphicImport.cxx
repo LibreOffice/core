@@ -82,6 +82,8 @@
 #include <o3tl/unit_conversion.hxx>
 #include <oox/export/drawingml.hxx>
 #include <utility>
+#include <unoframe.hxx>
+#include <unotxdoc.hxx>
 
 using namespace css;
 
@@ -467,7 +469,7 @@ public:
 };
 
 GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentContext,
-                             uno::Reference<lang::XMultiServiceFactory> xTextFactory,
+                             rtl::Reference<SwXTextDocument> xTextDoc,
                              DomainMapper& rDMapper,
                              GraphicImportType & rImportType,
                              std::pair<OUString, OUString>& rPositionOffsets,
@@ -478,7 +480,7 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentCo
 , LoggedStream("GraphicImport")
 , m_pImpl(new GraphicImport_Impl(rImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
 , m_xComponentContext(std::move(xComponentContext))
-, m_xTextFactory(std::move(xTextFactory))
+, m_xTextDoc(std::move(xTextDoc))
 {
 }
 
@@ -873,12 +875,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if ( !bUseShape )
                         {
                             // Define the object size
-                            uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
-                                    uno::UNO_QUERY );
                             awt::Size aSize = xShape->getSize( );
-                            xGraphProps->setPropertyValue("Height",
+                            m_xGraphicObject->setPropertyValue("Height",
                                    uno::Any( aSize.Height ) );
-                            xGraphProps->setPropertyValue("Width",
+                            m_xGraphicObject->setPropertyValue("Width",
                                    uno::Any( aSize.Width ) );
 
                             text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
@@ -886,12 +886,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             uno::Any aAny = xSourceGraphProps->getPropertyValue("GraphicCrop");
                             if (m_pImpl->m_oCrop)
                             {   // RTF: RTFValue from resolvePict()
-                                xGraphProps->setPropertyValue("GraphicCrop",
+                                m_xGraphicObject->setPropertyValue("GraphicCrop",
                                         uno::Any(*m_pImpl->m_oCrop));
                             }
                             else if (aAny >>= aGraphicCrop)
                             {   // DOCX: imported in oox BlipFillContext
-                                xGraphProps->setPropertyValue("GraphicCrop",
+                                m_xGraphicObject->setPropertyValue("GraphicCrop",
                                     uno::Any( aGraphicCrop ) );
                             }
 
@@ -1771,23 +1771,20 @@ void GraphicImport::lcl_entry(const writerfilter::Reference<Properties>::Pointer
 {
 }
 
-uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Reference<graphic::XGraphic> const & rxGraphic,
+rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Reference<graphic::XGraphic> const & rxGraphic,
                                                                       uno::Reference<beans::XPropertySet> const & xShapeProps)
 {
-    uno::Reference<text::XTextContent> xGraphicObject;
+    rtl::Reference<SwXTextGraphicObject> xGraphicObject;
     try
     {
         if (rxGraphic.is())
         {
-            uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
-                m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
-                uno::UNO_QUERY_THROW);
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::Any(rxGraphic));
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
+            xGraphicObject = m_xTextDoc->createTextGraphicObject();
+            xGraphicObject->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::Any(rxGraphic));
+            xGraphicObject->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
                 uno::Any( m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
-            xGraphicObject.set( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
             //shapes have only one border
             table::BorderLine2 aBorderLine;
@@ -1816,7 +1813,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             };
 
             for(PropertyIds const & rBorderProp : aBorderProps)
-                xGraphicObjectProperties->setPropertyValue(getPropertyName(rBorderProp), uno::Any(aBorderLine));
+                xGraphicObject->setPropertyValue(getPropertyName(rBorderProp), uno::Any(aBorderLine));
 
             // setting graphic object shadow properties
             if (m_pImpl->m_bShadow)
@@ -1847,18 +1844,18 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                         aShadow.Location = table::ShadowLocation_TOP_LEFT;
                 }
 
-                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_SHADOW_FORMAT), uno::Any(aShadow));
+                xGraphicObject->setPropertyValue(getPropertyName(PROP_SHADOW_FORMAT), uno::Any(aShadow));
             }
 
             // setting properties for all types
             if( m_pImpl->m_bPositionProtected )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_POSITION_PROTECTED ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_POSITION_PROTECTED ),
                     uno::Any(true));
             if( m_pImpl->m_bSizeProtected )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
                     uno::Any(true));
 
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->m_bDecorative));
+            xGraphicObject->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->m_bDecorative));
             sal_Int32 nWidth = - m_pImpl->m_nLeftPosition;
             if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
@@ -1923,41 +1920,41 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                     m_pImpl->m_nTopPosition *= -1;
                 }
 
-                m_pImpl->applyPosition(xGraphicObjectProperties);
-                m_pImpl->applyRelativePosition(xGraphicObjectProperties);
+                m_pImpl->applyPosition(xGraphicObject);
+                m_pImpl->applyRelativePosition(xGraphicObject);
                 if( !m_pImpl->m_bOpaque )
                 {
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any(m_pImpl->m_bOpaque));
+                    xGraphicObject->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any(m_pImpl->m_bOpaque));
                 }
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::Any(static_cast<sal_Int32>(m_pImpl->m_nWrap)));
                 if( m_pImpl->m_rDomainMapper.IsInTable())
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
+                    xGraphicObject->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::Any(m_pImpl->m_bLayoutInCell));
 
-                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ALLOW_OVERLAP),
+                xGraphicObject->setPropertyValue(getPropertyName(PROP_ALLOW_OVERLAP),
                                                            uno::Any(m_pImpl->m_bAllowOverlap));
 
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::Any(m_pImpl->m_bContour));
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),
                     uno::Any(m_pImpl->m_bContourOutside));
-                m_pImpl->applyMargins(xGraphicObjectProperties);
+                m_pImpl->applyMargins(xGraphicObject);
             }
 
-            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_CONTRAST ),
+            xGraphicObject->setPropertyValue(getPropertyName( PROP_ADJUST_CONTRAST ),
                 uno::Any(static_cast<sal_Int16>(m_pImpl->m_nContrast)));
-            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_LUMINANCE ),
+            xGraphicObject->setPropertyValue(getPropertyName( PROP_ADJUST_LUMINANCE ),
                 uno::Any(static_cast<sal_Int16>(m_pImpl->m_nBrightness)));
             if(m_pImpl->m_eColorMode != drawing::ColorMode_STANDARD)
             {
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),
+                xGraphicObject->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),
                     uno::Any(m_pImpl->m_eColorMode));
             }
 
-            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
+            xGraphicObject->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::Any( GraphicImport_Impl::nFillColor ));
-            m_pImpl->applyZOrder(xGraphicObjectProperties);
+            m_pImpl->applyZOrder(xGraphicObject);
 
             //there seems to be no way to detect the original size via _real_ API
             uno::Reference< beans::XPropertySet > xGraphicProperties(rxGraphic, uno::UNO_QUERY_THROW);
@@ -1994,12 +1991,12 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 if (pCorrected)
                 {
                     aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_CONTOUR_POLY_POLYGON),
+                    xGraphicObject->setPropertyValue(getPropertyName(PROP_CONTOUR_POLY_POLYGON),
                         aContourPolyPolygon);
                     // We should bring it to front, even if wp:anchor's behindDoc="1",
                     // because otherwise paragraph background (if set) overlaps the graphic
                     // TODO: if paragraph's background becomes bottommost, then remove this hack
-                    xGraphicObjectProperties->setPropertyValue("Opaque", uno::Any(true));
+                    xGraphicObject->setPropertyValue("Opaque", uno::Any(true));
                 }
             }
 
@@ -2008,11 +2005,11 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 || m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 if( m_pImpl->getXSize() && m_pImpl->getYSize() )
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_SIZE),
+                    xGraphicObject->setPropertyValue(getPropertyName(PROP_SIZE),
                         uno::Any( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
-                m_pImpl->applyMargins(xGraphicObjectProperties);
-                m_pImpl->applyName(xGraphicObjectProperties);
-                m_pImpl->applyHyperlink(xGraphicObjectProperties, false);
+                m_pImpl->applyMargins(xGraphicObject);
+                m_pImpl->applyName(xGraphicObject);
+                m_pImpl->applyHyperlink(xGraphicObject, false);
             }
 
             // Handle horizontal flip.
@@ -2020,9 +2017,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             xShapeProps->getPropertyValue("IsMirrored") >>= bMirrored;
             if (bMirrored)
             {
-                xGraphicObjectProperties->setPropertyValue("HoriMirroredOnEvenPages",
+                xGraphicObject->setPropertyValue("HoriMirroredOnEvenPages",
                                                            uno::Any(true));
-                xGraphicObjectProperties->setPropertyValue("HoriMirroredOnOddPages",
+                xGraphicObject->setPropertyValue("HoriMirroredOnOddPages",
                                                            uno::Any(true));
             }
         }
