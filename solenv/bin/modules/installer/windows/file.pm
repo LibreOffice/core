@@ -248,7 +248,8 @@ sub get_file_component_name
         $componentname = lc($componentname);    # componentnames always lowercase
 
         $componentname =~ s/\-/\_/g;            # converting "-" to "_"
-        $componentname =~ s/\./\_/g;            # converting "-" to "_"
+        $componentname =~ s/\./\_/g;            # converting "." to "_"
+        $componentname =~ s/\@/\_/g;            # converting "@" to "_"
 
         # Attention: Maximum length for the componentname is 72
         # %installer::globals::allcomponents_in_this_database : reset for each database
