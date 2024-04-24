@@ -132,6 +132,7 @@
 #include <unicode/errorcode.h>
 #include <unicode/regex.h>
 #include <unotxdoc.hxx>
+#include <SwXDocumentSettings.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -523,11 +524,11 @@ uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
 }
 
 
-uno::Reference< beans::XPropertySet > const & DomainMapper_Impl::GetDocumentSettings()
+rtl::Reference<SwXDocumentSettings> const & DomainMapper_Impl::GetDocumentSettings()
 {
     if( !m_xDocumentSettings.is() && m_xTextDocument.is())
     {
-        m_xDocumentSettings.set( m_xTextDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
+        m_xDocumentSettings = m_xTextDocument->createDocumentSettings();
     }
     return m_xDocumentSettings;
 }
@@ -9592,7 +9593,7 @@ void DomainMapper_Impl::ApplySettingsTable()
             m_xTextDocument->setViewData(xBox);
         }
 
-        uno::Reference< beans::XPropertySet > xSettings(m_xTextDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        rtl::Reference<SwXDocumentSettings> xSettings(m_xTextDocument->createDocumentSettings());
 
         if (m_pSettingsTable->GetDoNotExpandShiftReturn())
             xSettings->setPropertyValue( "DoNotJustifyLinesWithManualBreak", uno::Any(true) );

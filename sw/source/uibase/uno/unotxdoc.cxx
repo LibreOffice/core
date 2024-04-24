@@ -1652,6 +1652,13 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     return xTmp;
 }
 
+rtl::Reference< SwXDocumentSettings > SwXTextDocument::createDocumentSettings()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return new SwXDocumentSettings(this);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);

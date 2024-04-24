@@ -105,6 +105,7 @@ class SwXLineNumberingProperties;
 class SwXReferenceMarks;
 class SwXLinkTargetSupplier;
 class SwXRedlines;
+class SwXDocumentSettings;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -506,6 +507,8 @@ public:
                                             css::uno::Reference< css::uno::XInterface > const & xLastResult);
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
+
+    SW_DLLPUBLIC rtl::Reference<SwXDocumentSettings> createDocumentSettings();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

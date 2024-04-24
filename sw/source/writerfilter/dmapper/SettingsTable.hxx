@@ -21,8 +21,10 @@
 
 #include "LoggedResources.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <rtl/ref.hxx>
 #include <memory>
 
+class SwXTextDocument;
 namespace com::sun::star::lang
 {
 class XMultiServiceFactory;
@@ -89,7 +91,7 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> GetWriteProtectionSettings() const;
 
-    void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
+    void ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc);
 
     std::pair<bool, bool> GetCompatSettingHasAndValue(std::u16string_view sCompatName) const;
     sal_Int32 GetWordCompatibilityMode() const;

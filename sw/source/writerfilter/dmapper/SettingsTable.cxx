@@ -43,6 +43,8 @@
 #include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
 #include "util.hxx"
+#include <SwXDocumentSettings.hxx>
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
@@ -587,11 +589,11 @@ static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xProperty
     return xPropertyState->getPropertyState(rPropertyName) == beans::PropertyState_DEFAULT_VALUE;
 }
 
-void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
+void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
 {
-    uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
-    uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
+    if (!xDoc)
+        throw uno::RuntimeException();
+    rtl::Reference<SwXDocumentSettings> xDocumentSettings(xDoc->createDocumentSettings());
 
     // Shared between DOCX and RTF, unconditional flags.
     xDocumentSettings->setPropertyValue("TableRowKeep", uno::Any(true));
@@ -604,32 +606,25 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 
     // Show changes value
-    if (xDocProps.is())
-    {
-        bool bHideChanges = !m_pImpl->m_bShowInsDelChanges || !m_pImpl->m_bShowMarkupChanges;
-        xDocProps->setPropertyValue("ShowChanges", uno::Any( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
-    }
+    bool bHideChanges = !m_pImpl->m_bShowInsDelChanges || !m_pImpl->m_bShowMarkupChanges;
+    xDoc->setPropertyValue("ShowChanges", uno::Any( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
 
     // Record changes value
-    if (xDocProps.is())
+    xDoc->setPropertyValue("RecordChanges", uno::Any( m_pImpl->m_bRecordChanges ) );
+    // Password protected Record changes
+    if (m_pImpl->m_bRecordChanges && m_pImpl->m_pDocumentProtection->getRedlineProtection()
+        && m_pImpl->m_pDocumentProtection->getEnforcement())
     {
-        xDocProps->setPropertyValue("RecordChanges", uno::Any( m_pImpl->m_bRecordChanges ) );
-        // Password protected Record changes
-        if (m_pImpl->m_bRecordChanges && m_pImpl->m_pDocumentProtection->getRedlineProtection()
-            && m_pImpl->m_pDocumentProtection->getEnforcement())
-        {
-            // use dummy protection key to forbid disabling of Record changes without a notice
-            // (extending the recent GrabBag support)    TODO support password verification...
-            css::uno::Sequence<sal_Int8> aDummyKey { 1 };
-            xDocProps->setPropertyValue("RedlineProtectionKey", uno::Any( aDummyKey ));
-        }
+        // use dummy protection key to forbid disabling of Record changes without a notice
+        // (extending the recent GrabBag support)    TODO support password verification...
+        css::uno::Sequence<sal_Int8> aDummyKey { 1 };
+        xDoc->setPropertyValue("RedlineProtectionKey", uno::Any( aDummyKey ));
     }
 
     // Create or overwrite DocVars based on found in settings
     if (m_pImpl->m_aDocVars.size())
     {
-        uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier(xDoc, uno::UNO_QUERY_THROW);
-        uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+        uno::Reference< container::XNameAccess > xFieldMasterAccess = xDoc->getTextFieldMasters();
         for (const auto& docVar : m_pImpl->m_aDocVars)
         {
             uno::Reference< beans::XPropertySet > xMaster;
@@ -642,10 +637,10 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
             }
             else
             {
-                xMaster.set(xTextFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY_THROW);
+                xMaster.set(xDoc->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY_THROW);
                 xMaster->setPropertyValue(getPropertyName(PROP_NAME), uno::Any(docVar.first));
                 uno::Reference<text::XDependentTextField> xField(
-                    xTextFactory->createInstance("com.sun.star.text.TextField.User"),
+                    xDoc->createInstance("com.sun.star.text.TextField.User"),
                     uno::UNO_QUERY);
                 xField->attachTextFieldMaster(xMaster);
             }
@@ -670,11 +665,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     if (!(m_pImpl->m_bAutoHyphenation || m_pImpl->m_bNoHyphenateCaps || m_pImpl->m_bWidowControl))
         return;
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
-    if (!xStyleFamiliesSupplier.is())
-        return;
-
-    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamilies = xDoc->getStyleFamilies();
     uno::Reference<container::XNameContainer> xParagraphStyles = xStyleFamilies->getByName("ParagraphStyles").get< uno::Reference<container::XNameContainer> >();
     uno::Reference<style::XStyle> xDefault = xParagraphStyles->getByName("Standard").get< uno::Reference<style::XStyle> >();
     uno::Reference<beans::XPropertyState> xPropertyState(xDefault, uno::UNO_QUERY);

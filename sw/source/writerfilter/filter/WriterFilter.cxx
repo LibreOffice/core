@@ -46,6 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotxdoc.hxx>
+#include <SwXDocumentSettings.hxx>
 
 using namespace ::com::sun::star;
 
@@ -301,8 +302,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
 
     // Set some compatibility options that are valid for the DOCX format
     uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xSettings(
-        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    rtl::Reference<SwXDocumentSettings> xSettings = m_xDstDoc->createDocumentSettings();
 
     xSettings->setPropertyValue("UseOldNumbering", uno::Any(false));
     xSettings->setPropertyValue("IgnoreFirstLineIndentInNumbering", uno::Any(false));

@@ -19,7 +19,9 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <comphelper/MasterPropertySet.hxx>
+#include <comphelper/MasterPropertySetInfo.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
@@ -30,7 +32,7 @@ class SwDocShell;
 class SwDoc;
 class SfxPrinter;
 
-class SwXDocumentSettings final :
+class SW_DLLPUBLIC SwXDocumentSettings final :
         public comphelper::MasterPropertySet,
         public css::lang::XServiceInfo,
         public css::lang::XTypeProvider,

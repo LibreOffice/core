@@ -56,7 +56,7 @@
 #include <map>
 
 class SwXTextDocument;
-
+class SwXDocumentSettings;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -535,7 +535,7 @@ private:
     writerfilter::ooxml::OOXMLDocument* m_pOOXMLDocument;
     OUString m_aBaseUrl;
     rtl::Reference<SwXTextDocument> m_xTextDocument;
-    css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
+    rtl::Reference<SwXDocumentSettings> m_xDocumentSettings;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::container::XNameContainer> m_xPageStyles1;
     // cache next available number, expensive to repeatedly compute
@@ -670,7 +670,7 @@ private:
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     /// @throws css::uno::Exception
     css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
-    css::uno::Reference<css::beans::XPropertySet> const & GetDocumentSettings();
+    rtl::Reference<SwXDocumentSettings> const & GetDocumentSettings();
 
     SmartTagHandler m_aSmartTagHandler;
 
