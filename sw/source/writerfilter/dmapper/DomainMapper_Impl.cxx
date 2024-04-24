@@ -136,6 +136,7 @@
 #include <SwXTextDefaults.hxx>
 #include <unobookmark.hxx>
 #include <unosection.hxx>
+#include <unofield.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -4247,8 +4248,7 @@ void DomainMapper_Impl::PushAnnotation()
         m_StreamStateStack.top().eSubstreamType = SubstreamType::Annotation;
         if (!m_xTextDocument)
             return;
-        m_xAnnotationField.set( m_xTextDocument->createInstance( "com.sun.star.text.TextField.Annotation" ),
-                                uno::UNO_QUERY_THROW );
+        m_xAnnotationField = m_xTextDocument->createFieldAnnotation();
         uno::Reference< text::XText > xAnnotationText;
         m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
@@ -4521,9 +4521,8 @@ void DomainMapper_Impl::PopAnnotation()
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
             uno::Sequence< beans::PropertyValue > aEmptyProperties;
-            uno::Reference< text::XTextContent > xContent( m_xAnnotationField, uno::UNO_QUERY_THROW );
-            appendTextContent( xContent, aEmptyProperties );
-            CheckRedline( xContent->getAnchor( ) );
+            appendTextContent( m_xAnnotationField, aEmptyProperties );
+            CheckRedline( m_xAnnotationField->getAnchor( ) );
         }
         else
         {
@@ -4547,7 +4546,7 @@ void DomainMapper_Impl::PopAnnotation()
 
             // Attach the annotation to the range.
             uno::Reference<text::XTextAppend> const xTextAppend = m_aTextAppendStack.top().xTextAppend;
-            xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+            xTextAppend->insertTextContent(xTextRange, m_xAnnotationField, !xCursor->isCollapsed());
 
             if (bMarker)
             {

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -114,7 +115,7 @@ typedef ::cppu::WeakImplHelper
  * UNO wrapper around an SwFormatField, i.e. a Writer field that the user creates via Insert ->
  * Field.
  */
-class SwXTextField final
+class SW_DLLPUBLIC SwXTextField final
     : public SwXTextField_Base
 {
 

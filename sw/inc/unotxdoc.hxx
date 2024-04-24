@@ -109,6 +109,7 @@ class SwXDocumentSettings;
 class SwXTextDefaults;
 class SwXBookmark;
 class SwXTextSection;
+class SwXTextField;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -516,6 +517,7 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXBookmark> createBookmark();
     SW_DLLPUBLIC rtl::Reference<SwXBookmark> createFieldmark();
     SW_DLLPUBLIC rtl::Reference<SwXTextSection> createTextSection();
+    SW_DLLPUBLIC rtl::Reference<SwXTextField> createFieldAnnotation();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

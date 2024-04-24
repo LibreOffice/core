@@ -177,6 +177,7 @@
 #include <unoport.hxx>
 #include <unobookmark.hxx>
 #include <unosection.hxx>
+#include <unofield.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1688,6 +1689,13 @@ rtl::Reference< SwXTextSection > SwXTextDocument::createTextSection()
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return SwXTextSection::CreateXTextSection(nullptr, false);
+}
+
+rtl::Reference< SwXTextField > SwXTextDocument::createFieldAnnotation()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXTextField::CreateXTextField(&GetDocOrThrow(), nullptr, SwServiceType::FieldTypeAnnotation);
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)

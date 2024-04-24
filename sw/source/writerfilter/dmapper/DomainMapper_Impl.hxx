@@ -58,6 +58,7 @@
 class SwXTextDocument;
 class SwXDocumentSettings;
 class SwXTextSection;
+class SwXTextField;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -661,7 +662,7 @@ private:
     ::std::set<::std::pair<PagePartType, PageType>> m_HeaderFooterSeen;
 
     //annotation import
-    css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
+    rtl::Reference< SwXTextField > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
     bool m_bAnnotationResolved = false;
     OUString m_sAnnotationParent;
