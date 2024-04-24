@@ -513,6 +513,7 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXDocumentSettings> createDocumentSettings();
     SW_DLLPUBLIC rtl::Reference<SwXTextDefaults> createTextDefaults();
     SW_DLLPUBLIC rtl::Reference<SwXBookmark> createBookmark();
+    SW_DLLPUBLIC rtl::Reference<SwXBookmark> createFieldmark();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

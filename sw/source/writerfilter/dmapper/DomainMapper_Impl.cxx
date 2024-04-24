@@ -7461,8 +7461,6 @@ void DomainMapper_Impl::CloseFieldCommand()
 
     try
     {
-        uno::Reference< uno::XInterface > xFieldInterface;
-
         const auto& [sType, vArguments, vSwitches]{ splitFieldCommand(pContext->GetCommand()) };
         (void)vSwitches;
         OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
@@ -7558,6 +7556,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 bCreateField = false;
             }
 
+            uno::Reference< uno::XInterface > xFieldInterface;
             if( bCreateField || bCreateEnhancedField )
             {
                 //add the service prefix
@@ -8347,9 +8346,9 @@ void DomainMapper_Impl::CloseFieldCommand()
             // Don't waste resources on wrapping shapes inside a fieldmark.
             if (sType != "SHAPE" && m_xTextDocument && !m_aTextAppendStack.empty())
             {
-                xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.Fieldmark");
+                rtl::Reference<SwXBookmark> xFieldInterface = m_xTextDocument->createFieldmark();
 
-                uno::Reference<text::XFormField> const xFormField(xFieldInterface, uno::UNO_QUERY);
+                uno::Reference<text::XFormField> const xFormField(static_cast<cppu::OWeakObject*>(xFieldInterface.get()), uno::UNO_QUERY);
                 InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
                         pContext->GetFieldId());
                 xFormField->setFieldType(ODF_UNHANDLED);
