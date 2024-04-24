@@ -29,7 +29,6 @@ module com { module sun { module star { module accessibility {
     @since OOo 3.0
 */
 
-/// not yet published
 interface XAccessibleMultiLineText
     : ::com::sun::star::accessibility::XAccessibleText
 {
