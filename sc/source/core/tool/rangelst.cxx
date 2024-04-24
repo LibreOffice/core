@@ -133,10 +133,6 @@ void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, const ScDocument& r
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter, bool bFullAddressNotation ) const
 {
-    // LO's AddressConverter::parseOoxAddress2d cannot import a short-hand address,
-    // so definitely do not export that way.
-    assert(eConv != FormulaGrammar::CONV_XL_OOX || bFullAddressNotation);
-
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 

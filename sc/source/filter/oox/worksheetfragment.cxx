@@ -643,7 +643,8 @@ void WorksheetFragment::importPageSetUpPr( const AttributeList& rAttribs )
 void WorksheetFragment::importDimension( const AttributeList& rAttribs )
 {
     ScRange aRange;
-    AddressConverter::convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
+    AddressConverter::convertToCellRangeUnchecked(aRange, rAttribs.getString(XML_ref, OUString()),
+                                                  getSheetIndex(), getScDocument());
     /*  OOXML stores the used area, if existing, or "A1" if the sheet is empty.
         In case of "A1", the dimension at the WorksheetHelper object will not
         be set. If the cell A1 exists, the used area will be updated while

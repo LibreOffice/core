@@ -57,7 +57,9 @@ Table::Table( const WorkbookHelper& rHelper ) :
 
 void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    AddressConverter::convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
+    AddressConverter::convertToCellRangeUnchecked(maModel.maRange,
+                                                  rAttribs.getString(XML_ref, OUString()), nSheet,
+                                                  getScDocument());
     maModel.maProgName    = rAttribs.getXString( XML_name, OUString() );
     maModel.maDisplayName = rAttribs.getXString( XML_displayName, OUString() );
     maModel.mnId          = rAttribs.getInteger( XML_id, -1 );

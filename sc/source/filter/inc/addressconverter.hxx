@@ -125,29 +125,6 @@ public:
     static bool parseOoxAddress2d(
         sal_Int32& ornColumn, sal_Int32& ornRow, std::string_view pStr );
 
-    /** Tries to parse the passed string for a 2d cell range in A1 notation.
-
-        This function accepts all strings that match the regular expression
-        "ADDR(:ADDR)?" (without quotes), where ADDR is a cell address accepted
-        by the parseOoxAddress2d() function of this class. It is up to the
-        caller to handle cell ranges outside of a specific valid range (e.g.
-        the entire spreadsheet).
-
-        @param ornStartColumn  (out-parameter) Returns the converted start column index.
-        @param ornStartRow  (out-parameter) returns the converted start row index.
-        @param ornEndColumn  (out-parameter) Returns the converted end column index.
-        @param ornEndRow  (out-parameter) returns the converted end row index.
-        @param rString  The string containing the cell address.
-        @param nStart  Start index of string part in rString to be parsed.
-
-        @return  true = Parsed string was valid, returned values can be used.
-     */
-    static bool         parseOoxRange2d(
-                            sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
-                            sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
-                            std::u16string_view aString,
-                            sal_Int32 nStart = 0 );
-
     /** Returns the biggest valid cell address in the own Calc document. */
     const ScAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
@@ -346,7 +323,7 @@ public:
     static bool         convertToCellRangeUnchecked(
                             ScRange& orRange,
                             std::u16string_view aString,
-                            sal_Int16 nSheet );
+                            sal_Int16 nSheet, const ScDocument& rDoc);
 
     /** Tries to convert the passed string to a cell range address.
 
