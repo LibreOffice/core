@@ -175,6 +175,7 @@
 #include <textcontentcontrol.hxx>
 #include <unocontentcontrol.hxx>
 #include <unoport.hxx>
+#include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1657,6 +1658,13 @@ rtl::Reference< SwXDocumentSettings > SwXTextDocument::createDocumentSettings()
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return new SwXDocumentSettings(this);
+}
+
+rtl::Reference< SwXTextDefaults > SwXTextDocument::createTextDefaults()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return new SwXTextDefaults(&GetDocOrThrow());
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)

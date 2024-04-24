@@ -106,6 +106,7 @@ class SwXReferenceMarks;
 class SwXLinkTargetSupplier;
 class SwXRedlines;
 class SwXDocumentSettings;
+class SwXTextDefaults;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -509,6 +510,7 @@ public:
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
     SW_DLLPUBLIC rtl::Reference<SwXDocumentSettings> createDocumentSettings();
+    SW_DLLPUBLIC rtl::Reference<SwXTextDefaults> createTextDefaults();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

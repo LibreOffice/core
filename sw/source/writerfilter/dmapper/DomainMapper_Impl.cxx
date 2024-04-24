@@ -133,6 +133,7 @@
 #include <unicode/regex.h>
 #include <unotxdoc.hxx>
 #include <SwXDocumentSettings.hxx>
+#include <SwXTextDefaults.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -9564,7 +9565,7 @@ void DomainMapper_Impl::ApplySettingsTable()
 
     try
     {
-        uno::Reference< beans::XPropertySet > xTextDefaults(m_xTextDocument->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY_THROW );
+        rtl::Reference< SwXTextDefaults > xTextDefaults(m_xTextDocument->createTextDefaults());
         sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
         xTextDefaults->setPropertyValue( getPropertyName( PROP_TAB_STOP_DISTANCE ), uno::Any(nDefTab) );
         if (m_pSettingsTable->GetLinkStyles())

@@ -92,6 +92,7 @@
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotxdoc.hxx>
+#include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -172,8 +173,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         // the intended font to provide best layout match.
         try
         {
-            uno::Reference< beans::XPropertySet > xDefProps(GetTextDocument()->createInstance("com.sun.star.text.Defaults"),
-                uno::UNO_QUERY_THROW);
+            rtl::Reference<SwXTextDefaults> xDefProps(GetTextDocument()->createTextDefaults());
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Calibri")));
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), css::uno::Any(double(11)));
         }

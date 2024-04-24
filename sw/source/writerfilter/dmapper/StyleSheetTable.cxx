@@ -53,6 +53,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <unotxdoc.hxx>
+#include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
 
@@ -273,7 +274,7 @@ struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
     rtl::Reference<SwXTextDocument>         m_xTextDocument;
-    uno::Reference< beans::XPropertySet>    m_xTextDefaults;
+    rtl::Reference<SwXTextDefaults>         m_xTextDefaults;
     std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
     std::map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
     std::map<OUString, OUString>            m_ClonedTOCStylesMap;
@@ -1720,9 +1721,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 
         if(!m_pImpl->m_xTextDefaults.is())
         {
-            m_pImpl->m_xTextDefaults.set(
-                m_pImpl->m_rDMapper.GetTextDocument()->createInstance("com.sun.star.text.Defaults"),
-                uno::UNO_QUERY_THROW );
+            m_pImpl->m_xTextDefaults = m_pImpl->m_rDMapper.GetTextDocument()->createTextDefaults();
         }
 
         // WARNING: these defaults only take effect IF there is a DocDefaults style section. Normally there is, but not always.

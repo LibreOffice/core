@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_precompiled_header,sw_writerfilter,sw/inc/pch/preco
 $(eval $(call gb_Library_set_include,sw_writerfilter,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/uibase/uno/ \
     -I$(SRCDIR)/sw/source/writerfilter/inc \
     -I$(SRCDIR)/sw/source/writerfilter \

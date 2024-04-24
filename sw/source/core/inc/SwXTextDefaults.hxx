@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -27,7 +28,7 @@
 class SwDoc;
 class SfxItemPropertySet;
 
-class SwXTextDefaults final :  public cppu::WeakImplHelper
+class SW_DLLPUBLIC SwXTextDefaults final :  public cppu::WeakImplHelper
                         <
                             css::beans::XPropertyState,
                             css::beans::XPropertySet,
