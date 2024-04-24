@@ -333,7 +333,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_rDMapper( rDMapper ),
         m_pOOXMLDocument(nullptr),
         m_xTextDocument( xModel ),
-        m_xTextFactory( xModel ),
         m_xComponentContext(std::move( xContext )),
         m_bForceGenericFields(officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bIsDecimalComma( false ),
@@ -526,9 +525,9 @@ uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
 
 uno::Reference< beans::XPropertySet > const & DomainMapper_Impl::GetDocumentSettings()
 {
-    if( !m_xDocumentSettings.is() && m_xTextFactory.is())
+    if( !m_xDocumentSettings.is() && m_xTextDocument.is())
     {
-        m_xDocumentSettings.set( m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
+        m_xDocumentSettings.set( m_xTextDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
     }
     return m_xDocumentSettings;
 }
@@ -875,7 +874,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                 {
                     // Yes, it was removed. Restore
                     uno::Reference<text::XTextContent> xBookmark(
-                        m_xTextFactory->createInstance("com.sun.star.text.Bookmark"),
+                        m_xTextDocument->createInstance("com.sun.star.text.Bookmark"),
                         uno::UNO_QUERY_THROW);
 
                     uno::Reference<container::XNamed> xBkmNamed(xBookmark,
@@ -1083,7 +1082,7 @@ void DomainMapper_Impl::PopSdt()
     }
 
     uno::Reference<text::XTextContent> xContentControl(
-        m_xTextFactory->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        m_xTextDocument->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     if (m_pSdtHelper->GetShowingPlcHdr())
     {
@@ -1581,7 +1580,7 @@ ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
         m_pListTable =
-            new ListsManager( m_rDMapper, m_xTextFactory );
+            new ListsManager( m_rDMapper, m_xTextDocument );
     return m_pListTable;
 }
 
@@ -3379,7 +3378,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 {
     try
     {
-        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xOLE( m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
         OUString aCLSID = pOLEHandler->getCLSID();
@@ -3496,7 +3495,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
 
     try
     {
-        uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xStarMath( m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
 
         xStarMathProperties->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
@@ -3675,7 +3674,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             // to the newly appended paragraph, which will be kept in the end.
             copyAllProps(xEndPara, xNewPara);
 
-            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextContent > xSection( m_xTextDocument->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
             xSection->attach(xCursor);
 
             // Remove the extra paragraph (last inside the section)
@@ -4002,8 +4001,8 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         pTopContext->Erase(PROP_CHAR_STYLE_NAME);
 
         uno::Reference< text::XText > xFootnoteText;
-        if (GetTextFactory().is())
-            xFootnoteText.set( GetTextFactory()->createInstance(
+        if (m_xTextDocument)
+            xFootnoteText.set( m_xTextDocument->createInstance(
             bIsFootnote ?
                 OUString( "com.sun.star.text.Footnote" ) : OUString( "com.sun.star.text.Endnote" )),
             uno::UNO_QUERY_THROW );
@@ -4249,9 +4248,9 @@ void DomainMapper_Impl::PushAnnotation()
     try
     {
         m_StreamStateStack.top().eSubstreamType = SubstreamType::Annotation;
-        if (!GetTextFactory().is())
+        if (!m_xTextDocument)
             return;
-        m_xAnnotationField.set( GetTextFactory()->createInstance( "com.sun.star.text.TextField.Annotation" ),
+        m_xAnnotationField.set( m_xTextDocument->createInstance( "com.sun.star.text.TextField.Annotation" ),
                                 uno::UNO_QUERY_THROW );
         uno::Reference< text::XText > xAnnotationText;
         m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
@@ -4719,7 +4718,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aAnchoredStack.push(AnchoredContext(xTextContent));
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
-            m_StreamStateStack.top().xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
+            m_StreamStateStack.top().xEmbedded.set(m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY_THROW);
             xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
             xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
@@ -5157,10 +5156,10 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
         return;
     }
 
-    if (GetTextFactory().is())
+    if (m_xTextDocument)
     {
         uno::Reference<text::XTextContent> xLineBreak(
-            GetTextFactory()->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+            m_xTextDocument->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
         xLineBreakProps->setPropertyValue("Clear", uno::Any(*m_StreamStateStack.top().oLineBreakClear));
         appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
@@ -5770,7 +5769,7 @@ void DomainMapper_Impl::PushTextBoxContent()
     try
     {
         uno::Reference<text::XTextFrame> xTBoxFrame(
-            m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+            m_xTextDocument->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
         uno::Reference<container::XNamed>(xTBoxFrame, uno::UNO_QUERY_THROW)
             ->setName("textbox" + OUString::number(m_xPendingTextBoxFrames.size() + 1));
         uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend,
@@ -5936,10 +5935,10 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
         //get the master
         xMaster.set(xFieldMasterAccess->getByName(sFieldMasterName), uno::UNO_QUERY_THROW);
     }
-    else if( m_xTextFactory.is() )
+    else if( m_xTextDocument )
     {
         //create the master
-        xMaster.set( m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
+        xMaster.set( m_xTextDocument->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
         if ( !bIsMergeField || sDatabaseDataSourceName.isEmpty() )
         {
             //set the master's name
@@ -6716,8 +6715,8 @@ void DomainMapper_Impl::handleAuthor
     {
         sServiceName += sFieldServiceName;
     }
-    if (m_xTextFactory.is())
-        xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+    if (m_xTextDocument)
+        xFieldInterface = m_xTextDocument->createInstance(sServiceName);
     uno::Reference<beans::XPropertySet> xFieldProperties( xFieldInterface, uno::UNO_QUERY_THROW);
     if( bIsCustomField )
     {
@@ -7045,7 +7044,7 @@ void DomainMapper_Impl::handleToc
 
     uno::Reference<beans::XPropertySet> xTOC;
 
-    if (m_xTextFactory.is() && ! m_aTextAppendStack.empty())
+    if (m_xTextDocument && ! m_aTextAppendStack.empty())
     {
         const auto& xTextAppend = GetTopTextAppend();
         if (aTocTitle.isEmpty() || bTableOfFigures)
@@ -7275,7 +7274,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::createSectionForRange(
             //the paragraph after this new section is already inserted
             if (stepLeft)
                 xCursor->goLeft(1, true);
-            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sObjectType), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextContent > xSection( m_xTextDocument->createInstance(sObjectType), uno::UNO_QUERY_THROW );
             try
             {
                 xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
@@ -7584,9 +7583,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                 TagLogger::getInstance().endElement();
 #endif
 
-                if (m_xTextFactory.is())
+                if (m_xTextDocument)
                 {
-                    xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+                    xFieldInterface = m_xTextDocument->createInstance(sServiceName);
                     xFieldProperties.set( xFieldInterface, uno::UNO_QUERY_THROW);
                 }
             }
@@ -7687,9 +7686,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     OUString aCommand = pContext->GetCommand().trim();
 
                     msfilter::util::EquationResult aResult(msfilter::util::ParseCombinedChars(aCommand));
-                    if (!aResult.sType.isEmpty() && m_xTextFactory.is())
+                    if (!aResult.sType.isEmpty() && m_xTextDocument)
                     {
-                        xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField." + aResult.sType);
+                        xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.TextField." + aResult.sType);
                         xFieldProperties =
                             uno::Reference< beans::XPropertySet >( xFieldInterface,
                                 uno::UNO_QUERY_THROW);
@@ -8067,9 +8066,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                                 getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::Any( nFieldPart ));
                     }
-                    else if( m_xTextFactory.is() )
+                    else if( m_xTextDocument )
                     {
-                        xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField.GetExpression");
+                        xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.TextField.GetExpression");
                         xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
                         xFieldProperties->setPropertyValue(
                             getPropertyName(PROP_CONTENT),
@@ -8224,7 +8223,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_XE:
                 {
-                    if( !m_xTextFactory.is() )
+                    if( !m_xTextDocument )
                         break;
 
                     // only UserIndexMark can handle user index types defined by \f
@@ -8235,7 +8234,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             ? "com.sun.star.text.UserIndexMark"
                             : OUString::createFromAscii(aIt->second.cFieldServiceName);
                     uno::Reference< beans::XPropertySet > xTC(
-                            m_xTextFactory->createInstance(sFieldServiceName),
+                            m_xTextDocument->createInstance(sFieldServiceName),
                                     uno::UNO_QUERY_THROW);
 
                     if (!sFirstParam.isEmpty())
@@ -8268,10 +8267,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                 case FIELD_CITATION:
                 {
-                    if( !m_xTextFactory.is() )
+                    if( !m_xTextDocument )
                         break;
 
-                    xFieldInterface = m_xTextFactory->createInstance(
+                    xFieldInterface = m_xTextDocument->createInstance(
                               OUString::createFromAscii(aIt->second.cFieldServiceName));
                     uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
                               uno::UNO_QUERY_THROW);
@@ -8293,11 +8292,11 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                 case FIELD_TC :
                 {
-                    if( !m_xTextFactory.is() )
+                    if( !m_xTextDocument )
                         break;
 
                     uno::Reference< beans::XPropertySet > xTC(
-                        m_xTextFactory->createInstance(
+                        m_xTextDocument->createInstance(
                             OUString::createFromAscii(aIt->second.cFieldServiceName)),
                             uno::UNO_QUERY_THROW);
                     if (!sFirstParam.isEmpty())
@@ -8348,9 +8347,9 @@ void DomainMapper_Impl::CloseFieldCommand()
              */
             OUString aCode( pContext->GetCommand().trim() );
             // Don't waste resources on wrapping shapes inside a fieldmark.
-            if (sType != "SHAPE" && m_xTextFactory.is() && !m_aTextAppendStack.empty())
+            if (sType != "SHAPE" && m_xTextDocument && !m_aTextAppendStack.empty())
             {
-                xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
+                xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.Fieldmark");
 
                 uno::Reference<text::XFormField> const xFormField(xFieldInterface, uno::UNO_QUERY);
                 InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
@@ -8911,9 +8910,9 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
     {
         if( aBookmarkIter != m_aBookmarkMap.end() )
         {
-            if (m_xTextFactory.is())
+            if (m_xTextDocument)
             {
-                uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( "com.sun.star.text.Bookmark" ), uno::UNO_QUERY_THROW );
+                uno::Reference< text::XTextContent > xBookmark( m_xTextDocument->createInstance( "com.sun.star.text.Bookmark" ), uno::UNO_QUERY_THROW );
                 uno::Reference< text::XTextCursor > xCursor;
                 uno::Reference< text::XText > xText = aBookmarkIter->second.m_xTextRange->getText();
                 if( aBookmarkIter->second.m_bIsStartOfText && !bIsAfterDummyPara)
@@ -9061,7 +9060,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
         }
         else
         {
-            if (m_xTextFactory.is())
+            if (m_xTextDocument)
             {
                 uno::Reference< text::XTextCursor > xCursor;
                 uno::Reference< text::XText > xText = aPermIter->second.m_xTextRange->getText();
@@ -9087,7 +9086,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
                 }
 
                 // create a new bookmark using specific bookmark name pattern for permissions
-                uno::Reference< text::XTextContent > xPerm(m_xTextFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW);
+                uno::Reference< text::XTextContent > xPerm(m_xTextDocument->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW);
                 uno::Reference< container::XNamed > xPermNamed(xPerm, uno::UNO_QUERY_THROW);
                 xPermNamed->setName(aPermIter->second.createBookmarkName());
 
@@ -9150,7 +9149,7 @@ GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport()
 {
     if(!m_pGraphicImport)
     {
-        m_pGraphicImport = new GraphicImport(m_xComponentContext, m_xTextFactory, m_rDMapper, m_eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages);
+        m_pGraphicImport = new GraphicImport(m_xComponentContext, m_xTextDocument, m_rDMapper, m_eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages);
     }
     return m_pGraphicImport;
 }
@@ -9559,12 +9558,12 @@ void DomainMapper_Impl::RemoveTopRedline( )
 
 void DomainMapper_Impl::ApplySettingsTable()
 {
-    if (!(m_pSettingsTable && m_xTextFactory.is()))
+    if (!(m_pSettingsTable && m_xTextDocument))
         return;
 
     try
     {
-        uno::Reference< beans::XPropertySet > xTextDefaults(m_xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xTextDefaults(m_xTextDocument->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY_THROW );
         sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
         xTextDefaults->setPropertyValue( getPropertyName( PROP_TAB_STOP_DISTANCE ), uno::Any(nDefTab) );
         if (m_pSettingsTable->GetLinkStyles())
@@ -9593,7 +9592,7 @@ void DomainMapper_Impl::ApplySettingsTable()
             m_xTextDocument->setViewData(xBox);
         }
 
-        uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xSettings(m_xTextDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
 
         if (m_pSettingsTable->GetDoNotExpandShiftReturn())
             xSettings->setPropertyValue( "DoNotJustifyLinesWithManualBreak", uno::Any(true) );

@@ -1721,7 +1721,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         if(!m_pImpl->m_xTextDefaults.is())
         {
             m_pImpl->m_xTextDefaults.set(
-                m_pImpl->m_rDMapper.GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
+                m_pImpl->m_rDMapper.GetTextDocument()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW );
         }
 

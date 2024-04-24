@@ -480,7 +480,6 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
 uno::Reference<beans::XPropertySet> SectionPropertyMap::GetPageStyle(DomainMapper_Impl& rDM_Impl)
 {
     const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
-    const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();
     uno::Reference<beans::XPropertySet> xReturnPageStyle;
     try
     {
@@ -490,7 +489,7 @@ uno::Reference<beans::XPropertySet> SectionPropertyMap::GetPageStyle(DomainMappe
 
             m_sPageStyleName = rDM_Impl.GetUnusedPageStyleName();
 
-            m_aPageStyle.set(xTextFactory->createInstance("com.sun.star.style.PageStyle"), uno::UNO_QUERY );
+            m_aPageStyle.set(rDM_Impl.GetTextDocument()->createInstance("com.sun.star.style.PageStyle"), uno::UNO_QUERY );
             xPageStyles->insertByName(m_sPageStyleName, uno::Any(m_aPageStyle));
         }
         else if (!m_aPageStyle.is() && xPageStyles.is())
@@ -1449,7 +1448,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
 {
     OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
     uno::Reference<beans::XPropertySet> evenOddStyle(
-        rDM_Impl.GetTextFactory()->createInstance("com.sun.star.style.PageStyle"),
+        rDM_Impl.GetTextDocument()->createInstance("com.sun.star.style.PageStyle"),
         uno::UNO_QUERY);
     // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
     uno::Reference<beans::XPropertySet> pageProperties(m_aPageStyle);

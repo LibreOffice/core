@@ -103,7 +103,7 @@ public:
 
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & GetTextFactory() const;
+    rtl::Reference<SwXTextDocument> const & GetTextDocument() const;
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );

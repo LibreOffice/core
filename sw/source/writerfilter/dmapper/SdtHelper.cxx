@@ -285,7 +285,7 @@ void SdtHelper::createDropDownControl()
     {
         // create field
         uno::Reference<css::text::XTextField> xControlModel(
-            m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.TextField.DropDown"),
+            m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.text.TextField.DropDown"),
             uno::UNO_QUERY);
 
         const auto it = std::find_if(
@@ -312,7 +312,7 @@ void SdtHelper::createDropDownControl()
     {
         // create control
         uno::Reference<awt::XControlModel> xControlModel(
-            m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.ComboBox"),
+            m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.form.component.ComboBox"),
             uno::UNO_QUERY);
 
         // set properties
@@ -374,7 +374,7 @@ void SdtHelper::createPlainTextControl()
         xCrsr->setString(*oData);
 
     uno::Reference<text::XTextContent> xContentControl(
-        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.ContentControl"),
+        m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.text.ContentControl"),
         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
 
@@ -474,7 +474,7 @@ void SdtHelper::createDateContentControl()
     }
 
     uno::Reference<uno::XInterface> xFieldInterface
-        = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.Fieldmark");
+        = m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.text.Fieldmark");
     uno::Reference<text::XFormField> xFormField(xFieldInterface, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xToInsert(xFormField, uno::UNO_QUERY);
     if (!(xFormField.is() && xToInsert.is()))
@@ -523,7 +523,7 @@ void SdtHelper::createControlShape(awt::Size aSize,
                                    const uno::Sequence<beans::PropertyValue>& rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(
-        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.drawing.ControlShape"),
+        m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.drawing.ControlShape"),
         uno::UNO_QUERY);
     xControlShape->setSize(aSize);
     xControlShape->setControl(xControlModel);

@@ -172,7 +172,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         // the intended font to provide best layout match.
         try
         {
-            uno::Reference< beans::XPropertySet > xDefProps(GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
+            uno::Reference< beans::XPropertySet > xDefProps(GetTextDocument()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW);
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Calibri")));
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), css::uno::Any(double(11)));
@@ -4859,9 +4859,9 @@ bool DomainMapper::IsRTFImport() const
     return m_pImpl->IsRTFImport();
 }
 
-uno::Reference < lang::XMultiServiceFactory > const & DomainMapper::GetTextFactory() const
+rtl::Reference<SwXTextDocument> const & DomainMapper::GetTextDocument() const
 {
-    return m_pImpl->GetTextFactory();
+    return m_pImpl->GetTextDocument();
 }
 
 uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()

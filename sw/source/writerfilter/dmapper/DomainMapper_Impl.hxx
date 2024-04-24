@@ -536,7 +536,6 @@ private:
     OUString m_aBaseUrl;
     rtl::Reference<SwXTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::container::XNameContainer> m_xPageStyles1;
     // cache next available number, expensive to repeatedly compute
@@ -714,10 +713,6 @@ public:
     css::uno::Reference<css::container::XNameContainer> const& GetParagraphStyles();
     OUString GetUnusedCharacterStyleName();
     css::uno::Reference<css::text::XText> const & GetBodyText();
-    const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
-    {
-        return m_xTextFactory;
-    }
     const rtl::Reference<SwXTextDocument>& GetTextDocument() const
     {
         return m_xTextDocument;
