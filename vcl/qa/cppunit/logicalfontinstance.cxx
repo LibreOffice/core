@@ -46,6 +46,7 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
 
     basegfx::B2DRectangle aBoundRect;
     const auto LATIN_SMALL_LETTER_B = 0x0062;
+    const auto SECTION_SIGN = 0x00A7; // UTR#50: Vertical_Orientation (vo) property value U
     pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(LATIN_SMALL_LETTER_B), aBoundRect,
                                      false);
 
@@ -53,6 +54,14 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-79.7, aBoundRect.getMinY(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(49.5, aBoundRect.getWidth(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(80.8, aBoundRect.getHeight(), 0.05);
+
+    // tdf#160436: test vertically oriented glyphs
+    pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(SECTION_SIGN), aBoundRect, true);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-79.7, aBoundRect.getMinX(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-55.0, aBoundRect.getMinY(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(88.9, aBoundRect.getWidth(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(48.8, aBoundRect.getHeight(), 0.05);
 
     font.SetOrientation(900_deg10);
     device->SetFont(font);
@@ -67,6 +76,14 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(80.8, aBoundRect.getWidth(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(49.5, aBoundRect.getHeight(), 0.05);
 
+    // tdf#160436: test vertically oriented glyphs
+    pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(SECTION_SIGN), aBoundRect, true);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-55.0, aBoundRect.getMinX(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-9.2, aBoundRect.getMinY(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(48.8, aBoundRect.getWidth(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(88.9, aBoundRect.getHeight(), 0.05);
+
     font.SetOrientation(450_deg10);
     device->SetFont(font);
 
@@ -79,6 +96,14 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-96.4, aBoundRect.getMinY(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(92.1, aBoundRect.getWidth(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(92.1, aBoundRect.getHeight(), 0.05);
+
+    // tdf#160436: test vertically oriented glyphs
+    pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(SECTION_SIGN), aBoundRect, true);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-95.3, aBoundRect.getMinX(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-45.4, aBoundRect.getMinY(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(97.4, aBoundRect.getWidth(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(97.4, aBoundRect.getHeight(), 0.05);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclLogicalFontInstanceTest);
