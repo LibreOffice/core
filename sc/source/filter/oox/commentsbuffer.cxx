@@ -116,7 +116,9 @@ void Comment::importComment( const AttributeList& rAttribs )
 {
     maModel.mnAuthorId = rAttribs.getInteger( XML_authorId, -1 );
     // cell range will be checked while inserting the comment into the document
-    AddressConverter::convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
+    AddressConverter::convertToCellRangeUnchecked(maModel.maRange,
+                                                  rAttribs.getString(XML_ref, OUString()),
+                                                  getSheetIndex(), getScDocument());
 }
 
 void Comment::importCommentPr( const AttributeList& rAttribs )

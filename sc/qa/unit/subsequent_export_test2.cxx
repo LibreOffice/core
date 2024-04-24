@@ -1263,15 +1263,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
                 "External");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest2, testProtectedRange)
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testEnhancedProtectionRangeShorthand)
 {
-    createScDoc("xlsx/protectedRange.xlsx");
+    createScDoc("xlsx/enhancedProtectionRangeShorthand.xlsx");
     save("Calc Office Open XML");
-
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
-    // entire row was being exported as shorthand 'B:B' which LO couldn't read back
-    assertXPath(pDoc, "//x:protectedRanges/x:protectedRange"_ostr, "sqref"_ostr, "B1:B1048576");
+    // the shorthand version was not recognized as a valid range on import
+    assertXPath(pDoc, "//x:protectedRanges/x:protectedRange[1]"_ostr, "sqref"_ostr, "C:C");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)

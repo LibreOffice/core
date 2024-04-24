@@ -674,7 +674,7 @@ SortCondition::SortCondition( const WorkbookHelper& rHelper ) :
 void SortCondition::importSortCondition( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
     OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
-    AddressConverter::convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
+    AddressConverter::convertToCellRangeUnchecked(maRange, aRangeStr, nSheet, getScDocument());
 
     maSortCustomList = rAttribs.getString( XML_customList, OUString() );
     mbDescending = rAttribs.getBool( XML_descending, false );
@@ -690,7 +690,7 @@ AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
 void AutoFilter::importAutoFilter( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
     OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
-    AddressConverter::convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
+    AddressConverter::convertToCellRangeUnchecked(maRange, aRangeStr, nSheet, getScDocument());
 }
 
 void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet )
@@ -703,7 +703,7 @@ void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet 
 void AutoFilter::importSortState( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
     OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
-    AddressConverter::convertToCellRangeUnchecked( maSortRange, aRangeStr, nSheet );
+    AddressConverter::convertToCellRangeUnchecked(maSortRange, aRangeStr, nSheet, getScDocument());
 }
 
 FilterColumn& AutoFilter::createFilterColumn()

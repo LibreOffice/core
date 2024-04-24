@@ -922,7 +922,9 @@ void PivotCache::importWorksheetSource( const AttributeList& rAttribs, const Rel
     // resolve URL of external document
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
     // store range address unchecked with sheet index 0, will be resolved/checked later
-    AddressConverter::convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
+    AddressConverter::convertToCellRangeUnchecked(maSheetSrcModel.maRange,
+                                                  rAttribs.getString(XML_ref, OUString()), 0,
+                                                  getScDocument());
 }
 
 void PivotCache::importPCDefinition( SequenceInputStream& rStrm )

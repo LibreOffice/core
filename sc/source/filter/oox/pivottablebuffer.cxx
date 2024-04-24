@@ -1038,7 +1038,9 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
 
 void PivotTable::importLocation( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    AddressConverter::convertToCellRangeUnchecked( maLocationModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
+    AddressConverter::convertToCellRangeUnchecked(maLocationModel.maRange,
+                                                  rAttribs.getString(XML_ref, OUString()), nSheet,
+                                                  getScDocument());
     maLocationModel.mnFirstHeaderRow = rAttribs.getInteger( XML_firstHeaderRow, 0 );
     maLocationModel.mnFirstDataRow   = rAttribs.getInteger( XML_firstDataRow, 0 );
     maLocationModel.mnFirstDataCol   = rAttribs.getInteger( XML_firstDataCol, 0 );
