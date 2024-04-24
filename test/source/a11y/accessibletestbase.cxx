@@ -121,10 +121,9 @@ test::AccessibleTestBase::getFirstRelationTargetOfType(
             const auto& rel = relset->getRelation(i);
             if (rel.RelationType == relationType)
             {
-                for (auto& target : rel.TargetSet)
+                for (const uno::Reference<accessibility::XAccessible>& targetAccessible :
+                     rel.TargetSet)
                 {
-                    uno::Reference<accessibility::XAccessible> targetAccessible(target,
-                                                                                uno::UNO_QUERY);
                     if (targetAccessible.is())
                         return targetAccessible->getAccessibleContext();
                 }
@@ -177,12 +176,11 @@ void test::AccessibleTestBase::dumpA11YTree(
                           << " (" << rel.RelationType << ")";
                 std::cout << " targets=[";
                 int j = 0;
-                for (auto& target : rel.TargetSet)
+                for (const uno::Reference<accessibility::XAccessible>& xTarget : rel.TargetSet)
                 {
                     if (j++ > 0)
                         std::cout << ", ";
-                    uno::Reference<accessibility::XAccessible> ta(target, uno::UNO_QUERY_THROW);
-                    std::cout << AccessibilityTools::debugString(ta);
+                    std::cout << AccessibilityTools::debugString(xTarget);
                 }
                 std::cout << "])";
             }

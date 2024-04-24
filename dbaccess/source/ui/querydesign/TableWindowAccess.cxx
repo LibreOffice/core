@@ -201,19 +201,19 @@ namespace dbaui
 
             auto aIter = pView->getTableConnections(m_pTable);
             auto aEnd = rConnectionList.end();
-            std::vector< Reference<XInterface> > aRelations;
+            std::vector< Reference<css::accessibility::XAccessible> > aRelations;
             aRelations.reserve(5); // just guessing
             // TODO JNA aIter comes from pView->getTableConnections(m_pTable)
             // and aEnd comes from pView->getTableConnections().end()
             for (; aIter != aEnd ; ++aIter )
             {
-                uno::Reference<uno::XInterface> xInterface(
+                uno::Reference<css::accessibility::XAccessible> xAccessible(
                     getParentChild(aIter - rConnectionList.begin()));
-                aRelations.push_back(xInterface);
+                aRelations.push_back(xAccessible);
             }
 
-            Sequence< Reference<XInterface> > aSeq(aRelations.data(), aRelations.size());
-            return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR,aSeq);
+            Sequence<Reference<css::accessibility::XAccessible>> aSeq(aRelations.data(), aRelations.size());
+            return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR, aSeq);
         }
         return AccessibleRelation();
     }

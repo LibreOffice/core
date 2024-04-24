@@ -571,10 +571,9 @@ atk_object_wrapper_relation_new(const accessibility::AccessibleRelation& rRelati
 
     std::vector<AtkObject*> aTargets;
 
-    for (const auto& rTarget : rRelation.TargetSet)
+    for (const uno::Reference<accessibility::XAccessible>& xTarget : rRelation.TargetSet)
     {
-        uno::Reference< accessibility::XAccessible > xAccessible( rTarget, uno::UNO_QUERY );
-        aTargets.push_back(atk_object_wrapper_ref(xAccessible));
+        aTargets.push_back(atk_object_wrapper_ref(xTarget));
     }
 
     AtkRelation *pRel =

@@ -464,8 +464,8 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         return;
     }
 
-    uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
-    uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
+    uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aTargetSet(nCount);
+    uno::Reference <css::accessibility::XAccessible>* pTargetSet = aTargetSet.getArray();
     sal_uInt32 nPos(0);
     for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
     {

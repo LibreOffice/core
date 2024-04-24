@@ -188,7 +188,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     {
         AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() )
-            return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
+            return relationMemberOf.TargetSet[0];
     }
     return Reference < XAccessible > ();
 }
@@ -318,8 +318,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
         AccessibleRelation const relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
-            for ( const auto& i : relationMemberOf.TargetSet ) {
-                Reference < XAccessible > rMateAccessible( i, UNO_QUERY );
+            for (Reference <XAccessible> rMateAccessible : relationMemberOf.TargetSet ) {
                 if ( rMateAccessible.is() ) {
                     Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
                     if ( rMateAccessibleContext.is() ) {
@@ -639,7 +638,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( [ title length ] == 0 ) {
             AccessibleRelation relationLabeledBy = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType::LABELED_BY );
             if ( relationLabeledBy.RelationType == AccessibleRelationType::LABELED_BY && relationLabeledBy.TargetSet.hasElements()  ) {
-                Reference < XAccessible > rxAccessible ( relationLabeledBy.TargetSet[0], UNO_QUERY );
+                Reference <XAccessible> rxAccessible = relationLabeledBy.TargetSet[0];
                 titleElement = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessible -> getAccessibleContext() ];
             }
         }
@@ -657,7 +656,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         id titleForElement = nil;
         AccessibleRelation relationLabelFor = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType::LABEL_FOR );
         if ( relationLabelFor.RelationType == AccessibleRelationType::LABEL_FOR && relationLabelFor.TargetSet.hasElements() ) {
-            Reference < XAccessible > rxAccessible ( relationLabelFor.TargetSet[0], UNO_QUERY );
+            Reference <XAccessible> rxAccessible = relationLabelFor.TargetSet[0];
             titleForElement = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessible -> getAccessibleContext() ];
         }
         return titleForElement;
@@ -1120,8 +1119,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                 if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType::SUB_WINDOW_OF )) {
                     // we have a valid relation to the parent element
                     AccessibleRelation const relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
-                    for ( const auto & i : relation.TargetSet ) {
-                        Reference < XAccessible > rxAccessible ( i, UNO_QUERY );
+                    for (Reference<XAccessible> rxAccessible : relation.TargetSet) {
                         if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
                             // hit test for children of parent
                             hitChild = hitTestRunner ( hitPoint, rxAccessible -> getAccessibleContext() );

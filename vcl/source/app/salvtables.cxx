@@ -6281,7 +6281,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
         vcl::Window* pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if (pLabeledBy && pLabeledBy != pWindow)
         {
-            css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
+            css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence{
                 pLabeledBy->GetAccessible()
             };
             pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
@@ -6290,7 +6290,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
         vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if (pMemberOf && pMemberOf != pWindow)
         {
-            css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
+            css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence{
                 pMemberOf->GetAccessible()
             };
             pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(

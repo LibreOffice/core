@@ -261,7 +261,7 @@ void lcl_appendRelation(QVector<QPair<QAccessibleInterface*, QAccessible::Relati
 
     for (sal_uInt32 i = 0; i < nTargetCount; i++)
     {
-        Reference<XAccessible> xAccessible(aRelation.TargetSet[i], uno::UNO_QUERY);
+        Reference<XAccessible> xAccessible = aRelation.TargetSet[i];
         relations->append(
             { QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xAccessible)),
               aQRelation });

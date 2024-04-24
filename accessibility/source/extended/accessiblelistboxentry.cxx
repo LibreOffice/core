@@ -463,7 +463,7 @@ namespace accessibility
         if ( xParent.is() )
         {
             rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-            Sequence< Reference< XInterface > > aSequence { xParent };
+            Sequence<Reference<XAccessible>> aSequence { xParent };
             pRelationSetHelper->AddRelation(
                 AccessibleRelation( AccessibleRelationType::NODE_CHILD_OF, aSequence ) );
             xRelSet = pRelationSetHelper;

@@ -717,12 +717,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         if(paccRelation == nullptr)
                             return S_FALSE;
 
-                        Sequence< Reference< XInterface > > xTargets = paccRelation->TargetSet;
-                        Reference<XInterface> pRAcc = xTargets[0];
+                        Sequence<Reference<XAccessible>> xTargets = paccRelation->TargetSet;
+                        Reference<XAccessible> xAcc = xTargets[0];
 
-                        XAccessible* pXAcc = static_cast<XAccessible*>(pRAcc.get());
-
-                        Reference<XAccessibleContext> xLabelContext = pXAcc->getAccessibleContext();
+                        Reference<XAccessibleContext> xLabelContext = xAcc->getAccessibleContext();
                         if (!xLabelContext.is())
                             return S_FALSE;
 
@@ -742,8 +740,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         if(paccRelation)
                         {
                             xTargets = paccRelation->TargetSet;
-                            pRAcc = xTargets[0];
-                            if (m_xAccessible.get() != static_cast<XAccessible*>(pRAcc.get()))
+                            xAcc = xTargets[0];
+                            if (m_xAccessible.get() != xAcc.get())
                                 return S_FALSE;
                         }
 
@@ -1794,8 +1792,8 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
         AccessibleRelation accRelation = pRrelationSet->getRelation(i);
         if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
         {
-            Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
-            return static_cast<XAccessible*>(xTargets[0].get());
+            Sequence<Reference<XAccessible>> xTargets = accRelation.TargetSet;
+            return xTargets[0].get();
         }
     }
     return nullptr;
@@ -1863,15 +1861,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
                 AccessibleRelation accRelation = pRrelationSet->getRelation(i);
                 if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
                 {
-                    Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
+                    Sequence<Reference<XAccessible>> xTargets = accRelation.TargetSet;
 
-                    Reference<XInterface> pRAcc = xTargets[0];
+                    Reference<XAccessible> xTarget = xTargets[0];
                     sal_Int64 nChildCount = pRParentContext->getAccessibleChildCount();
                     assert(nChildCount < std::numeric_limits<long>::max());
                     for (sal_Int64 j = 0; j< nChildCount; j++)
                     {
                         if( getTheParentOfMember(pRParentContext->getAccessibleChild(j).get())
-                            == static_cast<XAccessible*>(pRAcc.get()) &&
+                            == xTarget.get() &&
                             pRParentContext->getAccessibleChild(j)->getAccessibleContext()->getAccessibleRole() == AccessibleRole::RADIO_BUTTON)
                             number++;
                         if (pRParentContext->getAccessibleChild(j).get() == m_xAccessible.get())

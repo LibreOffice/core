@@ -369,8 +369,7 @@ void Atspi2TestTree::compareObjects(const uno::Reference<accessibility::XAccessi
         {
             for (auto j = decltype(nLOTargetsCount){ 0 }; j < nLOTargetsCount; j++)
             {
-                uno::Reference<accessibility::XAccessible> xLOTarget(xLORelation.TargetSet[j],
-                                                                     uno::UNO_QUERY_THROW);
+                uno::Reference<accessibility::XAccessible> xLOTarget = xLORelation.TargetSet[j];
                 compareObjects(xLOTarget, pAtspiRelation.getTarget(j), RecurseFlags::NONE);
             }
         }

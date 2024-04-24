@@ -80,7 +80,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
     if (nTargets == nullptr)
         return E_INVALIDARG;
 
-    Sequence< Reference< XInterface > > xTargets = relation.TargetSet;
+    Sequence<Reference<XAccessible>> xTargets = relation.TargetSet;
     *nTargets = xTargets.getLength();
     return S_OK;
 
@@ -102,12 +102,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_target(long targetIndex, IUn
     if (target == nullptr)
         return E_FAIL;
 
-    Sequence< Reference< XInterface > > xTargets = relation.TargetSet;
+    Sequence<Reference<XAccessible>> xTargets = relation.TargetSet;
     int nCount = xTargets.getLength();
     if( targetIndex >= nCount )
         return E_FAIL;
 
-    Reference<XAccessible> xRAcc(xTargets[targetIndex], UNO_QUERY);
+    Reference<XAccessible> xRAcc = xTargets[targetIndex];
     IAccessible* pRet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get());
     if (pRet)
     {
@@ -139,7 +139,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * t
     if (nTargets == nullptr)
         return E_INVALIDARG;
 
-    Sequence< Reference< XInterface > > xTargets = relation.TargetSet;
+    Sequence<Reference<XAccessible>> xTargets = relation.TargetSet;
     int nCount = xTargets.getLength();
 
     *target = static_cast<IUnknown*>(::CoTaskMemAlloc(nCount*sizeof(IUnknown)));

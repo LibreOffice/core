@@ -133,7 +133,7 @@ namespace dbaui
         if( nIndex < 0 || nIndex >= getRelationCount() )
             throw IndexOutOfBoundsException();
 
-        Sequence< Reference<XInterface> > aSeq;
+        Sequence<Reference<XAccessible>> aSeq;
         if( m_pLine )
         {
             aSeq = { m_pLine->GetSourceWin()->GetAccessible(),

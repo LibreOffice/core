@@ -211,7 +211,7 @@ public:
 
     void AddRelation (
         const sal_Int16 nRelationType,
-        const Reference<XInterface>& rxObject);
+        const Reference<XAccessible>& rxObject);
 
     //----- XAccessibleRelationSet --------------------------------------------
 
@@ -1194,7 +1194,7 @@ AccessibleRelationSet::AccessibleRelationSet()
 
 void AccessibleRelationSet::AddRelation (
     const sal_Int16 nRelationType,
-    const Reference<XInterface>& rxObject)
+    const Reference<XAccessible>& rxObject)
 {
     maRelations.emplace_back();
     maRelations.back().RelationType = nRelationType;

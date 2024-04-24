@@ -81,7 +81,7 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup());
     if (!aGroup.empty())
     {
-        std::vector< Reference< XInterface > > aVec;
+        std::vector<Reference<css::accessibility::XAccessible>> aVec;
         aVec.reserve(aGroup.size());
         std::transform(aGroup.begin(), aGroup.end(), std::back_inserter(aVec),
             [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });

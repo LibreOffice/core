@@ -46,7 +46,7 @@ struct AccessibleRelation
         INVALID.  The set must not contain references to one object more
         than once.</p>
     */
-    sequence< ::com::sun::star::uno::XInterface> TargetSet;
+    sequence<::com::sun::star::accessibility::XAccessible> TargetSet;
 };
 
 }; }; }; };
