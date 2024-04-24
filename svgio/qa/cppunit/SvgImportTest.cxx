@@ -1585,20 +1585,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160773)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160773.svg");
 
-    const bool hasMask = countXPathNodes(pDocument, "/primitive2D/transform/mask"_ostr) > 0;
-    const OString aXPath = hasMask ? "/primitive2D/transform/mask/transform"_ostr
-                                   : "/primitive2D/transform/transform"_ostr;
-
     // tdf#160773 Check there is a rectangle
-    assertXPath(pDocument, aXPath + "/polypolygoncolor", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/polypolygoncolor"_ostr, "color"_ostr, "#ff0000");
 
     // tdf#159661 Check there is text in the right position
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, 1);
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, "x"_ostr, "0");
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, "y"_ostr, "1");
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, "height"_ostr, "0");
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, "width"_ostr, "0");
-    assertXPath(pDocument, aXPath + "/textsimpleportion"_ostr, "text"_ostr, "Red");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "x"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "y"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "height"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "width"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/textsimpleportion"_ostr, "text"_ostr, "Red");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
