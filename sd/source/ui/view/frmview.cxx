@@ -289,12 +289,14 @@ void FrameView::Update(SdOptions const * pOptions)
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
         SetDragStripes( officecfg::Office::Impress::Layout::Display::Guide::get() );
         SetNoDragXorPolys ( !officecfg::Office::Impress::Layout::Display::Contour::get() );
+        SetPlusHandlesAlwaysVisible( officecfg::Office::Impress::Layout::Display::Bezier::get() );
     }
     else
     {
         mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
         SetDragStripes( officecfg::Office::Draw::Layout::Display::Guide::get() );
         SetNoDragXorPolys ( !officecfg::Office::Draw::Layout::Display::Contour::get() );
+        SetPlusHandlesAlwaysVisible( officecfg::Office::Draw::Layout::Display::Bezier::get() );
     }
 
     SetGridVisible( pOptions->IsGridVisible() );
@@ -305,7 +307,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetOFrmSnap( pOptions->IsSnapFrame() );
     SetOPntSnap( pOptions->IsSnapPoints() );
     SetHlplVisible( pOptions->IsHelplines() );
-    SetPlusHandlesAlwaysVisible( pOptions->IsHandlesBezier() );
     SetSnapMagneticPixel( pOptions->GetSnapArea() );
     SetMarkedHitMovesAlways( pOptions->IsMarkedHitMovesAlways() );
     SetMoveOnlyDragging( pOptions->IsMoveOnlyDragging() );
