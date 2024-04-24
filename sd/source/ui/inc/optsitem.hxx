@@ -105,63 +105,6 @@ public:
     static bool             isMetricSystem();
 };
 
-class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
-{
-private:
-
-    bool    bRuler; // Layout/Display/Ruler
-    bool    bMoveOutline;   // Layout/Display/Contour
-    bool    bDragStripes;   // Layout/Display/Guide
-    bool    bHandlesBezier; // Layout/Display/Bezier
-    bool    bHelplines; // Layout/Display/Helpline
-    sal_uInt16  nMetric;                    // Layout/Other/MeasureUnit
-    sal_uInt16  nDefTab;                    // Layout/Other/TabStop
-
-protected:
-
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
-
-public:
-            SdOptionsLayout(bool bImpress, bool bUseConfig);
-
-    bool    operator==( const SdOptionsLayout& rOpt ) const;
-
-    bool    IsRulerVisible() const { Init(); return bRuler; }
-    bool    IsMoveOutline() const { Init(); return bMoveOutline; }
-    bool    IsDragStripes() const { Init(); return bDragStripes; }
-    bool    IsHandlesBezier() const { Init(); return bHandlesBezier; }
-    bool    IsHelplines() const { Init(); return bHelplines; }
-    sal_uInt16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? static_cast<sal_uInt16>(SfxModule::GetCurrentFieldUnit()) : nMetric ); }
-    sal_uInt16  GetDefTab() const { Init(); return nDefTab; }
-
-    void    SetRulerVisible( bool bOn ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
-    void    SetMoveOutline( bool bOn ) { if( bMoveOutline != bOn ) { OptionsChanged(); bMoveOutline = bOn; } }
-    void    SetDragStripes( bool bOn ) { if( bDragStripes != bOn ) { OptionsChanged(); bDragStripes = bOn; } }
-    void    SetHandlesBezier( bool bOn ) { if( bHandlesBezier != bOn ) { OptionsChanged(); bHandlesBezier = bOn; } }
-    void    SetHelplines( bool bOn ) { if( bHelplines != bOn ) { OptionsChanged(); bHelplines = bOn; } }
-    void    SetMetric( sal_uInt16 nInMetric ) { if( nMetric != nInMetric ) { OptionsChanged(); nMetric = nInMetric; } }
-    void    SetDefTab( sal_uInt16 nTab ) { if( nDefTab != nTab ) { OptionsChanged(); nDefTab = nTab; } }
-};
-
-class SD_DLLPUBLIC SdOptionsLayoutItem final : public SfxPoolItem
-{
-public:
-
-                            explicit SdOptionsLayoutItem();
-                            SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
-
-    virtual SdOptionsLayoutItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    void                    SetOptions( SdOptions* pOpts ) const;
-
-    SdOptionsLayout&        GetOptionsLayout() { return maOptionsLayout; }
-private:
-    SdOptionsLayout maOptionsLayout;
-};
-
 class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
@@ -543,7 +486,7 @@ private:
     SdOptionsPrint  maOptionsPrint;
 };
 
-class SdOptions final : public SdOptionsLayout,
+class SdOptions final :
                   public SdOptionsMisc, public SdOptionsSnap,
                   public SdOptionsZoom, public SdOptionsGrid,
                   public SdOptionsPrint

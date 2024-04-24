@@ -2724,11 +2724,6 @@ SdOptionsLayout::ReadData(com::sun::star::uno::Any const*)
 SdOptionsLayout::SdOptionsLayout(bool, bool)
 SdOptionsLayout::WriteData(com::sun::star::uno::Any*) const
 SdOptionsLayout::operator==(SdOptionsLayout const&) const
-SdOptionsLayoutItem::Clone(SfxItemPool*) const
-SdOptionsLayoutItem::SdOptionsLayoutItem()
-SdOptionsLayoutItem::SdOptionsLayoutItem(SdOptions const*, sd::FrameView const*)
-SdOptionsLayoutItem::SetOptions(SdOptions*) const
-SdOptionsLayoutItem::operator==(SfxPoolItem const&) const
 SdOptionsMisc::GetDisplay() const
 SdOptionsMisc::GetDragThresholdPixels() const
 SdOptionsMisc::GetPropNameArray(char const**&, unsigned long&) const

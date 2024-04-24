@@ -462,9 +462,6 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
             SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
             ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>  aRet(rPool);
 
-    // TP_OPTIONS_LAYOUT:
-    aRet.Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
-
     sal_uInt16 nDefTab = 0;
     SvtSysLocale aSysLocale;
 
@@ -590,12 +587,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     if( const SdOptionsGridItem* pGridItem = static_cast<const SdOptionsGridItem*>(rSet.GetItemIfSet( SID_ATTR_GRID_OPTIONS, false )) )
     {
         pGridItem->SetOptions( pOptions );
-    }
-
-    // Layout
-    if( const SdOptionsLayoutItem* pLayoutItem = rSet.GetItemIfSet( ATTR_OPTIONS_LAYOUT, false ))
-    {
-        pLayoutItem->SetOptions( pOptions );
     }
 
     // Metric

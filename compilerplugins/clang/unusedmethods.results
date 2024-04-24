@@ -1235,8 +1235,6 @@ include/svl/typedwhich.hxx:31
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScViewObjectModeItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
-     TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SdOptionsLayoutItem, derived_type>, int>::type)
-include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SdOptionsMiscItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SdOptionsPrintItem, derived_type>, int>::type)

@@ -179,165 +179,6 @@ bool SdOptionsGeneric::isMetricSystem()
 
 /*************************************************************************
 |*
-|* SdOptionsLayout
-|*
-\************************************************************************/
-
-SdOptionsLayout::SdOptionsLayout(bool bImpress, bool bUseConfig) :
-    SdOptionsGeneric( bImpress, bUseConfig ?
-                      ( bImpress ?
-                        OUString( "Office.Impress/Layout" ) :
-                        OUString( "Office.Draw/Layout" ) ) :
-                      OUString() ),
-    bRuler( true ),
-    bMoveOutline( true ),
-    bDragStripes( false ),
-    bHandlesBezier( false ),
-    bHelplines( true ),
-    nMetric(static_cast<sal_uInt16>(isMetricSystem() ? FieldUnit::CM : FieldUnit::INCH)),
-    nDefTab( 1250 )
-{
-    EnableModify( true );
-}
-
-bool SdOptionsLayout::operator==( const SdOptionsLayout& rOpt ) const
-{
-    return( IsRulerVisible() == rOpt.IsRulerVisible() &&
-            IsMoveOutline() == rOpt.IsMoveOutline() &&
-            IsDragStripes() == rOpt.IsDragStripes() &&
-            IsHandlesBezier() == rOpt.IsHandlesBezier() &&
-            IsHelplines() == rOpt.IsHelplines() &&
-            GetMetric() == rOpt.GetMetric() &&
-            GetDefTab() == rOpt.GetDefTab() );
-}
-
-void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
-{
-    if( isMetricSystem() )
-    {
-        static const char* aPropNamesMetric[] =
-        {
-            "Display/Ruler",
-            "Display/Bezier",
-            "Display/Contour",
-            "Display/Guide",
-            "Display/Helpline",
-            "Other/MeasureUnit/Metric",
-            "Other/TabStop/Metric"
-        };
-        ppNames = aPropNamesMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
-    }
-    else
-    {
-        static const char* aPropNamesNonMetric[] =
-        {
-            "Display/Ruler",
-            "Display/Bezier",
-            "Display/Contour",
-            "Display/Guide",
-            "Display/Helpline",
-            "Other/MeasureUnit/NonMetric",
-            "Other/TabStop/NonMetric"
-        };
-        ppNames = aPropNamesNonMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
-    }
-}
-
-bool SdOptionsLayout::ReadData( const Any* pValues )
-{
-    if( pValues[0].hasValue() ) SetRulerVisible( *o3tl::doAccess<bool>(pValues[ 0 ]) );
-    if( pValues[1].hasValue() ) SetHandlesBezier( *o3tl::doAccess<bool>(pValues[ 1 ]) );
-    if( pValues[2].hasValue() ) SetMoveOutline( *o3tl::doAccess<bool>(pValues[ 2 ]) );
-    if( pValues[3].hasValue() ) SetDragStripes( *o3tl::doAccess<bool>(pValues[ 3 ]) );
-    if( pValues[4].hasValue() ) SetHelplines( *o3tl::doAccess<bool>(pValues[ 4 ]) );
-    if( pValues[5].hasValue() ) SetMetric( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[ 5 ])) );
-    if( pValues[6].hasValue() ) SetDefTab( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[ 6 ])) );
-
-    return true;
-}
-
-bool SdOptionsLayout::WriteData( Any* pValues ) const
-{
-    pValues[ 0 ] <<= IsRulerVisible();
-    pValues[ 1 ] <<= IsHandlesBezier();
-    pValues[ 2 ] <<= IsMoveOutline();
-    pValues[ 3 ] <<= IsDragStripes();
-    pValues[ 4 ] <<= IsHelplines();
-    pValues[ 5 ] <<= static_cast<sal_Int32>(GetMetric());
-    pValues[ 6 ] <<= static_cast<sal_Int32>(GetDefTab());
-
-    return true;
-}
-
-/*************************************************************************
-|*
-|* SdOptionsLayoutItem
-|*
-\************************************************************************/
-
-SdOptionsLayoutItem::SdOptionsLayoutItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
-,   maOptionsLayout ( false, false )
-{
-}
-
-SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
-,   maOptionsLayout ( false, false )
-{
-    if( pOpts )
-    {
-        maOptionsLayout.SetMetric( pOpts->GetMetric() );
-        maOptionsLayout.SetDefTab( pOpts->GetDefTab() );
-    }
-
-    if( pView )
-    {
-        maOptionsLayout.SetRulerVisible( pView->HasRuler() );
-        maOptionsLayout.SetMoveOutline( !pView->IsNoDragXorPolys() );
-        maOptionsLayout.SetDragStripes( pView->IsDragStripes() );
-        maOptionsLayout.SetHandlesBezier( pView->IsPlusHandlesAlwaysVisible() );
-        maOptionsLayout.SetHelplines( pView->IsHlplVisible() );
-    }
-    else if( pOpts )
-    {
-        maOptionsLayout.SetRulerVisible( pOpts->IsRulerVisible() );
-        maOptionsLayout.SetMoveOutline( pOpts->IsMoveOutline() );
-        maOptionsLayout.SetDragStripes( pOpts->IsDragStripes() );
-        maOptionsLayout.SetHandlesBezier( pOpts->IsHandlesBezier() );
-        maOptionsLayout.SetHelplines( pOpts->IsHelplines() );
-    }
-}
-
-SdOptionsLayoutItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
-{
-    return new SdOptionsLayoutItem( *this );
-}
-
-bool SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-    return maOptionsLayout == static_cast<const SdOptionsLayoutItem&>(rAttr).maOptionsLayout;
-}
-
-void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
-{
-    if( pOpts )
-    {
-        pOpts->SetRulerVisible( maOptionsLayout.IsRulerVisible() );
-        pOpts->SetMoveOutline( maOptionsLayout.IsMoveOutline() );
-        pOpts->SetDragStripes( maOptionsLayout.IsDragStripes() );
-        pOpts->SetHandlesBezier( maOptionsLayout.IsHandlesBezier() );
-        pOpts->SetHelplines( maOptionsLayout.IsHelplines() );
-        pOpts->SetMetric( maOptionsLayout.GetMetric() );
-        pOpts->SetDefTab( maOptionsLayout.GetDefTab() );
-    }
-}
-
-/*************************************************************************
-|*
 |* SdOptionsMisc
 |*
 \************************************************************************/
@@ -1293,7 +1134,6 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 \************************************************************************/
 
 SdOptions::SdOptions(bool bImpress) :
-    SdOptionsLayout( bImpress, true ),
     SdOptionsMisc( bImpress, true ),
     SdOptionsSnap( bImpress, true ),
     SdOptionsZoom( bImpress ),
@@ -1308,7 +1148,6 @@ SdOptions::~SdOptions()
 
 void SdOptions::StoreConfig()
 {
-    SdOptionsLayout::Store();
     SdOptionsMisc::Store();
     SdOptionsSnap::Store();
     SdOptionsZoom::Store();
