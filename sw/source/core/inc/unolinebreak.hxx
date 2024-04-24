@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,7 +31,7 @@ class SwDoc;
 class SwFormatLineBreak;
 
 /// UNO API wrapper around an SwFormatLineBreak, exposed as the com.sun.star.text.LineBreak service.
-class SwXLineBreak final
+class SW_DLLPUBLIC SwXLineBreak final
     : public cppu::WeakImplHelper<css::beans::XPropertySet, css::lang::XServiceInfo,
                                   css::text::XTextContent>
 {

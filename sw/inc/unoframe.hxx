@@ -99,7 +99,7 @@ public:
 
     //XNamed
     virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName(const OUString& Name_) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setName(const OUString& Name_) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

@@ -137,6 +137,8 @@
 #include <unobookmark.hxx>
 #include <unosection.hxx>
 #include <unofield.hxx>
+#include <unolinebreak.hxx>
+#include <unoframe.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -5154,10 +5156,8 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
 
     if (m_xTextDocument)
     {
-        uno::Reference<text::XTextContent> xLineBreak(
-            m_xTextDocument->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
-        xLineBreakProps->setPropertyValue("Clear", uno::Any(*m_StreamStateStack.top().oLineBreakClear));
+        rtl::Reference<SwXLineBreak> xLineBreak = m_xTextDocument->createLineBreak();
+        xLineBreak->setPropertyValue("Clear", uno::Any(*m_StreamStateStack.top().oLineBreakClear));
         appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
     }
     m_StreamStateStack.top().oLineBreakClear.reset();
@@ -5764,16 +5764,14 @@ void DomainMapper_Impl::PushTextBoxContent()
 
     try
     {
-        uno::Reference<text::XTextFrame> xTBoxFrame(
-            m_xTextDocument->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
-        uno::Reference<container::XNamed>(xTBoxFrame, uno::UNO_QUERY_THROW)
-            ->setName("textbox" + OUString::number(m_xPendingTextBoxFrames.size() + 1));
+        rtl::Reference<SwXTextFrame> xTBoxFrame(m_xTextDocument->createTextFrame());
+        xTBoxFrame->setName("textbox" + OUString::number(m_xPendingTextBoxFrames.size() + 1));
         uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend,
             uno::UNO_QUERY_THROW)
-            ->appendTextContent(xTBoxFrame, beans::PropertyValues());
+            ->appendTextContent(static_cast<SwXFrame*>(xTBoxFrame.get()), beans::PropertyValues());
         m_xPendingTextBoxFrames.push(xTBoxFrame);
 
-        m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xTBoxFrame, uno::UNO_QUERY_THROW), {}));
+        m_aTextAppendStack.push(TextAppendContext(xTBoxFrame, {}));
         m_StreamStateStack.top().bIsInTextBox = true;
 
         appendTableManager();

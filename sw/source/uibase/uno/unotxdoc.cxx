@@ -178,6 +178,7 @@
 #include <unobookmark.hxx>
 #include <unosection.hxx>
 #include <unofield.hxx>
+#include <unoframe.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1696,6 +1697,20 @@ rtl::Reference< SwXTextField > SwXTextDocument::createFieldAnnotation()
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return SwXTextField::CreateXTextField(&GetDocOrThrow(), nullptr, SwServiceType::FieldTypeAnnotation);
+}
+
+rtl::Reference< SwXLineBreak > SwXTextDocument::createLineBreak()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXLineBreak::CreateXLineBreak(nullptr);
+}
+
+rtl::Reference< SwXTextFrame > SwXTextDocument::createTextFrame()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXTextFrame::CreateXTextFrame(GetDocOrThrow(), nullptr);
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
