@@ -216,20 +216,22 @@ catch (const sal::systools::ComError& e)
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     assert(dynamic_cast<const SkiaWinFontInstance*>(&rLayout.GetFont()));
-    const SkiaWinFontInstance* pWinFont
-        = static_cast<const SkiaWinFontInstance*>(&rLayout.GetFont());
-    const HFONT hLayoutFont = pWinFont->GetHFONT();
-    double hScale = pWinFont->getHScale();
+    const SkiaWinFontInstance& rWinFont
+        = static_cast<const SkiaWinFontInstance&>(rLayout.GetFont());
+    const vcl::font::FontSelectPattern& rFSD = rWinFont.GetFontSelectPattern();
+    if (rFSD.mnHeight == 0)
+        return false;
+    const HFONT hLayoutFont = rWinFont.GetHFONT();
     LOGFONTW logFont;
     if (GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
     {
         assert(false);
         return false;
     }
-    sk_sp<SkTypeface> typeface = pWinFont->GetSkiaTypeface();
+    sk_sp<SkTypeface> typeface = rWinFont.GetSkiaTypeface();
     if (!typeface)
     {
-        typeface = createDirectWriteTypeface(pWinFont);
+        typeface = createDirectWriteTypeface(&rWinFont);
         bool dwrite = true;
         if (!typeface) // fall back to GDI text rendering
         {
@@ -250,7 +252,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
                 return false;
         }
         // Cache the typeface.
-        const_cast<SkiaWinFontInstance*>(pWinFont)->SetSkiaTypeface(typeface, dwrite);
+        const_cast<SkiaWinFontInstance&>(rWinFont).SetSkiaTypeface(typeface, dwrite);
     }
 
     SkFont font(typeface);
@@ -267,21 +269,14 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : ePreferredAliasing);
 
-    const vcl::font::FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
-    int nHeight = rFSD.mnHeight;
-    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
-    if (nWidth == 0 || nHeight == 0)
-        return false;
+    double nHeight = rFSD.mnHeight;
+    double nWidth = rFSD.mnWidth ? rFSD.mnWidth * rWinFont.GetAverageWidthFactor() : nHeight;
     font.setSize(nHeight);
-    font.setScaleX(hScale);
+    font.setScaleX(nWidth / nHeight);
 
-    // Unlike with Freetype-based font handling, use height even in vertical mode,
-    // additionally multiply it by horizontal scale to get the proper
-    // size and then scale the width back, otherwise the height would
-    // not be correct. I don't know why this is inconsistent.
     SkFont verticalFont(font);
-    verticalFont.setSize(nHeight * hScale);
-    verticalFont.setScaleX(1.0 / hScale);
+    verticalFont.setSize(nWidth);
+    verticalFont.setScaleX(nHeight / nWidth);
 
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
