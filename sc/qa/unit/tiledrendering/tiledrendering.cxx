@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+    CPPUNIT_ASSERT_EQUAL("9"_ostr, aResult);
 
     // TODO check that we really selected what we wanted here
 
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+    CPPUNIT_ASSERT_EQUAL("1"_ostr, aResult);
 
     // TODO check that we really selected what we wanted here
 
@@ -3926,6 +3926,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
 
     // Make sure we get A1+A3 instead of an error:
     CPPUNIT_ASSERT(xTransferable.is());
+
+    // Also make sure that just 2 cells is classified as a simple selection:
+    uno::Reference<datatransfer::XTransferable2> xTransferable2(xTransferable, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTransferable2.is());
+    // Without the fix, the text selection was complex.
+    CPPUNIT_ASSERT(!xTransferable2->isComplex());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
