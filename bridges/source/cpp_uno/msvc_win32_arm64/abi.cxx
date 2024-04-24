@@ -144,13 +144,13 @@ ReturnKind getReturnKind(typelib_TypeDescription const* type)
             switch (getStructKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(type)))
             {
                 case STRUCT_KIND_FLOAT:
-                    return RETURN_KIND_HFA_FLOAT;
+                    return RETURN_KIND_INDIRECT;
                 case STRUCT_KIND_DOUBLE:
-                    return RETURN_KIND_HFA_DOUBLE;
+                    return RETURN_KIND_INDIRECT;
                 case STRUCT_KIND_DTOR:
                     return RETURN_KIND_INDIRECT;
                 default:
-                    return RETURN_KIND_REG;
+                    return RETURN_KIND_INDIRECT;
             }
     }
 }

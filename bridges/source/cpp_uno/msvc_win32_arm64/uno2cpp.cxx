@@ -45,8 +45,8 @@
 
 namespace
 {
-extern "C" void callVirtualFunction(sal_uInt64* stack, sal_uInt64* frame, sal_uInt64 function,
-                                    void* ret);
+extern "C" void callVirtualFunction(sal_uInt64* regs, sal_uInt64* stack, sal_Int32 sp,
+                                    sal_uInt64 function);
 
 void pushArgument(sal_uInt64 value, sal_uInt64* stack, sal_Int32& sp, sal_uInt64* regs,
                   sal_Int32& nregs)
@@ -68,18 +68,22 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* pProxy,
 
     sal_uInt64** thisPtr = reinterpret_cast<sal_uInt64**>(pProxy->getCppI()) + slot.offset;
 
-    sal_uInt64* gpr = static_cast<sal_uInt64*>(alloca((count + 16) * sizeof(sal_uInt64) + 32));
-    sal_uInt64* fpr = &gpr[8];
-    sal_uInt64* stack = &gpr[16];
-    sal_uInt64* frame = &gpr[16 + count];
     void** cppArgs = static_cast<void**>(alloca(count * sizeof(void*)));
     typelib_TypeDescription** ptds
         = static_cast<typelib_TypeDescription**>(alloca(count * sizeof(typelib_TypeDescription*)));
+
+    sal_uInt64* gpr = static_cast<sal_uInt64*>(alloca(16 * sizeof(sal_uInt64)));
+    sal_uInt64* fpr = &gpr[8];
+    sal_uInt64* stack = static_cast<sal_uInt64*>(alloca(count * sizeof(sal_uInt64)));
 
     sal_Int32 sp = 0;
     sal_Int32 nGPR = 0;
     sal_Int32 nFPR = 0;
     gpr[nGPR++] = reinterpret_cast<sal_uInt64>(thisPtr);
+    if (eRetKind == RETURN_KIND_INDIRECT)
+    {
+        gpr[nGPR++] = reinterpret_cast<sal_uInt64>(ret);
+    }
 
     for (sal_Int32 i = 0; i != count; ++i)
     {
@@ -156,7 +160,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* pProxy,
 
     __try
     {
-        callVirtualFunction(stack, frame, (*thisPtr)[slot.index], ret);
+        callVirtualFunction(gpr, stack, sp, (*thisPtr)[slot.index]);
     }
     __except (msvc_filterCppException(GetExceptionInformation(), *exception,
                                       pProxy->getBridge()->getCpp2Uno()))

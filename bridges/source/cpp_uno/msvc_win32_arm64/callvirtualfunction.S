@@ -19,53 +19,63 @@
 /*
    extern void callVirtualFunction
 
-   x0 stack
-   x1 frame
-   x2 function
-   x3 return
+   x0 regs
+   x1 stack
+   x2 stack count
+   x3 function
 */
 
-    NESTED_ENTRY callVirtualFunction_fake
+    NESTED_ENTRY callVirtualFunction
 
-        // for unwind information, Windows has to store fp and lr
-        PROLOG_SAVE_REG_PAIR	x29, x30, #-32!
+        sub   sp, sp, #32
+        stp   fp, lr, [sp]
+        mov   fp, sp
 
-        ALTERNATE_ENTRY callVirtualFunction
+        // Stack space for arguments >= 8 (16-byte aligned):
+        lsl   x2, x2, #3
+        sub   x9, sp, x2
+        bfc   x9, #0, #4
+        mov   sp, x9
 
-        // use a stack frame allocated by our caller
-        stp   x29, x30, [x1]
-        mov   x29, x1
-        mov   sp, x0
+        // Copy arguments >= 8:
+        cbz   x2, done
+loop
+        sub   x2, x2, #8
+        ldr   x9, [x1, x2]
+        str   x9, [sp, x2]
+        cbnz  x2, loop
+done
 
-        mov   x9, x2                  // function
-        mov   x8, x3                  // complex return
-        str   x3, [x29, #16]          // save rvalue
+        mov   x9, x3                  // function
+
+        mov   x10, x0
+        str   x10, [fp, #16]
 
         // load the core argument passing registers
-        ldp   x0, x1, [sp, #-128]
-        ldp   x2, x3, [sp, #-112]
-        ldp   x4, x5, [sp, #-96]
-        ldp   x6, x7, [sp, #-80]
+        ldp   x0, x1, [x10, #0]
+        ldp   x2, x3, [x10, #16]
+        ldp   x4, x5, [x10, #32]
+        ldp   x6, x7, [x10, #48]
 
-        ldp   d0, d1, [sp, #-64]
-        ldp   d2, d3, [sp, #-48]
-        ldp   d4, d5, [sp, #-32]
-        ldp   d6, d7, [sp, #-16]
+        ldp   d0, d1, [x10, #64]
+        ldp   d2, d3, [x10, #80]
+        ldp   d4, d5, [x10, #96]
+        ldp   d6, d7, [x10, #112]
 
         blr   x9                      // call
 
-        ldr   x3, [x29, #16]          // reload rvalue
-
-        // partially deconstruct the stack frame
-        mov   sp, x29
-        ldp   x29, x30, [x29]
+        ldr   x10, [fp, #16]
 
         // save the simple return values
-        stp   x0, x1, [sp, #0]
-        stp   d0, d1, [sp, #64]
-        stp   d2, d3, [sp, #80]
+        stp   x0, x1, [x10, #0]
+        stp   d0, d1, [x10, #64]
+        stp   d2, d3, [x10, #80]
 
-        NESTED_END callVirtualFunction_fake
+        add   sp, fp, #32
+        ldp   fp, lr, [sp, #-32]
+        ret
+
+        NESTED_END callVirtualFunction
 
     END
 
