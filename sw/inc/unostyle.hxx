@@ -34,6 +34,7 @@
 #include <com/sun/star/style/XAutoStyles.hpp>
 #include <com/sun/star/style/XAutoStyle.hpp>
 
+#include "coreframestyle.hxx"
 #include "istyleaccess.hxx"
 #include <memory>
 #include <map>
@@ -43,6 +44,10 @@ namespace com::sun::star::document { class XEventsSupplier; }
 class SwDocShell;
 class SwAutoStylesEnumImpl;
 class SfxItemSet;
+class SwXStyle;
+class SwXTextCellStyle;
+class SwXPageStyle;
+class SwXFrameStyle;
 
 class SwXStyleFamilies final : public cppu::WeakImplHelper
 <
@@ -84,22 +89,15 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static css::uno::Reference<css::style::XStyle> CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc);
+    static rtl::Reference<SwXStyle> CreateStyleCharOrParaOrPseudo(SfxStyleFamily eFamily, SwDoc& rDoc);
+    static rtl::Reference<SwXPageStyle> CreateStylePage(SwDoc& rDoc);
+    static rtl::Reference<SwXFrameStyle> CreateStyleFrame(SwDoc& rDoc);
+    static rtl::Reference<SwXTextTableStyle> CreateStyleTable(SwDoc& rDoc);
+    static rtl::Reference<SwXTextCellStyle> CreateStyleCell(SwDoc& rDoc);
     // FIXME: This is very ugly as is the whole conditional paragraph style
     // hackety. Should be folded into CreateStyle hopefully one day
     static css::uno::Reference<css::style::XStyle> CreateStyleCondParagraph(SwDoc& rDoc);
 };
-
-namespace sw
-{
-    class ICoreFrameStyle
-    {
-        public:
-            virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) =0;
-            virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) =0;
-            virtual css::document::XEventsSupplier& GetEventsSupplier() =0;
-            virtual ~ICoreFrameStyle() {};
-    };
-}
 
 // access to all automatic style families
 class SwXAutoStyles final :
@@ -318,7 +316,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    static css::uno::Reference<css::style::XStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+    static rtl::Reference<SwXTextTableStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
 };
 
 /// A text cell style is a UNO API wrapper for a SwBoxAutoFormat core class
@@ -389,7 +387,7 @@ class SwXTextCellStyle final : public cppu::WeakImplHelper
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    static css::uno::Reference<css::style::XStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
+    static rtl::Reference<SwXTextCellStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

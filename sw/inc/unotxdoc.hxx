@@ -96,6 +96,7 @@ class SwXFootnotes;
 class SwXContentControls;
 class SwXDocumentIndexes;
 class SwXStyleFamilies;
+class SwXStyle;
 class SwXAutoStyles;
 class SwXBookmarks;
 class SwXChapterNumbering;
@@ -113,6 +114,7 @@ class SwXTextField;
 class SwXLineBreak;
 class SwXTextFrame;
 class SwXTextGraphicObject;
+class SwXPageStyle;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -524,6 +526,8 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXLineBreak> createLineBreak();
     SW_DLLPUBLIC rtl::Reference<SwXTextFrame> createTextFrame();
     SW_DLLPUBLIC rtl::Reference<SwXTextGraphicObject> createTextGraphicObject();
+    SW_DLLPUBLIC rtl::Reference<SwXStyle> createNumberingStyle();
+    SW_DLLPUBLIC rtl::Reference<SwXPageStyle> createPageStyle();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

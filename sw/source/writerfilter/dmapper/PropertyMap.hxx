@@ -39,6 +39,7 @@
 #include <deque>
 
 class SwXTextSection;
+class SwXPageStyle;
 namespace com::sun::star {
     namespace beans {
         struct PropertyValue;
@@ -255,7 +256,7 @@ private:
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
 
     OUString m_sPageStyleName;
-    css::uno::Reference<css::beans::XPropertySet> m_aPageStyle;
+    rtl::Reference<SwXPageStyle>                    m_aPageStyle;
 
     std::optional< css::table::BorderLine2 >      m_oBorderLines[4];
     sal_Int32                                       m_nBorderDistances[4];
@@ -356,7 +357,7 @@ public:
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
-    css::uno::Reference<css::beans::XPropertySet> GetPageStyle(DomainMapper_Impl& rDM_Impl);
+    rtl::Reference<SwXPageStyle> GetPageStyle(DomainMapper_Impl& rDM_Impl);
 
     const OUString& GetPageStyleName()
     {

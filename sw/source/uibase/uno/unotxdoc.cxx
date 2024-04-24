@@ -179,6 +179,7 @@
 #include <unosection.hxx>
 #include <unofield.hxx>
 #include <unoframe.hxx>
+#include <unoxstyle.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1718,6 +1719,20 @@ rtl::Reference< SwXTextGraphicObject > SwXTextDocument::createTextGraphicObject(
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return SwXTextGraphicObject::CreateXTextGraphicObject(GetDocOrThrow(), nullptr);
+}
+
+rtl::Reference< SwXStyle > SwXTextDocument::createNumberingStyle()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily::Pseudo, GetDocOrThrow());
+}
+
+rtl::Reference< SwXPageStyle > SwXTextDocument::createPageStyle()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXStyleFamilies::CreateStylePage(GetDocOrThrow());
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)

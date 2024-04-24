@@ -67,6 +67,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <unosection.hxx>
 #include <unotxdoc.hxx>
+#include <unoxstyle.hxx>
 #include <utility>
 
 #include <frozen/bits/defines.h>
@@ -478,10 +479,10 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     }
 }
 
-uno::Reference<beans::XPropertySet> SectionPropertyMap::GetPageStyle(DomainMapper_Impl& rDM_Impl)
+rtl::Reference<SwXPageStyle> SectionPropertyMap::GetPageStyle(DomainMapper_Impl& rDM_Impl)
 {
     const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
-    uno::Reference<beans::XPropertySet> xReturnPageStyle;
+    rtl::Reference<SwXPageStyle> xReturnPageStyle;
     try
     {
         if (m_sPageStyleName.isEmpty() && xPageStyles.is())
@@ -490,12 +491,15 @@ uno::Reference<beans::XPropertySet> SectionPropertyMap::GetPageStyle(DomainMappe
 
             m_sPageStyleName = rDM_Impl.GetUnusedPageStyleName();
 
-            m_aPageStyle.set(rDM_Impl.GetTextDocument()->createInstance("com.sun.star.style.PageStyle"), uno::UNO_QUERY );
-            xPageStyles->insertByName(m_sPageStyleName, uno::Any(m_aPageStyle));
+            m_aPageStyle = rDM_Impl.GetTextDocument()->createPageStyle();
+            xPageStyles->insertByName(m_sPageStyleName, uno::Any(uno::Reference<style::XStyle>(m_aPageStyle)));
         }
         else if (!m_aPageStyle.is() && xPageStyles.is())
         {
-            xPageStyles->getByName(m_sPageStyleName) >>= m_aPageStyle;
+            uno::Reference<style::XStyle> xTmpStyle;
+            xPageStyles->getByName(m_sPageStyleName) >>= xTmpStyle;
+            m_aPageStyle = dynamic_cast<SwXPageStyle*>(xTmpStyle.get());
+            assert(bool(xTmpStyle) == bool(m_aPageStyle) && "expect null or a SwXPageStyle here");
         }
         xReturnPageStyle = m_aPageStyle;
     }
@@ -1448,9 +1452,7 @@ void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::A
 void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl, PageBreakType eBreakType)
 {
     OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
-    uno::Reference<beans::XPropertySet> evenOddStyle(
-        rDM_Impl.GetTextDocument()->createInstance("com.sun.star.style.PageStyle"),
-        uno::UNO_QUERY);
+    rtl::Reference<SwXPageStyle> evenOddStyle = rDM_Impl.GetTextDocument()->createPageStyle();
     // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
     uno::Reference<beans::XPropertySet> pageProperties(m_aPageStyle);
     uno::Reference<beans::XPropertySetInfo> pagePropertiesInfo(pageProperties->getPropertySetInfo());
@@ -1478,7 +1480,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     }
     evenOddStyle->setPropertyValue("FollowStyle", uno::Any(m_sPageStyleName));
 
-    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(evenOddStyle));
+    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(uno::Reference<style::XStyle>(evenOddStyle)));
 
     if (rDM_Impl.IsNewDoc())
     {

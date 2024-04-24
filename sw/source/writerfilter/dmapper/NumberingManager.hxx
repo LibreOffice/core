@@ -194,7 +194,7 @@ public:
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
     sal_uInt16 GetChapterNumberingWeight() const;
-    void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory, sal_Int16 nOutline);
+    void CreateNumberingRules(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> const& xTextDoc, sal_Int16 nOutline);
 
     const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() const { return m_xNumRules; }
 
@@ -209,7 +209,7 @@ class ListsManager :
 private:
 
     DomainMapper&                                       m_rDMapper;
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xFactory;
+    rtl::Reference<SwXTextDocument>                     m_xTextDoc;
 
     // The numbering entries
     std::vector< NumPicBullet::Pointer >                m_aNumPicBullets;
@@ -232,7 +232,7 @@ private:
 
 public:
 
-    ListsManager(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> xFactory);
+    ListsManager(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> xTextDoc);
     virtual ~ListsManager() override;
 
     typedef tools::SvRef< ListsManager >  Pointer;

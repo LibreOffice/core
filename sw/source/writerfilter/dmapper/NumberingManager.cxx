@@ -44,6 +44,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
+#include <unotxdoc.hxx>
+#include <unoxstyle.hxx>
 #include <regex>
 #include <utility>
 
@@ -471,14 +473,15 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
 }
 
 static uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
-       uno::Reference<lang::XMultiServiceFactory> const& xFactory)
+       rtl::Reference<SwXTextDocument> const& xTextDoc)
 {
     uno::Reference< container::XNameContainer > xStyles;
+    if (!xTextDoc)
+        return xStyles;
 
     try
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xFamilies( xFactory, uno::UNO_QUERY_THROW );
-        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName("NumberingStyles");
+        uno::Any oFamily = xTextDoc->getStyleFamilies( )->getByName("NumberingStyles");
 
         oFamily >>= xStyles;
     }
@@ -523,13 +526,13 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
 }
 
 void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
-        uno::Reference<lang::XMultiServiceFactory> const& xFactory, sal_Int16 nOutline)
+        rtl::Reference<SwXTextDocument> const& xTextDoc, sal_Int16 nOutline)
 {
     // Get the UNO Numbering styles
-    uno::Reference< container::XNameContainer > xStyles = lcl_getUnoNumberingStyles( xFactory );
+    uno::Reference< container::XNameContainer > xStyles = lcl_getUnoNumberingStyles( xTextDoc );
 
     // Do the whole thing
-    if( !(!m_xNumRules.is() && xFactory.is() && xStyles.is( )) )
+    if( !(!m_xNumRules.is() && xTextDoc.is() && xStyles.is( )) )
         return;
 
     try
@@ -540,7 +543,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         else
             xStyles->insertByName(
                 GetStyleName(GetId(), xStyles),
-                css::uno::Any(xFactory->createInstance("com.sun.star.style.NumberingStyle")));
+                css::uno::Any(uno::Reference<css::style::XStyle>(xTextDoc->createNumberingStyle())));
 
         uno::Any oStyle = xStyles->getByName(GetStyleName());
         uno::Reference< beans::XPropertySet > xStyle( oStyle, uno::UNO_QUERY_THROW );
@@ -601,10 +604,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             // Handle the outline level here
             if (GetId() == nOutline && pAbsLevel && pAbsLevel->GetParaStyle())
             {
-                uno::Reference< text::XChapterNumberingSupplier > xOutlines (
-                    xFactory, uno::UNO_QUERY_THROW );
                 uno::Reference< container::XIndexReplace > xOutlineRules =
-                    xOutlines->getChapterNumberingRules( );
+                    xTextDoc->getChapterNumberingRules( );
 
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
                 pParaStyle->m_bAssignedAsChapterNumbering = true;
@@ -641,11 +642,11 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
 
 ListsManager::ListsManager(DomainMapper& rDMapper,
-    uno::Reference<lang::XMultiServiceFactory> xFactory)
+    rtl::Reference<SwXTextDocument> xTextDoc)
     : LoggedProperties("ListsManager")
     , LoggedTable("ListsManager")
     , m_rDMapper(rDMapper)
-    , m_xFactory(std::move(xFactory))
+    , m_xTextDoc(std::move(xTextDoc))
 {
 }
 
@@ -1202,7 +1203,7 @@ void ListsManager::CreateNumberingRules( )
     // Loop over the definitions
     for ( const auto& rList : m_aLists )
     {
-        rList->CreateNumberingRules(m_rDMapper, m_xFactory, nChosenAsChapterNumberingId);
+        rList->CreateNumberingRules(m_rDMapper, m_xTextDoc, nChosenAsChapterNumberingId);
     }
     m_rDMapper.GetStyleSheetTable()->ReApplyInheritedOutlineLevelFromChapterNumbering();
     m_rDMapper.GetStyleSheetTable()->ApplyNumberingStyleNameToParaStyles();

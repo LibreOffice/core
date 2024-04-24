@@ -139,6 +139,7 @@
 #include <unofield.hxx>
 #include <unolinebreak.hxx>
 #include <unoframe.hxx>
+#include <unoxstyle.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -3819,7 +3820,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     if (!m_bIsNewDoc)
         return; // TODO sw cannot Undo insert header/footer without crashing
 
-    uno::Reference<beans::XPropertySet> xPageStyle = pSectionContext->GetPageStyle(*this);
+    rtl::Reference<SwXPageStyle> xPageStyle = pSectionContext->GetPageStyle(*this);
     if (!xPageStyle.is())
         return;
 

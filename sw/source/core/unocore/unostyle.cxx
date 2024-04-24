@@ -117,6 +117,7 @@
 #include <ccoll.hxx>
 #include <hints.hxx>
 #include <uiitems.hxx>
+#include <unoxstyle.hxx>
 
 #include <cassert>
 #include <memory>
@@ -172,12 +173,14 @@ constexpr ParagraphStyleCategoryEntry sParagraphStyleCategoryEntries[]
         { style::ParagraphStyleCategory::HTML,    SfxStyleSearchBits::SwHtml,    COLL_HTML_BITS     }
 };
 
+} // namespace anonymous
+
 class StyleFamilyEntry
 {
 public:
     template <SfxStyleFamily f> static StyleFamilyEntry Create(sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString sName, TranslateId pResId)
     {
-        return StyleFamilyEntry(f, nPropMapType, aPoolId, sName, pResId, GetCountOrName<f>, CreateStyle<f>, TranslateIndex<f>);
+        return StyleFamilyEntry(f, nPropMapType, aPoolId, sName, pResId, GetCountOrName<f>, TranslateIndex<f>);
     }
 
     SfxStyleFamily family() const { return m_eFamily; }
@@ -188,12 +191,10 @@ public:
     const TranslateId& resId() const { return m_pResId; }
 
     sal_Int32 getCountOrName(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex) const { return m_fGetCountOrName(rDoc, pString, nIndex); }
-    css::uno::Reference<css::style::XStyle> createStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName) const { return m_fCreateStyle(pBasePool, pDocShell, sStyleName); }
     sal_uInt16 translateIndex(const sal_uInt16 nIndex) const { return m_fTranslateIndex(nIndex); }
 
 private:
     using GetCountOrName_t = sal_Int32 (*)(const SwDoc&, OUString*, sal_Int32);
-    using CreateStyle_t = uno::Reference<css::style::XStyle>(*)(SfxStyleSheetBasePool*, SwDocShell*, const OUString&);
     using TranslateIndex_t = sal_uInt16(*)(const sal_uInt16);
     SfxStyleFamily m_eFamily;
     sal_uInt16 m_nPropMapType;
@@ -202,9 +203,8 @@ private:
     OUString m_sName;
     TranslateId m_pResId;
     GetCountOrName_t m_fGetCountOrName;
-    CreateStyle_t m_fCreateStyle;
     TranslateIndex_t m_fTranslateIndex;
-    StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString sName, TranslateId pResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
+    StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString sName, TranslateId pResId, GetCountOrName_t fGetCountOrName, TranslateIndex_t fTranslateIndex)
             : m_eFamily(eFamily)
             , m_nPropMapType(nPropMapType)
             , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
@@ -212,11 +212,9 @@ private:
             , m_sName(std::move(sName))
             , m_pResId(pResId)
             , m_fGetCountOrName(fGetCountOrName)
-            , m_fCreateStyle(fCreateStyle)
             , m_fTranslateIndex(fTranslateIndex)
         { }
     template<SfxStyleFamily> static inline sal_Int32 GetCountOrName(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex);
-    template<SfxStyleFamily> static inline css::uno::Reference<css::style::XStyle> CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName);
     template<SfxStyleFamily> static inline sal_uInt16 TranslateIndex(const sal_uInt16 nIndex) { return nIndex; }
 };
 
@@ -423,7 +421,7 @@ sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Pseudo>(const sal_uI
     throw lang::IndexOutOfBoundsException();
 }
 
-const std::vector<StyleFamilyEntry>& lcl_GetStyleFamilyEntries()
+static const std::vector<StyleFamilyEntry>& lcl_GetStyleFamilyEntries()
 {
     static const std::vector<StyleFamilyEntry> our_pStyleFamilyEntries{
         StyleFamilyEntry::Create<SfxStyleFamily::Char>  (PROPERTY_MAP_CHAR_STYLE,  SwGetPoolIdFromName::ChrFmt,    "CharacterStyles", STR_STYLE_FAMILY_CHARACTER),
@@ -502,171 +500,17 @@ public:
     };
 };
 
-class SwStyleProperties_Impl;
-class SwXStyle : public cppu::WeakImplHelper
-    <
-        css::style::XStyle,
-        css::beans::XPropertySet,
-        css::beans::XMultiPropertySet,
-        css::lang::XServiceInfo,
-        css::lang::XUnoTunnel,
-        css::beans::XPropertyState,
-        css::beans::XMultiPropertyStates
-    >
-    , public SfxListener
-    , public SvtListener
-{
-    SwDoc* m_pDoc;
-    OUString m_sStyleName;
-    const StyleFamilyEntry& m_rEntry;
-    bool m_bIsDescriptor;
-    bool m_bIsConditional;
-    OUString m_sParentStyleName;
 
-protected:
-    SfxStyleSheetBasePool* m_pBasePool;
-    std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
-    css::uno::Reference<css::container::XNameAccess> m_xStyleFamily;
-    css::uno::Reference<css::beans::XPropertySet> m_xStyleData;
+SfxStyleFamily SwXStyle::GetFamily() const
+{return m_rEntry.family();}
 
-    template<sal_uInt16>
-    void SetPropertyValue(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&);
-    void SetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues );
-    SfxStyleSheetBase* GetStyleSheetBase();
-    void PrepareStyleBase(SwStyleBase_Impl& rBase);
-    template<sal_uInt16>
-    uno::Any GetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
-    uno::Any GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
-    uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName);
+OUString SwXStyle::getImplementationName()
+{ return {"SwXStyle"}; };
 
-public:
-    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam, bool bConditional = false);
-    SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName);
-    virtual ~SwXStyle() override;
+sal_Bool SwXStyle::supportsService(const OUString& rServiceName)
+{ return cppu::supportsService(this, rServiceName); };
 
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    //XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName(const OUString& Name_) override;
-
-    //XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
-    virtual OUString SAL_CALL getParentStyle() override;
-    virtual void SAL_CALL setParentStyle(const OUString& aParentStyle) override;
-
-    //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override
-            { OSL_FAIL("not implemented"); };
-    virtual void SAL_CALL removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override
-            { OSL_FAIL("not implemented"); };
-    virtual void SAL_CALL addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override
-            { OSL_FAIL("not implemented"); };
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override
-            { OSL_FAIL("not implemented"); };
-
-    //XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >&, const css::uno::Reference< css::beans::XPropertiesChangeListener >& ) override
-            {};
-    virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& ) override
-            {};
-    virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >&, const css::uno::Reference< css::beans::XPropertiesChangeListener >& ) override
-            {};
-
-    //XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
-
-    //XMultiPropertyStates
-    virtual void SAL_CALL setAllPropertiesToDefault(  ) override;
-    virtual void SAL_CALL setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-
-    //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
-            { return {"SwXStyle"}; };
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
-            { return cppu::supportsService(this, rServiceName); };
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    //SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    //SvtListener
-    virtual void Notify(const SfxHint&) override;
-    const OUString&     GetStyleName() const { return m_sStyleName;}
-    SfxStyleFamily      GetFamily() const {return m_rEntry.family();}
-
-    bool                IsDescriptor() const {return m_bIsDescriptor;}
-    bool                IsConditional() const { return m_bIsConditional;}
-    const OUString&     GetParentStyleName() const { return m_sParentStyleName;}
-    void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
-                            {
-                                m_bIsDescriptor = false; m_pDoc = pDc;
-                                m_pBasePool = pPool;
-                                SfxListener::StartListening(*m_pBasePool);
-                            }
-    SwDoc*                GetDoc() const { return m_pDoc; }
-    void Invalidate();
-    void ApplyDescriptorProperties();
-    void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
-    /// @throws beans::PropertyVetoException
-    /// @throws lang::IllegalArgumentException
-    /// @throws lang::WrappedTargetException
-    /// @throws uno::RuntimeException
-    void SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase);
-    void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl);
-};
-
-typedef cppu::ImplInheritanceHelper< SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
-class SwXFrameStyle
-    : public SwXFrameStyle_Base
-    , public sw::ICoreFrameStyle
-{
-public:
-    SwXFrameStyle(SfxStyleSheetBasePool& rPool,
-                                SwDoc*  pDoc,
-                                const OUString& rStyleName) :
-        SwXFrameStyle_Base(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
-    explicit SwXFrameStyle(SwDoc *pDoc);
-
-    virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
-
-    //ICoreStyle
-    virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) override;
-    virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) override;
-    virtual css::document::XEventsSupplier& GetEventsSupplier() override
-            { return *this; };
-};
-
-class SwXPageStyle
-    : public SwXStyle
-{
-protected:
-    void SetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues );
-    css::uno::Sequence< css::uno::Any > GetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames );
-
-public:
-    SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const OUString& rStyleName);
-    explicit SwXPageStyle(SwDocShell* pDocSh);
-
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-};
 
 class SwStyleProperties_Impl
 {
@@ -717,35 +561,32 @@ public:
     }
 };
 
-template<SfxStyleFamily eFamily>
-css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+static rtl::Reference<SwXStyle> CreateStyleCharOrParaOrPseudo(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName, SfxStyleFamily eFamily)
 {
     return pBasePool ? new SwXStyle(pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false);
 }
 
-template<>
-css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle<SfxStyleFamily::Frame>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+static rtl::Reference<SwXFrameStyle> CreateStyleFrame(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
 {
     return pBasePool ? new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), sStyleName) : new SwXFrameStyle(pDocShell->GetDoc());
 }
 
-template<>
-css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle<SfxStyleFamily::Page>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+static rtl::Reference<SwXPageStyle> CreateStylePage(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
 {
     return pBasePool ? new SwXPageStyle(*pBasePool, pDocShell, sStyleName) : new SwXPageStyle(pDocShell);
 }
 
-template<>
-css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle<SfxStyleFamily::Table>(SfxStyleSheetBasePool* /*pBasePool*/, SwDocShell* pDocShell, const OUString& sStyleName)
+static rtl::Reference<SwXTextTableStyle> CreateStyleTable(SwDocShell* pDocShell, const OUString& sStyleName)
 {
     return SwXTextTableStyle::CreateXTextTableStyle(pDocShell, sStyleName);
 }
 
-template<>
-css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle<SfxStyleFamily::Cell>(SfxStyleSheetBasePool* /*pBasePool*/, SwDocShell* pDocShell, const OUString& sStyleName)
+static rtl::Reference<SwXTextCellStyle> CreateStyleCell(SwDocShell* pDocShell, const OUString& sStyleName)
 {
     return SwXTextCellStyle::CreateXTextCellStyle(pDocShell, sStyleName);
 }
+
+namespace {
 
 class XStyleFamily : public cppu::WeakImplHelper
 <
@@ -996,12 +837,51 @@ static bool lcl_GetHeaderFooterItem(
     return o_rpItem;
 }
 
-uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
+css::uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
 {
-    auto& entries(lcl_GetStyleFamilyEntries());
-    const auto pEntry = std::find_if(entries.begin(), entries.end(),
-            [eFamily] (const StyleFamilyEntry& e) { return e.family() == eFamily; });
-    return pEntry == entries.end() ? nullptr : pEntry->createStyle(nullptr, rDoc.GetDocShell(), "");
+    switch (eFamily)
+    {
+        case SfxStyleFamily::Char:
+        case SfxStyleFamily::Para:
+        case SfxStyleFamily::Pseudo:
+            return CreateStyleCharOrParaOrPseudo(eFamily, rDoc);
+        case SfxStyleFamily::Page:
+            return CreateStylePage(rDoc);
+        case SfxStyleFamily::Frame:
+            return CreateStyleFrame(rDoc);
+        case SfxStyleFamily::Table:
+            return CreateStyleTable(rDoc);
+        case SfxStyleFamily::Cell:
+            return CreateStyleCell(rDoc);
+        default:
+            assert(false);
+            return nullptr;
+    }
+}
+
+rtl::Reference<SwXStyle> SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily eFamily, SwDoc& rDoc)
+{
+    return ::CreateStyleCharOrParaOrPseudo(nullptr, rDoc.GetDocShell(), "", eFamily);
+}
+
+rtl::Reference<SwXPageStyle> SwXStyleFamilies::CreateStylePage(SwDoc& rDoc)
+{
+    return ::CreateStylePage(nullptr, rDoc.GetDocShell(), "");
+}
+
+rtl::Reference<SwXFrameStyle> SwXStyleFamilies::CreateStyleFrame(SwDoc& rDoc)
+{
+    return ::CreateStyleFrame(nullptr, rDoc.GetDocShell(), "");
+}
+
+rtl::Reference<SwXTextTableStyle> SwXStyleFamilies::CreateStyleTable(SwDoc& rDoc)
+{
+    return ::CreateStyleTable(rDoc.GetDocShell(), "");
+}
+
+rtl::Reference<SwXTextCellStyle> SwXStyleFamilies::CreateStyleCell(SwDoc& rDoc)
+{
+    return ::CreateStyleCell(rDoc.GetDocShell(), "");
 }
 
 // FIXME: Ugly special casing that should die.
@@ -1039,7 +919,28 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
         throw container::NoSuchElementException(rName);
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
-        xStyle = m_rEntry.createStyle(m_pBasePool, m_pDocShell, m_rEntry.family() == SfxStyleFamily::Frame ? pBase->GetName() : sStyleName);
+        switch (m_rEntry.family())
+        {
+            case SfxStyleFamily::Char:
+            case SfxStyleFamily::Para:
+            case SfxStyleFamily::Pseudo:
+                xStyle = ::CreateStyleCharOrParaOrPseudo(m_pBasePool, m_pDocShell, sStyleName, m_rEntry.family());
+                break;
+            case SfxStyleFamily::Page:
+                xStyle = ::CreateStylePage(m_pBasePool, m_pDocShell, sStyleName);
+                break;
+            case SfxStyleFamily::Frame:
+                xStyle = ::CreateStyleFrame(m_pBasePool, m_pDocShell, pBase->GetName());
+                break;
+            case SfxStyleFamily::Table:
+                xStyle = ::CreateStyleTable(m_pDocShell, sStyleName);
+                break;
+            case SfxStyleFamily::Cell:
+                xStyle = ::CreateStyleCell(m_pDocShell, sStyleName);
+                break;
+            default:
+                assert(false);
+        }
     return uno::Any(xStyle);
 }
 
@@ -1515,22 +1416,21 @@ void SwXStyle::ApplyDescriptorProperties()
     m_pPropertiesImpl->Apply(*this);
 }
 
-namespace {
-    const TranslateId STR_POOLPAGE_ARY[] =
-    {
-        // Page styles
-        STR_POOLPAGE_STANDARD,
-        STR_POOLPAGE_FIRST,
-        STR_POOLPAGE_LEFT,
-        STR_POOLPAGE_RIGHT,
-        STR_POOLPAGE_ENVELOPE,
-        STR_POOLPAGE_REGISTER,
-        STR_POOLPAGE_HTML,
-        STR_POOLPAGE_FOOTNOTE,
-        STR_POOLPAGE_ENDNOTE,
-        STR_POOLPAGE_LANDSCAPE
-    };
-}
+const TranslateId STR_POOLPAGE_ARY[] =
+{
+    // Page styles
+    STR_POOLPAGE_STANDARD,
+    STR_POOLPAGE_FIRST,
+    STR_POOLPAGE_LEFT,
+    STR_POOLPAGE_RIGHT,
+    STR_POOLPAGE_ENVELOPE,
+    STR_POOLPAGE_REGISTER,
+    STR_POOLPAGE_HTML,
+    STR_POOLPAGE_FOOTNOTE,
+    STR_POOLPAGE_ENDNOTE,
+    STR_POOLPAGE_LANDSCAPE
+};
+
 
 const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 {
@@ -1556,7 +1456,6 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 }
 
 
-
 static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertyMapEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
 {
     // check for needed metric translation
@@ -1577,6 +1476,7 @@ static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertyMapEntry& rEntry, SwDo
         SvxUnoConvertFromMM(eMapUnit, o_aValue);
     return rEntry.nMemberId;
 }
+
 template<>
 void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
@@ -4331,7 +4231,7 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
     UpdateCellStylesMapping();
 }
 
-uno::Reference<style::XStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
+rtl::Reference<SwXTextTableStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
 {
     SolarMutexGuard aGuard;
     rtl::Reference<SwXTextTableStyle> xTextTableStyle;
@@ -4743,7 +4643,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, std::
     return pBoxAutoFormat;
 }
 
-css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName)
+rtl::Reference<SwXTextCellStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName)
 {
     rtl::Reference<SwXTextCellStyle> xTextCellStyle;
 
