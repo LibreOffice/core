@@ -1295,6 +1295,20 @@ Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size 
     return aBmp;
 }
 
+BitmapColor premultiply(const BitmapColor c)
+{
+    return BitmapColor(ColorAlpha, premultiply(c.GetRed(), c.GetAlpha()),
+                       premultiply(c.GetGreen(), c.GetAlpha()),
+                       premultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
+}
+
+BitmapColor unpremultiply(const BitmapColor c)
+{
+    return BitmapColor(ColorAlpha, unpremultiply(c.GetRed(), c.GetAlpha()),
+                       unpremultiply(c.GetGreen(), c.GetAlpha()),
+                       unpremultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
+}
+
 } // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

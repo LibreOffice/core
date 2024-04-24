@@ -32,20 +32,6 @@ static sal_uInt8 lcl_calculate(sal_uInt8 aColor, sal_uInt8 aColor2, double aK1, 
     return std::clamp(result, 0.0, 1.0) * 255.0;
 }
 
-static BitmapColor premultiply(const BitmapColor c)
-{
-    return BitmapColor(ColorAlpha, vcl::bitmap::premultiply(c.GetRed(), c.GetAlpha()),
-                       vcl::bitmap::premultiply(c.GetGreen(), c.GetAlpha()),
-                       vcl::bitmap::premultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
-}
-
-static BitmapColor unpremultiply(const BitmapColor c)
-{
-    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(c.GetRed(), c.GetAlpha()),
-                       vcl::bitmap::unpremultiply(c.GetGreen(), c.GetAlpha()),
-                       vcl::bitmap::unpremultiply(c.GetBlue(), c.GetAlpha()), c.GetAlpha());
-}
-
 BitmapEx BitmapArithmeticBlendFilter::execute(double aK1, double aK2, double aK3, double aK4)
 {
     if (maBitmapEx.IsEmpty() || maBitmapEx2.IsEmpty())
@@ -56,48 +42,33 @@ BitmapEx BitmapArithmeticBlendFilter::execute(double aK1, double aK2, double aK3
     sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
     sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
 
-    BitmapScopedReadAccess pReadAccess(maBitmapEx.GetBitmap());
-    Bitmap aDstBitmap(Size(nWidth, nHeight), maBitmapEx.GetBitmap().getPixelFormat(),
-                      &pReadAccess->GetPalette());
+    Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
     Bitmap aDstAlpha(AlphaMask(Size(nWidth, nHeight)).GetBitmap());
 
+    BitmapScopedWriteAccess pWriteAccess(aDstBitmap);
+    BitmapScopedWriteAccess pAlphaWriteAccess(aDstAlpha);
+
+    for (tools::Long y(0); y < nHeight; ++y)
     {
-        // just to be on the safe side: let the
-        // ScopedAccessors get destructed before
-        // copy-constructing the resulting bitmap. This will
-        // rule out the possibility that cached accessor data
-        // is not yet written back.
-
-        BitmapScopedWriteAccess pWriteAccess(aDstBitmap);
-        BitmapScopedWriteAccess pAlphaWriteAccess(aDstAlpha);
-
-        if (pWriteAccess.get() != nullptr && pAlphaWriteAccess.get() != nullptr)
+        Scanline pScanline = pWriteAccess->GetScanline(y);
+        Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
+        for (tools::Long x(0); x < nWidth; ++x)
         {
-            for (tools::Long y(0); y < nHeight; ++y)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline(y);
-                Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
-                for (tools::Long x(0); x < nWidth; ++x)
-                {
-                    BitmapColor i1 = premultiply(maBitmapEx.GetPixelColor(x, y));
-                    BitmapColor i2 = premultiply(maBitmapEx2.GetPixelColor(x, y));
-                    sal_uInt8 r(lcl_calculate(i1.GetRed(), i2.GetRed(), aK1, aK2, aK3, aK4));
-                    sal_uInt8 g(lcl_calculate(i1.GetGreen(), i2.GetGreen(), aK1, aK2, aK3, aK4));
-                    sal_uInt8 b(lcl_calculate(i1.GetBlue(), i2.GetBlue(), aK1, aK2, aK3, aK4));
-                    sal_uInt8 a(lcl_calculate(i1.GetAlpha(), i2.GetAlpha(), aK1, aK2, aK3, aK4));
+            BitmapColor i1 = vcl::bitmap::premultiply(maBitmapEx.GetPixelColor(x, y));
+            BitmapColor i2 = vcl::bitmap::premultiply(maBitmapEx2.GetPixelColor(x, y));
+            sal_uInt8 r(lcl_calculate(i1.GetRed(), i2.GetRed(), aK1, aK2, aK3, aK4));
+            sal_uInt8 g(lcl_calculate(i1.GetGreen(), i2.GetGreen(), aK1, aK2, aK3, aK4));
+            sal_uInt8 b(lcl_calculate(i1.GetBlue(), i2.GetBlue(), aK1, aK2, aK3, aK4));
+            sal_uInt8 a(lcl_calculate(i1.GetAlpha(), i2.GetAlpha(), aK1, aK2, aK3, aK4));
 
-                    pWriteAccess->SetPixelOnData(
-                        pScanline, x, unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
-                    pAlphaWriteAccess->SetPixelOnData(pScanAlpha, x, BitmapColor(a));
-                }
-            }
-        }
-        else
-        {
-            // TODO(E2): Error handling!
-            ENSURE_OR_THROW(false, "BitmapScreenBlendFilter: could not access bitmap");
+            pWriteAccess->SetPixelOnData(
+                pScanline, x, vcl::bitmap::unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
+            pAlphaWriteAccess->SetPixelOnData(pScanAlpha, x, BitmapColor(a));
         }
     }
+
+    pWriteAccess.reset();
+    pAlphaWriteAccess.reset();
 
     return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
 }

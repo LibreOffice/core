@@ -97,6 +97,9 @@ VCL_DLLPUBLIC bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & 
 VCL_DLLPUBLIC Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
                             Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY);
 
+BitmapColor premultiply(const BitmapColor c);
+BitmapColor unpremultiply(const BitmapColor c);
+
 } // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
