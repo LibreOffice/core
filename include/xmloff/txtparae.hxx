@@ -114,6 +114,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     struct DocumentListNodes;
     std::unique_ptr<DocumentListNodes> mpDocumentListNodes;
+    std::vector<sal_Int32> maDocumentNodeOrder;
+    bool bInDocumentNodeOrderCollection = false;
 
     o3tl::sorted_vector<css::uno::Reference<css::text::XTextFrame>> maFrameRecurseGuard;
     o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> maShapeRecurseGuard;
@@ -472,9 +474,7 @@ public:
         exportText( rText, rBaseSection, true, bIsProgress, true/*bExportParagraph*/ );
     }
 
-    // It the model implements the xAutoStylesSupplier interface, the automatic
-    // styles can exported without iterating over the text portions
-    void collectTextAutoStylesOptimized( bool bIsProgress );
+    void collectTextAutoStylesAndNodeExportOrder(bool bIsProgress);
 
     // This method exports all automatic styles that have been collected.
     void exportTextAutoStyles();
@@ -540,6 +540,7 @@ public:
     void PopTextListsHelper();
 
 private:
+    void RecordNodeIndex(const css::uno::Reference<css::text::XTextContent>& xTextContent);
     bool ShouldSkipListId(const css::uno::Reference<css::text::XTextContent>& xTextContent);
     bool ExportListId() const;
 
