@@ -59,6 +59,7 @@ class SwXTextDocument;
 class SwXDocumentSettings;
 class SwXTextSection;
 class SwXTextField;
+class SwXTextFrame;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -679,7 +680,7 @@ private:
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
     std::stack<BookmarkInsertPosition> m_xSdtStarts;
 
-    std::queue< css::uno::Reference< css::text::XTextFrame > > m_xPendingTextBoxFrames;
+    std::queue< rtl::Reference< SwXTextFrame > > m_xPendingTextBoxFrames;
 
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;

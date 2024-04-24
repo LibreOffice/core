@@ -99,7 +99,7 @@ protected:
 public:
 
     //XNamed
-    virtual OUString SAL_CALL getName() override;
+    SW_DLLPUBLIC virtual OUString SAL_CALL getName() override;
     SW_DLLPUBLIC virtual void SAL_CALL setName(const OUString& Name_) override;
 
     //XPropertySet
@@ -188,7 +188,7 @@ public:
     using SwXText::SetDoc;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
+    virtual SW_DLLPUBLIC void SAL_CALL acquire(  ) noexcept override;
     virtual SW_DLLPUBLIC void SAL_CALL release(  ) noexcept override;
 
     //XTypeProvider

@@ -5823,7 +5823,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
         return;
 
     // if this is a textbox there must be a waiting frame
-    auto xTextBox = m_xPendingTextBoxFrames.front();
+    rtl::Reference<SwXTextFrame> xTextBox = m_xPendingTextBoxFrames.front();
     if (!xTextBox)
         return;
 
@@ -5833,7 +5833,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
     // Attach the textbox to the shape
     try
     {
-        xProps->setPropertyValue("TextBoxContent", uno::Any(xTextBox));
+        xProps->setPropertyValue("TextBoxContent", uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
     catch (...)
     {
@@ -5846,9 +5846,8 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
     {
         // Get the name of the textbox
         OUString sTextBoxName;
-        uno::Reference<container::XNamed> xName(xTextBox, uno::UNO_QUERY);
-        if (xName && !xName->getName().isEmpty())
-            sTextBoxName = xName->getName();
+        if (!xTextBox->getName().isEmpty())
+            sTextBoxName = xTextBox->getName();
 
         // Try to get the grabbag
         uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
