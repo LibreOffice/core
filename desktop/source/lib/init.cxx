@@ -7637,7 +7637,7 @@ static void preloadData()
     }
     std::cerr << "\n";
 
-    std::cerr << "Preloading breakiterator: ";
+    std::cerr << "Preloading breakiterator\n";
     if (aLocales.getLength())
     {
         css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
