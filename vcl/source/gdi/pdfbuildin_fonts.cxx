@@ -738,11 +738,6 @@ BuildinFontInstance::BuildinFontInstance(const vcl::font::PhysicalFontFace& rFon
 {
 }
 
-bool BuildinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const
-{
-    return false;
-}
-
 bool BuildinFontInstance::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const
 {
     return false;
