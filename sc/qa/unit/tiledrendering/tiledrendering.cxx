@@ -214,7 +214,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+    CPPUNIT_ASSERT_EQUAL("9"_ostr, aResult);
 
     // TODO check that we really selected what we wanted here
 
@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+    CPPUNIT_ASSERT_EQUAL("1"_ostr, aResult);
 
     // TODO check that we really selected what we wanted here
 
