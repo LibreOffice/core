@@ -332,7 +332,8 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
     }
     else
     {
-        bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, p, mnSheet, true);
+        bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, OUString::fromUtf8(p),
+                                                    mnSheet, true);
         mnCol = maCellData.maCellAddr.Col();
     }
 

@@ -80,123 +80,6 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
 }
 
-bool AddressConverter::parseOoxAddress2d(
-        sal_Int32& ornColumn, sal_Int32& ornRow,
-        std::u16string_view aString, sal_Int32 nStart, sal_Int32 nLength )
-{
-    ornColumn = ornRow = 0;
-    if( (nStart < 0) || (nStart >= sal_Int32(aString.size())) || (nLength < 2) )
-        return false;
-
-    const sal_Unicode* pcChar = aString.data() + nStart;
-    const sal_Unicode* pcEndChar = pcChar + ::std::min( nLength, sal_Int32(aString.size() - nStart) );
-
-    enum { STATE_COL, STATE_ROW } eState = STATE_COL;
-    while( pcChar < pcEndChar )
-    {
-        sal_Unicode cChar = *pcChar;
-        switch( eState )
-        {
-            case STATE_COL:
-            {
-                if( ('a' <= cChar) && (cChar <= 'z') )
-                    cChar = (cChar - 'a') + 'A';
-                if( ('A' <= cChar) && (cChar <= 'Z') )
-                {
-                    /*  Return, if 1-based column index is already 6 characters
-                        long (12356631 is column index for column AAAAAA). */
-                    if( ornColumn >= 12356631 )
-                        return false;
-                    ornColumn = (ornColumn * 26) + (cChar - 'A' + 1);
-                }
-                else if( ornColumn > 0 )
-                {
-                    --pcChar;
-                    eState = STATE_ROW;
-                }
-                else
-                    return false;
-            }
-            break;
-
-            case STATE_ROW:
-            {
-                if( ('0' <= cChar) && (cChar <= '9') )
-                {
-                    // return, if 1-based row is already 9 digits long
-                    if( ornRow >= 100000000 )
-                        return false;
-                    ornRow = (ornRow * 10) + (cChar - '0');
-                }
-                else
-                    return false;
-            }
-            break;
-        }
-        ++pcChar;
-    }
-
-    --ornColumn;
-    --ornRow;
-    return (ornColumn >= 0) && (ornRow >= 0);
-}
-
-bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRow, std::string_view aStr )
-{
-    ornColumn = ornRow = 0;
-
-    enum { STATE_COL, STATE_ROW } eState = STATE_COL;
-
-    const char* pStr = aStr.data();
-    while (pStr != aStr.data() + aStr.size())
-    {
-        char cChar = *pStr;
-        switch( eState )
-        {
-            case STATE_COL:
-            {
-                if( ('a' <= cChar) && (cChar <= 'z') )
-                    cChar = (cChar - 'a') + 'A';
-                if( ('A' <= cChar) && (cChar <= 'Z') )
-                {
-                    /*  Return, if 1-based column index is already 6 characters
-                        long (12356631 is column index for column AAAAAA). */
-                    if( ornColumn >= 12356631 )
-                        return false;
-                    ornColumn = (ornColumn * 26) + (cChar - 'A' + 1);
-                }
-                else if( ornColumn > 0 )
-                {
-                    --pStr;
-                    eState = STATE_ROW;
-                }
-                else
-                    return false;
-            }
-            break;
-
-            case STATE_ROW:
-            {
-                if( ('0' <= cChar) && (cChar <= '9') )
-                {
-                    // return, if 1-based row is already 9 digits long
-                    if( ornRow >= 100000000 )
-                        return false;
-                    ornRow = (ornRow * 10) + (cChar - '0');
-                }
-                else
-                    return false;
-            }
-            break;
-        }
-        ++pStr;
-    }
-
-    --ornColumn;
-    --ornRow;
-    return (ornColumn >= 0) && (ornRow >= 0);
-}
-
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 {
     bool bValid = (0 <= nCol) && ( nCol <= maMaxPos.Col() );
@@ -230,47 +113,26 @@ bool AddressConverter::checkCellAddress( const ScAddress& rAddress, bool bTrackO
 }
 
 bool AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
-        const OUString& rString, sal_Int16 nSheet )
+        const OUString& rString, sal_Int16 nSheet, const ScDocument& rDoc)
 {
     orAddress.SetTab(nSheet);
-    sal_Int32 nCol = 0;
-    sal_Int32 nRow = 0;
-    bool bRes = parseOoxAddress2d( nCol, nRow, rString );
-    orAddress.SetRow(nRow);
-    orAddress.SetCol(nCol);
+    orAddress.SetRow(0);
+    orAddress.SetCol(0);
 
-    return bRes;
-}
+    if (rString.isEmpty())
+        return false;
 
-bool AddressConverter::convertToCellAddressUnchecked(
-        ScAddress& orAddress, std::string_view pStr, sal_Int16 nSheet )
-{
-    orAddress.SetTab(nSheet);
-    sal_Int32 nCol = 0;
-    sal_Int32 nRow = 0;
-    bool bRes = parseOoxAddress2d(nCol, nRow, pStr);
-    orAddress.SetRow(nRow);
-    orAddress.SetCol(nCol);
-
-    return bRes;
+    return (orAddress.Parse(rString, rDoc, formula::FormulaGrammar::CONV_XL_OOX)
+            & ScRefFlags::VALID)
+           == ScRefFlags::VALID;
 }
 
 bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
     return
-        convertToCellAddressUnchecked( orAddress, rString, nSheet ) &&
+        convertToCellAddressUnchecked(orAddress, rString, nSheet, getScDocument()) &&
         checkCellAddress( orAddress, bTrackOverflow );
-}
-
-bool AddressConverter::convertToCellAddress(
-    ScAddress& rAddress,
-    std::string_view pStr, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
-        return false;
-
-    return checkCellAddress(rAddress, bTrackOverflow);
 }
 
 ScAddress AddressConverter::createValidCellAddress(

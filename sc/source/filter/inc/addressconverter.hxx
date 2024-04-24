@@ -97,34 +97,6 @@ class AddressConverter final : public WorkbookHelper
 public:
     explicit            AddressConverter( const WorkbookHelper& rHelper );
 
-    /** Tries to parse the passed string for a 2d cell address in A1 notation.
-
-        This function accepts all strings that match the regular expression
-        "[a-zA-Z]{1,6}0*[1-9][0-9]{0,8}" (without quotes), i.e. 1 to 6 letters
-        for the column index (translated to 0-based column indexes from 0 to
-        321,272,405), and 1 to 9 digits for the 1-based row index (translated
-        to 0-based row indexes from 0 to 999,999,998). The row number part may
-        contain leading zeros, they will be ignored. It is up to the caller to
-        handle cell addresses outside of a specific valid range (e.g. the
-        entire spreadsheet).
-
-        @param ornColumn  (out-parameter) Returns the converted column index.
-        @param ornRow  (out-parameter) returns the converted row index.
-        @param rString  The string containing the cell address.
-        @param nStart  Start index of string part in rString to be parsed.
-        @param nLength  Length of string part in rString to be parsed.
-
-        @return  true = Parsed string was valid, returned values can be used.
-     */
-    static bool         parseOoxAddress2d(
-                            sal_Int32& ornColumn, sal_Int32& ornRow,
-                            std::u16string_view aString,
-                            sal_Int32 nStart = 0,
-                            sal_Int32 nLength = SAL_MAX_INT32 );
-
-    static bool parseOoxAddress2d(
-        sal_Int32& ornColumn, sal_Int32& ornRow, std::string_view pStr );
-
     /** Returns the biggest valid cell address in the own Calc document. */
     const ScAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
@@ -188,10 +160,7 @@ public:
     static bool        convertToCellAddressUnchecked(
                             ScAddress& orAddress,
                             const OUString& rString,
-                            sal_Int16 nSheet );
-
-    static bool convertToCellAddressUnchecked(
-        ScAddress& orAddress, std::string_view pStr, sal_Int16 nSheet );
+                            sal_Int16 nSheet, const ScDocument& rDoc);
 
     /** Tries to convert the passed string to a single cell address.
 
@@ -207,10 +176,6 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
-
-    bool convertToCellAddress(
-        ScAddress& rAddress,
-        std::string_view pStr, sal_Int16 nSheet, bool bTrackOverflow );
 
     /** Returns a valid cell address by moving it into allowed dimensions.
 

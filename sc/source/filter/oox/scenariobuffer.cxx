@@ -73,7 +73,8 @@ void Scenario::importScenario( const AttributeList& rAttribs )
 void Scenario::importInputCells( const AttributeList& rAttribs )
 {
     ScenarioCellModel aModel;
-    AddressConverter::convertToCellAddressUnchecked( aModel.maPos, rAttribs.getString( XML_r, OUString() ), mnSheet );
+    AddressConverter::convertToCellAddressUnchecked(
+        aModel.maPos, rAttribs.getString(XML_r, OUString()), mnSheet, getScDocument());
     aModel.maValue    = rAttribs.getXString( XML_val, OUString() );
     aModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, 0 );
     aModel.mbDeleted  = rAttribs.getBool( XML_deleted, false );
