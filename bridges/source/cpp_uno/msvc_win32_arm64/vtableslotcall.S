@@ -46,7 +46,6 @@
         mov x3, x20
         mov x2, x19
         stp x4, x5, [sp, 96]
-        mov x5, x8
         mov x4, x11
         stp x6, x7, [sp, 112]
         stp d0, d1, [sp, 128]

@@ -71,7 +71,7 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
     typelib_TypeDescription** argtds
         = static_cast<typelib_TypeDescription**>(alloca(count * sizeof(typelib_TypeDescription*)));
 
-    sal_Int32 ngpr = 1;
+    sal_Int32 ngpr = retKind == RETURN_KIND_INDIRECT ? 2 : 1;
     sal_Int32 nfpr = 0;
     sal_Int32 sp = 0;
     for (sal_Int32 i = 0; i != count; ++i)
@@ -229,6 +229,7 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
             break;
         case RETURN_KIND_INDIRECT:
             retout = indirectRet;
+            gpr[0] = reinterpret_cast<sal_uInt64>(retout);
             break;
     }
 
@@ -243,11 +244,12 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
 }
 
 extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_uInt64* gpr,
-                           sal_uInt64* fpr, sal_uInt64* stack, void* indirectRet)
+                           sal_uInt64* fpr, sal_uInt64* stack)
 {
     bridges::cpp_uno::shared::CppInterfaceProxy* proxy
         = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
             reinterpret_cast<char*>(gpr[0]) - vtableOffset);
+    void* indirectRet = reinterpret_cast<void*>(gpr[1]);
     typelib_InterfaceTypeDescription* pInterfaceTD = proxy->getTypeDescr();
     assert(functionIndex < pInterfaceTD->nMapFunctionIndexToMemberIndex);
     sal_Int32 nMemberPos = pInterfaceTD->pMapFunctionIndexToMemberIndex[functionIndex];
