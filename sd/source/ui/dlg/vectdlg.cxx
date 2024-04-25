@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/bitmap/Vectorizer.hxx>
@@ -25,8 +26,6 @@
 #include <vcl/svapp.hxx>
 
 #include <DrawDocShell.hxx>
-#include <sdmod.hxx>
-#include <sdiocmpt.hxx>
 #include <vectdlg.hxx>
 
 #define VECTORIZE_MAX_EXTENT 512
@@ -294,47 +293,23 @@ IMPL_LINK_NOARG(SdVectorizeDlg, MetricModifyHdl, weld::MetricSpinButton&, void)
 
 void SdVectorizeDlg::LoadSettings()
 {
-    rtl::Reference<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream(
-                               SD_OPTION_VECTORIZE ,
-                               SdOptionStreamMode::Load ) );
-    sal_uInt16              nLayers;
-    sal_uInt16              nReduce;
-    sal_uInt16              nFillHoles;
-    bool                bFillHoles;
-
-    if( xIStm.is() )
-    {
-        SdIOCompat aCompat( *xIStm, StreamMode::READ );
-        xIStm->ReadUInt16( nLayers ).ReadUInt16( nReduce ).ReadUInt16( nFillHoles ).ReadCharAsBool( bFillHoles );
-    }
-    else
-    {
-        nLayers = 8;
-        nReduce = 0;
-        nFillHoles = 32;
-        bFillHoles = false;
-    }
-
-    m_xNmLayers->set_value(nLayers);
-    m_xMtReduce->set_value(nReduce, FieldUnit::NONE);
-    m_xMtFillHoles->set_value(nFillHoles, FieldUnit::NONE);
-    m_xCbFillHoles->set_active(bFillHoles);
+    m_xNmLayers->set_value(officecfg::Office::Common::Vectorize::ColorCount::get());
+    m_xMtReduce->set_value(officecfg::Office::Common::Vectorize::PointReduce::get(), FieldUnit::NONE);
+    m_xCbFillHoles->set_active(officecfg::Office::Common::Vectorize::FillHole::get());
+    m_xMtFillHoles->set_value(officecfg::Office::Common::Vectorize::TileExtent::get(), FieldUnit::NONE);
 
     ToggleHdl(*m_xCbFillHoles);
 }
 
 void SdVectorizeDlg::SaveSettings() const
 {
-    rtl::Reference<SotStorageStream> xOStm( SD_MOD()->GetOptionStream(
-                              SD_OPTION_VECTORIZE  ,
-                              SdOptionStreamMode::Store ) );
-
-    if( xOStm.is() )
-    {
-        SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
-        xOStm->WriteUInt16( m_xNmLayers->get_value() ).WriteUInt16(m_xMtReduce->get_value(FieldUnit::NONE));
-        xOStm->WriteUInt16( m_xMtFillHoles->get_value(FieldUnit::NONE) ).WriteBool(m_xCbFillHoles->get_active());
-    }
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Vectorize::ColorCount::set(m_xNmLayers->get_value(),batch);
+    officecfg::Office::Common::Vectorize::PointReduce::set(m_xMtReduce->get_value(FieldUnit::NONE),batch);
+    officecfg::Office::Common::Vectorize::FillHole::set(m_xCbFillHoles->get_active(),batch);
+    officecfg::Office::Common::Vectorize::TileExtent::set(m_xMtFillHoles->get_value(FieldUnit::NONE),batch);
+    batch->commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
