@@ -1809,7 +1809,8 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         // created between commits 6249858a8972aef077e0249bd93cfe8f01bce4d6 and
                         // 1a88efa8e02a6d765dab13c7110443bb9e6acecf, where the trailing empty spans
                         // were used to store the marker formatting
-                        if (!m_aMarkerStyleName.hasValue()
+                        if (pHint->GetType() == XMLHintType::XML_HINT_STYLE
+                            && !m_aMarkerStyleName.hasValue()
                             && xCompare->compareRegionStarts(pHint->GetStart(), xEnd) == 0)
                         {
                             if (auto pStyle = GetImport().GetTextImport()->FindAutoCharStyle(
