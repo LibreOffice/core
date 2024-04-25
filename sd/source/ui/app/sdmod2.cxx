@@ -543,7 +543,8 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     else
     {
         // Get options from configuration file
-        pOptions->GetScale( nX, nY );
+        nX = officecfg::Office::Draw::Zoom::ScaleX::get();
+        nY = officecfg::Office::Draw::Zoom::ScaleY::get();
     }
 
     aRet.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
@@ -660,7 +661,12 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         if( pItem )
         {
             sal_Int32 nY = pItem->GetValue();
-            pOptions->SetScale( nX, nY );
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create());
+
+            officecfg::Office::Draw::Zoom::ScaleX::set(nX, batch);
+            officecfg::Office::Draw::Zoom::ScaleY::set(nY, batch);
+            batch->commit();
 
             // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )

@@ -158,7 +158,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Set measuring unit (of the application) and scale (of SdMod)
     sal_Int32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
-    pOptions->GetScale( nX, nY );
+    nX = officecfg::Office::Draw::Zoom::ScaleX::get();
+    nY = officecfg::Office::Draw::Zoom::ScaleY::get();
     SvtSysLocale aSysLocale;
 
     // Allow UI scale only for draw documents.
