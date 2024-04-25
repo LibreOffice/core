@@ -240,13 +240,16 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         // by the mpFrame case above b) for genuine SdrObject this must be set
         // if it's connected to layout
         assert(dynamic_cast<SwDrawContact const*>(pContact));
-        SwPageFrame const*const pPage(const_cast<SwAnchoredObject *>(
-            pContact->GetAnchoredObj(mpDrawObj))->FindPageFrameOfAnchor());
-        if (pPage) // may end up here with partial layout -> not visible
+        if (pContact)
         {
-            aBox = SwRect( mpDrawObj->GetCurrentBoundRect() );
-            // tdf#91260 drawing object may be partially off-page
-            aBox.Intersection(pPage->getFrameArea());
+            SwPageFrame const*const pPage(const_cast<SwAnchoredObject *>(
+                pContact->GetAnchoredObj(mpDrawObj))->FindPageFrameOfAnchor());
+            if (pPage) // may end up here with partial layout -> not visible
+            {
+                aBox = SwRect( mpDrawObj->GetCurrentBoundRect() );
+                // tdf#91260 drawing object may be partially off-page
+                aBox.Intersection(pPage->getFrameArea());
+            }
         }
     }
     else if ( mpWindow )

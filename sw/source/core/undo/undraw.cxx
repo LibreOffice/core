@@ -274,6 +274,8 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         SdrObject* pObj = rSave.pObj;
 
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+        if (!pContact)
+            continue;
 
         // Save the textboxes
         if (auto pOldTextBoxNode = rSave.pFormat->GetOtherTextBoxFormats())
@@ -350,23 +352,25 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
     m_nSize = o3tl::narrowing<sal_uInt16>(pObj->GetSubList()->GetObjCount()) + 1;
     m_pObjArray.reset( new SwUndoGroupObjImpl[ m_nSize ] );
 
-    SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-    SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
+    if (SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+    {
+        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
 
-    m_pObjArray[0].pObj = pObj;
-    m_pObjArray[0].pFormat = pFormat;
+        m_pObjArray[0].pObj = pObj;
+        m_pObjArray[0].pFormat = pFormat;
 
-    // object will destroy itself
-    pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
-    pObj->SetUserCall( nullptr );
+        // object will destroy itself
+        pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
+        pObj->SetUserCall( nullptr );
 
-    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
+        ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
-    pFormat->RemoveAllUnos();
+        pFormat->RemoveAllUnos();
 
-    // remove from array
-    sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
-    rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
+        // remove from array
+        sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
+        rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
+    }
 }
 
 SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
@@ -622,6 +626,9 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+        if (!pContact)
+            continue;
+
         SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
 
         // object will destroy itself

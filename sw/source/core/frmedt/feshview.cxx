@@ -377,22 +377,27 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
     const SdrMarkList& pMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if (1 != pMrkList.GetMarkCount())
         return false;
+
+    SdrObject *pObj = pMrkList.GetMark( 0 )->GetMarkedSdrObj();
+    SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+    if (!pContact)
+        return false;
+
     SwFrame* pOld;
     SwFlyFrame* pFly = nullptr;
-    SdrObject *pObj = pMrkList.GetMark( 0 )->GetMarkedSdrObj();
     if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
     {
         pFly = pVirtO->GetFlyFrame();
         pOld = pFly->AnchorFrame();
     }
     else
-        pOld = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrame( pObj );
+        pOld = pContact->GetAnchorFrame( pObj );
     bool bRet = false;
     if( pOld )
     {
         SwFrame* pNew = pOld;
         // #i28701#
-        SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+        SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
         SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
         SwFormatAnchor aAnch( pFormat->GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
@@ -875,7 +880,11 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         }
         else
         {
-            SwFrame* pAnch = static_cast<SwDrawContact*>( GetUserCall(pO) )->GetAnchorFrame( pO );
+            SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pO));
+            if (!pContact)
+                continue;
+
+            SwFrame* pAnch = pContact->GetAnchorFrame( pO );
             if( !pAnch )
                 continue;
             pPage = pAnch->FindPageFrame();
@@ -1317,12 +1326,15 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             {
                 if ( pObj->GetLayer() == rIDDMA.GetHellId() )
                 {
-                    const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
-                    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
-                    const SwFormatSurround& rSurround = pFormat->GetSurround();
-                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
+                    if (const SwContact* pContact = ::GetUserCall( pObj ))
                     {
-                        bObjInBackground = true;
+                        const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
+                        const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+                        const SwFormatSurround& rSurround = pFormat->GetSurround();
+                        if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
+                        {
+                            bObjInBackground = true;
+                        }
                     }
                 }
             }
@@ -2352,7 +2364,7 @@ bool SwFEShell::IsGroupSelected(bool bAllowDiagams)
             // Thus, use corresponding method instead of checking type.
             if ( pObj->IsGroupObject() &&
                  // --> #i38505# No ungroup allowed for 3d objects
-                 !pObj->Is3DObj() &&
+                 !pObj->Is3DObj() && GetUserCall(pObj) &&
                  RndStdIds::FLY_AS_CHAR != static_cast<SwDrawContact*>(GetUserCall(pObj))->
                                       GetFormat()->GetAnchor().GetAnchorId() )
             {
@@ -2681,7 +2693,6 @@ bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-        // --> make code robust
         OSL_ENSURE( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact>." );
         if ( pContact )
         {
@@ -2711,8 +2722,8 @@ void SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-        SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-        GetDoc()->SetAttr( rSet, *pContact->GetFormat() );
+        if (SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+            GetDoc()->SetAttr( rSet, *pContact->GetFormat() );
     }
 
     EndUndo( SwUndoId::INSATTR );

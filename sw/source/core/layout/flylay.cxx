@@ -1430,27 +1430,30 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
             tools::Long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
             tools::Long nTop;
-            const SwFormat *pFormat = GetUserCall(pSdrObj)->GetFormat();
-            const SvxULSpaceItem &rUL = pFormat->GetULSpace();
-            if( bMove )
+            if (const SwContact* pContact = ::GetUserCall( pSdrObj ))
             {
-                nTop = aRectFnSet.IsVert() ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
-                               static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y();
-                nTop = aRectFnSet.YInc( nTop, -nHeight );
-                tools::Long nWidth = aRectFnSet.GetWidth(pFly->getFrameArea());
-                aRectFnSet.SetLeftAndWidth( rRect, aRectFnSet.IsVert() ?
-                            static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y() :
-                            static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X(), nWidth );
-                nHeight = 2*nHeight - rUL.GetLower() - rUL.GetUpper();
+                const SwFormat *pFormat = pContact->GetFormat();
+                const SvxULSpaceItem &rUL = pFormat->GetULSpace();
+                if( bMove )
+                {
+                    nTop = aRectFnSet.IsVert() ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
+                                   static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y();
+                    nTop = aRectFnSet.YInc( nTop, -nHeight );
+                    tools::Long nWidth = aRectFnSet.GetWidth(pFly->getFrameArea());
+                    aRectFnSet.SetLeftAndWidth( rRect, aRectFnSet.IsVert() ?
+                                static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y() :
+                                static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X(), nWidth );
+                    nHeight = 2*nHeight - rUL.GetLower() - rUL.GetUpper();
+                }
+                else
+                {
+                    nTop = aRectFnSet.YInc( aRectFnSet.GetBottom(pFly->getFrameArea()),
+                                               rUL.GetLower() - nHeight );
+                    nHeight = 2*nHeight - aRectFnSet.GetHeight(pFly->getFrameArea())
+                              - rUL.GetLower() - rUL.GetUpper();
+                }
+                aRectFnSet.SetTopAndHeight( rRect, nTop, nHeight );
             }
-            else
-            {
-                nTop = aRectFnSet.YInc( aRectFnSet.GetBottom(pFly->getFrameArea()),
-                                           rUL.GetLower() - nHeight );
-                nHeight = 2*nHeight - aRectFnSet.GetHeight(pFly->getFrameArea())
-                          - rUL.GetLower() - rUL.GetUpper();
-            }
-            aRectFnSet.SetTopAndHeight( rRect, nTop, nHeight );
         }
     }
     else

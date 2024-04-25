@@ -197,7 +197,8 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         {
             if (SdrObject const*const pObj = pFormat->FindSdrObject())
             {   // tdf#123259 disconnect with *old* anchor position
-                static_cast<SwDrawContact*>(::GetUserCall(pObj))->DisconnectFromLayout(false);
+                if (SwDrawContact* pContact = static_cast<SwDrawContact*>(::GetUserCall( pObj )))
+                    pContact->DisconnectFromLayout(false);
             }
         }
         pFormat->SetFormatAttr( aAnchor );  // only set the anchor
