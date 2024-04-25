@@ -1684,49 +1684,6 @@ void XMLTextParagraphExport::collectTextAutoStylesAndNodeExportOrder(bool bIsPro
             }
         }
 
-    Reference< XNumberingRulesSupplier > xNumberingRulesSupp( GetExport().GetModel(), UNO_QUERY );
-    if ( xNumberingRulesSupp.is() )
-    {
-        Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
-        sal_Int32 nCount = xNumberingRules->getCount();
-        // Custom outline assignment lost after re-importing sxw (#i73361#)
-        for( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            Reference< XIndexReplace > xNumRule( xNumberingRules->getByIndex( i ), UNO_QUERY );
-            if( xNumRule.is() && xNumRule->getCount() )
-            {
-                Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
-                OUString sName;
-                if( xNamed.is() )
-                    sName = xNamed->getName();
-                bool bAdd = sName.isEmpty();
-                if( !bAdd )
-                {
-                    Reference < XPropertySet > xNumPropSet( xNumRule,
-                                                            UNO_QUERY );
-                    if( xNumPropSet.is() &&
-                        xNumPropSet->getPropertySetInfo()
-                                   ->hasPropertyByName( "IsAutomatic" ) )
-                    {
-                        bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
-                        // Check on outline style (#i73361#)
-                        if ( bAdd &&
-                             xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( "NumberingIsOutline" ) )
-                        {
-                            bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
-                        }
-                    }
-                    else
-                    {
-                        bAdd = true;
-                    }
-                }
-                if( bAdd )
-                    maListAutoPool.Add( xNumRule );
-            }
-        }
-    }
     mbCollected = true;
 }
 
