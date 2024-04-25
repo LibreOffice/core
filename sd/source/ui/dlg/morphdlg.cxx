@@ -19,14 +19,13 @@
 
 #include <morphdlg.hxx>
 
-#include <sdmod.hxx>
-#include <sdiocmpt.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <officecfg/Office/Draw.hxx>
 
 using namespace com::sun::star;
 
@@ -61,45 +60,24 @@ MorphDlg::MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObjec
 
 MorphDlg::~MorphDlg()
 {
+    SaveSettings();
 }
 
 void MorphDlg::LoadSettings()
 {
-    rtl::Reference<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
-                               SdOptionStreamMode::Load ) );
-    sal_uInt16              nSteps;
-    bool                bOrient, bAttrib;
-
-    if( xIStm.is() )
-    {
-        SdIOCompat aCompat( *xIStm, StreamMode::READ );
-
-        xIStm->ReadUInt16( nSteps ).ReadCharAsBool( bOrient ).ReadCharAsBool( bAttrib );
-    }
-    else
-    {
-        nSteps = 16;
-        bOrient = bAttrib = true;
-    }
-
-    m_xMtfSteps->set_value(nSteps);
-    m_xCbxOrientation->set_active(bOrient);
-    m_xCbxAttributes->set_active(bAttrib);
+    m_xMtfSteps->set_value(officecfg::Office::Draw::Misc::CrossFading::Steps::get());
+    m_xCbxOrientation->set_active(officecfg::Office::Draw::Misc::CrossFading::Orientation::get());
+    m_xCbxAttributes->set_active(officecfg::Office::Draw::Misc::CrossFading::Attributes::get());
 }
 
 void MorphDlg::SaveSettings() const
 {
-    rtl::Reference<SotStorageStream> xOStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
-                               SdOptionStreamMode::Store ) );
-
-    if( xOStm.is() )
-    {
-        SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
-
-        xOStm->WriteUInt16( m_xMtfSteps->get_value() )
-              .WriteBool( m_xCbxOrientation->get_active() )
-              .WriteBool( m_xCbxAttributes->get_active() );
-    }
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Draw::Misc::CrossFading::Steps::set(m_xMtfSteps->get_value(),batch);
+    officecfg::Office::Draw::Misc::CrossFading::Orientation::set(m_xCbxOrientation->get_active(),batch);
+    officecfg::Office::Draw::Misc::CrossFading::Attributes::set(m_xCbxAttributes->get_active(),batch);
+    batch->commit();
 }
 
 } // end of namespace sd
