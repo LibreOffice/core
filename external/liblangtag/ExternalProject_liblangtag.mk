@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,liblangtag,\
 ))
 
 $(call gb_ExternalProject_get_state_target,liblangtag,build):
-	$(call gb_Trace_StartRange,liblangtrag,EXTERNAL)
+	$(call gb_Trace_StartRange,liblangtag,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
 		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
@@ -44,6 +44,6 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \
 		) \
 	)
-	$(call gb_Trace_EndRange,liblangtrag,EXTERNAL)
+	$(call gb_Trace_EndRange,liblangtag,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:
