@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <memory>
 #include <deque>
 
@@ -48,7 +49,7 @@ typedef std::deque<rtl::Reference<SwXTextPortion>> TextRangeList_t;
  * UNO API wrapper around an SwContentControl, exposed as the com.sun.star.text.ContentControl
  * service.
  */
-class SwXContentControl final
+class SW_DLLPUBLIC SwXContentControl final
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::container::XEnumerationAccess,
                                   css::text::XTextContent, css::text::XText,
                                   css::beans::XPropertySet>

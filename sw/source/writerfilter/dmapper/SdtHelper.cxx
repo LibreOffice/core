@@ -33,6 +33,8 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <unotxdoc.hxx>
 #include <unobookmark.hxx>
+#include <unocontentcontrol.hxx>
+#include <unoport.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -374,10 +376,8 @@ void SdtHelper::createPlainTextControl()
     if (oData.has_value())
         xCrsr->setString(*oData);
 
-    uno::Reference<text::XTextContent> xContentControl(
-        m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.text.ContentControl"),
-        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    rtl::Reference<SwXContentControl> xContentControl(
+        m_rDM_Impl.GetTextDocument()->createContentControl());
 
     for (const beans::PropertyValue& prop : getInteropGrabBagAndClear())
     {
@@ -418,7 +418,7 @@ void SdtHelper::createPlainTextControl()
                     sPropertyName = "MultiLine";
                 if (!sPropertyName.isEmpty())
                 {
-                    xContentControlProps->setPropertyValue(sPropertyName, internalProp.Value);
+                    xContentControl->setPropertyValue(sPropertyName, internalProp.Value);
                 }
                 sPropertyName.clear();
             }
@@ -426,11 +426,11 @@ void SdtHelper::createPlainTextControl()
 
         if (!sPropertyName.isEmpty())
         {
-            xContentControlProps->setPropertyValue(sPropertyName, prop.Value);
+            xContentControl->setPropertyValue(sPropertyName, prop.Value);
         }
     }
 
-    xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+    xContentControl->setPropertyValue("PlainText", uno::Any(true));
 
     xText->insertTextContent(xCrsr, xContentControl, /*bAbsorb=*/true);
 

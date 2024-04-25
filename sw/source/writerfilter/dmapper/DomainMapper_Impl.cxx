@@ -140,6 +140,8 @@
 #include <unolinebreak.hxx>
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
+#include <unocontentcontrol.hxx>
+#include <unoport.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
@@ -1084,86 +1086,84 @@ void DomainMapper_Impl::PopSdt()
         }
     }
 
-    uno::Reference<text::XTextContent> xContentControl(
-        m_xTextDocument->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    rtl::Reference<SwXContentControl> xContentControl( m_xTextDocument->createContentControl());
     if (m_pSdtHelper->GetShowingPlcHdr())
     {
-        xContentControlProps->setPropertyValue("ShowingPlaceHolder",
+        xContentControl->setPropertyValue("ShowingPlaceHolder",
                                                uno::Any(m_pSdtHelper->GetShowingPlcHdr()));
     }
 
     if (!m_pSdtHelper->GetPlaceholderDocPart().isEmpty())
     {
-        xContentControlProps->setPropertyValue("PlaceholderDocPart",
+        xContentControl->setPropertyValue("PlaceholderDocPart",
                                                uno::Any(m_pSdtHelper->GetPlaceholderDocPart()));
     }
 
     if (!m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
     {
-        xContentControlProps->setPropertyValue("DataBindingPrefixMappings",
+        xContentControl->setPropertyValue("DataBindingPrefixMappings",
                                                uno::Any(m_pSdtHelper->GetDataBindingPrefixMapping()));
     }
     if (!m_pSdtHelper->GetDataBindingXPath().isEmpty())
     {
-        xContentControlProps->setPropertyValue("DataBindingXpath",
+        xContentControl->setPropertyValue("DataBindingXpath",
                                                uno::Any(m_pSdtHelper->GetDataBindingXPath()));
     }
     if (!m_pSdtHelper->GetDataBindingStoreItemID().isEmpty())
     {
-        xContentControlProps->setPropertyValue("DataBindingStoreItemID",
+        xContentControl->setPropertyValue("DataBindingStoreItemID",
                                                uno::Any(m_pSdtHelper->GetDataBindingStoreItemID()));
     }
 
     if (!m_pSdtHelper->GetColor().isEmpty())
     {
-        xContentControlProps->setPropertyValue("Color",
+        xContentControl->setPropertyValue("Color",
                                                uno::Any(m_pSdtHelper->GetColor()));
     }
 
     if (!m_pSdtHelper->GetAppearance().isEmpty())
     {
-        xContentControlProps->setPropertyValue("Appearance",
+        xContentControl->setPropertyValue("Appearance",
                                                uno::Any(m_pSdtHelper->GetAppearance()));
     }
 
     if (!m_pSdtHelper->GetAlias().isEmpty())
     {
-        xContentControlProps->setPropertyValue("Alias",
+        xContentControl->setPropertyValue("Alias",
                                                uno::Any(m_pSdtHelper->GetAlias()));
     }
 
     if (!m_pSdtHelper->GetTag().isEmpty())
     {
-        xContentControlProps->setPropertyValue("Tag",
+        xContentControl->setPropertyValue("Tag",
                                                uno::Any(m_pSdtHelper->GetTag()));
     }
 
     if (m_pSdtHelper->GetId())
     {
-        xContentControlProps->setPropertyValue("Id", uno::Any(m_pSdtHelper->GetId()));
+        xContentControl->setPropertyValue("Id", uno::Any(m_pSdtHelper->GetId()));
     }
 
     if (m_pSdtHelper->GetTabIndex())
     {
-        xContentControlProps->setPropertyValue("TabIndex", uno::Any(m_pSdtHelper->GetTabIndex()));
+        xContentControl->setPropertyValue("TabIndex", uno::Any(m_pSdtHelper->GetTabIndex()));
     }
 
     if (!m_pSdtHelper->GetLock().isEmpty())
     {
-        xContentControlProps->setPropertyValue("Lock", uno::Any(m_pSdtHelper->GetLock()));
+        xContentControl->setPropertyValue("Lock", uno::Any(m_pSdtHelper->GetLock()));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
     {
-        xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
+        xContentControl->setPropertyValue("Checkbox", uno::Any(true));
 
-        xContentControlProps->setPropertyValue("Checked", uno::Any(m_pSdtHelper->GetChecked()));
+        xContentControl->setPropertyValue("Checked", uno::Any(m_pSdtHelper->GetChecked()));
 
-        xContentControlProps->setPropertyValue("CheckedState",
+        xContentControl->setPropertyValue("CheckedState",
                                                uno::Any(m_pSdtHelper->GetCheckedState()));
 
-        xContentControlProps->setPropertyValue("UncheckedState",
+        xContentControl->setPropertyValue("UncheckedState",
                                                uno::Any(m_pSdtHelper->GetUncheckedState()));
     }
 
@@ -1183,31 +1183,31 @@ void DomainMapper_Impl::PopSdt()
                     comphelper::makePropertyValue("Value", rValues[i])
                 };
             }
-            xContentControlProps->setPropertyValue("ListItems", uno::Any(aItems));
+            xContentControl->setPropertyValue("ListItems", uno::Any(aItems));
             if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
             {
-                xContentControlProps->setPropertyValue("DropDown", uno::Any(true));
+                xContentControl->setPropertyValue("DropDown", uno::Any(true));
             }
             else
             {
-                xContentControlProps->setPropertyValue("ComboBox", uno::Any(true));
+                xContentControl->setPropertyValue("ComboBox", uno::Any(true));
             }
         }
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::picture)
     {
-        xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+        xContentControl->setPropertyValue("Picture", uno::Any(true));
     }
 
     bool bDateFromDataBinding = false;
     if (m_pSdtHelper->getControlType() == SdtControlType::datePicker)
     {
-        xContentControlProps->setPropertyValue("Date", uno::Any(true));
+        xContentControl->setPropertyValue("Date", uno::Any(true));
         OUString aDateFormat = m_pSdtHelper->getDateFormat().makeStringAndClear();
-        xContentControlProps->setPropertyValue("DateFormat",
+        xContentControl->setPropertyValue("DateFormat",
                                                uno::Any(aDateFormat.replaceAll("'", "\"")));
-        xContentControlProps->setPropertyValue("DateLanguage",
+        xContentControl->setPropertyValue("DateLanguage",
                                                uno::Any(m_pSdtHelper->getLocale().makeStringAndClear()));
         OUString aCurrentDate = m_pSdtHelper->getDate().makeStringAndClear();
         if (oData.has_value())
@@ -1215,13 +1215,13 @@ void DomainMapper_Impl::PopSdt()
             aCurrentDate = *oData;
             bDateFromDataBinding = true;
         }
-        xContentControlProps->setPropertyValue("CurrentDate",
+        xContentControl->setPropertyValue("CurrentDate",
                                                uno::Any(aCurrentDate));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::plainText)
     {
-        xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+        xContentControl->setPropertyValue("PlainText", uno::Any(true));
     }
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
@@ -1229,7 +1229,7 @@ void DomainMapper_Impl::PopSdt()
     if (bDateFromDataBinding)
     {
         OUString aDateString;
-        xContentControlProps->getPropertyValue("DateString") >>= aDateString;
+        xContentControl->getPropertyValue("DateString") >>= aDateString;
         xCursor->setString(aDateString);
     }
 

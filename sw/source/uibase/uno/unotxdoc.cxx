@@ -180,6 +180,7 @@
 #include <unofield.hxx>
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
+#include <unocontentcontrol.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1733,6 +1734,13 @@ rtl::Reference< SwXPageStyle > SwXTextDocument::createPageStyle()
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     return SwXStyleFamilies::CreateStylePage(GetDocOrThrow());
+}
+
+rtl::Reference< SwXContentControl > SwXTextDocument::createContentControl()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXContentControl::CreateXContentControl(GetDocOrThrow());
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
