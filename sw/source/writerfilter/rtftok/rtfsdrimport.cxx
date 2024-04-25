@@ -81,8 +81,8 @@ RTFSdrImport::~RTFSdrImport()
 void RTFSdrImport::createShape(const OUString& rService, uno::Reference<drawing::XShape>& xShape,
                                uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    if (m_rImport.getModelFactory().is())
-        xShape.set(m_rImport.getModelFactory()->createInstance(rService), uno::UNO_QUERY);
+    if (m_rImport.getTextDocument().is())
+        xShape.set(m_rImport.getTextDocument()->createInstance(rService), uno::UNO_QUERY);
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 
@@ -1089,7 +1089,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                                            uno::Any(rShape.getVertOrientRelation()));
         if (rShape.getWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
             xPropertySet->setPropertyValue("Surround", uno::Any(rShape.getWrap()));
-        oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
+        oox::ModelObjectHelper aModelObjectHelper(m_rImport.getTextDocument());
         if (aFillModel.moType.has_value())
         {
             oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);

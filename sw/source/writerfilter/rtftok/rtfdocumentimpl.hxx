@@ -728,10 +728,7 @@ public:
 
     Stream& Mapper() { return *m_pMapperStream; }
     void setSuperstream(RTFDocumentImpl* pSuperstream);
-    const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory() const
-    {
-        return m_xModelFactory;
-    }
+    const rtl::Reference<SwXTextDocument>& getTextDocument() const { return m_xDstDoc; }
     bool isInBackground();
     void setDestinationText(std::u16string_view rString);
     /// Resolve a picture: If not inline, then anchored.
@@ -817,7 +814,6 @@ private:
     rtl::Reference<SwXTextDocument> const& m_xDstDoc;
     css::uno::Reference<css::frame::XFrame> const& m_xFrame;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xModelFactory;
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
     std::unique_ptr<SvStream> m_pInStream;
     Stream* m_pMapperStream;

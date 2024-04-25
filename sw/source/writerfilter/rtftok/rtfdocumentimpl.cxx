@@ -335,8 +335,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
 
-    m_xModelFactory = m_xDstDoc;
-
     if (m_xDstDoc)
         m_xDocumentProperties = m_xDstDoc->getDocumentProperties();
 
@@ -1014,17 +1012,13 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             xShape.clear();
         }
     }
-    if (!xShape.is())
+    if (!xShape.is() && m_xDstDoc)
     {
-        if (m_xModelFactory.is())
-            xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
-                       uno::UNO_QUERY);
-        if (m_xDstDoc)
-        {
-            uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
-            if (xShapes.is())
-                xShapes->add(xShape);
-        }
+        xShape.set(m_xDstDoc->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                   uno::UNO_QUERY);
+        uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
+        if (xShapes.is())
+            xShapes->add(xShape);
     }
 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
@@ -3524,11 +3518,11 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                 else
                 {
                     uno::Reference<beans::XPropertySet> xMaster(
-                        m_xModelFactory->createInstance("com.sun.star.text.FieldMaster.User"),
+                        m_xDstDoc->createInstance("com.sun.star.text.FieldMaster.User"),
                         uno::UNO_QUERY_THROW);
                     xMaster->setPropertyValue("Name", uno::Any(m_aStates.top().getDocVarName()));
                     uno::Reference<text::XDependentTextField> xField(
-                        m_xModelFactory->createInstance("com.sun.star.text.TextField.User"),
+                        m_xDstDoc->createInstance("com.sun.star.text.TextField.User"),
                         uno::UNO_QUERY);
                     xField->attachTextFieldMaster(xMaster);
                     xField->getTextFieldMaster()->setPropertyValue("Content", uno::Any(docvar));

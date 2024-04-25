@@ -613,7 +613,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (!aLookahead.hasTable())
                 {
                     uno::Reference<drawing::XShapes> xGroupShape(
-                        m_xModelFactory->createInstance("com.sun.star.drawing.GroupShape"),
+                        getTextDocument()->createInstance("com.sun.star.drawing.GroupShape"),
                         uno::UNO_QUERY);
                     if (m_xDstDoc)
                     {

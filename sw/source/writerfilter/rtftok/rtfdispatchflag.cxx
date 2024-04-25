@@ -28,6 +28,7 @@
 #include "rtfsdrimport.hxx"
 #include "rtfskipdestination.hxx"
 #include <unotxdoc.hxx>
+#include <unoframe.hxx>
 
 using namespace com::sun::star;
 
@@ -1039,7 +1040,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPLINE:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getModelFactory()->createInstance("com.sun.star.drawing.LineShape"),
+                        getTextDocument()->createInstance("com.sun.star.drawing.LineShape"),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1048,7 +1049,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     // The reason this is not a simple CustomShape is that in the old syntax we have no ViewBox info.
                     uno::Reference<drawing::XShape> xShape(
-                        getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"),
+                        getTextDocument()->createInstance("com.sun.star.drawing.PolyLineShape"),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1056,7 +1057,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPPOLYGON:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getModelFactory()->createInstance("com.sun.star.drawing.PolyPolygonShape"),
+                        getTextDocument()->createInstance("com.sun.star.drawing.PolyPolygonShape"),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1064,7 +1065,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPRECT:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getModelFactory()->createInstance("com.sun.star.drawing.RectangleShape"),
+                        getTextDocument()->createInstance("com.sun.star.drawing.RectangleShape"),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1074,9 +1075,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     break;
                 case RTFKeyword::DPTXBX:
                 {
-                    uno::Reference<drawing::XShape> xShape(
-                        getModelFactory()->createInstance("com.sun.star.text.TextFrame"),
-                        uno::UNO_QUERY);
+                    rtl::Reference<SwXTextFrame> xShape(getTextDocument()->createTextFrame());
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     std::vector<beans::PropertyValue> aDefaults
                         = RTFSdrImport::getTextFrameDefaults(false);
@@ -1099,7 +1098,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (nType)
             {
                 uno::Reference<drawing::XShape> xShape(
-                    getModelFactory()->createInstance("com.sun.star.drawing.CustomShape"),
+                    getTextDocument()->createInstance("com.sun.star.drawing.CustomShape"),
                     uno::UNO_QUERY);
                 m_aStates.top().getDrawingObject().setShape(xShape);
             }
