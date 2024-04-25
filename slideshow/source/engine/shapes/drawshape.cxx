@@ -863,7 +863,7 @@ namespace slideshow::internal
             ENSURE_OR_RETURN_VOID( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );
 
-            // Load 1 more frame if needed. (make sure the current frame is loded)
+            // Load 1 more frame if needed. (make sure the current frame is loaded)
             if (mpGraphicLoader)
                 getSomeAnimationFramesFromGraphic(1, nCurrFrame);
 
