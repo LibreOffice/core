@@ -9349,7 +9349,6 @@ sd/inc/sdcommands.h
 sd/inc/sddll.hxx
 sd/inc/sderror.hxx
 sd/inc/sdfilter.hxx
-sd/inc/sdiocmpt.hxx
 sd/inc/sdmod.hxx
 sd/inc/sdpage.hxx
 sd/inc/sdpptwrp.hxx
@@ -9446,7 +9445,6 @@ sd/source/core/drawdoc2.cxx
 sd/source/core/drawdoc3.cxx
 sd/source/core/drawdoc4.cxx
 sd/source/core/pglink.cxx
-sd/source/core/sdiocmpt.cxx
 sd/source/core/sdpage.cxx
 sd/source/core/sdpage2.cxx
 sd/source/core/sdpage_animations.cxx
