@@ -157,49 +157,6 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     return pOptions;
 }
 
-/**
- * Open and return option stream for internal options;
- * if the stream is opened for reading but does not exist, an 'empty'
- * RefObject is returned
- */
-rtl::Reference<SotStorageStream> SdModule::GetOptionStream( std::u16string_view rOptionName,
-                                              SdOptionStreamMode eMode )
-{
-    ::sd::DrawDocShell*     pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-    rtl::Reference<SotStorageStream> xStm;
-
-    if( pDocSh )
-    {
-        DocumentType    eType = pDocSh->GetDoc()->GetDocumentType();
-
-        if( !xOptionStorage.is() )
-        {
-            INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-
-            aURL.Append( u"drawing.cfg" );
-
-            std::unique_ptr<SvStream> pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READWRITE );
-
-            if( pStm )
-                xOptionStorage = new SotStorage( pStm.release(), true );
-        }
-
-        OUString        aStmName;
-
-        if( DocumentType::Draw == eType )
-            aStmName = "Draw_";
-        else
-            aStmName = "Impress_";
-
-        aStmName += rOptionName;
-
-        if( SdOptionStreamMode::Store == eMode || xOptionStorage->IsContained( aStmName ) )
-            xStm = xOptionStorage->OpenSotStream( aStmName );
-    }
-
-    return xStm;
-}
-
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )

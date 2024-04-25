@@ -51,12 +51,6 @@ namespace com::sun::star::frame {
     class XFrame;
 }
 
-enum class SdOptionStreamMode
-{
-    Load = 0,
-    Store = 1
-};
-
 struct SdExtPropertySetInfoCacheCompare
 {
     bool operator()(const std::span<SfxItemPropertyMapEntry const>& lhs, const std::span<SfxItemPropertyMapEntry const>& rhs) const
@@ -104,7 +98,6 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC rtl::Reference<SotStorageStream> GetOptionStream( std::u16string_view rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
@@ -140,7 +133,6 @@ private:
     SdOptions*              pDrawOptions;
     std::unique_ptr<SvxSearchItem>      pSearchItem;
     std::unique_ptr<SvNumberFormatter>  pNumberFormatter;
-    rtl::Reference<SotStorage>          xOptionStorage;
     bool                    bWaterCan;
     std::unique_ptr<SfxErrorHandler> mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
