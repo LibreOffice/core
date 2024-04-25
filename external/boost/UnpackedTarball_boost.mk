@@ -20,8 +20,6 @@ boost_patches += rtti.patch.0
 
 # https://svn.boost.org/trac/boost/ticket/11505
 boost_patches += boost_1_59_0.mpl.config.wundef.patch
-# https://svn.boost.org/trac/boost/ticket/11501
-boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
 boost_patches += clang-cl.patch.0
 
@@ -44,7 +42,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,boost,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,boost,\
 	$(foreach patch,$(boost_patches),external/boost/$(patch)) \
-    external/boost/boost-emscripten-noshm.patch.0 \
     external/boost/boost-emscripten-nowasm.patch.0 \
 ))
 

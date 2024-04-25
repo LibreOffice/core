@@ -31,25 +31,3 @@
  #    pragma clang diagnostic pop
  #endif
  }}} // namespace boost::locale::detail
---- boost/math/tools/config.hpp
-+++ boost/math/tools/config.hpp
-@@ -147,7 +147,7 @@
- #endif
- 
- // C++23
--#if __cplusplus > 202002L || _MSVC_LANG > 202002L
-+#if __cplusplus > 202002L || (defined _MSVC_LANG && _MSVC_LANG > 202002L)
- #  if __GNUC__ >= 13
-      // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
-      // otherwise we're right out of luck...
---- boost/math/tools/promotion.hpp
-+++ boost/math/tools/promotion.hpp
-@@ -27,7 +27,7 @@
- #include <type_traits>
- 
- #if defined __has_include
--#  if __cplusplus > 202002L || _MSVC_LANG > 202002L 
-+#  if __cplusplus > 202002L || (defined _MSVC_LANG && _MSVC_LANG > 202002L) 
- #    if __has_include (<stdfloat>)
- #    include <stdfloat>
- #    endif
