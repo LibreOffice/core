@@ -1079,6 +1079,8 @@ void ToolBarRules::SelectionHasChanged (
                         case ::sd::ViewShell::ST_HANDOUT:
                             mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Function,
                                                          ToolBarManager::msDrawingObjectToolBar);
+                            mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Permanent,
+                                                         ToolBarManager::msToolBar);
                             break;
                         default:
                             break;
@@ -1122,6 +1124,7 @@ void ToolBarRules::SubShellAdded (
             break;
 
         case ToolbarId::Draw_Text_Toolbox_Sd:
+            mpToolBarManager->RemoveToolBar(ToolBarManager::ToolBarGroup::Permanent, ToolBarManager::msToolBar);
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTextObjectBar);
             break;
 
