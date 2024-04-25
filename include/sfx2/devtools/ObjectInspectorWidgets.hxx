@@ -10,36 +10,14 @@
 
 #pragma once
 
+#include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
-struct ObjectInspectorWidgets
+struct SFX2_DLLPUBLIC ObjectInspectorWidgets
 {
-    ObjectInspectorWidgets(const std::unique_ptr<weld::Builder>& rxBuilder)
-        : mpClassNameLabel(rxBuilder->weld_label("class_name_value_id"))
-        , mpInterfacesTreeView(rxBuilder->weld_tree_view("interfaces_treeview_id"))
-        , mpServicesTreeView(rxBuilder->weld_tree_view("services_treeview_id"))
-        , mpPropertiesTreeView(rxBuilder->weld_tree_view("properties_treeview_id"))
-        , mpMethodsTreeView(rxBuilder->weld_tree_view("methods_treeview_id"))
-        , mpToolbar(rxBuilder->weld_toolbar("object_inspector_toolbar"))
-        , mpNotebook(rxBuilder->weld_notebook("object_inspector_notebookbar"))
-        , mpTextView(rxBuilder->weld_text_view("object_inspector_text_view"))
-        , mpPaned(rxBuilder->weld_paned("object_inspector_paned"))
-    {
-    }
+    ObjectInspectorWidgets(const std::unique_ptr<weld::Builder>& rxBuilder);
 
-    ~ObjectInspectorWidgets()
-    {
-        // dispose welded objects
-        mpClassNameLabel.reset();
-        mpInterfacesTreeView.reset();
-        mpServicesTreeView.reset();
-        mpPropertiesTreeView.reset();
-        mpMethodsTreeView.reset();
-        mpToolbar.reset();
-        mpNotebook.reset();
-        mpTextView.reset();
-        mpPaned.reset();
-    }
+    ~ObjectInspectorWidgets();
 
     std::unique_ptr<weld::Label> mpClassNameLabel;
     std::unique_ptr<weld::TreeView> mpInterfacesTreeView;
