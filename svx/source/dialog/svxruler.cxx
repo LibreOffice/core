@@ -1032,7 +1032,7 @@ void SvxRuler::UpdateTabs()
             lCurrentDefTabDist = mxTabStopItem->GetDefaultDistance();
         tools::Long nDefTabDist = ConvertHPosPixel(lCurrentDefTabDist);
 
-        const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent
+        const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent || nDefTabDist == 0
                     ? 0
                     : static_cast<sal_uInt16>( (lRightIndent - lPosPixel) / nDefTabDist );
 
