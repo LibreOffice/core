@@ -195,18 +195,20 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
             }
             else
             {
-                SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
-                SwFrameFormat *pFormat = pContact->GetFormat();
-                SwFormatAnchor aAnchor( pFormat->GetAnchor() );
-                if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-                    (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-                    (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
-                    (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
+                if (SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj )))
                 {
-                    aAnchor.SetAnchor( &aPos );
-                }
+                    SwFrameFormat *pFormat = pContact->GetFormat();
+                    SwFormatAnchor aAnchor( pFormat->GetAnchor() );
+                    if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                        (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                        (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+                        (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
+                    {
+                        aAnchor.SetAnchor( &aPos );
+                    }
 
-                rClpDoc.getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
+                    rClpDoc.getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
+                }
             }
         }
     }
@@ -297,6 +299,9 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
         SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
 
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
+        if (!pContact)
+            continue;
+
         SwFrameFormat *pFormat = pContact->GetFormat();
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
 

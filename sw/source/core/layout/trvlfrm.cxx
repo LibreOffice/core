@@ -70,26 +70,29 @@ namespace {
         {
             const SwVirtFlyDrawObj* pObj =
                                 static_cast<const SwVirtFlyDrawObj*>(aIter());
-            const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
-            const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
-            const SwFormatSurround& rSurround = pObjFormat->GetSurround();
-            const SvxOpaqueItem& rOpaque = pObjFormat->GetOpaque();
-            bool bInBackground = ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH ) && !rOpaque.GetValue();
-
-            bool bBackgroundMatches = bInBackground == bSearchBackground;
-
-            const SwFlyFrame* pFly = pObj ? pObj->GetFlyFrame() : nullptr;
-            if ( pFly && bBackgroundMatches &&
-                 ( ( pCMS && pCMS->m_bSetInReadOnly ) ||
-                   !pFly->IsProtected() ) &&
-                 pFly->GetModelPositionForViewPoint( pPos, aPoint, pCMS ) )
+            if (const SwContact* pContact = ::GetUserCall( aIter() ))
             {
-                bRet = true;
-                break;
-            }
+                const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( aIter() );
+                const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+                const SwFormatSurround& rSurround = pObjFormat->GetSurround();
+                const SvxOpaqueItem& rOpaque = pObjFormat->GetOpaque();
+                bool bInBackground = ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH ) && !rOpaque.GetValue();
 
-            if ( pCMS && pCMS->m_bStop )
-                return false;
+                bool bBackgroundMatches = bInBackground == bSearchBackground;
+
+                const SwFlyFrame* pFly = pObj ? pObj->GetFlyFrame() : nullptr;
+                if ( pFly && bBackgroundMatches &&
+                     ( ( pCMS && pCMS->m_bSetInReadOnly ) ||
+                       !pFly->IsProtected() ) &&
+                     pFly->GetModelPositionForViewPoint( pPos, aPoint, pCMS ) )
+                {
+                    bRet = true;
+                    break;
+                }
+
+                if ( pCMS && pCMS->m_bStop )
+                    return false;
+            }
             aIter.Prev();
         }
         return bRet;

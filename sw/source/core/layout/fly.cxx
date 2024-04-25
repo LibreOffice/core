@@ -2528,8 +2528,8 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
         assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
         // perform disconnect from layout, if 'master' drawing object is appended
         // to a new frame.
-        static_cast<SwDrawContact*>(::GetUserCall( _rNewObj.GetDrawObj() ))->
-                                                DisconnectFromLayout( false );
+        if (SwDrawContact* pContact = static_cast<SwDrawContact*>(::GetUserCall( _rNewObj.GetDrawObj() )))
+            pContact->DisconnectFromLayout( false );
         assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
     }
 

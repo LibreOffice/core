@@ -297,6 +297,8 @@ void SwFrameNotify::ImplDestroy()
                 bool bNotify = false;
                 bool bNotifySize = false;
                 SwContact* pContact = ::GetUserCall( pObj->GetDrawObj() );
+                if (!pContact)
+                    continue;
                 const bool bAnchoredAsChar = pContact->ObjAnchoredAsChar();
                 if ( !bAnchoredAsChar )
                 {
@@ -1067,22 +1069,23 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
                             InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
                 }
 
-                SwDrawContact* pNew =
-                    static_cast<SwDrawContact*>(GetUserCall( pSdrObj ));
-                if ( !pNew->GetAnchorFrame() )
+                if (SwDrawContact* pNew = static_cast<SwDrawContact*>(GetUserCall( pSdrObj )))
                 {
-                    pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( nullptr )) );
-                }
-                // OD 19.06.2003 #108784# - add 'virtual' drawing object,
-                // if necessary. But control objects have to be excluded.
-                else if ( !::CheckControlLayer( pSdrObj ) &&
-                          pNew->GetAnchorFrame() != pFrame &&
-                          !pNew->GetDrawObjectByAnchorFrame( *pFrame ) )
-                {
-                    SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj(*pFrame);
-                    pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( pDrawVirtObj )) );
+                    if ( !pNew->GetAnchorFrame() )
+                    {
+                        pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( nullptr )) );
+                    }
+                    // OD 19.06.2003 #108784# - add 'virtual' drawing object,
+                    // if necessary. But control objects have to be excluded.
+                    else if ( !::CheckControlLayer( pSdrObj ) &&
+                              pNew->GetAnchorFrame() != pFrame &&
+                              !pNew->GetDrawObjectByAnchorFrame( *pFrame ) )
+                    {
+                        SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj(*pFrame);
+                        pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( pDrawVirtObj )) );
 
-                    pDrawVirtObj->ActionChanged();
+                        pDrawVirtObj->ActionChanged();
+                    }
                 }
             }
             else
@@ -3598,8 +3601,13 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
     }
     else
     {
-        pFrame = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrame(pObj);
-        aPos = pObj->GetCurrentBoundRect().TopLeft();
+        if (SwDrawContact* pC = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+        {
+            pFrame = pC->GetAnchorFrame(pObj);
+            aPos = pObj->GetCurrentBoundRect().TopLeft();
+        }
+        else
+            return false;
     }
     OSL_ENSURE( pFrame, "8-( Fly is lost in Space." );
     pFrame = GetVirtualUpper( pFrame, aPos );

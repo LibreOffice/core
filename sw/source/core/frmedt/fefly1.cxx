@@ -382,11 +382,13 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
             return nullptr;
         return pFly->GetFormat();
     }
-    else if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
+    else if ( rMrkList.GetMarkCount() != 1 )
         return nullptr;
 
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
+    SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+    if (!pContact)
+        return nullptr;
 
     SwFrameFormat *pFormat = FindFrameFormat( pObj );
     if( pFormat && RndStdIds::FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
@@ -398,7 +400,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         }
         else
         {
-            pFly = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrame(pObj);
+            pFly = pContact->GetAnchorFrame(pObj);
         }
 
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
@@ -491,11 +493,12 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     SdrObject* pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
 
-    if (!GetUserCall(pObj))
+    SwContact* pContact = ::GetUserCall( pObj );
+    if (!pContact)
         return aRet;
 
     // #i28701#
-    SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+    SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
     SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     const RndStdIds nAnchorId = pFormat->GetAnchor().GetAnchorId();
 
