@@ -1577,6 +1577,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_outline_numbering)
     // assertXPath(pXmlDoc, "//office:body/office:text/text:list"_ostr, 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
+{
+    // Given a table in a frame anchored to a page:
+    // it must not assert on export because of missing format for an exported table
+    loadAndReload("table_in_frame_to_page.fodt");
+
+    // Check also, that autostyles defined inside that frame are stored correctly. If not, then
+    // these paragraphs would refer to styles in <office::styles>, not in <office:automatic-styles>,
+    // without the 'italic' and 'bold' attributes.
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    OUString P1 = getXPath(
+        pXmlDoc,
+        "//office:body/office:text/draw:frame/draw:text-box/table:table/table:table-row[1]/"
+        "table:table-cell[1]/text:p"_ostr,
+        "style-name"_ostr);
+    assertXPath(pXmlDoc,
+                "//office:automatic-styles/style:style[@style:name='"_ostr + P1.toUtf8()
+                    + "']/style:text-properties",
+                "font-style"_ostr, u"italic"_ustr);
+    OUString P2
+        = getXPath(pXmlDoc, "//office:body/office:text/draw:frame/draw:text-box/text:p"_ostr,
+                   "style-name"_ostr);
+    assertXPath(pXmlDoc,
+                "//office:automatic-styles/style:style[@style:name='"_ostr + P2.toUtf8()
+                    + "']/style:text-properties",
+                "font-weight"_ostr, u"bold"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

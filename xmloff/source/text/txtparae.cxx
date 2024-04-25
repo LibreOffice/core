@@ -1631,7 +1631,7 @@ void XMLTextParagraphExport::collectTextAutoStylesAndNodeExportOrder(bool bIsPro
         return;
 
     const bool bAutoStyles = true;
-    const bool bExportContent = false;
+    const bool bExportContent = true;
 
     if (auto xTextDocument = GetExport().GetModel().query<XTextDocument>())
     {
