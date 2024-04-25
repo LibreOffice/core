@@ -531,6 +531,8 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXTextFrame> createTextFrame();
     SW_DLLPUBLIC rtl::Reference<SwXTextGraphicObject> createTextGraphicObject();
     SW_DLLPUBLIC rtl::Reference<SwXStyle> createNumberingStyle();
+    SW_DLLPUBLIC rtl::Reference<SwXStyle> createCharacterStyle();
+    SW_DLLPUBLIC rtl::Reference<SwXStyle> createParagraphStyle();
     SW_DLLPUBLIC rtl::Reference<SwXPageStyle> createPageStyle();
     SW_DLLPUBLIC rtl::Reference<SwXContentControl> createContentControl();
     SW_DLLPUBLIC rtl::Reference<SwXFootnote> createFootnote();

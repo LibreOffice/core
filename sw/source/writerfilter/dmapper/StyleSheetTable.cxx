@@ -53,6 +53,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <unotxdoc.hxx>
+#include <unoxstyle.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1153,11 +1154,12 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     else
                     {
                         bInsert = true;
-                        xStyle.set(m_pImpl->m_xTextDocument->createInstance(
-                                     bParaStyle ?
-                                        getPropertyName( PROP_SERVICE_PARA_STYLE ) :
-                                        (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : getPropertyName( PROP_SERVICE_CHAR_STYLE ))),
-                                   uno::UNO_QUERY_THROW);
+                        if (bParaStyle)
+                            xStyle = m_pImpl->m_xTextDocument->createParagraphStyle();
+                        else if (bListStyle)
+                            xStyle = m_pImpl->m_xTextDocument->createNumberingStyle();
+                        else
+                            xStyle = m_pImpl->m_xTextDocument->createCharacterStyle();
 
                         // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
                         if (bListStyle)
@@ -1799,21 +1801,19 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         throw uno::RuntimeException();
     try
     {
-        uno::Reference< style::XStyle > xStyle( m_pImpl->m_xTextDocument->createInstance(
-            getPropertyName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
+        rtl::Reference< SwXStyle > xStyle = m_pImpl->m_xTextDocument->createCharacterStyle();
         for( const auto& rCharProp : rCharProperties)
         {
             try
             {
-                xStyleProps->setPropertyValue( rCharProp.Name, rCharProp.Value );
+                xStyle->setPropertyValue( rCharProp.Name, rCharProp.Value );
             }
             catch( const uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
         }
-        xCharStyles->insertByName( sListLabel, uno::Any( xStyle) );
+        xCharStyles->insertByName( sListLabel, uno::Any( uno::Reference<style::XStyle>(xStyle) ) );
         m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, std::vector(rCharProperties) );
     }
     catch( const uno::Exception& )

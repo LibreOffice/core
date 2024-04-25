@@ -1729,6 +1729,20 @@ rtl::Reference< SwXStyle > SwXTextDocument::createNumberingStyle()
     return SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily::Pseudo, GetDocOrThrow());
 }
 
+rtl::Reference< SwXStyle > SwXTextDocument::createCharacterStyle()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily::Char, GetDocOrThrow());
+}
+
+rtl::Reference< SwXStyle > SwXTextDocument::createParagraphStyle()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily::Para, GetDocOrThrow());
+}
+
 rtl::Reference< SwXPageStyle > SwXTextDocument::createPageStyle()
 {
     SolarMutexGuard aGuard;
