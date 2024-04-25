@@ -290,7 +290,7 @@ extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_
                 {
                     typelib_TypeDescription* td = nullptr;
                     TYPELIB_DANGER_GET(&td,
-                                       (reinterpret_cast<uno::Type*>(gpr[1])->getTypeLibType()));
+                                       (reinterpret_cast<uno::Type*>(gpr[2])->getTypeLibType()));
                     if (td != 0 && td->eTypeClass == typelib_TypeClass_INTERFACE)
                     {
                         uno::XInterface* ifc = nullptr;
