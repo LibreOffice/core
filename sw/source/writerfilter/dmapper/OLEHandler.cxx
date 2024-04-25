@@ -42,6 +42,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <svx/xmleohlp.hxx>
+#include <unotxdoc.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -277,23 +279,19 @@ OUString const & OLEHandler::GetVisAreaHeight() const
     return m_sVisAreaHeight;
 }
 
-OUString OLEHandler::copyOLEOStream(
-        uno::Reference<text::XTextDocument> const& xTextDocument)
+OUString OLEHandler::copyOLEOStream(rtl::Reference<SwXTextDocument> const& xTextDocument)
 {
     OUString sRet;
     if( !m_xInputStream.is( ) )
         return sRet;
     try
     {
-        uno::Reference < lang::XMultiServiceFactory > xFactory(xTextDocument, uno::UNO_QUERY_THROW);
-        uno::Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver(
-            xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"), uno::UNO_QUERY_THROW );
+        rtl::Reference< SvXMLEmbeddedObjectHelper > xEmbeddedResolver = xTextDocument->createEmbeddedObjectResolver();
         //hack to work with the ImportEmbeddedObjectResolver
         static sal_Int32 nObjectCount = 100;
-        uno::Reference< container::XNameAccess > xNA( xEmbeddedResolver, uno::UNO_QUERY_THROW );
         OUString aURL = "Obj" + OUString::number( nObjectCount++ );
         uno::Reference < io::XOutputStream > xOLEStream;
-        if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
+        if( (xEmbeddedResolver->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
         {
             const sal_Int32 nReadRequest = 0x1000;
             uno::Sequence< sal_Int8 > aData;
@@ -309,14 +307,13 @@ OUString OLEHandler::copyOLEOStream(
                 }
             }
 
-            ::oox::ole::SaveInteropProperties(xTextDocument, aURL, nullptr, m_sProgId);
+            ::oox::ole::SaveInteropProperties(static_cast<SfxBaseModel*>(xTextDocument.get()), aURL, nullptr, m_sProgId);
 
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
             sRet = aPersistName.copy( strlen("vnd.sun.star.EmbeddedObject:") );
 
         }
-        uno::Reference< lang::XComponent > xComp( xEmbeddedResolver, uno::UNO_QUERY_THROW );
-        xComp->dispose();
+        xEmbeddedResolver->dispose();
         m_aURL = aURL;
     }
     catch( const uno::Exception& )

@@ -22,7 +22,9 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <rtl/ref.hxx>
 
+class SwXTextDocument;
 namespace com::sun::star{
     namespace graphic{
         class XGraphic;
@@ -83,7 +85,7 @@ public:
     OUString const & GetVisAreaWidth() const;
     OUString const & GetVisAreaHeight() const;
 
-    OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
+    OUString copyOLEOStream(rtl::Reference<SwXTextDocument> const& xTextDocument);
 
     css::awt::Size getSize() const;
     css::uno::Reference<css::graphic::XGraphic> getReplacement() const;

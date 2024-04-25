@@ -1764,6 +1764,13 @@ rtl::Reference< SwXTextEmbeddedObject > SwXTextDocument::createTextEmbeddedObjec
     return SwXTextEmbeddedObject::CreateXTextEmbeddedObject(GetDocOrThrow(), nullptr);
 }
 
+rtl::Reference< SvXMLEmbeddedObjectHelper > SwXTextDocument::createEmbeddedObjectResolver()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return new SvXMLEmbeddedObjectHelper(*m_pDocShell, SvXMLEmbeddedObjectHelperMode::Read);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);

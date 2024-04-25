@@ -118,6 +118,7 @@ class SwXTextGraphicObject;
 class SwXPageStyle;
 class SwXContentControl;
 class SwXTextEmbeddedObject;
+class SvXMLEmbeddedObjectHelper;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -535,6 +536,7 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXFootnote> createFootnote();
     SW_DLLPUBLIC rtl::Reference<SwXFootnote> createEndnote();
     SW_DLLPUBLIC rtl::Reference<SwXTextEmbeddedObject> createTextEmbeddedObject();
+    SW_DLLPUBLIC rtl::Reference<SvXMLEmbeddedObjectHelper> createEmbeddedObjectResolver();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
