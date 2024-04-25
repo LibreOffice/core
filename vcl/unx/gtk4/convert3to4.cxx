@@ -541,6 +541,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "input-purpose" && GetParentObjectType(xChild) == "GtkSpinButton")
+            {
+                // "input-purpose" is a property of GtkEntry, but
+                // GTK 4 GtkSpinButton no longer derives from GtkEntry
+                xRemoveList.push_back(xChild);
+            }
+
             if (sName == "truncate-multiline")
             {
                 if (GetParentObjectType(xChild) == "GtkSpinButton")
