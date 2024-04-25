@@ -23,6 +23,9 @@
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "FieldTypes.hxx"
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 namespace writerfilter::dmapper
 {
@@ -30,8 +33,7 @@ class FormControlHelper : public virtual SvRefBase
 {
 public:
     typedef tools::SvRef<FormControlHelper> Pointer_t;
-    FormControlHelper(FieldId eFieldId,
-                      css::uno::Reference<css::text::XTextDocument> const& rTextDocument,
+    FormControlHelper(FieldId eFieldId, rtl::Reference<SwXTextDocument> const& rTextDocument,
                       FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper() override;
 

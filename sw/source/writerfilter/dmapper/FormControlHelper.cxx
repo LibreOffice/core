@@ -41,6 +41,8 @@
 #include <xmloff/odffields.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <rtl/ref.hxx>
+#include <unotxdoc.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -53,11 +55,9 @@ struct FormControlHelper::FormControlHelper_Impl : public virtual SvRefBase
     uno::Reference<drawing::XDrawPage> rDrawPage;
     uno::Reference<form::XForm> rForm;
     uno::Reference<form::XFormComponent> rFormComponent;
-    uno::Reference<lang::XMultiServiceFactory> rServiceFactory;
-    uno::Reference<text::XTextDocument> rTextDocument;
+    rtl::Reference<SwXTextDocument> mxTextDocument;
 
     uno::Reference<drawing::XDrawPage> const & getDrawPage();
-    uno::Reference<lang::XMultiServiceFactory> const & getServiceFactory();
     uno::Reference<form::XForm> const & getForm();
     uno::Reference<container::XIndexContainer> getFormComps();
 };
@@ -66,21 +66,11 @@ uno::Reference<drawing::XDrawPage> const & FormControlHelper::FormControlHelper_
 {
     if (! rDrawPage.is())
     {
-        uno::Reference<drawing::XDrawPageSupplier>
-            xDrawPageSupplier(rTextDocument, uno::UNO_QUERY);
-        if (xDrawPageSupplier.is())
-            rDrawPage = xDrawPageSupplier->getDrawPage();
+        if (mxTextDocument)
+            rDrawPage = mxTextDocument->getDrawPage();
     }
 
     return rDrawPage;
-}
-
-uno::Reference<lang::XMultiServiceFactory> const & FormControlHelper::FormControlHelper_Impl::getServiceFactory()
-{
-    if (! rServiceFactory.is())
-        rServiceFactory.set(rTextDocument, uno::UNO_QUERY);
-
-    return rServiceFactory;
 }
 
 uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::getForm()
@@ -103,7 +93,7 @@ uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::g
                 sFormName = sDOCXForm + OUString::number(nUnique);
             }
 
-            uno::Reference<uno::XInterface> xForm(getServiceFactory()->createInstance("com.sun.star.form.component.Form"));
+            uno::Reference<uno::XInterface> xForm(mxTextDocument->createInstance("com.sun.star.form.component.Form"));
             if (xForm.is())
             {
                 uno::Reference<beans::XPropertySet>
@@ -131,12 +121,12 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
 }
 
 FormControlHelper::FormControlHelper(FieldId eFieldId,
-                                     uno::Reference<text::XTextDocument> const& xTextDocument,
+                                     rtl::Reference<SwXTextDocument> const& xTextDocument,
                                      FFDataHandler::Pointer_t pFFData)
     : m_pFFData(std::move(pFFData)), m_pImpl(new FormControlHelper_Impl)
 {
     m_pImpl->m_eFieldId = eFieldId;
-    m_pImpl->rTextDocument = xTextDocument;
+    m_pImpl->mxTextDocument = xTextDocument;
 }
 
 FormControlHelper::~FormControlHelper()
@@ -148,13 +138,10 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
 {
     if ( !m_pFFData )
         return false;
-    uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(m_pImpl->getServiceFactory());
-
-    if (! xServiceFactory.is())
+    if (! m_pImpl->mxTextDocument)
         return false;
 
-    uno::Reference<uno::XInterface> xInterface = xServiceFactory->createInstance("com.sun.star.form.component.CheckBox");
+    uno::Reference<uno::XInterface> xInterface = m_pImpl->mxTextDocument->createInstance("com.sun.star.form.component.CheckBox");
 
     if (!xInterface.is())
         return false;
@@ -342,10 +329,10 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     uno::Any aAny(m_pImpl->rFormComponent);
     xFormComps->insertByIndex(xFormComps->getCount(), aAny);
 
-    if (! m_pImpl->getServiceFactory().is())
+    if (! m_pImpl->mxTextDocument )
         return;
 
-    uno::Reference<uno::XInterface> xInterface = m_pImpl->getServiceFactory()->createInstance("com.sun.star.drawing.ControlShape");
+    uno::Reference<uno::XInterface> xInterface = m_pImpl->mxTextDocument->createInstance("com.sun.star.drawing.ControlShape");
 
     if (! xInterface.is())
         return;
