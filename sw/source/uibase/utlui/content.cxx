@@ -2049,7 +2049,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveDeleteEndnoteEntry)
         xPop->remove("deleteendnote");
 
-    // bRemoveDeleteEntry is used in determining seperator 2
+    // bRemoveDeleteEntry is used in determining separator 2
     bool bRemoveDeleteEntry =
             bRemoveDeleteChapterEntry &&
             bRemoveDeleteTableEntry &&
