@@ -25,7 +25,12 @@
    x3 function
 */
 
-    NESTED_ENTRY callVirtualFunction
+    NESTED_ENTRY callVirtualFunction_fake
+
+        // for unwind information, Windows has to store fp and lr
+        PROLOG_SAVE_REG_PAIR	x29, x30, #-32!
+
+        ALTERNATE_ENTRY callVirtualFunction
 
         sub   sp, sp, #32
         stp   fp, lr, [sp]
@@ -75,7 +80,7 @@ done
         ldp   fp, lr, [sp, #-32]
         ret
 
-        NESTED_END callVirtualFunction
+        NESTED_END callVirtualFunction_fake
 
     END
 
