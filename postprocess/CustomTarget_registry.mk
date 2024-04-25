@@ -607,7 +607,7 @@ $(call gb_XcdTarget_get_target,registry_%.xcd) : \
 			$(SRCDIR)/solenv/bin/removereportbuilder.xslt - ) \
 			> $@ \
 	)
-	$(call gb_Trace_EndRange,$*,XCD)
+	$(call gb_Trace_EndRange,registry_$*,XCD)
 
 $(call gb_XcdTarget_get_target,%.xcd) : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
