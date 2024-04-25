@@ -682,59 +682,6 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 
 /*************************************************************************
 |*
-|* SdOptionsZoom
-|*
-\************************************************************************/
-
-SdOptionsZoom::SdOptionsZoom( bool bImpress ) :
-    SdOptionsGeneric( bImpress, bImpress ?
-                                 OUString() :
-                                 OUString("Office.Draw/Zoom") ),
-    nX( 1 ),
-    nY( 1 )
-
-{
-    EnableModify( true );
-}
-
-void SdOptionsZoom::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
-{
-    static const char* aPropNames[] =
-    {
-        "ScaleX",
-        "ScaleY"
-    };
-
-    rCount = !IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 0;
-    ppNames = aPropNames;
-}
-
-bool SdOptionsZoom::ReadData( const Any* pValues )
-{
-    sal_Int32 x = 1, y = 1;
-
-    if( pValues[0].hasValue() ) x = *o3tl::doAccess<sal_Int32>(pValues[ 0 ]);
-    if( pValues[1].hasValue() ) y = *o3tl::doAccess<sal_Int32>(pValues[ 1 ]);
-
-    SetScale( x, y );
-
-    return true;
-}
-
-bool SdOptionsZoom::WriteData( Any* pValues ) const
-{
-    sal_Int32 x, y;
-
-    GetScale( x, y );
-
-    pValues[ 0 ] <<= x;
-    pValues[ 1 ] <<= y;
-
-    return true;
-}
-
-/*************************************************************************
-|*
 |* SdOptionsGrid
 |*
 \************************************************************************/
@@ -1136,7 +1083,6 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 SdOptions::SdOptions(bool bImpress) :
     SdOptionsMisc( bImpress, true ),
     SdOptionsSnap( bImpress, true ),
-    SdOptionsZoom( bImpress ),
     SdOptionsGrid( bImpress ),
     SdOptionsPrint( bImpress, true )
 {
@@ -1150,7 +1096,6 @@ void SdOptions::StoreConfig()
 {
     SdOptionsMisc::Store();
     SdOptionsSnap::Store();
-    SdOptionsZoom::Store();
     SdOptionsGrid::Store();
     SdOptionsPrint::Store();
 }

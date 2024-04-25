@@ -321,27 +321,6 @@ private:
     SdOptionsSnap           maOptionsSnap;
 };
 
-class SdOptionsZoom : public SdOptionsGeneric
-{
-private:
-
-    sal_Int32   nX; // Zoom/ScaleX
-    sal_Int32   nY; // Zoom/ScaleY
-
-protected:
-
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
-
-public:
-
-    explicit SdOptionsZoom(bool bImpress);
-
-    void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
-    void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
-};
-
 class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 {
 protected:
@@ -488,7 +467,7 @@ private:
 
 class SdOptions final :
                   public SdOptionsMisc, public SdOptionsSnap,
-                  public SdOptionsZoom, public SdOptionsGrid,
+                  public SdOptionsGrid,
                   public SdOptionsPrint
 {
 public:

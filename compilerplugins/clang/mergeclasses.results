@@ -177,7 +177,6 @@ merge SceneObject with (anonymous namespace)::Iris
 maybe merge SdImportTestSkia with testTdf156856, in modules sd and workdir
 merge SdNavigatorWin with sd::sidebar::NavigatorWrapper
 merge SdOptionsGrid with SdOptions
-merge SdOptionsZoom with SdOptions
 merge SdTransferable::UserData with sd::slidesorter::controller::TransferableData
 merge SdUnoSearchReplaceShape with SdGenericDrawPage
 merge SdrCreateView with SdrView
