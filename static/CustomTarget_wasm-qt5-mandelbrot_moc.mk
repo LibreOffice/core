@@ -24,7 +24,7 @@ $(qt5_mandelbrot_MOCDEFS_H): $(qt5_mandelbrot_MOCDEFS_CXX) | $(qt5_mandelbrot_WO
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CXX,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CXX)
 	$(CXX) -pipe -O2 -std=gnu++11 -fno-exceptions $(gb_EMSCRIPTEN_CPPFLAGS) -dM -E -o $@ $<
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),MOC)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CXX)
 
 $(call gb_CustomTarget_get_workdir,static/qt5-mandelbrot)/%.moc : \
 		$(SRCDIR)/static/source/qt5-mandelbrot/%.h \
