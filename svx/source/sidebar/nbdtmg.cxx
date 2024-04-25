@@ -341,16 +341,9 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     }
 }
 
-OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
+OUString BulletsTypeMgr::GetDescription(sal_uInt16 /*nIndex*/, bool /*isDefault*/)
 {
-    OUString sRet;
-
-    if ( nIndex >= DEFAULT_BULLET_TYPES )
-        return sRet;
-    else
-        sRet = pActualBullets[nIndex]->sDescription;
-
-    return sRet;
+    return OUString();
 }
 
 bool BulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)

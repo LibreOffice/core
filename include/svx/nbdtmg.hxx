@@ -72,7 +72,6 @@ class  SVX_DLLPUBLIC BulletsSettings
 {
 public:
     vcl::Font       aFont;
-    OUString        sDescription;
     sal_UCS4        cBulletChar;
     bool            bIsCustomized;
     BulletsSettings() : cBulletChar(0), bIsCustomized(false)  {}
