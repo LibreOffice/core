@@ -220,6 +220,8 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry(size_t nPos)
 {
     pImpCursor->Clear();
     maEntries.erase(maEntries.begin() + nPos);
+    // Recalculate list positions
+    nFlags &= ~IconChoiceFlags::EntryListPosValid;
     RecalcAllBoundingRectsSmart();
 }
 
