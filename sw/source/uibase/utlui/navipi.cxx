@@ -73,6 +73,8 @@ OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget)
 {
     SwView *pView = GetCreateView();
+    if (!pView)
+        return;
     SwWrtShell &rSh = pView->GetWrtShell();
     if(nTarget < nSource || nTarget == SwOutlineNodes::npos)
         nTarget ++;
@@ -575,7 +577,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
         //Open Headings by default
         SwView *pView = GetCreateView();
-        if (pView->m_nNaviExpandedStatus < 0)
+        if (pView && pView->m_nNaviExpandedStatus < 0)
         {
             pView->m_nNaviExpandedStatus = 1;
             m_xContentTree->ExpandAllHeadings();
@@ -684,13 +686,16 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
             if (SwView::GetMoveType() == NID_PGE)
             {
                 SwView *pView = GetCreateView();
-                SwWrtShell &rSh = pView->GetWrtShell();
-                // GetPageNum - return current page number:
-                // true: in which cursor is located.
-                // false: which is visible at the upper margin.
-                sal_uInt16 nPhyNum, nVirtNum;
-                rSh.GetPageNum(nPhyNum, nVirtNum, false);
-                m_xGotoPageSpinButton->set_text(OUString::number(nPhyNum));
+                if (pView)
+                {
+                    SwWrtShell& rSh = pView->GetWrtShell();
+                    // GetPageNum - return current page number:
+                    // true: in which cursor is located.
+                    // false: which is visible at the upper margin.
+                    sal_uInt16 nPhyNum, nVirtNum;
+                    rSh.GetPageNum(nPhyNum, nVirtNum, false);
+                    m_xGotoPageSpinButton->set_text(OUString::number(nPhyNum));
+                }
             }
         }
     }
