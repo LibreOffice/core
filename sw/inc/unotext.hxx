@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_UNOTEXT_HXX
 #define INCLUDED_SW_INC_UNOTEXT_HXX
 
+#include "swdllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
@@ -120,7 +121,7 @@ public:
     // XTextRange
     virtual css::uno::Reference< css::text::XText >
         SAL_CALL getText() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString(const OUString& rString) override;
@@ -132,7 +133,7 @@ public:
     virtual void SAL_CALL insertControlCharacter(
             const css::uno::Reference< css::text::XTextRange > & xRange,
             sal_Int16 nControlCharacter, sal_Bool bAbsorb) override;
-    virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange(
+    SW_DLLPUBLIC virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) = 0;

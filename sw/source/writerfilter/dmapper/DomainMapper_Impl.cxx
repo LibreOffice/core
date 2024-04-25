@@ -141,6 +141,7 @@
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
 #include <unocontentcontrol.hxx>
+#include <unofootnote.hxx>
 #include <unoport.hxx>
 
 #define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
@@ -4001,20 +4002,21 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // for footnotes/endnotes to restore original LO behavior here.
         pTopContext->Erase(PROP_CHAR_STYLE_NAME);
 
-        uno::Reference< text::XText > xFootnoteText;
+        rtl::Reference< SwXFootnote > xFootnote;
         if (m_xTextDocument)
-            xFootnoteText.set( m_xTextDocument->createInstance(
-            bIsFootnote ?
-                OUString( "com.sun.star.text.Footnote" ) : OUString( "com.sun.star.text.Endnote" )),
-            uno::UNO_QUERY_THROW );
-        uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
+        {
+            if (bIsFootnote)
+                xFootnote = m_xTextDocument->createFootnote();
+            else
+                xFootnote = m_xTextDocument->createEndnote();
+        }
         pTopContext->SetFootnote(xFootnote, sFootnoteCharStyleName);
         uno::Sequence< beans::PropertyValue > aFontProperties;
         if (GetTopContextOfType(CONTEXT_CHARACTER))
             aFontProperties = GetTopContextOfType(CONTEXT_CHARACTER)->GetPropertyValues();
-        appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
-        m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
-                    xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
+        appendTextContent( xFootnote, aFontProperties );
+        m_aTextAppendStack.push(TextAppendContext(xFootnote,
+                    xFootnote->createTextCursorByRange(xFootnote->getStart())));
 
         // Redlines for the footnote anchor in the main text content
         std::vector< RedlineParamsPtr > aFootnoteRedline = std::move(m_aRedlines.top());

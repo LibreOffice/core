@@ -92,6 +92,7 @@ class SwXTextFieldTypes;
 class SwXTextFieldMasters;
 class SwXTextSections;
 class SwXNumberingRulesCollection;
+class SwXFootnote;
 class SwXFootnotes;
 class SwXContentControls;
 class SwXDocumentIndexes;
@@ -530,6 +531,8 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXStyle> createNumberingStyle();
     SW_DLLPUBLIC rtl::Reference<SwXPageStyle> createPageStyle();
     SW_DLLPUBLIC rtl::Reference<SwXContentControl> createContentControl();
+    SW_DLLPUBLIC rtl::Reference<SwXFootnote> createFootnote();
+    SW_DLLPUBLIC rtl::Reference<SwXFootnote> createEndnote();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

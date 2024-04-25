@@ -1743,6 +1743,20 @@ rtl::Reference< SwXContentControl > SwXTextDocument::createContentControl()
     return SwXContentControl::CreateXContentControl(GetDocOrThrow());
 }
 
+rtl::Reference< SwXFootnote > SwXTextDocument::createFootnote()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXFootnote::CreateXFootnote(GetDocOrThrow(), nullptr);
+}
+
+rtl::Reference< SwXFootnote > SwXTextDocument::createEndnote()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXFootnote::CreateXFootnote(GetDocOrThrow(), nullptr, true);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);

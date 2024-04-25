@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <swdllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -38,7 +39,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XFootnote
 > SwXFootnote_Base;
 
-class SwXFootnote final
+class SW_DLLPUBLIC SwXFootnote final
     : public SwXFootnote_Base
     , public SwXText
 {
