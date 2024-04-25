@@ -369,9 +369,9 @@ namespace comphelper
     void EnumerableMap::impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues )
     {
         OSL_PRECOND( m_aData.m_pValues && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
-        if (!m_aData.m_pValues || !m_aData.m_pValues->empty())
-            throw RuntimeException();
-
+        if (!m_aData.m_pValues || !m_aData.m_pValues->empty()){
+            throw IllegalTypeException("EnumerableMap m_aData container is invalid or not empty.", *this);
+        }
         for (auto& mapping : _initialValues)
         {
             impl_checkValue_throw(mapping.Second);
