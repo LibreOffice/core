@@ -3382,40 +3382,39 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 {
     try
     {
-        uno::Reference< text::XTextContent > xOLE( m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXTextEmbeddedObject> xOLE = m_xTextDocument->createTextEmbeddedObject();
 
         OUString aCLSID = pOLEHandler->getCLSID();
         if (aCLSID.isEmpty())
-            xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
+            xOLE->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::Any( rStreamName ));
         else
-            xOLEProperties->setPropertyValue("CLSID", uno::Any(aCLSID));
+            xOLE->setPropertyValue("CLSID", uno::Any(aCLSID));
 
         OUString aDrawAspect = pOLEHandler->GetDrawAspect();
         if(!aDrawAspect.isEmpty())
-            xOLEProperties->setPropertyValue("DrawAspect", uno::Any(aDrawAspect));
+            xOLE->setPropertyValue("DrawAspect", uno::Any(aDrawAspect));
 
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
             aSize.Width = 1000;
         if( !aSize.Height )
             aSize.Height = 1000;
-        xOLEProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
+        xOLE->setPropertyValue(getPropertyName( PROP_WIDTH ),
                         uno::Any(aSize.Width));
-        xOLEProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
+        xOLE->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                         uno::Any(aSize.Height));
 
         OUString aVisAreaWidth = pOLEHandler->GetVisAreaWidth();
         if(!aVisAreaWidth.isEmpty())
-            xOLEProperties->setPropertyValue("VisibleAreaWidth", uno::Any(aVisAreaWidth));
+            xOLE->setPropertyValue("VisibleAreaWidth", uno::Any(aVisAreaWidth));
 
         OUString aVisAreaHeight = pOLEHandler->GetVisAreaHeight();
         if(!aVisAreaHeight.isEmpty())
-            xOLEProperties->setPropertyValue("VisibleAreaHeight", uno::Any(aVisAreaHeight));
+            xOLE->setPropertyValue("VisibleAreaHeight", uno::Any(aVisAreaHeight));
 
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
-        xOLEProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
+        xOLE->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
                         uno::Any(xGraphic));
         uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
         if (xReplacementProperties.is())
@@ -3427,10 +3426,10 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 
             if (aBorderProps.LineStyle) // Set line props only if LineStyle is set
             {
-                xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
-                xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
-                xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
-                xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
+                xOLE->setPropertyValue("RightBorder", uno::Any(aBorderProps));
+                xOLE->setPropertyValue("TopBorder", uno::Any(aBorderProps));
+                xOLE->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
+                xOLE->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
             }
             OUString pProperties[] = {
                 "AnchorType",
@@ -3450,24 +3449,24 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             for (const OUString& s : pProperties)
             {
                 const uno::Any aVal = xReplacementProperties->getPropertyValue(s);
-                xOLEProperties->setPropertyValue(s, aVal);
+                xOLE->setPropertyValue(s, aVal);
             }
 
             if (xReplacementProperties->getPropertyValue("FillStyle").get<css::drawing::FillStyle>()
                 != css::drawing::FillStyle::FillStyle_NONE) // Apply fill props if style is set
             {
-                xOLEProperties->setPropertyValue(
+                xOLE->setPropertyValue(
                     "FillStyle", xReplacementProperties->getPropertyValue("FillStyle"));
-                xOLEProperties->setPropertyValue(
+                xOLE->setPropertyValue(
                     "FillColor", xReplacementProperties->getPropertyValue("FillColor"));
-                xOLEProperties->setPropertyValue(
+                xOLE->setPropertyValue(
                     "FillColor2", xReplacementProperties->getPropertyValue("FillColor2"));
             }
         }
         else
             // mimic the treatment of graphics here... it seems anchoring as character
             // gives a better ( visually ) result
-            xOLEProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),  uno::Any( text::TextContentAnchorType_AS_CHARACTER ) );
+            xOLE->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),  uno::Any( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
         SAL_WARN_IF(m_aAnchoredStack.empty(), "writerfilter.dmapper", "no anchor stack");
         if (!m_aAnchoredStack.empty())
@@ -3499,19 +3498,18 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
 
     try
     {
-        uno::Reference< text::XTextContent > xStarMath( m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXTextEmbeddedObject> xStarMath = m_xTextDocument->createTextEmbeddedObject();
 
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
             val.getAny());
         // tdf#66405: set zero margins for embedded object
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
             uno::Any(sal_Int32(0)));
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ),
             uno::Any(sal_Int32(0)));
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ),
             uno::Any(sal_Int32(0)));
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
             uno::Any(sal_Int32(0)));
 
         uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
@@ -3528,11 +3526,11 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         Size size( 1000, 1000 );
         if( oox::FormulaImExportBase* formulaimport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
             size = formulaimport->getFormulaSize();
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_WIDTH ),
             uno::Any( sal_Int32(size.Width())));
-        xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
+        xStarMath->setPropertyValue(getPropertyName( PROP_HEIGHT ),
             uno::Any( sal_Int32(size.Height())));
-        xStarMathProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
+        xStarMath->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
                 uno::Any(text::TextContentAnchorType_AS_CHARACTER));
         // mimic the treatment of graphics here... it seems anchoring as character
         // gives a better ( visually ) result
@@ -4719,10 +4717,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aAnchoredStack.push(AnchoredContext(xTextContent));
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
-            m_StreamStateStack.top().xEmbedded.set(m_xTextDocument->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY_THROW);
-            xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
-            xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+            rtl::Reference<SwXTextEmbeddedObject> xEmbedded = m_xTextDocument->createTextEmbeddedObject();
+            m_StreamStateStack.top().xEmbedded = xEmbedded;
+            xEmbedded->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
+            xEmbedded->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_aAnchoredStack.top().bToRemove = true;
             m_aTextAppendStack.pop();
@@ -4871,24 +4869,23 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
     if (!xShape.is())
         return;
 
-    uno::Reference<beans::XPropertySet> const xEmbeddedProperties(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTextEmbeddedObject> const xEmbedded(m_StreamStateStack.top().xEmbedded);
     awt::Size aSize = xShape->getSize( );
-    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_WIDTH), uno::Any(sal_Int32(aSize.Width)));
-    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_HEIGHT), uno::Any(sal_Int32(aSize.Height)));
+    xEmbedded->setPropertyValue(getPropertyName(PROP_WIDTH), uno::Any(sal_Int32(aSize.Width)));
+    xEmbedded->setPropertyValue(getPropertyName(PROP_HEIGHT), uno::Any(sal_Int32(aSize.Height)));
     uno::Reference<beans::XPropertySet> const xShapeProps(xShape, uno::UNO_QUERY);
     // tdf#130782 copy a11y related properties
-    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_DESCRIPTION),
+    xEmbedded->setPropertyValue(getPropertyName(PROP_DESCRIPTION),
         xShapeProps->getPropertyValue(getPropertyName(PROP_DESCRIPTION)));
-    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_TITLE),
+    xEmbedded->setPropertyValue(getPropertyName(PROP_TITLE),
         xShapeProps->getPropertyValue(getPropertyName(PROP_TITLE)));
-    uno::Reference<container::XNamed> const xEmbedName(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY);
     uno::Reference<container::XNamed> const xShapeName(xShape, uno::UNO_QUERY);
     OUString const name(xShapeName->getName());
     if (!name.isEmpty()) // setting empty name will throw
     {
         try
         {
-            xEmbedName->setName(name);
+            xEmbedded->setName(name);
         }
         catch (uno::RuntimeException const&)
         {
@@ -9213,21 +9210,21 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         UpdateEmbeddedShapeProps(xShape);
         if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
         {
-            uno::Reference<beans::XPropertySet> const xEmbeddedProps(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY);
-            xEmbeddedProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-            xEmbeddedProps->setPropertyValue("IsFollowingTextFlow", uno::Any(m_pGraphicImport->GetLayoutInCell()));
+            rtl::Reference<SwXTextEmbeddedObject> const xEmbedded(m_StreamStateStack.top().xEmbedded);
+            xEmbedded->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+            xEmbedded->setPropertyValue("IsFollowingTextFlow", uno::Any(m_pGraphicImport->GetLayoutInCell()));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            xEmbeddedProps->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
-            xEmbeddedProps->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));
-            xEmbeddedProps->setPropertyValue("HoriOrientRelation", xShapeProps->getPropertyValue("HoriOrientRelation"));
-            xEmbeddedProps->setPropertyValue("VertOrient", xShapeProps->getPropertyValue("VertOrient"));
-            xEmbeddedProps->setPropertyValue("VertOrientPosition", xShapeProps->getPropertyValue("VertOrientPosition"));
-            xEmbeddedProps->setPropertyValue("VertOrientRelation", xShapeProps->getPropertyValue("VertOrientRelation"));
+            xEmbedded->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
+            xEmbedded->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));
+            xEmbedded->setPropertyValue("HoriOrientRelation", xShapeProps->getPropertyValue("HoriOrientRelation"));
+            xEmbedded->setPropertyValue("VertOrient", xShapeProps->getPropertyValue("VertOrient"));
+            xEmbedded->setPropertyValue("VertOrientPosition", xShapeProps->getPropertyValue("VertOrientPosition"));
+            xEmbedded->setPropertyValue("VertOrientRelation", xShapeProps->getPropertyValue("VertOrientRelation"));
             //tdf123873 fix missing textwrap import
-            xEmbeddedProps->setPropertyValue("TextWrap", xShapeProps->getPropertyValue("TextWrap"));
+            xEmbedded->setPropertyValue("TextWrap", xShapeProps->getPropertyValue("TextWrap"));
 
             // GraphicZOrderHelper::findZOrder() was called already, so can just copy it over.
-            xEmbeddedProps->setPropertyValue("ZOrder", xShapeProps->getPropertyValue("ZOrder"));
+            xEmbedded->setPropertyValue("ZOrder", xShapeProps->getPropertyValue("ZOrder"));
         }
     }
     //insert it into the document at the current cursor position

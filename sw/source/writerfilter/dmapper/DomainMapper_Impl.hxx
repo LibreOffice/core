@@ -60,6 +60,7 @@ class SwXDocumentSettings;
 class SwXTextSection;
 class SwXTextField;
 class SwXTextFrame;
+class SwXTextEmbeddedObject;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -249,7 +250,7 @@ struct SubstreamContext
     bool bCheckFirstFootnoteTab = false;
     std::optional<sal_Int16> oLineBreakClear;
     bool bIsInTextBox = false;
-    css::uno::Reference<css::text::XTextContent> xEmbedded;
+    rtl::Reference<SwXTextEmbeddedObject> xEmbedded;
     /// If we want to set "sdt end" on the next character context.
     bool bSdtEndDeferred = false;
     /// If we want to set "paragraph sdt end" on the next paragraph context.

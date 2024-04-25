@@ -266,7 +266,7 @@ typedef cppu::ImplInheritanceHelper
     css::document::XEventsSupplier
 > SwXTextEmbeddedObjectBaseClass;
 
-class SwXTextEmbeddedObject final : public SwXTextEmbeddedObjectBaseClass
+class SW_DLLPUBLIC SwXTextEmbeddedObject final : public SwXTextEmbeddedObjectBaseClass
 {
     css::uno::Reference<css::util::XModifyListener> m_xOLEListener;
 

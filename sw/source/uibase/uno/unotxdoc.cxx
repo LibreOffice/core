@@ -1757,6 +1757,13 @@ rtl::Reference< SwXFootnote > SwXTextDocument::createEndnote()
     return SwXFootnote::CreateXFootnote(GetDocOrThrow(), nullptr, true);
 }
 
+rtl::Reference< SwXTextEmbeddedObject > SwXTextDocument::createTextEmbeddedObject()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    return SwXTextEmbeddedObject::CreateXTextEmbeddedObject(GetDocOrThrow(), nullptr);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
 {
     return create(rServiceName, nullptr);
