@@ -13,6 +13,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/debug.hxx>
 
 #include <QtWidgets/QApplication>
 
@@ -173,8 +174,15 @@ void QtClipboardTransferable::ensureConsistencyWithSystemClipboard()
     {
         SAL_WARN("vcl.qt", "In flight clipboard change detected - updating mime data with current "
                            "clipboard contents.");
+        DBG_TESTSOLARMUTEX();
         setMimeData(pCurrentClipboardData);
     }
+}
+
+bool QtClipboardTransferable::hasMimeData(const QMimeData* pMimeData) const
+{
+    SolarMutexGuard aGuard;
+    return QtTransferable::mimeData() == pMimeData;
 }
 
 css::uno::Any SAL_CALL
