@@ -24,7 +24,7 @@ namespace GpgME { class Context; }
 
 class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment >
 {
-    std::unique_ptr<GpgME::Context> m_ctx;
+    std::shared_ptr<GpgME::Context> m_ctx;
 
 public:
     SecurityEnvironmentGpg();

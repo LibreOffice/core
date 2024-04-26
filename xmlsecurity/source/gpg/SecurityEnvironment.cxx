@@ -119,7 +119,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesIm
     int i = 0;
     for (auto const& key : keyList) {
         rtl::Reference<CertificateImpl> xCert = new CertificateImpl();
-        xCert->setCertificate(m_ctx.get(),key);
+        xCert->setCertificate(m_ctx, key);
         xCertificateSequenceRange[i++] = xCert;  // fills xCertificateSequence
     }
 
@@ -154,7 +154,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
             break;
         if (!k.isInvalid() && strcmp(k.primaryFingerprint(), reinterpret_cast<const char*>(strKeyId)) == 0) {
             rtl::Reference<CertificateImpl> xCert = new CertificateImpl();
-            xCert->setCertificate(m_ctx.get(), k);
+            xCert->setCertificate(m_ctx, k);
             m_ctx->endKeyListing();
             return xCert;
         }
