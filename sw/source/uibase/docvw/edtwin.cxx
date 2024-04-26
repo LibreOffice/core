@@ -3113,9 +3113,13 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SwTab nMouseTabCol = SwTab::COL_NONE;
     const bool bTmp = !rSh.IsDrawCreate() && !m_pApplyTempl && !rSh.IsInSelect()
                       && aMEvt.GetClicks() == 1 && MOUSE_LEFT == aMEvt.GetButtons();
+
     if (  bTmp &&
          SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
-         !rSh.IsObjSelectable( aDocPos ) )
+         ( !rSh.IsObjSelectable( aDocPos ) ||
+             // allow resizing row height, if the image is anchored as character in the cell
+             ( rSh.ShouldObjectBeSelected(aDocPos) &&
+                 !( SwTab::COL_VERT == nMouseTabCol || SwTab::COL_HORI == nMouseTabCol ) ) ) )
     {
         // Enhanced table selection
         if ( SwTab::SEL_HORI <= nMouseTabCol && SwTab::COLSEL_VERT >= nMouseTabCol )
@@ -3984,8 +3988,12 @@ bool SwEditWin::changeMousePointer(Point const & rDocPoint)
     SwWrtShell & rShell = m_rView.GetWrtShell();
 
     SwTab nMouseTabCol;
+
     if ( SwTab::COL_NONE != (nMouseTabCol = rShell.WhichMouseTabCol( rDocPoint ) ) &&
-         !rShell.IsObjSelectable( rDocPoint ) )
+         ( !rShell.IsObjSelectable( rDocPoint ) ||
+             // allow resizing row height, if the image is anchored as character in the cell
+             ( rShell.ShouldObjectBeSelected(rDocPoint) &&
+                 !( SwTab::COL_VERT == nMouseTabCol || SwTab::COL_HORI == nMouseTabCol ) ) ) )
     {
         PointerStyle nPointer = PointerStyle::Null;
         bool bChkTableSel = false;
