@@ -588,6 +588,9 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
         mxCkbSkipEmptyCells->set_active(false);
         mxCkbSkipEmptyCells->hide();
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xBuilder->weld_button("cancel")->hide();
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportAsciiDlg, InstallLOKNotifierHdl));
 }
 
