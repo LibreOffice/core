@@ -933,7 +933,7 @@ void SfxObjectShell::DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet,
     if (U_SUCCESS(uerr))
         pEncodingName = ucsdet_getName(match, &uerr);
 
-    if (U_SUCCESS(uerr))
+    if (U_SUCCESS(uerr) && pEncodingName)
     {
         const auto it = mapCharSets.find(pEncodingName);
         if (it != mapCharSets.end())
