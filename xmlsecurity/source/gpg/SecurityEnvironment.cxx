@@ -99,7 +99,6 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesImpl( bool bPrivateOnly )
 {
     std::vector< GpgME::Key > keyList;
-    std::vector< rtl::Reference<CertificateImpl> > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err = m_ctx->startKeyListing("", bPrivateOnly );
@@ -115,17 +114,13 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesIm
     }
     m_ctx->endKeyListing();
 
+    Sequence< Reference< XCertificate > > xCertificateSequence(keyList.size());
+    auto xCertificateSequenceRange = asNonConstRange(xCertificateSequence);
+    int i = 0;
     for (auto const& key : keyList) {
         rtl::Reference<CertificateImpl> xCert = new CertificateImpl();
         xCert->setCertificate(m_ctx.get(),key);
-        certsList.push_back(xCert);
-    }
-
-    Sequence< Reference< XCertificate > > xCertificateSequence(certsList.size());
-    auto xCertificateSequenceRange = asNonConstRange(xCertificateSequence);
-    int i = 0;
-    for (const auto& cert : certsList) {
-        xCertificateSequenceRange[i++] = cert;
+        xCertificateSequenceRange[i++] = xCert;  // fills xCertificateSequence
     }
 
     return xCertificateSequence;
