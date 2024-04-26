@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H29M57S</meta:editing-duration><meta:editing-cycles>29</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/417ff8b00401b1b61dc87a73b053a58e6d63ecc7</meta:generator><dc:date>2024-04-22T15:10:20.637000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="908" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H45M28S</meta:editing-duration><meta:editing-cycles>32</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/a689a4de60470f75f45b3ed1a5fc3e2ef08daa64</meta:generator><dc:date>2024-04-26T15:55:20.748000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="968" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">15882</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">5013</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">60486</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">61863</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -30,13 +30,13 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">133</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">132</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">108</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">105</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -47,7 +47,7 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
-     <config:config-item config:name="ActiveTable" config:type="string">Sheet1</config:config-item>
+     <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
      <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1851</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
@@ -1378,151 +1378,151 @@
    <number:text> </number:text>
    <number:year/>
   </number:date-style>
-  <number:number-style style:name="N348P0" style:volatile="true">
-   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text loext:blank-width-char="€1">   </number:text>
-  </number:number-style>
-  <number:number-style style:name="N348">
-   <number:text>-</number:text>
-   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text loext:blank-width-char="€1">   </number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N348P0"/>
-  </number:number-style>
   <number:number-style style:name="N349P0" style:volatile="true">
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
   </number:number-style>
   <number:number-style style:name="N349">
-   <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N349P0"/>
   </number:number-style>
   <number:number-style style:name="N350P0" style:volatile="true">
-   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
   </number:number-style>
   <number:number-style style:name="N350">
+   <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
-   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N350P0"/>
   </number:number-style>
-  <number:number-style style:name="N351P0" style:volatile="true">
+  <number:number-style style:name="N352P0" style:volatile="true">
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
   </number:number-style>
-  <number:number-style style:name="N351">
+  <number:number-style style:name="N352">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="€1">   </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N352P0"/>
+  </number:number-style>
+  <number:number-style style:name="N353P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="€1">   </number:text>
+  </number:number-style>
+  <number:number-style style:name="N353">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1">   </number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N351P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N353P0"/>
   </number:number-style>
-  <number:number-style style:name="N352P0" style:volatile="true">
+  <number:number-style style:name="N357P0" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1_-3">    </number:text>
   </number:number-style>
-  <number:number-style style:name="N352P1" style:volatile="true">
+  <number:number-style style:name="N357P1" style:volatile="true">
    <number:text>-</number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1_-3">    </number:text>
   </number:number-style>
-  <number:number-style style:name="N352P2" style:volatile="true">
+  <number:number-style style:name="N357P2" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:text loext:blank-width-char="€2_-4">-    </number:text>
   </number:number-style>
-  <number:text-style style:name="N352">
+  <number:text-style style:name="N357">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:text-content/>
    <number:text loext:blank-width-char="-"> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N352P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N352P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N352P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N357P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N357P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N357P2"/>
   </number:text-style>
-  <number:number-style style:name="N353P0" style:volatile="true">
+  <number:number-style style:name="N361P0" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="-2"> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N353P1" style:volatile="true">
+  <number:number-style style:name="N361P1" style:volatile="true">
    <number:text>-</number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="-2"> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N353P2" style:volatile="true">
+  <number:number-style style:name="N361P2" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:text loext:blank-width-char="-3">- € </number:text>
   </number:number-style>
-  <number:text-style style:name="N353">
+  <number:text-style style:name="N361">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:text-content/>
    <number:text loext:blank-width-char="-"> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N353P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N353P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N353P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N361P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N361P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N361P2"/>
   </number:text-style>
-  <number:number-style style:name="N354P0" style:volatile="true">
+  <number:number-style style:name="N365P0" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1_-3">    </number:text>
   </number:number-style>
-  <number:number-style style:name="N354P1" style:volatile="true">
+  <number:number-style style:name="N365P1" style:volatile="true">
    <number:text>-</number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="€1_-3">    </number:text>
   </number:number-style>
-  <number:number-style style:name="N354P2" style:volatile="true">
+  <number:number-style style:name="N365P2" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
    <number:text loext:blank-width-char="€1_-3">    </number:text>
   </number:number-style>
-  <number:text-style style:name="N354">
+  <number:text-style style:name="N365">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:text-content/>
    <number:text loext:blank-width-char="-"> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N354P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N354P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N354P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N365P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N365P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N365P2"/>
   </number:text-style>
-  <number:number-style style:name="N355P0" style:volatile="true">
+  <number:number-style style:name="N369P0" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="-2"> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N355P1" style:volatile="true">
+  <number:number-style style:name="N369P1" style:volatile="true">
    <number:text>-</number:text>
    <number:fill-character> </number:fill-character>
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text loext:blank-width-char="-2"> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N355P2" style:volatile="true">
+  <number:number-style style:name="N369P2" style:volatile="true">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:fill-character> </number:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
    <number:text loext:blank-width-char="-2"> € </number:text>
   </number:number-style>
-  <number:text-style style:name="N355">
+  <number:text-style style:name="N369">
    <number:text loext:blank-width-char="-"> </number:text>
    <number:text-content/>
    <number:text loext:blank-width-char="-"> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N355P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N355P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N355P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N369P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N369P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N369P2"/>
   </number:text-style>
   <number:date-style style:name="N10129" number:language="en" number:country="US">
    <number:month/>
@@ -2055,11 +2055,6 @@
    <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
   </style:style>
-  <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
-  </style:style>
   <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
@@ -2077,8 +2072,56 @@
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
   </style:style>
+  <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+  </style:style>
   <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
-  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet2.C2"/>
@@ -2139,7 +2182,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2024-04-22">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="15:04:55.201000000">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2024-04-26">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="15:43:04.970000000">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -2156,10 +2199,10 @@
    <table:calculation-settings table:automatic-find-labels="false" table:use-regular-expressions="false" table:use-wildcards="true"/>
    <table:table table:name="Sheet1" table:style-name="ta1">
     <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co2" table:default-cell-style-name="ce5"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce22"/>
     <table:table-column table:style-name="co3" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
       <text:p>XLOOKUP Function</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Default"/>
@@ -2171,10 +2214,10 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-     <table:table-cell table:style-name="ce18" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce17" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -2183,13 +2226,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro4">
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Sheet</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce23" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Description</text:p>
      </table:table-cell>
     </table:table-row>
@@ -2197,16 +2240,16 @@
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=AND([Sheet2.C2:.C202])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce17" table:formula="of:=AND([Sheet2.C2:.C202])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" office:value-type="string" calcext:value-type="string">
       <text:p>Simple XLOOKUP formulas with local references and values</text:p>
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="20">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce27"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="21">
@@ -2297,7 +2340,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>+55</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=XLOOKUP(G2;H2:H11;J2:J11)" calcext:value-type="string">
@@ -2340,7 +2383,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>+91</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=XLOOKUP(&quot;India&quot;;H2:H11;J2:J11)" calcext:value-type="string">
@@ -2380,7 +2423,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>+91</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=XLOOKUP(&quot;INDIA&quot;;H2:H11;J2:J11)" calcext:value-type="string">
@@ -2423,7 +2466,7 @@
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.A5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISNA([.A5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Ireland&quot;;H2:H11;J2:J11)" calcext:value-type="string">
@@ -2466,7 +2509,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p/>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Ireland&quot;;H2:H11;J2:J11;&quot;&quot;)" calcext:value-type="string">
@@ -2506,7 +2549,7 @@
      <table:table-cell office:value-type="float" office:value="-99" calcext:value-type="float">
       <text:p>-99</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Ireland&quot;;H2:H11;J2:J11;-99)" calcext:value-type="string">
@@ -2543,7 +2586,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Not here</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Ireland&quot;;H2:H11;J2:J11;&quot;Not here&quot;)" calcext:value-type="string">
@@ -2586,7 +2629,7 @@
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISNA([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=XLOOKUP(&quot;&quot;;H2:H11;J2:J11)" calcext:value-type="string">
@@ -2629,7 +2672,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>00234</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Nigeria&quot;;H2:H11;J2:J11;;;1)" calcext:value-type="string">
@@ -2669,7 +2712,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>+234</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Nigeria&quot;;H2:H11;J2:J11;;;-1)" calcext:value-type="string">
@@ -2704,7 +2747,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Mexico</text:p>
@@ -2725,7 +2768,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -2735,7 +2778,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Ned Lanning</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="{=XLOOKUP(4390;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2787,7 +2830,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Marketing</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="{=XLOOKUP(4390;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2836,7 +2879,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Mia Arnold</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="{=XLOOKUP(G14;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2885,7 +2928,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Operations</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="{=XLOOKUP(G14;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2900,7 +2943,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>ID not found</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="{=XLOOKUP(G18;I14:R14;I15:R16;&quot;ID not found&quot;)}" calcext:value-type="string">
@@ -2919,7 +2962,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>ID not found</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="{=XLOOKUP(G18;I14:R14;I15:R16;&quot;ID not found&quot;)}" calcext:value-type="string">
@@ -2934,7 +2977,7 @@
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.A20])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISNA([.A20])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="{=XLOOKUP(&quot;&quot;;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2949,7 +2992,7 @@
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.A21])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISNA([.A21])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="{=XLOOKUP(&quot;&quot;;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -2964,7 +3007,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Earlene McCartney</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;1)}" calcext:value-type="string">
@@ -2996,7 +3039,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Accounting</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A23]=[.B23]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A23]=[.B23]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A23])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;1)}" calcext:value-type="string">
@@ -3028,7 +3071,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Earlene McCartney</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A24]=[.B24]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A24]=[.B24]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}" calcext:value-type="string">
@@ -3057,7 +3100,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Accounting</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A25]=[.B25]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A25]=[.B25]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}" calcext:value-type="string">
@@ -3090,7 +3133,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Earlene McCartney</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -3123,7 +3166,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Accounting</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16)}" calcext:value-type="string">
@@ -3133,7 +3176,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -3143,7 +3186,7 @@
      <table:table-cell office:value-type="float" office:value="0.24" calcext:value-type="float">
       <text:p>0,24</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=XLOOKUP(G29;I30:I35;H30:H35;;1;1)" calcext:value-type="string">
@@ -3168,7 +3211,7 @@
      <table:table-cell office:value-type="float" office:value="0.24" calcext:value-type="float">
       <text:p>0,24</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=XLOOKUP(G29;I30:I35;H30:H35;;1;2)" calcext:value-type="string">
@@ -3190,7 +3233,7 @@
      <table:table-cell office:value-type="float" office:value="0.22" calcext:value-type="float">
       <text:p>0,22</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A31]=[.B31]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A31]=[.B31]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A31])" office:value-type="string" office:string-value="=XLOOKUP(G29;I30:I35;H30:H35;;-1;2)" calcext:value-type="string">
@@ -3215,7 +3258,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A32])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A32])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="=XLOOKUP(G29;I30:I35;H30:H35;;2;2)" calcext:value-type="string">
@@ -3232,7 +3275,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="float" office:value="0.32" calcext:value-type="float">
       <text:p>0,32</text:p>
@@ -3244,7 +3287,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="float" office:value="0.35" calcext:value-type="float">
       <text:p>0,35</text:p>
@@ -3256,7 +3299,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="float" office:value="0.37" calcext:value-type="float">
       <text:p>0,37</text:p>
@@ -3268,7 +3311,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -3278,7 +3321,7 @@
      <table:table-cell office:value-type="float" office:value="25000" calcext:value-type="float">
       <text:p>25000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A37]=[.B37]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A37]=[.B37]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=XLOOKUP(K37;$I37:$T37;XLOOKUP($G37;$H38:$H42;$I38:$T42))" calcext:value-type="string">
@@ -3329,7 +3372,7 @@
      <table:table-cell office:value-type="float" office:value="19342" calcext:value-type="float">
       <text:p>19342</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A38]=[.B38]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A38]=[.B38]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=XLOOKUP(S37;$I37:$T37;XLOOKUP($G37;$H38:$H42;$I38:$T42))" calcext:value-type="string">
@@ -3377,7 +3420,7 @@
      <table:table-cell office:value-type="float" office:value="0.293" calcext:value-type="float">
       <text:p>0,293</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A39]=[.B39]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A39]=[.B39]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=XLOOKUP(T37;$I37:$T37;XLOOKUP($G37;$H38:$H42;$I38:$T42))" calcext:value-type="string">
@@ -3420,7 +3463,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Q3</text:p>
@@ -3463,7 +3506,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Mia Arnold</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A41]=[.B41]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A41]=[.B41]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A41])" office:value-type="string" office:string-value="{=XLOOKUP(G14;$H14:$R14;$H$15:$R$16)}" calcext:value-type="string">
@@ -3511,7 +3554,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Operations</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A42]=[.B42]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A42]=[.B42]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A42])" office:value-type="string" office:string-value="{=XLOOKUP(G14;$H14:$R14;$H$15:$R$16)}" calcext:value-type="string">
@@ -3554,7 +3597,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -3564,7 +3607,7 @@
      <table:table-cell office:value-type="float" office:value="110.56" calcext:value-type="float">
       <text:p>110,56</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A44]=[.B44]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A44]=[.B44]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=SUM(XLOOKUP(G44;H45:H49;K45:K49):XLOOKUP(G45;H45:H49;K45:K49))" calcext:value-type="string">
@@ -3591,7 +3634,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Banana</text:p>
@@ -3612,7 +3655,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Grape</text:p>
@@ -3630,7 +3673,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Pear</text:p>
@@ -3648,7 +3691,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Banana</text:p>
@@ -3666,7 +3709,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Cherry</text:p>
@@ -3684,7 +3727,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -3694,7 +3737,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A51])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A51])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A51])" office:value-type="string" office:string-value="=XLOOKUP(&quot;B&quot;;H51:H53;K51:K52)" calcext:value-type="string">
@@ -3727,7 +3770,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A52])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A52])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A52])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;H51:H53;K51:K52)" calcext:value-type="string">
@@ -3760,7 +3803,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A53])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A53])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A53])" office:value-type="string" office:string-value="=XLOOKUP(&quot;E&quot;;H51:I53;K51:L53)" calcext:value-type="string">
@@ -3793,7 +3836,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A54])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A54])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A54])" office:value-type="string" office:string-value="=XLOOKUP(&quot;E&quot;;H51:I53;K51:K53)" calcext:value-type="string">
@@ -3812,7 +3855,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A55])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A55])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A55])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;H51:I53;K51:K53)" calcext:value-type="string">
@@ -3826,7 +3869,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -3836,7 +3879,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A58]=[.B58]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A58]=[.B58]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="=XLOOKUP(3;I$58:I$62;L$58:L$62;;0;1)" calcext:value-type="string">
@@ -3874,7 +3917,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A59]=[.B59]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A59]=[.B59]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A59])" office:value-type="string" office:string-value="=XLOOKUP(4;I$58:I$62;L$58:L$62;;-1;1)" calcext:value-type="string">
@@ -3912,7 +3955,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A60]=[.B60]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A60]=[.B60]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A60])" office:value-type="string" office:string-value="=XLOOKUP(4;I$58:I$62;L$58:L$62;;1;1)" calcext:value-type="string">
@@ -3950,7 +3993,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A61]=[.B61]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A61]=[.B61]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A61])" office:value-type="string" office:string-value="=XLOOKUP(3;I$58:I$62;L$58:L$62;;2;1)" calcext:value-type="string">
@@ -3984,7 +4027,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A62]=[.B62]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A62]=[.B62]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A62])" office:value-type="string" office:string-value="=XLOOKUP(3;I$58:I$62;L$58:L$62;;0;-1)" calcext:value-type="string">
@@ -4022,7 +4065,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A63]=[.B63]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A63]=[.B63]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A63])" office:value-type="string" office:string-value="=XLOOKUP(4;I$58:I$62;L$58:L$62;;-1;-1)" calcext:value-type="string">
@@ -4041,7 +4084,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A64]=[.B64]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A64]=[.B64]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A64])" office:value-type="string" office:string-value="=XLOOKUP(4;I$58:I$62;L$58:L$62;;1;-1)" calcext:value-type="string">
@@ -4060,7 +4103,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A65]=[.B65]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A65]=[.B65]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A65])" office:value-type="string" office:string-value="=XLOOKUP(3;I$58:I$62;L$58:L$62;;2;-1)" calcext:value-type="string">
@@ -4075,7 +4118,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A66]=[.B66]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A66]=[.B66]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A66])" office:value-type="string" office:string-value="=XLOOKUP(3;H$58:H$62;K$58:K$62;;0;2)" calcext:value-type="string">
@@ -4094,7 +4137,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A67]=[.B67]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A67]=[.B67]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A67])" office:value-type="string" office:string-value="=XLOOKUP(4;H$58:H$62;K$58:K$62;;-1;2)" calcext:value-type="string">
@@ -4113,7 +4156,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>D5.2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A68]=[.B68]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A68]=[.B68]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A68])" office:value-type="string" office:string-value="=XLOOKUP(4;H$58:H$62;K$58:K$62;;1;2)" calcext:value-type="string">
@@ -4132,7 +4175,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A69]=[.B69]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A69]=[.B69]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A69])" office:value-type="string" office:string-value="=XLOOKUP(3;H$58:H$62;K$58:K$62;;2;2)" calcext:value-type="string">
@@ -4147,7 +4190,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A70]=[.B70]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A70]=[.B70]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A70])" office:value-type="string" office:string-value="=XLOOKUP(3;J$58:J$62;M$58:M$62;;0;-2)" calcext:value-type="string">
@@ -4166,7 +4209,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A71]=[.B71]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A71]=[.B71]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A71])" office:value-type="string" office:string-value="=XLOOKUP(4;J$58:J$62;M$58:M$62;;-1;-2)" calcext:value-type="string">
@@ -4185,7 +4228,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A72]=[.B72]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A72]=[.B72]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A72])" office:value-type="string" office:string-value="=XLOOKUP(4;J$58:J$62;M$58:M$62;;1;-2)" calcext:value-type="string">
@@ -4204,7 +4247,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A73]=[.B73]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A73]=[.B73]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A73])" office:value-type="string" office:string-value="=XLOOKUP(3;J$58:J$62;M$58:M$62;;2;-2)" calcext:value-type="string">
@@ -4219,7 +4262,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A74]=[.B74]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A74]=[.B74]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A74])" office:value-type="string" office:string-value="=XLOOKUP(3;H$74:L$74;H$75:L$75;;0;1)" calcext:value-type="string">
@@ -4254,7 +4297,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A75]=[.B75]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A75]=[.B75]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A75])" office:value-type="string" office:string-value="=XLOOKUP(4;H$74:L$74;H$75:L$75;;-1;1)" calcext:value-type="string">
@@ -4289,7 +4332,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A76]=[.B76]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A76]=[.B76]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A76])" office:value-type="string" office:string-value="=XLOOKUP(4;H$74:L$74;H$75:L$75;;1;1)" calcext:value-type="string">
@@ -4308,7 +4351,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A77]=[.B77]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A77]=[.B77]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A77])" office:value-type="string" office:string-value="=XLOOKUP(3;H$74:L$74;H$75:L$75;;2;1)" calcext:value-type="string">
@@ -4322,7 +4365,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -4332,7 +4375,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A79]=[.B79]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A79]=[.B79]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A79])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;I$79:I$83;L$79:L$83;;0;1)" calcext:value-type="string">
@@ -4370,7 +4413,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A80]=[.B80]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A80]=[.B80]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A80])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;I$79:I$83;L$79:L$83;;-1;1)" calcext:value-type="string">
@@ -4408,7 +4451,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>aE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A81]=[.B81]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A81]=[.B81]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A81])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;I$79:I$83;L$79:L$83;;1;1)" calcext:value-type="string">
@@ -4446,7 +4489,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>eB</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A82]=[.B82]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A82]=[.B82]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A82])" office:value-type="string" office:string-value="=XLOOKUP(&quot;b?b&quot;;I$84:I$88;L$79:L$83;;2;1)" calcext:value-type="string">
@@ -4480,7 +4523,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A83]=[.B83]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A83]=[.B83]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A83])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;I$79:I$83;L$79:L$83;;0;-1)" calcext:value-type="string">
@@ -4518,7 +4561,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A84]=[.B84]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A84]=[.B84]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A84])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;I$79:I$83;L$79:L$83;;-1;-1)" calcext:value-type="string">
@@ -4541,7 +4584,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>aE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A85]=[.B85]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A85]=[.B85]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A85])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;I$79:I$83;L$79:L$83;;1;-1)" calcext:value-type="string">
@@ -4564,7 +4607,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A86]=[.B86]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A86]=[.B86]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A86])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;I$79:I$83;L$79:L$83;;2;-1)" calcext:value-type="string">
@@ -4583,7 +4626,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A87]=[.B87]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A87]=[.B87]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A87])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;H$79:H$83;K$79:K$83;;0;2)" calcext:value-type="string">
@@ -4606,7 +4649,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A88]=[.B88]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A88]=[.B88]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A88])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;H$79:H$83;K$79:K$83;;-1;2)" calcext:value-type="string">
@@ -4629,7 +4672,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>eE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A89]=[.B89]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A89]=[.B89]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A89])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;H$79:H$83;K$79:K$83;;1;2)" calcext:value-type="string">
@@ -4648,7 +4691,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A90]=[.B90]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A90]=[.B90]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A90])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;H$79:H$83;K$79:K$83;;2;2)" calcext:value-type="string">
@@ -4663,7 +4706,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A91]=[.B91]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A91]=[.B91]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A91])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;J$79:J$83;M$79:M$83;;0;-2)" calcext:value-type="string">
@@ -4682,7 +4725,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A92]=[.B92]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A92]=[.B92]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A92])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;J$79:J$83;M$79:M$83;;-1;-2)" calcext:value-type="string">
@@ -4701,7 +4744,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>eE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A93]=[.B93]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A93]=[.B93]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A93])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;J$79:J$83;M$79:M$83;;1;-2)" calcext:value-type="string">
@@ -4720,7 +4763,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>cC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A94]=[.B94]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A94]=[.B94]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A94])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;J$79:J$83;M$79:M$83;;2;-2)" calcext:value-type="string">
@@ -4735,7 +4778,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A95]=[.B95]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A95]=[.B95]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A95])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C&quot;;H$95:L$95;H$96:L$96;;0;1)" calcext:value-type="string">
@@ -4770,7 +4813,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A96]=[.B96]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A96]=[.B96]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A96])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;H$95:L$95;H$96:L$96;;-1;1)" calcext:value-type="string">
@@ -4805,7 +4848,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>aE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A97]=[.B97]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A97]=[.B97]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A97])" office:value-type="string" office:string-value="=XLOOKUP(&quot;D&quot;;H$95:L$95;H$96:L$96;;1;1)" calcext:value-type="string">
@@ -4824,7 +4867,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A98])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A98])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A98])" office:value-type="string" office:string-value="=XLOOKUP(&quot;C?&quot;;H$95:L$95;H$96:L$96;;2;1)" calcext:value-type="string">
@@ -4834,7 +4877,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>LookCol</text:p>
@@ -4876,7 +4919,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A100]=[.B100]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A100]=[.B100]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A100])" office:value-type="string" office:string-value="=XLOOKUP(&quot;c&quot;;I$79:I$83;L$79:L$83;;0;1)" calcext:value-type="string">
@@ -4921,7 +4964,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>bC</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A101]=[.B101]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A101]=[.B101]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A101])" office:value-type="string" office:string-value="=XLOOKUP(&quot;d&quot;;I$79:I$83;L$79:L$83;;-1;1)" calcext:value-type="string">
@@ -4947,7 +4990,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>aE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A102]=[.B102]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A102]=[.B102]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A102])" office:value-type="string" office:string-value="=XLOOKUP(&quot;d&quot;;I$79:I$83;L$79:L$83;;1;1)" calcext:value-type="string">
@@ -4973,7 +5016,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A103])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A103])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A103])" office:value-type="string" office:string-value="=XLOOKUP(&quot;f?&quot;;I$79:I$83;L$79:L$83;;2;1)" calcext:value-type="string">
@@ -4995,7 +5038,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>g</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A104]=[.B104]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A104]=[.B104]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A104])" office:value-type="string" office:string-value="=XLOOKUP(K99;H$99:H$109;I$99:I$109;;-1;-1)" calcext:value-type="string">
@@ -5017,7 +5060,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A105]=[.B105]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A105]=[.B105]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A105])" office:value-type="string" office:string-value="=XLOOKUP(K99;N$99:R$99;N$100:R$100;;-1;-1)" calcext:value-type="string">
@@ -5039,7 +5082,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>BR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A106]=[.B106]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A106]=[.B106]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A106])" office:value-type="string" office:string-value="=XLOOKUP($M$1;K$1:K$12;I$1:I$12;0;1;2)" calcext:value-type="string">
@@ -5061,7 +5104,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>BR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A107]=[.B107]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A107]=[.B107]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A107])" office:value-type="string" office:string-value="=XLOOKUP($M$1;L$1:L$12;I$1:I$12;0;1;-2)" calcext:value-type="string">
@@ -5083,7 +5126,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>ID</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A108]=[.B108]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A108]=[.B108]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A108])" office:value-type="string" office:string-value="=XLOOKUP($M$1;K$1:K$12;I$1:I$12;0;-1;2)" calcext:value-type="string">
@@ -5105,7 +5148,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>PK</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A109]=[.B109]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A109]=[.B109]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A109])" office:value-type="string" office:string-value="=XLOOKUP(M1;L$1:L$12;I$1:I$12;0;-1;-2)" calcext:value-type="string">
@@ -5127,7 +5170,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>PK</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A110]=[.B110]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A110]=[.B110]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A110])" office:value-type="string" office:string-value="=XLOOKUP(N1;L$1:L$12;I$1:I$12;0;0;-2)" calcext:value-type="string">
@@ -5142,7 +5185,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A111])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A111])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A111])" office:value-type="string" office:string-value="=XLOOKUP(M1;K$1:K$12;I$1:I$12;;0;2)" calcext:value-type="string">
@@ -5152,7 +5195,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -5162,7 +5205,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A113])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A113])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A113])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;0;2)" calcext:value-type="string">
@@ -5177,7 +5220,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A114]=[.B114]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A114]=[.B114]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A114])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;-1;2)" calcext:value-type="string">
@@ -5192,7 +5235,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>d</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A115]=[.B115]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A115]=[.B115]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A115])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;1;2)" calcext:value-type="string">
@@ -5207,7 +5250,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A116]=[.B116]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A116]=[.B116]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A116])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;0;2)" calcext:value-type="string">
@@ -5222,7 +5265,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A117]=[.B117]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A117]=[.B117]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A117])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;-1;2)" calcext:value-type="string">
@@ -5237,7 +5280,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A118]=[.B118]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A118]=[.B118]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A118])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;1;2)" calcext:value-type="string">
@@ -5247,7 +5290,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -5257,7 +5300,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISERROR([.A120])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A120])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A120])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;0;-2)" calcext:value-type="string">
@@ -5272,7 +5315,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>h</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A121]=[.B121]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A121]=[.B121]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A121])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
@@ -5294,7 +5337,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>g</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A122]=[.B122]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A122]=[.B122]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A122])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;1;-2)" calcext:value-type="string">
@@ -5316,7 +5359,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>h</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A123]=[.B123]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A123]=[.B123]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A123])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;0;-2)" calcext:value-type="string">
@@ -5338,7 +5381,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>h</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A124]=[.B124]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A124]=[.B124]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A124])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
@@ -5360,7 +5403,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>h</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A125]=[.B125]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A125]=[.B125]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A125])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;1;-2)" calcext:value-type="string">
@@ -5377,7 +5420,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
       <text:p>Klein</text:p>
@@ -5394,7 +5437,7 @@
      <table:table-cell office:value-type="float" office:value="16" calcext:value-type="float">
       <text:p>16</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A127]=[.B127]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A127]=[.B127]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A127])" office:value-type="string" office:string-value="=XLOOKUP(N25;K22:K26;L22:L26;XLOOKUP(N25;P22:P26;Q22:Q26))" calcext:value-type="string">
@@ -5416,7 +5459,7 @@
      <table:table-cell office:value-type="float" office:value="86" calcext:value-type="float">
       <text:p>86</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A128]=[.B128]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A128]=[.B128]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A128])" office:value-type="string" office:string-value="=XLOOKUP(N26;K22:K26;L22:L26;XLOOKUP(N26;P22:P26;Q22:Q26))" calcext:value-type="string">
@@ -5433,7 +5476,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -5443,7 +5486,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Susanne</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.A130]=[.B130]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A130]=[.B130]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A130])" office:value-type="string" office:string-value="=XLOOKUP(&quot;Luchs&quot;;G$121:G$128;H$121:H$128; ;-1;-2)" calcext:value-type="string">
@@ -5451,9 +5494,189 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="72">
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Asc1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Asc2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.G137];[.G132:.Q132];[.G135:.Q135];;1;2)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A133]=[.B133]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A133])" office:value-type="string" office:string-value="=XLOOKUP(G137;G132:Q132;G135:Q135;;1;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP(G137;G132:Q132;G135:Q135;;1;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Desc1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Desc2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Prefix</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>a</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>e</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>f</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>g</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>I</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>j</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="13"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="65">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048373">

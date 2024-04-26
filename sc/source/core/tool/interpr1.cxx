@@ -11385,26 +11385,41 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                 }
                 else
                 {
-                    // search of columns in row
                     rParam.bByRow = false;
-                    bool bReverseSearch = (vsa.eSearchMode == searchrev);
-                    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, vsa.nTab1, rParam, false, bReverseSearch);
-                    // Advance Entry.nField in Iterator if column changed
-                    aCellIter.SetAdvanceQueryParamEntryField(true);
-                    aCellIter.SetLookupMode(vsa.nSearchOpCode);
-                    // TODO: no binary search for column (horizontal) search (use linear)
-                    aCellIter.SetSortedBinarySearchMode(vsa.eSearchMode);
-                    if (rEntry.eOp == SC_EQUAL)
+                    bool bBinarySearch = vsa.eSearchMode == searchbasc || vsa.eSearchMode == searchbdesc;
+                    if (bBinarySearch && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH))
                     {
+                        ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, rParam.nTab, rParam, false, false);
+                        // Advance Entry.nField in Iterator if column changed
+                        aCellIter.SetAdvanceQueryParamEntryField(true);
+                        aCellIter.SetSortedBinarySearchMode(vsa.eSearchMode);
+                        aCellIter.SetLookupMode(vsa.nSearchOpCode);
                         if (aCellIter.GetFirst())
+                        {
                             vsa.nHitIndex = aCellIter.GetCol() - vsa.nCol1 + 1;
+                        }
                     }
                     else
                     {
-                        SCCOL nC;
-                        SCROW nR;
-                        if (aCellIter.FindEqualOrSortedLastInRange(nC, nR))
-                            vsa.nHitIndex = nC - vsa.nCol1 + 1;
+                        // search of columns in row
+                        bool bReverseSearch = (vsa.eSearchMode == searchrev);
+                        ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, vsa.nTab1, rParam, false, bReverseSearch);
+                        // Advance Entry.nField in Iterator if column changed
+                        aCellIter.SetAdvanceQueryParamEntryField(true);
+                        aCellIter.SetLookupMode(vsa.nSearchOpCode);
+                        aCellIter.SetSortedBinarySearchMode(vsa.eSearchMode);
+                        if (rEntry.eOp == SC_EQUAL)
+                        {
+                            if (aCellIter.GetFirst())
+                                vsa.nHitIndex = aCellIter.GetCol() - vsa.nCol1 + 1;
+                        }
+                        else
+                        {
+                            SCCOL nC;
+                            SCROW nR;
+                            if (aCellIter.FindEqualOrSortedLastInRange(nC, nR))
+                                vsa.nHitIndex = nC - vsa.nCol1 + 1;
+                        }
                     }
                 }
             }
