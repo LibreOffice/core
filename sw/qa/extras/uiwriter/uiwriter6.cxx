@@ -1504,6 +1504,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
     CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
+{
+    createSwDoc("tdf160842.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // set table row height by drag & drop at images cropped by the fixed row height
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    auto pCellA1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCellA1);
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRowHeight = rCellA1Rect.Height();
+    // select center of the bottom border of the first table cell
+    Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
+    // halve the row height
+    Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 0.5 * nRowHeight);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                           MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    Point aTo = rEditWin.LogicToPixel(ptTo);
+    MouseEvent aMoveEvent(aTo, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                          MOUSE_LEFT);
+    TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
+    // drag & drop of cell border inside the document (and outside the table)
+    // still based on the ruler code, use that to simulate dragging
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    Scheduler::ProcessEventsToIdle();
+    rEditWin.CaptureMouse();
+    rEditWin.ReleaseMouse();
+
+    // this was 3910 (not modified row height previously)
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1980), pCellA1->getFrameArea().Height());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
 {
     createSwDoc();
