@@ -201,32 +201,6 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
                     assert(false);
             }
             break;
-        case RETURN_KIND_HFA_FLOAT:
-            assert(rtd != 0);
-            switch (rtd->nSize)
-            {
-                case 16:
-                    std::memcpy(fpr + 3, static_cast<char*>(retin) + 12, 4);
-                    [[fallthrough]];
-                case 12:
-                    std::memcpy(fpr + 2, static_cast<char*>(retin) + 8, 4);
-                    [[fallthrough]];
-                case 8:
-                    std::memcpy(fpr + 1, static_cast<char*>(retin) + 4, 4);
-                    [[fallthrough]];
-                case 4:
-                    std::memcpy(fpr, retin, 4);
-                    break;
-                default:
-                    assert(false);
-            }
-            assert(!retConv);
-            break;
-        case RETURN_KIND_HFA_DOUBLE:
-            assert(rtd != 0);
-            std::memcpy(fpr, retin, rtd->nSize);
-            assert(!retConv);
-            break;
         case RETURN_KIND_INDIRECT:
             retout = indirectRet;
             gpr[0] = reinterpret_cast<sal_uInt64>(retout);

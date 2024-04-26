@@ -226,28 +226,6 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* pProxy,
                     assert(false);
             }
             break;
-        case RETURN_KIND_HFA_FLOAT:
-            switch (aReturnTD->nSize)
-            {
-                case 16:
-                    std::memcpy(static_cast<char*>(ret) + 12, fpr + 3, 4);
-                    [[fallthrough]];
-                case 12:
-                    std::memcpy(static_cast<char*>(ret) + 8, fpr + 2, 4);
-                    [[fallthrough]];
-                case 8:
-                    std::memcpy(static_cast<char*>(ret) + 4, fpr + 1, 4);
-                    [[fallthrough]];
-                case 4:
-                    std::memcpy(ret, fpr, 4);
-                    break;
-                default:
-                    assert(false);
-            }
-            break;
-        case RETURN_KIND_HFA_DOUBLE:
-            std::memcpy(ret, fpr, aReturnTD->nSize);
-            break;
         case RETURN_KIND_INDIRECT:
             break;
     }
