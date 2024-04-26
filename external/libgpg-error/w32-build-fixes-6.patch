@@ -1,0 +1,15 @@
+--- src/spawn-w32.c	2024-11-12 14:35:30.648259606 +0100
++++ src/spawn-w32.c	2024-11-12 14:35:56.972307401 +0100
+@@ -1061,9 +1061,9 @@
+       /* Fixme: For unknown reasons AllowSetForegroundWindow returns
+        * an invalid argument error if we pass it the correct
+        * processID.  As a workaround we use -1 (ASFW_ANY).  */
+-      if (!AllowSetForegroundWindow (ASFW_ANY /*pi.dwProcessId*/))
+-        _gpgrt_log_info ("AllowSetForegroundWindow() failed: ec=%d\n",
+-                         (int)GetLastError ());
++      //if (!AllowSetForegroundWindow (ASFW_ANY /*pi.dwProcessId*/))
++      //  _gpgrt_log_info ("AllowSetForegroundWindow() failed: ec=%d\n",
++      //                   (int)GetLastError ());
+     }
+ 
+   /* Process has been created suspended; resume it now. */

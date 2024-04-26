@@ -130,12 +130,15 @@
  
 --- src/w32-add.h	2020-06-06 00:32:38.502203300 +0200
 +++ src/w32-add.h~	2018-12-07 14:48:19.000000000 +0100
-@@ -65,3 +65,5 @@
- char *gpgrt_w32_reg_query_string (const char *root,
+@@ -89,5 +89,7 @@
                                    const char *dir,
                                    const char *name);
-+
+ 
 +wchar_t *utf8_to_wchar (const char *string, size_t length, size_t *retlen);
++
+ /* Query a string in the registry using a unified key representation.  */
+ char *gpgrt_w32_reg_get_string (const char *key);
+
 --- src/w32-gettext.c	2022-03-04 21:44:26.000000000 +0900
 +++ src/w32-gettext.c~	2023-08-30 16:01:12.861855006 +0900
 @@ -1325,7 +1325,7 @@
