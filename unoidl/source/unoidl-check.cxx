@@ -140,11 +140,11 @@ OUString showDirection(
 {
     switch (direction) {
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN:
-        return "[in]";
+        return u"[in]"_ustr;
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT:
-        return "[out]";
+        return u"[out]"_ustr;
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
-        return "[inout]";
+        return u"[inout]"_ustr;
     default:
         assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
@@ -251,10 +251,10 @@ void checkMap(
                             << "plain struct type " << name
                             << " direct base changed from "
                             << (ent2A->getDirectBase().isEmpty()
-                                ? OUString("none") : ent2A->getDirectBase())
+                                ? u"none"_ustr : ent2A->getDirectBase())
                             << " to "
                             << (ent2B->getDirectBase().isEmpty()
-                                ? OUString("none") : ent2B->getDirectBase())
+                                ? u"none"_ustr : ent2B->getDirectBase())
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -345,11 +345,11 @@ void checkMap(
                                 << i - ent2A->getMembers().begin() + 1
                                 << " changed from "
                                 << (i->parameterized
-                                    ? OUString("parameterized ") : OUString())
+                                    ? u"parameterized "_ustr : OUString())
                                 << i->type << " " << i->name
                                 << " to "
                                 << (j->parameterized
-                                    ? OUString("parameterized ") : OUString())
+                                    ? u"parameterized "_ustr : OUString())
                                 << j->type << " " << j->name
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
@@ -368,10 +368,10 @@ void checkMap(
                             << "exception type " << name
                             << " direct base changed from "
                             << (ent2A->getDirectBase().isEmpty()
-                                ? OUString("none") : ent2A->getDirectBase())
+                                ? u"none"_ustr : ent2A->getDirectBase())
                             << " to "
                             << (ent2B->getDirectBase().isEmpty()
-                                ? OUString("none") : ent2B->getDirectBase())
+                                ? u"none"_ustr : ent2B->getDirectBase())
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -489,14 +489,14 @@ void checkMap(
                                 << " direct attribute #"
                                 << i - ent2A->getDirectAttributes().begin() + 1
                                 << " changed from "
-                                << (i->bound ? OUString("bound ") : OUString())
+                                << (i->bound ? u"bound "_ustr : OUString())
                                 << (i->readOnly
-                                    ? OUString("read-only ") : OUString())
+                                    ? u"read-only "_ustr : OUString())
                                 << i->type << " " << i->name //TODO: exceptions
                                 << " to "
-                                << (j->bound ? OUString("bound ") : OUString())
+                                << (j->bound ? u"bound "_ustr : OUString())
                                 << (j->readOnly
-                                    ? OUString("read-only ") : OUString())
+                                    ? u"read-only "_ustr : OUString())
                                 << j->type << " " << j->name //TODO: exceptions
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
@@ -661,10 +661,10 @@ void checkMap(
                                 << i - ent2A->getConstructors().begin() + 1
                                 << " changed from "
                                 << (i->defaultConstructor
-                                    ? OUString("default ") : i->name) //TODO: parameters, exceptions
+                                    ? u"default "_ustr : i->name) //TODO: parameters, exceptions
                                 << " to "
                                 << (j->defaultConstructor
-                                    ? OUString("default ") : j->name) //TODO: parameters, exceptions
+                                    ? u"default "_ustr : j->name) //TODO: parameters, exceptions
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }

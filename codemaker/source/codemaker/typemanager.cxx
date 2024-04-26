@@ -62,7 +62,7 @@ codemaker::UnoType::Sort TypeManager::getSort(
 {
     if (name.isEmpty()) {
         if (cursor != nullptr) {
-            *cursor = manager_->createCursor("");
+            *cursor = manager_->createCursor(u""_ustr);
         }
         return codemaker::UnoType::Sort::Module;
     }

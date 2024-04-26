@@ -419,7 +419,7 @@ void CppuType::dump(CppuOptions const & options)
             m_cppuTypeDynamic = false;
     }
     dumpFiles(
-        options.isValid("-O"_ostr) ? b2u(options.getOption("-O"_ostr)) : "", options);
+        options.isValid("-O"_ostr) ? b2u(options.getOption("-O"_ostr)) : u""_ustr, options);
 }
 
 void CppuType::dumpFile(
@@ -670,86 +670,86 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle)
     switch (m_typeMgr->getSort(name, &ent)) {
     case codemaker::UnoType::Sort::Void:
         return cStyle
-               ? OUString("typelib_TypeClass_VOID")
-               : OUString("::css::uno::TypeClass_VOID");
+               ? u"typelib_TypeClass_VOID"_ustr
+               : u"::css::uno::TypeClass_VOID"_ustr;
     case codemaker::UnoType::Sort::Boolean:
         return cStyle
-               ? OUString("typelib_TypeClass_BOOLEAN")
-               : OUString("::css::uno::TypeClass_BOOLEAN");
+               ? u"typelib_TypeClass_BOOLEAN"_ustr
+               : u"::css::uno::TypeClass_BOOLEAN"_ustr;
     case codemaker::UnoType::Sort::Byte:
         return cStyle
-               ? OUString("typelib_TypeClass_BYTE")
-               : OUString("::css::uno::TypeClass_BYTE");
+               ? u"typelib_TypeClass_BYTE"_ustr
+               : u"::css::uno::TypeClass_BYTE"_ustr;
     case codemaker::UnoType::Sort::Short:
         return cStyle
-               ? OUString("typelib_TypeClass_SHORT")
-               : OUString("::css::uno::TypeClass_SHORT");
+               ? u"typelib_TypeClass_SHORT"_ustr
+               : u"::css::uno::TypeClass_SHORT"_ustr;
     case codemaker::UnoType::Sort::UnsignedShort:
         return cStyle
-               ? OUString("typelib_TypeClass_UNSIGNED_SHORT")
-               : OUString("::css::uno::TypeClass_UNSIGNED_SHORT");
+               ? u"typelib_TypeClass_UNSIGNED_SHORT"_ustr
+               : u"::css::uno::TypeClass_UNSIGNED_SHORT"_ustr;
     case codemaker::UnoType::Sort::Long:
         return cStyle
-               ? OUString("typelib_TypeClass_LONG")
-               : OUString("::css::uno::TypeClass_LONG");
+               ? u"typelib_TypeClass_LONG"_ustr
+               : u"::css::uno::TypeClass_LONG"_ustr;
     case codemaker::UnoType::Sort::UnsignedLong:
         return cStyle
-               ? OUString("typelib_TypeClass_UNSIGNED_LONG")
-               : OUString("::css::uno::TypeClass_UNSIGNED_LONG");
+               ? u"typelib_TypeClass_UNSIGNED_LONG"_ustr
+               : u"::css::uno::TypeClass_UNSIGNED_LONG"_ustr;
     case codemaker::UnoType::Sort::Hyper:
         return cStyle
-               ? OUString("typelib_TypeClass_HYPER")
-               : OUString("::css::uno::TypeClass_HYPER");
+               ? u"typelib_TypeClass_HYPER"_ustr
+               : u"::css::uno::TypeClass_HYPER"_ustr;
     case codemaker::UnoType::Sort::UnsignedHyper:
         return cStyle
-               ? OUString("typelib_TypeClass_UNSIGNED_HYPER")
-               : OUString("::css::uno::TypeClass_UNSIGNED_HYPER");
+               ? u"typelib_TypeClass_UNSIGNED_HYPER"_ustr
+               : u"::css::uno::TypeClass_UNSIGNED_HYPER"_ustr;
     case codemaker::UnoType::Sort::Float:
         return cStyle
-               ? OUString("typelib_TypeClass_FLOAT")
-               : OUString("::css::uno::TypeClass_FLOAT");
+               ? u"typelib_TypeClass_FLOAT"_ustr
+               : u"::css::uno::TypeClass_FLOAT"_ustr;
     case codemaker::UnoType::Sort::Double:
         return cStyle
-               ? OUString("typelib_TypeClass_DOUBLE")
-               : OUString("::css::uno::TypeClass_DOUBLE");
+               ? u"typelib_TypeClass_DOUBLE"_ustr
+               : u"::css::uno::TypeClass_DOUBLE"_ustr;
     case codemaker::UnoType::Sort::Char:
         return cStyle
-               ? OUString("typelib_TypeClass_CHAR")
-               : OUString("::css::uno::TypeClass_CHAR");
+               ? u"typelib_TypeClass_CHAR"_ustr
+               : u"::css::uno::TypeClass_CHAR"_ustr;
     case codemaker::UnoType::Sort::String:
         return cStyle
-               ? OUString("typelib_TypeClass_STRING")
-               : OUString("::css::uno::TypeClass_STRING");
+               ? u"typelib_TypeClass_STRING"_ustr
+               : u"::css::uno::TypeClass_STRING"_ustr;
     case codemaker::UnoType::Sort::Type:
         return cStyle
-               ? OUString("typelib_TypeClass_TYPE")
-               : OUString("::css::uno::TypeClass_TYPE");
+               ? u"typelib_TypeClass_TYPE"_ustr
+               : u"::css::uno::TypeClass_TYPE"_ustr;
     case codemaker::UnoType::Sort::Any:
         return cStyle
-               ? OUString("typelib_TypeClass_ANY")
-               : OUString("::css::uno::TypeClass_ANY");
+               ? u"typelib_TypeClass_ANY"_ustr
+               : u"::css::uno::TypeClass_ANY"_ustr;
     case codemaker::UnoType::Sort::Sequence:
         return cStyle
-               ? OUString("typelib_TypeClass_SEQUENCE")
-               : OUString("::css::uno::TypeClass_SEQUENCE");
+               ? u"typelib_TypeClass_SEQUENCE"_ustr
+               : u"::css::uno::TypeClass_SEQUENCE"_ustr;
     case codemaker::UnoType::Sort::Enum:
         return cStyle
-               ? OUString("typelib_TypeClass_ENUM")
-               : OUString("::css::uno::TypeClass_ENUM");
+               ? u"typelib_TypeClass_ENUM"_ustr
+               : u"::css::uno::TypeClass_ENUM"_ustr;
     case codemaker::UnoType::Sort::PlainStruct:
     case codemaker::UnoType::Sort::PolymorphicStructTemplate:
     case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         return cStyle
-               ? OUString("typelib_TypeClass_STRUCT")
-               : OUString("::css::uno::TypeClass_STRUCT");
+               ? u"typelib_TypeClass_STRUCT"_ustr
+               : u"::css::uno::TypeClass_STRUCT"_ustr;
     case codemaker::UnoType::Sort::Exception:
         return cStyle
-               ? OUString("typelib_TypeClass_EXCEPTION")
-               : OUString("::css::uno::TypeClass_EXCEPTION");
+               ? u"typelib_TypeClass_EXCEPTION"_ustr
+               : u"::css::uno::TypeClass_EXCEPTION"_ustr;
     case codemaker::UnoType::Sort::Interface:
         return cStyle
-               ? OUString("typelib_TypeClass_INTERFACE")
-               : OUString("::css::uno::TypeClass_INTERFACE");
+               ? u"typelib_TypeClass_INTERFACE"_ustr
+               : u"::css::uno::TypeClass_INTERFACE"_ustr;
     case codemaker::UnoType::Sort::Typedef:
         return getTypeClass(dynamic_cast<unoidl::TypedefEntity&>(*ent).getType(), cStyle);
     default:
@@ -1397,7 +1397,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
         << indent() << "bInitStarted = true;\n";
     std::set< OUString > seen;
     // Type for RuntimeException is always needed:
-    seen.insert("com.sun.star.uno.RuntimeException");
+    seen.insert(u"com.sun.star.uno.RuntimeException"_ustr);
     dumpCppuGetType(out, u"com.sun.star.uno.RuntimeException");
     dumpAttributesCppuDecl(out, &seen);
     dumpMethodsCppuDecl(out, &seen);
@@ -2818,21 +2818,21 @@ void ExceptionType::dumpHdlFile(
 {
     if (name_ == "com.sun.star.uno.Exception")
     {
-        includes.addCustom("#if defined(LIBO_INTERNAL_ONLY)");
-        includes.addCustom("#if __has_include(<version>)");
-        includes.addCustom("#include <version>");
-        includes.addCustom("#endif");
-        includes.addCustom("#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907");
-        includes.addCustom("#include <source_location>");
-        includes.addCustom("#define LIBO_USE_SOURCE_LOCATION std");
-        includes.addCustom("#elif __has_include(<experimental/source_location>)");
-        includes.addCustom("#include <experimental/source_location>");
-        includes.addCustom("#define LIBO_USE_SOURCE_LOCATION std::experimental");
-        includes.addCustom("#endif");
-        includes.addCustom("#endif");
-        includes.addCustom("#if defined LIBO_USE_SOURCE_LOCATION");
-        includes.addCustom("#include <o3tl/runtimetooustring.hxx>");
-        includes.addCustom("#endif");
+        includes.addCustom(u"#if defined(LIBO_INTERNAL_ONLY)"_ustr);
+        includes.addCustom(u"#if __has_include(<version>)"_ustr);
+        includes.addCustom(u"#include <version>"_ustr);
+        includes.addCustom(u"#endif"_ustr);
+        includes.addCustom(u"#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907"_ustr);
+        includes.addCustom(u"#include <source_location>"_ustr);
+        includes.addCustom(u"#define LIBO_USE_SOURCE_LOCATION std"_ustr);
+        includes.addCustom(u"#elif __has_include(<experimental/source_location>)"_ustr);
+        includes.addCustom(u"#include <experimental/source_location>"_ustr);
+        includes.addCustom(u"#define LIBO_USE_SOURCE_LOCATION std::experimental"_ustr);
+        includes.addCustom(u"#endif"_ustr);
+        includes.addCustom(u"#endif"_ustr);
+        includes.addCustom(u"#if defined LIBO_USE_SOURCE_LOCATION"_ustr);
+        includes.addCustom(u"#include <o3tl/runtimetooustring.hxx>"_ustr);
+        includes.addCustom(u"#endif"_ustr);
     }
     dumpHFileContent(out, includes);
 }

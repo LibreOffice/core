@@ -31,7 +31,7 @@ std::vector< OUString > translateAnnotations(std::u16string_view documentation) 
     std::vector< OUString > ans;
     if (documentation.find(u"@deprecated") != std::u16string_view::npos) {
         //TODO: this check is somewhat crude
-        ans.push_back("deprecated");
+        ans.push_back(u"deprecated"_ustr);
     }
     return ans;
 }
@@ -104,7 +104,7 @@ Cursor::Cursor(
     if (!prefix_.endsWith("/")) {
         prefix_ += "/";
     }
-    RegError e = key_.getKeyNames("", names_);
+    RegError e = key_.getKeyNames(u""_ustr, names_);
     if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key_.getRegistryName(),
@@ -150,7 +150,7 @@ private:
 
 std::vector< OUString > Module::getMemberNames() const {
     RegistryKeyNames names;
-    RegError e = key_.getKeyNames("", names);
+    RegError e = key_.getKeyNames(u""_ustr, names);
     if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key_.getRegistryName(),
@@ -168,7 +168,7 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
     assert(buffer != nullptr);
     RegValueType type;
     sal_uInt32 size;
-    RegError e = key.getValueInfo("", &type, &size);
+    RegError e = key.getValueInfo(u""_ustr, &type, &size);
     if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key.getRegistryName(),
@@ -190,7 +190,7 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
              + " of key " + key.getName()));
     }
     buffer->resize(static_cast< std::vector< char >::size_type >(size));
-    e = key.getValue("", buffer->data());
+    e = key.getValue(u""_ustr, buffer->data());
     if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key.getRegistryName(),
@@ -799,7 +799,7 @@ LegacyProvider::LegacyProvider(Manager & manager, OUString const & uri):
         throw FileFormatException(
             uri, "legacy format: cannot open root key: " + OUString::number(static_cast<int>(e)));
     }
-    e = root.openKey("UCR", ucr_);
+    e = root.openKey(u"UCR"_ustr, ucr_);
     switch (e) {
     case RegError::NO_ERROR:
     case RegError::KEY_NOT_EXISTS: // such effectively empty files exist in the wild

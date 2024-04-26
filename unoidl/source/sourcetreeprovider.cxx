@@ -201,7 +201,7 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
                         }
                         if (ent != data.entities.end()) {
                             throw FileFormatException(
-                                stat.getFileURL(), "source file defines more than one entity");
+                                stat.getFileURL(), u"source file defines more than one entity"_ustr);
                         }
                         ent = j;
                     }
@@ -259,7 +259,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
             assert(i == start || i != 0);
             if (i == start || name[i - 1] == '_') {
                 throw FileFormatException( //TODO
-                    "", "Illegal UNOIDL identifier \"" + name + "\"");
+                    u""_ustr, "Illegal UNOIDL identifier \"" + name + "\"");
             }
             buf[i] = '/';
             start = i + 1;
@@ -269,21 +269,21 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
                 || !rtl::isAsciiUpperCase(name[start]))
             {
                 throw FileFormatException( //TODO
-                    "", "Illegal UNOIDL identifier \"" + name + "\"");
+                    u""_ustr, "Illegal UNOIDL identifier \"" + name + "\"");
             }
         } else if (rtl::isAsciiDigit(c)) {
             if (i == start) {
                 throw FileFormatException( //TODO
-                    "", "Illegal UNOIDL identifier \"" + name + "\"");
+                    u""_ustr, "Illegal UNOIDL identifier \"" + name + "\"");
             }
         } else if (!rtl::isAsciiAlpha(c)) {
             throw FileFormatException( //TODO
-                "", "Illegal UNOIDL identifier \"" + name + "\"");
+                u""_ustr, "Illegal UNOIDL identifier \"" + name + "\"");
         }
     }
     if (i == start) {
         throw FileFormatException( //TODO
-            "", "Illegal UNOIDL identifier \"" + name + "\"");
+            u""_ustr, "Illegal UNOIDL identifier \"" + name + "\"");
     }
     OUString uri(uri_ + buf);
     rtl::Reference<Entity> ent;

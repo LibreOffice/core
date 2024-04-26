@@ -84,27 +84,27 @@ void error(YYLTYPE location, yyscan_t yyscanner, OUString const & message) {
 OUString flagName(unoidl::detail::SourceProviderFlags flag) {
     switch (flag) {
     case unoidl::detail::FLAG_ATTRIBUTE:
-        return "attribute";
+        return u"attribute"_ustr;
     case unoidl::detail::FLAG_BOUND:
-        return "bound";
+        return u"bound"_ustr;
     case unoidl::detail::FLAG_CONSTRAINED:
-        return "constrained";
+        return u"constrained"_ustr;
     case unoidl::detail::FLAG_MAYBEAMBIGUOUS:
-        return "maybeambiguous";
+        return u"maybeambiguous"_ustr;
     case unoidl::detail::FLAG_MAYBEDEFAULT:
-        return "maybedefault";
+        return u"maybedefault"_ustr;
     case unoidl::detail::FLAG_MAYBEVOID:
-        return "maybevoid";
+        return u"maybevoid"_ustr;
     case unoidl::detail::FLAG_OPTIONAL:
-        return "optional";
+        return u"optional"_ustr;
     case unoidl::detail::FLAG_PROPERTY:
-        return "property";
+        return u"property"_ustr;
     case unoidl::detail::FLAG_READONLY:
-        return "readonly";
+        return u"readonly"_ustr;
     case unoidl::detail::FLAG_REMOVABLE:
-        return "removable";
+        return u"removable"_ustr;
     case unoidl::detail::FLAG_TRANSIENT:
-        return "transient";
+        return u"transient"_ustr;
     default:
         assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
@@ -267,7 +267,7 @@ bool coerce(
         break;
     }
     if (!ok) {
-        error(location, yyscanner, "cannot coerce binary expression arguments");
+        error(location, yyscanner, u"cannot coerce binary expression arguments"_ustr);
     }
     return ok;
 }
@@ -835,7 +835,7 @@ bool checkTypeArgument(
     case unoidl::detail::SourceProviderType::TYPE_PARAMETER: //TODO?
         error(
             location, yyscanner,
-            "bad instantiated polymorphic struct type argument");
+            u"bad instantiated polymorphic struct type argument"_ustr);
         return false;
     case unoidl::detail::SourceProviderType::TYPE_SEQUENCE:
         return checkTypeArgument(location, yyscanner, type.subtypes.front());
@@ -864,7 +864,7 @@ bool checkInstantiatedPolymorphicStructTypeArgument(
 std::vector<OUString> annotations(bool deprecated) {
     std::vector<OUString> ann;
     if (deprecated) {
-        ann.push_back("deprecated");
+        ann.push_back(u"deprecated"_ustr);
     }
     return ann;
 }
@@ -1574,7 +1574,7 @@ interfaceDefn:
       if (pad->directMandatoryBases.empty()
           && data->currentName != "com.sun.star.uno.XInterface")
       {
-          OUString base(".com.sun.star.uno.XInterface");
+          OUString base(u".com.sun.star.uno.XInterface"_ustr);
           unoidl::detail::SourceProviderEntity const * p;
           if (findEntity(@4, yyscanner, data, true, &base, &p, nullptr, nullptr)
               == FOUND_ERROR)
@@ -1641,13 +1641,13 @@ interfaceBase:
       if (pad->singleBase) {
           error(
               @3, yyscanner,
-              "single-inheritance interface cannot have additional bases");
+              u"single-inheritance interface cannot have additional bases"_ustr);
           YYERROR;
       }
       if (($2 & ~unoidl::detail::FLAG_OPTIONAL) != 0) {
           error(
               @2, yyscanner,
-              "interface base can only be flagged as [optional]");
+              u"interface base can only be flagged as [optional]"_ustr);
           YYERROR;
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
@@ -1705,7 +1705,7 @@ interfaceAttribute:
       if (($2 & unoidl::detail::FLAG_ATTRIBUTE) == 0) {
           error(
               @2, yyscanner,
-              "interface attribute must be flagged as [attribute]");
+              u"interface attribute must be flagged as [attribute]"_ustr);
           YYERROR;
       }
       if (($2
@@ -1715,8 +1715,8 @@ interfaceAttribute:
       {
           error(
               @2, yyscanner,
-              ("interface attribute can only be flagged as [attribute,"
-               " bound, readonly]"));
+              (u"interface attribute can only be flagged as [attribute,"
+               " bound, readonly]"_ustr));
           YYERROR;
       }
       switch (t.type) {
@@ -1755,7 +1755,7 @@ attributeAccessDecls:
   {
       if (($1 & $2) != 0) {
           error(
-              @2, yyscanner, "duplicate get/set attribute access declaration");
+              @2, yyscanner, u"duplicate get/set attribute access declaration"_ustr);
           YYERROR;
       }
       $$ = unoidl::detail::SourceProviderAccessDecls($1 | $2);
@@ -1910,7 +1910,7 @@ typedefDefn:
       case unoidl::detail::SourceProviderType::TYPE_VOID:
       case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
       case unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT:
-          error(@4, yyscanner, "bad typedef type");
+          error(@4, yyscanner, u"bad typedef type"_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderType::TYPE_ENUM:
@@ -2596,7 +2596,7 @@ serviceBase:
       if (($2 & ~unoidl::detail::FLAG_OPTIONAL) != 0) {
           error(
               @2, yyscanner,
-              "service base can only be flagged as [optional]");
+              u"service base can only be flagged as [optional]"_ustr);
           YYERROR;
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
@@ -2654,7 +2654,7 @@ serviceInterfaceBase:
       if (($2 & ~unoidl::detail::FLAG_OPTIONAL) != 0) {
           error(
               @2, yyscanner,
-              "interface base can only be flagged as [optional]");
+              u"interface base can only be flagged as [optional]"_ustr);
           YYERROR;
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
@@ -2730,8 +2730,8 @@ serviceProperty:
       if (($2 & unoidl::detail::FLAG_PROPERTY) == 0) {
           error(
               @2, yyscanner,
-              ("accumulation-based service property must be flagged as"
-               " [property]"));
+              (u"accumulation-based service property must be flagged as"
+               " [property]"_ustr));
           YYERROR;
       }
       if (($2
@@ -2746,9 +2746,9 @@ serviceProperty:
       {
           error(
               @2, yyscanner,
-              ("accumulation-based service property can only be flagged as"
+              (u"accumulation-based service property can only be flagged as"
                " [property, bound, constrained, maybeambiguous, maybedefault,"
-               " maybevoid, optional, readonly, removable, transient]"));
+               " maybevoid, optional, readonly, removable, transient]"_ustr));
           YYERROR;
       }
       int att = 0;
@@ -3120,7 +3120,7 @@ orExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval | $3.uval);
           break;
       default:
-          error(@1, yyscanner, "arguments of non-integer type to \"|\"");
+          error(@1, yyscanner, u"arguments of non-integer type to \"|\""_ustr);
           YYERROR;
           break;
       }
@@ -3142,7 +3142,7 @@ xorExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval ^ $3.uval);
           break;
       default:
-          error(@1, yyscanner, "arguments of non-integer type to \"^\"");
+          error(@1, yyscanner, u"arguments of non-integer type to \"^\""_ustr);
           YYERROR;
           break;
       }
@@ -3164,7 +3164,7 @@ andExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval & $3.uval);
           break;
       default:
-          error(@1, yyscanner, "arguments of non-integer type to \"&\"");
+          error(@1, yyscanner, u"arguments of non-integer type to \"&\""_ustr);
           YYERROR;
           break;
       }
@@ -3198,7 +3198,7 @@ shiftExpr:
           n = static_cast<int>($3.uval);
           break;
       default:
-          error(@3, yyscanner, "right argument of non-integer type to \"<<\"");
+          error(@3, yyscanner, u"right argument of non-integer type to \"<<\""_ustr);
           YYERROR;
       }
       switch ($1.type) {
@@ -3216,7 +3216,7 @@ shiftExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval << n);
           break;
       default:
-          error(@1, yyscanner, "left argument of non-integer type to \"<<\"");
+          error(@1, yyscanner, u"left argument of non-integer type to \"<<\""_ustr);
           YYERROR;
           break;
       }
@@ -3246,7 +3246,7 @@ shiftExpr:
           n = static_cast<int>($3.uval);
           break;
       default:
-          error(@3, yyscanner, "right argument of non-integer type to \">>\"");
+          error(@3, yyscanner, u"right argument of non-integer type to \">>\""_ustr);
           YYERROR;
           break;
       }
@@ -3258,7 +3258,7 @@ shiftExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval >> n);
           break;
       default:
-          error(@1, yyscanner, "left argument of non-integer type to \">>\"");
+          error(@1, yyscanner, u"left argument of non-integer type to \">>\""_ustr);
           YYERROR;
           break;
       }
@@ -3274,7 +3274,7 @@ addExpr:
       }
       switch ($1.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
-          error(@1, yyscanner, "arguments of boolean type to binary \"+\"");
+          error(@1, yyscanner, u"arguments of boolean type to binary \"+\""_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
@@ -3295,7 +3295,7 @@ addExpr:
       }
       switch ($1.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
-          error(@1, yyscanner, "arguments of boolean type to binary \"-\"");
+          error(@1, yyscanner, u"arguments of boolean type to binary \"-\""_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
@@ -3320,7 +3320,7 @@ multExpr:
       }
       switch ($1.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
-          error(@1, yyscanner, "arguments of boolean type to \"*\"");
+          error(@1, yyscanner, u"arguments of boolean type to \"*\""_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
@@ -3341,26 +3341,26 @@ multExpr:
       }
       switch ($1.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
-          error(@1, yyscanner, "arguments of boolean type to \"/\"");
+          error(@1, yyscanner, u"arguments of boolean type to \"/\""_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
           if ($3.ival == 0) {
-              error(@3, yyscanner, "cannot divide by zero");
+              error(@3, yyscanner, u"cannot divide by zero"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Int($1.ival / $3.ival);
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_UINT:
           if ($3.uval == 0) {
-              error(@3, yyscanner, "cannot divide by zero");
+              error(@3, yyscanner, u"cannot divide by zero"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval / $3.uval);
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
           if ($3.fval == 0) {
-              error(@3, yyscanner, "cannot divide by zero");
+              error(@3, yyscanner, u"cannot divide by zero"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Float($1.fval - $3.fval);
@@ -3375,20 +3375,20 @@ multExpr:
       switch ($1.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
           if ($3.ival == 0) {
-              error(@3, yyscanner, "cannot divide by zero");
+              error(@3, yyscanner, u"cannot divide by zero"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Int($1.ival % $3.ival);
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_UINT:
           if ($3.uval == 0) {
-              error(@3, yyscanner, "cannot divide by zero");
+              error(@3, yyscanner, u"cannot divide by zero"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Uint($1.uval % $3.uval);
           break;
       default:
-          error(@1, yyscanner, "arguments of non-integer type to \"%\"");
+          error(@1, yyscanner, u"arguments of non-integer type to \"%\""_ustr);
           YYERROR;
           break;
       }
@@ -3400,7 +3400,7 @@ unaryExpr:
   '+' primaryExpr
   {
       if ($2.type == unoidl::detail::SourceProviderExpr::TYPE_BOOL) {
-          error(@2, yyscanner, "argument of boolean type to unary \"+\"");
+          error(@2, yyscanner, u"argument of boolean type to unary \"+\""_ustr);
           YYERROR;
       }
       $$ = $2;
@@ -3409,12 +3409,12 @@ unaryExpr:
   {
       switch ($2.type) {
       case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
-          error(@2, yyscanner, "argument of boolean type to unary \"-\"");
+          error(@2, yyscanner, u"argument of boolean type to unary \"-\""_ustr);
           YYERROR;
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_INT:
           if ($2.ival == SAL_MIN_INT64) {
-              error(@2, yyscanner, "cannot negate -2^63");
+              error(@2, yyscanner, u"cannot negate -2^63"_ustr);
               YYERROR;
           }
           $$ = unoidl::detail::SourceProviderExpr::Int(-$2.ival);
@@ -3449,7 +3449,7 @@ unaryExpr:
           $$ = unoidl::detail::SourceProviderExpr::Uint(~$2.uval);
           break;
       default:
-          error(@2, yyscanner, "argument of non-integer type to \"~\"");
+          error(@2, yyscanner, u"argument of non-integer type to \"~\""_ustr);
           YYERROR;
           break;
       }
@@ -3705,7 +3705,7 @@ type:
       case unoidl::detail::SourceProviderType::TYPE_VOID:
       case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER: //TODO?
-          error(@3, yyscanner, "illegal sequence type component type");
+          error(@3, yyscanner, u"illegal sequence type component type"_ustr);
           YYERROR;
           break;
       default:
@@ -3987,35 +3987,35 @@ OUString SourceProviderType::getName() const {
     }
     switch (type) {
     case unoidl::detail::SourceProviderType::TYPE_VOID:
-        return "void";
+        return u"void"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_BOOLEAN:
-        return "boolean";
+        return u"boolean"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_BYTE:
-        return "byte";
+        return u"byte"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_SHORT:
-        return "short";
+        return u"short"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_SHORT:
-        return "unsigned short";
+        return u"unsigned short"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_LONG:
-        return "long";
+        return u"long"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_LONG:
-        return "unsigned long";
+        return u"unsigned long"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_HYPER:
-        return "hyper";
+        return u"hyper"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_HYPER:
-        return "unsigned hyper";
+        return u"unsigned hyper"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_FLOAT:
-        return "float";
+        return u"float"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_DOUBLE:
-        return "double";
+        return u"double"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_CHAR:
-        return "char";
+        return u"char"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_STRING:
-        return "string";
+        return u"string"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_TYPE:
-        return "type";
+        return u"type"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_ANY:
-        return "any";
+        return u"any"_ustr;
     case unoidl::detail::SourceProviderType::TYPE_SEQUENCE:
         assert(subtypes.size() == 1);
         return "[]" + subtypes.front().getName();
@@ -4374,7 +4374,7 @@ bool SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(
     }
     for (auto & i: entity->getDirectAttributes()) {
         Member & m(
-            allMembers.emplace(i.name, Member(""))
+            allMembers.emplace(i.name, Member(u""_ustr))
             .first->second);
         if (m.mandatory.isEmpty()) {
             m.optional.insert(name);
@@ -4382,7 +4382,7 @@ bool SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(
     }
     for (auto & i: entity->getDirectMethods()) {
         Member & m(
-            allMembers.emplace(i.name, Member(""))
+            allMembers.emplace(i.name, Member(u""_ustr))
             .first->second);
         if (m.mandatory.isEmpty()) {
             m.optional.insert(name);

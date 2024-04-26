@@ -36,7 +36,7 @@ OString convertString(OUString const & string) {
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw CannotDumpException(
-            "Failure converting string from UTF-16 to UTF-8");
+            u"Failure converting string from UTF-16 to UTF-8"_ustr);
     }
     return s;
 }

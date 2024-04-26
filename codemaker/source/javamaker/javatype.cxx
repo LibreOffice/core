@@ -153,7 +153,7 @@ SpecialType translateUnoTypeToDescriptor(
             != codemaker::UnoType::Sort::InstantiatedPolymorphicStruct));
     if (rank > 0xFF - (array ? 1 : 0)) {
         throw CannotDumpException(
-            "Too many array dimensions for Java class file format");
+            u"Too many array dimensions for Java class file format"_ustr);
     }
     if (array) {
         ++rank;
@@ -592,7 +592,7 @@ void TypeInfo::generatePolymorphicUnoTypeCode(
             "com/sun/star/uno/TypeClass"_ostr, "SEQUENCE"_ostr,
             "Lcom/sun/star/uno/TypeClass;"_ostr);
     }
-    dependencies->insert("com.sun.star.uno.TypeClass");
+    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
     code.instrInvokespecial(
         "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
         "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
@@ -648,7 +648,7 @@ void addTypeInfo(
     std::vector< TypeInfo >::size_type typeInfos = typeInfo.size();
     if (typeInfos > SAL_MAX_INT32) {
         throw CannotDumpException(
-            "UNOTYPEINFO array too big for Java class file format");
+            u"UNOTYPEINFO array too big for Java class file format"_ustr);
     }
     if (typeInfos == 0)
         return;
@@ -677,7 +677,7 @@ void addTypeInfo(
     code->instrReturn();
     if (stack > SAL_MAX_UINT16 - 4) {
         throw CannotDumpException(
-            "Stack too big for Java class file format");
+            u"Stack too big for Java class file format"_ustr);
     }
     code->setMaxStackAndLocals(static_cast< sal_uInt16 >(stack + 4), 0);
     classFile->addMethod(
@@ -1194,7 +1194,7 @@ sal_uInt16 addLoadLocal(
                     code->instrGetstatic(
                         "com/sun/star/uno/TypeClass"_ostr, "STRUCT"_ostr,
                         "Lcom/sun/star/uno/TypeClass;"_ostr);
-                    dependencies->insert("com.sun.star.uno.TypeClass");
+                    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
                     code->instrInvokespecial(
                         "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
                         "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
@@ -1219,7 +1219,7 @@ sal_uInt16 addLoadLocal(
                     code->instrGetstatic(
                         "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
                         "Lcom/sun/star/uno/TypeClass;"_ostr);
-                    dependencies->insert("com.sun.star.uno.TypeClass");
+                    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
                     code->instrInvokespecial(
                         "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
                         "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
@@ -1305,7 +1305,7 @@ sal_uInt16 addLoadLocal(
     }
     if (*index > SAL_MAX_UINT16 - size) {
         throw CannotDumpException(
-            "Too many local variables for Java class file format");
+            u"Too many local variables for Java class file format"_ustr);
     }
     *index = *index + size;
     return stack;
@@ -1455,7 +1455,7 @@ void handlePolyStructType(
         sig.append(codemaker::convertString(param) + ":Ljava/lang/Object;");
         if (!typeParameters.emplace(param, index++).second)
         {
-            throw CannotDumpException("Bad type information"); //TODO
+            throw CannotDumpException(u"Bad type information"_ustr); //TODO
         }
     }
     sig.append(">Ljava/lang/Object;");
@@ -1473,7 +1473,7 @@ void handlePolyStructType(
             std::map< OUString, sal_Int32 >::iterator it(
                 typeParameters.find(member.type));
             if (it == typeParameters.end()) {
-                throw CannotDumpException("Bad type information"); //TODO
+                throw CannotDumpException(u"Bad type information"_ustr); //TODO
             }
             typeParameterIndex = it->second;
         } else {
@@ -1593,7 +1593,7 @@ void handleExceptionType(
     if (baseRuntimeException) {
         addField(
             manager, dependencies, cf.get(), &typeInfo, -1,
-            "com.sun.star.uno.XInterface", "Context", index++);
+            u"com.sun.star.uno.XInterface"_ustr, u"Context"_ustr, index++);
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1615,7 +1615,7 @@ void handleExceptionType(
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className, "Context", false,
+                manager, className, u"Context"_ustr, false,
                 u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
@@ -1647,7 +1647,7 @@ void handleExceptionType(
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className, "Context", false,
+                manager, className, u"Context"_ustr, false,
                 u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
@@ -1685,7 +1685,7 @@ void handleExceptionType(
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className, "Context", false,
+                manager, className, u"Context"_ustr, false,
                 u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
@@ -1716,7 +1716,7 @@ void handleExceptionType(
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className, "Context", false,
+                manager, className, u"Context"_ustr, false,
                 u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
@@ -1757,7 +1757,7 @@ void handleExceptionType(
             maxSize,
             addDirectArgument(
                 manager, dependencies, &desc1, code.get(), &index2, className,
-                "Context"_ostr, false, "com.sun.star.uno.XInterface"));
+                "Context"_ostr, false, u"com.sun.star.uno.XInterface"_ustr));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1804,7 +1804,7 @@ void handleExceptionType(
             maxSize2,
             addDirectArgument(
                 manager, dependencies, &desc2, code.get(), &index3, className,
-                "Context"_ostr, false, "com.sun.star.uno.XInterface"));
+                "Context"_ostr, false, u"com.sun.star.uno.XInterface"_ustr));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -2220,7 +2220,7 @@ void addConstructor(
             &tree.getRoot(), tryStart, tryEnd, pos2, code.get());
         code->addException(
             tryStart, tryEnd, pos1, "com/sun/star/uno/Exception"_ostr);
-        dependencies->insert("com.sun.star.uno.Exception");
+        dependencies->insert(u"com.sun.star.uno.Exception"_ustr);
         stack = std::max< sal_uInt16 >(stack, 4);
     }
     code->setMaxStackAndLocals(stack, localIndex);
@@ -2254,10 +2254,10 @@ void handleService(
         OString realJavaBaseName(
             codemaker::convertString(entity->getBase()));
         dependencies->insert(entity->getBase());
-        dependencies->insert("com.sun.star.lang.XMultiComponentFactory");
-        dependencies->insert("com.sun.star.uno.DeploymentException");
-        dependencies->insert("com.sun.star.uno.TypeClass");
-        dependencies->insert("com.sun.star.uno.XComponentContext");
+        dependencies->insert(u"com.sun.star.lang.XMultiComponentFactory"_ustr);
+        dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
+        dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+        dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
                  entity->getConstructors())
         {
@@ -2340,9 +2340,9 @@ void handleSingleton(
     OString unoName(codemaker::convertString(name));
     OString className(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "singleton"));
-    dependencies->insert("com.sun.star.uno.DeploymentException");
-    dependencies->insert("com.sun.star.uno.TypeClass");
-    dependencies->insert("com.sun.star.uno.XComponentContext");
+    dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
+    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+    dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
     std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(

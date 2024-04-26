@@ -287,7 +287,7 @@ sal_uInt8 MappedFile::read8(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 1) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 8-bit value too large");
+            uri, u"UNOIDL format: offset for 8-bit value too large"_ustr);
     }
     return get8(offset);
 }
@@ -296,7 +296,7 @@ sal_uInt16 MappedFile::read16(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 2) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 16-bit value too large");
+            uri, u"UNOIDL format: offset for 16-bit value too large"_ustr);
     }
     return get16(offset);
 }
@@ -305,7 +305,7 @@ sal_uInt32 MappedFile::read32(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 4) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 32-bit value too large");
+            uri, u"UNOIDL format: offset for 32-bit value too large"_ustr);
     }
     return get32(offset);
 }
@@ -314,7 +314,7 @@ sal_uInt64 MappedFile::read64(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 8) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 64-bit value too large");
+            uri, u"UNOIDL format: offset for 64-bit value too large"_ustr);
     }
     return get64(offset);
 }
@@ -323,7 +323,7 @@ float MappedFile::readIso60599Binary32(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 4) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 32-bit value too large");
+            uri, u"UNOIDL format: offset for 32-bit value too large"_ustr);
     }
     return getIso60599Binary32(offset);
 }
@@ -332,7 +332,7 @@ double MappedFile::readIso60599Binary64(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 8) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for 64-bit value too large");
+            uri, u"UNOIDL format: offset for 64-bit value too large"_ustr);
     }
     return getIso60599Binary64(offset);
 }
@@ -340,20 +340,20 @@ double MappedFile::readIso60599Binary64(sal_uInt32 offset) const {
 OUString MappedFile::readNulName(sal_uInt32 offset) {
     if (offset > size) {
         throw FileFormatException(
-            uri, "UNOIDL format: offset for string too large");
+            uri, u"UNOIDL format: offset for string too large"_ustr);
     }
     sal_uInt64 end = offset;
     for (;; ++end) {
         if (end == size) {
             throw FileFormatException(
-                uri, "UNOIDL format: string misses trailing NUL");
+                uri, u"UNOIDL format: string misses trailing NUL"_ustr);
         }
         if (static_cast< char const * >(address)[end] == 0) {
             break;
         }
     }
     if (end - offset > SAL_MAX_INT32) {
-        throw FileFormatException(uri, "UNOIDL format: string too long");
+        throw FileFormatException(uri, u"UNOIDL format: string too long"_ustr);
     }
     OUString name;
     if (!rtl_convertStringToUString(
@@ -363,7 +363,7 @@ OUString MappedFile::readNulName(sal_uInt32 offset) {
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        throw FileFormatException(uri, "UNOIDL format: name is not ASCII");
+        throw FileFormatException(uri, u"UNOIDL format: name is not ASCII"_ustr);
     }
     checkEntityName(this, name);
     return name;
@@ -432,12 +432,12 @@ OUString MappedFile::readIdxString(
         len = read32(off);
         if ((len & 0x80000000) != 0) {
             throw FileFormatException(
-                uri, "UNOIDL format: string length high bit set");
+                uri, u"UNOIDL format: string length high bit set"_ustr);
         }
     }
     if (len > SAL_MAX_INT32 || len > size - off - 4) {
         throw FileFormatException(
-            uri, "UNOIDL format: size of string is too large");
+            uri, u"UNOIDL format: size of string is too large"_ustr);
     }
     OUString name;
     if (!rtl_convertStringToUString(
@@ -448,7 +448,7 @@ OUString MappedFile::readIdxString(
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw FileFormatException(
-            uri, "UNOIDL format: string bytes do not match encoding");
+            uri, u"UNOIDL format: string bytes do not match encoding"_ustr);
     }
     return name;
 }
@@ -477,7 +477,7 @@ Compare compare(
     sal_uInt32 off = entry->name.getUnsigned32();
     if (off > file->size - 1) { // at least a trailing NUL
         throw FileFormatException(
-            file->uri, "UNOIDL format: string offset too large");
+            file->uri, u"UNOIDL format: string offset too large"_ustr);
     }
     assert(nameLength >= 0);
     sal_uInt64 min = std::min(
@@ -497,7 +497,7 @@ Compare compare(
     if (static_cast< sal_uInt64 >(nameLength) == min) {
         if (file->size - off == min) {
             throw FileFormatException(
-                file->uri, "UNOIDL format: string misses trailing NUL");
+                file->uri, u"UNOIDL format: string misses trailing NUL"_ustr);
         }
         return
             static_cast< unsigned char const * >(file->address)[off + min] == 0
@@ -529,7 +529,7 @@ sal_uInt32 findInMap(
     sal_uInt32 off = mapBegin[n].data.getUnsigned32();
     if (off == 0) {
         throw FileFormatException(
-            file->uri, "UNOIDL format: map entry data offset is null");
+            file->uri, u"UNOIDL format: map entry data offset is null"_ustr);
     }
     return off;
 }
@@ -704,7 +704,7 @@ public:
         map_.trace = std::move(trace);
         if (!map_.trace.insert(map_.map).second) {
             throw FileFormatException(
-                file_->uri, "UNOIDL format: recursive map");
+                file_->uri, u"UNOIDL format: recursive map"_ustr);
         }
     }
 
@@ -754,14 +754,14 @@ rtl::Reference< Entity > readEntity(
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
-                    file->uri, "UNOIDL format: too many items in module");
+                    file->uri, u"UNOIDL format: too many items in module"_ustr);
             }
             if (sal_uInt64(offset) + 5 + 8 * sal_uInt64(n) > file->size)
                 // cannot overflow
             {
                 throw FileFormatException(
                     file->uri,
-                    "UNOIDL format: module map offset + size too large");
+                    u"UNOIDL format: module map offset + size too large"_ustr);
             }
             return new UnoidlModuleEntity(file, offset + 5, n, std::move(trace));
         }
@@ -770,11 +770,11 @@ rtl::Reference< Entity > readEntity(
             sal_uInt32 n = file->read32(offset + 1);
             if (n == 0) {
                 throw FileFormatException(
-                    file->uri, "UNOIDL format: enum type with no members");
+                    file->uri, u"UNOIDL format: enum type with no members"_ustr);
             }
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
-                    file->uri, "UNOIDL format: too many members of enum type");
+                    file->uri, u"UNOIDL format: too many members of enum type"_ustr);
             }
             offset += 5;
             std::vector< EnumTypeEntity::Member > mems;
@@ -805,8 +805,8 @@ rtl::Reference< Entity > readEntity(
                 if (base.isEmpty()) {
                     throw FileFormatException(
                         file->uri,
-                        ("UNOIDL format: empty base type name of plain struct"
-                         " type"));
+                        (u"UNOIDL format: empty base type name of plain struct"
+                         " type"_ustr));
                 }
                 checkTypeName(file, base);
             }
@@ -814,8 +814,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct members of plain struct"
-                     " type"));
+                    (u"UNOIDL format: too many direct members of plain struct"
+                     " type"_ustr));
             }
             offset += 4;
             std::vector< PlainStructTypeEntity::Member > mems;
@@ -839,8 +839,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many type parameters of polymorphic"
-                     " struct type template"));
+                    (u"UNOIDL format: too many type parameters of polymorphic"
+                     " struct type template"_ustr));
             }
             offset += 5;
             std::vector< OUString > params;
@@ -854,8 +854,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many members of polymorphic struct"
-                     " type template"));
+                    (u"UNOIDL format: too many members of polymorphic struct"
+                     " type template"_ustr));
             }
             offset += 4;
             std::vector< PolymorphicStructTypeTemplateEntity::Member > mems;
@@ -892,8 +892,8 @@ rtl::Reference< Entity > readEntity(
                 if (base.isEmpty()) {
                     throw FileFormatException(
                         file->uri,
-                        ("UNOIDL format: empty base type name of exception"
-                         " type"));
+                        (u"UNOIDL format: empty base type name of exception"
+                         " type"_ustr));
                 }
                 checkTypeName(file, base);
             }
@@ -901,7 +901,7 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    "UNOIDL format: too many direct members of exception type");
+                    u"UNOIDL format: too many direct members of exception type"_ustr);
             }
             offset += 4;
             std::vector< ExceptionTypeEntity::Member > mems;
@@ -925,8 +925,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct mandatory bases of"
-                     " interface type"));
+                    (u"UNOIDL format: too many direct mandatory bases of"
+                     " interface type"_ustr));
             }
             offset += 5;
             std::vector< AnnotatedReference > mandBases;
@@ -941,8 +941,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct optional bases of"
-                     " interface type"));
+                    (u"UNOIDL format: too many direct optional bases of"
+                     " interface type"_ustr));
             }
             offset += 4;
             std::vector< AnnotatedReference > optBases;
@@ -957,8 +957,8 @@ rtl::Reference< Entity > readEntity(
             if (nAttrs > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct attributes of interface"
-                     " type"));
+                    (u"UNOIDL format: too many direct attributes of interface"
+                     " type"_ustr));
             }
             offset += 4;
             std::vector< InterfaceTypeEntity::Attribute > attrs;
@@ -1018,8 +1018,8 @@ rtl::Reference< Entity > readEntity(
             if (nMeths > SAL_MAX_INT32 - nAttrs) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct attributes and methods of"
-                     " interface type"));
+                    (u"UNOIDL format: too many direct attributes and methods of"
+                     " interface type"_ustr));
             }
             offset += 4;
             std::vector< InterfaceTypeEntity::Method > meths;
@@ -1107,15 +1107,15 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    "UNOIDL format: too many constants in constant group");
+                    u"UNOIDL format: too many constants in constant group"_ustr);
             }
             if (sal_uInt64(offset) + 5 + 8 * sal_uInt64(n) > file->size)
                 // cannot overflow
             {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: constant group map offset + size too"
-                     " large"));
+                    (u"UNOIDL format: constant group map offset + size too"
+                     " large"_ustr));
             }
             MapEntry const * p = reinterpret_cast< MapEntry const * >(
                 static_cast< char const * >(file->address) + offset + 5);
@@ -1148,8 +1148,8 @@ rtl::Reference< Entity > readEntity(
                 if (n > SAL_MAX_INT32) {
                     throw FileFormatException(
                         file->uri,
-                        ("UNOIDL format: too many constructors of"
-                         " single-interface--based service"));
+                        (u"UNOIDL format: too many constructors of"
+                         " single-interface--based service"_ustr));
                 }
                 offset += 4;
                 ctors.reserve(n);
@@ -1226,8 +1226,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct mandatory service bases of"
-                     " accumulation-based service"));
+                    (u"UNOIDL format: too many direct mandatory service bases of"
+                     " accumulation-based service"_ustr));
             }
             offset += 5;
             std::vector< AnnotatedReference > mandServs;
@@ -1242,8 +1242,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct optional service bases of"
-                     " accumulation-based service"));
+                    (u"UNOIDL format: too many direct optional service bases of"
+                     " accumulation-based service"_ustr));
             }
             offset += 4;
             std::vector< AnnotatedReference > optServs;
@@ -1258,8 +1258,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct mandatory interface bases"
-                     " of accumulation-based service"));
+                    (u"UNOIDL format: too many direct mandatory interface bases"
+                     " of accumulation-based service"_ustr));
             }
             offset += 4;
             std::vector< AnnotatedReference > mandIfcs;
@@ -1274,8 +1274,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct optional interface bases"
-                     " of accumulation-based service"));
+                    (u"UNOIDL format: too many direct optional interface bases"
+                     " of accumulation-based service"_ustr));
             }
             offset += 4;
             std::vector< AnnotatedReference > optIfcs;
@@ -1290,8 +1290,8 @@ rtl::Reference< Entity > readEntity(
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri,
-                    ("UNOIDL format: too many direct properties of"
-                     " accumulation-based service"));
+                    (u"UNOIDL format: too many direct properties of"
+                     " accumulation-based service"_ustr));
             }
             offset += 4;
             std::vector< AccumulationBasedServiceEntity::Property > props;
@@ -1351,14 +1351,14 @@ UnoidlProvider::UnoidlProvider(OUString const & uri): file_(new MappedFile(uri))
     {
         throw FileFormatException(
             file_->uri,
-            "UNOIDL format: does not begin with magic UNOIDL\\xFF and version"
-            " 0");
+            u"UNOIDL format: does not begin with magic UNOIDL\\xFF and version"
+            " 0"_ustr);
     }
     sal_uInt32 off = file_->read32(8);
     map_.map.size = file_->read32(12);
     if (off + 8 * sal_uInt64(map_.map.size) > file_->size) { // cannot overflow
         throw FileFormatException(
-            file_->uri, "UNOIDL format: root map offset + size too large");
+            file_->uri, u"UNOIDL format: root map offset + size too large"_ustr);
     }
     map_.map.begin = reinterpret_cast< MapEntry const * >(
         static_cast< char const * >(file_->address) + off);
@@ -1412,13 +1412,13 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
             // cannot overflow
         {
             throw FileFormatException(
-                file_->uri, "UNOIDL format: map offset + size too large");
+                file_->uri, u"UNOIDL format: map offset + size too large"_ustr);
         }
         map.map.begin = reinterpret_cast< MapEntry const * >(
             static_cast< char const * >(file_->address) + off + 5);
         if (!map.trace.insert(map.map).second) {
             throw FileFormatException(
-                file_->uri, "UNOIDL format: recursive map");
+                file_->uri, u"UNOIDL format: recursive map"_ustr);
         }
         i = j + 1;
     }
