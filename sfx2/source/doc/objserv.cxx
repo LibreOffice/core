@@ -453,6 +453,10 @@ static void sendErrorToLOK(ErrCodeMsg error)
     if (error.GetCode().GetClass() == ErrCodeClass::NONE)
         return;
 
+    SfxViewShell* pNotifier = SfxViewShell::Current();
+    if (!pNotifier)
+        return;
+
     boost::property_tree::ptree aTree;
     aTree.put("code", error);
     aTree.put("kind", "");
@@ -465,7 +469,7 @@ static void sendErrorToLOK(ErrCodeMsg error)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, OString(aStream.str()));
+    pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, OString(aStream.str()));
 }
 
 namespace
