@@ -789,28 +789,6 @@ static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, 
 
 static void lo_accessible_init(LoAccessible* /*iface*/) {}
 
-static GtkATContext* get_at_context(GtkAccessible* self)
-{
-    OOoFixed* pFixed = OOO_FIXED(self);
-
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible(
-        get_uno_accessible(GTK_WIDGET(pFixed)));
-
-    if (!pFixed->at_context)
-    {
-        //        if (pFixed->at_context)
-        //            g_clear_object(&pFixed->at_context);
-
-        GtkAccessibleRole eRole = map_accessible_role(xAccessible);
-        pFixed->at_context
-            = gtk_at_context_create(eRole, self, gtk_widget_get_display(GTK_WIDGET(pFixed)));
-        if (!pFixed->at_context)
-            return nullptr;
-    }
-
-    return g_object_ref(pFixed->at_context);
-}
-
 #if 0
 gboolean get_platform_state(GtkAccessible* self, GtkAccessiblePlatformState state)
 {
@@ -858,7 +836,6 @@ static void ooo_fixed_accessible_init(GtkAccessibleInterface* iface)
 {
     GtkAccessibleInterface* parent_iface
         = static_cast<GtkAccessibleInterface*>(g_type_interface_peek_parent(iface));
-    iface->get_at_context = get_at_context;
     iface->get_bounds = get_bounds;
     iface->get_first_accessible_child = get_first_accessible_child;
     iface->get_platform_state = parent_iface->get_platform_state;
