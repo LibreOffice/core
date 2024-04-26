@@ -67,7 +67,7 @@ class SwFormatsBase;
 class SwTableFormat;
 
 /// Style of a layout element.
-class SAL_DLLPUBLIC_RTTI SwFrameFormat
+class SW_DLLPUBLIC SwFrameFormat
     : public SwFormat
 {
     friend class SwDoc;
@@ -136,7 +136,7 @@ public:
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
-    SW_DLLPUBLIC SwRect FindLayoutRect( const bool bPrtArea = false,
+    SwRect FindLayoutRect( const bool bPrtArea = false,
                            const Point* pPoint = nullptr ) const;
 
     /** @return the SdrObject, that is connected to the ContactObject.
@@ -152,7 +152,7 @@ public:
     const SdrObject *FindSdrObject() const
         { return const_cast<SwFrameFormat*>(this)->FindSdrObject(); }
 
-    SW_DLLPUBLIC SdrObject *FindRealSdrObject();
+          SdrObject *FindRealSdrObject();
     const SdrObject *FindRealSdrObject() const
         { return const_cast<SwFrameFormat*>(this)->FindRealSdrObject(); }
 

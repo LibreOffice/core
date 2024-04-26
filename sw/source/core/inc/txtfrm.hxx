@@ -164,7 +164,7 @@ bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode);
 
 /// Represents the visualization of a paragraph. Typical upper is an
 /// SwBodyFrame. The first text portion of the first line is az SwParaPortion.
-class SAL_DLLPUBLIC_RTTI SwTextFrame final : public SwContentFrame
+class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 {
     friend class SwTextIter;
     friend class SwTestFormat;
@@ -407,7 +407,7 @@ public:
      * @returns false if the SPoint is outside of the SSize else
      *          returns true
      */
-    SW_DLLPUBLIC virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                                   SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     /**
@@ -418,7 +418,7 @@ public:
             { return GetModelPositionForViewPoint_( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
-    SW_DLLPUBLIC SwRect GetPaintSwRect();
+    SwRect GetPaintSwRect();
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
 
     /**
@@ -464,12 +464,12 @@ public:
     sw::MergedPara const* GetMergedPara() const { return m_pMergedPara.get(); }
 
     /// Returns the text portion we want to edit (for inline see underneath)
-    SW_DLLPUBLIC const OUString& GetText() const;
+    const OUString& GetText() const;
     SwTextNode const* GetTextNodeForParaProps() const;
-    SW_DLLPUBLIC SwTextNode const* GetTextNodeForFirstText() const;
+    SwTextNode const* GetTextNodeForFirstText() const;
     SwTextNode      * GetTextNodeFirst()
         { return const_cast<SwTextNode*>(const_cast<SwTextFrame const*>(this)->GetTextNodeFirst()); };
-    SW_DLLPUBLIC SwTextNode const* GetTextNodeFirst() const;
+    SwTextNode const* GetTextNodeFirst() const;
     SwDoc      & GetDoc()
         { return const_cast<SwDoc &>(const_cast<SwTextFrame const*>(this)->GetDoc()); }
     SwDoc const& GetDoc() const;
@@ -511,10 +511,10 @@ public:
     /// Test grow
     inline SwTwips GrowTst( const SwTwips nGrow );
 
-    SW_DLLPUBLIC SwParaPortion *GetPara();
+    SwParaPortion *GetPara();
     inline const SwParaPortion *GetPara() const;
     inline bool HasPara() const;
-    SW_DLLPUBLIC bool HasPara_() const;
+    bool HasPara_() const;
 
     /// map position in potentially merged text frame to SwPosition
     std::pair<SwTextNode*, sal_Int32> MapViewToModel(TextFrameIndex nIndex) const;
@@ -688,13 +688,13 @@ public:
     void StopAnimation( const OutputDevice *pOut );
 
     /// Visit all portions for Accessibility
-    SW_DLLPUBLIC void VisitPortions( SwPortionHandler& rPH ) const;
+    void VisitPortions( SwPortionHandler& rPH ) const;
 
     /// Returns the script info stored at the paraportion
     const SwScriptInfo* GetScriptInfo() const;
 
     /// Swaps width and height of the text frame
-    SW_DLLPUBLIC void SwapWidthAndHeight();
+    void SwapWidthAndHeight();
 
     /**
      * Calculates the coordinates of a rectangle when switching from
@@ -718,7 +718,7 @@ public:
      * Calculates the coordinates of a rectangle when switching from
      * vertical to horizontal layout
      */
-    SW_DLLPUBLIC void SwitchVerticalToHorizontal( SwRect& rRect ) const;
+    void SwitchVerticalToHorizontal( SwRect& rRect ) const;
 
     /**
      * Calculates the coordinates of a point when switching from

@@ -85,7 +85,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XRedline
 > SwXTextRange_Base;
 
-class SAL_DLLPUBLIC_RTTI SwXTextRange final
+class SW_DLLPUBLIC SwXTextRange final
     : public SwXTextRange_Base
 {
 
@@ -115,7 +115,7 @@ public:
         RANGE_IS_SECTION, // anchor of a section
     };
 
-    SW_DLLPUBLIC SwXTextRange(SwPaM const & rPam,
+    SwXTextRange(SwPaM const & rPam,
             const css::uno::Reference< css::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE
@@ -125,10 +125,10 @@ public:
 
     const SwDoc& GetDoc() const;
           SwDoc& GetDoc();
-    SW_DLLPUBLIC bool GetPositions(SwPaM & rToFill,
+    bool GetPositions(SwPaM & rToFill,
         ::sw::TextRangeMode eMode = ::sw::TextRangeMode::RequireTextNode) const;
 
-    SW_DLLPUBLIC static rtl::Reference< SwXTextRange > CreateXTextRange(
+    static rtl::Reference< SwXTextRange > CreateXTextRange(
             SwDoc & rDoc,
             const SwPosition& rPos, const SwPosition *const pMark);
 
@@ -186,11 +186,11 @@ public:
         getAvailableServiceNames() override;
 
     // XTextRange
-    SW_DLLPUBLIC virtual css::uno::Reference< css::text::XText >
+    virtual css::uno::Reference< css::text::XText >
         SAL_CALL getText() override;
-    SW_DLLPUBLIC virtual css::uno::Reference<
+    virtual css::uno::Reference<
                 css::text::XTextRange > SAL_CALL getStart() override;
-    SW_DLLPUBLIC virtual css::uno::Reference<
+    virtual css::uno::Reference<
                 css::text::XTextRange > SAL_CALL getEnd() override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString(const OUString& rString) override;

@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFlySplitFootnoteLayout)
     pWrtShell->EndAllAction();
     pWrtShell->UnSelectFrame();
     pWrtShell->LeaveSelFrameMode();
-    pWrtShell->GetView().TriggerAttrChangedNotify();
+    pWrtShell->GetView().AttrChangedNotify(nullptr);
     pWrtShell->MoveSection(GoCurrSection, fnSectionEnd);
 
     // When inserting a footnote:

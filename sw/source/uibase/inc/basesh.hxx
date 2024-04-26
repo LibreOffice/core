@@ -36,7 +36,7 @@ class SfxItemSet;
 class SwCursorShell;
 
 struct DBTextStruct_Impl;
-class SAL_DLLPUBLIC_RTTI SwBaseShell: public SfxShell
+class SW_DLLPUBLIC SwBaseShell: public SfxShell
 {
     SwView      &m_rView;
 
@@ -85,7 +85,7 @@ public:
     void        StateUndo(SfxItemSet &);
 
     void        Execute(SfxRequest &);
-    SW_DLLPUBLIC void GetState(SfxItemSet &);
+    void        GetState(SfxItemSet &);
     void        StateStyle(SfxItemSet &);
 
     void        ExecuteGallery(SfxRequest&);

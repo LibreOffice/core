@@ -157,7 +157,7 @@ public:
 /**
  * View of a document
  */
-class SAL_DLLPUBLIC_RTTI SwPagePreview final : public SfxViewShell
+class SW_DLLPUBLIC SwPagePreview final : public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell

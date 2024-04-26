@@ -27,7 +27,7 @@ struct SwCursorMoveState;
 class SwBorderAttrs;
 
 /// SwCellFrame is one table cell in the document layout.
-class SAL_DLLPUBLIC_RTTI SwCellFrame final : public SwLayoutFrame
+class SW_DLLPUBLIC SwCellFrame final : public SwLayoutFrame
 {
     const SwTableBox* m_pTabBox;
 
@@ -51,8 +51,8 @@ public:
     const SwTableBox *GetTabBox() const { return m_pTabBox; }
 
     // used for breaking table rows:
-    SW_DLLPUBLIC SwCellFrame* GetFollowCell() const;
-    SW_DLLPUBLIC SwCellFrame* GetPreviousCell() const;
+    SwCellFrame* GetFollowCell() const;
+    SwCellFrame* GetPreviousCell() const;
 
     virtual bool IsLeaveUpperAllowed() const override;
     virtual bool IsCoveredCell() const override;

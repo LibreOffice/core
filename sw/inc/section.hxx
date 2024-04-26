@@ -136,7 +136,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SAL_DLLPUBLIC_RTTI SwSection
+class SW_DLLPUBLIC SwSection
     : public SwClient
     , public SvtListener // needed for SwClientNotify to be called from SwSectionFormat
 {
@@ -180,7 +180,7 @@ public:
     // (Attributes/flags are set/get.)
     bool IsHidden()  const { return m_Data.IsHidden(); }
     void SetHidden (bool const bFlag = true);
-    SW_DLLPUBLIC bool IsProtect() const;
+    bool IsProtect() const;
     void SetProtect(bool const bFlag = true);
     bool IsEditInReadonly() const;
     void SetEditInReadonly(bool const bFlag = true);
@@ -243,7 +243,7 @@ public:
                                     { m_Data.SetConnectFlag(bFlag); }
 
     // Return the TOX base class if the section is a TOX section
-    SW_DLLPUBLIC const SwTOXBase* GetTOXBase() const;
+    const SwTOXBase* GetTOXBase() const;
 
     void BreakLink();
 
@@ -270,7 +270,7 @@ class SwSectionFrameMoveAndDeleteHint final : public SfxHint
 
 enum class SectionSort { Not, Pos };
 
-class SAL_DLLPUBLIC_RTTI SwSectionFormat final
+class SW_DLLPUBLIC SwSectionFormat final
     : public SwFrameFormat
     , public ::sfx2::Metadatable
 {
@@ -288,7 +288,7 @@ class SAL_DLLPUBLIC_RTTI SwSectionFormat final
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
-    SW_DLLPUBLIC virtual ~SwSectionFormat() override;
+    virtual ~SwSectionFormat() override;
 
     // Deletes all Frames in aDepend (Frames are recognized via dynamic_cast).
     virtual void DelFrames() override;
@@ -301,21 +301,21 @@ public:
 
     virtual bool IsVisible() const override;
 
-    SW_DLLPUBLIC SwSection* GetSection() const;
+    SwSection* GetSection() const;
     inline SwSectionFormat* GetParent() const;
     inline SwSection* GetParentSection() const;
 
     //  All sections that are derived from this one:
     //  - sorted according to name or position or unsorted
     //  - all of them or only those that are in the normal Nodes-array.
-    SW_DLLPUBLIC void GetChildSections( SwSections& rArr,
+    void GetChildSections( SwSections& rArr,
                             SectionSort eSort = SectionSort::Not,
                             bool bAllSections = true ) const;
 
     // Query whether section is in Nodes-array or in UndoNodes-array.
-    SW_DLLPUBLIC bool IsInNodesArr() const;
+    bool IsInNodesArr() const;
 
-    SW_DLLPUBLIC SwSectionNode* GetSectionNode();
+          SwSectionNode* GetSectionNode();
     const SwSectionNode* GetSectionNode() const
         { return const_cast<SwSectionFormat *>(this)
                 ->GetSectionNode(); }
@@ -330,7 +330,7 @@ public:
     // sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
     virtual bool IsInClipboard() const override;
-    SW_DLLPUBLIC virtual bool IsInUndo() const override;
+    virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;

@@ -97,7 +97,7 @@ namespace sw {
 
 /// SfxPoolItem subclass that is a wrapper around an SwField, i.e. one inserted field into paragraph
 /// text. Typically owned by an SwTextField.
-class SAL_DLLPUBLIC_RTTI SwFormatField final
+class SW_DLLPUBLIC SwFormatField final
     : public SfxPoolItem
     , public sw::BroadcastingModify
     , public SfxBroadcaster
@@ -117,15 +117,15 @@ class SAL_DLLPUBLIC_RTTI SwFormatField final
 public:
 
     /// Single argument constructors shall be explicit.
-    SW_DLLPUBLIC explicit SwFormatField( const SwField &rField );
+    explicit SwFormatField( const SwField &rField );
 
     SwFormatField( const SwFormatField& rAttr );
 
-    SW_DLLPUBLIC virtual ~SwFormatField() override;
+    virtual ~SwFormatField() override;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    SW_DLLPUBLIC virtual SwFormatField*  Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwFormatField*  Clone( SfxItemPool* pPool = nullptr ) const override;
 
     void InvalidateField();
 
@@ -158,7 +158,7 @@ public:
     void SetTextField( SwTextField& rTextField );
     void ClearTextField();
 
-    SW_DLLPUBLIC void RegisterToFieldType( SwFieldType& );
+    void RegisterToFieldType( SwFieldType& );
     bool IsFieldInDoc() const;
     bool IsProtect() const;
 

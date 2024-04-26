@@ -30,7 +30,7 @@ class SwRootFrame;
 
 /// SwTextAttr subclass for footnotes and endnotes. If it's an endnote is decided by the owned
 /// SwFormatFootnote's m_bEndNote.
-class SAL_DLLPUBLIC_RTTI SwTextFootnote final : public SwTextAttr
+class SW_DLLPUBLIC SwTextFootnote final : public SwTextAttr
 {
     std::optional<SwNodeIndex> m_oStartNode;
     SwTextNode * m_pTextNode;
@@ -44,7 +44,7 @@ public:
 
     const SwNodeIndex *GetStartNode() const { return m_oStartNode ? &*m_oStartNode : nullptr; }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
-    SW_DLLPUBLIC void SetNumber(sal_uInt16 nNumber, sal_uInt16 nNumberRLHidden, const OUString &sNumStr);
+    void SetNumber(sal_uInt16 nNumber, sal_uInt16 nNumberRLHidden, const OUString &sNumStr);
     void CopyFootnote(SwTextFootnote & rDest, SwTextNode & rDestNode) const;
 
     // Get and set TextNode pointer.

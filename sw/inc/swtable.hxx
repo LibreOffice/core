@@ -372,7 +372,7 @@ public:
 };
 
 /// SwTableLine is one table row in the document model.
-class SAL_DLLPUBLIC_RTTI SwTableLine final : public SwClient     // Client of FrameFormat.
+class SW_DLLPUBLIC SwTableLine final : public SwClient     // Client of FrameFormat.
 {
     SwTableBoxes m_aBoxes;
     SwTableBox *m_pUpper;
@@ -399,7 +399,7 @@ public:
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
 
     // Creates an own FrameFormat if more lines depend on it.
-    SW_DLLPUBLIC SwFrameFormat* ClaimFrameFormat();
+    SwFrameFormat* ClaimFrameFormat();
     void ChgFrameFormat( SwTableLineFormat* pNewFormat );
 
     // Search next/previous box with content.
@@ -424,11 +424,11 @@ public:
     // in the case of deleted row, the first insertion in the case of row insertion
     // or npos, if TextChangesOnly is true, i.e. the table row is not deleted or inserted).
     // Cache also the type of the redline associated to the changed table row.
-    SW_DLLPUBLIC SwRedlineTable::size_type UpdateTextChangesOnly(
+    SwRedlineTable::size_type UpdateTextChangesOnly(
         SwRedlineTable::size_type& rRedlinePos, bool bUpdateProperty = true) const;
     // tracked text changes, i.e. a single redline can contain tables
     // get that redline for the table row, if it exists
-    SW_DLLPUBLIC SwRedlineTable::size_type GetTableRedline() const;
+    SwRedlineTable::size_type GetTableRedline() const;
     // is it a tracked row
     bool IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDeleted = false) const;
     // is it a tracked deleted row
@@ -441,7 +441,7 @@ public:
 };
 
 /// SwTableBox is one table cell in the document model.
-class SAL_DLLPUBLIC_RTTI SwTableBox final : public SwClient      //Client of FrameFormat.
+class SW_DLLPUBLIC SwTableBox final : public SwClient      //Client of FrameFormat.
 {
     friend class SwNodes;           // Transpose index.
     friend void DelBoxNode(SwTableSortBoxes const &);  // Delete StartNode* !
@@ -490,12 +490,12 @@ public:
     bool HasDirectFormatting() const { return mbDirectFormatting; }
 
     // Creates its own FrameFormat if more boxes depend on it.
-    SW_DLLPUBLIC SwFrameFormat* ClaimFrameFormat();
-    SW_DLLPUBLIC void ChgFrameFormat( SwTableBoxFormat *pNewFormat, bool bNeedToReregister = true );
+    SwFrameFormat* ClaimFrameFormat();
+    void ChgFrameFormat( SwTableBoxFormat *pNewFormat, bool bNeedToReregister = true );
 
     void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return m_pStartNode; }
-    SW_DLLPUBLIC SwNodeOffset GetSttIdx() const;
+    SwNodeOffset GetSttIdx() const;
     // it doesn't contain box content or if bWithRemainingNestedTable = true,
     // it contains only an empty nested table as box content (which
     // could remain after deletion of the text content of the selected box).
@@ -513,7 +513,7 @@ public:
 
     // Computes "coordinates" of a box, used to computed selection
     // width or height when inserting cols or rows
-    SW_DLLPUBLIC Point GetCoordinates() const;
+    Point GetCoordinates() const;
 
     bool IsInHeadline( const SwTable* pTable ) const;
 
@@ -528,7 +528,7 @@ public:
     // Is that a formula box or a box with numeric contents (AutoSum)?
     // What it is indicated by the return value - the WhichId of the attribute.
     // Empty boxes have the return value USHRT_MAX !!
-    SW_DLLPUBLIC sal_uInt16 IsFormulaOrValueBox() const;
+    sal_uInt16 IsFormulaOrValueBox() const;
 
     // Loading of a document requires an actualization of cells with values
     void ActualiseValueBox();
@@ -540,7 +540,7 @@ public:
     void SetSaveNumFormatColor( std::optional<Color> p ) { mxNumFormatColor = p; }
 
     sal_Int32 getRowSpan() const { return mnRowSpan; }
-    SW_DLLPUBLIC void setRowSpan( sal_Int32 nNewRowSpan );
+    void setRowSpan( sal_Int32 nNewRowSpan );
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
 
@@ -555,7 +555,7 @@ public:
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
     void RegisterToFormat( SwFormat& rFormat ) ;
     // get redline for the table cell, if it exists
-    SW_DLLPUBLIC SwRedlineTable::size_type GetRedline() const;
+    SwRedlineTable::size_type GetRedline() const;
     // get redline type
     RedlineType GetRedlineType() const;
 

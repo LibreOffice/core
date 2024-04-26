@@ -144,7 +144,7 @@ public:
 };
 
 // view of a document
-class SAL_DLLPUBLIC_RTTI SwView: public SfxViewShell
+class SW_DLLPUBLIC SwView: public SfxViewShell
 {
     friend class SwHHCWrapper;
     friend class SwHyphWrapper;
@@ -410,7 +410,7 @@ public:
 
     css::view::XSelectionSupplier*       GetUNOObject();
 
-    SW_DLLPUBLIC OUString   GetSelectionTextParam( bool bCompleteWords,
+    OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
     virtual bool            HasSelection( bool bText = true ) const override;
     virtual OUString        GetSelectionText( bool bCompleteWords = false, bool bOnlyASample = false ) override;
@@ -424,7 +424,7 @@ public:
     OUString                GetThesaurusLookUpText( bool bSelection ) const;
 
     // immediately switch shell -> for GetSelectionObject
-    SW_DLLPUBLIC void       StopShellTimer();
+    void                    StopShellTimer();
 
     SwWrtShell&      GetWrtShell   () const { return *m_pWrtShell; }
     SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell.get(); }
@@ -467,7 +467,7 @@ public:
 
     void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return m_aDocSz; }
-    SW_DLLPUBLIC void SetVisArea( const tools::Rectangle&, bool bUpdateScrollbar = true);
+    void    SetVisArea( const tools::Rectangle&, bool bUpdateScrollbar = true);
             void    SetVisArea( const Point&, bool bUpdateScrollbar = true);
             void    CheckVisArea();
 
@@ -475,7 +475,7 @@ public:
     static SvxSearchDialog* GetSearchDialog();
 
     static sal_uInt16   GetMoveType();
-    SW_DLLPUBLIC static void SetMoveType(sal_uInt16 nSet);
+    static void     SetMoveType(sal_uInt16 nSet);
     DECL_DLLPRIVATE_LINK( MoveNavigationHdl, void*, void );
     static void     SetActMark(sal_Int32 nSet);
 
@@ -488,7 +488,7 @@ public:
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, bool bViewOnly = false);
     virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) override;
 
-    SW_DLLPUBLIC void SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
+    void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
 
     void            ShowHScrollbar(bool bShow);
     bool            IsHScrollbarVisible()const;
@@ -510,7 +510,7 @@ public:
 
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
-    SW_DLLPUBLIC void InvalidateRulerPos();
+    void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
     void            GetHRulerMetric(FieldUnit& rToFill) const;
 
@@ -532,7 +532,7 @@ public:
 
     void            StateViewOptions(SfxItemSet &);
     void            StateSearch(SfxItemSet &);
-    SW_DLLPUBLIC void GetState(SfxItemSet&);
+    void            GetState(SfxItemSet&);
     void            StateStatusLine(SfxItemSet&);
     void            UpdateWordCount(SfxShell*, sal_uInt16);
     void            ExecFormatFootnote();
@@ -551,14 +551,14 @@ public:
     void            NoRotate();     // turn off rotate mode
     bool            EnterDrawTextMode(const Point& aDocPos);
     /// Same as EnterDrawTextMode(), but takes an SdrObject instead of guessing it by document position.
-    SW_DLLPUBLIC bool EnterShapeDrawTextMode(SdrObject* pObject);
+    bool EnterShapeDrawTextMode(SdrObject* pObject);
     void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.clear(); m_eFormObjKind = SdrObjKind::NONE; }
     bool            IsDrawMode() const  { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;
     bool            IsBezierEditMode() const;
     bool            AreOnlyFormsSelected() const;
     bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
-    SW_DLLPUBLIC bool BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
+    bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
     bool isSignatureLineSelected() const;
     bool isSignatureLineSigned() const;
@@ -568,7 +568,6 @@ public:
 
     // attributes have changed
     DECL_LINK( AttrChangedNotify, LinkParamNone*, void );
-    SW_DLLPUBLIC void TriggerAttrChangedNotify(); // called from unit tests
 
     // form control has been activated
     DECL_DLLPRIVATE_LINK( FormControlActivated, LinkParamNone*, void );
@@ -576,7 +575,7 @@ public:
     // edit links
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
-    SW_DLLPUBLIC void InsertCaption(const InsCaptionOpt *pOpt);
+    void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async call by Core
     void UpdatePageNums();
@@ -591,7 +590,7 @@ public:
 
     // hand over Shell
                  SfxShell       *GetCurShell()  { return m_pShell; }
-    SW_DLLPUBLIC SwDocShell     *GetDocShell();
+                 SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
     virtual       FmFormShell    *GetFormShell()       override { return m_pFormShell; }
     virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
@@ -607,7 +606,7 @@ public:
     void SetCursorAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCursor = bFlag; m_bCenterCursor = bCenter; }
 
-    SW_DLLPUBLIC bool JumpToSwMark( std::u16string_view rMark );
+    bool JumpToSwMark( std::u16string_view rMark );
 
     tools::Long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
                     const OUString& rFilterName, sal_Int16 nVersion = 0 );
@@ -638,18 +637,18 @@ public:
 
     // store MailMerge data while "Back to Mail Merge Wizard" FloatingWindow is active
     // or to support printing
-    SW_DLLPUBLIC void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
-    SW_DLLPUBLIC std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() const;
+    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
+    std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() const;
     std::shared_ptr<SwMailMergeConfigItem> EnsureMailMergeConfigItem(const SfxItemSet* pArgs = nullptr);
 
-    SW_DLLPUBLIC OUString GetDataSourceName() const;
-    SW_DLLPUBLIC static bool IsDataSourceAvailable(const OUString sDataSourceName);
+    OUString GetDataSourceName() const;
+    static bool IsDataSourceAvailable(const OUString sDataSourceName);
 
     void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
 
     // public for D&D
-    SW_DLLPUBLIC ErrCode InsertGraphic( const OUString &rPath, const OUString &rFilter,
+    ErrCode     InsertGraphic( const OUString &rPath, const OUString &rFilter,
                             bool bLink, GraphicFilter *pFlt );
 
     void ExecuteScan( SfxRequest& rReq );
@@ -675,7 +674,7 @@ public:
     int getPart() const override;
     /// See SfxViewShell::dumpAsXml().
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-    SW_DLLPUBLIC void SetRedlineAuthor(const OUString& rAuthor);
+    void SetRedlineAuthor(const OUString& rAuthor);
     const OUString& GetRedlineAuthor() const;
     /// See SfxViewShell::afterCallbackRegistered().
     void afterCallbackRegistered() override;
@@ -707,13 +706,13 @@ public:
         m_StringCache[id] = sStr;
     }
 
-    SW_DLLPUBLIC const OUString& GetOldGrfCat();
+    const OUString& GetOldGrfCat();
     void SetOldGrfCat(const OUString& sStr);
-    SW_DLLPUBLIC const OUString& GetOldTabCat();
+    const OUString& GetOldTabCat();
     void SetOldTabCat(const OUString& sStr);
-    SW_DLLPUBLIC const OUString& GetOldFrameCat();
+    const OUString& GetOldFrameCat();
     void SetOldFrameCat(const OUString& sStr);
-    SW_DLLPUBLIC const OUString& GetOldDrwCat();
+    const OUString& GetOldDrwCat();
     void SetOldDrwCat(const OUString& sStr);
 
     virtual tools::Rectangle getLOKVisibleArea() const override;

@@ -445,7 +445,7 @@ public:
     };
 };
 
-class SAL_DLLPUBLIC_RTTI SwPostItField final : public SwField
+class SW_DLLPUBLIC SwPostItField final : public SwField
 {
     OUString m_sText;
     OUString m_sAuthor;
@@ -464,7 +464,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItField final : public SwField
 public:
     static sal_uInt32 s_nLastPostItId;
 
-    SW_DLLPUBLIC SwPostItField( SwPostItFieldType*,
+    SwPostItField( SwPostItFieldType*,
                    OUString aAuthor,
                    OUString aText,
                    OUString aInitials,
@@ -480,7 +480,7 @@ public:
     SwPostItField(const SwPostItField&) = delete;
     SwPostItField* operator=(const SwPostItField&) = delete;
 
-    SW_DLLPUBLIC virtual ~SwPostItField() override;
+    virtual ~SwPostItField() override;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -498,7 +498,7 @@ public:
     void SetParaId(const sal_uInt32 nParaId);
 
     /// Author
-    SW_DLLPUBLIC virtual OUString GetPar1() const override;
+    virtual OUString        GetPar1() const override;
     virtual void            SetPar1(const OUString& rStr) override;
 
     /// Text
@@ -512,11 +512,11 @@ public:
     void                    SetParentName(const OUString& rStr);
 
     const OutlinerParaObject* GetTextObject() const { return mpText ? &*mpText : nullptr;}
-    SW_DLLPUBLIC void SetTextObject( std::optional<OutlinerParaObject> pText );
+    void SetTextObject( std::optional<OutlinerParaObject> pText );
 
     void SetResolved(bool bNewState);
     void ToggleResolved();
-    SW_DLLPUBLIC bool GetResolved() const;
+    bool GetResolved() const;
 
     sal_Int32 GetNumberOfParagraphs() const;
     void ChangeStyleSheetName(std::u16string_view rOldName, const SfxStyleSheetBase* pStyleSheet);

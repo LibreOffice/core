@@ -43,7 +43,7 @@ namespace drawinglayer::attribute {
 }
 
 /// Base class for various Writer styles.
-class SAL_DLLPUBLIC_RTTI SwFormat : public sw::BorderCacheOwner, public sw::BroadcastingModify
+class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::BroadcastingModify
 {
     friend class SwFrameFormat;
 
@@ -66,7 +66,7 @@ class SAL_DLLPUBLIC_RTTI SwFormat : public sw::BorderCacheOwner, public sw::Broa
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
 
 protected:
-    SW_DLLPUBLIC SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+    SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
             const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
@@ -88,17 +88,17 @@ public:
     void DelDiffs( const SwFormat& rFormat ) { DelDiffs( rFormat.GetAttrSet() ); }
 
     /// 0 is Default.
-    SW_DLLPUBLIC bool SetDerivedFrom(SwFormat *pDerivedFrom = nullptr);
+    bool SetDerivedFrom(SwFormat *pDerivedFrom = nullptr);
 
     /// If bInParents is FALSE, search only in this format for attribute.
-    SW_DLLPUBLIC const SfxPoolItem& GetFormatAttr( sal_uInt16 nWhich,
+    const SfxPoolItem& GetFormatAttr( sal_uInt16 nWhich,
                                    bool bInParents = true ) const;
     template<class T> const T& GetFormatAttr( TypedWhichId<T> nWhich, bool bInParents = true ) const
     {
         return static_cast<const T&>(GetFormatAttr(sal_uInt16(nWhich), bInParents));
     }
 
-    SW_DLLPUBLIC SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
+    SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
     template<class T>
     SfxItemState GetItemState( TypedWhichId<T> nWhich, bool bSrchInParent = true,
@@ -115,9 +115,9 @@ public:
             return static_cast<const T*>(pItem);
         return nullptr;
     }
-    SW_DLLPUBLIC SfxItemState GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) const;
-    SW_DLLPUBLIC virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
-    SW_DLLPUBLIC virtual bool SetFormatAttr( const SfxItemSet& rSet );
+    SfxItemState GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) const;
+    virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
+    virtual bool SetFormatAttr( const SfxItemSet& rSet );
     virtual bool ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
     /** Takes all hints from Delta-Array,
@@ -139,7 +139,7 @@ public:
           SwDoc *GetDoc()               { return m_aSet.GetDoc(); }
 
     /// Provides access to the document settings interface.
-    SW_DLLPUBLIC const IDocumentSettingAccess& getIDocumentSettingAccess() const;
+    const IDocumentSettingAccess& getIDocumentSettingAccess() const;
 
     /// Provides access to the document draw model interface.
     const IDocumentDrawModelAccess& getIDocumentDrawModelAccess() const;
@@ -180,7 +180,7 @@ public:
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
 
-    SW_DLLPUBLIC void GetGrabBagItem(css::uno::Any& rVal) const;
+    void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);
 
     /// Query / set m_bAutoUpdateOnDirectFormat-flag.
@@ -228,7 +228,7 @@ public:
     inline const SvxFormatKeepItem         &GetKeep( bool = true ) const;
 
     // Create SvxBrushItem for Background fill (partially for backwards compatibility)
-    SW_DLLPUBLIC std::unique_ptr<SvxBrushItem> makeBackgroundBrushItem( bool = true ) const;
+    std::unique_ptr<SvxBrushItem> makeBackgroundBrushItem( bool = true ) const;
 
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
     inline const SwFormatPageDesc            &GetPageDesc( bool = true ) const;

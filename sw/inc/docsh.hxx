@@ -65,7 +65,7 @@ namespace ooo::vba::word { class XDocument; }
 // as needed, one or both parameters may be zero
 void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawModel);
 
-class SAL_DLLPUBLIC_RTTI SwDocShell
+class SW_DLLPUBLIC SwDocShell
     : public SfxObjectShell
     , public SfxListener
 {
@@ -167,20 +167,19 @@ protected:
 public:
     /// but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)
-    SW_DLLPUBLIC static SfxObjectFactory& Factory();
-    virtual SfxObjectFactory& GetFactory() const override { return Factory(); }
+    SFX_DECL_OBJECTFACTORY()
 
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
 public:
-    SW_DLLPUBLIC static OUString GetEventName( sal_Int32 nId );
+    static OUString GetEventName( sal_Int32 nId );
 
     /// Doc is required for SO data exchange!
-    SW_DLLPUBLIC SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
+    SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
     SwDocShell( SfxModelFlags i_nSfxCreationFlags );
-    SW_DLLPUBLIC SwDocShell( SwDoc& rDoc, SfxObjectCreateMode eMode );
+    SwDocShell( SwDoc& rDoc, SfxObjectCreateMode eMode );
     virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.
@@ -219,7 +218,7 @@ public:
     virtual sfx2::StyleManager* GetStyleManager() override;
 
     /// Set View for actions via Shell.
-    SW_DLLPUBLIC void SetView(SwView* pVw);
+    void          SetView(SwView* pVw);
     const SwView *GetView() const { return m_pView; }
     SwView       *GetView()       { return m_pView; }
 
@@ -228,10 +227,10 @@ public:
     const SwWrtShell *GetWrtShell() const { return m_pWrtShell; }
     // Same as GetWrtShell, but return pointer to SwEditShell base of
     // (potentially incomplete) SwWrtShell:
-    SW_DLLPUBLIC SwEditShell * GetEditShell();
+    SwEditShell * GetEditShell();
 
     /// For Core - it knows the DocShell but not the WrtShell!
-    SW_DLLPUBLIC SwFEShell *GetFEShell();
+          SwFEShell *GetFEShell();
     const SwFEShell *GetFEShell() const
                 { return const_cast<SwDocShell*>(this)->GetFEShell(); }
 
@@ -262,12 +261,12 @@ public:
 
     virtual void LoadStyles( SfxObjectShell& rSource ) override;
 
-    SW_DLLPUBLIC void LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
+    void LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
 
     /// Show page style format dialog
     /// @param nSlot
     /// Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
-    SW_DLLPUBLIC void FormatPage(
+    void FormatPage(
         weld::Window* pDialogParent,
         const OUString& rPage,
         const OUString& rPageId,
@@ -291,7 +290,7 @@ public:
 
     void ToggleLayoutMode(SwView* pView);
 
-    SW_DLLPUBLIC ErrCodeMsg LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall);
+    ErrCodeMsg LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall);
     void InvalidateModel();
     void ReactivateModel();
 
@@ -322,9 +321,9 @@ public:
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
-    SW_DLLPUBLIC void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
-    SW_DLLPUBLIC void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
+    void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews() override;

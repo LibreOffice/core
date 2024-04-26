@@ -32,7 +32,7 @@ class SwOLEListener_Impl;
 namespace sfx2 { class SvBaseLink; }
 class DeflateData;
 
-class SAL_DLLPUBLIC_RTTI SwOLEObj
+class SW_DLLPUBLIC SwOLEObj
 {
     friend class SwOLENode;
 
@@ -68,8 +68,8 @@ public:
 
     OUString GetDescription();
 
-    SW_DLLPUBLIC css::uno::Reference < css::embed::XEmbeddedObject > const & GetOleRef();
-    SW_DLLPUBLIC svt::EmbeddedObjectRef& GetObject();
+    css::uno::Reference < css::embed::XEmbeddedObject > const & GetOleRef();
+    svt::EmbeddedObjectRef& GetObject();
     const OUString& GetCurrentPersistName() const { return m_aName; }
     OUString GetStyleString();
     bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
@@ -89,7 +89,7 @@ public:
 
 // SwOLENode
 
-class SAL_DLLPUBLIC_RTTI SwOLENode final: public SwNoTextNode
+class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
 {
     friend class SwNodes;
     mutable SwOLEObj maOLEObj;
@@ -123,9 +123,9 @@ public:
     /// Is in ndcopy.cxx.
     virtual SwContentNode* MakeCopy(SwDoc&, SwNode& rWhere, bool bNewFrames) const override;
 
-    SW_DLLPUBLIC virtual Size GetTwipSize() const override;
+    virtual Size GetTwipSize() const override;
 
-    SW_DLLPUBLIC const Graphic* GetGraphic();
+    const Graphic* GetGraphic();
 
     void GetNewReplacement();
 

@@ -105,7 +105,7 @@ struct ParagraphIdleData
 } // end namespace sw
 
 /// SwTextNode is a paragraph in the document model.
-class SAL_DLLPUBLIC_RTTI SwTextNode final
+class SW_DLLPUBLIC SwTextNode final
     : public SwContentNode
     , public ::sfx2::Metadatable
     , public sw::FormatDropDefiner
@@ -219,7 +219,7 @@ public:
     void SetWrong( std::unique_ptr<SwWrongList> pNew );
     void ClearWrong();
     std::unique_ptr<SwWrongList> ReleaseWrong();
-    SW_DLLPUBLIC SwWrongList* GetWrong();
+    SwWrongList* GetWrong();
     const SwWrongList* GetWrong() const;
     void SetGrammarCheck( std::unique_ptr<SwGrammarMarkUp> pNew );
     void ClearGrammarCheck();
@@ -256,15 +256,15 @@ public:
 
     virtual ~SwTextNode() override;
 
-    SW_DLLPUBLIC virtual sal_Int32 Len() const override;
+    virtual sal_Int32 Len() const override;
 
     /// Is in itratr.
     void GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs ) const;
 
     /// overriding to handle change of certain paragraph attributes
-    SW_DLLPUBLIC virtual bool SetAttr( const SfxPoolItem& ) override;
+    virtual bool SetAttr( const SfxPoolItem& ) override;
     virtual bool SetAttr( const SfxItemSet& rSet ) override;
-    SW_DLLPUBLIC virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) override;
+    virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) override;
     virtual bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr ) override;
     virtual sal_uInt16 ResetAllAttr() override;
 
@@ -304,7 +304,7 @@ public:
         only the ones which have exactly same range. Don't delete the ones
         which are simply included in the range.
      */
-    SW_DLLPUBLIC void RstTextAttr(
+    void RstTextAttr(
         const sal_Int32 nContentStart,
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
@@ -327,7 +327,7 @@ public:
                   const SetAttrMode nMode = SetAttrMode::DEFAULT );
     /// create new text attribute from rAttr and insert it
     /// @return     inserted hint; 0 if not sure the hint is inserted
-    SW_DLLPUBLIC SwTextAttr* InsertItem( SfxPoolItem& rAttr,
+    SwTextAttr* InsertItem( SfxPoolItem& rAttr,
                   const sal_Int32 nStart, const sal_Int32 nEnd,
                   const SetAttrMode nMode = SetAttrMode::DEFAULT );
 
@@ -344,14 +344,14 @@ public:
        the requested item set as a LR-SPACE item, if <bOnlyTextAttr> == false,
        corresponding node has not its own indent attributes and the
        position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT. */
-    SW_DLLPUBLIC bool GetParaAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+    bool GetParaAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                   const bool bOnlyTextAttr  = false,
                   const bool bGetFromChrFormat = true,
                   const bool bMergeIndentValuesOfNumRule = false,
                   SwRootFrame const* pLayout = nullptr) const;
 
     /// Convey attributes of an AttrSet (AutoFormat) to SwpHintsArray.
-    SW_DLLPUBLIC void FormatToTextAttr( SwTextNode* pNd );
+    void FormatToTextAttr( SwTextNode* pNd );
 
     /// delete all attributes of type nWhich at nStart (opt. end nEnd)
     void DeleteAttributes( const sal_uInt16 nWhich,
@@ -396,8 +396,8 @@ public:
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
     SwTextNode * SplitContentNode(const SwPosition &,
             std::function<void (SwTextNode *, sw::mark::RestoreMode, bool AtStart)> const* pContentIndexRestore);
-    SW_DLLPUBLIC virtual SwContentNode *JoinNext() override;
-    SW_DLLPUBLIC void JoinPrev();
+    virtual SwContentNode *JoinNext() override;
+    void JoinPrev();
 
     SwContentNode *AppendNode( const SwPosition & );
 
@@ -413,7 +413,7 @@ public:
         hints of which several may cover a single position, like
         RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
      */
-    SW_DLLPUBLIC SwTextAttr *GetTextAttrAt(
+    SwTextAttr *GetTextAttrAt(
         sal_Int32 const nIndex,
         sal_uInt16 const nWhich,
         ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Default) const;
@@ -422,7 +422,7 @@ public:
         @param nWhich   only attributes with this id are returned.
         @param eMode    the predicate for matching (@see GetTextAttrMode).
      */
-    SW_DLLPUBLIC std::vector<SwTextAttr *> GetTextAttrsAt(
+    std::vector<SwTextAttr *> GetTextAttrsAt(
         sal_Int32 const nIndex,
         sal_uInt16 const nWhich ) const;
 
@@ -433,7 +433,7 @@ public:
                         attribute with given which id
         @return the text attribute at nIndex of type nWhich, if it exists
     */
-    SW_DLLPUBLIC SwTextAttr *GetTextAttrForCharAt(
+    SwTextAttr *GetTextAttrForCharAt(
         const sal_Int32 nIndex,
         const sal_uInt16 nWhich = RES_TXTATR_END ) const;
 
@@ -445,7 +445,7 @@ public:
      */
     SwTextAttr* GetTextAttrForEndCharAt(sal_Int32 nIndex, sal_uInt16 nWhich) const;
 
-    SW_DLLPUBLIC SwTextField* GetFieldTextAttrAt(
+    SwTextField* GetFieldTextAttrAt(
         const sal_Int32 nIndex,
         ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Expand) const;
 
@@ -453,14 +453,14 @@ public:
     bool Convert( SwConversionArgs & );
 
     inline SwTextFormatColl *GetTextColl() const;
-    SW_DLLPUBLIC virtual SwFormatColl *ChgFormatColl( SwFormatColl* ) override;
+    virtual SwFormatColl *ChgFormatColl( SwFormatColl* ) override;
     void ChgTextCollUpdateNum(const SwTextFormatColl* pOld,
                               const SwTextFormatColl* pNew );
 
     /** Copy collection with all auto formats to dest-node.
         The latter might be in another document!
        (Method in ndcopy.cxx!!). */
-    SW_DLLPUBLIC void CopyCollFormat(SwTextNode& rDestNd, bool bUndoForChgFormatColl = true);
+    void CopyCollFormat(SwTextNode& rDestNd, bool bUndoForChgFormatColl = true);
 
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
 
@@ -471,7 +471,7 @@ public:
 
        @return numbering rule of this text node or NULL if none is set
      */
-    SW_DLLPUBLIC SwNumRule *GetNumRule(bool bInParent = true) const;
+    SwNumRule *GetNumRule(bool bInParent = true) const;
 
     const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr,
              SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
@@ -486,7 +486,7 @@ public:
        @retval true      this text node is an outline
        @retval false     else
      */
-    SW_DLLPUBLIC bool IsOutline() const;
+    bool IsOutline() const;
 
     bool IsOutlineStateChanged() const;
 
@@ -511,7 +511,7 @@ public:
         level to which the output string must be restricted to. Default value is
         MAXLEVEL
     */
-    SW_DLLPUBLIC OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
+    OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
             const unsigned int _nRestrictToThisLevel = MAXLEVEL,
             SwRootFrame const* pLayout = nullptr,
             SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
@@ -580,7 +580,7 @@ public:
         @retval true      This node is numbered.
         @retval false     else
      */
-    SW_DLLPUBLIC bool IsNumbered(SwRootFrame const* pLayout = nullptr) const;
+    bool IsNumbered(SwRootFrame const* pLayout = nullptr) const;
 
     /** Returns if this text node has a marked label.
 
@@ -597,7 +597,7 @@ public:
 
         @param nLevel level to set
     */
-    SW_DLLPUBLIC void SetAttrListLevel(int nLevel);
+    void SetAttrListLevel(int nLevel);
 
     bool HasAttrListLevel() const;
 
@@ -608,7 +608,7 @@ public:
         @return the actual list level of this text node, if it is a list item,
                -1 otherwise
     */
-    SW_DLLPUBLIC int GetActualListLevel(SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
+    int GetActualListLevel(SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
 
     /**
        Returns outline level of this text node.
@@ -679,7 +679,7 @@ public:
     bool HasVisibleNumberingOrBullet() const;
 
     void SetListId(OUString const& rListId);
-    SW_DLLPUBLIC OUString GetListId() const;
+    OUString GetListId() const;
 
     /** Determines, if the list level indent attributes can be applied to the
         paragraph.
@@ -695,7 +695,7 @@ public:
 
         @return bitmask
     */
-    SW_DLLPUBLIC ::sw::ListLevelIndents AreListLevelIndentsApplicable() const;
+    ::sw::ListLevelIndents AreListLevelIndentsApplicable() const;
     bool AreListLevelIndentsApplicableImpl(sal_uInt16 nWhich) const;
 
     /** Retrieves the list tab stop position, if the paragraph's list level defines
@@ -717,9 +717,9 @@ public:
 
     // END OF BULLET/NUMBERING/OUTLINE STUFF:
 
-    SW_DLLPUBLIC void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
+    void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
-    SW_DLLPUBLIC LanguageType GetLang( const sal_Int32 nBegin, const sal_Int32 nLen = 0,
+    LanguageType GetLang( const sal_Int32 nBegin, const sal_Int32 nLen = 0,
                     sal_uInt16 nScript = 0, bool bNoneIfNoHyphenation = false ) const;
 
     /// in ndcopy.cxx
@@ -736,7 +736,7 @@ public:
        add 5th optional parameter <bWithSpacesForLevel> indicating, if additional
        spaces are inserted in front of the expanded text string depending on
        the list level. */
-    SW_DLLPUBLIC OUString GetExpandText( SwRootFrame const* pLayout,
+    OUString GetExpandText( SwRootFrame const* pLayout,
                             const sal_Int32 nIdx = 0,
                             const sal_Int32 nLen = -1,
                             const bool bWithNum = false,
@@ -749,14 +749,14 @@ public:
                            bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 
-    SW_DLLPUBLIC OUString GetRedlineText() const;
+    OUString GetRedlineText() const;
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */
-    SW_DLLPUBLIC sal_Int32 GetDropLen(sal_Int32 nWishLen) const;
+    sal_Int32 GetDropLen(sal_Int32 nWishLen) const;
 
     /// Passes back info needed on the dropcap dimensions
-    SW_DLLPUBLIC bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
+    bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
     /// Hidden Paragraph Field:
     bool CalcHiddenParaField()
@@ -810,16 +810,16 @@ public:
     /// Checks a temporary notification blocker and the global conditions of IsNotificationEnabled()
     bool IsNotifiable() const;
 
-    SW_DLLPUBLIC void SetListRestart( bool bRestart );
-    SW_DLLPUBLIC bool IsListRestart() const;
+    void SetListRestart( bool bRestart );
+    bool IsListRestart() const;
 
-    SW_DLLPUBLIC void SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNum );
+    void SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNum );
     bool HasAttrListRestartValue() const;
     SwNumberTree::tSwNumTreeNumber GetAttrListRestartValue() const;
-    SW_DLLPUBLIC SwNumberTree::tSwNumTreeNumber GetActualListStartValue() const;
+    SwNumberTree::tSwNumTreeNumber GetActualListStartValue() const;
 
-    SW_DLLPUBLIC void SetCountedInList( bool bCounted );
-    SW_DLLPUBLIC bool IsCountedInList() const;
+    void SetCountedInList( bool bCounted );
+    bool IsCountedInList() const;
 
     void AddToList();
     void AddToListRLHidden();
@@ -827,7 +827,7 @@ public:
     void RemoveFromList();
     void RemoveFromListRLHidden();
     void RemoveFromListOrig();
-    SW_DLLPUBLIC bool IsInList() const;
+    bool IsInList() const;
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 

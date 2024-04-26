@@ -83,7 +83,7 @@ private:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
-class SAL_DLLPUBLIC_RTTI SwGetExpField final : public SwFormulaField
+class SW_DLLPUBLIC SwGetExpField final : public SwFormulaField
 {
     double          m_fValueRLHidden; ///< SwValueField; hidden redlines
     OUString        m_sExpand;
@@ -99,7 +99,7 @@ class SAL_DLLPUBLIC_RTTI SwGetExpField final : public SwFormulaField
     virtual void        SetValue(const double& rVal) override; // hide it
 
 public:
-    SW_DLLPUBLIC SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
+    SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
                    sal_uInt16 nSubType, sal_uLong nFormat);
 
     double      GetValue(SwRootFrame const* pLayout) const;
@@ -130,7 +130,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    SW_DLLPUBLIC static sal_Int32 GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
+    static sal_Int32    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
     // #i82544#
     void                SetLateInitialization() { m_bLateInitialization = true;}
 };

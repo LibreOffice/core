@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
     SdrObject* pObject = pPage->GetObj(0);
     pView->EnterShapeDrawTextMode(pObject);
-    pView->TriggerAttrChangedNotify();
+    pView->AttrChangedNotify(nullptr);
 
     // Change paragraph adjustment to center.
     pView->GetViewFrame().GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER,
