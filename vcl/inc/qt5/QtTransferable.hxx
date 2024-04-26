@@ -40,12 +40,17 @@ protected:
      *  Since data flavors supported by this class depend on the mime data,
      *  results from previous calls to the public methods of this
      *  class are no longer valid after setting new mime data using this method.
+     *
+     *  Subclasses that set new mime data must ensure that no data race exists
+     *  on m_pMimeData.
+     *  (For the current only subclass doing so, QtClipboardTransferable, all access
+     *  to m_pMimeData happens with the SolarMutex held.)
      */
     void setMimeData(const QMimeData* pMimeData) { m_pMimeData = pMimeData; }
+    const QMimeData* mimeData() const { return m_pMimeData; }
 
 public:
     QtTransferable(const QMimeData* pMimeData);
-    const QMimeData* mimeData() const { return m_pMimeData; }
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
@@ -73,6 +78,9 @@ class QtClipboardTransferable final : public QtTransferable
 
 public:
     explicit QtClipboardTransferable(const QClipboard::Mode aMode, const QMimeData* pMimeData);
+
+    // whether pMimeData are the current mime data
+    bool hasMimeData(const QMimeData* pMimeData) const;
 
     // these are the same then QtTransferable, except they go through RunInMainThread
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;

@@ -103,7 +103,7 @@ css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
     {
         const auto* pTrans = dynamic_cast<QtClipboardTransferable*>(m_aContents.get());
         assert(pTrans);
-        if (pTrans && pTrans->mimeData() == pMimeData)
+        if (pTrans && pTrans->hasMimeData(pMimeData))
             return m_aContents;
     }
 
