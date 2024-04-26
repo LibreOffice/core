@@ -34,7 +34,6 @@ class QtTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfera
     QtTransferable(const QtTransferable&) = delete;
 
     const QMimeData* m_pMimeData;
-    bool m_bProvideUTF16FromOtherEncoding;
 
 protected:
     /** Sets new mime data.
