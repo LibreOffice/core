@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="FrameDialog">
@@ -92,6 +92,7 @@
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="tab-pos">left</property>
             <property name="scrollable">True</property>
             <property name="enable-popup">True</property>
             <child>
