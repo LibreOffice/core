@@ -33,6 +33,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -329,18 +330,8 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
             configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Impress/Misc"))}
-        }));
-        Reference<container::XNameAccess> xNameAccess(
-            xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
-                aArgs),
-                UNO_QUERY_THROW );
         uno::Sequence< OUString > aFiles;
-        xNameAccess->getByName("TransitionFiles") >>= aFiles;
-
+        aFiles = officecfg::Office::Impress::Misc::TransitionFiles::get();
         for (const auto& rFile : aFiles)
         {
             OUString aURL = comphelper::getExpandedUri(xContext, rFile);

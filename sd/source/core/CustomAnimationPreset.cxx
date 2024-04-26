@@ -37,6 +37,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -252,17 +253,8 @@ void CustomAnimationPresets::importEffects()
             configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Impress/Misc"))}
-        }));
-        Reference<container::XNameAccess> xNameAccess(
-            xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
-                aArgs ), UNO_QUERY_THROW );
         uno::Sequence< OUString > aFiles;
-        xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
-
+        aFiles = officecfg::Office::Impress::Misc::EffectFiles::get();
         for (const auto& rFile : aFiles)
         {
             OUString aURL = comphelper::getExpandedUri(xContext, rFile);
