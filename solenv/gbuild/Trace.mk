@@ -37,7 +37,7 @@ ifneq ($(gb_TRACE),)
 gb_Trace_Timestamp := $(if $(filter MACOSX,$(OS)),$$(date +%s)000000000,$$(date +%s%N))
 # macOS also doesn't provide flock, so skip that part on mac
 # The (flock;cat) part is to minimize lock time.
-gb_Trace_Flock := $(if $(filter MACOSX,$(OS)),,| ( flock 1; cat ))
+gb_Trace_Flock := $(if $(MSYSTEM)$(filter MACOSX,$(OS)),,| ( flock 1; cat ))
 # call gb_Trace_AddMark,marktype,detail,type,extra
 define gb_Trace__AddMark
 echo "{\"name\": \"$(3)\", \"ph\": \"$(1)\", \"pid\": 1, \"tid\": 1, \"ts\": $(gb_Trace_Timestamp),\"args\":{\"message\":\"[$(3)]: $(2)\"}}," $(gb_Trace_Flock) >>$(gb_TRACE)
