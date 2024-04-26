@@ -469,7 +469,7 @@ void XMLRedlineExport::ExportChangeInfo(
         OUStringBuffer sBuf;
         ::sax::Converter::convertDateTime(sBuf, bRemovePersonalInfo
                 ? util::DateTime(0, 0, 0, 0, 1, 1, 1970, true) // Epoch time
-                : aDateTime, nullptr);
+                : aDateTime, nullptr, true);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, true,
                                           false );
@@ -521,7 +521,7 @@ void XMLRedlineExport::ExportChangeInfo(
             OUStringBuffer sBuf;
             ::sax::Converter::convertDateTime(sBuf, bRemovePersonalInfo
                                         ? util::DateTime(0, 0, 0, 0, 1, 1, 1970, true) // Epoch time
-                                        : aDateTime, nullptr);
+                                        : aDateTime, nullptr, true);
             SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, true,
                                           false );

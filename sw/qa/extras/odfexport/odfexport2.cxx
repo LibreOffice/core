@@ -1609,6 +1609,21 @@ CPPUNIT_TEST_FIXTURE(Test, testDeletedTableAutostylesExport)
     loadAndReload("deleted_table.fodt");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
+{
+    // Given a document with a tracked change with a midnight datetime:
+    // make sure that it succeeds export and import validation. Before the fix, this failed:
+    // - Error: "2001-01-01" does not satisfy the "dateTime" type
+    // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
+    loadAndReload("midnight_redline.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPathContent(pXmlDoc,
+                       "//office:body/office:text/text:tracked-changes/text:changed-region/"
+                       "text:deletion/office:change-info/dc:date"_ostr,
+                       u"2001-01-01T00:00:00"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
