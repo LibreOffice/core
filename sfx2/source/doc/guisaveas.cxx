@@ -674,10 +674,12 @@ void SfxStoringHelper::CallFinishGUIStoreModel()
 
 IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
 {
+    SfxViewShell* pNotifier = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+
     if (pEvt->DialogResult == RET_OK && m_xFilterProperties)
     {
-        if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
-            SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
+        if (pNotifier)
+            pNotifier->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
 
         const uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
         for ( const auto& rProp : aPropsFromDialog )
@@ -685,9 +687,9 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
 
         m_pOwner->CallFinishGUIStoreModel();
     }
-    else if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
+    else if (pNotifier)
     {
-        SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
+        pNotifier->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
     }
 }
 

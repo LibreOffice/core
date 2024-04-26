@@ -137,10 +137,16 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
     return css::uno::Reference< css::frame::XFrame >();
 }
 
+static bool isLOKMobilePhone()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return false;
+    const SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    return pCurrentShell && pCurrentShell->isLOKMobilePhone();
+}
+
 SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet *rAttrSet)
-    : BuilderPage(pPage, pController, rUIXMLDescription, rID,
-                    comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current()
-                    && SfxViewShell::Current()->isLOKMobilePhone())
+    : BuilderPage(pPage, pController, rUIXMLDescription, rID, isLOKMobilePhone())
     , mpSet(rAttrSet)
     , mbHasExchangeSupport(false)
     , mpImpl(new TabPageImpl)
