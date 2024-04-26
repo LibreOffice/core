@@ -418,6 +418,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             if (bIsLOK)
             {
+                if (!pViewShell)
+                    return false;
+
                 // Notebookbar was loaded too early what caused:
                 //   * in LOK: Paste Special feature was incorrectly initialized
                 // Skip first request so Notebookbar will be initialized after document was loaded
@@ -608,11 +611,12 @@ void SfxNotebookBar::ToggleMenubar()
 
 void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
 {
-    if (SfxNotebookBar::IsActive())
-    {
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(), sUIPath, true);
-    }
+    if (!SfxNotebookBar::IsActive())
+        return;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return;
+    sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(), sUIPath, true);
 }
 
 IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)
