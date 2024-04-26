@@ -681,15 +681,16 @@ static OUString SHGetSpecialFolder( int nFolderID )
 
     if( hHdl == NOERROR )
     {
-        WCHAR *lpFolderA;
-        lpFolderA = ALLOC( WCHAR, 16000 );
+        if (WCHAR *lpFolderA = ALLOC(WCHAR, 16000))
+        {
+            SHGetPathFromIDListW(pidl, lpFolderA);
+            aFolder = o3tl::toU(lpFolderA);
 
-        SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = o3tl::toU( lpFolderA );
-
-        FREE( lpFolderA );
-        SHFree_( pidl );
+            FREE(lpFolderA);
+            SHFree_(pidl);
+        }
     }
+
     return aFolder;
 }
 

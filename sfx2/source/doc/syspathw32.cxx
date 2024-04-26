@@ -37,17 +37,18 @@ static bool SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 
     if( hHdl == NOERROR )
     {
-        WCHAR *lpFolder = static_cast< WCHAR* >( HeapAlloc( GetProcessHeap(), 0, 16000 ));
-
-        SHGetPathFromIDListW( pidl, lpFolder );
-        wcsncpy( pszFolder, lpFolder, nSize );
-
-        HeapFree( GetProcessHeap(), 0, lpFolder );
-        IMalloc *pMalloc;
-        if( NOERROR == SHGetMalloc(&pMalloc) )
+        if (WCHAR *lpFolder = static_cast<WCHAR*>(HeapAlloc(GetProcessHeap(), 0, 16000)))
         {
-            pMalloc->Free( pidl );
-            pMalloc->Release();
+            SHGetPathFromIDListW( pidl, lpFolder );
+            wcsncpy( pszFolder, lpFolder, nSize );
+
+            HeapFree( GetProcessHeap(), 0, lpFolder );
+            IMalloc *pMalloc;
+            if( NOERROR == SHGetMalloc(&pMalloc) )
+            {
+                pMalloc->Free( pidl );
+                pMalloc->Release();
+            }
         }
     }
     return true;
