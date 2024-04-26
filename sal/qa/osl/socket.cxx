@@ -45,7 +45,7 @@ class SocketTest : public CppUnit::TestFixture
         OUString out;
         auto const res = osl_getDottedInetAddrOfSocketAddr(addr, &out.pData);
         CPPUNIT_ASSERT_EQUAL(osl_Socket_Ok, res);
-        CPPUNIT_ASSERT_EQUAL(OUString("123.255.255.255"), out);
+        CPPUNIT_ASSERT_EQUAL(u"123.255.255.255"_ustr, out);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(100), osl_getInetPortOfSocketAddr(addr));
         osl_destroySocketAddr(addr);
     }

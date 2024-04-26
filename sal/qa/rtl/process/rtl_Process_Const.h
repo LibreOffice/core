@@ -26,10 +26,10 @@
 extern "C" {
 #endif
 
-OUString suParam0("-join");
-OUString suParam1("-with");
-OUString suParam2("-child");
-OUString suParam3("-process");
+OUString suParam0(u"-join"_ustr);
+OUString suParam1(u"-with"_ustr);
+OUString suParam2(u"-child"_ustr);
+OUString suParam3(u"-process"_ustr);
 
 #ifdef __cplusplus
 }

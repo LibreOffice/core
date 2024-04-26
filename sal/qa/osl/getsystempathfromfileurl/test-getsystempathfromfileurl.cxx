@@ -84,7 +84,7 @@ private:
 
 void Test::testBadScheme() {
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("foo:bar", p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"foo:bar"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }
@@ -92,9 +92,9 @@ void Test::testBadScheme() {
 void Test::testNoScheme() {
 #if !defined(_WIN32) //TODO
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("//" MY_PATH_IN, p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"//" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT ""_ustr, p);
 #endif
 }
 
@@ -102,7 +102,7 @@ void Test::testBadAuthority() {
 #if defined UNX
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://baz" MY_PATH_IN, p);
+        u"file://baz" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 #endif
@@ -111,50 +111,50 @@ void Test::testBadAuthority() {
 void Test::testLocalhost1Authority() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://localhost" MY_PATH_IN, p);
+        u"file://localhost" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT ""_ustr, p);
 }
 
 void Test::testLocalhost2Authority() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://LOCALHOST" MY_PATH_IN, p);
+        u"file://LOCALHOST" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT ""_ustr, p);
 }
 
 void Test::testLocalhost3Authority() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://127.0.0.1" MY_PATH_IN, p);
+        u"file://127.0.0.1" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT ""_ustr, p);
 }
 
 void Test::testNoAuthority() {
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("file:" MY_PATH_IN, p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"file:" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT ""_ustr, p);
 }
 
 void Test::testEmptyPath() {
 #if defined UNX
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("file://", p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"file://"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString("/"), p);
+    CPPUNIT_ASSERT_EQUAL(u"/"_ustr, p);
 #endif
 }
 
 void Test::testHomeAbbreviation() {
 #if defined UNX
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("file:///~", p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"file:///~"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
         // could theoretically fail due to osl::Security::getHomeDir problem
-    e = osl::FileBase::getSystemPathFromFileURL("file:///~/foo%2525/bar", p);
+    e = osl::FileBase::getSystemPathFromFileURL(u"file:///~/foo%2525/bar"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
         // could theoretically fail due to osl::Security::getHomeDir problem
     CPPUNIT_ASSERT(p.endsWith("/foo%25/bar"));
@@ -165,7 +165,7 @@ void Test::testOtherHomeAbbreviation() {
 #if defined UNX
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file:///~baz" MY_PATH_IN, p);
+        u"file:///~baz" MY_PATH_IN ""_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e); // not supported for now
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 #endif
@@ -173,7 +173,7 @@ void Test::testOtherHomeAbbreviation() {
 
 void Test::testRelative() {
     OUString p;
-    auto e = osl::FileBase::getSystemPathFromFileURL("foo/bar", p);
+    auto e = osl::FileBase::getSystemPathFromFileURL(u"foo/bar"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
     CPPUNIT_ASSERT(p.endsWith(MY_PATH_OUT_REL));
 }
@@ -181,15 +181,15 @@ void Test::testRelative() {
 void Test::testEscape() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "/b%61z", p);
+        u"file://" MY_PATH_IN "/b%61z"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT_CONT "baz"), p);
+    CPPUNIT_ASSERT_EQUAL(u"" MY_PATH_OUT_CONT "baz" ""_ustr, p);
 }
 
 void Test::testBadEscape2f() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "/b%2fz", p);
+        u"file://" MY_PATH_IN "/b%2fz"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }
@@ -197,7 +197,7 @@ void Test::testBadEscape2f() {
 void Test::testBadEscape2F() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "/b%2Fz", p);
+        u"file://" MY_PATH_IN "/b%2Fz"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }
@@ -214,7 +214,7 @@ void Test::testBad0() {
 void Test::testBadEscape0() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "/b%00z", p);
+        u"file://" MY_PATH_IN "/b%00z"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }
@@ -222,7 +222,7 @@ void Test::testBadEscape0() {
 void Test::testBadQuery() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "?baz", p);
+        u"file://" MY_PATH_IN "?baz"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }
@@ -230,7 +230,7 @@ void Test::testBadQuery() {
 void Test::testBadFragment() {
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL(
-        "file://" MY_PATH_IN "#baz", p);
+        u"file://" MY_PATH_IN "#baz"_ustr, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, e);
     CPPUNIT_ASSERT_EQUAL(OUString(), p);
 }

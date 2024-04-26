@@ -106,13 +106,13 @@ public:
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suLanguage = pData->Language;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", OUString("de"), suLanguage );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", u"de"_ustr, suLanguage );
     }
     void getLanguage_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suLanguage(rtl_locale_getLanguage(pData), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", OUString("de"), suLanguage );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale language must be 'de'", u"de"_ustr, suLanguage );
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -140,13 +140,13 @@ public:
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suCountry = pData->Country;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", OUString("DE"), suCountry );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", u"DE"_ustr, suCountry );
     }
     void getCountry_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suCountry(rtl_locale_getCountry(pData), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", OUString("DE"), suCountry );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale country must be 'DE'", u"DE"_ustr, suCountry );
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -174,13 +174,13 @@ public:
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suVariant = pData->Variant;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", OUString("hochdeutsch"), suVariant );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", u"hochdeutsch"_ustr, suVariant );
     }
     void getVariant_002()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
         OUString suVariant(rtl_locale_getVariant(pData), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", OUString("hochdeutsch"), suVariant );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "locale variant must be 'hochdeutsch'", u"hochdeutsch"_ustr, suVariant );
     }
 
     // Change the following lines only, if you add, remove or rename

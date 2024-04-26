@@ -158,7 +158,7 @@ public:
 
         rtl_alloc_preInit(true);
 
-        OUString aFoo("foo");
+        OUString aFoo("foo"); // [-loplugin:ostr]
 
         // fill some cache bits
         for (int iter = 0; iter < 4; iter++)

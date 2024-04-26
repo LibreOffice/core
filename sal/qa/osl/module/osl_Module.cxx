@@ -30,7 +30,7 @@ static OUString getDllURL()
 #if defined(_WIN32)        // lib in Unix and lib in Windows are not same in file name.
     OUString libPath( "test_Module_DLL.dll" );
 #else
-    OUString libPath( "libtest_Module_DLL.so" );
+    OUString libPath( u"libtest_Module_DLL.so"_ustr );
 #endif
 
     OUString dirPath, dllPath;
@@ -136,7 +136,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( "firstfunc" ));
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( u"firstfunc"_ustr ));
 
             OUString aFileURL;
             bRes = osl::Module::getUrlFromAddress(
@@ -265,7 +265,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( "firstfunc" ));
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( u"firstfunc"_ustr ));
             bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );
@@ -313,7 +313,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
-            OUString funcName( "firstfunc" );
+            OUString funcName( u"firstfunc"_ustr );
 
             FuncPtr pFunc = reinterpret_cast<FuncPtr>(osl_getSymbol( static_cast<oslModule>(aMod), funcName.pData ));
             bRes = false;

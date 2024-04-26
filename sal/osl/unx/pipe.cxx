@@ -132,7 +132,7 @@ getBootstrapSocketPath()
 {
     OUString pValue;
 
-    if (rtl::Bootstrap::get("OSL_SOCKET_PATH", pValue))
+    if (rtl::Bootstrap::get(u"OSL_SOCKET_PATH"_ustr, pValue))
     {
         return OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
     }

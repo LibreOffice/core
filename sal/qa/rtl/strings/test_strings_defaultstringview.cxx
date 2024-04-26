@@ -34,24 +34,22 @@ class Test : public CppUnit::TestFixture
     void ustring()
     {
         CPPUNIT_ASSERT_EQUAL(OUString(), OUString(std::u16string_view()));
-        OUString s1("foo");
+        OUString s1(u"foo"_ustr);
         s1 = std::u16string_view();
         CPPUNIT_ASSERT_EQUAL(OUString(), s1);
-        OUString s2("foo");
+        OUString s2(u"foo"_ustr);
         s2 += std::u16string_view();
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), s2);
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, s2);
+        CPPUNIT_ASSERT_GREATER(sal_Int32(0), u"foo"_ustr.reverseCompareTo(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(false, u"foo"_ustr.equalsIgnoreAsciiCase(std::u16string_view()));
         CPPUNIT_ASSERT_GREATER(sal_Int32(0),
-                               OUString("foo").reverseCompareTo(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(false, OUString("foo").equalsIgnoreAsciiCase(std::u16string_view()));
-        CPPUNIT_ASSERT_GREATER(sal_Int32(0),
-                               OUString("foo").compareToIgnoreAsciiCase(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo").match(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo").matchIgnoreAsciiCase(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo").startsWith(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true,
-                             OUString("foo").startsWithIgnoreAsciiCase(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWith(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWithIgnoreAsciiCase(std::u16string_view()));
+                               u"foo"_ustr.compareToIgnoreAsciiCase(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.match(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.matchIgnoreAsciiCase(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.startsWith(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.startsWithIgnoreAsciiCase(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.endsWith(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.endsWithIgnoreAsciiCase(std::u16string_view()));
         OUString constexpr foo(u"foo"_ustr); // avoid loplugin:stringconstant, loplugin:stringview
         CPPUNIT_ASSERT_EQUAL(false, foo == std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(true, foo != std::u16string_view());
@@ -65,35 +63,32 @@ class Test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() <= foo);
         CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() > foo);
         CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() >= foo);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").indexOf(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").lastIndexOf(std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").lastIndexOf(std::u16string_view(), 3));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), u"foo"_ustr.indexOf(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), u"foo"_ustr.lastIndexOf(std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), u"foo"_ustr.lastIndexOf(std::u16string_view(), 3));
+        CPPUNIT_ASSERT_EQUAL(u"foobarfoo"_ustr, u"foobarfoo"_ustr.replaceFirst(
+                                                    std::u16string_view(), std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceFirst(std::u16string_view(), std::u16string_view()));
+            u"barfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(std::u16string_view(u"foo"), std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(
-            OUString("barfoo"),
-            OUString("foobarfoo").replaceFirst(std::u16string_view(u"foo"), std::u16string_view()));
+            u"foobarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(std::u16string_view(), std::u16string_view(u"baz")));
+        CPPUNIT_ASSERT_EQUAL(u"barfoo"_ustr,
+                             u"foobarfoo"_ustr.replaceFirst("foo", std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(u"foobarfoo"_ustr,
+                             u"foobarfoo"_ustr.replaceFirst(std::u16string_view(), "baz"));
+        CPPUNIT_ASSERT_EQUAL(u"foobarfoo"_ustr, u"foobarfoo"_ustr.replaceAll(
+                                                    std::u16string_view(), std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, u"foobarfoo"_ustr.replaceAll(std::u16string_view(u"foo"),
+                                                                       std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceFirst(std::u16string_view(), std::u16string_view(u"baz")));
-        CPPUNIT_ASSERT_EQUAL(OUString("barfoo"),
-                             OUString("foobarfoo").replaceFirst("foo", std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(OUString("foobarfoo"),
-                             OUString("foobarfoo").replaceFirst(std::u16string_view(), "baz"));
-        CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceAll(std::u16string_view(), std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(
-            OUString("bar"),
-            OUString("foobarfoo").replaceAll(std::u16string_view(u"foo"), std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceAll(std::u16string_view(), std::u16string_view(u"baz")));
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"),
-                             OUString("foobarfoo").replaceAll("foo", std::u16string_view()));
-        CPPUNIT_ASSERT_EQUAL(OUString("foobarfoo"),
-                             OUString("foobarfoo").replaceAll(std::u16string_view(), "baz"));
+            u"foobarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceAll(std::u16string_view(), std::u16string_view(u"baz")));
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr,
+                             u"foobarfoo"_ustr.replaceAll("foo", std::u16string_view()));
+        CPPUNIT_ASSERT_EQUAL(u"foobarfoo"_ustr,
+                             u"foobarfoo"_ustr.replaceAll(std::u16string_view(), "baz"));
         CPPUNIT_ASSERT_EQUAL(OUString(), OUString::createFromAscii(std::string_view()));
     }
 
@@ -101,7 +96,7 @@ class Test : public CppUnit::TestFixture
     {
         OUStringBuffer b("foo");
         b.append(std::u16string_view());
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), b.toString());
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, b.toString());
     }
 
     CPPUNIT_TEST_SUITE(Test);

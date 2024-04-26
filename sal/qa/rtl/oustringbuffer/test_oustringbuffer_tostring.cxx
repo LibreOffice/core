@@ -49,12 +49,12 @@ void test::oustringbuffer::ToString::testEmptyToString() {
 void test::oustringbuffer::ToString::testToString() {
     OUStringBuffer sb("test string");
     OUString str = sb.toString();
-    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
+    CPPUNIT_ASSERT_EQUAL( u"test string"_ustr, str );
     // returned OUString must be independent from sb
     sb.append( 'a' );
-    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
+    CPPUNIT_ASSERT_EQUAL( u"test string"_ustr, str );
     sb.setLength(0);
-    CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
+    CPPUNIT_ASSERT_EQUAL( u"test string"_ustr, str );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

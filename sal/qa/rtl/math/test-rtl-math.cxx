@@ -314,21 +314,21 @@ public:
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max,
                     '.', aGroups, ',', true));
-        CPPUNIT_ASSERT_EQUAL( OUString("99,99,99,99,99,99,999"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"99,99,99,99,99,99,999"_ustr, aRes);
 
         fVal = 949.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     -2,     // round before decimals
                     '.', aGroups, ',', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("900"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"900"_ustr, aRes);
 
         fVal = 950.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     -2,     // round before decimals
                     '.', aGroups, ',', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1,000"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1,000"_ustr, aRes);
 
         // Check non-ASCII separators: Arabic decimal separator U+066B, thousand separator U+066C
         fVal = 123456.78;
@@ -342,141 +342,141 @@ public:
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.');
-        CPPUNIT_ASSERT_EQUAL( OUString("4503599627370495"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"4503599627370495"_ustr, aRes);
 
         fVal = 4503599627370496.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     2, '.');
-        CPPUNIT_ASSERT_EQUAL( OUString("4503599627370496.00"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"4503599627370496.00"_ustr, aRes);
 
         fVal = -4503599627370496.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     2, '.');
-        CPPUNIT_ASSERT_EQUAL( OUString("-4503599627370496.00"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"-4503599627370496.00"_ustr, aRes);
 
         fVal = 9007199254740991.0;  // (2^53)-1
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("9007199254740991"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"9007199254740991"_ustr, aRes);
 
         fVal = 9007199254740992.0;  // (2^53), algorithm switch
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"9.00719925474099E+015"_ustr, aRes);
 
         fVal = 9007199254740993.0;  // (2^53)+1 would be but is 9007199254740992
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"9.00719925474099E+015"_ustr, aRes);
 
         // Test rtl_math_StringFormat_G
 
         fVal = 0.001234567;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("0.00123"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"0.00123"_ustr, aRes);
 
         fVal = 123.4567;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("123"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"123"_ustr, aRes);
 
         fVal = 123.4567;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 4, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("123.5"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"123.5"_ustr, aRes);
 
         fVal = 99.6;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("99.6"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"99.6"_ustr, aRes);
 
         // Expected could be 1E+03 (as 999.6 rounded to 3 significant digits
         // results in 1000 with an exponent equal to significant digits).
         // Currently we don't and output 1000 instead, negligible.
         fVal = 999.6;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1000"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1000"_ustr, aRes);
 
         fVal = 9999.6;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1E+004"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1E+004"_ustr, aRes);
 
         fVal = 12345.6789;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, -3, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.2E+004"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.2E+004"_ustr, aRes);
 
         // DBL_MAX and 4 nextafters
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.7976931348623157E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.7976931348623157E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.7976931348623155E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.7976931348623155E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.7976931348623153E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.7976931348623153E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.7976931348623151E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.7976931348623151E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862315E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862315E+308"_ustr, aRes);
         CPPUNIT_ASSERT_EQUAL(fVal, rtl::math::stringToDouble(aRes, '.', ',')); // Test roundtrip
 
         // DBL_MAX and 4 nextafters rounded to 15 decimals
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 15, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862316E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862316E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 15, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862316E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862316E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 15, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862315E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862315E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 15, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862315E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862315E+308"_ustr, aRes);
 
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 15, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862315E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.797693134862315E+308"_ustr, aRes);
 
         // DBL_MAX rounded to 14 decimals
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 14, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.79769313486232E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.79769313486232E+308"_ustr, aRes);
 
         // DBL_MAX rounded to 2 decimals
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 2, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.8E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1.8E+308"_ustr, aRes);
 
         // Crashed after commit eae24a9488814e77254d175c11fc4a138c1dbd30
         fVal = 123456.789;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_E, 2, '.', false);
-        CPPUNIT_ASSERT_EQUAL(OUString("1.23E+005"), aRes);
+        CPPUNIT_ASSERT_EQUAL(u"1.23E+005"_ustr, aRes);
 
         fVal = 9.9999999999999929;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL(OUString("9.99999999999999"), aRes);
+        CPPUNIT_ASSERT_EQUAL(u"9.99999999999999"_ustr, aRes);
 
         fVal = 0.99999999999999933;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_F, rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL(OUString("0.999999999999999"), aRes);
+        CPPUNIT_ASSERT_EQUAL(u"0.999999999999999"_ustr, aRes);
     }
 
     void test_approx() {

@@ -161,15 +161,15 @@ void test::ostring::StringConcat::checkAppend()
 void test::ostring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OString() + OString()));
-    CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + OUString( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + u"b"_ustr));
     CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + OUStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + OUStringLiteral( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + OUString::Concat( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"b"_ustr + rs ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"b"_ustr + rus ));
     CPPUNIT_ASSERT( INVALID_CONCAT( "a"_ostr + OUString::number( 10 )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString::number( 0 ) + OUString::number( 10 )));
 

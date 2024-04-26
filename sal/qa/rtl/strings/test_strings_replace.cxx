@@ -19,12 +19,12 @@
 namespace {
 
 OUString s_empty;
-OUString s_bar("bar");
-OUString s_bars("bars");
-OUString s_foo("foo");
-OUString s_other("other");
-OUString s_xa("xa");
-OUString s_xx("xx");
+OUString s_bar(u"bar"_ustr);
+OUString s_bars(u"bars"_ustr);
+OUString s_foo(u"foo"_ustr);
+OUString s_other(u"other"_ustr);
+OUString s_xa(u"xa"_ustr);
+OUString s_xx(u"xx"_ustr);
 
 class Test: public CppUnit::TestFixture {
 private:
@@ -111,128 +111,128 @@ void Test::stringReplaceAll() {
 
 void Test::ustringReplaceFirst() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarfoo"),
-        OUString("foobarfoo").replaceFirst(s_foo, s_other));
+        u"otherbarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst(s_foo, s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceFirst(s_bars, s_other));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst(s_bars, s_other));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("otherbarfoo"),
-            OUString("foobarfoo").replaceFirst(s_foo, s_other, &n));
+            u"otherbarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_foo, s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarother"),
-            OUString("foobarfoo").replaceFirst(s_foo, s_other, &n));
+            u"foobarother"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_foo, s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceFirst(s_bar, s_other, &n));
+            u"foobarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_bar, s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 }
 
 void Test::ustringReplaceFirstAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarfoo"),
-        OUString("foobarfoo").replaceFirst("foo", s_other));
+        u"otherbarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst("foo", s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceFirst("bars", s_other));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst("bars", s_other));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("otherbarfoo"),
-            OUString("foobarfoo").replaceFirst("foo", s_other, &n));
+            u"otherbarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst("foo", s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarother"),
-            OUString("foobarfoo").replaceFirst("foo", s_other, &n));
+            u"foobarother"_ustr,
+            u"foobarfoo"_ustr.replaceFirst("foo", s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceFirst("bar", s_other, &n));
+            u"foobarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst("bar", s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceFirst("xa", s_empty));
+        OUString(), u"xa"_ustr.replaceFirst("xa", s_empty));
 }
 
 void Test::ustringReplaceFirstToAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarfoo"),
-        OUString("foobarfoo").replaceFirst(s_foo, "other"));
+        u"otherbarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst(s_foo, "other"));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceFirst(s_bars, "other"));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceFirst(s_bars, "other"));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("otherbarfoo"),
-            OUString("foobarfoo").replaceFirst(s_foo, "other", &n));
+            u"otherbarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_foo, "other", &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarother"),
-            OUString("foobarfoo").replaceFirst(s_foo, "other", &n));
+            u"foobarother"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_foo, "other", &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            OUString("foobarfoo").replaceFirst(s_bar, "other", &n));
+            u"foobarfoo"_ustr,
+            u"foobarfoo"_ustr.replaceFirst(s_bar, "other", &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceFirst(s_xa, ""));
+        OUString(), u"xa"_ustr.replaceFirst(s_xa, ""));
 }
 
 void Test::ustringReplaceFirstAsciiLAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarfoo"),
-        (OUString("foobarfoo").
+        u"otherbarfoo"_ustr,
+        (u"foobarfoo"_ustr.
          replaceFirst("foo", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        (OUString("foobarfoo").
+        u"foobarfoo"_ustr,
+        (u"foobarfoo"_ustr.
          replaceFirst("bars", "other")));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("otherbarfoo"),
-            (OUString("foobarfoo").
+            u"otherbarfoo"_ustr,
+            (u"foobarfoo"_ustr.
              replaceFirst("foo", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
@@ -240,8 +240,8 @@ void Test::ustringReplaceFirstAsciiLAsciiL() {
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarother"),
-            (OUString("foobarfoo").
+            u"foobarother"_ustr,
+            (u"foobarfoo"_ustr.
              replaceFirst("foo", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
@@ -249,85 +249,85 @@ void Test::ustringReplaceFirstAsciiLAsciiL() {
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            OUString("foobarfoo"),
-            (OUString("foobarfoo").
+            u"foobarfoo"_ustr,
+            (u"foobarfoo"_ustr.
              replaceFirst("bar", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceFirst("xa", ""));
+        OUString(), u"xa"_ustr.replaceFirst("xa", ""));
 }
 
 void Test::ustringReplaceAll() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarother"),
-        OUString("foobarfoo").replaceAll(s_foo, s_other));
+        u"otherbarother"_ustr,
+        u"foobarfoo"_ustr.replaceAll(s_foo, s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceAll(s_bars, s_other));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceAll(s_bars, s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("xxa"),
-        OUString("xaa").replaceAll(s_xa, s_xx));
+        u"xxa"_ustr,
+        u"xaa"_ustr.replaceAll(s_xa, s_xx));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarbaz"), OUString("foobarfoo").replaceAll(u"foo", u"baz", 1));
+        u"foobarbaz"_ustr, u"foobarfoo"_ustr.replaceAll(u"foo", u"baz", 1));
 }
 
 void Test::ustringReplaceAllAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarother"),
-        OUString("foobarfoo").replaceAll("foo", s_other));
+        u"otherbarother"_ustr,
+        u"foobarfoo"_ustr.replaceAll("foo", s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceAll("bars", s_other));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceAll("bars", s_other));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("xxa"),
-        OUString("xaa").replaceAll("xa", s_xx));
+        u"xxa"_ustr,
+        u"xaa"_ustr.replaceAll("xa", s_xx));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceAll("xa", s_empty));
+        OUString(), u"xa"_ustr.replaceAll("xa", s_empty));
 }
 
 void Test::ustringReplaceAllToAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarother"),
-        OUString("foobarfoo").replaceAll(s_foo, "other"));
+        u"otherbarother"_ustr,
+        u"foobarfoo"_ustr.replaceAll(s_foo, "other"));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        OUString("foobarfoo").replaceAll(s_bars, "other"));
+        u"foobarfoo"_ustr,
+        u"foobarfoo"_ustr.replaceAll(s_bars, "other"));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("xxa"),
-        OUString("xaa").replaceAll(s_xa, "xx"));
+        u"xxa"_ustr,
+        u"xaa"_ustr.replaceAll(s_xa, "xx"));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceAll(s_xa, ""));
+        OUString(), u"xa"_ustr.replaceAll(s_xa, ""));
 }
 
 void Test::ustringReplaceAllAsciiLAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString("otherbarother"),
-        (OUString("foobarfoo").
+        u"otherbarother"_ustr,
+        (u"foobarfoo"_ustr.
          replaceAll("foo", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foobarfoo"),
-        (OUString("foobarfoo").
+        u"foobarfoo"_ustr,
+        (u"foobarfoo"_ustr.
          replaceAll("bars", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("xxa"),
-        (OUString("xaa").
+        u"xxa"_ustr,
+        (u"xaa"_ustr.
          replaceAll("xa", "xx")));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), OUString("xa").replaceAll("xa", ""));
+        OUString(), u"xa"_ustr.replaceAll("xa", ""));
 }
 
 }

@@ -113,10 +113,10 @@ const char pBuffer_Blank[]  = "";
 
 // OS independent file definition
 
-OUString aNullURL( "" );
-OUString aSlashURL( PATH_SEPARATOR );
-OUString aPreURL( FILE_PREFIX );
-OUString aRootURL( FILE_PREFIX TEST_PLATFORM_ROOT );
+OUString aNullURL( u""_ustr );
+OUString aSlashURL( u"" PATH_SEPARATOR ""_ustr );
+OUString aPreURL( u"" FILE_PREFIX ""_ustr );
+OUString aRootURL( u"" FILE_PREFIX TEST_PLATFORM_ROOT ""_ustr );
 
 OUString aTempDirectorySys(getTempDirectorySys_());
 OUString aTempDirectoryURL(getTempDirectoryURL_());
@@ -128,10 +128,10 @@ OUString aUserDirectoryURL( aTempDirectoryURL + "" );
 OUString aCanURL1( aTempDirectoryURL +  "/canonical.name" );
 OUString aCanURL2(
     RTL_CONSTASCII_USTRINGPARAM("ca@#;+.,$///78no\0ni..name"));
-OUString aCanURL3( "ca@#;+.,$//tmp/678nonical//name" );
-OUString aCanURL4( "canonical.name" );
-OUString aTmpName1( "tmpdir" );
-OUString aTmpName2( "tmpname" );
+OUString aCanURL3( u"ca@#;+.,$//tmp/678nonical//name"_ustr );
+OUString aCanURL4( u"canonical.name"_ustr );
+OUString aTmpName1( u"tmpdir"_ustr );
+OUString aTmpName2( u"tmpname"_ustr );
 OUString aTmpName3( aTempDirectoryURL + "/tmpdir" );
 OUString aTmpName4( aTempDirectoryURL + "/tmpdir/tmpname" );
 OUString aTmpName5( aTempDirectoryURL + "/tmpdir/../tmpdir/./tmpname" );
@@ -141,17 +141,17 @@ OUString aTmpName8( aTempDirectoryURL + "/tmpname/tmpdir" );
 OUString aTmpName9( aTempDirectoryURL + "/tmpdir/../tmpdir/./" );
 OUString aTmpName10(aTempDirectoryURL + u"/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030");
 
-OUString aRelURL1( "relative/file1" );
-OUString aRelURL2( "relative/./file2" );
-OUString aRelURL3( "relative/../file3" );
-OUString aRelURL4( "././relative/../file4" );
+OUString aRelURL1( u"relative/file1"_ustr );
+OUString aRelURL2( u"relative/./file2"_ustr );
+OUString aRelURL3( u"relative/../file3"_ustr );
+OUString aRelURL4( u"././relative/../file4"_ustr );
 OUString aRelURL5( aTempDirectoryURL + "/./../"     );
 OUString aLnkURL1( aTempDirectoryURL + "/link.file" );
-OUString aHidURL1( ".hiddenfile" );
+OUString aHidURL1( u".hiddenfile"_ustr );
 
 // common used System Path:temp, root,etc
 
-OUString aRootSys( TEST_PLATFORM_ROOT );
+OUString aRootSys( u"" TEST_PLATFORM_ROOT ""_ustr);
 OUString aSysPath1( aTempDirectorySys + "/system.path" );
 OUString aSysPath2( aTempDirectorySys + "/system/path" );
 OUString aSysPath3( aTempDirectorySys + "/tmpdir" );
@@ -165,36 +165,36 @@ OUString aFifoSys( aTempDirectorySys + "/tmpdir/fifo" );
 // Note that this may be changed in the different platform, so be careful to use.
 
 #if ( defined UNX )                                                    //          Unix
-OUString aTypeURL1( FILE_PREFIX "dev/ccv");                    //socket    Solaris/Linux
-OUString aTypeURL2( FILE_PREFIX "devices/pseudo/tcp@0:tcp");   //special   Solaris/Linux
-OUString aTypeURL3( FILE_PREFIX "lib" );                       //link      Solaris
+OUString aTypeURL1( u"" FILE_PREFIX "dev/ccv"_ustr);                    //socket    Solaris/Linux
+OUString aTypeURL2( u"" FILE_PREFIX "devices/pseudo/tcp@0:tcp"_ustr);   //special   Solaris/Linux
+OUString aTypeURL3( u"" FILE_PREFIX "lib"_ustr );                       //link      Solaris
 #else                                                                  //          Windows
-OUString aTypeURL1( FILE_PREFIX "" );
-OUString aTypeURL2( FILE_PREFIX "" );
-OUString aTypeURL3( FILE_PREFIX "" );
+OUString aTypeURL1( u"" FILE_PREFIX ""_ustr );
+OUString aTypeURL2( u"" FILE_PREFIX ""_ustr );
+OUString aTypeURL3( u"" FILE_PREFIX ""_ustr );
 #endif
 
 // Volume device URL, we pick some canonical volume device for test:
 // UNIX file system, Floppy Disk, Proc file system, Temp file system, Compact Disk.
 
 #if ( defined UNX )                                     //          Unix
-OUString aVolURL1( FILE_PREFIX  "");            //ufs       Solaris/Linux
+OUString aVolURL1( u"" FILE_PREFIX  ""_ustr);            //ufs       Solaris/Linux
 #ifdef __sun
-OUString aVolURL2( FILE_PREFIX  "dev/fd" );     //fd        Solaris
+OUString aVolURL2( u"" FILE_PREFIX  "dev/fd"_ustr );     //fd        Solaris
 #else
-OUString aVolURL2( FILE_PREFIX  "dev/floppy/0u1440" );  //fd0       Linux
+OUString aVolURL2( u"" FILE_PREFIX  "dev/floppy/0u1440"_ustr );  //fd0       Linux
 #endif
-OUString aVolURL3( FILE_PREFIX  "proc" );       //proc      Solaris/Linux
-OUString aVolURL4( FILE_PREFIX  "staroffice" ); //nfs       Solaris/Linux
-OUString aVolURL5( FILE_PREFIX  "tmp" );        //tmpfs     Solaris
-OUString aVolURL6( FILE_PREFIX  "cdrom" );      //cd        Solaris
+OUString aVolURL3( u"" FILE_PREFIX  "proc"_ustr );       //proc      Solaris/Linux
+OUString aVolURL4( u"" FILE_PREFIX  "staroffice"_ustr ); //nfs       Solaris/Linux
+OUString aVolURL5( u"" FILE_PREFIX  "tmp"_ustr );        //tmpfs     Solaris
+OUString aVolURL6( u"" FILE_PREFIX  "cdrom"_ustr );      //cd        Solaris
 #else                                                   //          Windows
-OUString aVolURL1( FILE_PREFIX  "c:/" );
-OUString aVolURL2( FILE_PREFIX  "a:/" );
-OUString aVolURL3( FILE_PREFIX  "" );
-OUString aVolURL4( FILE_PREFIX  "" );
-OUString aVolURL5( FILE_PREFIX  "c:/temp" );
-OUString aVolURL6( FILE_PREFIX  "e:/" );
+OUString aVolURL1( u"" FILE_PREFIX  "c:/"_ustr );
+OUString aVolURL2( u"" FILE_PREFIX  "a:/"_ustr );
+OUString aVolURL3( u"" FILE_PREFIX  ""_ustr );
+OUString aVolURL4( u"" FILE_PREFIX  ""_ustr );
+OUString aVolURL5( u"" FILE_PREFIX  "c:/temp"_ustr );
+OUString aVolURL6( u"" FILE_PREFIX  "e:/"_ustr );
 #endif
 
 #ifdef __cplusplus

@@ -27,15 +27,15 @@ private:
     void test()
     {
         OUStringBuffer b1;
-        OUString s1("123456789012345");
+        OUString s1(u"123456789012345"_ustr);
         b1 = s1;
         CPPUNIT_ASSERT_EQUAL(s1, b1.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), b1.getCapacity());
-        OUString s2("abc");
+        OUString s2(u"abc"_ustr);
         b1 = s2;
         CPPUNIT_ASSERT_EQUAL(s2, b1.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), b1.getCapacity());
-        OUString s3("1234567890123456");
+        OUString s3(u"1234567890123456"_ustr);
         b1 = s3;
         CPPUNIT_ASSERT_EQUAL(s3, b1.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b1.getCapacity());

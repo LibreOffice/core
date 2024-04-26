@@ -4296,7 +4296,7 @@ namespace osl_Directory
             // open a directory
             auto nError1 = testDirectory.open();
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
-            OUString aFileName ("link.file");
+            OUString aFileName (u"link.file"_ustr);
 
             while (true) {
                 nError1 = testDirectory.getNextItem(rItem, 4);
@@ -4783,7 +4783,7 @@ namespace osl_Directory
 
         void with_relative_path()
         {
-            osl::FileBase::RC rc = Directory::createPath(TEST_PATH_POSTFIX);
+            osl::FileBase::RC rc = Directory::createPath(u"" TEST_PATH_POSTFIX ""_ustr);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (

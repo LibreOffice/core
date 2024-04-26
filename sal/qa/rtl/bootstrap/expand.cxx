@@ -33,21 +33,21 @@ private:
 };
 
 void Test::setUp() {
-    rtl::Bootstrap::set("TEST", "<expanded TEST>");
-    rtl::Bootstrap::set("WITH_DOLLAR", "foo\\$TEST");
-    rtl::Bootstrap::set("INDIRECT", "$WITH_DOLLAR");
+    rtl::Bootstrap::set(u"TEST"_ustr, u"<expanded TEST>"_ustr);
+    rtl::Bootstrap::set(u"WITH_DOLLAR"_ustr, u"foo\\$TEST"_ustr);
+    rtl::Bootstrap::set(u"INDIRECT"_ustr, u"$WITH_DOLLAR"_ustr);
 }
 
 void Test::testDollar() {
-    OUString s("$WITH_DOLLAR");
+    OUString s(u"$WITH_DOLLAR"_ustr);
     rtl::Bootstrap::expandMacros(s);
-    CPPUNIT_ASSERT_EQUAL(OUString("foo$TEST"), s);
+    CPPUNIT_ASSERT_EQUAL(u"foo$TEST"_ustr, s);
 }
 
 void Test::testIndirectDollar() {
-    OUString s("$INDIRECT");
+    OUString s(u"$INDIRECT"_ustr);
     rtl::Bootstrap::expandMacros(s);
-    CPPUNIT_ASSERT_EQUAL(OUString("foo$TEST"), s);
+    CPPUNIT_ASSERT_EQUAL(u"foo$TEST"_ustr, s);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

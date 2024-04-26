@@ -210,23 +210,21 @@ public:
         void test() {
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int32 >(-0x76543210),
-                (OUString("-76543210").
+                (u"-76543210"_ustr.
                  toInt32(16)));
             // @return 0 if this string represents no number or one of too large magnitude
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int32 >(0),
-                (OUString("+FEDCBA98").
+                (u"+FEDCBA98"_ustr.
                  toInt32(16)));
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int64 >(-SAL_CONST_INT64(0x76543210FEDCBA98)),
-                (OUString(
-                    "-76543210FEDCBA98").
+                (u"-76543210FEDCBA98"_ustr.
                  toInt64(16)));
             // @return 0 if this string represents no number or one of too large magnitude
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int64 >(SAL_CONST_INT64(0)),
-                (OUString(
-                    "+FEDCBA9876543210").
+                (u"+FEDCBA9876543210"_ustr.
                  toInt64(16)));
         }
 
@@ -524,80 +522,80 @@ public:
     void lastIndexOf_test_oustring_offset_001()
         {
             // search for sun, start at the end, found (pos==0)
-            OUString aStr("sun java system");
-            lastIndexOf_oustring_offset(aStr, "sun", 0, aStr.getLength());
+            OUString aStr(u"sun java system"_ustr);
+            lastIndexOf_oustring_offset(aStr, u"sun"_ustr, 0, aStr.getLength());
         }
 
     void lastIndexOf_test_oustring_offset_002()
         {
             // search for sun, start at pos = 3, found (pos==0)
-            lastIndexOf_oustring_offset("sun java system", "sun", 0, 3);
+            lastIndexOf_oustring_offset(u"sun java system"_ustr, u"sun"_ustr, 0, 3);
         }
 
     void lastIndexOf_test_oustring_offset_003()
         {
             // search for sun, start at pos = 2, found (pos==-1)
-            lastIndexOf_oustring_offset("sun java system", "sun", -1, 2);
+            lastIndexOf_oustring_offset(u"sun java system"_ustr, u"sun"_ustr, -1, 2);
         }
 
     void lastIndexOf_test_oustring_offset_004()
         {
             // search for sun, start at the end, found (pos==0)
-            lastIndexOf_oustring_offset("sun java system", "sun", -1, 1);
+            lastIndexOf_oustring_offset(u"sun java system"_ustr, u"sun"_ustr, -1, 1);
         }
 
     void lastIndexOf_test_oustring_001()
         {
             // search for sun, found (pos==0)
-            lastIndexOf_oustring("sun java system", "sun", 0);
+            lastIndexOf_oustring(u"sun java system"_ustr, u"sun"_ustr, 0);
         }
 
     void lastIndexOf_test_oustring_002()
         {
             // search for sun, found (pos==4)
-            lastIndexOf_oustring("the sun java system", "sun", 4);
+            lastIndexOf_oustring(u"the sun java system"_ustr, u"sun"_ustr, 4);
         }
 
     void lastIndexOf_test_oustring_003()
         {
             // search for sun, found (pos==8)
-            lastIndexOf_oustring("the sun sun java system", "sun", 8);
+            lastIndexOf_oustring(u"the sun sun java system"_ustr, u"sun"_ustr, 8);
         }
 
     void lastIndexOf_test_oustring_004()
         {
             // search for sun, found (pos==8)
-            lastIndexOf_oustring("the sun sun", "sun", 8);
+            lastIndexOf_oustring(u"the sun sun"_ustr, u"sun"_ustr, 8);
         }
 
     void lastIndexOf_test_oustring_005()
         {
             // search for sun, found (pos==4)
-            lastIndexOf_oustring("the sun su", "sun", 4);
+            lastIndexOf_oustring(u"the sun su"_ustr, u"sun"_ustr, 4);
         }
 
     void lastIndexOf_test_oustring_006()
         {
             // search for sun, found (pos==-1)
-            lastIndexOf_oustring("the su su", "sun", -1);
+            lastIndexOf_oustring(u"the su su"_ustr, u"sun"_ustr, -1);
         }
 
     void lastIndexOf_test_oustring_007()
         {
             // search for earth, not found (-1)
-            lastIndexOf_oustring("the su su", "earth", -1);
+            lastIndexOf_oustring(u"the su su"_ustr, u"earth"_ustr, -1);
         }
 
     void lastIndexOf_test_oustring_008()
         {
             // search for earth, not found (-1)
-            lastIndexOf_oustring("", "earth", -1);
+            lastIndexOf_oustring(u""_ustr, u"earth"_ustr, -1);
         }
 
     void lastIndexOf_test_oustring_009()
         {
             // search for earth, not found (-1)
-            lastIndexOf_oustring("", "", -1);
+            lastIndexOf_oustring(u""_ustr, u""_ustr, -1);
 
         }
 
@@ -605,20 +603,20 @@ public:
         {
             // search for 's', found (19)
             sal_Unicode suChar = L's';
-            lastIndexOf_salunicode("the sun sun java system", suChar, 19);
+            lastIndexOf_salunicode(u"the sun sun java system"_ustr, suChar, 19);
         }
 
     void lastIndexOf_test_salunicode_002()
         {
             // search for 'x', not found (-1)
             sal_Unicode suChar = L'x';
-            lastIndexOf_salunicode("the sun sun java system", suChar, -1);
+            lastIndexOf_salunicode(u"the sun sun java system"_ustr, suChar, -1);
         }
 
     void lastIndexOf_test_salunicode_offset_001()
         {
             // search for 's', start from pos last char, found (19)
-            OUString aStr("the sun sun java system");
+            OUString aStr(u"the sun sun java system"_ustr);
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(aStr, cuChar, 19, aStr.getLength());
         }
@@ -626,13 +624,13 @@ public:
         {
             // search for 's', start pos is last occur from search behind, found (17)
             sal_Unicode cuChar = L's';
-            lastIndexOf_salunicode_offset("the sun sun java system", cuChar, 17, 19);
+            lastIndexOf_salunicode_offset(u"the sun sun java system"_ustr, cuChar, 17, 19);
         }
     void lastIndexOf_test_salunicode_offset_003()
         {
             // search for 't', start pos is 1, found (0)
             sal_Unicode cuChar = L't';
-            lastIndexOf_salunicode_offset("the sun sun java system", cuChar, 0, 1);
+            lastIndexOf_salunicode_offset(u"the sun sun java system"_ustr, cuChar, 0, 1);
         }
 
     // Change the following lines only, if you add, remove or rename
@@ -686,66 +684,66 @@ public:
 
     void getToken_001()
         {
-            OUString suTokenStr("a;b");
+            OUString suTokenStr(u"a;b"_ustr);
 
             sal_Int32 nIndex = 0;
 
             OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", OUString("a"), suToken);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", u"a"_ustr, suToken);
 
             /* OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", OUString("b"), suToken);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", u"b"_ustr, suToken);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1), nIndex);
         }
 
     void getToken_002()
         {
-            OUString suTokenStr("a;b.c");
+            OUString suTokenStr(u"a;b.c"_ustr);
 
             sal_Int32 nIndex = 0;
 
             OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", OUString("a"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", u"a"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", OUString("b"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", u"b"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'c'", OUString("c"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'c'", u"c"_ustr, suToken );
             CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1), nIndex);
         }
 
     void getToken_003()
         {
-            OUString suTokenStr("a;;b");
+            OUString suTokenStr(u"a;;b"_ustr);
 
             sal_Int32 nIndex = 0;
 
             OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", OUString("a"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'a'", u"a"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.isEmpty());
 
             /* OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", OUString("b"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be a 'b'", u"b"_ustr, suToken );
             CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1), nIndex);
         }
 
     void getToken_004()
         {
-            OUString suTokenStr("longer.then.ever.");
+            OUString suTokenStr(u"longer.then.ever."_ustr);
 
             sal_Int32 nIndex = 0;
 
             OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'longer'", OUString("longer"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'longer'", u"longer"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'then'", OUString("then"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'then'", u"then"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'ever'", OUString("ever"), suToken );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Token should be 'ever'", u"ever"_ustr, suToken );
 
             /* OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.isEmpty());
@@ -754,7 +752,7 @@ public:
         }
 
     void getToken_005() {
-        OUString ab("ab");
+        OUString ab(u"ab"_ustr);
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "token should be 'ab'", ab, ab.getToken(0, '-', n));
@@ -834,9 +832,9 @@ public:
         OUString().intern();
         OUString::intern( "",strlen(""),RTL_TEXTENCODING_ASCII_US );
 
-        OUString aFoo( "foo" );
+        OUString aFoo( u"foo"_ustr );
         OUString aFooIntern = aFoo.intern();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "string contents", OUString("foo"), aFooIntern);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "string contents", u"foo"_ustr, aFooIntern);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("string length", static_cast<sal_Int32>(3), aFooIntern.getLength());
         // We have to dup due to no atomic 'intern' bit-set operation
         CPPUNIT_ASSERT_MESSAGE("intern dups", aFoo.pData != aFooIntern.pData);
@@ -875,14 +873,14 @@ public:
 void indexOfAscii::test() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString().indexOf(""));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString().lastIndexOf(""));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), OUString("foo").indexOf("foo"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), OUString("foo").lastIndexOf("foo"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), u"foo"_ustr.indexOf("foo"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), u"foo"_ustr.lastIndexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(2), OUString("fofoobar").indexOf("foo"));
+        sal_Int32(2), u"fofoobar"_ustr.indexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(3), OUString("foofoofob").lastIndexOf("foo"));
+        sal_Int32(3), u"foofoofob"_ustr.lastIndexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(3), OUString("foofoobar").indexOf("foo", 1));
+        sal_Int32(3), u"foofoobar"_ustr.indexOf("foo", 1));
 }
 
 class endsWith: public CppUnit::TestFixture {
@@ -897,9 +895,9 @@ public:
 void endsWith::test() {
     CPPUNIT_ASSERT_EQUAL(true, OUString().endsWith(""));
     CPPUNIT_ASSERT_EQUAL(false, OUString().endsWith("foo"));
-    CPPUNIT_ASSERT_EQUAL(true, OUString("bar").endsWith("bar"));
-    CPPUNIT_ASSERT_EQUAL(true, OUString("foobar").endsWith("bar"));
-    CPPUNIT_ASSERT_EQUAL(false, OUString("FOOBAR").endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(true, u"bar"_ustr.endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(true, u"foobar"_ustr.endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(false, u"FOOBAR"_ustr.endsWith("bar"));
 }
 
 class isEmpty: public CppUnit::TestFixture {
@@ -1026,7 +1024,7 @@ void convertFromString::test() {
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT_EQUAL( OUString("abc"), t );
+    CPPUNIT_ASSERT_EQUAL( u"abc"_ustr, t );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::number);

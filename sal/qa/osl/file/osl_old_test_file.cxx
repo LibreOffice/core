@@ -74,7 +74,7 @@ const std::pair<OUString, OUString> aSource2[] = {
 
 void oldtestfile::test_file_001()
 {
-    OUString base1( "file:///" TEST_VOLUME "bla" );
+    OUString base1( u"file:///" TEST_VOLUME "bla"_ustr );
     for (const auto& [rel, expected] : aSource1)
     {
         OUString target;
@@ -86,7 +86,7 @@ void oldtestfile::test_file_001()
 
 void oldtestfile::test_file_002()
 {
-    OUString base2( "file:///" TEST_VOLUME "bla/blubs/schnubbel" );
+    OUString base2( u"file:///" TEST_VOLUME "bla/blubs/schnubbel"_ustr );
     for (const auto& [rel, expected] : aSource2)
     {
         OUString target;
@@ -98,7 +98,7 @@ void oldtestfile::test_file_002()
 
 void oldtestfile::test_file_004()
 {
-    OUString base4( "file:///" TEST_VOLUME "bla/" );
+    OUString base4( u"file:///" TEST_VOLUME "bla/"_ustr );
     for (const auto& [rel, expected] : aSource1)
     {
         OUString target;

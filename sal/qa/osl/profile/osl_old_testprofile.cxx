@@ -39,7 +39,7 @@ namespace osl_Profile
 void oldtests::test_profile()
 {
     OUString baseUrl;
-    CPPUNIT_ASSERT(rtl::Bootstrap::get("UserInstallation", baseUrl));
+    CPPUNIT_ASSERT(rtl::Bootstrap::get(u"UserInstallation"_ustr, baseUrl));
 
     // successful write
     oslProfile hProfile = osl_openProfile( OUString(baseUrl + "/soffice.ini").pData, osl_Profile_WRITELOCK );

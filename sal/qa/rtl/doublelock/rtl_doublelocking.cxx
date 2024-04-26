@@ -43,7 +43,7 @@
 namespace {
 struct Gregorian : public rtl::StaticWithInit<OUString, Gregorian> {
     OUString operator () () {
-        return CONST_TEST_STRING;
+        return u"" CONST_TEST_STRING ""_ustr;
     }
 };
 
@@ -61,7 +61,7 @@ public:
     OGetThread()
             :m_nOK(0),
              m_nFails(0),
-             m_sConstStr(CONST_TEST_STRING)
+             m_sConstStr(u"" CONST_TEST_STRING ""_ustr)
         {
         }
 

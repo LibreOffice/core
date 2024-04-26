@@ -149,7 +149,7 @@ public:
 
     // ctor
     Test_osl_executeProcess() :
-        env_param_(OUString("-env")), suCWD(getExecutablePath())
+        env_param_(u"-env"_ustr), suCWD(getExecutablePath())
     {
         parameters_[0] = env_param_.pData;
 
@@ -330,10 +330,10 @@ public:
     void osl_execProc_merged_child_environment()
     {
         rtl_uString* child_env[4];
-        OUString env1(ENV1);
-        OUString env2(ENV2);
-        OUString env3(ENV3);
-        OUString env4(ENV4);
+        OUString env1(u"" ENV1 ""_ustr);
+        OUString env2(u"" ENV2 ""_ustr);
+        OUString env3(u"" ENV3 ""_ustr);
+        OUString env4(u"" ENV4 ""_ustr);
 
         child_env[0] = env1.pData;
         child_env[1] = env2.pData;

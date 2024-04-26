@@ -732,7 +732,7 @@ namespace osl::detail {
     bool find_in_PATH(const OUString& file_path, OUString& result)
     {
         bool bfound = false;
-        OUString path("PATH");
+        OUString path(u"PATH"_ustr);
         OUString env_path;
 
         if (osl_getEnvironment(path.pData, &env_path.pData) == osl_Process_E_None)

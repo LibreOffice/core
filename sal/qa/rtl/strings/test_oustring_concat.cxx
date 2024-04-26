@@ -56,57 +56,57 @@ void test::oustring::StringConcat::checkConcat()
 {
 // All the extra () are to protect commas against being treated as separators of macro arguments.
     CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + OUString( "bar" )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), OUString( OUString( "foo" ) + "bar" + "baz" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< OUString, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" + "baz" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( u"foo"_ustr + u"bar"_ustr));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( u"foo"_ustr + u"bar"_ustr));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( u"foo"_ustr + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( u"foo"_ustr + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobarbaz"_ustr, OUString( u"foo"_ustr + "bar" + "baz" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< OUString, const char[ 4 ] >, const char[ 4 ] > )), typeid( u"foo"_ustr + "bar" + "baz" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( OUStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, const char[ 4 ] > )), typeid( OUStringBuffer( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( u"foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( OUStringLiteral( u"foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral<4>, const char[ 4 ] > )), typeid( OUStringLiteral( u"foo" ) + "bar" ));
     const char d1[] = "xyz";
-    CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
+    CPPUNIT_ASSERT_EQUAL( u"fooxyz"_ustr, OUString( u"foo"_ustr + d1 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( u"foo"_ustr + d1 ));
     const sal_Unicode* d2 = u"xyz";
-    CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d2 ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const sal_Unicode* > )), typeid( OUString( "foo" ) + d2 ));
+    CPPUNIT_ASSERT_EQUAL( u"fooxyz"_ustr, OUString( u"foo"_ustr + d2 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const sal_Unicode* > )), typeid( u"foo"_ustr + d2 ));
     const sal_Unicode d3[] = u"xyz";
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString::Concat( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( OUString::Concat( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "xyzbar" ), OUString( OUString::Concat( d1 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d1 ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( d1 ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString::Concat( u"foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( OUString::Concat( u"foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( u"foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "xyzbar" ), OUString( OUString::Concat( d2 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d2 ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode* >, const char[ 4 ] > )), typeid( OUString::Concat( d2 ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "xyzbar" ), OUString( OUString::Concat( d3 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d3 ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( d3 ) + "bar" ));
 
-    CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10 )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT32 > > )), typeid( OUString( "num" ) + OUString::number( 10 )));
-    CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10L )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT64 > > )), typeid( OUString( "num" ) + OUString::number( 10L )));
-    CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10ULL )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFUINT64 > > )), typeid( OUString( "num" ) + OUString::number( 10ULL )));
-    CPPUNIT_ASSERT_EQUAL( OUString( "num10.5" ), OUString( OUString( "num" ) + OUString::number( 10.5f )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "num" ) + OUString::number( 10.5f )));
-    CPPUNIT_ASSERT_EQUAL( OUString( "num10.5" ), OUString( OUString( "num" ) + OUString::number( 10.5 )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "num" ) + OUString::number( 10.5 )));
+    CPPUNIT_ASSERT_EQUAL( u"num10"_ustr, OUString( u"num"_ustr + OUString::number( 10 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT32 > > )), typeid( u"num"_ustr + OUString::number( 10 )));
+    CPPUNIT_ASSERT_EQUAL( u"num10"_ustr, OUString( u"num"_ustr + OUString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT64 > > )), typeid( u"num"_ustr + OUString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL( u"num10"_ustr, OUString( u"num"_ustr + OUString::number( 10ULL )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFUINT64 > > )), typeid( u"num"_ustr + OUString::number( 10ULL )));
+    CPPUNIT_ASSERT_EQUAL( u"num10.5"_ustr, OUString( u"num"_ustr + OUString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( u"num"_ustr + OUString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL( u"num10.5"_ustr, OUString( u"num"_ustr + OUString::number( 10.5 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( u"num"_ustr + OUString::number( 10.5 )));
 }
 
 void test::oustring::StringConcat::checkConcatAsciiL()
 {
     {
-        OUString s("foo");
+        OUString s(u"foo"_ustr);
         s += "";
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), s);
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, s);
     }
     {
-        OUString s("foo");
+        OUString s(u"foo"_ustr);
         s += "bar";
-        CPPUNIT_ASSERT_EQUAL(OUString("foobar"), s);
+        CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, s);
     }
 }
 
@@ -154,12 +154,12 @@ void test::oustring::StringConcat::checkEnsureCapacity()
 
 void test::oustring::StringConcat::checkAppend()
 {
-    OUString str( "foo" );
+    OUString str( u"foo"_ustr );
     str += OUStringLiteral( u"bar" ) + "baz";
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), str );
+    CPPUNIT_ASSERT_EQUAL( u"foobarbaz"_ustr, str );
     OUStringBuffer buf( "foo" );
     buf.append( OUStringLiteral( u"bar" ) + "baz" );
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), buf.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL( u"foobarbaz"_ustr, buf.makeStringAndClear());
 }
 
 #define INVALID_CONCAT( expression ) \
@@ -171,20 +171,20 @@ void test::oustring::StringConcat::checkAppend()
 void test::oustring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + "b"_ostr));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<const char*>("b") ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + "b"_ostr));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + OStringBuffer( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + static_cast<const char*>("b") ));
     char d[] = "b";
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + d ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<char*>(d) ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringLiteral( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString::Concat( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + 1 ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + d ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + static_cast<char*>(d) ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + OStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + OString::Concat( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString::number( 10 )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"b"_ustr + rs ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"b"_ustr + rus ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( u"a"_ustr + OString::number( 10 )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString::number( 0 ) + OString::number( 10 )));
 
 #if 0

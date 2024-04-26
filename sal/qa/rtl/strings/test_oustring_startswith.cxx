@@ -29,9 +29,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StartsWith);
 
 void test::oustring::StartsWith::startsWith()
 {
-    CPPUNIT_ASSERT( OUString( "foobar" ).startsWith( "foo" ));
-    CPPUNIT_ASSERT( !OUString( "foo" ).startsWith( "foobar" ));
-    CPPUNIT_ASSERT( !OUString( "foobar" ).startsWith( "oo" ));
+    CPPUNIT_ASSERT( u"foobar"_ustr.startsWith( "foo" ));
+    CPPUNIT_ASSERT( !u"foo"_ustr.startsWith( "foobar" ));
+    CPPUNIT_ASSERT( !u"foobar"_ustr.startsWith( "oo" ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

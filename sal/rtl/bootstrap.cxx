@@ -107,7 +107,7 @@ OUString recursivelyExpandMacros(
         if (requestStack->file == requestFile &&
             requestStack->key == requestKey)
         {
-            return "***RECURSION DETECTED***";
+            return u"***RECURSION DETECTED***"_ustr;
         }
     }
     ExpandRequestLink link = { requestStack, requestFile, requestKey };
@@ -232,7 +232,7 @@ static OUString getIniFileName(bool overriding) {
         : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
     resolvePathnameUrl(&fileName);
 #else
-    if (!overriding && getFromCommandLineArgs("INIFILENAME", &fileName))
+    if (!overriding && getFromCommandLineArgs(u"INIFILENAME"_ustr, &fileName))
     {
         resolvePathnameUrl(&fileName);
     }
@@ -245,7 +245,7 @@ static OUString getIniFileName(bool overriding) {
             fileName = fileName.replaceAt(i, fileName.getLength() - i, u"fundamental.override.ini");
         } else {
             // get rid of a potential executable extension
-            OUString progExt = ".bin";
+            OUString progExt = u".bin"_ustr;
             if (fileName.getLength() > progExt.getLength()
                 && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
             {
@@ -445,7 +445,7 @@ struct FundamentalIniData
         OUString uri;
         ini =
             (get_static_bootstrap_handle()->getValue(
-                "URE_BOOTSTRAP", &uri.pData, nullptr, LookupMode::NORMAL, false,
+                u"URE_BOOTSTRAP"_ustr, &uri.pData, nullptr, LookupMode::NORMAL, false,
                 nullptr)
              && resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : nullptr;
@@ -486,14 +486,14 @@ bool Bootstrap_Impl::getValue(
     if (key == "_OS")
     {
         rtl_uString_assign(
-            value, OUString(RTL_OS).pData);
+            value, (u"" RTL_OS ""_ustr).pData);
         return true;
     }
 
     if (key == "_ARCH")
     {
         rtl_uString_assign(
-            value, OUString(RTL_ARCH).pData);
+            value, (u"" RTL_ARCH ""_ustr).pData);
         return true;
     }
 
@@ -501,9 +501,7 @@ bool Bootstrap_Impl::getValue(
     {
         rtl_uString_assign(
             value,
-            (OUString(
-                SAL_STRINGIFY(CPPU_ENV)).
-             pData));
+            (u"" SAL_STRINGIFY(CPPU_ENV) ""_ustr).pData);
         return true;
     }
 

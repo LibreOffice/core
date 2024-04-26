@@ -76,16 +76,16 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
 {
     if(access( file, R_OK ) != 0)
         return; // cannot read info from the binary file anyway
-    OUString binary("addr2line");
+    OUString binary(u"addr2line"_ustr);
     OUString dummy;
 #if defined __clang__
     // llvm-addr2line is faster than addr2line
-    if(osl::detail::find_in_PATH("llvm-addr2line", dummy))
+    if(osl::detail::find_in_PATH(u"llvm-addr2line"_ustr, dummy))
         binary = "llvm-addr2line";
 #endif
     if(!osl::detail::find_in_PATH(binary, dummy))
         return; // Will not work, avoid warnings from osl process code.
-    OUString arg1("-Cfe");
+    OUString arg1(u"-Cfe"_ustr);
     OUString arg2 = OUString::fromUtf8(file);
     std::vector<OUString> addrs;
     std::vector<rtl_uString*> args;
