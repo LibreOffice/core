@@ -116,7 +116,7 @@ public:
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, std::u16string_view rName);
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
+    virtual bool renameItem(ThumbnailViewItem& rItem, const OUString& sNewTitle) override;
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 

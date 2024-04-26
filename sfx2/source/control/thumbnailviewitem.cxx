@@ -107,7 +107,7 @@ void ThumbnailViewItem::setHighlight (bool state)
 
 void ThumbnailViewItem::setTitle (const OUString& rTitle)
 {
-    if (mrParent.renameItem(this, rTitle))
+    if (mrParent.renameItem(*this, rTitle))
         maTitle = rTitle;
 }
 

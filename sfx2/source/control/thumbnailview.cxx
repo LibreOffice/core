@@ -52,7 +52,7 @@ using namespace drawinglayer::primitive2d;
 
 constexpr int gnFineness = 5;
 
-bool ThumbnailView::renameItem(ThumbnailViewItem*, const OUString&)
+bool ThumbnailView::renameItem(ThumbnailViewItem&, const OUString&)
 {
     // Do nothing by default
     return false;
@@ -416,11 +416,11 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
     {
-        ThumbnailViewItem *const pItem = mFilteredItemList[i];
+        ThumbnailViewItem& rItem = *mFilteredItemList[i];
 
 #if !ENABLE_WASM_STRIP_RECENT
         // tdf#38742 - show pinned items in a separate line
-        if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(pItem))
+        if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(&rItem))
         {
             if (bPinnedItems && !pRecentDocsItem->isPinned())
             {
@@ -438,23 +438,23 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 
         if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
         {
-            if( !pItem->isVisible())
+            if( !rItem.isVisible())
             {
                 if ( ImplHasAccessibleListeners() )
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
+                    aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible( false ));
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
-                pItem->show(true);
+                rItem.show(true);
 
-                maItemStateHdl.Call(pItem);
+                maItemStateHdl.Call(&rItem);
             }
 
-            pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
+            rItem.setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+            rItem.calculateItemsPosition(mnThumbnailHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
 
             if ( !((nCurCount+1) % mnCols) )
             {
@@ -466,19 +466,19 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         }
         else
         {
-            if( pItem->isVisible())
+            if( rItem.isVisible())
             {
                 if ( ImplHasAccessibleListeners() )
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
+                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible( false ));
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
-                pItem->show(false);
+                rItem.show(false);
 
-                maItemStateHdl.Call(pItem);
+                maItemStateHdl.Call(&rItem);
             }
 
         }

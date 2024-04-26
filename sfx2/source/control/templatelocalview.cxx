@@ -598,13 +598,11 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
     return false;
 }
 
-bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle)
+bool TemplateLocalView::renameItem(ThumbnailViewItem& rItem, const OUString& sNewTitle)
 {
     sal_uInt16 nRegionId = 0;
     sal_uInt16 nDocId = USHRT_MAX;
-    TemplateViewItem* pDocItem = dynamic_cast<TemplateViewItem*>( pItem );
-
-    if ( pDocItem )
+    if (TemplateViewItem* pDocItem = dynamic_cast<TemplateViewItem*>(&rItem))
     {
         nRegionId = pDocItem->mnRegionId;
         nDocId = pDocItem->mnDocId;
@@ -641,8 +639,8 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
 
         OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
         sHelpText = (sHelpText.replaceFirst("$1", sNewTitle)).replaceFirst("$2", sRegionName);
-        pItem->setHelpText(sHelpText);
-        pItem->maTitle = sNewTitle;
+        rItem.setHelpText(sHelpText);
+        rItem.maTitle = sNewTitle;
     }
     return bRes;
 }
