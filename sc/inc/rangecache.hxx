@@ -91,8 +91,10 @@ public:
         }
     };
 
+    /// Returns if the cache values in rows.
+    bool isRowSearch() const { return mRowSearch; }
+
     const std::vector<SCROW>& sortedRows() const { return mSortedRows; }
-    size_t size() const { return mSortedRows.size(); }
     size_t indexForRow(SCROW row) const
     {
         assert(row >= maRange.aStart.Row() && row <= maRange.aEnd.Row());
@@ -101,13 +103,24 @@ public:
     }
     SCROW rowForIndex(size_t index) const { return mSortedRows[index]; }
 
+    const std::vector<SCCOLROW>& sortedCols() const { return mSortedCols; }
+    size_t indexForCol(SCCOL col) const
+    {
+        assert(col >= maRange.aStart.Col() && col <= maRange.aEnd.Col());
+        assert(mColToIndex[col - maRange.aStart.Col()] != mSortedCols.max_size());
+        return mColToIndex[col - maRange.aStart.Col()];
+    }
+    SCCOL colForIndex(size_t index) const { return mSortedCols[index]; }
+
 private:
-    // Rows sorted by their value.
-    std::vector<SCROW> mSortedRows;
+    std::vector<SCROW> mSortedRows; // Rows sorted by their value.
+    std::vector<SCCOLROW> mSortedCols; // Cols sorted by their value.
     std::vector<size_t> mRowToIndex; // indexed by 'SCROW - maRange.aStart.Row()'
+    std::vector<size_t> mColToIndex; // indexed by 'SCCOL - maRange.aStart.Col()'
     ScRange maRange;
     ScDocument* mpDoc;
     bool mValid;
+    bool mRowSearch;
     ValueType mValueType;
     ScQueryOp mQueryOp;
     ScQueryEntry::QueryType mQueryType;

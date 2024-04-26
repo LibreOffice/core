@@ -89,9 +89,9 @@ protected:
     SCROW           nRow;
 
     class NonEmptyCellIndexer;
-    typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
-    static NonEmptyCellIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
-        SCROW nStartRow, SCROW nEndRow);
+    typedef std::pair<ScRefCellValue, SCCOLROW> BinarySearchCellType;
+    static NonEmptyCellIndexer MakeBinarySearchIndexer(const sc::CellStoreType* pCells,
+        SCCOLROW nStartRow, SCCOLROW nEndRow);
 };
 
 // The implementation using ScSortedRangeCache, which allows sorted iteration
@@ -108,6 +108,7 @@ protected:
         const ScQueryParam& rParam, bool bReverseSearch );
     void InitPosStart(sal_uInt8 nSortedBinarySearch = 0x00);
     void InitPosFinish( SCROW beforeRow, SCROW lastRow, bool bFirstMatch );
+    void InitPosColFinish( SCCOL beforeCol, SCCOL lastCol, bool bFirstMatch );
     void IncPos() { IncPosImpl<false>(); }
     bool IncPosFast() { return IncPosImpl<true>(); }
     void IncBlock() { IncPos(); } // Cannot skip entire block, not linear.
@@ -133,9 +134,9 @@ protected:
     size_t sortedCachePosLast;
 
     class SortedCacheIndexer;
-    typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
-    SortedCacheIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
-        SCROW nStartRow, SCROW nEndRow);
+    typedef std::pair<ScRefCellValue, SCCOLROW> BinarySearchCellType;
+    SortedCacheIndexer MakeBinarySearchIndexer(const sc::CellStoreType* pCells,
+        SCCOLROW nStartRow, SCCOLROW nEndRow);
 };
 
 // Data and functionality for specific types of query.
@@ -210,16 +211,16 @@ protected:
     // and return if HandleItemFound() returns true.
     void PerformQuery();
 
-    /* Only works if no regular expression is involved, only searches for rows in one column,
-       and only the first query entry is considered with simple conditions SC_LESS,SC_LESS_EQUAL,
-       SC_EQUAL (sorted ascending) or SC_GREATER,SC_GREATER_EQUAL (sorted descending). It
-       delivers a starting point set to nRow, i.e. the last row that either matches the searched
-       for value, or the last row that matches the condition. Continue with e.g. GetThis() and
-       GetNext() afterwards. Returns false if the searched for value is not in the search range
-       or if the range is not properly sorted, with nRow in that case set to the first row or after
-       the last row. In that case use GetFirst().
+    /* Only works if no regular expression is involved, only searches for rows in one column or
+       only searches for cols in one row, and only the first query entry is considered with simple
+       conditions SC_LESS,SC_LESS_EQUAL, SC_EQUAL (sorted ascending) or SC_GREATER,SC_GREATER_EQUAL
+       (sorted descending). It delivers a starting point set to nRow/nCol, i.e. the last row/col that
+       either matches the searched for value, or the last row/col that matches the condition.
+       Continue with e.g. GetThis() and GetNext() afterwards. Returns false if the searched for value
+       is not in the search range or if the range is not properly sorted, with nRow/nCol in that case
+       set to the first row or after the last row. In that case use GetFirst().
     */
-    bool BinarySearch( SCCOL col, bool forEqual = false );
+    bool BinarySearch( SCCOLROW col_row, bool forEqual = false );
 
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
@@ -269,6 +270,7 @@ public:
     void            SetAdvanceQueryParamEntryField( bool bVal )
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
+    void            AdvanceQueryParamEntryFieldForBinarySearch();
 
     void            SetSortedBinarySearchMode( sal_Int8 nSearchMode )
                         {
