@@ -50,8 +50,4 @@
 // Separator between layout name and template name of presentation templates
 inline constexpr OUString SD_LT_SEPARATOR = u"~LT~"_ustr;
 
-// option-stream identifier
-#define SD_OPTION_MORPHING  u"Morph"
-#define SD_OPTION_VECTORIZE u"Vectorize"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
