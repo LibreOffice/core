@@ -6299,7 +6299,10 @@ else
     PathFormat "${absolute_path}"
     TARFILE_LOCATION="${formatted_path_unix}"
 fi
+PathFormat "$TARFILE_LOCATION"
+TARFILE_LOCATION_NATIVE="$formatted_path"
 AC_SUBST(TARFILE_LOCATION)
+AC_SUBST(TARFILE_LOCATION_NATIVE)
 
 AC_MSG_CHECKING([whether we want to fetch tarballs])
 if test "$enable_fetch_external" != "no"; then
