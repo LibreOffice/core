@@ -33,7 +33,7 @@ public:
 
     SbiDllMgr();
 
-#if defined(_WIN32) && !defined(_ARM64_)
+#if defined(_WIN32)
     ~SbiDllMgr();
 #endif
 
@@ -44,7 +44,7 @@ public:
     void FreeDll(OUString const & library);
 
 private:
-#if defined(_WIN32) && !defined(_ARM64_)
+#if defined(_WIN32)
     struct Impl;
 
     std::unique_ptr< Impl > impl_;

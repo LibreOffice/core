@@ -150,7 +150,7 @@ $(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-x86 \
 ))
 else
-ifeq ($(OS)$(CPUNAME),WNTX86_64)
+ifeq ($(OS)$(filter-out AARCH64 X86_64,$(CPUNAME)),WNT)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x64 \
 ))
