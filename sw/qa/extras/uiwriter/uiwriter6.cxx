@@ -55,6 +55,10 @@
 #include <wrthtml.hxx>
 #include <dbmgr.hxx>
 #include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
+#include <flyfrms.hxx>
+#include <tabfrm.hxx>
 #include <unotxdoc.hxx>
 #include <wrong.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -1470,6 +1474,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
 
     // this was 396 (not modified row height previously)
     CPPUNIT_ASSERT_EQUAL(tools::Long(810), pCellA1->getFrameArea().Height());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
+{
+    createSwDoc("tdf160842.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // the cursor is not in the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow2 = pTable->GetLower()->GetNext();
+    CPPUNIT_ASSERT(pRow2->IsRowFrame());
+    auto pCellA2 = pRow2->GetLower();
+    CPPUNIT_ASSERT(pCellA2);
+    const SwRect& rCellA2Rect = pCellA2->getFrameArea();
+    auto nRowHeight = rCellA2Rect.Height();
+    // select center of the bottom cell
+    Point ptFrom(rCellA2Rect.Left() + rCellA2Rect.Width() / 2, rCellA2Rect.Top() + nRowHeight / 2);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    rEditWin.MouseButtonUp(aClickEvent);
+
+    // the cursor is in the table
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)

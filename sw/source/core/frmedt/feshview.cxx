@@ -68,6 +68,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sectfrm.hxx>
+#include <rowfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
@@ -1390,6 +1391,27 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                         bRet = false;
                         break;
                     }
+                }
+            }
+
+            // within table row, where image cropped by the fixed table row height,
+            // click position must be in the cell, where the image anchored as character
+            if ( bRet && pContact && pContact->ObjAnchoredAsChar() )
+            {
+                if ( const SwTableBox *pBox = pContact->GetAnchorNode().GetTableBox() )
+                {
+                    SwIterator<SwRowFrame, SwFormat> aIter( *pBox->GetUpper()->GetFrameFormat() );
+                    bool bContainsClickPosition = false;
+                    for (SwRowFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    {
+                        if ( pFrame->getFrameArea().Contains( rPt ) )
+                        {
+                            bContainsClickPosition = true;
+                            break;
+                        }
+                    }
+                    if ( !bContainsClickPosition )
+                        bRet = false;
                 }
             }
         }
