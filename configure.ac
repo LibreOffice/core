@@ -2810,6 +2810,13 @@ AC_ARG_WITH(gtk3-build,
         [(Windows-only) In order to build GtkTiledViewer on Windows, pass the path
          to a GTK3 build, like '--with-gtk3-build=C:/gtk-build/gtk/x64/release'.]))
 
+AC_ARG_WITH(keep-awake,
+    AS_HELP_STRING([--with-keep-awake],
+        [command to prefix make with in order to prevent the system from going to sleep/suspend
+         while building.
+         If no command is specified, defaults to using Awake (from Microsoft PowerToys) on Windows
+         and caffeinate on macOS]))
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -15242,6 +15249,40 @@ AC_SUBST(JQ)
 AC_SUBST(SYSTEMD_ESCAPE)
 AC_SUBST(SYSTEMD_RUN)
 AC_SUBST(WITH_COREDUMPCTL)
+
+dnl ===================================================================
+dnl Checking whether to use a keep-awake helper
+dnl ===================================================================
+#"
+AC_MSG_CHECKING([whether to keep the system awake/prevent it from going into sleep/standby])
+if test -z "$with_keep_awake" -o "$with_keep_awake" = "no"; then
+    AC_MSG_RESULT([no])
+elif test "$with_keep_awake" = "yes"; then
+    AC_MSG_RESULT([yes (autodetect)])
+    AC_MSG_CHECKING([for a suitable keep-awake command])
+    if test "$_os" = "WINNT"; then
+        PathFormat "$(perl.exe -e 'print $ENV{"PROGRAMFILES"}')"
+        if test -f "$formatted_path_unix/PowerToys/PowerToys.Awake.exe"; then
+            AC_MSG_RESULT([using "Awake"])
+            # need to pass the windows-PID to awake, so get the PGID of the shell first to get
+            # make's PID and then use that to get the windows-PID.
+            # lots of quoting for both make ($$) as well as configure ('"'"') make that command
+            # much scarier looking than it actually is. Using make's shell instead of subshells in
+            # the recipe to keep the command that's echoed by make short.
+            KEEP_AWAKE_CMD=$formatted_path/PowerToys/PowerToys.Awake.exe' --display-on False --pid $(shell ps | awk '"'"'/^\s+'"'"'$$(ps | awk '"'"'/^\s+'"'"'$$$$'"'"'\s+/{print $$3}'"'"')'"'"'\s+/{print $$4}'"'"') &'
+        else
+            AC_MSG_ERROR(["Awake" not found - install Microsoft PowerToys or specify a custom command])
+        fi
+    elif test "$_os" = "Darwin"; then
+        AC_MSG_RESULT([using "caffeinate"])
+        KEEP_AWAKE_CMD="caffeinate"
+    else
+        AC_MSG_ERROR([no default available for $_os, please specify manually])
+    fi
+else
+    AC_MSG_RESULT([yes (custom command: $with_keep_awake)])
+fi
+AC_SUBST(KEEP_AWAKE_CMD)
 
 dnl ===================================================================
 dnl Setting up the environment.

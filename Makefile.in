@@ -91,19 +91,19 @@ define gb_Top_GbuildModuleRules
 .PHONY: $(1).allbuild $(1).buildall $(1).allcheck $(1).checkall
 
 $(1): bootstrap fetch
-	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
-	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).allbuild $(1).buildall: bootstrap fetch
-	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
 
 $(1).allcheck $(1).checkall: bootstrap fetch
-	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
 
 $(1).all:
 	@echo "'make $(1).all' was renamed to 'make $(1).allcheck' (or use 'make $(1).allbuild' to build without unit tests)"
@@ -170,10 +170,10 @@ gbuild_TARGETS := AllLangHelp \
 
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)) UIConfig_modules/% %.genpatch: bootstrap fetch
-	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 $(gbuild_TARGETS):
-	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
 # Clean
@@ -291,9 +291,9 @@ bootstrap: check-if-root compilerplugins
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset,install-gdb-printers) \
     $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check)))
-	$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),iOS)
-	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
 build-non-l10n-only build-l10n-only check debugrun translations packageinfo coverage $(gb_Top_MODULE_CHECK_TARGETS): build
