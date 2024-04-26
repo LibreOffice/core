@@ -263,12 +263,6 @@ void SwXMLExport::ExportAutoStyles_()
     if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
         GetTextParagraphExport()->exportUsedDeclarations();
 
-    // exported in ExportContent_
-    if( getExportFlags() & SvXMLExportFlags::CONTENT )
-    {
-        GetTextParagraphExport()->exportTrackedChanges( true );
-    }
-
     GetTextParagraphExport()->exportTextAutoStyles();
     GetShapeExport()->exportAutoStyles();
     if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )

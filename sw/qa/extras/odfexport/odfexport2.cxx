@@ -1602,6 +1602,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
     assertXPath(pXmlDoc, P + "/style:text-properties", "font-style"_ostr, u"italic"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDeletedTableAutostylesExport)
+{
+    // Given a document with deleted table:
+    // it must not assert on export because of missing format for an exported table
+    loadAndReload("deleted_table.fodt");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

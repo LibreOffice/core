@@ -1684,6 +1684,9 @@ void XMLTextParagraphExport::collectTextAutoStylesAndNodeExportOrder(bool bIsPro
             }
         }
 
+    if (GetExport().getExportFlags() & SvXMLExportFlags::CONTENT)
+        exportTrackedChanges(true);
+
     mbCollected = true;
 }
 
