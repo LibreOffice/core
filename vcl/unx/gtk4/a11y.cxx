@@ -528,11 +528,9 @@ static GtkATContext* lo_accessible_get_at_context(GtkAccessible* self)
 {
     LoAccessible* pAccessible = LO_ACCESSIBLE(self);
 
-    GtkAccessibleRole eRole = map_accessible_role(pAccessible->uno_accessible);
-
-    if (!pAccessible->at_context
-        || gtk_at_context_get_accessible_role(pAccessible->at_context) != eRole)
+    if (!pAccessible->at_context)
     {
+        GtkAccessibleRole eRole = map_accessible_role(pAccessible->uno_accessible);
         pAccessible->at_context = gtk_at_context_create(eRole, self, pAccessible->display);
         if (!pAccessible->at_context)
             return nullptr;
@@ -797,13 +795,13 @@ static GtkATContext* get_at_context(GtkAccessible* self)
 
     css::uno::Reference<css::accessibility::XAccessible> xAccessible(
         get_uno_accessible(GTK_WIDGET(pFixed)));
-    GtkAccessibleRole eRole = map_accessible_role(xAccessible);
 
-    if (!pFixed->at_context || gtk_at_context_get_accessible_role(pFixed->at_context) != eRole)
+    if (!pFixed->at_context)
     {
         //        if (pFixed->at_context)
         //            g_clear_object(&pFixed->at_context);
 
+        GtkAccessibleRole eRole = map_accessible_role(xAccessible);
         pFixed->at_context
             = gtk_at_context_create(eRole, self, gtk_widget_get_display(GTK_WIDGET(pFixed)));
         if (!pFixed->at_context)
