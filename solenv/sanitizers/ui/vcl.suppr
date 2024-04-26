@@ -4,7 +4,6 @@ vcl/uiconfig/ui/aboutbox.ui://GtkTextView[@id='version'] no-labelled-by
 vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='description'] orphan-label
 vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='copyright'] orphan-label
 vcl/uiconfig/ui/combobox.ui://GtkEntry[@id='entry'] no-labelled-by
-vcl/uiconfig/ui/combobox.ui://GtkToggleButton[@id='button'] button-no-label
 vcl/uiconfig/ui/combobox.ui://GtkMenuButton[@id='overlaybutton'] button-no-label
 vcl/uiconfig/ui/cupspassworddialog.ui://GtkLabel[@id='text'] orphan-label
 vcl/uiconfig/ui/editmenu.ui://GtkMenuItem[@id='specialchar'] button-no-label

@@ -17,7 +17,6 @@ sc/uiconfig/scalc/ui/conditionalentry.ui://GtkEntry[@id='val1'] no-labelled-by
 sc/uiconfig/scalc/ui/conditionalentry.ui://GtkEntry[@id='val2'] no-labelled-by
 sc/uiconfig/scalc/ui/conditionalentry.ui://GtkComboBoxText[@id='iconsettype'] no-labelled-by
 sc/uiconfig/scalc/ui/conditionalentry.ui://GtkEntry[@id='formula'] no-labelled-by
-sc/uiconfig/scalc/ui/conditionaliconset.ui://GtkLabel[@id='label'] orphan-label
 sc/uiconfig/scalc/ui/conditionaliconset.ui://GtkEntry[@id='entry'] no-labelled-by
 sc/uiconfig/scalc/ui/conditionaliconset.ui://GtkComboBoxText[@id='listbox'] no-labelled-by
 sc/uiconfig/scalc/ui/conditionaliconset.ui://GtkImage[@id='icon'] no-labelled-by
