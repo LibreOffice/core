@@ -100,7 +100,7 @@ public:
 
 }
 
-class SD_DLLPUBLIC SdNavigatorWin : public PanelLayout, public sfx2::sidebar::IContextChangeReceiver
+class SAL_DLLPUBLIC_RTTI SdNavigatorWin : public PanelLayout, public sfx2::sidebar::IContextChangeReceiver
 {
 public:
     typedef ::std::function<void ()> UpdateRequestFunctor;
@@ -112,18 +112,18 @@ public:
             update is necessary.  When <FALSE/> the navigator will
             rely on others to trigger updates.
     */
-    SdNavigatorWin(weld::Widget* pParent, SfxBindings* pBindings, SfxNavigator* pNavigatorDlg);
+    SD_DLLPUBLIC SdNavigatorWin(weld::Widget* pParent, SfxBindings* pBindings, SfxNavigator* pNavigatorDlg);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin() override;
 
-    void                        InitTreeLB( const SdDrawDocument* pDoc );
+    SD_DLLPUBLIC void           InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
     void                        FirstFocus();
 
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    SdPageObjsTLV&              GetObjects();
+    SD_DLLPUBLIC SdPageObjsTLV& GetObjects();
 
     virtual void HandleContextChange(const vcl::EnumContext& eContext) override;
 

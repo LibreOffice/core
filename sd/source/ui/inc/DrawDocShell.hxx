@@ -48,7 +48,7 @@ class ViewShell;
 class DrawViewShell;
 
 // DrawDocShell
-class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
+class SAL_DLLPUBLIC_RTTI DrawDocShell : public SfxObjectShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL)
@@ -59,7 +59,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    DrawDocShell (
+    SD_DLLPUBLIC DrawDocShell (
         SfxObjectCreateMode eMode,
         bool bSdDataObj,
         DocumentType);
@@ -130,7 +130,7 @@ public:
 
     void                    GotoBookmark(std::u16string_view rBookmark);
 
-    BitmapEx                GetPagePreviewBitmap(SdPage* pPage);
+    SD_DLLPUBLIC BitmapEx GetPagePreviewBitmap(SdPage* pPage);
 
     /** checks, if the given name is a valid new name for a slide
 

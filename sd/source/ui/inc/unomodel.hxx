@@ -61,7 +61,7 @@ class DrawViewShell;
 extern OUString getPageApiName( SdPage const * pPage );
 extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
-class SD_DLLPUBLIC SdXImpressDocument final : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
+class SAL_DLLPUBLIC_RTTI SdXImpressDocument final : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
                            public SvxFmMSFactory,
                            public css::drawing::XDrawPageDuplicator,
                            public css::drawing::XLayerSupplier,
@@ -170,7 +170,7 @@ public:
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL duplicate( const css::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
 
     // XDrawPagesSupplier
-    virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages(  ) override;
+    SD_DLLPUBLIC virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages(  ) override;
 
     // XMasterPagesSupplier
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getMasterPages(  ) override;
@@ -224,7 +224,7 @@ public:
     virtual void SAL_CALL render( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
 
     // ITiledRenderable
-    virtual void paintTile( VirtualDevice& rDevice,
+    SD_DLLPUBLIC virtual void paintTile( VirtualDevice& rDevice,
                             int nOutputWidth,
                             int nOutputHeight,
                             int nTilePosX,
@@ -232,12 +232,12 @@ public:
                             tools::Long nTileWidth,
                             tools::Long nTileHeight ) override;
     virtual Size getDocumentSize() override;
-    virtual void setPart(   int nPart, bool bAllowChangeFocus = true ) override;
-    virtual int  getPart() override;
-    virtual int  getParts() override;
-    virtual OUString getPartName( int nPart ) override;
-    virtual OUString getPartHash( int nPart ) override;
-    virtual VclPtr<vcl::Window> getDocWindow() override;
+    SD_DLLPUBLIC virtual void setPart(   int nPart, bool bAllowChangeFocus = true ) override;
+    SD_DLLPUBLIC virtual int  getPart() override;
+    SD_DLLPUBLIC virtual int  getParts() override;
+    SD_DLLPUBLIC virtual OUString getPartName( int nPart ) override;
+    SD_DLLPUBLIC virtual OUString getPartHash( int nPart ) override;
+    SD_DLLPUBLIC virtual VclPtr<vcl::Window> getDocWindow() override;
     bool isMasterViewMode();
 
     /// @see vcl::ITiledRenderable::setPartMode().
@@ -247,19 +247,19 @@ public:
     /// @see vcl::ITiledRenderable::setEditMode().
     virtual void setEditMode(int) override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+    SD_DLLPUBLIC virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().
-    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
+    SD_DLLPUBLIC virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
     /// @see vcl::ITiledRenderable::postMouseEvent().
-    virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
+    SD_DLLPUBLIC virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
     /// @see vcl::ITiledRenderable::setTextSelection().
-    virtual void setTextSelection(int nType, int nX, int nY) override;
+    SD_DLLPUBLIC virtual void setTextSelection(int nType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::getSelection().
-    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
+    SD_DLLPUBLIC virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
-    virtual void setGraphicSelection(int nType, int nX, int nY) override;
+    SD_DLLPUBLIC virtual void setGraphicSelection(int nType, int nX, int nY) override;
     /// @see lok::Document::resetSelection().
-    virtual void resetSelection() override;
+    SD_DLLPUBLIC virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
     /// @see vcl::ITiledRenderable::setClipboard().
@@ -285,7 +285,7 @@ public:
     virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
+    SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
     // XComponent
 

@@ -74,7 +74,7 @@ class ViewShellBase;
     The implementation of the XControllerManager interface is not yet in its
     final form.
 */
-class SD_DLLPUBLIC DrawController final
+class SAL_DLLPUBLIC_RTTI DrawController final
     : public DrawControllerInterfaceBase,
       private BroadcastHelperOwner,
       public ::cppu::OPropertySetHelper
@@ -160,7 +160,11 @@ public:
     */
     void ReleaseViewShellBase();
 
-    DECLARE_XINTERFACE()
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
+    SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
+
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
@@ -213,7 +217,7 @@ public:
 
     // XControllerManager
 
-    virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
+    SD_DLLPUBLIC virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
         getConfigurationController() override;
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL

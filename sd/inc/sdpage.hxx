@@ -88,7 +88,7 @@ namespace sd {
     class UndoAttrObject;
 }
 
-class SD_DLLPUBLIC SdPage final : public FmFormPage, public SdrObjUserCall
+class SAL_DLLPUBLIC_RTTI SdPage final : public FmFormPage, public SdrObjUserCall
 {
     SdPage& operator=(const SdPage&) = delete;
     SdPage(const SdPage&) = delete;
@@ -163,10 +163,10 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
-    rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
-    void            DestroyDefaultPresObj(PresObjKind eObjKind);
-    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
+    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
+    SD_DLLPUBLIC rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
+    SD_DLLPUBLIC void DestroyDefaultPresObj(PresObjKind eObjKind);
+    SD_DLLPUBLIC SdrObject* GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     OUString        GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
@@ -183,7 +183,7 @@ public:
     /** inserts the given SdrObject into the presentation object list */
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
-    void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
+    SD_DLLPUBLIC void SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit);
@@ -262,7 +262,7 @@ public:
     void            ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rNewBorderRect,
                          bool bScaleAllObj);
 
-    const OUString& GetName() const;
+    SD_DLLPUBLIC const OUString& GetName() const;
     OUString const & GetRealName() const { return FmFormPage::GetName(); };
 
     void            SetPresentationLayout(std::u16string_view rLayoutName,
@@ -313,10 +313,10 @@ public:
 
     /** Set the name of the page and broadcast a model change.
     */
-    void SetName (const OUString& rName);
+    SD_DLLPUBLIC void SetName(const OUString& rName);
 
-    const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
-    void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );
+    SD_DLLPUBLIC const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
+    SD_DLLPUBLIC void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );
 
     /**
         @return true if the object from the ViewObjectContact should
