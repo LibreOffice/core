@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
@@ -916,6 +917,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
         }
         else
         {
+            bool bIsLOK = comphelper::LibreOfficeKit::isActive();
             bool bSystemLanguage = false;
             LanguageType nLang = pEntry->GetLanguage();
             if (nLang == LANGUAGE_SYSTEM)
@@ -923,7 +925,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 bSystemLanguage = true;
                 nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
             }
-            if (nLang != LANGUAGE_ENGLISH_US)
+            if (!bIsLOK && nLang != LANGUAGE_ENGLISH_US)
             {
                 sal_Int32 nCheckPos;
                 SvNumFormatType nType = SvNumFormatType::DEFINED;
