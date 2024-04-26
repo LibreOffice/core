@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-java -jar @TARFILE_LOCATION@/@OFFICEOTRON_JAR@ "$@"
+java -jar @TARFILE_LOCATION_NATIVE@/@OFFICEOTRON_JAR@ "$@"
