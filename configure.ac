@@ -337,7 +337,8 @@ if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q mingw64); then
     STRAWBERRY_PERL="$formatted_path/perl/bin/perl.exe"
     AC_ARG_WITH([wsl-command],
         [AS_HELP_STRING([--with-wsl-command],
-            [Specify your wsl distro command if it isn't the default/the one used with just wsl.exe])],
+            [Specify your wsl distro command if it isn't the default/the one used with just wsl.exe –
+             for example: wsl.exe -d MyDistro -u NonDefaultUser])],
         [],
         [with_wsl_command="wsl.exe"])
     WSL="$with_wsl_command"
@@ -15468,10 +15469,11 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     PERL="perl.exe"
     # use flex, gperf and nasm from wsl-container
     # if using absolute path, would need to use double-leading slash for the msys path mangling
-    FLEX="wsl.exe $FLEX"
-    NASM="wsl.exe $NASM"
-    # some externals (libebook) checks with AC_PATH_PROGS, and that requires argument to begin with slash...
-    GPERF="/c/Windows/system32/wsl.exe gperf"
+    FLEX="$WSL $FLEX"
+    NASM="$WSL $NASM"
+    # some externals (libebook) check for it with AC_PATH_PROGS, and that only accepts overrides
+    # with an absolute path/requires the value to begin with a slash
+    GPERF="/c/Windows/system32/$WSL gperf"
     # append strawberry tools dir to PATH (for e.g. windres, ar)
     LO_PATH="$LO_PATH:$STRAWBERRY_TOOLS"
     # temp-dir needs to be in windows realm, hardcode for now

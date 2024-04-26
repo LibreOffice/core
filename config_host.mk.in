@@ -792,8 +792,8 @@ include @SRC_ROOT@/download.lst
 
 KEEP_AWAKE_CMD=@KEEP_AWAKE_CMD@
 
-# prep for WSL-as-helper-builds where build runs from within git-bash/MSYS that would otherwise
-# messes with anything that looks like a path (starts with /) but it cannot resolve
+# used for WSL-as-helper-builds where the build runs from within git-bash/MSYS that otherwise would
+# mess with anything that looks like a path (starts with a /) but cannot be resolved to a target
 export MSYS_NO_PATHCONV=1
 STRAWBERRY_PERL=@STRAWBERRY_PERL@
 WSL=@WSL@
