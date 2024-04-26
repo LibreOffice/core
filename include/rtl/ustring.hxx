@@ -357,7 +357,7 @@ public:
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         pData = NULL;
-        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if SAL_CONSTEXPR (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromLiteral(
@@ -620,7 +620,7 @@ public:
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if SAL_CONSTEXPR (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromLiteral(
