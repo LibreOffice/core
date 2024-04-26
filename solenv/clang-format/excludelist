@@ -9900,7 +9900,6 @@ sd/source/ui/slidesorter/cache/SlsBitmapCompressor.cxx
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.cxx
 sd/source/ui/slidesorter/cache/SlsCacheCompactor.cxx
 sd/source/ui/slidesorter/cache/SlsCacheCompactor.hxx
-sd/source/ui/slidesorter/cache/SlsCacheConfiguration.cxx
 sd/source/ui/slidesorter/cache/SlsGenericPageCache.cxx
 sd/source/ui/slidesorter/cache/SlsGenericPageCache.hxx
 sd/source/ui/slidesorter/cache/SlsPageCache.cxx

@@ -22,11 +22,10 @@
 
 #include "SlsBitmapCompressor.hxx"
 #include "SlsBitmapCache.hxx"
-#include "SlsCacheConfiguration.hxx"
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <utility>
 
 using namespace ::com::sun::star::uno;
@@ -86,27 +85,21 @@ namespace sd::slidesorter::cache {
     static const char sNone[] = "None";
 
     std::shared_ptr<BitmapCompressor> pCompressor;
-    OUString sCompressionPolicy("PNGCompression");
-    Any aCompressionPolicy (CacheConfiguration::Instance()->GetValue("CompressionPolicy"));
-    if (aCompressionPolicy.has<OUString>())
-        aCompressionPolicy >>= sCompressionPolicy;
+    OUString sCompressionPolicy = officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::PreviewCache::CompressionPolicy::get();
     if (sCompressionPolicy == sNone)
         pCompressor = std::make_shared<NoBitmapCompression>();
     else if (sCompressionPolicy == "Erase")
         pCompressor = std::make_shared<CompressionByDeletion>();
     else if (sCompressionPolicy == "ResolutionReduction")
         pCompressor = std::make_shared<ResolutionReduction>();
-    else
+    else // default: "PNGCompression"
         pCompressor = std::make_shared<PngCompression>();
 
     ::std::unique_ptr<CacheCompactor> pCompactor;
-    OUString sCompactionPolicy("Compress");
-    Any aCompactionPolicy (CacheConfiguration::Instance()->GetValue("CompactionPolicy"));
-    if (aCompactionPolicy.has<OUString>())
-        aCompactionPolicy >>= sCompactionPolicy;
+    OUString sCompactionPolicy = officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::PreviewCache::CompactionPolicy::get();
     if (sCompactionPolicy == sNone)
         pCompactor.reset(new NoCacheCompaction(rCache,nMaximalCacheSize));
-    else
+    else // default: "Compress"
         pCompactor.reset(new CacheCompactionByCompression(rCache,nMaximalCacheSize,pCompressor));
 
     return pCompactor;

@@ -375,7 +375,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/slidesorter/cache/SlsBitmapCompressor \
 	sd/source/ui/slidesorter/cache/SlsBitmapFactory \
 	sd/source/ui/slidesorter/cache/SlsCacheCompactor \
-	sd/source/ui/slidesorter/cache/SlsCacheConfiguration \
 	sd/source/ui/slidesorter/cache/SlsGenericPageCache \
 	sd/source/ui/slidesorter/cache/SlsPageCache \
 	sd/source/ui/slidesorter/cache/SlsPageCacheManager \

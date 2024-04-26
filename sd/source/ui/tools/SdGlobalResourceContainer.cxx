@@ -19,8 +19,6 @@
 
 #include <tools/SdGlobalResourceContainer.hxx>
 
-#include <../cache/SlsCacheConfiguration.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
 
@@ -189,8 +187,6 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer()
         if (xComponent.is())
             xComponent->dispose();
     }
-
-    sd::slidesorter::cache::CacheConfiguration::Shutdown();
 }
 
 } // end of namespace sd

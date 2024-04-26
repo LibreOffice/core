@@ -115,8 +115,6 @@ bool UnnecessaryLocking::VisitCompoundStmt(const CompoundStmt* compoundStmt)
             && !loplugin::isSamePathname(fn,
                                          SRCDIR "/desktop/source/deployment/gui/dp_gui_dialog2.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/desktop/source/lib/init.cxx")
-            && !loplugin::isSamePathname(
-                   fn, SRCDIR "/sd/source/ui/slidesorter/cache/SlsCacheConfiguration.cxx")
 
             // needs to lock around access to methods in vcl
             && !loplugin::isSamePathname(fn, SRCDIR "/basctl/source/basicide/unomodel.cxx")
