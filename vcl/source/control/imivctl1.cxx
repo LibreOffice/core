@@ -92,7 +92,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    Size gridSize(100,70);
+    Size gridSize((nWinStyle & WB_DETAILS) ? 200 : 100, (nWinStyle & WB_DETAILS) ?  20 : 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
@@ -157,11 +157,6 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
         eSelectionMode = SelectionMode::NONE;
     if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
         nWinBits |= WB_ALIGN_LEFT;
-    if( nWinStyle & WB_DETAILS )
-    {
-        if (!m_pColumns)
-            SetColumn( 0, SvxIconChoiceCtrlColumnInfo() );
-    }
 }
 
 IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
@@ -608,7 +603,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     if(aDocPos.X()>=aOutputSize.Width() || aDocPos.Y()>=aOutputSize.Height())
         return false;
     ToDocPos( aDocPos );
-    SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos, true );
+    SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos );
     if( pEntry )
         MakeEntryVisible( pEntry, false );
 
@@ -785,7 +780,7 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
         return false;
     else if( nWinBits & WB_HIGHLIGHTFRAME )
     {
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos, true );
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos );
         SetEntryHighlightFrame( pEntry, false );
     }
     else
@@ -1513,7 +1508,7 @@ void SvxIconChoiceCtrl_Impl::SetNoSelection()
     }
 }
 
-SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, bool bHit )
+SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos )
 {
     CheckBoundingRects();
     // search through z-order list from the end
@@ -1522,24 +1517,9 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, 
     {
         nCount--;
         SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCount ];
-        if( pEntry->aRect.Contains( rDocPos ) )
-        {
-            if( bHit )
-            {
-                tools::Rectangle aRect = CalcBmpRect( pEntry );
-                aRect.AdjustTop( -3 );
-                aRect.AdjustBottom(3 );
-                aRect.AdjustLeft( -3 );
-                aRect.AdjustRight(3 );
-                if( aRect.Contains( rDocPos ) )
-                    return pEntry;
-                aRect = CalcTextRect( pEntry );
-                if( aRect.Contains( rDocPos ) )
-                    return pEntry;
-            }
-            else
-                return pEntry;
-        }
+        tools::Rectangle aBoundingRect(GetEntryBoundRect(pEntry));
+        if( aBoundingRect.Contains( rDocPos ) )
+            return pEntry;
     }
     return nullptr;
 }
@@ -1585,8 +1565,9 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pE
             return tools::Rectangle( aPos, aImageSize );
         }
 
-        case WB_SMALLICON:
         case WB_DETAILS:
+            return tools::Rectangle(aPos, Size(0,0));
+        case WB_SMALLICON:
             aPos.AdjustY(( aBound.GetHeight() - aImageSize.Height() ) / 2 );
             //TODO: determine horizontal distance to bounding rectangle
             return tools::Rectangle( aPos, aImageSize );
@@ -1627,8 +1608,10 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
             aPos.AdjustX((nBoundWidth - aTextSize.Width()) / 2 );
             break;
 
-        case WB_SMALLICON:
         case WB_DETAILS:
+            break;
+
+        case WB_SMALLICON:
             aPos.AdjustX(aImageSize.Width() );
             aPos.AdjustX(HOR_DIST_BMP_STRING );
             aPos.AdjustY((nBoundHeight - aTextSize.Height()) / 2 );
@@ -1649,8 +1632,11 @@ tools::Long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
             nWidth = std::max( nStringWidth, aImageSize.Width() );
             break;
 
-        case WB_SMALLICON:
         case WB_DETAILS:
+            nWidth = nStringWidth;
+            break;
+
+        case WB_SMALLICON:
             nWidth = aImageSize.Width();
             nWidth += HOR_DIST_BMP_STRING;
             nWidth += nStringWidth;
@@ -1672,8 +1658,11 @@ tools::Long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
             nHeight += nStringHeight;
             break;
 
-        case WB_SMALLICON:
         case WB_DETAILS:
+            nHeight = nStringHeight;
+            break;
+
+        case WB_SMALLICON:
             nHeight = std::max( aImageSize.Height(), nStringHeight );
             break;
     }
@@ -2053,10 +2042,13 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThi
 
 Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
 {
+    Size aTextSize( pView->GetTextWidth( "XXX" ), pView->GetTextHeight() );
+    if (nWinBits & WB_DETAILS)
+        return Size(aTextSize.Width(), aTextSize.Height());
+
     Size aMinSize( aImageSize );
     aMinSize.AdjustWidth(2 * LROFFS_BOUND );
     aMinSize.AdjustHeight(TBOFFS_BOUND );  // single offset is enough (FileDlg)
-    Size aTextSize( pView->GetTextWidth( "XXX" ), pView->GetTextHeight() );
     if( nWinBits & WB_ICON )
     {
         aMinSize.AdjustHeight(VER_DIST_BMP_STRING );
@@ -2122,7 +2114,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
         if( pEntry->GetTextMode() == SvxIconChoiceCtrlTextMode::Full )
             aBoundRect.SetBottom( LONG_MAX );
     }
-    else
+    else if (nWinBits & WB_SMALLICON)
     {
         aBoundRect.SetLeft( aBmpRect.Right() );
         aBoundRect.AdjustLeft(HOR_DIST_BMP_STRING );
@@ -2207,9 +2199,14 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
 {
     tools::Rectangle aTextRect( CalcTextRect( pEntry ) );
     tools::Rectangle aBoundRect( GetEntryBoundRect( pEntry ) );
+
+    // Remove left margin
+    if (nWinBits & WB_DETAILS)
+        aBoundRect.SetPos(Point(0, aBoundRect.GetPos().Y()));
+
     return tools::Rectangle(
         aBoundRect.Left(), aBoundRect.Top() - 1, aBoundRect.Right() - 1,
-        aTextRect.Bottom() + 1);
+        aTextRect.Bottom());
 }
 
 // the hot spot is the inner 50% of the rectangle
@@ -2774,7 +2771,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 
     Point aPos( pView->ScreenToOutputPixel(rHEvt.GetMousePosPixel() ) );
     aPos -= pView->GetMapMode().GetOrigin();
-    SvxIconChoiceCtrlEntry* pEntry = GetEntry( aPos, true );
+    SvxIconChoiceCtrlEntry* pEntry = GetEntry( aPos );
 
     if ( !pEntry )
         return false;

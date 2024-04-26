@@ -985,6 +985,18 @@ namespace
         return bVertical;
     }
 
+    bool extractVerticalTabsWithIcons(VclBuilder::stringmap &rMap)
+    {
+        bool bWithIcons = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find("group-name");
+        if (aFind != rMap.end())
+        {
+            bWithIcons = aFind->second.equalsIgnoreAsciiCase("icons");
+            rMap.erase(aFind);
+        }
+        return bWithIcons;
+    }
+
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
@@ -2061,7 +2073,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         if (!extractVerticalTabPos(rMap))
             xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
         else
-            xWindow = VclPtr<VerticalTabControl>::Create(pParent);
+            xWindow = VclPtr<VerticalTabControl>::Create(pParent, extractVerticalTabsWithIcons(rMap));
     }
     else if (name == "GtkDrawingArea")
     {

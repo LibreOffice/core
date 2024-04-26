@@ -435,9 +435,9 @@ struct VerticalTabPageData
     VclPtr<vcl::Window> xPage;      ///< the TabPage itself
 };
 
-VerticalTabControl::VerticalTabControl(vcl::Window* pParent)
+VerticalTabControl::VerticalTabControl(vcl::Window* pParent, bool bWithIcons)
     : VclHBox(pParent)
-    , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | WB_ICON | WB_BORDER |
+    , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | (bWithIcons ?  WB_ICON : WB_DETAILS) | WB_BORDER |
                                                          WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                                                          WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN |
                                                          WB_ALIGN_LEFT | WB_NOHSCROLL))

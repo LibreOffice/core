@@ -303,7 +303,7 @@ public:
     SvxIconChoiceCtrlEntry* GetCurEntry() const { return pCursor; }
     void                SetCursor( SvxIconChoiceCtrlEntry* );
 
-    SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, bool bHit = false );
+    SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos );
 
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 

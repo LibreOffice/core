@@ -49,7 +49,7 @@ class VerticalTabControl final : public VclHBox
     VerticalTabPageData* GetPageData(const SvxIconChoiceCtrlEntry* pEntry) const;
 
 public:
-    VerticalTabControl(vcl::Window* pParent);
+    VerticalTabControl(vcl::Window* pParent, bool bWithIcons);
     virtual ~VerticalTabControl() override;
     virtual void dispose() override;
 

@@ -123,6 +123,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="tab-pos">left</property>
+            <property name="group-name">icons</property>
             <child>
               <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid">
