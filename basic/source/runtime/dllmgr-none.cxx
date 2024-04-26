@@ -106,7 +106,7 @@ void SbiDllMgr::FreeDll(SAL_UNUSED_PARAMETER OUString const &) {}
 
 SbiDllMgr::SbiDllMgr() = default;
 
-#if defined(_WIN32) && !defined(_ARM64_)
+#if defined(_WIN32)
 SbiDllMgr::~SbiDllMgr() = default;
 #endif
 
