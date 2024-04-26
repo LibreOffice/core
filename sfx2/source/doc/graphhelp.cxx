@@ -128,28 +128,29 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
                     if ( hMemory )
                     {
-                        METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( hMemory ));
-
-                        pMF->hMF = hMeta;
-                        pMF->mm = MM_ANISOTROPIC;
-
-                        MapMode aWinMode( MapUnit::Map100thMM );
-
-                        if ( aWinMode == pGDIMeta->GetPrefMapMode() )
+                        if (METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock(hMemory)))
                         {
-                            pMF->xExt = aMetaSize.Width();
-                            pMF->yExt = aMetaSize.Height();
-                        }
-                        else
-                        {
-                            Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
-                                                                        pGDIMeta->GetPrefMapMode(),
-                                                                        aWinMode );
-                            pMF->xExt = aWinSize.Width();
-                            pMF->yExt = aWinSize.Height();
-                        }
+                            pMF->hMF = hMeta;
+                            pMF->mm = MM_ANISOTROPIC;
 
-                        GlobalUnlock( hMemory );
+                            MapMode aWinMode( MapUnit::Map100thMM );
+
+                            if ( aWinMode == pGDIMeta->GetPrefMapMode() )
+                            {
+                                pMF->xExt = aMetaSize.Width();
+                                pMF->yExt = aMetaSize.Height();
+                            }
+                            else
+                            {
+                                Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
+                                                                            pGDIMeta->GetPrefMapMode(),
+                                                                            aWinMode );
+                                pMF->xExt = aWinSize.Width();
+                                pMF->yExt = aWinSize.Height();
+                            }
+
+                            GlobalUnlock(hMemory);
+                        }
                         pResult = static_cast<void*>(hMemory);
                     }
                     else
