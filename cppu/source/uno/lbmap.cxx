@@ -448,7 +448,7 @@ static Mapping loadExternalMapping(
         if (bModule)
         {
             uno_ext_getMappingFunc fpGetMapFunc =
-                reinterpret_cast<uno_ext_getMappingFunc>(aModule.getSymbol( UNO_EXT_GETMAPPING ));
+                reinterpret_cast<uno_ext_getMappingFunc>(aModule.getSymbol( u"" UNO_EXT_GETMAPPING ""_ustr ));
 
             if (fpGetMapFunc)
             {
@@ -518,7 +518,7 @@ static Mapping getMediateMapping(
     // backwards: from dest to source of mapping chain
 
     // connect to uno
-    OUString aUnoEnvTypeName( UNO_LB_UNO );
+    OUString aUnoEnvTypeName( u"" UNO_LB_UNO ""_ustr );
     if (rTo.getTypeName() == aUnoEnvTypeName) // to is uno
     {
         aUno = rTo;

@@ -431,91 +431,91 @@ static typelib_TypeDescription * createCTD(
             // built in types
         case TypeClass_VOID:
         {
-            OUString aTypeName("void");
+            OUString aTypeName(u"void"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_VOID, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_CHAR:
         {
-            OUString aTypeName("char");
+            OUString aTypeName(u"char"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_CHAR, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_BOOLEAN:
         {
-            OUString aTypeName("boolean");
+            OUString aTypeName(u"boolean"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_BOOLEAN, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_BYTE:
         {
-            OUString aTypeName("byte");
+            OUString aTypeName(u"byte"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_BYTE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_SHORT:
         {
-            OUString aTypeName("short");
+            OUString aTypeName(u"short"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_SHORT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_SHORT:
         {
-            OUString aTypeName("unsigned short");
+            OUString aTypeName(u"unsigned short"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_SHORT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_LONG:
         {
-            OUString aTypeName("long");
+            OUString aTypeName(u"long"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_LONG, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_LONG:
         {
-            OUString aTypeName("unsigned long");
+            OUString aTypeName(u"unsigned long"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_LONG, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_HYPER:
         {
-            OUString aTypeName("hyper");
+            OUString aTypeName(u"hyper"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_HYPER, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_HYPER:
         {
-            OUString aTypeName("unsigned hyper");
+            OUString aTypeName(u"unsigned hyper"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_HYPER, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_FLOAT:
         {
-            OUString aTypeName("float");
+            OUString aTypeName(u"float"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_FLOAT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_DOUBLE:
         {
-            OUString aTypeName("double");
+            OUString aTypeName(u"double"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_DOUBLE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_STRING:
         {
-            OUString aTypeName("string");
+            OUString aTypeName(u"string"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_STRING, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_TYPE:
         {
-            OUString aTypeName("type");
+            OUString aTypeName(u"type"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_TYPE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_ANY:
         {
-            OUString aTypeName("any");
+            OUString aTypeName(u"any"_ustr);
             typelib_typedescription_new( &pRet, typelib_TypeClass_ANY, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }

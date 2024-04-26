@@ -1711,7 +1711,7 @@ Enumeration::nextTypeDescription()
         std::scoped_lock g(mutex_);
         if (positions_.empty()) {
             throw css::container::NoSuchElementException(
-                "exhausted XTypeDescriptionEnumeration",
+                u"exhausted XTypeDescriptionEnumeration"_ustr,
                 static_cast< cppu::OWeakObject * >(this));
         }
         name = current_;
@@ -1905,7 +1905,7 @@ cppuhelper::TypeManager::~TypeManager() noexcept {}
 OUString cppuhelper::TypeManager::getImplementationName()
 {
     return
-        "com.sun.star.comp.cppuhelper.bootstrap.TypeManager";
+        u"com.sun.star.comp.cppuhelper.bootstrap.TypeManager"_ustr;
 }
 
 sal_Bool cppuhelper::TypeManager::supportsService(
@@ -1917,7 +1917,7 @@ sal_Bool cppuhelper::TypeManager::supportsService(
 css::uno::Sequence< OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.reflection.TypeDescriptionManager" }; //TODO
+    return { u"com.sun.star.reflection.TypeDescriptionManager"_ustr }; //TODO
 }
 
 css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
@@ -1945,7 +1945,7 @@ css::uno::Type cppuhelper::TypeManager::getElementType()
 sal_Bool cppuhelper::TypeManager::hasElements()
 {
     throw css::uno::RuntimeException(
-        "TypeManager hasElements: method not supported",
+        u"TypeManager hasElements: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -1953,14 +1953,14 @@ css::uno::Reference< css::container::XEnumeration >
 cppuhelper::TypeManager::createEnumeration()
 {
     throw css::uno::RuntimeException(
-        "TypeManager createEnumeration: method not supported",
+        u"TypeManager createEnumeration: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
 sal_Bool cppuhelper::TypeManager::has(css::uno::Any const &)
 {
     throw css::uno::RuntimeException(
-        "TypeManager has: method not supported",
+        u"TypeManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -1969,8 +1969,8 @@ void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
     OUString uri;
     if (!(aElement >>= uri)) {
         throw css::lang::IllegalArgumentException(
-            ("css.uno.theTypeDescriptionManager.insert expects a string URI"
-             " argument"),
+            (u"css.uno.theTypeDescriptionManager.insert expects a string URI"
+             " argument"_ustr),
             static_cast< cppu::OWeakObject * >(this), 0);
     }
     //TODO: check for ElementExistException
@@ -1983,8 +1983,8 @@ void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
     OUString uri;
     if (!(aElement >>= uri)) {
         throw css::lang::IllegalArgumentException(
-            ("css.uno.theTypeDescriptionManager.remove expects a string URI"
-             " argument"),
+            (u"css.uno.theTypeDescriptionManager.remove expects a string URI"
+             " argument"_ustr),
             static_cast< cppu::OWeakObject * >(this), 0);
     }
     //TODO: remove requests are silently ignored for now

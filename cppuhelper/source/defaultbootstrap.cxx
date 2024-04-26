@@ -54,25 +54,25 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
     }
     rtl::Reference smgr(
         new cppuhelper::ServiceManager);
-    smgr->init(getBootstrapVariable(bs, "UNO_SERVICES"));
+    smgr->init(getBootstrapVariable(bs, u"UNO_SERVICES"_ustr));
     rtl::Reference tmgr(new cppuhelper::TypeManager);
-    tmgr->init(getBootstrapVariable(bs, "UNO_TYPES"));
+    tmgr->init(getBootstrapVariable(bs, u"UNO_TYPES"_ustr));
     std::vector< cppu::ContextEntry_Init > context_values
     {
         cppu::ContextEntry_Init(
-            "/singletons/com.sun.star.lang.theServiceManager",
+            u"/singletons/com.sun.star.lang.theServiceManager"_ustr,
             css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
             false),
         cppu::ContextEntry_Init(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager",
+            u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr,
             css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false),
         cppu::ContextEntry_Init( //TODO: from services.rdb?
-            "/singletons/com.sun.star.util.theMacroExpander",
+            u"/singletons/com.sun.star.util.theMacroExpander"_ustr,
             css::uno::Any(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
             true)
@@ -80,13 +80,13 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
     smgr->addSingletonContextEntries(&context_values);
     context_values.push_back(
         cppu::ContextEntry_Init(
-            "/services/com.sun.star.security.AccessController/mode",
-            css::uno::Any(OUString("off")), false));
+            u"/services/com.sun.star.security.AccessController/mode"_ustr,
+            css::uno::Any(u"off"_ustr), false));
     context_values.push_back(
         cppu::ContextEntry_Init(
-            "/singletons/com.sun.star.security.theAccessController",
+            u"/singletons/com.sun.star.security.theAccessController"_ustr,
             css::uno::Any(
-                OUString("com.sun.star.security.AccessController")),
+                u"com.sun.star.security.AccessController"_ustr),
             true));
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(context_values.data(), context_values.size()));

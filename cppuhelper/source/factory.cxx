@@ -272,7 +272,7 @@ OFactoryComponentHelper::createInstanceWithArgumentsEveryTime(
                 xComp->dispose();
 
             throw lang::IllegalArgumentException(
-                "cannot pass arguments to component => no XInitialization implemented!",
+                u"cannot pass arguments to component => no XInitialization implemented!"_ustr,
                 Reference< XInterface >(), 0 );
         }
     }
@@ -459,7 +459,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
     if (m_property_array_helper == nullptr)
     {
         beans::Property prop(
-            "ImplementationKey" /* name */,
+            u"ImplementationKey"_ustr /* name */,
             0 /* handle */,
             cppu::UnoType<decltype(xImplementationKey)>::get(),
             beans::PropertyAttribute::READONLY |
@@ -483,7 +483,7 @@ void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
     sal_Int32, Any const & )
 {
     throw beans::PropertyVetoException(
-        "unexpected: only readonly properties!",
+        u"unexpected: only readonly properties!"_ustr,
         static_cast< OWeakObject * >(this) );
 }
 
@@ -499,7 +499,7 @@ void ORegistryFactoryHelper::getFastPropertyValue(
     {
         rValue.clear();
         throw beans::UnknownPropertyException(
-            "unknown property!", static_cast< OWeakObject * >(
+            u"unknown property!"_ustr, static_cast< OWeakObject * >(
                 const_cast< ORegistryFactoryHelper * >(this) ) );
     }
 }
@@ -599,7 +599,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     OUString aLocation;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
-        "/UNO/ACTIVATOR" );
+        u"/UNO/ACTIVATOR"_ustr );
     if( xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
@@ -607,7 +607,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         aActivatorName = o3tl::getToken(aActivatorUrl, 0, ':');
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            "/UNO/LOCATION" );
+            u"/UNO/LOCATION"_ustr );
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
             aLocation = xLocationKey->getAsciiValue();
     }
@@ -616,7 +616,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         // old style"url"
         // the location of the program code of the implementation
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            "/UNO/URL" );
+            u"/UNO/URL"_ustr );
         // is the key of the right type ?
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
         {
@@ -659,7 +659,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
         // not yet loaded
         try
         {
-            Reference<XRegistryKey > xKey = xImplementationKey->openKey( "UNO/SERVICES" );
+            Reference<XRegistryKey > xKey = xImplementationKey->openKey( u"UNO/SERVICES"_ustr );
 
             if (xKey.is())
             {

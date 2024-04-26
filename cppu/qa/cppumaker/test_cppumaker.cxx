@@ -474,8 +474,7 @@ void Test::testBigStruct() {
 
 void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
-        OUString(
-                "test.codemaker.cppumaker.Struct<char,short>"),
+        u"test.codemaker.cppumaker.Struct<char,short>"_ustr,
         (css::uno::Any(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
@@ -494,7 +493,7 @@ void Test::testExceptions() {
         aEmptySequence;
 
     test::codemaker::cppumaker::TestException1 e11(
-        "abc", nullptr, 1,
+        u"abc"_ustr, nullptr, 1,
         css::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
@@ -504,7 +503,7 @@ void Test::testExceptions() {
     e13 = e11;
     CPPUNIT_ASSERT_EQUAL(e11, e13);
     test::codemaker::cppumaker::TestException2 e21(
-        "abc", nullptr, 1,
+        u"abc"_ustr, nullptr, 1,
         css::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);

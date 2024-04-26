@@ -380,7 +380,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     if ( !m_xSMgr.is() )
     {
         throw DeploymentException(
-            "null component context service manager",
+            u"null component context service manager"_ustr,
             static_cast<OWeakObject *>(this) );
     }
     return m_xSMgr;
@@ -446,7 +446,7 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
     uno_Environment ** envs;
     sal_Int32 envCount;
     uno_getRegisteredEnvironments(
-        &envs, &envCount, &rtl_allocateMemory, OUString("java").pData);
+        &envs, &envCount, &rtl_allocateMemory, u"java"_ustr.pData);
     assert(envCount >= 0);
     assert(envCount == 0 || envs != nullptr);
     if (envs) {
@@ -502,7 +502,7 @@ ComponentContext::ComponentContext(
         // create new smgr based on delegate's one
         m_xSMgr.set(
             xMgr->createInstanceWithContext(
-                "com.sun.star.comp.stoc.OServiceManagerWrapper", xDelegate ),
+                u"com.sun.star.comp.stoc.OServiceManagerWrapper"_ustr, xDelegate ),
             UNO_QUERY );
         // patch DefaultContext property of new one
         Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
@@ -510,7 +510,7 @@ ComponentContext::ComponentContext(
         if (xProps.is())
         {
             Reference< XComponentContext > xThis( this );
-            xProps->setPropertyValue( "DefaultContext", Any( xThis ) );
+            xProps->setPropertyValue( u"DefaultContext"_ustr, Any( xThis ) );
         }
     }
     catch (...)

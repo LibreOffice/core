@@ -59,9 +59,9 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nDefaultEnumValue);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), t->nEnumValues);
         CPPUNIT_ASSERT(t->ppEnumNames != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OUString("METHOD"), OUString::unacquired(&t->ppEnumNames[0]));
-        CPPUNIT_ASSERT_EQUAL(OUString("PROPERTY"), OUString::unacquired(&t->ppEnumNames[1]));
-        CPPUNIT_ASSERT_EQUAL(OUString("UNKNOWN"), OUString::unacquired(&t->ppEnumNames[2]));
+        CPPUNIT_ASSERT_EQUAL(u"METHOD"_ustr, OUString::unacquired(&t->ppEnumNames[0]));
+        CPPUNIT_ASSERT_EQUAL(u"PROPERTY"_ustr, OUString::unacquired(&t->ppEnumNames[1]));
+        CPPUNIT_ASSERT_EQUAL(u"UNKNOWN"_ustr, OUString::unacquired(&t->ppEnumNames[2]));
         CPPUNIT_ASSERT(t->pEnumValues != nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->pEnumValues[0]);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), t->pEnumValues[1]);
@@ -110,10 +110,10 @@ public:
         CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(t->aBase.ppTypeRefs[1]));
         CPPUNIT_ASSERT_EQUAL(t3, css::uno::Type(t->aBase.ppTypeRefs[2]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OUString("Finish"), OUString::unacquired(&t->aBase.ppMemberNames[0]));
-        CPPUNIT_ASSERT_EQUAL(OUString("ErrorMessage"),
+        CPPUNIT_ASSERT_EQUAL(u"Finish"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
+        CPPUNIT_ASSERT_EQUAL(u"ErrorMessage"_ustr,
                              OUString::unacquired(&t->aBase.ppMemberNames[1]));
-        CPPUNIT_ASSERT_EQUAL(OUString("Return"), OUString::unacquired(&t->aBase.ppMemberNames[2]));
+        CPPUNIT_ASSERT_EQUAL(u"Return"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[2]));
         CPPUNIT_ASSERT(t->pParameterizedTypes == nullptr);
         // `offsets` and `typerefs` must still be valid:
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[0], offsets[0]);
@@ -164,9 +164,8 @@ public:
         CPPUNIT_ASSERT_EQUAL(t1, css::uno::Type(t->aBase.ppTypeRefs[0]));
         CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(t->aBase.ppTypeRefs[1]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OUString("IsPresent"),
-                             OUString::unacquired(&t->aBase.ppMemberNames[0]));
-        CPPUNIT_ASSERT_EQUAL(OUString("Value"), OUString::unacquired(&t->aBase.ppMemberNames[1]));
+        CPPUNIT_ASSERT_EQUAL(u"IsPresent"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
+        CPPUNIT_ASSERT_EQUAL(u"Value"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[1]));
         CPPUNIT_ASSERT(t->pParameterizedTypes != nullptr);
         CPPUNIT_ASSERT_EQUAL(param[0], t->pParameterizedTypes[0]);
         CPPUNIT_ASSERT_EQUAL(param[1], t->pParameterizedTypes[1]);

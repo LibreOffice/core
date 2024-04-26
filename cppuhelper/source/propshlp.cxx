@@ -869,7 +869,7 @@ void OPropertySetHelper::setPropertyValues(
 {
         sal_Int32   nSeqLen = rPropertyNames.getLength();
         if (nSeqLen != rValues.getLength())
-            throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this),
+            throw IllegalArgumentException(u"lengths do not match"_ustr, static_cast<XPropertySet*>(this),
                                            -1);
         std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
         // get the map table

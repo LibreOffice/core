@@ -284,9 +284,9 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -393,9 +393,9 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -504,9 +504,9 @@ void Test::testByte() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -615,9 +615,9 @@ void Test::testShort() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -728,9 +728,9 @@ void Test::testUnsignedShort() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -839,9 +839,9 @@ void Test::testLong() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -950,9 +950,9 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1061,9 +1061,9 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1172,9 +1172,9 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1283,9 +1283,9 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1394,9 +1394,9 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1506,9 +1506,9 @@ void Test::testChar() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'1', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1553,7 +1553,7 @@ void Test::testChar() {
 }
 
 void Test::testString() {
-    css::uno::Any a(OUString("1"));
+    css::uno::Any a(u"1"_ustr);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<OUString>::get()));
     {
         bool b = true;
@@ -1617,9 +1617,9 @@ void Test::testString() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", (a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("1"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"1"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1728,9 +1728,9 @@ void Test::testType() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1840,9 +1840,9 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -1970,9 +1970,9 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -2086,9 +2086,9 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -2154,7 +2154,7 @@ void Test::testStruct() {
 void Test::testPoly() {
     css::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", OUString("Poly<[]char>"), a.getValueType().getTypeName() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", u"Poly<[]char>"_ustr, a.getValueType().getTypeName() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "constructor",
         css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);
@@ -2228,9 +2228,9 @@ void Test::testException() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -2364,9 +2364,9 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
@@ -2496,9 +2496,9 @@ void Test::testNull() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
-        OUString b("2");
+        OUString b(u"2"_ustr);
         CPPUNIT_ASSERT_MESSAGE( "OUString", !(a >>= b) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", OUString("2"), b );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());

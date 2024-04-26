@@ -484,7 +484,7 @@ css::uno::Any ContentEnumeration::nextElement()
     std::scoped_lock g(mutex_);
     if (iterator_ == factories_.end()) {
         throw css::container::NoSuchElementException(
-            "Bootstrap service manager service enumerator has no more elements",
+            u"Bootstrap service manager service enumerator has no more elements"_ustr,
             static_cast< cppu::OWeakObject * >(this));
     }
     return *iterator_++;
@@ -492,7 +492,7 @@ css::uno::Any ContentEnumeration::nextElement()
 
 css::beans::Property getDefaultContextProperty() {
     return css::beans::Property(
-        "DefaultContext", -1,
+        u"DefaultContext"_ustr, -1,
         cppu::UnoType< css::uno::XComponentContext >::get(),
         css::beans::PropertyAttribute::READONLY);
 }
@@ -941,7 +941,7 @@ void cppuhelper::ServiceManager::initialize(
         || arg != "preload")
     {
         throw css::lang::IllegalArgumentException(
-            "invalid ServiceManager::initialize argument",
+            u"invalid ServiceManager::initialize argument"_ustr,
             css::uno::Reference<css::uno::XInterface>(), 0);
     }
     preloadImplementations();
@@ -950,7 +950,7 @@ void cppuhelper::ServiceManager::initialize(
 OUString cppuhelper::ServiceManager::getImplementationName()
 {
     return
-        "com.sun.star.comp.cppuhelper.bootstrap.ServiceManager";
+        u"com.sun.star.comp.cppuhelper.bootstrap.ServiceManager"_ustr;
 }
 
 sal_Bool cppuhelper::ServiceManager::supportsService(
@@ -962,7 +962,7 @@ sal_Bool cppuhelper::ServiceManager::supportsService(
 css::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.ServiceManager" };
+    return { u"com.sun.star.lang.MultiServiceFactory"_ustr, u"com.sun.star.lang.ServiceManager"_ustr };
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -992,7 +992,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
     }
     if (data_.services.size() > o3tl::make_unsigned(SAL_MAX_INT32)) {
         throw css::uno::RuntimeException(
-            "getAvailableServiceNames: too many services",
+            u"getAvailableServiceNames: too many services"_ustr,
             static_cast< cppu::OWeakObject * >(this));
     }
     return comphelper::mapKeysToSequence(data_.services);
@@ -1038,14 +1038,14 @@ css::uno::Reference< css::container::XEnumeration >
 cppuhelper::ServiceManager::createEnumeration()
 {
     throw css::uno::RuntimeException(
-        "ServiceManager createEnumeration: method not supported",
+        u"ServiceManager createEnumeration: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
 sal_Bool cppuhelper::ServiceManager::has(css::uno::Any const &)
 {
     throw css::uno::RuntimeException(
-        "ServiceManager has: method not supported",
+        u"ServiceManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -1060,19 +1060,19 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
                 OUString uri;
                 if (!(arg.Value >>= uri)) {
                     throw css::lang::IllegalArgumentException(
-                        "Bad uri argument",
+                        u"Bad uri argument"_ustr,
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
                 uris.push_back(uri);
             } else if (arg.Name == "component-context") {
                 if (alienContext.is()) {
                     throw css::lang::IllegalArgumentException(
-                        "Multiple component-context arguments",
+                        u"Multiple component-context arguments"_ustr,
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
                 if (!(arg.Value >>= alienContext) || !alienContext.is()) {
                     throw css::lang::IllegalArgumentException(
-                        "Bad component-context argument",
+                        u"Bad component-context argument"_ustr,
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
             } else {
@@ -1091,7 +1091,7 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
     }
 
     throw css::lang::IllegalArgumentException(
-        "Bad insert element", static_cast< cppu::OWeakObject * >(this), 0);
+        u"Bad insert element"_ustr, static_cast< cppu::OWeakObject * >(this), 0);
 }
 
 void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
@@ -1108,7 +1108,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
             OUString uri;
             if (!(i.Value >>= uri)) {
                 throw css::lang::IllegalArgumentException(
-                    "Bad uri argument",
+                    u"Bad uri argument"_ustr,
                     static_cast< cppu::OWeakObject * >(this), 0);
             }
             uris.push_back(uri);
@@ -1120,7 +1120,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
     if ((aElement >>= info) && info.is()) {
         if (!removeLegacyFactory(info, true)) {
             throw css::container::NoSuchElementException(
-                "Remove non-inserted factory object",
+                u"Remove non-inserted factory object"_ustr,
                 static_cast< cppu::OWeakObject * >(this));
         }
         return;
@@ -1132,7 +1132,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
         return;
     }
     throw css::lang::IllegalArgumentException(
-        "Bad remove element", static_cast< cppu::OWeakObject * >(this), 0);
+        u"Bad remove element"_ustr, static_cast< cppu::OWeakObject * >(this), 0);
 }
 
 css::uno::Reference< css::container::XEnumeration >
@@ -1415,7 +1415,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
             static_cast< cppu::OWeakObject * >(this));
     }
     RegistryKeyArray impls;
-    switch (rootKey.openSubKeys("IMPLEMENTATIONS", impls)) {
+    switch (rootKey.openSubKeys(u"IMPLEMENTATIONS"_ustr, impls)) {
     case RegError::NO_ERROR:
         break;
     case RegError::KEY_NOT_EXISTS:
@@ -1432,8 +1432,8 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
             implKey.getName().copy(RTL_CONSTASCII_LENGTH("/IMPLEMENTATIONS/")));
         std::shared_ptr< Data::Implementation > impl =
             std::make_shared<Data::Implementation>(
-                name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
-                readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "", false,
+                name, readLegacyRdbString(uri, implKey, u"UNO/ACTIVATOR"_ustr),
+                readLegacyRdbString(uri, implKey, u"UNO/LOCATION"_ustr), "", "", "", false,
                 css::uno::Reference< css::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {
@@ -1441,13 +1441,13 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
                 uri + ": duplicate <implementation name=\"" + name + "\">");
         }
         readLegacyRdbStrings(
-            uri, implKey, "UNO/SERVICES", &impl->services);
+            uri, implKey, u"UNO/SERVICES"_ustr, &impl->services);
         for (const auto& rService : impl->services)
         {
             data_.services[rService].push_back(impl);
         }
         readLegacyRdbStrings(
-            uri, implKey, "UNO/SINGLETONS", &impl->singletons);
+            uri, implKey, u"UNO/SINGLETONS"_ustr, &impl->singletons);
         for (const auto& rSingleton : impl->singletons)
         {
             data_.singletons[rSingleton].push_back(impl);
@@ -1553,8 +1553,8 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         f2.set(factoryInfo, css::uno::UNO_QUERY);
         if (!f2.is()) {
             throw css::lang::IllegalArgumentException(
-                ("Bad XServiceInfo argument implements neither"
-                 " XSingleComponentFactory nor XSingleServiceFactory"),
+                (u"Bad XServiceInfo argument implements neither"
+                 " XSingleComponentFactory nor XSingleServiceFactory"_ustr),
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
     }
@@ -1599,7 +1599,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
         if (bDuplicate)
         {
             throw css::lang::IllegalArgumentException(
-                "Insert duplicate factory object",
+                u"Insert duplicate factory object"_ustr,
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:

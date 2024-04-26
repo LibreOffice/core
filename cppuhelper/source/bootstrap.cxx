@@ -90,7 +90,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         auto* p1 = cppuhelper_detail_findSofficePath();
         if (p1 == nullptr) {
             throw BootstrapException(
-                "no soffice installation found!");
+                u"no soffice installation found!"_ustr);
         }
         OUString p2;
 #if defined(_WIN32)
@@ -106,7 +106,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         if (!bOk)
         {
             throw BootstrapException(
-                "bad characters in soffice installation path!");
+                u"bad characters in soffice installation path!"_ustr);
         }
 #endif
         OUString path;
@@ -114,16 +114,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             osl::FileBase::E_None)
         {
             throw BootstrapException(
-                "cannot convert soffice installation path to URL!");
+                u"cannot convert soffice installation path to URL!"_ustr);
         }
         if (!path.isEmpty() && !path.endsWith("/")) {
             path += "/";
         }
 
         OUString uri;
-        if (!Bootstrap::get("URE_BOOTSTRAP", uri)) {
+        if (!Bootstrap::get(u"URE_BOOTSTRAP"_ustr, uri)) {
             Bootstrap::set(
-                "URE_BOOTSTRAP",
+                u"URE_BOOTSTRAP"_ustr,
                 Bootstrap::encode(
                     path +
 #if defined MACOSX
@@ -136,16 +136,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         Reference< XComponentContext > xLocalContext(
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
-            throw BootstrapException( "no local component context!" );
+            throw BootstrapException( u"no local component context!"_ustr );
 
         // create a random pipe name
         rtlRandomPool hPool = rtl_random_createPool();
         if ( hPool == nullptr )
-            throw BootstrapException( "cannot create random pool!" );
+            throw BootstrapException( u"cannot create random pool!"_ustr );
         sal_uInt8 bytes[ 16 ];
         if ( rtl_random_getBytes( hPool, bytes, std::size( bytes ) )
             != rtl_Random_E_None )
-            throw BootstrapException( "random pool error!" );
+            throw BootstrapException( u"random pool error!"_ustr );
         rtl_random_destroyPool( hPool );
         OUStringBuffer buf("uno");
         for (unsigned char byte : bytes)
@@ -154,10 +154,10 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // arguments
         OUString args [] = {
-            OUString("--nologo"),
-            OUString("--nodefault"),
-            OUString("--norestore"),
-            OUString("--nolockcheck"),
+            u"--nologo"_ustr,
+            u"--nodefault"_ustr,
+            u"--norestore"_ustr,
+            u"--nolockcheck"_ustr,
             OUString("--accept=pipe,name=" + sPipeName + ";urp;")
         };
         rtl_uString * ar_args [] = {
@@ -184,16 +184,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                 osl_freeProcessHandle( hProcess );
                 break;
             case osl_Process_E_NotFound:
-                throw BootstrapException( "image not found!" );
+                throw BootstrapException( u"image not found!"_ustr );
             case osl_Process_E_TimedOut:
-                throw BootstrapException( "timeout occurred!" );
+                throw BootstrapException( u"timeout occurred!"_ustr );
             case osl_Process_E_NoPermission:
-                throw BootstrapException( "permission denied!" );
+                throw BootstrapException( u"permission denied!"_ustr );
             case osl_Process_E_Unknown:
-                throw BootstrapException( "unknown error!" );
+                throw BootstrapException( u"unknown error!"_ustr );
             case osl_Process_E_InvalidError:
             default:
-                throw BootstrapException( "unmapped error!" );
+                throw BootstrapException( u"unmapped error!"_ustr );
         }
 
         // create a URL resolver

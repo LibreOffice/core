@@ -115,7 +115,7 @@ void ExceptionThrower_dispatch(
     default:
     {
         OSL_ASSERT( false );
-        RuntimeException exc( "not implemented!" );
+        RuntimeException exc( u"not implemented!"_ustr );
         uno_type_any_construct(
             *ppException, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), nullptr );
         break;
@@ -227,18 +227,18 @@ void SAL_CALL throwException( Any const & exc )
     if (exc.getValueTypeClass() != TypeClass_EXCEPTION)
     {
         throw RuntimeException(
-            "no UNO exception given "
-            "(must be derived from com::sun::star::uno::Exception)!" );
+            u"no UNO exception given "
+            "(must be derived from com::sun::star::uno::Exception)!"_ustr );
     }
 
 #if RETHROW_FAKE_EXCEPTIONS
     lo_mobile_throwException(exc);
 #else
-    Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
+    Mapping uno2cpp(Environment(u"" UNO_LB_UNO ""_ustr), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
-            "cannot get binary UNO to C++ mapping!" );
+            u"cannot get binary UNO to C++ mapping!"_ustr );
     }
 
     Reference< XExceptionThrower > xThrower;
@@ -258,17 +258,17 @@ Any SAL_CALL getCaughtException()
 #if defined(ANDROID) || defined(EMSCRIPTEN)
     return Any();
 #else
-    Mapping cpp2uno(Environment::getCurrent(), Environment(UNO_LB_UNO));
+    Mapping cpp2uno(Environment::getCurrent(), Environment(u"" UNO_LB_UNO ""_ustr));
     if (! cpp2uno.is())
     {
         throw RuntimeException(
-            "cannot get C++ to binary UNO mapping!" );
+            u"cannot get C++ to binary UNO mapping!"_ustr );
     }
-    Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
+    Mapping uno2cpp(Environment(u"" UNO_LB_UNO ""_ustr), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
-            "cannot get binary UNO to C++ mapping!" );
+            u"cannot get binary UNO to C++ mapping!"_ustr );
     }
 
     typelib_TypeDescription * pTD = nullptr;
@@ -296,7 +296,7 @@ Any SAL_CALL getCaughtException()
 
     if (exc == nullptr)
     {
-        throw RuntimeException( "rethrowing C++ exception failed!" );
+        throw RuntimeException( u"rethrowing C++ exception failed!"_ustr );
     }
 
     Any ret;

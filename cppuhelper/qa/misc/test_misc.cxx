@@ -32,7 +32,7 @@ void Test::testCatchThrow()
     css::uno::Any aSavedException;
     try
     {
-        throw css::uno::RuntimeException("RuntimeException");
+        throw css::uno::RuntimeException(u"RuntimeException"_ustr);
     }
     catch (const css::uno::RuntimeException&)
     {
@@ -60,7 +60,7 @@ void Test::testgetCaughtException()
         aSavedException; /// exception caught during unzipping is saved to be thrown during reading
     try
     {
-        throw css::uno::RuntimeException("RuntimeException");
+        throw css::uno::RuntimeException(u"RuntimeException"_ustr);
     }
     catch (...)
     {

@@ -231,7 +231,7 @@ void Data::initProperties(
                         getTypeArguments());
                 if (args.getLength() != 1) {
                     throw css::uno::RuntimeException(
-                        "inconsistent UNO type registry");
+                        u"inconsistent UNO type registry"_ustr);
                 }
                 t = args[0];
             }
@@ -239,7 +239,7 @@ void Data::initProperties(
                 = handleNames->size();
             if (handles > SAL_MAX_INT32) {
                 throw css::uno::RuntimeException(
-                    "interface type has too many attributes");
+                    u"interface type has too many attributes"_ustr);
             }
             OUString name(m->getMemberName());
             if (!properties.emplace(
@@ -255,7 +255,7 @@ void Data::initProperties(
                 second)
             {
                 throw css::uno::RuntimeException(
-                    "inconsistent UNO type registry");
+                    u"inconsistent UNO type registry"_ustr);
             }
             handleNames->push_back(name);
         }
@@ -425,8 +425,8 @@ PropertySetMixinImpl::Impl::Impl(
         ifc.set(
             css::uno::Reference< css::container::XHierarchicalNameAccess >(
                 m_context->getValueByName(
-                    "/singletons/com.sun.star.reflection."
-                    "theTypeDescriptionManager"),
+                    u"/singletons/com.sun.star.reflection."
+                    "theTypeDescriptionManager"_ustr),
                 css::uno::UNO_QUERY_THROW)->getByHierarchicalName(
                     m_type.getTypeName()),
             css::uno::UNO_QUERY_THROW);
@@ -607,17 +607,17 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 getReflection(value.getValueTypeName()));
             try {
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
-                          ambiguous->getField("IsAmbiguous"),
+                          ambiguous->getField(u"IsAmbiguous"_ustr),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isAmbiguous))
                 {
                     throw css::uno::RuntimeException(
-                        ("unexpected type of com.sun.star.beans.Ambiguous"
-                         " IsAmbiguous member"),
+                        (u"unexpected type of com.sun.star.beans.Ambiguous"
+                         " IsAmbiguous member"_ustr),
                         object);
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    ambiguous->getField("Value"), css::uno::UNO_QUERY_THROW)->
+                    ambiguous->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 css::uno::Any anyEx = cppu::getCaughtException();
@@ -636,17 +636,17 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             try {
 
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
-                          defaulted->getField("IsDefaulted"),
+                          defaulted->getField(u"IsDefaulted"_ustr),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isDefaulted))
                 {
                     throw css::uno::RuntimeException(
-                        ("unexpected type of com.sun.star.beans.Defaulted"
-                         " IsDefaulted member"),
+                        (u"unexpected type of com.sun.star.beans.Defaulted"
+                         " IsDefaulted member"_ustr),
                         object);
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    defaulted->getField("Value"), css::uno::UNO_QUERY_THROW)->
+                    defaulted->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 css::uno::Any anyEx = cppu::getCaughtException();
@@ -665,13 +665,13 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             try {
                 bool present = false;
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
-                          optional->getField("IsPresent"),
+                          optional->getField(u"IsPresent"_ustr),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= present))
                 {
                     throw css::uno::RuntimeException(
-                        ("unexpected type of com.sun.star.beans.Optional"
-                         " IsPresent member"),
+                        (u"unexpected type of com.sun.star.beans.Optional"
+                         " IsPresent member"_ustr),
                         object);
                 }
                 if (!present) {
@@ -679,7 +679,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                     break;
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    optional->getField("Value"), css::uno::UNO_QUERY_THROW)->
+                    optional->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 css::uno::Any anyEx = cppu::getCaughtException();
@@ -730,14 +730,14 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         type->createObject(strct);
         try {
             css::uno::Reference< css::reflection::XIdlField2 > field(
-                type->getField("Value"), css::uno::UNO_QUERY_THROW);
+                type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), false, false,
                     wrapDefaulted, isDefaulted, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField("IsAmbiguous"), css::uno::UNO_QUERY_THROW)->set(
+                type->getField(u"IsAmbiguous"_ustr), css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::Any(isAmbiguous));
         } catch (css::lang::IllegalArgumentException & e) {
             css::uno::Any anyEx = cppu::getCaughtException();
@@ -761,14 +761,14 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         type->createObject(strct);
         try {
             css::uno::Reference< css::reflection::XIdlField2 > field(
-                type->getField("Value"), css::uno::UNO_QUERY_THROW);
+                type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), wrapAmbiguous, isAmbiguous,
                     false, false, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField("IsDefaulted"), css::uno::UNO_QUERY_THROW)->set(
+                type->getField(u"IsDefaulted"_ustr), css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::Any(isDefaulted));
         } catch (css::lang::IllegalArgumentException & e) {
             css::uno::Any anyEx = cppu::getCaughtException();
@@ -793,11 +793,11 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         bool present = value.hasValue();
         try {
             css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField("IsPresent"), css::uno::UNO_QUERY_THROW)->set(
+                type->getField(u"IsPresent"_ustr), css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::Any(present));
             if (present) {
                 css::uno::Reference< css::reflection::XIdlField2 > field(
-                    type->getField("Value"), css::uno::UNO_QUERY_THROW);
+                    type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
                 field->set(
                     strct,
                     wrapValue(
@@ -821,7 +821,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
     }
     if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
         throw css::uno::RuntimeException(
-            "unexpected type of attribute", object);
+            u"unexpected type of attribute"_ustr, object);
     }
     return value;
 }
@@ -859,7 +859,7 @@ void PropertySetMixinImpl::prepareSet(
         std::scoped_lock g(m_impl->mutex);
         if (m_impl->disposed) {
             throw css::lang::DisposedException(
-                "disposed", static_cast< css::beans::XPropertySet * >(this));
+                u"disposed"_ustr, static_cast< css::beans::XPropertySet * >(this));
         }
         if ((it->second.property.Attributes
              & css::beans::PropertyAttribute::CONSTRAINED)
@@ -870,7 +870,7 @@ void PropertySetMixinImpl::prepareSet(
             if (i != m_impl->vetoListeners.end()) {
                 specificVeto = i->second;
             }
-            i = m_impl->vetoListeners.find("");
+            i = m_impl->vetoListeners.find(u""_ustr);
             if (i != m_impl->vetoListeners.end()) {
                 unspecificVeto = i->second;
             }
@@ -885,7 +885,7 @@ void PropertySetMixinImpl::prepareSet(
             if (i != m_impl->boundListeners.end()) {
                 boundListeners->m_impl->specificListeners = i->second;
             }
-            i = m_impl->boundListeners.find("");
+            i = m_impl->boundListeners.find(u""_ustr);
             if (i != m_impl->boundListeners.end()) {
                 boundListeners->m_impl->unspecificListeners = i->second;
             }

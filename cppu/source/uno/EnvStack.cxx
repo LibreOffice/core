@@ -135,7 +135,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
         }
         else
         {
-            OUString uno_envDcp(UNO_LB_UNO);
+            OUString uno_envDcp(u"" UNO_LB_UNO ""_ustr);
             uno_getEnvironment(ppEnv, uno_envDcp.pData, nullptr);
         }
     }

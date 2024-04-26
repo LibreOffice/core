@@ -88,14 +88,14 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
             return false;
         default:
             throw css::uno::DeploymentException(
-                "Cannot iterate directory");
+                u"Cannot iterate directory"_ustr);
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::DeploymentException(
-                "Cannot stat in directory");
+                u"Cannot stat in directory"_ustr);
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             // Ignore backup and spurious junk files:

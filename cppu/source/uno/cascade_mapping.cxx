@@ -208,7 +208,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     if (pAddPurpose && pAddPurpose->length)
         return;
 
-    OUString uno_envType(UNO_LB_UNO);
+    OUString uno_envType(u"" UNO_LB_UNO ""_ustr);
 
     OUString from_envType    = cppu::EnvDcp::getTypeName(pFrom->pTypeName);
     OUString to_envType      = cppu::EnvDcp::getTypeName(pTo->pTypeName);
