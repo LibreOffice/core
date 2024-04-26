@@ -4545,6 +4545,76 @@ void DomainMapper_Impl::PopAnnotation()
             }
 
             xCursor->gotoRange(aAnnotationPosition.m_xEnd, true);
+
+            // MS Word can anchor a comment anywhere in the document, but LO always anchors it
+            // immediately at the end of the range it spans.
+            // If multiple comments have the same end-point, we need to expand the range so that
+            // this later comment doesn't insert itself before any earlier ones.
+            const uno::Reference<frame::XModel> xModel(static_cast<SfxBaseModel*>(m_xTextDocument.get()));
+            const uno::Reference<text::XTextFieldsSupplier> xTFS(xModel, uno::UNO_QUERY);
+            if (xTFS.is())
+            {
+                // sadly, the enumeration is not correctly sorted, which really complicates things.
+                const uno::Reference<container::XEnumerationAccess> xFieldEA(xTFS->getTextFields());
+                bool bRetry(false);
+                // keep track of the relevant (unsorted) fields that might have the same end point
+                std::vector<uno::Reference<text::XTextRange>> xRetryFields;
+
+                uno::Reference<container::XEnumeration> xEnum = xFieldEA->createEnumeration();
+                // Although the primary interest is other comments, the same principle
+                // probably applies to any kind of field.
+                while (xEnum->hasMoreElements())
+                {
+                    try
+                    {
+                        // IMPORTANT: nextElement() MUST run before any possible exception...
+                        const uno::Reference<text::XTextField> xField(xEnum->nextElement(),
+                                                                      uno::UNO_QUERY_THROW);
+                        if (xTextRangeCompare->compareRegionStarts(xCursor->getEnd(),
+                                                                   xField->getAnchor()) == 1)
+                        {
+                            // Not interesting: our comment-to-insert ends before this field begins
+                            continue;
+                        }
+
+                        const sal_Int32 nCompare = xTextRangeCompare->compareRegionEnds(
+                            xCursor->getEnd(), xField->getAnchor());
+                        if (nCompare == 0) // both end at the same spot
+                        {
+                            bRetry = xCursor->goRight(1, true);
+                        }
+                        else if (nCompare == 1) // this field ends later than our comment-to-insert
+                        {
+                            // current implementation of SwModify::Add is basically in reverse order
+                            // so placing at the front of the list should effectively sort them.
+                            xRetryFields.emplace(xRetryFields.begin(), xField->getAnchor());
+                        }
+                    }
+                    catch (uno::Exception&)
+                    {
+                    }
+                }
+                // if the comment range expanded, retry with cached relevant fields
+                while (bRetry && xRetryFields.size())
+                {
+                    bRetry = false;
+                    auto iter = xRetryFields.cbegin();
+                    while (iter != xRetryFields.cend())
+                    {
+                        const sal_Int32 nCompare
+                            = xTextRangeCompare->compareRegionEnds(xCursor->getEnd(), *iter);
+                        if (nCompare == 1) // this field still ends later than our comment
+                            ++iter;
+                        else
+                        {
+                            iter = xRetryFields.erase(iter);
+                            if (nCompare == 0) // both end at the same spot
+                                bRetry = xCursor->goRight(1, true);
+                        }
+                    }
+                }
+            }
+
             uno::Reference<text::XTextRange> const xTextRange(xCursor, uno::UNO_QUERY_THROW);
 
             // Attach the annotation to the range.

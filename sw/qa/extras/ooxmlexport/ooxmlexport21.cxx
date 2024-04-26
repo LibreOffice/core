@@ -437,6 +437,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
+{
+    // given a document with a comment and 5 replies
+    loadAndSave("tdf160814_commentOrder.docx");
+
+    // make sure the order of the comments is imported and exported correctly
+    xmlDocUniquePtr pXmlComments = parseExport("word/comments.xml");
+    // This really should be "1. First comment", the 1. being list numbering...
+    assertXPathContent(pXmlComments, "//w:comment[1]//w:t"_ostr, "First comment");
+    assertXPathContent(pXmlComments, "//w:comment[2]//w:t"_ostr, "1.1 first reply.");
+    assertXPathContent(pXmlComments, "//w:comment[4]//w:t"_ostr, "1.3");
+    assertXPathContent(pXmlComments, "//w:comment[6]//w:t"_ostr, "1.5");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 {
     // 1. Remove all personal info
