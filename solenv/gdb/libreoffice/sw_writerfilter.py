@@ -72,7 +72,7 @@ printer = None
 def build_pretty_printers():
     global printer
 
-    printer = printing.Printer("libreoffice/writerfilter")
+    printer = printing.Printer("libreoffice/sw_writerfilter")
     printer.add('writerfilter::ooxml::OOXMLProperty', OOXMLPropertyPrinter)
     printer.add('writerfilter::ooxml::OOXMLPropertySet', OOXMLPropertySetPrinter)
     printer.add('writerfilter::ooxml::OOXMLPropertySetValue', OOXMLPropertySetValuePrinter)
