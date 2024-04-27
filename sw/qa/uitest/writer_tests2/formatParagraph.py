@@ -177,7 +177,7 @@ class formatParagraph(UITestCase):
                 self.assertEqual(get_state_as_dict(xspinWidow)["Text"], "2")
                 self.assertEqual(get_state_as_dict(xcheckWidow)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(xcheckOrphan)["Selected"], "false")
-                self.assertEqual(get_state_as_dict(xcheckSplitPara)["Selected"], "true")
+                self.assertEqual(get_state_as_dict(xcheckSplitPara)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(xcheckKeepPara)["Selected"], "true")
 
 
