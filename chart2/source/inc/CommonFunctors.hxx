@@ -21,9 +21,11 @@
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
+#include <algorithm>
 #include <limits>
 
 namespace chart::CommonFunctors
@@ -34,20 +36,21 @@ namespace chart::CommonFunctors
     <p>uno::makeAny is an inline function.  Thus is cannot be taken directly
     (via mem_fun_ptr)</p>
 */
-template< typename T >
-    struct makeAny
+struct makeAny
 {
+    template< typename T >
     css::uno::Any operator() ( const T & aVal )
     {
         return css::uno::Any( aVal );
     }
 };
 
-/** unary function to convert css::uno::Any into a double number.
+/** unary function to convert an OUString or css::uno::Any into a double number.
 
+    <p>For conversion of OUString, rtl::math::StringToDouble is used.</p>
     <p>In case no number can be generated from the Any, NaN is returned.</p>
-*/
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble
+ */
+struct OOO_DLLPUBLIC_CHARTTOOLS ToDouble
 {
     double operator() ( const css::uno::Any & rAny )
     {
@@ -55,12 +58,24 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble
         rAny >>= fResult;
         return fResult;
     }
+
+    double operator() ( std::u16string_view rStr )
+    {
+        rtl_math_ConversionStatus eConversionStatus;
+        double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus );
+
+        if( eConversionStatus != rtl_math_ConversionStatus_Ok )
+            return std::numeric_limits<double>::quiet_NaN();
+
+        return fResult;
+    }
 };
 
-/** unary function to convert css::uno::Any into an
-    OUString.
-*/
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
+/** unary function to convert a double number or css::uno::Any into an OUString.
+
+    <p>For conversion of doubles, rtl::math::DoubleToOUString is used.</p>
+ */
+struct OOO_DLLPUBLIC_CHARTTOOLS ToString
 {
     OUString operator() ( const css::uno::Any & rAny )
     {
@@ -83,32 +98,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
 
         return OUString();
     }
-};
 
-/** unary function to convert an OUString into a double number.
-
-    <p>For conversion rtl::math::StringToDouble is used.</p>
- */
-struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble
-{
-    double operator() ( std::u16string_view rStr )
-    {
-        rtl_math_ConversionStatus eConversionStatus;
-        double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus );
-
-        if( eConversionStatus != rtl_math_ConversionStatus_Ok )
-            return std::numeric_limits<double>::quiet_NaN();
-
-        return fResult;
-    }
-};
-
-/** unary function to convert a double number into an OUString.
-
-    <p>For conversion rtl::math::DoubleToOUString is used.</p>
- */
-struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
-{
     OUString operator() ( double fNumber )
     {
         return ::rtl::math::doubleToUString(
@@ -120,6 +110,13 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
             );
     }
 };
+
+template <class Container, class Func> auto convertToSequence(const Container& container, Func f)
+{
+    css::uno::Sequence<decltype(f(container[0]))> result(container.size());
+    std::transform(container.begin(), container.end(), result.getArray(), f);
+    return result;
+}
 
 } //  namespace chart::CommonFunctors
 

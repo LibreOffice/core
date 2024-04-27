@@ -48,7 +48,7 @@ void CommonFunctorsTest::testAnyToString()
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),
-            std::back_inserter(aOutput), chart::CommonFunctors::AnyToString());
+            std::back_inserter(aOutput), chart::CommonFunctors::ToString());
 
     CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);
@@ -65,7 +65,7 @@ void CommonFunctorsTest::testDoubleToString()
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),
-            std::back_inserter(aOutput), chart::CommonFunctors::DoubleToOUString());
+            std::back_inserter(aOutput), chart::CommonFunctors::ToString());
 
     CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);

@@ -674,7 +674,7 @@ ErrCode XMLFilter::impl_ExportStream(
         {
             uno::Reference< beans::XPropertySet > xInfoSet;
             if( rFilterProperties.hasElements() )
-                rFilterProperties.getConstArray()[0] >>= xInfoSet;
+                rFilterProperties[0] >>= xInfoSet;
             OSL_ENSURE( xInfoSet.is(), "missing infoset for export" );
             if( xInfoSet.is() )
                 xInfoSet->setPropertyValue( "StreamName", uno::Any( rStreamName ) );

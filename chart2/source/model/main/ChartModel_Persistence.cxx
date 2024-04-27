@@ -74,19 +74,6 @@ using ::osl::MutexGuard;
 
 namespace
 {
-struct lcl_PropNameEquals
-{
-    explicit lcl_PropNameEquals( OUString aStrToCompareWith ) :
-            m_aStr(std::move( aStrToCompareWith ))
-    {}
-    bool operator() ( const beans::PropertyValue & rProp )
-    {
-        return rProp.Name == m_aStr;
-    }
-private:
-    OUString m_aStr;
-};
-
 template< typename T >
 T lcl_getProperty(
     const Sequence< beans::PropertyValue > & rMediaDescriptor,
@@ -95,10 +82,9 @@ T lcl_getProperty(
     T aResult;
     if( rMediaDescriptor.hasElements())
     {
-        const beans::PropertyValue * pIt = rMediaDescriptor.getConstArray();
-        const beans::PropertyValue * pEndIt = pIt +  + rMediaDescriptor.getLength();
-        pIt = std::find_if( pIt, pEndIt, lcl_PropNameEquals( rPropName ));
-        if( pIt != pEndIt )
+        auto pIt = std::find_if(rMediaDescriptor.begin(), rMediaDescriptor.end(),
+                                [&rPropName](auto& prop) { return prop.Name == rPropName; });
+        if (pIt != rMediaDescriptor.end())
             (*pIt).Value >>= aResult;
     }
     return aResult;

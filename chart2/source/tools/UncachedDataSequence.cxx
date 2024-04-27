@@ -160,31 +160,25 @@ css::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServic
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
 {
-    Sequence< double > aResult;
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
         const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
-        aResult.realloc( aValues.getLength());
-        std::transform( aValues.begin(), aValues.end(),
-                          aResult.getArray(), CommonFunctors::AnyToDouble());
+        return CommonFunctors::convertToSequence(aValues, CommonFunctors::ToDouble());
     }
-    return aResult;
+    return {};
 }
 
 // ________ XTextualDataSequence ________
 Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
 {
-    Sequence< OUString > aResult;
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
         const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
-        aResult.realloc( aValues.getLength());
-        std::transform( aValues.begin(), aValues.end(),
-                          aResult.getArray(), CommonFunctors::AnyToString());
+        return CommonFunctors::convertToSequence(aValues, CommonFunctors::ToString());
     }
-    return aResult;
+    return {};
 }
 
 // ________ XDataSequence  ________

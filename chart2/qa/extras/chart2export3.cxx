@@ -838,9 +838,9 @@ void checkCharacterProps(Reference<beans::XPropertySet> const & xTitleProp)
     std::vector<OUString> aValues = { "This", " is", "3", " a ", "custom", " erte1\n", "2dfgd ch", "ar", "t ", "title" };
     for (sal_Int32 i = 0; i < xFormattedSubTitle.getLength(); i++)
     {
-        const OUString aText = xFormattedSubTitle.getConstArray()[i]->getString();
+        const OUString aText = xFormattedSubTitle[i]->getString();
         CPPUNIT_ASSERT_EQUAL(aValues[i], aText);
-        Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle.getConstArray()[i], uno::UNO_QUERY);
+        Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle[i], uno::UNO_QUERY);
         // common props
         uno::Any aAny = xRunPropSet->getPropertyValue("CharFontName");
         CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Aptos Narrow")), aAny);

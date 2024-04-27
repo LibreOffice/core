@@ -42,18 +42,15 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& /*aXValues*/,
     const uno::Sequence< double >& aYValues )
 {
-    const sal_Int32 nDataLength = aYValues.getLength();
-    sal_Int32 nMax = nDataLength;
+    sal_Int32 nMax = aYValues.getLength();
     double fSumY = 0.0;
-    const double * pY = aYValues.getConstArray();
 
-    for( sal_Int32 i = 0; i < nDataLength; ++i )
+    for (double y : aYValues)
     {
-        if( std::isnan( pY[i] ) ||
-            std::isinf( pY[i] ))
+        if (std::isnan(y) || std::isinf(y))
             --nMax;
         else
-            fSumY += pY[i];
+            fSumY += y;
     }
 
     m_fCorrelationCoefficient = 0.0;
@@ -70,12 +67,11 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
         if( nMax > 1 )
         {
             double fErrorSum = 0.0;
-            for( sal_Int32 i = 0; i < nDataLength; ++i )
+            for (double y : aYValues)
             {
-                if( !std::isnan( pY[i] ) &&
-                    !std::isinf( pY[i] ))
+                if (!std::isnan(y) && !std::isinf(y))
                 {
-                    double v = m_fMeanValue - pY[i];
+                    double v = m_fMeanValue - y;
                     fErrorSum += (v*v);
                 }
             }

@@ -1681,20 +1681,16 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
         if( ! (rValue >>= aZoomFactors) )
             throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", nullptr, 0 );
 
-        sal_Int32 nFilterArgs = aZoomFactors.getLength();
-        const beans::PropertyValue* pDataValues = aZoomFactors.getConstArray();
-        while( nFilterArgs-- )
+        for (auto& propval : aZoomFactors)
         {
-            if ( pDataValues->Name == "ScaleXNumerator" )
-                pDataValues->Value >>= m_nScaleXNumerator;
-            else if ( pDataValues->Name == "ScaleXDenominator" )
-                pDataValues->Value >>= m_nScaleXDenominator;
-            else if ( pDataValues->Name == "ScaleYNumerator" )
-                pDataValues->Value >>= m_nScaleYNumerator;
-            else if ( pDataValues->Name == "ScaleYDenominator" )
-                pDataValues->Value >>= m_nScaleYDenominator;
-
-            pDataValues++;
+            if (propval.Name == "ScaleXNumerator")
+                propval.Value >>= m_nScaleXNumerator;
+            else if (propval.Name == "ScaleXDenominator")
+                propval.Value >>= m_nScaleXDenominator;
+            else if (propval.Name == "ScaleYNumerator")
+                propval.Value >>= m_nScaleYNumerator;
+            else if (propval.Name == "ScaleYDenominator")
+                propval.Value >>= m_nScaleYDenominator;
         }
     }
     else if( rPropertyName == "SdrViewIsInEditMode" )

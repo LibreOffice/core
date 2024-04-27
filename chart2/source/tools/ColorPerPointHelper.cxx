@@ -65,9 +65,7 @@ bool ColorPerPointHelper::hasPointOwnProperties(
         uno::Sequence< sal_Int32 > aIndexList;
         if( xDataSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aIndexList ) // "AttributedDataPoints"
         {
-            const sal_Int32 * pBegIt = aIndexList.getConstArray();
-            const sal_Int32 * pEndIt = pBegIt + aIndexList.getLength();
-            return ( std::find( pBegIt, pEndIt, nPointIndex ) != pEndIt );
+            return (std::find(aIndexList.begin(), aIndexList.end(), nPointIndex) != aIndexList.end());
         }
     }
 
