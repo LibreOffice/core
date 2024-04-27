@@ -64,6 +64,7 @@ cmd/32/cellvertcenter.png cmd/32/alignverticalcenter.png
 cmd/32/cellverttop.png cmd/32/aligntop.png
 cmd/32/centerpara.png cmd/32/alignhorizontalcenter.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
+cmd/32/changetheme.png cmd/32/symbolshapes.moon.png
 cmd/32/charactermenu.png cmd/32/fontdialog.png
 cmd/32/charbackcolor.png cmd/32/backcolor.png
 cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
@@ -808,6 +809,7 @@ cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_cellverttop.png cmd/lc_aligntop.png
 cmd/lc_centerpara.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
+cmd/lc_changetheme.png cmd/lc_symbolshapes.moon.png
 cmd/lc_charactermenu.png cmd/lc_fontdialog.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
@@ -1226,6 +1228,7 @@ cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_cellverttop.png cmd/sc_aligntop.png
 cmd/sc_centerpara.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
+cmd/sc_changetheme.png cmd/sc_symbolshapes.moon.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png

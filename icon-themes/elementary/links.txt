@@ -2472,6 +2472,7 @@ cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
 # View menu
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
+cmd/32/changetheme.png cmd/32/symbolshapes.moon.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
 cmd/32/rulermenu.png cmd/32/ruler.png
 cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
@@ -2482,6 +2483,7 @@ cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 cmd/32/zoommenu.png cmd/32/zoom.png
 
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
+cmd/lc_changetheme.png cmd/lc_symbolshapes.moon.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
 cmd/lc_rulermenu.png cmd/lc_ruler.png
 cmd/lc_scrollbarmenu.png cmd/lc_scrollbar.png
@@ -2492,6 +2494,7 @@ cmd/lc_viewtrackchanges.png cmd/lc_showtrackedchanges.png
 cmd/lc_zoommenu.png cmd/lc_zoom.png
 
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
+cmd/sc_changetheme.png cmd/sc_symbolshapes.moon.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 cmd/sc_rulermenu.png cmd/sc_ruler.png
 cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
