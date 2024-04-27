@@ -184,7 +184,6 @@ gb_MERGE_LIBRARY_LIST += \
 	solver \
 	storagefd \
 	svgfilter \
-	sw_writerfilter \
 	t602filter \
 	textconversiondlgs \
 	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
