@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
         xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // TODO: I have no idea why fields are enumerated in invalid order, not like in document
+    // SwModify::Add() enumerates in invalid (mostly reverse) order, not like in document
 
     // Field: Chapter Format: Chapter name
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChapterFieldsFollowedBy)
         xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // TODO: I have no idea why fields are enumerated in invalid order, not like in document
+    // SwModify::Add() enumerates in invalid (mostly reverse) order, not like in document
     std::vector<OUString> aFieldValues = {
         "Followed by tab", // #1
         "I.I.I.I", // #16

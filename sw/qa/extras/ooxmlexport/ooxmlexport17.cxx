@@ -862,7 +862,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     std::vector<OUString> aExpectedValues = {
         // These field values are NOT in order in document: getTextFields did provide
-        // fields in a strange but fixed order
+        // fields in a strange but fixed order (mostly reversed, thanks to SwModify::Add)
         "Title", "Placeholder", "Placeholder", "Placeholder",
         "Placeholder", "Placeholder", "Placeholder", "Placeholder",
         "Placeholder", "Placeholder", "Placeholder", "Placeholder",
@@ -972,7 +972,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 
     std::vector<OUString> aExpectedValues = {
         // These field values are NOT in order in document: getTextFields did provide
-        // fields in a strange but fixed order
+        // fields in a strange but fixed order (mostly reversed, thanks to SwModify::Add)
         "1", "1", "1", "1", "1/", "1/", "1/", "1)", "1)", "1)", "1.)",
         "1.)", "1.)", "1..", "1..", "1..", "1.", "1.", "1.", "1", "1"
     };

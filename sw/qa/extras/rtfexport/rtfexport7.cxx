@@ -728,6 +728,7 @@ DECLARE_RTFEXPORT_TEST(testTdf156030, "tdf156030.rtf")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
     // As usual, fields given by FieldsAccess are not in same order as in the document
+    // (mostly in reverse order, thanks to SwModify::Add)
     std::vector<std::vector<OUString>> aExpectedValues = {
         { "1 FORMULA 2", "true value 1", "false value 1" }, // #1, condition should be 1 = 2
         { "", "", "" }, // #9, not enough field params
