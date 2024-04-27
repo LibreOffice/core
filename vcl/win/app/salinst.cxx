@@ -23,7 +23,6 @@
 
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
@@ -949,10 +948,34 @@ typedef LONG NTSTATUS;
 typedef NTSTATUS(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
 constexpr NTSTATUS STATUS_SUCCESS = 0x00000000;
 
+static OUString getOSVersionString(const OUString& aNtVersionString, DWORD nBuildNumber)
+{
+    OUString aVersionPlusBuild
+        = " (" + aNtVersionString + " build " + OUString::number(nBuildNumber) + ")";
+
+    if (aNtVersionString == "6.1")
+        return "Windows 7 Service Pack 1" + aVersionPlusBuild;
+    else if (aNtVersionString == "6.2")
+        return "Windows 8" + aVersionPlusBuild;
+    else if (aNtVersionString == "6.3")
+        return "Windows 8.1" + aVersionPlusBuild;
+    else if (aNtVersionString == "10.0")
+    {
+        if (nBuildNumber >= 22000)
+            return "Windows 11" + aVersionPlusBuild;
+        else
+            return "Windows 10" + aVersionPlusBuild;
+    }
+    else if (aNtVersionString.isEmpty()) // We don't know what Windows it is
+        return u"Windows unknown"_ustr;
+    else if (nBuildNumber == 0) // We don't know the build number
+        return "Windows (" + aNtVersionString + ")";
+    else // return Windows NtVersion and build number - we don't know this release
+        return "Windows" + aVersionPlusBuild;
+}
+
 OUString WinSalInstance::getOSVersion()
 {
-    OUStringBuffer aVer(50); // capacity for string like "Windows 6.1 Service Pack 1 build 7601"
-    aVer.append("Windows ");
     // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
     // subject to manifest-based behavior since Windows 8.1, so give wrong results.
     // Another approach would be to use NetWkstaGetInfo, but that has some small
@@ -960,6 +983,7 @@ OUString WinSalInstance::getOSVersion()
     // poor network connections.
     // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
     bool bHaveVerFromKernel32 = false;
+    OUString aNtVersion;
     if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
     {
         wchar_t szPath[MAX_PATH];
@@ -977,7 +1001,7 @@ OUString WinSalInstance::getOSVersion()
                     if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
                     {
                         VS_FIXEDFILEINFO* vi1 = static_cast<VS_FIXEDFILEINFO*>(pBlock);
-                        aVer.append(OUString::number(HIWORD(vi1->dwProductVersionMS)) + "."
+                        aNtVersion = (OUString::number(HIWORD(vi1->dwProductVersionMS)) + "."
                                     + OUString::number(LOWORD(vi1->dwProductVersionMS)));
                         bHaveVerFromKernel32 = true;
                     }
@@ -988,6 +1012,7 @@ OUString WinSalInstance::getOSVersion()
     // Now use RtlGetVersion (which is not subject to deprecation for GetVersion(Ex) API)
     // to get build number and SP info
     bool bHaveVerFromRtlGetVersion = false;
+    DWORD nBuildNumber = 0;
     if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
     {
         if (auto RtlGetVersion
@@ -998,19 +1023,14 @@ OUString WinSalInstance::getOSVersion()
             if (STATUS_SUCCESS == RtlGetVersion(&vi2))
             {
                 if (!bHaveVerFromKernel32) // we failed above; let's hope this would be useful
-                    aVer.append(OUString::number(vi2.dwMajorVersion) + "."
+                    aNtVersion = (OUString::number(vi2.dwMajorVersion) + "."
                                 + OUString::number(vi2.dwMinorVersion));
-                aVer.append(" ");
-                if (vi2.szCSDVersion[0])
-                    aVer.append(OUString::Concat(o3tl::toU(vi2.szCSDVersion)) + " ");
-                aVer.append("Build " + OUString::number(vi2.dwBuildNumber));
+                nBuildNumber = vi2.dwBuildNumber;
                 bHaveVerFromRtlGetVersion = true;
             }
         }
     }
-    if (!bHaveVerFromKernel32 && !bHaveVerFromRtlGetVersion)
-        aVer.append("unknown");
-    return aVer.makeStringAndClear();
+    return getOSVersionString(aNtVersion, nBuildNumber);
 }
 
 void WinSalInstance::BeforeAbort(const OUString&, bool)
