@@ -23,17 +23,7 @@ exported_symbols1 = set()
 imported_symbols1 = set()
 exported_symbols2 = set() # decoded
 imported_symbols2 = set() # decoded
-# all names that exist in the source code
-#all_source_names = set()
 
-
-#subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*' | sort -u",
-#    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-#with subprocess_find_all_source_names.stdout as txt:
-#    for line in txt:
-#        line = line.strip()
-#        all_source_names.add(line)
-#subprocess_find_all_source_names.terminate()
 
 # find all our shared libs
 subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so",
@@ -88,15 +78,6 @@ with subprocess_find.stdout as txt:
                 imported_symbols1.add(sym)
 subprocess_find.terminate()
 
-#progress = 0;
-#for sym in sorted(imported_symbols - exported_symbols):
-#    progress += 1
-#    if (progress % 128 == 0): print( str(int(progress * 100 / len(diff))) + "%")
-#    filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
-#    if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
-#    elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
-#    print("Symbol imported but not exported? " + filtered_sym)
-
 # Now we have to symbolize before comparing because sometimes (due to thunks) two
 # different encoded names symbolize to the same method/func name
 #
@@ -122,11 +103,6 @@ unused_exports = exported_symbols2 - imported_symbols2
 print("exported       = " + str(len(exported_symbols2)))
 print("imported       = " + str(len(imported_symbols2)))
 print("unused_exports = " + str(len(unused_exports)))
-
-#def extractFunctionNameFromSignature(sym):
-#    i = sym.find("(")
-#    if i == -1: return sym
-#    return sym[:i]
 
 # for each class, count how many symbols will become hidden if we mark the class as hidden
 can_be_hidden_count = dict()
