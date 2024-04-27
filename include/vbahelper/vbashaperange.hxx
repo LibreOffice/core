@@ -51,7 +51,7 @@ namespace ooo::vba {
 
 typedef CollTestImplHelper< ov::msforms::XShapeRange > ScVbaShapeRange_BASE;
 
-class VBAHELPER_DLLPUBLIC ScVbaShapeRange final : public ScVbaShapeRange_BASE
+class SAL_DLLPUBLIC_RTTI ScVbaShapeRange final : public ScVbaShapeRange_BASE
 {
 private:
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
@@ -62,7 +62,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShapes > const & getShapes() ;
 public:
-    ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::drawing::XDrawPage> xDrawShape, css::uno::Reference< css::frame::XModel > xModel );
+    VBAHELPER_DLLPUBLIC ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::drawing::XDrawPage> xDrawShape, css::uno::Reference< css::frame::XModel > xModel );
 
     // Methods
     virtual void SAL_CALL Select(  ) override;

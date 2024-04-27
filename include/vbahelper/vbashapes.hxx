@@ -52,7 +52,7 @@ namespace ooo::vba {
 
 typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
 
-class VBAHELPER_DLLPUBLIC ScVbaShapes final : public ScVbaShapes_BASE
+class SAL_DLLPUBLIC_RTTI ScVbaShapes final : public ScVbaShapes_BASE
 {
 private:
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
@@ -77,7 +77,7 @@ private:
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
 
 public:
-    ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::frame::XModel > xModel );
+    VBAHELPER_DLLPUBLIC ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::frame::XModel > xModel );
     /// @throws css::uno::RuntimeException
     static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
