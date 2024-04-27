@@ -20,6 +20,7 @@
 #include <vcl/window.hxx>
 #include <window.h>
 #include <vcl/cursor.hxx>
+#include <salframe.hxx>
 
 namespace vcl
 {
@@ -215,7 +216,13 @@ Color Window::GetBackgroundColor() const { return GetOutDev()->GetBackgroundColo
 
 void Window::EnableRTL(bool bEnable) { GetOutDev()->EnableRTL(bEnable); }
 
-void Window::FlashWindow() const {}
+void Window::FlashWindow() const
+{
+    vcl::Window* pMyParent = ImplGetTopmostFrameWindow();
+
+    if (pMyParent && pMyParent->mpWindowImpl)
+        pMyParent->mpWindowImpl->mpFrame->FlashWindow();
+}
 
 } /* namespace vcl */
 

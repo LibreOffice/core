@@ -1596,11 +1596,11 @@ void LoadEnv::impl_reactForLoadingState()
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
 
         if (bMinimized)
         {
             SolarMutexGuard aSolarGuard;
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
                 static_cast<WorkWindow*>(pWindow.get())->Minimize();
@@ -1611,6 +1611,9 @@ void LoadEnv::impl_reactForLoadingState()
             // But do nothing if it's already visible!
             impl_makeFrameWindowVisible(xWindow, !m_bFocusedAndToFront && shouldFocusAndToFront());
         }
+
+        if (pWindow)
+            pWindow->FlashWindow();
 
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
         // it should be used. Otherwise we should do nothing. May be the outside code has already
@@ -1700,8 +1703,7 @@ bool LoadEnv::shouldFocusAndToFront() const
 {
     bool const preview(
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false));
-    return !preview
-           && officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
+    return !preview;
 }
 
 // static

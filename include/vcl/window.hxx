@@ -694,7 +694,7 @@ private:
     // retrieves the list of owner draw decorated windows for this window hierarchy
     SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
 
-    SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
+    SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow() const;
 
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
@@ -1119,7 +1119,7 @@ public:
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
-
+    /// Use OS specific way to bring user attention to current window
     virtual void FlashWindow() const;
 
     /** @name Accessibility

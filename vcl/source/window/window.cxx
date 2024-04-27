@@ -2316,14 +2316,20 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
             // If it is a SystemWindow it automatically pops up on top of
             // all other windows if needed.
-            if ( ImplIsOverlapWindow() && !(nFlags & ShowFlags::NoActivate) )
+            if (ImplIsOverlapWindow())
             {
-                ImplStartToTop(( nFlags & ShowFlags::ForegroundTask ) ? ToTopFlags::ForegroundTask : ToTopFlags::NONE );
-                ImplFocusToTop( ToTopFlags::NONE, false );
-            }
+                if (!(nFlags & ShowFlags::NoActivate))
+                {
+                    ImplStartToTop((nFlags & ShowFlags::ForegroundTask) ? ToTopFlags::ForegroundTask
+                                                                        : ToTopFlags::NONE);
+                    ImplFocusToTop(ToTopFlags::NONE, false);
 
-            if (!HasFocus() && GetParent()) {
-                GetParent()->FlashWindow();
+                    if (!(nFlags & ShowFlags::ForegroundTask))
+                    {
+                        // Inform user about window if we did not popup it at foreground
+                        FlashWindow();
+                    }
+                }
             }
 
             // adjust mpWindowImpl->mbReallyVisible

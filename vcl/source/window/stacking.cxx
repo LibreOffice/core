@@ -47,9 +47,9 @@ struct ImplCalcToTopData
 
 namespace vcl {
 
-vcl::Window* Window::ImplGetTopmostFrameWindow()
+vcl::Window* Window::ImplGetTopmostFrameWindow() const
 {
-    vcl::Window *pTopmostParent = this;
+    const vcl::Window *pTopmostParent = this;
     while( pTopmostParent->ImplGetParent() )
         pTopmostParent = pTopmostParent->ImplGetParent();
     return pTopmostParent->mpWindowImpl->mpFrameWindow;
