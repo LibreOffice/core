@@ -139,7 +139,7 @@
               <object class="GtkLabel" id="organizer">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="label" translatable="yes" context="templatedialog8|organizer">Organizer</property>
+                <property name="label" translatable="yes" context="templatedialog8|organizer">General</property>
               </object>
               <packing>
                 <property name="tab-fill">False</property>
