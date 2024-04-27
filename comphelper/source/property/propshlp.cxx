@@ -814,7 +814,6 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
     IPropertyArrayHelper& rPH = getInfoHelper();
     rPH.fillHandles(pHandles.get(), rPropertyNames);
-    const OUString* pNames = rPropertyNames.getConstArray();
 
     // get the count of matching properties
     sal_Int32 nFireLen = 0;
@@ -836,7 +835,7 @@ void OPropertySetHelper::firePropertiesChangeEvent(
             if (pHandles[i] != -1)
             {
                 pChanges[nFirePos].Source = xSource;
-                pChanges[nFirePos].PropertyName = pNames[i];
+                pChanges[nFirePos].PropertyName = rPropertyNames[i];
                 pChanges[nFirePos].PropertyHandle = pHandles[i];
                 getFastPropertyValue(aGuard, pChanges[nFirePos].OldValue, pHandles[i]);
                 pChanges[nFirePos].NewValue = pChanges[nFirePos].OldValue;

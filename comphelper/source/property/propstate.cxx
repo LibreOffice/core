@@ -115,25 +115,22 @@ namespace comphelper
         sal_Int32 nLen = _rPropertyNames.getLength();
         css::uno::Sequence< css::beans::PropertyState> aRet(nLen);
         css::beans::PropertyState* pValues = aRet.getArray();
-        const OUString* pNames = _rPropertyNames.getConstArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
 
         css::uno::Sequence< css::beans::Property> aProps = rHelper.getProperties();
-        const css::beans::Property* pProps = aProps.getConstArray();
-        sal_Int32 nPropCount       = aProps.getLength();
+        auto it = aProps.begin();
+        const auto end = aProps.end();
 
         osl::MutexGuard aGuard(rBHelper.rMutex);
-        for (sal_Int32 i=0, j=0; i<nPropCount && j<nLen; ++i, ++pProps)
+        // Assumption is that both _rPropertyNames and aProps are sorted
+        for (auto& propName : _rPropertyNames)
         {
             // get the values only for valid properties
-            if (pProps->Name == *pNames)
-            {
-                *pValues = getPropertyState(*pNames);
-                ++pValues;
-                ++pNames;
-                ++j;
-            }
+            it = std::find_if(it, end, [&propName](auto& prop) { return prop.Name == propName; });
+            if (it == end)
+                break;
+            *pValues++ = getPropertyStateByHandle(it->Handle);
         }
 
         return aRet;

@@ -202,24 +202,18 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::Propert
 {
     clear();
 
-    sal_Int32                        c       = lSource.getLength();
-    const css::beans::PropertyValue* pSource = lSource.getConstArray();
-
-    m_aMap.reserve(c);
-    for (sal_Int32 i=0; i<c; ++i)
-        (*this)[pSource[i].Name] = pSource[i].Value;
+    m_aMap.reserve(lSource.getLength());
+    for (auto& rSource : lSource)
+        (*this)[rSource.Name] = rSource.Value;
 }
 
 void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedValue >& lSource)
 {
     clear();
 
-    sal_Int32                     c       = lSource.getLength();
-    const css::beans::NamedValue* pSource = lSource.getConstArray();
-
-    m_aMap.reserve(c);
-    for (sal_Int32 i=0; i<c; ++i)
-        (*this)[pSource[i].Name] = pSource[i].Value;
+    m_aMap.reserve(lSource.getLength());
+    for (auto& rSource : lSource)
+        (*this)[rSource.Name] = rSource.Value;
 }
 
 void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const

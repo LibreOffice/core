@@ -457,10 +457,9 @@ void ImplEventAttacherManager::registerScriptEvents
     for( const auto& rObj : aList )
         detach( l, nIndex, rObj.xTarget );
 
-    const ScriptEventDescriptor* pArray = ScriptEvents.getConstArray();
     sal_Int32 nLen = ScriptEvents.getLength();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
-        registerScriptEvent( l, nIndex, pArray[ i ] );
+        registerScriptEvent(l, nIndex, ScriptEvents[i]);
 
     for( const auto& rObj : aList )
         attach( l, nIndex, rObj.xTarget, rObj.aHelper );

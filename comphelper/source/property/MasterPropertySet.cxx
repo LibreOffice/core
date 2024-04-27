@@ -195,8 +195,6 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
 
     _preSetValues();
 
-    const Any * pAny = aValues.getConstArray();
-    const OUString * pString = aPropertyNames.getConstArray();
     PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
     //!! have a unique_ptr to an array of OGuards in order to have the
@@ -206,14 +204,14 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
     //!! the acquired locks properly released.
     AutoOGuardArray aOGuardArray( nCount );
 
-    for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aIter = mxInfo->maMap.find ( *pString );
+        aIter = mxInfo->maMap.find(aPropertyNames[i]);
         if ( aIter == aEnd )
-            throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
+            throw RuntimeException(aPropertyNames[i], static_cast<XPropertySet*>(this));
 
         if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
-            _setSingleValue( *((*aIter).second->mpInfo), *pAny );
+            _setSingleValue(*((*aIter).second->mpInfo), aValues[i]);
         else
         {
             SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
@@ -226,7 +224,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
                 pSlave->mxSlave->_preSetValues();
                 pSlave->SetInit ( true );
             }
-            pSlave->mxSlave->_setSingleValue( *((*aIter).second->mpInfo), *pAny );
+            pSlave->mxSlave->_setSingleValue(*((*aIter).second->mpInfo), aValues[i]);
         }
     }
 
@@ -257,7 +255,6 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         _preGetValues();
 
         Any * pAny = aValues.getArray();
-        const OUString * pString = aPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
         //!! have a unique_ptr to an array of OGuards in order to have the
@@ -267,14 +264,14 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         //!! the acquired locks properly released.
         AutoOGuardArray aOGuardArray( nCount );
 
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find(aPropertyNames[i]);
             if ( aIter == aEnd )
-                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
+                throw RuntimeException(aPropertyNames[i], static_cast<XPropertySet*>(this));
 
             if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
-                _getSingleValue( *((*aIter).second->mpInfo), *pAny );
+                _getSingleValue(*((*aIter).second->mpInfo), pAny[i]);
             else
             {
                 SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
@@ -287,7 +284,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
                     pSlave->mxSlave->_preGetValues();
                     pSlave->SetInit ( true );
                 }
-                pSlave->mxSlave->_getSingleValue( *((*aIter).second->mpInfo), *pAny );
+                pSlave->mxSlave->_getSingleValue(*((*aIter).second->mpInfo), pAny[i]);
             }
         }
 
@@ -348,14 +345,13 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
     if( nCount )
     {
         PropertyState * pState = aStates.getArray();
-        const OUString * pString = rPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find(rPropertyNames[i]);
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw UnknownPropertyException(rPropertyNames[i], static_cast<XPropertySet*>(this));
 
             // 0 means it's one of ours !
             if ( (*aIter).second->mnMapId != 0 )
@@ -366,6 +362,8 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
                     pSlave->SetInit ( true );
                 }
             }
+
+            pState[i] = PropertyState_AMBIGUOUS_VALUE;
         }
         for( const auto& rSlave : maSlaveMap )
         {

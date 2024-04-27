@@ -677,19 +677,16 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     ctx->setArmor(false);
 
-    const uno::Sequence < beans::NamedValue > *pSequence = rGpgProperties.getConstArray();
-    const sal_Int32 nLength = rGpgProperties.getLength();
-    for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
+    for (auto& rSequence : rGpgProperties)
     {
-        const beans::NamedValue *pValues = pSequence->getConstArray();
-        if ( pSequence->getLength() == 3 )
+        if (rSequence.getLength() == 3)
         {
             // take CipherValue and try to decrypt that - stop after
             // the first successful decryption
 
             // ctx is setup now, let's decrypt the lot!
             uno::Sequence < sal_Int8 > aVector;
-            pValues[2].Value >>= aVector;
+            rSequence[2].Value >>= aVector;
 
             GpgME::Data cipher(
                 reinterpret_cast<const char*>(aVector.getConstArray()),

@@ -97,12 +97,9 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPr
     std::unique_lock aGuard(maMutex);
     if ( aPropertyName.isEmpty() )
     {
-        Sequence< Property> aSeq = xInfo->getProperties();
-        const Property* pIter = aSeq.getConstArray();
-        const Property* pEnd  = pIter + aSeq.getLength();
-        for( ; pIter != pEnd ; ++pIter)
+        for (auto& prop : xInfo->getProperties())
         {
-            m_aListener.addInterface(aGuard, pIter->Name,xListener);
+            m_aListener.addInterface(aGuard, prop.Name, xListener);
         }
     }
     else if ( xInfo->hasPropertyByName(aPropertyName) )
@@ -120,12 +117,9 @@ void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& 
     std::unique_lock aGuard(maMutex);
     if ( aPropertyName.isEmpty() )
     {
-        Sequence< Property> aSeq = xInfo->getProperties();
-        const Property* pIter = aSeq.getConstArray();
-        const Property* pEnd  = pIter + aSeq.getLength();
-        for( ; pIter != pEnd ; ++pIter)
+        for (auto& prop : xInfo->getProperties())
         {
-            m_aListener.removeInterface(aGuard, pIter->Name,xListener);
+            m_aListener.removeInterface(aGuard, prop.Name, xListener);
         }
     }
     else if ( xInfo->hasPropertyByName(aPropertyName) )

@@ -372,12 +372,10 @@ namespace comphelper
         if (!m_aData.m_pValues || !m_aData.m_pValues->empty())
             throw RuntimeException();
 
-        const Pair< Any, Any >* mapping = _initialValues.getConstArray();
-        const Pair< Any, Any >* mappingEnd = mapping + _initialValues.getLength();
-        for ( ; mapping != mappingEnd; ++mapping )
+        for (auto& mapping : _initialValues)
         {
-            impl_checkValue_throw( mapping->Second );
-            (*m_aData.m_pValues)[ mapping->First ] = mapping->Second;
+            impl_checkValue_throw(mapping.Second);
+            (*m_aData.m_pValues)[mapping.First] = mapping.Second;
         }
     }
 

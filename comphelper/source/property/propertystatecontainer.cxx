@@ -89,45 +89,33 @@ namespace comphelper
 
 #ifdef DBG_UTIL
         // precondition: property sequence is sorted (the algorithm below relies on this)
-        {
-            const OUString* pNames = _rPropertyNames.getConstArray();
-            const OUString* pNamesCompare = pNames + 1;
-            const OUString* pNamesEnd = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
-            for ( ; pNamesCompare != pNamesEnd; ++pNames, ++pNamesCompare )
-                OSL_PRECOND( pNames->compareTo( *pNamesCompare ) < 0,
+        OSL_PRECOND(std::is_sorted(_rPropertyNames.begin(), _rPropertyNames.end(),
+                                   [](auto& lhs, auto& rhs) { return lhs.compareTo(rhs) < 0; }),
                     "OPropertyStateContainer::getPropertyStates: property sequence not sorted!" );
-        }
 #endif
 
-        const OUString* pLookup = _rPropertyNames.getConstArray();
-        const OUString* pLookupEnd = pLookup + nProperties;
         PropertyState* pStates = aStates.getArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
         Sequence< Property> aAllProperties  = rHelper.getProperties();
-        sal_Int32 nAllProperties            = aAllProperties.getLength();
-        const  Property* pAllProperties     = aAllProperties.getConstArray();
-        const  Property* pAllPropertiesEnd  = pAllProperties + nAllProperties;
-
-        osl::MutexGuard aGuard( rBHelper.rMutex );
-        for ( ; ( pAllProperties != pAllPropertiesEnd ) && ( pLookup != pLookupEnd ); ++pAllProperties )
-        {
 #ifdef DBG_UTIL
-            if ( pAllProperties < pAllPropertiesEnd - 1 )
-                OSL_ENSURE( pAllProperties->Name.compareTo( (pAllProperties + 1)->Name ) < 0,
-                    "OPropertyStateContainer::getPropertyStates: all-properties not sorted!" );
+        OSL_ENSURE(std::is_sorted(aAllProperties.begin(), aAllProperties.end(),
+                                  [](auto& lhs, auto& rhs)
+                                  { return lhs.Name.compareTo(rhs.Name) < 0; }),
+                   "OPropertyStateContainer::getPropertyStates: all-properties not sorted!");
 #endif
-            if ( pAllProperties->Name == *pLookup )
-            {
-                *pStates++ = getPropertyState( *pLookup );
-                ++pLookup;
-            }
-        }
 
-        if ( pLookup != pLookupEnd )
-            // we run out of properties from the IPropertyArrayHelper, but still have properties to lookup
-            // -> we were asked for a nonexistent property
-            throw UnknownPropertyException( lcl_getUnknownPropertyErrorMessage( *pLookup ), static_cast< XPropertyState* >( this ) );
+        auto it = aAllProperties.begin();
+        const auto end = aAllProperties.end();
+        osl::MutexGuard aGuard( rBHelper.rMutex );
+        for (auto& propName : _rPropertyNames)
+        {
+            it = std::find_if(it, end, [&propName](auto& prop) { return prop.Name == propName; });
+            if (it == end)
+                throw UnknownPropertyException(lcl_getUnknownPropertyErrorMessage(propName),
+                                               static_cast<XPropertyState*>(this));
+            *pStates++ = getPropertyStateByHandle(it->Handle);
+        }
 
         return aStates;
     }

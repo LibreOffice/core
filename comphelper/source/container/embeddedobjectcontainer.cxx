@@ -1165,12 +1165,9 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
     try
     {
         comphelper::EmbeddedObjectContainer aCnt( _xStorage );
-        const uno::Sequence < OUString > aNames = GetObjectNames();
-        const OUString* pIter = aNames.getConstArray();
-        const OUString* pEnd   = pIter + aNames.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& name : GetObjectNames())
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+            uno::Reference<embed::XEmbeddedObject> xObj = GetEmbeddedObject(name);
             SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
@@ -1209,13 +1206,13 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                         {
                             // if it is an embedded object or the optimized inserting fails the normal inserting should be done
                             if ( _bCreateEmbedded
-                                || !aCnt.InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
-                                aCnt.InsertGraphicStream( xStream, *pIter, aMediaType );
+                                || !aCnt.InsertGraphicStreamDirectly(xStream, name, aMediaType))
+                                aCnt.InsertGraphicStream(xStream, name, aMediaType);
                         }
                         else
                         {
                             // it is a linked object exported into SO7 format
-                            InsertStreamIntoPicturesStorage_Impl( _xStorage, xStream, *pIter );
+                            InsertStreamIntoPicturesStorage_Impl(_xStorage, xStream, name);
                         }
                     }
                 }
@@ -1248,7 +1245,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                     }
                     catch (const embed::WrongStateException&)
                     {
-                        SAL_WARN("comphelper.container", "failed to store '" << *pIter << "'");
+                        SAL_WARN("comphelper.container", "failed to store '" << name << "'");
                     }
                 }
 
@@ -1290,14 +1287,11 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
 bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnly)
 {
     bool bResult = true;
-    const uno::Sequence < OUString > aNames = GetObjectNames();
-    const OUString* pIter = aNames.getConstArray();
-    const OUString* pEnd   = pIter + aNames.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& name : GetObjectNames())
     {
         try
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+            uno::Reference<embed::XEmbeddedObject> xObj = GetEmbeddedObject(name);
             SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
@@ -1316,8 +1310,8 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                                                             &aMediaType );
                     if ( xStream.is() )
                     {
-                        if ( !InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
-                            InsertGraphicStream( xStream, *pIter, aMediaType );
+                        if (!InsertGraphicStreamDirectly(xStream, name, aMediaType))
+                            InsertGraphicStream(xStream, name, aMediaType);
                     }
                 }
 
@@ -1341,7 +1335,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                         // '_bObjectsOnly' mean we are storing to alien formats.
                         //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
                         if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
-                            && (pImpl->mxStorage->isStorageElement( *pIter ) ))
+                            && (pImpl->mxStorage->isStorageElement(name)))
                         {
                             uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xModifiable.is() && xModifiable->isModified())
@@ -1378,7 +1372,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                             OUString aMediaType;
                             uno::Reference < io::XInputStream > xInStream = GetGraphicStream( xObj, &aMediaType );
                             if ( xInStream.is() )
-                                InsertStreamIntoPicturesStorage_Impl( pImpl->mxStorage, xInStream, *pIter );
+                                InsertStreamIntoPicturesStorage_Impl( pImpl->mxStorage, xInStream, name );
                         }
                     }
                     catch (const uno::Exception&)
@@ -1444,12 +1438,9 @@ uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacemen
 bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::XStorage >& _xStorage,bool _bClearModifiedFlag)
 {
     bool bError = false;
-    const uno::Sequence < OUString > aNames = GetObjectNames();
-    const OUString* pIter = aNames.getConstArray();
-    const OUString* pEnd   = pIter + aNames.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& name : GetObjectNames())
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+        uno::Reference<embed::XEmbeddedObject> xObj = GetEmbeddedObject(name);
         SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
         if ( xObj.is() )
         {
@@ -1459,7 +1450,7 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                 try
                 {
                     xPersist->setPersistentEntry( _xStorage,
-                                                *pIter,
+                                                name,
                                                 embed::EntryInitModes::NO_INIT,
                                                 uno::Sequence< beans::PropertyValue >(),
                                                 uno::Sequence< beans::PropertyValue >() );

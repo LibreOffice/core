@@ -404,17 +404,14 @@ namespace comphelper
         ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
 
         Sequence< PropertyValue > aPropertyValues( aNames.getLength() );
-        const OUString* pName = aNames.getConstArray();
-        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
-        const Any* pValue = aValues.getArray();
         PropertyValue* pPropertyValue = aPropertyValues.getArray();
 
-        for ( ; pName != pNamesEnd; ++pName, ++pValue, ++pPropertyValue )
+        for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         {
-            pPropertyValue->Name = *pName;
-            pPropertyValue->Handle = rPropInfo.getHandleByName( *pName );
-            pPropertyValue->Value = *pValue;
-            pPropertyValue->State = getPropertyStateByHandle( pPropertyValue->Handle );
+            pPropertyValue[i].Name = aNames[i];
+            pPropertyValue[i].Handle = rPropInfo.getHandleByName(aNames[i]);
+            pPropertyValue[i].Value = aValues[i];
+            pPropertyValue[i].State = getPropertyStateByHandle(pPropertyValue[i].Handle);
         }
 
         return aPropertyValues;
@@ -452,16 +449,12 @@ namespace comphelper
             sal_Int32 nCount = aNames.getLength();
 
             Sequence< sal_Int32 > aHandles( nCount );
-            sal_Int32* pHandle = aHandles.getArray();
-            const PropertyValue* pProperty = aProperties.getConstArray();
-            for (   const OUString* pName = aNames.getConstArray();
-                    pName != aNames.getConstArray() + aNames.getLength();
-                    ++pName, ++pHandle, ++pProperty
-                )
+            sal_Int32* pHandles = aHandles.getArray();
+            for (sal_Int32 i = 0; i < nCount; ++i)
             {
                 ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
-                *pHandle = rPropInfo.getHandleByName( *pName );
-                if ( *pHandle != -1 )
+                pHandles[i] = rPropInfo.getHandleByName(aNames[i]);
+                if (pHandles[i] != -1)
                     continue;
 
                 // there's a property requested which we do not know
@@ -469,12 +462,12 @@ namespace comphelper
                 {
                     // add the property
                     sal_Int16 const nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVABLE | PropertyAttribute::MAYBEDEFAULT;
-                    addProperty( *pName, nAttributes, pProperty->Value );
+                    addProperty(aNames[i], nAttributes, aProperties[i].Value);
                     continue;
                 }
 
                 // no way out
-                throw UnknownPropertyException( *pName, *this );
+                throw UnknownPropertyException(aNames[i], *this);
             }
 
             // a sequence of values
@@ -486,7 +479,7 @@ namespace comphelper
                 ExtractPropertyValue()
             );
 
-            setFastPropertyValues( nCount, aHandles.getArray(), aValues.getConstArray(), nCount );
+            setFastPropertyValues(nCount, pHandles, aValues.getConstArray(), nCount);
         }
         catch( const PropertyVetoException& )       { throw; }
         catch( const IllegalArgumentException& )    { throw; }

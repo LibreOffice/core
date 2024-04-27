@@ -124,17 +124,13 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
 
     _preSetValues();
 
-    const Any * pAny = rValues.getConstArray();
-    const OUString * pString = rPropertyNames.getConstArray();
-    PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-
-    for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aIter = mxInfo->maMap.find ( *pString );
-        if ( aIter == aEnd )
-            throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
+        auto aIter = mxInfo->maMap.find(rPropertyNames[i]);
+        if (aIter == mxInfo->maMap.end())
+            throw RuntimeException(rPropertyNames[i], static_cast<XPropertySet*>(this));
 
-        _setSingleValue ( *((*aIter).second), *pAny );
+        _setSingleValue(*((*aIter).second), rValues[i]);
     }
 
     _postSetValues();
@@ -156,16 +152,13 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence<
         _preGetValues();
 
         Any * pAny = aValues.getArray();
-        const OUString * pString = rPropertyNames.getConstArray();
-        PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            aIter = mxInfo->maMap.find ( *pString );
-            if ( aIter == aEnd )
-                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
+            auto aIter = mxInfo->maMap.find(rPropertyNames[i]);
+            if (aIter == mxInfo->maMap.end())
+                throw RuntimeException(rPropertyNames[i], static_cast<XPropertySet*>(this));
 
-            _getSingleValue ( *((*aIter).second), *pAny );
+            _getSingleValue(*((*aIter).second), pAny[i]);
         }
 
         _postGetValues();
@@ -206,14 +199,15 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
     if( nCount )
     {
         PropertyState * pState = aStates.getArray();
-        const OUString * pString = rPropertyNames.getConstArray();
         PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find(rPropertyNames[i]);
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw UnknownPropertyException(rPropertyNames[i], static_cast<XPropertySet*>(this));
+
+            pState[i] = PropertyState_AMBIGUOUS_VALUE;
         }
     }
     return aStates;

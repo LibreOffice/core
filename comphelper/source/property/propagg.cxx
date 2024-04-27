@@ -229,15 +229,13 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
         sal_Int32* _pHandles, const css::uno::Sequence< OUString >& _rPropNames )
 {
     sal_Int32 nHitCount = 0;
-    const OUString* pReqProps = _rPropNames.getConstArray();
-    sal_Int32 nReqLen = _rPropNames.getLength();
 
     Property aNameProp;
-    for( sal_Int32 i = 0; i < nReqLen; ++i )
+    for (sal_Int32 i = 0; i < _rPropNames.getLength(); ++i)
     {
-        aNameProp.Name = pReqProps[i];
+        aNameProp.Name = _rPropNames[i];
         auto findIter = std::lower_bound(m_aProperties.begin(), m_aProperties.end(), aNameProp, PropertyCompareByName());
-        if ( findIter != m_aProperties.end() && findIter->Name == pReqProps[i] )
+        if (findIter != m_aProperties.end() && findIter->Name == _rPropNames[i])
         {
             _pHandles[i] = findIter->Handle;
             nHitCount++;
@@ -386,7 +384,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Se
 
     if (1 == nLen)
     {
-        const css::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
+        const css::beans::PropertyChangeEvent& evt = _rEvents[0];
         OSL_ENSURE(!evt.PropertyName.isEmpty(), "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
@@ -637,9 +635,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             if (_rValues.getLength() != nLen)
                 throw IllegalArgumentException("lengths do not match",
                                                static_cast<XPropertySet*>(this), -1);
-            const  css::uno::Any* pValues = _rValues.getConstArray();
-
-            // dividing the Names and _rValues
 
             // aggregate's names
             Sequence< OUString > AggPropertyNames( nAggCount );
@@ -656,22 +651,19 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             Sequence< Any > DelValues( nLen - nAggCount );
             Any* pDelValues = DelValues.getArray();
 
-            for ( const OUString& rName : _rPropertyNames )
+            for (sal_Int32 i = 0; i < nLen; ++i)
             {
-                if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == rPH.classifyProperty( rName ) )
+                if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == rPH.classifyProperty( _rPropertyNames[i] ) )
                 {
-                    *pAggNames++ = rName;
-                    *pAggValues++ = *pValues++;
+                    *pAggNames++ = _rPropertyNames[i];
+                    *pAggValues++ = _rValues[i];
                 }
                 else
                 {
-                    *pDelNames++ = rName;
-                    *pDelValues++ = *pValues++;
+                    *pDelNames++ = _rPropertyNames[i];
+                    *pDelValues++ = _rValues[i];
                 }
             }
-
-            // reset, needed below
-            pDelValues = DelValues.getArray();
 
             std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nLen - nAggCount ]);
 
@@ -700,7 +692,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                                 throw css::beans::PropertyVetoException();
                             // Will the property change?
                             if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
-                                                        pHandles[i], pDelValues[i] ) )
+                                                        pHandles[i], DelValues[i] ) )
                             {
                                 // only increment if the property really change
                                 pHandles[nHitCount]         = pHandles[i];

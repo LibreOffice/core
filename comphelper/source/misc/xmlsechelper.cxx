@@ -284,18 +284,14 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
 
     OUString GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
     {
-        const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
-        int                     nCnt = _rSeq.getLength();
         OUStringBuffer          aStr;
         const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
         char                    pBuffer[ 3 ] = "  ";
-        sal_uInt8                   nNum;
         sal_uInt16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
         sal_uInt16                  nBreak = nBreakStart;
-        for( int i = 0 ; i < nCnt ; ++i )
+        for (sal_Int8 n : _rSeq)
         {
-            nNum = sal_uInt8( pSerNumSeq[ i ] );
-
+            sal_uInt8 nNum = static_cast<sal_uInt8>(n);
             // exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;

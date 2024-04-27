@@ -112,28 +112,22 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     const sal_Int32 nCount = rPropertyNames.getLength();
 
     if( nCount != rValues.getLength() )
-        throw IllegalArgumentException("lengths do not match", uno::Reference<uno::XInterface>(), -1);
+        throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this), -1);
 
     if( !nCount )
         return;
 
     std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
     pEntries[nCount] = nullptr;
-    const OUString* pNames = rPropertyNames.getConstArray();
 
-    bool bUnknown = false;
-    sal_Int32 n;
-    for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
+    for (sal_Int32 n = 0; n < nCount; n++)
     {
-        pEntries[n] = find( mxInfo, *pNames );
-        bUnknown = nullptr == pEntries[n];
+        pEntries[n] = find(mxInfo, rPropertyNames[n]);
+        if (!pEntries[n])
+            throw UnknownPropertyException(rPropertyNames[n], static_cast<XPropertySet*>(this));
     }
 
-    if( !bUnknown )
-        _setPropertyValues( pEntries.get(), rValues.getConstArray() );
-
-    if( bUnknown )
-        throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
+    _setPropertyValues(pEntries.get(), rValues.getConstArray());
 }
 
 Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OUString >& rPropertyNames)
@@ -144,22 +138,16 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
         return Sequence< Any >();
 
     std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
-    const OUString* pNames = rPropertyNames.getConstArray();
 
-    bool bUnknown = false;
-    sal_Int32 n;
-    for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
+    for (sal_Int32 n = 0; n < nCount; n++)
     {
-        pEntries[n] = find( mxInfo, *pNames );
-        bUnknown = nullptr == pEntries[n];
+        pEntries[n] = find(mxInfo, rPropertyNames[n]);
+        if (!pEntries[n])
+            throw UnknownPropertyException(rPropertyNames[n], static_cast<XPropertySet*>(this));
     }
-
-    if( bUnknown )
-        throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
 
     pEntries[nCount] = nullptr;
     Sequence< Any > aValues(nCount);
-    aValues.realloc(nCount);
     _getPropertyValues( pEntries.get(), aValues.getArray() );
     return aValues;
 
@@ -205,26 +193,19 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 
     if( nCount )
     {
-        const OUString* pNames = aPropertyName.getConstArray();
-
-        bool bUnknown = false;
-
         std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
 
         sal_Int32 n;
-        for( n = 0; !bUnknown && (n < nCount); n++, pNames++ )
+        for (n = 0; n < nCount; n++)
         {
-            pEntries[n] = find( mxInfo, *pNames );
-            bUnknown = nullptr == pEntries[n];
+            pEntries[n] = find(mxInfo, aPropertyName[n]);
+            if (!pEntries[n])
+                throw UnknownPropertyException(aPropertyName[n], static_cast<XPropertySet*>(this));
         }
 
         pEntries[nCount] = nullptr;
 
-        if( !bUnknown )
-            _getPropertyStates( pEntries.get(), aStates.getArray() );
-
-        if( bUnknown )
-            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
+        _getPropertyStates(pEntries.get(), aStates.getArray());
     }
 
     return aStates;
