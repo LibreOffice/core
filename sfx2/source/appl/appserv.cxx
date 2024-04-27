@@ -620,20 +620,57 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case FN_CHANGE_THEME:
         {
             const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
+            OUString sSchemeName
+                = pNewThemeArg ? pNewThemeArg->GetValue() : "COLOR_SCHEME_LIBREOFFICE_AUTOMATIC";
             if (!pNewThemeArg)
             {
-                SAL_WARN("sfx.appl", "FN_CHANGE_THEME: no theme name");
-                break;
+                // toggle between light and dark mode
+
+                // There are two separate things that can be dark mode themed: UI and document
+                // The modes can be 0 (automatic - what the OS/VCL asks for), 1 (light), or 2 (dark)
+
+                // Since only gtk/osx/win support UI theme, toggle based on document colors
+                // Automatic in this case means "whatever GetUseDarkMode() says"
+                const bool bWasInDarkMode
+                    = MiscSettings::GetAppColorMode() == 2
+                      || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
+
+                // Set the UI theme. It would be nicest to use automatic whenever possible
+                sal_Int32 nUseMode = 0; // automatic
+                if (MiscSettings::GetDarkMode() != 0)
+                    MiscSettings::SetDarkMode(nUseMode);
+
+                if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
+                {
+                    // automatic didn't toggle, so force the desired theme
+                    nUseMode = bWasInDarkMode ? 1 : 2;
+                    MiscSettings::SetDarkMode(nUseMode);
+                }
+
+                // Now set the document theme
+                // If the UI can be themed, then the document theme can always remain on automatic.
+                nUseMode = 0;
+                // NOTE: since SetDarkMode has run, GetUseDarkMode might return a different result.
+                if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
+                {
+                    nUseMode = bWasInDarkMode ? 1 : 2;
+                    sSchemeName = bWasInDarkMode ? u"Light" : u"Dark";
+                }
+                MiscSettings::SetAppColorMode(nUseMode);
             }
-            const OUString& rSchemeName = pNewThemeArg->GetValue();
             svtools::EditableColorConfig aEditableConfig;
             // kit explicitly ignores changes to the global color scheme, except for the current ViewShell,
             // so an attempted change to the same global color scheme when the now current ViewShell ignored
             // the last change requires re-sending the change. In which case individual shells will have to
             // decide if this color-scheme change is a change from their perspective to avoid unnecessary
             // invalidations.
-            if (aEditableConfig.GetCurrentSchemeName() != rSchemeName || comphelper::LibreOfficeKit::isActive())
-                aEditableConfig.LoadScheme(rSchemeName);
+            if (!pNewThemeArg || comphelper::LibreOfficeKit::isActive()
+                || aEditableConfig.GetCurrentSchemeName() != sSchemeName)
+            {
+                aEditableConfig.LoadScheme(sSchemeName);
+            }
+
+            Invalidate(FN_CHANGE_THEME);
             break;
         }
 
@@ -1233,6 +1270,14 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
 #endif
 
+                case FN_CHANGE_THEME:
+                {
+                    const bool bIsDarkMode
+                        = MiscSettings::GetAppColorMode() == 2
+                          || (!MiscSettings::GetAppColorMode() && MiscSettings::GetUseDarkMode());
+                    rSet.Put(SfxBoolItem(FN_CHANGE_THEME, bIsDarkMode));
+                    break;
+                }
                 case SID_HELPTIPS:
                 {
                     rSet.Put( SfxBoolItem( SID_HELPTIPS, Help::IsQuickHelpEnabled() ) );

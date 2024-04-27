@@ -5933,11 +5933,14 @@ SfxVoidItem ChangeTheme FN_CHANGE_THEME
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]

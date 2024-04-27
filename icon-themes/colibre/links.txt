@@ -1279,12 +1279,15 @@ cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 
 # View
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
+cmd/32/changetheme.png cmd/32/symbolshapes.moon.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
 cmd/32/toolbarsmenu.png cmd/32/showtoolbar.png
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
+cmd/lc_changetheme.png cmd/lc_symbolshapes.moon.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 cmd/lc_toolbarsmenu.png cmd/lc_showtoolbar.png
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
+cmd/sc_changetheme.png cmd/sc_symbolshapes.moon.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
 cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
 

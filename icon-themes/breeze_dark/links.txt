@@ -1486,16 +1486,20 @@ cmd/sc_leftpara.png cmd/sc_alignleft.png
 cmd/sc_rightpara.png cmd/sc_alignright.png
 
 # View menu
+
+cmd/32/changetheme.png cmd/32/symbolshapes.moon.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
 cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
 
+cmd/lc_changetheme.png cmd/lc_symbolshapes.moon.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
 cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_scrollbarmenu.png cmd/lc_scrollbar.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 
+cmd/sc_changetheme.png cmd/sc_symbolshapes.moon.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
