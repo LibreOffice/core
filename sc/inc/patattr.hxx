@@ -121,7 +121,7 @@ public:
     static bool areSame(const CellAttributeHolder* p1, const CellAttributeHolder* p2);
 };
 
-class SC_DLLPUBLIC ScPatternAttr final
+class SAL_DLLPUBLIC_RTTI ScPatternAttr final
 {
     friend class CellAttributeHelper;
 
@@ -140,14 +140,14 @@ class SC_DLLPUBLIC ScPatternAttr final
 #endif
 
 public:
-    ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pItemSet = nullptr, const OUString* pStyleName = nullptr);
-    ScPatternAttr(const ScPatternAttr& rPatternAttr);
-    ~ScPatternAttr();
+    SC_DLLPUBLIC ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pItemSet = nullptr, const OUString* pStyleName = nullptr);
+    SC_DLLPUBLIC ScPatternAttr(const ScPatternAttr& rPatternAttr);
+    SC_DLLPUBLIC ~ScPatternAttr();
 
     bool operator==(const ScPatternAttr& rCmp) const;
 
     // version that allows nullptrs
-    static bool areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2);
+    SC_DLLPUBLIC static bool areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2);
     bool isRegistered() const { return 0 != mnRefCount; }
     bool isDefault() const { return this == &pCellAttributeHelper->getDefaultCellAttribute(); }
     CellAttributeHelper& getCellAttributeHelper() const { return *pCellAttributeHelper; }
@@ -161,7 +161,7 @@ public:
     static const SfxPoolItem& GetItem(sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet);
     template<class T> static const T& GetItem(TypedWhichId<T> nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet)
         { return static_cast<const T&>(GetItem(sal_uInt16(nWhich), rItemSet, pCondSet)); }
-    const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
+    SC_DLLPUBLIC const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
     template<class T> const T& GetItem(TypedWhichId<T> nWhich, const SfxItemSet* pCondSet) const
         { return static_cast<const T&>(GetItem(sal_uInt16(nWhich), pCondSet)); }
 
@@ -174,7 +174,7 @@ public:
     SvxCellOrientation GetCellOrientation( const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
-    static void fillFontOnly(vcl::Font& rFont, const SfxItemSet& rItemSet,
+    SC_DLLPUBLIC static void fillFontOnly(vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         const OutputDevice* pOutDev = nullptr,
                                         const Fraction* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
@@ -188,7 +188,7 @@ public:
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
                                         const Color* pTextConfigColor = nullptr);
 
-    static void fillColor(model::ComplexColor& rComplexColor,
+    SC_DLLPUBLIC static void fillColor(model::ComplexColor& rComplexColor,
                             const SfxItemSet& rItemSet,
                             ScAutoFontColorMode eAutoMode,
                             const SfxItemSet* pCondSet = nullptr,
@@ -196,7 +196,7 @@ public:
                             const Color* pTextConfigColor = nullptr);
 
 
-    static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
+    SC_DLLPUBLIC static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
 
     void fillColor(model::ComplexColor& rComplexColor,
                     ScAutoFontColorMode eAutoMode,
@@ -229,22 +229,22 @@ public:
     }
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
-    static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );
+    SC_DLLPUBLIC static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );
     /** Converts all Calc items contained in the own item set to edit engine items and puts them into pEditSet. */
-    void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = nullptr ) const;
+    SC_DLLPUBLIC void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Converts all edit engine items contained in rEditSet to Calc items and puts them into rDestSet. */
-    static void             GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet );
+    SC_DLLPUBLIC static void             GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet );
     /** Converts all edit engine items contained in pEditSet to Calc items and puts them into the own item set. */
-    void                    GetFromEditItemSet( const SfxItemSet* pEditSet );
+    SC_DLLPUBLIC void                    GetFromEditItemSet( const SfxItemSet* pEditSet );
 
     void                    FillEditParaItems( SfxItemSet* pSet ) const;
 
     CellAttributeHolder     MigrateToDocument( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const;
 
-    void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
+    SC_DLLPUBLIC void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
-    const OUString*         GetStyleName() const;
+    SC_DLLPUBLIC const OUString*         GetStyleName() const;
     bool                    UpdateStyleSheet(const ScDocument& rDoc);
     void                    StyleToName();
 
@@ -255,11 +255,11 @@ public:
                                 with text encoding RTL_TEXTENC_SYMBOL */
     bool                    IsSymbolFont() const;
 
-    sal_uInt32              GetNumberFormat( SvNumberFormatter* ) const;
+    SC_DLLPUBLIC sal_uInt32              GetNumberFormat( SvNumberFormatter* ) const;
     sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext ) const;
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
                                              const SfxItemSet* pCondSet ) const;
-    sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext,
+    SC_DLLPUBLIC sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext,
                                              const SfxItemSet* pCondSet ) const;
 
     Degree100               GetRotateVal( const SfxItemSet* pCondSet ) const;

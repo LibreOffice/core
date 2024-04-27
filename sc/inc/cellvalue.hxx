@@ -104,7 +104,7 @@ public:
  * this class any longer than necessary, and absolutely not after the
  * original cell has been destroyed.
  */
-struct SC_DLLPUBLIC ScRefCellValue
+struct SAL_DLLPUBLIC_RTTI ScRefCellValue
 {
 private:
     CellType meType;
@@ -116,8 +116,8 @@ private:
     };
 public:
 
-    ScRefCellValue();
-    ScRefCellValue( double fValue );
+    SC_DLLPUBLIC ScRefCellValue();
+    SC_DLLPUBLIC ScRefCellValue( double fValue );
     ScRefCellValue( const svl::SharedString* pString );
     ScRefCellValue( const EditTextObject* pEditText );
     ScRefCellValue( ScFormulaCell* pFormula );
@@ -125,8 +125,8 @@ public:
     /**
      * Take cell value from specified position in specified document.
      */
-    ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
-    ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
+    SC_DLLPUBLIC ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
+    SC_DLLPUBLIC ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     void clear();
 
@@ -139,7 +139,7 @@ public:
     /**
      * Take cell value from specified position in specified document.
      */
-    void assign( ScDocument& rDoc, const ScAddress& rPos );
+    SC_DLLPUBLIC void assign( ScDocument& rDoc, const ScAddress& rPos );
     void assign( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     /**
@@ -149,7 +149,7 @@ public:
 
     bool hasString() const;
 
-    bool hasNumeric() const;
+    SC_DLLPUBLIC bool hasNumeric() const;
 
     bool hasError() const;
 
@@ -173,7 +173,7 @@ public:
      *          specific fields can not be resolved. See
      *          ScEditUtil::GetString().
      */
-    OUString getString( const ScDocument* pDoc ) const;
+    SC_DLLPUBLIC OUString getString( const ScDocument* pDoc ) const;
 
     /**
      * Retrieve a string value without modifying the states of any objects in
@@ -183,7 +183,7 @@ public:
      */
     OUString getRawString( const ScDocument& rDoc ) const;
 
-    bool isEmpty() const;
+    SC_DLLPUBLIC bool isEmpty() const;
 
     bool hasEmptyValue();
 

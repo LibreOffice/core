@@ -43,15 +43,15 @@ class ScDPSaveGroupDimension;
  * These have to be applied before the other ScDPSaveData settings.
  */
 
-class SC_DLLPUBLIC ScDPSaveGroupItem
+class SAL_DLLPUBLIC_RTTI ScDPSaveGroupItem
 {
     OUString aGroupName;                        ///< name of group
     std::vector<OUString> aElements;            ///< names of items in original dimension
     mutable std::vector<ScDPItemData> maItems;  ///< items converted from the strings.
 
 public:
-    ScDPSaveGroupItem( OUString aName );
-    ~ScDPSaveGroupItem();
+    SC_DLLPUBLIC ScDPSaveGroupItem( OUString aName );
+    SC_DLLPUBLIC ~ScDPSaveGroupItem();
 
     ScDPSaveGroupItem(ScDPSaveGroupItem const &) = default;
     ScDPSaveGroupItem(ScDPSaveGroupItem &&) = default;
@@ -60,16 +60,16 @@ public:
 
     void AddToData(ScDPGroupDimension& rDataDim) const;
 
-    void    AddElement( const OUString& rName );
+    SC_DLLPUBLIC void AddElement( const OUString& rName );
     void    AddElementsFromGroup( const ScDPSaveGroupItem& rGroup );
     const OUString& GetGroupName() const { return aGroupName; }
 
     /// @return true if found (removed)
     bool    RemoveElement( const OUString& rName );
 
-    bool    IsEmpty() const;
-    size_t  GetElementCount() const;
-    const OUString* GetElementByIndex(size_t nIndex) const;
+    SC_DLLPUBLIC bool IsEmpty() const;
+    SC_DLLPUBLIC size_t GetElementCount() const;
+    SC_DLLPUBLIC const OUString* GetElementByIndex(size_t nIndex) const;
 
     void Rename( const OUString& rNewName );
 

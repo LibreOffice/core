@@ -41,7 +41,7 @@ enum RutlNameScope
     RUTL_DBASE
 };
 
-class SC_DLLPUBLIC ScRangeUtil
+class SAL_DLLPUBLIC_RTTI ScRangeUtil
 {
 public:
     ScRangeUtil() = delete;
@@ -62,7 +62,7 @@ public:
                                   bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    static bool IsAbsArea       ( const OUString& rAreaStr,
+    SC_DLLPUBLIC static bool IsAbsArea       ( const OUString& rAreaStr,
                                   const ScDocument& rDoc,
                                   SCTAB     nTab,
                                   OUString*     pCompleteStr,
@@ -70,7 +70,7 @@ public:
                                   ScRefAddress* pEndPos      = nullptr,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    static bool IsAbsPos        ( const OUString& rPosStr,
+    SC_DLLPUBLIC static bool IsAbsPos        ( const OUString& rPosStr,
                                   const ScDocument& rDoc,
                                   SCTAB     nTab,
                                   OUString*       pCompleteStr,
@@ -86,7 +86,7 @@ public:
                                   bool bUseDetailsPos = false );
 };
 
-class SC_DLLPUBLIC ScRangeStringConverter
+class SAL_DLLPUBLIC_RTTI ScRangeStringConverter
 {
 public:
 
@@ -124,7 +124,7 @@ public:
                             const OUString& rTabName);
 
 /// String to Range core
-    static bool     GetAddressFromString(
+    SC_DLLPUBLIC static bool GetAddressFromString(
                             ScAddress& rAddress,
                             std::u16string_view rAddressStr,
                             const ScDocument& rDocument,
@@ -140,7 +140,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static bool     GetRangeListFromString(
+    SC_DLLPUBLIC static bool GetRangeListFromString(
                             ScRangeList& rRangeList,
                             std::u16string_view rRangeListStr,
                             const ScDocument& rDocument,
@@ -182,7 +182,7 @@ public:
                             sal_Unicode cSeparator = ' ',
                             bool bAppendStr = false,
                             ScRefFlags nFormatFlags = ScRefFlags::VALID | ScRefFlags::TAB_3D );
-    static void         GetStringFromRangeList(
+    SC_DLLPUBLIC static void GetStringFromRangeList(
                             OUString& rString,
                             const ScRangeList* pRangeList,
                             const ScDocument* pDocument,

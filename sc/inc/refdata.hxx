@@ -26,7 +26,7 @@
 struct ScSheetLimits;
 
 /// Single reference (one address) into the sheet
-struct SC_DLLPUBLIC ScSingleRefData
+struct SAL_DLLPUBLIC_RTTI ScSingleRefData
 {
 private:
     SCCOL mnCol;
@@ -53,7 +53,7 @@ public:
     /// No default ctor, because used in ScRawToken union, set InitFlags!
     void InitFlags() { mnFlagValue = 0; }    ///< all FALSE
     /// InitAddress: InitFlags and set address
-    void InitAddress( const ScAddress& rAdr );
+    SC_DLLPUBLIC void InitAddress( const ScAddress& rAdr );
     void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
     void InitAddressRel( const ScDocument& rDoc, const ScAddress& rAdr, const ScAddress& rPos );
@@ -68,23 +68,23 @@ public:
     void SetTabRel( bool bVal ) { Flags.bTabRel = bVal; }
     bool IsTabRel() const { return Flags.bTabRel; }
 
-    void SetAbsCol( SCCOL nVal );
-    void SetRelCol( SCCOL nVal );
+    SC_DLLPUBLIC void SetAbsCol( SCCOL nVal );
+    SC_DLLPUBLIC void SetRelCol( SCCOL nVal );
     void IncCol( SCCOL nInc );
-    void SetAbsRow( SCROW nVal );
-    void SetRelRow( SCROW nVal );
+    SC_DLLPUBLIC void SetAbsRow( SCROW nVal );
+    SC_DLLPUBLIC void SetRelRow( SCROW nVal );
     void IncRow( SCROW nInc );
-    void SetAbsTab( SCTAB nVal );
-    void SetRelTab( SCTAB nVal );
+    SC_DLLPUBLIC void SetAbsTab( SCTAB nVal );
+    SC_DLLPUBLIC void SetRelTab( SCTAB nVal );
     void IncTab( SCTAB nInc );
 
-    void SetColDeleted( bool bVal );
+    SC_DLLPUBLIC void SetColDeleted( bool bVal );
     bool IsColDeleted() const { return Flags.bColDeleted;}
-    void SetRowDeleted( bool bVal );
+    SC_DLLPUBLIC void SetRowDeleted( bool bVal );
     bool IsRowDeleted() const { return Flags.bRowDeleted;}
-    void SetTabDeleted( bool bVal );
+    SC_DLLPUBLIC void SetTabDeleted( bool bVal );
     bool IsTabDeleted() const { return Flags.bTabDeleted;}
-    bool IsDeleted() const;
+    SC_DLLPUBLIC bool IsDeleted() const;
 
     void SetFlag3D( bool bVal ) { Flags.bFlag3D = bVal; }
     bool IsFlag3D() const { return Flags.bFlag3D; }
@@ -101,11 +101,11 @@ public:
     bool ValidExternal(const ScDocument& rDoc) const;
 
     ScAddress toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const;
-    ScAddress toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
-    void SetAddress( const ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos );
-    SCROW Row() const;
-    SCCOL Col() const;
-    SCTAB Tab() const;
+    SC_DLLPUBLIC ScAddress toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC void SetAddress( const ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos );
+    SC_DLLPUBLIC SCROW Row() const;
+    SC_DLLPUBLIC SCCOL Col() const;
+    SC_DLLPUBLIC SCTAB Tab() const;
 
     /** Adjust ordering (front-top-left/rear-bottom-right) to a new position. */
     static void PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2, const ScAddress& rPos );

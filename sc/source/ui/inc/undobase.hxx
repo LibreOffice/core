@@ -31,7 +31,7 @@ class SdrUndoAction;
 class ScRefUndoData;
 class ScDBData;
 
-class SC_DLLPUBLIC ScSimpleUndo: public SfxUndoAction
+class SAL_DLLPUBLIC_RTTI ScSimpleUndo: public SfxUndoAction
 {
     ScSimpleUndo(const ScSimpleUndo&) = delete;
 

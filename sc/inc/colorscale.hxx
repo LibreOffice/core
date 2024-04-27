@@ -221,13 +221,13 @@ struct ScIconSetMap {
     sal_Int32 nElements;
 };
 
-class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
+class SAL_DLLPUBLIC_RTTI ScColorFormat : public ScFormatEntry
 {
 public:
     ScColorFormat(ScDocument* pDoc);
-    virtual ~ScColorFormat() override;
+    SC_DLLPUBLIC virtual ~ScColorFormat() override;
 
-    const ScRangeList& GetRange() const;
+    SC_DLLPUBLIC const ScRangeList& GetRange() const;
     void SetCache(const std::vector<double>& aValues) const;
     std::vector<double> GetCache() const;
 
@@ -297,10 +297,10 @@ public:
     void EnsureSize();
 };
 
-class SC_DLLPUBLIC ScDataBarFormat final : public ScColorFormat
+class SAL_DLLPUBLIC_RTTI ScDataBarFormat final : public ScColorFormat
 {
 public:
-    ScDataBarFormat(ScDocument* pDoc);
+    SC_DLLPUBLIC ScDataBarFormat(ScDocument* pDoc);
     ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
 
@@ -308,9 +308,9 @@ public:
 
     std::unique_ptr<ScDataBarInfo> GetDataBarInfo(const ScAddress& rAddr) const;
 
-    void SetDataBarData( ScDataBarFormatData* pData );
-    const ScDataBarFormatData* GetDataBarData() const;
-    ScDataBarFormatData* GetDataBarData();
+    SC_DLLPUBLIC  void SetDataBarData( ScDataBarFormatData* pData );
+    SC_DLLPUBLIC const ScDataBarFormatData* GetDataBarData() const;
+    SC_DLLPUBLIC ScDataBarFormatData* GetDataBarData();
 
     bool IsEqual(const ScFormatEntry& r, bool bIgnoreSrcPos) const override;
 

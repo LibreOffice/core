@@ -300,7 +300,7 @@ public:
     }
 };
 
-class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
+class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry
 {
                                         // stored data:
     ScConditionMode     eOp;
@@ -370,23 +370,23 @@ public:
     ScConditionMode GetOperation() const        { return eOp; }
     void SetOperation(ScConditionMode eMode);
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
-    void            SetIgnoreBlank(bool bSet);
+    SC_DLLPUBLIC void SetIgnoreBlank(bool bSet);
     const OUString& GetSrcString() const         { return aSrcString; }
     const ScAddress& GetSrcPos() const           { return aSrcPos; }
 
-    ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
+    SC_DLLPUBLIC ScAddress GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 
-    void            SetSrcString( const OUString& rNew );     // for XML import
+    SC_DLLPUBLIC void SetSrcString( const OUString& rNew );     // for XML import
 
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uInt32 nNumFmt = 0,
+    SC_DLLPUBLIC OUString GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uInt32 nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
                     /** Create a flat copy using ScTokenArray copy-ctor with
                         shared tokens. */
-    std::unique_ptr<ScTokenArray> CreateFlatCopiedTokenArray( sal_uInt16 nPos ) const;
+    SC_DLLPUBLIC std::unique_ptr<ScTokenArray> CreateFlatCopiedTokenArray( sal_uInt16 nPos ) const;
 
     void            CompileAll();
     void            CompileXML();
@@ -448,13 +448,13 @@ private:
 };
 
 //  single condition entry for conditional formatting
-class SC_DLLPUBLIC ScCondFormatEntry final : public ScConditionEntry
+class SAL_DLLPUBLIC_RTTI ScCondFormatEntry final : public ScConditionEntry
 {
     OUString aStyleName;
     Type eCondFormatType = Type::Condition;
 
 public:
-            ScCondFormatEntry( ScConditionMode eOper,
+    SC_DLLPUBLIC ScCondFormatEntry( ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
                                 OUString aStyle,
@@ -463,13 +463,13 @@ public:
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 Type eType = Type::Condition);
-            ScCondFormatEntry( ScConditionMode eOper,
+    SC_DLLPUBLIC ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
                                 OUString aStyle );
-            ScCondFormatEntry( const ScCondFormatEntry& r );
+    SC_DLLPUBLIC ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument& rDocument, const ScCondFormatEntry& r );
-    virtual ~ScCondFormatEntry() override;
+    SC_DLLPUBLIC virtual ~ScCondFormatEntry() override;
 
     bool            IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const override;
 

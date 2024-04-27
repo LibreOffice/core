@@ -54,10 +54,10 @@ struct ScNoteData
 /**
  * Additional class containing cell annotation data.
  */
-class SC_DLLPUBLIC ScPostIt
+class SAL_DLLPUBLIC_RTTI ScPostIt
 {
 public:
-    static sal_uInt32 mnLastPostItId;
+    static SC_DLLPUBLIC sal_uInt32 mnLastPostItId;
 
     /** Creates an empty note and its caption object and places it according to
         the passed cell position. */
@@ -110,7 +110,7 @@ public:
     /** Returns the author date of this note. */
     const OUString& GetAuthor() const { return maNoteData.maAuthor;}
     /** Sets a new author date for this note. */
-    void SetAuthor( const OUString& rAuthor );
+    SC_DLLPUBLIC void SetAuthor( const OUString& rAuthor );
 
     /** Sets date and author from system settings. */
     void                AutoStamp();
@@ -118,12 +118,12 @@ public:
     /** Returns the pointer to the current outliner object, or null. */
     const OutlinerParaObject* GetOutlinerObject() const;
     /** Returns the pointer to the current edit text object, or null. */
-    const EditTextObject* GetEditTextObject() const;
+    SC_DLLPUBLIC const EditTextObject* GetEditTextObject() const;
 
     /** Returns the caption text of this note. */
-    OUString     GetText() const;
+    SC_DLLPUBLIC OUString     GetText() const;
     /** Changes the caption text of this note. All text formatting will be lost. */
-    void                SetText( const ScAddress& rPos, const OUString& rText );
+    SC_DLLPUBLIC void SetText( const ScAddress& rPos, const OUString& rText );
 
     /** Returns an existing note caption object. returns null, if the note
         contains initial caption data needed to construct a caption object.
@@ -134,7 +134,7 @@ public:
         the note contains initial caption data instead of the caption.
         The SdrCaptionObj* returned is still managed by the underlying
         ScNoteData::ScCaptionPtr and must not be stored elsewhere. */
-    SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
 
     /** Forgets the pointer to the note caption object.
 
@@ -145,7 +145,7 @@ public:
     void                ForgetCaption( bool bPreserveData = false );
 
     /** Shows or hides the note caption object. */
-    void                ShowCaption( const ScAddress& rPos, bool bShow );
+    SC_DLLPUBLIC void ShowCaption( const ScAddress& rPos, bool bShow );
     /** Returns true, if the caption object is visible. */
     bool IsCaptionShown() const { return maNoteData.mbShown;}
 

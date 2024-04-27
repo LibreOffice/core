@@ -27,7 +27,7 @@
 class SfxObjectShell;
 class ScDocShell;
 
-class SC_DLLPUBLIC ScAreaLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer
+class SAL_DLLPUBLIC_RTTI ScAreaLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell*     m_pDocSh;
@@ -42,7 +42,7 @@ private:
     static bool FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const OUString& rAreaName );
 
 public:
-    ScAreaLink( ScDocShell* pShell, OUString aFile,
+    SC_DLLPUBLIC ScAreaLink( ScDocShell* pShell, OUString aFile,
                     OUString aFilter, OUString aOpt,
                     OUString aArea, const ScRange& rDest, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScAreaLink() override;

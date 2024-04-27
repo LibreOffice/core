@@ -92,7 +92,7 @@ public:
     virtual bool verifyPassword(const OUString& aPassText) const = 0;
 };
 
-class SC_DLLPUBLIC ScDocProtection final : public ScPassHashProtectable
+class SAL_DLLPUBLIC_RTTI ScDocProtection final : public ScPassHashProtectable
 {
 public:
     enum Option
@@ -102,29 +102,29 @@ public:
         NONE        ///< last item - used to resize the vector
     };
 
-    explicit ScDocProtection();
+    SC_DLLPUBLIC explicit ScDocProtection();
     explicit ScDocProtection(const ScDocProtection& r);
-    virtual ~ScDocProtection() override;
+    SC_DLLPUBLIC virtual ~ScDocProtection() override;
 
-    virtual bool isProtected() const override;
+    SC_DLLPUBLIC virtual bool isProtected() const override;
     virtual bool isProtectedWithPass() const override;
-    virtual void setProtected(bool bProtected) override;
+    SC_DLLPUBLIC virtual void setProtected(bool bProtected) override;
 
     virtual bool isPasswordEmpty() const override;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPassword(const OUString& aPassText) override;
-    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
+    SC_DLLPUBLIC virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual const ScOoxPasswordHash& getPasswordHash() const override;
-    virtual void setPasswordHash(
+    SC_DLLPUBLIC virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
-    virtual bool verifyPassword(const OUString& aPassText) const override;
+    SC_DLLPUBLIC virtual bool verifyPassword(const OUString& aPassText) const override;
 
-    bool isOptionEnabled(Option eOption) const;
-    void setOption(Option eOption, bool bEnabled);
+    SC_DLLPUBLIC bool isOptionEnabled(Option eOption) const;
+    SC_DLLPUBLIC void setOption(Option eOption, bool bEnabled);
 
 private:
     std::unique_ptr<ScTableProtectionImpl> mpImpl;

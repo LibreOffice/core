@@ -109,7 +109,7 @@ public:
     bool    Save( SvStream& rStream, sal_uInt16 fileVersion );
 };
 
-class SC_DLLPUBLIC ScAutoFormatData
+class SAL_DLLPUBLIC_RTTI ScAutoFormatData
 {
 private:
     OUString               aName;
@@ -134,8 +134,8 @@ private:
 
 public:
     ScAutoFormatData();
-    ScAutoFormatData( const ScAutoFormatData& rData );
-    ~ScAutoFormatData();
+    SC_DLLPUBLIC ScAutoFormatData( const ScAutoFormatData& rData );
+    SC_DLLPUBLIC ~ScAutoFormatData();
 
     void            SetName( const OUString& rName )              { aName = rName; nStrResId = USHRT_MAX; }
     const OUString& GetName() const { return aName; }
@@ -177,7 +177,7 @@ struct DefaultFirstEntry {
     bool operator() (const OUString& left, const OUString& right) const;
 };
 
-class SC_DLLPUBLIC ScAutoFormat
+class SAL_DLLPUBLIC_RTTI ScAutoFormat
 {
     typedef std::map<OUString, std::unique_ptr<ScAutoFormatData>, DefaultFirstEntry> MapType;
     MapType m_Data;
@@ -193,23 +193,23 @@ public:
 
     ScAutoFormat();
     void Load();
-    bool Save();
+    SC_DLLPUBLIC bool Save();
 
     void SetSaveLater( bool bSet );
     bool IsSaveLater() const { return mbSaveLater; }
 
     const ScAutoFormatData* findByIndex(size_t nIndex) const;
-    ScAutoFormatData* findByIndex(size_t nIndex);
-    iterator find(const OUString& rName);
+    SC_DLLPUBLIC ScAutoFormatData* findByIndex(size_t nIndex);
+    SC_DLLPUBLIC iterator find(const OUString& rName);
 
-    iterator insert(std::unique_ptr<ScAutoFormatData> pNew);
-    void erase(const iterator& it);
+    SC_DLLPUBLIC iterator insert(std::unique_ptr<ScAutoFormatData> pNew);
+    SC_DLLPUBLIC void erase(const iterator& it);
 
-    size_t size() const;
+    SC_DLLPUBLIC size_t size() const;
     const_iterator begin() const;
     const_iterator end() const;
-    iterator begin();
-    iterator end();
+    SC_DLLPUBLIC iterator begin();
+    SC_DLLPUBLIC iterator end();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

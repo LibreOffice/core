@@ -131,10 +131,10 @@ private:
     void            SetChangeTrack();
 };
 
-class SC_DLLPUBLIC ScUndoCut: public ScBlockUndo
+class SAL_DLLPUBLIC_RTTI ScUndoCut: public ScBlockUndo
 {
 public:
-    ScUndoCut(ScDocShell* pNewDocShell,
+    SC_DLLPUBLIC ScUndoCut(ScDocShell* pNewDocShell,
               const ScRange& aRange, // adjusted for merged cells
               const ScAddress& aOldEnd, // end position without adjustment
               const ScMarkData& rMark, // selected sheets
@@ -177,10 +177,10 @@ struct ScUndoPasteOptions
     {}
 };
 
-class SC_DLLPUBLIC ScUndoPaste: public ScMultiBlockUndo
+class SAL_DLLPUBLIC_RTTI ScUndoPaste: public ScMultiBlockUndo
 {
 public:
-    ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
+    SC_DLLPUBLIC ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,

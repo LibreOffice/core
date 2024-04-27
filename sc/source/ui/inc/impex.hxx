@@ -45,7 +45,7 @@ struct ScExportTextOptions
     bool mbAddQuotes;
 };
 
-class SC_DLLPUBLIC ScImportExport
+class SAL_DLLPUBLIC_RTTI ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument& rDoc;
@@ -93,9 +93,9 @@ class SC_DLLPUBLIC ScImportExport
 public:
     ScImportExport( ScDocument& );                  // the whole document
     ScImportExport( ScDocument&, const OUString& );   // Range/cell input
-    ScImportExport( ScDocument&, const ScAddress& );
-    ScImportExport( ScDocument&, const ScRange& );
-   ~ScImportExport() COVERITY_NOEXCEPT_FALSE;
+    SC_DLLPUBLIC ScImportExport( ScDocument&, const ScAddress& );
+    SC_DLLPUBLIC ScImportExport( ScDocument&, const ScRange& );
+    SC_DLLPUBLIC ~ScImportExport() COVERITY_NOEXCEPT_FALSE;
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
     void SetFilterOptions( const OUString& rFilterOptions );
@@ -103,7 +103,7 @@ public:
 
     const ScRange& GetRange() const { return aRange; }
 
-    static void EmbeddedNullTreatment( OUString & rStr );
+    SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
 
     static bool  IsFormatSupported( SotClipboardFormatId nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
@@ -139,8 +139,8 @@ public:
     bool ExportString( OUString&, SotClipboardFormatId );
     bool ExportByteString( OString&, rtl_TextEncoding, SotClipboardFormatId );
 
-    bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
-    bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
+    SC_DLLPUBLIC bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
+    SC_DLLPUBLIC bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
 
     bool ExportData( std::u16string_view rMimeType,
                      css::uno::Any & rValue  );

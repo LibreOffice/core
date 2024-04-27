@@ -83,7 +83,7 @@ private:
 /**
  * Implementation of ScDPTableData with sheet data.
  */
-class SC_DLLPUBLIC ScSheetDPData final : public ScDPTableData
+class SAL_DLLPUBLIC_RTTI ScSheetDPData final : public ScDPTableData
 {
 private:
     ScQueryParam    aQuery;
@@ -93,8 +93,8 @@ private:
     ScDPFilteredCache  aCacheTable;
 
 public:
-    ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
-    virtual ~ScSheetDPData() override;
+    SC_DLLPUBLIC ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
+    SC_DLLPUBLIC virtual ~ScSheetDPData() override;
 
     virtual sal_Int32               GetColumnCount() override;
     virtual OUString                getDimensionName(sal_Int32 nColumn) override;
