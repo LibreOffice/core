@@ -1084,6 +1084,50 @@ void ScTable::SortReorderByColumn(
     }
 }
 
+static void backupObjectsVisibility(const std::vector<std::unique_ptr<SortedColumn>>& rSortedCols,
+                                    std::vector<std::vector<std::vector<bool>>>& rBackup)
+{
+    size_t nSortedCols = rSortedCols.size();
+    for (size_t iCol = 0; iCol < nSortedCols; ++iCol)
+    {
+        std::vector<std::vector<SdrObject*>>& rSingleColCellDrawObjects
+            = rSortedCols[iCol]->maCellDrawObjects;
+        size_t nSingleColCellDrawObjects = rSingleColCellDrawObjects.size();
+        std::vector<std::vector<bool>> aColBackup;
+        for (size_t jRow = 0; jRow < nSingleColCellDrawObjects; ++jRow)
+        {
+            std::vector<SdrObject*>& rCellDrawObjects = rSingleColCellDrawObjects[jRow];
+            std::vector<bool> aCellBackup;
+            for (auto& pObject : rCellDrawObjects)
+            {
+                aCellBackup.push_back(pObject->IsVisible());
+            }
+            aColBackup.push_back(std::move(aCellBackup));
+        }
+        rBackup.push_back(std::move(aColBackup));
+    }
+}
+
+static void restoreObjectsVisibility(std::vector<std::unique_ptr<SortedColumn>>& rSortedCols,
+                                     const std::vector<std::vector<std::vector<bool>>>& rBackup)
+{
+    size_t nSortedCols = rSortedCols.size();
+    for (size_t iCol = 0; iCol < nSortedCols; ++iCol)
+    {
+        std::vector<std::vector<SdrObject*>>& rSingleColCellDrawObjects
+            = rSortedCols[iCol]->maCellDrawObjects;
+        size_t nSingleColCellDrawObjects = rSingleColCellDrawObjects.size();
+        for (size_t jRow = 0; jRow < nSingleColCellDrawObjects; jRow++)
+        {
+            std::vector<SdrObject*>& rCellDrawObjects = rSingleColCellDrawObjects[jRow];
+            for (size_t kCell = 0; kCell < rCellDrawObjects.size(); ++kCell)
+            {
+                rCellDrawObjects[kCell]->SetVisible(rBackup[iCol][jRow][kCell]);
+            }
+        }
+    }
+}
+
 void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2,
         ScProgress* pProgress, bool bOnlyDataAreaExtras )
 {
@@ -1180,9 +1224,6 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
             aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
         }
 
-        // Update draw object positions
-        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i]->maCellDrawObjects, nRow1, nRow2);
-
         {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
@@ -1210,6 +1251,10 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
         aRowFlags.maRowsHidden.build_tree();
         aRowFlags.maRowsFiltered.build_tree();
 
+        // Backup visibility state of objects. States will be lost when changing the flags below.
+        std::vector<std::vector<std::vector<bool>>> aBackup;
+        backupObjectsVisibility(aSortedCols, aBackup);
+
         // Remove all flags in the range first.
         SetRowHidden(nRow1, nRow2, false);
         SetRowFiltered(nRow1, nRow2, false);
@@ -1224,6 +1269,16 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
 
         for (const auto& rSpan : aSpans)
             SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
+
+        //Restore visibility state of objects
+        restoreObjectsVisibility(aSortedCols, aBackup);
+    }
+
+    // Update draw object positions
+    for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
+    {
+        SCCOL nThisCol = i + nCol1;
+        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i]->maCellDrawObjects, nRow1, nRow2);
     }
 
     // Notify the cells' listeners to (re-)start listening.
@@ -1381,9 +1436,6 @@ void ScTable::SortReorderByRowRefUpdate(
             aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
         }
 
-        // Update draw object positions
-        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i]->maCellDrawObjects, nRow1, nRow2);
-
         {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
@@ -1411,6 +1463,10 @@ void ScTable::SortReorderByRowRefUpdate(
         aRowFlags.maRowsHidden.build_tree();
         aRowFlags.maRowsFiltered.build_tree();
 
+        // Backup visibility state of objects. States will be lost when changing the flags below.
+        std::vector<std::vector<std::vector<bool>>> aBackup;
+        backupObjectsVisibility(aSortedCols, aBackup);
+
         // Remove all flags in the range first.
         SetRowHidden(nRow1, nRow2, false);
         SetRowFiltered(nRow1, nRow2, false);
@@ -1425,6 +1481,16 @@ void ScTable::SortReorderByRowRefUpdate(
 
         for (const auto& rSpan : aSpans)
             SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
+
+        //Restore visibility state of objects
+        restoreObjectsVisibility(aSortedCols, aBackup);
+    }
+
+    // Update draw object positions
+    for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
+    {
+        SCCOL nThisCol = i + nCol1;
+        aCol[nThisCol].UpdateDrawObjects(aSortedCols[i]->maCellDrawObjects, nRow1, nRow2);
     }
 
     // Set up row reorder map (for later broadcasting of reference updates).
