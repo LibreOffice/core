@@ -1508,6 +1508,26 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
                 aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat,
                                                     SkSamplingOptions()));
             }
+
+#ifdef SK_METAL
+            // tdf#153306 prevent subpixel shifting of X coordinate
+            // HACK: for some unknown reason, if the X coordinate of the
+            // path's bounds is more than 1024, SkBlendMode::kExclusion will
+            // shift by about a half a pixel to the right with Skia/Metal on
+            // a Retina display. Weirdly, if the same polygon is repeatedly
+            // drawn, the total shift is cumulative so if the drawn polygon
+            // is more than a few pixels wide, the blinking cursor in Writer
+            // will exhibit this bug but only for one thin vertical slice at
+            // a time. Apparently, shifting drawing a very tiny amount to
+            // the left seems to be enough to quell this runaway cumulative
+            // X coordinate shift.
+            if (isGPU())
+            {
+                SkMatrix aMatrix;
+                aMatrix.set(SkMatrix::kMTransX, -0.001);
+                getDrawCanvas()->concat(aMatrix);
+            }
+#endif
         }
         getDrawCanvas()->drawPath(aPath, aPaint);
     }
