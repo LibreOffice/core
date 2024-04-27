@@ -29,10 +29,12 @@
 #include <svsys.h>
 
 class WinSalGraphics;
+struct ITaskbarList3;
 
 class WinSalFrame final: public SalFrame
 {
     vcl::WindowState m_eState;
+    ITaskbarList3* m_pTaskbarList3;
 
 public:
     HWND                    mhWnd;                  // Window handle
@@ -146,6 +148,9 @@ public:
     constexpr vcl::WindowState state() const { return m_eState; }
     void UpdateFrameState();
     constexpr bool isFullScreen() const { return bool(m_eState & vcl::WindowState::FullScreen); }
+
+    virtual void  SetTaskBarProgress(int nCurrentProgress) override;
+    virtual void  SetTaskBarState(VclTaskBarStates eTaskBarState) override;
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );

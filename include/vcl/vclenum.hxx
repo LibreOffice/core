@@ -196,6 +196,20 @@ enum class VclPackType
     LAST = End
 };
 
+enum class VclTaskBarStates {
+    // Default, no specifics
+    Normal,
+    // Display some progress defined by SetTaskBarProgress
+    Progress,
+    // Something going on, but no exact progress scale
+    ProgressUnknown,
+    // Process on pause
+    Paused,
+    // Some error did happen
+    Error
+};
+
+
 // Return Values from Dialog::Execute
 //!!! in case of changes adjust /basic/source/runtime/methods.cxx msgbox
 

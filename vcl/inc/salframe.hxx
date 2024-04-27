@@ -316,6 +316,9 @@ public:
     // in nOffset, nChars.
     static Selection        CalcDeleteSurroundingSelection(std::u16string_view rSurroundingText,
                                                            sal_Int32 nCursorIndex, int nOffset, int nChars);
+
+    virtual void  SetTaskBarProgress(int /*nCurrentProgress*/) {}
+    virtual void  SetTaskBarState(VclTaskBarStates /*eTaskBarState*/) {}
 };
 
 #ifdef _WIN32

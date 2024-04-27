@@ -224,6 +224,22 @@ void Window::FlashWindow() const
         pMyParent->mpWindowImpl->mpFrame->FlashWindow();
 }
 
+void Window::SetTaskBarProgress(int nCurrentProgress)
+{
+    vcl::Window* pMyParent = ImplGetTopmostFrameWindow();
+
+    if (pMyParent && pMyParent->mpWindowImpl)
+        pMyParent->mpWindowImpl->mpFrame->SetTaskBarProgress(nCurrentProgress);
+}
+
+void Window::SetTaskBarState(VclTaskBarStates eTaskBarState)
+{
+    vcl::Window* pMyParent = ImplGetTopmostFrameWindow();
+
+    if (pMyParent && pMyParent->mpWindowImpl)
+        pMyParent->mpWindowImpl->mpFrame->SetTaskBarState(eTaskBarState);
+}
+
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

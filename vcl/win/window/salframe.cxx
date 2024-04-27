@@ -903,6 +903,7 @@ WinSalFrame::WinSalFrame()
     mpNextClipRect      = nullptr;
     mnDisplay           = 0;
     mbPropertiesStored  = false;
+    m_pTaskbarList3     = nullptr;
 
     // get data, when making 1st frame
     if ( !pSalData->mpFirstFrame )
@@ -983,6 +984,11 @@ WinSalFrame::~WinSalFrame()
         ReleaseFrameGraphicsDC( mpLocalGraphics );
         delete mpLocalGraphics;
         mpLocalGraphics = nullptr;
+    }
+
+    if ( m_pTaskbarList3 )
+    {
+        m_pTaskbarList3->Release();
     }
 
     if ( mhWnd )
@@ -3157,6 +3163,53 @@ bool WinSalFrame::GetUseReducedAnimation() const
     BOOL bEnableAnimation = FALSE;
     SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION, 0, &bEnableAnimation, 0);
     return !bEnableAnimation;
+}
+
+void WinSalFrame::SetTaskBarProgress(int nCurrentProgress)
+{
+    if (!m_pTaskbarList3)
+    {
+        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList3, (void **)&m_pTaskbarList3);
+        if (!SUCCEEDED(hr) || !m_pTaskbarList3)
+            return;
+    }
+
+    m_pTaskbarList3->SetProgressValue(mhWnd, nCurrentProgress, 100);
+}
+
+void WinSalFrame::SetTaskBarState(VclTaskBarStates eTaskBarState)
+{
+    if (!m_pTaskbarList3)
+    {
+        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList3, (void **)&m_pTaskbarList3);
+        if (!SUCCEEDED(hr) || !m_pTaskbarList3)
+            return;
+    }
+
+    TBPFLAG nFlag;
+    switch (eTaskBarState)
+    {
+        case VclTaskBarStates::Progress:
+            nFlag = TBPF_NORMAL;
+            break;
+        case VclTaskBarStates::ProgressUnknown:
+            nFlag = TBPF_INDETERMINATE;
+            break;
+        case VclTaskBarStates::Paused:
+            nFlag = TBPF_PAUSED;
+            SetTaskBarProgress(100);
+            break;
+        case VclTaskBarStates::Error:
+            nFlag = TBPF_ERROR;
+            SetTaskBarProgress(100);
+            break;
+        case VclTaskBarStates::Normal:
+        default:
+            nFlag = TBPF_NOPROGRESS;
+            break;
+    }
+
+    m_pTaskbarList3->SetProgressState(mhWnd, nFlag);
 }
 
 static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,

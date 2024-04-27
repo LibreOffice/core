@@ -2563,6 +2563,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
             break;
         case VclMessageType::Error:
             SetText(GetStandardErrorBoxText());
+            SetTaskBarState(VclTaskBarStates::Error);
             break;
         case VclMessageType::Other:
             SetText(Application::GetDisplayName());
@@ -2572,6 +2573,8 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
 
 void MessageDialog::dispose()
 {
+    SetTaskBarState(VclTaskBarStates::Normal);
+
     disposeOwnedButtons();
     m_pPrimaryMessage.disposeAndClear();
     m_pSecondaryMessage.disposeAndClear();
