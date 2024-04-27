@@ -66,6 +66,14 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     return pObj;
 }
 
+static SdrObject* lcl_getSdrObjectbyName(ScDocument& rDoc, std::u16string_view rName)
+{
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    SdrObject* pObj = pPage->GetObjByName(rName);
+    return pObj;
+}
+
 CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_OpenBezier_noSwapWH)
 {
     // Shapes, which have rotation incorporated in their points, got erroneously width-height
@@ -1297,6 +1305,35 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     CPPUNIT_ASSERT_EQUAL(aOrigStart, aAfterStart);
     CPPUNIT_ASSERT_EQUAL(aOrigEnd, aAfterEnd);
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aOrigRect, aAfterRect, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160329_sortWithHiddenRows)
+{
+    // Load a document, which has images anchored to cell and rows hidden
+    createScDoc("ods/tdf160329_sortWithHiddenRows.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Sort the rows
+    uno::Sequence<beans::PropertyValue> aArgs1
+        = { comphelper::makePropertyValue("DbName", u"myRange"_ustr) };
+    dispatchCommand(mxComponent, ".uno:SelectDB", aArgs1);
+    uno::Sequence<beans::PropertyValue> aArgs2
+        = { comphelper::makePropertyValue("ByRows", true),
+            comphelper::makePropertyValue("HasHeader", true),
+            comphelper::makePropertyValue("Col1", sal_Int32(1)),
+            comphelper::makePropertyValue("Ascending1", false),
+            comphelper::makePropertyValue("IncludeImages", true) };
+    dispatchCommand(mxComponent, ".uno:DataSort", aArgs2);
+
+    // Make sure objects are on correct position
+    SdrObject* pObj = lcl_getSdrObjectbyName(*pDoc, std::u16string_view(u"ImageD"));
+    Point aPos = pObj->GetSnapRect().TopLeft();
+    // The position was (3000|2899) without fix.
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(3000, 5898), aPos, 1);
+    pObj = lcl_getSdrObjectbyName(*pDoc, std::u16string_view(u"ImageE"));
+    aPos = pObj->GetSnapRect().TopLeft();
+    // The position was (2600|2499) without fix.
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2600, 4399), aPos, 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
