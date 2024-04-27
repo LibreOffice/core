@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <config_crypto.h>
+
 #include <curl/curl.h>
 
 // curl is built with --with-secure-transport on macOS and iOS so doesn't need these
