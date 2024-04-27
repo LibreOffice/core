@@ -1799,14 +1799,8 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if (m_xAllowSplitBox->get_state_changed_from_saved())
     {
-        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_SPLIT );
-
-        if ( !pOld || static_cast<const SvxFormatSplitItem*>(pOld)->GetValue() !=
-                      ( eState == TRISTATE_FALSE ) )
-        {
-            rOutSet->Put( SvxFormatSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
-            bModified = true;
-        }
+        rOutSet->Put( SvxFormatSplitItem( eState == TRISTATE_TRUE, _nWhich ) );
+        bModified = true;
     }
 
     // keep paragraphs
