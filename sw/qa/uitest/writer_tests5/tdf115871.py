@@ -35,7 +35,7 @@ class tdf115871(UITestCase):
             # Modify outline & list settings of the created style
             with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "15")
+                select_pos(xTabs, "13")
 
                 # Outline level
                 xOutlineLevel = xTabs.getChild("comboLB_OUTLINE_LEVEL")
@@ -58,7 +58,7 @@ class tdf115871(UITestCase):
             # Open the paragraph style dialog and reset dialog to parent settings
             with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "15")
+                select_pos(xTabs, "13")
 
                 xStandardButton = xDialog.getChild("standard")
                 xStandardButton.executeAction("CLICK", tuple())

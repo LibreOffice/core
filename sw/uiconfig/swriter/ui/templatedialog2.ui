@@ -159,10 +159,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="indents">
+              <object class="GtkLabel" id="font">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|indents">Indents &amp; Spacing</property>
+                <property name="label" translatable="yes" context="templatedialog2|font">Font</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -183,10 +183,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="alignment">
+              <object class="GtkLabel" id="fonteffect">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|alignment">Alignment</property>
+                <property name="label" translatable="yes" context="templatedialog2|fonteffect">Font Effects</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -231,10 +231,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="asiantypo">
+              <object class="GtkLabel" id="alignment">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|asiantypo">Asian Typography</property>
+                <property name="label" translatable="yes" context="templatedialog2|alignment">Alignment</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -255,10 +255,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="font">
+              <object class="GtkLabel" id="indents">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|font">Font</property>
+                <property name="label" translatable="yes" context="templatedialog2|indents">Indents &amp; Spacing</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -279,10 +279,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="fonteffect">
+              <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|fonteffect">Font Effects</property>
+                <property name="label" translatable="yes" context="templatedialog2|position">Position</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -303,10 +303,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="position">
+              <object class="GtkLabel" id="dropcaps">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|position">Position</property>
+                <property name="label" translatable="yes" context="templatedialog2|dropcaps">Drop Caps</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -327,10 +327,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="asianlayout">
+              <object class="GtkLabel" id="highlighting">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|asianlayout">Asian Layout</property>
+                <property name="label" translatable="yes" context="templatedialog2|highlighting">Highlighting</property>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -351,10 +351,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="highlighting">
+              <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|highlighting">Highlighting</property>
+                <property name="label" translatable="yes" context="templatedialog2|area">Area</property>
               </object>
               <packing>
                 <property name="position">9</property>
@@ -375,10 +375,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="tabs">
+              <object class="GtkLabel" id="transparence">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|tabs">Tabs</property>
+                <property name="label" translatable="yes" context="templatedialog2|transparence">Transparency</property>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -399,10 +399,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="dropcaps">
+              <object class="GtkLabel" id="borders">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|dropcaps">Drop Caps</property>
+                <property name="label" translatable="yes" context="templatedialog2|borders">Borders</property>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -423,10 +423,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="area">
+              <object class="GtkLabel" id="tabs">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|area">Area</property>
+                <property name="label" translatable="yes" context="templatedialog2|tabs">Tabs</property>
               </object>
               <packing>
                 <property name="position">12</property>
@@ -447,10 +447,11 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="transparence">
+              <object class="GtkLabel" id="outline">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|transparence">Transparency</property>
+                <property name="tooltip-text" translatable="yes" context="templatedialog2|outline">Set outline level, list style and line numbering for paragraph style.</property>
+                <property name="label" translatable="yes" context="templatedialog2|outline">Outline &amp; List</property>
               </object>
               <packing>
                 <property name="position">13</property>
@@ -471,10 +472,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="borders">
+              <object class="GtkLabel" id="condition">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|borders">Borders</property>
+                <property name="label" translatable="yes" context="templatedialog2|condition">Condition</property>
               </object>
               <packing>
                 <property name="position">14</property>
@@ -495,10 +496,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="condition">
+              <object class="GtkLabel" id="asiantypo">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|condition">Condition</property>
+                <property name="label" translatable="yes" context="templatedialog2|asiantypo">Asian Typography</property>
               </object>
               <packing>
                 <property name="position">15</property>
@@ -519,14 +520,13 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="outline">
+              <object class="GtkLabel" id="asianlayout">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="templatedialog2|outline">Set outline level, list style and line numbering for paragraph style.</property>
-                <property name="label" translatable="yes" context="templatedialog2|outline">Outline &amp; List</property>
+                <property name="label" translatable="yes" context="templatedialog2|asianlayout">Asian Layout</property>
               </object>
               <packing>
-                <property name="position">9</property>
+                <property name="position">16</property>
                 <property name="tab-fill">False</property>
               </packing>
             </child>
