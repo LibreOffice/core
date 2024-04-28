@@ -472,31 +472,24 @@ namespace basegfx::utils
                        "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have the same "
                        "length (!)" );
 
-                const css::drawing::DoubleSequence* pInnerSequenceX = rPolyPolygonShape3DSource.SequenceX.getConstArray();
-                const css::drawing::DoubleSequence* pInnerSequenceY = rPolyPolygonShape3DSource.SequenceY.getConstArray();
-                const css::drawing::DoubleSequence* pInnerSequenceZ = rPolyPolygonShape3DSource.SequenceZ.getConstArray();
-
                 for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
                 {
                     basegfx::B3DPolygon aNewPolygon;
-                    const sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
-                    assert(nInnerSequenceCount == pInnerSequenceY->getLength()
-                           && nInnerSequenceCount == pInnerSequenceZ->getLength()
+
+                    auto& rInnerSequenceX = rPolyPolygonShape3DSource.SequenceX[a];
+                    auto& rInnerSequenceY = rPolyPolygonShape3DSource.SequenceY[a];
+                    auto& rInnerSequenceZ = rPolyPolygonShape3DSource.SequenceZ[a];
+
+                    const sal_Int32 nInnerSequenceCount(rInnerSequenceX.getLength());
+                    assert(nInnerSequenceCount == rInnerSequenceY.getLength()
+                           && nInnerSequenceCount == rInnerSequenceZ.getLength()
                            && "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have "
                               "the same length (!)");
 
-                    const double* pArrayX = pInnerSequenceX->getConstArray();
-                    const double* pArrayY = pInnerSequenceY->getConstArray();
-                    const double* pArrayZ = pInnerSequenceZ->getConstArray();
-
                     for(sal_Int32 b(0); b < nInnerSequenceCount; b++)
                     {
-                        aNewPolygon.append(basegfx::B3DPoint(*pArrayX++,*pArrayY++,*pArrayZ++));
+                        aNewPolygon.append(basegfx::B3DPoint(rInnerSequenceX[b], rInnerSequenceY[b], rInnerSequenceZ[b]));
                     }
-
-                    pInnerSequenceX++;
-                    pInnerSequenceY++;
-                    pInnerSequenceZ++;
 
                     // #i101520# correction is needed for imported polygons of old format,
                     // see callers

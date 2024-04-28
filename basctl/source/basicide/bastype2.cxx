@@ -208,14 +208,8 @@ void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation 
 void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const ScriptDocument& rDocument, LibraryLocation eLocation)
 {
     // get a sorted list of library names
-    Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
-    sal_Int32 nLibCount = aLibNames.getLength();
-    const OUString* pLibNames = aLibNames.getConstArray();
-
-    for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+    for (auto& aLibName : rDocument.getLibraryNames())
     {
-        OUString aLibName = pLibNames[ i ];
-
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
             // check, if the module library is loaded
@@ -284,15 +278,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
                 else
                 {
                     // get a sorted list of module names
-                    Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
-                    sal_Int32 nModCount = aModNames.getLength();
-                    const OUString* pModNames = aModNames.getConstArray();
-
                     auto xTreeIter = m_xControl->make_iterator();
 
-                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+                    for (auto& aModName : rDocument.getObjectNames(E_SCRIPTS, rLibName))
                     {
-                        OUString aModName = pModNames[ i ];
                         m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
                         bool bModuleEntry = FindEntry(aModName, OBJ_TYPE_MODULE, *xTreeIter);
                         if (!bModuleEntry)
@@ -303,15 +292,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
                         // methods
                         if ( nMode & BrowseMode::Subs )
                         {
-                            Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
-                            sal_Int32 nCount = aNames.getLength();
-                            const OUString* pNames = aNames.getConstArray();
-
                             auto xSubTreeIter = m_xControl->make_iterator();
 
-                            for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                            for (auto& aName : GetMethodNames(rDocument, rLibName, aModName))
                             {
-                                OUString aName = pNames[ j ];
                                 m_xControl->copy_iterator(*xTreeIter, *xSubTreeIter);
                                 bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xSubTreeIter);
                                 if (!bEntry)
@@ -342,15 +326,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
     try
     {
         // get a sorted list of dialog names
-        Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
-        sal_Int32 nDlgCount = aDlgNames.getLength();
-        const OUString* pDlgNames = aDlgNames.getConstArray();
-
         auto xTreeIter = m_xControl->make_iterator();
 
-        for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+        for (auto& aDlgName : rDocument.getObjectNames(E_DIALOGS, rLibName))
         {
-            OUString aDlgName = pDlgNames[ i ];
             m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
             bool bDialogEntry = FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xTreeIter);
             if (!bDialogEntry)
@@ -401,16 +380,11 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
     try
     {
         // get a sorted list of module names
-        Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
-        sal_Int32 nModCount = aModNames.getLength();
-        const OUString* pModNames = aModNames.getConstArray();
-
         EntryDescriptor aDesc(GetEntryDescriptor(&rLibSubRootEntry));
         EntryType eCurrentType(aDesc.GetType());
 
-        for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+        for (auto& aModName : rDocument.getObjectNames(E_SCRIPTS, rLibName))
         {
-            OUString aModName = pModNames[ i ];
             EntryType eType = OBJ_TYPE_UNKNOWN;
             switch( ModuleInfoHelper::getModuleType( xLib, aModName ) )
             {
@@ -454,13 +428,8 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
             // methods
             if ( nMode & BrowseMode::Subs )
             {
-                Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
-                sal_Int32 nCount = aNames.getLength();
-                const OUString* pNames = aNames.getConstArray();
-
-                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                for (auto& aName : GetMethodNames(rDocument, rLibName, aModName))
                 {
-                    OUString aName = pNames[ j ];
                     std::unique_ptr<weld::TreeIter> xEntry(m_xControl->make_iterator(xModuleEntry.get()));
                     bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xEntry);
                     if (!bEntry)
@@ -697,13 +666,11 @@ OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
             OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
             Sequence< beans::PropertyValue > aModuleDescr;
             xModuleManager->getByName( sModule ) >>= aModuleDescr;
-            sal_Int32 nCount = aModuleDescr.getLength();
-            const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
-            for ( sal_Int32 i = 0; i < nCount; ++i )
+            for (auto& rModuleDescr : aModuleDescr)
             {
-                if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
+                if (rModuleDescr.Name == "ooSetupFactoryEmptyDocumentURL")
                 {
-                    pModuleDescr[ i ].Value >>= sFactoryURL;
+                    rModuleDescr.Value >>= sFactoryURL;
                     break;
                 }
             }

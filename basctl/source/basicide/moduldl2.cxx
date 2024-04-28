@@ -640,8 +640,7 @@ void LibPage::InsertLib()
     std::shared_ptr<LibDialog> xLibDlg;
 
     Sequence< OUString > aLibNames = GetMergedLibraryNames( xModLibContImport, xDlgLibContImport );
-    sal_Int32 nLibCount = aLibNames.getLength();
-    if (nLibCount)
+    if (aLibNames.hasElements())
     {
         // library import dialog
         xLibDlg = std::make_shared<LibDialog>(m_pDialog->getDialog());
@@ -650,11 +649,9 @@ void LibPage::InsertLib()
         rView.make_unsorted();
         rView.freeze();
 
-        const OUString* pLibNames = aLibNames.getConstArray();
-        for (sal_Int32 i = 0 ; i < nLibCount; ++i)
+        for (auto& aLibName : aLibNames)
         {
             // libbox entries
-            OUString aLibName( pLibNames[ i ] );
             if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) && xModLibContImport->isLibraryLink( aLibName ) ) ||
                     ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
             {
@@ -828,12 +825,8 @@ void LibPage::InsertLib()
                                         xModLibContImport->loadLibrary( aLibName );
 
                                     // copy all modules
-                                    Sequence< OUString > aModNames = xModLibImport->getElementNames();
-                                    sal_Int32 nModCount = aModNames.getLength();
-                                    const OUString* pModNames = aModNames.getConstArray();
-                                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+                                    for (auto& aModName : xModLibImport->getElementNames())
                                     {
-                                        OUString aModName( pModNames[ i ] );
                                         Any aElement_ = xModLibImport->getByName( aModName );
                                         xModLib->insertByName( aModName, aElement_ );
                                     }
@@ -896,12 +889,8 @@ void LibPage::InsertLib()
                                         xDlgLibContImport->loadLibrary( aLibName );
 
                                     // copy all dialogs
-                                    Sequence< OUString > aDlgNames = xDlgLibImport->getElementNames();
-                                    sal_Int32 nDlgCount = aDlgNames.getLength();
-                                    const OUString* pDlgNames = aDlgNames.getConstArray();
-                                    for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+                                    for (auto& aDlgName : xDlgLibImport->getElementNames())
                                     {
-                                        OUString aDlgName( pDlgNames[ i ] );
                                         Any aElement_ = xDlgLibImport->getByName( aDlgName );
                                         xDlgLib->insertByName( aDlgName, aElement_ );
                                     }
@@ -1227,14 +1216,9 @@ void LibPage::SetCurLib()
     m_xLibBox->clear();
 
     // get a sorted list of library names
-    Sequence< OUString > aLibNames = aDocument.getLibraryNames();
-    sal_Int32 nLibCount = aLibNames.getLength();
-    const OUString* pLibNames = aLibNames.getConstArray();
-
     int nEntry = 0;
-    for (int i = 0 ; i < nLibCount; ++i)
+    for (auto& aLibName : aDocument.getLibraryNames())
     {
-        OUString aLibName(pLibNames[i]);
         if (eLocation == aDocument.getLibraryLocation(aLibName))
             ImpInsertLibEntry(aLibName, nEntry++);
     }

@@ -580,16 +580,12 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
     {
         // get sequence of control names
         Sequence< OUString > aNames = xNameAcc->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
 
         // create a map of tab indices and control names, sorted by tab index
         IndexToNameMap aIndexToNameMap;
-        for ( sal_Int32 i = 0; i < nCtrls; ++i )
+        for (auto& aName : aNames)
         {
-            // get control name
-            OUString aName( pNames[i] );
-
             // get tab index
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
@@ -1427,17 +1423,10 @@ void DlgEdForm::UpdateTabIndices()
     if ( xNameAcc.is() )
     {
         // get sequence of control names
-        Sequence< OUString > aNames = xNameAcc->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        sal_Int32 nCtrls = aNames.getLength();
-
         // create a map of tab indices and control names, sorted by tab index
         IndexToNameMap aIndexToNameMap;
-        for ( sal_Int32 i = 0; i < nCtrls; ++i )
+        for (auto& aName : xNameAcc->getElementNames())
         {
-            // get name
-            OUString aName( pNames[i] );
-
             // get tab index
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
@@ -1485,11 +1474,8 @@ void DlgEdForm::UpdateTabOrder()
     Reference< awt::XUnoControlContainer > xCont( GetControl(), UNO_QUERY );
     if ( xCont.is() )
     {
-        Sequence< Reference< awt::XTabController > > aSeqTabCtrls = xCont->getTabControllers();
-        const Reference< awt::XTabController >* pTabCtrls = aSeqTabCtrls.getConstArray();
-        sal_Int32 nCount = aSeqTabCtrls.getLength();
-        for ( sal_Int32 i = 0; i < nCount; ++i )
-            pTabCtrls[i]->activateTabOrder();
+        for (auto& xTabController : xCont->getTabControllers())
+            xTabController->activateTabOrder();
     }
 }
 
@@ -1511,8 +1497,9 @@ void DlgEdForm::UpdateGroups()
     std::vector<DlgEdObj*> aChildList = GetChildren();
     sal_uInt32 nSize = aChildList.size();
     Sequence< Reference< awt::XControl > > aSeqControls( nSize );
+    auto* pSeqControlsData = aSeqControls.getArray();
     for ( sal_uInt32 i = 0; i < nSize; ++i )
-        aSeqControls.getArray()[i] = aChildList[i]->GetControl();
+        pSeqControlsData[i] = aChildList[i]->GetControl();
 
     sal_Int32 nGroupCount = xTabModel->getGroupCount();
     for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
@@ -1521,26 +1508,23 @@ void DlgEdForm::UpdateGroups()
         OUString aName;
         Sequence< Reference< awt::XControlModel > > aSeqModels;
         xTabModel->getGroup( nGroup, aSeqModels, aName );
-        const Reference< awt::XControlModel >* pModels = aSeqModels.getConstArray();
         sal_Int32 nModelCount = aSeqModels.getLength();
 
         // create a list of peers that belong to this group
         Sequence< Reference< awt::XWindow > > aSeqPeers( nModelCount );
+        auto* pSeqPeersData = aSeqPeers.getArray();
         for ( sal_Int32 nModel = 0; nModel < nModelCount; ++nModel )
         {
             // for each control model find the corresponding control in the global list
-            const Reference< awt::XControl >* pControls = aSeqControls.getConstArray();
-            sal_Int32 nControlCount = aSeqControls.getLength();
-            for ( sal_Int32 nControl = 0; nControl < nControlCount; ++nControl )
+            for (auto& xCtrl : aSeqControls)
             {
-                const Reference< awt::XControl > xCtrl( pControls[nControl] );
                 if ( xCtrl.is() )
                 {
                     Reference< awt::XControlModel > xCtrlModel( xCtrl->getModel() );
-                    if ( xCtrlModel.get() == pModels[nModel].get() )
+                    if (xCtrlModel.get() == aSeqModels[nModel].get())
                     {
                         // get the control peer and insert into the list of peers
-                        aSeqPeers.getArray()[ nModel ].set( xCtrl->getPeer(), UNO_QUERY );
+                        pSeqPeersData[nModel].set(xCtrl->getPeer(), UNO_QUERY);
                         break;
                     }
                 }

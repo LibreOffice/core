@@ -100,19 +100,16 @@ void ManageLanguageDialog::FillLanguageBox()
     if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
         Locale aDefaultLocale = m_xLocalizationMgr->getStringResourceManager()->getDefaultLocale();
-        Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
-        const Locale* pLocale = aLocaleSeq.getConstArray();
-        sal_Int32 i, nCount = aLocaleSeq.getLength();
-        for ( i = 0;  i < nCount;  ++i )
+        for (auto& rLocale : m_xLocalizationMgr->getStringResourceManager()->getLocales())
         {
-            bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
-            LanguageType eLangType = LanguageTag::convertToLanguageType( pLocale[i] );
+            bool bIsDefault = localesAreEqual(aDefaultLocale, rLocale);
+            LanguageType eLangType = LanguageTag::convertToLanguageType(rLocale);
             OUString sLanguage = SvtLanguageTable::GetLanguageString( eLangType );
             if ( bIsDefault )
             {
                 sLanguage += " " + m_sDefLangStr;
             }
-            LanguageEntry* pEntry = new LanguageEntry(pLocale[i], bIsDefault);
+            LanguageEntry* pEntry = new LanguageEntry(rLocale, bIsDefault);
             m_xLanguageLB->append(weld::toId(pEntry), sLanguage);
         }
     }
@@ -256,11 +253,8 @@ void SetDefaultLanguageDialog::FillLanguageBox()
     if (m_xLocalizationMgr->isLibraryLocalized())
     {
         // remove the already localized languages
-        Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
-        const Locale* pLocale = aLocaleSeq.getConstArray();
-        const sal_Int32 nCountLoc = aLocaleSeq.getLength();
-        for ( sal_Int32 i = 0;  i < nCountLoc;  ++i )
-            m_xLanguageCB->remove_id(LanguageTag::convertToLanguageType(pLocale[i]));
+        for (auto& rLocale : m_xLocalizationMgr->getStringResourceManager()->getLocales())
+            m_xLanguageCB->remove_id(LanguageTag::convertToLanguageType(rLocale));
 
         // fill checklistbox if not in default mode
         const sal_Int32 nCountLang = m_xLanguageCB->get_count();

@@ -3250,12 +3250,10 @@ namespace basegfx::utils
             if(nLength)
             {
                 aRetval.reserve(nLength);
-                const css::awt::Point* pArray = rPointSequenceSource.getConstArray();
-                const css::awt::Point* pArrayEnd = pArray + rPointSequenceSource.getLength();
 
-                for(;pArray != pArrayEnd; pArray++)
+                for(auto& point : rPointSequenceSource)
                 {
-                    aRetval.append(B2DPoint(pArray->X, pArray->Y));
+                    aRetval.append(B2DPoint(point.X, point.Y));
                 }
 
                 // check for closed state flag
@@ -3301,7 +3299,7 @@ namespace basegfx::utils
                 // copy first point if closed
                 if(bIsClosed)
                 {
-                    *pSequence = *rPointSequenceRetval.getConstArray();
+                    *pSequence = rPointSequenceRetval[0];
                 }
             }
             else
@@ -3317,8 +3315,8 @@ namespace basegfx::utils
             const css::drawing::PointSequence& rPointSequenceSource,
             const css::drawing::FlagSequence& rFlagSequenceSource)
         {
-            const sal_uInt32 nCount(static_cast<sal_uInt32>(rPointSequenceSource.getLength()));
-            OSL_ENSURE(nCount == static_cast<sal_uInt32>(rFlagSequenceSource.getLength()),
+            const sal_Int32 nCount(rPointSequenceSource.getLength());
+            OSL_ENSURE(nCount == rFlagSequenceSource.getLength(),
                 "UnoPolygonBezierCoordsToB2DPolygon: Unequal count of Points and Flags (!)");
 
             // prepare new polygon
@@ -3328,12 +3326,9 @@ namespace basegfx::utils
             {
                 aRetval.reserve(nCount);
 
-                const css::awt::Point* pPointSequence = rPointSequenceSource.getConstArray();
-                const css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceSource.getConstArray();
-
                 // get first point and flag
-                B2DPoint aNewCoordinatePair(pPointSequence->X, pPointSequence->Y); pPointSequence++;
-                css::drawing::PolygonFlags ePolygonFlag(*pFlagSequence); pFlagSequence++;
+                B2DPoint aNewCoordinatePair(rPointSequenceSource[0].X, rPointSequenceSource[0].Y);
+                css::drawing::PolygonFlags ePolygonFlag(rFlagSequenceSource[0]);
                 B2DPoint aControlA;
                 B2DPoint aControlB;
 
@@ -3344,16 +3339,16 @@ namespace basegfx::utils
                 // add first point as start point
                 aRetval.append(aNewCoordinatePair);
 
-                for(sal_uInt32 b(1); b < nCount;)
+                for(sal_Int32 b(1); b < nCount;)
                 {
                     // prepare loop
                     bool bControlA(false);
                     bool bControlB(false);
 
                     // get next point and flag
-                    aNewCoordinatePair = B2DPoint(pPointSequence->X, pPointSequence->Y);
-                    ePolygonFlag = *pFlagSequence;
-                    pPointSequence++; pFlagSequence++; b++;
+                    aNewCoordinatePair = B2DPoint(rPointSequenceSource[b].X, rPointSequenceSource[b].Y);
+                    ePolygonFlag = rFlagSequenceSource[b];
+                    b++;
 
                     if(b < nCount && ePolygonFlag == css::drawing::PolygonFlags_CONTROL)
                     {
@@ -3361,9 +3356,9 @@ namespace basegfx::utils
                         bControlA = true;
 
                         // get next point and flag
-                        aNewCoordinatePair = B2DPoint(pPointSequence->X, pPointSequence->Y);
-                        ePolygonFlag = *pFlagSequence;
-                        pPointSequence++; pFlagSequence++; b++;
+                        aNewCoordinatePair = B2DPoint(rPointSequenceSource[b].X, rPointSequenceSource[b].Y);
+                        ePolygonFlag = rFlagSequenceSource[b];
+                        b++;
                     }
 
                     if(b < nCount && ePolygonFlag == css::drawing::PolygonFlags_CONTROL)
@@ -3372,9 +3367,9 @@ namespace basegfx::utils
                         bControlB = true;
 
                         // get next point and flag
-                        aNewCoordinatePair = B2DPoint(pPointSequence->X, pPointSequence->Y);
-                        ePolygonFlag = *pFlagSequence;
-                        pPointSequence++; pFlagSequence++; b++;
+                        aNewCoordinatePair = B2DPoint(rPointSequenceSource[b].X, rPointSequenceSource[b].Y);
+                        ePolygonFlag = rFlagSequenceSource[b];
+                        b++;
                     }
 
                     // two or no control points are consumed, another one would be an error.
@@ -3559,7 +3554,7 @@ namespace basegfx::utils
                     if(bClosed)
                     {
                         // add first point as closing point
-                        *pPointSequence = *rPointSequenceRetval.getConstArray();
+                        *pPointSequence = rPointSequenceRetval[0];
                         *pFlagSequence = css::drawing::PolygonFlags_NORMAL;
                     }
                 }

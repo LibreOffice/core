@@ -554,13 +554,10 @@ namespace basegfx::utils
         {
             B2DPolyPolygon aRetval;
             aRetval.reserve(rPointSequenceSequenceSource.getLength());
-            const css::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
-            const css::drawing::PointSequence* pPointSeqEnd = pPointSequence + rPointSequenceSequenceSource.getLength();
 
-            for(;pPointSequence != pPointSeqEnd; pPointSequence++)
+            for (auto& rPointSequence : rPointSequenceSequenceSource)
             {
-                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence);
-                aRetval.append(aNewPolygon);
+                aRetval.append(UnoPointSequenceToB2DPolygon(rPointSequence));
             }
 
             return aRetval;
@@ -595,23 +592,19 @@ namespace basegfx::utils
             const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource)
         {
             B2DPolyPolygon aRetval;
-            const sal_uInt32 nSequenceCount(static_cast<sal_uInt32>(rPolyPolygonBezierCoordsSource.Coordinates.getLength()));
+            const sal_Int32 nSequenceCount(rPolyPolygonBezierCoordsSource.Coordinates.getLength());
 
             if(nSequenceCount)
             {
-                OSL_ENSURE(nSequenceCount == static_cast<sal_uInt32>(rPolyPolygonBezierCoordsSource.Flags.getLength()),
+                OSL_ENSURE(nSequenceCount == rPolyPolygonBezierCoordsSource.Flags.getLength(),
                     "UnoPolyPolygonBezierCoordsToB2DPolyPolygon: unequal number of Points and Flags (!)");
-                const css::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsSource.Coordinates.getConstArray();
-                const css::drawing::FlagSequence* pFlagSequence = rPolyPolygonBezierCoordsSource.Flags.getConstArray();
 
-                for(sal_uInt32 a(0); a < nSequenceCount; a++)
+                for(sal_Int32 a(0); a < nSequenceCount; a++)
                 {
                     const B2DPolygon aNewPolygon(UnoPolygonBezierCoordsToB2DPolygon(
-                        *pPointSequence,
-                        *pFlagSequence));
+                        rPolyPolygonBezierCoordsSource.Coordinates[a],
+                        rPolyPolygonBezierCoordsSource.Flags[a]));
 
-                    pPointSequence++;
-                    pFlagSequence++;
                     aRetval.append(aNewPolygon);
                 }
             }

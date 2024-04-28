@@ -1207,7 +1207,6 @@ void Shell::GetState(SfxItemSet &rSet)
                     if ( pCurMgr->isLibraryLocalized() )
                     {
                         Sequence< lang::Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
-                        const lang::Locale* pLocale = aLocaleSeq.getConstArray();
                         sal_Int32 i, nCount = aLocaleSeq.getLength();
 
                         // Force different results for any combination of locales and default locale
@@ -1216,7 +1215,7 @@ void Shell::GetState(SfxItemSet &rSet)
                         {
                             lang::Locale aLocale;
                             if( i < nCount )
-                                aLocale = pLocale[i];
+                                aLocale = aLocaleSeq[i];
                             else
                                 aLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
 

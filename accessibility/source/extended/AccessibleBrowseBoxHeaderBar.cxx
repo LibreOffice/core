@@ -345,7 +345,7 @@ sal_Int64 AccessibleBrowseBoxHeaderBar::implGetChildIndexFromSelectedIndex(
     if( (nSelectedChildIndex < 0) || (nSelectedChildIndex >= aSelSeq.getLength()) )
         throw lang::IndexOutOfBoundsException();
 
-    return aSelSeq.getConstArray()[ nSelectedChildIndex ];
+    return aSelSeq[ nSelectedChildIndex ];
 }
 
 void AccessibleBrowseBoxHeaderBar::ensureIsValidHeaderIndex( sal_Int32 nIndex )

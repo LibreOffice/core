@@ -231,13 +231,9 @@ BasicManager* FindBasicManager( StarBASIC const * pLib )
         if ( !pBasicMgr )
             continue;
 
-        Sequence< OUString > aLibNames( doc.getLibraryNames() );
-        sal_Int32 nLibCount = aLibNames.getLength();
-        const OUString* pLibNames = aLibNames.getConstArray();
-
-        for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+        for (auto& rLibName : doc.getLibraryNames())
         {
-            StarBASIC* pL = pBasicMgr->GetLib( pLibNames[ i ] );
+            StarBASIC* pL = pBasicMgr->GetLib(rLibName);
             if ( pL == pLib )
                 return pBasicMgr;
         }

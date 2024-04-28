@@ -353,17 +353,10 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
     if ( m_xUnoControlDialogModel.is() )
     {
         // get sequence of control names
-        Sequence< OUString > aNames = m_xUnoControlDialogModel->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        sal_Int32 nCtrls = aNames.getLength();
-
         // create a map of tab indices and control names, sorted by tab index
         IndexToNameMap aIndexToNameMap;
-        for ( sal_Int32 i = 0; i < nCtrls; ++i )
+        for (auto& aName : m_xUnoControlDialogModel->getElementNames())
         {
-            // get name
-            OUString aName( pNames[i] );
-
             // get tab index
             sal_Int16 nTabIndex = -1;
             Any aCtrl = m_xUnoControlDialogModel->getByName( aName );
@@ -669,13 +662,9 @@ void DlgEditor::Copy()
 
     if ( xClipDialogModel.is() )
     {
-        Sequence< OUString > aNames = xClipDialogModel->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        sal_uInt32 nCtrls = aNames.getLength();
-
-        for ( sal_uInt32 n = 0; n < nCtrls; n++ )
+        for (auto& rName : xClipDialogModel->getElementNames())
         {
-               xClipDialogModel->removeByName( pNames[n] );
+            xClipDialogModel->removeByName(rName);
         }
     }
 
@@ -856,27 +845,31 @@ void DlgEditor::Paste()
         Any aCombinedDataAny = xTransf->getTransferData( m_ClipboardDataFlavorsResource[1] );
         Sequence< sal_Int8 > aCombinedData;
         aCombinedDataAny >>= aCombinedData;
-        const sal_Int8* pCombinedData = aCombinedData.getConstArray();
 
         sal_Int32 nTotalLen = aCombinedData.getLength();
-
-        // Reading offset
-        sal_Int32 nResOffset = 0;
-        sal_Int32 nFactor = 1;
-        for( sal_Int16 i = 0; i < 4; i++ )
+        if (nTotalLen > 4)
         {
-            nResOffset += nFactor * sal_uInt8( pCombinedData[i] );
-            nFactor *= 256;
+            // Reading offset
+            sal_Int32 nResOffset = 0;
+            sal_Int32 nFactor = 1;
+            for (sal_Int16 i = 0; i < 4; i++)
+            {
+                nResOffset += nFactor * sal_uInt8(aCombinedData[i]);
+                nFactor *= 256;
+            }
+
+            if (nResOffset > nTotalLen || nResOffset < 0)
+                nResOffset = nTotalLen;
+
+            sal_Int32 nResDataLen = nTotalLen - nResOffset;
+            sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
+
+            DialogModelBytes.realloc(nDialogDataLen);
+            memcpy(DialogModelBytes.getArray(), aCombinedData.getConstArray() + 4, nDialogDataLen);
+
+            aResData.realloc(nResDataLen);
+            memcpy(aResData.getArray(), aCombinedData.getConstArray() + nResOffset, nResDataLen);
         }
-
-        sal_Int32 nResDataLen = nTotalLen - nResOffset;
-        sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
-
-        DialogModelBytes.realloc( nDialogDataLen );
-        memcpy( DialogModelBytes.getArray(), pCombinedData + 4, nDialogDataLen );
-
-        aResData.realloc( nResDataLen );
-        memcpy( aResData.getArray(), pCombinedData + nResOffset, nResDataLen );
     }
     else
     {
@@ -895,18 +888,16 @@ void DlgEditor::Paste()
         return;
 
     Sequence< OUString > aNames = xClipDialogModel->getElementNames();
-    const OUString* pNames = aNames.getConstArray();
-    sal_uInt32 nCtrls = aNames.getLength();
 
     Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
-    if( nCtrls > 0 && bSourceIsLocalized )
+    if (aNames.hasElements() && bSourceIsLocalized)
     {
         xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
         xStringResourcePersistence->importBinary( aResData );
     }
-    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+    for (auto& rName : aNames)
     {
-        Any aA = xClipDialogModel->getByName( pNames[n] );
+        Any aA = xClipDialogModel->getByName(rName);
         Reference< css::awt::XControlModel > xCM;
         aA >>= xCM;
 

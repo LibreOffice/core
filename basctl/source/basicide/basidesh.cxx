@@ -678,14 +678,8 @@ void Shell::UpdateWindows()
         StartListening(*doc.getBasicManager(), DuplicateHandling::Prevent /* log on only once */);
 
         // libraries
-        Sequence< OUString > aLibNames( doc.getLibraryNames() );
-        sal_Int32 nLibCount = aLibNames.getLength();
-        const OUString* pLibNames = aLibNames.getConstArray();
-
-        for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+        for (auto& aLibName : doc.getLibraryNames())
         {
-            OUString aLibName = pLibNames[ i ];
-
             if ( m_aCurLibName.isEmpty() || ( doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 // check, if library is password protected and not verified
@@ -716,13 +710,10 @@ void Shell::UpdateWindows()
                         try
                         {
                             Sequence< OUString > aModNames( doc.getObjectNames( E_SCRIPTS, aLibName ) );
-                            sal_Int32 nModCount = aModNames.getLength();
-                            const OUString* pModNames = aModNames.getConstArray();
-                            nTotalTabs += nModCount;
+                            nTotalTabs += aModNames.getLength();
 
-                            for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
+                            for (auto& aModName : aModNames)
                             {
-                                OUString aModName = pModNames[ j ];
                                 VclPtr<ModulWindow> pWin = FindBasWin( doc, aLibName, aModName );
                                 if ( !pWin )
                                     pWin = CreateBasWin( doc, aLibName, aModName );
@@ -746,13 +737,10 @@ void Shell::UpdateWindows()
                         try
                         {
                             Sequence< OUString > aDlgNames = doc.getObjectNames( E_DIALOGS, aLibName );
-                            sal_Int32 nDlgCount = aDlgNames.getLength();
-                            const OUString* pDlgNames = aDlgNames.getConstArray();
-                            nTotalTabs += nDlgCount;
+                            nTotalTabs += aDlgNames.getLength();
 
-                            for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
+                            for (auto& aDlgName : aDlgNames)
                             {
-                                OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
                                 VclPtr<DialogWindow> pWin = FindDlgWin( doc, aLibName, aDlgName );
