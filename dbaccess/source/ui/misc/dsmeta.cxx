@@ -115,13 +115,10 @@ namespace dbaui
         {
             std::map< OUString, FeatureSupport > tmp;
             ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());
-            const uno::Sequence< OUString > aURLs = aDriverConfig.getURLs();
-            const OUString* pIter = aURLs.getConstArray();
-            const OUString* pEnd = pIter + aURLs.getLength();
-            for(;pIter != pEnd;++pIter)
+            for (auto& url : aDriverConfig.getURLs())
             {
                 FeatureSupport aInit( AuthNone );
-                const ::comphelper::NamedValueCollection& aMetaData = aDriverConfig.getMetaData(*pIter);
+                const ::comphelper::NamedValueCollection& aMetaData = aDriverConfig.getMetaData(url);
                 if ( aMetaData.has("Authentication") )
                 {
                     OUString sAuth;
@@ -131,7 +128,7 @@ namespace dbaui
                     else if ( sAuth == "Password" )
                         aInit = FeatureSupport(AuthPwd);
                 }
-                tmp.insert(std::make_pair(*pIter,aInit));
+                tmp.insert(std::make_pair(url, aInit));
             }
             return tmp;
         }();

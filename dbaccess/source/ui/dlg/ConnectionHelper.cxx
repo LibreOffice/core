@@ -281,13 +281,8 @@ namespace dbaui
                 css::uno::Sequence< OUString > list;
 
                 xMozillaBootstrap->getProfileList( profileType, list );
-                const OUString * pArray = list.getConstArray();
 
-                sal_Int32 count = list.getLength();
-
-                std::set<OUString> aProfiles;
-                for (sal_Int32 index=0; index < count; index++)
-                    aProfiles.insert(pArray[index]);
+                std::set<OUString> aProfiles(list.begin(), list.end());
 
                 // execute the select dialog
                 ODatasourceSelectDialog aSelector(GetFrameWeld(), aProfiles);

@@ -791,29 +791,27 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         Sequence< PropertyValue > aArguments;
         if ( _rOpenArgument >>= aArguments )
         {
-            const PropertyValue* pIter = aArguments.getConstArray();
-            const PropertyValue* pEnd  = pIter + aArguments.getLength();
-            for ( ;pIter != pEnd; ++pIter )
+            for (auto& arg : aArguments)
             {
-                if ( pIter->Name == PROPERTY_ACTIVE_CONNECTION )
+                if (arg.Name == PROPERTY_ACTIVE_CONNECTION)
                 {
-                    xConnection.set( pIter->Value, UNO_QUERY );
+                    xConnection.set(arg.Value, UNO_QUERY);
                     continue;
                 }
 
-                if ( lcl_extractOpenMode( pIter->Value, nOpenMode ) )
+                if (lcl_extractOpenMode(arg.Value, nOpenMode))
                     continue;
 
-                if ( pIter->Name == "MacroExecutionMode" )
+                if (arg.Name == "MacroExecutionMode")
                 {
                     sal_Int16 nMacroExecMode( !aDocumentMacroMode ? MacroExecMode::USE_CONFIG : *aDocumentMacroMode );
-                    OSL_VERIFY( pIter->Value >>= nMacroExecMode );
+                    OSL_VERIFY(arg.Value >>= nMacroExecMode);
                     aDocumentMacroMode = nMacroExecMode;
                     continue;
                 }
 
                 // unknown argument -> pass to the loaded document
-                aDocumentArgs.put( pIter->Name, pIter->Value );
+                aDocumentArgs.put(arg.Name, arg.Value);
             }
         }
     }

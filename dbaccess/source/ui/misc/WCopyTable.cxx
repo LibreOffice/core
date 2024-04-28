@@ -220,19 +220,14 @@ OUString ObjectCopySource::getSelectStatement() const
         const OUString sQuote = m_xMetaData->getIdentifierQuoteString();
 
         Sequence< OUString > aColumnNames = getColumnNames();
-        const OUString* pColumnName = aColumnNames.getConstArray();
-        const OUString* pEnd = pColumnName + aColumnNames.getLength();
-        for ( ; pColumnName != pEnd; )
+        for (sal_Int32 i = 0; i < aColumnNames.getLength(); ++i)
         {
-            aSQL.append( ::dbtools::quoteName( sQuote, *pColumnName++ ) );
-
-            if ( pColumnName == pEnd )
-                aSQL.append( " " );
-            else
-                aSQL.append( ", " );
+            if (i > 0)
+                aSQL.append(", ");
+            aSQL.append(::dbtools::quoteName(sQuote, aColumnNames[i]));
         }
 
-        aSQL.append( "FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
+        aSQL.append( " FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
 
         sSelectStatement = aSQL.makeStringAndClear();
     }
@@ -997,14 +992,10 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     // On drop no line must be editable.
     // On add only empty lines must be editable.
     // On Add and Drop all lines can be edited.
-    Sequence< OUString > aColumns( _rSourceObject.getColumnNames() );
-    const OUString* pColumn      = aColumns.getConstArray();
-    const OUString* pColumnEnd   = pColumn + aColumns.getLength();
-
-    for ( ; pColumn != pColumnEnd; ++pColumn )
+    for (auto& column : _rSourceObject.getColumnNames())
     {
         // get the properties of the column
-        pActFieldDescr = _rSourceObject.createFieldDescription( *pColumn );
+        pActFieldDescr = _rSourceObject.createFieldDescription(column);
         OSL_ENSURE( pActFieldDescr, "OCopyTableWizard::loadData: illegal field description!" );
         if ( !pActFieldDescr )
             continue;
@@ -1026,13 +1017,9 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     }
 
     // determine which columns belong to the primary key
-    Sequence< OUString > aPrimaryKeyColumns( _rSourceObject.getPrimaryKeyColumnNames() );
-    const OUString* pKeyColName  = aPrimaryKeyColumns.getConstArray();
-    const OUString* pKeyColEnd   = pKeyColName + aPrimaryKeyColumns.getLength();
-
-    for( ; pKeyColName != pKeyColEnd; ++pKeyColName )
+    for (auto& keyColName : _rSourceObject.getPrimaryKeyColumnNames())
     {
-        ODatabaseExport::TColumns::const_iterator keyPos = _rColumns.find( *pKeyColName );
+        ODatabaseExport::TColumns::const_iterator keyPos = _rColumns.find(keyColName);
         if ( keyPos != _rColumns.end() )
         {
             keyPos->second->SetPrimaryKey( true );
@@ -1248,12 +1235,10 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         // set column mappings
         Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
         Sequence< OUString> aSeq = xNameAccess->getElementNames();
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
 
-        for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
+        for (sal_Int32 i = 0; i < aSeq.getLength(); ++i)
         {
-            ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(*pIter);
+            ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(aSeq[i]);
 
             if ( aDestIter != m_vDestColumns.end() )
             {
@@ -1270,7 +1255,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
                 if ( m_vColumnPositions.end() != aPosFind )
                 {
-                    aPosFind->second = nNewPos;
+                    aPosFind->second = i + 1;
                     OSL_ENSURE( m_vColumnTypes.size() > o3tl::make_unsigned( aPosFind - m_vColumnPositions.begin() ),
                         "Invalid index for vector!" );
                     m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();

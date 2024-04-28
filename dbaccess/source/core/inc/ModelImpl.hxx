@@ -45,6 +45,8 @@
 #include <rtl/ref.hxx>
 #include <o3tl/enumarray.hxx>
 
+#include <span>
+
 namespace comphelper
 {
     class NamedValueCollection;
@@ -55,33 +57,22 @@ namespace dbaccess
 
 typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 
-struct AsciiPropertyValue
+struct DefaultPropertyValue
 {
-    // note: the canonic member order would be AsciiName / DefaultValue, but
-    // this crashes on unxlngi6.pro, since there's a bug which somehow results in
-    // getDefaultDataSourceSettings returning corrupted Any instances then.
+    OUString               Name;
     css::uno::Any          DefaultValue;
-    const char*            AsciiName;
     const css::uno::Type&  ValueType;
 
-    AsciiPropertyValue()
-        :DefaultValue( )
-        ,AsciiName( nullptr )
-        ,ValueType( ::cppu::UnoType<void>::get() )
-    {
-    }
-
-    AsciiPropertyValue( const char* _pAsciiName, const css::uno::Any& _rDefaultValue )
-        :DefaultValue( _rDefaultValue )
-        ,AsciiName( _pAsciiName )
+    DefaultPropertyValue(const OUString& _aName, const css::uno::Any& _rDefaultValue)
+        :Name( _aName )
+        ,DefaultValue( _rDefaultValue )
         ,ValueType( _rDefaultValue.getValueType() )
     {
         OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
     }
-    AsciiPropertyValue( const char* _pAsciiName, const css::uno::Type& _rValeType )
-        :DefaultValue()
-        ,AsciiName( _pAsciiName )
+    DefaultPropertyValue(const OUString& _aName, const css::uno::Type& _rValeType)
+        :Name( _aName )
         ,ValueType( _rValeType )
     {
         OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
@@ -386,7 +377,7 @@ public:
     void release();
 
     /// returns all known data source settings, including their default values
-    static const AsciiPropertyValue* getDefaultDataSourceSettings();
+    static std::span<const DefaultPropertyValue> getDefaultDataSourceSettings();
 
     /** retrieves the requested container of objects (forms/reports/tables/queries)
     */

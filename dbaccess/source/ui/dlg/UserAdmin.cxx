@@ -222,11 +222,8 @@ void OUserAdmin::FillUserNames()
             {
                 m_xUSER->clear();
 
-                m_aUserNames = m_xUsers->getElementNames();
-                const OUString* pBegin = m_aUserNames.getConstArray();
-                const OUString* pEnd   = pBegin + m_aUserNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                    m_xUSER->append_text(*pBegin);
+                for (auto& name : m_xUsers->getElementNames())
+                    m_xUSER->append_text(name);
 
                 m_xUSER->set_active(0);
                 if(m_xUsers->hasByName(m_UserName))

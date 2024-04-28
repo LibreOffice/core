@@ -134,13 +134,10 @@ namespace
                 try
                 {
                     Reference<XNameAccess> xReferencedTableColumns(xInfoData->getReferencedTable()->getColumns());
-                    Sequence< OUString> aSeq = xInfoData->getReferencingTable()->getColumns()->getElementNames();
-                    const OUString* pIter = aSeq.getConstArray();
-                    const OUString* pEnd   = pIter + aSeq.getLength();
-                    for(;pIter != pEnd;++pIter)
+                    for (auto& column : xInfoData->getReferencingTable()->getColumns()->getElementNames())
                     {
-                        if ( xReferencedTableColumns->hasByName(*pIter) )
-                            xInfoData->AppendConnLine(*pIter,*pIter);
+                        if (xReferencedTableColumns->hasByName(column))
+                            xInfoData->AppendConnLine(column, column);
                     }
                 }
                 catch( const Exception& )

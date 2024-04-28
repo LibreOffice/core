@@ -336,43 +336,29 @@ void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _r
 namespace
 {
     Sequence< PropertyValue > lcl_filterDriverProperties( const Reference< XDriver >& _xDriver, const OUString& _sUrl,
-        const Sequence< PropertyValue >& _rDataSourceSettings, const AsciiPropertyValue* _pKnownSettings )
+        const Sequence< PropertyValue >& _rDataSourceSettings )
     {
         if ( _xDriver.is() )
         {
             Sequence< DriverPropertyInfo > aDriverInfo(_xDriver->getPropertyInfo(_sUrl,_rDataSourceSettings));
 
-            const PropertyValue* pDataSourceSetting = _rDataSourceSettings.getConstArray();
-            const PropertyValue* pEnd = pDataSourceSetting + _rDataSourceSettings.getLength();
-
             std::vector< PropertyValue > aRet;
 
-            for ( ; pDataSourceSetting != pEnd ; ++pDataSourceSetting )
+            for (auto& dataSourceSetting : _rDataSourceSettings)
             {
-                bool bAllowSetting = false;
-                const AsciiPropertyValue* pSetting = _pKnownSettings;
-                for ( ; pSetting->AsciiName; ++pSetting )
-                {
-                    if ( pDataSourceSetting->Name.equalsAscii( pSetting->AsciiName ) )
-                    {   // the particular data source setting is known
-
-                        const DriverPropertyInfo* pAllowedDriverSetting = aDriverInfo.getConstArray();
-                        const DriverPropertyInfo* pDriverSettingsEnd = pAllowedDriverSetting + aDriverInfo.getLength();
-                        for ( ; pAllowedDriverSetting != pDriverSettingsEnd; ++pAllowedDriverSetting )
-                        {
-                            if ( pAllowedDriverSetting->Name.equalsAscii( pSetting->AsciiName ) )
-                            {   // the driver also allows this setting
-                                bAllowSetting = true;
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                if ( bAllowSetting || !pSetting->AsciiName )
+                auto knownSettings = dbaccess::ODatabaseModelImpl::getDefaultDataSourceSettings();
+                bool isSettingKnown = std::any_of(knownSettings.begin(), knownSettings.end(),
+                                                  [name = dataSourceSetting.Name](auto& setting)
+                                                  { return name == setting.Name; });
+                // Allow if the particular data source setting is unknown or allowed by the driver
+                bool bAllowSetting = !isSettingKnown
+                                     || std::any_of(aDriverInfo.begin(), aDriverInfo.end(),
+                                                    [name = dataSourceSetting.Name](auto& setting)
+                                                    { return name == setting.Name; });
+                if (bAllowSetting)
                 {   // if the driver allows this particular setting, or if the setting is completely unknown,
                     // we pass it to the driver
-                    aRet.push_back( *pDataSourceSetting );
+                    aRet.push_back(dataSourceSetting);
                 }
             }
             if ( !aRet.empty() )
@@ -659,8 +645,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(
                 xDriver,
                 m_pImpl->m_sConnectURL,
-                m_pImpl->m_xSettings->getPropertyValues(),
-                dbaccess::ODatabaseModelImpl::getDefaultDataSourceSettings()
+                m_pImpl->m_xSettings->getPropertyValues()
             );
 
             if ( m_pImpl->isEmbeddedDatabase() )
@@ -762,36 +747,26 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
 
 sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
-    bool bModified(false);
     if ( m_pImpl.is() )
     {
         switch (nHandle)
         {
             case PROPERTY_ID_TABLEFILTER:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aTableFilter);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aTableFilter);
             case PROPERTY_ID_TABLETYPEFILTER:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aTableTypeFilter);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aTableTypeFilter);
             case PROPERTY_ID_USER:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_sUser);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_sUser);
             case PROPERTY_ID_PASSWORD:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aPassword);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aPassword);
             case PROPERTY_ID_ISPASSWORDREQUIRED:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_bPasswordRequired);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_bPasswordRequired);
             case PROPERTY_ID_SUPPRESSVERSIONCL:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_bSuppressVersionColumns);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_bSuppressVersionColumns);
             case PROPERTY_ID_LAYOUTINFORMATION:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aLayoutInformation);
-                break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_aLayoutInformation);
             case PROPERTY_ID_URL:
-            {
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_sConnectURL);
-            }   break;
+                return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_sConnectURL);
             case PROPERTY_ID_INFO:
             {
                 Sequence<PropertyValue> aValues;
@@ -805,30 +780,26 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 }
 
                 Sequence< PropertyValue > aSettings = m_pImpl->m_xSettings->getPropertyValues();
-                bModified = aSettings.getLength() != aValues.getLength();
-                if ( !bModified )
-                {
-                    const PropertyValue* pInfoIter = aSettings.getConstArray();
-                    const PropertyValue* checkValue = aValues.getConstArray();
-                    for ( ;!bModified && checkValue != std::cend(aValues) ; ++checkValue,++pInfoIter)
-                    {
-                        bModified = checkValue->Name != pInfoIter->Name;
-                        if ( !bModified )
-                        {
-                            bModified = checkValue->Value != pInfoIter->Value;
-                        }
-                    }
-                }
 
                 rConvertedValue = rValue;
                 rOldValue <<= aSettings;
+
+                if (aSettings.getLength() != aValues.getLength())
+                    return true;
+
+                for (sal_Int32 i = 0; i < aSettings.getLength(); ++i)
+                {
+                    if (aValues[i].Name != aSettings[i].Name
+                        || aValues[i].Value != aSettings[i].Value)
+                        return true;
+                }
             }
             break;
             default:
                 SAL_WARN("dbaccess", "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
         }
     }
-    return bModified;
+    return false;
 }
 
 namespace

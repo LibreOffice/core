@@ -31,9 +31,7 @@ namespace dbaui
     struct OIndexField
     {
         OUString            sFieldName;
-        bool            bSortAscending;
-
-        OIndexField() : bSortAscending(true) { }
+        bool            bSortAscending = true;
     };
 
     typedef std::vector<OIndexField> IndexFields;

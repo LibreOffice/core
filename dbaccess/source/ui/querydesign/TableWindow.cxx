@@ -206,20 +206,16 @@ void OTableWindow::FillListBox()
         Reference< XNameAccess > xColumns = m_pData->getColumns();
         if( xColumns.is() )
         {
-            Sequence< OUString> aColumns = xColumns->getElementNames();
-            const OUString* pIter = aColumns.getConstArray();
-            const OUString* pEnd = pIter + aColumns.getLength();
-
-            for (; pIter != pEnd; ++pIter)
+            for (auto& column : xColumns->getElementNames())
             {
-                bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
+                bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName(column);
 
                 OUString sId;
-                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
+                Reference<XPropertySet> xColumn(xColumns->getByName(column), UNO_QUERY);
                 if (xColumn.is())
                     sId = weld::toId(createUserData(xColumn, bPrimaryKeyColumn));
 
-                rTreeView.append(sId, *pIter);
+                rTreeView.append(sId, column);
 
                 // is this column in the primary key
                 if ( bPrimaryKeyColumn )

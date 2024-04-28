@@ -358,12 +358,9 @@ namespace dbaui
                 //sal_Int32 nRows = GetRowCount();
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
                 Reference<XNameAccess> xColumns = xSup->getColumns();
-                Sequence< OUString> aNames = xColumns->getElementNames();
-                const OUString* pIter = aNames.getConstArray();
-                const OUString* pEnd = pIter + aNames.getLength();
-                for(;pIter != pEnd;++pIter)
+                for (auto& text : xColumns->getElementNames())
                 {
-                    rList.append_text(*pIter);
+                    rList.append_text(text);
                 }
                 rList.insert_text(0, OUString());
             }

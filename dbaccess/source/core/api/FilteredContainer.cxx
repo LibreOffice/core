@@ -71,15 +71,11 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
     return nShiftPos;
 }
 
-    static bool lcl_isElementAllowed(  const OUString& _rName,
+    static bool lcl_isElementAllowed(std::u16string_view _rName,
                                 const Sequence< OUString >& _rTableFilter,
                                 const std::vector< WildCard >& _rWCSearch )
     {
-        sal_Int32 nTableFilterLen = _rTableFilter.getLength();
-
-        const OUString* tableFilter = _rTableFilter.getConstArray();
-        const OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
-        bool bFilterMatch = std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
+        bool bFilterMatch = std::find(_rTableFilter.begin(), _rTableFilter.end(), _rName) != _rTableFilter.end();
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
         {   // or if one of the wildcard expression matches
@@ -207,15 +203,12 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             TableInfos aUnfilteredTables;
             aUnfilteredTables.swap( aFilteredTables );
 
-            const OUString* pTableTypeFilterBegin = _tableTypeFilter.getConstArray();
-            const OUString* pTableTypeFilterEnd = pTableTypeFilterBegin + _tableTypeFilter.getLength();
-
             for (auto & unfilteredTable : aUnfilteredTables)
             {
                 // ensure that we know the table type
                 lcl_ensureType( unfilteredTable, _metaData, _masterContainer );
 
-                if ( std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *unfilteredTable.sType ) != pTableTypeFilterEnd )
+                if (std::find(_tableTypeFilter.begin(), _tableTypeFilter.end(), *unfilteredTable.sType) != _tableTypeFilter.end())
                     aFilteredTables.push_back(unfilteredTable);
             }
         }
@@ -267,11 +260,10 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
 
             TableInfos aUnfilteredTables;
 
-            Sequence< OUString > aNames = m_xMasterContainer->getElementNames();
-            const OUString*  name = aNames.getConstArray();
-            const OUString*  nameEnd = name + aNames.getLength();
-            for ( ; name != nameEnd; ++name )
-                aUnfilteredTables.emplace_back( *name );
+            Sequence<OUString> aNames = m_xMasterContainer->getElementNames();
+            aUnfilteredTables.reserve(aNames.getLength());
+            for (auto& name : aNames)
+                aUnfilteredTables.emplace_back(name);
 
             reFill( lcl_filter( std::move(aUnfilteredTables),
                 _rTableFilter, _rTableTypeFilter, m_xMetaData, m_xMasterContainer ) );
@@ -308,14 +300,9 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             {
                 if ( _rTableTypeFilter.hasElements() )
                 {
-                    const OUString* tableType    = _rTableTypeFilter.getConstArray();
-                    const OUString* tableTypeEnd = tableType + _rTableTypeFilter.getLength();
-                    for ( ; tableType != tableTypeEnd; ++tableType )
-                    {
-                        if ( *tableType == sInherentTableTypeRestriction )
-                            break;
-                    }
-                    if ( tableType == tableTypeEnd )
+                    if (std::find(_rTableTypeFilter.begin(), _rTableTypeFilter.end(),
+                                  sInherentTableTypeRestriction)
+                        == _rTableTypeFilter.end())
                     {   // the only table type which can be part of this container is not allowed
                         // by the externally provided table type filter.
                         m_bConstructed = true;

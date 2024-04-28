@@ -382,7 +382,6 @@ bool ORTFImportExport::Write()
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< OUString> aNames(xColumns->getElementNames());
-        const OUString* pIter = aNames.getConstArray();
 
         sal_Int32 nCount = aNames.getLength();
         bool bUseResultMetaData = false;
@@ -413,11 +412,10 @@ bool ORTFImportExport::Write()
                 sColumnName = m_xResultSetMetaData->getColumnName(i);
             else
             {
-                sColumnName = *pIter;
+                sColumnName = aNames[i];
                 Reference<XPropertySet> xColumn;
                 xColumns->getByName(sColumnName) >>= xColumn;
                 xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
-                ++pIter;
             }
 
             const char* pChar;
@@ -458,25 +456,22 @@ bool ORTFImportExport::Write()
         sal_Int32 kk=0;
         if ( m_aSelection.hasElements() )
         {
-            const Any* pSelIter = m_aSelection.getConstArray();
-            const Any* pEnd   = pSelIter + m_aSelection.getLength();
-
-            bool bContinue = true;
-            for( ; pSelIter != pEnd && bContinue; ++pSelIter )
+            for (auto& any : m_aSelection)
             {
                 if ( m_bBookmarkSelection )
                 {
-                    bContinue = m_xRowLocate->moveToBookmark( *pSelIter );
+                    if (!m_xRowLocate->moveToBookmark(any))
+                        break;
                 }
                 else
                 {
                     sal_Int32 nPos = -1;
-                    OSL_VERIFY( *pSelIter >>= nPos );
-                    bContinue = ( m_xResultSet->absolute( nPos ) );
+                    OSL_VERIFY(any >>= nPos);
+                    if (!m_xResultSet->absolute(nPos))
+                        break;
                 }
 
-                if ( bContinue )
-                    appendRow( pHorzChar.get(), nCount, k, kk );
+                appendRow(pHorzChar.get(), nCount, k, kk);
             }
         }
         else
@@ -755,10 +750,7 @@ void OHTMLImportExport::WriteTables()
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
 
         // 1. writing the column description
-        const OUString* pIter = aNames.getConstArray();
-        const OUString* pEnd = pIter + aNames.getLength();
-
-        for( sal_Int32 i=0;pIter != pEnd; ++pIter,++i )
+        for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         {
             sal_Int32 nAlign = 0;
             pFormat[i] = 0;
@@ -766,7 +758,7 @@ void OHTMLImportExport::WriteTables()
             if ( !bUseResultMetaData )
             {
                 Reference<XPropertySet> xColumn;
-                xColumns->getByName(*pIter) >>= xColumn;
+                xColumns->getByName(aNames[i]) >>= xColumn;
                 xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
                 pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
                 pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
@@ -782,7 +774,7 @@ void OHTMLImportExport::WriteTables()
             if(i == aNames.getLength()-1)
                 IncIndent(-1);
 
-            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
+            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],aNames[i],OOO_STRING_SVTOOLS_HTML_tableheader);
         }
 
         IncIndent(-1);

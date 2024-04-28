@@ -307,33 +307,32 @@ namespace dbaui
 
     sal_Int32 BasicInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        const Reference< XInteractionContinuation >* pContinuations = _rContinuations.getConstArray();
-        for (sal_Int32 i=0; i<_rContinuations.getLength(); ++i, ++pContinuations)
+        for (sal_Int32 i = 0; i < _rContinuations.getLength(); ++i)
         {
             switch (_eCont)
             {
                 case APPROVE:
-                    if (Reference< XInteractionApprove >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionApprove>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
                 case DISAPPROVE:
-                    if (Reference< XInteractionDisapprove >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionDisapprove>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
                 case RETRY:
-                    if (Reference< XInteractionRetry >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionRetry>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
                 case ABORT:
-                    if (Reference< XInteractionAbort >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionAbort>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
                 case SUPPLY_PARAMETERS:
-                    if (Reference< XInteractionSupplyParameters >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionSupplyParameters>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
                 case SUPPLY_DOCUMENTSAVE:
-                    if (Reference< XInteractionDocumentSave >(*pContinuations, UNO_QUERY).is())
+                    if (Reference<XInteractionDocumentSave>(_rContinuations[i], UNO_QUERY).is())
                         return i;
                     break;
             }

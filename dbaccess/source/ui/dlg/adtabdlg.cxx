@@ -188,17 +188,11 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         // if no views are allowed remove the views also out the table name filter
         if ( !_bAllowViews )
         {
-            const OUString* pTableBegin  = sTables.getConstArray();
-            const OUString* pTableEnd    = pTableBegin + sTables.getLength();
-            std::vector< OUString > aTables(pTableBegin,pTableEnd);
+            std::vector<OUString> aTables(sTables.begin(), sTables.end());
 
-            const OUString* pViewBegin = sViews.getConstArray();
-            const OUString* pViewEnd   = pViewBegin + sViews.getLength();
-            ::comphelper::UStringMixEqual aEqualFunctor;
-            for(;pViewBegin != pViewEnd;++pViewBegin)
-                std::erase_if(aTables,
-                                             [&aEqualFunctor, pViewBegin](const OUString& lhs)
-                                             { return aEqualFunctor(lhs, *pViewBegin); } );
+            for (auto& view : sViews)
+                std::erase_if(aTables, [Equal = comphelper::UStringMixEqual(), &view](auto& s)
+                              { return Equal(s, view); });
             sTables = Sequence< OUString>(aTables.data(), aTables.size());
             sViews = Sequence< OUString>();
         }

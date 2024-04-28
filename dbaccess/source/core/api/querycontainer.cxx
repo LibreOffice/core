@@ -78,13 +78,10 @@ void OQueryContainer::init()
 
     // fill my structures
     ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-    Sequence< OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-    const OUString* pDefinitionName = sDefinitionNames.getConstArray();
-    const OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
-    for ( ; pDefinitionName != pEnd; ++pDefinitionName )
+    for (auto& definitionName : m_xCommandDefinitions->getElementNames())
     {
-        rDefinitions.insert( *pDefinitionName, TContentPtr() );
-        m_aDocuments.push_back(m_aDocumentMap.emplace( *pDefinitionName,Documents::mapped_type()).first);
+        rDefinitions.insert(definitionName, TContentPtr());
+        m_aDocuments.push_back(m_aDocumentMap.emplace(definitionName, Documents::mapped_type()).first);
     }
 
     setElementApproval( std::make_shared<ObjectNameApproval>( m_xConnection, ObjectNameApproval::TypeQuery ) );

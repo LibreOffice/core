@@ -1364,8 +1364,8 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
 
         Sequence< OUString> aNames(m_pTables->getElementNames());
-        const OUString* pBegin     = aNames.getConstArray();
-        const OUString* const pEnd = pBegin + aNames.getLength();
+        const OUString* pBegin     = aNames.begin();
+        const OUString* const pEnd = aNames.end();
 
         if(aTable.isEmpty())
         { // we haven't found a table name, now we must search every table for this column
@@ -1564,21 +1564,22 @@ namespace
         std::u16string_view rQuoteString)
     {
         OUStringBuffer sRet;
-        const Sequence< PropertyValue >* pOrIter = filter.getConstArray();
-        const Sequence< PropertyValue >* pOrEnd = pOrIter + filter.getLength();
-        while ( pOrIter != pOrEnd )
+        for (auto& rOr : filter)
         {
-            if ( pOrIter->hasElements() )
+            if (rOr.hasElements())
             {
+                if (!sRet.isEmpty())
+                    sRet.append(STR_OR);
                 sRet.append(L_BRACKET);
-                const PropertyValue* pAndIter = pOrIter->getConstArray();
-                const PropertyValue* pAndEnd = pAndIter + pOrIter->getLength();
-                while ( pAndIter != pAndEnd )
+                OUStringBuffer sAnd;
+                for (auto& rAnd : rOr)
                 {
-                    sRet.append(pAndIter->Name);
+                    if (!sAnd.isEmpty())
+                        sAnd.append(STR_AND);
+                    sAnd.append(rAnd.Name);
                     OUString sValue;
-                    pAndIter->Value >>= sValue;
-                    const OUString sColumnName = lcl_getDecomposedColumnName( pAndIter->Name, rQuoteString );
+                    rAnd.Value >>= sValue;
+                    const OUString sColumnName = lcl_getDecomposedColumnName( rAnd.Name, rQuoteString );
                     if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(sColumnName) )
                     {
                         Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(sColumnName),UNO_QUERY);
@@ -1586,18 +1587,12 @@ namespace
                     }
                     else
                     {
-                        sValue = i_aPredicateInputController.getPredicateValueStr(pAndIter->Name,sValue);
+                        sValue = i_aPredicateInputController.getPredicateValueStr(rAnd.Name,sValue);
                     }
-                    lcl_addFilterCriteria_throw(pAndIter->Handle,sValue,sRet);
-                    ++pAndIter;
-                    if ( pAndIter != pAndEnd )
-                        sRet.append(STR_AND);
+                    lcl_addFilterCriteria_throw(rAnd.Handle, sValue, sAnd);
                 }
-                sRet.append(R_BRACKET);
+                sRet.append(OUString::unacquired(sAnd) + R_BRACKET);
             }
-            ++pOrIter;
-            if ( pOrIter != pOrEnd && !sRet.isEmpty() )
-                sRet.append(STR_OR);
         }
         return sRet.makeStringAndClear();
     }
@@ -1726,12 +1721,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         aSQL.append( "\'" );
                     }
                     aSQL.append( "0x" );
-                    const sal_Int8* pBegin  = aSeq.getConstArray();
-                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
-                    for(;pBegin != pEnd;++pBegin)
-                    {
-                        aSQL.append( static_cast<sal_Int32>(*pBegin), 16 );
-                    }
+                    for (sal_Int32 byte : aSeq)
+                        aSQL.append(byte, 16);
                     if(nSearchable == ColumnSearch::CHAR)
                         aSQL.append( "\'" );
                 }

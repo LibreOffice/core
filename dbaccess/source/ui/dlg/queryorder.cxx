@@ -74,13 +74,10 @@ DlgOrderCrit::DlgOrderCrit(weld::Window * pParent,
     try
     {
         // ... also the remaining fields
-        Sequence< OUString> aNames = m_xColumns->getElementNames();
-        const OUString* pIter = aNames.getConstArray();
-        const OUString* pEnd   = pIter + aNames.getLength();
         Reference<XPropertySet> xColumn;
-        for(;pIter != pEnd;++pIter)
+        for (auto& name : m_xColumns->getElementNames())
         {
-            xColumn.set(m_xColumns->getByName(*pIter),UNO_QUERY);
+            xColumn.set(m_xColumns->getByName(name), UNO_QUERY);
             OSL_ENSURE(xColumn.is(),"Column is null!");
             if ( xColumn.is() )
             {
@@ -91,7 +88,7 @@ DlgOrderCrit::DlgOrderCrit(weld::Window * pParent,
                 {
                     for (auto j : m_aColumnList)
                     {
-                        j->append_text(*pIter);
+                        j->append_text(name);
                     }
                 }
             }

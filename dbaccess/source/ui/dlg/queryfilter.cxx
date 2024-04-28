@@ -89,15 +89,12 @@ DlgFilterCrit::DlgFilterCrit(weld::Window * pParent,
     m_xLB_WHERECOMP1->clear();
 
     // ... also write it into the remaining fields
-    Sequence< OUString> aNames = m_xColumns->getElementNames();
-    const OUString* pIter = aNames.getConstArray();
-    const OUString* pEnd   = pIter + aNames.getLength();
     Reference<XPropertySet> xColumn;
-    for(;pIter != pEnd;++pIter)
+    for (auto& colName : m_xColumns->getElementNames())
     {
         try
         {
-            xColumn.set( m_xColumns->getByName( *pIter ), UNO_QUERY_THROW );
+            xColumn.set(m_xColumns->getByName(colName), UNO_QUERY_THROW);
 
             sal_Int32 nDataType( 0 );
             OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= nDataType );
@@ -114,21 +111,18 @@ DlgFilterCrit::DlgFilterCrit(weld::Window * pParent,
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
-        m_xLB_WHEREFIELD1->append_text( *pIter );
-        m_xLB_WHEREFIELD2->append_text( *pIter );
-        m_xLB_WHEREFIELD3->append_text( *pIter );
+        m_xLB_WHEREFIELD1->append_text(colName);
+        m_xLB_WHEREFIELD2->append_text(colName);
+        m_xLB_WHEREFIELD3->append_text(colName);
     }
 
     Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
-    aNames = xSelectColumns->getElementNames();
-    pIter = aNames.getConstArray();
-    pEnd   = pIter + aNames.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& colName : xSelectColumns->getElementNames())
     {
         // don't insert a column name twice
-        if ( !m_xColumns->hasByName(*pIter) )
+        if (!m_xColumns->hasByName(colName))
         {
-            xColumn.set(xSelectColumns->getByName(*pIter),UNO_QUERY);
+            xColumn.set(xSelectColumns->getByName(colName), UNO_QUERY);
             OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
             sal_Int32 nDataType(0);
             xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
@@ -137,9 +131,9 @@ DlgFilterCrit::DlgFilterCrit(weld::Window * pParent,
             // !pColumn->IsFunction()
             if(eColumnSearch != ColumnSearch::NONE)
             {
-                m_xLB_WHEREFIELD1->append_text( *pIter );
-                m_xLB_WHEREFIELD2->append_text( *pIter );
-                m_xLB_WHEREFIELD3->append_text( *pIter );
+                m_xLB_WHEREFIELD1->append_text(colName);
+                m_xLB_WHEREFIELD2->append_text(colName);
+                m_xLB_WHEREFIELD3->append_text(colName);
             }
         }
     }
@@ -345,20 +339,17 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const OUString& _rFieldName 
         Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
         if ( xColumns.is() && !xColumn.is() )
         {
-            Sequence< OUString> aSeq = xColumns->getElementNames();
-            const OUString* pIter = aSeq.getConstArray();
-            const OUString* pEnd   = pIter + aSeq.getLength();
-            for(;pIter != pEnd;++pIter)
+            for (auto& colName : xColumns->getElementNames())
             {
-                Reference<XPropertySet> xProp(xColumns->getByName(*pIter),UNO_QUERY);
+                Reference<XPropertySet> xProp(xColumns->getByName(colName), UNO_QUERY);
                 if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
                 {
                     OUString sRealName;
                     xProp->getPropertyValue(PROPERTY_REALNAME)  >>= sRealName;
                     if ( sRealName == _rFieldName )
                     {
-                        if ( m_xColumns.is() && m_xColumns->hasByName( *pIter ) )
-                            m_xColumns->getByName( *pIter ) >>= xColumn;
+                        if (m_xColumns.is() && m_xColumns->hasByName(colName))
+                            m_xColumns->getByName(colName) >>= xColumn;
                         break;
                     }
                 }
@@ -726,16 +717,12 @@ void DlgFilterCrit::BuildWherePart()
 
 void DlgFilterCrit::fillLines(int &i, const Sequence< Sequence< PropertyValue > >& _aValues)
 {
-    const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();
-    const Sequence<PropertyValue >* pOrEnd   = pOrIter + _aValues.getLength();
     bool bOr(i != 0); // WHERE clause and HAVING clause are always ANDed, nor ORed
-    for(; pOrIter != pOrEnd; ++pOrIter)
+    for (auto& rOr : _aValues)
     {
-        const PropertyValue* pAndIter   = pOrIter->getConstArray();
-        const PropertyValue* pAndEnd    = pAndIter + pOrIter->getLength();
-        for(;pAndIter != pAndEnd; ++pAndIter)
+        for (auto& rAnd : rOr)
         {
-            SetLine( i++,*pAndIter,bOr);
+            SetLine(i++, rAnd, bOr);
             bOr = false;
         }
         bOr=true;

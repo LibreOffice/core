@@ -279,18 +279,15 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             m_nPrivileges = Privilege::SELECT;
             bool bNoInsert = false;
 
-            Sequence< OUString> aNames(xColumns->getElementNames());
-            const OUString* pIter    = aNames.getConstArray();
-            const OUString* pEnd     = pIter + aNames.getLength();
-            for(;pIter != pEnd;++pIter)
+            for (auto& columnName : xColumns->getElementNames())
             {
-                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
+                Reference<XPropertySet> xColumn(xColumns->getByName(columnName), UNO_QUERY);
                 OSL_ENSURE(xColumn.is(),"Column in table is null!");
                 if(xColumn.is())
                 {
                     sal_Int32 nNullable = 0;
                     xColumn->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullable;
-                    if(nNullable == ColumnValue::NO_NULLS && aColumnNames.find(*pIter) == aColumnNames.end())
+                    if(nNullable == ColumnValue::NO_NULLS && aColumnNames.find(columnName) == aColumnNames.end())
                     { // we found a column where null is not allowed so we can't insert new values
                         bNoInsert = true;
                         break; // one column is enough

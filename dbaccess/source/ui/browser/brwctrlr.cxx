@@ -1292,8 +1292,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
             setLoadingCancelled();
             return false;
         }
-        const PropertyValue* pFinalValues = aFinalValues.getConstArray();
-        for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+        for (sal_Int32 i = 0; i < aFinalValues.getLength(); ++i)
         {
             Reference< XPropertySet > xParam(
                 aRequest.Parameters->getByIndex(i), css::uno::UNO_QUERY);
@@ -1303,9 +1302,9 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
 #ifdef DBG_UTIL
                 OUString sName;
                 xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-                OSL_ENSURE(sName == pFinalValues->Name, "SbaXDataBrowserController::approveParameter: suspicious value names!");
+                OSL_ENSURE(sName == aFinalValues[i].Name, "SbaXDataBrowserController::approveParameter: suspicious value names!");
 #endif
-                try { xParam->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value); }
+                try { xParam->setPropertyValue(PROPERTY_VALUE, aFinalValues[i].Value); }
                 catch(Exception&)
                 {
                     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::approveParameter: setting one of the properties failed!");

@@ -1927,7 +1927,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                             Sequence< OUString> aSeq = m_xColumns->getElementNames();
                             if( i <= aSeq.getLength())
                             {
-                                m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                                m_xColumns->getByName(aSeq[i-1]) >>= xColumn;
                             }
                         }
                     }
@@ -2085,25 +2085,23 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
     Sequence< sal_Int32 > aResults( rows.getLength() );
-    const Any* row = rows.getConstArray();
-    const Any* rowEnd = rows.getConstArray() + rows.getLength();
     sal_Int32* result = aResults.getArray();
-    for ( ; row != rowEnd; ++row, ++result )
+    for (sal_Int32 i = 0; i < rows.getLength(); ++i)
     {
-        *result = 0;
-        if ( !m_pCache->moveToBookmark( *row ) )
+        result[i] = 0;
+        if (!m_pCache->moveToBookmark(rows[i]))
             continue;
         sal_Int32 nDeletePosition = m_pCache->getRow();
 
         // first notify the clones so that they can save their position
-        notifyRowSetAndClonesRowDelete( *row );
+        notifyRowSetAndClonesRowDelete(rows[i]);
 
         // now delete the row
         if ( !m_pCache->deleteRow() )
             continue;
-        *result = 1;
+        result[i] = 1;
         // now notify that we have deleted
-        notifyRowSetAndClonesRowDeleted( *row, nDeletePosition );
+        notifyRowSetAndClonesRowDeleted(rows[i], nDeletePosition);
     }
     aEvt.Rows = aResults.getLength();
 
@@ -2752,13 +2750,13 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
     if ( rParent.m_pColumns )
     {
         Sequence< OUString> aSeq = rParent.m_pColumns->getElementNames();
-        const OUString* pIter    = aSeq.getConstArray();
-        const OUString* pEnd     = pIter + aSeq.getLength();
         aColumns->reserve(aSeq.getLength()+1);
-        for(sal_Int32 i=1;pIter != pEnd ;++pIter,++i)
+        sal_Int32 i = 0;
+        for (auto& columnName : aSeq)
         {
+            ++i;
             Reference<XPropertySet> xColumn;
-            rParent.m_pColumns->getByName(*pIter) >>= xColumn;
+            rParent.m_pColumns->getByName(columnName) >>= xColumn;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
@@ -2774,8 +2772,8 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
                     return this->getValue(column);
                 });
             aColumns->emplace_back(pColumn);
-            pColumn->setName(*pIter);
-            aNames.push_back(*pIter);
+            pColumn->setName(columnName);
+            aNames.push_back(columnName);
             m_aDataColumns.push_back(pColumn.get());
 
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));

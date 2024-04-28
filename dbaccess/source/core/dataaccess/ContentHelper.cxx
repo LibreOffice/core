@@ -260,44 +260,32 @@ void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ )
 void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    sal_Int32 nCount = PropertyNames.getLength();
-    if ( !nCount )
+    if (!PropertyNames.hasElements())
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_aPropertyChangeListeners.addInterface(OUString(), Listener );
     }
     else
     {
-        const OUString* pSeq = PropertyNames.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-        {
-            const OUString& rName = pSeq[ n ];
+        for (auto& rName : PropertyNames)
             if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.addInterface(rName, Listener );
-        }
     }
 }
 
 void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    sal_Int32 nCount = PropertyNames.getLength();
-    if ( !nCount )
+    if (!PropertyNames.hasElements())
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_aPropertyChangeListeners.removeInterface( OUString(), Listener );
     }
     else
     {
-        const OUString* pSeq = PropertyNames.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-        {
-            const OUString& rName = pSeq[ n ];
+        for (auto& rName : PropertyNames)
             if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.removeInterface( rName, Listener );
-        }
     }
 }
 
@@ -315,12 +303,10 @@ void SAL_CALL OContentHelper::removeProperty( const OUString& /*Name*/ )
 // XInitialization
 void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments )
 {
-    const Any* pBegin = _aArguments.getConstArray();
-    const Any* pEnd = pBegin + _aArguments.getLength();
-    PropertyValue aValue;
-    for(;pBegin != pEnd;++pBegin)
+    for (auto& arg : _aArguments)
     {
-        *pBegin >>= aValue;
+        PropertyValue aValue;
+        arg >>= aValue;
         if ( aValue.Name == "Parent" )
         {
             m_xParentContainer.set(aValue.Value,UNO_QUERY);
@@ -350,12 +336,9 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     aEvent.Further        = false;
     aEvent.PropertyHandle = -1;
 
-    const PropertyValue* pValues = rValues.getConstArray();
-    sal_Int32 nCount = rValues.getLength();
-
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
     {
-        const PropertyValue& rValue = pValues[ n ];
+        const PropertyValue& rValue = rValues[n];
 
         if ( rValue.Name == "ContentType" || rValue.Name == "IsDocument" || rValue.Name == "IsFolder" )
         {
@@ -424,14 +407,10 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext );
 
-    sal_Int32 nCount = rProperties.getLength();
-    if ( nCount )
+    if (rProperties.hasElements())
     {
-        const Property* pProps = rProperties.getConstArray();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for (auto& rProp : rProperties)
         {
-            const Property& rProp = pProps[ n ];
-
             // Process Core properties.
 
             if ( rProp.Name == "ContentType" )
@@ -502,11 +481,9 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
     typedef std::map< XPropertiesChangeListener*, Sequence< PropertyChangeEvent > > PropertiesEventListenerMap;
     PropertiesEventListenerMap aListeners;
 
-    const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
-
-    for ( sal_Int32 n = 0; n < nCount; ++n, ++propertyChangeEvent )
+    for (sal_Int32 n = 0; n < nCount; ++n)
     {
-        const PropertyChangeEvent& rEvent = *propertyChangeEvent;
+        const PropertyChangeEvent& rEvent = evt[n];
         const OUString& rName = rEvent.PropertyName;
 
         comphelper::OInterfaceContainerHelper3<XPropertiesChangeListener>* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
@@ -528,7 +505,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                 else
                     propertyEvents = &(*it).second;
 
-                propertyEvents->getArray()[n] = rEvent;
+                asNonConstRange(*propertyEvents)[n] = rEvent;
             }
         }
     }

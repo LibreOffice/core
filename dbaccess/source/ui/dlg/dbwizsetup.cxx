@@ -261,16 +261,9 @@ IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
 static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)
 {
     _rDSInfo.merge(_aNew,true);
-    uno::Sequence< beans::NamedValue > aOldValues = _aOld.getNamedValues();
-    const beans::NamedValue* pIter = aOldValues.getConstArray();
-    const beans::NamedValue* pEnd  = pIter + aOldValues.getLength();
-    for(;pIter != pEnd;++pIter)
-    {
-        if ( !_aNew.has(pIter->Name) )
-        {
-            _rDSInfo.remove(pIter->Name);
-        }
-    }
+    for (auto& val : _aOld.getNamedValues())
+        if (!_aNew.has(val.Name))
+            _rDSInfo.remove(val.Name);
 }
 
 void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)

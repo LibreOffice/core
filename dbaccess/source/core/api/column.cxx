@@ -280,21 +280,18 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  )
 {
     bool bAppendFound = false,bDropFound = false;
 
-    sal_Int32 nSize = 0;
+    sal_Int32 nSize;
     Type aAppendType = cppu::UnoType<XAppend>::get();
     Type aDropType   = cppu::UnoType<XDrop>::get();
     if(m_xDrvColumns.is())
     {
         Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);
-        Sequence< Type > aTypes(xTypes->getTypes());
 
-        const Type* pBegin = aTypes.getConstArray();
-        const Type* pEnd = pBegin + aTypes.getLength();
-        for (;pBegin != pEnd ; ++pBegin)
+        for (auto& type : xTypes->getTypes())
         {
-            if(aAppendType == *pBegin)
+            if (aAppendType == type)
                 bAppendFound = true;
-            else if(aDropType == *pBegin)
+            else if (aDropType == type)
                 bDropFound = true;
         }
         nSize = (bDropFound ? (bAppendFound ? 0 : 1) : (bAppendFound ? 1 : 2));
@@ -312,17 +309,17 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  )
     }
     Sequence< Type > aTypes(::comphelper::concatSequences(OColumns_BASE::getTypes(),TXChild::getTypes()));
     Sequence< Type > aRet(aTypes.getLength() - nSize);
+    auto* pRet = aRet.getArray();
 
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd ;++pBegin)
+    sal_Int32 i = 0;
+    for (auto& type : aTypes)
     {
-        if(*pBegin != aAppendType && *pBegin != aDropType)
-            aRet.getArray()[i++] = *pBegin;
-        else if(bDropFound && *pBegin == aDropType)
-            aRet.getArray()[i++] = *pBegin;
-        else if(bAppendFound && *pBegin == aAppendType)
-            aRet.getArray()[i++] = *pBegin;
+        if (type != aAppendType && type != aDropType)
+            pRet[i++] = type;
+        else if (bDropFound && type == aDropType)
+            pRet[i++] = type;
+        else if (bAppendFound && type == aAppendType)
+            pRet[i++] = type;
     }
     return aRet;
 }

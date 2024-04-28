@@ -1027,14 +1027,12 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     }
                     else
                     {
-                        const PropertyValue* pIter = aArgs.getConstArray();
-                        const PropertyValue* pEnd  = pIter + aArgs.getLength();
-                        for( ; pIter != pEnd ; ++pIter)
+                        for (auto& arg : aArgs)
                         {
-                            if ( pIter->Name == "FormatStringId" )
+                            if (arg.Name == "FormatStringId")
                             {
                                 sal_uInt32 nTmp;
-                                if ( pIter->Value >>= nTmp )
+                                if (arg.Value >>= nTmp)
                                     pasteFormat(static_cast<SotClipboardFormatId>(nTmp));
                                 break;
                             }
@@ -2703,20 +2701,18 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
     if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.hasElements() )
     {
         ElementType eType = E_NONE;
-        const NamedValue* pIter = aCurrentSelection.getConstArray();
-        const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& item : aCurrentSelection)
         {
-            if ( pIter->Name == "Type" )
+            if (item.Name == "Type")
             {
                 sal_Int32 nType = 0;
-                pIter->Value >>= nType;
+                item.Value >>= nType;
                 if ( nType < DatabaseObject::TABLE || nType > DatabaseObject::REPORT )
                     throw IllegalArgumentException();
                 eType = static_cast< ElementType >( nType );
             }
-            else if ( pIter->Name == "Selection" )
-                pIter->Value >>= aSelection;
+            else if (item.Name == "Selection")
+                item.Value >>= aSelection;
         }
 
         m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
@@ -2736,42 +2732,37 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
 
     SelectionByElementType aSelectedElements;
     ElementType eSelectedCategory = E_NONE;
-    for (   const NamedDatabaseObject* pObject = aSelectedObjects.getConstArray();
-            pObject != aSelectedObjects.getConstArray() + aSelectedObjects.getLength();
-            ++pObject
-        )
+    for (sal_Int32 i = 0; i < aSelectedObjects.getLength(); ++i)
     {
-        switch ( pObject->Type )
+        switch (aSelectedObjects[i].Type)
         {
             case DatabaseObject::TABLE:
             case DatabaseObjectContainer::SCHEMA:
             case DatabaseObjectContainer::CATALOG:
-                aSelectedElements[ E_TABLE ].push_back( pObject->Name );
+                aSelectedElements[E_TABLE].push_back(aSelectedObjects[i].Name);
                 break;
             case DatabaseObject::QUERY:
-                aSelectedElements[ E_QUERY ].push_back( pObject->Name );
+                aSelectedElements[E_QUERY].push_back(aSelectedObjects[i].Name);
                 break;
             case DatabaseObject::FORM:
             case DatabaseObjectContainer::FORMS_FOLDER:
-                aSelectedElements[ E_FORM ].push_back( pObject->Name );
+                aSelectedElements[E_FORM].push_back(aSelectedObjects[i].Name);
                 break;
             case DatabaseObject::REPORT:
             case DatabaseObjectContainer::REPORTS_FOLDER:
-                aSelectedElements[ E_REPORT ].push_back( pObject->Name );
+                aSelectedElements[E_REPORT].push_back(aSelectedObjects[i].Name);
                 break;
             case DatabaseObjectContainer::TABLES:
             case DatabaseObjectContainer::QUERIES:
             case DatabaseObjectContainer::FORMS:
             case DatabaseObjectContainer::REPORTS:
                 if ( eSelectedCategory != E_NONE )
-                    throw IllegalArgumentException(
-                        DBA_RES(RID_STR_NO_DIFF_CAT),
-                        *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
+                    throw IllegalArgumentException(DBA_RES(RID_STR_NO_DIFF_CAT), *this, i);
                 eSelectedCategory =
-                        ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
-                    :   ( pObject->Type == DatabaseObjectContainer::QUERIES ) ? E_QUERY
-                    :   ( pObject->Type == DatabaseObjectContainer::FORMS )   ? E_FORM
-                    :   ( pObject->Type == DatabaseObjectContainer::REPORTS ) ? E_REPORT
+                        ( aSelectedObjects[i].Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
+                    :   ( aSelectedObjects[i].Type == DatabaseObjectContainer::QUERIES ) ? E_QUERY
+                    :   ( aSelectedObjects[i].Type == DatabaseObjectContainer::FORMS )   ? E_FORM
+                    :   ( aSelectedObjects[i].Type == DatabaseObjectContainer::REPORTS ) ? E_REPORT
                     :   E_NONE;
                 break;
 
@@ -2780,8 +2771,8 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
             {
                 OUString sMessage(
                         DBA_RES(RID_STR_UNSUPPORTED_OBJECT_TYPE).
-                    replaceFirst("$type$", OUString::number(pObject->Type)));
-                throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
+                    replaceFirst("$type$", OUString::number(aSelectedObjects[i].Type)));
+                throw IllegalArgumentException(sMessage, *this, i);
             }
         }
     }

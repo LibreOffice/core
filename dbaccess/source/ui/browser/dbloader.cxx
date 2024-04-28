@@ -219,13 +219,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();
-            Any* pEnd   = pBegin + aInitArgs.getLength();
             *pBegin <<= aFrame;
-            const PropertyValue* pIter      = m_aArgs.getConstArray();
-            for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
-            {
-                *pBegin <<= *pIter;
-            }
+            std::transform(m_aArgs.begin(), m_aArgs.end(), ++pBegin,
+                           [](auto& val) { return Any(val); });
 
             xIni->initialize(aInitArgs);
         }

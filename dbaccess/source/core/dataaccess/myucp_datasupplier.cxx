@@ -152,26 +152,19 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     sal_uInt32 nOldCount = m_aResults.size();
     bool bFound = false;
-    sal_uInt32 nPos = nOldCount;
 
     // @@@ Obtain data and put it into result list...
     Sequence< OUString> aSeq = m_xContent->getElementNames();
     if ( nIndex < sal::static_int_cast< sal_uInt32 >( aSeq.getLength() ) )
     {
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
-        for(pIter = pIter + nPos;pIter != pEnd;++pIter,++nPos)
-        {
+        m_aResults.reserve(nIndex + 1);
+        const OUString* pEnd = aSeq.begin() + nIndex + 1;
+        for (const OUString* pIter = aSeq.begin() + nOldCount; pIter != pEnd; ++pIter)
             m_aResults.emplace_back(
                             new ResultListEntry( m_xContent->getContent(*pIter)->getContentProperties() ) );
 
-            if ( nPos == nIndex )
-            {
-                // Result obtained.
-                bFound = true;
-                break;
-            }
-        }
+        // Result obtained.
+        bFound = true;
     }
 
     if ( !bFound )
@@ -204,11 +197,11 @@ sal_uInt32 DataSupplier::totalCount()
 
     // @@@ Obtain data and put it into result list...
     Sequence< OUString> aSeq = m_xContent->getElementNames();
-    const OUString* pIter = aSeq.getConstArray();
-    const OUString* pEnd   = pIter + aSeq.getLength();
-    for(;pIter != pEnd;++pIter)
+    // FIXME: this adds everything from aSeq to m_aResults, unlike similar code in getResult,
+    // which skips nOldCount entries in aSeq - which is correct?
+    for (auto& name : aSeq)
         m_aResults.emplace_back(
-                        new ResultListEntry( m_xContent->getContent(*pIter)->getContentProperties() ) );
+                        new ResultListEntry( m_xContent->getContent(name)->getContentProperties() ) );
 
     m_bCountFinal = true;
 

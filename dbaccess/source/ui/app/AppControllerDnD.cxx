@@ -764,12 +764,9 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                             {
                                 Reference<XPropertySet> xDstProp(xFac->createDataDescriptor());
 
-                                Sequence< OUString> aSeq = xSrcNameAccess->getElementNames();
-                                const OUString* pIter = aSeq.getConstArray();
-                                const OUString* pEnd   = pIter + aSeq.getLength();
-                                for( ; pIter != pEnd ; ++pIter)
+                                for (auto& name : xSrcNameAccess->getElementNames())
                                 {
-                                    Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(*pIter),UNO_QUERY);
+                                    Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(name),UNO_QUERY);
                                     ::comphelper::copyProperties(xSrcProp,xDstProp);
                                     xAppend->appendByDescriptor(xDstProp);
                                 }

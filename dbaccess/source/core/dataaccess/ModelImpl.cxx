@@ -426,25 +426,22 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );
         Reference< XSet > xSettingsSet( m_xSettings, UNO_QUERY_THROW );
-        const AsciiPropertyValue* pSettings = getDefaultDataSourceSettings();
-        for ( ; pSettings->AsciiName; ++pSettings )
+        for (auto& setting : getDefaultDataSourceSettings())
         {
-            if ( !pSettings->DefaultValue.hasValue() )
+            if (!setting.DefaultValue.hasValue())
             {
-                Property aProperty(
-                    OUString::createFromAscii( pSettings->AsciiName ),
+                Property aProperty(setting.Name,
                     -1,
-                    pSettings->ValueType,
+                    setting.ValueType,
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID
                 );
                 xSettingsSet->insert( Any( aProperty ) );
             }
             else
             {
-                xContainer->addProperty(
-                    OUString::createFromAscii( pSettings->AsciiName ),
+                xContainer->addProperty(setting.Name,
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
-                    pSettings->DefaultValue
+                    setting.DefaultValue
                 );
             }
         }
@@ -1024,75 +1021,74 @@ Reference< XStorage > ODatabaseModelImpl::getStorage( const ObjectType _eType )
                     css::embed::ElementModes::READWRITE );
 }
 
-const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
+// static
+std::span<const DefaultPropertyValue> ODatabaseModelImpl::getDefaultDataSourceSettings()
 {
-    static const AsciiPropertyValue aKnownSettings[] =
+    static const DefaultPropertyValue aKnownSettings[] =
     {
         // known JDBC settings
-        AsciiPropertyValue( "JavaDriverClass",            Any( OUString() ) ),
-        AsciiPropertyValue( "JavaDriverClassPath",        Any( OUString() ) ),
-        AsciiPropertyValue( "IgnoreCurrency",             Any( false ) ),
+        { u"JavaDriverClass"_ustr,            Any( OUString() ) },
+        { u"JavaDriverClassPath"_ustr,        Any( OUString() ) },
+        { u"IgnoreCurrency"_ustr,             Any( false ) },
         // known settings for file-based drivers
-        AsciiPropertyValue( "Extension",                  Any( OUString() ) ),
-        AsciiPropertyValue( "CharSet",                    Any( OUString() ) ),
-        AsciiPropertyValue( "HeaderLine",                 Any( true ) ),
-        AsciiPropertyValue( "FieldDelimiter",             Any( OUString( "," ) ) ),
-        AsciiPropertyValue( "StringDelimiter",            Any( OUString( "\"" ) ) ),
-        AsciiPropertyValue( "DecimalDelimiter",           Any( OUString( "." ) ) ),
-        AsciiPropertyValue( "ThousandDelimiter",          Any( OUString() ) ),
-        AsciiPropertyValue( "ShowDeleted",                Any( false ) ),
+        { u"Extension"_ustr,                  Any( OUString() ) },
+        { u"CharSet"_ustr,                    Any( OUString() ) },
+        { u"HeaderLine"_ustr,                 Any( true ) },
+        { u"FieldDelimiter"_ustr,             Any( OUString( "," ) ) },
+        { u"StringDelimiter"_ustr,            Any( OUString( "\"" ) ) },
+        { u"DecimalDelimiter"_ustr,           Any( OUString( "." ) ) },
+        { u"ThousandDelimiter"_ustr,          Any( OUString() ) },
+        { u"ShowDeleted"_ustr,                Any( false ) },
         // known ODBC settings
-        AsciiPropertyValue( "SystemDriverSettings",       Any( OUString() ) ),
-        AsciiPropertyValue( "UseCatalog",                 Any( false ) ),
-        AsciiPropertyValue( "TypeInfoSettings",           Any( Sequence< Any >()) ),
+        { u"SystemDriverSettings"_ustr,       Any( OUString() ) },
+        { u"UseCatalog"_ustr,                 Any( false ) },
+        { u"TypeInfoSettings"_ustr,           Any( Sequence< Any >()) },
         // settings related to auto increment handling
-        AsciiPropertyValue( "AutoIncrementCreation",      Any( OUString() ) ),
-        AsciiPropertyValue( "AutoRetrievingStatement",    Any( OUString() ) ),
-        AsciiPropertyValue( "IsAutoRetrievingEnabled",    Any( false ) ),
+        { u"AutoIncrementCreation"_ustr,      Any( OUString() ) },
+        { u"AutoRetrievingStatement"_ustr,    Any( OUString() ) },
+        { u"IsAutoRetrievingEnabled"_ustr,    Any( false ) },
         // known LDAP driver settings
-        AsciiPropertyValue( "HostName",                   Any( OUString() ) ),
-        AsciiPropertyValue( "PortNumber",                 Any( sal_Int32(389) ) ),
-        AsciiPropertyValue( "BaseDN",                     Any( OUString() ) ),
-        AsciiPropertyValue( "MaxRowCount",                Any( sal_Int32(100) ) ),
+        { u"HostName"_ustr,                   Any( OUString() ) },
+        { u"PortNumber"_ustr,                 Any( sal_Int32(389) ) },
+        { u"BaseDN"_ustr,                     Any( OUString() ) },
+        { u"MaxRowCount"_ustr,                Any( sal_Int32(100) ) },
         // known MySQLNative driver settings
-        AsciiPropertyValue( "LocalSocket",                Any( OUString() ) ),
-        AsciiPropertyValue( "NamedPipe",                  Any( OUString() ) ),
+        { u"LocalSocket"_ustr,                Any( OUString() ) },
+        { u"NamedPipe"_ustr,                  Any( OUString() ) },
         // misc known driver settings
-        AsciiPropertyValue( "ParameterNameSubstitution",  Any( false ) ),
-        AsciiPropertyValue( "AddIndexAppendix",           Any( true ) ),
-        AsciiPropertyValue( "IgnoreDriverPrivileges",     Any( true ) ),
-        AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< OUString >::get() ),
-        AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< OUString >::get() ),
-        AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
-        AsciiPropertyValue( "ShowColumnDescription",      Any( false ) ),
+        { u"ParameterNameSubstitution"_ustr,  Any( false ) },
+        { u"AddIndexAppendix"_ustr,           Any( true ) },
+        { u"IgnoreDriverPrivileges"_ustr,     Any( true ) },
+        { u"ImplicitCatalogRestriction"_ustr, ::cppu::UnoType< OUString >::get() },
+        { u"ImplicitSchemaRestriction"_ustr,  ::cppu::UnoType< OUString >::get() },
+        { u"PrimaryKeySupport"_ustr,          ::cppu::UnoType< sal_Bool >::get() },
+        { u"ShowColumnDescription"_ustr,      Any( false ) },
         // known SDB level settings
-        AsciiPropertyValue( "NoNameLengthLimit",          Any( false ) ),
-        AsciiPropertyValue( "AppendTableAliasName",       Any( false ) ),
-        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  Any( false ) ),
-        AsciiPropertyValue( "ColumnAliasInOrderBy",       Any( true ) ),
-        AsciiPropertyValue( "EnableSQL92Check",           Any( false ) ),
-        AsciiPropertyValue( "BooleanComparisonMode",      Any( BooleanComparisonMode::EQUAL_INTEGER ) ),
-        AsciiPropertyValue( "TableTypeFilterMode",        Any( sal_Int32(3) ) ),
-        AsciiPropertyValue( "RespectDriverResultSetType", Any( false ) ),
-        AsciiPropertyValue( "UseSchemaInSelect",          Any( true ) ),
-        AsciiPropertyValue( "UseCatalogInSelect",         Any( true ) ),
-        AsciiPropertyValue( "EnableOuterJoinEscape",      Any( true ) ),
-        AsciiPropertyValue( "PreferDosLikeLineEnds",      Any( false ) ),
-        AsciiPropertyValue( "FormsCheckRequiredFields",   Any( true ) ),
-        AsciiPropertyValue( "EscapeDateTime",             Any( true ) ),
+        { u"NoNameLengthLimit"_ustr,          Any( false ) },
+        { u"AppendTableAliasName"_ustr,       Any( false ) },
+        { u"GenerateASBeforeCorrelationName"_ustr,  Any( false ) },
+        { u"ColumnAliasInOrderBy"_ustr,       Any( true ) },
+        { u"EnableSQL92Check"_ustr,           Any( false ) },
+        { u"BooleanComparisonMode"_ustr,      Any( BooleanComparisonMode::EQUAL_INTEGER ) },
+        { u"TableTypeFilterMode"_ustr,        Any( sal_Int32(3) ) },
+        { u"RespectDriverResultSetType"_ustr, Any( false ) },
+        { u"UseSchemaInSelect"_ustr,          Any( true ) },
+        { u"UseCatalogInSelect"_ustr,         Any( true ) },
+        { u"EnableOuterJoinEscape"_ustr,      Any( true ) },
+        { u"PreferDosLikeLineEnds"_ustr,      Any( false ) },
+        { u"FormsCheckRequiredFields"_ustr,   Any( true ) },
+        { u"EscapeDateTime"_ustr,             Any( true ) },
 
         // known services to handle database tasks
-        AsciiPropertyValue( "TableAlterationServiceName", Any( OUString() ) ),
-        AsciiPropertyValue( "TableRenameServiceName",     Any( OUString() ) ),
-        AsciiPropertyValue( "ViewAlterationServiceName",  Any( OUString() ) ),
-        AsciiPropertyValue( "ViewAccessServiceName",      Any( OUString() ) ),
-        AsciiPropertyValue( "CommandDefinitions",         Any( OUString() ) ),
-        AsciiPropertyValue( "Forms",                      Any( OUString() ) ),
-        AsciiPropertyValue( "Reports",                    Any( OUString() ) ),
-        AsciiPropertyValue( "KeyAlterationServiceName",   Any( OUString() ) ),
-        AsciiPropertyValue( "IndexAlterationServiceName", Any( OUString() ) ),
-
-        AsciiPropertyValue()
+        { u"TableAlterationServiceName"_ustr, Any( OUString() ) },
+        { u"TableRenameServiceName"_ustr,     Any( OUString() ) },
+        { u"ViewAlterationServiceName"_ustr,  Any( OUString() ) },
+        { u"ViewAccessServiceName"_ustr,      Any( OUString() ) },
+        { u"CommandDefinitions"_ustr,         Any( OUString() ) },
+        { u"Forms"_ustr,                      Any( OUString() ) },
+        { u"Reports"_ustr,                    Any( OUString() ) },
+        { u"KeyAlterationServiceName"_ustr,   Any( OUString() ) },
+        { u"IndexAlterationServiceName"_ustr, Any( OUString() ) },
     };
     return aKnownSettings;
 }

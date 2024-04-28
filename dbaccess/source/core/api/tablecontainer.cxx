@@ -63,22 +63,20 @@ namespace
         Reference<XPropertyState> xState(_xProp,UNO_QUERY);
         if ( !xState )
             return false;
-        const OUString* pIter = _aNames.getConstArray();
-        const OUString* pEnd   = pIter + _aNames.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& name : _aNames)
         {
             try
             {
-                PropertyState aState = xState->getPropertyState(*pIter);
+                PropertyState aState = xState->getPropertyState(name);
                 if ( aState != PropertyState_DEFAULT_VALUE )
-                    break;
+                    return false;
             }
             catch(const Exception&)
             {
                 TOOLS_WARN_EXCEPTION("dbaccess", "" );
             }
         }
-        return ( pIter == pEnd );
+        return true;
     }
 }
 
@@ -312,14 +310,11 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
         if ( xNames.is() )
         {
             Reference<XPropertySet> xProp = xFac->createDataDescriptor();
-            Sequence< OUString> aSeq = xNames->getElementNames();
-            const OUString* pIter = aSeq.getConstArray();
-            const OUString* pEnd   = pIter + aSeq.getLength();
-            for(;pIter != pEnd;++pIter)
+            for (auto& name : xNames->getElementNames())
             {
-                if ( !xColumnDefinitions->hasByName(*pIter) )
+                if (!xColumnDefinitions->hasByName(name))
                 {
-                    Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
+                    Reference<XPropertySet> xColumn(xNames->getByName(name), UNO_QUERY);
                     if ( !OColumnSettings::hasDefaultSettings( xColumn ) )
                     {
                         ::comphelper::copyProperties( xColumn, xProp );

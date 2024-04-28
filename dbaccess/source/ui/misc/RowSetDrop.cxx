@@ -95,21 +95,21 @@ bool ORowSetImportExport::Write()
 
 bool ORowSetImportExport::Read()
 {
+    if (!m_xResultSet)
+        return false;
     // check if there is any column to copy
     if(std::none_of(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         [](sal_Int32 n) { return n > 0; }))
         return false;
-    bool bContinue = true;
     if(m_aSelection.hasElements())
     {
-        const Any* pBegin = m_aSelection.getConstArray();
-        const Any* pEnd   = pBegin + m_aSelection.getLength();
-        for(;pBegin != pEnd && bContinue;++pBegin)
+        for (auto& any : m_aSelection)
         {
             sal_Int32 nPos = -1;
-            *pBegin >>= nPos;
+            any >>= nPos;
             OSL_ENSURE(nPos != -1,"Invalid position!");
-            bContinue = (m_xResultSet.is() && m_xResultSet->absolute(nPos) && insertNewRow());
+            if (!m_xResultSet->absolute(nPos) || !insertNewRow())
+                break;
         }
     }
     else
@@ -131,10 +131,11 @@ bool ORowSetImportExport::Read()
         }
         OSL_ENSURE(nRowCount,"RowCount is 0!");
         m_xResultSet->beforeFirst();
-        while(m_xResultSet.is() && m_xResultSet->next() && bContinue && nRowCount )
+        while(m_xResultSet.is() && m_xResultSet->next() && nRowCount )
         {
             --nRowCount;
-            bContinue = insertNewRow();
+            if (!insertNewRow())
+                break;
         }
     }
     return true;

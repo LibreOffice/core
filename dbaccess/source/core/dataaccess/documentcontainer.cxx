@@ -324,14 +324,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     }
     else if ( ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION || SERVICE_NAME_REPORT_COLLECTION == ServiceSpecifier )
     {
-        const Any* pBegin = _aArguments.getConstArray();
-        const Any* pEnd = pBegin + _aArguments.getLength();
-        PropertyValue aValue;
         OUString sName;
         Reference<XNameAccess> xCopyFrom;
-        for(;pBegin != pEnd;++pBegin)
+        for (auto& arg : _aArguments)
         {
-            *pBegin >>= aValue;
+            PropertyValue aValue;
+            arg >>= aValue;
             if ( aValue.Name == PROPERTY_NAME)
             {
                 aValue.Value >>= sName;
@@ -359,21 +357,18 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         // copy children
         if ( xCopyFrom.is() )
         {
-            Sequence< OUString> aSeq = xCopyFrom->getElementNames();
-            const OUString* elements = aSeq.getConstArray();
-            const OUString* elementsEnd = elements + aSeq.getLength();
             Reference<XContent> xObjectToCopy;
 
             Reference<XMultiServiceFactory> xORB(xContent,UNO_QUERY);
             OSL_ENSURE(xORB.is(),"No service factory given");
             if ( xORB.is() )
             {
-                for(;elements != elementsEnd;++elements)
+                for (auto& element : xCopyFrom->getElementNames())
                 {
-                    xCopyFrom->getByName(*elements) >>= xObjectToCopy;
+                    xCopyFrom->getByName(element) >>= xObjectToCopy;
                     Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                     {
-                        {"Name", Any(*elements)}, // set as folder
+                        {"Name", Any(element)}, // set as folder
                         {"Parent", Any(xContent)},
                         {PROPERTY_EMBEDDEDOBJECT, Any(xObjectToCopy)},
                     }));
@@ -392,7 +387,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
                     Reference<XNameContainer> xNameContainer(xContent,UNO_QUERY);
                     if ( xNameContainer.is() )
-                        xNameContainer->insertByName(*elements,Any(xNew));
+                        xNameContainer->insertByName(element, Any(xNew));
                 }
             }
         }
@@ -477,11 +472,8 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     else if ( aCommand.Name == "delete" )
     {
         // delete
-        Sequence< OUString> aSeq = getElementNames();
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
-            removeByName(*pIter);
+        for (auto& name : getElementNames())
+            removeByName(name);
 
         dispose();
     }

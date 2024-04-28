@@ -238,13 +238,10 @@ IMPL_LINK_NOARG(DlgQryJoin, NaturalToggleHdl, weld::Toggleable&, void)
     try
     {
         Reference<XNameAccess> xReferencedTableColumns(m_pConnData->getReferencedTable()->getColumns());
-        Sequence< OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& column : m_pConnData->getReferencingTable()->getColumns()->getElementNames())
         {
-            if ( xReferencedTableColumns->hasByName(*pIter) )
-                m_pConnData->AppendConnLine(*pIter,*pIter);
+            if (xReferencedTableColumns->hasByName(column))
+                m_pConnData->AppendConnLine(column, column);
         }
     }
     catch( const Exception& )

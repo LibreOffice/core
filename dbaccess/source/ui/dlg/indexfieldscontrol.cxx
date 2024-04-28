@@ -228,10 +228,8 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         weld::ComboBox& rNameListBox = m_pFieldNameCell->get_widget();
         rNameListBox.append_text(OUString());
         rNameListBox.set_help_id(HID_DLGINDEX_INDEXDETAILS_FIELD);
-        const OUString* pFields = _rAvailableFields.getConstArray();
-        const OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
-        for (;pFields < pFieldsEnd; ++pFields)
-            rNameListBox.append_text(*pFields);
+        for (auto& text : _rAvailableFields)
+            rNameListBox.append_text(text);
     }
 
     CellController* IndexFieldsControl::GetController(sal_Int32 _nRow, sal_uInt16 _nColumnId)

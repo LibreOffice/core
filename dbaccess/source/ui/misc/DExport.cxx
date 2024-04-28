@@ -803,9 +803,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const 
     {
         return Reference< XPreparedStatement > ();
     }
-    const OUString* pIter = aDestColumnNames.getConstArray();
-    std::vector< OUString> aInsertList;
-    aInsertList.resize(aDestColumnNames.getLength()+1);
+    std::vector<OUString> aInsertList(aDestColumnNames.getLength() + 1);
     for(size_t j=0; j < aInsertList.size(); ++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = std::find_if(_rvColumns.begin(),_rvColumns.end(),
@@ -814,7 +812,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const 
         if ( _rvColumns.end() != aFind && aFind->second != COLUMN_POSITION_NOT_FOUND && aFind->first != COLUMN_POSITION_NOT_FOUND )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
-            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+j));
+            aInsertList[aFind->first] = ::dbtools::quoteName(aQuote, aDestColumnNames[j]);
         }
     }
 

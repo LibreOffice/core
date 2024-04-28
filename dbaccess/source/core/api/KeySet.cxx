@@ -293,13 +293,11 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     const Sequence< OUString> aSeq = xSelectTables->getElementNames();
     if ( aSeq.getLength() > 1 ) // special handling for join
     {
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* const pEnd  = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& name : aSeq)
         {
-            if ( *pIter != m_sUpdateTableName )
+            if (name != m_sUpdateTableName)
             {
-                connectivity::OSQLTable xSelColSup(xSelectTables->getByName(*pIter),uno::UNO_QUERY);
+                connectivity::OSQLTable xSelColSup(xSelectTables->getByName(name), uno::UNO_QUERY);
                 Reference<XPropertySet> xProp(xSelColSup,uno::UNO_QUERY);
                 OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
 
@@ -375,19 +373,14 @@ void OKeySet::executeStatement(OUStringBuffer& io_aFilter, Reference<XSingleSele
     io_xAnalyzer->setFilter(io_aFilter.makeStringAndClear());
     if ( bFilterSet )
     {
-        Sequence< Sequence< PropertyValue > > aFilter2 = io_xAnalyzer->getStructuredFilter();
-        const Sequence< PropertyValue >* pOr = aFilter2.getConstArray();
-        const Sequence< PropertyValue >* pOrEnd = pOr + aFilter2.getLength();
-        for(;pOr != pOrEnd;++pOr)
+        for (auto& rOr : io_xAnalyzer->getStructuredFilter())
         {
-            const PropertyValue* pAnd = pOr->getConstArray();
-            const PropertyValue* pAndEnd = pAnd + pOr->getLength();
-            for(;pAnd != pAndEnd;++pAnd)
+            for (auto& rAnd : rOr)
             {
                 OUString sValue;
-                if ( !(pAnd->Value >>= sValue) || !( sValue == "?" || sValue.startsWith( ":" ) ) )
+                if (!(rAnd.Value >>= sValue) || !(sValue == "?" || sValue.startsWith(":")))
                 { // we have a criteria which has to be taken into account for updates
-                    m_aFilterColumns.push_back(pAnd->Name);
+                    m_aFilterColumns.push_back(rAnd.Name);
                 }
             }
         }
@@ -1386,27 +1379,22 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                             bool i_bAppendTableName)
     {
         // get the real name of the columns
-        Sequence< OUString> aSelNames(_rxQueryColumns->getElementNames());
-        const OUString* pSelIter     = aSelNames.getConstArray();
-        const OUString* pSelEnd      = pSelIter + aSelNames.getLength();
-
-        const OUString* pTblColumnIter   = _aColumnNames.getConstArray();
-        const OUString* pTblColumnEnd    = pTblColumnIter + _aColumnNames.getLength();
-
         ::comphelper::UStringMixEqual bCase(o_rColumnNames.key_comp().isCaseSensitive());
 
-        for(sal_Int32 nPos = 1;pSelIter != pSelEnd;++pSelIter,++nPos)
+        sal_Int32 nPos = 0;
+        for (auto& queryColumnName : _rxQueryColumns->getElementNames())
         {
-            Reference<XPropertySet> xQueryColumnProp(_rxQueryColumns->getByName(*pSelIter),UNO_QUERY_THROW);
+            ++nPos;
+            Reference<XPropertySet> xQueryColumnProp(_rxQueryColumns->getByName(queryColumnName),UNO_QUERY_THROW);
             OUString sRealName,sTableName;
             OSL_ENSURE(xQueryColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
             OSL_ENSURE(xQueryColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
             xQueryColumnProp->getPropertyValue(PROPERTY_REALNAME)   >>= sRealName;
             xQueryColumnProp->getPropertyValue(PROPERTY_TABLENAME)  >>= sTableName;
 
-            for(;pTblColumnIter != pTblColumnEnd;++pTblColumnIter)
+            for (auto& tableColumnName : _aColumnNames)
             {
-                if(bCase(sRealName,*pTblColumnIter) && bCase(_rsUpdateTableName,sTableName) && o_rColumnNames.find(*pTblColumnIter) == o_rColumnNames.end())
+                if(bCase(sRealName,tableColumnName) && bCase(_rsUpdateTableName,sTableName) && o_rColumnNames.find(tableColumnName) == o_rColumnNames.end())
                 {
                     sal_Int32 nType = 0;
                     xQueryColumnProp->getPropertyValue(PROPERTY_TYPE)   >>= nType;
@@ -1436,7 +1424,6 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                     break;
                 }
             }
-            pTblColumnIter = _aColumnNames.getConstArray();
         }
     }
 }

@@ -492,17 +492,15 @@ SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
 
 void ODBFilter::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 {
-    const PropertyValue *pIter = aViewProps.getConstArray();
-    const PropertyValue *pEnd = pIter + aViewProps.getLength();
-    for (; pIter != pEnd; ++pIter)
+    for (auto& prop : aViewProps)
     {
-        if ( pIter->Name == "Queries" )
+        if (prop.Name == "Queries")
         {
-            fillPropertyMap(pIter->Value,m_aQuerySettings);
+            fillPropertyMap(prop.Value, m_aQuerySettings);
         }
-        else if ( pIter->Name == "Tables" )
+        else if (prop.Name == "Tables")
         {
-            fillPropertyMap(pIter->Value,m_aTablesSettings);
+            fillPropertyMap(prop.Value, m_aTablesSettings);
         }
     }
 }
@@ -510,14 +508,12 @@ void ODBFilter::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 
 void ODBFilter::SetConfigurationSettings(const Sequence<PropertyValue>& aConfigProps)
 {
-    const PropertyValue *pIter = aConfigProps.getConstArray();
-    const PropertyValue *pEnd = pIter + aConfigProps.getLength();
-    for (; pIter != pEnd; ++pIter)
+    for (auto& prop : aConfigProps)
     {
-        if ( pIter->Name == "layout-settings" )
+        if (prop.Name == "layout-settings")
         {
             Sequence<PropertyValue> aWindows;
-            pIter->Value >>= aWindows;
+            prop.Value >>= aWindows;
             uno::Reference<XPropertySet> xProp(getDataSource());
             if ( xProp.is() )
                 xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,Any(aWindows));
@@ -530,13 +526,11 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
 {
     Sequence<PropertyValue> aWindows;
     _rValue >>= aWindows;
-    const PropertyValue *pIter = aWindows.getConstArray();
-    const PropertyValue *pEnd = pIter + aWindows.getLength();
-    for (; pIter != pEnd; ++pIter)
+    for (auto& window : aWindows)
     {
         Sequence<PropertyValue> aValue;
-        pIter->Value >>= aValue;
-        _rMap.emplace( pIter->Name,aValue );
+        window.Value >>= aValue;
+        _rMap.emplace(window.Name, aValue);
     }
 
 }

@@ -383,11 +383,9 @@ void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
     DBTreeViewBase& rTree = *m_aLists[nPos];
     weld::TreeView& rTreeView = rTree.GetWidget();
     rTreeView.unselect_all();
-    const OUString* pIter = _aNames.getConstArray();
-    const OUString* pEnd  = pIter + _aNames.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& name : _aNames)
     {
-        auto xEntry = rTree.getListBox().GetEntryPosByName(*pIter);
+        auto xEntry = rTree.getListBox().GetEntryPosByName(name);
         if (!xEntry)
             continue;
         rTreeView.select(*xEntry);
@@ -644,18 +642,15 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     std::unique_ptr<weld::TreeIter> xRet = rTreeView.make_iterator();
     const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
 
-    Sequence< OUString> aSeq = _xContainer->getElementNames();
-    const OUString* pIter = aSeq.getConstArray();
-    const OUString* pEnd  = pIter + aSeq.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& name : _xContainer->getElementNames())
     {
-        Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
+        Reference<XNameAccess> xSubElements(_xContainer->getByName(name), UNO_QUERY);
         if ( xSubElements.is() )
         {
             OUString sId(OUString::number(nFolderIndicator));
 
             rTreeView.insert(_pParent, -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
-            rTreeView.set_text(*xRet, *pIter, 0);
+            rTreeView.set_text(*xRet, name, 0);
             rTreeView.set_text_emphasis(*xRet, false, 0);
             getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
             fillNames( xSubElements, _eType, rImageId, xRet.get());
@@ -663,7 +658,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
         else
         {
             rTreeView.insert(_pParent, -1, nullptr, nullptr, nullptr, nullptr, false, xRet.get());
-            rTreeView.set_text(*xRet, *pIter, 0);
+            rTreeView.set_text(*xRet, name, 0);
             rTreeView.set_text_emphasis(*xRet, false, 0);
             rTreeView.set_image(*xRet, rImageId);
         }

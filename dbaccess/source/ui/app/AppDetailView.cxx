@@ -156,26 +156,20 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         // copy the commands so we can use them with the config managers
         Sequence< OUString > aCommands( _rList.size() );
-        OUString* pCommands = aCommands.getArray();
-        for (auto const& copyTask : _rList)
-        {
-            *pCommands = copyTask.sUNOCommand;
-            ++pCommands;
-        }
+        std::transform(_rList.begin(), _rList.end(), aCommands.getArray(),
+                       [](auto& copyTask) { return copyTask.sUNOCommand; });
 
         Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages(
             ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL ,
             aCommands
         );
+        assert(aImages.size() == _rList.size());
 
-        const Reference< XGraphic >* pImages( aImages.getConstArray() );
-
-        size_t nIndex = 0;
-        for (auto const& task : _rList)
+        for (size_t nIndex = 0; nIndex < _rList.size(); ++nIndex)
         {
-            OUString sId = weld::toId(new TaskEntry(task));
-            m_xTreeView->append(sId, task.sTitle);
-            m_xTreeView->set_image(nIndex++, *pImages++);
+            OUString sId = weld::toId(new TaskEntry(_rList[nIndex]));
+            m_xTreeView->append(sId, _rList[nIndex].sTitle);
+            m_xTreeView->set_image(nIndex, aImages[nIndex]);
         }
     }
     catch(Exception&)

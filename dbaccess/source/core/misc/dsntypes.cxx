@@ -55,13 +55,10 @@ ODsnTypeCollection::ODsnTypeCollection(const css::uno::Reference< css::uno::XCom
 ,m_nLivingIterators(0)
 #endif
 {
-    const uno::Sequence< OUString > aURLs = m_aDriverConfig.getURLs();
-    const OUString* pIter = aURLs.getConstArray();
-    const OUString* pEnd = pIter + aURLs.getLength();
-    for(;pIter != pEnd;++pIter )
+    for (auto& url : m_aDriverConfig.getURLs())
     {
-        m_aDsnPrefixes.push_back(*pIter);
-        m_aDsnTypesDisplayNames.push_back(m_aDriverConfig.getDriverTypeDisplayName(*pIter));
+        m_aDsnPrefixes.push_back(url);
+        m_aDsnTypesDisplayNames.push_back(m_aDriverConfig.getDriverTypeDisplayName(url));
     }
 
     OSL_ENSURE(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
@@ -158,22 +155,19 @@ OUString ODsnTypeCollection::getMediaType(std::u16string_view _sURL) const
 OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_view _sMediaType,std::u16string_view _sExtension)
 {
     OUString sURL, sFallbackURL;
-    const uno::Sequence< OUString > aURLs = m_aDriverConfig.getURLs();
-    const OUString* pIter = aURLs.getConstArray();
-    const OUString* pEnd = pIter + aURLs.getLength();
-    for(;pIter != pEnd;++pIter )
+    for (auto& url : m_aDriverConfig.getURLs())
     {
-        const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(*pIter);
+        const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(url);
         if ( aFeatures.getOrDefault("MediaType",OUString()) == _sMediaType )
         {
             const OUString sFileExtension = aFeatures.getOrDefault("Extension",OUString());
             if ( _sExtension == sFileExtension )
             {
-                sURL = *pIter;
+                sURL = url;
                 break;
             }
             if ( sFileExtension.isEmpty() && !_sExtension.empty() )
-                sFallbackURL = *pIter;
+                sFallbackURL = url;
         }
     }
 

@@ -233,32 +233,25 @@ namespace dbaui
             return;
 
         Sequence< OUString > aFieldNames = xCols->getElementNames();
-        _rIndex.aFields.resize(aFieldNames.getLength());
+        _rIndex.aFields.clear();
+        _rIndex.aFields.reserve(aFieldNames.getLength());
 
-        const OUString* pFieldNames = aFieldNames.getConstArray();
-        const OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
-        IndexFields::iterator aCopyTo = _rIndex.aFields.begin();
-
-        Reference< XPropertySet > xIndexColumn;
-        for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++aCopyTo)
+        for (auto& fieldName : aFieldNames)
         {
             // extract the column
-            xIndexColumn.clear();
-            xCols->getByName(*pFieldNames) >>= xIndexColumn;
+            Reference<XPropertySet> xIndexColumn;
+            xCols->getByName(fieldName) >>= xIndexColumn;
             if (!xIndexColumn.is())
             {
                 OSL_FAIL("OIndexCollection::implFillIndexInfo: invalid index column!");
-                --aCopyTo;
                 continue;
             }
 
             // get the relevant properties
-            aCopyTo->sFieldName = *pFieldNames;
-            aCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue("IsAscending"));
+            _rIndex.aFields.push_back({ .sFieldName = fieldName,
+                                        .bSortAscending = cppu::any2bool(
+                                            xIndexColumn->getPropertyValue("IsAscending")) });
         }
-
-        _rIndex.aFields.resize(aCopyTo - _rIndex.aFields.begin());
-            // (just in case some fields were invalid ...)
     }
 
     void OIndexCollection::resetIndex(const Indexes::iterator& _rPos)
@@ -302,14 +295,11 @@ namespace dbaui
             return;
 
         // loop through all the indexes
-        Sequence< OUString > aNames = m_xIndexes->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for (; pNames < pEnd; ++pNames)
+        for (auto& name : m_xIndexes->getElementNames())
         {
             // extract the index object
             Reference< XPropertySet > xIndex;
-            m_xIndexes->getByName(*pNames) >>= xIndex;
+            m_xIndexes->getByName(name) >>= xIndex;
             if (!xIndex.is())
             {
                 OSL_FAIL("OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
@@ -317,8 +307,8 @@ namespace dbaui
             }
 
             // fill the OIndex structure
-            OIndex aCurrentIndex(*pNames);
-            implFillIndexInfo(aCurrentIndex);
+            OIndex aCurrentIndex(name);
+            implFillIndexInfo(aCurrentIndex, xIndex);
             m_aIndexes.push_back(aCurrentIndex);
         }
     }

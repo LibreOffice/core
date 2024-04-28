@@ -285,13 +285,9 @@ Sequence< OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )
 Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& URL,const OUString& TargetFrameName,sal_Int32 SearchFlags )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    const OUString* pIter = m_aInterceptedURL.getConstArray();
-    const OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
-    for(;pIter != pEnd;++pIter)
-    {
-        if ( URL.Complete == *pIter )
+    for (auto& interceptedUrl : m_aInterceptedURL)
+        if (URL.Complete == interceptedUrl)
             return static_cast<XDispatch*>(this);
-    }
 
     if(m_xSlaveDispatchProvider.is())
         return m_xSlaveDispatchProvider->queryDispatch(URL,TargetFrameName,SearchFlags);
@@ -310,11 +306,9 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
     auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
     {
-        const OUString* pIter = m_aInterceptedURL.getConstArray();
-        const OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (auto& interceptedUrl : m_aInterceptedURL)
         {
-            if ( Requests[i].FeatureURL.Complete == *pIter )
+            if (Requests[i].FeatureURL.Complete == interceptedUrl)
             {
                 aRetRange[i] = static_cast<XDispatch*>(this);
                 break;

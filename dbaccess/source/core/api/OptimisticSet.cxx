@@ -96,13 +96,10 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xTables = xTabSup->getTables();
-    const Sequence< OUString> aTableNames = xTables->getElementNames();
-    const OUString* pTableNameIter = aTableNames.getConstArray();
-    const OUString* pTableNameEnd = pTableNameIter + aTableNames.getLength();
-    for( ; pTableNameIter != pTableNameEnd ; ++pTableNameIter)
+    for (auto& tableName : xTables->getElementNames())
     {
         std::unique_ptr<SelectColumnsMetaData> pKeyColumNames(new SelectColumnsMetaData(bCase));
-        findTableColumnsMatching_throw(xTables->getByName(*pTableNameIter),*pTableNameIter,xMeta,xQueryColumns,pKeyColumNames);
+        findTableColumnsMatching_throw(xTables->getByName(tableName),tableName,xMeta,xQueryColumns,pKeyColumNames);
         m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }
 

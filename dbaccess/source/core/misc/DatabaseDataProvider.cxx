@@ -115,14 +115,12 @@ uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceName
 void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > & aArguments)
 {
     osl::MutexGuard g(m_aMutex);
-    const uno::Any* pIter   = aArguments.getConstArray();
-    const uno::Any* pEnd    = pIter + aArguments.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& arg : aArguments)
     {
         if ( !m_xActiveConnection.is() )
-            (*pIter) >>= m_xActiveConnection;
+            arg >>= m_xActiveConnection;
         else if ( !m_xHandler.is() )
-            (*pIter) >>= m_xHandler;
+            arg >>= m_xHandler;
     }
     m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, uno::Any( m_xActiveConnection ) );
 }
@@ -130,28 +128,26 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 // chart2::data::XDataProvider:
 sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments)
 {
-    const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
-    const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
-    for(;pArgIter != pArgEnd;++pArgIter)
+    for (auto& arg : _aArguments)
     {
-        if ( pArgIter->Name == "DataRowSource" )
+        if (arg.Name == "DataRowSource")
         {
             css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_COLUMNS;
-            pArgIter->Value >>= eRowSource;
+            arg.Value >>= eRowSource;
             if ( eRowSource != css::chart::ChartDataRowSource_COLUMNS )
                 return false;
         }
-        else if ( pArgIter->Name == "CellRangeRepresentation" )
+        else if (arg.Name == "CellRangeRepresentation")
         {
             OUString sRange;
-            pArgIter->Value >>= sRange;
+            arg.Value >>= sRange;
             if ( sRange != "all" )
                 return false;
         }
-        else if ( pArgIter->Name == "FirstCellAsLabel" )
+        else if (arg.Name == "FirstCellAsLabel")
         {
             bool bFirstCellAsLabel = true;
-            pArgIter->Value >>= bFirstCellAsLabel;
+            arg.Value >>= bFirstCellAsLabel;
             if ( !bFirstCellAsLabel )
                 return false;
         }

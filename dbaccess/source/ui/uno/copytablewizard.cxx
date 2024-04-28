@@ -1090,8 +1090,8 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     Reference< XParameters > xStatementParams( xStatement, UNO_QUERY_THROW );
 
     const bool bSelectedRecordsOnly = m_aSourceSelection.hasElements();
-    const Any* pSelectedRow         = m_aSourceSelection.getConstArray();
-    const Any* pSelEnd              = pSelectedRow + m_aSourceSelection.getLength();
+    const Any* pSelectedRow         = m_aSourceSelection.begin();
+    const Any* pSelEnd              = m_aSourceSelection.end();
 
     sal_Int32 nRowCount = 0;
     bool bContinue = false;

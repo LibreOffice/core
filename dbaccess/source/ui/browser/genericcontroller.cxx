@@ -177,20 +177,20 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
     Reference< XFrame > xFrame;
 
-    PropertyValue aValue;
-    const Any* pIter    = aArguments.getConstArray();
-    const Any* pEnd     = pIter + aArguments.getLength();
-
-    for ( ; pIter != pEnd; ++pIter )
+    for (auto& arg : aArguments)
     {
-        if ( ( *pIter >>= aValue ) && aValue.Name == "Frame" )
+        PropertyValue aValue;
+        if (arg >>= aValue)
         {
-            xFrame.set(aValue.Value,UNO_QUERY_THROW);
-        }
-        else if ( ( *pIter >>= aValue ) && aValue.Name == "Preview" )
-        {
-            aValue.Value >>= m_bPreview;
-            m_bReadOnly = true;
+            if (aValue.Name == "Frame")
+            {
+                xFrame.set(aValue.Value, UNO_QUERY_THROW);
+            }
+            else if (aValue.Name == "Preview")
+            {
+                aValue.Value >>= m_bPreview;
+                m_bReadOnly = true;
+            }
         }
     }
     try
@@ -542,19 +542,13 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
 
 Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const Sequence< DispatchDescriptor >& aDescripts)
 {
-    Sequence< Reference< XDispatch > > aReturn;
-    sal_Int32 nLen = aDescripts.getLength();
-    if ( nLen )
+    Sequence< Reference< XDispatch > > aReturn(aDescripts.getLength());
+    if (aDescripts.hasElements())
     {
-        aReturn.realloc( nLen );
-        Reference< XDispatch >* pReturn     = aReturn.getArray();
-        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
-        const   DispatchDescriptor*     pDescripts  = aDescripts.getConstArray();
-
-        for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
-        {
-            *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
-        }
+        std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
+                       [this](auto& desc) {
+                           return queryDispatch(desc.FeatureURL, desc.FrameName, desc.SearchFlags);
+                       });
     }
 
     return aReturn;

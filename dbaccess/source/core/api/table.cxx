@@ -268,12 +268,10 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  )
     std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
-    const Type* pIter = aTypes.getConstArray();
-    const Type* pEnd = pIter + aTypes.getLength();
-    for(;pIter != pEnd ;++pIter)
+    for (auto& type : aTypes)
     {
-        if( (*pIter != aRenameType || getRenameService().is()) && (*pIter != aAlterType || getAlterService().is()))
-            aOwnTypes.push_back(*pIter);
+        if( (type != aRenameType || getRenameService().is()) && (type != aAlterType || getAlterService().is()))
+            aOwnTypes.push_back(type);
     }
 
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());

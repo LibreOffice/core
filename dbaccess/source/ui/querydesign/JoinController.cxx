@@ -314,14 +314,9 @@ void OJoinController::loadTableWindows( const ::comphelper::NamedValueCollection
 
     m_aMinimumTableViewSize = Point();
 
-    Sequence< PropertyValue > aWindowData;
-    aWindowData = i_rViewSettings.getOrDefault( "Tables", aWindowData );
-
-    const PropertyValue* pTablesIter = aWindowData.getConstArray();
-    const PropertyValue* pTablesEnd = pTablesIter + aWindowData.getLength();
-    for ( ; pTablesIter != pTablesEnd; ++pTablesIter )
+    for (auto& table : i_rViewSettings.getOrDefault("Tables", Sequence<PropertyValue>()))
     {
-        ::comphelper::NamedValueCollection aSingleTableData( pTablesIter->Value );
+        ::comphelper::NamedValueCollection aSingleTableData(table.Value);
         loadTableWindow( aSingleTableData );
     }
     if ( m_aMinimumTableViewSize != Point() )

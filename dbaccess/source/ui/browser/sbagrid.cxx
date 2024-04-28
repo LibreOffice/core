@@ -1090,10 +1090,10 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         OUString sCellText;
         Reference< XGridFieldDataSupplier >  xFieldData(GetPeer());
         Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(cppu::UnoType<decltype(sCellText)>::get());
-        if (aSupportingText.getConstArray()[nColumnPos])
+        if (aSupportingText[nColumnPos])
         {
             Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, cppu::UnoType<decltype(sCellText)>::get());
-            sCellText = ::comphelper::getString(aCellContents.getConstArray()[nColumnPos]);
+            sCellText = ::comphelper::getString(aCellContents[nColumnPos]);
             ::svt::OStringTransfer::StartStringDrag(sCellText, this, DND_ACTION_COPY);
         }
     }

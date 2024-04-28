@@ -40,7 +40,6 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
     css::uno::Reference< css::container::XNameAccess >    m_xUsers;
-    css::uno::Sequence< OUString>                         m_aUserNames;
 
     OUString            m_UserName;
 
