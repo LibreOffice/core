@@ -2741,13 +2741,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
                     if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("_MarkAsFinal"))
                     {
-                        Any anyMarkAsFinal = xPropertySet->getPropertyValue("_MarkAsFinal");
-                        const OUString strValueTypeName = anyMarkAsFinal.getValueTypeName();
-
-                        if (
-                               ( (strValueTypeName == "boolean") && (anyMarkAsFinal.get<bool>()) ) ||
-                               ( (strValueTypeName == "string") && (anyMarkAsFinal.get<OUString>() == "true") )
-                        )
+                        if (xPropertySet->getPropertyValue("_MarkAsFinal").get<bool>())
                         {
                             uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
                             uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
