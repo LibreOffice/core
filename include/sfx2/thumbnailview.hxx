@@ -178,16 +178,16 @@ public:
 
     void AppendItem(std::unique_ptr<ThumbnailViewItem> pItem);
 
-    void RemoveItem(sal_uInt16 nItemId);
+    SAL_DLLPRIVATE void RemoveItem(sal_uInt16 nItemId);
 
     virtual void Clear();
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
-    void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
+    SAL_DLLPRIVATE void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
 
-    size_t GetItemPos( sal_uInt16 nItemId ) const;
+    SAL_DLLPRIVATE size_t GetItemPos( sal_uInt16 nItemId ) const;
 
-    sal_uInt16 GetItemId( size_t nPos ) const;
+    SAL_DLLPRIVATE sal_uInt16 GetItemId( size_t nPos ) const;
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
@@ -195,14 +195,14 @@ public:
 
     bool isDrawMnemonic() const { return mbDrawMnemonics; }
 
-    void setItemMaxTextLength (sal_uInt32 nLength);
+    SAL_DLLPRIVATE void setItemMaxTextLength (sal_uInt32 nLength);
 
     void setItemDimensions (tools::Long ItemWidth, tools::Long ThumbnailHeight,
                             tools::Long DisplayHeight, int itemPadding);
 
     void SelectItem( sal_uInt16 nItemId );
 
-    bool IsItemSelected( sal_uInt16 nItemId ) const;
+    SAL_DLLPRIVATE bool IsItemSelected( sal_uInt16 nItemId ) const;
 
     /**
      *
@@ -212,11 +212,11 @@ public:
 
     void deselectItems ();
 
-    void ShowTooltips( bool bShowTooltips );
+    SAL_DLLPRIVATE void ShowTooltips( bool bShowTooltips );
 
     void DrawMnemonics( bool bDrawMnemonics );
 
-    void filterItems (const std::function<bool (const ThumbnailViewItem*) > &func);
+    SAL_DLLPRIVATE void filterItems(const std::function<bool (const ThumbnailViewItem*) > &func);
 
     void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }
 
@@ -254,36 +254,36 @@ protected:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    const rtl::Reference<ThumbnailViewAcc> & getAccessible() const;
+    SAL_DLLPRIVATE const rtl::Reference<ThumbnailViewAcc> & getAccessible() const;
 
 protected:
 
     // Drawing item related functions, override them to make your own custom ones.
 
-    void DrawItem (ThumbnailViewItem const *pItem);
+    SAL_DLLPRIVATE void DrawItem (ThumbnailViewItem const *pItem);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
     // Set Item colors from the ThumbnailView colors
-    void UpdateColors();
+    SAL_DLLPRIVATE void UpdateColors();
 
 protected:
 
     friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
 
-    void CalculateItemPositions (bool bScrollBarUsed = false);
-    void MakeItemVisible( sal_uInt16 nId );
+    SAL_DLLPRIVATE void CalculateItemPositions (bool bScrollBarUsed = false);
+    SAL_DLLPRIVATE void MakeItemVisible( sal_uInt16 nId );
 
-    void         ImplInit();
+    SAL_DLLPRIVATE void ImplInit();
 
-    void         ImplDeleteItems();
-    size_t       ImplGetItem( const Point& rPoint ) const;
-    ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    sal_uInt16 ImplGetVisibleItemCount() const;
-    ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
-    void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-    bool         ImplHasAccessibleListeners() const;
+    SAL_DLLPRIVATE void ImplDeleteItems();
+    SAL_DLLPRIVATE size_t ImplGetItem( const Point& rPoint ) const;
+    SAL_DLLPRIVATE ThumbnailViewItem* ImplGetItem( size_t nPos );
+    SAL_DLLPRIVATE sal_uInt16 ImplGetVisibleItemCount() const;
+    SAL_DLLPRIVATE ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
+    SAL_DLLPRIVATE void ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    SAL_DLLPRIVATE bool ImplHasAccessibleListeners() const;
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
 
 protected:

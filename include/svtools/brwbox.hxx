@@ -375,16 +375,16 @@ private:
     bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
 
-    void            ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice);
+    SAL_DLLPRIVATE void ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice);
 
     bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
 
-    sal_uInt16      ToggleSelectedColumn();
-    void            SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
+    SAL_DLLPRIVATE sal_uInt16 ToggleSelectedColumn();
+    SAL_DLLPRIVATE void SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
 
 protected:
     /// retrieves the XAccessible implementation associated with the BrowseBox instance
-    ::vcl::IAccessibleFactory&   getAccessibleFactory();
+    SAL_DLLPRIVATE ::vcl::IAccessibleFactory&   getAccessibleFactory();
 
 protected:
     bool                m_bNavigationBar;
@@ -410,8 +410,8 @@ protected:
             nRow starts at 0
     */
     virtual bool    SeekRow( sal_Int32 nRow ) = 0;
-    void            DrawCursor();
-    void            PaintData(vcl::Window const & rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    SAL_DLLPRIVATE void DrawCursor();
+    SAL_DLLPRIVATE void PaintData(vcl::Window const & rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     virtual void    PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
     // The subclass is able to announce changes of the model with the
@@ -435,9 +435,9 @@ protected:
     sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable
-    void            DoShowCursor();
-    void            DoHideCursor();
-    short           GetCursorHideCount() const;
+    SAL_DLLPRIVATE void DoShowCursor();
+    SAL_DLLPRIVATE void DoHideCursor();
+    SAL_DLLPRIVATE short GetCursorHideCount() const;
 
     virtual VclPtr<BrowserHeader> CreateHeaderBar( BrowseBox* pParent );
 
@@ -459,7 +459,7 @@ protected:
     virtual void    ImplEndTracking();
 
 public:
-                    BrowseBox( vcl::Window* pParent, WinBits nBits,
+    SAL_DLLPRIVATE BrowseBox( vcl::Window* pParent, WinBits nBits,
                                BrowserMode nMode = BrowserMode::NONE );
     virtual         ~BrowseBox() override;
     virtual void    dispose() override;
@@ -487,7 +487,7 @@ public:
     // new handlers
     virtual void    MouseButtonDown( const BrowserMouseEvent& rEvt );
     virtual void    MouseButtonUp( const BrowserMouseEvent& rEvt );
-    void            StartScroll();
+    SAL_DLLPRIVATE void StartScroll();
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
@@ -533,11 +533,11 @@ public:
     tools::Long     GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16      GetColumnId( sal_uInt16 nPos ) const;
     sal_uInt16      GetColumnPos( sal_uInt16 nColumnId ) const;
-    bool            IsFrozen( sal_uInt16 nColumnId ) const;
+    SAL_DLLPRIVATE bool IsFrozen( sal_uInt16 nColumnId ) const;
 
     // movement of visible area
-    sal_Int32       ScrollColumns( sal_Int32 nColumns );
-    sal_Int32       ScrollRows( sal_Int32 nRows );
+    SAL_DLLPRIVATE sal_Int32 ScrollColumns( sal_Int32 nColumns );
+    SAL_DLLPRIVATE sal_Int32 ScrollRows( sal_Int32 nRows );
     void            MakeFieldVisible( sal_Int32 nRow, sal_uInt16 nColId );
 
     // access and movement of cursor
@@ -575,14 +575,14 @@ public:
     tools::Rectangle       GetRowRectPixel( sal_Int32 nRow ) const;
     tools::Rectangle       GetFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;
-    bool            IsFieldVisible( sal_Int32 nRow, sal_uInt16 nColId,
+    SAL_DLLPRIVATE bool IsFieldVisible( sal_Int32 nRow, sal_uInt16 nColId,
                                     bool bComplete = false ) const;
     sal_Int32       GetRowAtYPosPixel( tools::Long nY,
                                         bool bRelToBrowser = true  ) const;
     sal_uInt16      GetColumnAtXPosPixel( tools::Long nX ) const;
 
     // invalidations
-    void            Clear();
+    SAL_DLLPRIVATE void Clear();
     void            RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows = 1, bool bDoPaint = true );
     void            RowModified( sal_Int32 nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
     void            RowInserted( sal_Int32 nRow, sal_Int32 nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
@@ -593,7 +593,7 @@ public:
     virtual bool    ProcessKey(const KeyEvent& rEvt);
     virtual void    ChildFocusIn();
     virtual void    ChildFocusOut();
-    void            Dispatch( sal_uInt16 nId );
+    SAL_DLLPRIVATE void Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
@@ -644,7 +644,7 @@ public:
         @param rOldValue
             the old value
     */
-    void commitBrowseBoxEvent(sal_Int16 nEventId,
+    SAL_DLLPRIVATE void commitBrowseBoxEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
             const css::uno::Any& rOldValue);
 
@@ -656,7 +656,7 @@ public:
         @param rOldValue
             the old value
     */
-    void commitTableEvent(sal_Int16 nEventId,
+    SAL_DLLPRIVATE void commitTableEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
             const css::uno::Any& rOldValue);
 
@@ -669,7 +669,7 @@ public:
         @param rOldValue
             the old value
     */
-    void commitHeaderBarEvent(sal_Int16 nEventId,
+    SAL_DLLPRIVATE void commitHeaderBarEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
             const css::uno::Any& rOldValue,
             bool _bColumnHeaderBar
@@ -706,7 +706,7 @@ public:
     virtual tools::Rectangle GetFieldRectPixel(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen) override;
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
-    bool isAccessibleAlive( ) const;
+    SAL_DLLPRIVATE bool isAccessibleAlive( ) const;
 
 public:
     /** Creates and returns the accessible object of the whole BrowseBox. */

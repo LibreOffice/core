@@ -268,51 +268,51 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE void _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any _getPropertyValue( const OUString& PropertyName, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::uno::Any _getPropertyValue( const OUString& PropertyName, sal_Int32 nPara = -1 );
 
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void _setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE void _setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, sal_Int32 nPara = -1 );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Any > _getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::uno::Sequence< css::uno::Any > _getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara = -1 );
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState _getPropertyState( const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::beans::PropertyState _getPropertyState( const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState _getPropertyState( std::u16string_view PropertyName, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::beans::PropertyState _getPropertyState( std::u16string_view PropertyName, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::beans::PropertyState > _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  );
+    SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyState > _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  );
     // returns true if property found or false if unknown property
-    static bool _getOnePropertyStates(const SfxItemSet& rSet, const SfxItemPropertyMapEntry* pMap, css::beans::PropertyState& rState);
+    SAL_DLLPRIVATE static bool _getOnePropertyStates(const SfxItemSet& rSet, const SfxItemPropertyMapEntry* pMap, css::beans::PropertyState& rState);
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE void _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara );
+    SAL_DLLPRIVATE void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara );
     void SetEditSource( SvxEditSource* _pEditSource ) noexcept;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void getPropertyValue( const SfxItemPropertyMapEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE void getPropertyValue( const SfxItemPropertyMapEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
-    void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
+    SAL_DLLPRIVATE void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
 
-    SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
-    SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
-    SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange);
-    virtual ~SvxUnoTextRangeBase() noexcept;
+    SAL_DLLPRIVATE SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
+    SAL_DLLPRIVATE SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
+    SAL_DLLPRIVATE SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange);
+    SAL_DLLPRIVATE virtual ~SvxUnoTextRangeBase() noexcept;
 
 public:
     // Internal
@@ -324,13 +324,13 @@ public:
     }
     void                    SetSelection( const ESelection& rSelection ) noexcept;
 
-    void            CollapseToStart() noexcept;
-    void            CollapseToEnd() noexcept;
-    bool            IsCollapsed() noexcept;
-    bool            GoLeft(sal_Int32 nCount, bool Expand) noexcept;
-    bool            GoRight(sal_Int32 nCount, bool Expand) noexcept;
-    void            GotoStart(bool Expand) noexcept;
-    void            GotoEnd(bool Expand) noexcept;
+    SAL_DLLPRIVATE void CollapseToStart() noexcept;
+    SAL_DLLPRIVATE void CollapseToEnd() noexcept;
+    SAL_DLLPRIVATE bool IsCollapsed() noexcept;
+    SAL_DLLPRIVATE bool GoLeft(sal_Int32 nCount, bool Expand) noexcept;
+    SAL_DLLPRIVATE bool GoRight(sal_Int32 nCount, bool Expand) noexcept;
+    SAL_DLLPRIVATE void GotoStart(bool Expand) noexcept;
+    SAL_DLLPRIVATE void GotoEnd(bool Expand) noexcept;
 
     //const SfxItemPropertyMapEntry*   getPropertyMapEntries() const throw() { return maPropSet.getPropertyMapEntries(); }
     const SvxItemPropertySet*   getPropertySet() const noexcept { return mpPropSet; }
@@ -345,10 +345,10 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextRangeBase )
 
     // css::text::XTextRange
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
-    virtual OUString SAL_CALL getString() override;
-    virtual void SAL_CALL setString( const OUString& aString ) override;
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
+    SAL_DLLPRIVATE virtual OUString SAL_CALL getString() override;
+    SAL_DLLPRIVATE virtual void SAL_CALL setString( const OUString& aString ) override;
 
     // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
@@ -384,8 +384,8 @@ public:
 
     // css::lang::XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    static  css::uno::Sequence< OUString > getSupportedServiceNames_Static( );
+    SAL_DLLPRIVATE virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    SAL_DLLPRIVATE static  css::uno::Sequence< OUString > getSupportedServiceNames_Static( );
 };
 
 

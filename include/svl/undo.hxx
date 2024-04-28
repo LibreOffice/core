@@ -329,19 +329,19 @@ protected:
     virtual void EmptyActionsChanged();
 
 private:
-    size_t  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
-    bool    ImplAddUndoAction_NoNotify( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerge, bool bClearRedo, ::svl::undo::impl::UndoManagerGuard& i_guard );
-    void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard, bool const i_currentLevel );
-    void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
-    void    ImplClearCurrentLevel_NoNotify( ::svl::undo::impl::UndoManagerGuard& i_guard );
-    size_t  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;
-    bool    ImplIsUndoEnabled_Lock() const;
-    bool    ImplIsInListAction_Lock() const;
-    void    ImplEnableUndo_Lock( bool const i_enable );
+    SAL_DLLPRIVATE size_t  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
+    SAL_DLLPRIVATE bool    ImplAddUndoAction_NoNotify( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerge, bool bClearRedo, ::svl::undo::impl::UndoManagerGuard& i_guard );
+    SAL_DLLPRIVATE void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard, bool const i_currentLevel );
+    SAL_DLLPRIVATE void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    SAL_DLLPRIVATE void    ImplClearCurrentLevel_NoNotify( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    SAL_DLLPRIVATE size_t  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;
+    SAL_DLLPRIVATE bool    ImplIsUndoEnabled_Lock() const;
+    SAL_DLLPRIVATE bool    ImplIsInListAction_Lock() const;
+    SAL_DLLPRIVATE void    ImplEnableUndo_Lock( bool const i_enable );
 
-    bool    ImplUndo( SfxUndoContext* i_contextOrNull );
-    bool    ImplRedo( SfxUndoContext* i_contextOrNull );
-    void    ImplCheckEmptyActions();
+    SAL_DLLPRIVATE bool    ImplUndo( SfxUndoContext* i_contextOrNull );
+    SAL_DLLPRIVATE bool    ImplRedo( SfxUndoContext* i_contextOrNull );
+    SAL_DLLPRIVATE void    ImplCheckEmptyActions();
     inline  bool    ImplIsEmptyActions() const;
 
     friend class ::svl::undo::impl::LockGuard;

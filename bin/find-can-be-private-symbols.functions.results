@@ -58,29 +58,6 @@ BitmapSolarizeFilter::execute(BitmapEx const&) const
 BitmapSymmetryCheck::checkImpl(BitmapReadAccess const*)
 BitmapWriteAccess::SetFillColor()
 BmpWriter(SvStream&, Graphic const&, FilterConfigItem*)
-BrowseBox::BrowseBox(vcl::Window*, long, BrowserMode)
-BrowseBox::Clear()
-BrowseBox::Dispatch(unsigned short)
-BrowseBox::DoHideCursor()
-BrowseBox::DoShowCursor()
-BrowseBox::DrawCursor()
-BrowseBox::GetCursorHideCount() const
-BrowseBox::GoToColumnId(unsigned short, bool, bool)
-BrowseBox::GoToRow(int, bool, bool)
-BrowseBox::ImplPaintData(OutputDevice&, tools::Rectangle const&, bool)
-BrowseBox::IsFieldVisible(int, unsigned short, bool) const
-BrowseBox::IsFrozen(unsigned short) const
-BrowseBox::PaintData(vcl::Window const&, OutputDevice&, tools::Rectangle const&)
-BrowseBox::ScrollColumns(int)
-BrowseBox::ScrollRows(int)
-BrowseBox::SetToggledSelectedColumn(unsigned short)
-BrowseBox::StartScroll()
-BrowseBox::ToggleSelectedColumn()
-BrowseBox::commitBrowseBoxEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
-BrowseBox::commitHeaderBarEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&, bool)
-BrowseBox::commitTableEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
-BrowseBox::getAccessibleFactory()
-BrowseBox::isAccessibleAlive() const
 BuilderBase::collectAccelerator(xmlreader::XmlReader&, std::__debug::map<rtl::OUString, std::pair<rtl::OUString, rtl::OUString>, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, std::pair<rtl::OUString, rtl::OUString> > > >&)
 BuilderBase::collectAtkRelationAttribute(xmlreader::XmlReader&, std::__debug::map<rtl::OUString, rtl::OUString, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >&)
 BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader&, std::__debug::map<rtl::OUString, rtl::OUString, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >&)
@@ -1287,17 +1264,6 @@ LinguMgr::GetProp()
 LinguMgr::GetSpell()
 LinguMgr::GetStandard()
 LinguMgr::GetThes()
-LocaleDataWrapper::ImplAddFormatNum(rtl::OUStringBuffer&, long, unsigned short, bool, bool) const
-LocaleDataWrapper::getAllInstalledLocaleNames() const
-LocaleDataWrapper::getLanguageCountryInfo() const
-LocaleDataWrapper::getMyLocale() const
-LocaleDataWrapper::loadCurrencyFormats()
-LocaleDataWrapper::loadData()
-LocaleDataWrapper::loadDateAcceptancePatterns(std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> > const&)
-LocaleDataWrapper::loadDateOrders()
-LocaleDataWrapper::loadDigitGrouping()
-LocaleDataWrapper::scanCurrFormatImpl(std::basic_string_view<char16_t, std::char_traits<char16_t> >, int, int&, int&, int&, int&, int&) const
-LocaleDataWrapper::scanDateOrderImpl(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 LogL10fromY
 LogL10toY
 LogL16fromY
@@ -1847,69 +1813,6 @@ SbxMethod::Clear()
 SbxMethod::GetClass() const
 SbxMethod::SbxMethod(rtl::OUString const&, SbxDataType, bool)
 SbxMethod::~SbxMethod()
-SbxObject::Call(rtl::OUString const&, SbxArray*)
-SbxObject::Clear()
-SbxObject::Dump(SvStream&, bool)
-SbxObject::Find(rtl::OUString const&, SbxClassType)
-SbxObject::FindQualified(rtl::OUString const&, SbxClassType)
-SbxObject::GetClass() const
-SbxObject::GetDfltProperty()
-SbxObject::GetType() const
-SbxObject::Insert(SbxVariable*)
-SbxObject::IsClass(rtl::OUString const&) const
-SbxObject::IsOptionCompatible() const
-SbxObject::LoadData(SvStream&, unsigned short)
-SbxObject::Make(rtl::OUString const&, SbxClassType, SbxDataType, bool)
-SbxObject::Notify(SfxBroadcaster&, SfxHint const&)
-SbxObject::QuickInsert(SbxVariable*)
-SbxObject::Remove(SbxVariable*)
-SbxObject::Remove(rtl::OUString const&, SbxClassType)
-SbxObject::SbxObject(SbxObject const&)
-SbxObject::SbxObject(rtl::OUString const&)
-SbxObject::SetDfltProperty(rtl::OUString const&)
-SbxObject::StoreData(SvStream&) const
-SbxObject::operator=(SbxObject const&)
-SbxObject::~SbxObject()
-SbxValue::Convert(SbxDataType)
-SbxValue::Format(rtl::OUString&, rtl::OUString const*) const
-SbxValue::GetCoreString() const
-SbxValue::ImpIsNumeric(bool) const
-SbxValue::IsNumericRTL() const
-SbxValue::PutByte(unsigned char)
-SbxValue::PutCurrency(long)
-SbxValue::PutDate(double)
-SbxValue::PutDecimal(SbxDecimal*)
-SbxValue::PutDecimal(com::sun::star::bridge::oleautomation::Decimal const&)
-SbxValue::PutErr(unsigned short)
-SbxValue::PutInt64(long)
-SbxValue::PutInteger(short)
-SbxValue::PutNull()
-SbxValue::PutSingle(float)
-SbxValue::PutUInt64(unsigned long)
-SbxValue::SbxValue(SbxDataType)
-SbxValue::Scan(rtl::OUString const&, unsigned short*)
-SbxValue::ScanNumIntnl(rtl::OUString const&, double&, bool)
-SbxValue::SetType(SbxDataType)
-SbxValue::fillAutomationDecimal(com::sun::star::bridge::oleautomation::Decimal&) const
-SbxVariable::Broadcast(SfxHintId)
-SbxVariable::ClearComListener()
-SbxVariable::Dump(SvStream&, bool)
-SbxVariable::GetClass() const
-SbxVariable::GetDeclareClassName() const
-SbxVariable::GetInfo()
-SbxVariable::GetType() const
-SbxVariable::LoadData(SvStream&, unsigned short)
-SbxVariable::NameToCaseInsensitiveName(rtl::OUString const&)
-SbxVariable::SbxVariable(SbxVariable const&)
-SbxVariable::SetComListener(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, StarBASIC*)
-SbxVariable::SetDeclareClassName(rtl::OUString const&)
-SbxVariable::SetInfo(SbxInfo*)
-SbxVariable::SetModified(bool)
-SbxVariable::SetName(rtl::OUString const&)
-SbxVariable::SetParent(SbxObject*)
-SbxVariable::StoreData(SvStream&) const
-SbxVariable::operator=(SbxVariable const&)
-SbxVariable::~SbxVariable()
 ScAppOptions::ScAppOptions()
 ScAppOptions::SetDefaults()
 ScAppOptions::SetLRUFuncList(unsigned short const*, unsigned short)
@@ -3652,20 +3555,6 @@ SelectionListenerMultiplexer::release()
 SelectionListenerMultiplexer::selectionChanged(com::sun::star::awt::grid::GridSelectionEvent const&)
 SfxAllItemSet::Clone(bool, SfxItemPool*) const
 SfxAllItemSet::PutImpl(SfxPoolItem const&, bool)
-SfxApplication::Deinitialize()
-SfxApplication::GetDdeService() const
-SfxApplication::GetFreeIndex()
-SfxApplication::GetProgress() const
-SfxApplication::GetSidebarTheme()
-SfxApplication::GetStaticInterface()
-SfxApplication::InitInterface_Impl()
-SfxApplication::InitializeDde()
-SfxApplication::Invalidate(unsigned short)
-SfxApplication::MacroOrganizer(weld::Window*, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, short)
-SfxApplication::RegisterInterface(SfxModule const*)
-SfxApplication::ReleaseIndex(unsigned short)
-SfxApplication::SfxApplication()
-SfxApplication::~SfxApplication()
 SfxBaseModel::IsInitialized() const
 SfxBaseModel::MethodEntryCheck(bool) const
 SfxBaseModel::changing()
@@ -4119,27 +4008,6 @@ SfxTemplateItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
 SfxTemplateItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
 SfxTemplateItem::SfxTemplateItem()
 SfxTemplateItem::operator==(SfxPoolItem const&) const
-SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SfxTemplateManagerDlg::ExtensionsActionHdl()
-SfxTemplateManagerDlg::ImportActionHdl()
-SfxTemplateManagerDlg::OnCategoryDelete()
-SfxTemplateManagerDlg::OnCategoryNew()
-SfxTemplateManagerDlg::OnCategoryRename()
-SfxTemplateManagerDlg::OnTemplateExport()
-SfxTemplateManagerDlg::OnTemplateImportCategory(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SfxTemplateManagerDlg::OnTemplateOpen()
-SfxTemplateManagerDlg::OnTemplateState(ThumbnailViewItem const*)
-SfxTemplateManagerDlg::SearchUpdate()
-SfxTemplateManagerDlg::fillFolderComboBox()
-SfxTemplateManagerDlg::getApplicationSpecificSettings()
-SfxTemplateManagerDlg::getCurrentApplicationFilter() const
-SfxTemplateManagerDlg::getTemplateViewMode() const
-SfxTemplateManagerDlg::localMoveTo(unsigned short)
-SfxTemplateManagerDlg::readSettings()
-SfxTemplateManagerDlg::setDocumentModel(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
-SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode)
-SfxTemplateManagerDlg::updateMenuItems()
-SfxTemplateManagerDlg::writeSettings()
 SfxTemplatePanelControl::NotifyItemUpdate(unsigned short, SfxItemState, SfxPoolItem const*)
 SfxToolBoxControl::CreateControl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox*, SfxModule const*)
 SfxToolBoxControl::CreateImpl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
@@ -4147,18 +4015,6 @@ SfxToolBoxControl::RegisterControl(unsigned short, SfxModule*)
 SfxUndoAction::GetDateTime() const
 SfxUndoArray::Remove(unsigned long, unsigned long)
 SfxUndoArray::~SfxUndoArray()
-SfxUndoManager::ImplAddUndoAction_NoNotify(std::unique_ptr<SfxUndoAction, std::default_delete<SfxUndoAction> >, bool, bool, svl::undo::impl::UndoManagerGuard&)
-SfxUndoManager::ImplCheckEmptyActions()
-SfxUndoManager::ImplClearCurrentLevel_NoNotify(svl::undo::impl::UndoManagerGuard&)
-SfxUndoManager::ImplClearRedo(svl::undo::impl::UndoManagerGuard&, bool)
-SfxUndoManager::ImplClearUndo(svl::undo::impl::UndoManagerGuard&)
-SfxUndoManager::ImplEnableUndo_Lock(bool)
-SfxUndoManager::ImplGetRedoActionCount_Lock(bool) const
-SfxUndoManager::ImplIsInListAction_Lock() const
-SfxUndoManager::ImplIsUndoEnabled_Lock() const
-SfxUndoManager::ImplLeaveListAction(bool, svl::undo::impl::UndoManagerGuard&)
-SfxUndoManager::ImplRedo(SfxUndoContext*)
-SfxUndoManager::ImplUndo(SfxUndoContext*)
 SfxUnoAnyItem::Clone(SfxItemPool*) const
 SfxUnoAnyItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
 SfxUnoAnyItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
@@ -4171,27 +4027,6 @@ SfxUnoFrameItem::operator==(SfxPoolItem const&) const
 SfxViewFactory::CreateInstance(SfxViewFrame&, SfxViewShell*)
 SfxViewFactory::GetAPIViewName() const
 SfxViewFactory::GetLegacyViewName() const
-SfxViewFrame::Activate(bool)
-SfxViewFrame::AppendContainsMacrosInfobar()
-SfxViewFrame::ChildWindowState(SfxItemSet&)
-SfxViewFrame::Close()
-SfxViewFrame::Deactivate(bool)
-SfxViewFrame::DoActivate(bool)
-SfxViewFrame::DoAdjustPosSizePixel(SfxViewShell*, Point const&, Size const&, bool)
-SfxViewFrame::DoDeactivate(bool, SfxViewFrame const*)
-SfxViewFrame::Get(com::sun::star::uno::Reference<com::sun::star::frame::XController> const&, SfxObjectShell const*)
-SfxViewFrame::GetProgress() const
-SfxViewFrame::GetStaticInterface()
-SfxViewFrame::HandleSecurityInfobar(rtl::OUString const&)
-SfxViewFrame::InitInterface_Impl()
-SfxViewFrame::Notify(SfxBroadcaster&, SfxHint const&)
-SfxViewFrame::RegisterInterface(SfxModule const*)
-SfxViewFrame::SetModalMode(bool)
-SfxViewFrame::SetViewFrame(SfxViewFrame*)
-SfxViewFrame::SfxViewFrame(SfxFrame&, SfxObjectShell*)
-SfxViewFrame::UpdateInfoBar(std::basic_string_view<char16_t, std::char_traits<char16_t> >, rtl::OUString const&, rtl::OUString const&, InfobarType)
-SfxViewFrame::UpdateTitle()
-SfxViewFrame::~SfxViewFrame()
 SfxViewFrameItem::Clone(SfxItemPool*) const
 SfxViewFrameItem::operator==(SfxPoolItem const&) const
 SfxViewShell::GetActivePrinter() const
@@ -7535,22 +7370,6 @@ SvxPatternListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
 SvxPatternListItem::SvxPatternListItem()
 SvxPatternListItem::SvxPatternListItem(SvxPatternListItem const&)
 SvxPatternListItem::operator==(SfxPoolItem const&) const
-SvxPixelCtl::ChangePixel(unsigned short)
-SvxPixelCtl::CreateAccessible()
-SvxPixelCtl::GetBitmapPixel(unsigned short) const
-SvxPixelCtl::GetFocus()
-SvxPixelCtl::GetFocusPosIndex() const
-SvxPixelCtl::GetFocusRect()
-SvxPixelCtl::IndexToPoint(long) const
-SvxPixelCtl::KeyInput(KeyEvent const&)
-SvxPixelCtl::LoseFocus()
-SvxPixelCtl::MouseButtonDown(MouseEvent const&)
-SvxPixelCtl::Paint(OutputDevice&, tools::Rectangle const&)
-SvxPixelCtl::PointToIndex(Point const&) const
-SvxPixelCtl::Resize()
-SvxPixelCtl::SetDrawingArea(weld::DrawingArea*)
-SvxPixelCtl::ShowPosition(Point const&)
-SvxPixelCtl::implCalFocusRect(Point const&)
 SvxPosSizeStatusBarControl::Command(CommandEvent const&)
 SvxPosSizeStatusBarControl::CreateImpl(unsigned short, unsigned short, StatusBar&)
 SvxPosSizeStatusBarControl::ImplUpdateItemText()
@@ -8048,35 +7867,6 @@ SvxUnoTextRange::getTypes()
 SvxUnoTextRange::queryAggregation(com::sun::star::uno::Type const&)
 SvxUnoTextRange::queryInterface(com::sun::star::uno::Type const&)
 SvxUnoTextRange::~SvxUnoTextRange()
-SvxUnoTextRangeBase::CollapseToEnd()
-SvxUnoTextRangeBase::CollapseToStart()
-SvxUnoTextRangeBase::GoLeft(int, bool)
-SvxUnoTextRangeBase::GoRight(int, bool)
-SvxUnoTextRangeBase::GotoEnd(bool)
-SvxUnoTextRangeBase::GotoStart(bool)
-SvxUnoTextRangeBase::IsCollapsed()
-SvxUnoTextRangeBase::SvxUnoTextRangeBase(SvxEditSource const*, SvxItemPropertySet const*)
-SvxUnoTextRangeBase::SvxUnoTextRangeBase(SvxItemPropertySet const*)
-SvxUnoTextRangeBase::SvxUnoTextRangeBase(SvxUnoTextRangeBase const&)
-SvxUnoTextRangeBase::_getOnePropertyStates(SfxItemSet const&, SfxItemPropertyMapEntry const*, com::sun::star::beans::PropertyState&)
-SvxUnoTextRangeBase::_getPropertyState(SfxItemPropertyMapEntry const*, int)
-SvxUnoTextRangeBase::_getPropertyState(std::basic_string_view<char16_t, std::char_traits<char16_t> >, int)
-SvxUnoTextRangeBase::_getPropertyStates(com::sun::star::uno::Sequence<rtl::OUString> const&, int)
-SvxUnoTextRangeBase::_getPropertyValue(rtl::OUString const&, int)
-SvxUnoTextRangeBase::_getPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, int)
-SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder*, SfxItemPropertyMapEntry const*, int)
-SvxUnoTextRangeBase::_setPropertyToDefault(rtl::OUString const&, int)
-SvxUnoTextRangeBase::_setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&, int)
-SvxUnoTextRangeBase::_setPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, int)
-SvxUnoTextRangeBase::getEnd()
-SvxUnoTextRangeBase::getPropertyValue(SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&, SfxItemSet const&)
-SvxUnoTextRangeBase::getStart()
-SvxUnoTextRangeBase::getString()
-SvxUnoTextRangeBase::getSupportedServiceNames()
-SvxUnoTextRangeBase::getSupportedServiceNames_Static()
-SvxUnoTextRangeBase::setPropertyValue(SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&, ESelection const&, SfxItemSet const&, SfxItemSet&)
-SvxUnoTextRangeBase::setString(rtl::OUString const&)
-SvxUnoTextRangeBase::~SvxUnoTextRangeBase()
 SvxVerJustifyItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxVerJustifyItem::GetValueCount() const
 SvxVerJustifyItem::GetValueText(SvxCellVerJustify)
@@ -9447,27 +9237,6 @@ TextSelection::TextSelection(TextPaM const&)
 Throbber::Resize()
 Throbber::dispose()
 Throbber::~Throbber()
-ThumbnailView::CalculateItemPositions(bool)
-ThumbnailView::DrawItem(ThumbnailViewItem const*)
-ThumbnailView::GetItemId(unsigned long) const
-ThumbnailView::GetItemPos(unsigned short) const
-ThumbnailView::ImplDeleteItems()
-ThumbnailView::ImplFireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
-ThumbnailView::ImplGetItem(Point const&) const
-ThumbnailView::ImplGetItem(unsigned long)
-ThumbnailView::ImplGetVisibleItem(unsigned short)
-ThumbnailView::ImplGetVisibleItemCount() const
-ThumbnailView::ImplHasAccessibleListeners() const
-ThumbnailView::ImplInit()
-ThumbnailView::IsItemSelected(unsigned short) const
-ThumbnailView::MakeItemVisible(unsigned short)
-ThumbnailView::RemoveItem(unsigned short)
-ThumbnailView::ShowTooltips(bool)
-ThumbnailView::UpdateColors()
-ThumbnailView::filterItems(std::function<bool (ThumbnailViewItem const*)> const&)
-ThumbnailView::getAccessible() const
-ThumbnailView::setItemMaxTextLength(unsigned int)
-ThumbnailView::updateItems(std::__debug::vector<std::unique_ptr<ThumbnailViewItem, std::default_delete<ThumbnailViewItem> >, std::allocator<std::unique_ptr<ThumbnailViewItem, std::default_delete<ThumbnailViewItem> > > >)
 ThumbnailViewItem::GetAccessible(bool)
 ThumbnailViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D*, ThumbnailItemAttributes const*)
 ThumbnailViewItem::addTextPrimitives(rtl::OUString const&, ThumbnailItemAttributes const*, Point, drawinglayer::primitive2d::Primitive2DContainer&)
@@ -9509,21 +9278,6 @@ TimeFormatter::TimeFormatter(Edit*)
 TimeFormatter::~TimeFormatter()
 Timer::Invoke(Timer*)
 Timer::Timer(bool, char const*)
-ToolBox::CalcFloatingWindowSizePixel(unsigned long)
-ToolBox::CopyItem(ToolBox const&, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>)
-ToolBox::DoubleClick()
-ToolBox::ExecuteCustomMenu(tools::Rectangle const&)
-ToolBox::GetDefaultImageSize() const
-ToolBox::GetItemId(Point const&) const
-ToolBox::GetItemImage(o3tl::strong_int<unsigned short, ToolBoxItemIdTag>) const
-ToolBox::GetOverflowRect() const
-ToolBox::Highlight()
-ToolBox::IsMenuEnabled() const
-ToolBox::Lock(bool)
-ToolBox::SetAccessibleName(o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, rtl::OUString const&)
-ToolBox::SetItemExpand(o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, bool)
-ToolBox::ShowLine(bool)
-ToolBox::UpdateCustomMenu()
 ToolbarPopupContainer::unsetPopover()
 ToolbarUnoDispatcher::CreateController(rtl::OUString const&)
 ToolbarUnoDispatcher::GetIconSize()
@@ -15046,24 +14800,6 @@ sdr::properties::BaseProperties::SetMergedItemSetAndBroadcast(SfxItemSet const&,
 sdr::properties::BaseProperties::dumpAsXml(_xmlTextWriter*) const
 sdr::properties::BaseProperties::getVersion() const
 sdr::properties::BaseProperties::~BaseProperties()
-sdr::properties::DefaultProperties::AllowItemChange(unsigned short, SfxPoolItem const*) const
-sdr::properties::DefaultProperties::ClearObjectItem(unsigned short)
-sdr::properties::DefaultProperties::ClearObjectItemDirect(unsigned short)
-sdr::properties::DefaultProperties::Clone(SdrObject&) const
-sdr::properties::DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool&)
-sdr::properties::DefaultProperties::DefaultProperties(sdr::properties::DefaultProperties const&, SdrObject&)
-sdr::properties::DefaultProperties::ForceDefaultAttributes()
-sdr::properties::DefaultProperties::GetObjectItemSet() const
-sdr::properties::DefaultProperties::GetStyleSheet() const
-sdr::properties::DefaultProperties::ItemChange(unsigned short, SfxPoolItem const*)
-sdr::properties::DefaultProperties::ItemSetChanged(std::span<SfxPoolItem const* const, 18446744073709551615ul>, unsigned short)
-sdr::properties::DefaultProperties::PostItemChange(unsigned short)
-sdr::properties::DefaultProperties::SetObjectItem(SfxPoolItem const&)
-sdr::properties::DefaultProperties::SetObjectItemDirect(SfxPoolItem const&)
-sdr::properties::DefaultProperties::SetObjectItemSet(SfxItemSet const&)
-sdr::properties::DefaultProperties::SetStyleSheet(SfxStyleSheet*, bool, bool)
-sdr::properties::DefaultProperties::dumpAsXml(_xmlTextWriter*) const
-sdr::properties::DefaultProperties::~DefaultProperties()
 sdr::table::Cell::IsTextEditActive() const
 sdr::table::Cell::dumpAsXml(_xmlTextWriter*, int, int) const
 sdr::table::SdrTableObj::AddToHdlList(SdrHdlList&) const
@@ -15754,24 +15490,6 @@ svx::diagram::DiagramDataState::DiagramDataState(std::__debug::vector<svx::diagr
 svx::diagram::DiagramFrameHdl::CreateB2dIAObject()
 svx::diagram::DiagramFrameHdl::DiagramFrameHdl(basegfx::B2DHomMatrix const&)
 svx::diagram::IDiagramHelper::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)
-svx::frame::Array::GetB2DRange(int, int, int, int) const
-svx::frame::Array::GetCellCount() const
-svx::frame::Array::GetCellStyleBL(int, int) const
-svx::frame::Array::GetCellStyleBLTR(int, int) const
-svx::frame::Array::GetCellStyleBR(int, int) const
-svx::frame::Array::GetCellStyleBottom(int, int) const
-svx::frame::Array::GetCellStyleLeft(int, int) const
-svx::frame::Array::GetCellStyleRight(int, int) const
-svx::frame::Array::GetCellStyleTL(int, int) const
-svx::frame::Array::GetCellStyleTLBR(int, int) const
-svx::frame::Array::GetCellStyleTR(int, int) const
-svx::frame::Array::GetCellStyleTop(int, int) const
-svx::frame::Array::GetColPosition(int) const
-svx::frame::Array::GetColWidth(int, int) const
-svx::frame::Array::GetMergedOrigin(int&, int&, int, int) const
-svx::frame::Array::GetMergedRange(int&, int&, int&, int&, int, int) const
-svx::frame::Array::GetRowHeight(int, int) const
-svx::frame::Array::GetRowPosition(int) const
 svx::frame::Style::Set(double, double, double)
 svx::frame::Style::hashCode() const
 svx::sidebar::AreaPropertyPanelBase::FillStyleChanged(bool)
@@ -15856,11 +15574,6 @@ tools::JsonWriter::ensureSpaceAndWriteNameColon(std::basic_string_view<char, std
 tools::JsonWriter::writeEscapedOUString(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 tools::Line::Intersection(tools::Line const&, Point&) const
 tools::PolyPolygon::Remove(unsigned short)
-tools::Polygon::Clear()
-tools::Polygon::ImplRead(SvStream&)
-tools::Polygon::ImplReduceEdges(tools::Polygon&, double const&, unsigned short)
-tools::Polygon::ImplWrite(SvStream&) const
-tools::Polygon::IsRect() const
 tools::Time::GetNSFromTime() const
 tools::Time::MakeTimeFromNS(long)
 tools::Time::init(unsigned int, unsigned int, unsigned int, unsigned long)

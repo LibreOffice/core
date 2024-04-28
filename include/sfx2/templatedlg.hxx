@@ -43,30 +43,30 @@ public:
     virtual ~SfxTemplateManagerDlg() override;
     virtual short run() override;
 
-    void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
-    void setTemplateViewMode(TemplateViewMode eViewMode);
-    TemplateViewMode getTemplateViewMode() const;
+    SAL_DLLPRIVATE void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
+    SAL_DLLPRIVATE void setTemplateViewMode(TemplateViewMode eViewMode);
+    SAL_DLLPRIVATE TemplateViewMode getTemplateViewMode() const;
 
 protected:
-    void getApplicationSpecificSettings();
+    SAL_DLLPRIVATE void getApplicationSpecificSettings();
 
-    void readSettings();
+    SAL_DLLPRIVATE void readSettings();
 
-    void writeSettings();
+    SAL_DLLPRIVATE void writeSettings();
 
-    void fillFolderComboBox();
+    SAL_DLLPRIVATE void fillFolderComboBox();
 
     DECL_DLLPRIVATE_LINK(SelectApplicationHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SelectRegionHdl, weld::ComboBox&, void);
 
     DECL_DLLPRIVATE_LINK(OkClickHdl, weld::Button&, void);
-    void ImportActionHdl();
-    static void ExtensionsActionHdl();
+    SAL_DLLPRIVATE void ImportActionHdl();
+    SAL_DLLPRIVATE static void ExtensionsActionHdl();
 
     DECL_DLLPRIVATE_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
     DECL_DLLPRIVATE_LINK(MenuSelectHdl, const OUString&, void);
-    void DefaultTemplateMenuSelectHdl(std::u16string_view rIdent);
+    SAL_DLLPRIVATE void DefaultTemplateMenuSelectHdl(std::u16string_view rIdent);
 
     DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
     DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
@@ -77,7 +77,7 @@ protected:
     DECL_DLLPRIVATE_LINK(MoveTemplateHdl, void*, void);
     DECL_DLLPRIVATE_LINK(ExportTemplateHdl, void*, void);
 
-    void SearchUpdate();
+    SAL_DLLPRIVATE void SearchUpdate();
 
     DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(GetFocusHdl, weld::Widget&, void);
@@ -89,18 +89,18 @@ protected:
     DECL_DLLPRIVATE_LINK(ThumbnailViewHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
 
-    void OnTemplateImportCategory(std::u16string_view sCategory);
+    SAL_DLLPRIVATE void OnTemplateImportCategory(std::u16string_view sCategory);
     //    static void OnTemplateLink ();
-    void OnTemplateOpen();
-    void OnTemplateExport();
+    SAL_DLLPRIVATE void OnTemplateOpen();
+    SAL_DLLPRIVATE void OnTemplateExport();
 
-    void OnTemplateState(const ThumbnailViewItem* pItem);
+    SAL_DLLPRIVATE void OnTemplateState(const ThumbnailViewItem* pItem);
 
-    void OnCategoryNew();
-    void OnCategoryRename();
-    void OnCategoryDelete();
+    SAL_DLLPRIVATE void OnCategoryNew();
+    SAL_DLLPRIVATE void OnCategoryRename();
+    SAL_DLLPRIVATE void OnCategoryDelete();
 
-    void updateMenuItems();
+    SAL_DLLPRIVATE void updateMenuItems();
 
     /**
      *
@@ -108,10 +108,10 @@ protected:
      *
      **/
 
-    void localMoveTo(sal_uInt16 nMenuId);
+    SAL_DLLPRIVATE void localMoveTo(sal_uInt16 nMenuId);
 
     /// Return filter according to the currently selected application filter.
-    FILTER_APPLICATION getCurrentApplicationFilter() const;
+    SAL_DLLPRIVATE FILTER_APPLICATION getCurrentApplicationFilter() const;
 
 protected:
     std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;

@@ -96,28 +96,28 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;
 
-    void                loadData();
-    void                loadDateAcceptancePatterns(const std::vector<OUString> & rOverrideDateAcceptancePatterns);
+    SAL_DLLPRIVATE void loadData();
+    SAL_DLLPRIVATE void loadDateAcceptancePatterns(const std::vector<OUString> & rOverrideDateAcceptancePatterns);
 
     const OUString&     getOneLocaleItem( sal_Int16 nItem ) const;
 
     const OUString&     getOneReservedWord( sal_Int16 nWord ) const;
 
-    void                loadCurrencyFormats();
+    SAL_DLLPRIVATE void loadCurrencyFormats();
 
-    void                scanCurrFormatImpl( std::u16string_view rCode,
+    SAL_DLLPRIVATE void scanCurrFormatImpl( std::u16string_view rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym ) const;
 
-    void                loadDateOrders();
-    LongDateOrder       scanDateOrderImpl( std::u16string_view rCode ) const;
+    SAL_DLLPRIVATE void loadDateOrders();
+    SAL_DLLPRIVATE LongDateOrder scanDateOrderImpl( std::u16string_view rCode ) const;
 
-    void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
+    SAL_DLLPRIVATE void ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
                             bool bUseThousandSep, bool bTrailingZeros ) const;
 
-    void                loadDigitGrouping();
+    SAL_DLLPRIVATE void loadDigitGrouping();
 
 public:
     LocaleDataWrapper(
@@ -151,7 +151,7 @@ public:
 
     // Wrapper implementations of service LocaleData
 
-    css::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
+    SAL_DLLPRIVATE css::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
     /// NOTE: this wraps XLocaleData5::getLocaleItem2() in fact.
     const css::i18n::LocaleDataItem2& getLocaleItem() const;
     /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
@@ -160,7 +160,7 @@ public:
     css::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
     css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    const css::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
+    SAL_DLLPRIVATE const css::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
     const css::uno::Sequence< OUString > & getDateAcceptancePatterns() const;
 
 
@@ -388,7 +388,7 @@ public:
 
 private:
 
-    const css::lang::Locale &  getMyLocale() const;
+    SAL_DLLPRIVATE const css::lang::Locale &  getMyLocale() const;
 
     static  void                evaluateLocaleDataChecking();
 };

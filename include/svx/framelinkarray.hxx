@@ -80,7 +80,7 @@ public:
     sal_Int32           GetRowCount() const;
 
     /** Returns the number of cells in the array. */
-    sal_Int32           GetCellCount() const;
+    SAL_DLLPRIVATE sal_Int32 GetCellCount() const;
 
     /** Returns the cell index from the cell address (nCol,nRow). */
     sal_Int32           GetCellIndex( sal_Int32 nCol, sal_Int32 nRow, bool bRTL) const;
@@ -131,40 +131,40 @@ public:
         Returns the style only if visible (i.e. at left border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleLeft( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleLeft( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the right frame style of the cell (nCol,nRow).
         Returns thicker of own right style or left style of the cell to the right.
         Returns the style only if visible (i.e. at right border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleRight( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleRight( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
         Returns thicker of own top style or bottom style of the cell above.
         Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTop( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleTop( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
         Returns thicker of own top style or bottom style of the cell above.
         Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBottom( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleBottom( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         Ignores merged ranges;
         @return
             The top-left to bottom-right frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTLBR( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleTLBR( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the bottom-left to top-right frame style of the cell (nCol,nRow).
         Ignores merged ranges;
         @return
             The bottom-left to top-right frame style or an invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBLTR( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleBLTR( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         @return
@@ -172,7 +172,7 @@ public:
             a merged range, or if (nCol,nRow) is the top-left corner of a merged
             range (useful to find connected frame styles).
             An invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTL( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleTL( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         @return
@@ -180,7 +180,7 @@ public:
             a merged range, or if (nCol,nRow) is the bottom-right corner of a
             merged range (useful to find connected frame styles).
             An invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBR( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleBR( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the bottom-left to top-right frame style of the cell (nCol,nRow).
         @return
@@ -188,7 +188,7 @@ public:
             a merged range, or if (nCol,nRow) is the bottom-left corner of a
             merged range (useful to find connected frame styles).
             An invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleBL( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleBL( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the bottom-left to top-right frame style of the cell (nCol,nRow).
         @return
@@ -196,7 +196,7 @@ public:
             a merged range, or if (nCol,nRow) is the top-right corner of a
             merged range (useful to find connected frame styles).
             An invisible style for invalid cell addresses. */
-    const Style&        GetCellStyleTR( sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE const Style& GetCellStyleTR( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     // cell merging
 
@@ -228,10 +228,10 @@ public:
     bool                IsMerged( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the address of the top-left cell of the merged range that contains (nCol,nRow). */
-    void                GetMergedOrigin( sal_Int32& rnFirstCol, sal_Int32& rnFirstRow, sal_Int32 nCol, sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE void GetMergedOrigin( sal_Int32& rnFirstCol, sal_Int32& rnFirstRow, sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the top-left and bottom-right address of the merged range that contains (nCol,nRow). */
-    void                GetMergedRange( sal_Int32& rnFirstCol, sal_Int32& rnFirstRow,
+    SAL_DLLPRIVATE void GetMergedRange( sal_Int32& rnFirstCol, sal_Int32& rnFirstRow,
                             sal_Int32& rnLastCol, sal_Int32& rnLastRow, sal_Int32 nCol, sal_Int32 nRow ) const;
 
     // clipping
@@ -270,18 +270,18 @@ public:
     /** Returns the X output coordinate of the left border of the specified column.
         @descr  The column index <array-width> returns the X output coordinate
                 of the right array border. */
-    sal_Int32           GetColPosition( sal_Int32 nCol ) const;
+    SAL_DLLPRIVATE sal_Int32 GetColPosition( sal_Int32 nCol ) const;
 
     /** Returns the Y output coordinate of the top border of the specified row.
         @descr  The row index <array-height> returns the Y output coordinate
                 of the bottom array border. */
-    sal_Int32           GetRowPosition( sal_Int32 nRow ) const;
+    SAL_DLLPRIVATE sal_Int32 GetRowPosition( sal_Int32 nRow ) const;
 
     /** Returns the output width of the specified range of columns. */
-    sal_Int32           GetColWidth( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const;
+    SAL_DLLPRIVATE sal_Int32 GetColWidth( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const;
 
     /** Returns the output height of the specified range of rows. */
-    sal_Int32           GetRowHeight( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
+    SAL_DLLPRIVATE sal_Int32 GetRowHeight( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
 
     /** Returns the output width of the entire array. */
     sal_Int32           GetWidth() const;
@@ -294,7 +294,7 @@ public:
     basegfx::B2DRange GetCellRange( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     // return output range of given row/col range in logical coordinates
-    basegfx::B2DRange GetB2DRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow ) const;
+    SAL_DLLPRIVATE basegfx::B2DRange GetB2DRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow ) const;
 
     // mirroring
 

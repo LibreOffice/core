@@ -36,7 +36,7 @@ public:
     const Bitmap& getBitmap() const { return m_aResultantBitmap; }
 };
 
-class VCL_PLUGIN_PUBLIC GraphicsRenderTests
+class SAL_DLLPUBLIC_RTTI GraphicsRenderTests
 {
     bool m_aStoreResultantBitmap;
 
@@ -158,9 +158,9 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
                           const Bitmap& rTestBitmap = Bitmap());
 
 public:
-    std::vector<VclTestResult>& getTestResults();
-    OUString getResultString(bool bLocalize = false);
-    void run(bool storeResultBitmap = false);
+    VCL_PLUGIN_PUBLIC std::vector<VclTestResult>& getTestResults();
+    VCL_PLUGIN_PUBLIC OUString getResultString(bool bLocalize = false);
+    VCL_PLUGIN_PUBLIC void run(bool storeResultBitmap = false);
 
     GraphicsRenderTests()
         : m_aStoreResultantBitmap(false)

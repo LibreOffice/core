@@ -107,7 +107,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VALUE,1);
     SbxValue();
-    SbxValue( SbxDataType );
+    SAL_DLLPRIVATE SbxValue( SbxDataType );
     SbxValue( const SbxValue& );
     SbxValue& operator=( const SbxValue& );
     virtual void Clear() override;
@@ -124,12 +124,12 @@ public:
     bool IsEmpty()      const { return GetType() == SbxEMPTY     ; }
     bool IsNull()       const { return GetType() == SbxNULL      ; }
     bool IsNumeric() const;
-    bool IsNumericRTL() const;  // #41692 Interface for Basic
-    bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
+    SAL_DLLPRIVATE bool IsNumericRTL() const;  // #41692 Interface for Basic
+    SAL_DLLPRIVATE bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
 
     virtual SbxDataType GetType() const override;
     SbxDataType GetFullType() const { return aData.eType;}
-    bool SetType( SbxDataType );
+    SAL_DLLPRIVATE bool SetType( SbxDataType );
 
     bool Get( SbxValues& ) const;
     const SbxValues& GetValues_Impl() const { return aData; }
@@ -151,7 +151,7 @@ public:
     double GetDate() const { return Get(SbxDATE).nDouble; }
 
     bool GetBool() const { return Get(SbxBOOL).nUShort != 0; }
-    const OUString&   GetCoreString() const;
+    SAL_DLLPRIVATE const OUString&   GetCoreString() const;
     OUString    GetOUString() const;
 
     SbxBase* GetObject() const { return Get(SbxOBJECT).pObj; }
@@ -159,39 +159,39 @@ public:
     sal_uInt16 GetUShort() const { return Get(SbxUSHORT).nUShort; }
     sal_uInt32 GetULong() const { return Get(SbxULONG).nULong; }
 
-    bool PutInteger( sal_Int16 );
+    SAL_DLLPRIVATE bool PutInteger( sal_Int16 );
     bool PutLong( sal_Int32 );
-    bool PutSingle( float );
+    SAL_DLLPRIVATE bool PutSingle( float );
     bool PutDouble( double );
-    void PutDate( double );
+    SAL_DLLPRIVATE void PutDate( double );
     bool PutBool( bool );
-    void PutErr( sal_uInt16 );
+    SAL_DLLPRIVATE void PutErr( sal_uInt16 );
     void PutStringExt( const OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
-    bool PutInt64( sal_Int64 );
-    bool PutUInt64( sal_uInt64 );
+    SAL_DLLPRIVATE bool PutInt64( sal_Int64 );
+    SAL_DLLPRIVATE bool PutUInt64( sal_uInt64 );
     bool PutString( const OUString& );
     bool PutChar( sal_Unicode );
-    bool PutByte( sal_uInt8 );
+    SAL_DLLPRIVATE bool PutByte( sal_uInt8 );
     bool PutUShort( sal_uInt16 );
     bool PutULong( sal_uInt32 );
     bool PutEmpty();
-    void PutNull();
+    SAL_DLLPRIVATE void PutNull();
 
             // Special methods
-    void PutDecimal( css::bridge::oleautomation::Decimal const & rAutomationDec );
-    bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
-    void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
-    bool PutCurrency( sal_Int64 );
+    SAL_DLLPRIVATE void PutDecimal( css::bridge::oleautomation::Decimal const & rAutomationDec );
+    SAL_DLLPRIVATE bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
+    SAL_DLLPRIVATE void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
+    SAL_DLLPRIVATE bool PutCurrency( sal_Int64 );
             // Interface for CDbl in Basic
-    static ErrCode ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
+    SAL_DLLPRIVATE static ErrCode ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
 
     bool PutObject( SbxBase* );
 
-    bool Convert( SbxDataType );
+    SAL_DLLPRIVATE bool Convert( SbxDataType );
     bool Compute( SbxOperator, const SbxValue& );
     bool Compare( SbxOperator, const SbxValue& ) const;
-    bool Scan( const OUString&, sal_uInt16* );
-    void Format( OUString&, const OUString* = nullptr ) const;
+    SAL_DLLPRIVATE bool Scan( const OUString&, sal_uInt16* );
+    SAL_DLLPRIVATE void Format( OUString&, const OUString* = nullptr ) const;
 
     // The following operators are defined for easier handling.
     // TODO: Ensure error conditions (overflow, conversions)
@@ -256,34 +256,34 @@ protected:
     SbxInfoRef  pInfo;              // Probably called information
     sal_uInt32 nUserData= 0;        // User data for Call()
     SbxObject* pParent = nullptr;   // Currently attached object
-    virtual ~SbxVariable() override;
-    virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
+    SAL_DLLPRIVATE virtual ~SbxVariable() override;
+    SAL_DLLPRIVATE virtual bool LoadData( SvStream&, sal_uInt16 ) override;
+    SAL_DLLPRIVATE virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();
     SbxVariable( SbxDataType );
-    SbxVariable( const SbxVariable& );
+    SAL_DLLPRIVATE SbxVariable( const SbxVariable& );
     SbxVariable& operator=( const SbxVariable& );
 
-    void Dump( SvStream&, bool bDumpAll );
+    SAL_DLLPRIVATE void Dump( SvStream&, bool bDumpAll );
 
-    void SetName( const OUString& );
+    SAL_DLLPRIVATE void SetName( const OUString& );
     const OUString& GetName( SbxNameType = SbxNameType::NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
-    static OUString NameToCaseInsensitiveName(const OUString& rName);
+    SAL_DLLPRIVATE static OUString NameToCaseInsensitiveName(const OUString& rName);
 
-    virtual void SetModified( bool ) override;
+    SAL_DLLPRIVATE virtual void SetModified( bool ) override;
 
     sal_uInt32 GetUserData() const { return nUserData; }
     void SetUserData( sal_uInt32 n ) { nUserData = n; }
 
-    virtual SbxDataType  GetType()  const override;
-    virtual SbxClassType GetClass() const;
+    SAL_DLLPRIVATE virtual SbxDataType  GetType()  const override;
+    SAL_DLLPRIVATE virtual SbxClassType GetClass() const;
 
     // Parameter-Interface
-    virtual SbxInfo* GetInfo();
-    void SetInfo( SbxInfo* p );
+    SAL_DLLPRIVATE virtual SbxInfo* GetInfo();
+    SAL_DLLPRIVATE void SetInfo( SbxInfo* p );
     void SetParameters( SbxArray* p );
     SbxArray* GetParameters() const;
 
@@ -295,13 +295,13 @@ public:
 
     const SbxObject* GetParent() const { return pParent; }
     SbxObject* GetParent() { return pParent;}
-    virtual void SetParent( SbxObject* );
+    SAL_DLLPRIVATE virtual void SetParent( SbxObject* );
 
-    const OUString& GetDeclareClassName() const;
-    void SetDeclareClassName( const OUString& );
-    void SetComListener( const css::uno::Reference< css::uno::XInterface >& xComListener,
+    SAL_DLLPRIVATE const OUString& GetDeclareClassName() const;
+    SAL_DLLPRIVATE void SetDeclareClassName( const OUString& );
+    SAL_DLLPRIVATE void SetComListener( const css::uno::Reference< css::uno::XInterface >& xComListener,
                          StarBASIC* pParentBasic );
-    void ClearComListener();
+    SAL_DLLPRIVATE void ClearComListener();
 
     // Create a simple hashcode: the first six characters are evaluated.
     static constexpr sal_uInt16 MakeHashCode(std::u16string_view aName)

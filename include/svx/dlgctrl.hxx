@@ -156,8 +156,8 @@ private:
     Point       aFocusPosition;
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
 
-    tools::Rectangle   implCalFocusRect( const Point& aPosition );
-    void    ChangePixel( sal_uInt16 nPixel );
+    SAL_DLLPRIVATE tools::Rectangle   implCalFocusRect( const Point& aPosition );
+    SAL_DLLPRIVATE void    ChangePixel( sal_uInt16 nPixel );
 
     SvxPixelCtl(SvxPixelCtl const&) = delete;
     SvxPixelCtl(SvxPixelCtl&&) = delete;
@@ -169,11 +169,11 @@ public:
 
     virtual ~SvxPixelCtl() override;
 
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void Resize() override;
-    virtual tools::Rectangle GetFocusRect() override;
+    SAL_DLLPRIVATE virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    SAL_DLLPRIVATE virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    SAL_DLLPRIVATE virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    SAL_DLLPRIVATE virtual void Resize() override;
+    SAL_DLLPRIVATE virtual tools::Rectangle GetFocusRect() override;
 
     void    SetXBitmap( const BitmapEx& rBitmapEx );
 
@@ -182,14 +182,14 @@ public:
 
     static sal_uInt16 GetLineCount() { return nLines; }
 
-    sal_uInt8  GetBitmapPixel( const sal_uInt16 nPixelNumber ) const;
+    SAL_DLLPRIVATE sal_uInt8  GetBitmapPixel( const sal_uInt16 nPixelNumber ) const;
     std::array<sal_uInt8,64> const & GetBitmapPixelPtr() const { return maPixelData; }
 
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    SAL_DLLPRIVATE virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     static tools::Long GetSquares() { return nSquares ; }
@@ -197,15 +197,15 @@ public:
     tools::Long GetHeight() const { return aRectSize.getHeight() ; }
 
     //Device Pixel .
-    tools::Long ShowPosition( const Point &pt);
+    SAL_DLLPRIVATE tools::Long ShowPosition( const Point &pt);
 
-    tools::Long PointToIndex(const Point &pt) const;
-    Point IndexToPoint(tools::Long nIndex) const ;
-    tools::Long GetFocusPosIndex() const ;
+    SAL_DLLPRIVATE tools::Long PointToIndex(const Point &pt) const;
+    SAL_DLLPRIVATE Point IndexToPoint(tools::Long nIndex) const ;
+    SAL_DLLPRIVATE tools::Long GetFocusPosIndex() const ;
     //Keyboard function for key input and focus handling function
-    virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        GetFocus() override;
-    virtual void        LoseFocus() override;
+    SAL_DLLPRIVATE virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
+    SAL_DLLPRIVATE virtual void        GetFocus() override;
+    SAL_DLLPRIVATE virtual void        LoseFocus() override;
 };
 
 /************************************************************************/

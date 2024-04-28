@@ -77,9 +77,9 @@ private:
     ImplType            mpImplPolygon;
 
 public:
-    static void         ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
-    void                ImplRead( SvStream& rIStream );
-    void                ImplWrite( SvStream& rOStream ) const;
+    SAL_DLLPRIVATE static void ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
+    SAL_DLLPRIVATE void ImplRead( SvStream& rIStream );
+    SAL_DLLPRIVATE void ImplWrite( SvStream& rOStream ) const;
 
 public:
                         Polygon();
@@ -110,13 +110,13 @@ public:
     PolyFlags           GetFlags( sal_uInt16 nPos ) const;
     bool                HasFlags() const;
 
-    bool                IsRect() const;
+    SAL_DLLPRIVATE bool IsRect() const;
 
     void                SetSize( sal_uInt16 nNewSize );
     sal_uInt16          GetSize() const;
     sal_uInt16          size() const { return GetSize(); } //for vector compatibility
 
-    void                Clear();
+    SAL_DLLPRIVATE void Clear();
 
     tools::Rectangle           GetBoundRect() const;
     bool                Contains( const Point& rPt ) const;
