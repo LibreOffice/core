@@ -211,7 +211,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
                 //0 is a bad starting point, so just pick some other.
                 //That is certainly not optimal but the user should specify
                 //bounds or at least a good starting point anyway.
-                if (value == 0.0)
+                if (Double.compare(value, 0.0D) == 0)
                     value = 1000;
 
                 double b1;
@@ -366,7 +366,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
 
                 switch (m_extConstraints[i].Operator.getValue()) {
                     case SolverConstraintOperator.EQUAL_value:
-                        result = value == targetValue;
+                        result = Double.compare(value, targetValue) == 0;
                         break;
                     case SolverConstraintOperator.GREATER_EQUAL_value:
                         result = value >= targetValue;
@@ -375,10 +375,10 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
                         result = value <= targetValue;
                         break;
                     case SolverConstraintOperator.INTEGER_value:
-                        result = Math.rint(value) == value;
+                        result = Double.compare(Math.rint(value), value) == 0;
                         break;
                     case SolverConstraintOperator.BINARY_value:
-                        result = (value == 0.0 || value == 1.0);
+                        result = (Double.compare(value, 0.0D) == 0 || Double.compare(value, 1.0D) == 0);
                         break;
                 }
             } else {
