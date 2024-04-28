@@ -301,7 +301,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     assert(m_xDstDoc);
 
     // Set some compatibility options that are valid for the DOCX format
-    uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY);
     rtl::Reference<SwXDocumentSettings> xSettings = m_xDstDoc->createDocumentSettings();
 
     xSettings->setPropertyValue("UseOldNumbering", uno::Any(false));
