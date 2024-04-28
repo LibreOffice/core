@@ -27,6 +27,7 @@
 #include <svl/whichranges.hxx>
 #include <unotools/syslocale.hxx>
 #include <memory>
+#include <o3tl/unit_conversion.hxx>
 
 
 /**
@@ -67,11 +68,8 @@ namespace SdrEngineDefaults
     // Default FontColor is COL_AUTO
     inline Color GetFontColor() { return COL_AUTO; }
 
-    // Default FontHeight is 847. The font height uses logical units (MapUnit/MapFraction
-    // see below for further details). The default setting 847/100mm corresponds to about
-    // 24 Point. If e.g. one would use Twips (SetMapUnit(MapUnit::MapTwip)) (20 Twip = 1 Point)
-    // instead, one would need to set the font height to 480, in order to get a 24 Point height.
-    inline size_t GetFontHeight() { return 847; }
+    // Default font height
+    inline size_t GetFontHeight() { return o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100); }
 
     // The MapMode is needed for the global Outliner.
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
