@@ -657,7 +657,7 @@ namespace
         const Bitmap& rSource,
         const Size& rDestinationSize,
         const basegfx::B2DHomMatrix& rTransform,
-        bool bSmooth)
+        bool bSmooth, bool bAlphaMask)
     {
         Bitmap aDestination(rDestinationSize, vcl::PixelFormat::N24_BPP);
         BitmapScopedWriteAccess xWrite(aDestination);
@@ -673,7 +673,10 @@ namespace
                 // tdf#157795 set color to black outside of bitmap bounds
                 // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
                 // transparent areas are now black instead of white.
-                const BitmapColor aOutside(0x0, 0x0, 0x0);
+                // tdf#160831 only set outside color to black for alpha masks
+                // The outside color still needs to be white for the content
+                // so only apply the fix for tdf#157795 to the alpha mask.
+                const BitmapColor aOutside = bAlphaMask ? BitmapColor(0x0, 0x0, 0x0) : BitmapColor(0xff, 0xff, 0xff);
 
                 for(tools::Long y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
@@ -759,12 +762,12 @@ BitmapEx BitmapEx::TransformBitmapEx(
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
     bool bSmooth = implTransformNeedsSmooth(rTransformation);
-    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth, false));
 
     // create mask
     if(IsAlpha())
     {
-        const Bitmap aAlpha(impTransformBitmap(GetAlphaMask().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+        const Bitmap aAlpha(impTransformBitmap(GetAlphaMask().GetBitmap(), aDestinationSize, rTransformation, bSmooth, true));
         return BitmapEx(aDestination, AlphaMask(aAlpha));
     }
 
