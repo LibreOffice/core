@@ -970,7 +970,7 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x0300, 0x036F, SvxResId(RID_SUBSETSTR_COMB_DIACRITICAL) );
                     break;
                 case UBLOCK_GREEK:
-                    aAllSubsets.emplace_back( 0x0370, 0x03FF, SvxResId(RID_SUBSETSTR_BASIC_GREEK) );
+                    aAllSubsets.emplace_back( 0x0370, 0x03FF, SvxResId(RID_SUBSETSTR_GREEK) );
                     break;
                 case UBLOCK_CYRILLIC:
                     aAllSubsets.emplace_back( 0x0400, 0x04FF, SvxResId(RID_SUBSETSTR_CYRILLIC) );
