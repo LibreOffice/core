@@ -576,29 +576,22 @@ IMPL_LINK_NOARG(SvxSaveTabPage, BackupClickHdl_Impl, weld::Toggleable&, void)
 static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, std::u16string_view rExtension)
 {
     OUString sName;
-    const PropertyValue* pPropVal = rProperties.getConstArray();
-    const PropertyValue* const pEnd = pPropVal + rProperties.getLength();
-    for( ; pPropVal != pEnd; pPropVal++ )
+    for (auto& propVal : rProperties)
     {
-        const OUString &rName = pPropVal->Name;
+        const OUString &rName = propVal.Name;
         if (rName == "UIName")
         {
             OUString sUIName;
-            if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
+            if ((propVal.Value >>= sUIName) && sUIName.getLength())
             {
                 if (!rExtension.empty())
-                {
-                    return sUIName + " (" + rExtension + ")";
-                }
-                else
-                {
-                    return sUIName;
-                }
+                    sUIName += OUString::Concat(" (") + rExtension + ")";
+                return sUIName;
             }
         }
         else if (rName == "Name")
         {
-            pPropVal->Value >>= sName;
+            propVal.Value >>= sName;
         }
     }
 

@@ -89,7 +89,6 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
             aLookUpText, aLocale, uno::Sequence< beans::PropertyValue >() );
     const sal_Int32 nMeanings = aMeanings.getLength();
-    const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
 
     m_xAlternativesCT->freeze();
 
@@ -97,22 +96,20 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     int nRow = 0;
     for (sal_Int32 i = 0;  i < nMeanings;  ++i)
     {
-        OUString rMeaningTxt = pMeanings[i]->getMeaning();
-        uno::Sequence< OUString > aSynonyms( pMeanings[i]->querySynonyms() );
-        const sal_Int32 nSynonyms = aSynonyms.getLength();
-        const OUString *pSynonyms = aSynonyms.getConstArray();
+        OUString rMeaningTxt = aMeanings[i]->getMeaning();
+        uno::Sequence<OUString> aSynonyms(aMeanings[i]->querySynonyms());
         DBG_ASSERT( !rMeaningTxt.isEmpty(), "meaning with empty text" );
-        DBG_ASSERT( nSynonyms > 0, "meaning without synonym" );
+        DBG_ASSERT(aSynonyms.hasElements(), "meaning without synonym");
 
         OUString sHeading = OUString::number(i + 1) + ". " + rMeaningTxt;
         m_xAlternativesCT->append_text(sHeading);
         m_xAlternativesCT->set_text_emphasis(nRow, true, 0);
         ++nRow;
 
-        for (sal_Int32 k = 0;  k < nSynonyms; ++k)
+        for (auto& synonym : aSynonyms)
         {
             // GetThesaurusReplaceText will strip the leading spaces
-            m_xAlternativesCT->append_text("   " + pSynonyms[k]);
+            m_xAlternativesCT->append_text("   " + synonym);
             m_xAlternativesCT->set_text_emphasis(nRow, false, 0);
             ++nRow;
         }
@@ -287,13 +284,11 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     uno::Sequence< lang::Locale > aLocales;
     if (xThesaurus.is())
         aLocales = xThesaurus->getLocales();
-    const sal_Int32 nLocales = aLocales.getLength();
-    const lang::Locale *pLocales = aLocales.getConstArray();
     m_xLangLB->clear();
     std::vector< OUString > aLangVec;
-    for (sal_Int32 i = 0;  i < nLocales; ++i)
+    for (auto& locale : aLocales)
     {
-        const LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
+        const LanguageType nLang = LanguageTag::convertToLanguageType(locale);
         DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
         aLangVec.push_back( SvtLanguageTable::GetLanguageString( nLang ) );
     }

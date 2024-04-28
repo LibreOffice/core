@@ -84,15 +84,8 @@ constexpr OUString cThes(SN_THESAURUS);
 static sal_Int32 lcl_SeqGetEntryPos(
     const Sequence< OUString > &rSeq, std::u16string_view rEntry )
 {
-    sal_Int32 i;
-    sal_Int32 nLen = rSeq.getLength();
-    const OUString *pItem = rSeq.getConstArray();
-    for (i = 0;  i < nLen;  ++i)
-    {
-        if (rEntry == pItem[i])
-            break;
-    }
-    return i < nLen ? i : -1;
+    auto it = std::find(rSeq.begin(), rSeq.end(), rEntry);
+    return it == rSeq.end() ? -1 : std::distance(rSeq.begin(), it);
 }
 
 static bool KillFile_Impl( const OUString& rURL )
@@ -407,20 +400,6 @@ public:
 };
 
 
-static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, std::u16string_view rTxt )
-{
-    sal_Int32 nRes = -1;
-    sal_Int32 nLen = rSeq.getLength();
-    const OUString *pString = rSeq.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen  &&  nRes == -1;  ++i)
-    {
-        if (pString[i] == rTxt)
-            nRes = i;
-    }
-    return nRes;
-}
-
-
 Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, sal_uInt8 nType )
 {
     LangImplNameTable *pTable = nullptr;
@@ -457,7 +436,7 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, 
             case TYPE_GRAMMAR   : aImplName = rInfo.sGrammarImplName; break;
         }
 
-        if (!aImplName.isEmpty()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
+        if (!aImplName.isEmpty()  &&  (lcl_SeqGetEntryPos( aRes, aImplName) == -1))    // name not yet added
         {
             DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" );
             if (nIdx < aRes.getLength())
@@ -745,20 +724,12 @@ void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEna
 
     pInfo->bConfigured = bEnable;
 
-    Sequence< Locale > aLocales;
-    const Locale *pLocale = nullptr;
-    sal_Int32 nLocales = 0;
-    sal_Int32 i;
-
     // update configured spellchecker entries
     if (pInfo->xSpell.is())
     {
-        aLocales = pInfo->xSpell->getLocales();
-        pLocale = aLocales.getConstArray();
-        nLocales = aLocales.getLength();
-        for (i = 0;  i < nLocales;  ++i)
+        for (auto& locale : pInfo->xSpell->getLocales())
         {
-            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            LanguageType nLang = LanguageTag::convertToLanguageType(locale);
             if (!aCfgSpellTable.count( nLang ) && bEnable)
                 aCfgSpellTable[ nLang ] = Sequence< OUString >();
             if (aCfgSpellTable.count( nLang ))
@@ -769,12 +740,9 @@ void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEna
     // update configured grammar checker entries
     if (pInfo->xGrammar.is())
     {
-        aLocales = pInfo->xGrammar->getLocales();
-        pLocale = aLocales.getConstArray();
-        nLocales = aLocales.getLength();
-        for (i = 0;  i < nLocales;  ++i)
+        for (auto& locale : pInfo->xGrammar->getLocales())
         {
-            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            LanguageType nLang = LanguageTag::convertToLanguageType(locale);
             if (!aCfgGrammarTable.count( nLang ) && bEnable)
                 aCfgGrammarTable[ nLang ] = Sequence< OUString >();
             if (aCfgGrammarTable.count( nLang ))
@@ -785,12 +753,9 @@ void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEna
     // update configured hyphenator entries
     if (pInfo->xHyph.is())
     {
-        aLocales = pInfo->xHyph->getLocales();
-        pLocale = aLocales.getConstArray();
-        nLocales = aLocales.getLength();
-        for (i = 0;  i < nLocales;  ++i)
+        for (auto& locale : pInfo->xHyph->getLocales())
         {
-            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            LanguageType nLang = LanguageTag::convertToLanguageType(locale);
             if (!aCfgHyphTable.count( nLang ) && bEnable)
                 aCfgHyphTable[ nLang ] = Sequence< OUString >();
             if (aCfgHyphTable.count( nLang ))
@@ -802,12 +767,9 @@ void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEna
     if (!pInfo->xThes.is())
         return;
 
-    aLocales = pInfo->xThes->getLocales();
-    pLocale = aLocales.getConstArray();
-    nLocales = aLocales.getLength();
-    for (i = 0;  i < nLocales;  ++i)
+    for (auto& locale : pInfo->xThes->getLocales())
     {
-        LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+        LanguageType nLang = LanguageTag::convertToLanguageType(locale);
         if (!aCfgThesTable.count( nLang ) && bEnable)
             aCfgThesTable[ nLang ] = Sequence< OUString >();
         if (aCfgThesTable.count( nLang ))
@@ -1017,7 +979,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         if (aData.GetEntryId() < nDics)
         {
             bool bChecked = m_xLinguDicsCLB->get_toggle(i) == TRISTATE_TRUE;
-            uno::Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
+            uno::Reference<XDictionary> xDic(aDics[i]);
             if (xDic.is())
             {
                 if (LinguMgr::GetIgnoreAllList() == xDic)
@@ -1124,11 +1086,9 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
     m_xLinguDicsCLB->freeze();
     m_xLinguDicsCLB->clear();
 
-    sal_Int32 nDics  = aDics.getLength();
-    const uno::Reference< XDictionary > *pDic = aDics.getConstArray();
-    for (sal_Int32 i = 0;  i < nDics;  ++i)
+    for (sal_Int32 i = 0;  i < aDics.getLength();  ++i)
     {
-        const uno::Reference< XDictionary > &rDic = pDic[i];
+        const uno::Reference<XDictionary>& rDic = aDics[i];
         if (rDic.is())
             AddDicBoxEntry( rDic, static_cast<sal_uInt16>(i) );
     }
@@ -1373,7 +1333,7 @@ IMPL_LINK(SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl, const weld::TreeView::
 
 IMPL_LINK(SvxLinguTabPage, DicsBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    const uno::Reference<XDictionary> &rDic = aDics.getConstArray()[m_xLinguDicsCLB->get_iter_index_in_parent(rRowCol.first)];
+    const uno::Reference<XDictionary> &rDic = aDics[m_xLinguDicsCLB->get_iter_index_in_parent(rRowCol.first)];
     if (LinguMgr::GetIgnoreAllList() == rDic)
         m_xLinguDicsCLB->set_toggle(rRowCol.first, TRISTATE_TRUE);
 }
@@ -1438,7 +1398,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                uno::Reference< XDictionary > xDic = aDics.getConstArray()[ nDicPos ];
+                uno::Reference<XDictionary> xDic = aDics[nDicPos];
                 if (xDic.is())
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -1463,7 +1423,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                uno::Reference< XDictionary > xDic = aDics.getConstArray()[ nDicPos ];
+                uno::Reference<XDictionary> xDic = aDics[nDicPos];
                 if (xDic.is())
                 {
                     if (LinguMgr::GetIgnoreAllList() == xDic)
@@ -1778,8 +1738,6 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
     if (LANGUAGE_DONTKNOW != eCurLanguage)
     {
-        sal_Int32 n;
-        ServiceInfo_Impl* pInfo;
         bool bReadOnly = false;
 
         int nRow = 0;
@@ -1802,16 +1760,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
             bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
         }
 
-        Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
-        const OUString *pName = aNames.getConstArray();
-        sal_Int32 nNames = aNames.getLength();
         sal_Int32 nLocalIndex = 0;  // index relative to parent
-        for (n = 0;  n < nNames;  ++n)
+        for (auto& name : rLinguData.GetSortedImplNames(eCurLanguage, TYPE_SPELL))
         {
             OUString aImplName;
             bool     bIsSuppLang = false;
 
-            pInfo = rLinguData.GetInfoByImplName( pName[n] );
+            ServiceInfo_Impl* pInfo = rLinguData.GetInfoByImplName(name);
             if (pInfo)
             {
                 bIsSuppLang = pInfo->xSpell.is()  &&
@@ -1860,16 +1815,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
             bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
         }
 
-        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
-        pName = aNames.getConstArray();
-        nNames = aNames.getLength();
         nLocalIndex = 0;
-        for (n = 0;  n < nNames;  ++n)
+        for (auto& name : rLinguData.GetSortedImplNames(eCurLanguage, TYPE_GRAMMAR))
         {
             OUString aImplName;
             bool     bIsSuppLang = false;
 
-            pInfo = rLinguData.GetInfoByImplName( pName[n] );
+            ServiceInfo_Impl* pInfo = rLinguData.GetInfoByImplName(name);
             if (pInfo)
             {
                 bIsSuppLang = pInfo->xGrammar.is()  &&
@@ -1919,16 +1871,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
             bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
         }
 
-        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
-        pName = aNames.getConstArray();
-        nNames = aNames.getLength();
         nLocalIndex = 0;
-        for (n = 0;  n < nNames;  ++n)
+        for (auto& name : rLinguData.GetSortedImplNames(eCurLanguage, TYPE_HYPH))
         {
             OUString aImplName;
             bool     bIsSuppLang = false;
 
-            pInfo = rLinguData.GetInfoByImplName( pName[n] );
+            ServiceInfo_Impl* pInfo = rLinguData.GetInfoByImplName(name);
             if (pInfo)
             {
                 bIsSuppLang = pInfo->xHyph.is()  &&
@@ -1977,16 +1926,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
             bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
         }
 
-        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
-        pName = aNames.getConstArray();
-        nNames = aNames.getLength();
         nLocalIndex = 0;
-        for (n = 0;  n < nNames;  ++n)
+        for (auto& name : rLinguData.GetSortedImplNames(eCurLanguage, TYPE_THES))
         {
             OUString aImplName;
             bool     bIsSuppLang = false;
 
-            pInfo = rLinguData.GetInfoByImplName( pName[n] );
+            ServiceInfo_Impl* pInfo = rLinguData.GetInfoByImplName(name);
             if (pInfo)
             {
                 bIsSuppLang = pInfo->xThes.is()  &&

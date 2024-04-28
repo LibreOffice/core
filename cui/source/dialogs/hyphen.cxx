@@ -116,43 +116,28 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
         aTxt = m_xPossHyph->getPossibleHyphens();
 
         m_nHyphenationPositionsOffset = 0;
-        uno::Sequence< sal_Int16 > aHyphenationPositions(
-                m_xPossHyph->getHyphenationPositions() );
-        sal_Int32 nLen = aHyphenationPositions.getLength();
-        const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
         // find position nIdx after which all hyphen positions are unusable
         sal_Int32  nIdx = -1;
-        sal_Int32  nPos = 0, nPos1 = 0;
-        if (nLen)
+        for (sal_Int16 hyphenationPos : m_xPossHyph->getHyphenationPositions())
         {
-            sal_Int32 nStart = 0;
-            for (sal_Int32 i = 0;  i < nLen;  ++i)
+            if (hyphenationPos > m_nMaxHyphenationPos)
+                break;
+            else
             {
-                if (pHyphenationPos[i] > m_nMaxHyphenationPos)
-                    break;
-                else
-                {
-                    // find corresponding hyphen positions in string
-                    nPos = aTxt.indexOf( sal_Unicode( HYPH_POS_CHAR ), nStart );
+                // find corresponding hyphen positions in string
+                nIdx = aTxt.indexOf(sal_Unicode(HYPH_POS_CHAR), nIdx + 1);
 
-                    if (nPos == -1)
-                        break;
-                    else
-                    {
-                        nIdx = nPos;
-                        nStart = nPos + 1;
-                    }
-                }
+                if (nIdx == -1)
+                    break;
             }
         }
         DBG_ASSERT(nIdx != -1, "no usable hyphenation position");
 
         // 1) remove all not usable hyphenation positions from the end of the string
-        nPos = nIdx == -1 ? 0 : nIdx + 1;
-        nPos1 = nPos;   //save for later use in 2) below
+        sal_Int32 nPos1 = nIdx + 1; //save for later use in 2) below
         const OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
-        while (nPos != -1)
+        for (sal_Int32 nPos = nPos1; nPos != -1;)
         {
             nPos++;
             aTxt = aTxt.replaceFirst( aTmp, "", &nPos);
@@ -164,8 +149,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
         if (nPos2 != std::u16string_view::npos && nPos2 != 0)
         {
             OUString aLeft( aSearchRange.substr( 0, nPos2 ) );
-            nPos = 0;
-            while (nPos != -1)
+            for (sal_Int32 nPos = 0; nPos != -1;)
             {
                 nPos++;
                 aLeft = aLeft.replaceFirst( aTmp, "", &nPos );
@@ -222,7 +206,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
             DBG_ASSERT(0 <= nIdxPos && nIdxPos < nLen, "index out of range");
             if (nLen && 0 <= nIdxPos && nIdxPos < nLen)
             {
-                nInsPos = aSeq.getConstArray()[ nIdxPos ];
+                nInsPos = aSeq[nIdxPos];
                 m_pHyphWrapper->InsertHyphen( nInsPos );
             }
         }

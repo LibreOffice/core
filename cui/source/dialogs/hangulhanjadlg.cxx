@@ -729,15 +729,9 @@ namespace svx
         Reference< XNameContainer > xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
         if( xNameCont.is() )
         {
-            Sequence< OUString >     aDictNames( xNameCont->getElementNames() );
-
-            const OUString*          pDic = aDictNames.getConstArray();
-            sal_Int32                       nCount = aDictNames.getLength();
-
-            sal_Int32                       i;
-            for( i = 0 ; i < nCount ; ++i )
+            for (auto& name : xNameCont->getElementNames())
             {
-                Any                                 aAny( xNameCont->getByName( pDic[ i ] ) );
+                Any aAny(xNameCont->getByName(name));
                 Reference< XConversionDictionary >  xDic;
                 if( ( aAny >>= xDic ) && xDic.is() )
                 {
@@ -1372,20 +1366,13 @@ namespace svx
                 m_xSuggestions->Clear();
 
             //fill found entries into boxes
-            sal_uInt32 nCnt = aEntries.getLength();
-            if( nCnt )
+            if (aEntries.hasElements())
             {
                 if( !m_xSuggestions )
                     m_xSuggestions.reset(new SuggestionList);
 
-                const OUString* pSugg = aEntries.getConstArray();
-                sal_uInt32 n = 0;
-                while( nCnt )
-                {
-                    m_xSuggestions->Set( pSugg[ n ], sal_uInt16( n ) );
-                    ++n;
-                    --nCnt;
-                }
+                for (sal_Int32 n = 0; n < aEntries.getLength(); ++n)
+                    m_xSuggestions->Set(aEntries[n], n);
             }
             m_bModifiedSuggestions = false;
         }

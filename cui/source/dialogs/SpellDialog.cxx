@@ -278,7 +278,6 @@ void SpellDialog::Init_Impl()
 
 void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
 {
-    sal_Int32 i;
     m_xSuggestionLB->clear();
 
     SpellErrorDescription aSpellErrorDescription;
@@ -309,26 +308,20 @@ void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
     int nDicts = InitUserDicts();
 
     // enter alternatives
-    const OUString *pNewWords = aNewWords.getConstArray();
-    const sal_Int32 nSize = aNewWords.getLength();
-    for ( i = 0; i < nSize; ++i )
+    for (auto& aTmp : aNewWords)
     {
-        OUString aTmp( pNewWords[i] );
         if (m_xSuggestionLB->find_text(aTmp) == -1)
             m_xSuggestionLB->append_text(aTmp);
     }
-    if(!nSize)
-        m_xSuggestionLB->append_text(m_sNoSuggestionsST);
-    m_xAutoCorrPB->set_sensitive( nSize > 0 );
-
-    m_xSuggestionFT->set_sensitive(nSize > 0);
-    m_xSuggestionLB->set_sensitive(nSize > 0);
-    if( nSize )
-    {
+    m_xSuggestionLB->set_sensitive(aNewWords.hasElements());
+    if (aNewWords.hasElements())
         m_xSuggestionLB->select(0);
-    }
-    m_xChangePB->set_sensitive( nSize > 0);
-    m_xChangeAllPB->set_sensitive(nSize > 0);
+    else
+        m_xSuggestionLB->append_text(m_sNoSuggestionsST);
+    m_xAutoCorrPB->set_sensitive(aNewWords.hasElements());
+    m_xSuggestionFT->set_sensitive(aNewWords.hasElements());
+    m_xChangePB->set_sensitive(aNewWords.hasElements());
+    m_xChangeAllPB->set_sensitive(aNewWords.hasElements());
     bool bShowChangeAll = !bIsGrammarError;
     m_xChangeAllPB->set_visible( bShowChangeAll );
     m_xExplainFT->set_visible( !bShowChangeAll );
@@ -778,8 +771,6 @@ int SpellDialog::InitUserDicts()
 {
     const LanguageType nLang = m_xLanguageLB->get_active_id();
 
-    const Reference< XDictionary >  *pDic = nullptr;
-
     // get list of dictionaries
     Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
@@ -798,13 +789,10 @@ int SpellDialog::InitUserDicts()
 
     // list suitable dictionaries
     bool bEnable = false;
-    const sal_Int32 nSize = pImpl->aDics.getLength();
-    pDic = pImpl->aDics.getConstArray();
     m_xAddToDictMB->clear();
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
-    for (sal_Int32 i = 0; i < nSize; ++i)
+    for (auto& xDicTmp : pImpl->aDics)
     {
-        uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
         if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
             continue;
 

@@ -67,13 +67,10 @@ namespace offapp
         // then look for which of them settings are stored in the configuration
         OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(DRIVER_SETTINGS);
 
-        Sequence< OUString > aDriverKeys = aDriverSettings.getNodeNames();
-        const OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
-        for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
+        for (auto& driverKey : aDriverSettings.getNodeNames())
         {
             // the name of the driver in this round
-            OConfigurationNode aThisDriverSettings = aDriverSettings.openNode(*pDriverKeys);
+            OConfigurationNode aThisDriverSettings = aDriverSettings.openNode(driverKey);
             OUString sThisDriverName;
             aThisDriverSettings.getNodeValue(DRIVER_NAME) >>= sThisDriverName;
 

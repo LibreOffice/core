@@ -302,19 +302,14 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
     std::stack<std::pair<std::unique_ptr<weld::TreeIter>, const sal_Int32>> aHeadingsParentEntryStack;
 
     int nEntries=0;
-    const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
-    const sal_Int32 nLinks = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
 
     static constexpr OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
     static constexpr OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
     static constexpr OUStringLiteral aProp_LinkDisplayBitmap( u"LinkDisplayBitmap" );
-    for( sal_Int32 i = 0; i < nLinks; i++ )
+    for (auto& aLink : xLinks->getElementNames())
     {
         uno::Any aAny;
-        OUString aLink( *pNames++ );
 
-        bool bError = false;
         try
         {
             aAny = xLinks->getByName( aLink );
@@ -323,10 +318,8 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
-            bError = true;
-        }
-        if(bError)
             continue;
+        }
 
         uno::Reference< beans::XPropertySet > xTarget;
 

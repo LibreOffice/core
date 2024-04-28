@@ -44,10 +44,8 @@ sal_Bool component_writeInfoHelper(
                 Reference< XRegistryKey > xNewKey(
                     static_cast< XRegistryKey * >( pRegistryKey )->createKey( sKey ) );
 
-                Sequence< OUString > seq = entries[i].getSupportedServiceNames();
-                const OUString *pArray = seq.getConstArray();
-                for ( sal_Int32 nPos = 0 ; nPos < seq.getLength(); nPos ++ )
-                    xNewKey->createKey( pArray[nPos] );
+                for (auto& serviceName : entries[i].getSupportedServiceNames())
+                    xNewKey->createKey(serviceName);
             }
             bRet = true;
         }

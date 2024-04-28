@@ -458,11 +458,10 @@ SAL_IMPLEMENT_MAIN()
 
             // init params
             Sequence< Any > aInitParams( aParams.getLength() );
-            const OUString * p = aParams.getConstArray();
             Any * pInitParams = aInitParams.getArray();
             for ( sal_Int32 i = aParams.getLength(); i--; )
             {
-                pInitParams[i] <<= p[i];
+                pInitParams[i] <<= aParams[i];
             }
 
             // instance provider

@@ -632,10 +632,8 @@ void FmSearchDialog::LoadParams()
 {
     FmSearchParams aParams(m_pConfig->getParams());
 
-    const OUString* pHistory     =                   aParams.aHistory.getConstArray();
-    const OUString* pHistoryEnd  =   pHistory    +   aParams.aHistory.getLength();
-    for (; pHistory != pHistoryEnd; ++pHistory)
-        m_pcmbSearchText->append_text( *pHistory );
+    for (auto& historystr : aParams.aHistory)
+        m_pcmbSearchText->append_text(historystr);
 
     // I do the settings at my UI-elements and then I simply call the respective change-handler,
     // that way the data is handed on to the SearchEngine and all dependent settings are done

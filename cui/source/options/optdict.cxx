@@ -136,18 +136,6 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
 
     Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
 
-    Sequence< Reference< XDictionary >  > aDics;
-    if (xDicList.is())
-        aDics = xDicList->getDictionaries();
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int32 nCount = aDics.getLength();
-
-    bool bFound = false;
-    sal_Int32 i;
-    for (i = 0; !bFound && i < nCount; ++i )
-        if ( sDict.equalsIgnoreAsciiCase( pDic[i]->getName()) )
-            bFound = true;
-
     if ( sDict.indexOf("/") != -1 || sDict.indexOf("\\") != -1 )
     {
         // Detected an invalid character.
@@ -159,7 +147,12 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         return;
     }
 
-    if ( bFound )
+    Sequence< Reference< XDictionary >  > aDics;
+    if (xDicList.is())
+        aDics = xDicList->getDictionaries();
+
+    if (std::any_of(aDics.begin(), aDics.end(),
+                    [&sDict](auto& d) { return sDict.equalsIgnoreAsciiCase(d->getName()); }))
     {
         // duplicate names?
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
@@ -276,13 +269,9 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16
     m_xReplaceED->connect_activate(LINK(this, SvxEditDictionaryDialog, NewDelActionHdl));
 
     // fill listbox with all available WB's
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int32 nCount = aDics.getLength();
-
     OUString aLookUpEntry;
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    for (auto& xDic : aDics)
     {
-        Reference< XDictionary >  xDic = pDic[i];
         if (xDic.is())
         {
             bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
@@ -298,7 +287,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16
 
     m_xLangLB->SetLanguageList( SvxLanguageListFlags::ALL, true, true );
 
-    if ( nCount > 0 )
+    if (aDics.hasElements())
     {
         m_xAllDictsLB->set_active_text(aLookUpEntry);
         int nPos = m_xAllDictsLB->get_active();
@@ -396,7 +385,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(int nEntry)
     {
         OUString sTmpShort(m_pWordsLB->get_text(nEntry, 0));
 
-        Reference<XDictionary> xDic = aDics.getConstArray()[nLBPos];
+        Reference<XDictionary> xDic = aDics[nLBPos];
         if (xDic->remove(sTmpShort))  // sal_True on success
         {
             m_pWordsLB->remove(nEntry);
@@ -462,7 +451,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, weld::ComboBox&, vo
 
 void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 {
-    Reference< XDictionary >  xDic = aDics.getConstArray()[ nId ];
+    Reference<XDictionary> xDic = aDics[nId];
 
     weld::WaitObject aWait(m_xDialog.get());
 
@@ -512,16 +501,14 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     m_pWordsLB->clear();
 
     Sequence< Reference< XDictionaryEntry >  > aEntries( xDic->getEntries() );
-    const Reference< XDictionaryEntry >  *pEntry = aEntries.getConstArray();
-    sal_Int32 nCount = aEntries.getLength();
     std::vector<OUString> aSortedDicEntries;
-    aSortedDicEntries.reserve(nCount);
-    for (sal_Int32 i = 0;  i < nCount;  i++)
+    aSortedDicEntries.reserve(aEntries.getLength());
+    for (auto& xDictionaryEntry : aEntries)
     {
-        OUString aStr = pEntry[i]->getDictionaryWord();
-        if(!pEntry[i]->getReplacementText().isEmpty())
+        OUString aStr = xDictionaryEntry->getDictionaryWord();
+        if (!xDictionaryEntry->getReplacementText().isEmpty())
         {
-            aStr += "\t" + pEntry[i]->getReplacementText();
+            aStr += "\t" + xDictionaryEntry->getReplacementText();
         }
         aSortedDicEntries.push_back(aStr);
     }
@@ -540,10 +527,11 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     int nRow = 0;
     for (OUString const & rStr : aSortedDicEntries)
     {
-        m_pWordsLB->append_text(rStr.getToken(0, '\t'));
-        if (m_pWordsLB == m_xDoubleColumnLB.get())
+        sal_Int32 index = 0;
+        m_pWordsLB->append_text(rStr.getToken(0, '\t', index));
+        if (index != -1 && m_pWordsLB == m_xDoubleColumnLB.get())
         {
-            OUString sReplace = rStr.getToken(1, '\t');
+            OUString sReplace = rStr.getToken(0, '\t', index);
             m_pWordsLB->set_text(nRow, sReplace, 1);
             ++nRow;
         }

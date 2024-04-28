@@ -149,9 +149,6 @@ void Data::initProperties(
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > members(
         ifc->getMembers());
-    OUString const * absentBegin = absentOptional.getConstArray();
-    OUString const * absentEnd =
-        absentBegin + absentOptional.getLength();
     for (const auto & m : members) {
         if (m->getTypeClass()
             == css::uno::TypeClass_INTERFACE_ATTRIBUTE)
@@ -250,8 +247,8 @@ void Data::initProperties(
                                 css::uno::Type(
                                     t->getTypeClass(), t->getName()),
                                 attrAttribs),
-                            (std::find(absentBegin, absentEnd, name)
-                             == absentEnd))).
+                            (std::find(absentOptional.begin(), absentOptional.end(), name)
+                             == absentOptional.end()))).
                 second)
             {
                 throw css::uno::RuntimeException(

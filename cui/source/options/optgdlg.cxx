@@ -464,23 +464,18 @@ CanvasSettings::CanvasSettings() :
         Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
 
-        Sequence<OUString> serviceNames = xNameAccess->getElementNames();
-        const OUString* pCurr = serviceNames.getConstArray();
-        const OUString* const pEnd = pCurr + serviceNames.getLength();
-        while( pCurr != pEnd )
+        for (auto& serviceName : xNameAccess->getElementNames())
         {
             Reference<XNameAccess> xEntryNameAccess(
-                xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                xHierarchicalNameAccess->getByHierarchicalName(serviceName),
                 UNO_QUERY );
 
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> preferredImplementations;
                 if( xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations )
-                    maAvailableImplementations.emplace_back(*pCurr,preferredImplementations );
+                    maAvailableImplementations.emplace_back(serviceName, preferredImplementations);
             }
-
-            ++pCurr;
         }
     }
     catch (const Exception&)
@@ -500,15 +495,12 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
         // implementation that presents the "HardwareAcceleration" property
         for (auto const& availableImpl : maAvailableImplementations)
         {
-            const OUString* pCurrImpl = availableImpl.second.getConstArray();
-            const OUString* const pEndImpl = pCurrImpl + availableImpl.second.getLength();
-
-            while( pCurrImpl != pEndImpl )
+            for (auto& currImpl : availableImpl.second)
             {
                 try
                 {
                     Reference<XPropertySet> xPropSet( xFactory->createInstance(
-                                                          pCurrImpl->trim() ),
+                                                          currImpl.trim() ),
                                                       UNO_QUERY_THROW );
                     bool bHasAccel(false);
                     if( xPropSet->getPropertyValue("HardwareAcceleration") >>= bHasAccel )
@@ -521,8 +513,6 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
                 catch (const Exception&)
                 {
                 }
-
-                ++pCurrImpl;
             }
         }
     }
@@ -1144,10 +1134,9 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
     SAL_WARN_IF( !nPatterns, "cui.options", "No date acceptance pattern");
     if (nPatterns)
     {
-        const OUString* pPatterns = aDateAcceptancePatterns.getConstArray();
-        aBuf.append( pPatterns[0]);
+        aBuf.append(aDateAcceptancePatterns[0]);
         for (sal_Int32 i=1; i < nPatterns; ++i)
-            aBuf.append(";" + pPatterns[i]);
+            aBuf.append(";" + aDateAcceptancePatterns[i]);
     }
     return aBuf.makeStringAndClear();
 }

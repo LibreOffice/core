@@ -621,14 +621,11 @@ void SvxPathTabPage::GetPathList(
         Sequence< OUString > aPathSeq;
         if ( aAny >>= aPathSeq )
         {
-            tools::Long i, nCount = aPathSeq.getLength();
-            const OUString* pPaths = aPathSeq.getConstArray();
-
-            for ( i = 0; i < nCount; ++i )
+            for (auto& path : aPathSeq)
             {
                 if ( !_rInternalPath.isEmpty() )
                     _rInternalPath += ";";
-                _rInternalPath += pPaths[i];
+                _rInternalPath += path;
             }
         }
         // load user paths
@@ -636,14 +633,11 @@ void SvxPathTabPage::GetPathList(
             sCfgName + POSTFIX_USER);
         if ( aAny >>= aPathSeq )
         {
-            tools::Long i, nCount = aPathSeq.getLength();
-            const OUString* pPaths = aPathSeq.getConstArray();
-
-            for ( i = 0; i < nCount; ++i )
+            for (auto& path : aPathSeq)
             {
                 if ( !_rUserPath.isEmpty() )
                     _rUserPath += ";";
-                _rUserPath += pPaths[i];
+                _rUserPath += path;
             }
         }
         // then the writable path

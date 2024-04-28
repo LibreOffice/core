@@ -742,13 +742,11 @@ OUString CuiConfigGroupListBox::GetImage(
                 {
                     throw RuntimeException("SFTreeListBox::Init: failed to get PropertyValue");
                 }
-                beans::PropertyValue const * pmoduleDescr =
-                    moduleDescr.getConstArray();
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
-                    if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
+                    if (moduleDescr[pos].Name == "ooSetupFactoryEmptyDocumentURL")
                     {
-                        pmoduleDescr[ pos ].Value >>= factoryURL;
+                        moduleDescr[pos].Value >>= factoryURL;
                         SAL_INFO("cui.customize", "factory url for doc images is " << factoryURL);
                         break;
                     }

@@ -98,26 +98,25 @@ static bool bLastRelative =         false;
 
 static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
-    const PropertyValue* pValues = rLevelProps.getConstArray();
     SvxNumSettings_Impl* pNew = new SvxNumSettings_Impl;
-    for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
+    for (auto& prop : rLevelProps)
     {
-        if ( pValues[j].Name == "NumberingType" )
+        if (prop.Name == "NumberingType")
         {
             sal_Int16 nTmp;
-            if (pValues[j].Value >>= nTmp)
+            if (prop.Value >>= nTmp)
                 pNew->nNumberType = static_cast<SvxNumType>(nTmp);
         }
-        else if ( pValues[j].Name == "Prefix" )
-            pValues[j].Value >>= pNew->sPrefix;
-        else if ( pValues[j].Name == "Suffix" )
-            pValues[j].Value >>= pNew->sSuffix;
-        else if ( pValues[j].Name == "ParentNumbering" )
-            pValues[j].Value >>= pNew->nParentNumbering;
-        else if ( pValues[j].Name == "BulletChar" )
-            pValues[j].Value >>= pNew->sBulletChar;
-        else if ( pValues[j].Name == "BulletFontName" )
-            pValues[j].Value >>= pNew->sBulletFont;
+        else if (prop.Name == "Prefix")
+            prop.Value >>= pNew->sPrefix;
+        else if (prop.Name == "Suffix")
+            prop.Value >>= pNew->sSuffix;
+        else if (prop.Name == "ParentNumbering")
+            prop.Value >>= pNew->nParentNumbering;
+        else if (prop.Name == "BulletChar")
+            prop.Value >>= pNew->sBulletChar;
+        else if (prop.Name == "BulletFontName")
+            prop.Value >>= pNew->sBulletFont;
     }
     return pNew;
 }
@@ -176,13 +175,10 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::D
         aNumberings =
             xDefNum->getDefaultContinuousNumberingLevels( rLocale );
 
-
         sal_Int32 nLength = std::min<sal_Int32>(aNumberings.getLength(), NUM_VALUSET_COUNT);
-
-        const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
         for(sal_Int32 i = 0; i < nLength; i++)
         {
-            SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
+            SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aNumberings[i]);
             aNumSettingsArr.push_back(std::unique_ptr<SvxNumSettings_Impl>(pNew));
         }
     }
@@ -501,7 +497,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
         {
             SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
 
-            Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
+            Reference<XIndexAccess> xLevel = aOutlineAccess[nItem];
             for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
                 // use the last locale-defined level for all remaining levels.

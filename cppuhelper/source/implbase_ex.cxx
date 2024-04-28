@@ -255,16 +255,11 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     class_data * cd, Sequence< Type > const & rAddTypes )
 {
     sal_Int32 nImplTypes = cd->m_nTypes;
-    sal_Int32 nAddTypes = rAddTypes.getLength();
-    Sequence< Type > types( nImplTypes + nAddTypes );
+    Sequence<Type> types(nImplTypes + rAddTypes.getLength());
     Type * pTypes = types.getArray();
     fillTypes( pTypes, cd );
     // append base types
-    Type const * pAddTypes = rAddTypes.getConstArray();
-    while (nAddTypes--)
-    {
-        pTypes[ nImplTypes + nAddTypes ] = pAddTypes[ nAddTypes ];
-    }
+    std::copy(rAddTypes.begin(), rAddTypes.end(), pTypes + nImplTypes);
     return types;
 }
 
