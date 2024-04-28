@@ -927,11 +927,9 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
     rgsabound[0].cElements = rows.getLength();
     SAFEARRAY *psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
-    const Any* pBegin = rows.getConstArray();
-    const Any* pEnd = pBegin + rows.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd ;++pBegin,++i)
+    for (sal_Int32 i = 0; i < rows.getLength(); ++i)
     {
-        *pBegin >>= nPos;
+        rows[i] >>= nPos;
         SafeArrayPutElement(psa,&i,&m_aBookmarks[nPos]);
     }
 

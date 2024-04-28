@@ -117,12 +117,10 @@ OLEVariant::OLEVariant(const css::uno::Sequence< sal_Int8 >& x)
     vt      = VT_ARRAY|VT_UI1;
 
     parray  = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
-    const sal_Int8* pBegin = x.getConstArray();
-    const sal_Int8* pEnd = pBegin + x.getLength();
 
-    for(sal_Int32 i=0;pBegin != pEnd;++i,++pBegin)
+    for (sal_Int32 i = 0; i < x.getLength(); ++i)
     {
-        sal_Int32 nData = *pBegin;
+        sal_Int32 nData = x[i];
         HRESULT rs = SafeArrayPutElement(parray,&i,&nData);
         OSL_ENSURE(S_OK == rs,"Error while copy byte data");
     }

@@ -134,27 +134,23 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    OUString aTable("TABLE");
+    static constexpr OUString aTable(u"TABLE"_ustr);
 
-    bool bTableFound = true;
-    sal_Int32 nLength = types.getLength();
-    if(nLength)
+    if (types.hasElements())
     {
-        bTableFound = false;
+        bool bTableFound = false;
 
-        const OUString* pIter = types.getConstArray();
-        const OUString* pEnd = pIter + nLength;
-        for(;pIter != pEnd;++pIter)
+        for (auto& type : types)
         {
-            if(*pIter == aTable)
+            if (type == aTable)
             {
                 bTableFound = true;
                 break;
             }
         }
+        if (!bTableFound)
+            return pResult;
     }
-    if(!bTableFound)
-        return pResult;
 
     // get the sheet names from the document
 

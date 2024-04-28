@@ -741,29 +741,25 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         return;
 
     ORows aRowsToSet;
-    const Sequence<Any>* pRowsIter = aRows.getConstArray();
-    const Sequence<Any>* pRowsEnd  = pRowsIter + aRows.getLength();
-    for (; pRowsIter != pRowsEnd;++pRowsIter)
+    for (auto& row : aRows)
     {
         ORow aRowToSet;
-        const Any* pRowIter = pRowsIter->getConstArray();
-        const Any* pRowEnd = pRowIter + pRowsIter->getLength();
-        for (; pRowIter != pRowEnd;++pRowIter)
+        for (auto& field : row)
         {
             ORowSetValueDecoratorRef aValue;
-            switch( pRowIter->getValueTypeClass() )
+            switch (field.getValueTypeClass())
             {
                 case TypeClass_BOOLEAN:
                     {
                         bool bValue = false;
-                        *pRowIter >>= bValue;
+                        field >>= bValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
                     }
                     break;
                 case TypeClass_BYTE:
                     {
                         sal_Int8 nValue(0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
@@ -771,7 +767,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                 case TypeClass_UNSIGNED_SHORT:
                     {
                         sal_Int16 nValue(0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
@@ -779,7 +775,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                 case TypeClass_UNSIGNED_LONG:
                     {
                         sal_Int32 nValue(0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
@@ -787,28 +783,28 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                 case TypeClass_UNSIGNED_HYPER:
                     {
                         sal_Int64 nValue(0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
                 case TypeClass_FLOAT:
                     {
                         float nValue(0.0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
                 case TypeClass_DOUBLE:
                     {
                         double nValue(0.0);
-                        *pRowIter >>= nValue;
+                        field >>= nValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                     }
                     break;
                 case TypeClass_STRING:
                     {
                         OUString sValue;
-                        *pRowIter >>= sValue;
+                        field >>= sValue;
                         aValue = new ORowSetValueDecorator(ORowSetValue(sValue));
                     }
                     break;

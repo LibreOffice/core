@@ -178,15 +178,12 @@ bool OPoolCollection::isDriverPoolingEnabled(std::u16string_view _sDriverImplNam
 
     if(xDirectAccess.is())
     {
-        Sequence< OUString > aDriverKeys = xDirectAccess->getElementNames();
-        const OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
-        for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
+        for (auto& driverKey : xDirectAccess->getElementNames())
         {
             // the name of the driver in this round
-            if(_sDriverImplName == *pDriverKeys)
+            if (_sDriverImplName == driverKey)
             {
-                _rxDriverNode = openNode(*pDriverKeys,xDirectAccess);
+                _rxDriverNode = openNode(driverKey, xDirectAccess);
                 if(_rxDriverNode.is())
                     getNodeValue(ENABLE,_rxDriverNode) >>= bEnabled;
                 break;

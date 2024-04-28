@@ -69,14 +69,11 @@ static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& 
         CellFlags::STRING | CellFlags::VALUE | CellFlags::DATETIME | CellFlags::FORMULA | CellFlags::ANNOTATION;
 
     const Reference<XSheetCellRanges> xUsedRanges = xUsedQuery->queryContentCells( nContentFlags );
-    const Sequence<CellRangeAddress> aAddresses = xUsedRanges->getRangeAddresses();
 
-    const sal_Int32 nCount = aAddresses.getLength();
-    const CellRangeAddress* pData = aAddresses.getConstArray();
-    for ( sal_Int32 i=0; i<nCount; i++ )
+    for (auto& address : xUsedRanges->getRangeAddresses())
     {
-        rEndCol = std::max(pData[i].EndColumn, rEndCol);
-        rEndRow = std::max(pData[i].EndRow, rEndRow);
+        rEndCol = std::max(address.EndColumn, rEndCol);
+        rEndRow = std::max(address.EndRow, rEndRow);
     }
 }
 

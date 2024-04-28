@@ -1732,15 +1732,14 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
 
     // now transfer the values from the continuation object to the parameter columns
     Sequence< PropertyValue > aFinalValues = pParams->getValues();
-    const PropertyValue* pFinalValues = aFinalValues.getConstArray();
-    for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+    for (sal_Int32 i = 0; i < aFinalValues.getLength(); ++i)
     {
         Reference< XPropertySet > xParamColumn(xWrappedParameters->getByIndex(i),UNO_QUERY);
         if (xParamColumn.is())
         {
             OUString sName;
             xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-            OSL_ENSURE(sName == pFinalValues->Name, "::dbaui::askForParameters: inconsistent parameter names!");
+            OSL_ENSURE(sName == aFinalValues[i].Name, "::dbaui::askForParameters: inconsistent parameter names!");
 
             // determine the field type and ...
             sal_Int32 nParamType = 0;
@@ -1750,12 +1749,12 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
                 xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
                 // (the index of the parameters is one-based)
-            TParameterPositions::const_iterator aFind = aParameterNames.find(pFinalValues->Name);
+            TParameterPositions::const_iterator aFind = aParameterNames.find(aFinalValues[i].Name);
             for(const auto& rItem : aFind->second)
             {
                 if ( _aParametersSet.empty() || !_aParametersSet[rItem-1] )
                 {
-                    _xParameters->setObjectWithInfo(rItem, pFinalValues->Value, nParamType, nScale);
+                    _xParameters->setObjectWithInfo(rItem, aFinalValues[i].Value, nParamType, nScale);
                 }
             }
         }

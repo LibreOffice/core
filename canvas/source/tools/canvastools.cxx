@@ -209,104 +209,89 @@ namespace canvas::tools
                 }
                 virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
                 {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::RGBColor(pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::RGBColor(deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
                 {
                     SAL_WARN_IF(!deviceColor.hasElements(), "canvas", "empty deviceColor argument");
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::ARGBColor(deviceColor[i+3], deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
                 {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[3]*pIn[0],pIn[3]*pIn[1],pIn[3]*pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::ARGBColor(deviceColor[i+3],
+                                                       deviceColor[i+3] * deviceColor[i],
+                                                       deviceColor[i+3] * deviceColor[i+1],
+                                                       deviceColor[i+3] * deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t             nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
+                        *pColors++ = color.Red;
+                        *pColors++ = color.Green;
+                        *pColors++ = color.Blue;
                         *pColors++ = 1.0;
-                        ++pIn;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
-                        *pColors++ = pIn->Alpha;
-                        ++pIn;
+                        *pColors++ = color.Red;
+                        *pColors++ = color.Green;
+                        *pColors++ = color.Blue;
+                        *pColors++ = color.Alpha;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red/pIn->Alpha;
-                        *pColors++ = pIn->Green/pIn->Alpha;
-                        *pColors++ = pIn->Blue/pIn->Alpha;
-                        *pColors++ = pIn->Alpha;
-                        ++pIn;
+                        *pColors++ = color.Red / color.Alpha;
+                        *pColors++ = color.Green / color.Alpha;
+                        *pColors++ = color.Blue / color.Alpha;
+                        *pColors++ = color.Alpha;
                     }
                     return aRes;
                 }
@@ -329,21 +314,14 @@ namespace canvas::tools
                 {
                     if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
                     {
-                        const sal_Int8* pIn( deviceColor.getConstArray() );
-                        const std::size_t  nLen( deviceColor.getLength() );
+                        const sal_Int32 nLen(deviceColor.getLength());
                         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                              "number of channels no multiple of 4",
                                              static_cast<rendering::XColorSpace*>(this), 0);
 
                         uno::Sequence<double> aRes(nLen);
-                        double* pOut( aRes.getArray() );
-                        for( std::size_t i=0; i<nLen; i+=4 )
-                        {
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                        }
+                        std::transform(deviceColor.begin(), deviceColor.end(), aRes.getArray(),
+                                       [](auto c) { return vcl::unotools::toDoubleColor(c); });
                         return aRes;
                     }
                     else
@@ -374,120 +352,102 @@ namespace canvas::tools
                 }
                 virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
                         *pOut++ = rendering::RGBColor(
-                            vcl::unotools::toDoubleColor(pIn[0]),
-                            vcl::unotools::toDoubleColor(pIn[1]),
-                            vcl::unotools::toDoubleColor(pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(deviceColor[i]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
                         *pOut++ = rendering::ARGBColor(
-                            vcl::unotools::toDoubleColor(pIn[3]),
-                            vcl::unotools::toDoubleColor(pIn[0]),
-                            vcl::unotools::toDoubleColor(pIn[1]),
-                            vcl::unotools::toDoubleColor(pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(deviceColor[i+3]),
+                            vcl::unotools::toDoubleColor(deviceColor[i]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        const sal_Int8 nAlpha( pIn[3] );
+                        const sal_Int8 nAlpha(deviceColor[i+3]);
                         *pOut++ = rendering::ARGBColor(
                             vcl::unotools::toDoubleColor(nAlpha),
-                            vcl::unotools::toDoubleColor(nAlpha*pIn[0]),
-                            vcl::unotools::toDoubleColor(nAlpha*pIn[1]),
-                            vcl::unotools::toDoubleColor(nAlpha*pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(nAlpha * deviceColor[i]),
+                            vcl::unotools::toDoubleColor(nAlpha * deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(nAlpha * deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t             nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
+                        *pColors++ = vcl::unotools::toByteColor(color.Red);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue);
                         *pColors++ = 0;
-                        ++pIn;
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Alpha);
-                        ++pIn;
+                        *pColors++ = vcl::unotools::toByteColor(color.Red);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue);
+                        *pColors++ = vcl::unotools::toByteColor(color.Alpha);
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red/pIn->Alpha);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green/pIn->Alpha);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue/pIn->Alpha);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Alpha);
-                        ++pIn;
+                        *pColors++ = vcl::unotools::toByteColor(color.Red / color.Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green / color.Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue / color.Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Alpha);
                     }
                     return aRes;
                 }
@@ -544,103 +504,85 @@ namespace canvas::tools
                 }
                 virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
                 {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::RGBColor(pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::RGBColor(deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
                 {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::ARGBColor(1.0,pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::ARGBColor(1.0, deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
                 {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
-                        *pOut++ = rendering::ARGBColor(1.0,pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
+                        *pOut++ = rendering::ARGBColor(1.0, deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t             nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
+                        *pColors++ = color.Red;
+                        *pColors++ = color.Green;
+                        *pColors++ = color.Blue;
                         *pColors++ = 1.0; // the value does not matter
-                        ++pIn;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
+                        *pColors++ = color.Red;
+                        *pColors++ = color.Green;
+                        *pColors++ = color.Blue;
                         *pColors++ = 1.0; // the value does not matter
-                        ++pIn;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< double > aRes(nLen*4);
+                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = pIn->Red/pIn->Alpha;
-                        *pColors++ = pIn->Green/pIn->Alpha;
-                        *pColors++ = pIn->Blue/pIn->Alpha;
+                        *pColors++ = color.Red / color.Alpha;
+                        *pColors++ = color.Green / color.Alpha;
+                        *pColors++ = color.Blue / color.Alpha;
                         *pColors++ = 1.0; // the value does not matter
-                        ++pIn;
                     }
                     return aRes;
                 }
@@ -663,20 +605,19 @@ namespace canvas::tools
                 {
                     if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
                     {
-                        const sal_Int8* pIn( deviceColor.getConstArray() );
-                        const std::size_t  nLen( deviceColor.getLength() );
+                        const sal_Int32 nLen(deviceColor.getLength());
                         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                              "number of channels no multiple of 4",
                                              static_cast<rendering::XColorSpace*>(this), 0);
 
                         uno::Sequence<double> aRes(nLen);
                         double* pOut( aRes.getArray() );
-                        for( std::size_t i=0; i<nLen; i+=4 )
+                        for (sal_Int32 i = 0; i < nLen; i += 4)
                         {
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = 1.0; pIn++;
+                            *pOut++ = vcl::unotools::toDoubleColor(deviceColor[i]);
+                            *pOut++ = vcl::unotools::toDoubleColor(deviceColor[i+1]);
+                            *pOut++ = vcl::unotools::toDoubleColor(deviceColor[i+2]);
+                            *pOut++ = 1.0;
                         }
                         return aRes;
                     }
@@ -708,119 +649,101 @@ namespace canvas::tools
                 }
                 virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
                         *pOut++ = rendering::RGBColor(
-                            vcl::unotools::toDoubleColor(pIn[0]),
-                            vcl::unotools::toDoubleColor(pIn[1]),
-                            vcl::unotools::toDoubleColor(pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(deviceColor[i]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
                         *pOut++ = rendering::ARGBColor(
                             1.0,
-                            vcl::unotools::toDoubleColor(pIn[0]),
-                            vcl::unotools::toDoubleColor(pIn[1]),
-                            vcl::unotools::toDoubleColor(pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(deviceColor[i]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
-                    const sal_Int8* pIn( deviceColor.getConstArray() );
-                    const std::size_t  nLen( deviceColor.getLength() );
+                    const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
                     uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
+                    for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
                         *pOut++ = rendering::ARGBColor(
                             1.0,
-                            vcl::unotools::toDoubleColor(pIn[0]),
-                            vcl::unotools::toDoubleColor(pIn[1]),
-                            vcl::unotools::toDoubleColor(pIn[2]));
-                        pIn += 4;
+                            vcl::unotools::toDoubleColor(deviceColor[i]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                            vcl::unotools::toDoubleColor(deviceColor[i+2]));
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t             nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
+                        *pColors++ = vcl::unotools::toByteColor(color.Red);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue);
                         *pColors++ = 1.0;
-                        ++pIn;
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
+                        *pColors++ = vcl::unotools::toByteColor(color.Red);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue);
                         *pColors++ = -1;
-                        ++pIn;
                     }
                     return aRes;
                 }
 
                 virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for (auto& color : rgbColor)
                     {
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Red/pIn->Alpha);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Green/pIn->Alpha);
-                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue/pIn->Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Red / color.Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Green / color.Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(color.Blue / color.Alpha);
                         *pColors++ = -1;
-                        ++pIn;
                     }
                     return aRes;
                 }

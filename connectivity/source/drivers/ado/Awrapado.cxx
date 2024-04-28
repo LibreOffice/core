@@ -1821,13 +1821,11 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
 
     ++nPos;
     OUStringBuffer aTypes;
-    const OUString* pIter = types.getConstArray();
-    const OUString* pEnd = pIter + types.getLength();
-    for( ; pIter != pEnd ; ++pIter)
+    for (auto& type : types)
     {
         if ( aTypes.getLength() )
             aTypes.append(",");
-        aTypes.append(*pIter);
+        aTypes.append(type);
     }
 
     OUString sTypeNames = aTypes.makeStringAndClear();

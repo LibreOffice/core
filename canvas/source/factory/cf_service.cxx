@@ -142,13 +142,10 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
                 xNameAccess, UNO_QUERY_THROW);
 
-            Sequence<OUString> serviceNames = xNameAccess->getElementNames();
-            const OUString* pCurr = serviceNames.getConstArray();
-            const OUString* const pEnd = pCurr + serviceNames.getLength();
-            while( pCurr != pEnd )
+            for (auto& serviceName : xNameAccess->getElementNames())
             {
                 Reference<container::XNameAccess> xEntryNameAccess(
-                    xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                    xHierarchicalNameAccess->getByHierarchicalName(serviceName),
                     UNO_QUERY );
 
                 if( xEntryNameAccess.is() )
@@ -156,20 +153,17 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                     Sequence<OUString> implementationList;
                     if( xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList )
                     {
-                        m_aAvailableImplementations.emplace_back(*pCurr,implementationList );
+                        m_aAvailableImplementations.emplace_back(serviceName, implementationList);
                     }
                     if( xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList )
                     {
-                        m_aAcceleratedImplementations.emplace_back(*pCurr,implementationList );
+                        m_aAcceleratedImplementations.emplace_back(serviceName, implementationList);
                     }
                     if( xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList )
                     {
-                        m_aAAImplementations.emplace_back(*pCurr,implementationList );
+                        m_aAAImplementations.emplace_back(serviceName, implementationList);
                     }
-
                 }
-
-                ++pCurr;
             }
         }
         catch (const RuntimeException &)

@@ -669,8 +669,7 @@ namespace dbtools
         {
             // transfer the values from the continuation object to the parameter columns
             const Sequence< PropertyValue >& aFinalValues = pParams->getValues();
-            const PropertyValue* pFinalValues = aFinalValues.getConstArray();
-            for ( sal_Int32 i = 0; i < aFinalValues.getLength(); ++i, ++pFinalValues )
+            for (sal_Int32 i = 0; i < aFinalValues.getLength(); ++i)
             {
                 Reference< XPropertySet > xParamColumn(aRequest.Parameters->getByIndex( i ),UNO_QUERY);
                 if ( xParamColumn.is() )
@@ -678,9 +677,9 @@ namespace dbtools
             #ifdef DBG_UTIL
                     OUString sName;
                     xParamColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME) ) >>= sName;
-                    OSL_ENSURE( sName == pFinalValues->Name, "ParameterManager::completeParameters: inconsistent parameter names!" );
+                    OSL_ENSURE( sName == aFinalValues[i].Name, "ParameterManager::completeParameters: inconsistent parameter names!" );
             #endif
-                    xParamColumn->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_VALUE), pFinalValues->Value );
+                    xParamColumn->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_VALUE), aFinalValues[i].Value );
                         // the property sets are wrapper classes, translating the Value property into a call to
                         // the appropriate XParameters interface
                 }

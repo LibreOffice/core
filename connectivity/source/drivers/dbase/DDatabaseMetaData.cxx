@@ -166,35 +166,28 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     try
     {
         aRow[10] = new ORowSetValueDecorator(sal_Int32(10));
-        Sequence< OUString> aTabNames(xNames->getElementNames());
-        const OUString* pTabBegin    = aTabNames.getConstArray();
-        const OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
-        for(;pTabBegin != pTabEnd;++pTabBegin)
+        for (auto& tabName : xNames->getElementNames())
         {
-            if(match(tableNamePattern,*pTabBegin,'\0'))
+            if (match(tableNamePattern, tabName, '\0'))
             {
-                Reference< XColumnsSupplier> xTable(
-                    xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
+                Reference<XColumnsSupplier> xTable(xNames->getByName(tabName), css::uno::UNO_QUERY);
                 OSL_ENSURE(xTable.is(),"Table not found! Normally an exception had to be thrown here!");
-                aRow[3] = new ORowSetValueDecorator(*pTabBegin);
+                aRow[3] = new ORowSetValueDecorator(tabName);
 
                 Reference< XNameAccess> xColumns = xTable->getColumns();
                 if(!xColumns.is())
                     throw SQLException();
 
-                Sequence< OUString> aColNames(xColumns->getElementNames());
-
-                const OUString* pBegin = aColNames.getConstArray();
-                const OUString* pEnd = pBegin + aColNames.getLength();
                 Reference< XPropertySet> xColumn;
-                for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
+                sal_Int32 i = 0;
+                for (auto& colName : xColumns->getElementNames())
                 {
-                    if(match(columnNamePattern,*pBegin,'\0'))
+                    ++i;
+                    if (match(columnNamePattern, colName, '\0'))
                     {
-                        aRow[4] = new ORowSetValueDecorator(*pBegin);
+                        aRow[4] = new ORowSetValueDecorator(colName);
 
-                        xColumn.set(
-                            xColumns->getByName(*pBegin), css::uno::UNO_QUERY);
+                        xColumn.set(xColumns->getByName(colName), css::uno::UNO_QUERY);
                         OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                         aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                         aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
@@ -274,20 +267,16 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     if(!xIndexes.is())
         throw SQLException();
 
-    Sequence< OUString> aIdxNames(xIndexes->getElementNames());
-
-    const OUString* pBegin = aIdxNames.getConstArray();
-    const OUString* pEnd = pBegin + aIdxNames.getLength();
     Reference< XPropertySet> xIndex;
-    for(;pBegin != pEnd;++pBegin)
+    for (auto& idxName : xIndexes->getElementNames())
     {
-        xIndex.set(xIndexes->getByName(*pBegin), css::uno::UNO_QUERY);
+        xIndex.set(xIndexes->getByName(idxName), css::uno::UNO_QUERY);
         OSL_ENSURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
         if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             continue;
         aRow[4] = new ORowSetValueDecorator(ORowSetValue(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE)))));
-        aRow[6] = new ORowSetValueDecorator(*pBegin);
+        aRow[6] = new ORowSetValueDecorator(idxName);
 
         auto pIndex = dynamic_cast<ODbaseIndex*>(xIndex.get());
         if(pIndex)
@@ -298,14 +287,12 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         Reference<XColumnsSupplier> xColumnsSup(xIndex,UNO_QUERY);
         Reference< XNameAccess> xColumns = xColumnsSup->getColumns();
-        Sequence< OUString> aColNames(xColumns->getElementNames());
 
-        const OUString* pColBegin = aColNames.getConstArray();
-        const OUString* pColEnd = pColBegin + aColNames.getLength();
-        for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
+        sal_Int32 j = 0;
+        for (auto& colName : xColumns->getElementNames())
         {
-            aRow[8] = new ORowSetValueDecorator(j);
-            aRow[9] = new ORowSetValueDecorator(*pColBegin);
+            aRow[8] = new ORowSetValueDecorator(++j);
+            aRow[9] = new ORowSetValueDecorator(colName);
             aRows.push_back(aRow);
         }
     }

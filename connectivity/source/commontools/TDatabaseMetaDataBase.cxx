@@ -122,12 +122,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
             std::vector<std::shared_ptr<ExpressionNode>> aConditions;
             if ( aTypeInfoSettings.getLength() > 1 && ((aTypeInfoSettings.getLength() % 2) == 0) )
             {
-                const Any* pIter = aTypeInfoSettings.getConstArray();
-                const Any* pEnd  = pIter + aTypeInfoSettings.getLength();
                 try
                 {
-                    for(;pIter != pEnd;++pIter)
-                        aConditions.push_back(FunctionParser::parseFunction(::comphelper::getString(*pIter)));
+                    for (auto& any : aTypeInfoSettings)
+                        aConditions.push_back(FunctionParser::parseFunction(::comphelper::getString(any)));
                 }
                 catch(ParseError&)
                 {

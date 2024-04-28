@@ -1533,18 +1533,14 @@ void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OS
     if ( !xColumns.is() )
         return;
 
-    Sequence< OUString > aColNames =  xColumns->getElementNames();
-    const OUString* pBegin = aColNames.getConstArray();
-    const OUString* pEnd = pBegin + aColNames.getLength();
-
     ::comphelper::UStringMixLess aCompare(isCaseSensitive());
     std::vector<OUString> aSelectColumnNames = getSelectColumnNames();
 
-    for(;pBegin != pEnd;++pBegin)
+    for (auto& colName : xColumns->getElementNames())
     {
-        OUString aName(getUniqueColumnName(aSelectColumnNames, *pBegin));
+        OUString aName(getUniqueColumnName(aSelectColumnNames, colName));
         Reference< XPropertySet > xColumn;
-        if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
+        if(xColumns->hasByName(colName) && (xColumns->getByName(colName) >>= xColumn) && xColumn.is())
         {
             rtl::Reference<OParseColumn> pColumn = new OParseColumn(aName
                                                 ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
@@ -1562,13 +1558,13 @@ void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OS
                                                 ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME))));
 
             pColumn->setTableName(_rTableAlias);
-            pColumn->setRealName(*pBegin);
+            pColumn->setRealName(colName);
             m_aSelectColumns->push_back(pColumn);
             // update aSelectColumnNames with newly insert aName
             aSelectColumnNames.insert(std::upper_bound(aSelectColumnNames.begin(), aSelectColumnNames.end(), aName, aCompare), aName);
         }
         else
-            impl_appendError( IParseContext::ErrorCode::InvalidColumn, pBegin, &_rTableAlias );
+            impl_appendError(IParseContext::ErrorCode::InvalidColumn, &colName, &_rTableAlias);
     }
 }
 

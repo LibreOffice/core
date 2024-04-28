@@ -965,11 +965,8 @@ OUString ORowSetValue::getString( ) const
             case DataType::LONGVARBINARY:
                 {
                     OUStringBuffer sVal("0x");
-                    Sequence<sal_Int8> aSeq(getSequence());
-                    const sal_Int8* pBegin  = aSeq.getConstArray();
-                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
-                    for(;pBegin != pEnd;++pBegin)
-                        sVal.append(static_cast<sal_Int32>(*pBegin),16);
+                    for (sal_Int32 byte : getSequence())
+                        sVal.append(byte, 16);
                     aRet = sVal.makeStringAndClear();
                 }
                 break;

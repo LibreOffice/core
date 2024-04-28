@@ -80,18 +80,15 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     m_aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     m_sPassword.clear();
-    const char pPwd[] = "password";
 
-    const PropertyValue *pIter  = info.getConstArray();
-    const PropertyValue *pEnd   = pIter + info.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (auto& propval : info)
     {
-        if(pIter->Name == pPwd)
+        if (propval.Name == "password")
         {
-            pIter->Value >>= m_sPassword;
+            propval.Value >>= m_sPassword;
             break;
         }
-    } // for(;pIter != pEnd;++pIter)
+    }
     ODocHolder aDocHolder(this); // just to test that the doc can be loaded
     acquireDoc();
 }

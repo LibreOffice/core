@@ -843,22 +843,15 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
 
         if ( xModel.is() )
         {
-            Sequence< PropertyValue > aArgs = xModel->getArgs();
-            const PropertyValue* pIter = aArgs.getConstArray();
-            const PropertyValue* pEnd  = pIter + aArgs.getLength();
-            for(;pIter != pEnd;++pIter)
+            for (auto& arg : xModel->getArgs())
             {
-                if ( pIter->Name == "ComponentData" )
+                if (arg.Name == "ComponentData")
                 {
                     Sequence<PropertyValue> aDocumentContext;
-                    pIter->Value >>= aDocumentContext;
-                    const PropertyValue* pContextIter = aDocumentContext.getConstArray();
-                    const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
-                    for(;pContextIter != pContextEnd;++pContextIter)
+                    arg.Value >>= aDocumentContext;
+                    for (auto& item : aDocumentContext)
                     {
-                        if (   pContextIter->Name == "ActiveConnection"
-                            && ( pContextIter->Value >>= _rxActualConnection )
-                           )
+                        if (item.Name == "ActiveConnection" && (item.Value >>= _rxActualConnection))
                         {
                             bIsEmbedded = true;
                             break;

@@ -739,14 +739,12 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
     std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    for (auto& type : aTypes)
     {
-        if(*pBegin != cppu::UnoType<XKeysSupplier>::get() &&
-           *pBegin != cppu::UnoType<XDataDescriptorFactory>::get())
+        if(type != cppu::UnoType<XKeysSupplier>::get() &&
+           type != cppu::UnoType<XDataDescriptorFactory>::get())
         {
-            aOwnTypes.push_back(*pBegin);
+            aOwnTypes.push_back(type);
         }
     }
     aOwnTypes.push_back(cppu::UnoType<css::lang::XUnoTunnel>::get());

@@ -96,16 +96,14 @@ void OConnection::construct(std::u16string_view url,const Sequence< PropertyValu
     o3tl::starts_with(aDSN, u"access:", &aDSN);
 
     sal_Int32 nTimeout = 20;
-    const PropertyValue *pIter  = info.getConstArray();
-    const PropertyValue *pEnd   = pIter + info.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (const auto& propval : info)
     {
-        if(pIter->Name == "Timeout")
-            pIter->Value >>= nTimeout;
-        else if(pIter->Name == "user")
-            pIter->Value >>= aUID;
-        else if(pIter->Name == "password")
-            pIter->Value >>= aPWD;
+        if (propval.Name == "Timeout")
+            propval.Value >>= nTimeout;
+        else if (propval.Name == "user")
+            propval.Value >>= aUID;
+        else if (propval.Name == "password")
+            propval.Value >>= aPWD;
     }
     try
     {

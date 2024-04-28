@@ -520,18 +520,16 @@ Assembly ^ TypeEmitter::type_resolve(
                                   TypeAttributes::BeforeFieldInit |
                                   TypeAttributes::AnsiClass) );
 
-        Sequence< Reference<
+        const Sequence< Reference<
             reflection::XConstantTypeDescription > > seq_constants(
                 xType->getConstants() );
-        Reference< reflection::XConstantTypeDescription > const * constants =
-            seq_constants.getConstArray();
         sal_Int32 constants_length = seq_constants.getLength();
         for ( sal_Int32 constants_pos = 0;
               constants_pos < constants_length; ++constants_pos )
         {
             Reference<
                 reflection::XConstantTypeDescription > const & xConstant =
-                constants[ constants_pos ];
+                seq_constants[ constants_pos ];
             ::System::Object ^ constant =
                   to_cli_constant( xConstant->getConstantValue() );
             ::System::String ^ uno_name =
@@ -575,12 +573,10 @@ Assembly ^ TypeEmitter::type_resolve(
             (FieldAttributes) (FieldAttributes::Private |
                                FieldAttributes::SpecialName |
                                FieldAttributes::RTSpecialName) );
-        Sequence< OUString > seq_enum_names( xType->getEnumNames() );
-        Sequence< sal_Int32 > seq_enum_values( xType->getEnumValues() );
+        const Sequence< OUString > seq_enum_names( xType->getEnumNames() );
+        const Sequence< sal_Int32 > seq_enum_values( xType->getEnumValues() );
         sal_Int32 enum_length = seq_enum_names.getLength();
         OSL_ASSERT( enum_length == seq_enum_values.getLength() );
-        OUString const * enum_names = seq_enum_names.getConstArray();
-        sal_Int32 const * enum_values = seq_enum_values.getConstArray();
         for ( sal_Int32 enum_pos = 0; enum_pos < enum_length; ++enum_pos )
         {
 //             enum_builder->DefineLiteral(
@@ -588,13 +584,13 @@ Assembly ^ TypeEmitter::type_resolve(
 //                 __box ((::System::Int32) enum_values[ enum_pos ]) );
             Emit::FieldBuilder ^ field_builder =
                 enum_builder->DefineField(
-                    ustring_to_String( enum_names[ enum_pos ] ),
+                    ustring_to_String( seq_enum_names[ enum_pos ] ),
                     enum_builder,
                     (FieldAttributes) (FieldAttributes::Public |
                                        FieldAttributes::Static |
                                        FieldAttributes::Literal) );
             field_builder->SetConstant(
-                ((::System::Int32) enum_values[ enum_pos ]) );
+                ((::System::Int32) seq_enum_values[ enum_pos ]) );
         }
 
         if (g_bVerbose)
@@ -844,18 +840,16 @@ Assembly ^ TypeEmitter::type_resolve(
         }
     }
 
-    Sequence<
+    const Sequence<
         Reference< reflection::XInterfaceMemberTypeDescription > > seq_members(
             xType->getMembers() );
-    Reference< reflection::XInterfaceMemberTypeDescription > const * members =
-        seq_members.getConstArray();
     sal_Int32 members_length = seq_members.getLength();
     for ( sal_Int32 members_pos = 0;
           members_pos < members_length; ++members_pos )
     {
         Reference<
             reflection::XInterfaceMemberTypeDescription > const & xMember =
-            members[ members_pos ];
+            seq_members[ members_pos ];
         Sequence< Reference< reflection::XTypeDescription > > seq_exceptions;
 
         MethodAttributes c_method_attr = (MethodAttributes)
@@ -870,21 +864,19 @@ Assembly ^ TypeEmitter::type_resolve(
             Reference< reflection::XInterfaceMethodTypeDescription > xMethod(
                 xMember, UNO_QUERY_THROW );
 
-            Sequence<
+            const Sequence<
                 Reference< reflection::XMethodParameter > > seq_parameters(
                     xMethod->getParameters() );
             sal_Int32 params_length = seq_parameters.getLength();
             array< ::System::Type^>^ param_types =
                   gcnew array< ::System::Type^>( params_length );
-            Reference< reflection::XMethodParameter > const * parameters =
-                seq_parameters.getConstArray();
             // first determine all types
             //Make the first param type as return type
             sal_Int32 params_pos = 0;
             for ( ; params_pos < params_length; ++params_pos )
             {
                 Reference< reflection::XMethodParameter > const & xParam =
-                    parameters[ params_pos ];
+                    seq_parameters[ params_pos ];
                 ::System::Type ^ param_type = get_type( xParam->getType() );
                 ::System::String ^ param_type_name = param_type->FullName;
                 if (xParam->isOut())
@@ -913,7 +905,7 @@ Assembly ^ TypeEmitter::type_resolve(
             for ( ; params_pos < params_length; ++params_pos )
             {
                 Reference< reflection::XMethodParameter > const & xParam =
-                    parameters[ params_pos ];
+                    seq_parameters[ params_pos ];
                 long param_flags = 0;
                 if (xParam->isIn())
                     param_flags |= (long)ParameterAttributes::In;
@@ -932,19 +924,17 @@ Assembly ^ TypeEmitter::type_resolve(
 
             if (xReturnStruct.is())
             {
-                Sequence<Reference<reflection::XTypeDescription> > seq_type_args =
+                const Sequence<Reference<reflection::XTypeDescription> > seq_type_args =
                     xReturnStruct->getTypeArguments();
                 if (seq_type_args.getLength() != 0)
                 {
                     //get th ctor of the attribute
                     array< ::System::Type^>^ arCtor = {::System::Type::GetType("System.Type[]")};
                     //Get the arguments for the attribute's ctor
-                    Reference<reflection::XTypeDescription> const * arXTypeArgs =
-                        seq_type_args.getConstArray();
                     int numTypes = seq_type_args.getLength();
                     array< ::System::Type^>^ arCtsTypes = gcnew array< ::System::Type^>(numTypes);
                     for (int i = 0; i < numTypes; i++)
-                        arCtsTypes[i] = get_type(arXTypeArgs[i]);
+                        arCtsTypes[i] = get_type(seq_type_args[i]);
                     array< ::System::Object^>^ arArgs = {arCtsTypes};
 
                     Emit::CustomAttributeBuilder ^ attrBuilder =
@@ -1080,7 +1070,7 @@ Assembly ^ TypeEmitter::type_resolve(
         {
             array< ::System::Object^>^ aArg = gcnew array< ::System::Object^>(numTypes);
             for (int i = 0; i < numTypes; i++)
-                aArg[i] = ustring_to_String(seq_type_parameters.getConstArray()[i]);
+                aArg[i] = ustring_to_String(seq_type_parameters[i]);
             array< ::System::Object^>^ args = {aArg};
 
             array< ::System::Type^>^ arTypesCtor =
@@ -1105,22 +1095,18 @@ Assembly ^ TypeEmitter::type_resolve(
     }
 
         // members
-    Sequence< Reference< reflection::XTypeDescription > > seq_members(
+    const Sequence< Reference< reflection::XTypeDescription > > seq_members(
         entry->m_xType->getMemberTypes() );
-    Sequence< OUString > seq_member_names( entry->m_xType->getMemberNames() );
+    const Sequence< OUString > seq_member_names( entry->m_xType->getMemberNames() );
     sal_Int32 members_length = seq_members.getLength();
     OSL_ASSERT( seq_member_names.getLength() == members_length );
     //check if we have a XTypeDescription for every member. If not then the user may
     //have forgotten to specify additional rdbs with the --extra option.
-    Reference< reflection::XTypeDescription > const * pseq_members =
-            seq_members.getConstArray();
-    OUString const * pseq_member_names =
-        seq_member_names.getConstArray();
     for (int i = 0; i < members_length; i++)
     {
         const OUString sType(entry->m_xType->getName());
-        const OUString sMemberName(pseq_member_names[i]);
-        if ( ! pseq_members[i].is())
+        const OUString sMemberName(seq_member_names[i]);
+        if ( ! seq_members[i].is())
             throw RuntimeException("Missing type description . Check if you need to "
             "specify additional RDBs with the --extra option. Type missing for: " +  sType +
             "::" + sMemberName,0);
@@ -1231,11 +1217,11 @@ Assembly ^ TypeEmitter::type_resolve(
     for ( member_pos = 0; member_pos < members_length; ++member_pos )
     {
         ::System::String ^ field_name =
-            ustring_to_String( pseq_member_names[ member_pos ] );
+            ustring_to_String( seq_member_names[ member_pos ] );
         ::System::Type ^ field_type;
         //Special handling of struct parameter types
         bool bParameterizedType = false;
-        if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
+        if (seq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
         {
             bParameterizedType = true;
             if (type_param_pos < seq_type_parameters.getLength())
@@ -1251,7 +1237,7 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else
         {
-            field_type = get_type( pseq_members[ member_pos ] );
+            field_type = get_type( seq_members[ member_pos ] );
 
             if (field_type->IsArray
                 && m_incomplete_structs[cts_name]
@@ -1262,7 +1248,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 while ((value = value->GetElementType())->IsArray);
                 //If the value type is a struct then make sure it is fully created.
                 get_complete_struct(value->FullName);
-                field_type = get_type(pseq_members[member_pos]);
+                field_type = get_type(seq_members[member_pos]);
             }
         }
         members[ member_pos ] =
@@ -1275,7 +1261,7 @@ Assembly ^ TypeEmitter::type_resolve(
             //get the name
             OSL_ASSERT(seq_type_parameters.getLength() > curParamIndex);
             ::System::String^ sTypeName = ustring_to_String(
-                seq_type_parameters.getConstArray()[curParamIndex++]);
+                seq_type_parameters[curParamIndex++]);
             array< ::System::Object^>^ args = {sTypeName};
             //set ParameterizedTypeAttribute
             array< ::System::Type^>^ arCtorTypes = {::System::String::typeid};
@@ -1511,18 +1497,17 @@ Assembly ^ TypeEmitter::type_resolve(
         const Reference<reflection::XServiceConstructorDescription> & ctorDes =
             seqCtors[j];
         //obtain the parameter types
-        Sequence<Reference<reflection::XParameter> > seqParams =
+        const Sequence<Reference<reflection::XParameter> > seqParams =
             ctorDes->getParameters();
-        Reference<reflection::XParameter> const * arXParams = seqParams.getConstArray();
         sal_Int32 cParams = seqParams.getLength();
         array< ::System::Type^>^ arTypeParameters = gcnew array< ::System::Type^> (cParams + 1);
         arTypeParameters[0] = get_type("unoidl.com.sun.star.uno.XComponentContext", true);
         for (int iparam = 0; iparam != cParams; iparam++)
         {
-            if (arXParams[iparam]->isRestParameter())
+            if (seqParams[iparam]->isRestParameter())
                 arTypeParameters[iparam + 1] = array< ::uno::Any>::typeid;
             else
-                arTypeParameters[iparam + 1] = get_type(arXParams[iparam]->getType());
+                arTypeParameters[iparam + 1] = get_type(seqParams[iparam]->getType());
         }
         //The array arTypeParameters can contain:
         //System.Type and uno.PolymorphicType.
@@ -1572,7 +1557,7 @@ Assembly ^ TypeEmitter::type_resolve(
             gcnew array<Emit::ParameterBuilder^> (cParams);
         for (int iparam = 0; iparam != cParams; iparam++)
         {
-            Reference<reflection::XParameter> const & aParam = arXParams[iparam];
+            Reference<reflection::XParameter> const & aParam = seqParams[iparam];
             ::System::String ^ sParamName = ustring_to_String(aParam->getName());
 
             arParameterBuilder[iparam] = method_builder->DefineParameter(
@@ -1909,9 +1894,6 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
 {
     Emit::CustomAttributeBuilder ^ attr_builder = nullptr;
 
-    Reference< reflection::XCompoundTypeDescription > const * exceptions =
-        seq_exceptionsTd.getConstArray();
-
     array< ::System::Type^>^ arTypesCtor = {::System::Type::GetType("System.Type[]")};
     ConstructorInfo ^ ctor_ExceptionAttribute =
         ::uno::ExceptionAttribute::typeid->GetConstructor(arTypesCtor);
@@ -1924,7 +1906,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         for ( sal_Int32 exc_pos = 0; exc_pos < exc_length; ++exc_pos )
         {
             Reference< reflection::XCompoundTypeDescription > const & xExc =
-                exceptions[ exc_pos ];
+                seq_exceptionsTd[ exc_pos ];
             exception_types[ exc_pos ] = get_type( xExc );
         }
         array< ::System::Object^>^ args = {exception_types};
