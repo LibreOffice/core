@@ -1276,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
     uno::Reference<chart2::data::XNumericalDataSequence> xNumSeq(xValueSeq, uno::UNO_QUERY);
     uno::Sequence<double> aValues(xNumSeq->getNumericalData());
     for (sal_Int32 i = 0; i < xValueSeq->getData().getLength(); i++)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", values[i], aValues.getConstArray()[i]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", values[i], aValues[i]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testStrictOOXML)

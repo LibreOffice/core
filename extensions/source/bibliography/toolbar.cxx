@@ -100,13 +100,8 @@ void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rE
         pToolBar->UpdateSourceList(false);
         pToolBar->ClearSourceList();
 
-        const OUString* pStringArray = pStringSeq->getConstArray();
-
-        sal_uInt32 nCount = pStringSeq->getLength();
-        OUString aEntry;
-        for( sal_uInt32 i=0; i<nCount; i++ )
+        for (auto& aEntry : *pStringSeq)
         {
-            aEntry = pStringArray[i];
             pToolBar->InsertSourceEntry(aEntry);
         }
         pToolBar->UpdateSourceList(true);
@@ -139,13 +134,10 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 
     pToolBar->ClearFilterMenu();
 
-    const OUString* pStringArray = pStringSeq->getConstArray();
-
-    sal_uInt32 nCount = pStringSeq->getLength();
-    for( sal_uInt32 i=0; i<nCount; i++ )
+    for (auto& string : *pStringSeq)
     {
-        sal_uInt16 nID = pToolBar->InsertFilterItem(pStringArray[i]);
-        if(pStringArray[i]==rEvt.FeatureDescriptor)
+        sal_uInt16 nID = pToolBar->InsertFilterItem(string);
+        if (string == rEvt.FeatureDescriptor)
         {
             pToolBar->SelectFilterItem(nID);
         }

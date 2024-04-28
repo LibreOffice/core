@@ -207,11 +207,10 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
             if ( nParamsCount > 0 )
             {
                 xSbxParams = new SbxArray;
-                const Any* pParams = aParams.getConstArray();
                 for ( sal_Int32 i = 0; i < nParamsCount; ++i )
                 {
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
-                    unoToSbxValue( xSbxVar.get(), pParams[i] );
+                    unoToSbxValue(xSbxVar.get(), aParams[i]);
                     xSbxParams->Put(xSbxVar.get(), static_cast<sal_uInt32>(i) + 1);
 
                     if (pInfo)

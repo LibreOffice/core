@@ -63,7 +63,7 @@ public:
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override
         {
             nBytesToRead = std::min(nBytesToRead, m_seq.getLength() - nPos);
-            aData = Sequence< sal_Int8 > ( &(m_seq.getConstArray()[nPos]) , nBytesToRead );
+            aData = Sequence<sal_Int8>(m_seq.getConstArray() + nPos, nBytesToRead);
             nPos += nBytesToRead;
             return nBytesToRead;
         }

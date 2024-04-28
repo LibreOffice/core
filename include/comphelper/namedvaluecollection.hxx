@@ -302,12 +302,8 @@ namespace comphelper
             css::uno::Sequence< VALUE_TYPE > aValues;
             *this >>= aValues;
             css::uno::Sequence< css::uno::Any > aWrappedValues( aValues.getLength() );
-
-            css::uno::Any* pO = aWrappedValues.getArray();
-            const VALUE_TYPE* pV = aValues.getConstArray();
-            const sal_Int32 nLen = aValues.getLength();
-            for( sal_Int32 i = 0; i < nLen; ++i )
-                *(pO++) = css::uno::Any( *(pV++) );
+            std::transform(aValues.begin(), aValues.end(), aWrappedValues.getArray(),
+                           [](const auto& val) { return css::uno::Any(val); });
 
             return aWrappedValues;
         }

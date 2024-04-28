@@ -105,17 +105,15 @@ namespace dbp
         aFormFieldNames.reserve(getSettings().aSelectedFields.getLength());
 
         // loop through the selected field names
-        const OUString* pSelectedFields = getSettings().aSelectedFields.getConstArray();
-        const OUString* pEnd = pSelectedFields + getSettings().aSelectedFields.getLength();
-        for (;pSelectedFields < pEnd; ++pSelectedFields)
+        for (auto& selectedField : getSettings().aSelectedFields)
         {
             // get the information for the selected column
             sal_Int32 nFieldType = DataType::OTHER;
-            OControlWizardContext::TNameTypeMap::const_iterator aFind = rContext.aTypes.find(*pSelectedFields);
+            OControlWizardContext::TNameTypeMap::const_iterator aFind = rContext.aTypes.find(selectedField);
             if ( aFind != rContext.aTypes.end() )
                 nFieldType = aFind->second;
 
-            aFormFieldNames.push_back(*pSelectedFields);
+            aFormFieldNames.push_back(selectedField);
             switch (nFieldType)
             {
                 case DataType::BIT:
@@ -154,7 +152,7 @@ namespace dbp
                     aColumnServiceNames.emplace_back("DateField");
                     aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_DATEPOSTFIX));
 
-                    aFormFieldNames.push_back(*pSelectedFields);
+                    aFormFieldNames.push_back(selectedField);
                     aColumnServiceNames.emplace_back("TimeField");
                     aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_TIMEPOSTFIX));
                     break;
@@ -324,13 +322,10 @@ namespace dbp
         fillListBox(*m_xExistFields, rContext.aFieldNames);
 
         m_xSelFields->clear();
-        const OGridSettings& rSettings = getSettings();
-        const OUString* pSelected = rSettings.aSelectedFields.getConstArray();
-        const OUString* pEnd = pSelected + rSettings.aSelectedFields.getLength();
-        for (; pSelected < pEnd; ++pSelected)
+        for (auto& field : getSettings().aSelectedFields)
         {
-            m_xSelFields->append_text(*pSelected);
-            m_xExistFields->remove_text(*pSelected);
+            m_xSelFields->append_text(field);
+            m_xExistFields->remove_text(field);
         }
 
         implCheckButtons();

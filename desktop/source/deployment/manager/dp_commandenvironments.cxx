@@ -82,21 +82,14 @@ void BaseCommandEnv::handle_(bool approve,
     else
     {
         // select:
-        uno::Sequence< Reference< task::XInteractionContinuation > > conts(
-            xRequest->getContinuations() );
-        Reference< task::XInteractionContinuation > const * pConts =
-            conts.getConstArray();
-        sal_Int32 len = conts.getLength();
-        for ( sal_Int32 pos = 0; pos < len; ++pos )
+        for (auto& xContinuation : xRequest->getContinuations())
         {
-            if (approve) {
-                Reference< task::XInteractionApprove > xInteractionApprove(
-                    pConts[ pos ], uno::UNO_QUERY );
-                if (xInteractionApprove.is()) {
-                    xInteractionApprove->select();
-                    // don't query again for ongoing continuations:
-                    approve = false;
-                }
+            Reference<task::XInteractionApprove> xInteractionApprove(xContinuation, uno::UNO_QUERY);
+            if (xInteractionApprove.is())
+            {
+                xInteractionApprove->select();
+                // don't query again for ongoing continuations:
+                break;
             }
         }
     }

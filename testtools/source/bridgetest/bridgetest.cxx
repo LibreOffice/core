@@ -174,11 +174,9 @@ static bool equals( const TestData & rData1, const TestData & rData2 )
     if (nLen == rData2.Sequence.getLength())
     {
         // once again by hand sequence ==
-        const TestElement * pElements1 = rData1.Sequence.getConstArray();
-        const TestElement * pElements2 = rData2.Sequence.getConstArray();
         for ( ; nLen--; )
         {
-            if (! equals( pElements1[nLen], pElements2[nLen] ))
+            if (!equals(rData1.Sequence[nLen], rData2.Sequence[nLen]))
             {
                 check( false, "### sequence element did not match!" );
                 return false;

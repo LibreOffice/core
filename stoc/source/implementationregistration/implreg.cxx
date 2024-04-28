@@ -508,7 +508,7 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 
     OUString relativKey;
     if (keyNames.hasElements())
-        relativKey = keyNames.getConstArray()[0].copy(xKey->getKeyName().getLength()+1);
+        relativKey = keyNames[0].copy(xKey->getKeyName().getLength()+1);
 
     if (keyNames.getLength() == 1 &&
         xKey->getKeyType(relativKey) == RegistryKeyType_LINK)
@@ -656,10 +656,9 @@ void delete_all_singleton_entries(
     // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence< Reference< registry::XRegistryKey > > singletons( xSingletons_section->openKeys() );
-    Reference< registry::XRegistryKey > const * subkeys = singletons.getConstArray();
     for ( sal_Int32 nPos = singletons.getLength(); nPos--; )
     {
-        Reference< registry::XRegistryKey > const & xSingleton = subkeys[ nPos ];
+        Reference<registry::XRegistryKey> const& xSingleton = singletons[nPos];
         Reference< registry::XRegistryKey > xRegisteredImplNames(
             xSingleton->openKey( "REGISTERED_BY" ) );
         if (xRegisteredImplNames.is() && xRegisteredImplNames->isValid())
@@ -801,10 +800,9 @@ void insert_singletons(
     OUString implname( xImplKey->getKeyName().copy( sizeof ("/IMPLEMENTATIONS/") -1 ) );
     // singleton entries
     Sequence< Reference< registry::XRegistryKey > > xSingletons_section( xKey->openKeys() );
-    Reference< registry::XRegistryKey > const * p = xSingletons_section.getConstArray();
     for ( sal_Int32 nPos = xSingletons_section.getLength(); nPos--; )
     {
-        Reference< registry::XRegistryKey > const & xSingleton = p[ nPos ];
+        Reference<registry::XRegistryKey> const& xSingleton = xSingletons_section[nPos];
         OUString singleton_name(
             xSingleton->getKeyName().copy(
                 implname.getLength() + sizeof ("/IMPLEMENTATIONS//UNO/SINGLETONS/") -1 ) );
@@ -1175,42 +1173,42 @@ void ImplementationRegistration::initialize(
     Reference< XSimpleRegistry > rReg;
 
     // 1st argument : An instance of an implementation loader
-    if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
-        aArgs.getConstArray()[0] >>= rLoader;
+    if( aArgs[0].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
+        aArgs[0] >>= rLoader;
     }
     if( !rLoader.is()) {
         throw IllegalArgumentException(
             "ImplementationRegistration::initialize() invalid first parameter,"
             "expected " + cppu::UnoType<decltype(rLoader)>::get().getTypeName() +
-            ", got " + aArgs.getConstArray()[0].getValueTypeName(),
+            ", got " + aArgs[0].getValueTypeName(),
             Reference< XInterface > (), 0 );
     }
 
     // 2nd argument : The service name of the loader. This name is written into the registry
-    if( aArgs.getConstArray()[1].getValueType().getTypeClass() == TypeClass_STRING ) {
-        aArgs.getConstArray()[1] >>= loaderServiceName;
+    if( aArgs[1].getValueType().getTypeClass() == TypeClass_STRING ) {
+        aArgs[1] >>= loaderServiceName;
     }
     if( loaderServiceName.isEmpty() ) {
         throw IllegalArgumentException(
             "ImplementationRegistration::initialize() invalid second parameter,"
-            "expected string, got " + aArgs.getConstArray()[1].getValueTypeName(),
+            "expected string, got " + aArgs[1].getValueTypeName(),
             Reference< XInterface > (), 0 );
     }
 
     // 3rd argument : The file name of the dll, that contains the loader
-    if( aArgs.getConstArray()[2].getValueType().getTypeClass() == TypeClass_STRING ) {
-        aArgs.getConstArray()[2] >>= locationUrl;
+    if( aArgs[2].getValueType().getTypeClass() == TypeClass_STRING ) {
+        aArgs[2] >>= locationUrl;
     }
     if( locationUrl.isEmpty() ) {
         throw IllegalArgumentException(
             "ImplementationRegistration::initialize() invalid third parameter,"
-            "expected string, got " + aArgs.getConstArray()[2].getValueTypeName(),
+            "expected string, got " + aArgs[2].getValueTypeName(),
             Reference< XInterface > (), 0 );
     }
 
     // 4th argument : The registry, the service should be written to
-    if( aArgs.getConstArray()[3].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
-        aArgs.getConstArray()[3] >>= rReg;
+    if( aArgs[3].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
+        aArgs[3] >>= rReg;
     }
 
     if( !rReg.is() ) {
@@ -1219,7 +1217,7 @@ void ImplementationRegistration::initialize(
             throw IllegalArgumentException(
                 "ImplementationRegistration::initialize() invalid fourth parameter,"
                 "expected " + cppu::UnoType<decltype(rReg)>::get().getTypeName() +
-                ", got " + aArgs.getConstArray()[3].getValueTypeName(),
+                ", got " + aArgs[3].getValueTypeName(),
                 Reference< XInterface > (), 0 );
         }
     }

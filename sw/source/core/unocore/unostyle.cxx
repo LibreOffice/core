@@ -2992,7 +2992,9 @@ static rtl::Reference<SwXHeadFootText> lcl_makeHeaderFooter(const sal_uInt16 nRe
 
 uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames)
 {
-    if(!GetDoc())
+    SolarMutexGuard aGuard;
+
+    if (!GetDoc())
         throw uno::RuntimeException();
 
     sal_Int32 nLength = rPropertyNames.getLength();
@@ -3183,13 +3185,10 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
 
 uno::Sequence<uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence<uno::Any> aValues;
-
     // workaround for bad designed API
     try
     {
-        aValues = GetPropertyValues_Impl(rPropertyNames);
+        return GetPropertyValues_Impl(rPropertyNames);
     }
     catch(beans::UnknownPropertyException &)
     {
@@ -3203,13 +3202,10 @@ uno::Sequence<uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence<OUSt
         throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
                 getXWeak(), anyEx );
     }
-
-    return aValues;
 }
 
 uno::Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName)
 {
-    SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     return GetPropertyValues_Impl(aProperties)[0];
 }
@@ -3838,9 +3834,8 @@ void SwXAutoStyle::setPropertyValue( const OUString& /*rPropertyName*/, const un
 
 uno::Any SwXAutoStyle::getPropertyValue( const OUString& rPropertyName )
 {
-    SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
+    return GetPropertyValues_Impl(aProperties)[0];
 }
 
 void SwXAutoStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/,
@@ -3872,7 +3867,9 @@ void SwXAutoStyle::setPropertyValues(
 uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 {
-    if( !mpSet )
+    SolarMutexGuard aGuard;
+
+    if (!mpSet)
     {
         throw uno::RuntimeException();
     }
@@ -4009,13 +4006,10 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
         const uno::Sequence< OUString >& rPropertyNames )
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< uno::Any > aValues;
-
     // workaround for bad designed API
     try
     {
-        aValues = GetPropertyValues_Impl( rPropertyNames );
+        return GetPropertyValues_Impl( rPropertyNames );
     }
     catch (beans::UnknownPropertyException &)
     {
@@ -4027,8 +4021,6 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
         css::uno::Any exc = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException("WrappedTargetException caught", getXWeak(), exc );
     }
-
-    return aValues;
 }
 
 void SwXAutoStyle::addPropertiesChangeListener(

@@ -99,11 +99,10 @@ static void mergeKeys(
 
     // sub keys
     Sequence< OUString > sourceKeys( xSource->getKeyNames() );
-    OUString const * pSourceKeys = sourceKeys.getConstArray();
     for ( sal_Int32 nPos = sourceKeys.getLength(); nPos--; )
     {
         // key name
-        OUString name( pSourceKeys[ nPos ] );
+        OUString name( sourceKeys[ nPos ] );
         sal_Int32 nSlash = name.lastIndexOf( '/' );
         if (nSlash >= 0)
         {
@@ -137,7 +136,7 @@ static void mergeKeys(
             }
 
             links.push_back( Link(
-                pSourceKeys[ nPos ], // abs path
+                sourceKeys[ nPos ], // abs path
                 xSource->getResolvedName( name ) // abs resolved name
                 ) );
         }

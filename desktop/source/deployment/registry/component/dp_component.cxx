@@ -1279,13 +1279,11 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
             Sequence<OUString> implNames;
             if (xImplKey.is() && xImplKey->isValid())
                 implNames = xImplKey->getKeyNames();
-            OUString const * pImplNames = implNames.getConstArray();
             sal_Int32 pos = implNames.getLength();
             for ( ; pos--; )
             {
                 checkAborted( abortChannel );
-                const OUString key(
-                    pImplNames[ pos ] + "/UNO/LOCATION" );
+                const OUString key(implNames[pos] + "/UNO/LOCATION");
                 const Reference<registry::XRegistryKey> xKey(
                     xRootKey->openKey(key) );
                 if (xKey.is() && xKey->isValid())

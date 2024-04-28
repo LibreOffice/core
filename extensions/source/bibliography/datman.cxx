@@ -948,48 +948,42 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
             Reference< XConnection >    xConnection = getConnection( m_xForm );
             Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess > xAccess = xSupplyTables->getTables();
-            Sequence< OUString > aTableNameSeq = xAccess->getElementNames();
-            sal_uInt32 nCount = aTableNameSeq.getLength();
 
-            const OUString* pTableNames = aTableNameSeq.getConstArray();
-            const OUString* pTableNamesEnd = pTableNames + nCount;
-
-            for ( ; pTableNames != pTableNamesEnd; ++pTableNames )
+            for (auto& rTableName: xAccess->getElementNames())
             {
-                if ( rTable == *pTableNames )
+                if (rTable == rTableName)
                 {
                     aActiveDataTable = rTable;
                     Any aVal; aVal <<= rTable;
                     aPropertySet->setPropertyValue( "Command", aVal );
+
+                    Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
+                    aQuoteChar = xMetaData->getIdentifierQuoteString();
+
+                    Reference<XMultiServiceFactory> xFactory(xConnection, UNO_QUERY);
+                    if (xFactory.is())
+                        m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
+
+                    OUString aString("SELECT * FROM ");
+
+                    OUString sCatalog, sSchema, sName;
+                    ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
+                    aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
+
+                    m_xParser->setElementaryQuery(aString);
+
+                    BibConfig* pConfig = BibModul::GetConfig();
+                    pConfig->setQueryField(getQueryField());
+                    startQueryWith(pConfig->getQueryText());
+
+                    BibDBDescriptor aDesc;
+                    aDesc.sDataSource = aDataSourceURL;
+                    aDesc.sTableOrQuery = aActiveDataTable;
+                    aDesc.nCommandType = CommandType::TABLE;
+                    BibModul::GetConfig()->SetBibliographyURL(aDesc);
+
                     break;
                 }
-            }
-            if (pTableNames != pTableNamesEnd)
-            {
-                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                aQuoteChar = xMetaData->getIdentifierQuoteString();
-
-                Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
-                if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
-
-                OUString aString("SELECT * FROM ");
-
-                OUString sCatalog, sSchema, sName;
-                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
-                aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
-
-                m_xParser->setElementaryQuery(aString);
-
-                BibConfig* pConfig = BibModul::GetConfig();
-                pConfig->setQueryField(getQueryField());
-                startQueryWith(pConfig->getQueryText());
-
-                BibDBDescriptor aDesc;
-                aDesc.sDataSource = aDataSourceURL;
-                aDesc.sTableOrQuery = aActiveDataTable;
-                aDesc.nCommandType = CommandType::TABLE;
-                BibModul::GetConfig()->SetBibliographyURL(aDesc);
             }
         }
     }

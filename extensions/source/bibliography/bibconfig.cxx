@@ -95,24 +95,23 @@ BibConfig::BibConfig()
 
     const Sequence< OUString > aPropertyNames = GetPropertyNames();
     const Sequence<Any> aPropertyValues = GetProperties( aPropertyNames );
-    const Any* pValues = aPropertyValues.getConstArray();
     if(aPropertyValues.getLength() == aPropertyNames.getLength())
     {
         for(int nProp = 0; nProp < aPropertyNames.getLength(); nProp++)
         {
-            if(pValues[nProp].hasValue())
+            if (aPropertyValues[nProp].hasValue())
             {
                 switch(nProp)
                 {
-                    case  0: pValues[nProp] >>= sDataSource; break;
-                    case  1: pValues[nProp] >>= sTableOrQuery; break;
-                    case  2: pValues[nProp] >>= nTblOrQuery;  break;
-                    case  3: pValues[nProp] >>= nBeamerSize;  break;
-                    case  4: pValues[nProp] >>= nViewSize  ;  break;
-                    case  5: pValues[nProp] >>= sQueryText ;  break;
-                    case  6: pValues[nProp] >>= sQueryField;  break;
+                    case  0: aPropertyValues[nProp] >>= sDataSource; break;
+                    case  1: aPropertyValues[nProp] >>= sTableOrQuery; break;
+                    case  2: aPropertyValues[nProp] >>= nTblOrQuery;  break;
+                    case  3: aPropertyValues[nProp] >>= nBeamerSize;  break;
+                    case  4: aPropertyValues[nProp] >>= nViewSize  ;  break;
+                    case  5: aPropertyValues[nProp] >>= sQueryText ;  break;
+                    case  6: aPropertyValues[nProp] >>= sQueryField;  break;
                     case  7:
-                        bShowColumnAssignmentWarning = *o3tl::doAccess<bool>(pValues[nProp]);
+                        bShowColumnAssignmentWarning = *o3tl::doAccess<bool>(aPropertyValues[nProp]);
                     break;
                 }
             }
@@ -130,14 +129,13 @@ BibConfig::BibConfig()
         pHistoryNames[2] = sPrefix + "CommandType";
 
         Sequence<Any> aHistoryValues = GetProperties( aHistoryNames );
-        const Any* pHistoryValues = aHistoryValues.getConstArray();
 
         if(aHistoryValues.getLength() == aHistoryNames.getLength())
         {
             Mapping* pMapping = new Mapping;
-            pHistoryValues[0] >>= pMapping->sURL;
-            pHistoryValues[1] >>= pMapping->sTableName;
-            pHistoryValues[2] >>= pMapping->nCommandType;
+            aHistoryValues[0] >>= pMapping->sURL;
+            aHistoryValues[1] >>= pMapping->sTableName;
+            aHistoryValues[2] >>= pMapping->nCommandType;
             //field assignment is contained in another set
             sPrefix += "Fields";
             const Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
@@ -153,15 +151,14 @@ BibConfig::BibConfig()
                 pAssignmentPropertyNames[nFieldIdx++]   += "/AssignedFieldName";
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
-            const Any* pAssignmentValues = aAssignmentValues.getConstArray();
             OUString sTempLogical;
             OUString sTempReal;
             sal_Int16 nSetMapping = 0;
             nFieldIdx = 0;
             for(sal_Int32 nFieldVal = 0; nFieldVal < aAssignmentValues.getLength() / 2; nFieldVal++)
             {
-                pAssignmentValues[nFieldIdx++] >>= sTempLogical;
-                pAssignmentValues[nFieldIdx++] >>= sTempReal;
+                aAssignmentValues[nFieldIdx++] >>= sTempLogical;
+                aAssignmentValues[nFieldIdx++] >>= sTempReal;
                 if(!(sTempLogical.isEmpty() || sTempReal.isEmpty()))
                 {
                     pMapping->aColumnPairs[nSetMapping].sLogicalColumnName = sTempLogical;

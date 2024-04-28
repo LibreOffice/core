@@ -87,12 +87,11 @@ namespace basprov
             {
                 Sequence< OUString > aNames = m_xLibrary->getElementNames();
                 sal_Int32 nCount = aNames.getLength();
-                const OUString* pNames = aNames.getConstArray();
                 aChildNodes.resize( nCount );
 
                 for ( sal_Int32 i = 0 ; i < nCount ; ++i )
                 {
-                    SbModule* pModule = pBasic->FindModule( pNames[i] );
+                    SbModule* pModule = pBasic->FindModule(aNames[i]);
                     if ( pModule )
                         aChildNodes[i] = new BasicModuleNodeImpl(m_xContext, m_sScriptingContext,
                                                                  pModule, m_bIsAppScript);

@@ -116,23 +116,18 @@ namespace dbp
     void OControlWizardPage::fillListBox(weld::TreeView& _rList, const Sequence< OUString >& _rItems)
     {
         _rList.clear();
-        const OUString* pItems = _rItems.getConstArray();
-        const OUString* pEnd = pItems + _rItems.getLength();
-        sal_Int32 nIndex = 0;
-        for (;pItems < pEnd; ++pItems, ++nIndex)
+        for (sal_Int32 nIndex = 0; nIndex < _rItems.getLength(); ++nIndex)
         {
-            _rList.append(OUString::number(nIndex), *pItems);
+            _rList.append(OUString::number(nIndex), _rItems[nIndex]);
         }
     }
 
     void OControlWizardPage::fillListBox(weld::ComboBox& _rList, const Sequence< OUString >& _rItems)
     {
         _rList.clear();
-        const OUString* pItems = _rItems.getConstArray();
-        const OUString* pEnd = pItems + _rItems.getLength();
-        for (;pItems < pEnd; ++pItems)
+        for (auto& item : _rItems)
         {
-            _rList.append_text(*pItems);
+            _rList.append_text(item);
         }
     }
 
@@ -539,15 +534,13 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                const OUString* pBegin = m_aContext.aFieldNames.getConstArray();
-                const OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
+                for (auto& name : m_aContext.aFieldNames)
                 {
                     sal_Int32 nFieldType = DataType::OTHER;
                     try
                     {
                         Reference< XPropertySet > xColumn;
-                        xColumns->getByName(*pBegin) >>= xColumn;
+                        xColumns->getByName(name) >>= xColumn;
                         xColumn->getPropertyValue("Type") >>= nFieldType;
                     }
                     catch(const Exception&)
@@ -556,7 +549,7 @@ namespace dbp
                             "extensions.dbpilots",
                             "unexpected exception while gathering column information!");
                     }
-                    m_aContext.aTypes.emplace(*pBegin,nFieldType);
+                    m_aContext.aTypes.emplace(name, nFieldType);
                 }
             }
         }

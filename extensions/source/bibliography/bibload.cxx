@@ -207,7 +207,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
         DBChangeDialogConfig_Impl aConfig;
         const Sequence<OUString> aSources = aConfig.GetDataSourceNames();
         if(aSources.hasElements())
-            aBibDesc.sDataSource = aSources.getConstArray()[0];
+            aBibDesc.sDataSource = aSources[0];
     }
 
     m_xDatMan->createDatabaseForm( aBibDesc );

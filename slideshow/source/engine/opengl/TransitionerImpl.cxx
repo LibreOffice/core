@@ -506,7 +506,6 @@ private:
     }
     virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
     {
-        const double*  pIn( deviceColor.getConstArray() );
         const std::size_t nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -516,14 +515,12 @@ private:
         rendering::RGBColor* pOut( aRes.getArray() );
         for( std::size_t i=0; i<nLen; i+=4 )
         {
-            *pOut++ = rendering::RGBColor(pIn[0],pIn[1],pIn[2]);
-            pIn += 4;
+            *pOut++ = rendering::RGBColor(deviceColor[i], deviceColor[i + 1], deviceColor[i + 2]);
         }
         return aRes;
     }
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
     {
-        const double*  pIn( deviceColor.getConstArray() );
         const std::size_t nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -533,14 +530,12 @@ private:
         rendering::ARGBColor* pOut( aRes.getArray() );
         for( std::size_t i=0; i<nLen; i+=4 )
         {
-            *pOut++ = rendering::ARGBColor(pIn[3],pIn[0],pIn[1],pIn[2]);
-            pIn += 4;
+            *pOut++ = rendering::ARGBColor(deviceColor[i+3], deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
         }
         return aRes;
     }
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
     {
-        const double*  pIn( deviceColor.getConstArray() );
         const std::size_t nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -550,8 +545,10 @@ private:
         rendering::ARGBColor* pOut( aRes.getArray() );
         for( std::size_t i=0; i<nLen; i+=4 )
         {
-            *pOut++ = rendering::ARGBColor(pIn[3],pIn[3]*pIn[0],pIn[3]*pIn[1],pIn[3]*pIn[2]);
-            pIn += 4;
+            *pOut++ = rendering::ARGBColor(deviceColor[i+3],
+                                           deviceColor[i+3] * deviceColor[i],
+                                           deviceColor[i+3] * deviceColor[i+1],
+                                           deviceColor[i+3] * deviceColor[i+2]);
         }
         return aRes;
     }
@@ -657,7 +654,6 @@ private:
     }
     virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< sal_Int8 >& deviceColor ) override
     {
-        const sal_Int8* pIn( deviceColor.getConstArray() );
         const std::size_t  nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -668,17 +664,15 @@ private:
         for( std::size_t i=0; i<nLen; i+=4 )
         {
             *pOut++ = rendering::RGBColor(
-                vcl::unotools::toDoubleColor(pIn[0]),
-                vcl::unotools::toDoubleColor(pIn[1]),
-                vcl::unotools::toDoubleColor(pIn[2]));
-            pIn += 4;
+                vcl::unotools::toDoubleColor(deviceColor[i + 0]),
+                vcl::unotools::toDoubleColor(deviceColor[i + 1]),
+                vcl::unotools::toDoubleColor(deviceColor[i + 2]));
         }
         return aRes;
     }
 
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< sal_Int8 >& deviceColor ) override
     {
-        const sal_Int8* pIn( deviceColor.getConstArray() );
         const std::size_t  nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -689,18 +683,16 @@ private:
         for( std::size_t i=0; i<nLen; i+=4 )
         {
             *pOut++ = rendering::ARGBColor(
-                vcl::unotools::toDoubleColor(pIn[3]),
-                vcl::unotools::toDoubleColor(pIn[0]),
-                vcl::unotools::toDoubleColor(pIn[1]),
-                vcl::unotools::toDoubleColor(pIn[2]));
-            pIn += 4;
+                vcl::unotools::toDoubleColor(deviceColor[i + 3]),
+                vcl::unotools::toDoubleColor(deviceColor[i + 0]),
+                vcl::unotools::toDoubleColor(deviceColor[i + 1]),
+                vcl::unotools::toDoubleColor(deviceColor[i + 2]));
         }
         return aRes;
     }
 
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< sal_Int8 >& deviceColor ) override
     {
-        const sal_Int8* pIn( deviceColor.getConstArray() );
         const std::size_t  nLen( deviceColor.getLength() );
         ENSURE_ARG_OR_THROW2(nLen%4==0,
                                 "number of channels no multiple of 4",
@@ -710,13 +702,12 @@ private:
         rendering::ARGBColor* pOut( aRes.getArray() );
         for( std::size_t i=0; i<nLen; i+=4 )
         {
-            const sal_Int8 nAlpha( pIn[3] );
+            const sal_Int8 nAlpha(deviceColor[i + 3]);
             *pOut++ = rendering::ARGBColor(
                 vcl::unotools::toDoubleColor(nAlpha),
-                vcl::unotools::toDoubleColor(nAlpha*pIn[0]),
-                vcl::unotools::toDoubleColor(nAlpha*pIn[1]),
-                vcl::unotools::toDoubleColor(nAlpha*pIn[2]));
-            pIn += 4;
+                vcl::unotools::toDoubleColor(nAlpha * deviceColor[i + 0]),
+                vcl::unotools::toDoubleColor(nAlpha * deviceColor[i + 1]),
+                vcl::unotools::toDoubleColor(nAlpha * deviceColor[i + 2]));
         }
         return aRes;
     }

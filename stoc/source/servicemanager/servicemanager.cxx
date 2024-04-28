@@ -157,7 +157,7 @@ Any ServiceEnumeration_Impl::nextElement()
     if( nIt == aFactories.getLength() )
         throw NoSuchElementException("no more elements");
 
-    return Any( &aFactories.getConstArray()[nIt++], cppu::UnoType<XInterface>::get());
+    return Any( &aFactories[nIt++], cppu::UnoType<XInterface>::get());
 }
 
 
@@ -183,11 +183,10 @@ Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
 
 beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
 {
-    beans::Property const * p = m_properties.getConstArray();
     for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
     {
-        if (p[ nPos ].Name == name)
-            return p[ nPos ];
+        if (m_properties[nPos].Name == name)
+            return m_properties[nPos];
     }
     throw beans::UnknownPropertyException(
         "unknown property: " + name );

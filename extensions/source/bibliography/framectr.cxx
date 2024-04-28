@@ -431,14 +431,11 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
         }
 
-        const beans::PropertyValue* pPropertyValue = aArgs.getConstArray();
-        uno::Any aValue=pPropertyValue[0].Value;
         OUString aQuery;
-        aValue >>= aQuery;
+        aArgs[0].Value >>= aQuery;
 
-        aValue=pPropertyValue[1].Value;
         OUString aQueryField;
-        aValue >>= aQueryField;
+        aArgs[1].Value >>= aQueryField;
         BibConfig* pConfig = BibModul::GetConfig();
         pConfig->setQueryField(aQueryField);
         m_xDatMan->startQueryWith(aQuery);
@@ -806,15 +803,14 @@ void BibFrameController_Impl::RemoveFilter()
 
 void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::PropertyValue >& aArgs)
 {
-    const beans::PropertyValue* pPropertyValue = aArgs.getConstArray();
-    uno::Any aValue=pPropertyValue[0].Value;
+    uno::Any aValue = aArgs[0].Value;
     OUString aDBTableName;
     aValue >>= aDBTableName;
 
 
     if(aArgs.getLength() > 1)
     {
-        uno::Any aDB = pPropertyValue[1].Value;
+        uno::Any aDB = aArgs[1].Value;
         OUString aURL;
         aDB >>= aURL;
         m_xDatMan->setActiveDataSource(aURL);

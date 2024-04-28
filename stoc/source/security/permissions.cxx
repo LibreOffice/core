@@ -452,10 +452,9 @@ PermissionCollection::PermissionCollection(
     Sequence< Any > const & permissions, PermissionCollection const & addition )
     : m_head( addition.m_head )
 {
-    Any const * perms = permissions.getConstArray();
     for ( sal_Int32 nPos = permissions.getLength(); nPos--; )
     {
-        Any const & perm = perms[ nPos ];
+        Any const& perm = permissions[nPos];
         Type const & perm_type = perm.getValueType();
 
         // supported permission types

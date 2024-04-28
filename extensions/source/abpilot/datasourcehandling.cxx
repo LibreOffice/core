@@ -199,12 +199,8 @@ namespace abp
             m_pImpl->xContext.set( lcl_getDataSourceContext( _rxORB ), UNO_QUERY_THROW );
 
             // collect the data source names
-            Sequence< OUString > aDSNames = m_pImpl->xContext->getElementNames();
-            const OUString* pDSNames = aDSNames.getConstArray();
-            const OUString* pDSNamesEnd = pDSNames + aDSNames.getLength();
-
-            for ( ;pDSNames != pDSNamesEnd; ++pDSNames )
-                m_pImpl->aDataSourceNames.insert( *pDSNames );
+            for (auto& rDSName : m_pImpl->xContext->getElementNames())
+                m_pImpl->aDataSourceNames.insert(rDSName);
         }
         catch( const Exception& )
         {
@@ -487,10 +483,8 @@ namespace abp
                     aTableNames = xTables->getElementNames( );
 
                 // copy the names
-                const OUString* pTableNames = aTableNames.getConstArray();
-                const OUString* pTableNamesEnd = pTableNames + aTableNames.getLength();
-                for (;pTableNames < pTableNamesEnd; ++pTableNames)
-                    m_pImpl->aTables.insert( *pTableNames );
+                for (auto& rTableName : aTableNames)
+                    m_pImpl->aTables.insert(rTableName);
             }
             catch(const Exception&)
             {
