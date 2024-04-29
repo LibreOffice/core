@@ -287,23 +287,19 @@ typedef struct tagDRIVEENUM
 
 static HANDLE OpenLogicalDrivesEnum()
 {
-    LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) ));
-    if ( pEnum )
-    {
-        DWORD dwNumCopied = GetLogicalDriveStringsW( SAL_N_ELEMENTS(pEnum->cBuffer) - 1, pEnum->cBuffer );
+    auto xEnum = std::make_unique<DRIVEENUM>();
+    DWORD dwNumCopied = GetLogicalDriveStringsW( SAL_N_ELEMENTS(xEnum->cBuffer) - 1, xEnum->cBuffer );
 
-        if ( dwNumCopied && dwNumCopied < SAL_N_ELEMENTS(pEnum->cBuffer) )
-        {
-            pEnum->lpCurrent = pEnum->cBuffer;
-            pEnum->lpIdent = L"tagDRIVEENUM";
-        }
-        else
-        {
-            HeapFree( GetProcessHeap(), 0, pEnum );
-            pEnum = nullptr;
-        }
+    if ( dwNumCopied && dwNumCopied < SAL_N_ELEMENTS(xEnum->cBuffer) )
+    {
+        xEnum->lpCurrent = xEnum->cBuffer;
+        xEnum->lpIdent = L"tagDRIVEENUM";
     }
-    return pEnum ? static_cast<HANDLE>(pEnum) : INVALID_HANDLE_VALUE;
+    else
+    {
+        xEnum.reset();
+    }
+    return xEnum ? static_cast<HANDLE>(xEnum.release()) : INVALID_HANDLE_VALUE;
 }
 
 static bool EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
@@ -334,7 +330,7 @@ static bool CloseLogicalDrivesEnum(HANDLE hEnum)
 
     if ( pEnum )
     {
-        HeapFree( GetProcessHeap(), 0, pEnum );
+        delete pEnum;
         fSuccess = true;
     }
     else
@@ -370,20 +366,18 @@ static HANDLE OpenDirectory(const OUString& path)
     pos = std::copy_n(suffix.data(), suffix.length(), pos);
     *pos = 0;
 
-    LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
-    assert(pDirectory); // Don't handle OOM conditions
-    pDirectory->hFind = FindFirstFileW(szFileMask.get(), &pDirectory->aFirstData);
+    auto xDirectory = std::make_unique<DIRECTORY>();
+    xDirectory->hFind = FindFirstFileW(szFileMask.get(), &xDirectory->aFirstData);
 
-    if (!IsValidHandle(pDirectory->hFind))
+    if (!IsValidHandle(xDirectory->hFind))
     {
         if ( GetLastError() != ERROR_NO_MORE_FILES )
         {
-            HeapFree(GetProcessHeap(), 0, pDirectory);
-            pDirectory = nullptr;
+            xDirectory.reset();
         }
     }
 
-    return static_cast<HANDLE>(pDirectory);
+    return static_cast<HANDLE>(xDirectory.release());
 }
 
 static bool EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
@@ -430,7 +424,7 @@ static bool CloseDirectory(HANDLE hDirectory)
         if (IsValidHandle(pDirectory->hFind))
             fSuccess = FindClose(pDirectory->hFind);
 
-        fSuccess = HeapFree(GetProcessHeap(), 0, pDirectory) && fSuccess;
+        delete pDirectory;
     }
     else
         SetLastError(ERROR_INVALID_HANDLE);

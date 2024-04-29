@@ -658,20 +658,6 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 
 // code from setup2 project
 
-
-static void SHFree_( void *pv )
-{
-    IMalloc *pMalloc;
-    if( NOERROR == SHGetMalloc(&pMalloc) )
-    {
-        pMalloc->Free( pv );
-        pMalloc->Release();
-    }
-}
-
-#define ALLOC(type, n) static_cast<type *>(HeapAlloc(GetProcessHeap(), 0, sizeof(type) * n ))
-#define FREE(p) HeapFree(GetProcessHeap(), 0, p)
-
 static OUString SHGetSpecialFolder( int nFolderID )
 {
 
@@ -681,14 +667,9 @@ static OUString SHGetSpecialFolder( int nFolderID )
 
     if( hHdl == NOERROR )
     {
-        if (WCHAR *lpFolderA = ALLOC(WCHAR, 16000))
-        {
-            SHGetPathFromIDListW(pidl, lpFolderA);
-            aFolder = o3tl::toU(lpFolderA);
-
-            FREE(lpFolderA);
-            SHFree_(pidl);
-        }
+        auto xFolder = std::make_unique<WCHAR[]>(16000);
+        SHGetPathFromIDListW(pidl, xFolder.get());
+        aFolder = o3tl::toU(xFolder.get());
     }
 
     return aFolder;
