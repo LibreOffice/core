@@ -46,7 +46,7 @@ typedef ::cppu::ImplInheritanceHelper
 > SwXBookmark_Base;
 
 /// UNO API wrapper around an internal sw::mark::IMark.
-class SwXBookmark
+class SAL_DLLPUBLIC_RTTI SwXBookmark
     : public SwXBookmark_Base
 {
 
