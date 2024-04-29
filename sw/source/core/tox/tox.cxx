@@ -240,7 +240,7 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
     , m_eType(rCopy.m_eType)
 {
     if (auto pRegisteredIn = const_cast<SwTOXType&>(rCopy).GetRegisteredIn())
-        pRegisteredIn->Add(this);
+        pRegisteredIn->Add(*this);
 }
 
 const TranslateId STR_POOLCOLL_TOX_ARY[] =
@@ -571,7 +571,7 @@ SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )
 
 void SwTOXBase::RegisterToTOXType( SwTOXType& rType )
 {
-    rType.Add( this );
+    rType.Add(*this);
 }
 
 void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
@@ -601,7 +601,7 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
         if( !bFound )
             pType = const_cast<SwTOXType*>(pDoc->InsertTOXType( *pType ));
     }
-    pType->Add( this );
+    pType->Add(*this);
 
     m_nCreateType = rSource.m_nCreateType;
     m_aTitle      = rSource.m_aTitle;

@@ -87,7 +87,7 @@ void SwTextTOXMark::CopyTOXMark( SwDoc& rDoc )
     }
 
     // register at target tox type
-    const_cast<SwTOXType*>(pType)->Add( &rTOX );
+    const_cast<SwTOXType*>(pType)->Add(rTOX);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -466,7 +466,7 @@ public:
     virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override
     {
         if(dynamic_cast<const sw::DocumentDyingHint*>(&rHint))
-            GetRegisteredIn()->Remove(this);
+            GetRegisteredIn()->Remove(*this);
         else
             SwClient::SwClientNotify(rMod, rHint);
     }

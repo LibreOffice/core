@@ -60,7 +60,7 @@ SwClient::SwClient(SwClient&& o) noexcept
 {
     if(o.m_pRegisteredIn)
     {
-        o.m_pRegisteredIn->Add(this);
+        o.m_pRegisteredIn->Add(*this);
         o.EndListeningAll();
     }
 }
@@ -71,7 +71,7 @@ SwClient::~SwClient()
         DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !m_pRegisteredIn || m_pRegisteredIn->HasWriterListeners(), "SwModify still known, but Client already disconnected!" );
     if( m_pRegisteredIn && m_pRegisteredIn->HasWriterListeners() )
-        m_pRegisteredIn->Remove( this );
+        m_pRegisteredIn->Remove(*this);
 }
 
 std::optional<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolItem* pOld )
@@ -94,7 +94,7 @@ std::optional<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolI
     {
         // if the dying object itself was listening at an SwModify, I take over
         // adding myself to pAbove will automatically remove me from my current pRegisteredIn
-        pAbove->Add(this);
+        pAbove->Add(*this);
     }
     else
     {
@@ -110,7 +110,7 @@ void SwClient::CheckRegistrationFormat(SwFormat& rOld)
     auto pNew = rOld.DerivedFrom();
     SAL_INFO("sw.core", "reparenting " << typeid(*this).name() << " at " << this << " from " << typeid(rOld).name() << " at " << &rOld << " to "  << typeid(*pNew).name() << " at " << pNew);
     assert(pNew);
-    pNew->Add(this);
+    pNew->Add(*this);
     const SwFormatChg aOldFormat(&rOld);
     const SwFormatChg aNewFormat(pNew);
     const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
@@ -128,7 +128,7 @@ void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 void SwClient::StartListeningToSameModifyAs(const SwClient& other)
 {
     if(other.m_pRegisteredIn)
-        other.m_pRegisteredIn->Add(this);
+        other.m_pRegisteredIn->Add(*this);
     else
         EndListeningAll();
 }
@@ -136,7 +136,7 @@ void SwClient::StartListeningToSameModifyAs(const SwClient& other)
 void SwClient::EndListeningAll()
 {
     if(m_pRegisteredIn)
-        m_pRegisteredIn->Remove(this);
+        m_pRegisteredIn->Remove(*this);
 }
 
 SwModify::~SwModify()
@@ -169,7 +169,7 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
     return true;
 }
 
-void SwModify::Add( SwClient* pDepend )
+void SwModify::Add(SwClient& rDepend)
 {
     DBG_TESTSOLARMUTEX();
 #ifdef DBG_UTIL
@@ -185,44 +185,44 @@ void SwModify::Add( SwClient* pDepend )
     }
 #endif
 
-    if(pDepend->m_pRegisteredIn == this)
+    if (rDepend.m_pRegisteredIn == this)
         return;
 
     // deregister new client in case it is already registered elsewhere
-    if( pDepend->m_pRegisteredIn != nullptr )
-        pDepend->m_pRegisteredIn->Remove( pDepend );
+    if( rDepend.m_pRegisteredIn != nullptr )
+        rDepend.m_pRegisteredIn->Remove(rDepend);
 
     if( !m_pWriterListeners )
     {
         // first client added
-        m_pWriterListeners = pDepend;
+        m_pWriterListeners = &rDepend;
         m_pWriterListeners->m_pLeft = nullptr;
         m_pWriterListeners->m_pRight = nullptr;
     }
     else
     {
         // append client
-        pDepend->m_pRight = m_pWriterListeners->m_pRight;
-        m_pWriterListeners->m_pRight = pDepend;
-        pDepend->m_pLeft = m_pWriterListeners;
-        if( pDepend->m_pRight )
-            pDepend->m_pRight->m_pLeft = pDepend;
+        rDepend.m_pRight = m_pWriterListeners->m_pRight;
+        m_pWriterListeners->m_pRight = &rDepend;
+        rDepend.m_pLeft = m_pWriterListeners;
+        if( rDepend.m_pRight )
+            rDepend.m_pRight->m_pLeft = &rDepend;
     }
 
     // connect client to me
-    pDepend->m_pRegisteredIn = this;
+    rDepend.m_pRegisteredIn = this;
 }
 
-SwClient* SwModify::Remove( SwClient* pDepend )
+void SwModify::Remove(SwClient& rDepend)
 {
     DBG_TESTSOLARMUTEX();
-    assert(pDepend->m_pRegisteredIn == this);
+    assert(rDepend.m_pRegisteredIn == this);
 
     // SwClient is my listener
     // remove it from my list
-    ::sw::WriterListener* pR = pDepend->m_pRight;
-    ::sw::WriterListener* pL = pDepend->m_pLeft;
-    if( m_pWriterListeners == pDepend )
+    ::sw::WriterListener* pR = rDepend.m_pRight;
+    ::sw::WriterListener* pL = rDepend.m_pLeft;
+    if( m_pWriterListeners == &rDepend )
         m_pWriterListeners = pL ? pL : pR;
 
     if( pL )
@@ -236,7 +236,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
         {
             if (&rIter.m_rRoot == this &&
-                (rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend))
+                (rIter.m_pCurrent == &rDepend || rIter.m_pPosition == &rDepend))
             {
                 // if object being removed is the current or next object in an
                 // iterator, advance this iterator
@@ -244,10 +244,9 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             }
         }
     }
-    pDepend->m_pLeft = nullptr;
-    pDepend->m_pRight = nullptr;
-    pDepend->m_pRegisteredIn = nullptr;
-    return pDepend;
+    rDepend.m_pLeft = nullptr;
+    rDepend.m_pRight = nullptr;
+    rDepend.m_pRegisteredIn = nullptr;
 }
 
 sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)

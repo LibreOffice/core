@@ -574,29 +574,29 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 
         if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
-            aCallMod.Add( mpDfltTextFormatColl.get() );
-            aCallMod.Add( mpDfltCharFormat.get() );
+            aCallMod.Add(*mpDfltTextFormatColl);
+            aCallMod.Add(*mpDfltCharFormat);
             bCheckSdrDflt = nullptr != pSdrPool;
         }
         else if ( isPARATR(nWhich) ||
                   isPARATR_LIST(nWhich) )
         {
-            aCallMod.Add( mpDfltTextFormatColl.get() );
+            aCallMod.Add(*mpDfltTextFormatColl);
             bCheckSdrDflt = nullptr != pSdrPool;
         }
         else if (isGRFATR(nWhich))
         {
-            aCallMod.Add( mpDfltGrfFormatColl.get() );
+            aCallMod.Add(*mpDfltGrfFormatColl);
         }
         else if (isFRMATR(nWhich) || isDrawingLayerAttribute(nWhich) )
         {
-            aCallMod.Add( mpDfltGrfFormatColl.get() );
-            aCallMod.Add( mpDfltTextFormatColl.get() );
-            aCallMod.Add( mpDfltFrameFormat.get() );
+            aCallMod.Add(*mpDfltGrfFormatColl);
+            aCallMod.Add(*mpDfltTextFormatColl);
+            aCallMod.Add(*mpDfltFrameFormat);
         }
         else if (isBOXATR(nWhich))
         {
-            aCallMod.Add( mpDfltFrameFormat.get() );
+            aCallMod.Add(*mpDfltFrameFormat);
         }
 
         // also copy the defaults
@@ -670,7 +670,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     // remove the default formats from the object again
     SwIterator<SwClient, sw::BroadcastingModify> aClientIter(aCallMod);
     for(SwClient* pClient = aClientIter.First(); pClient; pClient = aClientIter.Next())
-        aCallMod.Remove( pClient );
+        aCallMod.Remove(*pClient);
 
     getIDocumentState().SetModified();
 }

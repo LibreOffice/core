@@ -229,7 +229,7 @@ SwTable::~SwTable()
 
     // the table can be deleted if it's the last client of the FrameFormat
     SwTableFormat* pFormat = GetFrameFormat();
-    pFormat->Remove( this );               // remove
+    pFormat->Remove(*this);               // remove
 
     if( !pFormat->HasWriterListeners() )
         pFormat->GetDoc()->DelTableFrameFormat( pFormat );   // and delete
@@ -1479,7 +1479,7 @@ SwTableLine::~SwTableLine()
     }
     // the TabelleLine can be deleted if it's the last client of the FrameFormat
     sw::BroadcastingModify* pMod = GetFrameFormat();
-    pMod->Remove( this );               // remove,
+    pMod->Remove(*this);               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
 }
@@ -1508,7 +1508,7 @@ SwFrameFormat* SwTableLine::ClaimFrameFormat()
                     pFrame->RegisterToFormat( *pNewFormat );
 
             // register myself
-            pNewFormat->Add( this );
+            pNewFormat->Add(*this);
             pRet = pNewFormat;
             break;
         }
@@ -1522,7 +1522,7 @@ void SwTableLine::ChgFrameFormat(SwTableLineFormat* pNewFormat)
     auto pOld = GetFrameFormat();
     pOld->CallSwClientNotify(sw::TableLineFormatChanged(*pNewFormat, *this));
     // Now, re-register self.
-    pNewFormat->Add(this);
+    pNewFormat->Add(*this);
     if(!pOld->HasWriterListeners())
         delete pOld;
 }
@@ -2021,7 +2021,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLin
     , mbDirectFormatting(false)
 {
     m_aLines.reserve( nLines );
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->Add(*this);
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
@@ -2033,7 +2033,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->Add(*this);
 
     m_pStartNode = rIdx.GetNode().GetStartNode();
 
@@ -2055,7 +2055,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->Add(*this);
 
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
@@ -2090,7 +2090,7 @@ SwTableBox::~SwTableBox()
 
     // the TabelleBox can be deleted if it's the last client of the FrameFormat
     sw::BroadcastingModify* pMod = GetFrameFormat();
-    pMod->Remove( this );               // remove,
+    pMod->Remove(*this);               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
 }
@@ -2147,7 +2147,7 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
                     pCell->RegisterToFormat( *pNewFormat );
 
             // re-register myself
-            pNewFormat->Add( this );
+            pNewFormat->Add(*this);
             pRet = pNewFormat;
             break;
         }
@@ -2164,7 +2164,7 @@ void SwTableBox::ChgFrameFormat(SwTableBoxFormat* pNewFormat, bool bNeedToReregi
     if(bNeedToReregister)
         pOld->CallSwClientNotify(sw::TableBoxFormatChanged(*pNewFormat, *this));
     // Now, re-register self.
-    pNewFormat->Add(this);
+    pNewFormat->Add(*this);
     if(!pOld->HasWriterListeners())
         delete pOld;
 }
@@ -3224,7 +3224,7 @@ const SwTableBox * SwTableCellInfo::getTableBox() const
 
 void SwTable::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    rFormat.Add(*this);
 }
 
 bool SwTable::HasLayout() const
@@ -3236,7 +3236,7 @@ bool SwTable::HasLayout() const
 
 void SwTableBox::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    rFormat.Add(*this);
 }
 
 // free's any remaining child objects

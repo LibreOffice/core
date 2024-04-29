@@ -4411,7 +4411,7 @@ void SwRowFrame::DestroyImpl()
     sw::BroadcastingModify* pMod = GetFormat();
     if( pMod )
     {
-        pMod->Remove( this );
+        pMod->Remove(*this);
         if( !pMod->HasWriterListeners() )
             delete pMod;
     }
@@ -4479,7 +4479,7 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 
         if(GetTabLine() != &pMoveTableLineHint->m_rTableLine)
             return;
-        const_cast<SwFrameFormat*>(&pMoveTableLineHint->m_rNewFormat)->Add(this);
+        const_cast<SwFrameFormat*>(&pMoveTableLineHint->m_rNewFormat)->Add(*this);
         InvalidateAll();
         ReinitializeFrameSizeAttrFlags();
         return;
@@ -5508,7 +5508,7 @@ void SwCellFrame::DestroyImpl()
         }
 #endif
 
-        pMod->Remove( this );
+        pMod->Remove(*this);
         if( !pMod->HasWriterListeners() )
             delete pMod;
     }
@@ -6059,7 +6059,7 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         if(GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
             return;
-        const_cast<SwFrameFormat*>(&pMoveTableBoxHint->m_rNewFormat)->Add(this);
+        const_cast<SwFrameFormat*>(&pMoveTableBoxHint->m_rNewFormat)->Add(*this);
         InvalidateAll();
         ReinitializeFrameSizeAttrFlags();
         SetDerivedVert(false);

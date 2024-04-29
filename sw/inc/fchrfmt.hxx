@@ -65,7 +65,7 @@ public:
     void SetCharFormat( SwFormat* pFormat )
     {
         assert(!pFormat->IsDefault()); // expose cases that lead to use-after-free
-        pFormat->Add(this);
+        pFormat->Add(*this);
     }
     SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
 

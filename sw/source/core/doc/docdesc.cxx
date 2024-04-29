@@ -461,7 +461,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
             auto lDelHFFormat = [this](SwClient* pToRemove, SwFrameFormat* pFormat)
             {
                 // Code taken from lcl_DelHFFormat
-                pFormat->Remove(pToRemove);
+                pFormat->Remove(*pToRemove);
                 SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
                 if (rCnt.GetContentIdx())
                 {

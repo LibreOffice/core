@@ -52,7 +52,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
 
     if( pDrvdFrame )
     {
-        pDrvdFrame->Add(this);
+        pDrvdFrame->Add(*this);
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
     }
 }
@@ -73,7 +73,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, OUString aFormatNm,
 
     if( pDrvdFrame )
     {
-        pDrvdFrame->Add(this);
+        pDrvdFrame->Add(*this);
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
     }
 }
@@ -94,7 +94,7 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
 
     if( auto pDerived = rFormat.DerivedFrom() )
     {
-        pDerived->Add(this);
+        pDerived->Add(*this);
         m_aSet.SetParent( &pDerived->m_aSet );
     }
     // a few special treatments for attributes
@@ -257,7 +257,7 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
                 if(pFormat->GetRegisteredIn())
                 {
                     // if parent so register in new parent
-                    pFormat->DerivedFrom()->Add(this);
+                    pFormat->DerivedFrom()->Add(*this);
                     m_aSet.SetParent(&DerivedFrom()->m_aSet);
                 }
                 else
@@ -354,7 +354,7 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
     InvalidateInSwCache(RES_ATTRSET_CHG);
     InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
-    pDerFrom->Add( this );
+    pDerFrom->Add(*this);
     m_aSet.SetParent( &pDerFrom->m_aSet );
 
     SwFormatChg aOldFormat( this );

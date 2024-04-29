@@ -230,7 +230,7 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
                         ? pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId )
                         : pDoc->MakeCharFormat( rCharStyleName, nullptr );
         }
-        pCFormat->Add( this );
+        pCFormat->Add(*this);
     }
     else
         EndListeningAll();
@@ -288,7 +288,7 @@ bool SwNumFormat::operator==( const SwNumFormat& rNumFormat) const
 void SwNumFormat::SetCharFormat( SwCharFormat* pChFormat)
 {
     if( pChFormat )
-        pChFormat->Add( this );
+        pChFormat->Add(*this);
     else
         EndListeningAll();
 }

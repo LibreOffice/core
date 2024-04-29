@@ -413,7 +413,7 @@ void SwLayoutFrame::SetFrameFormat(SwFrameFormat* pNew)
     if(pNew == GetFormat())
         return;
     const SwFormatChg aOldFormat(GetFormat());
-    pNew->Add(this);
+    pNew->Add(*this);
     const SwFormatChg aNewFormat(pNew);
     SwClientNotify(*pNew, sw::LegacyModifyHint(&aOldFormat, &aNewFormat));
 }
@@ -480,7 +480,7 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
     m_pMergedPara = sw::CheckParaRedlineMerge(*this, rFirstNode, sw::FrameMode::New);
     if (!m_pMergedPara)
     {
-        rNode.Add(this);
+        rNode.Add(*this);
     }
 }
 

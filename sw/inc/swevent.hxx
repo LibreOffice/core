@@ -85,10 +85,10 @@ struct SwCallMouseEvent final
     }
 
     void Set( SwCallEventObjectType eTyp, const SwFrameFormat* pFormat )
-        { Clear(); eType = eTyp; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = nullptr; assert(pFormat); const_cast<SwFrameFormat*>(pFormat)->Add(this); }
+        { Clear(); eType = eTyp; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = nullptr; assert(pFormat); const_cast<SwFrameFormat*>(pFormat)->Add(*this); }
 
     void Set( const SwFrameFormat* pFormat, const IMapObject* pIMapObj )
-        { Clear(); eType = EVENT_OBJECT_IMAGEMAP; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = pIMapObj; assert(pFormat); const_cast<SwFrameFormat*>(pFormat)->Add(this); }
+        { Clear(); eType = EVENT_OBJECT_IMAGEMAP; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = pIMapObj; assert(pFormat); const_cast<SwFrameFormat*>(pFormat)->Add(*this); }
 
     void Set( const SwFormatINetFormat* pINetAttr )
         { Clear(); eType = EVENT_OBJECT_INETATTR; PTR.pINetAttr = pINetAttr; PTR.IMAP.pIMapObj = nullptr; }

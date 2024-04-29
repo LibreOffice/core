@@ -223,7 +223,7 @@ SwSection::~SwSection()
     }
     else
     {
-        pFormat->Remove( this ); // remove
+        pFormat->Remove(*this); // remove
         SvtListener::EndListeningAll();
 
         if (SectionType::Content != m_Data.GetType())

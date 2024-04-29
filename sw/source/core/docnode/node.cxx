@@ -1080,7 +1080,7 @@ SwContentNode::SwContentNode( const SwNode& rWhere, const SwNodeType nNdType,
     , mbSetModifyAtAttr( false )
 {
     if(pColl)
-        pColl->Add(this);
+        pColl->Add(*this);
 }
 
 SwContentNode::~SwContentNode()
@@ -1099,6 +1099,7 @@ SwContentNode::~SwContentNode()
         const_cast<SwAttrSet*>(mpAttrSet.get())->SetModifyAtAttr( nullptr );
     InvalidateInSwCache(RES_OBJECTDYING);
 }
+
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 {
     if (GetNodes().IsDocNodes()
@@ -1255,7 +1256,7 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
 
     if( pNewColl != pOldColl )
     {
-        pNewColl->Add( this );
+        pNewColl->Add(*this);
 
         // Set the Parent of out AutoAttributes to the new Collection
         if( GetpSwAttrSet() )

@@ -3272,13 +3272,13 @@ void SwShareBoxFormats::ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn,
     if( pBox )
     {
         pOld = pBox->GetFrameFormat();
-        pOld->Add( &aCl );
+        pOld->Add(aCl);
         pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(&rFormat) );
     }
     else if( pLn )
     {
         pOld = pLn->GetFrameFormat();
-        pOld->Add( &aCl );
+        pOld->Add(aCl);
         pLn->ChgFrameFormat( static_cast<SwTableLineFormat*>(&rFormat) );
     }
     if( pOld && pOld->HasOnlyOneListener() )

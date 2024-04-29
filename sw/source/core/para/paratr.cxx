@@ -69,7 +69,7 @@ void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
     // Rewire
     EndListeningAll();
     if(pNew)
-        pNew->Add( this );
+        pNew->Add(*this);
 }
 
 bool SwFormatDrop::GetInfo( SfxPoolItem& ) const

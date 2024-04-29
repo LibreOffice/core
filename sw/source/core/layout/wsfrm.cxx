@@ -367,7 +367,7 @@ bool SwFrame::KnowsFormat( const SwFormat& rFormat ) const
 
 void SwFrame::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    rFormat.Add(*this);
 }
 
 void SwFrame::CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool bBrowse )

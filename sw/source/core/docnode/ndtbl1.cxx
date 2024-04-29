@@ -90,14 +90,14 @@ SwTableFormatCmp::SwTableFormatCmp(SwFrameFormat* pO, SwFrameFormat* pN, sal_Int
     , m_nType(nT)
 {
     if (m_pOld)
-        m_pOld->Add(this);
+        m_pOld->Add(*this);
 }
 
 SwTableFormatCmp::~SwTableFormatCmp()
 {
     if (m_pOld)
     {
-        m_pOld->Remove(this);
+        m_pOld->Remove(*this);
         if (!m_pOld->HasWriterListeners())
             delete m_pOld;
     }

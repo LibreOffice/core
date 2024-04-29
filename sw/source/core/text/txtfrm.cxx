@@ -1400,7 +1400,7 @@ void SwTextFrame::SetMergedPara(std::unique_ptr<sw::MergedPara> p)
         }
         else
         {
-            pFirst->Add(this); // must register at node again
+            pFirst->Add(*this); // must register at node again
         }
     }
     // postcondition: frame must be listening somewhere

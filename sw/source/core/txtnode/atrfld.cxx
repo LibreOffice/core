@@ -60,7 +60,7 @@ SwFormatField::SwFormatField( const SwField &rField )
     , mpTextField( nullptr )
 {
     setNonShareable();
-    rField.GetTyp()->Add(this);
+    rField.GetTyp()->Add(*this);
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
         // input field in-place editing
@@ -101,7 +101,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
     if ( !rAttr.mpField )
         return;
 
-    rAttr.mpField->GetTyp()->Add(this);
+    rAttr.mpField->GetTyp()->Add(*this);
     mpField = rAttr.mpField->CopyField();
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
@@ -165,14 +165,14 @@ SwFormatField::~SwFormatField()
     if( bDel )
     {
         // unregister before deleting
-        pType->Remove( this );
+        pType->Remove(*this);
         delete pType;
     }
 }
 
 void SwFormatField::RegisterToFieldType( SwFieldType& rType )
 {
-    rType.Add(this);
+    rType.Add(*this);
 }
 
 void SwFormatField::SetField(std::unique_ptr<SwField> _pField)
@@ -601,7 +601,7 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
         }
 
         OSL_ENSURE( pFieldType, "unknown FieldType" );
-        pFieldType->Add( &rDestFormatField ); // register at the field type
+        pFieldType->Add(rDestFormatField); // register at the field type
         rDestFormatField.GetField()->ChgTyp( pFieldType );
     }
 

@@ -25,7 +25,7 @@ private:
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if (pLegacy->GetWhich() == RES_OBJECTDYING)
         {
-            m_pModify->Remove(this);
+            m_pModify->Remove(*this);
             m_pModify = nullptr;
         }
     }
@@ -34,7 +34,7 @@ public:
     SwDeleteListener(SwModify& rModify)
         : m_pModify(&rModify)
     {
-        m_pModify->Add(this);
+        m_pModify->Add(*this);
     }
 
     bool WasDeleted() const { return !m_pModify; }
@@ -43,7 +43,7 @@ public:
     {
         if (!m_pModify)
             return;
-        m_pModify->Remove(this);
+        m_pModify->Remove(*this);
     }
 };
 

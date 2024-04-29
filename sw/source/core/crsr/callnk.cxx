@@ -136,7 +136,7 @@ void SwCallLink::ImplDestroy()
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.
-    pCNd->Add( &m_rShell );
+    pCNd->Add(m_rShell);
 
     const bool bCurrentHasSelection = (*pCurrentCursor->GetPoint() != *pCurrentCursor->GetMark());
 

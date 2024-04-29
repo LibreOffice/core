@@ -198,8 +198,8 @@ public:
 
     virtual ~SwModify() override;
 
-    void Add(SwClient *pDepend);
-    SwClient* Remove(SwClient *pDepend);
+    void Add(SwClient& rDepend);
+    void Remove(SwClient& rDepend);
     bool HasWriterListeners() const { return m_pWriterListeners; }
     bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 
@@ -248,7 +248,7 @@ namespace sw
         ListenerEntry& operator=(ListenerEntry&& other) noexcept
         {
             m_pToTell = other.m_pToTell;
-            other.GetRegisteredIn()->Add(this);
+            other.GetRegisteredIn()->Add(*this);
             other.EndListeningAll();
             return *this;
         }
@@ -275,8 +275,8 @@ namespace sw
     };
     class ClientIteratorBase : public sw::Ring< ::sw::ClientIteratorBase >
     {
-            friend SwClient* SwModify::Remove(SwClient*);
-            friend void SwModify::Add(SwClient*);
+            friend void SwModify::Remove(SwClient&);
+            friend void SwModify::Add(SwClient&);
         protected:
             const SwModify& m_rRoot;
             // the current object in an iteration
@@ -424,7 +424,7 @@ SwClient::SwClient( SwModify* pToRegisterIn )
     : m_pRegisteredIn( nullptr )
 {
     if(pToRegisterIn)
-        pToRegisterIn->Add(this);
+        pToRegisterIn->Add(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

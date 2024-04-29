@@ -4732,7 +4732,7 @@ void wwExtraneousParas::remove_if_present(SwModify* pModify)
 TextNodeListener::TextNodeListener(SwTextNode* pTextNode)
     : m_pTextNode(pTextNode)
 {
-    m_pTextNode->Add(this);
+    m_pTextNode->Add(*this);
 }
 
 TextNodeListener::~TextNodeListener()
@@ -4756,7 +4756,7 @@ void TextNodeListener::SwClientNotify(const SwModify& rModify, const SfxHint& rH
 
 void TextNodeListener::StopListening(SwModify* pTextNode)
 {
-    pTextNode->Remove(this);
+    pTextNode->Remove(*this);
     m_pTextNode = nullptr;
 }
 

@@ -704,7 +704,7 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     m_pTextNode = pTextNode;
     if (m_pTextNode && (GetRegisteredIn() != m_pTextNode))
     {
-        m_pTextNode->Add(this);
+        m_pTextNode->Add(*this);
     }
     else if (!m_pTextNode)
     {

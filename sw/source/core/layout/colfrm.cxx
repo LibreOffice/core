@@ -54,7 +54,7 @@ void SwColumnFrame::DestroyImpl()
     {
         //I'm the only one, delete the format.
         //Get default format before, so the base class can cope with it.
-        pDoc->GetDfltFrameFormat()->Add( this );
+        pDoc->GetDfltFrameFormat()->Add(*this);
         // tdf#134009, like #i32968# avoid SwUndoFrameFormatDelete creation,
         // the format is owned by the SwColumnFrame, see lcl_AddColumns()
         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());

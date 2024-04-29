@@ -169,7 +169,7 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
     }
 
     if ( pRet )
-        pRet->Add( this );
+        pRet->Add(*this);
     else
         EndListeningAll();
 
@@ -270,7 +270,7 @@ SwCharFormat* SwTextRuby::GetCharFormat()
     }
 
     if( pRet )
-        pRet->Add( this );
+        pRet->Add(*this);
     else
         EndListeningAll();
 

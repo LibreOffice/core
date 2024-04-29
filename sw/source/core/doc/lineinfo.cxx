@@ -101,7 +101,7 @@ SwCharFormat* SwLineNumberInfo::GetCharFormat( IDocumentStylePoolAccess& rIDSPA 
     if ( !GetRegisteredIn() )
     {
         SwCharFormat* pFormat = rIDSPA.GetCharFormatFromPool( RES_POOLCHR_LINENUM );
-        pFormat->Add( const_cast<SwLineNumberInfo*>(this) );
+        pFormat->Add(const_cast<SwLineNumberInfo&>(*this));
     }
     return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn()));
 }
@@ -109,7 +109,7 @@ SwCharFormat* SwLineNumberInfo::GetCharFormat( IDocumentStylePoolAccess& rIDSPA 
 void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
 {
     OSL_ENSURE( pChFormat, "SetCharFormat, 0 is not a valid pointer" );
-    pChFormat->Add( this );
+    pChFormat->Add(*this);
 }
 
 void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)

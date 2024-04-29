@@ -1117,7 +1117,7 @@ void SaveTable::NewFrameFormatForLine(const SwTableLine& rTableLn, sal_uInt16 nF
     if(!pFormat)
         pFormat = &CreateNewFormat(*pOldFormat->GetDoc()->MakeTableLineFormat(), nFormatPos);
     pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, rTableLn));
-    pFormat->Add(const_cast<SwTableLine*>(&rTableLn));
+    pFormat->Add(const_cast<SwTableLine&>(rTableLn));
     KillEmptyFrameFormat(*pOldFormat);
 }
 

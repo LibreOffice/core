@@ -1484,7 +1484,7 @@ void SwRegHistory::RegisterInModify( sw::BroadcastingModify* pRegIn, const SwNod
 {
     if ( m_pHistory && pRegIn )
     {
-        pRegIn->Add( this );
+        pRegIn->Add(*this);
         m_nNodeIndex = rNd.GetIndex();
         MakeSetWhichIds();
     }

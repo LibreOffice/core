@@ -1671,10 +1671,10 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(nullptr),aClient1.GetRegisteredIn());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(nullptr),aClient2.GetRegisteredIn());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(nullptr),aClient2.GetRegisteredIn());
-    aMod.Add(&aClient1);
+    aMod.Add(aClient1);
     CPPUNIT_ASSERT(aMod.HasWriterListeners());
     CPPUNIT_ASSERT(aMod.HasOnlyOneListener());
-    aMod.Add(&aClient2);
+    aMod.Add(aClient2);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(&aMod),aClient1.GetRegisteredIn());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(&aMod), aClient2.GetRegisteredIn());
     CPPUNIT_ASSERT(aMod.HasWriterListeners());
@@ -1716,7 +1716,7 @@ void SwDocTest::testClientModify()
         }
         CPPUNIT_ASSERT_EQUAL(2,nCount);
     }
-    aMod.Add(&aOtherClient1);
+    aMod.Add(aOtherClient1);
     CPPUNIT_ASSERT_EQUAL(0,aOtherClient1.m_nModifyCount);
     {
         int nCount = 0;
@@ -1729,7 +1729,7 @@ void SwDocTest::testClientModify()
         CPPUNIT_ASSERT_EQUAL(2,nCount);
     }
     CPPUNIT_ASSERT_EQUAL(0,aOtherClient1.m_nModifyCount);
-    aMod.Remove(&aOtherClient1);
+    aMod.Remove(aOtherClient1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(&aMod),aClient1.GetRegisteredIn());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(&aMod),aClient2.GetRegisteredIn());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwModify*>(nullptr),aOtherClient1.GetRegisteredIn());
@@ -1739,7 +1739,7 @@ void SwDocTest::testClientModify()
         SwIterator<TestClient,SwModify> aIter(aMod);
         for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
         {
-            aMod.Remove(pClient);
+            aMod.Remove(*pClient);
             ++nCount;
         }
         CPPUNIT_ASSERT_EQUAL(2,nCount);
@@ -1765,7 +1765,7 @@ void SwDocTest::testBroadcastingModify()
     TestClient aClient;
     TestListener aListener;
 
-    aMod.Add(&aClient);
+    aMod.Add(aClient);
     aListener.StartListening(aMod.GetNotifier());
 
     aMod.CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
@@ -1789,7 +1789,7 @@ void SwDocTest::testWriterMultiListener()
     int nPreDeathChangedCount;
     {
         TestModify aTempMod;
-        aMod.Add(&aTempMod);
+        aMod.Add(aTempMod);
         aMulti.StartListening(&aTempMod);
         nPreDeathChangedCount = aClient.m_nModifyChangedCount;
     }

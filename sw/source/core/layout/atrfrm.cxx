@@ -151,7 +151,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     //If the client is the last one who uses this format, then we have to delete
     //it - before this is done, we may need to delete the content-section.
     SwDoc* pDoc = pFormat->GetDoc();
-    pFormat->Remove( pToRemove );
+    pFormat->Remove(*pToRemove);
     if( pDoc->IsInDtor() )
     {
         delete pFormat;
@@ -527,7 +527,7 @@ SwFormatHeader* SwFormatHeader::Clone( SfxItemPool* ) const
 
 void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add(this);
+    rFormat.Add(*this);
 }
 
 // Partially implemented inline in hxx
@@ -560,7 +560,7 @@ SwFormatFooter::SwFormatFooter( bool bOn )
 
 void SwFormatFooter::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add(this);
+    rFormat.Add(*this);
 }
 
 bool SwFormatFooter::operator==( const SfxPoolItem& rAttr ) const
@@ -722,7 +722,7 @@ void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
 void SwFormatPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
 {
-    rDesc.Add( this );
+    rDesc.Add(*this);
 }
 
 bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2183,7 +2183,7 @@ SwFormatChain* SwFormatChain::Clone( SfxItemPool* ) const
 void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
-        pFormat->Add( &m_aPrev );
+        pFormat->Add(m_aPrev);
     else
         m_aPrev.EndListeningAll();
 }
@@ -2191,7 +2191,7 @@ void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
 void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
-        pFormat->Add( &m_aNext );
+        pFormat->Add(m_aNext);
     else
         m_aNext.EndListeningAll();
 }
@@ -2760,7 +2760,7 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 
 void SwFrameFormat::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    rFormat.Add(*this);
 }
 
 /// Delete all Frames that are registered in aDepend.
@@ -3664,7 +3664,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
 
 void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat)
 {
-    Add(&rTableBox);
+    Add(rTableBox);
     if(!pOldFormat)
         return;
     const auto& rOld = pOldFormat->GetFormatAttr(RES_BOXATR_FORMAT);
@@ -3672,7 +3672,6 @@ void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOl
     if(rOld != rNew)
         SwClientNotify(*this, sw::LegacyModifyHint(&rOld, &rNew));
 }
-
 
 bool SwFrameFormat::IsVisible() const
 {

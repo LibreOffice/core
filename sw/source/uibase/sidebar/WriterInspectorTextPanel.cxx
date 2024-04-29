@@ -73,7 +73,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
         // tdf#154629 listen to know if the shell destructs before this panel does,
         // which can happen on entering print preview
-        m_pShell->Add(this);
+        m_pShell->Add(*this);
     }
 
     // Update panel on start
@@ -100,7 +100,7 @@ WriterInspectorTextPanel::~WriterInspectorTextPanel()
     if (m_pShell)
     {
         m_pShell->SetChgLnk(m_oldLink);
-        m_pShell->Remove(this);
+        m_pShell->Remove(*this);
     }
 }
 

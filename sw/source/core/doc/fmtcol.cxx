@@ -595,7 +595,7 @@ SwCollCondition::~SwCollCondition()
 
 void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    rFormat.Add(*this);
 }
 
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const

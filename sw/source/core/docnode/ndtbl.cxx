@@ -1007,7 +1007,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
             {
                 // Have to do an Add here, because the BoxFormat
                 // is still needed by the caller
-                pNewFormat->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ] );
+                pNewFormat->Add(*rLns[nTmpLine]->GetTabBoxes()[n]);
             }
 
             nLastPos = (*pPositions)[ n ];
@@ -1379,7 +1379,7 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
                         nWidth * (nMissing + 1)) );
-            pNewFormat->Add(rBoxes.back());
+            pNewFormat->Add(*rBoxes.back());
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
