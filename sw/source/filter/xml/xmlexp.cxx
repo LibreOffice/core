@@ -396,6 +396,7 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     static const std::initializer_list<std::u16string_view> vOmitFalseValues = {
         u"DoNotBreakWrappedTables",
         u"AllowTextAfterFloatingTableBreak",
+        u"DoNotMirrorRtlDrawObjs",
     };
     SvXMLUnitConverter::convertPropertySet( rProps, xProps, &vOmitFalseValues );
 

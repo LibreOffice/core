@@ -160,6 +160,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DROP_CAP_PUNCTUATION,
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
+    HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
 };
 
 }
@@ -266,6 +267,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
         { OUString("UseVariableWidthNBSP"), HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
         { OUString("ApplyTextAttrToEmptyLineAtEndOfParagraph"), HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
+        { OUString("DoNotMirrorRtlDrawObjs"), HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1086,6 +1088,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS, bTmp);
+            }
+        }
+        break;
         case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
         {
             bool bTmp;
@@ -1672,6 +1684,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH);
+        }
+        break;
+        case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
         }
         break;
         case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
