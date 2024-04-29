@@ -1123,6 +1123,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158451)
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf160827, "tdf160827.docx")
+{
+    // it crashes at import time
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
 {
     // Given a text with an URL with multiple spaces
