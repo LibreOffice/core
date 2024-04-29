@@ -133,7 +133,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     if (!xFact.is())
     {
         if (anyEx.hasValue())
-            throw css::lang::WrappedTargetRuntimeException( "", nullptr, anyEx );
+            throw css::lang::WrappedTargetRuntimeException( u""_ustr, nullptr, anyEx );
         else
             throw uno::RuntimeException();
     }
@@ -220,7 +220,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
 {
     uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
-        throw io::IOException("no XEncryptionProtectedStorage"); // TODO
+        throw io::IOException(u"no XEncryptionProtectedStorage"_ustr); // TODO
 
     if ( aEncryptionData.getLength() == 2 &&
          aEncryptionData[0].Name == "GpgInfos" &&
@@ -242,7 +242,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 
     OUString aMediaType;
-    xStorProps->getPropertyValue("MediaType") >>= aMediaType;
+    xStorProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
 
     sal_Int32 nResult = 0;
 
@@ -305,7 +305,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< beans::PropertyValue > aProps{ comphelper::makePropertyValue("StorageFormat",
+    uno::Sequence< beans::PropertyValue > aProps{ comphelper::makePropertyValue(u"StorageFormat"_ustr,
                                                                                 aFormat) };
 
     uno::Sequence< uno::Any > aArgs{ uno::Any(aURL), uno::Any(nStorageMode), uno::Any(aProps) };
@@ -443,7 +443,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     uno::Sequence < sal_Int8 > aVector(32);
     if (rtl_random_getBytes(aRandomPool, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
     {
-        throw uno::RuntimeException("rtl_random_getBytes failed");
+        throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
     }
 
     rtl_random_destroyPool(aRandomPool);
@@ -468,7 +468,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     std::unique_ptr<GpgME::Context> ctx;
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
     if (err)
-        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+        throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
 
     bool bResetContext = true;
     for (const auto & cert : xSignCertificates)
@@ -478,7 +478,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
             bResetContext = false;
             ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
             if (ctx == nullptr)
-                throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+                throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
             ctx->setArmor(false);
         }
 
@@ -535,21 +535,21 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
         if(crypt_res.error() || !len)
             throw lang::IllegalArgumentException(
-                "Not a suitable key, or failed to encrypt.",
+                u"Not a suitable key, or failed to encrypt."_ustr,
                 css::uno::Reference<css::uno::XInterface>(), -1);
 
         uno::Sequence < sal_Int8 > aCipherValue(len);
         result = cipher.seek(0,SEEK_SET);
         assert(result == 0);
         if( cipher.read(aCipherValue.getArray(), len) != len )
-            throw uno::RuntimeException("The GpgME library failed to read the encrypted value.");
+            throw uno::RuntimeException(u"The GpgME library failed to read the encrypted value."_ustr);
 
         SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
 
         uno::Sequence< beans::NamedValue > aGpgEncryptionEntry{
-            { "KeyId", uno::Any(aKeyID) },
-            { "KeyPacket", uno::Any(aKeyID) },
-            { "CipherValue", uno::Any(aCipherValue) }
+            { u"KeyId"_ustr, uno::Any(aKeyID) },
+            { u"KeyPacket"_ustr, uno::Any(aKeyID) },
+            { u"CipherValue"_ustr, uno::Any(aCipherValue) }
         };
 
         aGpgEncryptions.push_back(aGpgEncryptionEntry);
@@ -559,8 +559,8 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aVector) } };
 
     uno::Sequence<beans::NamedValue> aContainer
-        = { { "GpgInfos", uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
-            { "EncryptionKey", uno::Any(aEncryptionData) } };
+        = { { u"GpgInfos"_ustr, uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
+            { u"EncryptionKey"_ustr, uno::Any(aEncryptionData) } };
 
     return aContainer;
 #else
@@ -706,7 +706,7 @@ OUString OStorageHelper::GetODFVersionFromStorage(const uno::Reference<embed::XS
     try
     {
         uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue("Version") >>= aODFVersion;
+        xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
     }
     catch (uno::Exception&)
     {

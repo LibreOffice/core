@@ -65,7 +65,7 @@ OSeekableInputWrapper::OSeekableInputWrapper(
 , m_xOriginalStream(std::move( xInStream ))
 {
     if ( !m_xContext.is() )
-        throw lang::IllegalArgumentException("no component context", *this, 1);
+        throw lang::IllegalArgumentException(u"no component context"_ustr, *this, 1);
 }
 
 
@@ -92,7 +92,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
     if ( !m_xCopyInput.is() )
     {
         if ( !m_xContext.is() )
-            throw uno::RuntimeException("no component context");
+            throw uno::RuntimeException(u"no component context"_ustr);
 
         uno::Reference< io::XOutputStream > xTempOut(
                 io::TempFile::create(m_xContext),
@@ -112,7 +112,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
     }
 
     if ( !m_xCopyInput.is() )
-        throw io::IOException("no m_xCopyInput");
+        throw io::IOException(u"no m_xCopyInput"_ustr);
 }
 
 // XInputStream

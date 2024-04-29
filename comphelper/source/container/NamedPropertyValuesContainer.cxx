@@ -78,7 +78,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
 
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps ) )
-        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
+        throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
 
     maProperties.emplace( aName, aProps );
 }
@@ -101,7 +101,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps) )
-        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
+        throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
 
     (*aIter).second = aProps;
 }
@@ -145,7 +145,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  )
 {
-    return "NamedPropertyValuesContainer";
+    return u"NamedPropertyValuesContainer"_ustr;
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString&
 
 css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.NamedPropertyValues" };
+    return { u"com.sun.star.document.NamedPropertyValues"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

@@ -44,7 +44,7 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
 
     uno::Sequence<beans::PropertyValue> aProps;
     if (!(aElement >>= aProps))
-        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
+        throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
     if (nSize == nIndex)
         maProperties.push_back(aProps);
     else
@@ -68,7 +68,7 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
 
     uno::Sequence<beans::PropertyValue> aProps;
     if (!(aElement >>= aProps))
-        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
+        throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
     maProperties[nIndex] = aProps;
 }
 
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  )
 {
-    return "IndexedPropertyValuesContainer";
+    return u"IndexedPropertyValuesContainer"_ustr;
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUStrin
 
 css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.IndexedPropertyValues" };
+    return { u"com.sun.star.document.IndexedPropertyValues"_ustr };
 }
 
 } // namespace comphelper

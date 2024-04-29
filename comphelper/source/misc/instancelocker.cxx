@@ -123,13 +123,13 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
         sal_Int32 nLen = aArguments.getLength();
         if ( nLen < 2 || nLen > 3 )
             throw lang::IllegalArgumentException(
-                            "Wrong count of parameters!",
+                            u"Wrong count of parameters!"_ustr,
                             uno::Reference< uno::XInterface >(),
                             0 );
 
         if ( !( aArguments[0] >>= xInstance ) || !xInstance.is() )
             throw lang::IllegalArgumentException(
-                    "Nonempty reference is expected as the first argument!",
+                    u"Nonempty reference is expected as the first argument!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     0 );
 
@@ -143,14 +143,14 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
            )
         {
             throw lang::IllegalArgumentException(
-                    "The correct modes set is expected as the second argument!",
+                    u"The correct modes set is expected as the second argument!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     0 );
         }
 
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(
-                    "If the third argument is provided, it must be XActionsApproval implementation!",
+                    u"If the third argument is provided, it must be XActionsApproval implementation!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     0 );
 
@@ -173,7 +173,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 // XServiceInfo
 OUString SAL_CALL OInstanceLocker::getImplementationName(  )
 {
-    return "com.sun.star.comp.embed.InstanceLocker";
+    return u"com.sun.star.comp.embed.InstanceLocker"_ustr;
 }
 
 sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.InstanceLocker" };
+    return { u"com.sun.star.embed.InstanceLocker"_ustr };
 }
 
 // OLockListener

@@ -66,7 +66,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
@@ -94,7 +94,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Hours < rhs.Hours )
@@ -127,7 +127,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
@@ -216,12 +216,12 @@ namespace comphelper
             if (!lhsTypeDescr.is())
                 lhsTypeDescr.makeComplete();
             if (!lhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             TypeDescription rhsTypeDescr( rhsType );
             if (!rhsTypeDescr.is())
                 rhsTypeDescr.makeComplete();
             if (!rhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             int compare = compareTypes( lhsTypeDescr.get(), rhsTypeDescr.get());
             if( compare != 0 )
                 return compare < 0;
@@ -251,7 +251,7 @@ namespace comphelper
             {
                 TypeDescriptionRef memberType( ppTypeRefs[ nPos ] );
                 if (!memberType.is())
-                    throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                    throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
                 std::optional<bool> subLess = anyCompare(
                      static_cast< char const * >(
                          lhs ) + memberOffsets[ nPos ],
@@ -273,10 +273,10 @@ namespace comphelper
 
             TypeDescriptionRef lhsTypeDescr( lhsType );
             if (!lhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             TypeDescriptionRef rhsTypeDescr( rhsType );
             if (!rhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             int compare = compareTypes( lhsTypeDescr.get(), rhsTypeDescr.get());
             if( compare != 0 )
                 return compare < 0;
@@ -285,7 +285,7 @@ namespace comphelper
                 reinterpret_cast< typelib_IndirectTypeDescription * >(lhsTypeDescr.get())->pType;
             TypeDescriptionRef elementTypeDescr( elementTypeRef );
             if (!elementTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             assert( elementTypeDescr.equals( TypeDescriptionRef(
                         reinterpret_cast< typelib_IndirectTypeDescription * >(lhsTypeDescr.get())->pType )));
 
@@ -331,12 +331,12 @@ namespace comphelper
             if (!lhsTypeDescr.is())
                 lhsTypeDescr.makeComplete();
             if (!lhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             TypeDescription rhsTypeDescr( rhsType );
             if (!rhsTypeDescr.is())
                 rhsTypeDescr.makeComplete();
             if (!rhsTypeDescr.is())
-                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                throw css::lang::IllegalArgumentException(u"bad ordering"_ustr, css::uno::Reference<css::uno::XInterface>(), -1);
             int compare = compareTypes( lhsTypeDescr.get(), rhsTypeDescr.get());
             if( compare != 0 )
                 return compare < 0;

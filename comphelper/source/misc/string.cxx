@@ -368,7 +368,7 @@ OUString convertCommaSeparated(
 {
     OUStringBuffer buf;
     ::comphelper::intersperse(
-        i_rSeq.begin(), i_rSeq.end(), ::comphelper::OUStringBufferAppender(buf), OUString( ", " ));
+        i_rSeq.begin(), i_rSeq.end(), ::comphelper::OUStringBufferAppender(buf), u", "_ustr);
     return buf.makeStringAndClear();
 }
 

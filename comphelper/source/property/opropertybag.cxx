@@ -89,11 +89,11 @@ namespace comphelper
         } else {
             ::comphelper::NamedValueCollection aArguments( _rArguments );
 
-            if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
+            if ( aArguments.get_ensureType( u"AllowedTypes"_ustr, aTypes ) )
                 m_aAllowedTypes.insert(std::cbegin(aTypes), std::cend(aTypes));
 
-            aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
-            aArguments.get_ensureType( "AllowEmptyPropertyName",
+            aArguments.get_ensureType( u"AutomaticAddition"_ustr, m_bAutoAddProperties );
+            aArguments.get_ensureType( u"AllowEmptyPropertyName"_ustr,
                 AllowEmptyPropertyName );
         }
         if (AllowEmptyPropertyName) {
@@ -104,7 +104,7 @@ namespace comphelper
 
     OUString SAL_CALL OPropertyBag::getImplementationName()
     {
-        return "com.sun.star.comp.comphelper.OPropertyBag";
+        return u"com.sun.star.comp.comphelper.OPropertyBag"_ustr;
     }
 
     sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName )
@@ -114,7 +114,7 @@ namespace comphelper
 
     Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  )
     {
-         return { "com.sun.star.beans.PropertyBag" };
+         return { u"com.sun.star.beans.PropertyBag"_ustr };
     }
 
     void OPropertyBag::fireEvents(
@@ -197,7 +197,7 @@ namespace comphelper
         // If we ever have a smarter XPropertyContainer::addProperty interface, we can remove this, ehm, well, hack.
         Property aProperty;
         if ( !( _element >>= aProperty ) )
-            throw IllegalArgumentException( "element is not Property", *this, 1 );
+            throw IllegalArgumentException( u"element is not Property"_ustr, *this, 1 );
 
         {
             osl::MutexGuard g(m_aMutex);
@@ -206,7 +206,7 @@ namespace comphelper
             // by m_aDynamicProperties
             if (!m_aAllowedTypes.empty()
                 && m_aAllowedTypes.find(aProperty.Type) == m_aAllowedTypes.end())
-                throw IllegalArgumentException("not in list of allowed types", *this, 1);
+                throw IllegalArgumentException(u"not in list of allowed types"_ustr, *this, 1);
 
             m_aDynamicProperties.addVoidProperty(aProperty.Name, aProperty.Type, findFreeHandle(),
                                                  aProperty.Attributes);
@@ -389,7 +389,7 @@ namespace comphelper
         {
             aValues = OPropertyBag_PBase::getPropertyValues( aNames );
             if ( aValues.getLength() != aNames.getLength() )
-                throw RuntimeException("property name and value counts out of sync");
+                throw RuntimeException(u"property name and value counts out of sync"_ustr);
         }
         catch( const RuntimeException& )
         {

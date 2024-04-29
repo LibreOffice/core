@@ -137,9 +137,9 @@ private:
         virtual OUString SAL_CALL getImplementationName() override
         {
             if (mbComponentDLL)
-                return "com.sun.star.comp.ComponentDLLListener";
+                return u"com.sun.star.comp.ComponentDLLListener"_ustr;
             else
-                return "com.sun.star.comp.DisposingTerminateListener";
+                return u"com.sun.star.comp.DisposingTerminateListener"_ustr;
         }
 
         virtual sal_Bool SAL_CALL supportsService(const OUString& /*rName*/) override

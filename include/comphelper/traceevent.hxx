@@ -61,7 +61,7 @@ protected:
     static OUString createArgsString(const std::map<OUString, OUString>& args)
     {
         if (args.size() == 0)
-            return "";
+            return u""_ustr;
 
         OUStringBuffer sResult(",\"args\":{");
         bool first = true;

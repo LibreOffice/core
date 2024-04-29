@@ -75,7 +75,7 @@ namespace detail {
     {
         if( seq.getLength() <= nArg )
         {
-            return unwrapArgsError( OUString( "No such argument available!"),
+            return unwrapArgsError( u"No such argument available!"_ustr,
                                      nArg, args... );
         }
         if( !fromAny( seq[nArg], &v ) )

@@ -53,7 +53,7 @@ inline css::uno::Reference<css::uno::XCurrentContext> NewFlagContext(const OUStr
 // A specialization for preventing "Java must be enabled" interaction
 inline css::uno::Reference<css::uno::XCurrentContext> NoEnableJavaInteractionContext()
 {
-    return NewFlagContext("DontEnableJava");
+    return NewFlagContext(u"DontEnableJava"_ustr);
 }
 
 inline bool IsContextFlagActive(const OUString& sName)

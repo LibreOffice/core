@@ -189,7 +189,7 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
 OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
 {
-    return "com.sun.star.comp.util.OfficeInstallationDirectories";
+    return u"com.sun.star.comp.util.OfficeInstallationDirectories"_ustr;
 }
 
 // virtual
@@ -203,7 +203,7 @@ OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.OfficeInstallationDirectories" };
+    return { u"com.sun.star.util.OfficeInstallationDirectories"_ustr };
 }
 
 void OfficeInstallationDirectories::initDirs()
@@ -217,7 +217,7 @@ void OfficeInstallationDirectories::initDirs()
 
     uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 
-    m_xOfficeBrandDir = xExpander->expandMacros( "$BRAND_BASE_DIR" );
+    m_xOfficeBrandDir = xExpander->expandMacros( u"$BRAND_BASE_DIR"_ustr );
 
     OSL_ENSURE( !m_xOfficeBrandDir->isEmpty(),
                 "Unable to obtain office brand installation directory!" );
@@ -226,7 +226,7 @@ void OfficeInstallationDirectories::initDirs()
 
     m_xUserDir =
         xExpander->expandMacros(
-            "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" );
+            u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}"_ustr );
 
     OSL_ENSURE( !m_xUserDir->isEmpty(),
                 "Unable to obtain office user data directory!" );

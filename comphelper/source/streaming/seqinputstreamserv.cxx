@@ -86,7 +86,7 @@ SequenceInputStreamService::SequenceInputStreamService()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL SequenceInputStreamService::getImplementationName()
 {
-    return "com.sun.star.comp.SequenceInputStreamService";
+    return u"com.sun.star.comp.SequenceInputStreamService"_ustr;
 }
 
 sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName )
@@ -96,7 +96,7 @@ sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & 
 
 uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.SequenceInputStream" };
+    return { u"com.sun.star.io.SequenceInputStream"_ustr };
 }
 
 // css::io::XInputStream:
@@ -183,13 +183,13 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::
         throw frame::DoubleInitializationException();
 
     if ( aArguments.getLength() != 1 )
-        throw lang::IllegalArgumentException( "Wrong number of arguments!",
+        throw lang::IllegalArgumentException( u"Wrong number of arguments!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     uno::Sequence< sal_Int8 > aSeq;
     if ( !(aArguments[0] >>= aSeq) )
-        throw lang::IllegalArgumentException( "Unexpected type of argument!",
+        throw lang::IllegalArgumentException( u"Unexpected type of argument!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 

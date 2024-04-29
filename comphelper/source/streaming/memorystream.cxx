@@ -108,7 +108,7 @@ UNOMemoryStream::UNOMemoryStream()
 // XServiceInfo
 OUString SAL_CALL UNOMemoryStream::getImplementationName()
 {
-    return "com.sun.star.comp.MemoryStream";
+    return u"com.sun.star.comp.MemoryStream"_ustr;
 }
 
 sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
@@ -118,7 +118,7 @@ sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.comp.MemoryStream" };
+    return { u"com.sun.star.comp.MemoryStream"_ustr };
 }
 
 // XStream
@@ -136,7 +136,7 @@ Reference< XOutputStream > SAL_CALL UNOMemoryStream::getOutputStream(  )
 sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if( nBytesToRead < 0 )
-        throw IOException("nBytesToRead < 0");
+        throw IOException(u"nBytesToRead < 0"_ustr);
 
     nBytesToRead = std::min( nBytesToRead, available() );
     aData.realloc( nBytesToRead );
@@ -161,7 +161,7 @@ sal_Int32 SAL_CALL UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, 
 void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 )
-        throw IOException("nBytesToSkip < 0");
+        throw IOException(u"nBytesToSkip < 0"_ustr);
 
     mnCursor += std::min( nBytesToSkip, available() );
 }
@@ -180,7 +180,7 @@ void SAL_CALL UNOMemoryStream::closeInput()
 void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
 {
     if( (location < 0) || (location > SAL_MAX_INT32) )
-        throw IllegalArgumentException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this), 0 );
+        throw IllegalArgumentException(u"this implementation does not support more than 2GB!"_ustr, static_cast<OWeakObject*>(this), 0 );
 
     // seek operation should be able to resize the stream
     if ( o3tl::make_unsigned(location) > maData.size() )
@@ -215,7 +215,7 @@ void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWri
     if( nNewSize > SAL_MAX_INT32 )
     {
         OSL_ASSERT(false);
-        throw IOException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this) );
+        throw IOException(u"this implementation does not support more than 2GB!"_ustr, static_cast<OWeakObject*>(this) );
     }
 
     if( o3tl::make_unsigned( nNewSize ) > maData.size() )

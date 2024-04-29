@@ -68,7 +68,7 @@ public:
 
 void TestString::testDecimalStringToNumber()
 {
-    OUString s1("1234");
+    OUString s1(u"1234"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1234), comphelper::string::decimalStringToNumber(s1));
     s1 += u"\u07C6";
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(12346), comphelper::string::decimalStringToNumber(s1));
@@ -185,7 +185,7 @@ void TestString::testTokenCount()
 void TestString::testReverseString()
 {
     CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseString(u""));
-    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseString(u"abc"));
+    CPPUNIT_ASSERT_EQUAL(u"cba"_ustr, comphelper::string::reverseString(u"abc"));
     static sal_Unicode const rev[] = {'w', 0xDFFF, 0xDBFF, 'v', 0xDC00, 0xD800, 'u'};
     CPPUNIT_ASSERT_EQUAL(
         OUString(rev, std::size(rev)),
@@ -198,7 +198,7 @@ void TestString::testReverseString()
 
 void TestString::testReverseCodePoints() {
     CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseCodePoints(u""));
-    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseCodePoints(u"abc"));
+    CPPUNIT_ASSERT_EQUAL(u"cba"_ustr, comphelper::string::reverseCodePoints(u"abc"));
     CPPUNIT_ASSERT_EQUAL(
         u"w\U0010FFFFv\U00010000u"_ustr,
         comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"));
@@ -212,25 +212,25 @@ void TestString::testSplit()
 {
     std::vector<OUString> aRet = ::comphelper::string::split(u"CTRL+ALT+F1", '+');
     CPPUNIT_ASSERT_EQUAL(size_t(3), aRet.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("CTRL"), aRet[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("ALT"), aRet[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("F1"), aRet[2]);
+    CPPUNIT_ASSERT_EQUAL(u"CTRL"_ustr, aRet[0]);
+    CPPUNIT_ASSERT_EQUAL(u"ALT"_ustr, aRet[1]);
+    CPPUNIT_ASSERT_EQUAL(u"F1"_ustr, aRet[2]);
 }
 
 void TestString::testRemoveAny()
 {
     using namespace ::comphelper::string;
-    OUString in("abcAAAbbC");
+    OUString in(u"abcAAAbbC"_ustr);
     sal_Unicode const test1 [] = { 'a', 0 };
-    CPPUNIT_ASSERT_EQUAL(OUString("bcAAAbbC"), removeAny(in, test1));
+    CPPUNIT_ASSERT_EQUAL(u"bcAAAbbC"_ustr, removeAny(in, test1));
     sal_Unicode const test2 [] = { 0 };
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test2));
     sal_Unicode const test3 [] = { 'A', 0 };
-    CPPUNIT_ASSERT_EQUAL(OUString("abcbbC"), removeAny(in, test3));
+    CPPUNIT_ASSERT_EQUAL(u"abcbbC"_ustr, removeAny(in, test3));
     sal_Unicode const test4 [] = { 'A', 'a', 0 };
-    CPPUNIT_ASSERT_EQUAL(OUString("bcbbC"), removeAny(in, test4));
+    CPPUNIT_ASSERT_EQUAL(u"bcbbC"_ustr, removeAny(in, test4));
     sal_Unicode const test5 [] = { 'C', 0 };
-    CPPUNIT_ASSERT_EQUAL(OUString("abcAAAbb"), removeAny(in, test5));
+    CPPUNIT_ASSERT_EQUAL(u"abcAAAbb"_ustr, removeAny(in, test5));
     sal_Unicode const test6 [] = { 'X', 0 };
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
     sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };

@@ -36,7 +36,7 @@ namespace comphelper
 void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
 {
     if ( !m_xContext.is() )
-        throw uno::RuntimeException("no component context");
+        throw uno::RuntimeException(u"no component context"_ustr);
 
     {
         std::unique_lock aGuard( m_aMutex );
@@ -60,7 +60,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
             xFactory->createInstanceWithContext(
-                 "com.sun.star.awt.AsyncCallback",
+                 u"com.sun.star.awt.AsyncCallback"_ustr,
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 
@@ -98,7 +98,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
-            OUString aVetoPropName( "SuspendQuickstartVeto" );
+            OUString aVetoPropName( u"SuspendQuickstartVeto"_ustr );
             uno::Any aValue;
             aValue <<= true;
             xPropertySet->setPropertyValue( aVetoPropName, aValue );
@@ -130,7 +130,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
 OUString SAL_CALL OOfficeRestartManager::getImplementationName()
 {
-    return "com.sun.star.comp.task.OfficeRestartManager";
+    return u"com.sun.star.comp.task.OfficeRestartManager"_ustr;
 }
 
 sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName )
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServi
 
 uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.comp.task.OfficeRestartManager" };
+    return { u"com.sun.star.comp.task.OfficeRestartManager"_ustr };
 }
 
 } // namespace comphelper

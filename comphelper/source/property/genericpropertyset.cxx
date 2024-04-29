@@ -217,12 +217,12 @@ sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceN
 
 OUString SAL_CALL GenericPropertySet::getImplementationName()
 {
-    return "com.sun.star.comp.comphelper.GenericPropertySet";
+    return u"com.sun.star.comp.comphelper.GenericPropertySet"_ustr;
 }
 
 Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.beans.XPropertySet" };
+    return { u"com.sun.star.beans.XPropertySet"_ustr };
 }
 
 css::uno::Reference< css::beans::XPropertySet > comphelper::GenericPropertySet_CreateInstance( comphelper::PropertySetInfo* pInfo )

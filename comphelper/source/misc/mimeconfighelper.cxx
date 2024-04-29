@@ -44,7 +44,7 @@ MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< uno::XComponen
 : m_xContext(std::move( xContext ))
 {
     if ( !m_xContext.is() )
-        throw uno::RuntimeException("MimeConfigurationHelper:: empty component context");
+        throw uno::RuntimeException(u"MimeConfigurationHelper:: empty component context"_ustr);
 }
 
 
@@ -129,7 +129,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
             {"nodepath", uno::Any(aPath)}
         }));
         xConfig.set( m_xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess",
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                         aArgs ),
                      uno::UNO_QUERY );
     }
@@ -146,7 +146,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfigur
 
     if ( !m_xObjectConfig.is() )
         m_xObjectConfig = GetConfigurationByPathImpl(
-                                         "/org.openoffice.Office.Embedding/Objects" );
+                                         u"/org.openoffice.Office.Embedding/Objects"_ustr );
 
     return m_xObjectConfig;
 }
@@ -158,7 +158,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfig
 
     if ( !m_xVerbsConfig.is() )
         m_xVerbsConfig = GetConfigurationByPathImpl(
-                                        "/org.openoffice.Office.Embedding/Verbs");
+                                        u"/org.openoffice.Office.Embedding/Verbs"_ustr);
 
     return m_xVerbsConfig;
 }
@@ -170,7 +170,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
     if ( !m_xMediaTypeConfig.is() )
         m_xMediaTypeConfig = GetConfigurationByPathImpl(
-                    "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations");
+                    u"/org.openoffice.Office.Embedding/MimeTypeClassIDRelations"_ustr);
 
     return m_xMediaTypeConfig;
 }
@@ -182,7 +182,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
 
     if ( !m_xFilterFactory.is() )
         m_xFilterFactory.set(
-            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
+            m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, m_xContext),
             uno::UNO_QUERY );
 
     return m_xFilterFactory;
@@ -218,7 +218,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
 OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString& aMediaType )
 {
     uno::Reference< container::XContainerQuery > xTypeCFG(
-            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
+            m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, m_xContext),
             uno::UNO_QUERY );
 
     if ( xTypeCFG.is() )
@@ -226,7 +226,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
         try
         {
             // make query for all types matching the properties
-            uno::Sequence < beans::NamedValue > aSeq { { "MediaType", css::uno::Any(aMediaType) } };
+            uno::Sequence < beans::NamedValue > aSeq { { u"MediaType"_ustr, css::uno::Any(aMediaType) } };
 
             uno::Reference < container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
             while ( xEnum->hasMoreElements() )
@@ -315,12 +315,12 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
                 {
                     uno::Sequence< OUString > aVerbShortcuts;
                     if ( !(xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts) )
-                        throw uno::RuntimeException("Failed to get verb shortcuts from object properties");
+                        throw uno::RuntimeException(u"Failed to get verb shortcuts from object properties"_ustr);
                     uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
                     auto aVerbDescriptorsRange = asNonConstRange(aVerbDescriptors);
                     for ( sal_Int32 nVerbI = 0; nVerbI < aVerbShortcuts.getLength(); nVerbI++ )
                         if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptorsRange[nVerbI] ) )
-                            throw uno::RuntimeException("Failed to get verb descriptor by shortcut");
+                            throw uno::RuntimeException(u"Failed to get verb descriptor by shortcut"_ustr);
 
                     pResult[nInd+1].Value <<= aVerbDescriptors;
                 }
@@ -365,9 +365,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStri
     uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
-        aObjProps = { { "ObjectFactory",
-                        uno::Any(OUString("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory")) },
-                      { "ClassID", uno::Any(aClassID) } };
+        aObjProps = { { u"ObjectFactory"_ustr,
+                        uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
+                      { u"ClassID"_ustr, uno::Any(aClassID) } };
         return aObjProps;
     }
 
@@ -396,9 +396,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     uno::Sequence< beans::NamedValue > aObjProps;
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
-        aObjProps = { { "ObjectFactory",
-                        uno::Any(OUString("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory")) },
-                      { "ClassID", uno::Any(aClassID) } };
+        aObjProps = { { u"ObjectFactory"_ustr,
+                        uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
+                      { u"ClassID"_ustr, uno::Any(aClassID) } };
     }
 
     OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
@@ -461,7 +461,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
                     OUString aEntryDocName;
 
                     if ( ( xObjConfig->getByName( id ) >>= xObjectProps ) && xObjectProps.is()
-                      && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
+                      && ( xObjectProps->getByName(u"ObjectDocumentServiceName"_ustr) >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
                         return GetObjPropsFromConfigEntry( GetSequenceClassIDRepresentation( id ),
@@ -495,13 +495,13 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
         try
         {
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
-                xObjectProps->getByName("ObjectFactory") >>= aResult;
+                xObjectProps->getByName(u"ObjectFactory"_ustr) >>= aResult;
         }
         catch( uno::Exception& )
         {
             uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
             if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
-                return "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory";
+                return u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr;
         }
     }
 
@@ -527,10 +527,10 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( std::u16string_v
                     OUString aEntryDocName;
 
                     if ( ( xObjConfig->getByName( id ) >>= xObjectProps ) && xObjectProps.is()
-                      && ( xObjectProps->getByName( "ObjectDocumentServiceName" ) >>= aEntryDocName )
+                      && ( xObjectProps->getByName( u"ObjectDocumentServiceName"_ustr ) >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
-                        xObjectProps->getByName("ObjectFactory") >>= aResult;
+                        xObjectProps->getByName(u"ObjectFactory"_ustr) >>= aResult;
                         break;
                     }
                 }
@@ -574,7 +574,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         // filter name is not specified, so type detection should be done
 
         uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
+                m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW );
 
         // typedetection can change the mode, add a stream and so on, thus a copy should be used
@@ -715,8 +715,8 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
 
             uno::Sequence< beans::NamedValue > aSearchRequest
             {
-                { "DocumentService", css::uno::Any(aServiceName) },
-                { "FileFormatVersion", css::uno::Any(nVersion) }
+                { u"DocumentService"_ustr, css::uno::Any(aServiceName) },
+                { u"FileFormatVersion"_ustr, css::uno::Any(nVersion) }
             };
 
             uno::Reference< container::XEnumeration > xFilterEnum =
@@ -786,12 +786,12 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
             if ( aImpFilterAny >>= aImpData )
             {
                 SequenceAsHashMap aImpFilterHM( aImpData );
-                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aImpFilterHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
+                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aImpFilterHM.getUnpackedValueOrDefault( u"Flags"_ustr, sal_Int32(0) ));
 
                 if ( !( nFlags & SfxFilterFlags::IMPORT ) )
                 {
                     OSL_FAIL( "This is no import filter!" );
-                    throw uno::Exception("this is no import filter", nullptr);
+                    throw uno::Exception(u"this is no import filter"_ustr, nullptr);
                 }
 
                 if ( nFlags & SfxFilterFlags::EXPORT )
@@ -800,16 +800,16 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                 }
                 else
                 {
-                    OUString aDocumentServiceName = aImpFilterHM.getUnpackedValueOrDefault( "DocumentService", OUString() );
-                    OUString aTypeName = aImpFilterHM.getUnpackedValueOrDefault( "Type", OUString() );
+                    OUString aDocumentServiceName = aImpFilterHM.getUnpackedValueOrDefault( u"DocumentService"_ustr, OUString() );
+                    OUString aTypeName = aImpFilterHM.getUnpackedValueOrDefault( u"Type"_ustr, OUString() );
 
                     OSL_ENSURE( !aDocumentServiceName.isEmpty() && !aTypeName.isEmpty(), "Incomplete filter data!" );
                     if ( !(aDocumentServiceName.isEmpty() || aTypeName.isEmpty()) )
                     {
                         uno::Sequence< beans::NamedValue > aSearchRequest
                         {
-                            { "Type", css::uno::Any(aTypeName) },
-                            { "DocumentService", css::uno::Any(aDocumentServiceName) }
+                            { u"Type"_ustr, css::uno::Any(aTypeName) },
+                            { u"DocumentService"_ustr, css::uno::Any(aDocumentServiceName) }
                         };
 
                         uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(
@@ -821,7 +821,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                         if ( aExportFilterProps.hasElements() )
                         {
                             SequenceAsHashMap aExpPropsHM( aExportFilterProps );
-                            aExportFilterName = aExpPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
+                            aExportFilterName = aExpPropsHM.getUnpackedValueOrDefault( u"Name"_ustr, OUString() );
                         }
                     }
                 }
@@ -856,7 +856,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
             if ( xFilterEnum->nextElement() >>= aProps )
             {
                 SequenceAsHashMap aPropsHM( aProps );
-                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault("Flags",
+                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault(u"Flags"_ustr,
                                                                         sal_Int32(0) ));
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {

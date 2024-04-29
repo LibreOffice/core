@@ -326,31 +326,31 @@ namespace comphelper
 
         sal_Int32 nArgumentCount = _arguments.getLength();
         if ( ( nArgumentCount != 2 ) && ( nArgumentCount != 3 ) )
-            throw IllegalArgumentException("wrong number of args", static_cast<cppu::OWeakObject*>(this), 1);
+            throw IllegalArgumentException(u"wrong number of args"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )
-            throw IllegalArgumentException("com.sun.star.uno.Type expected.", *this, 1 );
+            throw IllegalArgumentException(u"com.sun.star.uno.Type expected."_ustr, *this, 1 );
         if ( !( _arguments[1] >>= aValueType ) )
-            throw IllegalArgumentException("com.sun.star.uno.Type expected.", *this, 2 );
+            throw IllegalArgumentException(u"com.sun.star.uno.Type expected."_ustr, *this, 2 );
 
         Sequence< Pair< Any, Any > > aInitialValues;
         bool bMutable = true;
         if ( nArgumentCount == 3 )
         {
             if ( !( _arguments[2] >>= aInitialValues ) )
-                throw IllegalArgumentException("[]com.sun.star.beans.Pair<any,any> expected.", *this, 2 );
+                throw IllegalArgumentException(u"[]com.sun.star.beans.Pair<any,any> expected."_ustr, *this, 2 );
             bMutable = false;
         }
 
         // for the value, anything is allowed, except VOID
         if ( ( aValueType.getTypeClass() == TypeClass_VOID ) || ( aValueType.getTypeClass() == TypeClass_UNKNOWN ) )
-            throw IllegalTypeException("Unsupported value type.", *this );
+            throw IllegalTypeException(u"Unsupported value type."_ustr, *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
         std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, nullptr ) );
         if (!pComparator)
-            throw IllegalTypeException("Unsupported key type.", *this );
+            throw IllegalTypeException(u"Unsupported key type."_ustr, *this );
 
         // init members
         m_aData.m_aKeyType = aKeyType;
@@ -465,7 +465,7 @@ namespace comphelper
             if ( _keyOrValue >>= nValue )
                 if ( std::isnan( nValue ) )
                     throw IllegalArgumentException(
-                        "NaN (not-a-number) not supported by this implementation.",
+                        u"NaN (not-a-number) not supported by this implementation."_ustr,
                         *const_cast< EnumerableMap* >( this ), 0 );
             // (note that the case of _key not containing a float/double value is handled in the
             // respective IKeyPredicateLess implementation, so there's no need to handle this here.)
@@ -477,7 +477,7 @@ namespace comphelper
     {
         if ( !_key.hasValue() )
             throw IllegalArgumentException(
-                "NULL keys not supported by this implementation.",
+                u"NULL keys not supported by this implementation."_ustr,
                 *const_cast< EnumerableMap* >( this ), 0 );
 
         impl_checkNaN_throw( _key, m_aData.m_aKeyType );
@@ -488,7 +488,7 @@ namespace comphelper
     {
         if ( !m_aData.m_bMutable )
             throw NoSupportException(
-                    "The map is immutable.",
+                    u"The map is immutable."_ustr,
                     *const_cast< EnumerableMap* >( this ) );
     }
 
@@ -637,7 +637,7 @@ namespace comphelper
 
     OUString SAL_CALL EnumerableMap::getImplementationName(  )
     {
-        return "org.openoffice.comp.comphelper.EnumerableMap";
+        return u"org.openoffice.comp.comphelper.EnumerableMap"_ustr;
     }
 
     sal_Bool SAL_CALL EnumerableMap::supportsService( const OUString& _serviceName )
@@ -648,7 +648,7 @@ namespace comphelper
 
     Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.container.EnumerableMap" };
+        return { u"com.sun.star.container.EnumerableMap"_ustr };
     }
 
     bool MapEnumerator::hasMoreElements()
@@ -664,7 +664,7 @@ namespace comphelper
         if ( m_disposed )
             throw DisposedException( OUString(), m_rParent );
         if ( m_mapPos == m_rMapData.m_pValues->end() )
-            throw NoSuchElementException("No more elements.", m_rParent );
+            throw NoSuchElementException(u"No more elements."_ustr, m_rParent );
 
         Any aNextElement;
         switch ( m_eType )

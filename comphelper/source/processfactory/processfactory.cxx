@@ -75,7 +75,7 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
     Reference< XMultiServiceFactory> xReturn = localProcessFactory.get();
     if ( !xReturn.is() )
     {
-        throw DeploymentException( "null process service factory" );
+        throw DeploymentException( u"null process service factory"_ustr );
     }
     return xReturn;
 }
@@ -100,7 +100,7 @@ Reference< XComponentContext > getComponentContext(
     if ( !xRet.is() )
     {
         throw DeploymentException(
-            "no service factory DefaultContext",
+            u"no service factory DefaultContext"_ustr,
             Reference<XInterface>(factory, UNO_QUERY) );
     }
     return xRet;

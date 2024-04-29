@@ -74,7 +74,7 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL SequenceOutputStreamService::getImplementationName()
 {
-    return "com.sun.star.comp.SequenceOutputStreamService";
+    return u"com.sun.star.comp.SequenceOutputStreamService"_ustr;
 }
 
 sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & serviceName )
@@ -84,7 +84,7 @@ sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const &
 
 uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.SequenceOutputStream" };
+    return { u"com.sun.star.io.SequenceOutputStream"_ustr };
 }
 
 // css::io::XOutputStream:

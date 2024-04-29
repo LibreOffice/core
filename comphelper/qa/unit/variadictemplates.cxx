@@ -40,7 +40,7 @@ void extract(
 {
     if (nArg >= seq.getLength()) {
         throw ::com::sun::star::lang::IllegalArgumentException(
-            "No such argument available!",
+            u"No such argument available!"_ustr,
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! fromAny(seq[nArg], &v)) {
@@ -87,7 +87,7 @@ void unwrapArgsBaseline(
 }
 
 void VariadicTemplatesTest::testUnwrapArgs() {
-    OUString tmp1   = "Test1";
+    OUString tmp1   = u"Test1"_ustr;
     sal_Int32 tmp2  = 42;
     sal_uInt32 tmp3 = 42;
     ::com::sun::star::uno::Any tmp6(
@@ -100,10 +100,10 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         tmp3
         );
     ::com::sun::star::uno::Any tmp9(
-        OUString("Test2")
+        u"Test2"_ustr
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp10(
-        OUString("Test3")
+        u"Test3"_ustr
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp11(
         tmp1
@@ -147,11 +147,11 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         CPPUNIT_ASSERT_EQUAL( static_cast< short >( 5 ), err.ArgumentPosition );
     }
 
-    OUString test1( "Test2" );
-    OUString test2( "Test2" );
-    OUString test3( "Test3" );
-    OUString test4( "Test4" );
-    OUString test5( "Test5" );
+    OUString test1( u"Test2"_ustr );
+    OUString test2( u"Test2"_ustr );
+    OUString test3( u"Test3"_ustr );
+    OUString test4( u"Test4"_ustr );
+    OUString test5( u"Test5"_ustr );
 
     try {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq(

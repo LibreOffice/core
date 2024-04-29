@@ -53,17 +53,17 @@ void Base64Test::testBase64Encode()
 
     inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAAABAgM="), aBuffer.toString());
+    CPPUNIT_ASSERT_EQUAL(u"AAAAAAABAgM="_ustr, aBuffer.toString());
     aBuffer.setLength(0);
 
     inputSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OUString("BQIDAAABAgM="), aBuffer.toString());
+    CPPUNIT_ASSERT_EQUAL(u"BQIDAAABAgM="_ustr, aBuffer.toString());
     aBuffer.setLength(0);
 
     inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OUString("yB9NbwABAgM="), aBuffer.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(u"yB9NbwABAgM="_ustr, aBuffer.makeStringAndClear());
 }
 
 void Base64Test::testBase64Decode()

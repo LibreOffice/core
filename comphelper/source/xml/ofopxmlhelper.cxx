@@ -92,7 +92,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
-    return ReadSequence_Impl( xInStream, "[Content_Types].xml", CONTENTTYPE_FORMAT, rContext );
+    return ReadSequence_Impl( xInStream, u"[Content_Types].xml"_ustr, CONTENTTYPE_FORMAT, rContext );
 }
 
 OUString GetContentTypeByName(
@@ -140,15 +140,15 @@ void WriteRelationsInfoSequence(
 
     xWriter->setOutputStream( xOutStream );
 
-    OUString aRelListElement( "Relationships" );
-    OUString aRelElement( "Relationship" );
-    OUString aWhiteSpace( " " );
+    OUString aRelListElement( u"Relationships"_ustr );
+    OUString aRelElement( u"Relationship"_ustr );
+    OUString aWhiteSpace( u" "_ustr );
 
     // write the namespace
     rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
-        "xmlns",
-        "http://schemas.openxmlformats.org/package/2006/relationships" );
+        u"xmlns"_ustr,
+        u"http://schemas.openxmlformats.org/package/2006/relationships"_ustr );
 
     xWriter->startDocument();
     xWriter->startElement( aRelListElement, pRootAttrList );
@@ -202,8 +202,8 @@ void WriteContentSequence(
     // write the namespace
     rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
-        "xmlns",
-        "http://schemas.openxmlformats.org/package/2006/content-types" );
+        u"xmlns"_ustr,
+        u"http://schemas.openxmlformats.org/package/2006/content-types"_ustr );
 
     xWriter->startDocument();
     xWriter->startElement( aTypesElement, pRootAttrList );
@@ -211,7 +211,7 @@ void WriteContentSequence(
     for ( const beans::StringPair & pair : aDefaultsSequence )
     {
         rtl::Reference<AttributeList> pAttrList = new AttributeList;
-        pAttrList->AddAttribute( "Extension", pair.First );
+        pAttrList->AddAttribute( u"Extension"_ustr, pair.First );
         pAttrList->AddAttribute( aContentTypeAttr, pair.Second );
 
         xWriter->startElement( aDefaultElement, pAttrList  );
@@ -222,7 +222,7 @@ void WriteContentSequence(
     for ( const beans::StringPair & pair : aOverridesSequence )
     {
         rtl::Reference<AttributeList> pAttrList = new AttributeList;
-        pAttrList->AddAttribute( "PartName", pair.First );
+        pAttrList->AddAttribute( u"PartName"_ustr, pair.First );
         pAttrList->AddAttribute( aContentTypeAttr, pair.Second );
 
         xWriter->startElement( aOverrideElement, pAttrList );

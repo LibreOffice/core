@@ -94,7 +94,7 @@ void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
 
 void SyntaxHighlightTest::testBasic()
 {
-    OUString aBasicString("        if Mid(sText,iRun,1 )<> \" \" then Mid( sText ,iRun, 1, Chr( 1 + Asc( Mid(sText,iRun,1 )) ) '");
+    OUString aBasicString(u"        if Mid(sText,iRun,1 )<> \" \" then Mid( sText ,iRun, 1, Chr( 1 + Asc( Mid(sText,iRun,1 )) ) '"_ustr);
 
     std::vector<HighlightPortion> aPortions;
     SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(

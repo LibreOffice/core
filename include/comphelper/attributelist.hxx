@@ -71,8 +71,8 @@ public:
     {
         return mAttributes[i].sName;
     }
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16) override { return "CDATA"; }
-    virtual OUString SAL_CALL getTypeByName(const OUString&) override { return "CDATA"; }
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16) override { return u"CDATA"_ustr; }
+    virtual OUString SAL_CALL getTypeByName(const OUString&) override { return u"CDATA"_ustr; }
     virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override
     {
         return mAttributes[i].sValue;

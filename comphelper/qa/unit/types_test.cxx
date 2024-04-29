@@ -83,10 +83,10 @@ void TypesTest::testGetFloat()
 
 void TypesTest::testGetString()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("1337"), ::comphelper::getString(uno::Any(OUString("1337"))));
+    CPPUNIT_ASSERT_EQUAL(u"1337"_ustr, ::comphelper::getString(uno::Any(u"1337"_ustr)));
 
     uno::Any aValue;
-    CPPUNIT_ASSERT_EQUAL(OUString(""), ::comphelper::getString(aValue));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, ::comphelper::getString(aValue));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TypesTest);

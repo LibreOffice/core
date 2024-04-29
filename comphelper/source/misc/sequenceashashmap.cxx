@@ -149,7 +149,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
     }
 
     throw css::lang::IllegalArgumentException(
-        "Any contains wrong type.", css::uno::Reference<css::uno::XInterface>(),
+        u"Any contains wrong type."_ustr, css::uno::Reference<css::uno::XInterface>(),
         -1);
 }
 
@@ -170,7 +170,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lP.Value.hasValue())
                )
                 throw css::lang::IllegalArgumentException(
-                    "PropertyValue struct contains no useful information.",
+                    u"PropertyValue struct contains no useful information."_ustr,
                     css::uno::Reference<css::uno::XInterface>(), -1);
             (*this)[lP.Name] = lP.Value;
             continue;
@@ -184,7 +184,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lN.Value.hasValue())
                )
                 throw css::lang::IllegalArgumentException(
-                    "NamedValue struct contains no useful information.",
+                    u"NamedValue struct contains no useful information."_ustr,
                     css::uno::Reference<css::uno::XInterface>(), -1);
             (*this)[lN.Name] = lN.Value;
             continue;
@@ -193,7 +193,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         // ignore VOID Any ... but reject wrong filled ones!
         if (lSource[i].hasValue())
             throw css::lang::IllegalArgumentException(
-                "Any contains wrong type.",
+                u"Any contains wrong type."_ustr,
                 css::uno::Reference<css::uno::XInterface>(), -1);
     }
 }

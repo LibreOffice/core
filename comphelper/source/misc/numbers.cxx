@@ -37,7 +37,7 @@ sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormat
         {
             css::uno::Reference<css::beans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
-                xFormat->getPropertyValue("Type") >>= nReturn;
+                xFormat->getPropertyValue(u"Type"_ustr) >>= nReturn;
         }
         catch(...)
         {
@@ -67,7 +67,7 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
             css::uno::Reference<css::beans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                return xFormat->getPropertyValue( "Decimals" );
+                return xFormat->getPropertyValue( u"Decimals"_ustr );
             }
         }
         catch(...)

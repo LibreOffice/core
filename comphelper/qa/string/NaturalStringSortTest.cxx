@@ -47,41 +47,46 @@ public:
         comphelper::string::NaturalStringSorter aSorter(comphelper::getProcessComponentContext(),
                                                         aLocale);
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare("ABC", "ABC"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("ABC", "abc"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("abc", "ABC"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("alongstring", "alongerstring"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("alongerstring", "alongstring"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("Heading 9", "Heading 10"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("Heading 10", "Heading 9"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("July, the 4th", "July, the 10th"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("July, the 10th", "July, the 4th"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("abc08", "abc010"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("abc010", "abc08"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare("apple10apple", "apple10apple"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare(u"ABC"_ustr, u"ABC"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"ABC"_ustr, u"abc"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"abc"_ustr, u"ABC"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1),
+                             aSorter.compare(u"alongstring"_ustr, u"alongerstring"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
+                             aSorter.compare(u"alongerstring"_ustr, u"alongstring"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"Heading 9"_ustr, u"Heading 10"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"Heading 10"_ustr, u"Heading 9"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
+                             aSorter.compare(u"July, the 4th"_ustr, u"July, the 10th"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1),
+                             aSorter.compare(u"July, the 10th"_ustr, u"July, the 4th"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"abc08"_ustr, u"abc010"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"abc010"_ustr, u"abc08"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0),
+                             aSorter.compare(u"apple10apple"_ustr, u"apple10apple"_ustr));
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("KA1", "KA0"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare("KA1", "KA1"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("KA1", "KA2"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("KA50", "KA5"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("KA50", "KA100"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"KA1"_ustr, u"KA0"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare(u"KA1"_ustr, u"KA1"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"KA1"_ustr, u"KA2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"KA50"_ustr, u"KA5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"KA50"_ustr, u"KA100"_ustr));
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("1", "0"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare("1", "1"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("1", "2"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("11", "1"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"1"_ustr, u"0"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+0), aSorter.compare(u"1"_ustr, u"1"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"1"_ustr, u"2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"11"_ustr, u"1"_ustr));
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("50", "100"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("0", "100000"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"50"_ustr, u"100"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"0"_ustr, u"100000"_ustr));
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("0", "A"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("A", "0"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("A", "99"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"0"_ustr, u"A"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"A"_ustr, u"0"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"A"_ustr, u"99"_ustr));
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("00ABC2", "00ABC1"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("00ABC1", "00ABC2"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare("00ABC11", "00ABC2"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare("00ABC2", "00ABC11"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"00ABC2"_ustr, u"00ABC1"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"00ABC1"_ustr, u"00ABC2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(+1), aSorter.compare(u"00ABC11"_ustr, u"00ABC2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSorter.compare(u"00ABC2"_ustr, u"00ABC11"_ustr));
     }
 
     CPPUNIT_TEST_SUITE(TestStringNaturalCompare);

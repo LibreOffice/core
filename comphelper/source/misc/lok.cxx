@@ -275,13 +275,13 @@ void setTimezone(bool isSet, const OUString& rTimezone)
     if (isSet)
     {
         // Set the given timezone, even if empty.
-        osl_setEnvironment(OUString("TZ").pData, rTimezone.pData);
+        osl_setEnvironment(u"TZ"_ustr.pData, rTimezone.pData);
     }
     else
     {
         // Unset and empty aren't the same.
         // When unset, it means default to the system configured timezone.
-        osl_clearEnvironment(OUString("TZ").pData);
+        osl_clearEnvironment(u"TZ"_ustr.pData);
     }
 
     // Update the timezone data.

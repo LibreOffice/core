@@ -33,9 +33,9 @@ namespace comphelper::xmlsec
         switch (rKind)
         {
             case css::security::CertificateKind_X509:
-                return "X.509";
+                return u"X.509"_ustr;
             case css::security::CertificateKind_OPENPGP:
-                return "OpenPGP";
+                return u"OpenPGP"_ustr;
             default:
                 return OUString();
         }

@@ -73,11 +73,11 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForXGraphic(const Reference<XGraphic>
     OUString aSourceMimeType;
     Reference<XPropertySet> const xGraphicPropertySet(xGraphic, UNO_QUERY);
     if (xGraphicPropertySet.is() && // it's null if it's an external link
-        (xGraphicPropertySet->getPropertyValue("MimeType") >>= aSourceMimeType))
+        (xGraphicPropertySet->getPropertyValue(u"MimeType"_ustr) >>= aSourceMimeType))
     {
         return aSourceMimeType;
     }
-    return "";
+    return u""_ustr;
 }
 
 OUString
@@ -86,7 +86,7 @@ GraphicMimeTypeHelper::GetMimeTypeForImageStream(const Reference<XInputStream>& 
     // Create the graphic to retrieve the mimetype from it
     Reference<XGraphicProvider> xProvider
         = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
-    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("InputStream",
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue(u"InputStream"_ustr,
                                                                             xInputStream) };
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
@@ -98,29 +98,29 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataForma
     switch (convertDataFormat)
     {
         case ConvertDataFormat::BMP:
-            return "image/bmp";
+            return u"image/bmp"_ustr;
         case ConvertDataFormat::GIF:
-            return "image/gif";
+            return u"image/gif"_ustr;
         case ConvertDataFormat::JPG:
-            return "image/jpeg";
+            return u"image/jpeg"_ustr;
         case ConvertDataFormat::PCT:
-            return "image/x-pict";
+            return u"image/x-pict"_ustr;
         case ConvertDataFormat::PNG:
-            return "image/png";
+            return u"image/png"_ustr;
         case ConvertDataFormat::SVM:
-            return "image/x-svm";
+            return u"image/x-svm"_ustr;
         case ConvertDataFormat::TIF:
-            return "image/tiff";
+            return u"image/tiff"_ustr;
         case ConvertDataFormat::WMF:
-            return "image/x-wmf";
+            return u"image/x-wmf"_ustr;
         case ConvertDataFormat::EMF:
-            return "image/x-emf";
+            return u"image/x-emf"_ustr;
         case ConvertDataFormat::SVG:
-            return "image/svg+xml";
+            return u"image/svg+xml"_ustr;
         case ConvertDataFormat::MET: // What is this?
         case ConvertDataFormat::Unknown:
         default:
-            return "";
+            return u""_ustr;
     }
 }
 

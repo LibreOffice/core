@@ -51,7 +51,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     if (eMode & EConfigurationModes::AllLocales)
     {
         aParam.Name    = "locale";
-        aParam.Value <<= OUString("*");
+        aParam.Value <<= u"*"_ustr;
         lParams.emplace_back(aParam);
     }
 
@@ -61,11 +61,11 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     bool bReadOnly(eMode & EConfigurationModes::ReadOnly);
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                 comphelper::containerToSequence(lParams));
     else
         xCFG = xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess",
+                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                 comphelper::containerToSequence(lParams));
 
     return xCFG;

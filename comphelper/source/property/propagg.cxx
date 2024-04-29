@@ -588,7 +588,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
     else if (_rPropertyNames.getLength() == 1) // use the more efficient way
     {
         if (_rValues.getLength() != 1)
-            throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this),
+            throw IllegalArgumentException(u"lengths do not match"_ustr, static_cast<XPropertySet*>(this),
                                            -1);
         try
         {
@@ -633,7 +633,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         else
         {
             if (_rValues.getLength() != nLen)
-                throw IllegalArgumentException("lengths do not match",
+                throw IllegalArgumentException(u"lengths do not match"_ustr,
                                                static_cast<XPropertySet*>(this), -1);
 
             // aggregate's names

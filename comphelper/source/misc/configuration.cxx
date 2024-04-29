@@ -111,7 +111,7 @@ comphelper::detail::ConfigurationWrapper::get(
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference<css::uno::XComponentContext> const & context):
     context_(context.is() ? context : comphelper::getProcessComponentContext()),
-    access_(css::configuration::ReadWriteAccess::create(context_, "*"))
+    access_(css::configuration::ReadWriteAccess::create(context_, u"*"_ustr))
 {}
 
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
