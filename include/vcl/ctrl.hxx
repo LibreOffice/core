@@ -93,16 +93,16 @@ private:
                             Control & operator= (const Control &) = delete;
 
 protected:
-                    Control( WindowType nType );
+    SAL_DLLPRIVATE Control( WindowType nType );
     virtual void    FillLayoutData() const;
 
     // helper method for composite controls
-    void            AppendLayoutData( const Control& rSubControl ) const;
+    SAL_DLLPRIVATE void AppendLayoutData( const Control& rSubControl ) const;
 
     /// creates the mpData->mpLayoutData structure
-    void            CreateLayoutData() const;
+    SAL_DLLPRIVATE void CreateLayoutData() const;
     /// determines whether we currently have layout data
-    bool            HasLayoutData() const;
+    SAL_DLLPRIVATE bool HasLayoutData() const;
 
     /** this calls both our event listeners, and a specified handler
 
@@ -131,12 +131,12 @@ protected:
         at the target device, or taking the reference device into account) when
         returning.
     */
-    tools::Rectangle DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& _rRect,
+    SAL_DLLPRIVATE tools::Rectangle DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& _rRect,
                                const OUString& _rStr, DrawTextFlags _nStyle,
                                std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText,
                                const Size* i_pDeviceSize = nullptr ) const;
 
-    tools::Rectangle GetControlTextRect( OutputDevice& _rTargetDevice, const tools::Rectangle & rRect,
+    SAL_DLLPRIVATE tools::Rectangle GetControlTextRect( OutputDevice& _rTargetDevice, const tools::Rectangle & rRect,
                                   const OUString& _rStr, DrawTextFlags _nStyle,
                                   Size* o_pDeviceSize = nullptr ) const;
 
@@ -207,7 +207,7 @@ public:
     the relative index inside the displayed line or -1 if the absolute index does
     not match any line
     */
-    tools::Long ToRelativeLineIndex( tools::Long nIndex ) const;
+    SAL_DLLPRIVATE tools::Long ToRelativeLineIndex( tools::Long nIndex ) const;
 
     void            SetLoseFocusHdl( const Link<Control&,void>& rLink ) { maLoseFocusHdl = rLink; }
 
@@ -215,7 +215,7 @@ public:
     */
     bool            HasControlFocus() const { return mbHasControlFocus; }
 
-    void            SetLayoutDataParent( const Control* pParent ) const;
+    SAL_DLLPRIVATE void SetLayoutDataParent( const Control* pParent ) const;
 
     virtual Size    GetOptimalSize() const override;
 
@@ -225,7 +225,7 @@ public:
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;
 
-    vcl::Font       GetUnzoomedControlPointFont() const;
+    SAL_DLLPRIVATE vcl::Font GetUnzoomedControlPointFont() const;
     void            SetShowAccelerator (bool val);
 
     /// Notify the LOK client about an invalidated area.

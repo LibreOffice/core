@@ -53,45 +53,46 @@ class PanelTitleBar;
 class SFX2_DLLPUBLIC Panel final
 {
 public:
-    Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
-          const bool bIsInitiallyExpanded, Deck* pDeck, std::function<Context()> aContextAccess,
-          const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    SAL_DLLPRIVATE Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
+                         const bool bIsInitiallyExpanded, Deck* pDeck,
+                         std::function<Context()> aContextAccess,
+                         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    ~Panel();
+    SAL_DLLPRIVATE ~Panel();
 
-    PanelTitleBar* GetTitleBar() const;
-    weld::Box* GetContents() const;
-    void Show(bool bShow);
+    SAL_DLLPRIVATE PanelTitleBar* GetTitleBar() const;
+    SAL_DLLPRIVATE weld::Box* GetContents() const;
+    SAL_DLLPRIVATE void Show(bool bShow);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
-    void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
+    SAL_DLLPRIVATE void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
     const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const
     {
         return mxPanelComponent;
     }
-    const css::uno::Reference<css::awt::XWindow>& GetElementParentWindow();
-    css::uno::Reference<css::awt::XWindow> GetElementWindow();
-    void SetExpanded(const bool bIsExpanded);
+    SAL_DLLPRIVATE const css::uno::Reference<css::awt::XWindow>& GetElementParentWindow();
+    SAL_DLLPRIVATE css::uno::Reference<css::awt::XWindow> GetElementWindow();
+    SAL_DLLPRIVATE void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }
-    bool HasIdPredicate(std::u16string_view rsId) const;
+    SAL_DLLPRIVATE bool HasIdPredicate(std::u16string_view rsId) const;
     const OUString& GetId() const { return msPanelId; }
     const OUString& GetTitle() const { return msTitle; }
     void TriggerDeckLayouting();
 
-    void SetHeightPixel(int nHeight);
+    SAL_DLLPRIVATE void SetHeightPixel(int nHeight);
 
-    bool get_extents(tools::Rectangle& rExtents) const;
+    SAL_DLLPRIVATE bool get_extents(tools::Rectangle& rExtents) const;
 
     /// Set whether a panel should be present but invisible / inactive
-    void SetLurkMode(bool bLurk);
+    SAL_DLLPRIVATE void SetLurkMode(bool bLurk);
     bool IsLurking() const { return mbLurking; }
 
-    void set_margin_top(int nMargin);
-    void set_margin_bottom(int nMargin);
-    void set_vexpand(bool bExpand);
+    SAL_DLLPRIVATE void set_margin_top(int nMargin);
+    SAL_DLLPRIVATE void set_margin_bottom(int nMargin);
+    SAL_DLLPRIVATE void set_vexpand(bool bExpand);
 
-    weld::Window* GetFrameWeld();
+    SAL_DLLPRIVATE weld::Window* GetFrameWeld();
 
-    void DataChanged();
+    SAL_DLLPRIVATE void DataChanged();
 
 private:
     std::unique_ptr<weld::Builder> mxBuilder;

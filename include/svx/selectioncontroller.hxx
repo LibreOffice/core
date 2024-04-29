@@ -43,42 +43,42 @@ namespace table { struct CellPos; }
 class SVXCORE_DLLPUBLIC SelectionController: public cppu::OWeakObject
 {
 public:
-    virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
-    virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
-    virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
-    virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
+    SAL_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
+    SAL_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
+    SAL_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
+    SAL_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
 
-    virtual void onSelectionHasChanged();
+    SAL_DLLPRIVATE virtual void onSelectionHasChanged();
 
-    virtual void onSelectAll();
+    SAL_DLLPRIVATE virtual void onSelectAll();
 
-    virtual void GetState( SfxItemSet& rSet );
-    virtual void Execute( SfxRequest& rReq );
+    SAL_DLLPRIVATE virtual void GetState( SfxItemSet& rSet );
+    SAL_DLLPRIVATE virtual void Execute( SfxRequest& rReq );
 
-    virtual bool DeleteMarked();
+    SAL_DLLPRIVATE virtual bool DeleteMarked();
 
-    virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
-    virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
+    SAL_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
+    SAL_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
 
-    virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const;
-    virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
+    SAL_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const;
+    SAL_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
 
-    virtual rtl::Reference<SdrObject> GetMarkedSdrObjClone( SdrModel& rTargetModel );
-    virtual bool PasteObjModel( const SdrModel& rModel );
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> GetMarkedSdrObjClone( SdrModel& rTargetModel );
+    SAL_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel );
 
     /** applies a format paint brush set from the current selection.
         if bNoCharacterFormats is true, no character attributes are changed.
         if bNoParagraphFormats is true, no paragraph attributes are changed.
     */
-    virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, sal_Int16 nDepth, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    SAL_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, sal_Int16 nDepth, bool bNoCharacterFormats, bool bNoParagraphFormats );
     /// This is a table object, and one or more of its cells are selected.
-    virtual bool hasSelectedCells() const;
+    SAL_DLLPRIVATE virtual bool hasSelectedCells() const;
     /// Allows adjusting the point or mark of the selection to a document coordinate.
-    virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint);
+    SAL_DLLPRIVATE virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint);
     /// Get the position of the first and the last selected cell.
-    virtual void getSelectedCells(table::CellPos& rFirstPos, table::CellPos& rLastPos);
+    SAL_DLLPRIVATE virtual void getSelectedCells(table::CellPos& rFirstPos, table::CellPos& rLastPos);
     /// Changes the font (grow/shrink) according to the input parameters.
-    virtual bool ChangeFontSize(bool bGrow, const FontList* pFontList);
+    SAL_DLLPRIVATE virtual bool ChangeFontSize(bool bGrow, const FontList* pFontList);
 };
 
 }

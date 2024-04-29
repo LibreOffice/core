@@ -156,15 +156,6 @@ CompressGraphicsDialog::UpdateResolutionLB()
 CompressGraphicsDialog::UpdateSensitivity(bool)
 CompressGraphicsDialog::recallParameter()
 ContextChangeEventMultiplexer::GetModuleName(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-Control::AppendLayoutData(Control const&) const
-Control::Control(WindowType)
-Control::CreateLayoutData() const
-Control::DrawControlText(OutputDevice&, tools::Rectangle const&, rtl::OUString const&, DrawTextFlags, std::__debug::vector<tools::Rectangle, std::allocator<tools::Rectangle> >*, rtl::OUString*, Size const*) const
-Control::GetControlTextRect(OutputDevice&, tools::Rectangle const&, rtl::OUString const&, DrawTextFlags, Size*) const
-Control::GetUnzoomedControlPointFont() const
-Control::HasLayoutData() const
-Control::SetLayoutDataParent(Control const*) const
-Control::ToRelativeLineIndex(long) const
 ConvertChar::RecodeChar(char16_t) const
 CurrencyBox::DataChanged(DataChangedEvent const&)
 CurrencyBox::EventNotify(NotifyEvent&)
@@ -6604,14 +6595,6 @@ SvtListener::BroadcasterDying(SvtBroadcaster&)
 SvtModuleOptions::IsDataBase() const
 SvtOptionsDialogOptions::IsHidden(rtl::OUString const&) const
 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent()
-SvtPathOptions::GetBitmapPath() const
-SvtPathOptions::GetDictionaryPath() const
-SvtPathOptions::GetFavoritesPath() const
-SvtPathOptions::GetFilterPath() const
-SvtPathOptions::GetLinguisticPath() const
-SvtPathOptions::GetModulePath() const
-SvtPathOptions::GetPluginPath() const
-SvtPathOptions::UseVariable(rtl::OUString const&) const
 SvtScriptedTextHelper::SvtScriptedTextHelper(SvtScriptedTextHelper const&)
 SvtSysLocaleOptions::ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints)
 SvtSysLocaleOptions::GetCurrencyChangeLink()
@@ -13742,40 +13725,6 @@ oox::drawingml::GraphicExport::writeNewSvgEntryToStorage(Graphic const&, bool)
 oox::drawingml::GraphicShapeContext::onCreateContext(int, oox::AttributeList const&)
 oox::drawingml::GraphicalObjectFrameContext::onCreateContext(int, oox::AttributeList const&)
 oox::drawingml::GraphicalObjectFrameContext::onEndElement()
-oox::drawingml::Shape::Shape(std::shared_ptr<oox::drawingml::Shape> const&)
-oox::drawingml::Shape::addChildren(oox::core::XmlFilterBase&, oox::drawingml::Shape&, oox::drawingml::Theme const*, com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> const&, std::__debug::map<rtl::OUString, std::shared_ptr<oox::drawingml::Shape>, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, std::shared_ptr<oox::drawingml::Shape> > > >*, basegfx::B2DHomMatrix const&)
-oox::drawingml::Shape::applyShapeReference(oox::drawingml::Shape const&, bool)
-oox::drawingml::Shape::cloneFillProperties()
-oox::drawingml::Shape::convertSmartArtToMetafile(oox::core::XmlFilterBase const&)
-oox::drawingml::Shape::createAndInsert(oox::core::XmlFilterBase&, rtl::OUString const&, oox::drawingml::Theme const*, com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> const&, bool, bool, basegfx::B2DHomMatrix&, oox::drawingml::FillProperties const&, std::shared_ptr<oox::drawingml::Shape>)
-oox::drawingml::Shape::finalizeServiceName(oox::core::XmlFilterBase&, rtl::OUString const&, com::sun::star::awt::Rectangle const&)
-oox::drawingml::Shape::getActualEffectProperties(oox::drawingml::Theme const*) const
-oox::drawingml::Shape::getActualFillProperties(oox::drawingml::Theme const*, oox::drawingml::FillProperties const*) const
-oox::drawingml::Shape::getActualLineProperties(oox::drawingml::Theme const*) const
-oox::drawingml::Shape::getShapeStyleRef(int) const
-oox::drawingml::Shape::getTableProperties()
-oox::drawingml::Shape::keepDiagramCompatibilityInfo()
-oox::drawingml::Shape::keepDiagramDrawing(oox::core::XmlFilterBase&, rtl::OUString const&)
-oox::drawingml::Shape::migrateDiagramHelperToNewShape(std::shared_ptr<oox::drawingml::Shape> const&)
-oox::drawingml::Shape::prepareDiagramHelper(std::shared_ptr<oox::drawingml::Diagram> const&, std::shared_ptr<oox::drawingml::Theme> const&)
-oox::drawingml::Shape::propagateDiagramHelper()
-oox::drawingml::Shape::putPropertiesToGrabBag(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-oox::drawingml::Shape::putPropertyToGrabBag(com::sun::star::beans::PropertyValue const&)
-oox::drawingml::Shape::putPropertyToGrabBag(rtl::OUString const&, com::sun::star::uno::Any const&)
-oox::drawingml::Shape::renderDiagramToGraphic(oox::core::XmlFilterBase const&)
-oox::drawingml::Shape::resolveRelationshipsOfTypeFromOfficeDoc(oox::core::XmlFilterBase&, rtl::OUString const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-oox::drawingml::Shape::setChartType(bool)
-oox::drawingml::Shape::setDefaults(bool)
-oox::drawingml::Shape::setDiagramType()
-oox::drawingml::Shape::setLockedCanvas(bool)
-oox::drawingml::Shape::setMasterTextListStyle(std::shared_ptr<oox::drawingml::TextListStyle> const&)
-oox::drawingml::Shape::setOleObjectType()
-oox::drawingml::Shape::setTableType()
-oox::drawingml::Shape::setTextBody(std::shared_ptr<oox::drawingml::TextBody> const&)
-oox::drawingml::Shape::setTextBox(bool)
-oox::drawingml::Shape::setWPGChild(bool)
-oox::drawingml::Shape::setWordprocessingCanvas(bool)
-oox::drawingml::Shape::setWps(bool)
 oox::drawingml::ShapeContext::onCreateContext(int, oox::AttributeList const&)
 oox::drawingml::ShapeContext::~ShapeContext()
 oox::drawingml::ShapeExport::GetNewShapeID(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
@@ -14638,26 +14587,6 @@ sdr::MasterPageDescriptor::SetVisibleLayers(SdrLayerIDSet const&)
 sdr::MasterPageDescriptor::getCorrectSdrPageProperties() const
 sdr::MasterPageDescriptor::~MasterPageDescriptor()
 sdr::PolyPolygonEditor::GetRelativePolyPoint(basegfx::B2DPolyPolygon const&, unsigned int, unsigned int&, unsigned int&)
-sdr::SelectionController::ApplyFormatPaintBrush(SfxItemSet&, short, bool, bool)
-sdr::SelectionController::ChangeFontSize(bool, FontList const*)
-sdr::SelectionController::DeleteMarked()
-sdr::SelectionController::Execute(SfxRequest&)
-sdr::SelectionController::GetAttributes(SfxItemSet&, bool) const
-sdr::SelectionController::GetMarkedSdrObjClone(SdrModel&)
-sdr::SelectionController::GetState(SfxItemSet&)
-sdr::SelectionController::GetStyleSheet(SfxStyleSheet*&) const
-sdr::SelectionController::PasteObjModel(SdrModel const&)
-sdr::SelectionController::SetAttributes(SfxItemSet const&, bool)
-sdr::SelectionController::SetStyleSheet(SfxStyleSheet*, bool)
-sdr::SelectionController::getSelectedCells(sdr::table::CellPos&, sdr::table::CellPos&)
-sdr::SelectionController::hasSelectedCells() const
-sdr::SelectionController::onKeyInput(KeyEvent const&, vcl::Window*)
-sdr::SelectionController::onMouseButtonDown(MouseEvent const&, vcl::Window*)
-sdr::SelectionController::onMouseButtonUp(MouseEvent const&, vcl::Window*)
-sdr::SelectionController::onMouseMove(MouseEvent const&, vcl::Window*)
-sdr::SelectionController::onSelectAll()
-sdr::SelectionController::onSelectionHasChanged()
-sdr::SelectionController::setCursorLogicPosition(Point const&, bool)
 sdr::ViewSelection::GetAllMarkedObjects() const
 sdr::ViewSelection::GetEdgesOfMarkedNodes() const
 sdr::ViewSelection::GetMarkedEdgesOfMarkedNodes() const
@@ -15041,24 +14970,6 @@ sfx2::sidebar::Context::operator!=(sfx2::sidebar::Context const&) const
 sfx2::sidebar::Context::operator==(sfx2::sidebar::Context const&) const
 sfx2::sidebar::ControllerItem::GetControlState(unsigned short, boost::property_tree::basic_ptree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
 sfx2::sidebar::ControllerItem::StateChangedAtToolBoxControl(unsigned short, SfxItemState, SfxPoolItem const*)
-sfx2::sidebar::Panel::DataChanged()
-sfx2::sidebar::Panel::GetContents() const
-sfx2::sidebar::Panel::GetElementParentWindow()
-sfx2::sidebar::Panel::GetElementWindow()
-sfx2::sidebar::Panel::GetFrameWeld()
-sfx2::sidebar::Panel::GetTitleBar() const
-sfx2::sidebar::Panel::HasIdPredicate(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
-sfx2::sidebar::Panel::Panel(sfx2::sidebar::PanelDescriptor const&, weld::Widget*, bool, sfx2::sidebar::Deck*, std::function<sfx2::sidebar::Context ()>, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-sfx2::sidebar::Panel::SetExpanded(bool)
-sfx2::sidebar::Panel::SetHeightPixel(int)
-sfx2::sidebar::Panel::SetLurkMode(bool)
-sfx2::sidebar::Panel::SetUIElement(com::sun::star::uno::Reference<com::sun::star::ui::XUIElement> const&)
-sfx2::sidebar::Panel::Show(bool)
-sfx2::sidebar::Panel::get_extents(tools::Rectangle&) const
-sfx2::sidebar::Panel::set_margin_bottom(int)
-sfx2::sidebar::Panel::set_margin_top(int)
-sfx2::sidebar::Panel::set_vexpand(bool)
-sfx2::sidebar::Panel::~Panel()
 sfx2::sidebar::ResourceManager::GetDeckDescriptor(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 sfx2::sidebar::ResourceManager::GetLastActiveDeck(sfx2::sidebar::Context const&)
 sfx2::sidebar::ResourceManager::GetLegacyAddonRootNode(rtl::OUString const&)
@@ -15731,16 +15642,6 @@ utl::ProgressHandlerWrap::pop()
 utl::ProgressHandlerWrap::push(com::sun::star::uno::Any const&)
 utl::ProgressHandlerWrap::update(com::sun::star::uno::Any const&)
 utl::SearchParam::SearchParam(utl::SearchParam const&)
-utl::TempFileFastService::available()
-utl::TempFileFastService::checkConnected()
-utl::TempFileFastService::checkError() const
-utl::TempFileFastService::closeInput()
-utl::TempFileFastService::flush()
-utl::TempFileFastService::getLength()
-utl::TempFileFastService::readSomeBytes(com::sun::star::uno::Sequence<signed char>&, int)
-utl::TempFileFastService::skipBytes(int)
-utl::TempFileFastService::truncate()
-utl::TempFileFastService::~TempFileFastService()
 utl::TempFileNamed::TempFileNamed(utl::TempFileNamed&&)
 utl::TextSearch::Init(utl::SearchParam const&, com::sun::star::lang::Locale const&)
 utl::TextSearch::getXTextSearch(i18nutil::SearchOptions2 const&)

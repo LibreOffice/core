@@ -204,32 +204,32 @@ class UNOTOOLS_DLLPUBLIC TempFileFastService final : public TempFileFastService_
     bool mbInClosed;
     bool mbOutClosed;
 
-    void checkError () const;
-    void checkConnected ();
+    SAL_DLLPRIVATE void checkError () const;
+    SAL_DLLPRIVATE void checkConnected ();
 
 public:
     explicit TempFileFastService ();
-    virtual ~TempFileFastService () override;
+    SAL_DLLPRIVATE virtual ~TempFileFastService () override;
 
     // XInputStream
     virtual ::sal_Int32 SAL_CALL readBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
-    virtual ::sal_Int32 SAL_CALL available(  ) override;
-    virtual void SAL_CALL closeInput(  ) override;
+    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL available(  ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL closeInput(  ) override;
     // XOutputStream
     virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
-    virtual void SAL_CALL flush(  ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL flush(  ) override;
     virtual void SAL_CALL closeOutput(  ) override;
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 location ) override;
     virtual sal_Int64 SAL_CALL getPosition(  ) override;
-    virtual sal_Int64 SAL_CALL getLength(  ) override;
+    SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getLength(  ) override;
     // XStream
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
     // XTruncate
-    virtual void SAL_CALL truncate() override;
+    SAL_DLLPRIVATE virtual void SAL_CALL truncate() override;
 
 };
 
