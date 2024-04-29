@@ -132,7 +132,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static bool     GetRangeFromString(
+    SC_DLLPUBLIC static bool GetRangeFromString(
                             ScRange& rRange,
                             std::u16string_view rRangeStr,
                             const ScDocument& rDocument,
