@@ -473,6 +473,10 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
+#ifdef MACOSX
+    virtual bool            ShouldDownscaleIconsAtSurface(double* pScaleOut) const override;
+#endif
+
     virtual SystemGraphicsData
                             GetGraphicsData() const override;
 };

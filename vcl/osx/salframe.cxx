@@ -1390,7 +1390,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     bool bUseDarkMode(GetUseDarkMode());
-    OUString sThemeName(!bUseDarkMode ? u"sukapura" : u"sukapura_dark");
+    OUString sThemeName(!bUseDarkMode ? u"sukapura_svg" : u"sukapura_dark_svg");
     aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
 
     Color aControlBackgroundColor(getNSBoxBackgroundColor([NSColor controlBackgroundColor]));

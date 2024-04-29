@@ -79,9 +79,9 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
         if (!bPreferDarkIconTheme)
-            r = "sukapura";
+            r = "sukapura_svg";
         else
-            r = "sukapura_dark";
+            r = "sukapura_dark_svg";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
          desktopEnvironment.equalsIgnoreAsciiCase("mate") ||

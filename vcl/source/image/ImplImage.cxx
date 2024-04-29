@@ -61,13 +61,20 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
     sal_Int32 nScalePercentage = -1;
 
     double fScale(1.0);
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+#ifdef MACOSX
+    if (aIconTheme.endsWith("_svg"))
+    {
+#endif
     if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(&fScale)) // scale at the surface
     {
         nScalePercentage = fScale * 100.0;
         eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
     }
+#ifdef MACOSX
+    }
+#endif
 
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmapEx, true,
                                     nScalePercentage, eScalingFlags))
     {

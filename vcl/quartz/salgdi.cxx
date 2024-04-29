@@ -299,6 +299,19 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     mpBackend->drawTextLayout(rLayout);
 }
 
+#ifdef MACOSX
+
+bool AquaSalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return SalGraphics::ShouldDownscaleIconsAtSurface(pScaleOut);
+    if (pScaleOut)
+        *pScaleOut = sal::aqua::getWindowScaling();
+    return true;
+}
+
+#endif
+
 void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
 {
 #ifdef IOS
