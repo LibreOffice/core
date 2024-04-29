@@ -6589,11 +6589,15 @@ void ScGridWindow::UpdateCursorOverlay()
             tools::Long nSizeYPix;
             mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
+            const double nAdjustBorder(mrViewData.GetZoomX() * 3);
+            aScrPos.AdjustX(-nAdjustBorder);
+            aScrPos.AdjustY(-nAdjustBorder);
+
             if (bLayoutRTL)
                 aScrPos.AdjustX( -(nSizeXPix - 2) );       // move instead of mirroring
 
             // show the cursor as 4 (thin) rectangles
-            tools::Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
+            tools::Rectangle aRect(aScrPos, Size(nSizeXPix + 2*nAdjustBorder, nSizeYPix + 2*nAdjustBorder));
 
             float fScaleFactor = GetDPIScaleFactor();
 
