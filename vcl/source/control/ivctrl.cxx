@@ -481,6 +481,20 @@ IMPL_LINK_NOARG(VerticalTabControl, ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
         SetCurPageId(pData->sId);
 }
 
+bool VerticalTabControl::EventNotify(NotifyEvent& rNEvt)
+{
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
+    {
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        if (nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN)
+        {
+            m_xChooser->DoKeyInput(*(rNEvt.GetKeyEvent()));
+            return true;
+        }
+    }
+    return VclHBox::EventNotify(rNEvt);
+}
+
 void VerticalTabControl::ActivatePage()
 {
     m_aActivateHdl.Call( this );

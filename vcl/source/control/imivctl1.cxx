@@ -879,7 +879,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( pCursor )
             {
                 MakeEntryVisible( pCursor );
-                if( nCode == KEY_UP )
+                if( nCode == KEY_UP || (rKEvt.GetKeyCode().IsMod1() && nCode == KEY_PAGEUP))
                     pNewCursor = pImpCursor->GoUpDown(pCursor,false);
                 else
                     pNewCursor = pImpCursor->GoPageUpDown(pCursor,false);
@@ -901,7 +901,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_PAGEDOWN:
             if( pCursor )
             {
-                if( nCode == KEY_DOWN )
+                if( nCode == KEY_DOWN || (rKEvt.GetKeyCode().IsMod1() && nCode == KEY_PAGEDOWN) )
                     pNewCursor=pImpCursor->GoUpDown( pCursor,true );
                 else
                     pNewCursor=pImpCursor->GoPageUpDown( pCursor,true );

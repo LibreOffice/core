@@ -53,6 +53,8 @@ public:
     virtual ~VerticalTabControl() override;
     virtual void dispose() override;
 
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
+
     sal_uInt16 GetPageCount() const { return m_xChooser->GetEntryCount(); }
 
     const OUString& GetCurPageId() const { return m_sCurrentPageId; }
