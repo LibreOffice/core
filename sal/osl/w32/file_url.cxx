@@ -943,7 +943,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
                 else
                 {
                     // Call GetFullPathNameW to get current directory on ustrRelSysPath's drive
-                    wchar_t baseDrive[3] = { ustrRelSysPath[0], ':' }; // just "C:"
+                    wchar_t baseDrive[3] = { ustrRelSysPath[0], ':', 0 }; // just "C:"
                     osl::LongPathBuffer<wchar_t> aBuf(MAX_LONG_PATH);
                     DWORD dwResult
                         = GetFullPathNameW(baseDrive, aBuf.getBufSizeInSymbols(), aBuf, nullptr);
