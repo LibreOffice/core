@@ -99,15 +99,15 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 }
 
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
-    pParent(pNewParent),
-    pModel(nullptr),
+    m_pParent(pNewParent),
+    m_pModel(nullptr),
     maControlLayerName("controls")
 {
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
-    pParent(nullptr),
-    pModel(nullptr),
+    m_pParent(nullptr),
+    m_pModel(nullptr),
     maControlLayerName("controls")
 {
     *this = rSrcLayerAdmin;
@@ -127,7 +127,7 @@ SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
     if (this != &rSrcLayerAdmin)
     {
         maLayers.clear();
-        pParent=rSrcLayerAdmin.pParent;
+        m_pParent=rSrcLayerAdmin.m_pParent;
         sal_uInt16 i;
         sal_uInt16 nCount=rSrcLayerAdmin.GetLayerCount();
         for (i=0; i<nCount; i++) {
@@ -139,8 +139,8 @@ SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 
 void SdrLayerAdmin::SetModel(SdrModel* pNewModelel)
 {
-    if (pNewModelel!=pModel) {
-        pModel=pNewModelel;
+    if (pNewModelel!=m_pModel) {
+        m_pModel=pNewModelel;
         sal_uInt16 nCount=GetLayerCount();
         sal_uInt16 i;
         for (i=0; i<nCount; i++) {
@@ -151,16 +151,16 @@ void SdrLayerAdmin::SetModel(SdrModel* pNewModelel)
 
 void SdrLayerAdmin::Broadcast() const
 {
-    if (pModel!=nullptr) {
+    if (m_pModel!=nullptr) {
         SdrHint aHint(SdrHintKind::LayerOrderChange);
-        pModel->Broadcast(aHint);
-        pModel->SetChanged();
+        m_pModel->Broadcast(aHint);
+        m_pModel->SetChanged();
     }
 }
 
 void SdrLayerAdmin::InsertLayer(std::unique_ptr<SdrLayer> pLayer, sal_uInt16 nPos)
 {
-        pLayer->SetModel(pModel);
+        pLayer->SetModel(m_pModel);
         if(nPos==0xFFFF)
             maLayers.push_back(std::move(pLayer));
         else
@@ -180,7 +180,7 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
 {
     SdrLayerID nID=GetUniqueLayerID();
     SdrLayer* pLay=new SdrLayer(nID,rName);
-    pLay->SetModel(pModel);
+    pLay->SetModel(m_pModel);
     if(nPos==0xFFFF)
         maLayers.push_back(std::unique_ptr<SdrLayer>(pLay));
     else
@@ -220,9 +220,9 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName) const
             i++;
     }
 
-    if(!pLay && pParent)
+    if(!pLay && m_pParent)
     {
-        pLay = pParent->GetLayer(rName);
+        pLay = m_pParent->GetLayer(rName);
     }
 
     return pLay;
@@ -256,7 +256,7 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
         aSet.Set(GetLayer(j)->GetID());
     }
     sal_uInt8 i;
-    if (pParent != nullptr)
+    if (m_pParent != nullptr)
     {
         i = 254;
         while (i && aSet.IsSet(SdrLayerID(i)))

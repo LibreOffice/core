@@ -105,8 +105,8 @@ friend class SdrModel;
 friend class SdrPage;
 
     std::vector<std::unique_ptr<SdrLayer>> maLayers;
-    SdrLayerAdmin* pParent; // The page's admin knows the doc's admin
-    SdrModel* pModel; // For broadcasting
+    SdrLayerAdmin* m_pParent; // The page's admin knows the doc's admin
+    SdrModel* m_pModel; // For broadcasting
     OUString maControlLayerName;
     // Find a LayerID which is not in use yet. If all have been used up,
     // we return 0.
