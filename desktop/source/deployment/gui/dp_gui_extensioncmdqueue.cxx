@@ -507,27 +507,24 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else
     {
+        assert(approve != abort);
         // select:
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > conts(
-            xRequest->getContinuations() );
-        uno::Reference< task::XInteractionContinuation > const * pConts = conts.getConstArray();
-        sal_Int32 len = conts.getLength();
-        for ( sal_Int32 pos = 0; pos < len; ++pos )
+        for (auto& cont : xRequest->getContinuations())
         {
             if (approve) {
-                uno::Reference< task::XInteractionApprove > xInteractionApprove( pConts[ pos ], uno::UNO_QUERY );
+                uno::Reference<task::XInteractionApprove> xInteractionApprove(cont, uno::UNO_QUERY);
                 if (xInteractionApprove.is()) {
                     xInteractionApprove->select();
                     // don't query again for ongoing continuations:
-                    approve = false;
+                    break;
                 }
             }
-            else if (abort) {
-                uno::Reference< task::XInteractionAbort > xInteractionAbort( pConts[ pos ], uno::UNO_QUERY );
+            else /*if (abort)*/ {
+                uno::Reference<task::XInteractionAbort> xInteractionAbort(cont, uno::UNO_QUERY);
                 if (xInteractionAbort.is()) {
                     xInteractionAbort->select();
                     // don't query again for ongoing continuations:
-                    abort = false;
+                    break;
                 }
             }
         }

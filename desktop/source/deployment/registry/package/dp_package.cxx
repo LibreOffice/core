@@ -468,10 +468,8 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 
 void BackendImpl::PackageImpl::disposing()
 {
-    sal_Int32 len = m_bundle.getLength();
-    Reference<deployment::XPackage> const * p = m_bundle.getConstArray();
-    for ( sal_Int32 pos = 0; pos < len; ++pos )
-        try_dispose( p[ pos ] );
+    for (auto& xPackage : m_bundle)
+        try_dispose(xPackage);
     m_bundle.realloc( 0 );
 
     Package::disposing();
@@ -1064,13 +1062,12 @@ void BackendImpl::PackageImpl::exportTo(
         std::vector< Sequence<beans::PropertyValue> > manifest;
         manifest.reserve( bundle.getLength() );
         sal_Int32 baseURLlen = m_url_expanded.getLength();
-        Reference<deployment::XPackage> const *pbundle = bundle.getConstArray();
         static constexpr OUStringLiteral strMediaType( u"MediaType" );
         static constexpr OUStringLiteral strFullPath( u"FullPath" );
         static constexpr OUStringLiteral strIsFolder( u"IsFolder" );
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
-            Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
+            Reference<deployment::XPackage> const& xPackage = bundle[pos];
             OUString url_( expandUnoRcUrl( xPackage->getURL() ) );
             OSL_ASSERT( url_.getLength() >= baseURLlen );
             OUString fullPath;

@@ -623,21 +623,14 @@ void UpdateCommandEnv::handle(
     else
     {
         // select:
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts(
-            xRequest->getContinuations() );
-        css::uno::Reference< css::task::XInteractionContinuation > const * pConts =
-            conts.getConstArray();
-        sal_Int32 len = conts.getLength();
-        for ( sal_Int32 pos = 0; pos < len; ++pos )
+        for (auto& cont : xRequest->getContinuations())
         {
-            if (approve) {
-                css::uno::Reference< css::task::XInteractionApprove > xInteractionApprove(
-                    pConts[ pos ], css::uno::UNO_QUERY );
-                if (xInteractionApprove.is()) {
-                    xInteractionApprove->select();
-                    // don't query again for ongoing continuations:
-                    approve = false;
-                }
+            css::uno::Reference< css::task::XInteractionApprove > xInteractionApprove(
+                cont, css::uno::UNO_QUERY );
+            if (xInteractionApprove.is()) {
+                xInteractionApprove->select();
+                // don't query again for ongoing continuations:
+                break;
             }
         }
     }

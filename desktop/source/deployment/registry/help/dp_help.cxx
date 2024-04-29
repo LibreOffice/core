@@ -396,12 +396,8 @@ void BackendImpl::implProcessHelp(
                 }
 
                 // Scan languages
-                Sequence< OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
-                sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
-                const OUString* pSeq = aLanguageFolderSeq.getConstArray();
-                for( sal_Int32 iLang = 0 ; iLang < nLangCount ; ++iLang )
+                for (auto& aLangURL : xSFA->getFolderContents(aExpandedHelpURL, true))
                 {
-                    OUString aLangURL = pSeq[iLang];
                     if( xSFA->isFolder( aLangURL ) )
                     {
                         std::vector< OUString > aXhpFileVector;
@@ -436,12 +432,8 @@ void BackendImpl::implProcessHelp(
 
                         sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
 
-                        Sequence< OUString > aSubLangSeq = xSFA->getFolderContents( aLangURL, true );
-                        sal_Int32 nSubLangCount = aSubLangSeq.getLength();
-                        const OUString* pSubLangSeq = aSubLangSeq.getConstArray();
-                        for( sal_Int32 iSubLang = 0 ; iSubLang < nSubLangCount ; ++iSubLang )
+                        for (auto& aSubFolderURL : xSFA->getFolderContents(aLangURL, true))
                         {
-                            OUString aSubFolderURL = pSubLangSeq[iSubLang];
                             if( !xSFA->isFolder( aSubFolderURL ) )
                                 continue;
 
@@ -565,12 +557,8 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
     Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
 
     // Scan xhp files recursively
-    Sequence< OUString > aSeq = xSFA->getFolderContents( aDir, true );
-    sal_Int32 nCount = aSeq.getLength();
-    const OUString* pSeq = aSeq.getConstArray();
-    for( sal_Int32 i = 0 ; i < nCount ; ++i )
+    for (auto& aURL : xSFA->getFolderContents(aDir, true))
     {
-        OUString aURL = pSeq[i];
         if( xSFA->isFolder( aURL ) )
         {
             implCollectXhpFiles( aURL, o_rXhpFileVector );
