@@ -560,6 +560,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testAllowTextAfterFloatingTableBreak)
     CPPUNIT_ASSERT(bAllowTextAfterFloatingTableBreak);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotMirrorRtlDrawObjs)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When checking the state of the DoNotMirrorRtlDrawObjs compat flag:
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bDoNotMirrorRtlDrawObjs{};
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // i.e. the compat flag was not recognized.
+    xSettings->getPropertyValue("DoNotMirrorRtlDrawObjs") >>= bDoNotMirrorRtlDrawObjs;
+    // Then make sure it's false by default:
+    CPPUNIT_ASSERT(!bDoNotMirrorRtlDrawObjs);
+
+    // And when setting DoNotMirrorRtlDrawObjs=true:
+    xSettings->setPropertyValue("DoNotMirrorRtlDrawObjs", uno::Any(true));
+    // Then make sure it gets enabled:
+    xSettings->getPropertyValue("DoNotMirrorRtlDrawObjs") >>= bDoNotMirrorRtlDrawObjs;
+    CPPUNIT_ASSERT(bDoNotMirrorRtlDrawObjs);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

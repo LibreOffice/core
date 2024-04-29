@@ -99,6 +99,7 @@ enum class DocumentSettingId
     // tdf#119908 new paragraph justification
     JUSTIFY_LINES_WITH_SHRINKING,
     APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
+    DO_NOT_MIRROR_RTL_DRAW_OBJS,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,
