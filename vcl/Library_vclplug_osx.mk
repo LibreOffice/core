@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,vclplug_osx,\
     harfbuzz \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         skia \
+        libpng \
     ) \
 ))
 
@@ -154,6 +155,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\
     Cocoa \
     Carbon \
     CoreFoundation \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        QuartzCore \
+        Metal \
+    ) \
 ))
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)

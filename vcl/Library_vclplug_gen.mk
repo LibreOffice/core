@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	Xrender \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 	    skia \
+        libpng \
 	    fontconfig \
 	) \
 ))
@@ -72,6 +73,9 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 	-lXext \
 	-lSM \
 	-lICE \
+	$(if $(filter SKIA,$(BUILD_TYPE)), \
+		-lX11-xcb \
+	) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
