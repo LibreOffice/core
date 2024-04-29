@@ -96,11 +96,11 @@ public:
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell const & i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
-    SAL_WARN_UNUSED_RESULT static SfxViewFrame* Current();
-    SAL_WARN_UNUSED_RESULT static SfxViewFrame* GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
-    SAL_WARN_UNUSED_RESULT static SfxViewFrame* GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
+    SAL_RET_MAYBENULL static SfxViewFrame* Current();
+    SAL_RET_MAYBENULL static SfxViewFrame* GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
+    SAL_RET_MAYBENULL static SfxViewFrame* GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
 
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE static SfxViewFrame* Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc );
+    SAL_RET_MAYBENULL SAL_DLLPRIVATE static SfxViewFrame* Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc );
 
     SAL_DLLPRIVATE void     DoActivate(bool bMDI);
     SAL_DLLPRIVATE void     DoDeactivate(bool bMDI, SfxViewFrame const *pOld);

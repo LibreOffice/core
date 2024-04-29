@@ -13,9 +13,11 @@ $(eval $(call gb_Executable_use_package,climaker,\
 	cli_basetypes_copy \
 ))
 
+# -analyze- to turn that off due to internal compiler error
 $(eval $(call gb_Executable_add_cxxclrflags,climaker,\
 	-LN \
 	-wd4715 \
+	-analyze- \
 ))
 
 $(eval $(call gb_Executable_add_ldflags,climaker,\

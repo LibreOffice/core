@@ -2835,8 +2835,7 @@ bool SfxViewShell::PrepareClose
     return true;
 }
 
-
-SfxViewShell* SfxViewShell::Current()
+SAL_RET_MAYBENULL SfxViewShell* SfxViewShell::Current()
 {
     SfxViewFrame *pCurrent = SfxViewFrame::Current();
     return pCurrent ? pCurrent->GetViewShell() : nullptr;
@@ -2850,7 +2849,7 @@ bool SfxViewShell::IsCurrentLokViewReadOnly()
     return pCurrent && pCurrent->IsLokReadOnlyView();
 }
 
-SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
+SAL_RET_MAYBENULL SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 {
     if ( !i_rController.is() )
         return nullptr;
@@ -2865,7 +2864,6 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
     }
     return nullptr;
 }
-
 
 SdrView* SfxViewShell::GetDrawView() const
 
@@ -3011,7 +3009,7 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 
 
 // returns the first shell of spec. type viewing the specified doc.
-SfxViewShell* SfxViewShell::GetFirst
+SAL_RET_MAYBENULL SfxViewShell* SfxViewShell::GetFirst
 (
     bool          bOnlyVisible,
     const std::function< bool ( const SfxViewShell& ) >& isViewShell
@@ -3040,7 +3038,7 @@ SfxViewShell* SfxViewShell::GetFirst
 }
 
 // returns the next shell of spec. type viewing the specified doc.
-SfxViewShell* SfxViewShell::GetNext
+SAL_RET_MAYBENULL SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
     bool                bOnlyVisible,
@@ -3067,7 +3065,6 @@ SfxViewShell* SfxViewShell::GetNext
 
     return nullptr;
 }
-
 
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )

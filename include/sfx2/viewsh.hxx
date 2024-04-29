@@ -204,14 +204,14 @@ protected:
 
 public:
     // Iteration
-    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
-    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetNext( const SfxViewShell& rPrev,
-                                         bool bOnlyVisible = true,
-                                         const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
-    SAL_WARN_UNUSED_RESULT static SfxViewShell* Current();
+    SAL_RET_MAYBENULL static SfxViewShell* GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
+    SAL_RET_MAYBENULL static SfxViewShell* GetNext( const SfxViewShell& rPrev,
+                   bool bOnlyVisible = true,
+                   const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
+    SAL_RET_MAYBENULL static SfxViewShell* Current();
     SAL_WARN_UNUSED_RESULT static bool IsCurrentLokViewReadOnly();
 
-    SAL_WARN_UNUSED_RESULT static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
+    SAL_RET_MAYBENULL static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)

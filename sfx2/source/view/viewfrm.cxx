@@ -2067,14 +2067,14 @@ void SfxViewFrame::KillDispatcher_Impl()
     }
 }
 
-SfxViewFrame* SfxViewFrame::Current()
+SAL_RET_MAYBENULL SfxViewFrame* SfxViewFrame::Current()
 {
     SfxApplication* pApp = SfxApplication::Get();
     return pApp ? pApp->Get_Impl()->pViewFrame : nullptr;
 }
 
 // returns the first window of spec. type viewing the specified doc.
-SfxViewFrame* SfxViewFrame::GetFirst
+SAL_RET_MAYBENULL SfxViewFrame* SfxViewFrame::GetFirst
 (
     const SfxObjectShell*   pDoc,
     bool                    bOnlyIfVisible
@@ -2097,7 +2097,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
 }
 
 // returns the next window of spec. type viewing the specified doc.
-SfxViewFrame* SfxViewFrame::GetNext
+SAL_RET_MAYBENULL SfxViewFrame* SfxViewFrame::GetNext
 (
     const SfxViewFrame&     rPrev,
     const SfxObjectShell*   pDoc,
@@ -2448,7 +2448,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell const & i_rDoc, c
     );
 }
 
-SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, const SfxObjectShell* i_pDoc )
+SAL_RET_MAYBENULL SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, const SfxObjectShell* i_pDoc )
 {
     if ( !i_rController.is() )
         return nullptr;

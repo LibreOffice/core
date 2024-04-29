@@ -49,7 +49,7 @@ endef
 gb_Helper_remove_overridden_flags = \
     $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2 -Zc:inline -Zc:inline- \
         -Zc:dllexportInlines -Zc:dllexportInlines- -EHs -EHa -DNOMINMAX -UNOMINMAX -D_X86_=1 -U_X86_ \
-        -D_AMD64_=1 -U_AMD64_,$(1)) \
+        -D_AMD64_=1 -U_AMD64_ $(MSVC_ANALYZE_FLAGS) -analyze-,$(1)) \
     $(lastword $(filter -W4 -w,$(1))) \
     $(lastword $(filter -Od -O2,$(1))) \
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1))) \
@@ -58,7 +58,14 @@ gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -D_X86_=1 -U_X86_,$(1))) \
     $(lastword $(filter -D_AMD64_=1 -U_AMD64_,$(1))) \
     $(lastword $(filter -Zc:inline -Zc:inline-,$(1))) \
-    $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)))
+    $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1))) \
+    $(lastword $(filter $(MSVC_ANALYZE_FLAGS) -analyze-,$(1)))
+
+# When gb_LinkTarget_use_clang is used, filter out MSVC flags that Clang doesn't know.
+# $(call gb_CObject__filter_out_clang_cflags,cflags)
+define gb_CObject__filter_out_clang_cflags
+    $(filter-out $(gb_FilterOutClangCFLAGS),$(1))
+endef
 
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
@@ -71,7 +78,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Helper_remove_overridden_flags, \
 			$(DEFS) \
 			$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \
-			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
+			$(if $(6), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
+			$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 			$(if $(EXTERNAL_CODE), \
 				$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
 				$(gb_DEFS_INTERNAL)) \

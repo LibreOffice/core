@@ -104,6 +104,10 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4706: assignment within conditional expression
 
+MSVC_ANALYZE_FLAGS := -analyze:ruleset$(SRCDIR)/solenv/vs/LibreOffice.ruleset
+
+gb_FilterOutClangCFLAGS += $(MSVC_ANALYZE_FLAGS)
+
 gb_CFLAGS := \
 	-utf-8 \
 	-Gd \
@@ -141,6 +145,7 @@ gb_CXXFLAGS := \
 	-wd4611 \
 	-wd4706 \
 	-bigobj \
+	$(if $(ENABLE_DEBUG),$(MSVC_ANALYZE_FLAGS),) \
 
 ifneq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS += -Zc:inline

@@ -273,10 +273,10 @@ typedef void *                   sal_Handle;
 #endif
 
 /** Use this as markup for functions and methods whose return value must be
-    checked.
+    used.
 
     Compilers that support a construct of this nature will emit a compile
-    time warning on unchecked return value.
+    time warning on unused return value.
 */
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
 #define SAL_WARN_UNUSED_RESULT [[nodiscard]]
@@ -287,6 +287,19 @@ typedef void *                   sal_Handle;
 #else
 #   define SAL_WARN_UNUSED_RESULT
 #endif
+
+/** Use this as markup for functions and methods whose return value may be
+    null and should not be derefenced unconditionally.
+
+    Compilers that support a construct of this nature will emit a compile
+    time warning on unconditional dereference of returned pointer.
+*/
+#ifdef _MSC_VER
+#   define SAL_RET_MAYBENULL _Ret_maybenull_
+#else
+#   define SAL_RET_MAYBENULL
+#endif
+
 
 /** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
     This hinders the compiler from setting a generic vtable stating that
