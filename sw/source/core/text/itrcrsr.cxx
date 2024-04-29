@@ -1706,12 +1706,9 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 SAL_WARN_IF( aSizeInf.GetIdx().get() + pPor->GetLen().get() > aSizeInf.GetText().getLength(), "sw", "portion and text are out of sync" );
                 TextFrameIndex nSafeLen( std::min(pPor->GetLen().get(), aSizeInf.GetText().getLength() - aSizeInf.GetIdx().get()) );
 
-                SwDrawTextInfo aDrawInf( aSizeInf.GetVsh(),
-                                         *aSizeInf.GetOut(),
-                                         &pPara->GetScriptInfo(),
-                                         aSizeInf.GetText(),
-                                         aSizeInf.GetIdx(),
-                                         nSafeLen );
+                SwDrawTextInfo aDrawInf(aSizeInf.GetVsh(), *aSizeInf.GetOut(),
+                                        &pPara->GetScriptInfo(), aSizeInf.GetText(),
+                                        aSizeInf.GetIdx(), nSafeLen, aSizeInf.GetLayoutContext());
 
                 // Drop portion works like a multi portion, just its parts are not portions
                 if( pPor->IsDropPortion() && static_cast<SwDropPortion*>(pPor)->GetLines() > 1 )

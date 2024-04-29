@@ -225,7 +225,7 @@ TextFrameIndex SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDev
     // Start:
     Point aPos( 0, 0 );
     SwDrawTextInfo aInfo(pSh, *const_cast<OutputDevice*>(pOut), pScript, rText, nIdx, nLen,
-        0, false);
+                         /*layout context*/ std::nullopt, 0, false);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( nullptr );
@@ -375,11 +375,9 @@ void SwDoCapitalCursorOfst::Do()
     }
     else
     {
-        SwDrawTextInfo aDrawInf( m_rInf.GetShell(), *m_rInf.GetpOut(),
-                                 m_rInf.GetScriptInfo(),
-                                 m_rInf.GetText(),
-                                 m_rInf.GetIdx(),
-                                 m_rInf.GetLen(), 0, false );
+        SwDrawTextInfo aDrawInf(m_rInf.GetShell(), *m_rInf.GetpOut(), m_rInf.GetScriptInfo(),
+                                m_rInf.GetText(), m_rInf.GetIdx(), m_rInf.GetLen(),
+                                /*layout context*/ std::nullopt, 0, false);
         aDrawInf.SetOffset(m_nOfst);
         aDrawInf.SetKern( m_rInf.GetKern() );
         aDrawInf.SetKanaComp( m_rInf.GetKanaComp() );

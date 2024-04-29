@@ -26,6 +26,7 @@
 #include <swtypes.hxx>
 #include "TextFrameIndex.hxx"
 #include <swdllapi.h>
+#include "swporlayoutcontext.hxx"
 
 class SwTextFrame;
 class SwViewShell;
@@ -44,127 +45,94 @@ class SwUnderlineFont;
 // encapsulates information for drawing text
 class SW_DLLPUBLIC SwDrawTextInfo
 {
-    const SwTextFrame* m_pFrame;
+    const SwTextFrame* m_pFrame = nullptr;
     VclPtr<OutputDevice> m_pOut;
-    SwViewShell const * m_pSh;
+    SwViewShell const* m_pSh;
     const SwScriptInfo* m_pScriptInfo;
     Point m_aPos;
     vcl::text::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
-    sw::WrongListIterator* m_pWrong;
-    sw::WrongListIterator* m_pGrammarCheck;
-    sw::WrongListIterator* m_pSmartTags;
+    sw::WrongListIterator* m_pWrong = nullptr;
+    sw::WrongListIterator* m_pGrammarCheck = nullptr;
+    sw::WrongListIterator* m_pSmartTags = nullptr;
     Size m_aSize;
-    SwFont *m_pFnt;
-    SwUnderlineFont* m_pUnderFnt;
-    TextFrameIndex* m_pHyphPos;
-    tools::Long m_nKanaDiff;
+    SwFont* m_pFnt = nullptr;
+    SwUnderlineFont* m_pUnderFnt = nullptr;
+    TextFrameIndex* m_pHyphPos = nullptr;
+    tools::Long m_nKanaDiff = 0;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
-    TextFrameIndex m_nMeasureLen;
+    TextFrameIndex m_nMeasureLen = TextFrameIndex{ COMPLETE_STRING };
+    std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
     /// this is not a string index
-    sal_Int32 m_nOfst;
+    sal_Int32 m_nOfst = 0;
     sal_uInt16 m_nWidth;
-    sal_uInt16 m_nAscent;
-    sal_uInt16 m_nCompress;
-    tools::Long m_nCharacterSpacing;
-    tools::Long m_nSpace;
-    tools::Long m_nKern;
-    TextFrameIndex m_nNumberOfBlanks;
-    sal_uInt8 m_nCursorBidiLevel;
+    sal_uInt16 m_nAscent = 0;
+    sal_uInt16 m_nCompress = 0;
+    tools::Long m_nCharacterSpacing = 0;
+    tools::Long m_nSpace = 0;
+    tools::Long m_nKern = 0;
+    TextFrameIndex m_nNumberOfBlanks = TextFrameIndex{ 0 };
+    sal_uInt8 m_nCursorBidiLevel = 0;
     bool m_bBullet : 1;
-    bool m_bUpper : 1;        // for small caps: upper case flag
-    bool m_bDrawSpace : 1;    // for small caps: underline/ line through
-    bool m_bGreyWave  : 1;    // grey wave line for extended text input
+    bool m_bUpper : 1 = false; // for small caps: upper case flag
+    bool m_bDrawSpace : 1 = false; // for small caps: underline/ line through
+    bool m_bGreyWave : 1 = false; // grey wave line for extended text input
     // For underlining we need to know, if a section is right in front of a
     // whole block or a fix margin section.
-    bool m_bSpaceStop : 1;
-    bool m_bSnapToGrid : 1;   // Does paragraph snap to grid?
+    bool m_bSpaceStop : 1 = false;
+    bool m_bSnapToGrid : 1 = false; // Does paragraph snap to grid?
     // Paint text as if text has LTR direction, used for line numbering
-    bool m_bIgnoreFrameRTL : 1;
+    bool m_bIgnoreFrameRTL : 1 = false;
     // GetModelPositionForViewPoint should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
-    bool m_bPosMatchesBounds :1;
+    bool m_bPosMatchesBounds : 1 = false;
 
 #ifdef DBG_UTIL
     // These flags should control that the appropriate Set-function has been
     // called before calling the Get-function of a member
-    bool m_bPos   : 1;
-    bool m_bWrong : 1;
-    bool m_bGrammarCheck : 1;
-    bool m_bSize  : 1;
-    bool m_bFnt   : 1;
-    bool m_bHyph  : 1;
-    bool m_bKana  : 1;
-    bool m_bOfst  : 1;
-    bool m_bAscent: 1;
-    bool m_bCharacterSpacing : 1;
-    bool m_bSpace : 1;
-    bool m_bNumberOfBlanks : 1;
-    bool m_bUppr  : 1;
-    bool m_bDrawSp: 1;
+    bool m_bPos : 1 = false;
+    bool m_bWrong : 1 = false;
+    bool m_bGrammarCheck : 1 = false;
+    bool m_bSize : 1 = false;
+    bool m_bFnt : 1 = false;
+    bool m_bHyph : 1 = false;
+    bool m_bKana : 1 = false;
+    bool m_bOfst : 1 = false;
+    bool m_bAscent : 1 = false;
+    bool m_bCharacterSpacing : 1 = false;
+    bool m_bSpace : 1 = false;
+    bool m_bNumberOfBlanks : 1 = false;
+    bool m_bUppr : 1 = false;
+    bool m_bDrawSp : 1 = false;
 #endif
 
 public:
 
     /// constructor for simple strings
-    SwDrawTextInfo( SwViewShell const *pSh, OutputDevice &rOut,
-                    const OUString &rText, sal_Int32 const nIdx, sal_Int32 const nLen,
-                    sal_uInt16 nWidth = 0, bool bBullet = false)
-        : SwDrawTextInfo(pSh, rOut, nullptr, rText, TextFrameIndex(nIdx), TextFrameIndex(nLen), nWidth, bBullet)
+    SwDrawTextInfo(SwViewShell const* pSh, OutputDevice& rOut, const OUString& rText,
+                   sal_Int32 const nIdx, sal_Int32 const nLen, sal_uInt16 nWidth = 0,
+                   bool bBullet = false)
+        : SwDrawTextInfo(pSh, rOut, nullptr, rText, TextFrameIndex(nIdx), TextFrameIndex(nLen),
+                         /*layout context*/ std::nullopt, nWidth, bBullet)
     {}
     /// constructor for text frame contents
-    SwDrawTextInfo( SwViewShell const *pSh, OutputDevice &rOut, const SwScriptInfo* pSI,
-                    const OUString &rText, TextFrameIndex const nIdx, TextFrameIndex const nLen,
-                    sal_uInt16 nWidth = 0, bool bBullet = false,
-                    vcl::text::TextLayoutCache const*const pCachedVclData = nullptr)
-        : m_pCachedVclData(pCachedVclData)
+    SwDrawTextInfo(SwViewShell const* pSh, OutputDevice& rOut, const SwScriptInfo* pSI,
+                   const OUString& rText, TextFrameIndex const nIdx, TextFrameIndex const nLen,
+                   std::optional<SwLinePortionLayoutContext> nLayoutContext, sal_uInt16 nWidth = 0,
+                   bool bBullet = false,
+                   vcl::text::TextLayoutCache const* const pCachedVclData = nullptr)
+        : m_pOut(&rOut)
+        , m_pSh(pSh)
+        , m_pScriptInfo(pSI)
+        , m_pCachedVclData(pCachedVclData)
+        , m_aText(rText)
+        , m_nIdx(nIdx)
+        , m_nLen(nLen)
+        , m_nLayoutContext(nLayoutContext)
+        , m_nWidth(nWidth)
+        , m_bBullet(bBullet)
     {
-        m_pFrame = nullptr;
-        m_pSh = pSh;
-        m_pOut = &rOut;
-        m_pScriptInfo = pSI;
-        m_aText = rText;
-        m_nIdx = nIdx;
-        m_nLen = nLen;
-        m_nMeasureLen = TextFrameIndex(COMPLETE_STRING);
-        m_nKern = 0;
-        m_nCompress = 0;
-        m_nWidth = nWidth;
-        m_nNumberOfBlanks = TextFrameIndex(0);
-        m_nCursorBidiLevel = 0;
-        m_bBullet = bBullet;
-        m_pUnderFnt = nullptr;
-        m_bGreyWave = false;
-        m_bSpaceStop = false;
-        m_bSnapToGrid = false;
-        m_bIgnoreFrameRTL = false;
-        m_bPosMatchesBounds = false;
-
-        // These values are initialized but have to be set explicitly via their
-        // Set-function before they may be accessed by their Get-function:
-        m_pWrong = nullptr;
-        m_pGrammarCheck = nullptr;
-        m_pSmartTags = nullptr;
-        m_pFnt = nullptr;
-        m_pHyphPos = nullptr;
-        m_nKanaDiff = 0;
-        m_nOfst = 0;
-        m_nAscent = 0;
-        m_nCharacterSpacing = 0;
-        m_nSpace = 0;
-        m_bUpper = false;
-        m_bDrawSpace = false;
-
-#ifdef DBG_UTIL
-        // these flags control whether the matching member variables have been
-        // set by using the Set-function before they may be accessed by their
-        // Get-function:
-        m_bPos = m_bWrong = m_bGrammarCheck = m_bSize = m_bFnt = m_bAscent =
-        m_bSpace = m_bNumberOfBlanks = m_bUppr =
-        m_bDrawSp = m_bKana = m_bOfst = m_bHyph =
-        m_bCharacterSpacing = false;
-#endif
     }
 
     const SwTextFrame* GetFrame() const
@@ -279,6 +247,8 @@ public:
     {
         return m_nMeasureLen;
     }
+
+    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
 
     sal_Int32 GetOffset() const
     {
@@ -443,6 +413,11 @@ public:
         assert( (nNewLen == TextFrameIndex(COMPLETE_STRING)) ? (nNewIdx.get() < m_aText.getLength()) : (nNewIdx + nNewLen).get() <= m_aText.getLength() );
         m_nIdx = nNewIdx;
         m_nLen = nNewLen;
+    }
+
+    void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
+    {
+        m_nLayoutContext = nNew;
     }
 
     void SetWrong(sw::WrongListIterator *const pNew)

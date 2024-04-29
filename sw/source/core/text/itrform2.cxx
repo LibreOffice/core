@@ -1354,6 +1354,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     // bookmarks
     const TextFrameIndex nNextBookmark = m_pScriptInfo->NextBookmark(rInf.GetIdx());
 
+    auto nNextContext = std::min({ nNextChg, nNextScript, nNextDir });
     nNextChg = std::min({ nNextChg, nNextAttr, nNextScript, nNextDir, nNextHidden, nNextBookmark });
 
     // Turbo boost:
@@ -1398,6 +1399,53 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
 
     pPor->SetLen( nNextChg - rInf.GetIdx() );
     rInf.SetLen( pPor->GetLen() );
+
+    // Generate a new layout context for the text portion. This is necessary
+    // for the first text portion in a paragraph, or for any successive
+    // portions that are outside of the bounds of the previous context.
+    if (!rInf.GetLayoutContext().has_value()
+        || rInf.GetLayoutContext()->m_nEnd <= rInf.GetIdx().get())
+    {
+        // The layout context must terminate at special characters
+        sal_Int32 nEnd = rInf.GetIdx().get();
+        for (; nEnd < nNextContext.get(); ++nEnd)
+        {
+            bool bAtEnd = false;
+            switch (rInf.GetText()[nEnd])
+            {
+                case CH_TXTATR_BREAKWORD:
+                case CH_TXTATR_INWORD:
+                case CH_TXTATR_TAB:
+                case CH_TXT_ATR_INPUTFIELDSTART:
+                case CH_TXT_ATR_INPUTFIELDEND:
+                case CH_TXT_ATR_FORMELEMENT:
+                case CH_TXT_ATR_FIELDSTART:
+                case CH_TXT_ATR_FIELDSEP:
+                case CH_TXT_ATR_FIELDEND:
+                    bAtEnd = true;
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (bAtEnd)
+            {
+                break;
+            }
+        }
+
+        std::optional<SwLinePortionLayoutContext> nNewContext;
+        if (rInf.GetIdx().get() != nEnd)
+        {
+            nNewContext = SwLinePortionLayoutContext{ rInf.GetIdx().get(), nEnd };
+        }
+
+        rInf.SetLayoutContext(nNewContext);
+    }
+
+    pPor->SetLayoutContext(rInf.GetLayoutContext());
+
     return pPor;
 }
 

@@ -155,6 +155,7 @@ protected:
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
     TextFrameIndex m_nMeasureLen;
+    std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
     sal_uInt16 m_nKanaIdx;
     bool m_bOnWin     : 1;
     bool m_bNotEOL    : 1;
@@ -248,11 +249,12 @@ public:
     SwPosSize GetTextSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rText, TextFrameIndex nIdx,
                           TextFrameIndex nLen ) const;
-    SwPosSize GetTextSize() const;
-    void GetTextSize( const SwScriptInfo* pSI, TextFrameIndex nIdx,
-                      TextFrameIndex nLen, const sal_uInt16 nComp,
-                      sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
-                      vcl::text::TextLayoutCache const* = nullptr) const;
+    SwPosSize GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext
+                          = std::nullopt) const;
+    void GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx, TextFrameIndex nLen,
+                     std::optional<SwLinePortionLayoutContext> nLayoutContext,
+                     const sal_uInt16 nComp, sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
+                     vcl::text::TextLayoutCache const* = nullptr) const;
     inline SwPosSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
                                  TextFrameIndex nLen) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
@@ -277,6 +279,13 @@ public:
     TextFrameIndex GetMeasureLen() const { return m_nMeasureLen; }
     void SetMeasureLen(const TextFrameIndex nNew) { m_nMeasureLen = nNew; }
     void SetText( const OUString &rNew ){ m_pText = &rNew; }
+
+    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
+
+    void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
+    {
+        m_nLayoutContext = nNew;
+    }
 
     // No Bullets for the symbol font!
     bool IsNoSymbol() const

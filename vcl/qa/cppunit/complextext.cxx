@@ -611,4 +611,70 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialKoreanJamoComposition)
+{
+    OUString aStr = u"은"_ustr;
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // Absolute character widths for the complete array.
+    KernArray aCompleteWidths;
+    auto nCompleteWidth = pOutDev->GetTextArray(aStr, &aCompleteWidths);
+
+    CPPUNIT_ASSERT_EQUAL(size_t{ 3 }, aCompleteWidths.size());
+
+    // Accumulate partial widths
+    double nPartialWidth = 0.0;
+
+    sal_Int32 nPrevWidth = 0;
+    for (sal_Int32 i = 0; i < 3; ++i)
+    {
+        KernArray aFragmentWidths;
+        auto nFragmentWidth = pOutDev->GetPartialTextArray(
+            aStr, &aFragmentWidths, /*nIndex*/ 0, /*nLen*/ 3, /*nPartIndex*/ i, /*nPartLen*/ 1);
+        nPartialWidth += nFragmentWidth;
+
+        CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aFragmentWidths.size());
+        CPPUNIT_ASSERT_EQUAL(aCompleteWidths[i] - nPrevWidth, aFragmentWidths[0]);
+        nPrevWidth = aCompleteWidths[i];
+    }
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nCompleteWidth, nPartialWidth, /*delta*/ 0.01);
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialArabicComposition)
+{
+    OUString aStr = u"سُكُونْ"_ustr;
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // Absolute character widths for the complete array.
+    KernArray aCompleteWidths;
+    auto nCompleteWidth = pOutDev->GetTextArray(aStr, &aCompleteWidths);
+
+    CPPUNIT_ASSERT_EQUAL(size_t{ 7 }, aCompleteWidths.size());
+
+    // Accumulate partial widths
+    double nPartialWidth = 0.0;
+
+    sal_Int32 nPrevWidth = 0;
+    for (sal_Int32 i = 0; i < 7; ++i)
+    {
+        KernArray aFragmentWidths;
+        auto nFragmentWidth = pOutDev->GetPartialTextArray(
+            aStr, &aFragmentWidths, /*nIndex*/ 0, /*nLen*/ 7, /*nPartIndex*/ i, /*nPartLen*/ 1);
+        nPartialWidth += nFragmentWidth;
+
+        CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aFragmentWidths.size());
+        CPPUNIT_ASSERT_EQUAL(aCompleteWidths[i] - nPrevWidth, aFragmentWidths[0]);
+        nPrevWidth = aCompleteWidths[i];
+    }
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nCompleteWidth, nPartialWidth, /*delta*/ 0.01);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2507,7 +2507,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf87922)
     const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();
     sal_Int32 nLength = rText.getLength();
     SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText,
-                                 TextFrameIndex(0), TextFrameIndex(nLength));
+                                 TextFrameIndex(0), TextFrameIndex(nLength),
+                                 /*layout context*/ std::nullopt);
     // Root -> page -> body -> text.
     SwTextFrame* pTextFrame
         = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());

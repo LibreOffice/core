@@ -547,7 +547,7 @@ TextFrameIndex SwTextPortion::GetModelPositionForViewPoint(const sal_uInt16 nOfs
 // The GetTextSize() assumes that the own length is correct
 SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
-    SwPosSize aSize = rInf.GetTextSize();
+    SwPosSize aSize = rInf.GetTextSize(GetLayoutContext());
     if( !GetJoinBorderWithPrev() )
         aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace() );
     if( !GetJoinBorderWithNext() )

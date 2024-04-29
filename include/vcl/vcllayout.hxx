@@ -97,6 +97,16 @@ public:
     virtual sal_Int32 GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const = 0;
     virtual double  FillDXArray( std::vector<double>* pDXArray, const OUString& rStr ) const = 0;
     virtual double  GetTextWidth() const { return FillDXArray( nullptr, {} ); }
+
+    virtual double FillPartialDXArray(std::vector<double>* pDXArray, const OUString& rStr,
+                                      sal_Int32 skipStart, sal_Int32 amt) const
+        = 0;
+
+    virtual double GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const
+    {
+        return FillPartialDXArray(nullptr, {}, skipStart, amt);
+    }
+
     virtual void    GetCaretPositions( std::vector<double>& rCaretPositions, const OUString& rStr ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/, int /*nNextCharPos*/ ) const = 0; // i60594
 

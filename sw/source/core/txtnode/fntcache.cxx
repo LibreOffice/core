@@ -743,27 +743,66 @@ static void lcl_DrawLineForWrongListData(
 }
 
 static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, KernArray& rDXAry,
-                         sal_Int32 nIndex, sal_Int32 nLen, bool bCaret = false,
+                         sal_Int32 nIndex, sal_Int32 nLen,
+                         std::optional<SwLinePortionLayoutContext> nLayoutContext,
+                         bool bCaret = false,
                          const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
-    const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rDevice, rStr, nIndex, nLen,
-        0, layoutCache);
-    rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
+    if (nLayoutContext.has_value())
+    {
+        auto nStrEnd = nIndex + nLen;
+        auto nContextBegin = std::clamp(nLayoutContext->m_nBegin, sal_Int32{0}, nIndex);
+        auto nContextEnd = std::clamp(nLayoutContext->m_nEnd, nStrEnd, rStr.getLength());
+        auto nContextLen = nContextEnd - nContextBegin;
+
+        const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+            &rDevice, rStr, nContextBegin, nContextLen, 0, layoutCache);
+        rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex, nLen, bCaret,
+                                    layoutCache, pLayoutCache);
+    }
+    else
+    {
+        const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+            &rDevice, rStr, nIndex, nLen, 0, layoutCache);
+        rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
+    }
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, KernArray& rDXAry,
-                         bool bCaret = false)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf,
+                         KernArray& rDXAry, bool bCaret = false)
 {
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(),
-                        bCaret, rInf.GetVclCache());
+    GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(),
+                 rInf.GetLayoutContext(), bCaret, rInf.GetVclCache());
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, KernArray& rDXAry,
-                         sal_Int32 nLen, bool bCaret = false)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf,
+                         KernArray& rDXAry, sal_Int32 nLen, bool bCaret = false)
 {
     // Substring is fine.
-    assert( nLen <= rInf.GetLen().get());
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, bCaret, rInf.GetVclCache());
+    assert(nLen <= rInf.GetLen().get());
+    GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen,
+                 rInf.GetLayoutContext(), bCaret, rInf.GetVclCache());
+}
+
+static void DrawTextArray(OutputDevice& rOutputDevice, const Point& rStartPt, const OUString& rStr,
+                          KernArray& aKernArray, std::span<const sal_Bool> pKashidaAry,
+                          sal_Int32 nIndex, sal_Int32 nLen,
+                          std::optional<SwLinePortionLayoutContext> nLayoutContext)
+{
+    if (nLayoutContext.has_value())
+    {
+        auto nStrEnd = nIndex + nLen;
+        auto nContextBegin = std::clamp(nLayoutContext->m_nBegin, sal_Int32{0}, nIndex);
+        auto nContextEnd = std::clamp(nLayoutContext->m_nEnd, nStrEnd, rStr.getLength());
+        auto nContextLen = nContextEnd - nContextBegin;
+
+        rOutputDevice.DrawPartialTextArray(rStartPt, rStr, aKernArray, pKashidaAry, nContextBegin,
+                                           nContextLen, nIndex, nLen);
+    }
+    else
+    {
+        rOutputDevice.DrawTextArray(rStartPt, rStr, aKernArray, pKashidaAry, nIndex, nLen);
+    }
 }
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
@@ -965,8 +1004,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                aKernArray, {}, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+            DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray, {},
+                          sal_Int32{ rInf.GetIdx() }, sal_Int32{ rInf.GetLen() },
+                          rInf.GetLayoutContext());
 
             return;
         }
@@ -1121,7 +1161,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if (TextFrameIndex(1) == rInf.GetLen())
                     {
                         aKernArray.set(0, rInf.GetWidth() + nSpaceAdd);
-
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                              aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
                     }
@@ -1129,13 +1168,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         sal_Int32 nIndex(sal_Int32(rInf.GetLen()) - 2);
                         aKernArray.adjust(nIndex, nSpaceAdd);
-                        rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                        DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                                      aKashidaArray, sal_Int32{ rInf.GetIdx() },
+                                      sal_Int32{ rInf.GetLen() }, rInf.GetLayoutContext());
                     }
                 }
-                else
-                    rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                else {
+                    DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                                  aKashidaArray, sal_Int32{ rInf.GetIdx() },
+                                  sal_Int32{ rInf.GetLen() }, rInf.GetLayoutContext());
+                }
             }
             else
             {
@@ -1485,10 +1527,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
                 sal_Int32 nIdx = sal_Int32(rInf.GetIdx());
-                const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rInf.GetOut(),
-                     rInf.GetText(), nIdx, nLen);
-                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(), aKernArray, aKashidaArray,
-                                             nIdx, nLen, SalLayoutFlags::NONE, pGlyphs );
+                DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                              aKashidaArray, nIdx, nLen, rInf.GetLayoutContext());
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
@@ -1633,8 +1673,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
 
-        GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn), bCaret);
+        GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray, sal_Int32(rInf.GetIdx()),
+                     sal_Int32(nLn), rInf.GetLayoutContext(), bCaret);
     }
     else
     {
@@ -1989,8 +2029,8 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             KernArray aKernArray;
-            GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+            GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray, sal_Int32(rInf.GetIdx()),
+                         sal_Int32(rInf.GetLen()), rInf.GetLayoutContext());
 
             if (pGrid->IsSnapToChars())
             {
@@ -2117,8 +2157,8 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
         else if (nLn > nTextBreak2 + nTextBreak2)
             nLn = nTextBreak2 + nTextBreak2;
         KernArray aKernArray;
-        GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
-                                    sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
+        GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray, sal_Int32(rInf.GetIdx()),
+                     sal_Int32(nLn), rInf.GetLayoutContext());
         if( rInf.GetScriptInfo()->Compress( aKernArray, rInf.GetIdx(), nLn,
                             rInf.GetKanaComp(), o3tl::narrowing<sal_uInt16>(GetHeight( m_nActual )),
                             lcl_IsFullstopCentered( rInf.GetOut() ) ) )

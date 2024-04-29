@@ -24,6 +24,7 @@
 #include <txttypes.hxx>
 #include <TextFrameIndex.hxx>
 #include <rtl/ustring.hxx>
+#include <swporlayoutcontext.hxx>
 
 class SwTextSizeInfo;
 class SwTextPaintInfo;
@@ -48,6 +49,7 @@ private:
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
     SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
+    std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
 
     void Truncate_();
 
@@ -72,6 +74,11 @@ public:
     void ExtraBlankWidth(const SwTwips nNew) { m_nExtraBlankWidth = nNew; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
+    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
+    void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
+    {
+        m_nLayoutContext = nNew;
+    }
 
     // Insert methods
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
@@ -179,6 +186,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_bJoinBorderWithPrev = rPortion.m_bJoinBorderWithPrev;
     m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
     m_nExtraBlankWidth = rPortion.m_nExtraBlankWidth;
+    m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
 }
 
@@ -191,7 +199,8 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     mnWhichPor( rPortion.mnWhichPor ),
     m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
     m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext ),
-    m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth)
+    m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth),
+    m_nLayoutContext(rPortion.m_nLayoutContext)
 {
 }
 

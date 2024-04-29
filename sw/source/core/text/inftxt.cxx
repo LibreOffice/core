@@ -402,7 +402,8 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
                                      const TextFrameIndex nIndex,
                                      const TextFrameIndex nLength) const
 {
-    SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rText, nIndex, nLength );
+    SwDrawTextInfo aDrawInf(m_pVsh, *pOutDev, pSI, rText, nIndex, nLength,
+                            /*layout context*/ std::nullopt);
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -410,7 +411,8 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
     return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
-SwPosSize SwTextSizeInfo::GetTextSize() const
+SwPosSize
+SwTextSizeInfo::GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext) const
 {
     const SwScriptInfo& rSI =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -423,7 +425,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
                     GetKanaComp() :
                                 0 ;
 
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rSI, *m_pText, m_nIdx, m_nLen );
+    SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, &rSI, *m_pText, m_nIdx, m_nLen, nLayoutContext);
     aDrawInf.SetMeasureLen( m_nMeasureLen );
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
@@ -432,13 +434,15 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
     return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
-void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex nIndex,
-                                const TextFrameIndex nLength, const sal_uInt16 nComp,
-                                sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
-                                vcl::text::TextLayoutCache const*const pCache) const
+void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex nIndex,
+                                 const TextFrameIndex nLength,
+                                 std::optional<SwLinePortionLayoutContext> nLayoutContext,
+                                 const sal_uInt16 nComp, sal_uInt16& nMinSize,
+                                 sal_uInt16& nMaxSizeDiff,
+                                 vcl::text::TextLayoutCache const* const pCache) const
 {
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pText, nIndex, nLength,
-            0, false, pCache);
+    SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, pSI, *m_pText, nIndex, nLength, nLayoutContext, 0,
+                            false, pCache);
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -457,8 +461,8 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pText, GetIdx(), nMaxLen,  0, false, pCache );
+    SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, &rScriptInfo, *m_pText, GetIdx(), nMaxLen,
+                            /*layout context*/ std::nullopt, 0, false, pCache);
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -478,8 +482,8 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pText, GetIdx(), nMaxLen, 0, false, pCache );
+    SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, &rScriptInfo, *m_pText, GetIdx(), nMaxLen,
+                            /*layout context*/ std::nullopt, 0, false, pCache);
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -632,8 +636,8 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled();
 
     OSL_ENSURE( GetParaPortion(), "No paragraph!");
-    SwDrawTextInfo aDrawInf( m_pFrame->getRootFrame()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
-                             rPor.Width(), bBullet );
+    SwDrawTextInfo aDrawInf(m_pFrame->getRootFrame()->GetCurrShell(), *m_pOut, pSI, rText, nStart,
+                            nLength, rPor.GetLayoutContext(), rPor.Width(), bBullet);
 
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 

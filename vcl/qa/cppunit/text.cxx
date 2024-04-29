@@ -846,6 +846,39 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetRightBottomAlignedMultiLineTextRect)
                                                  | DrawTextFlags::MultiLine));
 }
 
+CPPUNIT_TEST_FIXTURE(VclTextTest, testPartialTextArraySizeMatch)
+{
+    OUString aWater = u"Water"_ustr;
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // Absolute character widths for the complete array.
+    KernArray aCompleteWidths;
+    auto nCompleteWidth = pOutDev->GetTextArray(aWater, &aCompleteWidths);
+
+    CPPUNIT_ASSERT_EQUAL(size_t{ 5 }, aCompleteWidths.size());
+
+    // Accumulate partial widths
+    double nPartialWidth = 0.0;
+
+    sal_Int32 nPrevWidth = 0;
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        KernArray aFragmentWidths;
+        auto nFragmentWidth = pOutDev->GetPartialTextArray(
+            aWater, &aFragmentWidths, /*nIndex*/ 0, /*nLen*/ 5, /*nPartIndex*/ i, /*nPartLen*/ 1);
+        nPartialWidth += nFragmentWidth;
+
+        CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aFragmentWidths.size());
+        CPPUNIT_ASSERT_EQUAL(aCompleteWidths[i] - nPrevWidth, aFragmentWidths[0]);
+        nPrevWidth = aCompleteWidths[i];
+    }
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nCompleteWidth, nPartialWidth, /*delta*/ 0.01);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

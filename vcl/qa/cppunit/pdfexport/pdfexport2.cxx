@@ -4999,6 +4999,55 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159817)
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(138.6, 623.7), roundPoint(37));
 }
 
+// Tests that kerning is correctly applied across color changes
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf61444)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf61444.odt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    // 4 text objects should be present
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(4, nPageObjectCount);
+
+    OUString sText[4];
+    basegfx::B2DRectangle aRect[4];
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            sText[nTextObjectCount] = pPageObject->getText(pTextPage);
+            aRect[nTextObjectCount] = pPageObject->getBounds();
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(4, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"Wait"_ustr, sText[0].trim());
+    CPPUNIT_ASSERT_EQUAL(u"W"_ustr, sText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ai"_ustr, sText[2].trim());
+    CPPUNIT_ASSERT_EQUAL(u"t"_ustr, sText[3].trim());
+
+    // Both lines should have the same kerning, so should end at approximately the same X coordinate
+    auto solid_extent = aRect[0].getMaxX();
+    auto color_extent = aRect[3].getMaxX();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(solid_extent, color_extent, /*delta*/ 0.15);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

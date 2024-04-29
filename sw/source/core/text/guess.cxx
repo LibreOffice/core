@@ -80,7 +80,8 @@ bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex&
                                         TextFrameIndex& rBreakStart, sal_uInt16& rBreakWidth,
                                         sal_uInt16& rExtraBlankWidth, sal_uInt16& rMaxSizeDiff,
                                         const SwTextFormatInfo& rInf, const SwScriptInfo& rSI,
-                                        sal_uInt16 maxComp)
+                                        sal_uInt16 maxComp,
+                                        std::optional<SwLinePortionLayoutContext> nLayoutContext)
 {
     const auto& adjObj = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust& adjust = adjObj.GetAdjust();
@@ -139,10 +140,10 @@ bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex&
     rBreakStart = rCutPos = newCutPos;
     rBreakPos = breakPos;
 
-    rInf.GetTextSize(&rSI, rInf.GetIdx(), breakPos - rInf.GetIdx(), maxComp, rBreakWidth,
-                     rMaxSizeDiff, rInf.GetCachedVclData().get());
-    rInf.GetTextSize(&rSI, breakPos, rBreakStart - breakPos, maxComp, rExtraBlankWidth,
-                     rMaxSizeDiff, rInf.GetCachedVclData().get());
+    rInf.GetTextSize(&rSI, rInf.GetIdx(), breakPos - rInf.GetIdx(), nLayoutContext, maxComp,
+                     rBreakWidth, rMaxSizeDiff, rInf.GetCachedVclData().get());
+    rInf.GetTextSize(&rSI, breakPos, rBreakStart - breakPos, nLayoutContext, maxComp,
+                     rExtraBlankWidth, rMaxSizeDiff, rInf.GetCachedVclData().get());
 
     return false; // require SwHolePortion creation
 }
@@ -247,8 +248,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
          ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
     {
         // call GetTextSize with maximum compression (for kanas)
-        rInf.GetTextSize( &rSI, rInf.GetIdx(), nMaxLen,
-                         nMaxComp, m_nBreakWidth, nMaxSizeDiff );
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rPor.GetLayoutContext(), nMaxComp,
+                         m_nBreakWidth, nMaxSizeDiff);
 
         if ( ( m_nBreakWidth <= nLineWidth ) || ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
         {
@@ -257,7 +258,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             bool bRet = rPor.InFieldGrp()
                         || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
                                                               m_nBreakWidth, m_nExtraBlankWidth,
-                                                              nMaxSizeDiff, rInf, rSI, nMaxComp);
+                                                              nMaxSizeDiff, rInf, rSI, nMaxComp,
+                                                              rPor.GetLayoutContext());
             if( nItalic &&
                 (m_nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
                   // #i48035# Needed for CalcFitToContent
@@ -419,8 +421,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if ( TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
         {
             sal_uInt16 nMinSize;
-            rInf.GetTextSize( &rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(),
-                             nMaxComp, nMinSize, nMaxSizeDiff );
+            rInf.GetTextSize(&rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(),
+                             rPor.GetLayoutContext(), nMaxComp, nMinSize, nMaxSizeDiff);
             OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
 #endif
@@ -430,8 +432,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         // second check if everything fits to line
         m_nCutPos = m_nBreakPos = rInf.GetIdx() + nMaxLen - TextFrameIndex(1);
-        rInf.GetTextSize( &rSI, rInf.GetIdx(), nMaxLen, nMaxComp,
-                         m_nBreakWidth, nMaxSizeDiff );
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rPor.GetLayoutContext(), nMaxComp,
+                         m_nBreakWidth, nMaxSizeDiff);
 
         // The following comparison should always give true, otherwise
         // there likely has been a pixel rounding error in GetTextBreak
@@ -440,7 +442,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             bool bRet = rPor.InFieldGrp()
                         || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
                                                               m_nBreakWidth, m_nExtraBlankWidth,
-                                                              nMaxSizeDiff, rInf, rSI, nMaxComp);
+                                                              nMaxSizeDiff, rInf, rSI, nMaxComp,
+                                                              rPor.GetLayoutContext());
 
             if (nItalic && (m_nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
                 m_nBreakWidth += nItalic;
@@ -731,9 +734,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     if( nPorLen )
     {
-        rInf.GetTextSize( &rSI, rInf.GetIdx(), nPorLen,
-                         nMaxComp, m_nBreakWidth, nMaxSizeDiff,
-                         rInf.GetCachedVclData().get() );
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nPorLen, rPor.GetLayoutContext(), nMaxComp,
+                         m_nBreakWidth, nMaxSizeDiff, rInf.GetCachedVclData().get());
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
@@ -747,8 +749,9 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     if (m_nBreakStart > rInf.GetIdx() + nPorLen + m_nFieldDiff)
     {
         rInf.GetTextSize(&rSI, rInf.GetIdx() + nPorLen,
-                         m_nBreakStart - rInf.GetIdx() - nPorLen - m_nFieldDiff, nMaxComp,
-                         m_nExtraBlankWidth, nMaxSizeDiff, rInf.GetCachedVclData().get());
+                         m_nBreakStart - rInf.GetIdx() - nPorLen - m_nFieldDiff,
+                         rPor.GetLayoutContext(), nMaxComp, m_nExtraBlankWidth, nMaxSizeDiff,
+                         rInf.GetCachedVclData().get());
     }
 
     if( m_pHanging )

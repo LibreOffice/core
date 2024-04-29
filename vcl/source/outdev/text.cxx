@@ -689,6 +689,27 @@ float OutputDevice::approximate_digit_width() const
     return GetTextWidth(u"0123456789"_ustr) / 10.0;
 }
 
+void OutputDevice::DrawPartialTextArray(const Point& rStartPt, const OUString& rStr,
+                                        KernArraySpan pDXArray,
+                                        std::span<const sal_Bool> pKashidaArray,
+                                        sal_Int32 /*nIndex*/, sal_Int32 /*nLen*/,
+                                        sal_Int32 nPartIndex, sal_Int32 nPartLen,
+                                        SalLayoutFlags flags, const SalLayoutGlyphs* pLayoutCache)
+{
+    // Currently, this is just a wrapper for DrawTextArray().
+    //
+    // In certain documents, DrawTextArray/DrawPartialTextArray can be called such that combining
+    // characters straddle multiple draw calls. This can happen if, for example, a user attempts to
+    // use different text colors for a character and its diacritical marks.
+    //
+    // In order to fix this issue, this implementation should be replaced with one that performs
+    // correct glyph substitutions across text portion boundaries, using the extra layout context.
+    //
+    // See tdf#124116
+    DrawTextArray(rStartPt, rStr, pDXArray, pKashidaArray, nPartIndex, nPartLen, flags,
+                  pLayoutCache);
+}
+
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   KernArraySpan pDXAry,
                                   std::span<const sal_Bool> pKashidaAry,
@@ -729,12 +750,31 @@ double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
 {
+    return GetPartialTextArray(rStr, pKernArray, nIndex, nLen, nIndex, nLen, bCaret, pLayoutCache,
+                               pSalLayoutCache);
+}
+
+double OutputDevice::GetPartialTextArray(const OUString &rStr,
+                                         KernArray* pKernArray,
+                                         sal_Int32 nIndex,
+                                         sal_Int32 nLen,
+                                         sal_Int32 nPartIndex,
+                                         sal_Int32 nPartLen,
+                                         bool bCaret,
+                                         const vcl::text::TextLayoutCache* pLayoutCache,
+                                         const SalLayoutGlyphs* pSalLayoutCache) const
+{
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
 
     if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
     {
         nLen = rStr.getLength() - nIndex;
+    }
+
+    if (nPartLen < 0 || nPartIndex + nPartLen >= rStr.getLength())
+    {
+        nPartLen = rStr.getLength() - nPartIndex;
     }
 
     std::vector<sal_Int32>* pDXAry = pKernArray ? &pKernArray->get_subunit_array() : nullptr;
@@ -752,7 +792,7 @@ double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
         // and hope that is sufficient.
         if (pDXAry)
         {
-            pDXAry->resize(nLen);
+            pDXAry->resize(nPartLen);
             std::fill(pDXAry->begin(), pDXAry->end(), 0);
         }
         return 0;
@@ -761,15 +801,29 @@ double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
     std::unique_ptr<std::vector<double>> xDXPixelArray;
     if(pDXAry)
     {
-        xDXPixelArray.reset(new std::vector<double>(nLen));
+        xDXPixelArray.reset(new std::vector<double>(nPartLen));
     }
     std::vector<double>* pDXPixelArray = xDXPixelArray.get();
-    double nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
+
+    double nWidth = 0.0;
+
+    // Fall back to the unbounded DX array when there is no expanded layout context. This is
+    // necessary for certain situations where characters are appended to the input string, such as
+    // automatic ellipsis.
+    if (nIndex == nPartIndex && nLen == nPartLen)
+    {
+        nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
+    }
+    else
+    {
+        nWidth = pSalLayout->FillPartialDXArray(pDXPixelArray, bCaret ? rStr : OUString(),
+                                                nPartIndex - nIndex, nPartLen);
+    }
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
     {
-        for( int i = 1; i < nLen; ++i )
+        for (int i = 1; i < nPartLen; ++i)
         {
             (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
@@ -782,20 +836,20 @@ double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
         int nSubPixelFactor = pKernArray->get_factor();
         if (mbMap)
         {
-            for (int i = 0; i < nLen; ++i)
+            for (int i = 0; i < nPartLen; ++i)
                 (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i] * nSubPixelFactor);
         }
         else if (nSubPixelFactor)
         {
-            for (int i = 0; i < nLen; ++i)
+            for (int i = 0; i < nPartLen; ++i)
                 (*pDXPixelArray)[i] *= nSubPixelFactor;
         }
     }
 
     if (pDXAry)
     {
-        pDXAry->resize(nLen);
-        for (int i = 0; i < nLen; ++i)
+        pDXAry->resize(nPartLen);
+        for (int i = 0; i < nPartLen; ++i)
             (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
     }
 
