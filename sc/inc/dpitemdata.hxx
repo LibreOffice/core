@@ -62,7 +62,7 @@ public:
     ScDPItemData(const ScDPItemData& r);
     ScDPItemData(const OUString& rStr);
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
-    ~ScDPItemData();
+    SC_DLLPUBLIC ~ScDPItemData();
 
     Type GetType() const { return static_cast<Type>(meType); }
     void SetEmpty();
