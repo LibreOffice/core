@@ -611,9 +611,7 @@ SwAccessibleTable::SwAccessibleTable(
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame )
 {
     const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
-    if(pFrameFormat)
-        StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
-
+    StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
     SetName( pFrameFormat->GetName() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 
     const OUString sArg1( static_cast< const SwTabFrame * >( GetFrame() )->GetFormat()->GetName() );
@@ -1620,8 +1618,7 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
     SolarMutexGuard aGuard;
 
     const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
-    if(pFrameFormat)
-        StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
+    StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
     const OUString aName = pFrameFormat->GetName() + "-ColumnHeaders";
 
     SetName( aName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
