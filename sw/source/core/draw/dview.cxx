@@ -706,13 +706,10 @@ const SwFrame* SwDrawView::CalcAnchor()
         return nullptr;
 
     SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-    if (!pContact)
-        return nullptr;
 
     //Search for paragraph bound objects, otherwise only the
     //current anchor. Search only if we currently drag.
-    const SwFrame* pAnch;
+    const SwFrame* pAnch = nullptr;
     tools::Rectangle aMyRect;
     auto pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj *>( pObj );
     if ( pFlyDrawObj )
@@ -724,13 +721,16 @@ const SwFrame* SwDrawView::CalcAnchor()
     {
         // determine correct anchor position for 'virtual' drawing objects.
         // #i26791#
-        pAnch = pContact->GetAnchorFrame( pObj );
-        if( !pAnch )
+        if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
         {
-            pContact->ConnectToLayout();
-            // determine correct anchor position for 'virtual' drawing objects.
-            // #i26791#
             pAnch = pContact->GetAnchorFrame( pObj );
+            if( !pAnch )
+            {
+                pContact->ConnectToLayout();
+                // determine correct anchor position for 'virtual' drawing objects.
+                // #i26791#
+                pAnch = pContact->GetAnchorFrame( pObj );
+            }
         }
         aMyRect = pObj->GetSnapRect();
     }
@@ -765,11 +765,14 @@ const SwFrame* SwDrawView::CalcAnchor()
         {
             const SwRect aRect( aPt.getX(), aPt.getY(), 1, 1 );
 
-            if ( pContact->GetAnchorFrame( pObj ) &&
-                 pContact->GetAnchorFrame( pObj )->IsPageFrame() )
-                pAnch = pContact->GetPageFrame();
-            else
-                pAnch = pContact->FindPage( aRect );
+            if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+            {
+                if ( pContact->GetAnchorFrame( pObj ) &&
+                     pContact->GetAnchorFrame( pObj )->IsPageFrame() )
+                    pAnch = pContact->GetPageFrame();
+                else
+                    pAnch = pContact->FindPage( aRect );
+            }
         }
     }
     if( pAnch && !pAnch->IsProtected() )
