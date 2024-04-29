@@ -514,8 +514,12 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     void SAL_CALL getOut(sal_Bool& value1, sal_Int8& value2, sal_Int16& value3, sal_uInt16& value4,
                          sal_Int32& value5, sal_uInt32& value6, sal_Int64& value7,
-                         sal_uInt64& value8, float& value9, double& value10,
-                         sal_Unicode& value11) override
+                         sal_uInt64& value8, float& value9, double& value10, sal_Unicode& value11,
+                         OUString& value12, css::uno::Type& value13, css::uno::Any& value14,
+                         css::uno::Sequence<OUString>& value15,
+                         org::libreoffice::embindtest::Enum& value16,
+                         org::libreoffice::embindtest::Struct& value17,
+                         css::uno::Reference<org::libreoffice::embindtest::XTest>& value18) override
     {
         value1 = true;
         value2 = -12;
@@ -528,6 +532,13 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         value9 = -10.25;
         value10 = 100.5;
         value11 = u'Ö';
+        value12 = u"hä"_ustr;
+        value13 = cppu::UnoType<sal_Int32>::get();
+        value14 = css::uno::Any(sal_Int32(-123456));
+        value15 = { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
+        value16 = org::libreoffice::embindtest::Enum_E_2;
+        value17 = { -123456, 100.5, u"hä"_ustr };
+        value18 = this;
     }
 
     void SAL_CALL throwRuntimeException() override

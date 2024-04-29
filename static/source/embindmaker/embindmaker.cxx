@@ -558,49 +558,13 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
         {
             out << ", ";
         }
-        bool wrap = false;
-        if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
-        {
-            switch (manager->getSort(resolveOuterTypedefs(manager, param.type)))
-            {
-                case codemaker::UnoType::Sort::Boolean:
-                case codemaker::UnoType::Sort::Byte:
-                case codemaker::UnoType::Sort::Short:
-                case codemaker::UnoType::Sort::UnsignedShort:
-                case codemaker::UnoType::Sort::Long:
-                case codemaker::UnoType::Sort::UnsignedLong:
-                case codemaker::UnoType::Sort::Hyper:
-                case codemaker::UnoType::Sort::UnsignedHyper:
-                case codemaker::UnoType::Sort::Float:
-                case codemaker::UnoType::Sort::Double:
-                case codemaker::UnoType::Sort::Char:
-                case codemaker::UnoType::Sort::Enum:
-                    wrap = true;
-                    break;
-                case codemaker::UnoType::Sort::String:
-                case codemaker::UnoType::Sort::Type:
-                case codemaker::UnoType::Sort::Any:
-                case codemaker::UnoType::Sort::Sequence:
-                case codemaker::UnoType::Sort::PlainStruct:
-                case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
-                case codemaker::UnoType::Sort::Interface:
-                    break;
-                default:
-                    throw CannotDumpException("unexpected entity \"" + param.type
-                                              + "\" as parameter type");
-            }
-        }
         if (declarations)
         {
-            if (wrap)
+            if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
             {
                 out << "::unoembindhelpers::UnoInOutParam<";
             }
             dumpType(out, manager, param.type);
-            if (wrap)
-            {
-                out << ">";
-            }
             if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
             {
                 if (passByReference(manager, param.type))
@@ -610,17 +574,13 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
             }
             else
             {
-                out << " *";
+                out << "> *";
             }
             out << " ";
         }
-        else if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN
-                 && !wrap)
-        {
-            out << "*";
-        }
         out << param.name;
-        if (!declarations && wrap)
+        if (!declarations
+            && param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
         {
             out << "->value";
         }
@@ -872,6 +832,13 @@ void recordSequenceTypes(rtl::Reference<TypeManager> const& manager, OUString co
     }
 }
 
+void recordInOutParameterType(rtl::Reference<TypeManager> const& manager, OUString const& type,
+                              std::set<OUString>& inOutParameters)
+{
+    auto const res = resolveAllTypedefs(manager, type);
+    inOutParameters.insert(res);
+}
+
 void writeJsMap(std::ostream& out, Module const& module, std::string const& prefix)
 {
     auto comma = false;
@@ -1041,6 +1008,7 @@ SAL_IMPLEMENT_MAIN()
                 recordSequenceTypes(mgr, mem.type, sequences);
             }
         }
+        std::set<OUString> inOutParams;
         for (auto const& ifc : interfaces)
         {
             auto const ent = mgr->getManager()->findEntity(ifc);
@@ -1113,6 +1081,11 @@ SAL_IMPLEMENT_MAIN()
                 for (auto const& param : meth.parameters)
                 {
                     recordSequenceTypes(mgr, param.type, sequences);
+                    if (param.direction
+                        != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+                    {
+                        recordInOutParameterType(mgr, param.type, inOutParams);
+                    }
                 }
                 recordSequenceTypes(mgr, meth.returnType, sequences);
             }
@@ -1159,6 +1132,24 @@ SAL_IMPLEMENT_MAIN()
                 cppOut << k;
             }
             cppOut << "_" << jsName(nuc) << "\");\n";
+        }
+        for (auto const& par : inOutParams)
+        {
+            cppOut << "    ::unoembindhelpers::registerInOutParameter<";
+            dumpType(cppOut, mgr, par);
+            cppOut << ">(\"uno_InOutParam_";
+            sal_Int32 k;
+            auto const nuc = b2u(codemaker::UnoType::decompose(u2b(par), &k));
+            if (k >= 1)
+            {
+                cppOut << "sequence";
+                if (k > 1)
+                {
+                    cppOut << k;
+                }
+                cppOut << "_";
+            }
+            cppOut << jsName(nuc.replace(' ', '_')) << "\");\n";
         }
         cppOut << "}\n";
         cppOut.close();

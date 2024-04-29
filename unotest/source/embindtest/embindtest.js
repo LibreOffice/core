@@ -540,7 +540,15 @@ Module.addOnPostRun(function() {
         const v9 = new Module.uno_InOutParam_float;
         const v10 = new Module.uno_InOutParam_double;
         const v11 = new Module.uno_InOutParam_char;
-        test.getOut(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
+        const v12 = new Module.uno_InOutParam_string;
+        const v13 = new Module.uno_InOutParam_type;
+        const v14 = new Module.uno_InOutParam_any;
+        const v15 = new Module.uno_InOutParam_sequence_string;
+        const v16 = new Module.uno_InOutParam_org$libreoffice$embindtest$Enum;
+        const v17 = new Module.uno_InOutParam_org$libreoffice$embindtest$Struct;
+        const v18 = new Module.uno_InOutParam_org$libreoffice$embindtest$XTest;
+        test.getOut(
+            v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18);
         console.log(v1.val);
         console.log(v2.val);
         console.log(v3.val);
@@ -552,6 +560,13 @@ Module.addOnPostRun(function() {
         console.log(v9.val);
         console.log(v10.val);
         console.log(v11.val);
+        console.log(v12.val);
+        console.log(v13.val);
+        console.log(v14.val);
+        console.log(v15.val);
+        console.log(v16.val);
+        console.log(v17.val);
+        console.log(v18.val);
         console.assert(v1.val === 1); //TODO: true
         console.assert(v2.val === -12);
         console.assert(v3.val === -1234);
@@ -563,6 +578,18 @@ Module.addOnPostRun(function() {
         console.assert(v9.val === -10.25);
         console.assert(v10.val === 100.5);
         console.assert(v11.val === 'Ö');
+        console.assert(v12.val === 'hä');
+        console.assert(v13.val.toString() === 'long');
+        console.assert(v14.val.get() === -123456)
+        console.assert(v15.val.size() === 3);
+        console.assert(v15.val.get(0) === 'foo');
+        console.assert(v15.val.get(1) === 'barr');
+        console.assert(v15.val.get(2) === 'bazzz');
+        console.assert(v16.val === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v17.val.m1 === -123456);
+        console.assert(v17.val.m2 === 100.5);
+        console.assert(v17.val.m3 === 'hä');
+        console.assert(Module.sameUnoObject(v18.val, test));
         v1.delete();
         v2.delete();
         v3.delete();
@@ -574,6 +601,15 @@ Module.addOnPostRun(function() {
         v9.delete();
         v10.delete();
         v11.delete();
+        v12.delete();
+        v13.delete();
+        v14.val.delete();
+        v14.delete();
+        v15.val.delete();
+        v15.delete();
+        v16.delete();
+        v17.delete();
+        v18.delete();
     }
     console.assert(uno.org.libreoffice.embindtest.Constants.Boolean === true);
     console.assert(test.isBoolean(uno.org.libreoffice.embindtest.Constants.Boolean));

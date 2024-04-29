@@ -122,6 +122,12 @@ template <typename T> void registerSequence(char const* name)
         });
     registerUnoType<css::uno::Sequence<T>>();
 }
+
+template <typename T> void registerInOutParameter(char const* name)
+{
+    emscripten::class_<UnoInOutParam<T>>(name).constructor().template constructor<T>().property(
+        "val", &UnoInOutParam<T>::get, &UnoInOutParam<T>::set);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
