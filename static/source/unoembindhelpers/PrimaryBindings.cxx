@@ -158,12 +158,6 @@ void copyStruct(typelib_CompoundTypeDescription* desc, void const* source, void*
     }
 }
 
-template <typename T> void registerInOutParam(char const* name)
-{
-    class_<unoembindhelpers::UnoInOutParam<T>>(name).constructor().constructor<T>().property(
-        "val", &unoembindhelpers::UnoInOutParam<T>::get, &unoembindhelpers::UnoInOutParam<T>::set);
-}
-
 Reference<css::frame::XModel> getCurrentModelFromViewSh()
 {
     SfxViewShell* pSh = nullptr;
@@ -385,18 +379,6 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     O3TL_UNREACHABLE;
             };
         });
-
-    registerInOutParam<sal_Bool>("uno_InOutParam_boolean");
-    registerInOutParam<sal_Int8>("uno_InOutParam_byte");
-    registerInOutParam<sal_Int16>("uno_InOutParam_short");
-    registerInOutParam<sal_uInt16>("uno_InOutParam_unsigned_short");
-    registerInOutParam<sal_Int32>("uno_InOutParam_long");
-    registerInOutParam<sal_uInt32>("uno_InOutParam_unsigned_long");
-    registerInOutParam<sal_Int64>("uno_InOutParam_hyper");
-    registerInOutParam<sal_uInt64>("uno_InOutParam_unsigned_hyper");
-    registerInOutParam<float>("uno_InOutParam_float");
-    registerInOutParam<double>("uno_InOutParam_double");
-    registerInOutParam<sal_Unicode>("uno_InOutParam_char");
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
