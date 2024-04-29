@@ -285,7 +285,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     catch (const uno::Exception&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetException( "This package is unusable!",
+        throw lang::WrappedTargetException( u"This package is unusable!"_ustr,
                   getXWeak(), anyEx);
     }
 
@@ -453,7 +453,7 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
 
 OUString SAL_CALL OZipFileAccess::getImplementationName()
 {
-    return "com.sun.star.comp.package.zip.ZipFileAccess";
+    return u"com.sun.star.comp.package.zip.ZipFileAccess"_ustr;
 }
 
 sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
@@ -463,8 +463,8 @@ sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
 {
-    return { "com.sun.star.packages.zip.ZipFileAccess",
-    "com.sun.star.comp.packages.zip.ZipFileAccess" };
+    return { u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
+    u"com.sun.star.comp.packages.zip.ZipFileAccess"_ustr };
 }
 
 

@@ -53,12 +53,12 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement()
 
 OUString ZipPackageFolderEnumeration::getImplementationName()
 {
-    return "ZipPackageFolderEnumeration";
+    return u"ZipPackageFolderEnumeration"_ustr;
 }
 
 uno::Sequence<OUString> ZipPackageFolderEnumeration::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aNames{ "com.sun.star.packages.PackageFolderEnumeration" };
+    uno::Sequence<OUString> aNames{ u"com.sun.star.packages.PackageFolderEnumeration"_ustr };
     return aNames;
 }
 

@@ -305,7 +305,7 @@ OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Target");
+    auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -326,7 +326,7 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Type");
+    auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -348,7 +348,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
 
     // TODO/LATER: in future the unification of the ID could be checked
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
         [&aIDRel](const uno::Sequence<beans::StringPair>& rRel){
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
@@ -373,7 +373,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
 
     // TODO/LATER: in future the unification of the ID could be checked
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aTypeRel("Type", sType);
+    const beans::StringPair aTypeRel(u"Type"_ustr, sType);
     std::vector< uno::Sequence<beans::StringPair> > aResult;
     aResult.reserve(aSeq.getLength());
 
@@ -407,7 +407,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
             return aResult;
     }
 
-    throw io::IOException("relations info could not be read"); // the relations info could not be read
+    throw io::IOException(u"relations info could not be read"_ustr); // the relations info could not be read
 }
 
 void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, sal_Bool /*bReplace*/  )

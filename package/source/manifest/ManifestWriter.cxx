@@ -68,7 +68,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
 
 OUString ManifestWriter::getImplementationName()
 {
-    return "com.sun.star.packages.manifest.comp.ManifestWriter";
+    return u"com.sun.star.packages.manifest.comp.ManifestWriter"_ustr;
 }
 
 sal_Bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
 }
 Sequence < OUString > ManifestWriter::getSupportedServiceNames()
 {
-    return { "com.sun.star.packages.manifest.ManifestWriter" };
+    return { u"com.sun.star.packages.manifest.ManifestWriter"_ustr };
 }
 
 

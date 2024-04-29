@@ -332,7 +332,7 @@ bool OWriteStream_Impl::IsEncrypted()
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        uno::Any aValue = xPropSet->getPropertyValue("WasEncrypted");
+        uno::Any aValue = xPropSet->getPropertyValue(u"WasEncrypted"_ustr);
         if ( !( aValue >>= bWasEncr ) )
         {
             SAL_WARN( "package.xstor", "The property WasEncrypted has wrong type!" );
@@ -582,7 +582,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
     // in case the stream can not be open
     // an exception should be thrown
     if ( !xTempStream.is() )
-        throw io::IOException("no temp stream"); //TODO:
+        throw io::IOException(u"no temp stream"_ustr); //TODO:
 
     return xTempStream;
 }
@@ -636,7 +636,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_bHasDataToFlush )
-        throw io::IOException("m_bHasDataToFlush==true");
+        throw io::IOException(u"m_bHasDataToFlush==true"_ustr);
 
     OSL_ENSURE( !m_oTempFile.has_value() && !m_xCacheStream.is(), "The temporary must not exist!" );
 
@@ -655,8 +655,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     // Thus if Compressed property is provided it must be set as the latest one
     bool bCompressedIsSet = false;
     bool bCompressed = false;
-    OUString aComprPropName( "Compressed" );
-    OUString aMedTypePropName( "MediaType" );
+    OUString aComprPropName( u"Compressed"_ustr );
+    OUString aMedTypePropName( u"MediaType"_ustr );
     for ( const auto& rProp : aProps )
     {
         if ( rProp.Name == aComprPropName )
@@ -697,7 +697,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::Any( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( "Encrypted", uno::Any( true ) );
+        xPropertySet->setPropertyValue( u"Encrypted"_ustr, uno::Any( true ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -788,7 +788,7 @@ void OWriteStream_Impl::Commit()
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::Any( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( "Encrypted",
+        xPropertySet->setPropertyValue( u"Encrypted"_ustr,
                                         uno::Any( true ) );
     }
     else if ( m_bHasCachedEncryptionData )
@@ -886,7 +886,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
             aPropVal.Value <<= m_aNewRelInfo;
         else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( "Wrong relinfo stream!" );
+            throw io::IOException( u"Wrong relinfo stream!"_ustr );
     }
     if (!aPropVal.Name.isEmpty())
     {
@@ -1049,7 +1049,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRel
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
         return m_aNewRelInfo;
     else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( "Wrong relinfo stream!" );
+            throw io::IOException( u"Wrong relinfo stream!"_ustr );
 }
 
 void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream >& xDestStream )
@@ -1381,7 +1381,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY_THROW );
 
         bool bEncr = false;
-        xProps->getPropertyValue( "Encrypted" ) >>= bEncr;
+        xProps->getPropertyValue( u"Encrypted"_ustr ) >>= bEncr;
         if ( !bEncr )
             throw packages::NoEncryptionException();
 
@@ -1468,8 +1468,8 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 // set the mediatype
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue(
-                    "MediaType",
-                    uno::Any( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                    u"MediaType"_ustr,
+                    uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
 
                 m_nRelInfoStatus = RELINFO_READ;
             }
@@ -1492,8 +1492,8 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
             // set the mediatype
             uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-            xPropSet->setPropertyValue("MediaType",
-                uno::Any( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+            xPropSet->setPropertyValue(u"MediaType"_ustr,
+                uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
 
             if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                 m_nRelInfoStatus = RELINFO_NO_INIT;
@@ -1657,7 +1657,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
 
     // now the properties can be copied
     // the order of the properties setting is not important for StorageStream API
-    OUString aPropName ("Compressed");
+    OUString aPropName (u"Compressed"_ustr);
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_nStorageType == embed::StorageFormats::PACKAGE || m_nStorageType == embed::StorageFormats::OFOPXML )
     {
@@ -1984,7 +1984,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     }
     catch( const io::IOException& r )
     {
-        throw lang::WrappedTargetRuntimeException("OWriteStream::getOutputStream: Could not create backing temp file",
+        throw lang::WrappedTargetRuntimeException(u"OWriteStream::getOutputStream: Could not create backing temp file"_ustr,
                 getXWeak(), css::uno::Any ( r ) );
     }
 
@@ -2324,7 +2324,7 @@ void SAL_CALL OWriteStream::dispose()
             {
                 uno::Any aCaught( ::cppu::getCaughtException() );
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-                throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!",
+                throw lang::WrappedTargetRuntimeException(u"Can not commit/revert the storage!"_ustr,
                                                 getXWeak(),
                                                 aCaught );
             }
@@ -2453,7 +2453,7 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-        throw lang::WrappedTargetRuntimeException( "Problems on hasEncryptionData!",
+        throw lang::WrappedTargetRuntimeException( u"Problems on hasEncryptionData!"_ustr,
                                   getXWeak(),
                                   aCaught );
     }
@@ -2501,7 +2501,7 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Target");
+    auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -2522,7 +2522,7 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Type");
+    auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -2544,7 +2544,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
 
     // TODO/LATER: in future the unification of the ID could be checked
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
         [&aIDRel](const uno::Sequence<beans::StringPair>& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
@@ -2569,7 +2569,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
 
     // TODO/LATER: in future the unification of the ID could be checked
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aTypeRel("Type", sType);
+    const beans::StringPair aTypeRel(u"Type"_ustr, sType);
     std::vector< uno::Sequence<beans::StringPair> > aResult;
     aResult.reserve(aSeq.getLength());
 
@@ -2609,7 +2609,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
     uno::Sequence<beans::StringPair>* pPair = nullptr;
 
@@ -2660,7 +2660,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(std::cbegin(aSeq), std::cend(aSeq),
         [&aIDRel](const uno::Sequence< beans::StringPair >& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
@@ -2693,7 +2693,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    OUString aIDTag( "Id" );
+    OUString aIDTag( u"Id"_ustr );
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     std::vector< uno::Sequence<beans::StringPair> > aResultVec;
     aResultVec.reserve(aSeq.getLength() + aEntries.getLength());
@@ -3085,7 +3085,7 @@ void SAL_CALL OWriteStream::commit()
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-        throw embed::StorageWrappedTargetException( "Problems on commit!",
+        throw embed::StorageWrappedTargetException( u"Problems on commit!"_ustr,
                                   getXWeak(),
                                   aCaught );
     }
@@ -3141,7 +3141,7 @@ void SAL_CALL OWriteStream::revert()
         {
             uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-            throw embed::StorageWrappedTargetException("Problems on revert!",
+            throw embed::StorageWrappedTargetException(u"Problems on revert!"_ustr,
                 getXWeak(),
                 aCaught);
         }

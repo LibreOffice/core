@@ -248,7 +248,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute(
                         isODF13 ? ATTRIBUTE_ALGORITHM13 : ATTRIBUTE_ALGORITHM,
-                                                 "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
+                                                 u"http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"_ustr );
                     xHandler->startElement(isODF13 ? ELEMENT_ENCRYPTIONMETHOD13 : ELEMENT_ENCRYPTIONMETHOD, pNewAttrList);
                     xHandler->endElement(isODF13 ? ELEMENT_ENCRYPTIONMETHOD13 : ELEMENT_ENCRYPTIONMETHOD);
                     xHandler->ignorableWhitespace ( sWhiteSpace );

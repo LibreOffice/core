@@ -219,7 +219,7 @@ static sal_uInt32 getTruncated( sal_Int64 nNum, bool *pIsTruncated )
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
-        throw IOException("Unexpected character is used in file name." );
+        throw IOException(u"Unexpected character is used in file name."_ustr );
 
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
@@ -293,7 +293,7 @@ void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
     const ZipEntry &rEntry = *m_pCurrentEntry;
 
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
-        throw IOException("Unexpected character is used in file name." );
+        throw IOException(u"Unexpected character is used in file name."_ustr );
 
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );

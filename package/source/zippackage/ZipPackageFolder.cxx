@@ -294,7 +294,7 @@ void ZipPackageFolder::saveContents(
     }
 
     bool bMimeTypeStreamStored = false;
-    OUString aMimeTypeStreamName("mimetype");
+    OUString aMimeTypeStreamName(u"mimetype"_ustr);
     if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
         // let the "mimetype" stream in root folder be stored as the first stream if it is zip format
@@ -381,12 +381,12 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent
 
 OUString ZipPackageFolder::getImplementationName()
 {
-    return "ZipPackageFolder";
+    return u"ZipPackageFolder"_ustr;
 }
 
 uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
 {
-    return { "com.sun.star.packages.PackageFolder" };
+    return { u"com.sun.star.packages.PackageFolder"_ustr };
 }
 
 sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )

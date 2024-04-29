@@ -296,22 +296,22 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         uno::Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY_THROW );
 
         // copy all the properties of this stream to the new stream
-        xNewPSProps->setPropertyValue("MediaType", Any( msMediaType ) );
-        xNewPSProps->setPropertyValue("Compressed", Any( m_bToBeCompressed ) );
+        xNewPSProps->setPropertyValue(u"MediaType"_ustr, Any( msMediaType ) );
+        xNewPSProps->setPropertyValue(u"Compressed"_ustr, Any( m_bToBeCompressed ) );
         if ( m_bToBeEncrypted )
         {
             xNewPSProps->setPropertyValue(ENCRYPTION_KEY_PROPERTY, Any( aKey ) );
-            xNewPSProps->setPropertyValue("Encrypted", Any( true ) );
+            xNewPSProps->setPropertyValue(u"Encrypted"_ustr, Any( true ) );
         }
 
         // insert a new stream in the package
         uno::Reference< XInterface > xTmp;
-        Any aRoot = pPackage->getByHierarchicalName("/");
+        Any aRoot = pPackage->getByHierarchicalName(u"/"_ustr);
         aRoot >>= xTmp;
         uno::Reference< container::XNameContainer > xRootNameContainer( xTmp, UNO_QUERY_THROW );
 
         uno::Reference< XInterface > xNPSDummy( xNewPackStream, UNO_QUERY );
-        xRootNameContainer->insertByName("dummy", Any( xNPSDummy ) );
+        xRootNameContainer->insertByName(u"dummy"_ustr, Any( xNPSDummy ) );
 
         // commit the temporary package
         pPackage->commitChanges();
@@ -594,11 +594,11 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence<sal_Int8> aVector(GetIVSize());
                 if (rtl_random_getBytes(rRandomPool, aSalt.getArray(), 16) != rtl_Random_E_None)
                 {
-                    throw uno::RuntimeException("rtl_random_getBytes failed");
+                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
                 }
                 if (rtl_random_getBytes(rRandomPool, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
                 {
-                    throw uno::RuntimeException("rtl_random_getBytes failed");
+                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
                 }
                 if ( !m_bHaveOwnKey )
                 {
@@ -1349,12 +1349,12 @@ void ZipPackageStream::setSize ( const sal_Int64 nNewSize )
 }
 OUString ZipPackageStream::getImplementationName()
 {
-    return "ZipPackageStream";
+    return u"ZipPackageStream"_ustr;
 }
 
 Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.packages.PackageStream" };
+    return { u"com.sun.star.packages.PackageStream"_ustr };
 }
 
 sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )

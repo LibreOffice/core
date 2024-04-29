@@ -55,7 +55,7 @@ namespace
         BootstrapFixtureBase::setUp();
         OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs{ { "URL", uno::Any(aURL) } };
+        uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, uno::Any(aURL) } };
         uno::Sequence<uno::Any> aArgs{ uno::Any(aNVs) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
@@ -63,7 +63,7 @@ namespace
 
         uno::Reference<packages::zip::XZipFileAccess2> xZip(
             xSvcMgr->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.zip.ZipFileAccess", aArgs, xCxt),
+                u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs, xCxt),
             uno::UNO_QUERY);
 
         CPPUNIT_ASSERT(xZip.is());
@@ -208,7 +208,7 @@ namespace
         // and have ZIP64 format "Data descriptor".
         OUString aURL2 = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/export64.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs2{ { "URL", uno::Any(aURL2) } };
+        uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, uno::Any(aURL2) } };
         uno::Sequence<uno::Any> aArgs2{ uno::Any(aNVs2) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
@@ -217,7 +217,7 @@ namespace
         // Without Zip64 support, it would crash here
         uno::Reference<packages::zip::XZipFileAccess2> xZip2(
             xSvcMgr->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.zip.ZipFileAccess", aArgs2, xCxt),
+                u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs2, xCxt),
             uno::UNO_QUERY);
 
         CPPUNIT_ASSERT(xZip2.is());
@@ -228,7 +228,7 @@ namespace
 
         // Check if the styles.xml seems to be right
         uno::Reference<io::XInputStream> xStrm;
-        xNA->getByName("styles.xml") >>= xStrm;
+        xNA->getByName(u"styles.xml"_ustr) >>= xStrm;
         CPPUNIT_ASSERT(xStrm.is());
         // Filesize check
         sal_Int32 nSize = xStrm->available();

@@ -90,8 +90,8 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         // TODO: headers of encrypted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
-        uno::Sequence<OUString> aPropNames { "Compressed", "MediaType",
-                                             "UseCommonStoragePasswordEncryption" };
+        uno::Sequence<OUString> aPropNames { u"Compressed"_ustr, u"MediaType"_ustr,
+                                             u"UseCommonStoragePasswordEncryption"_ustr };
 
         if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
@@ -301,7 +301,7 @@ OStorage_Impl::~OStorage_Impl()
     m_xPackageFolder.clear();
     m_xPackage.clear();
 
-    OUString aPropertyName = "URL";
+    OUString aPropertyName = u"URL"_ustr;
     for (const auto& rProp : m_xProperties)
     {
         if ( rProp.Name == aPropertyName )
@@ -388,7 +388,7 @@ void OStorage_Impl::OpenOwnPackage()
             }
 
             // do not allow elements to remove themself from the old container in case of insertion to another container
-            pArguments[ 1 ] <<= beans::NamedValue( "AllowRemoveOnInsert",
+            pArguments[ 1 ] <<= beans::NamedValue( u"AllowRemoveOnInsert"_ustr,
                                                     uno::Any( false ) );
 
             sal_Int32 nArgNum = 2;
@@ -418,7 +418,7 @@ void OStorage_Impl::OpenOwnPackage()
                 // let the package support only plain zip format
                 beans::NamedValue aNamedValue;
                 aNamedValue.Name = "StorageFormat";
-                aNamedValue.Value <<= OUString( "ZipFormat" );
+                aNamedValue.Value <<= u"ZipFormat"_ustr;
                 aArguments.realloc( ++nArgNum );
                 pArguments = aArguments.getArray();
                 pArguments[nArgNum-1] <<= aNamedValue;
@@ -428,14 +428,14 @@ void OStorage_Impl::OpenOwnPackage()
                 // let the package support OFOPXML media type handling
                 beans::NamedValue aNamedValue;
                 aNamedValue.Name = "StorageFormat";
-                aNamedValue.Value <<= OUString( "OFOPXMLFormat" );
+                aNamedValue.Value <<= u"OFOPXMLFormat"_ustr;
                 aArguments.realloc( ++nArgNum );
                 pArguments = aArguments.getArray();
                 pArguments[nArgNum-1] <<= aNamedValue;
             }
 
             m_xPackage.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                               "com.sun.star.packages.comp.ZipPackage", aArguments, m_xContext),
+                               u"com.sun.star.packages.comp.ZipPackage"_ustr, aArguments, m_xContext),
                             uno::UNO_QUERY );
         }
 
@@ -444,7 +444,7 @@ void OStorage_Impl::OpenOwnPackage()
 
         if ( xHNameAccess.is() )
         {
-            uno::Any aFolder = xHNameAccess->getByHierarchicalName("/");
+            uno::Any aFolder = xHNameAccess->getByHierarchicalName(u"/"_ustr);
             aFolder >>= m_xPackageFolder;
         }
     }
@@ -481,7 +481,7 @@ void OStorage_Impl::GetStorageProperties()
 
     if ( !m_bControlVersion )
     {
-        xProps->getPropertyValue( "Version" ) >>= m_aVersion;
+        xProps->getPropertyValue( u"Version"_ustr ) >>= m_aVersion;
         m_bControlVersion = true;
     }
 
@@ -613,7 +613,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
     sal_Int32 nDestMode = embed::ElementModes::READ;
-    xPropSet->getPropertyValue( "OpenMode" ) >>= nDestMode;
+    xPropSet->getPropertyValue( u"OpenMode"_ustr ) >>= nDestMode;
 
     if ( !( nDestMode & embed::ElementModes::WRITE ) )
         throw io::IOException( THROW_WHERE ); // TODO: access_denied
@@ -633,15 +633,15 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     // move storage properties to the destination one ( means changeable properties )
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        xPropSet->setPropertyValue( "MediaType", uno::Any( m_aMediaType ) );
-        xPropSet->setPropertyValue( "Version", uno::Any( m_aVersion ) );
+        xPropSet->setPropertyValue( u"MediaType"_ustr, uno::Any( m_aMediaType ) );
+        xPropSet->setPropertyValue( u"Version"_ustr, uno::Any( m_aVersion ) );
     }
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // if this is a root storage, the common key from current one should be moved there
         bool bIsRoot = false;
-        if ( ( xPropSet->getPropertyValue( "IsRoot" ) >>= bIsRoot ) && bIsRoot )
+        if ( ( xPropSet->getPropertyValue( u"IsRoot"_ustr ) >>= bIsRoot ) && bIsRoot )
         {
             try
             {
@@ -840,7 +840,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    "UseCommonStoragePasswordEncryption",
+                    u"UseCommonStoragePasswordEncryption"_ustr,
                     uno::Any( true ) );
             }
             else
@@ -874,7 +874,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    "UseCommonStoragePasswordEncryption",
+                    u"UseCommonStoragePasswordEncryption"_ustr,
                     uno::Any( true ) );
             }
             catch( const packages::WrongPasswordException& )
@@ -1140,8 +1140,8 @@ void OStorage_Impl::Commit()
     {
         // move properties to the destination package folder
         uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue( "MediaType", uno::Any( m_aMediaType ) );
-        xProps->setPropertyValue( "Version", uno::Any( m_aVersion ) );
+        xProps->setPropertyValue( u"MediaType"_ustr, uno::Any( m_aMediaType ) );
+        xProps->setPropertyValue( u"Version"_ustr, uno::Any( m_aVersion ) );
     }
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -1580,7 +1580,7 @@ void OStorage_Impl::CreateRelStorage()
 
     if ( !m_pRelStorElement )
     {
-        m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
+        m_pRelStorElement = new SotElement_Impl( u"_rels"_ustr, true, true );
         m_pRelStorElement->m_xStorage = CreateNewStorageImpl(embed::ElementModes::WRITE);
         if (m_pRelStorElement->m_xStorage)
             m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
@@ -1641,7 +1641,7 @@ uno::Reference< io::XInputStream > OStorage_Impl::GetRelInfoStreamForName(
 void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContainer >& xNewPackageFolder )
 {
     // this method should be used only in OStorage_Impl::Commit() method
-    OUString aRelsStorName("_rels");
+    OUString aRelsStorName(u"_rels"_ustr);
 
     if ( !xNewPackageFolder.is() )
         throw uno::RuntimeException( THROW_WHERE );
@@ -1659,7 +1659,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
             CreateRelStorage();
 
             uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
-                ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
+                u".rels"_ustr, embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
 
             uno::Reference<io::XOutputStream> xOutStream = xRelsStream->getOutputStream();
             if (!xOutStream.is())
@@ -1671,8 +1671,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
             // set the mediatype
             uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
             xPropSet->setPropertyValue(
-                "MediaType", uno::Any(OUString(
-                                 "application/vnd.openxmlformats-package.relationships+xml")));
+                u"MediaType"_ustr, uno::Any(u"application/vnd.openxmlformats-package.relationships+xml"_ustr));
 
             m_nRelInfoStatus = RELINFO_READ;
         }
@@ -1685,7 +1684,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         CreateRelStorage();
 
         uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
-            ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
+            u".rels"_ustr, embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
 
         uno::Reference<io::XOutputStream> xOutputStream = xRelsStream->getOutputStream();
         if (!xOutputStream.is())
@@ -1698,8 +1697,8 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         // set the mediatype
         uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
         xPropSet->setPropertyValue(
-            "MediaType",
-            uno::Any(OUString("application/vnd.openxmlformats-package.relationships+xml")));
+            u"MediaType"_ustr,
+            uno::Any(u"application/vnd.openxmlformats-package.relationships+xml"_ustr));
 
         m_xNewRelInfoStream.clear();
         if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
@@ -4436,7 +4435,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
             throw lang::WrappedTargetException(
-                                        "Can't read contents!",
+                                        u"Can't read contents!"_ustr,
                                         getXWeak(),
                                         aCaught );
         }
@@ -4616,7 +4615,7 @@ OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
         throw uno::RuntimeException( THROW_WHERE );
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Target");
+    auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -4637,7 +4636,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
         throw uno::RuntimeException( THROW_WHERE );
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    auto pRel = lcl_findPairByName(aSeq, "Type");
+    auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
 
@@ -4659,7 +4658,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
 
     // TODO/LATER: in future the unification of the ID could be checked
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
         [&aIDRel](const uno::Sequence<beans::StringPair>& rRel) {
@@ -4690,7 +4689,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
         [&sType](const uno::Sequence<beans::StringPair>& rRel) {
-            auto pRel = lcl_findPairByName(rRel, "Type");
+            auto pRel = lcl_findPairByName(rRel, u"Type"_ustr);
             return pRel != rRel.end()
                 // the type is usually a URL, so the check should be case insensitive
                 && pRel->Second.equalsIgnoreAsciiCase( sType );
@@ -4749,7 +4748,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
     if ( m_pImpl->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
     uno::Sequence<beans::StringPair>* pResult = nullptr;
 
@@ -4800,7 +4799,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
         throw uno::RuntimeException( THROW_WHERE );
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    const beans::StringPair aIDRel("Id", sID);
+    const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(std::cbegin(aSeq), std::cend(aSeq),
         [&aIDRel](const uno::Sequence< beans::StringPair >& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
@@ -4833,7 +4832,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
     if ( m_pImpl->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
-    OUString aIDTag( "Id" );
+    OUString aIDTag( u"Id"_ustr );
     const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     std::vector< uno::Sequence<beans::StringPair> > aResultVec;
     aResultVec.reserve(aSeq.getLength() + aEntries.getLength());

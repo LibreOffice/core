@@ -33,7 +33,7 @@ uno::Reference<xml::crypto::XDigestContext> StarOfficeSHA1DigestContext::Create(
     ::rtl::Reference<StarOfficeSHA1DigestContext> xResult = new StarOfficeSHA1DigestContext();
     xResult->m_pDigest = rtl_digest_createSHA1();
     if ( !xResult->m_pDigest )
-        throw uno::RuntimeException("Can not create cipher!" );
+        throw uno::RuntimeException(u"Can not create cipher!"_ustr );
 
     return xResult;
 }

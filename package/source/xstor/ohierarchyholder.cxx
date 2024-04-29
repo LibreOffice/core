@@ -41,7 +41,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
-        throw io::IOException("invalid storage/stream mode combo");
+        throw io::IOException(u"invalid storage/stream mode combo"_ustr);
 
     uno::Reference< embed::XExtendedStorageStream > xResult =
         m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
@@ -83,7 +83,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     std::unique_lock aGuard( m_aMutex );
 
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
-        throw io::IOException("invalid storage/stream mode combo");
+        throw io::IOException(u"invalid storage/stream mode combo"_ustr);
 
     if ( aListPath.empty() )
         throw uno::RuntimeException();
@@ -309,7 +309,7 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
-                            "Can not commit storage sequence!",
+                            u"Can not commit storage sequence!"_ustr,
                             uno::Reference< uno::XInterface >(),
                             anyEx );
     }

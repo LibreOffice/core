@@ -79,10 +79,10 @@ XUnbufferedStream::XUnbufferedStream(
     }
 
     if (mnZipSize < 0)
-        throw ZipIOException("The stream seems to be broken!");
+        throw ZipIOException(u"The stream seems to be broken!"_ustr);
 
     if (o3tl::checked_add(maEntry.nOffset, nSize, mnZipEnd))
-        throw ZipIOException("Integer-overflow");
+        throw ZipIOException(u"Integer-overflow"_ustr);
 
     bool bHaveEncryptData = rData.is() && rData->m_aInitVector.hasElements() &&
         ((rData->m_aSalt.hasElements() && (rData->m_oPBKDFIterationCount || rData->m_oArgon2Args))
@@ -236,18 +236,18 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 nRead += nLastRead;
                 if ( nRead > nRequestedBytes )
                     throw RuntimeException(
-                        "Should not be possible to read more than requested!" );
+                        u"Should not be possible to read more than requested!"_ustr );
 
                 if ( maInflater.finished() || maInflater.getLastInflateError() )
-                    throw ZipIOException("The stream seems to be broken!" );
+                    throw ZipIOException(u"The stream seems to be broken!"_ustr );
 
                 if ( maInflater.needsDictionary() )
-                    throw ZipIOException("Dictionaries are not supported!" );
+                    throw ZipIOException(u"Dictionaries are not supported!"_ustr );
 
                 sal_Int32 nDiff = static_cast< sal_Int32 >( mnZipEnd - mnZipCurrent );
                 if ( nDiff <= 0 )
                 {
-                    throw ZipIOException("The stream seems to be broken!" );
+                    throw ZipIOException(u"The stream seems to be broken!"_ustr );
                 }
 
                 mxZipSeek->seek ( mnZipCurrent );
@@ -259,7 +259,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
                 sal_Int32 nZipRead = mxZipStream->readBytes( maCompBuffer, nToRead );
                 if ( nZipRead < nToRead )
-                    throw ZipIOException("No expected data!" );
+                    throw ZipIOException(u"No expected data!"_ustr );
 
                 mnZipCurrent += nZipRead;
                 // maCompBuffer now has the data, check if we need to decrypt
@@ -298,7 +298,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 maCRC.update( aData );
 
             if ( mnZipSize + maHeader.getLength() == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
-                throw ZipIOException("The stream seems to be broken!" );
+                throw ZipIOException(u"The stream seems to be broken!"_ustr );
         }
     }
 

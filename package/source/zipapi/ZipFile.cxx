@@ -93,7 +93,7 @@ ZipFile::ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
     if (bInitialise && readCEN() == -1 )
     {
         aEntries.clear();
-        throw ZipException( "stream data looks to be broken" );
+        throw ZipException( u"stream data looks to be broken"_ustr );
     }
 }
 
@@ -117,7 +117,7 @@ ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
         else if ( readCEN() == -1 )
         {
             aEntries.clear();
-            throw ZipException("stream data looks to be broken" );
+            throw ZipException(u"stream data looks to be broken"_ustr );
         }
     }
 }
@@ -173,7 +173,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 
     if (xEncryptionData->m_nDerivedKeySize < 0)
     {
-        throw ZipIOException("Invalid derived key length!" );
+        throw ZipIOException(u"Invalid derived key length!"_ustr );
     }
 
     uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
@@ -213,7 +213,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
         if (rc != ARGON2_OK)
         {
             SAL_WARN("package", "argon2id_ctx failed to derive key: " << argon2_error_message(rc));
-            throw ZipIOException("argon2id_ctx failed to derive key");
+            throw ZipIOException(u"argon2id_ctx failed to derive key"_ustr);
         }
     }
     else if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
@@ -224,7 +224,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                         xEncryptionData->m_aSalt.getLength(),
                         *xEncryptionData->m_oPBKDFIterationCount) )
     {
-        throw ZipIOException("Can not create derived key!" );
+        throw ZipIOException(u"Can not create derived key!"_ustr );
     }
 
     if (xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING
@@ -244,7 +244,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     }
     else
     {
-        throw ZipIOException("Unknown cipher algorithm is requested!" );
+        throw ZipIOException(u"Unknown cipher algorithm is requested!"_ustr );
     }
 
     return xResult;
@@ -749,14 +749,14 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(
         const ::rtl::Reference<EncryptionData> &rData)
 {
     if (!rData.is())
-        throw ZipIOException("Encrypted stream without encryption data!" );
+        throw ZipIOException(u"Encrypted stream without encryption data!"_ustr );
 
     if (!rData->m_aKey.hasElements())
         throw packages::WrongPasswordException(THROW_WHERE);
 
     uno::Reference<XSeekable> xSeek(xStream, UNO_QUERY);
     if (!xSeek.is())
-        throw ZipIOException("The stream must be seekable!");
+        throw ZipIOException(u"The stream must be seekable!"_ustr);
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
@@ -860,7 +860,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
         // in case no digest is provided there is no way
         // to detect password correctness
         if ( !rData.is() )
-            throw ZipException("Encrypted stream without encryption data!" );
+            throw ZipException(u"Encrypted stream without encryption data!"_ustr );
 
         // if we have a digest, then this file is an encrypted one and we should
         // check if we can decrypt it or not
@@ -923,7 +923,7 @@ void ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber.seek(nPos);
     sal_Int32 nTestSig = aGrabber.ReadInt32();
     if (nTestSig != LOCSIG)
-        throw ZipIOException("Invalid LOC header (bad signature)" );
+        throw ZipIOException(u"Invalid LOC header (bad signature)"_ustr );
 
     // Ignore all (duplicated) information from the local file header.
     // various programs produced "broken" zip files; even LO at some point.
@@ -978,7 +978,7 @@ void ZipFile::readLOC( ZipEntry &rEntry )
     }
 
     if ( bBroken && !bRecoveryMode )
-        throw ZipIOException("The stream seems to be broken!" );
+        throw ZipIOException(u"The stream seems to be broken!"_ustr );
 }
 
 sal_Int32 ZipFile::findEND()
@@ -998,7 +998,7 @@ sal_Int32 ZipFile::findEND()
 
         auto nSize = nLength - nEnd;
         if (nSize != aGrabber.readBytes(aBuffer, nSize))
-            throw ZipException("Zip END signature not found!" );
+            throw ZipException(u"Zip END signature not found!"_ustr );
 
         const sal_Int8 *pBuffer = aBuffer.getConstArray();
 
@@ -1012,17 +1012,17 @@ sal_Int32 ZipFile::findEND()
     }
     catch ( IllegalArgumentException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
     catch ( NotConnectedException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
     catch ( BufferSizeExceededException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
-    throw ZipException("Zip END signature not found!" );
+    throw ZipException(u"Zip END signature not found!"_ustr );
 }
 
 sal_Int32 ZipFile::readCEN()
@@ -1042,25 +1042,25 @@ sal_Int32 ZipFile::readCEN()
         sal_Int32 nCenOff = aGrabber.ReadInt32();
 
         if ( nTotal * CENHDR > nCenLen )
-            throw ZipException("invalid END header (bad entry count)" );
+            throw ZipException(u"invalid END header (bad entry count)"_ustr );
 
         if ( nTotal > ZIP_MAXENTRIES )
-            throw ZipException("too many entries in ZIP File" );
+            throw ZipException(u"too many entries in ZIP File"_ustr );
 
         if ( nCenLen < 0 || nCenLen > nEndPos )
-            throw ZipException("Invalid END header (bad central directory size)" );
+            throw ZipException(u"Invalid END header (bad central directory size)"_ustr );
 
         nCenPos = nEndPos - nCenLen;
 
         if ( nCenOff < 0 || nCenOff > nCenPos )
-            throw ZipException("Invalid END header (bad central directory size)" );
+            throw ZipException(u"Invalid END header (bad central directory size)"_ustr );
 
         nLocPos = nCenPos - nCenOff;
         aGrabber.seek( nCenPos );
         Sequence < sal_Int8 > aCENBuffer ( nCenLen );
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
         if ( static_cast < sal_Int64 > ( nCenLen ) != nRead )
-            throw ZipException ("Error reading CEN into memory buffer!" );
+            throw ZipException (u"Error reading CEN into memory buffer!"_ustr );
 
         MemoryByteGrabber aMemGrabber(aCENBuffer);
 
@@ -1072,19 +1072,19 @@ sal_Int32 ZipFile::readCEN()
         {
             sal_Int32 nTestSig = aMemGrabber.ReadInt32();
             if ( nTestSig != CENSIG )
-                throw ZipException("Invalid CEN header (bad signature)" );
+                throw ZipException(u"Invalid CEN header (bad signature)"_ustr );
 
             sal_uInt16 versionMadeBy = aMemGrabber.ReadUInt16();
             aEntry.nVersion = aMemGrabber.ReadInt16();
             aEntry.nFlag = aMemGrabber.ReadInt16();
 
             if ( ( aEntry.nFlag & 1 ) == 1 )
-                throw ZipException("Invalid CEN header (encrypted entry)" );
+                throw ZipException(u"Invalid CEN header (encrypted entry)"_ustr );
 
             aEntry.nMethod = aMemGrabber.ReadInt16();
 
             if ( aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
-                throw ZipException("Invalid CEN header (bad compression method)" );
+                throw ZipException(u"Invalid CEN header (bad compression method)"_ustr );
 
             aEntry.nTime = aMemGrabber.ReadInt32();
             aEntry.nCrc = aMemGrabber.ReadInt32();
@@ -1099,16 +1099,16 @@ sal_Int32 ZipFile::readCEN()
             sal_uInt64 nOffset = aMemGrabber.ReadUInt32();
 
             if ( aEntry.nPathLen < 0 )
-                throw ZipException("unexpected name length" );
+                throw ZipException(u"unexpected name length"_ustr );
 
             if ( nCommentLen < 0 )
-                throw ZipException("unexpected comment length" );
+                throw ZipException(u"unexpected comment length"_ustr );
 
             if ( aEntry.nExtraLen < 0 )
-                throw ZipException("unexpected extra header info length" );
+                throw ZipException(u"unexpected extra header info length"_ustr );
 
             if (aEntry.nPathLen > aMemGrabber.remainingSize())
-                throw ZipException("name too long");
+                throw ZipException(u"name too long"_ustr);
 
             // read always in UTF8, some tools seem not to set UTF8 bit
             aEntry.sPath = OUString( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
@@ -1116,7 +1116,7 @@ sal_Int32 ZipFile::readCEN()
                                      RTL_TEXTENCODING_UTF8 );
 
             if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
-                throw ZipException("Zip entry has an invalid name." );
+                throw ZipException(u"Zip entry has an invalid name."_ustr );
 
             aMemGrabber.skipBytes(aEntry.nPathLen);
 
@@ -1129,9 +1129,9 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset = nOffset;
 
             if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
-                throw ZipException("Integer-overflow");
+                throw ZipException(u"Integer-overflow"_ustr);
             if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
-                throw ZipException("Integer-overflow");
+                throw ZipException(u"Integer-overflow"_ustr);
 
             aMemGrabber.skipBytes(nCommentLen);
 
@@ -1147,7 +1147,7 @@ sal_Int32 ZipFile::readCEN()
         }
 
         if (nCount != nTotal)
-            throw ZipException("Count != Total" );
+            throw ZipException(u"Count != Total"_ustr );
     }
     catch ( IllegalArgumentException & )
     {
@@ -1414,15 +1414,15 @@ void ZipFile::recover()
     }
     catch ( IllegalArgumentException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
     catch ( NotConnectedException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
     catch ( BufferSizeExceededException& )
     {
-        throw ZipException("Zip END signature not found!" );
+        throw ZipException(u"Zip END signature not found!"_ustr );
     }
 }
 
