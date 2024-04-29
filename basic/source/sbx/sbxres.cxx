@@ -22,59 +22,59 @@
 
 #include <rtl/ustring.hxx>
 
-static const char* pSbxRes[] = {
-    "Empty",
-    "Null",
-    "Integer",
-    "Long",
-    "Single",
-    "Double",
-    "Currency",
-    "Date",
-    "String",
-    "Object",
-    "Error",
-    "Boolean",
-    "Variant",
-    "Any",
-    "Type14",
-    "Type15",
-    "Char",
-    "Byte",
-    "UShort",
-    "ULong",
-    "Long64",
-    "ULong64",
-    "Int",
-    "UInt",
-    "Void",
-    "HResult",
-    "Pointer",
-    "DimArray",
-    "CArray",
-    "Any",
-    "LpStr",
-    "LpWStr",
-    " As ",
-    "Optional ",
-    "Byref ",
+constexpr OUString pSbxRes[] = {
+    u"Empty"_ustr,
+    u"Null"_ustr,
+    u"Integer"_ustr,
+    u"Long"_ustr,
+    u"Single"_ustr,
+    u"Double"_ustr,
+    u"Currency"_ustr,
+    u"Date"_ustr,
+    u"String"_ustr,
+    u"Object"_ustr,
+    u"Error"_ustr,
+    u"Boolean"_ustr,
+    u"Variant"_ustr,
+    u"Any"_ustr,
+    u"Type14"_ustr,
+    u"Type15"_ustr,
+    u"Char"_ustr,
+    u"Byte"_ustr,
+    u"UShort"_ustr,
+    u"ULong"_ustr,
+    u"Long64"_ustr,
+    u"ULong64"_ustr,
+    u"Int"_ustr,
+    u"UInt"_ustr,
+    u"Void"_ustr,
+    u"HResult"_ustr,
+    u"Pointer"_ustr,
+    u"DimArray"_ustr,
+    u"CArray"_ustr,
+    u"Any"_ustr,
+    u"LpStr"_ustr,
+    u"LpWStr"_ustr,
+    u" As "_ustr,
+    u"Optional "_ustr,
+    u"Byref "_ustr,
 
-    "Name",
-    "Parent",
-    "Application",
-    "Count",
-    "Add",
-    "Item",
-    "Remove",
+    u"Name"_ustr,
+    u"Parent"_ustr,
+    u"Application"_ustr,
+    u"Count"_ustr,
+    u"Add"_ustr,
+    u"Item"_ustr,
+    u"Remove"_ustr,
 
-    "Error ",   // with blank!
-    "False",
-    "True"
+    u"Error "_ustr,   // with blank!
+    u"False"_ustr,
+    u"True"_ustr
 };
 
 OUString GetSbxRes( StringId nId )
 {
-    return OUString::createFromAscii( ( nId > StringId::LastValue ) ? "???" : pSbxRes[ static_cast<int>( nId ) ] );
+    return  ( nId > StringId::LastValue ) ? u"???"_ustr : pSbxRes[ static_cast<int>( nId ) ];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
