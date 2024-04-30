@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -45,6 +47,7 @@
 #include <test/lokcallback.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -3932,6 +3935,76 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
     CPPUNIT_ASSERT(xTransferable2.is());
     // Without the fix, the text selection was complex.
     CPPUNIT_ASSERT(!xTransferable2->isComplex());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
+{
+    {
+        // setup core language to FR as it will be the first session
+        SvtSysLocaleOptions aLocalOptions;
+        aLocalOptions.SetLocaleConfigString("fr-FR");
+        aLocalOptions.SetUILocaleConfigString("fr-FR");
+        aLocalOptions.Commit();
+
+        loadFromFile(u"numlocale.xlsx");
+
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+        CPPUNIT_ASSERT(pModelObj);
+
+        pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        ScDocument* pDoc = pModelObj->GetDocument();
+
+        int nViewFR = SfxLokHelper::getView();
+        ViewCallback aView1;
+        SfxViewShell* pViewFR = SfxViewShell::Current();
+        pViewFR->SetLOKLocale("fr-FR");
+
+        // modify G12 with FR and use French keywords in the format
+        SfxLokHelper::setView(nViewFR);
+
+        sal_Int32 nCheckPos;
+        SvNumFormatType nType;
+        sal_uInt32 nFormat;
+        OUString aNumberFormat("JJ/MM/AAAA");
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        pFormatter->PutEntry(aNumberFormat, nCheckPos, nType, nFormat);
+        ScAddress aCellPos1(/*nColP=*/6, /*nRowP=*/11, /*nTabP=*/0);
+        pDoc->SetNumberFormat(aCellPos1, nFormat);
+
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    {
+        // now setup DE language in core
+        SvtSysLocaleOptions aLocalOptions;
+        aLocalOptions.SetLocaleConfigString("de-DE");
+        aLocalOptions.SetUILocaleConfigString("de-DE");
+        aLocalOptions.Commit();
+
+        // save and reopen
+        // .uno:Save modifies the original file, make a copy first
+        saveAndReload("Calc MS Excel 2007 VBA XML");
+
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+        CPPUNIT_ASSERT(pModelObj);
+
+        ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        CPPUNIT_ASSERT(pView);
+
+        Scheduler::ProcessEventsToIdle();
+
+        uno::Sequence<beans::PropertyValue> aArgs;
+        dispatchCommand(mxComponent, ".uno:Save", aArgs);
+
+        Scheduler::ProcessEventsToIdle();
+
+        ScDocument* pDoc = pModelObj->GetDocument();
+
+        // verify that format is correct (German), doesn't have any "string" inside
+        sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(/*col=*/6, /*row=*/11, /*tab=*/0);
+        const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+        CPPUNIT_ASSERT_EQUAL(OUString("TT.MM.JJ"), pNumberFormat->GetFormatstring());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
