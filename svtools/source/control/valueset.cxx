@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/lineinfo.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -1255,9 +1256,15 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
         if (bDrawSel)
         {
             rRenderContext.SetLineColor(aDoubleColor);
-            tools::PolyPolygon aPolyPoly(1);
-            aPolyPoly.Insert(tools::Polygon(aRect));
-            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+            aRect.AdjustLeft( -1 );
+            aRect.AdjustTop( -1 );
+            aRect.AdjustRight( -2 );
+            aRect.AdjustBottom( -2 );
+
+            const tools::Polygon aPoly(aRect);
+            LineInfo aLineInfo;
+            aLineInfo.SetWidth(3);
+            rRenderContext.DrawPolyLine(aPoly, aLineInfo); // tdf#136917
         }
     }
     else
@@ -1343,6 +1350,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
                     rRenderContext.SetLineColor(aSingleColor);
                 else
                     rRenderContext.SetLineColor(COL_LIGHTGRAY);
+
                 rRenderContext.DrawRect(aFocusRect);
             }
         }
