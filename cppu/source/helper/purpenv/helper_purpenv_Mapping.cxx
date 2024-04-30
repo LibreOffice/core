@@ -128,13 +128,12 @@ Mapping::~Mapping()
     SAL_INFO("cppu.purpenv", "LIFE: Mapping:~Mapping() -> " << this);
 }
 
-
 void Mapping::mapInterface(
     uno_Interface                    ** ppOut,
     uno_Interface                     * pUnoI,
     typelib_InterfaceTypeDescription  * pTypeDescr)
 {
-    OSL_ASSERT(ppOut && pTypeDescr);
+    assert(ppOut && pTypeDescr);
     if (*ppOut)
     {
         (*ppOut)->release(*ppOut);
@@ -177,7 +176,6 @@ void Mapping::mapInterface(
 
     rtl_uString_release(pOId);
 }
-
 
 void Mapping::acquire()
 {

@@ -295,11 +295,11 @@ namespace cppu_threadpool
 
             ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
 
-            OSL_ASSERT( ii != m_mapQueue.end() );
+            assert(ii != m_mapQueue.end());
             pQueue = (*ii).second.first;
         }
 
-        OSL_ASSERT( pQueue );
+        assert(pQueue);
         void *pReturn = pQueue->enter( nDisposeId );
 
         if( pQueue->isCallstackEmpty() )
@@ -449,7 +449,7 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 
     bool empty;
     {
-        OSL_ASSERT( g_pThreadpoolHashSet );
+        assert(g_pThreadpoolHashSet);
 
         MutexGuard guard( Mutex::getGlobalMutex() );
 

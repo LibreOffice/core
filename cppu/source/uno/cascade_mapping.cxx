@@ -131,7 +131,7 @@ void MediatorMapping::mapInterface(
     if (*ppOut != nullptr)
     {
         uno_ExtEnvironment * env = m_to.get()->pExtEnv;
-        OSL_ASSERT( env != nullptr );
+        assert(env != nullptr);
         env->releaseInterface( env, *ppOut );
         *ppOut = nullptr;
     }

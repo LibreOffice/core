@@ -689,7 +689,7 @@ void newTypeDescription(
                 pTmp->ppMemberNames = new rtl_uString *[ nMembers ];
                 bool polymorphic = eTypeClass == typelib_TypeClass_STRUCT
                     && OUString::unacquired(&pTypeName).indexOf('<') >= 0;
-                OSL_ASSERT(!polymorphic || pStructMembers != nullptr);
+                assert(!polymorphic || pStructMembers != nullptr);
                 if (polymorphic) {
                     reinterpret_cast< typelib_StructTypeDescription * >(pTmp)->
                         pParameterizedTypes = new sal_Bool[nMembers];
@@ -714,6 +714,7 @@ void newTypeDescription(
                             = pStructMembers[i].aBase.pMemberName;
                         rtl_uString_acquire(pTmp->ppMemberNames[i]);
                     }
+                    assert(pTmp->ppTypeRefs[i]);
                     // write offset
                     sal_Int32 size;
                     sal_Int32 alignment;

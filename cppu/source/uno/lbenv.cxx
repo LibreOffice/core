@@ -233,7 +233,7 @@ static void defenv_registerInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
-    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
+    assert(pEnv && ppInterface && pOId && pTypeDescr && "### null ptr!");
     OUString const & rOId = OUString::unacquired( &pOId );
 
     uno_DefaultEnvironment * that =
@@ -275,13 +275,11 @@ static void defenv_registerInterface(
     }
 }
 
-
 static void defenv_registerProxyInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface, uno_freeProxyFunc freeProxy,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
-    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr && freeProxy,
-                "### null ptr!" );
+    assert(pEnv && ppInterface && pOId && pTypeDescr && freeProxy && "### null ptr!");
     OUString const & rOId = OUString::unacquired( &pOId );
 
     uno_DefaultEnvironment * that =
@@ -333,13 +331,12 @@ static void defenv_registerProxyInterface(
     }
 }
 
-
 static void s_stub_defenv_revokeInterface(va_list * pParam)
 {
     uno_ExtEnvironment * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
     void               * pInterface = va_arg(*pParam, void *);
 
-    OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
+    assert(pEnv && pInterface && "### null ptr!");
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::ClearableMutexGuard guard( that->mutex );
@@ -430,7 +427,7 @@ static void defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
 static void defenv_getObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
 {
-    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    assert(pEnv && ppOId && pInterface && "### null ptr!");
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );
@@ -456,12 +453,11 @@ static void defenv_getObjectIdentifier(
     }
 }
 
-
 static void defenv_getRegisteredInterface(
     uno_ExtEnvironment * pEnv, void ** ppInterface,
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
-    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
+    assert(pEnv && ppInterface && pOId && pTypeDescr && "### null ptr!");
     if (*ppInterface)
     {
         (*pEnv->releaseInterface)( pEnv, *ppInterface );
@@ -485,7 +481,6 @@ static void defenv_getRegisteredInterface(
         }
     }
 }
-
 
 static void defenv_getRegisteredInterfaces(
     uno_ExtEnvironment * pEnv, void *** pppInterfaces, sal_Int32 * pnLen,
@@ -690,7 +685,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const char * pFilter )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( pEnv, "### null ptr!" );
+    assert(pEnv && "### null ptr!");
     OUStringBuffer buf;
 
     if (! pEnv->pExtEnv)
@@ -919,10 +914,9 @@ void EnvironmentsData::getEnvironment(
     }
 }
 
-
 void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 {
-    OSL_ENSURE( ppEnv, "### null ptr!" );
+    assert(ppEnv && "### null ptr!");
     uno_Environment * pEnv =  *ppEnv;
 
     OUString aKey =
@@ -957,7 +951,6 @@ void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
         }
     }
 }
-
 
 void EnvironmentsData::getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,

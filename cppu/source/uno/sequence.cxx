@@ -779,7 +779,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppSequence, "### null ptr!" );
+    assert(ppSequence && "### null ptr!");
     OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
 
     bool ret = true;
@@ -799,7 +799,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppSequence, "### null ptr!" );
+    assert(ppSequence && "### null ptr!");
     bool ret = true;
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
@@ -846,7 +846,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppSequence, "### null ptr!" );
+    assert(ppSequence && "### null ptr!");
     bool ret = true;
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
