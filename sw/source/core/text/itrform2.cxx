@@ -1286,7 +1286,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             }
             if( !pPor )
             {
-                if( !rInf.X() && !m_pCurr->GetNextPortion() && !m_pCurr->GetLen() )
+                if( !rInf.X() && !m_pCurr->GetNextPortion() && !m_pCurr->GetLen()  && !GetFnt()->IsURL() )
                     pPor = m_pCurr;
                 else
                     pPor = new SwTextPortion;

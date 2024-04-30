@@ -367,6 +367,13 @@ void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
                 }
             }
         }
+
+        if (rAttr.Which() == RES_TXTATR_INETFMT)
+        {
+            if (m_nINETFMT == 0)
+                rFnt.SetURL(true);
+            ++m_nINETFMT;
+        }
     }
     // this is the usual case, we have a basic attribute, push it onto the
     // stack and change the font
@@ -432,6 +439,14 @@ void SwAttrHandler::PopAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
     {
         const SfxItemSet* pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return;
+
+        if (rAttr.Which() == RES_TXTATR_INETFMT)
+        {
+            assert(m_nINETFMT > 0);
+            --m_nINETFMT;
+            if (m_nINETFMT == 0)
+                rFnt.SetURL(false);
+        }
 
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {

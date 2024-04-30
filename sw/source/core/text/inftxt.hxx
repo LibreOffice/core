@@ -358,6 +358,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
                    const bool bGrammarCheck = false );
 
     SwTextPaintInfo &operator=(const SwTextPaintInfo&) = delete;
+    void NotifyURL_(const SwLinePortion& rPor) const;
 
 protected:
     SwTextPaintInfo()
@@ -415,6 +416,12 @@ public:
     void DrawBorder( const SwLinePortion &rPor ) const;
 
     void DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const;
+
+    void NotifyURL(const SwLinePortion& rPor) const
+    {
+        if (URLNotify())
+            NotifyURL_(rPor);
+    }
 
     /**
      * Calculate the rectangular area where the portion takes place.

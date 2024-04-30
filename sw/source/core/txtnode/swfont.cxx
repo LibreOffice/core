@@ -668,6 +668,7 @@ SwFont::SwFont( const SwFont &rFont )
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
     m_bGreyWave = rFont.m_bGreyWave;
+    m_bURL = rFont.m_bURL;
 }
 
 SwFont::SwFont( const SwAttrSet* pAttrSet,
@@ -857,6 +858,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
         m_bOrgChg = rFont.m_bOrgChg;
         m_bPaintBlank = rFont.m_bPaintBlank;
         m_bGreyWave = rFont.m_bGreyWave;
+        m_bURL = rFont.m_bURL;
     }
     return *this;
 }

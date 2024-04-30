@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties text:anchor-type="as-char" svg:x="0" svg:y="0" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" fo:background-color="transparent" draw:fill="none" fo:margin-left="0" fo:margin-right="0" fo:margin-top="0" fo:margin-bottom="0" style:wrap="none" style:vertical-pos="middle" style:vertical-rel="baseline" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" fo:padding="0" fo:border="none" loext:rel-width-rel="paragraph"/>
+  </style:style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:p><draw:a xlink:type="simple" xlink:href="foo/bar"><draw:frame draw:style-name="Frame" draw:name="image1" svg:width="17cm" svg:height="25mm" style:rel-height="scale"><draw:image draw:mime-type="image/png">
+       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAMSURBVBhXY/jPwAAAAwEBAGMkVdMAAAAASUVORK5C</office:binary-data>
+      </draw:image>
+     </draw:frame></draw:a>image1 with a hyperlink, and this text with <text:a xlink:type="simple" xlink:href="baz" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">another hyperlink</text:a></text:p>
+   <text:p><draw:frame draw:style-name="Frame" draw:name="frame" svg:width="17cm">
+     <draw:text-box fo:min-height="1pt">
+      <text:p><draw:a xlink:type="simple" xlink:href="foo/bar"><draw:frame draw:style-name="Frame" draw:name="image2" svg:width="17cm" svg:height="25mm"><draw:image draw:mime-type="image/png">
+          <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAMSURBVBhXY/jPwAAAAwEBAGMkVdMAAAAASUVORK5C</office:binary-data>
+         </draw:image>
+        </draw:frame></draw:a>image2 with a hyperlink, and this text with <text:a xlink:type="simple" xlink:href="baz" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">another hyperlink</text:a>, in a frame</text:p>
+     </draw:text-box>
+    </draw:frame></text:p>
+  </office:text>
+ </office:body>
+</office:document>

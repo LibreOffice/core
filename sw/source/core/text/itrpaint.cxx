@@ -404,6 +404,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // reset (for special vertical alignment)
         GetInfo().Y( nOldY );
 
+        if (GetFnt()->IsURL() && pPor->InTextGrp())
+            GetInfo().NotifyURL(*pPor);
+
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )
             pPor->Move( GetInfo() );
