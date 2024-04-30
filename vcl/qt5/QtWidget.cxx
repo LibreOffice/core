@@ -580,6 +580,8 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
         return true;
     }
 
+    QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
+
     if (nCode == 0 && pEvent->text().isEmpty())
     {
         sal_uInt16 nModCode = GetKeyModCode(pEvent->modifiers());
@@ -668,8 +670,6 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     aEvent.mnRepeat = 0;
     aEvent.mnCode = nCode;
     aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
-
-    QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
 
     bool bStopProcessingKey;
     if (bIsKeyPressed)
