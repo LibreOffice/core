@@ -44,6 +44,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <frmtool.hxx>
+#include <fmturl.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
@@ -51,6 +52,7 @@
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
 #include <noteurl.hxx>
+#include "porfly.hxx"
 #include "porftn.hxx"
 #include "porrst.hxx"
 #include "itratr.hxx"
@@ -1380,6 +1382,20 @@ void SwTextPaintInfo::NotifyURL_(const SwLinePortion& rPor) const
         {
             const SwFormatINetFormat& rFormat = pAttr->GetINetFormat();
             pNoteURL->InsertURLNote(rFormat.GetValue(), rFormat.GetTargetFrame(), aIntersect);
+        }
+        else if (rPor.IsFlyCntPortion())
+        {
+            if (auto* pFlyContentPortion = dynamic_cast<const sw::FlyContentPortion*>(&rPor))
+            {
+                if (auto* pFlyFtame = pFlyContentPortion->GetFlyFrame())
+                {
+                    if (auto* pFormat = pFlyFtame->GetFormat())
+                    {
+                        auto& url = pFormat->GetURL(); // TODO: url.GetMap() ?
+                        pNoteURL->InsertURLNote(url.GetURL(), url.GetTargetFrameName(), aIntersect);
+                    }
+                }
+            }
         }
     }
 }
