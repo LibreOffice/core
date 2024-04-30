@@ -477,36 +477,33 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
-        if (mpIMEInfos)
+        EditPaM aPaM( pView->getImpl().GetEditSelection().Max() );
+        tools::Rectangle aR1 = PaMtoEditCursor( aPaM );
+
+        if ( !IsFormatted() )
+            FormatDoc();
+
+        ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
+        if (pParaPortion)
         {
-            EditPaM aPaM( pView->getImpl().GetEditSelection().Max() );
-            tools::Rectangle aR1 = PaMtoEditCursor( aPaM );
+            sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
+            const EditLine& rLine = pParaPortion->GetLines()[nLine];
 
-            sal_Int32 nInputEnd = mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen;
+            sal_Int32 nInputEnd;
+            if (mpIMEInfos)
+                nInputEnd = mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen;
+            else
+                nInputEnd = aPaM.GetIndex();
 
-            if ( !IsFormatted() )
-                FormatDoc();
-
-            ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
-            if (pParaPortion)
-            {
-                sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
-                const EditLine& rLine = pParaPortion->GetLines()[nLine];
-                if ( nInputEnd > rLine.GetEnd() )
-                    nInputEnd = rLine.GetEnd();
-                tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), CursorFlags{ .bEndOfLine = true });
-                tools::Rectangle aRect = pView->getImpl().GetWindowPos( aR1 );
-                auto nExtTextInputWidth = aR2.Left() - aR1.Right();
-                if (EditViewCallbacks* pEditViewCallbacks = pView->getEditViewCallbacks())
-                    pEditViewCallbacks->EditViewCursorRect(aRect, nExtTextInputWidth);
-                else if (vcl::Window* pWindow = pView->GetWindow())
-                    pWindow->SetCursorRect(&aRect, nExtTextInputWidth);
-            }
-        }
-        else
-        {
-            if (vcl::Window* pWindow = pView->GetWindow())
-              pWindow->SetCursorRect();
+            if ( nInputEnd > rLine.GetEnd() )
+                nInputEnd = rLine.GetEnd();
+            tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), CursorFlags{ .bEndOfLine = true });
+            tools::Rectangle aRect = pView->getImpl().GetWindowPos( aR1 );
+            auto nExtTextInputWidth = aR2.Left() - aR1.Right();
+            if (EditViewCallbacks* pEditViewCallbacks = pView->getEditViewCallbacks())
+                pEditViewCallbacks->EditViewCursorRect(aRect, nExtTextInputWidth);
+            else if (vcl::Window* pWindow = pView->GetWindow())
+                pWindow->SetCursorRect(&aRect, nExtTextInputWidth);
         }
     }
     else if ( rCEvt.GetCommand() == CommandEventId::SelectionChange )
