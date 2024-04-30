@@ -200,7 +200,7 @@ public:
 
     // select word / sentence
     bool    SelNearestWrd();
-    SW_DLLPUBLIC bool SelWrd(const Point * = nullptr );
+    SW_DLLPUBLIC bool SelWrd(const Point * = nullptr, sal_Int16 nWordType = i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     // #i32329# Enhanced selection
     void    SelSentence (const Point *);
     SW_DLLPUBLIC void SelPara     (const Point *);

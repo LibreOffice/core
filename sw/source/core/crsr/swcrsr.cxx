@@ -1452,10 +1452,10 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
         }
         else
         {
-            bool bForward = true;
             sal_Int32 nPtPos = GetPoint()->GetContentIndex();
 
             HideWrapper w(pViewShell->GetLayout(), pTextNd, nPtPos);
+            bool bForward = w.m_pText->getLength() == w.m_nPtIndex ? false : true;
 
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 *w.m_pText, w.m_nPtIndex,

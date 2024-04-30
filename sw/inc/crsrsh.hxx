@@ -766,6 +766,7 @@ public:
     SW_DLLPUBLIC bool GoStartSentence();
     SW_DLLPUBLIC bool GoEndSentence();
     bool SelectWord( const Point* pPt );
+    bool SelectWordWT( const Point* pt, sal_Int16 nWordType );
     void ExpandToSentenceBorders();
 
     // get position from current cursor

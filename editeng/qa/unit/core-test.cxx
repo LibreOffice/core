@@ -1896,8 +1896,8 @@ void Test::testTransliterate()
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(u""_ustr, editEng.GetText(esel));
     CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe SMITH. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* No selection tests. Cursor between the 'm' and 'e' in 'met'. */
     selStart = 12;
