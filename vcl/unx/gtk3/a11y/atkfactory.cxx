@@ -139,7 +139,7 @@ wrapper_factory_create_accessible( GObject *obj )
                 if( accessible )
                     g_object_ref( G_OBJECT(accessible) );
                 else
-                    accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(pTopLevel) );
+                    accessible = atk_object_wrapper_new(xAccessible, gtk_widget_get_accessible(pEventBox));
 
                 return accessible;
             }
