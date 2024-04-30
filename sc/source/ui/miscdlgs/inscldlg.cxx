@@ -95,8 +95,9 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     }
 
     // if some cells are selected, then disable the SpinButtons
-    m_xNumberOfCols->set_sensitive(bColCount && !pViewData->GetMarkData().IsMarked());
-    m_xNumberOfRows->set_sensitive(bRowsCount && !pViewData->GetMarkData().IsMarked());
+    const bool bMarked = pViewData && pViewData->GetMarkData().IsMarked();
+    m_xNumberOfCols->set_sensitive(bColCount && !bMarked);
+    m_xNumberOfRows->set_sensitive(bRowsCount && !bMarked);
 }
 
 ScInsertCellDlg::~ScInsertCellDlg() {}
