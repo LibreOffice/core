@@ -42,6 +42,28 @@ struct CustomShapeGuide
     OUString   maFormula;
 };
 
+class CustomShapeGuideContainer
+{
+public:
+    sal_Int32 GetCustomShapeGuideValue( const OUString& rFormulaName ) const;
+    sal_Int32 SetCustomShapeGuideValue( const CustomShapeGuide& rGuide );
+
+    void push_back( const CustomShapeGuide& rGuide );
+    size_t size() const { return maGuideList.size(); };
+    bool empty() const { return maGuideList.empty(); };
+    std::vector< CustomShapeGuide >::const_iterator begin() const { return maGuideList.begin(); };
+    std::vector< CustomShapeGuide >::const_iterator end() const { return maGuideList.end(); };
+    const CustomShapeGuide& operator[](size_t nIndex) const { return maGuideList[ nIndex ]; };
+
+private:
+    std::vector< CustomShapeGuide > maGuideList;
+    mutable std::unordered_map< OUString, sal_Int32 > maGuideListLookupMap;
+    mutable bool mbLookupMapStale = false;
+    mutable sal_Int32 mnPreviousActSize = 0;
+
+    void ActualizeLookupMap() const;
+};
+
 struct AdjustHandle
 {
     bool                                    polar;
@@ -106,8 +128,8 @@ public:
     bool                                getShapeTypeOverride() const { return mbShapeTypeOverride; };
     void                                setShapeTypeOverride( bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
 
-    std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
-    std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
+    CustomShapeGuideContainer&          getAdjustmentGuideList(){ return maAdjustmentGuideList; };
+    CustomShapeGuideContainer&          getGuideList(){ return maGuideList; };
     std::vector< AdjustHandle >&        getAdjustHandleList(){ return maAdjustHandleList; };
     std::vector< ConnectionSite >&      getConnectionSiteList(){ return maConnectionSiteList; };
     std::optional< GeomRect >&          getTextRect(){ return maTextRect; };
@@ -118,9 +140,6 @@ public:
     void                                setTextPreRotateAngle( sal_Int32 nAngle ) { mnTextPreRotateAngle = nAngle; };
     void                                setTextCameraZRotateAngle( sal_Int32 nAngle ) { mnTextCameraZRotateAngle = nAngle; };
     void                                setTextAreaRotateAngle(sal_Int32 nAngle) { moTextAreaRotateAngle = nAngle; };
-
-    static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
-    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName );
 
     sal_Int32 getArcNum() { return mnArcNum++; }
     sal_Int32 countArcTo() { return mnArcNum; }
@@ -136,8 +155,8 @@ private:
 
     sal_Int32                       mnShapePresetType;
     bool                            mbShapeTypeOverride;
-    std::vector< CustomShapeGuide > maAdjustmentGuideList;
-    std::vector< CustomShapeGuide > maGuideList;
+    CustomShapeGuideContainer       maAdjustmentGuideList;
+    CustomShapeGuideContainer       maGuideList;
     std::vector< AdjustHandle >     maAdjustHandleList;
     std::vector< ConnectionSite >   maConnectionSiteList;
     std::optional< GeomRect >       maTextRect;

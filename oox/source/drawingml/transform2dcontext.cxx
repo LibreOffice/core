@@ -80,7 +80,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
         case XML_round2SameRect:
         {
             // Second handle of round2SameRect used in preset diagrams has value 0.
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             double fAdj = aAdjGdList.empty() ? 16667 : aAdjGdList[0].maFormula.toDouble();
             sal_Int32 nWidth = rShape.getSize().Width;
             sal_Int32 nHeight = rShape.getSize().Height;
@@ -98,7 +98,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
         }
         case XML_trapezoid:
         {
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             double fAdj = aAdjGdList.empty() ? 25000 : aAdjGdList[0].maFormula.toDouble();
             sal_Int32 nWidth = rShape.getSize().Width;
             sal_Int32 nHeight = rShape.getSize().Height;
@@ -144,7 +144,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
                 return false;
             double a1(15000.0);
             double a2(3526.0);
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             if (aAdjGdList.size() == 2)
             {
                 a1 = aAdjGdList[0].maFormula.toDouble();
@@ -186,7 +186,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
         }
         case XML_hexagon:
         {
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             double fAdj = aAdjGdList.empty() ? 25000 : aAdjGdList[0].maFormula.toDouble();
             sal_Int32 nWidth = rShape.getSize().Width;
             sal_Int32 nHeight = rShape.getSize().Height;
@@ -209,7 +209,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             sal_Int32 nHeight = rShape.getSize().Height;
             if (nWidth == 0 || nHeight == 0)
                 return false;
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             double fAdj = aAdjGdList.empty() ? 16667.0 : aAdjGdList[0].maFormula.toDouble();
             fAdj = std::clamp<double>(fAdj, 0.0, 50000.0);
             double fDx = std::min(nWidth, nHeight) * fAdj / 100000.0 * 0.29289;
@@ -228,7 +228,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
                 return false;
             double a1(50000.0);
             double a2(50000.0);
-            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             if (aAdjGdList.size() == 2)
             {
                 a1 = aAdjGdList[0].maFormula.toDouble();

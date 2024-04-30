@@ -1878,7 +1878,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             msConnectorName = mpCustomShapePropertiesPtr->getShapePresetTypeName();
 
-            auto aAdjustmentList = mpCustomShapePropertiesPtr->getAdjustmentGuideList();
+            const auto& aAdjustmentList = mpCustomShapePropertiesPtr->getAdjustmentGuideList();
             for (size_t i = 0; i < aAdjustmentList.size(); i++)
                 maConnectorAdjustmentList.push_back(aAdjustmentList[i].maFormula);
 

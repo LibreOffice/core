@@ -43,6 +43,67 @@ using namespace ::com::sun::star::drawing;
 
 namespace oox::drawingml {
 
+void CustomShapeGuideContainer::ActualizeLookupMap() const
+{
+    if ( mbLookupMapStale )
+    {
+        // maGuideListLookupMap maps guide name to index in maGuideList
+        // guides were added since last actualization, need to update map based on those
+        // guide names can be reused, and current is the latest one
+        // (see a1 guide in gear6 custom shape preset as example):
+        //  go backwards and update if index is higher than previously
+        for ( sal_Int32 nIndex = static_cast<sal_Int32>( maGuideList.size() ) - 1; nIndex >= mnPreviousActSize; --nIndex )
+        {
+            const auto it = maGuideListLookupMap.find( maGuideList[ nIndex ].maName );
+            if ( it != maGuideListLookupMap.end() )
+            {
+                if ( nIndex > it->second )
+                    it->second = nIndex;
+            }
+            else
+                maGuideListLookupMap[ maGuideList[ nIndex ].maName ] = nIndex;
+        }
+        mbLookupMapStale = false;
+        mnPreviousActSize = static_cast<sal_Int32>( maGuideList.size() );
+    }
+}
+
+void CustomShapeGuideContainer::push_back( const CustomShapeGuide& rGuide )
+{
+    if ( !mbLookupMapStale )
+    {
+        mbLookupMapStale = true;
+        mnPreviousActSize = static_cast<sal_Int32>( maGuideList.size() );
+    }
+    maGuideList.push_back( rGuide );
+}
+
+// returns the index into the guidelist for a given formula name,
+// if the return value is < 0 then the guide value could not be found
+sal_Int32 CustomShapeGuideContainer::GetCustomShapeGuideValue( const OUString &rFormulaName ) const
+{
+    ActualizeLookupMap();
+    const auto it = maGuideListLookupMap.find( rFormulaName );
+    if ( it != maGuideListLookupMap.end() )
+        return it->second;
+
+    return -1;
+}
+
+sal_Int32 CustomShapeGuideContainer::SetCustomShapeGuideValue( const CustomShapeGuide& rGuide )
+{
+    ActualizeLookupMap();
+    // change from previous SetCustomShapeGuideValue behavior: searching using cache traverses backwards
+    const auto it = maGuideListLookupMap.find( rGuide.maName );
+    if ( it != maGuideListLookupMap.end() )
+        return it->second;
+
+    maGuideList.push_back( rGuide );
+    maGuideListLookupMap[ rGuide.maName ] = mnPreviousActSize;
+    mnPreviousActSize++;
+    return mnPreviousActSize - 1;
+}
+
 CustomShapeProperties::CustomShapeProperties()
 : mnShapePresetType ( -1 )
 , mbShapeTypeOverride(false)
@@ -57,36 +118,6 @@ CustomShapeProperties::CustomShapeProperties()
 OUString CustomShapeProperties::getShapePresetTypeName() const
 {
     return StaticTokenMap().getUnicodeTokenName(mnShapePresetType);
-}
-
-sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
-{
-    std::vector<CustomShapeGuide>::size_type nIndex = 0;
-    for( ; nIndex < rGuideList.size(); nIndex++ )
-    {
-        if ( rGuideList[ nIndex ].maName == rGuide.maName )
-            break;
-    }
-    if ( nIndex == rGuideList.size() )
-        rGuideList.push_back( rGuide );
-    return static_cast< sal_Int32 >( nIndex );
-}
-
-// returns the index into the guidelist for a given formula name,
-// if the return value is < 0 then the guide value could not be found
-sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName )
-{
-    // traverse the list from the end, because guide names can be reused
-    // and current is the last one
-    // see a1 guide in gear6 custom shape preset as example
-    sal_Int32 nIndex = static_cast< sal_Int32 >( rGuideList.size() ) - 1;
-    for( ; nIndex >= 0; nIndex-- )
-    {
-        if ( rGuideList[ nIndex ].maName == rFormulaName )
-            break;
-    }
-
-    return nIndex;
 }
 
 bool CustomShapeProperties::representsDefaultShape() const
@@ -315,13 +346,13 @@ void CustomShapeProperties::pushToPropSet(
                 aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
                 if ( maAdjustHandleList[ i ].gdRef1.has_value() )
                 {
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.value() );
+                    sal_Int32 nIndex = maAdjustmentGuideList.GetCustomShapeGuideValue( maAdjustHandleList[ i ].gdRef1.value() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefR, nIndex);
                 }
                 if ( maAdjustHandleList[ i ].gdRef2.has_value() )
                 {
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.value() );
+                    sal_Int32 nIndex = maAdjustmentGuideList.GetCustomShapeGuideValue( maAdjustHandleList[ i ].gdRef2.value() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefAngle, nIndex);
                 }
@@ -344,13 +375,13 @@ void CustomShapeProperties::pushToPropSet(
                 {
                     // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
                     // so the handles will not work after save/reload
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.value() );
+                    sal_Int32 nIndex = maAdjustmentGuideList.GetCustomShapeGuideValue( maAdjustHandleList[ i ].gdRef1.value() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefX, nIndex);
                 }
                 if ( maAdjustHandleList[ i ].gdRef2.has_value() )
                 {
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.value() );
+                    sal_Int32 nIndex = maAdjustmentGuideList.GetCustomShapeGuideValue( maAdjustHandleList[ i ].gdRef2.value() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefY, nIndex);
                 }
