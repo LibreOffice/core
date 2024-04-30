@@ -531,7 +531,7 @@ namespace accessibility
         EnsureIsAlive();
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
         if ( !pEntry )
-            throw RuntimeException("AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!");
+            throw RuntimeException(u"AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!"_ustr);
 
         Reference< XAccessible > xAcc;
         rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
@@ -784,9 +784,9 @@ namespace accessibility
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
                 if ( state == SvButtonState::Checked )
-                    return "UnCheck";
+                    return u"UnCheck"_ustr;
                 else if (state == SvButtonState::Unchecked)
-                    return "Check";
+                    return u"Check"_ustr;
             }
             else
             {
@@ -860,7 +860,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException("AccessibleListBoxEntry::clearAccessibleSelection - pParent cannot be empty!");
+            throw RuntimeException(u"AccessibleListBoxEntry::clearAccessibleSelection - pParent cannot be empty!"_ustr);
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -879,7 +879,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException("AccessibleListBoxEntry::selectAllAccessibleChildren - pParent cannot be empty!");
+            throw RuntimeException(u"AccessibleListBoxEntry::selectAllAccessibleChildren - pParent cannot be empty!"_ustr);
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -900,7 +900,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!");
+            throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!"_ustr);
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for (sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -927,7 +927,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!");
+            throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!"_ustr);
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for (sal_Int32 i = 0; i < nCount; ++i )
         {

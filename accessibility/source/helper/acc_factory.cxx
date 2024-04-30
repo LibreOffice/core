@@ -484,11 +484,11 @@ class GetStandardAccessibleFactoryService:
 public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override
-        { return "com.sun.star.accessibility.comp.GetStandardAccessibleFactoryService"; }
+        { return u"com.sun.star.accessibility.comp.GetStandardAccessibleFactoryService"_ustr; }
     virtual sal_Bool SAL_CALL supportsService(const OUString & serviceName) override
         { return cppu::supportsService(this, serviceName); }
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return { "com.sun.star.accessibility.GetStandardAccessibleFactoryService" }; }
+        { return { u"com.sun.star.accessibility.GetStandardAccessibleFactoryService"_ustr }; }
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::css::uno::Sequence< ::sal_Int8 >& /*aIdentifier*/ ) override

@@ -149,13 +149,13 @@ void VCLXAccessibleMenuItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
 
 OUString VCLXAccessibleMenuItem::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleMenuItem";
+    return u"com.sun.star.comp.toolkit.AccessibleMenuItem"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleMenuItem" };
+    return { u"com.sun.star.awt.AccessibleMenuItem"_ustr };
 }
 
 

@@ -143,8 +143,8 @@ Paragraph::getAccessibleChild(sal_Int64)
 {
     checkDisposed();
     throw css::lang::IndexOutOfBoundsException(
-        "textwindowaccessibility.cxx:"
-        " Paragraph::getAccessibleChild",
+        u"textwindowaccessibility.cxx:"
+        " Paragraph::getAccessibleChild"_ustr,
         getXWeak());
 }
 
@@ -556,8 +556,8 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
     } catch (const css::lang::IndexOutOfBoundsException&) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-            "textwindowaccessibility.cxx:"
-            " Paragraph::getTextAtLineWithCaret",
+            u"textwindowaccessibility.cxx:"
+            " Paragraph::getTextAtLineWithCaret"_ustr,
             getXWeak(), anyEx );
     }
 }
@@ -861,8 +861,8 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
         // XXX  numeric overflow
     if (nIndex < 0 || nIndex > nLength)
         throw css::lang::IndexOutOfBoundsException(
-            "textwindowaccessibility.cxx:"
-            " Document::retrieveCharacterAttributes",
+            u"textwindowaccessibility.cxx:"
+            " Document::retrieveCharacterAttributes"_ustr,
             getXWeak());
     css::awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( nIndex == nLength )
@@ -986,8 +986,8 @@ Document::retrieveCharacterAttributes(
         // nIndex can be equal to getLength();
     if (nIndex < 0 || nIndex > m_rEngine.GetText(nNumber).getLength())
         throw css::lang::IndexOutOfBoundsException(
-            "textwindowaccessibility.cxx:"
-            " Document::retrieveCharacterAttributes",
+            u"textwindowaccessibility.cxx:"
+            " Document::retrieveCharacterAttributes"_ustr,
             getXWeak());
 
 
@@ -1079,8 +1079,8 @@ Document::retrieveRunAttributes(
         // XXX  numeric overflow
     if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).getLength() )
         throw css::lang::IndexOutOfBoundsException(
-            "textwindowaccessibility.cxx:"
-            " Document::retrieveRunAttributes",
+            u"textwindowaccessibility.cxx:"
+            " Document::retrieveRunAttributes"_ustr,
             getXWeak() );
 
     tPropValMap aRunAttrSeq;
@@ -1114,8 +1114,8 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::changeParagraphText",
+                u"textwindowaccessibility.cxx:"
+                " Document::changeParagraphText"_ustr,
                 getXWeak());
         changeParagraphText(nNumber, static_cast< ::sal_uInt16 >(nBegin),
                             static_cast< ::sal_uInt16 >(nEnd), bCut, bPaste, rText);
@@ -1134,8 +1134,8 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::copyParagraphText",
+                u"textwindowaccessibility.cxx:"
+                " Document::copyParagraphText"_ustr,
                 getXWeak());
         m_rView.SetSelection(
             ::TextSelection(::TextPaM(nNumber, nBegin),
@@ -1157,8 +1157,8 @@ void Document::changeParagraphAttributes(
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::changeParagraphAttributes",
+                u"textwindowaccessibility.cxx:"
+                " Document::changeParagraphAttributes"_ustr,
                 getXWeak());
 
         // FIXME  The new attributes are added to any attributes already set,
@@ -1189,8 +1189,8 @@ void Document::changeParagraphSelection(Paragraph const * pParagraph,
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::changeParagraphSelection",
+                u"textwindowaccessibility.cxx:"
+                " Document::changeParagraphSelection"_ustr,
                 getXWeak());
         m_rView.SetSelection(
             ::TextSelection(::TextPaM(nNumber, nBegin),
@@ -1213,8 +1213,8 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).getLength() )
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::retrieveParagraphLineBoundary",
+                u"textwindowaccessibility.cxx:"
+                " Document::retrieveParagraphLineBoundary"_ustr,
                 getXWeak() );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
@@ -1251,8 +1251,8 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nLineNo >= m_rEngine.GetLineCount( nNumber ) )
             throw css::lang::IndexOutOfBoundsException(
-                "textwindowaccessibility.cxx:"
-                " Document::retrieveParagraphBoundaryOfLine",
+                u"textwindowaccessibility.cxx:"
+                " Document::retrieveParagraphBoundaryOfLine"_ustr,
                 getXWeak() );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
@@ -1324,8 +1324,8 @@ Document::getAccessibleChild(sal_Int64 i)
     init();
     if (i < 0 || i >= m_aVisibleEnd - m_aVisibleBegin)
         throw css::lang::IndexOutOfBoundsException(
-            "textwindowaccessibility.cxx:"
-            " Document::getAccessibleChild",
+            u"textwindowaccessibility.cxx:"
+            " Document::getAccessibleChild"_ustr,
             getXWeak());
     return getAccessibleChild(m_aVisibleBegin
                               + static_cast< Paragraphs::size_type >(i));

@@ -255,7 +255,7 @@ OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex )
     if ( nIndex != 0)
         throw IndexOutOfBoundsException();
 
-    return "activate";
+    return u"activate"_ustr;
 }
 
 

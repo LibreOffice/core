@@ -116,7 +116,7 @@ OUString SAL_CALL AccessibleGridControlTable::getAccessibleRowDescription( sal_I
 
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    return "row description";
+    return u"row description"_ustr;
 }
 
 OUString SAL_CALL AccessibleGridControlTable::getAccessibleColumnDescription( sal_Int32 nColumn )
@@ -125,7 +125,7 @@ OUString SAL_CALL AccessibleGridControlTable::getAccessibleColumnDescription( sa
 
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
-    return "col description";
+    return u"col description"_ustr;
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlTable::getAccessibleRowHeaders()
@@ -253,7 +253,7 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int64 nSelectedChild
 
     ensureIsAlive();
     if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount())
-        throw lang::IndexOutOfBoundsException("Invalid index into selection", *this);
+        throw lang::IndexOutOfBoundsException(u"Invalid index into selection"_ustr, *this);
 
     const sal_Int32 nColCount = getAccessibleColumnCount();
     assert(nColCount > 0 && "Column count non-positive, but child count > 0");

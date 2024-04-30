@@ -111,13 +111,13 @@ void VCLXAccessibleRadioButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 
 OUString VCLXAccessibleRadioButton::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleRadioButton";
+    return u"com.sun.star.comp.toolkit.AccessibleRadioButton"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleRadioButton" };
+    return { u"com.sun.star.awt.AccessibleRadioButton"_ustr };
 }
 
 

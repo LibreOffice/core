@@ -166,7 +166,7 @@ void VCLXAccessibleListItem::disposing(std::unique_lock<std::mutex>& rGuard)
 
 OUString VCLXAccessibleListItem::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleListItem";
+    return u"com.sun.star.comp.toolkit.AccessibleListItem"_ustr;
 }
 
 sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
@@ -176,9 +176,9 @@ sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames()
 {
-    return {"com.sun.star.accessibility.AccessibleContext",
-            "com.sun.star.accessibility.AccessibleComponent",
-            "com.sun.star.accessibility.AccessibleListItem"};
+    return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
+            u"com.sun.star.accessibility.AccessibleComponent"_ustr,
+            u"com.sun.star.accessibility.AccessibleListItem"_ustr};
 }
 
 // XAccessible

@@ -596,13 +596,13 @@ sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole()
 // XServiceInfo
 OUString VCLXAccessibleList::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleList";
+    return u"com.sun.star.comp.toolkit.AccessibleList"_ustr;
 }
 
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
-                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleList"});
+                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleList"_ustr});
 }
 
 void VCLXAccessibleList::UpdateVisibleLineCount()
