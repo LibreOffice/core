@@ -149,6 +149,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     if (hProcess)
     {
         pProcImpl = static_cast< oslProcessImpl*>( malloc(sizeof(oslProcessImpl)) );
+        assert(pProcImpl && "Don't handle OOM conditions");
         pProcImpl->m_hProcess  = hProcess;
         pProcImpl->m_IdProcess = Ident;
     }

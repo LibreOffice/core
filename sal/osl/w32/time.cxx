@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include "assert.h"
 #include "system.h"
 
 #include "filetime.hxx"
@@ -33,7 +34,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
 
-    OSL_ASSERT(pTimeVal != nullptr);
+    assert(pTimeVal != nullptr);
 
     static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = []()
     {

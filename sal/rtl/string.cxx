@@ -161,7 +161,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 if ( *pTarget )
                     rtl_string_release( *pTarget );
                 *pTarget = rtl_string_ImplAlloc( nLength );
-                OSL_ASSERT(*pTarget != nullptr);
+                assert(*pTarget != nullptr);
                 pBuffer = (*pTarget)->buffer;
                 do
                 {
@@ -200,7 +200,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
         for (;;)
         {
             pTemp = rtl_string_ImplAlloc( nNewLen );
-            OSL_ASSERT(pTemp != nullptr);
+            assert(pTemp != nullptr);
             nDestBytes = rtl_convertUnicodeToText( hConverter, nullptr,
                                                    pSource, nLength,
                                                    pTemp->buffer, nNewLen,
@@ -230,7 +230,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
         if ( nNewLen > nDestBytes+8 )
         {
             rtl_String* pTemp2 = rtl_string_ImplAlloc( nDestBytes );
-            OSL_ASSERT(pTemp2 != nullptr);
+            assert(pTemp2 != nullptr);
             rtl::str::Copy(pTemp2->buffer, pTemp->buffer, nDestBytes);
             rtl_freeString( pTemp );
             pTemp = pTemp2;

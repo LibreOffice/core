@@ -152,7 +152,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
-    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
+    assert(pThreadImpl);        /* valid ptr? */
 
     ResumeThread(pThreadImpl->m_hThread);
 }
@@ -161,7 +161,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
-    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
+    assert(pThreadImpl);        /* valid ptr? */
 
     SuspendThread(pThreadImpl->m_hThread);
 }
@@ -172,7 +172,7 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
     int winPriority;
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
-    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
+    assert(pThreadImpl);        /* valid ptr? */
 
     /*  map enum to WIN32 levels
         it would be faster and more elegant to preset

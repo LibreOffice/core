@@ -371,7 +371,7 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
     char* pszString, sal_uInt32 MaxLen,
     const char* pszDefault)
 {
-    OSL_ASSERT(pProfile && (!MaxLen || pszString));
+    assert(pProfile && (!MaxLen || pszString));
 
     rtl_uString *pSection = nullptr, *pEntry = nullptr, *pDefault = nullptr;
     if (pszSection)
@@ -412,10 +412,10 @@ bool WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
     const char* pszSection, const char* pszEntry,
     const char* pszString)
 {
-    OSL_ASSERT(pProfile && pszSection);
+    assert(pProfile && pszSection);
     rtl_uString *pSection, *pEntry = nullptr, *pString = nullptr;
     rtl_string2UString(&pSection, pszSection, strlen(pszSection), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
-    OSL_ASSERT(pSection);
+    assert(pSection);
     if (pszEntry)
     {
         rtl_string2UString(&pEntry, pszEntry, strlen(pszEntry), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
@@ -1258,6 +1258,7 @@ static bool putLine(osl_TFile* pFile, const char *pszLine)
     if ( pFile->m_pWriteBuf == nullptr )
     {
         pFile->m_pWriteBuf = static_cast<char*>(malloc(Len+3));
+        assert(pFile->m_pWriteBuf && "Don't handle OOM conditions");
         pFile->m_nWriteBufLen = Len+3;
         pFile->m_nWriteBufFree = Len+3;
     }

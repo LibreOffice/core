@@ -87,7 +87,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
     WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
 
-    OSL_ASSERT( ppLocale );
+    assert(ppLocale);
 
     /* get the locale name to retrieve information from */
     /* and call GetLocaleInfo to retrieve the iso codes */

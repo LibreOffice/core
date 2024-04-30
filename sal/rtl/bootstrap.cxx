@@ -72,7 +72,7 @@ bool isPathnameUrl(std::u16string_view url)
 
 bool resolvePathnameUrl(OUString * url)
 {
-    OSL_ASSERT(url);
+    assert(url);
     if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
             url->copy(VND_SUN_STAR_PATHNAME.size()), *url) ==
@@ -835,7 +835,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 
 void rtl_bootstrap_encode(rtl_uString const * value, rtl_uString ** encoded)
 {
-    OSL_ASSERT(value);
+    assert(value);
     OUStringBuffer b(value->length+5);
     for (sal_Int32 i = 0; i < value->length; ++i)
     {
@@ -861,7 +861,7 @@ int hex(sal_Unicode c)
 
 sal_Unicode read(std::u16string_view text, std::size_t * pos, bool * escaped)
 {
-    OSL_ASSERT(pos && *pos < text.length() && escaped);
+    assert(pos && *pos < text.length() && escaped);
     sal_Unicode c = text[(*pos)++];
     if (c == '\\')
     {

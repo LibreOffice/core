@@ -329,13 +329,13 @@ oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr)
 
 sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2)
 {
-    OSL_ASSERT(Addr1);
-    OSL_ASSERT(Addr2);
+    assert(Addr1);
+    assert(Addr2);
     struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
     struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
-    OSL_ASSERT(pAddr1);
-    OSL_ASSERT(pAddr2);
+    assert(pAddr1);
+    assert(pAddr2);
 
     if (pAddr1->sa_family == pAddr2->sa_family)
     {
@@ -868,7 +868,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
 
 sal_Bool SAL_CALL osl_bindAddrToSocket ( oslSocket pSocket, oslSocketAddr pAddr)
 {
-    OSL_ASSERT( pAddr );
+    assert(pAddr);
 
     if (pSocket == nullptr) /* ENOTSOCK */
         return false;

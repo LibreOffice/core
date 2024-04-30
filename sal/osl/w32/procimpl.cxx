@@ -122,7 +122,7 @@ namespace /* private */
         sal_uInt32 env_vars_count,
         /*in|out*/ std::vector<OUString>* merged_env)
     {
-        OSL_ASSERT(env_vars && env_vars_count > 0 && merged_env);
+        assert(env_vars && env_vars_count > 0 && merged_env);
 
         read_environment(merged_env);
 

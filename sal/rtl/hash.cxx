@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <assert.h>
 #include <stdlib.h>
 
 #include "hash.hxx"
@@ -76,10 +77,12 @@ static sal_uInt32 hashString(rtl_uString *pString)
 static StringHashTable * rtl_str_hash_new(sal_uInt32 nSize)
 {
     StringHashTable *pHash = static_cast<StringHashTable *>(malloc(sizeof(StringHashTable)));
+    assert(pHash && "Don't handle OOM conditions");
 
     pHash->nEntries = 0;
     pHash->nSize = getNextSize (nSize);
     pHash->pData = static_cast< rtl_uString ** >(calloc(pHash->nSize, sizeof(rtl_uString *)));
+    assert(pHash->pData && "Don't handle OOM conditions");
 
     return pHash;
 }
