@@ -27,8 +27,15 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link
+
+# don't sort; later can override previous settings!
+$(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/environment.js))
+$(eval $(call gb_Executable_add_prejs,soffice_bin,$(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link))
 ifeq ($(OS)-$(ENABLE_QT5),EMSCRIPTEN-TRUE)
 $(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/soffice_args.js))
+endif
 endif
 
 ifeq ($(OS),WNT)
