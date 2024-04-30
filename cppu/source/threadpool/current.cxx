@@ -37,45 +37,47 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 
+static typelib_InterfaceTypeDescription * impl_get_type_XCurrentContext()
+{
+    OUString sTypeName(u"com.sun.star.uno.XCurrentContext"_ustr);
+    typelib_InterfaceTypeDescription* pTD = nullptr;
+    typelib_TypeDescriptionReference* pMembers[1] = { nullptr };
+    OUString sMethodName0(u"com.sun.star.uno.XCurrentContext::getValueByName"_ustr);
+    typelib_typedescriptionreference_new(&pMembers[0], typelib_TypeClass_INTERFACE_METHOD,
+                                         sMethodName0.pData);
+    typelib_typedescription_newInterface(
+        &pTD, sTypeName.pData, 0, 0, 0, 0, 0,
+        *typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE), 1, pMembers);
+
+    typelib_typedescription_register(reinterpret_cast<typelib_TypeDescription**>(&pTD));
+    typelib_typedescriptionreference_release(pMembers[0]);
+
+    typelib_InterfaceMethodTypeDescription* pMethod = nullptr;
+    typelib_Parameter_Init aParameters[1];
+    OUString sParamName0(u"Name"_ustr);
+    OUString sParamType0(u"string"_ustr);
+    aParameters[0].pParamName = sParamName0.pData;
+    aParameters[0].eTypeClass = typelib_TypeClass_STRING;
+    aParameters[0].pTypeName = sParamType0.pData;
+    aParameters[0].bIn = true;
+    aParameters[0].bOut = false;
+    rtl_uString* pExceptions[1];
+    OUString sExceptionName0(u"com.sun.star.uno.RuntimeException"_ustr);
+    pExceptions[0] = sExceptionName0.pData;
+    OUString sReturnType0(u"any"_ustr);
+    typelib_typedescription_newInterfaceMethod(&pMethod, 3, false, sMethodName0.pData,
+                                               typelib_TypeClass_ANY, sReturnType0.pData, 1,
+                                               aParameters, 1, pExceptions);
+    typelib_typedescription_register(reinterpret_cast<typelib_TypeDescription**>(&pMethod));
+    typelib_typedescription_release(&pMethod->aBase.aBase);
+    // another static ref:
+    ++reinterpret_cast<typelib_TypeDescription*>(pTD)->nStaticRefCount;
+    return pTD;
+}
+
 static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 {
-    static typelib_InterfaceTypeDescription* s_type_XCurrentContext = []() {
-        OUString sTypeName(u"com.sun.star.uno.XCurrentContext"_ustr);
-        typelib_InterfaceTypeDescription* pTD = nullptr;
-        typelib_TypeDescriptionReference* pMembers[1] = { nullptr };
-        OUString sMethodName0(u"com.sun.star.uno.XCurrentContext::getValueByName"_ustr);
-        typelib_typedescriptionreference_new(&pMembers[0], typelib_TypeClass_INTERFACE_METHOD,
-                                             sMethodName0.pData);
-        typelib_typedescription_newInterface(
-            &pTD, sTypeName.pData, 0, 0, 0, 0, 0,
-            *typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE), 1, pMembers);
-
-        typelib_typedescription_register(reinterpret_cast<typelib_TypeDescription**>(&pTD));
-        typelib_typedescriptionreference_release(pMembers[0]);
-
-        typelib_InterfaceMethodTypeDescription* pMethod = nullptr;
-        typelib_Parameter_Init aParameters[1];
-        OUString sParamName0(u"Name"_ustr);
-        OUString sParamType0(u"string"_ustr);
-        aParameters[0].pParamName = sParamName0.pData;
-        aParameters[0].eTypeClass = typelib_TypeClass_STRING;
-        aParameters[0].pTypeName = sParamType0.pData;
-        aParameters[0].bIn = true;
-        aParameters[0].bOut = false;
-        rtl_uString* pExceptions[1];
-        OUString sExceptionName0(u"com.sun.star.uno.RuntimeException"_ustr);
-        pExceptions[0] = sExceptionName0.pData;
-        OUString sReturnType0(u"any"_ustr);
-        typelib_typedescription_newInterfaceMethod(&pMethod, 3, false, sMethodName0.pData,
-                                                   typelib_TypeClass_ANY, sReturnType0.pData, 1,
-                                                   aParameters, 1, pExceptions);
-        typelib_typedescription_register(reinterpret_cast<typelib_TypeDescription**>(&pMethod));
-        typelib_typedescription_release(&pMethod->aBase.aBase);
-        // another static ref:
-        ++reinterpret_cast<typelib_TypeDescription*>(pTD)->nStaticRefCount;
-        return pTD;
-    }();
-
+    static typelib_InterfaceTypeDescription* s_type_XCurrentContext = impl_get_type_XCurrentContext();
     return s_type_XCurrentContext;
 }
 
