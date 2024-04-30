@@ -659,6 +659,43 @@ Fraction GetZoom(const ScViewData& rViewData, int i)
 }
 }
 
+
+void ScGridWindow::DrawEditView(OutputDevice &rDevice, EditView *pEditView)
+{
+    SCCOL nCol1 = mrViewData.GetEditStartCol();
+    SCROW nRow1 = mrViewData.GetEditStartRow();
+    SCCOL nCol2 = mrViewData.GetEditEndCol();
+    SCROW nRow2 = mrViewData.GetEditEndRow();
+
+    rDevice.SetLineColor();
+    rDevice.SetFillColor(pEditView->GetBackgroundColor());
+    Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eWhich );
+    Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
+
+    // don't overwrite grid
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    aEnd.AdjustX( -(2 * nLayoutSign) );
+    aEnd.AdjustY( -2 );
+
+    // set the correct mapmode
+    tools::Rectangle aBackground(aStart, aEnd);
+
+    // paint the background
+    rDevice.SetMapMode(mrViewData.GetLogicMode());
+
+    tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
+    //tdf#100925, rhbz#1283420, Draw some text here, to get
+    //X11CairoTextRender::getCairoContext called, so that the forced read
+    //from the underlying X Drawable gets it to sync.
+    rDevice.DrawText(aLogicRect.BottomLeft(), " ");
+    rDevice.DrawRect(aLogicRect);
+
+    // paint the editeng text
+    pEditView->Paint(rDevice.PixelToLogic(aEditRectangle), &rDevice);
+    rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
+}
+
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
@@ -1290,42 +1327,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     // buffer and on top of everything.
     if (bInPlaceEditing && !bIsTiledRendering)
     {
-        // get the coordinates of the area we need to clear (overpaint by
-        // the background)
-        SCCOL nCol1 = mrViewData.GetEditStartCol();
-        SCROW nRow1 = mrViewData.GetEditStartRow();
-        SCCOL nCol2 = mrViewData.GetEditEndCol();
-        SCROW nRow2 = mrViewData.GetEditEndRow();
-        rDevice.SetLineColor();
-        rDevice.SetFillColor(pEditView->GetBackgroundColor());
-        Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eWhich );
-        Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
+        aEditRectangle = tools::Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        DrawEditView(rDevice, pEditView);
 
-        // don't overwrite grid
-        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
-        aEnd.AdjustX( -(2 * nLayoutSign) );
-        aEnd.AdjustY( -2 );
-
-        // set the correct mapmode
-        tools::Rectangle aBackground(aStart, aEnd);
-
-        // paint the background
-        rDevice.SetMapMode(mrViewData.GetLogicMode());
-
-        tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
-        //tdf#100925, rhbz#1283420, Draw some text here, to get
-        //X11CairoTextRender::getCairoContext called, so that the forced read
-        //from the underlying X Drawable gets it to sync.
-        rDevice.DrawText(aLogicRect.BottomLeft(), " ");
-        rDevice.DrawRect(aLogicRect);
-
-        // paint the editeng text
-        tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
-        pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
-
-        rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
-
-        // restore the cursor it was originally visible
         if (bInPlaceVisCursor)
             pInPlaceCrsr->Show();
     }

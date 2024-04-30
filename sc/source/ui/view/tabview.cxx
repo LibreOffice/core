@@ -23,6 +23,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/cursor.hxx>
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
 #include <tools/json_writer.hxx>
@@ -2339,6 +2340,26 @@ void ScTabView::SetNewVisArea()
         if (pImp)
             pImp->VisAreaChanged();
     }
+
+    if (GetViewData().HasEditView(GetViewData().GetActivePart()))
+    {
+        EditView *pEditView = GetViewData().GetEditView(GetViewData().GetActivePart());
+        vcl::Cursor *pInPlaceCrsr = pEditView->GetCursor();
+        bool bInPlaceVisCursor = pInPlaceCrsr && pInPlaceCrsr->IsVisible();
+
+        if (bInPlaceVisCursor)
+            pInPlaceCrsr->Hide();
+
+        ScGridWindow *pGridWindow = GetViewData().GetActiveWin();
+        pGridWindow->DrawEditView(*pGridWindow->GetOutDev(), pEditView);
+
+        pGridWindow->flushOverlayManager();
+        pGridWindow->GetOutDev()->SetMapMode(GetViewData().GetLogicMode());
+
+        if (bInPlaceVisCursor)
+            pInPlaceCrsr->Show();
+    }
+
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccVisAreaChanged));
 }
