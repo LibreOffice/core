@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_use_api,drawinglayer_processors,\
 
 $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_processors, \
 	basegfx \
-	cppcanvas \
+	$(if $(ENABLE_WASM_STRIP_CANVAS),,cppcanvas) \
 	cppu \
 	cppuhelper \
 	sal \

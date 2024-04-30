@@ -166,6 +166,14 @@ ifneq ($(strip $(ENVCFLAGSCXX)),)
 gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
 endif
 
+ifeq ($(CROSS_COMPILING),)
+gb_CAN_EXECUTE_HOST_CODE := $(true)
+else ifeq ($(OS),EMSCRIPTEN)
+gb_CAN_EXECUTE_HOST_CODE := $(true)
+else
+gb_CAN_EXECUTE_HOST_CODE := $(false)
+endif
+
 include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/TargetLocations.mk
 

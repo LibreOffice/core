@@ -30,7 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_epubexport, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,writerperfect_epubexport,\
-    epubgen \
+    $(if $(ENABLE_WASM_STRIP_EPUB),,epubgen) \
     libxml2 \
     revenge \
 ))

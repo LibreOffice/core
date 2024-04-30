@@ -9,6 +9,9 @@
 
 ifneq ($(CROSS_COMPILING),)
 gb_Module_add_targets_for_build :=
+endif
+
+ifeq ($(gb_CAN_EXECUTE_HOST_CODE),$(false))
 gb_Module_SKIPTARGETS := check coverage slowcheck screenshot subsequentcheck uicheck
 endif
 

@@ -92,8 +92,6 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 
 endef
 
-gb_SUPPRESS_TESTS := $(true)
-
 define gb_Library_get_rpath
 endef
 
