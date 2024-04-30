@@ -70,8 +70,7 @@ int getBase64Weight(sal_uInt32 nChar)
 bool startsWithLineFolding(const sal_Unicode * pBegin,
                                             const sal_Unicode * pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "startsWithLineFolding(): Bad sequence");
+    assert(pBegin && pBegin <= pEnd && "startsWithLineFolding(): Bad sequence");
 
     return pEnd - pBegin >= 3 && pBegin[0] == 0x0D && pBegin[1] == 0x0A
            && isWhiteSpace(pBegin[2]); // CR, LF
@@ -395,8 +394,7 @@ bool isTokenChar(sal_uInt32 nChar)
 const sal_Unicode * skipComment(const sal_Unicode * pBegin,
                                           const sal_Unicode * pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "skipComment(): Bad sequence");
+    assert(pBegin && pBegin <= pEnd && "skipComment(): Bad sequence");
 
     if (pBegin != pEnd && *pBegin == '(')
     {
@@ -427,8 +425,7 @@ const sal_Unicode * skipLinearWhiteSpaceComment(const sal_Unicode *
                                                           const sal_Unicode *
                                                               pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "skipLinearWhiteSpaceComment(): Bad sequence");
+    assert(pBegin && pBegin <= pEnd && "skipLinearWhiteSpaceComment(): Bad sequence");
 
     while (pBegin != pEnd)
         switch (*pBegin)
@@ -463,8 +460,7 @@ const sal_Unicode * skipLinearWhiteSpaceComment(const sal_Unicode *
 const sal_Unicode * skipQuotedString(const sal_Unicode * pBegin,
                                                const sal_Unicode * pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "skipQuotedString(): Bad sequence");
+    assert(pBegin && pBegin <= pEnd && "skipQuotedString(): Bad sequence");
 
     if (pBegin != pEnd && *pBegin == '"')
         for (const sal_Unicode * p = pBegin + 1; p != pEnd;)
@@ -707,7 +703,7 @@ bool equalIgnoreCase(const char * pBegin1,
                                const char * pEnd1,
                                const char * pString2)
 {
-    DBG_ASSERT(pBegin1 && pBegin1 <= pEnd1 && pString2,
+    assert(pBegin1 && pBegin1 <= pEnd1 && pString2 &&
                "equalIgnoreCase(): Bad sequences");
 
     while (*pString2 != 0)
@@ -971,7 +967,7 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
                                const sal_Unicode * pEnd1,
                                const char * pString2)
 {
-    DBG_ASSERT(pBegin1 && pBegin1 <= pEnd1 && pString2,
+    assert(pBegin1 && pBegin1 <= pEnd1 && pString2 &&
                "INetMIME::equalIgnoreCase(): Bad sequences");
 
     while (*pString2 != 0)
