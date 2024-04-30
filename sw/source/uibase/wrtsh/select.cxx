@@ -79,13 +79,13 @@ bool SwWrtShell::SelNearestWrd()
     return SelWrd();
 }
 
-bool SwWrtShell::SelWrd(const Point *pPt )
+bool SwWrtShell::SelWrd(const Point *pPt, sal_Int16 nWordType )
 {
     bool bRet;
     {
         SwMvContext aMvContext(this);
         SttSelect();
-        bRet = SwCursorShell::SelectWord( pPt );
+        bRet = SwCursorShell::SelectWordWT( pPt, nWordType );
     }
     EndSelect();
     if( bRet )

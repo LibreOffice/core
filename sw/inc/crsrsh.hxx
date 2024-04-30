@@ -758,6 +758,7 @@ public:
     bool GoStartSentence();
     bool GoEndSentence();
     bool SelectWord( const Point* pPt );
+    bool SelectWordWT( const Point* pt, sal_Int16 nWordType );
     void ExpandToSentenceBorders();
 
     // get position from current cursor

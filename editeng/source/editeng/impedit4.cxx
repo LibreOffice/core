@@ -2701,7 +2701,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     if ( !aSel.HasRange() )
     {
-        aSel = SelectWord( aSel, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true, true );
+        aSel = SelectWord( aSel, css::i18n::WordType::WORD_COUNT, true, true );
         if (!aSel.HasRange() && aSel.Min().GetIndex() > 0 &&
             OUString(".!?").indexOf(aSel.Min().GetNode()->GetChar(aSel.Min().GetIndex() - 1)) > -1 )
         {

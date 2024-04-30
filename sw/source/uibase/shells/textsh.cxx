@@ -90,6 +90,8 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <IDocumentUndoRedo.hxx>
 #include <formatcontentcontrol.hxx>
+#include <com/sun/star/i18n/WordType.hpp>
+
 
 using namespace ::com::sun::star;
 
@@ -894,16 +896,8 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
         else
         {
             if (bSentenceCase)
-            {
-                if (!rSh.IsEndSentence())
-                    rSh.EndSentence(false);
-            }
-            if (rSh.IsEndSentence())
-            {
-                rSh.BwdSentence(true);
-                rSh.TransliterateText(transFlags);
-            }
-            else if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd())
+                transFlags = m_aRotateCase.getNextMode();
+            if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd(nullptr, i18n::WordType::WORD_COUNT))
                 rSh.TransliterateText(transFlags);
         }
     }

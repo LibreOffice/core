@@ -85,6 +85,11 @@ bool SwCursorShell::SelectWord( const Point* pPt )
     return m_pCurrentCursor->SelectWord( this, pPt );
 }
 
+bool SwCursorShell::SelectWordWT( const Point* pPt, sal_Int16 nWordType )
+{
+    return m_pCurrentCursor->SelectWordWT( this, nWordType, pPt );
+}
+
 void SwCursorShell::ExpandToSentenceBorders()
 {
     m_pCurrentCursor->ExpandToSentenceBorders(GetLayout());
