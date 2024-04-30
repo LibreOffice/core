@@ -248,7 +248,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     assert(constructor.isEmpty() || !environment.isEmpty());
     assert(
         (constructorFunction == nullptr && constructor.isEmpty())
-        || !*constructorFunction);
+        || (constructorFunction && !*constructorFunction));
     assert(factory != nullptr && !factory->is());
 #if defined DISABLE_DYNLOADING
     assert(!environment.isEmpty());
