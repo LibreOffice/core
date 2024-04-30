@@ -1353,9 +1353,9 @@ static const char* addLine(osl_TProfileImpl* pProfile, const char* Line)
 
     }
 
-    if ( pProfile->m_Lines != nullptr && pProfile->m_Lines[pProfile->m_NoLines] != nullptr )
+    if (pProfile->m_Lines[pProfile->m_NoLines] != nullptr)
     {
-            free(pProfile->m_Lines[pProfile->m_NoLines]);
+        free(pProfile->m_Lines[pProfile->m_NoLines]);
     }
     pProfile->m_Lines[pProfile->m_NoLines++] = strdup(Line);
 
