@@ -287,6 +287,7 @@ void ImpTwain::ImplOpenSource()
             TW_CAPABILITY aCap
                 = { CAP_XFERCOUNT, TWON_ONEVALUE, GlobalAlloc(GHND, sizeof(TW_ONEVALUE)) };
             TW_ONEVALUE* pVal = static_cast<TW_ONEVALUE*>(GlobalLock(aCap.hContainer));
+            assert(pVal);
 
             pVal->ItemType = TWTY_INT16;
             pVal->Item = 1;

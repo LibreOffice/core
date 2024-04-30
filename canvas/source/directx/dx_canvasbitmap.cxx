@@ -208,6 +208,7 @@ namespace dxcanvas
                     const sal_Int32 nScanWidth((aSize.getWidth() + 3) & ~3);
                     std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getHeight()] );
                     const sal_uInt8* pInBits=static_cast<sal_uInt8*>(aBmpData.Scan0);
+                    assert(pInBits);
                     pInBits+=3;
                     for( sal_Int32 y=0; y<aSize.getHeight(); ++y )
                     {

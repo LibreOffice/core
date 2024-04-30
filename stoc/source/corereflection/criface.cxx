@@ -508,6 +508,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             ppParamTypes[nPos] = nullptr;
             TYPELIB_DANGER_GET( ppParamTypes + nPos, pParams[nPos].pTypeRef );
             typelib_TypeDescription * pTD = ppParamTypes[nPos];
+            assert(pTD);
 
             ppUnoArgs[nPos] = alloca( pTD->nSize );
             if (pParams[nPos].bIn)

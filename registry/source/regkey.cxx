@@ -439,7 +439,7 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
                                               char*** pValueList,
                                               sal_uInt32* pLen)
 {
-    OSL_PRECOND((pValueList != nullptr) && (pLen != nullptr), "registry::getStringListValue(): invalid parameter");
+    assert(pValueList != nullptr && pLen != nullptr && "registry::getStringListValue(): invalid parameter");
     *pValueList = nullptr;
     *pLen = 0;
 

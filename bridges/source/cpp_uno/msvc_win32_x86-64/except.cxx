@@ -410,6 +410,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription* pTD) noexcept
     // 32 bit offsets
     const int totalSize = codeSize + typeInfoArraySize + excTypeAddLen;
     unsigned char* pCode = _code = static_cast<unsigned char*>(std::malloc(totalSize));
+    assert(pCode && "Don't handle OOM conditions");
     int pCodeOffset = 0;
 
     // New base of types array, starts after Trampoline D-Tor / C-Tors

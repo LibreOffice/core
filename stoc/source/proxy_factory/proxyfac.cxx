@@ -181,7 +181,7 @@ static void binuno_proxy_acquire( uno_Interface * pUnoI )
     // rebirth of zombie
     uno_ExtEnvironment * uno_env =
         that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-    OSL_ASSERT( uno_env != nullptr );
+    assert(uno_env != nullptr);
     (*uno_env->registerProxyInterface)(
         uno_env, reinterpret_cast< void ** >( &pUnoI ), binuno_proxy_free,
         that->m_oid.pData,
@@ -198,7 +198,7 @@ static void binuno_proxy_release( uno_Interface * pUnoI )
     {
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != nullptr );
+        assert(uno_env != nullptr);
         (*uno_env->revokeInterface)( uno_env, pUnoI );
     }
 }
@@ -289,7 +289,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
         {
             Reference< XInterface > xProxy;
             uno_ExtEnvironment * cpp_env = m_factory->m_cpp_env.get()->pExtEnv;
-            OSL_ASSERT( cpp_env != nullptr );
+            assert(cpp_env != nullptr);
 
             // mind a new delegator, calculate current root:
             Reference< XInterface > xRoot(
@@ -323,7 +323,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                         SAL_NO_ACQUIRE );
                     uno_ExtEnvironment * uno_env =
                         m_factory->m_uno_env.get()->pExtEnv;
-                    OSL_ASSERT( uno_env != nullptr );
+                    assert(uno_env != nullptr);
                     (*uno_env->registerProxyInterface)(
                         uno_env, reinterpret_cast< void ** >( &proxy.m_pUnoI ),
                         binuno_proxy_free, oid.pData,

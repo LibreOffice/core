@@ -21,6 +21,7 @@
 
 #include <config_options.h>
 #include <sal/types.h>
+#include <cassert>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -395,7 +396,7 @@ namespace basegfx
         {
             bool operator()(const RasterConversionLineEntry3D* pA, const RasterConversionLineEntry3D* pB)
             {
-                OSL_ENSURE(pA && pB, "lineComparator: empty pointer (!)");
+                assert(pA && pB && "lineComparator: empty pointer (!)");
                 return pA->getX().getVal() < pB->getX().getVal();
             }
         };
