@@ -539,6 +539,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Fly"), aPortionType);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPlainContentControlCopy)
+{
+    // Given a document with a plain text content control, all text selected and copied to the
+    // clipboard:
+    createSwDoc("plain-content-control-copy.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SelAll();
+    {
+        rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+        xTransfer->Copy();
+    }
+
+    // When closing that document, then make sure we don't crash on shutdown:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XCloseable> xFrame(xModel->getCurrentController()->getFrame(),
+                                            uno::UNO_QUERY);
+    // Without the accompanying fix in place, this resulted in an assertion failure, a char style
+    // still had clients by the time it was deleted.
+    xFrame->close(false);
+    mxComponent.clear();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

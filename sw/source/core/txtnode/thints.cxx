@@ -1698,7 +1698,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         // for all of its content.
         auto* pTextContentControl = static_txtattr_cast<SwTextContentControl*>(
             GetTextAttrAt(pAttr->GetStart(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent));
-        if (pTextContentControl)
+        // If the caller is SwTextNode::CopyText, we just copy an existing attribute, no need to
+        // correct it.
+        if (pTextContentControl && !(nMode & SetAttrMode::NOTXTATRCHR))
         {
             auto& rFormatContentControl
                 = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
