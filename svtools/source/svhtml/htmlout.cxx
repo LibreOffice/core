@@ -701,7 +701,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
                 sOut.append(OString::Concat("<") + OOO_STRING_SVTOOLS_HTML_area
                         " " OOO_STRING_SVTOOLS_HTML_O_shape
-                        "=" + pShape + " "
+                        "=\"" + pShape + "\" "
                         OOO_STRING_SVTOOLS_HTML_O_coords "=\"" +
                         aCoords + "\" ");
                 rStream.WriteOString( sOut );
@@ -755,7 +755,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_Events( rStream, rMacroTab, pEventTable,
                                 bOutStarBasic );
 
-                rStream.WriteChar( '>' );
+                rStream.WriteOString("/>");
             }
         }
 

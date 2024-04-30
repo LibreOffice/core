@@ -20,8 +20,42 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 
+#include <swrect.hxx>
+
+#include <rtl/ustring.hxx>
+
+#include <vector>
+
+class ImageMap;
+class MapMode;
+
+class SwURLNote
+{
+    OUString aURL;
+    OUString aTarget;
+    SwRect aRect;
+
+public:
+    SwURLNote(const OUString& rURL, const OUString& rTarget, const SwRect& rRect)
+        : aURL(rURL)
+        , aTarget(rTarget)
+        , aRect(rRect)
+    {
+    }
+    const OUString& GetURL() const { return aURL; }
+    const OUString& GetTarget() const { return aTarget; }
+    const SwRect& GetRect() const { return aRect; }
+};
+
 class SwNoteURL
 {
+private:
+    std::vector<SwURLNote> m_List;
+
+public:
+    SwNoteURL() {}
+    void InsertURLNote(const OUString& rURL, const OUString& rTarget, const SwRect& rRect);
+    void FillImageMap(ImageMap* pMap, const Point& rPos, const MapMode& rMap);
 };
 
 // globale Variable, in NoteURL.Cxx angelegt

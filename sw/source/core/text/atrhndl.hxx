@@ -46,6 +46,8 @@ private:
     // a template, if we have to restart the attribute evaluation
     std::optional<SwFont> m_oFnt;
 
+    int m_nINETFMT = 0; // for font's SetURL
+
     bool m_bVertLayout;
     bool m_bVertLayoutLRBT;
 
