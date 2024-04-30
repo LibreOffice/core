@@ -9,11 +9,6 @@
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-# don't sort; later can override previous settings!
-gb_EMSCRIPTEN_PRE_JS_FILES = \
-    $(SRCDIR)/static/emscripten/environment.js \
-    $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link \
-
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
@@ -85,8 +80,6 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
 
-$(foreach pre_js,$(gb_EMSCRIPTEN_PRE_JS_FILES),$(call gb_Executable_add_prejs,$(1),$(pre_js)))
-
 endef
 
 define gb_CppunitTest_CppunitTest_platform
@@ -96,8 +89,6 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
-
-$(foreach pre_js,$(gb_EMSCRIPTEN_PRE_JS_FILES),$(call gb_CppunitTest_add_prejs,$(1),$(pre_js)))
 
 endef
 
