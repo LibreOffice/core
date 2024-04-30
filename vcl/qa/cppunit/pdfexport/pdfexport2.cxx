@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124272)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // The page has a stream.
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf121615)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Get access to the only image on the only page.
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf121615)
     auto pXObjects
         = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
     CPPUNIT_ASSERT(pXObjects);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
     vcl::filter::PDFObjectElement* pXObject
         = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     CPPUNIT_ASSERT(pXObject);
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf141171)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Get access to the only image on the only page.
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf141171)
     auto pXObjects
         = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
     CPPUNIT_ASSERT(pXObjects);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
     vcl::filter::PDFObjectElement* pXObject
         = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     CPPUNIT_ASSERT(pXObject);
@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Get access to the only image on the only page.
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
 
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(pXObjects);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
     vcl::filter::PDFObjectElement* pXObject
         = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     CPPUNIT_ASSERT(pXObject);
@@ -700,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
     load(u"SimpleMultiPagePDF.pdf", aDocument);
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aPages.size());
 
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
     CPPUNIT_ASSERT(pResources);
@@ -709,7 +709,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
         = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
     CPPUNIT_ASSERT(pXObjects);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3),
+    CPPUNIT_ASSERT_EQUAL(size_t(3),
                          pXObjects->GetItems().size()); // 3 PDFs as Form XObjects
 
     std::vector<OString> rIDs;
@@ -1055,7 +1055,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160117)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nCount = 0;
     bool bFound1 = false;
@@ -1280,7 +1280,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
@@ -1308,9 +1308,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
     } state
         = Default;
 
-    auto nLine(0);
-    auto nTagged(0);
-    auto nArtifacts(0);
+    int nLine(0);
+    int nTagged(0);
+    int nArtifacts(0);
     while (true)
     {
         ++nLine;
@@ -1365,9 +1365,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
         }
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(1), nTagged); // text in body
+    CPPUNIT_ASSERT_EQUAL(1, nTagged); // text in body
     // 1 image and 1 frame and 1 header text; arbitrary number of aux stuff like borders
-    CPPUNIT_ASSERT(nArtifacts >= 3);
+    CPPUNIT_ASSERT_GREATEREQUAL(3, nArtifacts);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
@@ -1387,7 +1387,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
@@ -1413,9 +1413,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
     } state
         = Default;
 
-    auto nLine(0);
-    auto nTagged(0);
-    auto nArtifacts(0);
+    int nLine(0);
+    int nTagged(0);
+    int nArtifacts(0);
     while (true)
     {
         ++nLine;
@@ -1453,11 +1453,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
         }
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
-    CPPUNIT_ASSERT(nTagged >= 12); // text in body
+    CPPUNIT_ASSERT_GREATEREQUAL(12, nTagged); // text in body
     // 1 annotation
-    CPPUNIT_ASSERT(nArtifacts >= 1);
+    CPPUNIT_ASSERT_GREATEREQUAL(1, nArtifacts);
 
-    auto nPara(0);
+    int nPara(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -1477,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nPara)>(12), nPara);
+    CPPUNIT_ASSERT_EQUAL(12, nPara);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
@@ -1500,7 +1500,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
@@ -1526,9 +1526,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
     } state
         = Default;
 
-    auto nLine(0);
-    auto nTagged(0);
-    auto nArtifacts(0);
+    int nLine(0);
+    int nTagged(0);
+    int nArtifacts(0);
     while (true)
     {
         ++nLine;
@@ -1566,8 +1566,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
         }
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
-    CPPUNIT_ASSERT(nTagged >= 0); // text in body
-    CPPUNIT_ASSERT(nArtifacts >= 2); // 1 watermark + 1 other thing
+    CPPUNIT_ASSERT_GREATEREQUAL(0, nTagged); // text in body
+    CPPUNIT_ASSERT_GREATEREQUAL(2, nArtifacts); // 1 watermark + 1 other thing
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
@@ -1586,7 +1586,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTH(0);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -1620,12 +1620,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
                         ++nTable;
                     }
                 }
-                CPPUNIT_ASSERT_EQUAL(int(1), nTable);
+                CPPUNIT_ASSERT_EQUAL(1, nTable);
                 ++nTH;
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(int(6), nTH);
+    CPPUNIT_ASSERT_EQUAL(6, nTH);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
@@ -1644,9 +1644,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
 
     // the assert needs 2 follows to reproduce => 3 pages
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aPages.size());
 
-    auto nDoc(0);
+    int nDoc(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -1770,7 +1770,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nDoc)>(1), nDoc);
+    CPPUNIT_ASSERT_EQUAL(1, nDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
@@ -1789,7 +1789,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
 
     vcl::filter::PDFObjectElement* pTOC(nullptr);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -1962,7 +1962,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135638)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nFigure(0);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -2037,7 +2037,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135638)
         }
     }
     // the first one is a Writer image, 2nd one SdrRectObj
-    CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
+    CPPUNIT_ASSERT_EQUAL(2, nFigure);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157703)
@@ -2056,7 +2056,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157703)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pDocument(nullptr);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -2132,11 +2132,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // The document has one page.
+    // The document has two pages.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
 
-    auto nDoc(0);
+    int nDoc(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -2417,7 +2417,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                     = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject102101->Lookup("K"_ostr));
                 CPPUNIT_ASSERT(pKids102101);
                 auto vKids102101 = pKids102101->GetElements();
-                auto nRef(0);
+                int nRef(0);
                 for (size_t i = 0; i < vKids102101.size(); ++i)
                 {
                     auto pKid = dynamic_cast<vcl::filter::PDFDictionaryElement*>(vKids102101[i]);
@@ -2426,7 +2426,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                         ++nRef; // annotation
                     }
                 }
-                CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+                CPPUNIT_ASSERT_EQUAL(1, nRef);
 
                 auto pRefKid102102 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10210[2]);
                 CPPUNIT_ASSERT(pRefKid102102);
@@ -2443,7 +2443,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                 CPPUNIT_ASSERT(pKids102102);
                 auto vKids102102 = pKids102102->GetElements();
                 // there is a footnote
-                auto nFtn(0);
+                int nFtn(0);
                 for (size_t i = 0; i < vKids102102.size(); ++i)
                 {
                     auto pKid = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids102102[i]);
@@ -2460,7 +2460,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                         ++nFtn;
                     }
                 }
-                CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nFtn)>(1), nFtn);
+                CPPUNIT_ASSERT_EQUAL(1, nFtn);
 
                 auto pRefKid103 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10[3]);
                 CPPUNIT_ASSERT(pRefKid103);
@@ -2631,7 +2631,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nDoc)>(1), nDoc);
+    CPPUNIT_ASSERT_EQUAL(1, nDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157182)
@@ -2666,7 +2666,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf57423)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nFigure(0);
     int nFormula(0);
@@ -2748,9 +2748,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf57423)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(int(3), nFigure);
-    CPPUNIT_ASSERT_EQUAL(int(1), nFormula);
-    CPPUNIT_ASSERT_EQUAL(int(4), nDiv);
+    CPPUNIT_ASSERT_EQUAL(3, nFigure);
+    CPPUNIT_ASSERT_EQUAL(1, nFormula);
+    CPPUNIT_ASSERT_EQUAL(4, nDiv);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
@@ -2769,7 +2769,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nFigure(0);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -2828,7 +2828,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
+    CPPUNIT_ASSERT_EQUAL(2, nFigure);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
@@ -2847,7 +2847,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pDocument(nullptr);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -2895,8 +2895,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 
     {
         auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject120->Lookup("K"_ostr));
-        auto nMCID(0);
-        auto nRef(0);
+        int nMCID(0);
+        int nRef(0);
         for (size_t i = 0; i < pKids->GetElements().size(); ++i)
         {
             auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -2941,8 +2941,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                                      pAAURI->GetValue());
             }
         }
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+        CPPUNIT_ASSERT_EQUAL(1, nMCID);
+        CPPUNIT_ASSERT_EQUAL(1, nRef);
     }
 
     auto pRefKid13 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[3]);
@@ -2969,8 +2969,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 
     {
         auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject130->Lookup("K"_ostr));
-        auto nMCID(0);
-        auto nRef(0);
+        int nMCID(0);
+        int nRef(0);
         for (size_t i = 0; i < pKids->GetElements().size(); ++i)
         {
             auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3016,8 +3016,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                     pAAURI->GetValue());
             }
         }
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+        CPPUNIT_ASSERT_EQUAL(1, nMCID);
+        CPPUNIT_ASSERT_EQUAL(1, nRef);
     }
 
     auto pRefKid14 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[4]);
@@ -3044,8 +3044,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 
     {
         auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject140->Lookup("K"_ostr));
-        auto nMCID(0);
-        auto nRef(0);
+        int nMCID(0);
+        int nRef(0);
         for (size_t i = 0; i < pKids->GetElements().size(); ++i)
         {
             auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3091,8 +3091,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                     pAAURI->GetValue());
             }
         }
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+        CPPUNIT_ASSERT_EQUAL(1, nMCID);
+        CPPUNIT_ASSERT_EQUAL(1, nRef);
     }
 
     auto pRefKid16 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[6]);
@@ -3128,8 +3128,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 
     {
         auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject160->Lookup("K"_ostr));
-        auto nMCID(0);
-        auto nRef(0);
+        int nMCID(0);
+        int nRef(0);
         for (size_t i = 0; i < pKids->GetElements().size(); ++i)
         {
             auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3155,8 +3155,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                 CPPUNIT_ASSERT_EQUAL("Widget"_ostr, pASubtype->GetValue());
             }
         }
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+        CPPUNIT_ASSERT_EQUAL(1, nMCID);
+        CPPUNIT_ASSERT_EQUAL(1, nRef);
     }
 }
 
@@ -3176,7 +3176,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135192)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTable(0);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -3264,7 +3264,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135192)
                                                                 ++nOTable;
                                                             }
                                                         }
-                                                        CPPUNIT_ASSERT_EQUAL(int(1), nOTable);
+                                                        CPPUNIT_ASSERT_EQUAL(1, nOTable);
                                                         ++nTD;
                                                     }
                                                     else if (nTR != 0 && pS3
@@ -3276,19 +3276,19 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135192)
                                             }
                                         }
                                     }
-                                    CPPUNIT_ASSERT_EQUAL(int(3), nTD);
+                                    CPPUNIT_ASSERT_EQUAL(3, nTD);
                                     ++nTR;
                                 }
                             }
                         }
                     }
                 }
-                CPPUNIT_ASSERT_EQUAL(int(2), nTR);
+                CPPUNIT_ASSERT_EQUAL(2, nTR);
                 ++nTable;
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(int(1), nTable);
+    CPPUNIT_ASSERT_EQUAL(1, nTable);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
@@ -3307,7 +3307,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
@@ -3333,9 +3333,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
     } state
         = Default;
 
-    auto nLine(0);
-    auto nTagged(0);
-    auto nArtifacts(0);
+    int nLine(0);
+    int nTagged(0);
+    int nArtifacts(0);
     while (true)
     {
         ++nLine;
@@ -3373,8 +3373,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
         }
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(2), nTagged);
-    CPPUNIT_ASSERT(nArtifacts >= 1);
+    CPPUNIT_ASSERT_EQUAL(2, nTagged);
+    CPPUNIT_ASSERT_GREATEREQUAL(1, nArtifacts);
 
     int nFigure(0);
     for (const auto& rDocElement : aDocument.GetElements())
@@ -3421,7 +3421,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
         }
     }
     // the problem was that there were 4 shapes (the sub-shapes of the 2 groups)
-    CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
+    CPPUNIT_ASSERT_EQUAL(2, nFigure);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155190)
@@ -3441,10 +3441,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155190)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
-    auto nDiv(0);
-    auto nFigure(0);
+    int nDiv(0);
+    int nFigure(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -3509,8 +3509,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155190)
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nDiv)>(1), nDiv);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nDiv)>(1), nFigure);
+    CPPUNIT_ASSERT_EQUAL(1, nDiv);
+    CPPUNIT_ASSERT_EQUAL(1, nFigure);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
@@ -3530,13 +3530,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
     CPPUNIT_ASSERT(pAnnots);
 
     // There should be one annotation
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
     auto pAnnotReference
         = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
     CPPUNIT_ASSERT(pAnnotReference);
@@ -3579,7 +3579,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
     vcl::filter::PDFReferenceElement* pStructElemRef(nullptr);
 
     // check ParentTree to find StructElem
-    auto nRoots(0);
+    int nRoots(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -3596,7 +3596,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
             CPPUNIT_ASSERT(pNumTree);
             auto pNums = dynamic_cast<vcl::filter::PDFArrayElement*>(pNumTree->Lookup("Nums"_ostr));
             CPPUNIT_ASSERT(pNums);
-            auto nFound(0);
+            int nFound(0);
             for (size_t i = 0; i < pNums->GetElements().size(); i += 2)
             {
                 auto pI = dynamic_cast<vcl::filter::PDFNumberElement*>(pNums->GetElement(i));
@@ -3609,10 +3609,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
                     CPPUNIT_ASSERT(pStructElemRef);
                 }
             }
-            CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nFound)>(1), nFound);
+            CPPUNIT_ASSERT_EQUAL(1, nFound);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRoots)>(1), nRoots);
+    CPPUNIT_ASSERT_EQUAL(1, nRoots);
 
     // check /StructElem - produced by drawinglayer
     CPPUNIT_ASSERT(pStructElemRef);
@@ -3627,8 +3627,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
     CPPUNIT_ASSERT_EQUAL(OUString("alternativloser text - and some description"),
                          ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pSEAlt));
     auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"_ostr));
-    auto nMCID(0);
-    auto nRef(0);
+    int nMCID(0);
+    int nRef(0);
     for (size_t i = 0; i < pKids->GetElements().size(); ++i)
     {
         auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3648,8 +3648,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
             CPPUNIT_ASSERT_EQUAL(pAnnot, pAnnotRef->LookupObject());
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    CPPUNIT_ASSERT_EQUAL(1, nMCID);
+    CPPUNIT_ASSERT_EQUAL(1, nRef);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
@@ -3669,13 +3669,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
     CPPUNIT_ASSERT(pAnnots);
 
     // There should be one annotation
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
     auto pAnnotReference
         = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
     CPPUNIT_ASSERT(pAnnotReference);
@@ -3701,7 +3701,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
     vcl::filter::PDFReferenceElement* pStructElemRef(nullptr);
 
     // check ParentTree to find StructElem
-    auto nRoots(0);
+    int nRoots(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -3718,7 +3718,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
             CPPUNIT_ASSERT(pNumTree);
             auto pNums = dynamic_cast<vcl::filter::PDFArrayElement*>(pNumTree->Lookup("Nums"_ostr));
             CPPUNIT_ASSERT(pNums);
-            auto nFound(0);
+            int nFound(0);
             for (size_t i = 0; i < pNums->GetElements().size(); i += 2)
             {
                 auto pI = dynamic_cast<vcl::filter::PDFNumberElement*>(pNums->GetElement(i));
@@ -3731,10 +3731,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
                     CPPUNIT_ASSERT(pStructElemRef);
                 }
             }
-            CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nFound)>(1), nFound);
+            CPPUNIT_ASSERT_EQUAL(1, nFound);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRoots)>(1), nRoots);
+    CPPUNIT_ASSERT_EQUAL(1, nRoots);
 
     // check /StructElem - produced by sw painting code
     CPPUNIT_ASSERT(pStructElemRef);
@@ -3746,8 +3746,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
     auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pStructElem->Lookup("S"_ostr));
     CPPUNIT_ASSERT_EQUAL("Link"_ostr, pS->GetValue());
     auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"_ostr));
-    auto nMCID(0);
-    auto nRef(0);
+    int nMCID(0);
+    int nRef(0);
     for (size_t i = 0; i < pKids->GetElements().size(); ++i)
     {
         auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3767,8 +3767,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
             CPPUNIT_ASSERT_EQUAL(pAnnot, pAnnotRef->LookupObject());
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    CPPUNIT_ASSERT_EQUAL(1, nMCID);
+    CPPUNIT_ASSERT_EQUAL(1, nRef);
 
     // the Link is inside a Figure
     auto pParentRef
@@ -3802,13 +3802,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
     CPPUNIT_ASSERT(pAnnots);
 
     // There should be one annotation
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
     auto pAnnotReference
         = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
     CPPUNIT_ASSERT(pAnnotReference);
@@ -3836,7 +3836,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
     vcl::filter::PDFReferenceElement* pStructElemRef(nullptr);
 
     // check ParentTree to find StructElem
-    auto nRoots(0);
+    int nRoots(0);
     for (const auto& rDocElement : aDocument.GetElements())
     {
         auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
@@ -3853,7 +3853,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
             CPPUNIT_ASSERT(pNumTree);
             auto pNums = dynamic_cast<vcl::filter::PDFArrayElement*>(pNumTree->Lookup("Nums"_ostr));
             CPPUNIT_ASSERT(pNums);
-            auto nFound(0);
+            int nFound(0);
             for (size_t i = 0; i < pNums->GetElements().size(); i += 2)
             {
                 auto pI = dynamic_cast<vcl::filter::PDFNumberElement*>(pNums->GetElement(i));
@@ -3866,10 +3866,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
                     CPPUNIT_ASSERT(pStructElemRef);
                 }
             }
-            CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nFound)>(1), nFound);
+            CPPUNIT_ASSERT_EQUAL(1, nFound);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRoots)>(1), nRoots);
+    CPPUNIT_ASSERT_EQUAL(1, nRoots);
 
     // check /StructElem
     CPPUNIT_ASSERT(pStructElemRef);
@@ -3892,8 +3892,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
     CPPUNIT_ASSERT(pRole);
     CPPUNIT_ASSERT_EQUAL("cb"_ostr, pRole->GetValue());
     auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"_ostr));
-    auto nMCID(0);
-    auto nRef(0);
+    int nMCID(0);
+    int nRef(0);
     for (size_t i = 0; i < pKids->GetElements().size(); ++i)
     {
         auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
@@ -3913,8 +3913,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
             CPPUNIT_ASSERT_EQUAL(pAnnot, pAnnotRef->LookupObject());
         }
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    CPPUNIT_ASSERT_EQUAL(1, nMCID);
+    CPPUNIT_ASSERT_EQUAL(1, nRef);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf142129)
@@ -4285,13 +4285,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
 
         // The document has one page.
         std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
         auto pAnnots
             = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
         CPPUNIT_ASSERT(pAnnots);
 
         // There should be one annotation
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
         auto pAnnotReference
             = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
         CPPUNIT_ASSERT(pAnnotReference);
@@ -4609,7 +4609,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
     auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("BBox"_ostr));
     CPPUNIT_ASSERT(pBBox);
     const auto& rElements2 = pBBox->GetElements();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements2.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(4), rElements2.size());
     for (sal_Int32 nIdx = 0; nIdx < 4; ++nIdx)
     {
         const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements2[nIdx]);
@@ -4623,7 +4623,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
     auto pMatrix = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("Matrix"_ostr));
     CPPUNIT_ASSERT(pMatrix);
     const auto& rElements = pMatrix->GetElements();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), rElements.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(6), rElements.size());
     sal_Int32 aMatTranslate[6]
         = { // Rotation by $\theta$ $cos(\theta), sin(\theta), -sin(\theta), cos(\theta)$
             0, -1, 1, 0,
@@ -4701,7 +4701,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Position array
     constexpr double aPos[5][4] = { { 56.699, 707.701, 131.401, 721.499 },
@@ -4713,7 +4713,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
     // Get page annotations.
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
     CPPUNIT_ASSERT(pAnnots);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(5), pAnnots->GetElements().size());
     for (sal_Int32 i = 0; i < 5; ++i)
     {
         auto pAnnotReference
@@ -4731,7 +4731,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
         auto pRect = dynamic_cast<vcl::filter::PDFArrayElement*>(pAnnot->Lookup("Rect"_ostr));
         CPPUNIT_ASSERT(pRect);
         const auto& rElements = pRect->GetElements();
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(4), rElements.size());
         for (sal_Int32 nIdx = 0; nIdx < 4; ++nIdx)
         {
             const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[nIdx]);
