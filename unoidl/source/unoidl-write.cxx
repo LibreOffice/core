@@ -62,6 +62,7 @@ OUString getArgumentUri(sal_uInt32 argument, bool * entities) {
         if (entities == nullptr) {
             badUsage();
         }
+        assert(entities && "badUsage exits otherwise");
         *entities = true;
     } else if (entities != nullptr) {
         *entities = false;

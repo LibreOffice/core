@@ -106,6 +106,7 @@ bool getArgument(
         if (delimiter == nullptr) {
             badUsage();
         }
+        assert(delimiter && "badUsage exits otherwise");
         *delimiter = true;
         return false;
     }
