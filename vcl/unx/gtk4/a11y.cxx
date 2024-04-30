@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -391,6 +392,73 @@ applyObjectAttributes(GtkAccessible* pGtkAccessible,
     } while (nIndex >= 0);
 }
 
+static void applyRelations(LoAccessible* pLoAccessible,
+                           css::uno::Reference<css::accessibility::XAccessibleContext>& xContext)
+{
+    assert(pLoAccessible);
+
+    if (!xContext)
+        return;
+
+    css::uno::Reference<css::accessibility::XAccessibleRelationSet> xRelationSet
+        = xContext->getAccessibleRelationSet();
+    if (!xRelationSet.is())
+        return;
+
+    for (sal_Int32 i = 0; i < xRelationSet->getRelationCount(); i++)
+    {
+        GtkAccessibleRelation eGtkRelation;
+        css::accessibility::AccessibleRelation aRelation = xRelationSet->getRelation(i);
+        switch (aRelation.RelationType)
+        {
+            case css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+                eGtkRelation = GTK_ACCESSIBLE_RELATION_FLOW_TO;
+                break;
+            case css::accessibility::AccessibleRelationType::CONTROLLER_FOR:
+                eGtkRelation = GTK_ACCESSIBLE_RELATION_CONTROLS;
+                break;
+            case css::accessibility::AccessibleRelationType::DESCRIBED_BY:
+                eGtkRelation = GTK_ACCESSIBLE_RELATION_DESCRIBED_BY;
+                break;
+            case css::accessibility::AccessibleRelationType::LABELED_BY:
+                eGtkRelation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
+                break;
+            case css::accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
+            case css::accessibility::AccessibleRelationType::CONTROLLED_BY:
+            case css::accessibility::AccessibleRelationType::INVALID:
+            case css::accessibility::AccessibleRelationType::LABEL_FOR:
+            case css::accessibility::AccessibleRelationType::MEMBER_OF:
+            case css::accessibility::AccessibleRelationType::NODE_CHILD_OF:
+            case css::accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+                // GTK has no equivalent for these
+                continue;
+            default:
+                assert(false && "Unhandled relation type");
+        }
+
+        gtk_accessible_reset_relation(GTK_ACCESSIBLE(pLoAccessible),
+                                      GTK_ACCESSIBLE_RELATION_FLOW_TO);
+
+        GList* pTargetObjects = nullptr;
+        for (const css::uno::Reference<css::accessibility::XAccessible>& xTargetAcc :
+             aRelation.TargetSet)
+        {
+            LoAccessible* pTargetLOAcc
+                = GtkAccessibleRegistry::getLOAccessible(xTargetAcc, pLoAccessible->display);
+            assert(pTargetLOAcc);
+            GObject* pObject = G_OBJECT(pTargetLOAcc);
+            g_object_ref(pObject);
+            pTargetObjects = g_list_append(pTargetObjects, pObject);
+        }
+
+        GValue aValue = G_VALUE_INIT;
+        gtk_accessible_relation_init_value(eGtkRelation, &aValue);
+        g_value_set_pointer(&aValue, pTargetObjects);
+        gtk_accessible_update_relation_value(GTK_ACCESSIBLE(pLoAccessible), 1, &eGtkRelation,
+                                             &aValue);
+    }
+}
+
 struct LoAccessibleClass
 {
     GObjectClass parent_class;
@@ -619,6 +687,8 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
     applyStates(pGtkAccessible, xContext);
 
     applyObjectAttributes(GTK_ACCESSIBLE(ret), xContext);
+
+    applyRelations(ret, xContext);
 
     // set values from XAccessibleValue interface if that's implemented
     css::uno::Reference<css::accessibility::XAccessibleValue> xAccessibleValue(xContext,

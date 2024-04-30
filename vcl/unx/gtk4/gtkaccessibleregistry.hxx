@@ -24,7 +24,7 @@ private:
 public:
     /** Returns the related LoAccessible* for the XAccessible. Creates a new one if none exists yet. */
     static LoAccessible* getLOAccessible(css::uno::Reference<css::accessibility::XAccessible> xAcc,
-                                         GdkDisplay* pDisplay, GtkAccessible* pParent);
+                                         GdkDisplay* pDisplay, GtkAccessible* pParent = nullptr);
     /** Removes the entry for the given XAccessible. */
     static void remove(css::uno::Reference<css::accessibility::XAccessible> xAcc);
 };
