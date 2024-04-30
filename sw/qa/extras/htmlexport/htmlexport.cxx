@@ -3093,13 +3093,17 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/html/body/p"_ostr, 2);
 
-    // Test export of text hyperlink in the image map. TODO: implement export of image hyperlink.
+    // Test export of image and text hyperlinks in the image map.
     // Without the fix, the test would fail with
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '/html/body/p[2]/map' number of nodes is incorrect
     const OUString mapName = getXPath(pDoc, "/html/body/p[2]/map"_ostr, "name"_ostr);
-    assertXPath(pDoc, "/html/body/p[2]/map/area"_ostr, "shape"_ostr, u"rect"_ustr);
+    assertXPath(pDoc, "/html/body/p[2]/map/area[1]"_ostr, "shape"_ostr, u"rect"_ustr);
+    CPPUNIT_ASSERT(
+        getXPath(pDoc, "/html/body/p[2]/map/area[1]"_ostr, "href"_ostr).endsWith("foo/bar"));
+    assertXPath(pDoc, "/html/body/p[2]/map/area[2]"_ostr, "shape"_ostr, u"rect"_ustr);
+    CPPUNIT_ASSERT(getXPath(pDoc, "/html/body/p[2]/map/area[2]"_ostr, "href"_ostr).endsWith("baz"));
     assertXPath(pDoc, "/html/body/p[2]/img"_ostr, "usemap"_ostr, "#" + mapName);
 }
 
