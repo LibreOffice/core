@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <memory>
 
 #ifdef _WIN32
 
