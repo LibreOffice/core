@@ -33,6 +33,7 @@
 #include <swfont.hxx>
 #include "txtpaint.hxx"
 #include "porfld.hxx"
+#include "porfly.hxx"
 #include "portab.hxx"
 #include <txatbase.hxx>
 #include <charfmt.hxx>
@@ -40,6 +41,7 @@
 #include "porrst.hxx"
 #include "pormulti.hxx"
 #include <doc.hxx>
+#include <fmturl.hxx>
 
 // Returns, if we have an underline breaking situation
 // Adding some more conditions here means you also have to change them
@@ -461,6 +463,21 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if (GetFnt()->IsURL() && pPor->InTextGrp())
             GetInfo().NotifyURL(*pPor);
+        else if (pPor->IsFlyCntPortion())
+        {
+            if (auto* pFlyContentPortion = dynamic_cast<sw::FlyContentPortion*>(pPor))
+            {
+                if (auto* pFlyFrame = pFlyContentPortion->GetFlyFrame())
+                {
+                    if (auto* pFormat = pFlyFrame->GetFormat())
+                    {
+                        auto& url = pFormat->GetURL();
+                        if (!url.GetURL().isEmpty()) // TODO: url.GetMap() ?
+                            GetInfo().NotifyURL(*pPor);
+                    }
+                }
+            }
+        }
 
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )

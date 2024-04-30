@@ -76,6 +76,7 @@ namespace sw
             FlyContentPortion(SwFlyInContentFrame* pFly);
             static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, tools::Long nAscent, tools::Long nDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags);
             SwFlyInContentFrame* GetFlyFrame() { return m_pFly; }
+            const SwFlyInContentFrame* GetFlyFrame() const { return m_pFly; }
             void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetModelPositionForViewPoint(&rPos, rPoint, pCMS); };
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~FlyContentPortion() override;
