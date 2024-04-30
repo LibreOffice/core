@@ -125,7 +125,7 @@ void Includes::add(OString const & entityName) {
 namespace {
 
 void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
-    OSL_ASSERT(first != nullptr);
+    assert(first != nullptr);
     if (*first) {
         out << "\n";
         *first = false;
