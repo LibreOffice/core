@@ -55,25 +55,14 @@ using namespace ::com::sun::star::util;
 using ::com::sun::star::accessibility::XAccessibleContext;
 using ::com::sun::star::accessibility::XAccessible;
 
-namespace {
-
-struct LanguageDependentProp
+constexpr OUString aLanguageDependentProp[] =
 {
-    const char* pPropName;
-    sal_Int32   nPropNameLength;
-};
-
-}
-
-const LanguageDependentProp aLanguageDependentProp[] =
-{
-    { "Text",            4 },
-    { "Label",           5 },
-    { "Title",           5 },
-    { "HelpText",        8 },
-    { "CurrencySymbol", 14 },
-    { "StringItemList", 14 },
-    { nullptr, 0                 }
+    u"Text"_ustr,
+    u"Label"_ustr,
+    u"Title"_ustr,
+    u"HelpText"_ustr,
+    u"CurrencySymbol"_ustr,
+    u"StringItemList"_ustr,
 };
 
 static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
@@ -579,14 +568,13 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // Add language dependent properties into the peer property set.
         // Our resource resolver has been changed and we must be sure
         // that language dependent props use the new resolver.
-        const LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
-        while ( pLangDepProp->pPropName != nullptr )
+
+        for (const auto & rLangDepProp : aLanguageDependentProp)
         {
             bool bMustBeInserted( true );
             for (const PropertyValue & i : aPeerPropertiesToSet)
             {
-                if ( i.Name.equalsAsciiL(
-                        pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
+                if ( i.Name == rLangDepProp )
                 {
                     bMustBeInserted = false;
                     break;
@@ -596,14 +584,11 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             if ( bMustBeInserted )
             {
                 // Add language dependent props at the end
-                OUString aPropName( OUString::createFromAscii( pLangDepProp->pPropName ));
-                if ( xPSI.is() && xPSI->hasPropertyByName( aPropName ) )
+                if ( xPSI.is() && xPSI->hasPropertyByName( rLangDepProp ) )
                 {
-                    aPeerPropertiesToSet.emplace_back( aPropName, 0, xPS->getPropertyValue( aPropName ), PropertyState_DIRECT_VALUE );
+                    aPeerPropertiesToSet.emplace_back( rLangDepProp, 0, xPS->getPropertyValue( rLangDepProp ), PropertyState_DIRECT_VALUE );
                 }
             }
-
-            ++pLangDepProp;
         }
     }
     aGuard.clear();
