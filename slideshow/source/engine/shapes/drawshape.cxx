@@ -572,7 +572,7 @@ namespace slideshow::internal
             DrawShapeSharedPtr pShape( new DrawShape(xShape,
                                                      xContainingPage,
                                                      nPrio,
-                                                     pGraphic,
+                                                     std::move(pGraphic),
                                                      rContext) );
 
             if( pShape->hasIntrinsicAnimation() )

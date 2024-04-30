@@ -320,7 +320,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         return DrawShape::create( xCurrShape,
                                   mxPage,
                                   mnAscendingPrio,
-                                  pGraphic,
+                                  std::move(pGraphic),
                                   mrContext );
     }
     else
