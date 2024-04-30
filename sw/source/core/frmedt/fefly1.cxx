@@ -386,7 +386,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         return nullptr;
 
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+    SwContact* pContact = GetUserCall( pObj );
     if (!pContact)
         return nullptr;
 
@@ -400,7 +400,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         }
         else
         {
-            pFly = pContact->GetAnchorFrame(pObj);
+            pFly = static_cast<SwDrawContact*>(pContact)->GetAnchorFrame(pObj);
         }
 
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
