@@ -323,7 +323,7 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
 
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 {
-    if (// scalc
+    return // scalc
         rUIFile == u"modules/scalc/ui/functionpanel.ui"
         || rUIFile == u"modules/scalc/ui/navigatorpanel.ui"
         || rUIFile == u"modules/scalc/ui/sidebaralignment.ui"
@@ -350,6 +350,7 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         || rUIFile == u"modules/smath/ui/sidebarelements_math.ui"
         || rUIFile == u"modules/smath/ui/sidebarproperties_math.ui"
         // swriter
+        || rUIFile == u"modules/swriter/ui/a11ycheckissuespanel.ui"
         || rUIFile == u"modules/swriter/ui/managechangessidebar.ui"
         || rUIFile == u"modules/swriter/ui/navigatorpanel.ui"
         || rUIFile == u"modules/swriter/ui/pagefooterpanel.ui"
@@ -379,10 +380,7 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/sidebarpossize.ui"
         || rUIFile == u"svx/ui/sidebarshadow.ui"
         || rUIFile == u"svx/ui/sidebarstylespanel.ui"
-        || rUIFile == u"svx/ui/sidebartextpanel.ui")
-        return true;
-
-    return false;
+        || rUIFile == u"svx/ui/sidebartextpanel.ui";
 }
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
