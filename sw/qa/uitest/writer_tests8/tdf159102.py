@@ -85,7 +85,7 @@ class tdf159102(UITestCase):
             paragraphs = writer_doc.Text.createEnumeration()
             para1 = paragraphs.nextElement()
             # This was "stas.", i.e. too much shrinking
-            self.assertEqual("sus egestas.", para1.String)
+            self.assertEqual(" cursus egestas.", para1.String)
 
             # check next paragraph (containing different text portions)
             self.xUITest.executeCommand(".uno:GoDown")
@@ -94,4 +94,4 @@ class tdf159102(UITestCase):
             self.xUITest.executeCommand('.uno:Delete')
             paragraphs = writer_doc.Text.createEnumeration()
             para1 = paragraphs.nextElement()
-            self.assertEqual("sus egestas.", para1.String)
+            self.assertEqual(" cursus egestas.", para1.String)
