@@ -490,7 +490,7 @@ public:
         pHead->guard(nAddr);
 
         T * pImpl = dynamic_page_cast<T>(pHead);
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::guard(): Null pointer");
+        assert(pImpl != nullptr && "store::PageHolder<T>::guard(): Null pointer");
         pImpl->guard();
 
         return store_E_None;

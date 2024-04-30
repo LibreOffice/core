@@ -372,7 +372,7 @@ storeError FileLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, sa
 storeError FileLockBytes::writePageAt_Impl (std::shared_ptr<PageData> const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(pagedata != nullptr, "contract violation");
+    assert(pagedata != nullptr && "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
@@ -716,7 +716,7 @@ storeError MemoryLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, 
 storeError MemoryLockBytes::writePageAt_Impl (std::shared_ptr<PageData> const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(!(pagedata == nullptr), "contract violation");
+    assert(pagedata != nullptr && "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
