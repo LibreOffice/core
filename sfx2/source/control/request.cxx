@@ -576,10 +576,10 @@ void SfxRequest::Done_Impl
 
     // recordable?
     // new Recording uses UnoName!
-    SAL_WARN_IF( pImpl->pSlot->pUnoName.isEmpty(), "sfx", "Recording not exported slot: "
+    SAL_WARN_IF( pImpl->pSlot->aUnoName.isEmpty(), "sfx", "Recording not exported slot: "
                     << pImpl->pSlot->GetSlotId() );
 
-    if ( pImpl->pSlot->pUnoName.isEmpty() ) // playing it safe
+    if ( pImpl->pSlot->aUnoName.isEmpty() ) // playing it safe
         return;
 
     // often required values

@@ -90,8 +90,8 @@ enum class SfxSlotKind
 
 struct SfxTypeAttrib
 {
-    sal_uInt16                  nAID;
-    const char* pName;
+    sal_uInt16 nAID;
+    OUString aName;
 };
 
 template<class T> SfxPoolItem* createSfxPoolItem()
@@ -171,7 +171,7 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
 struct SfxFormalArgument
 {
     const SfxType*  pType;    // Type of the parameter (SfxPoolItem subclass)
-    const char*     pName;    // Name of the sParameters
+    OUString        aName;    // Name of the sParameters
     sal_uInt16      nSlotId;  // Slot-Id for identification of the Parameters
 
     std::unique_ptr<SfxPoolItem> CreateItem() const
@@ -201,30 +201,7 @@ public:
     SfxDisableFlags           nDisableFlags; // DisableFlags that need to be
                                              // present, so that the Slot
                                              // can be enabled
-    OUString     pUnoName;      // UnoName for the Slots
-
-public:
-
-    template <size_t N>
-    SfxSlot(sal_uInt16 sId, SfxGroupId gId, SfxSlotMode flags, sal_uInt16 masterSlotId,
-            sal_uInt16 value, SfxExecFunc exec, SfxStateFunc state, const SfxType* type,
-            const SfxSlot* nextSlot, const SfxFormalArgument* firstArgDef, sal_uInt16 argDefCount,
-            SfxDisableFlags disableFlags, const char (&literal)[N])
-        : nSlotId(sId)
-        , nGroupId(gId)
-        , nFlags(flags)
-        , nMasterSlotId(masterSlotId)
-        , nValue(value)
-        , fnExec(exec)
-        , fnState(state)
-        , pType(type)
-        , pNextSlot(nextSlot)
-        , pFirstArgDef(firstArgDef)
-        , nArgDefCount(argDefCount)
-        , nDisableFlags(disableFlags)
-        , pUnoName(literal)
-    {
-    }
+    OUString     aUnoName;      // UnoName for the Slots
 
     SfxSlotKind         GetKind() const;
     sal_uInt16          GetSlotId() const;
@@ -233,7 +210,7 @@ public:
     SfxGroupId          GetGroupId() const;
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
     const SfxType*  GetType() const { return pType; }
-    const OUString&     GetUnoName() const { return pUnoName; }
+    const OUString&     GetUnoName() const { return aUnoName; }
     SFX2_DLLPUBLIC OUString GetCommand() const;
 
     sal_uInt16          GetFormalArgumentCount() const { return nArgDefCount; }

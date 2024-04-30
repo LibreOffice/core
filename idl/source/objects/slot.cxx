@@ -559,9 +559,9 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
     }
 
     {
-        rOutStm.WriteOString( ",\"" );
+        rOutStm.WriteOString( ",u\"" );
         rOutStm.WriteOString( GetName() );
-        rOutStm.WriteOString( "\"" );
+        rOutStm.WriteOString( "\"_ustr" );
     }
 
     rOutStm.WriteOString( " )," ) << endl;
@@ -588,7 +588,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             // item type
            .WriteOString(pPType->GetName()).WriteOString("_Impl, ")
             // parameter name
-           .WriteOString("\"").WriteOString(pPar->GetName()).WriteOString("\", ")
+           .WriteOString("u\"").WriteOString(pPar->GetName()).WriteOString("\"_ustr, ")
             // slot id
            .WriteOString(pPar->GetSlotId().getString()).WriteOString(" },") << endl;
         if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )

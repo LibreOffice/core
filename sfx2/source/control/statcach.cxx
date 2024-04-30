@@ -245,7 +245,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 // get the slot - even if it is disabled on the dispatcher
                 pSlot = SfxSlotPool::GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
 
-            if ( !pSlot || pSlot->pUnoName.isEmpty() )
+            if ( !pSlot || pSlot->aUnoName.isEmpty() )
             {
                 bSlotDirty = false;
                 bCtrlDirty = true;

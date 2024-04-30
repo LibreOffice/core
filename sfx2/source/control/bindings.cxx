@@ -1513,7 +1513,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     if ( xDisp.is() || !pCache )
     {
         const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pDispatcher->GetFrame() ).GetSlot( nSlot );
-        if ( !pSlot || pSlot->pUnoName.isEmpty() )
+        if ( !pSlot || pSlot->aUnoName.isEmpty() )
             return SfxItemState::DISABLED;
 
         css::util::URL aURL;

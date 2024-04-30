@@ -292,7 +292,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteOString("{ (const SfxType*) &aSfxVoidItem_Impl, 0, 0 }" ) << endl;
+        rOutStm.WriteOString("{ (const SfxType*) &aSfxVoidItem_Impl, u\"\"_ustr, 0 }" ) << endl;
     }
     rOutStm << endl;
     rOutStm.WriteOString( "};" ) << endl << endl;
@@ -319,7 +319,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
                .WriteOString( ", 0, SfxGroupId::NONE, " )
                .WriteOString( "SFX_STUB_PTR_EXEC_NONE," )
                .WriteOString( "SFX_STUB_PTR_STATE_NONE," )
-               .WriteOString( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, \"\", SfxSlotMode::NONE )" ) << endl;
+               .WriteOString( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, u\"\"_ustr, SfxSlotMode::NONE )" ) << endl;
     }
     rOutStm << endl;
     rOutStm.WriteOString( "};" ) << endl;

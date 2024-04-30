@@ -562,7 +562,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         if (nSlotId > SID_VERB_END)
             break;
 
-        SfxSlot* pNewSlot = new SfxSlot(
+        SfxSlot* pNewSlot = new SfxSlot{
             nSlotId, SfxGroupId::NONE,
             // Verb slots must be executed asynchronously, so that they can be
             // destroyed while executing.
@@ -570,7 +570,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
             0, 0,
             SFX_STUB_PTR(SfxShell, VerbExec), SFX_STUB_PTR(SfxShell, VerbState),
             nullptr, // HACK(SFX_TYPE(SfxVoidItem)) ???
-            nullptr, nullptr, 0, SfxDisableFlags::NONE, "");
+            nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr};
 
         if (!pImpl->aSlotArr.empty())
         {

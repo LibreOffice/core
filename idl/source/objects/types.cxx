@@ -108,9 +108,9 @@ size_t SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray ) const
     {
         rAttrArray.append('{');
         rAttrArray.append(GetSlotId().getString());
-        rAttrArray.append(",\"");
+        rAttrArray.append(",u\"");
         rAttrArray.append(GetName());
-        rAttrArray.append("\"}");
+        rAttrArray.append("\"_ustr}");
         return 1;
     }
 }
