@@ -99,9 +99,9 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
 size_t SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray ) const
 {
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" );
+    assert(pType && "no type for attribute");
     SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" );
+    assert(pBaseType && "no base type for attribute");
     if( pBaseType->GetMetaTypeType() == MetaTypeType::Struct )
         return pBaseType->MakeSfx( rAttrArray );
     else

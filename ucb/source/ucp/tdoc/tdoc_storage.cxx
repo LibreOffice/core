@@ -319,18 +319,15 @@ StorageElementFactory::createStream( const OUString & rUri,
         new Stream( m_xContext, m_xDocsMgr, rUri, xParentStorage, xStream ) );
 }
 
-
 void StorageElementFactory::releaseElement( Storage const * pElement )
 {
-    OSL_ASSERT( pElement );
+    assert(pElement);
     osl::MutexGuard aGuard( m_aMutex );
     if ( pElement->m_aContainerIt != m_aMap.end() )
         m_aMap.erase( pElement->m_aContainerIt );
 }
 
-
 // Non-UNO interface
-
 
 uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
         const OUString & rUri, StorageAccessMode eMode )

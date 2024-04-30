@@ -146,7 +146,7 @@ static OptionInfo const * get_option_info(
 static bool is_option(
     OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
-    OSL_ASSERT( option_info != 0 );
+    assert(option_info != 0);
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
 

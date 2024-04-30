@@ -709,7 +709,9 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
         }
         else
-        { //called from extension manager
+        {
+            assert(pExtensionPath);
+            //called from extension manager
             extensionPath = *pExtensionPath;
             sourceRoot = fs::path(extensionPath);
             extensionDestination = *pDestination;
