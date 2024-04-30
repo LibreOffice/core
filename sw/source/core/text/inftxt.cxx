@@ -21,7 +21,9 @@
 
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
+#include <fmtinfmt.hxx>
 #include <hintids.hxx>
+#include <txatbase.hxx>
 #include <svl/ctloptions.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/printer.hxx>
@@ -1459,6 +1461,25 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 
     if ( bDraw )
         DrawBackground( rPor, pColor );
+}
+
+void SwTextPaintInfo::NotifyURL_(const SwLinePortion& rPor) const
+{
+    assert(pNoteURL);
+
+    SwRect aIntersect;
+    CalcRect(rPor, nullptr, &aIntersect);
+
+    if (aIntersect.HasArea())
+    {
+        SwTextNode* pNd = const_cast<SwTextNode*>(GetTextFrame()->GetTextNodeFirst());
+        SwTextAttr* const pAttr = pNd->GetTextAttrAt(sal_Int32(GetIdx()), RES_TXTATR_INETFMT);
+        if (pAttr)
+        {
+            const SwFormatINetFormat& rFormat = pAttr->GetINetFormat();
+            pNoteURL->InsertURLNote(rFormat.GetValue(), rFormat.GetTargetFrame(), aIntersect);
+        }
+    }
 }
 
 static void lcl_InitHyphValues( PropertyValues &rVals,

@@ -3082,6 +3082,27 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)
     ExportToHTML();
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
+{
+    // Given a document with an image with hyperlink, and text with hyperlink, both in a frame:
+    createSwDoc("tdf160867_image_with_link.fodt");
+    // When exporting to HTML:
+    ExportToHTML();
+    // Parse it as XML (strict!)
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/html/body/p"_ostr, 2);
+
+    // Test export of text hyperlink in the image map. TODO: implement export of image hyperlink.
+    // Without the fix, the test would fail with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/html/body/p[2]/map' number of nodes is incorrect
+    const OUString mapName = getXPath(pDoc, "/html/body/p[2]/map"_ostr, "name"_ostr);
+    assertXPath(pDoc, "/html/body/p[2]/map/area"_ostr, "shape"_ostr, u"rect"_ustr);
+    assertXPath(pDoc, "/html/body/p[2]/img"_ostr, "usemap"_ostr, "#" + mapName);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

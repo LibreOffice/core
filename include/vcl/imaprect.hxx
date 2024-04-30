@@ -25,7 +25,7 @@
 
 class Fraction;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapRectangleObject final : public IMapObject
+class VCL_DLLPUBLIC IMapRectangleObject final : public IMapObject
 {
     tools::Rectangle           aRect;
 
