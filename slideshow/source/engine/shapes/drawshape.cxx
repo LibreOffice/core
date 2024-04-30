@@ -1279,7 +1279,7 @@ namespace slideshow::internal
         }
 
         DelayedGraphicLoader::DelayedGraphicLoader(std::shared_ptr<Graphic> pGraphic)
-            : mpGraphic(pGraphic)
+            : mpGraphic(std::move(pGraphic))
             , mpVDevMask(DeviceFormat::WITHOUT_ALPHA)
         {
         }
