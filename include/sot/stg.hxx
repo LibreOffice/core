@@ -86,7 +86,7 @@ public:
     virtual SotClipboardFormatId         GetFormat() = 0;
     virtual OUString            GetUserName() = 0;
     virtual void                FillInfoList( SvStorageInfoList* ) const = 0;
-    virtual bool                CopyTo( BaseStorage* pDestStg ) const = 0;
+    virtual bool                CopyTo( BaseStorage& rDestStg ) const = 0;
     virtual bool                Commit() = 0;
     virtual bool                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
@@ -173,7 +173,7 @@ public:
     virtual SotClipboardFormatId         GetFormat() override;
     virtual OUString            GetUserName() override;
     virtual void                FillInfoList( SvStorageInfoList* ) const override;
-    virtual bool                CopyTo( BaseStorage* pDestStg ) const override;
+    virtual bool                CopyTo( BaseStorage& rDestStg ) const override;
     virtual bool                Commit() final override;
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
@@ -279,7 +279,7 @@ public:
     virtual SotClipboardFormatId         GetFormat() override;
     virtual OUString            GetUserName() override;
     virtual void                FillInfoList( SvStorageInfoList* ) const override;
-    virtual bool                CopyTo( BaseStorage* pDestStg ) const override;
+    virtual bool                CopyTo( BaseStorage& rDestStg ) const override;
     virtual bool                Commit() final override;
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,

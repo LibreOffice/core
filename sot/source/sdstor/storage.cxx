@@ -461,7 +461,7 @@ bool SotStorage::CopyTo( SotStorage * pDestStg )
 {
     if( m_pOwnStg && pDestStg->m_pOwnStg )
     {
-        m_pOwnStg->CopyTo( pDestStg->m_pOwnStg );
+        m_pOwnStg->CopyTo( *pDestStg->m_pOwnStg );
         SetError( m_pOwnStg->GetError() );
         pDestStg->m_aKey = m_aKey;
         pDestStg->m_nVersion = m_nVersion;

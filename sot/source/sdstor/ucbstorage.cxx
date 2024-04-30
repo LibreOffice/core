@@ -2398,7 +2398,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElemen
                                      pUCBCopy->pImp->m_aUserTypeName );
         else
             pOtherStorage->SetClassId( pStorage->GetClassId() );
-        pStorage->CopyTo( pOtherStorage.get() );
+        pStorage->CopyTo( *pOtherStorage );
         SetError( pStorage->GetError() );
         if( pOtherStorage->GetError() )
             pDest->SetError( pOtherStorage->GetError() );
@@ -2423,10 +2423,10 @@ UCBStorageElement_Impl* UCBStorage::FindElement_Impl( std::u16string_view rName 
     return nullptr;
 }
 
-bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
+bool UCBStorage::CopyTo( BaseStorage& rDestStg ) const
 {
-    DBG_ASSERT( pDestStg != static_cast<BaseStorage const *>(this), "Self-Copying is not possible!" );
-    if ( pDestStg == static_cast<BaseStorage const *>(this) )
+    DBG_ASSERT( &rDestStg != static_cast<BaseStorage const *>(this), "Self-Copying is not possible!" );
+    if ( &rDestStg == static_cast<BaseStorage const *>(this) )
         return false;
 
     // perhaps it's also a problem if one storage is a parent of the other ?!
@@ -2434,24 +2434,24 @@ bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 
     // For UCB storages, the class id and the format id may differ,
     // do passing the class id is not sufficient.
-    if( dynamic_cast<const UCBStorage *>(pDestStg) != nullptr )
-        pDestStg->SetClass( pImp->m_aClassId, pImp->m_nFormat,
-                            pImp->m_aUserTypeName );
+    if( dynamic_cast<const UCBStorage *>(&rDestStg) != nullptr )
+        rDestStg.SetClass( pImp->m_aClassId, pImp->m_nFormat,
+                           pImp->m_aUserTypeName );
     else
-        pDestStg->SetClassId( GetClassId() );
-    pDestStg->SetDirty();
+        rDestStg.SetClassId( GetClassId() );
+    rDestStg.SetDirty();
 
     bool bRet = true;
     for ( size_t i = 0; i < pImp->GetChildrenList().size() && bRet; ++i )
     {
         auto& pElement = pImp->GetChildrenList()[ i ];
         if ( !pElement->m_bIsRemoved )
-            bRet = CopyStorageElement_Impl( *pElement, pDestStg, pElement->m_aName );
+            bRet = CopyStorageElement_Impl( *pElement, &rDestStg, pElement->m_aName );
     }
 
     if( !bRet )
-        SetError( pDestStg->GetError() );
-    return Good() && pDestStg->Good();
+        SetError( rDestStg.GetError() );
+    return Good() && rDestStg.Good();
 }
 
 bool UCBStorage::CopyTo( const OUString& rElemName, BaseStorage* pDest, const OUString& rNew )

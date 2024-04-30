@@ -387,7 +387,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
             throw uno::RuntimeException();
 
         std::unique_ptr<BaseStorage> pNewStor(new Storage( *pStream, false ));
-        bool bSuccess = ( pStrg->CopyTo( pNewStor.get() ) && pNewStor->Commit() &&
+        bool bSuccess = ( pStrg->CopyTo( *pNewStor ) && pNewStor->Commit() &&
                           !pNewStor->GetError() && !pStrg->GetError() );
 
         pNewStor.reset();
