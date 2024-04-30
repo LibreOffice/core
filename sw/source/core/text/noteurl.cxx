@@ -19,7 +19,42 @@
 
 #include <noteurl.hxx>
 
+#include <vcl/imap.hxx>
+#include <vcl/imaprect.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/outdev.hxx>
+
 // Global variable
 SwNoteURL* pNoteURL = nullptr;
+
+void SwNoteURL::InsertURLNote(const OUString& rURL, const OUString& rTarget, const SwRect& rRect)
+{
+    const size_t nCount = m_List.size();
+    for (size_t i = 0; i < nCount; ++i)
+        if (rRect == m_List[i].GetRect())
+            return;
+
+    m_List.emplace_back(rURL, rTarget, rRect);
+}
+
+void SwNoteURL::FillImageMap(ImageMap* pMap, const Point& rPos, const MapMode& rMap)
+{
+    assert(pMap && "FillImageMap: No ImageMap, no cookies!");
+    const size_t nCount = m_List.size();
+    if (nCount)
+    {
+        MapMode aMap(MapUnit::Map100thMM);
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            const SwURLNote& rNote = m_List[i];
+            SwRect aSwRect(rNote.GetRect());
+            aSwRect -= rPos;
+            tools::Rectangle aRect(OutputDevice::LogicToLogic(aSwRect.SVRect(), rMap, aMap));
+            IMapRectangleObject aObj(aRect, rNote.GetURL(), OUString(), OUString(),
+                                     rNote.GetTarget(), OUString(), true, false);
+            pMap->InsertIMapObject(aObj);
+        }
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

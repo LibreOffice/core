@@ -169,6 +169,7 @@ class SwFont
     bool m_bFontChg       :1;
     bool m_bOrgChg        :1;  // nOrgHeight/Ascent are invalid
     bool m_bGreyWave      :1;  // for the extended TextInput: gray waveline
+    bool m_bURL = false;
 
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
@@ -259,6 +260,8 @@ public:
     inline void SetGreyWave( const bool bNew );
     bool IsGreyWave() const { return m_bGreyWave; }
     bool IsPaintBlank() const { return m_bPaintBlank; }
+    void SetURL(const bool bURL) { m_bURL = bURL; }
+    bool IsURL() const { return m_bURL; }
 
     // setting of the base class font for SwTextCharFormat
     void SetDiffFnt( const SfxItemSet* pSet,
