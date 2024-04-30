@@ -136,7 +136,7 @@ enum Result { Success, GeneralFailure, SpecificFailure };
 Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
                         OUString const & uri, OUString * normalized)
 {
-    OSL_ASSERT(broker.is() && normalized != nullptr);
+    assert(broker.is() && normalized != nullptr);
     css::uno::Reference< css::ucb::XContent > content;
     try {
         content = broker->queryContent(broker->createContentIdentifier(uri));

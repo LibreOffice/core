@@ -440,7 +440,7 @@ void Storage::Init( bool bCreate )
     bool bHdrLoaded = false;
     bIsRoot = true;
 
-    OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
+    assert(pIo && "The pointer may not be empty at this point!");
     if( pIo->Good() && pIo->GetStrm() )
     {
         sal_uInt64 nSize = pIo->GetStrm()->TellEnd();

@@ -724,7 +724,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 {
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( p, "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
+    assert(p && "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?");
 
     SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
     SfxStyleSheetBase* pOld = aIter.Find( p->GetName() );

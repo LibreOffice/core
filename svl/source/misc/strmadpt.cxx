@@ -591,6 +591,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
                 = static_cast< Page * >(std::malloc(
                                             sizeof (Page) + m_nPageSize
                                                 - 1));
+            assert(pNew && "Don't handle OOM conditions");
             pNew->m_pPrev = m_pWritePage;
             pNew->m_pNext = m_pWritePage->m_pNext;
 

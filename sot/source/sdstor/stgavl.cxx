@@ -59,7 +59,7 @@ sal_Int32 StgAvlNode::Locate
     sal_Int32 nRes = 0;
     StgAvlNode* pCur = this;
 
-    OSL_ENSURE( pPivot && pParent && pPrev, "The pointers may not be NULL!" );
+    assert(pPivot && pParent && pPrev && "The pointers may not be NULL!");
     *pParent = *pPrev = nullptr;
     *pPivot = this;
 
@@ -94,9 +94,10 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode const * pNew )
     StgAvlNode* pCur = this;
     short nDelta;
     // no traversing
-    OSL_ENSURE( pHeavy && pNew, "The pointers is not allowed to be NULL!" );
     if( pCur == pNew || !pNew )
         return m_nBalance;
+
+    assert(pHeavy && pNew && "The pointers is not allowed to be NULL!");
 
     sal_Int32 nRes = Compare( pNew );
     if( nRes > 0 )
