@@ -67,7 +67,7 @@ static void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, bool 
             if ( nLen > nRemoveLen )
             {
                 wchar_t* pProgramPath = static_cast<wchar_t*>( malloc( (nLen - nRemoveLen + 1) * sizeof(wchar_t) ) );
-                assert(pProgramPath); // Don't handle OOM conditions
+                assert(pProgramPath && "Don't handle OOM conditions");
                 wcsncpy( pProgramPath, pActiveXPath, nLen - nRemoveLen );
                 pProgramPath[ nLen - nRemoveLen ] = 0;
 
@@ -104,7 +104,7 @@ static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
         sz++;
         DWORD nbytes = sz * sizeof( wchar_t );
         wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
-        assert(buff); // Don't handle OOM conditions
+        assert(buff && "Don't handle OOM conditions");
         ZeroMemory( buff, nbytes );
         MsiGetPropertyW( hMSI, pPropName, buff, &sz );
         *ppValue = buff;
@@ -123,6 +123,7 @@ static bool GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
     {
         int nLen = wcslen( pProgPath );
         *ppActiveXPath = static_cast<wchar_t*>( malloc( (nLen + 23) * sizeof(wchar_t) ) );
+        assert(*ppActiveXPath && "Don't handle OOM conditions");
         wcsncpy( *ppActiveXPath, pProgPath, nLen );
         wcsncpy( (*ppActiveXPath) + nLen, L"program\\so_activex.dll", 22 );
         (*ppActiveXPath)[nLen+22] = 0;
