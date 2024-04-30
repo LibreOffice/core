@@ -24,6 +24,10 @@
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
 #include <frmatr.hxx>
+#include <IDocumentSettingAccess.hxx>
+#include <view.hxx>
+#include <fmtanchr.hxx>
+#include <fmtfsize.hxx>
 
 #include <vcl/scheduler.hxx>
 
@@ -417,6 +421,50 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableOverlapCell)
     auto pPage1 = pLayout->Lower()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage1);
     CPPUNIT_ASSERT(!pPage1->GetNext());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjsLayout)
+{
+    // Given a document with an RTL paragraph, Word-style compat flag is enabled:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    auto& rIDSA = pDoc->getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS, true);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+    SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aSet(rView.GetPool());
+    SvxFrameDirectionItem aDirection(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR);
+    aSet.Put(aDirection);
+    pWrtShell->SetAttrSet(aSet, SetAttrMode::DEFAULT, nullptr, /*bParagraphSetting=*/true);
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPageFrame = pLayout->Lower()->DynCastPageFrame();
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+
+    // When inserting a graphic on the middle of the right margin:
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
+    aFrameSet.Put(aAnchor);
+    // Default margin is 1440, this is 1440/2.
+    SwFormatFrameSize aSize(SwFrameSize::Fixed, 720, 720);
+    aFrameSet.Put(aSize);
+    // This is 1440/4.
+    SwFormatHoriOrient aOrient(pBodyFrame->getFrameArea().Right() + 360);
+    aFrameSet.Put(aOrient);
+    Graphic aGrf;
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
+
+    // Then make sure that the image is on the right margin:
+    SwTwips nBodyRight = pBodyFrame->getFrameArea().Right();
+    CPPUNIT_ASSERT(pPageFrame->GetSortedObjs());
+    const SwSortedObjs& rPageObjs = *pPageFrame->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    const SwAnchoredObject* pAnchored = rPageObjs[0];
+    Point aAnchoredCenter = pAnchored->GetDrawObj()->GetLastBoundRect().Center();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 11389
+    // - Actual  : 643
+    // i.e. the graphic was on the left margin, not on the right margin.
+    CPPUNIT_ASSERT_GREATER(nBodyRight, aAnchoredCenter.getX());
 }
 }
 

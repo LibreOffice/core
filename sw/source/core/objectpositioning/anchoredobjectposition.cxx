@@ -852,7 +852,10 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE )
     {
         // 'manual' horizontal position
-        const bool bR2L = rAnchorFrame.IsRightToLeft();
+        const IDocumentSettingAccess& rIDSA = mpFrameFormat->getIDocumentSettingAccess();
+        // If compat flag is active, then disable automatic mirroring for RTL.
+        bool bMirrorRtlDrawObjs = !rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
+        const bool bR2L = rAnchorFrame.IsRightToLeft() && bMirrorRtlDrawObjs;
         if( IsAnchoredToChar() && text::RelOrientation::CHAR == eRelOrient )
         {
             if( bR2L )
