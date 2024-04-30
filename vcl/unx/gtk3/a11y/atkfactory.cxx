@@ -28,68 +28,6 @@ using namespace ::com::sun::star;
 extern "C" {
 
 /*
- *  Instances of this dummy object class are returned whenever we have to
- *  create an AtkObject, but can't touch the OOo object anymore since it
- *  is already disposed.
- */
-
-static AtkStateSet *
-noop_wrapper_ref_state_set( AtkObject * )
-{
-    AtkStateSet *state_set = atk_state_set_new();
-    atk_state_set_add_state( state_set, ATK_STATE_DEFUNCT );
-    return state_set;
-}
-
-static void
-atk_noop_object_wrapper_class_init(gpointer klass_, gpointer)
-{
-    auto const klass = static_cast<AtkNoOpObjectClass *>(klass_);
-    AtkObjectClass *atk_class = ATK_OBJECT_CLASS( klass );
-    atk_class->ref_state_set = noop_wrapper_ref_state_set;
-}
-
-static GType
-atk_noop_object_wrapper_get_type()
-{
-    static GType type = 0;
-
-    if (!type)
-    {
-        static const GTypeInfo typeInfo =
-        {
-            sizeof (AtkNoOpObjectClass),
-            nullptr,
-            nullptr,
-            atk_noop_object_wrapper_class_init,
-            nullptr,
-            nullptr,
-            sizeof (AtkObjectWrapper),
-            0,
-            nullptr,
-            nullptr
-        } ;
-
-        type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, GTypeFlags(0)) ;
-    }
-    return type;
-}
-
-static AtkObject*
-atk_noop_object_wrapper_new()
-{
-  AtkObject *accessible;
-
-  accessible = static_cast<AtkObject *>(g_object_new (atk_noop_object_wrapper_get_type(), nullptr));
-  g_return_val_if_fail (accessible != nullptr, nullptr);
-
-  accessible->role = ATK_ROLE_INVALID;
-  accessible->layer = ATK_LAYER_INVALID;
-
-  return accessible;
-}
-
-/*
  * The wrapper factory
  */
 
@@ -103,24 +41,27 @@ static AtkObject*
 wrapper_factory_create_accessible( GObject *obj )
 {
     GtkWidget* pEventBox = gtk_widget_get_parent(GTK_WIDGET(obj));
-
-    // gail_container_real_remove_gtk tries to re-instantiate an accessible
-    // for a widget that is about to vanish ..
+    assert(pEventBox);
     if (!pEventBox)
-        return atk_noop_object_wrapper_new();
+        return nullptr;
 
     GtkWidget* pTopLevelGrid = gtk_widget_get_parent(pEventBox);
+    assert(pTopLevelGrid);
     if (!pTopLevelGrid)
-        return atk_noop_object_wrapper_new();
+        return nullptr;
 
     GtkWidget* pTopLevel = gtk_widget_get_parent(pTopLevelGrid);
+    assert(pTopLevel);
     if (!pTopLevel)
-        return atk_noop_object_wrapper_new();
+        return nullptr;
 
     GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
-    g_return_val_if_fail(pFrame != nullptr, atk_noop_object_wrapper_new());
+    assert(pFrame);
+    if (!pFrame)
+        return nullptr;
 
     vcl::Window* pFrameWindow = pFrame->GetWindow();
+    assert(pFrameWindow);
     if( pFrameWindow )
     {
         vcl::Window* pWindow = pFrameWindow;
@@ -146,7 +87,7 @@ wrapper_factory_create_accessible( GObject *obj )
         }
     }
 
-    return atk_noop_object_wrapper_new();
+    return nullptr;
 }
 
 AtkObject* ooo_fixed_get_accessible(GtkWidget *obj)
