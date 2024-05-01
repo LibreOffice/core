@@ -712,7 +712,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     // this is an OOo link, it has no persistence
                     OUString aURL = xOrigLinkage->getLinkURL();
                     if ( aURL.isEmpty() )
-                        throw uno::RuntimeException();
+                        throw uno::RuntimeException("URL of the linked object is empty");
 
                     // create new linked object from the URL the link is based on
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
@@ -760,7 +760,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     // copy all the properties from xOrigProps to xTargetProps
                     uno::Reference< beans::XPropertySetInfo > xOrigInfo = xOrigProps->getPropertySetInfo();
                     if ( !xOrigInfo.is() )
-                        throw uno::RuntimeException();
+                        throw uno::RuntimeException("Object has no properties");
 
                     const uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
                     for ( const auto & p : aPropertiesList )
