@@ -1080,17 +1080,17 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
     OUString aIMapName;
 
     // Only consider the URL attribute if no ImageMap was supplied
-    if (!pAltImgMap)
-        pURLItem = rItemSet.GetItemIfSet( RES_URL );
 
     // write ImageMap
     const ImageMap* pIMap = pAltImgMap;
-    if( !pIMap && pURLItem )
+    if( !pIMap  )
     {
-        pIMap = pURLItem->GetMap();
+        pURLItem = rItemSet.GetItemIfSet(RES_URL);
+        if (pURLItem)
+            pIMap = pURLItem->GetMap();
     }
 
-    if (pIMap)
+    if (pIMap && !rWrt.mbReqIF)
     {
         // make the name unique
         aIMapName = pIMap->GetName();
@@ -1098,10 +1098,10 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
         if (!aIMapName.isEmpty())
             aNameBase = aIMapName;
         else
+        {
             aNameBase = OOO_STRING_SVTOOLS_HTML_map;
-
-        if (aIMapName.isEmpty())
             aIMapName = aNameBase + OUString::number(rWrt.m_nImgMapCnt);
+        }
 
         bool bFound;
         do
@@ -1271,7 +1271,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     // URL -> <a>...<img ... >...</a>
     const SvxMacroItem *pMacItem = rItemSet.GetItemIfSet(RES_FRMMACRO);
 
-    if (pURLItem || pMacItem)
+    if (pURLItem || pMacItem || (rWrt.mbReqIF && pAltImgMap))
     {
         OUString aMapURL;
         OUString aName;
@@ -1282,6 +1282,21 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
             aMapURL = pURLItem->GetURL();
             aName = pURLItem->GetName();
             aTarget = pURLItem->GetTargetFrameName();
+        }
+        else if (rWrt.mbReqIF && pAltImgMap)
+        {
+            // Get first non-empty map element
+            for (size_t i = 0; i < pAltImgMap->GetIMapObjectCount(); ++i)
+            {
+                if (auto* pIMapObject = pAltImgMap->GetIMapObject(i))
+                {
+                    aMapURL = pIMapObject->GetURL();
+                    aName = pIMapObject->GetName();
+                    aTarget = pIMapObject->GetTarget();
+                    if (!aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty())
+                        break;
+                }
+            }
         }
 
         bool bEvents = pMacItem && !pMacItem->GetMacroTable().empty();
