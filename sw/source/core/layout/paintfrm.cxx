@@ -8054,7 +8054,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const sal_uInt32 /*nMaxim
             SfxItemState::SET != GetAttrSet().GetItemState( RES_URL );
         if( bNoteURL )
         {
-            OSL_ENSURE( !pNoteURL, "MakeGraphic: pNoteURL already used? " );
+            assert(!pNoteURL);
             pNoteURL = new SwNoteURL;
         }
         SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pFirst);
@@ -8135,7 +8135,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const sal_uInt32 /*nMaxim
 
         if( bNoteURL )
         {
-            OSL_ENSURE( pNoteURL, "MakeGraphic: Good Bye, NoteURL." );
+            assert(pNoteURL);
             pNoteURL->FillImageMap(pMap, pFly->getFrameArea().Pos(), aMap);
             delete pNoteURL;
             pNoteURL = nullptr;
