@@ -891,22 +891,23 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 // #i81764# This should not be applied for no length attributes!!! <--
                 if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && aNewSet.Count() )
                 {
-                    SfxItemIter aIter2( aNewSet );
-                    const SfxPoolItem* pItem = aIter2.GetCurItem();
-                    const SfxItemSet& rWholeParaAttrSet = rNode.GetSwAttrSet();
+                    const SfxItemSet& rWholeParaAttrSet(rNode.GetSwAttrSet());
+                    std::vector<sal_uInt16> aDeleteWhichIDs;
 
-                    do
+                    for (SfxItemIter aIter(aNewSet); !aIter.IsAtEnd(); aIter.NextItem())
                     {
-                        const SfxPoolItem* pTmpItem = nullptr;
-                        if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
-                             SfxPoolItem::areSame(pTmpItem, pItem) )
+                        const SfxPoolItem* pGet(nullptr);
+                        if (SfxItemState::SET == rWholeParaAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet) &&
+                             SfxPoolItem::areSame(pGet, aIter.GetCurItem()))
                         {
                             // Do not clear item if the attribute is set in a character format:
-                            if ( !pCurrentCharFormat || nullptr == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
-                                aIter2.ClearItem();
+                            if (!pCurrentCharFormat || nullptr == CharFormat::GetItem(*pCurrentCharFormat, aIter.GetCurWhich()))
+                                aDeleteWhichIDs.push_back(aIter.GetCurWhich());
                         }
                     }
-                    while ((pItem = aIter2.NextItem()));
+
+                    for (auto nDelWhich : aDeleteWhichIDs)
+                        aNewSet.ClearItem(nDelWhich);
                 }
 
                 // Remove old hint
@@ -2404,15 +2405,20 @@ struct RemovePresentAttrs
         }
 
         const SwTextAttr* const pAutoStyle(i_rAttrSpan.second);
-        SfxItemIter aIter(m_rAttrSet);
-        for (const SfxPoolItem* pItem(aIter.GetCurItem()); pItem; pItem = aIter.NextItem())
+
+        // ITEM: SfxItemIter and removing SfxPoolItems:
+        std::vector<sal_uInt16> aDeleteWhichIDs;
+
+        for (SfxItemIter aIter(m_rAttrSet); !aIter.IsAtEnd(); aIter.NextItem())
         {
-            const sal_uInt16 nWhich(pItem->Which());
-            if (CharFormat::IsItemIncluded(nWhich, pAutoStyle))
+            if (CharFormat::IsItemIncluded(aIter.GetCurWhich(), pAutoStyle))
             {
-                aIter.ClearItem();
+                aDeleteWhichIDs.push_back(aIter.GetCurWhich());
             }
         }
+
+        for (auto nDelWhich : aDeleteWhichIDs)
+            m_rAttrSet.ClearItem(nDelWhich);
     }
 
 private:

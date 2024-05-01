@@ -155,7 +155,10 @@ public:
     const SfxItemSet& GetItemSet() const { return maLocalSfxItemSet; }
     SfxItemSet& GetItemSet() { return maLocalSfxItemSet; }
 
-    const SfxPoolItem& GetItem(sal_uInt16 nWhichP) const { return maLocalSfxItemSet.GetByOffset(nWhichP, nWhichP - ATTR_PATTERN_START); }
+    const SfxPoolItem& GetItem(sal_uInt16 nWhichP) const
+    {
+        return maLocalSfxItemSet.Get(nWhichP, true); // GetByOffset used bSrchInParent==true
+    }
     template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const
         { return static_cast<const T&>(GetItem(sal_uInt16(nWhich))); }
     static const SfxPoolItem& GetItem(sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet);

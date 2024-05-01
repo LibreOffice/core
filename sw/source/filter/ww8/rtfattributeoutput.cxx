@@ -3757,6 +3757,7 @@ void RtfAttributeOutput::FormatFillStyle(const XFillStyleItem& rFillStyle)
 
 void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradient)
 {
+    assert(m_oFillStyle && "ITEM: FormatFillStyle *has* to be called before FormatFillGradient(!)");
     if (*m_oFillStyle != drawing::FillStyle_GRADIENT)
         return;
 

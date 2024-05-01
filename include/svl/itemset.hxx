@@ -23,6 +23,7 @@
 #include <cassert>
 #include <memory>
 #include <utility>
+#include <unordered_map>
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
@@ -42,7 +43,7 @@ SVL_DLLPUBLIC void listSfxItemSetUsage();
 
 // ItemSet/ItemPool helpers
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership);
-void implCleanupItemEntry(SfxPoolItem const* pSource);
+void implCleanupItemEntry(const SfxPoolItem* pSource);
 
 // coverity[ missing_move_assignment : SUPPRESS] - don't report about missing move assignment
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
@@ -75,25 +76,30 @@ public:
     sal_uInt16 Which() const { if(nullptr != m_pItem) return m_pItem->Which(); return 0; }
 };
 
+typedef std::unordered_map<sal_uInt16, const SfxPoolItem*> PoolItemMap;
+
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
     friend class SfxWhichIter;
+    friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
-    friend void implCleanupItemEntry(SfxPoolItem const*);
+    friend void implCleanupItemEntry(const SfxPoolItem*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
-    sal_uInt16        m_nCount;        ///< number of items
     sal_uInt16        m_nRegister;     ///< number of items with NeedsSurrogateSupport
 
-    // bitfield (better packaging if a bool needs to be added)
-    bool              m_bItemsFixed : 1; ///< true if this is a SfxItemSetFixed object, so does not *own* m_ppItems
+#ifdef DBG_UTIL
+    sal_uInt16          m_nRegisteredSfxItemIter;
+#endif
 
-    SfxPoolItem const** m_ppItems;     ///< pointer to array of items, we allocate and free this unless m_bItemsFixed==true
     WhichRangesContainer m_aWhichRanges;  ///< array of Which Ranges
+
+    // the set SfxPoolItems, indexed by WhichID
+    PoolItemMap         m_aPoolItemMap;
 
     // Notification-Callback mechanism for SwAttrSet in SW, functionPtr for callback
     std::function<void(const SfxPoolItem*, const SfxPoolItem*)> m_aCallback;
@@ -107,56 +113,26 @@ protected:
     void setCallback(const std::function<void(const SfxPoolItem*, const SfxPoolItem*)> &func) { m_aCallback = func; }
     void clearCallback() { m_aCallback = nullptr; }
 
-    // container library interface support
-    // only for internal use (for now), thus protected
-    using const_iterator = SfxPoolItem const**;
-
-    const_iterator begin() const noexcept { return m_ppItems; }
-    const_iterator end() const noexcept { return begin() + TotalCount(); }
-
-    bool empty() const noexcept { return 0 == TotalCount(); }
-    sal_Int32 size() const noexcept { return TotalCount(); }
-    SfxPoolItem const* operator[](sal_Int32 idx) const noexcept
-    {
-        assert(idx >= 0 && idx < TotalCount() && "index out of range");
-        return m_ppItems[idx];
-    }
-
-friend class SfxAllItemSet;
-
-private:
-    SVL_DLLPRIVATE void       RecreateRanges_Impl(const WhichRangesContainer& pNewRanges);
-
-public:
-    SfxPoolItem const**         GetItems_Impl() const { return m_ppItems; }
-
-private:
-    const SfxItemSet&           operator=(const SfxItemSet &) = delete;
-
-protected:
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, bool bPassingOwnership );
     const SfxPoolItem* PutImplAsTargetWhich( const SfxPoolItem&, sal_uInt16 nTargetWhich, bool bPassingOwnership );
 
-    /** special constructor for SfxAllItemSet */
-    enum class SfxAllItemSetFlag { Flag };
-    SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
-    /** special constructor for SfxItemSetFixed */
-    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems);
-    /** special constructor for SfxItemSetFixed copy constructor */
-    SfxItemSet( const SfxItemSet& rOther, SfxPoolItem const ** ppMyItems );
+private:
+    SVL_DLLPRIVATE void RecreateRanges_Impl(const WhichRangesContainer& pNewRanges);
+    const SfxItemSet& operator=(const SfxItemSet &) = delete;
 
 public:
     SfxItemSet( const SfxItemSet& );
     SfxItemSet( SfxItemSet&& ) noexcept;
     SfxItemSet( SfxItemPool& );
     SfxItemSet( SfxItemPool&, WhichRangesContainer ranges );
-
     SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhichStart, sal_uInt16 nWhichEnd )
         : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
 
     template<sal_uInt16... WIDs>
-    SfxItemSet(SfxItemPool& pool, svl::Items_t<WIDs...> wids)
-        : SfxItemSet(pool, WhichRangesContainer(wids)) {}
+    static SfxItemSet makeFixedSfxItemSet(SfxItemPool& pool)
+    {
+        return SfxItemSet(pool, WhichRangesContainer(svl::Items_t<WIDs...>{}));
+    }
 
     virtual ~SfxItemSet();
 
@@ -166,10 +142,8 @@ public:
     SfxItemSet CloneAsValue(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
     // Get number of items
-    sal_uInt16                  Count() const { return m_nCount; }
+    sal_uInt16                  Count() const { return m_aPoolItemMap.size(); }
     sal_uInt16                  TotalCount() const { return m_aWhichRanges.TotalCount(); }
-
-    bool IsItemsFixed() const { return m_bItemsFixed; }
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     template<class T>
@@ -200,7 +174,6 @@ public:
         return GetItem<T>(sal_uInt16(nWhich), bSearchInParent);
     }
 
-
     /// Templatized static version of GetItem() to directly return the correct type if the SfxItemSet is available.
     template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent)
     {
@@ -215,12 +188,6 @@ public:
     {
         return GetItem<T>(pItemSet, static_cast<sal_uInt16>(nWhich), bSearchInParent);
     }
-
-    sal_uInt16                  GetWhichByOffset(sal_uInt16 nOffset) const;
-
-    // Optimised variant for those situations where we know exactly what our which ranges are,
-    // and we can determine the offset at compile time.
-    const SfxPoolItem&          GetByOffset(sal_uInt16 nWhich, sal_uInt16 nOffset) const;
 
     SfxItemState GetItemState(sal_uInt16 nWhich, bool bSrchInParent = true, const SfxPoolItem **ppItem = nullptr) const
     {
@@ -256,10 +223,12 @@ public:
         { DisableOrInvalidateItem_ForWhichID(false, nWhich); }
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
     void                        ClearInvalidItems();
-    inline void                 SetParent( const SfxItemSet* pNew );
+    inline void                 SetParent( const SfxItemSet* pNew )
+    {
+        m_pParent = pNew;
+    }
 
     // add, delete items, work on items
-public:
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
         { return PutImpl(rItem, /*bPassingOwnership*/false); }
     const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem )
@@ -306,35 +275,26 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
-    // split version(s) of ClearSingleItemImpl for input types WhichID and Offset
+    // split version(s) of ClearSingleItemImpl for input type WhichID
     sal_uInt16 ClearSingleItem_ForWhichID( sal_uInt16 nWhich );
-    sal_uInt16 ClearSingleItem_ForOffset( sal_uInt16 nOffset );
+    void ClearSingleItem_PrepareRemove(const SfxPoolItem* pItem);
 
     // cleanup all Items, but do not reset/change m_ppItems array. That is
     // responsibility of the caller & allows specific resets
     sal_uInt16 ClearAllItemsImpl();
 
     // Merge two given Item(entries)
-    void MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bIgnoreDefaults);
+    void MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, bool bIgnoreDefaults);
 
-    // split version(s) of InvalidateItem/DisableItem for input types WhichID and Offset
+    // InvalidateItem/DisableItem for input types WhichID and Offset
     void DisableOrInvalidateItem_ForWhichID(bool bDsiable, sal_uInt16 nWhich);
-    void DisableOrInvalidateItem_ForOffset(bool bDisable, sal_uInt16 nOffset);
 
-    // split version(s) of GetItemStateImpl for input types WhichID and Offset
+    // GetItemStateImpl for input type WhichID
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
-    SfxItemState GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPoolItem **ppItem) const;
 };
 
-inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
-{
-    m_pParent = pNew;
-}
-
-class SVL_DLLPUBLIC SfxAllItemSet final : public SfxItemSet
-
 //  Handles all Ranges. Ranges are automatically modified by putting items.
-
+class SVL_DLLPUBLIC SfxAllItemSet final : public SfxItemSet
 {
 public:
                                 SfxAllItemSet( SfxItemPool &rPool );
@@ -347,41 +307,17 @@ private:
 };
 
 
-namespace svl::detail
-{
-/**
- * Determines the number of sal_uInt16s in a container of pairs of
- * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
- */
-template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
-static constexpr sal_uInt16 CountRanges1()
-{
-    sal_uInt16 nCapacity = rangeSize(WID1, WID2);
-    if constexpr (sizeof...(Rest) > 0)
-        nCapacity += CountRanges1<Rest...>();
-    return nCapacity;
-}}
-
-// Split out the array because we need it to be initialised before we call
-// the SfxItemSet constructor
+// Was: Allocate the items array inside the object, to reduce allocation cost.
+// NOTE: No longer needed with unordered_set, but there are 560+ places to
+// replace/adapt, so keep it for now.
+// To adapt, there is the static makeFixedSfxItemSet member in SfxItemSet. Did
+// that in one place to check functionality (easy hack...?)
 template<sal_uInt16... WIDs>
-struct SfxItemSetFixedStorage
-{
-    static constexpr sal_uInt16 NITEMS = svl::detail::CountRanges1<WIDs...>();
-    const SfxPoolItem* m_aItems[NITEMS] {};
-};
-
-// Allocate the items array inside the object, to reduce allocation cost.
-//
-template<sal_uInt16... WIDs>
-class SfxItemSetFixed : public SfxItemSetFixedStorage<WIDs...>, public SfxItemSet
+class SfxItemSetFixed : public SfxItemSet
 {
 public:
     SfxItemSetFixed( SfxItemPool& rPool)
-        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}),
-                     SfxItemSetFixedStorage<WIDs...>::m_aItems) {}
-    SfxItemSetFixed( const SfxItemSetFixed<WIDs...>& rOther )
-        : SfxItemSet(rOther, SfxItemSetFixedStorage<WIDs...>::m_aItems) {}
+        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{})){}//,
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

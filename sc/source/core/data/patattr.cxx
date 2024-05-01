@@ -48,6 +48,7 @@
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
@@ -444,8 +445,6 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
     return *pStr1 == *pStr2;
 }
 
-constexpr size_t compareSize = ATTR_PATTERN_END - ATTR_PATTERN_START + 1;
-
 bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
 {
     // check if same incarnation
@@ -456,46 +455,14 @@ bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
     if (!StrCmp(GetStyleName(), rCmp.GetStyleName()))
         return false;
 
-    // here we need to compare the SfxItemSet. We *know* that these are
-    // all simple (one range, same range)
-    const SfxItemSet& rSet1(maLocalSfxItemSet);
-    const SfxItemSet& rSet2(rCmp.maLocalSfxItemSet);
-
-    // the former method 'FastEqualPatternSets' mentioned:
+    // use SfxItemSet::operator==, does the same as locally done here before,
+    // including pool compare (default). It also compares parent, not used here.
+    // There was the old comment from
     //   "Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
     //   a different range (and I don't understand enough why), so better be safe and compare fully."
-    // in that case the hash code above would already fail, too
-    assert(rSet1.TotalCount() == compareSize && rSet2.TotalCount() == compareSize);
-
-    // check pools, do not accept different pools
-    if (rSet1.GetPool() != rSet2.GetPool())
-        return false;
-
-    // check count of set items, has to be equal
-    if (rSet1.Count() != rSet2.Count())
-        return false;
-
-    // both have no items, done
-    if (0 == rSet1.Count())
-        return true;
-
-    // compare each item separately
-    const SfxPoolItem **ppItem1(rSet1.GetItems_Impl());
-    const SfxPoolItem **ppItem2(rSet2.GetItems_Impl());
-
-    // are all pointers the same?
-    if (0 == memcmp(ppItem1, ppItem2, compareSize * sizeof(ppItem1[0])))
-        return true;
-
-    for (sal_uInt16 nPos(0); nPos < compareSize; nPos++)
-    {
-        if (!SfxPoolItem::areSame(*ppItem1, *ppItem2))
-            return false;
-        ++ppItem1;
-        ++ppItem2;
-    }
-
-    return true;
+    // that hints to different WhichRanges, but WhichRanges are not compared in
+    // the std-operator (but the Items - if needed - as was here done locally)
+    return maLocalSfxItemSet == rCmp.maLocalSfxItemSet;
 }
 
 bool ScPatternAttr::areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2)

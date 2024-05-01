@@ -459,6 +459,7 @@ public:
         , m_nStyleCountPos(0)
         , m_nFieldResults(0)
         , mbOnTOXEnding(false)
+        , mbFillStyleIsSet(false)
     {
     }
 
@@ -504,6 +505,7 @@ private:
     sal_uInt16 m_nFieldResults;
 
     bool mbOnTOXEnding;
+    bool mbFillStyleIsSet;
 
     /// Bookmarks of the current paragraph
     std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphStart;

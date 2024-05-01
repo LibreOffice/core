@@ -366,6 +366,13 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
     {
         const bool bAlreadyOutputBrushItem = AttrOutput().MaybeOutputBrushItem(rSet);
 
+        // ITEM: if we have no XATTR_FILLSTYLE also exclude XATTR_FILLGRADIENT to
+        // avoid errors (and to not assert there)
+        if (!aItems.contains(XATTR_FILLSTYLE))
+            aItems.erase(XATTR_FILLGRADIENT);
+
+        // ITEM: here XATTR_FILLSTYLE will be executed before XATTR_FILLGRADIENT due to
+        // ww8::PoolItems *is* sorted ascending due to using ItemSort::operator()
         for ( const auto& rItem : aItems )
         {
             const SfxPoolItem* pItem = rItem.second;
@@ -4650,6 +4657,8 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
 void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
+    mbFillStyleIsSet = true;
+
     // WW cannot have background in a section
     if ( m_rWW8Export.m_bOutPageDescs )
         return;
@@ -4672,6 +4681,7 @@ void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 
 void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
 {
+    assert(mbFillStyleIsSet && "ITEM: FormatFillStyle *has* to be called before FormatFillGradient(!)");
 }
 
 WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
@@ -5892,11 +5902,49 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
     if ( !pSet->GetParent() )
     {
         assert(rSet.Count() && "Was already handled or?");
-        SfxItemIter aIter( *pSet );
-        pItem = aIter.GetCurItem();
-        do {
-            OutputItem( *pItem );
-        } while ((pItem = aIter.NextItem()));
+        // ITEM: Here SfxItemIter is used, but the called functionality
+        // is dependent on the 'order' in which the Items are processed. This has
+        // mainly to do with ::OutputItem and it's use of FormatFillGradient/FormatFillStyle
+        // overloads -> XFillStyleItem *needs* to be known before XFillGradientItem
+        // since it is locally 'remembered' in the processor (see m_oFillStyle).
+        // This implicitely relies on a scpecific order of the Items: even with the situation
+        // that WhichIDs are sorted and thus was the output of SfxItemIter before this
+        // change, this is a risky assumtion - the WhichIDs and thus the order of the
+        // Items are not neccesarily fix (and were not designed to have a specific
+        // 'order' to be made use of, it's coincidence).
+        // Thus in the long run OutputItem itself might have to becorrected to work without
+        // that assumtion: hand a access method to it (callback/ItemSet) so that it might
+        // ask e.g. for current FillStyle when FillGradient is processed.
+        // I will now loop and remember XATTR_FILLSTYLE and XATTR_FILLGRADIENT when set,
+        // executing when *both* are set and in the needed order.
+        // Added asserts to ::FormatFillGradient impls when before not ::FormatFillStyle
+        // was called
+        const SfxPoolItem* pFillStyle(nullptr);
+        const SfxPoolItem* pGradient(nullptr);
+
+        for (SfxItemIter aIter(*pSet); !aIter.IsAtEnd(); aIter.NextItem())
+        {
+            pItem = aIter.GetCurItem();
+
+            if (nullptr != pItem)
+            {
+                const sal_uInt16 nWhich(pItem->Which());
+
+                if (XATTR_FILLSTYLE == nWhich)
+                    pFillStyle = pItem;
+                else if (XATTR_FILLGRADIENT == nWhich)
+                    pGradient = pItem;
+                else
+                    OutputItem(*pItem);
+            }
+        }
+
+        if (nullptr != pFillStyle && nullptr != pGradient)
+        {
+            // ITEM: execute when both are set and do so in needed order
+            OutputItem(*pFillStyle);
+            OutputItem(*pGradient);
+        }
     }
     else
     {

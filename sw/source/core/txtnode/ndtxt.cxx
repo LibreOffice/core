@@ -2588,7 +2588,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                 {
                     // check current item
                     const sal_uInt16 nWhich = IsInvalidItem( pItem )
-                        ? pDest->GetpSwAttrSet()->GetWhichByOffset( aIter.GetCurPos() )
+                        ? aIter.GetCurWhich()
                         : pItem->Which();
                     if( RES_FRMATR_STYLE_NAME != nWhich &&
                         RES_FRMATR_CONDITIONAL_STYLE_NAME != nWhich &&

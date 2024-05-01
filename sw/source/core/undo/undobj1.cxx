@@ -572,8 +572,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if( IsInvalidItem( pItem ))
-            m_pFrameFormat->ResetFormatAttr( m_oItemSet->GetWhichByOffset(
-                                    aIter.GetCurPos() ));
+            m_pFrameFormat->ResetFormatAttr( aIter.GetCurWhich() );
         else
             m_pFrameFormat->SetFormatAttr( *pItem );
     }

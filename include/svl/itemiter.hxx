@@ -27,32 +27,51 @@ class SfxPoolItem;
 class SVL_DLLPUBLIC SfxItemIter
 {
     const SfxItemSet& m_rSet;
-    sal_uInt16 m_nStart;
-    sal_uInt16 m_nEnd;
-    sal_uInt16 m_nCurrent;
+    PoolItemMap::const_iterator maCurrent;
 
 public:
-    SfxItemIter(const SfxItemSet& rSet);
+    SfxItemIter(const SfxItemSet& rSet)
+        : m_rSet(rSet)
+        , maCurrent(rSet.m_aPoolItemMap.begin())
+    {
+#ifdef DBG_UTIL
+        const_cast<SfxItemSet&>(m_rSet).m_nRegisteredSfxItemIter++;
+#endif
+    }
 
-    /// get item, or null if no items
+#ifdef DBG_UTIL
+    ~SfxItemIter() { const_cast<SfxItemSet&>(m_rSet).m_nRegisteredSfxItemIter--; }
+#endif
+
     const SfxPoolItem* GetCurItem() const
     {
-        return m_rSet.m_nCount ? *(m_rSet.m_ppItems + m_nCurrent) : nullptr;
+        if (IsAtEnd())
+            return nullptr;
+
+        return maCurrent->second;
     }
-    const SfxPoolItem* NextItem() { return (m_nCurrent < m_nEnd) ? ImplNextItem() : nullptr; }
 
-    bool IsAtEnd() const { return m_nCurrent == m_nEnd; }
+    sal_uInt16 GetCurWhich() const
+    {
+        if (IsAtEnd())
+            return 0;
 
-    sal_uInt16 GetCurPos() const { return m_nCurrent; }
-    sal_uInt16 GetFirstPos() const { return m_nStart; }
-    sal_uInt16 GetLastPos() const { return m_nEnd; }
+        return maCurrent->first;
+    }
+
+    const SfxPoolItem* NextItem()
+    {
+        if (IsAtEnd())
+            return nullptr;
+
+        maCurrent++;
+        return GetCurItem();
+    }
+
+    bool IsAtEnd() const { return maCurrent == m_rSet.m_aPoolItemMap.end(); }
 
     SfxItemState GetItemState(bool bSrchInParent = true,
                               const SfxPoolItem** ppItem = nullptr) const;
-    void ClearItem();
-
-private:
-    const SfxPoolItem* ImplNextItem();
 };
 
 #endif

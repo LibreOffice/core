@@ -381,25 +381,17 @@ namespace sw
         {
             if( bExportParentItemSet )
             {
-                sal_uInt16 nTotal = rSet.TotalCount();
-                for( sal_uInt16 nItem =0; nItem < nTotal; ++nItem )
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
                 {
-                    const SfxPoolItem* pItem = nullptr;
-                    if( SfxItemState::SET == rSet.GetItemState( rSet.GetWhichByOffset( nItem ), true, &pItem ) )
-                    {
-                        rItems[pItem->Which()] = pItem;
-                    }
+                    const SfxPoolItem* pItem(nullptr);
+                    if(SfxItemState::SET == aIter.GetItemState(true, &pItem))
+                        rItems[aIter.GetCurWhich()] = pItem;
                 }
             }
             else if( rSet.Count())
             {
-                SfxItemIter aIter(rSet);
-                if (const SfxPoolItem *pItem = aIter.GetCurItem())
-                {
-                    do
-                        rItems[pItem->Which()] = pItem;
-                    while ((pItem = aIter.NextItem()));
-                }
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+                    rItems[aIter.GetCurWhich()] = aIter.GetCurItem();
             }
 //            DeduplicateItems(rItems);
         }

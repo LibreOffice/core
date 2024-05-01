@@ -454,12 +454,13 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
              ?  (rDoc.*pSetFlyFrameAnchor)( rFlyFormat, rSet, false )
              :  DONTMAKEFRMS;
 
-    const SfxPoolItem* pItem;
-    SfxItemIter aIter( rSet );
-    SfxItemSet aTmpSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
-    const SfxPoolItem* pItemIter = aIter.GetCurItem();
-    do {
-        switch(pItemIter->Which())
+    // ITEM: SfxItemIter and removing SfxPoolItems:
+    std::vector<sal_uInt16> aDeleteWhichIDs;
+    SfxItemSet aTmpSet(rDoc.GetAttrPool(), aFrameFormatSetRange);
+
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd() && 0 != aIter.GetCurWhich(); aIter.NextItem())
+    {
+        switch(aIter.GetCurWhich())
         {
         case RES_FILL_ORDER:
         case RES_BREAK:
@@ -469,23 +470,26 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
             OSL_FAIL( "Unknown Fly attribute." );
             [[fallthrough]];
         case RES_CHAIN:
-            rSet.ClearItem(pItemIter->Which());
+            aDeleteWhichIDs.push_back(aIter.GetCurWhich());
             break;
         case RES_ANCHOR:
             if( DONTMAKEFRMS != nMakeFrames )
                 break;
             [[fallthrough]];
         default:
-            if( !IsInvalidItem(pItemIter) && ( SfxItemState::SET !=
-                rFlyFormat.GetAttrSet().GetItemState(pItemIter->Which(), true, &pItem ) ||
-                *pItem != *pItemIter))
-                aTmpSet.Put(*pItemIter);
-            break;
+            {
+                const SfxPoolItem* pGet(nullptr);
+                if (!IsInvalidItem(aIter.GetCurItem()) && (SfxItemState::SET !=
+                    rFlyFormat.GetAttrSet().GetItemState(aIter.GetCurWhich(), true, &pGet ) ||
+                    *pGet != *aIter.GetCurItem()))
+                    aTmpSet.Put(*aIter.GetCurItem());
+                break;
+            }
         }
+    }
 
-        pItemIter = aIter.NextItem();
-
-    } while (pItemIter && (0 != pItemIter->Which()));
+    for (auto nDelWhich : aDeleteWhichIDs)
+        rSet.ClearItem(nDelWhich);
 
     if( aTmpSet.Count() )
         rFlyFormat.SetFormatAttr( aTmpSet );

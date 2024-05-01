@@ -9656,7 +9656,12 @@ void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
     if (!m_bIgnoreNextFill)
         m_oFillStyle = rFillStyle.GetValue();
     else
+    {
         m_bIgnoreNextFill = false;
+        // ITEM: Still need to signal that ::FormatFillStyle was called so that
+        // ::FormatFillGradient does not assert but do nothing
+        m_oFillStyle = drawing::FillStyle_NONE;
+    }
 
     // Don't round-trip grabbag OriginalBackground if the background has been cleared.
     if ( m_pBackgroundAttrList.is() && m_sOriginalBackgroundColor != "auto" && rFillStyle.GetValue() == drawing::FillStyle_NONE )
@@ -9665,6 +9670,7 @@ void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 
 void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
+    assert(m_oFillStyle && "ITEM: FormatFillStyle *has* to be called before FormatFillGradient(!)");
     if (m_oFillStyle && *m_oFillStyle == drawing::FillStyle_GRADIENT && !m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         const basegfx::BGradient& rGradient = rFillGradient.GetGradientValue();

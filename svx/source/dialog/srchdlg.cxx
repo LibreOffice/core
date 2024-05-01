@@ -198,17 +198,13 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         return;
 
     SfxItemPool* pPool = rSet.GetPool();
-    SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
 
-    do
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
     {
-        const sal_uInt16 nWhich(rSet.GetWhichByOffset(aIter.GetCurPos()));
+        const sal_uInt16 nWhich(aIter.GetCurWhich());
         const sal_uInt16 nSlot(pPool->GetSlotId(nWhich));
-
-        emplace_back(nSlot, SfxPoolItemHolder(*pPool, pItem));
-        pItem = aIter.NextItem();
-    } while (pItem);
+        emplace_back(nSlot, SfxPoolItemHolder(*pPool, aIter.GetCurItem()));
+    }
 }
 
 

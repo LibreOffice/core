@@ -32,6 +32,7 @@
 #include <svl/undo.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -333,13 +334,12 @@ void SwSrcView::Execute(SfxRequest& rReq)
         break;
         case FID_SEARCH_NOW:
         {
-            const SfxItemSet* pTmpArgs = rReq.GetArgs();
-
-            const sal_uInt16 nWhich = pTmpArgs->GetWhichByOffset( 0 );
-            OSL_ENSURE( nWhich, "Which for SearchItem ?" );
-            const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
-            SetSearchItem( static_cast<const SvxSearchItem&>(rItem));
-            StartSearchAndReplace( static_cast<const SvxSearchItem&>(rItem), rReq.IsAPI() );
+            const SfxItemSet* pTmpArgs(rReq.GetArgs());
+            SfxItemIter aIter(*pTmpArgs);
+            OSL_ENSURE( aIter.GetCurItem(), "no SearchItem ?" );
+            const SvxSearchItem& rItem(static_cast<const SvxSearchItem&>(*aIter.GetCurItem()));
+            SetSearchItem(rItem);
+            StartSearchAndReplace(rItem, rReq.IsAPI() );
             if(m_aEditWin->IsModified())
             {
                 SwDocShell* pDocShell = GetDocShell();

@@ -220,9 +220,27 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
     m_aComapeSet.Put( rSet, false );
 
     // determine area of Fnd/Stack array (Min/Max)
-    SfxItemIter aIter( m_aComapeSet );
-    m_nArrStart = m_aComapeSet.GetWhichByOffset( aIter.GetFirstPos() );
-    m_nArrLen = m_aComapeSet.GetWhichByOffset( aIter.GetLastPos() ) - m_nArrStart+1;
+    sal_uInt16 nMinUsedWhichID(0);
+    sal_uInt16 nMaxUsedWhichID(0);
+
+    if (0 != m_aComapeSet.Count())
+    {
+        nMinUsedWhichID = 5000; // SFX_WHICH_MAX+1;
+        for (SfxItemIter aIter(m_aComapeSet); !aIter.IsAtEnd(); aIter.NextItem())
+        {
+            const sal_uInt16 nCurrentWhich(aIter.GetCurWhich());
+            if (SfxItemPool::IsSlot(nCurrentWhich))
+                continue;
+            nMinUsedWhichID = std::min(nMinUsedWhichID, nCurrentWhich);
+            nMaxUsedWhichID = std::max(nMaxUsedWhichID, nCurrentWhich);
+        }
+
+        if (nMinUsedWhichID > nMaxUsedWhichID)
+            nMinUsedWhichID = nMaxUsedWhichID = 0;
+    }
+
+    m_nArrStart = nMinUsedWhichID;//m_aComapeSet.GetWhichByOffset( aIter.GetFirstPos() );
+    m_nArrLen = nMaxUsedWhichID - nMinUsedWhichID + 1;//m_aComapeSet.GetWhichByOffset( aIter.GetLastPos() ) - m_nArrStart+1;
 
     char* pFndChar  = new char[ m_nArrLen * sizeof(SwSrchChrAttr) ];
     char* pStackChar = new char[ m_nArrLen * sizeof(SwSrchChrAttr) ];
@@ -273,7 +291,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
     {
         if( IsInvalidItem( pItem ) )
         {
-            nWhich = m_aComapeSet.GetWhichByOffset( aIter.GetCurPos() );
+            nWhich = aIter.GetCurWhich();
             if( RES_TXTATR_END <= nWhich )
                 break; // end of text attributes
 
@@ -887,7 +905,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
     {
         if( IsInvalidItem( pItem ))
         {
-            nWhich = rCmpSet.GetWhichByOffset( aIter.GetCurPos() );
+            nWhich = aIter.GetCurWhich();
             if( SfxItemState::SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
                 || CmpAttr( *pNdItem, rNdSet.GetPool()->GetUserOrPoolDefaultItem( nWhich ) ))
                 return false;

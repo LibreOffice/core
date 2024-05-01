@@ -86,7 +86,7 @@ class SVL_DLLPUBLIC WhichRangesContainer
     mutable sal_uInt16 m_TotalCount = 0;
 
     // variables for buffering the last used WhichPair to allow fast answers
-    // in getOffsetFromWhich
+    // in doesContainWhich
     mutable sal_uInt16 m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
     mutable sal_uInt16 m_aLastWhichPairFirst = 0;
     mutable sal_uInt16 m_aLastWhichPairSecond = 0;
@@ -167,12 +167,10 @@ public:
 
     void reset();
 
-    // calculate and return the offset inside the fixed SfxPoolItem
-    // array of SfxItemPool
-    sal_uInt16 getOffsetFromWhich(sal_uInt16 nWhich) const;
-
-    // extract the WhichID for given offset
-    sal_uInt16 getWhichFromOffset(sal_uInt16 nOffset) const;
+    // calculate and return if nWhich is member of one of
+    // the local WhichRanges and such contained in the
+    // defined range
+    bool doesContainWhich(sal_uInt16 nWhich) const;
 
     // Adds a range to which ranges, keeping the ranges in valid state (sorted, non-overlapping)
     SAL_WARN_UNUSED_RESULT WhichRangesContainer MergeRange(sal_uInt16 nFrom, sal_uInt16 nTo) const;

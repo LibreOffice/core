@@ -816,73 +816,103 @@ void SwHistoryTextFieldmark::ResetInDoc(SwDoc& rDoc)
     rMarksAccess.deleteFieldmarkAt(pos);
 }
 
-SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
-                        SwNodeOffset nNodePos, const o3tl::sorted_vector<sal_uInt16> &rSetArr )
-    : SwHistoryHint( HSTRY_SETATTRSET )
-    , m_OldSet( rSet )
-    , m_ResetArray( 0, 4 )
-    , m_nNodeIndex( nNodePos )
+SwHistorySetAttrSet::SwHistorySetAttrSet(
+    const SfxItemSet& rSet,
+    SwNodeOffset nNodePos,
+    const o3tl::sorted_vector<sal_uInt16> &rSetArr)
+: SwHistoryHint(HSTRY_SETATTRSET)
+, m_OldSet(*rSet.GetPool(), rSet.GetRanges())
+, m_ResetArray(0, 4)
+, m_nNodeIndex(nNodePos)
 {
-    SfxItemIter aIter( m_OldSet ), aOrigIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem(),
-                     * pOrigItem = aOrigIter.GetCurItem();
-    while (pItem && pOrigItem)
+    // ITEM: Analyzed this one, it originally iterated using two SfxItemIter at the
+    // same time to iterate rSet and m_OldSet. m_OldSet was copied from rSet before
+    // in the var init above. It then *removed* Items again or manipulated them.
+    // The problem with that is that this implies that the two iterators will advance
+    // on the same WhichIDs step by step. Even after copying and with the former
+    // organization of the Items in ItemSet as fixed array of pointers that is a
+    // 'wild' assumtion, besides that deleting Items while a iterator is used is
+    // bad in general, too.
+    // I re-designed this to iterate over the source ItemSet (rSet) and add Items
+    // as needed to the target ItemSet m_OldSet. This is tricky since some NonShareable
+    // 'special' Items get special treatment.
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
     {
-        if( !rSetArr.count( pOrigItem->Which() ))
+        // check if Item is intended to be contained
+        if (rSetArr.count(aIter.GetCurWhich()))
         {
-            m_ResetArray.push_back( pOrigItem->Which() );
-            m_OldSet.ClearItem( pOrigItem->Which() );
+            // do include item, but take care of some 'special' cases
+            switch (aIter.GetCurWhich())
+            {
+                case RES_PAGEDESC:
+                {
+                    // SwFormatPageDesc - NonShareable Item
+                    SwFormatPageDesc* pNew(new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(aIter.GetCurItem())));
+                    pNew->ChgDefinedIn(nullptr);
+                    m_OldSet.Put(std::unique_ptr<SwFormatPageDesc>(pNew));
+                    break;
+                }
+                case RES_PARATR_DROP:
+                {
+                    // SwFormatDrop - NonShareable Item
+                    SwFormatDrop* pNew(new SwFormatDrop(*static_cast<const SwFormatDrop*>(aIter.GetCurItem())));
+                    pNew->ChgDefinedIn(nullptr);
+                    m_OldSet.Put(std::unique_ptr<SwFormatDrop>(pNew));
+                    break;
+                }
+                case RES_BOXATR_FORMULA:
+                {
+                    // When a formula is set, never save the value. It
+                    // possibly must be recalculated!
+                    // Save formulas always in plain text
+                    // RES_BOXATR_FORMULA: SwTableBoxFormula - NonShareable Item
+                    // CAUTION: also is connected to RES_BOXATR_VALUE which was hard deleted before
+                    SwTableBoxFormula* pNew(static_cast<const SwTableBoxFormula*>(aIter.GetCurItem())->Clone());
+
+                    if (pNew->IsIntrnlName())
+                    {
+                        const SwTableBoxFormula& rOld(rSet.Get(RES_BOXATR_FORMULA));
+                        const SwNode* pNd(rOld.GetNodeOfFormula());
+
+                        if (nullptr != pNd)
+                        {
+                            const SwTableNode* pTableNode(pNd->FindTableNode());
+
+                            if(nullptr != pTableNode)
+                            {
+                                auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
+                                pCpyTable->SwitchFormulasToExternalRepresentation();
+                                pNew->ChgDefinedIn(rOld.GetDefinedIn());
+                                pNew->PtrToBoxNm(pCpyTable);
+                            }
+                        }
+                    }
+
+                    pNew->ChgDefinedIn(nullptr);
+                    m_OldSet.Put(std::unique_ptr<SwTableBoxFormula>(pNew));
+                    break;
+                }
+                case RES_BOXATR_VALUE:
+                {
+                    // If RES_BOXATR_FORMULA is set, do *not* set RES_BOXATR_VALUE - SwTableBoxValue - that IS a Shareable Item (!)
+                    // If RES_BOXATR_FORMULA is not set, also no reason to set RES_BOXATR_VALUE
+                    // -> so just ignore it here (?)
+                    break;
+                }
+                default:
+                {
+                    // all other Items: add to m_OldSet
+                    m_OldSet.Put(*aIter.GetCurItem());
+                    break;
+                }
+            }
         }
         else
         {
-            switch ( pItem->Which() )
-            {
-                case RES_PAGEDESC:
-                    static_cast<SwFormatPageDesc*>(
-                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn( nullptr );
-                    break;
-
-                case RES_PARATR_DROP:
-                    static_cast<SwFormatDrop*>(
-                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn(nullptr);
-                    break;
-
-                case RES_BOXATR_FORMULA:
-                    {
-                        // When a formula is set, never save the value. It
-                        // possibly must be recalculated!
-                        // Save formulas always in plain text
-                        m_OldSet.ClearItem( RES_BOXATR_VALUE );
-
-                        SwTableBoxFormula& rNew =
-                            *static_cast<SwTableBoxFormula*>(
-                                const_cast<SfxPoolItem*>(pItem));
-                        if ( rNew.IsIntrnlName() )
-                        {
-                            const SwTableBoxFormula& rOld =
-                                        rSet.Get( RES_BOXATR_FORMULA );
-                            const SwNode* pNd = rOld.GetNodeOfFormula();
-                            if ( pNd )
-                            {
-                                const SwTableNode* pTableNode
-                                    = pNd->FindTableNode();
-                                if(pTableNode)
-                                {
-                                    auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
-                                    pCpyTable->SwitchFormulasToExternalRepresentation();
-                                    rNew.ChgDefinedIn(rOld.GetDefinedIn());
-                                    rNew.PtrToBoxNm(pCpyTable);
-                                }
-                            }
-                        }
-                        rNew.ChgDefinedIn( nullptr );
-                    }
-                    break;
-            }
+            // do not include item, additionally remember in
+            // m_ResetArray
+            m_ResetArray.push_back(aIter.GetCurWhich());
         }
-
-        pItem = aIter.NextItem();
-        pOrigItem = aOrigIter.NextItem();
     }
 }
 

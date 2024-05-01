@@ -1843,19 +1843,27 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
 
     if( pFormat && rSet.Count())
     {
-        SfxItemIter aIter( rSet );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
         {
-            if( IsInvalidItem( pItem ) )            // Clear
+            // Own scope for SfxItemIter needed to have it registered at rSet as short as possible
+            // due to m_aCoreSet.ClearItem() below - rSet *is* equal to m_aCoreSet here sometimes.
+            // This should *not* be the case (see OSL_ENSURE &rSet != &m_aCoreSet at the beginning
+            // of this method) but happens because lcl_setLineNumbering calls GetItemSet/SetItemSet
+            // at the *same* xStyleSheet. You can see that SwDocStyleSheet::GetItemSet() above
+            // does return m_aCoreSet. I guess that lcl_setLineNumbering should not do that...
+            SfxItemIter aIter( rSet );
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            do
             {
-                // use method <SwDoc::ResetAttrAtFormat(..)> in order to
-                // create an Undo object for the attribute reset.
-                aWhichIdsToReset.emplace_back(rSet.GetWhichByOffset(aIter.GetCurPos()));
-            }
+                if( IsInvalidItem( pItem ) )            // Clear
+                {
+                    // use method <SwDoc::ResetAttrAtFormat(..)> in order to
+                    // create an Undo object for the attribute reset.
+                    aWhichIdsToReset.emplace_back(aIter.GetCurWhich());
+                }
 
-            pItem = aIter.NextItem();
-        } while (pItem);
+                pItem = aIter.NextItem();
+            } while (pItem);
+        }
 
         m_rDoc.ResetAttrAtFormat(aWhichIdsToReset, *pFormat);
 

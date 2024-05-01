@@ -700,17 +700,22 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
         // set only the attributes that are different from the parent
         if( pCurrent && pOld->aAttrSet.Count() )
         {
-            SfxItemIter aIter( pOld->aAttrSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
-            do
-            {
-                if( SfxItemState::SET == pCurrent->aAttrSet.GetItemState(
-                    pItem->Which(), false, &pGet ) &&
-                    *pItem == *pGet )
-                    aIter.ClearItem();
+            // ITEM: SfxItemIter and removing SfxPoolItems:
+            // iterating and clearing Items on the same incarnation is in
+            // general a bad idea, it invalidates iterators. Work around
+            // this by remembering the WhichIDs of Items to delete
+            std::vector<sal_uInt16> aDeleteWhichIDs;
 
-                pItem = aIter.NextItem();
-            } while (pItem);
+            for (SfxItemIter aIter(pOld->aAttrSet); !aIter.IsAtEnd(); aIter.NextItem())
+            {
+                const SfxPoolItem* pGet(nullptr);
+                if (SfxItemState::SET == pCurrent->aAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet)
+                    && *aIter.GetCurItem() == *pGet)
+                    aDeleteWhichIDs.push_back(aIter.GetCurWhich());
+            }
+
+            for (auto nDelWhich : aDeleteWhichIDs)
+                pOld->aAttrSet.ClearItem(nDelWhich);
 
             if (!pOld->aAttrSet.Count() && pOld->maChildList.empty() &&
                 !pOld->nStyleNo )
@@ -1102,17 +1107,19 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         if( n )
         {
             // Search for all which are set over the whole area
-            SfxItemIter aIter( aMrgSet );
-            const SfxPoolItem* pItem;
-            const SfxPoolItem* pIterItem = aIter.GetCurItem();
-            do {
-                sal_uInt16 nWhich = pIterItem->Which();
-                if( SfxItemState::SET != pTmp->aAttrSet.GetItemState( nWhich,
-                      false, &pItem ) || *pItem != *pIterItem)
-                    aIter.ClearItem();
+            // ITEM: SfxItemIter and removing SfxPoolItems:
+            std::vector<sal_uInt16> aDeleteWhichIDs;
 
-                pIterItem = aIter.NextItem();
-            } while(pIterItem);
+            for (SfxItemIter aIter(aMrgSet); !aIter.IsAtEnd(); aIter.NextItem())
+            {
+                const SfxPoolItem* pGet(nullptr);
+                if (SfxItemState::SET != pTmp->aAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet)
+                    || *aIter.GetCurItem() != *pGet)
+                    aDeleteWhichIDs.push_back(aIter.GetCurWhich());
+            }
+
+            for (auto nDelWhich : aDeleteWhichIDs)
+                aMrgSet.ClearItem(nDelWhich);
 
             if( !aMrgSet.Count() )
                 return;

@@ -1917,20 +1917,26 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
             SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>  aCoreSet( GetAttrPool() );
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
-    SfxItemIter aParaIter( aCoreSet );
-    for (auto pParaItem = aParaIter.GetCurItem(); pParaItem; pParaItem = aParaIter.NextItem())
+
+    // ITEM: SfxItemIter and removing SfxPoolItems:
+    std::vector<sal_uInt16> aDeleteWhichIDs;
+
+    for (SfxItemIter aIter(aCoreSet); !aIter.IsAtEnd(); aIter.NextItem())
     {
-        if(!IsInvalidItem(pParaItem))
+        if(!IsInvalidItem(aIter.GetCurItem()))
         {
-            sal_uInt16 nWhich = pParaItem->Which();
-            if(SfxItemState::SET == aParaIter.GetItemState() &&
-               SfxItemState::SET == rStyleSet.GetItemState(nWhich))
+            if (SfxItemState::SET == aIter.GetItemState() &&
+                SfxItemState::SET == rStyleSet.GetItemState(aIter.GetCurWhich()))
             {
-                aParaIter.ClearItem();
+                aDeleteWhichIDs.push_back(aIter.GetCurWhich());
                 bReset = true;
             }
         }
     }
+
+    for (auto nDelWhich : aDeleteWhichIDs)
+        aCoreSet.ClearItem(nDelWhich);
+
     StartAction();
     if(bReset)
     {

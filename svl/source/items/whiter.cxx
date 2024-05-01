@@ -20,14 +20,6 @@
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 
-SfxWhichIter::SfxWhichIter(const SfxItemSet& rSet)
-    : m_rItemSet(rSet)
-    , m_pCurrentWhichPair(rSet.m_aWhichRanges.begin())
-    , m_nOffsetFromStartOfCurrentWhichPair(0)
-    , m_nItemsOffset(0)
-{
-}
-
 sal_uInt16 SfxWhichIter::GetCurWhich() const
 {
     const WhichRangesContainer& rWhichRanges = m_rItemSet.m_aWhichRanges;
@@ -46,7 +38,6 @@ sal_uInt16 SfxWhichIter::NextWhich()
     ++m_nOffsetFromStartOfCurrentWhichPair;
     if (m_pCurrentWhichPair->second == nLastWhich)
     {
-        m_nItemsOffset += m_pCurrentWhichPair->second - m_pCurrentWhichPair->first + 1;
         ++m_pCurrentWhichPair;
         m_nOffsetFromStartOfCurrentWhichPair = 0;
     }
@@ -59,35 +50,7 @@ sal_uInt16 SfxWhichIter::FirstWhich()
 {
     m_pCurrentWhichPair = m_rItemSet.m_aWhichRanges.begin();
     m_nOffsetFromStartOfCurrentWhichPair = 0;
-    m_nItemsOffset = 0;
     return m_pCurrentWhichPair->first;
-}
-
-SfxItemState SfxWhichIter::GetItemState(bool bSrchInParent, const SfxPoolItem** ppItem) const
-{
-    const sal_uInt16 nOffset(m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair);
-
-    // we have the offset, so use it to profit. It is always valid, so no need
-    // to check if smaller than TotalCount()
-    SfxItemState eState(m_rItemSet.GetItemState_ForOffset(nOffset, ppItem));
-
-    // search in parent?
-    if (bSrchInParent && nullptr != m_rItemSet.GetParent() && (SfxItemState::UNKNOWN == eState || SfxItemState::DEFAULT == eState))
-    {
-        // nOffset was only valid for *local* SfxItemSet, need to continue with WhichID
-        // Use the *highest* SfxItemState as result
-        const sal_uInt16 nWhich(m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair);
-        return m_rItemSet.GetParent()->GetItemState_ForWhichID( eState, nWhich, true, ppItem);
-    }
-
-    return eState;
-}
-
-void SfxWhichIter::ClearItem()
-{
-    // we have the offset, so use it to profit. It is always valid, so no need
-    // to check if smaller than TotalCount()
-    const_cast<SfxItemSet&>(m_rItemSet).ClearSingleItem_ForOffset(m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

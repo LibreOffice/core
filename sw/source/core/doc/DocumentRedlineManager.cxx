@@ -42,6 +42,7 @@
 #include <osl/diagnose.h>
 #include <editeng/prntitem.hxx>
 #include <comphelper/lok.hxx>
+#include <svl/itemiter.hxx>
 
 using namespace com::sun::star;
 
@@ -442,9 +443,9 @@ namespace
 
             if (!bSameSet)
             {
-                for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+                for (SfxItemIter aIter(aTmp); !aIter.IsAtEnd(); aIter.NextItem())
                 {
-                    sal_uInt16 nWhich = aTmp.GetWhichByOffset(nItem);
+                    const sal_uInt16 nWhich(aIter.GetCurWhich());
                     if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
                         SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
                             aTmp2.Put( aTmp.GetPool()->GetUserOrPoolDefaultItem(nWhich) );

@@ -1885,6 +1885,11 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     {
         whichIds.push_back({pItem->Which(), pItem->Which()});
     }
+
+    // ITEM: Need to sort these due to ItemSet using unordered_set and
+    // WhichRangesContainer expect these sorted ascending
+    std::sort(whichIds.begin(), whichIds.end(), [](WhichPair& a, WhichPair& b) {return a.first < b.first;});
+
     SfxItemSet currentSet(GetAttrPool(), WhichRangesContainer(whichIds.data(), whichIds.size()));
     pTNd->GetParaAttr(currentSet, nEnd, nEnd);
     for (const WhichPair& rPair : whichIds)

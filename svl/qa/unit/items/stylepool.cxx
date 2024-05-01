@@ -100,17 +100,6 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
         CPPUNIT_ASSERT(!pIter->getNext());
     }
 }
-
-CPPUNIT_TEST_FIXTURE(StylePoolTest, testFixedItemSet)
-{
-    rtl::Reference<SfxItemPool> pPool = new SfxItemPool(u"test"_ustr);
-    pPool->registerItemInfoPackage(getItemInfoPackageTest());
-
-    SfxItemSetFixed<1, 2> aItemSet1(*pPool);
-    SfxItemSetFixed<1, 2> aItemSet2(aItemSet1); // test copy constructor
-
-    assert(aItemSet2.IsItemsFixed());
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
