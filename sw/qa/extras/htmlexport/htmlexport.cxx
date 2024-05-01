@@ -3078,6 +3078,23 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
     assertXPath(pDoc, "/html/body/p[2]/img", "usemap", "#" + mapName);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_160867)
+{
+    // Given a document with an image with hyperlink, and text with hyperlink, both in a frame:
+    createSwDoc("tdf160867_image_with_link.fodt");
+    // When exporting to reqif:
+    ExportToReqif();
+    // For now, we don't (yet) output the whole map in ReqIF case.
+    // Make sure that the first hyperlink from the objects in the frame is output as an <a> element
+    // around the whole image of the frame.
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a/reqif-xhtml:object");
+    CPPUNIT_ASSERT(
+        getXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a", "href").endsWith("foo/bar"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
