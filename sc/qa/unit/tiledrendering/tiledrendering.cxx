@@ -142,21 +142,13 @@ void ScTiledRenderingTest::tearDown()
     UnoApiXmlTest::tearDown();
 }
 
-ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)//, const char* pLang = nullptr)
+ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 {
     loadFromFile(OUString::createFromAscii(pName));
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
-
-    auto aProperties = uno::Sequence<beans::PropertyValue>();//pLang ? 1 : 0);
-    // if (pLang)
-    // {
-    //     aProperties[0] = beans::PropertyValue(
-    //         "Language", -1, OUString::createFromAscii(pLang), beans::PropertyState_DIRECT_VALUE);
-    // }
-
-    pModelObj->initializeForTiledRendering(aProperties);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pModelObj;
 }
 
