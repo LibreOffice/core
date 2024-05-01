@@ -882,7 +882,10 @@ void ExecuteMarginLRChange(
 {
     pPageLRMarginItem->SetLeft( nPageLeftMargin );
     pPageLRMarginItem->SetRight( nPageRightMargin );
-    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
+    SfxViewShell* pViewSh = SfxViewShell::Current();
+    if (!pViewSh)
+        return;
+    pViewSh->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
             SfxCallMode::RECORD, { pPageLRMarginItem });
 }
 
@@ -894,8 +897,11 @@ void ExecuteMarginULChange(
 {
     pPageULMarginItem->SetUpper( nPageTopMargin );
     pPageULMarginItem->SetLower( nPageBottomMargin );
-    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
-                                                          SfxCallMode::RECORD, { pPageULMarginItem });
+    SfxViewShell* pViewSh = SfxViewShell::Current();
+    if (!pViewSh)
+        return;
+    pViewSh->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
+            SfxCallMode::RECORD, { pPageULMarginItem });
 }
 
 // Main function which toggles page orientation of the Writer doc. Needed by ToggleOrientation
@@ -943,9 +949,9 @@ void ExecuteOrientationChange()
 
 
         // apply changed attributes
-        if (SfxViewShell::Current())
+        if (SfxViewShell* pCurrent = SfxViewShell::Current())
         {
-            SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+            pCurrent->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
                 SfxCallMode::RECORD, { pPageSizeItem.get(), pPageItem.get() });
         }
     }
@@ -4931,11 +4937,12 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     const bool mbWasModified; //< Whether or not the document was modified before saving.
 
 public:
-    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback)
+    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback,
+                           bool bWasModified)
         : maCommand(pCommand)
         , mpCallback(std::move(pCallback))
         , mSaveTime(std::chrono::steady_clock::now())
-        , mbWasModified(SfxObjectShell::Current()->IsModified())
+        , mbWasModified(bWasModified)
     {
         assert(mpCallback);
     }
@@ -5337,7 +5344,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
-                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));
+                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView],
+                                           pDocSh->IsModified()));
     }
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
@@ -5813,8 +5821,11 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
 
     *pOutCount = aMimeTypes.size();
     *pOutSizes = static_cast<size_t *>(malloc(*pOutCount * sizeof(size_t)));
+    assert(*pOutSizes && "Don't handle OOM conditions");
     *pOutMimeTypes = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
+    assert(*pOutMimeTypes && "Don't handle OOM conditions");
     *pOutStreams = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
+    assert(*pOutStreams && "Don't handle OOM conditions");
     for (size_t i = 0; i < aMimeTypes.size(); ++i)
     {
         if (aMimeTypes[i] == "text/plain;charset=utf-16")

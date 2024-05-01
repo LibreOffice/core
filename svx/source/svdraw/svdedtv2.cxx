@@ -116,6 +116,7 @@ void SdrEditView::MovMarkedToTop()
         bool bEnd=false;
         while (nCmpPos<nNewPos && !bEnd)
         {
+            assert(pOL);
             SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
             if (pCmpObj==nullptr)
             {
@@ -206,6 +207,7 @@ void SdrEditView::MovMarkedToBtm()
         // it (multiple selection).
         while (nCmpPos>nNewPos && !bEnd)
         {
+            assert(pOL);
             SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
             if (pCmpObj==nullptr)
             {
@@ -1743,6 +1745,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
         if (pOL!=pOL0) { pOL0=pOL; pObj->GetOrdNum(); } // make sure OrdNums are correct!
         if (ImpCanDismantle(pObj,bMakeLines)) {
+            assert(pOL);
             aRemoveBuffer.InsertEntry(SdrMark(pObj,pM->GetPageView()));
             const size_t nPos0=pObj->GetOrdNumDirect();
             size_t nPos=nPos0+1;

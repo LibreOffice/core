@@ -324,7 +324,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     ResetBackground_Impl( *rSet );
 
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool" );
+    assert(pPool && "Where is the pool");
     MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
 
     // Evaluate header-/footer- attributes

@@ -1246,7 +1246,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 // Set current 3D drawing object, create the scene for this
 rtl::Reference<E3dScene> E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
-    DBG_ASSERT(p3DObj != nullptr, "Who puts in a NULL-pointer here");
+    assert(p3DObj != nullptr && "Who puts in a NULL-pointer here");
 
     // get transformed BoundVolume of the object
     basegfx::B3DRange aVolume(p3DObj->GetBoundVolume());

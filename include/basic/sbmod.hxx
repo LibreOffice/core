@@ -55,7 +55,7 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject
 
     std::vector< OUString > mModuleVariableNames;
 
-    BASIC_DLLPRIVATE static void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
+    BASIC_DLLPRIVATE static void implClearIfVarDependsOnDeletedBasic(SbxVariable& rVar, StarBASIC* pDeletedBasic);
 
     SbModule(const SbModule&) = delete;
     SbModule& operator=(const SbModule&) = delete;

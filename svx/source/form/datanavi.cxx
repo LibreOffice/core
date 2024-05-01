@@ -451,7 +451,7 @@ namespace svxform
 
                     DBG_ASSERT( bEntry, "XFormsPage::DoToolBoxAction(): no entry" );
                     ItemNode* pParentNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
-                    DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
+                    assert(pParentNode && "XFormsPage::DoToolBoxAction(): no parent node");
                     xParentNode = pParentNode->m_xNode;
                     Reference< css::xml::dom::XNode > xNewNode;
                     if (rToolBoxID == u"addelement")
@@ -636,31 +636,34 @@ namespace svxform
                     {
                         // Set the new name
                         OUString sNewName;
-                        if ( DGTInstance == m_eGroup )
+                        if (pNode)
                         {
-                            try
+                            if ( DGTInstance == m_eGroup )
                             {
-                                sNewName = m_xUIHelper->getNodeDisplayName(
-                                    pNode->m_xNode, m_pNaviWin->IsShowDetails() );
+                                try
+                                {
+                                    sNewName = m_xUIHelper->getNodeDisplayName(
+                                        pNode->m_xNode, m_pNaviWin->IsShowDetails() );
+                                }
+                                catch ( Exception const & )
+                                {
+                                    TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::DoToolboxAction()" );
+                                }
                             }
-                            catch ( Exception const & )
+                            else
                             {
-                                TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::DoToolboxAction()" );
-                            }
-                        }
-                        else if (pNode)
-                        {
-                            try
-                            {
-                                OUString sTemp;
-                                pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                sNewName += sTemp + ": ";
-                                pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                                sNewName += sTemp;
-                            }
-                            catch ( Exception const & )
-                            {
-                                TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::DoToolboxAction()" );
+                                try
+                                {
+                                    OUString sTemp;
+                                    pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                                    sNewName += sTemp + ": ";
+                                    pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                                    sNewName += sTemp;
+                                }
+                                catch ( Exception const & )
+                                {
+                                    TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::DoToolboxAction()" );
+                                }
                             }
                         }
 
@@ -887,7 +890,7 @@ namespace svxform
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::RemoveEntry(): no model" );
             ItemNode* pNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
-            DBG_ASSERT( pNode, "XFormsPage::RemoveEntry(): no node" );
+            assert(pNode && "XFormsPage::RemoveEntry(): no node");
 
             if ( DGTInstance == m_eGroup )
             {
@@ -911,7 +914,7 @@ namespace svxform
                         bool bParent = m_xItemList->iter_parent(*xParent); (void)bParent;
                         assert(bParent && "XFormsPage::RemoveEntry(): no parent entry");
                         ItemNode* pParentNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xParent));
-                        DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
+                        assert(pParentNode && pParentNode->m_xNode.is() && "XFormsPage::RemoveEntry(): no parent XNode");
 
                         Reference< css::xml::dom::XNode > xPNode;
                         Reference< css::xml::dom::XNode > xNode =
@@ -1325,8 +1328,8 @@ namespace svxform
         ActivatePageHdl(sPageId);
 
         // get our frame
-        DBG_ASSERT( pBindings != nullptr,
-                    "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
+        assert(pBindings != nullptr &&
+                    "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame");
         m_xFrame = pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener

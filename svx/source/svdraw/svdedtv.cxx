@@ -147,6 +147,7 @@ bool SdrEditView::ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) co
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
+        assert(pObj);
         SdrObjList* pSubOL = pObj->GetSubList();
 
         // explicitly test for group objects and 3d scenes
@@ -181,6 +182,7 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
+        assert(pObj);
         SdrObjList* pSubOL = pObj->GetSubList();
 
 
@@ -246,6 +248,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
             {
                 nObjNum--;
                 SdrObject* pObj = pPage->GetObj(nObjNum);
+                assert(pObj);
                 SdrObjList* pSubOL = pObj->GetSubList();
 
                 // explicitly test for group objects and 3d scenes

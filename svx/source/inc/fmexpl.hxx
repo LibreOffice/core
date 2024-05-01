@@ -479,7 +479,7 @@ namespace svxform
         bool IsFormEntry(const weld::TreeIter& rEntry);
         bool IsFormComponentEntry(const weld::TreeIter& rEntry);
 
-        OUString GenerateName( FmEntryData const * pEntryData );
+        OUString GenerateName(const FmEntryData& rEntryData);
 
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel.get(); }
         std::unique_ptr<weld::TreeIter> FindEntry(FmEntryData* pEntryData);

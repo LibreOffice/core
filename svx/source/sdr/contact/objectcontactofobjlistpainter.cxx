@@ -51,7 +51,7 @@ sal_uInt32 ObjectContactOfObjListPainter::GetPaintObjectCount() const
 ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32 nIndex)
 {
     const SdrObject* pObj = maStartObjects[nIndex];
-    DBG_ASSERT(pObj, "ObjectContactOfObjListPainter: Corrupt SdrObjectVector (!)");
+    assert(pObj && "ObjectContactOfObjListPainter: Corrupt SdrObjectVector (!)");
     return pObj->GetViewContact();
 }
 

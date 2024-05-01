@@ -2035,7 +2035,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
     if (nMarkCount!=0) {
         nChgMarkNum=bPrev ? 0 : nMarkCount-1;
         SdrMark* pM=GetSdrMarkByIndex(nChgMarkNum);
-        OSL_ASSERT(pM!=nullptr);
+        assert(pM != nullptr);
         if (pM->GetMarkedSdrObj() != nullptr)
             nSearchObjNum = pM->GetMarkedSdrObj()->GetNavigationPosition();
     }
@@ -2366,6 +2366,7 @@ bool SdrMarkView::getPossibleGridOffsetForPosition(
 
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const
 {
+    assert(pObj);
     if(((nOptions & SdrSearchOptions::IMPISMASTER) && pObj->IsNotVisibleAsMaster()) || (!pObj->IsVisible()))
     {
         return nullptr;
@@ -2569,11 +2570,13 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
         if (ppRootObj!=nullptr) *ppRootObj=pObj;
         if (nOptions & SdrSearchOptions::DEEP) pObj=pHitObj;
         if (nOptions & SdrSearchOptions::TESTTEXTEDIT) {
+            assert(pPV);
             if (!pObj->HasTextEdit() || pPV->GetLockedLayers().IsSet(pObj->GetLayer())) {
                 pObj=nullptr;
             }
         }
         if (pObj!=nullptr && (nOptions & SdrSearchOptions::TESTMACRO)) {
+            assert(pPV);
             SdrObjMacroHitRec aHitRec;
             aHitRec.aPos=rPnt;
             aHitRec.nTol=nTol;

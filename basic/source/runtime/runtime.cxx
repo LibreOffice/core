@@ -682,6 +682,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
 
             SbxVariable* v = pParams->Get(i);
+            assert(v);
             // methods are always byval!
             bool bByVal = dynamic_cast<const SbxMethod *>(v) != nullptr;
             SbxDataType t = v->GetType();
@@ -3924,6 +3925,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 
 SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
+    assert(pElem);
     SbxArray* pPar;
     if( ( pElem->GetType() & SbxARRAY ) && refRedim.get() != pElem )
     {

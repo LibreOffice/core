@@ -2235,6 +2235,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
         // issue: group objects on different layers return LayerID=0!
         no--;
         SdrObject* pObj=pOL->GetObj(no);
+        assert(pObj);
         if (bHasRequestedOrdNum)
         {
             if (pObj->GetOrdNumDirect() != static_cast<sal_uInt32>(requestedOrdNum))

@@ -73,7 +73,7 @@ ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectConta
     for (sal_uInt32 a(0); !pRetval && a < nCount; a++)
     {
         ViewObjectContact* pCandidate = maViewObjectContactVector[a];
-        DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
+        assert(pCandidate && "Corrupted ViewObjectContactList (!)");
 
         if (&(pCandidate->GetObjectContact()) == &rObjectContact)
         {

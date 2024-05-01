@@ -1680,9 +1680,9 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
             // When you change the font list in the Doc, you can track
             // changes here only on the Listbox, because ppFontList
             // has already been updated.
-            bChanged =
-                ( ( *ppFontList != pNewFontList ) ||
-                  pBox->GetListCount() != pNewFontList->GetFontNameCount() );
+            bChanged = !pNewFontList ||
+                       *ppFontList != pNewFontList ||
+                       pBox->GetListCount() != pNewFontList->GetFontNameCount();
             // HACK: Comparing is incomplete
 
             if ( bChanged )
@@ -1707,7 +1707,7 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
     // Fill the FontBox, also the new list if necessary
     if ( pBox && bChanged )
     {
-        if ( *ppFontList )
+        if (ppFontList && *ppFontList)
             pBox->Fill( *ppFontList );
         else
             pBox->Clear();

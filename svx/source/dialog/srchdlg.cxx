@@ -81,7 +81,13 @@ using namespace com::sun::star;
 using namespace comphelper;
 
 
-#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
+static bool IsMobile()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return false;
+    SfxViewShell* pCurrent = SfxViewShell::Current();
+    return pCurrent && pCurrent->isLOKMobilePhone();
+}
 
 enum class ModifyFlags {
     NONE         = 0x000000,
@@ -237,7 +243,7 @@ void SearchAttrItemList::Remove(size_t nPos)
 
 SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
-                                  IS_MOBILE ? OUString("svx/ui/findreplacedialog-mobile.ui") : OUString("svx/ui/findreplacedialog.ui"),
+                                  IsMobile() ? OUString("svx/ui/findreplacedialog-mobile.ui") : OUString("svx/ui/findreplacedialog.ui"),
                                   "FindReplaceDialog")
     , rBindings(rBind)
     , m_aPresentIdle("Bring SvxSearchDialog to Foreground")

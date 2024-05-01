@@ -739,6 +739,8 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 
     for(SdrObject* pObj : aSdrObjects)
     {
+        assert(pObj);
+
         rtl::Reference<SdrObject> pNewObj;
 
         if(nullptr != dynamic_cast< const SdrPageObj* >(pObj))

@@ -242,12 +242,13 @@ void SvxUndoRedoControl::initialize( const css::uno::Sequence< css::uno::Any >& 
 
     if (getModuleName() != "com.sun.star.script.BasicIDE")
     {
-        if (pToolBox)
-            pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
         if (m_pToolbar)
             aDefaultTooltip = m_pToolbar->get_item_tooltip_text(m_aCommandURL);
         else
+        {
+            pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
             aDefaultTooltip = pToolBox->GetQuickHelpText(nId);
+        }
     }
 }
 

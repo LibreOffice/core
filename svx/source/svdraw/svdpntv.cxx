@@ -513,7 +513,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
     }
 
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
-    OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
+    assert(pPaintWindow && "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
     DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, pRedirector);
     EndCompleteRedraw(*pPaintWindow, true);
@@ -576,7 +576,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
 SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
 {
-    OSL_ENSURE(pOut, "SdrPaintView::BeginCompleteRedraw: No OutDev (!)");
+    assert(pOut && "SdrPaintView::BeginCompleteRedraw: No OutDev (!)");
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
 
     if(pPaintWindow)
@@ -672,12 +672,11 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
     }
 }
 
-
 SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     // #i74769# use BeginCompleteRedraw() as common base
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
-    OSL_ENSURE(pPaintWindow, "SdrPaintView::BeginDrawLayers: No SdrPaintWindow (!)");
+    assert(pPaintWindow && "SdrPaintView::BeginDrawLayers: No SdrPaintWindow (!)");
 
     if(mpPageView)
     {
@@ -713,7 +712,7 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
 void SdrPaintView::UpdateDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg)
 {
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
-    OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
+    assert(pPaintWindow && "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
 
     if(mpPageView)
     {

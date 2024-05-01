@@ -263,12 +263,12 @@ void SvxRectCtlAccessibleContext::implSelect(sal_Int64 nIndex, bool bSelect)
 
     checkChildIndex( nIndex );
 
-    const ChildIndexToPointData*    pData = IndexToPoint( nIndex );
-
-    DBG_ASSERT(pData, "SvxRectCtlAccessibleContext::selectAccessibleChild(): this is an impossible state! Or at least should be...");
-
     if (mpRepr)
     {
+        const ChildIndexToPointData* pData = IndexToPoint(nIndex);
+
+        assert(pData && "SvxRectCtlAccessibleContext::selectAccessibleChild(): this is an impossible state! Or at least should be...");
+
         if (bSelect)
         {
             // this does all what is needed, including the change of the child's state!

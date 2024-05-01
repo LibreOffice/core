@@ -3139,7 +3139,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
             if ( m_aColumns[ i ]->IsHidden())
                 --nViewPos;
 
-        DBG_ASSERT(pCol && GetColumnIdFromViewPos(nViewPos) == pCol->GetId(),
+        DBG_ASSERT(GetColumnIdFromViewPos(nViewPos) == pCol->GetId(),
             "DbGridControl::GetColumnIdFromModelPos : this isn't consistent... did I misunderstand something ?");
     }
 #endif

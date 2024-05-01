@@ -359,7 +359,7 @@ bool Model::isValid() const
     for( sal_Int32 i = 0; bValid && i < nCount; i++ )
     {
         Binding* pBind = comphelper::getFromUnoTunnel<Binding>( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
-        OSL_ENSURE( pBind != nullptr, "binding?" );
+        assert(pBind != nullptr && "binding?");
         bValid = pBind->isValid();
     }
     return bValid;

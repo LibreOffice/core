@@ -776,8 +776,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
      */
     sal_uInt16 nMyType;
 
-    DBG_ASSERT(pCurFmtTable != nullptr, "unknown NumberFormat");
-
     sal_uInt32 nNFEntry;
     OUString aNewFormNInfo;
 
@@ -813,6 +811,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
 
     if (nCurCategory != SvNumFormatType::ALL)
     {
+        assert(pCurFmtTable != nullptr && "unknown NumberFormat");
         for (const auto& rEntry : *pCurFmtTable)
         {
             sal_uInt32 nKey = rEntry.first;
@@ -857,8 +856,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
      * or if there is no current format, SELPOS_NONE is delivered.
      */
     sal_uInt16 nMyType;
-
-    DBG_ASSERT(pCurFmtTable != nullptr, "unknown NumberFormat");
 
     OUString aNewFormNInfo;
 
@@ -905,6 +902,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
         rShortSymbol = pTmpCurrencyEntry->BuildSymbolString(bTmpBanking, true);
     }
 
+    assert(pCurFmtTable != nullptr && "unknown NumberFormat");
     for (const auto& rEntry : *pCurFmtTable)
     {
         sal_uInt32 nKey = rEntry.first;

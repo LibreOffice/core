@@ -1288,7 +1288,7 @@ namespace svxform
 
 
         // set name
-        OUString aName = GenerateName(pNewFormData);
+        OUString aName = GenerateName(*pNewFormData);
         pNewFormData->SetText(aName);
 
         try
@@ -1366,21 +1366,21 @@ namespace svxform
         return pNewFormControlData;
     }
 
-    OUString NavigatorTree::GenerateName( FmEntryData const * pEntryData )
+    OUString NavigatorTree::GenerateName(const FmEntryData& rEntryData)
     {
         const sal_uInt16 nMaxCount = 99;
         OUString aNewName;
 
         // create base name
         OUString aBaseName;
-        if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
+        if( dynamic_cast<const FmFormData*>(&rEntryData) !=  nullptr )
             aBaseName = SvxResId( RID_STR_STDFORMNAME );
-        else if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
+        else if( dynamic_cast<const FmControlData*>(&rEntryData) !=  nullptr )
             aBaseName = SvxResId( RID_STR_CONTROL );
 
 
         // create new name
-        FmFormData* pFormParentData = static_cast<FmFormData*>(pEntryData->GetParent());
+        FmFormData* pFormParentData = static_cast<FmFormData*>(rEntryData.GetParent());
 
         for( sal_Int32 i=0; i<nMaxCount; i++ )
         {

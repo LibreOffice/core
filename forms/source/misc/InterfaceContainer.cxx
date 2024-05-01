@@ -768,7 +768,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( !pElementMetaData )
     {   // not yet approved by the caller -> do ourself
         pElementMetaData = createElementMetaData();
-        DBG_ASSERT( pElementMetaData, "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!" );
+        assert(pElementMetaData && "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!");
 
         // ensure that the meta data structure will be deleted later on
         aAutoDeleteMetaData.reset( pElementMetaData );

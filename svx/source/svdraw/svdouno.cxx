@@ -94,7 +94,7 @@ namespace
 {
     void lcl_ensureControlVisibility( SdrView const * _pView, const SdrUnoObj* _pObject, bool _bVisible )
     {
-        OSL_PRECOND( _pObject, "lcl_ensureControlVisibility: no object -> no survival!" );
+        assert(_pObject && "lcl_ensureControlVisibility: no object -> no survival!");
 
         SdrPageView* pPageView = _pView ? _pView->GetSdrPageView() : nullptr;
         DBG_ASSERT( pPageView, "lcl_ensureControlVisibility: no view found!" );

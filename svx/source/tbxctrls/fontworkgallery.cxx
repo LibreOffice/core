@@ -225,16 +225,16 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     Point aPagePos;
     Size aFontworkSize = aObjRect.GetSize();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    SfxViewShell* pKitViewShell = comphelper::LibreOfficeKit::isActive() ?
+        SfxViewShell::Current() : nullptr;
+    if (pKitViewShell)
     {
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-
-        aPagePos = pViewShell->getLOKVisibleArea().Center();
+        aPagePos = pKitViewShell->getLOKVisibleArea().Center();
 
         aPagePos.setX(convertTwipToMm100(aPagePos.X()));
         aPagePos.setY(convertTwipToMm100(aPagePos.Y()));
 
-        sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pViewShell->getLOKVisibleArea().getOpenWidth());
+        sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pKitViewShell->getLOKVisibleArea().getOpenWidth());
         if (aFontworkSize.getWidth() > nLOKViewWidth)
         {
             double fScale = static_cast<double>(aFontworkSize.getWidth()) / nLOKViewWidth;

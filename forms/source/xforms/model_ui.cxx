@@ -680,7 +680,7 @@ css::uno::Reference< ::css::beans::XPropertySet > Model::getBindingForNode( cons
         Binding* pBinding = comphelper::getFromUnoTunnel<Binding>(
             mxBindings->Collection<XPropertySet_t>::getItem( n ) );
 
-        OSL_ENSURE( pBinding != nullptr, "no binding?" );
+        assert(pBinding != nullptr && "no binding?");
         Reference<XNodeList> xNodeList = pBinding->getXNodeList();
 
         sal_Int32 nNodes = xNodeList.is() ? xNodeList->getLength() : 0;

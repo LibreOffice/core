@@ -383,7 +383,7 @@ void SvxLineEndWindow::FillValueSet()
     for( tools::Long i = 0; i < nCount; i++ )
     {
         pEntry = mpLineEndList->GetLineEnd( i );
-        DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
+        assert(pEntry && "Could not access LineEndEntry");
         aBmp = mpLineEndList->GetUiBitmap( i );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 

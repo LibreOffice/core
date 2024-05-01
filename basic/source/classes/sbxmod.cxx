@@ -1317,12 +1317,12 @@ void SbModule::ClearPrivateVars()
     }
 }
 
-void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
+void SbModule::implClearIfVarDependsOnDeletedBasic(SbxVariable& rVar, StarBASIC* pDeletedBasic)
 {
-    if( pVar->SbxValue::GetType() != SbxOBJECT || dynamic_cast<const SbProcedureProperty*>( pVar) != nullptr )
+    if (rVar.SbxValue::GetType() != SbxOBJECT || dynamic_cast<const SbProcedureProperty*>(&rVar) != nullptr)
         return;
 
-    SbxObject* pObj = dynamic_cast<SbxObject*>( pVar->GetObject() );
+    SbxObject* pObj = dynamic_cast<SbxObject*>(rVar.GetObject());
     if( pObj == nullptr )
         return;
 
@@ -1337,7 +1337,7 @@ void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC
         StarBASIC* pBasic = dynamic_cast<StarBASIC*>( p  );
         if( pBasic != nullptr && pBasic == pDeletedBasic )
         {
-            pVar->SbxValue::Clear();
+            rVar.SbxValue::Clear();
             break;
         }
     }
@@ -1358,13 +1358,13 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
                     for (sal_uInt32 j = 0; j < pArray->Count(); j++)
                     {
                         SbxVariable* pVar = pArray->Get(j);
-                        implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
+                        implClearIfVarDependsOnDeletedBasic(*pVar, pDeletedBasic);
                     }
                 }
             }
             else
             {
-                implClearIfVarDependsOnDeletedBasic( p, pDeletedBasic );
+                implClearIfVarDependsOnDeletedBasic(*p, pDeletedBasic);
             }
         }
     }

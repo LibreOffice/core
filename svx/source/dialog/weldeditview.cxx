@@ -1122,7 +1122,7 @@ static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, con
 
         for (const auto& rAttrib : aAttribs)
         {
-            OSL_ENSURE(rAttrib.pAttr, "GetCharAttribs gives corrupt data");
+            assert(rAttrib.pAttr && "GetCharAttribs gives corrupt data");
 
             const bool bEmptyPortion = (rAttrib.nStart == rAttrib.nEnd);
             if ((!bEmptyPortion && (rAttrib.nStart >= nEndPos))

@@ -125,7 +125,7 @@ void SvxXConnectionPreview::AdaptSize()
 
 void SvxXConnectionPreview::Construct()
 {
-    DBG_ASSERT( pView, "No valid view is passed on! ");
+    assert(pView && "No valid view is passed on!");
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();

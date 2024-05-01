@@ -155,7 +155,7 @@ namespace frm
 
     IMPL_LINK( OPasteClipboardDispatcher, OnClipboardChanged, TransferableDataHelper*, _pDataHelper, void )
     {
-        OSL_ENSURE( _pDataHelper, "OPasteClipboardDispatcher::OnClipboardChanged: ooops!" );
+        assert(_pDataHelper && "OPasteClipboardDispatcher::OnClipboardChanged: ooops!");
         m_bPastePossible = _pDataHelper->HasFormat( SotClipboardFormatId::STRING )
                         || _pDataHelper->HasFormat( SotClipboardFormatId::RTF )
                         || _pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT );

@@ -1760,7 +1760,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
 
 bool FmGridControl::isColumnSelected(DbGridColumn const * _pColumn) const
 {
-    OSL_ENSURE(_pColumn,"Column can not be null!");
+    assert(_pColumn && "Column can not be null!");
     bool bSelected = false;
     // if the column which is shown here is selected ...
     Reference< css::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);

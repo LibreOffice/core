@@ -541,7 +541,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
 {
-    DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
+    assert(_pOriginal && "OControlModel::OControlModel: invalid original!");
 
     // copy members
     m_aName = _pOriginal->m_aName;

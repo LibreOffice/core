@@ -770,7 +770,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     {
         // first the service name for the underlying model
         OGridColumn* pCol = comphelper::getFromUnoTunnel<OGridColumn>(m_aItems[i]);
-        DBG_ASSERT(pCol != nullptr, "OGridControlModel::write : such items should never reach it into my container !");
+        assert(pCol != nullptr && "OGridControlModel::write : such items should never reach it into my container !");
         _rxOutStream << pCol->getModelName();
         // then the object itself
         sal_Int32 nMark = xMark->createMark();

@@ -791,7 +791,6 @@ namespace svxform
             // an empty list causes NavigatorTree to remove his selection
     }
 
-
     void NavigatorTreeModel::UpdateContent( const Reference< css::form::XForms > & xForms )
     {
 
@@ -809,10 +808,9 @@ namespace svxform
         if(!m_pFormShell) return;       // no shell
 
         FmFormView* pFormView = m_pFormShell->GetFormView();
-        DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : no FormView");
+        assert(pFormView != nullptr && "NavigatorTreeModel::UpdateContent : no FormView");
         BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
     }
-
 
     void NavigatorTreeModel::UpdateContent( FmFormShell* pShell )
     {
@@ -854,7 +852,6 @@ namespace svxform
         }
     }
 
-
     Reference< XIndexContainer >  NavigatorTreeModel::GetFormComponents( FmFormData const * pFormData )
     {
 
@@ -864,7 +861,6 @@ namespace svxform
 
         return Reference< XIndexContainer > ();
     }
-
 
     bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
     {

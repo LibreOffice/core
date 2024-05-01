@@ -52,7 +52,7 @@ namespace frm
         ,m_bHasEverBeenShown    ( false               )
     {
         OSL_ENSURE( m_pAntiImpl, "RichTextControlImpl::RichTextControlImpl: invalid window!" );
-        OSL_ENSURE( m_pEngine,   "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definitely* crash!" );
+        assert(m_pEngine && "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definitely* crash!");
 
         m_pViewport = VclPtr<RichTextViewPort>::Create( m_pAntiImpl );
         m_pViewport->setAttributeInvalidationHandler( LINK( this, RichTextControlImpl, OnInvalidateAllAttributes ) );
