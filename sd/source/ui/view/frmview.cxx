@@ -282,8 +282,9 @@ void FrameView::Update(SdOptions const * pOptions)
         return;
 
     SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(&GetModel());
+    const bool bImpress = pDrawDocument && pDrawDocument->GetDocumentType() == DocumentType::Impress;
 
-    if (pDrawDocument->GetDocumentType() == DocumentType::Impress)
+    if (bImpress)
     {
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
         SetDragStripes( officecfg::Office::Impress::Layout::Display::Guide::get() );
