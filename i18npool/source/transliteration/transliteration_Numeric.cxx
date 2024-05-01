@@ -22,6 +22,7 @@
 
 #include <transliteration_Numeric.hxx>
 #include <nativenumbersupplier.hxx>
+#include <rtl/character.hxx>
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::i18n;
@@ -54,7 +55,6 @@ Sequence< OUString > SAL_CALL
 }
 
 
-#define isNumber(c) ((c) >= 0x30 && (c) <= 0x39)
 #define NUMBER_ZERO 0x30
 
 OUString
@@ -74,7 +74,7 @@ transliteration_Numeric::transliterateBullet( std::u16string_view inStr, sal_Int
     auto ppOffset = pOffset ? pOffset->getArray() : nullptr;
 
     for (sal_Int32 i = startPos; i < endPos; i++) {
-        if (isNumber(inStr[i]))
+        if (rtl::isAsciiDigit(inStr[i]))
         {
             if (number == -1) {
                 startPos = i;
@@ -127,7 +127,7 @@ sal_Unicode SAL_CALL
 transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar )
 {
     if (tableSize) {
-        if (isNumber(inChar)) {
+        if (rtl::isAsciiDigit(inChar)) {
             sal_Int16 number = inChar - NUMBER_ZERO;
             if (number <= tableSize || recycleSymbol)
                 return table[--number % tableSize];
