@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,dtoa, \
     external/dtoa/include_header.patch \
     external/dtoa/coverity.patch \
     external/dtoa/ubsan.patch.0 \
+    external/dtoa/C6011.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

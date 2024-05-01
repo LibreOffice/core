@@ -1,0 +1,10 @@
+--- src/dtoa.c	2024-05-01 10:10:49.702762020 +0100
++++ src/dtoa.c	2024-05-01 10:11:45.308831303 +0100
+@@ -1606,6 +1606,7 @@
+ 		else
+ 			rv = (Bigint*)MALLOC(len*sizeof(double));
+ #endif
++		assert(rv && "Don't handle OOM conditions");
+ 		rv->k = k;
+ 		rv->maxwds = x;
+ 		}
