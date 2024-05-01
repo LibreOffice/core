@@ -59,7 +59,7 @@ public:
 };
 
 // globale Variable, in NoteURL.Cxx angelegt
-extern SwNoteURL* pNoteURL;
+extern thread_local SwNoteURL* pNoteURL;
 
 #endif
 
