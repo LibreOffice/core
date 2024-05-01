@@ -369,15 +369,15 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
 
 struct {
     XPropertyListType t;
-    const char *pExt;
-} const pExtnMap[] = {
-    { XPropertyListType::Color,    "soc" },
-    { XPropertyListType::LineEnd, "soe" },
-    { XPropertyListType::Dash,     "sod" },
-    { XPropertyListType::Hatch,    "soh" },
-    { XPropertyListType::Gradient, "sog" },
-    { XPropertyListType::Bitmap,   "sob" },
-    { XPropertyListType::Pattern,  "sop"}
+    OUString aExt;
+} constexpr pExtnMap[] = {
+    { XPropertyListType::Color,    u"soc"_ustr },
+    { XPropertyListType::LineEnd, u"soe"_ustr },
+    { XPropertyListType::Dash,     u"sod"_ustr },
+    { XPropertyListType::Hatch,    u"soh"_ustr },
+    { XPropertyListType::Gradient, u"sog"_ustr },
+    { XPropertyListType::Bitmap,   u"sob"_ustr },
+    { XPropertyListType::Pattern,  u"sop"_ustr}
 };
 
 OUString XPropertyList::GetDefaultExt( XPropertyListType t )
@@ -385,7 +385,7 @@ OUString XPropertyList::GetDefaultExt( XPropertyListType t )
     for (const auto & i : pExtnMap)
     {
         if( i.t == t )
-            return OUString::createFromAscii( i.pExt );
+            return i.aExt;
     }
     return OUString();
 }
