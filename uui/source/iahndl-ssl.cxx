@@ -259,7 +259,7 @@ handleCertificateValidationRequest_(
     uno::Reference< security::XSanExtension > sanExtension;
     auto pExtension = std::find_if(extensions.begin(), extensions.end(),
         [](const uno::Reference< security::XCertificateExtension >& element) {
-            OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
+            std::string_view aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
             return aId == OID_SUBJECT_ALTERNATIVE_NAME;
         });
     if (pExtension != extensions.end())
