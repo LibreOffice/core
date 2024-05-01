@@ -2007,21 +2007,18 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 
     // Various rather important uno mappings.
     static struct {
-        const char *mpFrom;
-        const char *mpTo;
-        const char *mpPurpose;
-    } const aMappingLoad[] = {
-        { "gcc3", "uno",  "" },
-        { "uno",  "gcc3", "" },
+        OUString maFrom;
+        OUString maTo;
+        OUString maPurpose;
+    } constexpr aMappingLoad[] = {
+        { u"gcc3"_ustr, u"uno"_ustr,  u""_ustr },
+        { u"uno"_ustr,  u"gcc3"_ustr, u""_ustr },
     };
 
     static std::vector<css::uno::Mapping> maMaps;
     for (auto &it : aMappingLoad)
     {
-        maMaps.push_back(css::uno::Mapping(
-                             OUString::createFromAscii(it.mpFrom),
-                             OUString::createFromAscii(it.mpTo),
-                             OUString::createFromAscii(it.mpPurpose)));
+        maMaps.push_back(css::uno::Mapping(it.maFrom, it.maTo, it.maPurpose));
     }
 #endif
 }

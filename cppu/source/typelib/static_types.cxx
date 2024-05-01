@@ -118,11 +118,11 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
         MutexGuard aGuard( typelib_StaticInitMutex() );
         if (! s_aTypes[eTypeClass])
         {
-            static const char * s_aTypeNames[] = {
-                "void", "char", "boolean", "byte",
-                "short", "unsigned short", "long", "unsigned long",
-                "hyper", "unsigned hyper", "float", "double",
-                "string", "type", "any" };
+            static constexpr OUString s_aTypeNames[] = {
+                u"void"_ustr, u"char"_ustr, u"boolean"_ustr, u"byte"_ustr,
+                u"short"_ustr, u"unsigned short"_ustr, u"long"_ustr, u"unsigned long"_ustr,
+                u"hyper"_ustr, u"unsigned hyper"_ustr, u"float"_ustr, u"double"_ustr,
+                u"string"_ustr, u"type"_ustr, u"any"_ustr };
 
             switch (eTypeClass)
             {
@@ -258,7 +258,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
             }
             default:
             {
-                OUString aTypeName( OUString::createFromAscii( s_aTypeNames[eTypeClass] ) );
+                OUString aTypeName( s_aTypeNames[eTypeClass] );
                 ::typelib_typedescriptionreference_new( &s_aTypes[eTypeClass], eTypeClass, aTypeName.pData );
                 // another static ref:
                 ++s_aTypes[eTypeClass]->nStaticRefCount;

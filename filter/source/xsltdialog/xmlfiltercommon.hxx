@@ -70,7 +70,7 @@ struct application_info_impl
     OUString   maXMLImporter;
     OUString   maXMLExporter;
 
-    application_info_impl(const char * pDocumentService, const OUString& rUINameRes, const char * mpXMLImporter, const char * mpXMLExporter);
+    application_info_impl(const OUString& rDocumentService, const OUString& rUINameRes, const OUString& rXMLImporter, const OUString& rXMLExporter);
 };
 
 

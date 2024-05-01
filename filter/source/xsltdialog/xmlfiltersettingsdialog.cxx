@@ -1111,11 +1111,11 @@ void XMLFilterSettingsDialog::initFilterList()
     }
 }
 
-application_info_impl::application_info_impl( const char * pDocumentService, const OUString& rUINameRes, const char * mpXMLImporter, const char * mpXMLExporter )
-:   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
+application_info_impl::application_info_impl( const OUString& rDocumentService, const OUString& rUINameRes, const OUString& rXMLImporter, const OUString& rXMLExporter )
+:   maDocumentService( rDocumentService ),
     maDocumentUIName(Translate::ExpandVariables(rUINameRes)),
-    maXMLImporter( mpXMLImporter, strlen( mpXMLImporter ), RTL_TEXTENCODING_ASCII_US ),
-    maXMLExporter( mpXMLExporter, strlen( mpXMLExporter ), RTL_TEXTENCODING_ASCII_US )
+    maXMLImporter( rXMLImporter ),
+    maXMLExporter( rXMLExporter )
 {
 }
 
@@ -1123,46 +1123,46 @@ std::vector< application_info_impl > const & getApplicationInfos()
 {
     static std::vector< application_info_impl > const aInfos
     {
-        {   "com.sun.star.text.TextDocument",
+        {   u"com.sun.star.text.TextDocument"_ustr,
             STR_APPL_NAME_WRITER,
-            "com.sun.star.comp.Writer.XMLImporter",
-            "com.sun.star.comp.Writer.XMLExporter" },
+            u"com.sun.star.comp.Writer.XMLImporter"_ustr,
+            u"com.sun.star.comp.Writer.XMLExporter"_ustr },
 
-        {   "com.sun.star.sheet.SpreadsheetDocument",
+        {   u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
             STR_APPL_NAME_CALC,
-            "com.sun.star.comp.Calc.XMLImporter",
-            "com.sun.star.comp.Calc.XMLExporter" },
+            u"com.sun.star.comp.Calc.XMLImporter"_ustr,
+            u"com.sun.star.comp.Calc.XMLExporter"_ustr },
 
-        {  "com.sun.star.presentation.PresentationDocument",
+        {   u"com.sun.star.presentation.PresentationDocument"_ustr,
             STR_APPL_NAME_IMPRESS,
-            "com.sun.star.comp.Impress.XMLImporter",
-            "com.sun.star.comp.Impress.XMLExporter" },
+            u"com.sun.star.comp.Impress.XMLImporter"_ustr,
+            u"com.sun.star.comp.Impress.XMLExporter"_ustr },
 
-        {   "com.sun.star.drawing.DrawingDocument",
+        {   u"com.sun.star.drawing.DrawingDocument"_ustr,
             STR_APPL_NAME_DRAW,
-            "com.sun.star.comp.Draw.XMLImporter",
-            "com.sun.star.comp.Draw.XMLExporter" },
+            u"com.sun.star.comp.Draw.XMLImporter"_ustr,
+            u"com.sun.star.comp.Draw.XMLExporter"_ustr },
 
         // --- oasis file formats...
-        {   "com.sun.star.text.TextDocument",
+        {   u"com.sun.star.text.TextDocument"_ustr,
             STR_APPL_NAME_OASIS_WRITER,
-            "com.sun.star.comp.Writer.XMLOasisImporter",
-            "com.sun.star.comp.Writer.XMLOasisExporter" },
+            u"com.sun.star.comp.Writer.XMLOasisImporter"_ustr,
+            u"com.sun.star.comp.Writer.XMLOasisExporter"_ustr },
 
-        {   "com.sun.star.sheet.SpreadsheetDocument",
+        {   u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
             STR_APPL_NAME_OASIS_CALC,
-            "com.sun.star.comp.Calc.XMLOasisImporter",
-            "com.sun.star.comp.Calc.XMLOasisExporter" },
+            u"com.sun.star.comp.Calc.XMLOasisImporter"_ustr,
+            u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr },
 
-        {   "com.sun.star.presentation.PresentationDocument",
+        {   u"com.sun.star.presentation.PresentationDocument"_ustr,
             STR_APPL_NAME_OASIS_IMPRESS,
-            "com.sun.star.comp.Impress.XMLOasisImporter",
-            "com.sun.star.comp.Impress.XMLOasisExporter" },
+            u"com.sun.star.comp.Impress.XMLOasisImporter"_ustr,
+            u"com.sun.star.comp.Impress.XMLOasisExporter"_ustr },
 
-        {  "com.sun.star.drawing.DrawingDocument",
+        {  u"com.sun.star.drawing.DrawingDocument"_ustr,
             STR_APPL_NAME_OASIS_DRAW,
-            "com.sun.star.comp.Draw.XMLOasisImporter",
-            "com.sun.star.comp.Draw.XMLOasisExporter" },
+            u"com.sun.star.comp.Draw.XMLOasisImporter"_ustr,
+            u"com.sun.star.comp.Draw.XMLOasisExporter"_ustr },
     };
 
     return aInfos;
