@@ -358,7 +358,7 @@ namespace accessibility
         OExternalLockGuard aGuard( this );
 
         Reference< XAccessible > xChild;
-        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for( sal_Int64 i = 0; i < getAccessibleChildCount(); ++i )
         {
             Reference< XAccessible > xAcc = getAccessibleChild( i );
             if ( xAcc.is() )
