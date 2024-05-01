@@ -26,31 +26,31 @@ namespace xmloff
 {
 
     //= OControlElement
-    const char* OControlElement::getElementName(ElementType _eType)
+    OUString OControlElement::getElementName(ElementType _eType)
     {
         switch (_eType)
         {
-            case TEXT: return "text";
-            case TEXT_AREA: return "textarea";
-            case PASSWORD: return "password";
-            case FILE: return "file";
-            case FORMATTED_TEXT: return "formatted-text";
-            case FIXED_TEXT: return "fixed-text";
-            case COMBOBOX: return "combobox";
-            case LISTBOX: return "listbox";
-            case BUTTON: return "button";
-            case IMAGE: return "image";
-            case CHECKBOX: return "checkbox";
-            case RADIO: return "radio";
-            case FRAME: return "frame";
-            case IMAGE_FRAME: return "image-frame";
-            case HIDDEN: return "hidden";
-            case GRID: return "grid";
-            case VALUERANGE: return "value-range";
-            case TIME: return "time";
-            case DATE: return "date";
+            case TEXT: return u"text"_ustr;
+            case TEXT_AREA: return u"textarea"_ustr;
+            case PASSWORD: return u"password"_ustr;
+            case FILE: return u"file"_ustr;
+            case FORMATTED_TEXT: return u"formatted-text"_ustr;
+            case FIXED_TEXT: return u"fixed-text"_ustr;
+            case COMBOBOX: return u"combobox"_ustr;
+            case LISTBOX: return u"listbox"_ustr;
+            case BUTTON: return u"button"_ustr;
+            case IMAGE: return u"image"_ustr;
+            case CHECKBOX: return u"checkbox"_ustr;
+            case RADIO: return u"radio"_ustr;
+            case FRAME: return u"frame"_ustr;
+            case IMAGE_FRAME: return u"image-frame"_ustr;
+            case HIDDEN: return u"hidden"_ustr;
+            case GRID: return u"grid"_ustr;
+            case VALUERANGE: return u"value-range"_ustr;
+            case TIME: return u"time"_ustr;
+            case DATE: return u"date"_ustr;
 
-            default: return "generic-control";
+            default: return u"generic-control"_ustr;
         }
     }
 

@@ -138,7 +138,7 @@ namespace xmloff
         exportEvents();
     }
 
-    void OElementExport::implStartElement(const char* _pName)
+    void OElementExport::implStartElement(const OUString& _pName)
     {
         m_pXMLElement = std::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
     }
@@ -1360,11 +1360,11 @@ namespace xmloff
         }
     }
 
-    void OControlExport::implStartElement(const char* _pName)
+    void OControlExport::implStartElement(const OUString& _pName)
     {
         // before we let the base class start it's outer element, we add a wrapper element
-        const char *pOuterElementName = getOuterXMLElementName();
-        if (pOuterElementName)
+        OUString pOuterElementName = getOuterXMLElementName();
+        if (!pOuterElementName.isEmpty())
             m_pOuterElement = std::make_unique<SvXMLElementExport>(
                                         m_rContext.getGlobalContext(),
                                         XML_NAMESPACE_FORM,
@@ -1387,12 +1387,12 @@ namespace xmloff
         m_pOuterElement.reset();
     }
 
-    const char* OControlExport::getOuterXMLElementName() const
+    OUString OControlExport::getOuterXMLElementName() const
     {
-        return nullptr;
+        return u""_ustr;
     }
 
-    const char* OControlExport::getXMLElementName() const
+    OUString OControlExport::getXMLElementName() const
     {
         return getElementName(m_eType);
     }
@@ -1949,9 +1949,9 @@ namespace xmloff
 
     }
 
-    const char* OColumnExport::getOuterXMLElementName() const
+    OUString OColumnExport::getOuterXMLElementName() const
     {
-        return "column";
+        return u"column"_ustr;
     }
 
     void OColumnExport::exportAttributes()
@@ -1998,9 +1998,9 @@ namespace xmloff
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
     }
 
-    const char* OFormExport::getXMLElementName() const
+    OUString OFormExport::getXMLElementName() const
     {
-        return "form";
+        return u"form"_ustr;
     }
 
     void OFormExport::exportSubTags()

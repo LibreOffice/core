@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace xmloff
 {
@@ -71,7 +72,7 @@ namespace xmloff
             @param  _eType
                 the element type
         */
-        static const char* getElementName(ElementType _eType);
+        static OUString getElementName(ElementType _eType);
 
         /** retrieves the tag name to be used to describe a control of the given type
 

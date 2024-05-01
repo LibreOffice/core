@@ -339,39 +339,39 @@ bool SvxXMLXTableExportComponent::exportTable() noexcept
             if( !mxTable.is() )
                 break;
 
-            char const* pEleName;
+            OUString pEleName;
             Type aExportType = mxTable->getElementType();
             std::unique_ptr<SvxXMLTableEntryExporter> pExporter;
 
             if( aExportType == cppu::UnoType<sal_Int32>::get() )
             {
                 pExporter.reset(new SvxXMLColorEntryExporter(*this));
-                pEleName = "color-table";
+                pEleName = u"color-table"_ustr;
             }
             else if( aExportType == cppu::UnoType< drawing::PolyPolygonBezierCoords >::get() )
             {
                 pExporter.reset(new SvxXMLLineEndEntryExporter(*this));
-                pEleName = "marker-table";
+                pEleName = u"marker-table"_ustr;
             }
             else if( aExportType == cppu::UnoType< drawing::LineDash >::get() )
             {
                 pExporter.reset(new SvxXMLDashEntryExporter(*this));
-                pEleName = "dash-table";
+                pEleName = u"dash-table"_ustr;
             }
             else if( aExportType == cppu::UnoType< drawing::Hatch >::get() )
             {
                 pExporter.reset(new SvxXMLHatchEntryExporter(*this));
-                pEleName = "hatch-table";
+                pEleName = u"hatch-table"_ustr;
             }
             else if( aExportType == cppu::UnoType< awt::Gradient >::get() )
             {
                 pExporter.reset(new SvxXMLGradientEntryExporter(*this));
-                pEleName = "gradient-table";
+                pEleName = u"gradient-table"_ustr;
             }
             else if( aExportType == cppu::UnoType<awt::XBitmap>::get())
             {
                 pExporter.reset(new SvxXMLBitmapEntryExporter(*this));
-                pEleName = "bitmap-table";
+                pEleName = u"bitmap-table"_ustr;
             }
             else
             {

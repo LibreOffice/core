@@ -2451,20 +2451,6 @@ void SvXMLElementExport::StartElement(
 SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     sal_uInt16 nPrefixKey,
-    const char *pLName,
-    bool bIWSOutside,
-    bool bIWSInside )
-    : mrExport( rExp )
-    , mbIgnoreWhitespaceInside( bIWSInside )
-    , mbDoSomething( true )
-{
-    const OUString sLName( OUString::createFromAscii( pLName ) );
-    StartElement( nPrefixKey, sLName, bIWSOutside );
-}
-
-SvXMLElementExport::SvXMLElementExport(
-    SvXMLExport& rExp,
-    sal_uInt16 nPrefixKey,
     const OUString& rLName,
     bool bIWSOutside,
     bool bIWSInside )

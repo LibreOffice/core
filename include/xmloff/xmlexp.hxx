@@ -649,9 +649,6 @@ public:
     // The constructor prints a start tag that has the common attributes
     // of the XMLExport instance attached.
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
-                        const char *pName,
-                        bool bIgnWSOutside, bool bIgnWSInside );
-    SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         const OUString& rName,
                         bool bIgnWSOutside, bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
