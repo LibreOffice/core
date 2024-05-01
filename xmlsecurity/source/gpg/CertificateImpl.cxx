@@ -220,7 +220,7 @@ sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
     return KeyUsage::DIGITAL_SIGNATURE | KeyUsage::NON_REPUDIATION  | KeyUsage::KEY_ENCIPHERMENT | KeyUsage::DATA_ENCIPHERMENT;
 }
 
-void CertificateImpl::setCertificate(std::shared_ptr<GpgME::Context> ctx, const GpgME::Key& key)
+void CertificateImpl::setCertificate(const std::shared_ptr<GpgME::Context>& ctx, const GpgME::Key& key)
 {
     m_pKey = key;
     m_pContext = ctx;

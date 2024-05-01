@@ -82,7 +82,7 @@ public:
     virtual css::security::CertificateKind SAL_CALL getCertificateKind() override;
 
     // Helper methods
-    void setCertificate(std::shared_ptr<GpgME::Context> ctx, const GpgME::Key& key);
+    void setCertificate(const std::shared_ptr<GpgME::Context>& ctx, const GpgME::Key& key);
     const GpgME::Key* getCertificate() const;
 
     // XServiceInfo
