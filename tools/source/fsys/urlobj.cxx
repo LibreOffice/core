@@ -2274,7 +2274,8 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
     sal_Int32 i = 0;
     for (; pFirst < pLast; ++i)
     {
-        if (pFirst->m_pPrefix && pFirst->m_pPrefix[i] == '\0')
+        assert(pFirst->m_pPrefix && "we start search after the dummy entry");
+        if (pFirst->m_pPrefix[i] == '\0')
         {
             pMatch = pFirst++;
             pMatched = p;
