@@ -992,13 +992,13 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // just one page is special ...
     if ( 1 == aVec.size() )
     {
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ <= 13 && __cplusplus == 202002L
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
         aVec.insert( aVec.begin() + 1, nullptr ); // insert a second empty page
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ <= 13 && __cplusplus == 202002L
 #pragma GCC diagnostic pop
 #endif
     }
