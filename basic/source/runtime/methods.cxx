@@ -3564,46 +3564,46 @@ void SbRtl_VarType(StarBASIC *, SbxArray & rPar, bool)
 // Exported function
 OUString getBasicTypeName( SbxDataType eType )
 {
-    static const char* pTypeNames[] =
+    static constexpr OUString pTypeNames[] =
     {
-        "Empty",            // SbxEMPTY
-        "Null",             // SbxNULL
-        "Integer",          // SbxINTEGER
-        "Long",             // SbxLONG
-        "Single",           // SbxSINGLE
-        "Double",           // SbxDOUBLE
-        "Currency",         // SbxCURRENCY
-        "Date",             // SbxDATE
-        "String",           // SbxSTRING
-        "Object",           // SbxOBJECT
-        "Error",            // SbxERROR
-        "Boolean",          // SbxBOOL
-        "Variant",          // SbxVARIANT
-        "DataObject",       // SbxDATAOBJECT
-        "Unknown Type",
-        "Unknown Type",
-        "Char",             // SbxCHAR
-        "Byte",             // SbxBYTE
-        "UShort",           // SbxUSHORT
-        "ULong",            // SbxULONG
-        "Long64",           // SbxLONG64
-        "ULong64",          // SbxULONG64
-        "Int",              // SbxINT
-        "UInt",             // SbxUINT
-        "Void",             // SbxVOID
-        "HResult",          // SbxHRESULT
-        "Pointer",          // SbxPOINTER
-        "DimArray",         // SbxDIMARRAY
-        "CArray",           // SbxCARRAY
-        "Userdef",          // SbxUSERDEF
-        "Lpstr",            // SbxLPSTR
-        "Lpwstr",           // SbxLPWSTR
-        "Unknown Type",     // SbxCoreSTRING
-        "WString",          // SbxWSTRING
-        "WChar",            // SbxWCHAR
-        "Int64",            // SbxSALINT64
-        "UInt64",           // SbxSALUINT64
-        "Decimal",          // SbxDECIMAL
+        u"Empty"_ustr,            // SbxEMPTY
+        u"Null"_ustr,             // SbxNULL
+        u"Integer"_ustr,          // SbxINTEGER
+        u"Long"_ustr,             // SbxLONG
+        u"Single"_ustr,           // SbxSINGLE
+        u"Double"_ustr,           // SbxDOUBLE
+        u"Currency"_ustr,         // SbxCURRENCY
+        u"Date"_ustr,             // SbxDATE
+        u"String"_ustr,           // SbxSTRING
+        u"Object"_ustr,           // SbxOBJECT
+        u"Error"_ustr,            // SbxERROR
+        u"Boolean"_ustr,          // SbxBOOL
+        u"Variant"_ustr,          // SbxVARIANT
+        u"DataObject"_ustr,       // SbxDATAOBJECT
+        u"Unknown Type"_ustr,
+        u"Unknown Type"_ustr,
+        u"Char"_ustr,             // SbxCHAR
+        u"Byte"_ustr,             // SbxBYTE
+        u"UShort"_ustr,           // SbxUSHORT
+        u"ULong"_ustr,            // SbxULONG
+        u"Long64"_ustr,           // SbxLONG64
+        u"ULong64"_ustr,          // SbxULONG64
+        u"Int"_ustr,              // SbxINT
+        u"UInt"_ustr,             // SbxUINT
+        u"Void"_ustr,             // SbxVOID
+        u"HResult"_ustr,          // SbxHRESULT
+        u"Pointer"_ustr,          // SbxPOINTER
+        u"DimArray"_ustr,         // SbxDIMARRAY
+        u"CArray"_ustr,           // SbxCARRAY
+        u"Userdef"_ustr,          // SbxUSERDEF
+        u"Lpstr"_ustr,            // SbxLPSTR
+        u"Lpwstr"_ustr,           // SbxLPWSTR
+        u"Unknown Type"_ustr,     // SbxCoreSTRING
+        u"WString"_ustr,          // SbxWSTRING
+        u"WChar"_ustr,            // SbxWCHAR
+        u"Int64"_ustr,            // SbxSALINT64
+        u"UInt64"_ustr,           // SbxSALUINT64
+        u"Decimal"_ustr,          // SbxDECIMAL
     };
 
     size_t nPos = static_cast<size_t>(eType) & 0x0FFF;
@@ -3612,7 +3612,7 @@ OUString getBasicTypeName( SbxDataType eType )
     {
         nPos = nTypeNameCount - 1;
     }
-    return OUString::createFromAscii(pTypeNames[nPos]);
+    return pTypeNames[nPos];
 }
 
 static OUString getObjectTypeName( SbxVariable* pVar )
