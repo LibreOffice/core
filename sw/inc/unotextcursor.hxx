@@ -65,7 +65,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XMarkingAccess
 > SwXTextCursor_Base;
 
-class SwXTextCursor final
+class SW_DLLPUBLIC SwXTextCursor final
     : public SwXTextCursor_Base
     , public OTextCursorHelper
 {

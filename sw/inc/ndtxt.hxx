@@ -445,7 +445,7 @@ public:
      */
     SwTextAttr* GetTextAttrForEndCharAt(sal_Int32 nIndex, sal_uInt16 nWhich) const;
 
-    SwTextField* GetFieldTextAttrAt(
+    SW_DLLPUBLIC SwTextField* GetFieldTextAttrAt(
         const sal_Int32 nIndex,
         ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Expand) const;
 

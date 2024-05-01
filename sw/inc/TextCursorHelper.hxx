@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
+#include "swdllapi.h"
+
 #include <cppuhelper/implbase1.hxx>
 
 class SwDoc;
 class SwPaM;
 
-class SAL_LOPLUGIN_ANNOTATE("crosscast") OTextCursorHelper
+class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") OTextCursorHelper
 {
 public:
 
