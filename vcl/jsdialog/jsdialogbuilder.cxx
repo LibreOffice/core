@@ -1475,6 +1475,12 @@ JSContainer::JSContainer(JSDialogSender* pSender, vcl::Window* pContainer,
 {
 }
 
+void JSContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
+{
+    SalInstanceContainer::move(pWidget, pNewParent);
+    sendFullUpdate();
+}
+
 JSScrolledWindow::JSScrolledWindow(JSDialogSender* pSender, ::VclScrolledWindow* pContainer,
                                    SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                                    bool bUserManagedScrolling)
@@ -2340,7 +2346,7 @@ JSBox::JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder
 void JSBox::reorder_child(weld::Widget* pWidget, int nNewPosition)
 {
     SalInstanceBox::reorder_child(pWidget, nNewPosition);
-    sendUpdate();
+    sendFullUpdate();
 }
 
 JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,

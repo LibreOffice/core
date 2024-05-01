@@ -544,6 +544,8 @@ class JSContainer final : public JSWidget<SalInstanceContainer, vcl::Window>
 public:
     JSContainer(JSDialogSender* pSender, vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
                 bool bTakeOwnership);
+
+    void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
 };
 
 class JSScrolledWindow final : public JSWidget<SalInstanceScrolledWindow, ::VclScrolledWindow>
