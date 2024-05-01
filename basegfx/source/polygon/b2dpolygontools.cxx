@@ -3328,12 +3328,11 @@ namespace basegfx::utils
 
                 // get first point and flag
                 B2DPoint aNewCoordinatePair(rPointSequenceSource[0].X, rPointSequenceSource[0].Y);
-                css::drawing::PolygonFlags ePolygonFlag(rFlagSequenceSource[0]);
                 B2DPoint aControlA;
                 B2DPoint aControlB;
 
                 // first point is not allowed to be a control point
-                OSL_ENSURE(ePolygonFlag != css::drawing::PolygonFlags_CONTROL,
+                OSL_ENSURE(rFlagSequenceSource[0] != css::drawing::PolygonFlags_CONTROL,
                     "UnoPolygonBezierCoordsToB2DPolygon: Start point is a control point, illegal input polygon (!)");
 
                 // add first point as start point
@@ -3347,7 +3346,7 @@ namespace basegfx::utils
 
                     // get next point and flag
                     aNewCoordinatePair = B2DPoint(rPointSequenceSource[b].X, rPointSequenceSource[b].Y);
-                    ePolygonFlag = rFlagSequenceSource[b];
+                    css::drawing::PolygonFlags ePolygonFlag = rFlagSequenceSource[b];
                     b++;
 
                     if(b < nCount && ePolygonFlag == css::drawing::PolygonFlags_CONTROL)
