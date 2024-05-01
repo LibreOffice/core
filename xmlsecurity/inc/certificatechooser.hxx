@@ -51,7 +51,6 @@ class CertificateChooser final : public weld::GenericDialogController
 {
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
-    std::vector<std::shared_ptr<CertificateChooserUserData>> mvUserData;
 
     bool                    mbInitialized;
     CertificateChooserUserAction const meAction;

@@ -216,7 +216,6 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             userData->xCertificate = xCert;
             userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
-            mvUserData.push_back(userData);
 
             OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName(), xCert->getCertificateKind());
             OUString sExpDate = utl::GetDateString(xCert->getNotValidAfter());
