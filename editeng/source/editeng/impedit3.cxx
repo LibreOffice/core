@@ -4271,7 +4271,7 @@ void ImpEditEngine::InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 
 EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_Int32 nSepPos )
 {
     ContentNode* pNode = maEditDoc.GetObject( nNode );
-    DBG_ASSERT( pNode, "Invalid Node in SplitContent" );
+    assert(pNode && "Invalid Node in SplitContent");
     DBG_ASSERT( IsInUndo(), "SplitContent only for Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->Len(), "Index out of range: SplitContent" );
     EditPaM aPaM( pNode, nSepPos );

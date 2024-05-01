@@ -449,7 +449,7 @@ const SfxPoolItemHolder& SfxShell::ExecuteSlot
         pSlot = GetVerbSlot_Impl(nSlot);
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlot);
-    DBG_ASSERT( pSlot, "slot not supported" );
+    assert(pSlot && "slot not supported");
 
     SfxExecFunc pFunc = pSlot->GetExecFnc();
     if ( pFunc )

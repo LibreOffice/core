@@ -127,15 +127,13 @@ OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     DBG_ASSERT(pOut,"Undo:No Outliner");
 }
 
-
 OLUndoExpand::~OLUndoExpand()
 {
 }
 
-
 void OLUndoExpand::Restore( bool bUndo )
 {
-    DBG_ASSERT(pOutliner,"Undo:No Outliner");
+    assert(pOutliner && "Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
 

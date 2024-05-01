@@ -670,8 +670,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OUString& rEntry, StyleLis
 
 static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModMgr, SfxObjectShell const * i_pObjSh )
 {
-    OSL_ENSURE( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
-    OSL_ENSURE( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
+    assert(i_xModMgr.is() && "getModuleIdentifier(): no XModuleManager");
+    assert(i_pObjSh && "getModuleIdentifier(): no ObjectShell");
 
     OUString sIdentifier;
 

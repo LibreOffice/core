@@ -116,7 +116,7 @@ SvParserState EditRTFParser::CallParser()
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
         ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject(nPara-1);
-        DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
+        assert(pPrevNode && "Invalid RTF-Document?!");
         EditSelection aSel;
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
         aSel.Max() = EditPaM( pCurNode, 0 );

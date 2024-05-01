@@ -396,7 +396,7 @@ void Outliner::SetToEmptyText()
 
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
-    DBG_ASSERT(pPara,"SetText:No Para");
+    assert(pPara && "SetText:No Para");
 
     const sal_Int32 nPara = pParaList->GetAbsPos( pPara );
 
@@ -810,7 +810,8 @@ bool Outliner::Collapse( Paragraph const * pPara )
 vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
 {
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
-    DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
+    assert(pFmt && "ImpCalcBulletFont: Missing!");
+    DBG_ASSERT(( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: BitmapBullet!" );
 
     vcl::Font aStdFont;
     if ( !pEditEngine->IsFlatMode() )
@@ -1380,7 +1381,7 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
     if( pPara->aBulSize.Width() == -1 )
     {
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
-        DBG_ASSERT( pFmt, "ImplGetBulletSize - no Bullet!" );
+        assert(pFmt && "ImplGetBulletSize - no Bullet!");
 
         if ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE )
         {

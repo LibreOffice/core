@@ -103,7 +103,7 @@ private:
     double decideColorAndOpacity(basegfx::BColor& rColor) const
     {
         // init values with full opacity and material color
-        OSL_ENSURE(nullptr != mpCurrentMaterial, "CurrentMaterial not set (!)");
+        assert(nullptr != mpCurrentMaterial && "CurrentMaterial not set (!)");
         double fOpacity(1.0);
         rColor = mpCurrentMaterial->getColor();
 

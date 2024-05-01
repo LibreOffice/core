@@ -216,7 +216,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxEditSource* pSource, const Svx
 {
     SolarMutexGuard aGuard;
 
-    DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
+    assert(pSource && "SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
     mpEditSource = pSource->Clone();
     if (mpEditSource != nullptr)
@@ -1435,7 +1435,7 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int32 nCount, bool Expand) noexcept
         {
             if ( !pForwarder )
                 pForwarder = mpEditSource->GetTextForwarder();  // first here, it is necessary...
-
+            assert(pForwarder);
             --nNewPar;
             nCount -= nNewPos + 1;
             nNewPos = pForwarder->GetTextLen( nNewPar );

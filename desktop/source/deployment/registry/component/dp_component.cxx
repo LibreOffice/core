@@ -1106,7 +1106,7 @@ void extractComponentData(
         componentLoader,
     OUString const & componentUrl)
 {
-    OSL_ASSERT(
+    assert(
         context.is() && registry.is() && data != nullptr && componentLoader.is());
     OUString registryName(registry->getKeyName());
     sal_Int32 prefix = registryName.getLength();

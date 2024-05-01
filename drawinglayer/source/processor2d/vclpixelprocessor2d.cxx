@@ -586,8 +586,7 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
                     const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor
                         = static_cast<const primitive2d::PolyPolygonColorPrimitive2D*>(
                             pBasePrimitive);
-                    SAL_WARN_IF(!pPoPoColor, "drawinglayer",
-                                "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                    assert(pPoPoColor && "OOps, PrimitiveID and PrimitiveType do not match (!)");
                     bDrawTransparentUsed = true;
                     tryDrawPolyPolygonColorPrimitive2DDirect(
                         *pPoPoColor, rUniTransparenceCandidate.getTransparence());

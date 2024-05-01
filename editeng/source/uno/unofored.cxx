@@ -209,7 +209,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ES
 
         for (auto const& attrib : aAttribs)
         {
-            DBG_ASSERT(attrib.pAttr, "GetCharAttribs gives corrupt data");
+            assert(attrib.pAttr && "GetCharAttribs gives corrupt data");
 
             const bool bEmptyPortion = attrib.nStart == attrib.nEnd;
             if((!bEmptyPortion && attrib.nStart >= nEndPos) ||

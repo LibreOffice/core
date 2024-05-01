@@ -106,10 +106,9 @@ SfxSlotPool* SfxModule::GetSlotPool() const
     return &*pImpl->pSlotPool;
 }
 
-
 void SfxModule::RegisterChildWindow(const SfxChildWinFactory& rFact)
 {
-    DBG_ASSERT( pImpl, "No real Module!" );
+    assert(pImpl && "No real Module!");
 
     for (size_t nFactory=0; nFactory<pImpl->maFactories.size(); ++nFactory)
     {
@@ -123,7 +122,6 @@ void SfxModule::RegisterChildWindow(const SfxChildWinFactory& rFact)
 
     pImpl->maFactories.push_back( rFact );
 }
-
 
 void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {

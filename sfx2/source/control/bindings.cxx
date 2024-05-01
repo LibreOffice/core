@@ -1268,7 +1268,7 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
         while ( !bJobDone )
         {
             SfxStateCache* pCache = pImpl->pCaches[pImpl->nMsgPos].get();
-            DBG_ASSERT( pCache, "invalid SfxStateCache-position in job queue" );
+            assert(pCache && "invalid SfxStateCache-position in job queue");
             bool bWasDirty = pCache->IsControllerDirty();
             if ( bWasDirty )
             {

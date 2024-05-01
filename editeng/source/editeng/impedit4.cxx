@@ -147,8 +147,10 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
         pPool = pPool->GetSecondaryPool();
     }
 
-    DBG_ASSERT(pPool && pPool->GetName() == "EditEngineItemPool",
-        "ReadRTF: no EditEnginePool!");
+    assert(pPool && "ReadRTF: no EditEnginePool!");
+
+    DBG_ASSERT(pPool->GetName() == "EditEngineItemPool",
+        "ReadRTF: wrong EditEnginePool!");
 
     EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, mpEditEngine);
     SvParserState eState = xPrsr->CallParser();
@@ -217,7 +219,7 @@ ErrCode ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = maEditDoc.GetObject( nNode );
-        DBG_ASSERT( pNode, "Node not found: Search&Replace" );
+        assert(pNode && "Node not found: Search&Replace");
 
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->Len();

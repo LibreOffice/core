@@ -836,7 +836,7 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
     for ( sal_Int32 nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "ImpCalcSelectedPages: invalid Selection? ");
+        assert(pPara && "ImpCalcSelectedPages: invalid Selection?");
         if( pPara->HasFlag(ParaFlag::ISPAGE) )
         {
             nPages++;

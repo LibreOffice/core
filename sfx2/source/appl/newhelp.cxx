@@ -1854,10 +1854,6 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, void )
 }
 void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 {
-    bool bWrapAround = ( nullptr == pDlg );
-    if ( bWrapAround )
-        pDlg = m_xSrchDlg.get();
-    DBG_ASSERT( pDlg, "invalid search dialog" );
     try
     {
         // select the words, which are equal to the search text of the search page
@@ -1868,6 +1864,11 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
             Reference < XSearchable > xSearchable( xController->getModel(), UNO_QUERY );
             if ( xSearchable.is() )
             {
+                bool bWrapAround = ( nullptr == pDlg );
+                if ( bWrapAround )
+                    pDlg = m_xSrchDlg.get();
+                assert(pDlg && "invalid search dialog");
+
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
                 xSrchDesc->setPropertyValue( "SearchWords", Any(pDlg->IsOnlyWholeWords()) );

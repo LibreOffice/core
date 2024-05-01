@@ -435,7 +435,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
          m_xFilterLb->get_sensitive() )
     {
         bModified = true;
-        OSL_ENSURE( pItem, "No Item" );
+        assert(pItem && "No Item");
         // is only possibly for user templates
         SfxStyleSearchBits nMask = pItem->GetFilterList()[m_xFilterLb->get_id(nFilterIdx).toUInt32()].nFlags | SfxStyleSearchBits::UserDefined;
         pStyle->SetMask( nMask );

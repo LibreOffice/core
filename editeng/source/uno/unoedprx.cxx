@@ -1128,21 +1128,21 @@ bool SvxAccessibleTextEditViewAdapter::IsValid() const
 
 Point SvxAccessibleTextEditViewAdapter::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    assert(mpViewForwarder && "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     return mpViewForwarder->LogicToPixel(rPoint, rMapMode);
 }
 
 Point SvxAccessibleTextEditViewAdapter::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    assert(mpViewForwarder && "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     return mpViewForwarder->PixelToLogic(rPoint, rMapMode);
 }
 
 bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
 {
-    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    assert(mpViewForwarder && "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     ESelection aSelection;
 
@@ -1167,7 +1167,7 @@ bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
 
 bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel )
 {
-    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    assert(mpViewForwarder && "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;

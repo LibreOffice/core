@@ -473,7 +473,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     for ( size_t nView = 0; nView < pEE->GetViewCount(); nView++ )
     {
         EditView* pV = pEE->GetView( nView );
-        DBG_ASSERT( pV, "View not found!" );
+        assert(pV && "View not found!");
         fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         tools::Rectangle aR( pV->GetOutputArea() );
         fprintf( fp, "\n  OutputArea: nX=%" SAL_PRIdINT64 ", nY=%" SAL_PRIdINT64 ", dX=%" SAL_PRIdINT64 ", dY=%" SAL_PRIdINT64 ", MapMode = %i",

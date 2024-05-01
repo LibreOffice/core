@@ -204,7 +204,9 @@ void EditUndoDelContent::Redo()
         ? pEE->GetEditDoc().GetObject(nNode)
         : pEE->GetEditDoc().GetObject(nNode - 1);
 
-    DBG_ASSERT(pCheckNode && pCheckNode != mpContentNode.get(), "?! RemoveContent !? ");
+    assert(pCheckNode);
+
+    DBG_ASSERT(pCheckNode != mpContentNode.get(), "?! RemoveContent !? ");
 
     EditPaM aPaM(pCheckNode, pCheckNode->Len());
 
