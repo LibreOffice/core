@@ -32,8 +32,7 @@ namespace i18npool {
 CharacterClassificationImpl::CharacterClassificationImpl(
         const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
-    static constexpr OUStringLiteral sUnicode = u"Unicode";
-    if (createLocaleSpecificCharacterClassification(sUnicode, Locale()))
+    if (createLocaleSpecificCharacterClassification(u"Unicode"_ustr, Locale()))
         xUCI = cachedItem->xCI;
 }
 

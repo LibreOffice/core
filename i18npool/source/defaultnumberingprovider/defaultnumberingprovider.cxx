@@ -461,8 +461,7 @@ static
 void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 {
     OUStringBuffer aTemp(64);
-    static constexpr OUStringLiteral asPersianWord_conjunction_data = u" \u0648 ";
-    OUString asPersianWord_conjunction( asPersianWord_conjunction_data );
+    OUString asPersianWord_conjunction = u" \u0648 "_ustr;
     unsigned char nSection = 0;
 
     while (int nPart = nNumber % 1000)
