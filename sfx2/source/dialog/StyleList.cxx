@@ -65,6 +65,7 @@
 
 #include <vcl/virdev.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <random>
 
 using namespace css;
 using namespace css::beans;
@@ -98,19 +99,34 @@ namespace
 {
 Color ColorHash(std::u16string_view rString)
 {
-    static std::vector aSaturationArray{ 0.90, 0.75, 0.60 };
-    static std::vector aLightnessArray = aSaturationArray;
+    constexpr auto aSaturationArray = std::to_array<sal_uInt16>({ 90, 75, 60 });
+    constexpr auto aBrightnessArray = std::to_array<sal_uInt16>({ 100, 80, 60 });
+    constexpr auto aTintOrShadeArray
+        = std::to_array<sal_Int16>({ 1'500, 3'000, 4'500, 6'500, 7'500 });
 
     sal_uInt32 nStringHash = rtl_ustr_hashCode_WithLength(rString.data(), rString.length());
 
-    double nHue = nStringHash % 359;
-    double nSaturation = aSaturationArray[nStringHash / 360 % aSaturationArray.size()];
-    double nLightness
-        = aLightnessArray[nStringHash / 360 / aSaturationArray.size() % aLightnessArray.size()];
+    // Twist the hash number with a RNG twister so we can get very different number even when the string hash
+    // differs only slightly. For example "Heading 1" and "Heading 2" are very close, so we would get a color
+    // that is very similar and with number quantization could result in the same color.
+    std::mt19937 twister;
+    twister.seed(nStringHash); // setting the hash for
+    nStringHash = twister();
 
-    basegfx::BColor aHSLColor(nHue, nSaturation, nLightness);
+    double fHue = (nStringHash % 60) * 6;
+    nStringHash = nStringHash / 60;
 
-    return Color(basegfx::utils::hsl2rgb(aHSLColor));
+    double fSaturation = aSaturationArray[nStringHash % aSaturationArray.size()];
+    nStringHash = nStringHash / aSaturationArray.size();
+
+    double fBrightness = aBrightnessArray[nStringHash % aBrightnessArray.size()];
+    nStringHash = nStringHash / aBrightnessArray.size();
+
+    auto aColor = Color::HSBtoRGB(fHue, fSaturation, fBrightness);
+    double fTintOrShade = aTintOrShadeArray[nStringHash % aTintOrShadeArray.size()];
+    aColor.ApplyTintOrShade(fTintOrShade);
+
+    return aColor;
 }
 
 // used to disallow the default character style in the styles highlighter character styles color map
@@ -694,7 +710,7 @@ static bool IsExpanded_Impl(const std::vector<OUString>& rEntries, std::u16strin
 static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyleFamily eFam,
                        const weld::TreeIter* pParent, weld::TreeIter* pRet, SfxViewShell* pViewSh)
 {
-    Color aColor(ColorHash(rName));
+    Color aColor = ColorHash(rName);
 
     int nColor;
     if (eFam == SfxStyleFamily::Para)
