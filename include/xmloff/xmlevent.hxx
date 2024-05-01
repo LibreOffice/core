@@ -50,14 +50,10 @@ struct XMLEventName
     OUString m_aName;
 
     XMLEventName() : m_nPrefix( 0 ) {}
-    XMLEventName( sal_uInt16 n, const char *p ) :
-        m_nPrefix( n ),
-        m_aName( OUString::createFromAscii(p) )
-       {}
 
-    XMLEventName( sal_uInt16 n, OUString s ) :
+    XMLEventName( sal_uInt16 n, const OUString& s ) :
         m_nPrefix( n ),
-        m_aName(std::move( s ))
+        m_aName( s )
        {}
 
     bool operator<( const XMLEventName& r ) const
@@ -75,9 +71,9 @@ struct XMLEventName
  */
 struct XMLEventNameTranslation
 {
-    const char* sAPIName;
+    OUString sAPIName;
     sal_uInt16 nPrefix;    // namespace prefix
-    const char* sXMLName;
+    OUString sXMLName;
 };
 
 /// a translation table for the events defined in the XEventsSupplier service

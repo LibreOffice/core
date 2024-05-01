@@ -66,10 +66,10 @@ void XMLEventExport::AddTranslationTable(
     {
         // put translation table into map
         for(const XMLEventNameTranslation* pTrans = pTransTable;
-            pTrans->sAPIName != nullptr;
+            !pTrans->sAPIName.isEmpty();
             pTrans++)
         {
-            m_aNameTranslationMap[OUString::createFromAscii(pTrans->sAPIName)] =
+            m_aNameTranslationMap[pTrans->sAPIName] =
                 XMLEventName(pTrans->nPrefix, pTrans->sXMLName);
         }
     }
@@ -251,68 +251,68 @@ void XMLEventExport::EndElement(bool bWhitespace)
 // implement aStandardEventTable (defined in xmlevent.hxx)
 const XMLEventNameTranslation aStandardEventTable[] =
 {
-    { "OnSelect",           XML_NAMESPACE_DOM, "select" }, // "on-select"
-    { "OnInsertStart",      XML_NAMESPACE_OFFICE, "insert-start" }, // "on-insert-start"
-    { "OnInsertDone",       XML_NAMESPACE_OFFICE, "insert-done" }, // "on-insert-done"
-    { "OnMailMerge",        XML_NAMESPACE_OFFICE, "mail-merge" }, // "on-mail-merge"
-    { "OnAlphaCharInput",   XML_NAMESPACE_OFFICE, "alpha-char-input" }, // "on-alpha-char-input"
-    { "OnNonAlphaCharInput",    XML_NAMESPACE_OFFICE, "non-alpha-char-input" }, // "on-non-alpha-char-input"
-    { "OnResize",           XML_NAMESPACE_DOM, "resize" }, // "on-resize"
-    { "OnMove",             XML_NAMESPACE_OFFICE, "move" }, // "on-move"
-    { "OnPageCountChange",  XML_NAMESPACE_OFFICE, "page-count-change" }, // "on-page-count-change"
-    { "OnMouseOver",        XML_NAMESPACE_DOM, "mouseover" }, // "on-mouse-over"
-    { "OnClick",            XML_NAMESPACE_DOM, "click" }, // "on-click"
-    { "OnMouseOut",         XML_NAMESPACE_DOM, "mouseout" }, // "on-mouse-out"
-    { "OnLoadError",        XML_NAMESPACE_OFFICE, "load-error" }, // "on-load-error"
-    { "OnLoadCancel",       XML_NAMESPACE_OFFICE, "load-cancel" }, // "on-load-cancel"
-    { "OnLoadDone",         XML_NAMESPACE_OFFICE, "load-done" }, // "on-load-done"
-    { "OnLoad",             XML_NAMESPACE_DOM, "load" }, // "on-load"
-    { "OnUnload",           XML_NAMESPACE_DOM, "unload" }, // "on-unload"
-    { "OnStartApp",         XML_NAMESPACE_OFFICE, "start-app" }, // "on-start-app"
-    { "OnCloseApp",         XML_NAMESPACE_OFFICE, "close-app" }, // "on-close-app"
-    { "OnNew",              XML_NAMESPACE_OFFICE, "new" }, // "on-new"
-    { "OnSave",             XML_NAMESPACE_OFFICE, "save" }, // "on-save"
-    { "OnSaveAs",           XML_NAMESPACE_OFFICE, "save-as" }, // "on-save-as"
-    { "OnFocus",            XML_NAMESPACE_DOM, "DOMFocusIn" }, // "on-focus"
-    { "OnUnfocus",          XML_NAMESPACE_DOM, "DOMFocusOut" }, // "on-unfocus"
-    { "OnPrint",            XML_NAMESPACE_OFFICE, "print" }, // "on-print"
-    { "OnError",            XML_NAMESPACE_DOM, "error" }, // "on-error"
-    { "OnLoadFinished",     XML_NAMESPACE_OFFICE, "load-finished" }, // "on-load-finished"
-    { "OnSaveFinished",     XML_NAMESPACE_OFFICE, "save-finished" }, // "on-save-finished"
-    { "OnModifyChanged",    XML_NAMESPACE_OFFICE, "modify-changed" }, // "on-modify-changed"
-    { "OnPrepareUnload",    XML_NAMESPACE_OFFICE, "prepare-unload" }, // "on-prepare-unload"
-    { "OnNewMail",          XML_NAMESPACE_OFFICE, "new-mail" }, // "on-new-mail"
-    { "OnToggleFullscreen", XML_NAMESPACE_OFFICE, "toggle-fullscreen" }, // "on-toggle-fullscreen"
-    { "OnSaveDone",         XML_NAMESPACE_OFFICE, "save-done" }, // "on-save-done"
-    { "OnSaveAsDone",       XML_NAMESPACE_OFFICE, "save-as-done" }, // "on-save-as-done"
-    { "OnCopyTo",           XML_NAMESPACE_OFFICE, "copy-to" },
-    { "OnCopyToDone",       XML_NAMESPACE_OFFICE, "copy-to-done" },
-    { "OnViewCreated",      XML_NAMESPACE_OFFICE, "view-created" },
-    { "OnPrepareViewClosing", XML_NAMESPACE_OFFICE, "prepare-view-closing" },
-    { "OnViewClosed",       XML_NAMESPACE_OFFICE, "view-close" },
-    { "OnVisAreaChanged",   XML_NAMESPACE_OFFICE, "visarea-changed" }, // "on-visarea-changed"
-    { "OnCreate",           XML_NAMESPACE_OFFICE, "create" },
-    { "OnSaveAsFailed",     XML_NAMESPACE_OFFICE, "save-as-failed" },
-    { "OnSaveFailed",       XML_NAMESPACE_OFFICE, "save-failed" },
-    { "OnCopyToFailed",     XML_NAMESPACE_OFFICE, "copy-to-failed" },
-    { "OnTitleChanged",     XML_NAMESPACE_OFFICE, "title-changed" },
-    { "OnModeChanged",      XML_NAMESPACE_OFFICE, "mode-changed" },
-    { "OnSaveTo",           XML_NAMESPACE_OFFICE, "save-to" },
-    { "OnSaveToDone",       XML_NAMESPACE_OFFICE, "save-to-done" },
-    { "OnSaveToFailed",     XML_NAMESPACE_OFFICE, "save-to-failed" },
-    { "OnSubComponentOpened",   XML_NAMESPACE_OFFICE, "subcomponent-opened" },
-    { "OnSubComponentClosed",   XML_NAMESPACE_OFFICE, "subcomponent-closed" },
-    { "OnStorageChanged",       XML_NAMESPACE_OFFICE, "storage-changed" },
-    { "OnMailMergeFinished",    XML_NAMESPACE_OFFICE, "mail-merge-finished" },
-    { "OnFieldMerge",           XML_NAMESPACE_OFFICE, "field-merge" },
-    { "OnFieldMergeFinished",   XML_NAMESPACE_OFFICE, "field-merge-finished" },
-    { "OnLayoutFinished",       XML_NAMESPACE_OFFICE, "layout-finished" },
-    { "OnDoubleClick",      XML_NAMESPACE_OFFICE, "dblclick" },
-    { "OnRightClick",       XML_NAMESPACE_OFFICE, "contextmenu" },
-    { "OnChange",           XML_NAMESPACE_OFFICE, "content-changed" },
-    { "OnCalculate",        XML_NAMESPACE_OFFICE, "calculated" },
+    { u"OnSelect"_ustr,           XML_NAMESPACE_DOM, u"select"_ustr }, // "on-select"
+    { u"OnInsertStart"_ustr,      XML_NAMESPACE_OFFICE, u"insert-start"_ustr }, // "on-insert-start"
+    { u"OnInsertDone"_ustr,       XML_NAMESPACE_OFFICE, u"insert-done"_ustr }, // "on-insert-done"
+    { u"OnMailMerge"_ustr,        XML_NAMESPACE_OFFICE, u"mail-merge"_ustr }, // "on-mail-merge"
+    { u"OnAlphaCharInput"_ustr,   XML_NAMESPACE_OFFICE, u"alpha-char-input"_ustr }, // "on-alpha-char-input"
+    { u"OnNonAlphaCharInput"_ustr,    XML_NAMESPACE_OFFICE, u"non-alpha-char-input"_ustr }, // "on-non-alpha-char-input"
+    { u"OnResize"_ustr,           XML_NAMESPACE_DOM, u"resize"_ustr }, // "on-resize"
+    { u"OnMove"_ustr,             XML_NAMESPACE_OFFICE, u"move"_ustr }, // "on-move"
+    { u"OnPageCountChange"_ustr,  XML_NAMESPACE_OFFICE, u"page-count-change"_ustr }, // "on-page-count-change"
+    { u"OnMouseOver"_ustr,        XML_NAMESPACE_DOM, u"mouseover"_ustr }, // "on-mouse-over"
+    { u"OnClick"_ustr,            XML_NAMESPACE_DOM, u"click"_ustr }, // "on-click"
+    { u"OnMouseOut"_ustr,         XML_NAMESPACE_DOM, u"mouseout"_ustr }, // "on-mouse-out"
+    { u"OnLoadError"_ustr,        XML_NAMESPACE_OFFICE, u"load-error"_ustr }, // "on-load-error"
+    { u"OnLoadCancel"_ustr,       XML_NAMESPACE_OFFICE, u"load-cancel"_ustr }, // "on-load-cancel"
+    { u"OnLoadDone"_ustr,         XML_NAMESPACE_OFFICE, u"load-done"_ustr }, // "on-load-done"
+    { u"OnLoad"_ustr,             XML_NAMESPACE_DOM, u"load"_ustr }, // "on-load"
+    { u"OnUnload"_ustr,           XML_NAMESPACE_DOM, u"unload"_ustr }, // "on-unload"
+    { u"OnStartApp"_ustr,         XML_NAMESPACE_OFFICE, u"start-app"_ustr }, // "on-start-app"
+    { u"OnCloseApp"_ustr,         XML_NAMESPACE_OFFICE, u"close-app"_ustr }, // "on-close-app"
+    { u"OnNew"_ustr,              XML_NAMESPACE_OFFICE, u"new"_ustr }, // "on-new"
+    { u"OnSave"_ustr,             XML_NAMESPACE_OFFICE, u"save"_ustr }, // "on-save"
+    { u"OnSaveAs"_ustr,           XML_NAMESPACE_OFFICE, u"save-as"_ustr }, // "on-save-as"
+    { u"OnFocus"_ustr,            XML_NAMESPACE_DOM, u"DOMFocusIn"_ustr }, // "on-focus"
+    { u"OnUnfocus"_ustr,          XML_NAMESPACE_DOM, u"DOMFocusOut"_ustr }, // "on-unfocus"
+    { u"OnPrint"_ustr,            XML_NAMESPACE_OFFICE, u"print"_ustr }, // "on-print"
+    { u"OnError"_ustr,            XML_NAMESPACE_DOM, u"error"_ustr }, // "on-error"
+    { u"OnLoadFinished"_ustr,     XML_NAMESPACE_OFFICE, u"load-finished"_ustr }, // "on-load-finished"
+    { u"OnSaveFinished"_ustr,     XML_NAMESPACE_OFFICE, u"save-finished"_ustr }, // "on-save-finished"
+    { u"OnModifyChanged"_ustr,    XML_NAMESPACE_OFFICE, u"modify-changed"_ustr }, // "on-modify-changed"
+    { u"OnPrepareUnload"_ustr,    XML_NAMESPACE_OFFICE, u"prepare-unload"_ustr }, // "on-prepare-unload"
+    { u"OnNewMail"_ustr,          XML_NAMESPACE_OFFICE, u"new-mail"_ustr }, // "on-new-mail"
+    { u"OnToggleFullscreen"_ustr, XML_NAMESPACE_OFFICE, u"toggle-fullscreen"_ustr }, // "on-toggle-fullscreen"
+    { u"OnSaveDone"_ustr,         XML_NAMESPACE_OFFICE, u"save-done"_ustr }, // "on-save-done"
+    { u"OnSaveAsDone"_ustr,       XML_NAMESPACE_OFFICE, u"save-as-done"_ustr }, // "on-save-as-done"
+    { u"OnCopyTo"_ustr,           XML_NAMESPACE_OFFICE, u"copy-to"_ustr },
+    { u"OnCopyToDone"_ustr,       XML_NAMESPACE_OFFICE, u"copy-to-done"_ustr },
+    { u"OnViewCreated"_ustr,      XML_NAMESPACE_OFFICE, u"view-created"_ustr },
+    { u"OnPrepareViewClosing"_ustr, XML_NAMESPACE_OFFICE, u"prepare-view-closing"_ustr },
+    { u"OnViewClosed"_ustr,       XML_NAMESPACE_OFFICE, u"view-close"_ustr },
+    { u"OnVisAreaChanged"_ustr,   XML_NAMESPACE_OFFICE, u"visarea-changed"_ustr }, // "on-visarea-changed"
+    { u"OnCreate"_ustr,           XML_NAMESPACE_OFFICE, u"create"_ustr },
+    { u"OnSaveAsFailed"_ustr,     XML_NAMESPACE_OFFICE, u"save-as-failed"_ustr },
+    { u"OnSaveFailed"_ustr,       XML_NAMESPACE_OFFICE, u"save-failed"_ustr },
+    { u"OnCopyToFailed"_ustr,     XML_NAMESPACE_OFFICE, u"copy-to-failed"_ustr },
+    { u"OnTitleChanged"_ustr,     XML_NAMESPACE_OFFICE, u"title-changed"_ustr },
+    { u"OnModeChanged"_ustr,      XML_NAMESPACE_OFFICE, u"mode-changed"_ustr },
+    { u"OnSaveTo"_ustr,           XML_NAMESPACE_OFFICE, u"save-to"_ustr },
+    { u"OnSaveToDone"_ustr,       XML_NAMESPACE_OFFICE, u"save-to-done"_ustr },
+    { u"OnSaveToFailed"_ustr,     XML_NAMESPACE_OFFICE, u"save-to-failed"_ustr },
+    { u"OnSubComponentOpened"_ustr,   XML_NAMESPACE_OFFICE, u"subcomponent-opened"_ustr },
+    { u"OnSubComponentClosed"_ustr,   XML_NAMESPACE_OFFICE, u"subcomponent-closed"_ustr },
+    { u"OnStorageChanged"_ustr,       XML_NAMESPACE_OFFICE, u"storage-changed"_ustr },
+    { u"OnMailMergeFinished"_ustr,    XML_NAMESPACE_OFFICE, u"mail-merge-finished"_ustr },
+    { u"OnFieldMerge"_ustr,           XML_NAMESPACE_OFFICE, u"field-merge"_ustr },
+    { u"OnFieldMergeFinished"_ustr,   XML_NAMESPACE_OFFICE, u"field-merge-finished"_ustr },
+    { u"OnLayoutFinished"_ustr,       XML_NAMESPACE_OFFICE, u"layout-finished"_ustr },
+    { u"OnDoubleClick"_ustr,      XML_NAMESPACE_OFFICE, u"dblclick"_ustr },
+    { u"OnRightClick"_ustr,       XML_NAMESPACE_OFFICE, u"contextmenu"_ustr },
+    { u"OnChange"_ustr,           XML_NAMESPACE_OFFICE, u"content-changed"_ustr },
+    { u"OnCalculate"_ustr,        XML_NAMESPACE_OFFICE, u"calculated"_ustr },
 
-    { nullptr, 0, nullptr }
+    { u""_ustr, 0, u""_ustr }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

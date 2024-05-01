@@ -57,7 +57,7 @@ void XMLEventImportHelper::AddTranslationTable(
 
     // put translation table into map
     for(const XMLEventNameTranslation* pTrans = pTransTable;
-        pTrans->sAPIName != nullptr;
+        !pTrans->sAPIName.isEmpty();
         pTrans++)
     {
         XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
@@ -67,8 +67,7 @@ void XMLEventImportHelper::AddTranslationTable(
                    "conflicting event translations");
 
         // assign new translation
-        (*pEventNameMap)[aName] =
-            OUString::createFromAscii(pTrans->sAPIName);
+        (*pEventNameMap)[aName] = pTrans->sAPIName;
     }
     // else? ignore!
 }
