@@ -470,10 +470,12 @@ void StringResourceImpl::removeLocale( const Locale& locale )
             }
             if( m_pCurrentLocaleItem == pRemoveItem )
             {
+                assert(pFallbackItem);
                 setCurrentLocale( pFallbackItem->m_locale, false/*FindClosestMatch*/ );
             }
             if( m_pDefaultLocaleItem == pRemoveItem )
             {
+                assert(pFallbackItem);
                 setDefaultLocale( pFallbackItem->m_locale );
             }
         }
@@ -1568,8 +1570,8 @@ static OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
 
     static const char aUnder[] = "_";
 
-    OSL_ENSURE( pLocaleItem,
-        "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
+    assert(pLocaleItem &&
+        "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL");
     Locale aLocale = pLocaleItem->m_locale;
 
     OUString aRetStr = aUnder + aLocale.Language;

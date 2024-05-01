@@ -610,7 +610,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
     }
     OSQLParseNode * pTableRefCommalist = pSelect->getChild(3)->getChild(0)->getChild(1);
 
-    OSL_ENSURE(pTableRefCommalist != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pTableRefCommalist != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableRefCommalist,table_ref_commalist),"OSQLParseTreeIterator: error in parse tree!");
 
     const OSQLParseNode* pTableName = nullptr;
@@ -965,21 +965,21 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     OSL_ENSURE(pSelectNode->count() >= 4,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pTableExp = pSelectNode->getChild(3);
-    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pTableExp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator:table_exp error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     sal_uInt32 nPos = ( _bOrder ? ORDER_BY_CHILD_POS : 2 );
 
     OSQLParseNode * pOptByClause = pTableExp->getChild(nPos);
-    OSL_ENSURE(pOptByClause != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pOptByClause != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     if ( pOptByClause->count() == 0 )
         return;
 
     OSL_ENSURE(pOptByClause->count() == 3,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pOrderingSpecCommalist = pOptByClause->getChild(2);
-    OSL_ENSURE(pOrderingSpecCommalist != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pOrderingSpecCommalist != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(!_bOrder || SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OSQLParseTreeIterator:ordering_spec_commalist error in parse tree!");
     OSL_ENSURE(pOrderingSpecCommalist->count() > 0,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -989,7 +989,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         OSQLParseNode* pColumnRef  = pOrderingSpecCommalist->getChild(i);
-        OSL_ENSURE(pColumnRef  != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        assert(pColumnRef != nullptr && "OSQLParseTreeIterator: error in parse tree!");
         if ( _bOrder )
         {
             OSL_ENSURE(SQL_ISRULE(pColumnRef,ordering_spec),"OSQLParseTreeIterator:ordering_spec error in parse tree!");
@@ -997,7 +997,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 
             pColumnRef = pColumnRef->getChild(0);
         }
-        OSL_ENSURE(pColumnRef != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        assert(pColumnRef != nullptr && "OSQLParseTreeIterator: error in parse tree!");
         aTableRange.clear();
         sColumnName.clear();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
@@ -1123,7 +1123,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         OSL_ENSURE(pSelectNode->count() >= 4,"OSQLParseTreeIterator: error in parse tree!");
 
         OSQLParseNode * pTableExp = pSelectNode->getChild(3);
-        OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        assert(pTableExp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1221,8 +1221,8 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode const * pSearc
         OSQLParseNode * pNum_value_exp  = pPart2->getChild(nCurrentPos);
         OSQLParseNode * pOptEscape      = pPart2->getChild(nCurrentPos+1);
 
-        OSL_ENSURE(pNum_value_exp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
-        OSL_ENSURE(pOptEscape != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        assert(pNum_value_exp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
+        assert(pOptEscape != nullptr && "OSQLParseTreeIterator: error in parse tree!");
 
         if (pOptEscape->count() != 0)
         {
@@ -1803,7 +1803,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
     {
         OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
         OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-        OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        assert(pTableExp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1844,7 +1844,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
     OSQLParseNode * pOrderClause = nullptr;
     OSL_ENSURE(pParseTree->count() == 4, "OSQLParseTreeIterator::getOrderTree: expected a SELECT, and a SELECT must have exactly four children");
     OSQLParseNode * pTableExp = pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != nullptr, "OSQLParseTreeIterator::getOrderTree: got NULL table_exp");
+    assert(pTableExp != nullptr && "OSQLParseTreeIterator::getOrderTree: got NULL table_exp");
     OSL_ENSURE(SQL_ISRULE(pTableExp, table_exp), "OSQLParseTreeIterator::getOrderTree: expected table_exp but got something else");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator::getOrderTree: table_exp doesn't have the expected number of children");
     // tdf#141115 upgrade the above to an assert;
@@ -1868,7 +1868,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
     OSQLParseNode * pGroupClause = nullptr;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pTableExp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1889,7 +1889,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     OSQLParseNode * pHavingClause = nullptr;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+    assert(pTableExp != nullptr && "OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 

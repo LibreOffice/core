@@ -96,6 +96,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey const *keys
     start=start_;
     end=end_;
     table = static_cast<sal_uInt8*>(malloc((end-start+1)*sizeof(sal_uInt8)));
+    assert(table && "Don't handle OOM conditions");
     for (sal_Unicode i = start; i <= end; i++) {
         sal_Int16 j;
         for (j = 0; j < key_count; j++) {

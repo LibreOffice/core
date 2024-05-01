@@ -1676,10 +1676,9 @@ OSQLParseNode::~OSQLParseNode()
 {
 }
 
-
 void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
-    OSL_ENSURE(pNewNode != nullptr, "OSQLParseNode: invalid NewSubTree");
+    assert(pNewNode != nullptr && "OSQLParseNode: invalid NewSubTree");
     OSL_ENSURE(pNewNode->getParent() == nullptr, "OSQLParseNode: Node is not an orphan");
     OSL_ENSURE(std::none_of(m_aChildren.begin(), m_aChildren.end(),
                    [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewNode; }),
@@ -2707,15 +2706,16 @@ OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
 
 OUString OSQLParseNode::getTableRange(const OSQLParseNode* _pTableRef)
 {
-    OSL_ENSURE(_pTableRef && _pTableRef->count() > 1 && _pTableRef->getKnownRuleID() == OSQLParseNode::table_ref,"Invalid node give, only table ref is allowed!");
+    assert(_pTableRef);
+    OSL_ENSURE(_pTableRef->count() > 1 && _pTableRef->getKnownRuleID() == OSQLParseNode::table_ref,"Invalid node give, only table ref is allowed!");
     const sal_uInt32 nCount = _pTableRef->count();
     OUString sTableRange;
     if ( nCount == 2 || (nCount == 3 && !_pTableRef->getChild(0)->isToken()) )
     {
         const OSQLParseNode* pNode = _pTableRef->getChild(nCount - (nCount == 2 ? 1 : 2));
-        OSL_ENSURE(pNode && (pNode->getKnownRuleID() == OSQLParseNode::table_primary_as_range_column
-                          || pNode->getKnownRuleID() == OSQLParseNode::range_variable)
-                         ,"SQL grammar changed!");
+        assert(pNode);
+        OSL_ENSURE(pNode->getKnownRuleID() == OSQLParseNode::table_primary_as_range_column ||
+                   pNode->getKnownRuleID() == OSQLParseNode::range_variable, "SQL grammar changed!");
         if ( !pNode->isLeaf() )
             sTableRange = pNode->getChild(1)->getTokenValue();
     } // if ( nCount == 2 || nCount == 3 )

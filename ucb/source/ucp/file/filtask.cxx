@@ -1319,7 +1319,7 @@ bool getType(
     TaskManager & task, sal_Int32 id, OUString const & fileUrl,
     osl::DirectoryItem * item, osl::FileStatus::Type * type)
 {
-    OSL_ASSERT(item != nullptr && type != nullptr);
+    assert(item != nullptr && type != nullptr);
     osl::FileBase::RC err = osl::DirectoryItem::get(fileUrl, *item);
     if (err != osl::FileBase::E_None) {
         task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);

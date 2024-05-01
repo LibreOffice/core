@@ -28,7 +28,7 @@ OSQLInternalNode::OSQLInternalNode(const char* pNewValue,
                                    sal_uInt32 nNodeID)
                  : OSQLParseNode(pNewValue,eNodeType,nNodeID)
 {
-    OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
+    assert(OSQLParser::s_pGarbageCollector && "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
@@ -38,26 +38,23 @@ OSQLInternalNode::OSQLInternalNode(std::string_view NewValue,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(NewValue,eNodeType,nNodeID)
 {
-    OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
+    assert(OSQLParser::s_pGarbageCollector && "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
-
 
 OSQLInternalNode::OSQLInternalNode(const OUString &NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(NewValue,eNodeType,nNodeID)
 {
-    OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
+    assert(OSQLParser::s_pGarbageCollector && "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
-
 
 OSQLInternalNode::~OSQLInternalNode()
 {
     // remove the node from the garbage list
-
-    OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
+    assert(OSQLParser::s_pGarbageCollector && "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->erase(this);
 }
 

@@ -64,10 +64,9 @@ OColumnsHelper::~OColumnsHelper()
 {
 }
 
-
 sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 {
-    OSL_ENSURE(m_pTable,"NO Table set. Error!");
+    assert(m_pTable && "NO Table set. Error!");
     Reference<XConnection> xConnection = m_pTable->getConnection();
 
     if ( !m_pImpl )
@@ -141,7 +140,6 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     }
     return xRet;
 }
-
 
 void OColumnsHelper::impl_refresh()
 {
