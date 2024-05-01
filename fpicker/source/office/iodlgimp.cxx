@@ -148,7 +148,7 @@ namespace {
 
 void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl const * pFilter, const OUString& rDisplayName )
 {
-    DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
+    assert(pFilter && "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!");
     DBG_ASSERT( ( rDisplayName == pFilter->GetName() )
             ||  ( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
             "SvtExpFileDlg_Impl::SetCurFilter: arguments are inconsistent!" );

@@ -391,7 +391,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
             SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get(i));
             if( pMethod->IsHidden() )
                 continue;
-            SAL_WARN_IF( !pMethod, "basctl.basicide","Method not found! (NULL)" );
+            assert(pMethod && "Method not found! (NULL)");
             aSeqMethods.getArray()[ iTarget++ ] = pMethod->GetName();
         }
     }

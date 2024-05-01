@@ -1574,7 +1574,7 @@ static const CollatorWrapper*   pCollatorWrapper = nullptr;
 */
 static bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & aOne, std::unique_ptr<SortingData_Impl> const & aTwo )
 {
-    DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
+    assert(pCollatorWrapper && "*CompareSortingData_Impl(): Can't work this way!");
 
     sal_Int32 nComp;
     bool      bRet = false;

@@ -526,28 +526,20 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     const vcl::Region aPaintRectRegion(aPaintRect);
 
-    // #i74769#
-    SdrPaintWindow* pTargetPaintWindow = nullptr;
-
     // mark repaint start
     if (pPgView)
     {
-        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(&rRenderContext, aPaintRectRegion);
-        OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
-    }
+        // #i74769#
+        SdrPaintWindow* pTargetPaintWindow(pPgView->GetView().BeginDrawLayers(&rRenderContext, aPaintRectRegion));
+        assert(pTargetPaintWindow && "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
-    // draw background self using wallpaper
-    // #i79128# ...and use correct OutDev for that
-    if (pTargetPaintWindow)
-    {
+        // draw background self using wallpaper
+        // #i79128# ...and use correct OutDev for that
         Color maBackColor = rRenderContext.GetSettings().GetStyleSettings().GetLightColor();
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
         rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(maBackColor));
-    }
 
-    // do paint (unbuffered) and mark repaint end
-    if (pPgView)
-    {
+        // do paint (unbuffered) and mark repaint end
         // paint of control layer is done in EndDrawLayers anyway...
         pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
     }

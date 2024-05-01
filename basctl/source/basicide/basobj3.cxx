@@ -116,6 +116,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 
     if (aDocument.isValid())
     {
+        assert(pBasic && "isValid cannot be false with !pBasic");
         const OUString& aLibName = pBasic->GetName();
         const OUString& aModName = pModule->GetName();
         OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aOUSource ) );

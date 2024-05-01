@@ -421,7 +421,7 @@ void Shell::StoreAllWindowData( bool bPersistent )
     for (auto const& window : aWindowTable)
     {
         BaseWindow* pWin = window.second;
-        DBG_ASSERT( pWin, "PrepareClose: NULL-Pointer in Table?" );
+        assert(pWin && "PrepareClose: NULL-Pointer in Table?");
         if ( !pWin->IsSuspended() )
             pWin->StoreData();
     }
@@ -782,7 +782,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
 {
     VclPtr<BaseWindow> pWindowTmp( pWindow_ );
 
-    DBG_ASSERT( pWindow_, "Cannot delete NULL-Pointer!" );
+    assert(pWindow_ && "Cannot delete NULL-Pointer!");
     sal_uInt16 nKey = GetWindowId( pWindow_ );
     pTabBar->RemovePage( nKey );
     aWindowTable.erase( nKey );

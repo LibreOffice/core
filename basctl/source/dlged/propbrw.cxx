@@ -82,11 +82,18 @@ const tools::Long WIN_BORDER = 2;
 
 } // namespace
 
+static Reference<XModel> lclGetModel()
+{
+    if (SfxViewShell* pCurrent = SfxViewShell::Current())
+        return pCurrent->GetCurrentDocument();
+    return Reference<XModel>();
+}
+
 PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
     m_xContentArea(VclPtr<VclVBox>::Create(this)),
     m_bInitialStateChange(true),
-    m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
+    m_xContextDocument(lclGetModel()),
     pView(nullptr)
 {
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
@@ -241,6 +248,7 @@ Sequence< Reference< XInterface > >
     for( size_t i = 0 ; i < nMarkCount ; ++i )
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
+        assert(pCurrent && "GetMarkedSdrObj will succeed");
 
         std::optional<SdrObjListIter> oGroupIterator;
         if (pCurrent->IsGroupObject())
