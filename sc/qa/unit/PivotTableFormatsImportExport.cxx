@@ -82,21 +82,10 @@ static void assertDataFieldInRow_RowLabelColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"G7"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"G5"_ustr,
-        u"H5"_ustr,
-        u"I5"_ustr,
-        u"J5"_ustr,
-        u"K5"_ustr,
-        u"H6"_ustr,
-        u"I6"_ustr,
-        u"J6"_ustr,
-        u"K6"_ustr,
-        u"H7"_ustr,
-        u"I7"_ustr,
-        u"J7"_ustr,
-        u"K7"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"H6"_ustr, u"I6"_ustr,
+        u"J6"_ustr, u"K6"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr, u"K7"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -114,22 +103,10 @@ static void assertDataFieldInRow_ColumnLabelColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"H5"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"G5"_ustr,
-        u"I5"_ustr,
-        u"J5"_ustr,
-        u"K5"_ustr,
-        u"G6"_ustr,
-        u"H6"_ustr,
-        u"I6"_ustr,
-        u"J6"_ustr,
-        u"K6"_ustr,
-        u"G7"_ustr,
-        u"H7"_ustr,
-        u"I7"_ustr,
-        u"J7"_ustr,
-        u"K7"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"G5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr,
+        u"J6"_ustr, u"K6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr, u"K7"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -149,21 +126,10 @@ static void assertDataFieldInColumn_ColumnLabelColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I5"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"G5"_ustr,
-        u"G6"_ustr,
-        u"H6"_ustr,
-        u"I6"_ustr,
-        u"G7"_ustr,
-        u"H7"_ustr,
-        u"I7"_ustr,
-        u"G8"_ustr,
-        u"H8"_ustr,
-        u"I8"_ustr,
-        u"G9"_ustr,
-        u"H9"_ustr,
-        u"I9"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"G5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr,
+        u"G8"_ustr, u"H8"_ustr, u"I8"_ustr, u"G9"_ustr, u"H9"_ustr, u"I9"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -182,21 +148,10 @@ static void assertDataFieldInColumn_DataColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H7"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I9"_ustr));
 
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"G5"_ustr,
-        u"H5"_ustr,
-        u"I5"_ustr,
-        u"G6"_ustr,
-        u"H6"_ustr,
-        u"I6"_ustr,
-        u"G7"_ustr,
-        u"I7"_ustr,
-        u"G8"_ustr,
-        u"H8"_ustr,
-        u"I8"_ustr,
-        u"G9"_ustr,
-        u"H9"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr, u"G7"_ustr,
+        u"I7"_ustr, u"G8"_ustr, u"H8"_ustr, u"I8"_ustr, u"G9"_ustr, u"H9"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -215,14 +170,14 @@ static void assertDataFieldInColumnAndTwoRowFields_DataColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I11"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J13"_ustr));
 
-    auto aEmptyAddresses = std::to_array<OUString>({
+    std::vector<OUString> aEmptyAddresses{
         u"G5"_ustr,  u"H5"_ustr,  u"I5"_ustr,  u"J5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"I6"_ustr,
         u"J6"_ustr,  u"G7"_ustr,  u"H7"_ustr,  u"I7"_ustr,  u"J7"_ustr,  u"G8"_ustr,  u"H8"_ustr,
         u"J8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"I9"_ustr,  u"J9"_ustr,  u"G10"_ustr, u"H10"_ustr,
         u"I10"_ustr, u"J10"_ustr, u"G11"_ustr, u"H11"_ustr, u"J11"_ustr, u"G12"_ustr, u"H12"_ustr,
         u"I12"_ustr, u"J12"_ustr, u"G13"_ustr, u"H13"_ustr, u"I13"_ustr, u"G14"_ustr, u"H14"_ustr,
         u"I14"_ustr, u"J14"_ustr,
-    });
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -278,21 +233,10 @@ static void assertDataFieldInRow_DataColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"K7"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"G5"_ustr,
-        u"H5"_ustr,
-        u"I5"_ustr,
-        u"J5"_ustr,
-        u"K5"_ustr,
-        u"G6"_ustr,
-        u"H6"_ustr,
-        u"J6"_ustr,
-        u"K6"_ustr,
-        u"G7"_ustr,
-        u"H7"_ustr,
-        u"I7"_ustr,
-        u"J7"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"G6"_ustr, u"H6"_ustr,
+        u"J6"_ustr, u"K6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 };
 
@@ -353,18 +297,10 @@ static void assertWholeDataColumnSelected(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G7"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"F1"_ustr,
-        u"G1"_ustr,
-        u"F2"_ustr,
-        u"F3"_ustr,
-        u"F4"_ustr,
-        u"F5"_ustr,
-        u"F6"_ustr,
-        u"F7"_ustr,
-        u"F8"_ustr,
-        u"G8"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"F1"_ustr, u"G1"_ustr, u"F2"_ustr, u"F3"_ustr, u"F4"_ustr,
+        u"F5"_ustr, u"F6"_ustr, u"F7"_ustr, u"F8"_ustr, u"G8"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -387,18 +323,10 @@ static void assertWholeLabelColumnSelected(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F7"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"F1"_ustr,
-        u"G1"_ustr,
-        u"G2"_ustr,
-        u"G3"_ustr,
-        u"G4"_ustr,
-        u"G5"_ustr,
-        u"G6"_ustr,
-        u"G7"_ustr,
-        u"F8"_ustr,
-        u"G8"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"F1"_ustr, u"G1"_ustr, u"G2"_ustr, u"G3"_ustr, u"G4"_ustr,
+        u"G5"_ustr, u"G6"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -417,22 +345,10 @@ static void assertSelectionInLabelAndData(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"G5"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"F1"_ustr,
-        u"G1"_ustr,
-        u"F2"_ustr,
-        u"G2"_ustr,
-        u"F3"_ustr,
-        u"G3"_ustr,
-        u"F4"_ustr,
-        u"G4"_ustr,
-        u"F6"_ustr,
-        u"G6"_ustr,
-        u"F7"_ustr,
-        u"G7"_ustr,
-        u"F8"_ustr,
-        u"G8"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"F1"_ustr, u"G1"_ustr, u"F2"_ustr, u"G2"_ustr, u"F3"_ustr, u"G3"_ustr, u"F4"_ustr,
+        u"G4"_ustr, u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -451,14 +367,14 @@ static void assertTwoRowsDataFieldInColumn_LabelColor(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J5"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
+    std::vector<OUString> aEmptyAddresses{
         u"G5"_ustr,  u"H5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"i6"_ustr,  u"j6"_ustr,  u"G7"_ustr,
         u"H7"_ustr,  u"i7"_ustr,  u"j7"_ustr,  u"G8"_ustr,  u"H8"_ustr,  u"i8"_ustr,  u"j8"_ustr,
         u"G9"_ustr,  u"H9"_ustr,  u"i9"_ustr,  u"j9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"i10"_ustr,
         u"j10"_ustr, u"G11"_ustr, u"H11"_ustr, u"i11"_ustr, u"j11"_ustr, u"G12"_ustr, u"H12"_ustr,
         u"i12"_ustr, u"j12"_ustr, u"G13"_ustr, u"H13"_ustr, u"i13"_ustr, u"j13"_ustr, u"G14"_ustr,
         u"H14"_ustr, u"i14"_ustr, u"j14"_ustr,
-    });
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
@@ -482,26 +398,11 @@ static void assertTwoDataFieldColumns_WholeDataColumnSelected(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H8"_ustr));
 
     // Make sure the other cells have the font color or background set to default
-    auto aEmptyAddresses = std::to_array<OUString>({
-        u"F1"_ustr,
-        u"G1"_ustr,
-        u"H1"_ustr,
-        u"F2"_ustr,
-        u"G2"_ustr,
-        u"H2"_ustr,
-        u"F3"_ustr,
-        u"G3"_ustr,
-        u"F4"_ustr,
-        u"G4"_ustr,
-        u"F5"_ustr,
-        u"G5"_ustr,
-        u"F6"_ustr,
-        u"G6"_ustr,
-        u"F7"_ustr,
-        u"G7"_ustr,
-        u"F8"_ustr,
-        u"G8"_ustr,
-    });
+    std::vector<OUString> aEmptyAddresses{
+        u"F1"_ustr, u"G1"_ustr, u"H1"_ustr, u"F2"_ustr, u"G2"_ustr, u"H2"_ustr,
+        u"F3"_ustr, u"G3"_ustr, u"F4"_ustr, u"G4"_ustr, u"F5"_ustr, u"G5"_ustr,
+        u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
+    };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
 
