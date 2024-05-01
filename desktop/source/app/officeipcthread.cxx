@@ -115,7 +115,7 @@ public:
         case '1':
             {
                 OUString url;
-                if (!next(&url, false)) {
+                if (!next(url, false)) {
                     throw CommandLineArgs::Supplier::Exception();
                 }
                 m_cwdUrl = url;
@@ -124,7 +124,7 @@ public:
         case '2':
             {
                 OUString path;
-                if (!next(&path, false)) {
+                if (!next(path, false)) {
                     throw CommandLineArgs::Supplier::Exception();
                 }
                 OUString url;
@@ -142,11 +142,10 @@ public:
 
     virtual std::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
-    virtual bool next(OUString * argument) override { return next(argument, true); }
+    virtual bool next(OUString& argument) override { return next(argument, true); }
 
 private:
-    bool next(OUString * argument, bool prefix) {
-        OSL_ASSERT(argument != nullptr);
+    bool next(OUString& argument, bool prefix) {
         if (m_index < m_input.getLength()) {
             if (prefix) {
                 if (m_input[m_index] != ',') {
@@ -180,7 +179,7 @@ private:
             }
             OString b2(b.makeStringAndClear());
             if (!rtl_convertStringToUString(
-                    &argument->pData, b2.getStr(), b2.getLength(),
+                    &argument.pData, b2.getStr(), b2.getLength(),
                     RTL_TEXTENCODING_UTF8,
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
                      RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |

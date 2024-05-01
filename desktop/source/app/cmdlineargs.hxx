@@ -45,7 +45,7 @@ class CommandLineArgs
 
             virtual ~Supplier();
             virtual std::optional< OUString > getCwdUrl() = 0;
-            virtual bool next(OUString * argument) = 0;
+            virtual bool next(OUString& argument) = 0;
         };
 
         CommandLineArgs();

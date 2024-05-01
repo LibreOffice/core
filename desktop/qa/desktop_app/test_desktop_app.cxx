@@ -48,10 +48,9 @@ public:
     explicit TestSupplier(const std::initializer_list<OUString>& args) : m_args(args) {}
 
     virtual std::optional< OUString > getCwdUrl() override { return std::optional< OUString >(); }
-    virtual bool next(OUString * argument) override {
-        CPPUNIT_ASSERT(argument != nullptr);
+    virtual bool next(OUString& argument) override {
         if (m_index < m_args.size()) {
-            *argument = m_args[m_index++];
+            argument = m_args[m_index++];
             return true;
         }
         else {
