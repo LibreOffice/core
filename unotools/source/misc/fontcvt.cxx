@@ -1018,10 +1018,10 @@ enum SymbolFont
 
 }
 
-const char * const aSymbolNames[] =
+constexpr OUString aSymbolNames[] =
 {
-    "Symbol", "Wingdings", "Monotype Sorts", "Webdings", "Wingdings 2",
-    "Wingdings 3", "MT Extra", "Times New Roman"
+    u"Symbol"_ustr, u"Wingdings"_ustr, u"Monotype Sorts"_ustr, u"Webdings"_ustr, u"Wingdings 2"_ustr,
+    u"Wingdings 3"_ustr, u"MT Extra"_ustr, u"Times New Roman"_ustr
 };
 
 namespace {
@@ -1199,9 +1199,9 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     }
 }
 
-static const char *SymbolFontToString(int nResult)
+static const OUString & SymbolFontToString(int nResult)
 {
-    const char * const *ppName = aSymbolNames;
+    const OUString *ppName = aSymbolNames;
     int nI = Symbol;
     while (nI <= nResult)
     {
@@ -1224,8 +1224,7 @@ OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
     if (aResult != maMagicMap.end())
     {
         const SymbolEntry &rEntry = (*aResult).second;
-        const char* pc = SymbolFontToString(rEntry.eFont);
-        sRet = OUString(pc, strlen(pc), RTL_TEXTENCODING_ASCII_US);
+        sRet = SymbolFontToString(rEntry.eFont);
         rChar = rEntry.cIndex;
     }
 
