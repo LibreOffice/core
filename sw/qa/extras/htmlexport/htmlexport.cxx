@@ -3107,6 +3107,21 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
     assertXPath(pDoc, "/html/body/p[2]/img"_ostr, "usemap"_ostr, "#" + mapName);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_160867)
+{
+    // Given a document with an image with hyperlink, and text with hyperlink, both in a frame:
+    createSwDoc("tdf160867_image_with_link.fodt");
+    // When exporting to reqif:
+    ExportToReqif();
+    // For now, we don't (yet) output the whole map in ReqIF case.
+    // Make sure that the first hyperlink from the objects in the frame is output as an <a> element
+    // around the whole image of the frame.
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a/reqif-xhtml:object"_ostr);
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a"_ostr, "href"_ostr)
+                       .endsWith("foo/bar"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
