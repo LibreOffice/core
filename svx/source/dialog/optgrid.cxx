@@ -161,17 +161,19 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
 
     if (m_Emode != HTML_MODE)
     {
-        SfxViewFrame* pCurrent = SfxViewFrame::Current();
-        OUString aModuleName = vcl::CommandInfoProvider::GetModuleIdentifier(pCurrent->GetFrame().GetFrameInterface());
-        std::u16string_view sModulename = aModuleName.subView(aModuleName.lastIndexOf('.') + 1);
-        if (sModulename.starts_with(u"Text"))
-            m_Emode = WRITER_MODE;
-        else if (sModulename.starts_with(u"Spreadsheet"))
-            m_Emode = CALC_MODE;
-        else if (sModulename.starts_with(u"Presentation"))
-            m_Emode = IMPRESS_MODE;
-        else if (sModulename.starts_with(u"Drawing"))
-            m_Emode = DRAW_MODE;
+        if (SfxViewFrame* pCurrent = SfxViewFrame::Current())
+        {
+            OUString aModuleName = vcl::CommandInfoProvider::GetModuleIdentifier(pCurrent->GetFrame().GetFrameInterface());
+            std::u16string_view sModulename = aModuleName.subView(aModuleName.lastIndexOf('.') + 1);
+            if (sModulename.starts_with(u"Text"))
+                m_Emode = WRITER_MODE;
+            else if (sModulename.starts_with(u"Spreadsheet"))
+                m_Emode = CALC_MODE;
+            else if (sModulename.starts_with(u"Presentation"))
+                m_Emode = IMPRESS_MODE;
+            else if (sModulename.starts_with(u"Drawing"))
+                m_Emode = DRAW_MODE;
+        }
     }
 
     m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
