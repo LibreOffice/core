@@ -25,7 +25,7 @@
 #include <vcl/outdev.hxx>
 
 // Global variable
-SwNoteURL* pNoteURL = nullptr;
+thread_local SwNoteURL* pNoteURL = nullptr;
 
 void SwNoteURL::InsertURLNote(const OUString& rURL, const OUString& rTarget, const SwRect& rRect)
 {
