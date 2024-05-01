@@ -269,7 +269,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm.WriteOString("static SfxFormalArgument a").WriteOString(GetName()).WriteOString("Args_Impl[] =") << endl;
+    rOutStm.WriteOString("static const SfxFormalArgument a").WriteOString(GetName()).WriteOString("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uInt32> aSuperList;
@@ -304,7 +304,8 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteOString("static SfxSlot a").WriteOString(GetName()).WriteOString("Slots_Impl[] =") << endl;
+    rOutStm.WriteOString("static SfxSlot a").WriteOString(GetName())
+        .WriteOString("Slots_Impl[").WriteOString(OString::number(nSlotCount == 0 ? 1 : nSlotCount)).WriteOString("] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes

@@ -30,12 +30,6 @@
 
 extern "C" {
 
-static int
-SfxCompareSlots_qsort( const void* pSmaller, const void* pBigger )
-{
-    return static_cast<int>(static_cast<SfxSlot const *>(pSmaller)->GetSlotId()) -
-           static_cast<int>(static_cast<SfxSlot const *>(pBigger)->GetSlotId());
-}
 
 static int
 SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
@@ -113,39 +107,14 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
     pSlots = &rSlotMap;
     nCount = nSlotCount;
     SfxSlot* pIter = pSlots;
-    if ( 1 == nCount && !pIter->pNextSlot )
-        pIter->pNextSlot = pIter;
 
     if ( !pIter->pNextSlot )
     {
-        // sort the SfxSlots by id
-        qsort( pSlots, nCount, sizeof(SfxSlot), SfxCompareSlots_qsort );
-
-        // link masters and slaves
-        sal_uInt16 nIter = 1;
-        for ( pIter = pSlots; nIter <= nCount; ++pIter, ++nIter )
-        {
-
-            assert( nIter == nCount ||
-                    pIter->GetSlotId() != (pIter+1)->GetSlotId() );
-
-            if ( nullptr == pIter->GetNextSlot() )
+        assert(std::is_sorted(pSlots, pSlots + nCount,
+            [](const SfxSlot& rLHS, const SfxSlot& rRHS)
             {
-                // Slots referring in circle to the next with the same
-                // Status method.
-                SfxSlot *pLastSlot = pIter;
-                for ( sal_uInt16 n = nIter; n < Count(); ++n )
-                {
-                    SfxSlot *pCurSlot = pSlots+n;
-                    if ( pCurSlot->GetStateFnc() == pIter->GetStateFnc() )
-                    {
-                        pLastSlot->pNextSlot = pCurSlot;
-                        pLastSlot = pCurSlot;
-                    }
-                }
-                pLastSlot->pNextSlot = pIter;
-            }
-        }
+                return rLHS.GetSlotId() < rRHS.GetSlotId();
+            }));
     }
 #ifdef DBG_UTIL
     else

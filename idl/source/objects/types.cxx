@@ -242,7 +242,7 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteOString( "extern " );
     if (bExport)
         rOutStm.WriteOString( "SFX2_DLLPUBLIC " );
-    rOutStm.WriteOString( aTypeName )
+    rOutStm.WriteOString( "constinit const " ).WriteOString( aTypeName )
            .WriteOString( aVarName ).WriteChar( ';' ) << endl;
     if (bReturn)
         return;
@@ -252,7 +252,7 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteOString( "#if !defined(_WIN32) && (defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS) || defined(EMSCRIPTEN) || defined(LINUX)))" ) << endl;
     rOutStm.WriteOString( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteOString( "#endif" ) << endl;
-    rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
+    rOutStm.WriteOString( "constinit const " ).WriteOString( aTypeName ).WriteOString( aVarName )
            .WriteOString( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 

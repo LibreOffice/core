@@ -98,30 +98,33 @@ template<class T> SfxPoolItem* createSfxPoolItem()
 {
     return T::CreateDefault();
 }
+
 struct SfxType
 {
-    std::function<SfxPoolItem* ()> createSfxPoolItemFunc;
+    SfxPoolItem* (*createSfxPoolItemFunc)();
     const std::type_info*   pType;
     sal_uInt16          nAttribs;
-    SfxTypeAttrib   aAttrib[1]; // variable length
 
     const std::type_info* Type() const{return pType;}
     std::unique_ptr<SfxPoolItem> CreateItem() const
                     { return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc()); }
+    inline const SfxTypeAttrib& getAttrib(sal_uInt16 idx) const;
 };
 
-struct SfxType0
+struct SfxTypeImpl : public SfxType
 {
-    std::function<SfxPoolItem* ()> createSfxPoolItemFunc;
-    const std::type_info*   pType;
-    sal_uInt16          nAttribs;
-    const std::type_info*    Type() const { return pType;}
+    SfxTypeAttrib   aAttrib[1]; // variable length
 };
-#define SFX_DECL_TYPE(n)    struct SfxType##n                   \
+
+// Some casting to work around the lack of zero-sized trailing arrays in c++
+inline const SfxTypeAttrib& SfxType::getAttrib(sal_uInt16 idx) const
+{ return reinterpret_cast<const SfxTypeImpl*>(this)->aAttrib[idx]; }
+
+struct SfxType0 : public SfxType
+{
+};
+#define SFX_DECL_TYPE(n)    struct SfxType##n : public SfxType \
                             {                                   \
-                                std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
-                                const std::type_info* pType; \
-                                sal_uInt16          nAttribs;       \
                                 SfxTypeAttrib   aAttrib[n];     \
                             }
 

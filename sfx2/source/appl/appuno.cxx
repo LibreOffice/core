@@ -60,37 +60,37 @@ using namespace ::com::sun::star::io;
 
 // needs to be converted to a better data structure
 SfxFormalArgument const aFormalArgs[] = {
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsName", SID_DEFAULTFILENAME },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsDir", SID_DEFAULTFILEPATH },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "VersionAuthor", SID_DOCINFO_AUTHOR },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "VersionComment", SID_DOCINFO_COMMENTS },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "DontTerminateEdit", FN_PARAM_1 },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "VersionMajor", SID_DOCINFO_MAJOR },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FilterOptions", SID_FILE_FILTEROPTIONS },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FilterName", SID_FILTER_NAME },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Margin1", SID_RULER_MARGIN1 },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Margin2", SID_RULER_MARGIN2 },
-//    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FileName", SID_FILE_NAME },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "URL", SID_FILE_NAME },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "OpenFlags", SID_OPTIONS },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "Overwrite", SID_OVERWRITE },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Password", SID_PASSWORD },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "PasswordInteraction", SID_PASSWORDINTERACTION },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Referer", SID_REFERER },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "SaveTo", SID_SAVETO },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "TemplateName", SID_TEMPLATE_NAME },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "TemplateRegion", SID_TEMPLATE_REGIONNAME },
-//    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Region", SID_TEMPLATE_REGIONNAME },
-//    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Name", SID_TEMPLATE_NAME },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "Unpacked", SID_UNPACK },
-    { reinterpret_cast<SfxType*>(&aSfxInt16Item_Impl), "Version", SID_VERSION },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "SaveACopy", SID_SAVEACOPYITEM },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "NoFileSync", SID_NO_FILE_SYNC },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "NoThumbnail", SID_NO_THUMBNAIL },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "NoEmbDataSet", SID_NO_EMBEDDED_DS },
-    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "IsRedactMode", SID_IS_REDACT_MODE },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "RedactionStyle", SID_REDACTION_STYLE },
-    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "AdditionsTag", FN_PARAM_ADDITIONS_TAG },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsName", SID_DEFAULTFILENAME },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsDir", SID_DEFAULTFILEPATH },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "VersionAuthor", SID_DOCINFO_AUTHOR },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "VersionComment", SID_DOCINFO_COMMENTS },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "DontTerminateEdit", FN_PARAM_1 },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "VersionMajor", SID_DOCINFO_MAJOR },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "FilterOptions", SID_FILE_FILTEROPTIONS },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "FilterName", SID_FILTER_NAME },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Margin1", SID_RULER_MARGIN1 },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Margin2", SID_RULER_MARGIN2 },
+//    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "FileName", SID_FILE_NAME },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "URL", SID_FILE_NAME },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "OpenFlags", SID_OPTIONS },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "Overwrite", SID_OVERWRITE },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Password", SID_PASSWORD },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "PasswordInteraction", SID_PASSWORDINTERACTION },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Referer", SID_REFERER },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "SaveTo", SID_SAVETO },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "TemplateName", SID_TEMPLATE_NAME },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "TemplateRegion", SID_TEMPLATE_REGIONNAME },
+//    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Region", SID_TEMPLATE_REGIONNAME },
+//    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "Name", SID_TEMPLATE_NAME },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "Unpacked", SID_UNPACK },
+    { static_cast<const SfxType*>(&aSfxInt16Item_Impl), "Version", SID_VERSION },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "SaveACopy", SID_SAVEACOPYITEM },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "NoFileSync", SID_NO_FILE_SYNC },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "NoThumbnail", SID_NO_THUMBNAIL },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "NoEmbDataSet", SID_NO_EMBEDDED_DS },
+    { static_cast<const SfxType*>(&aSfxBoolItem_Impl), "IsRedactMode", SID_IS_REDACT_MODE },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "RedactionStyle", SID_REDACTION_STYLE },
+    { static_cast<const SfxType*>(&aSfxStringItem_Impl), "AdditionsTag", FN_PARAM_ADDITIONS_TAG },
 };
 
 sal_uInt16 const nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
@@ -242,9 +242,9 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
-                    if ( rPropValue.Name == (pSlot->aUnoName + "." + pType->aAttrib[nSub].aName) )
+                    if ( rPropValue.Name == (pSlot->aUnoName + "." + pType->getAttrib(nSub).aName) )
                     {
-                        sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
+                        sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->getAttrib(nSub).nAID));
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
                         if ( pItem->PutValue( rPropValue.Value, nSubId ) )
@@ -344,14 +344,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                     {
                         // search sub item by name
-                        if ( rProp.Name == (rArg.aName + "." + pType->aAttrib[nSub].aName) )
+                        if ( rProp.Name == (rArg.aName + "." + pType->getAttrib(nSub).aName) )
                         {
                             // at least one member found ...
                             bRet = true;
 #ifdef DBG_UTIL
                             ++nFoundArgs;
 #endif
-                            sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
+                            sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->getAttrib(nSub).nAID));
                             if ( bConvertTwips )
                                 nSubId |= CONVERT_TWIPS;
                             if (!pItem->PutValue( rProp.Value, nSubId ) )
@@ -1311,17 +1311,17 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 // complex type, add a property value for every member of the struct
                 for ( sal_uInt16 n=1; n<=nSubCount; ++n )
                 {
-                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[n-1].nAID));
+                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->getAttrib(n-1).nAID));
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
-                    DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
+                    DBG_ASSERT(( pType->getAttrib(n-1).nAID ) <= 127, "Member ID out of range" );
                     pValue[nActProp].Name = pSlot->aUnoName +
                         "." +
-                        pType->aAttrib[n-1].aName;
+                        pType->getAttrib(n-1).aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        SAL_WARN( "sfx", "Sub item " << pType->aAttrib[n-1].nAID
+                        SAL_WARN( "sfx", "Sub item " << pType->getAttrib(n-1).nAID
                                     << " not convertible in slot: " << nSlotId );
                     }
                 }
@@ -1356,18 +1356,18 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 // complex type, add a property value for every member of the struct
                 for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
                 {
-                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(rArg.pType->aAttrib[n-1].nAID));
+                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(rArg.pType->getAttrib(n-1).nAID));
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
-                    DBG_ASSERT((rArg.pType->aAttrib[n-1].nAID) <= 127, "Member ID out of range" );
+                    DBG_ASSERT((rArg.pType->getAttrib(n-1).nAID) <= 127, "Member ID out of range" );
                     pValue[nActProp].Name = rArg.aName +
                         "." +
-                        rArg.pType->aAttrib[n-1].aName ;
+                        rArg.pType->getAttrib(n-1).aName ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
                         SAL_WARN( "sfx", "Sub item "
-                                    << rArg.pType->aAttrib[n-1].nAID
+                                    << rArg.pType->getAttrib(n-1).nAID
                                     << " not convertible in slot: "
                                     << rArg.nSlotId );
                     }
