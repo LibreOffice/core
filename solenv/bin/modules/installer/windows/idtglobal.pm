@@ -1005,7 +1005,7 @@ sub set_custom_action
     # when the style NO_FILE is set, no searching for the file is needed, no filtering is done, we can add that custom action
     if ( $styles =~ /\bNO_FILE\b/ )
     {
-        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
+        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\t\n";
         push(@{$customactionidttable}, $line);
 
         $infoline = "Added $actionname CustomAction into table $customactionidttablename (NO_FILE has been set)\n";
@@ -1054,7 +1054,7 @@ sub set_custom_action
 
         if ( ! $inbinarytable ) { $customaction_exefilename = $uniquename; }    # the unique file name has to be added to the custom action table
 
-        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
+        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\t\n";
         push(@{$customactionidttable}, $line);
 
         $included_customaction = 1;

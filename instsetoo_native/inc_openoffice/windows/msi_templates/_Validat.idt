@@ -110,6 +110,7 @@ ControlEvent	Ordering	Y	0	2147483647					An integer used to order several events
 CreateFolder	Component_	N			Component	1	Identifier		Foreign key into the Component table.
 CreateFolder	Directory_	N			Directory	1	Identifier		Primary key, could be foreign key into the Directory table.
 CustomAction	Action	N					Identifier		Primary key, name of action, normally appears in sequence table unless private use.
+CustomAction	ExtendedType	Y	0	2147483647					A numeric custom action type that extends code type or option flags of the Type column.
 CustomAction	Source	Y					CustomSource		The table reference of the source of the code.
 # DON'T YOU EVEN ATTEMPT to fix the "Excecution" typo below - the MSI tools depend on that, and will fail if you change it.
 CustomAction	Target	Y					Formatted		Excecution parameter, depends on the type of custom action
