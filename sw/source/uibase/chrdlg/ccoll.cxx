@@ -28,36 +28,36 @@
 
 // note: also keep this in sync with the list of conditions in xmloff/source/style/prstylecond.cxx
 
-const char * const aCommandContext[COND_COMMAND_COUNT] =
+constexpr OUString aCommandContext[COND_COMMAND_COUNT] =
 {
-    "TableHeader",
-    "Table",
-    "Frame",
-    "Section",
-    "Footnote",
-    "Endnote",
-    "Header",
-    "Footer",
-    "OutlineLevel1",
-    "OutlineLevel2",
-    "OutlineLevel3",
-    "OutlineLevel4",
-    "OutlineLevel5",
-    "OutlineLevel6",
-    "OutlineLevel7",
-    "OutlineLevel8",
-    "OutlineLevel9",
-    "OutlineLevel10",
-    "NumberingLevel1",
-    "NumberingLevel2",
-    "NumberingLevel3",
-    "NumberingLevel4",
-    "NumberingLevel5",
-    "NumberingLevel6",
-    "NumberingLevel7",
-    "NumberingLevel8",
-    "NumberingLevel9",
-    "NumberingLevel10"
+    u"TableHeader"_ustr,
+    u"Table"_ustr,
+    u"Frame"_ustr,
+    u"Section"_ustr,
+    u"Footnote"_ustr,
+    u"Endnote"_ustr,
+    u"Header"_ustr,
+    u"Footer"_ustr,
+    u"OutlineLevel1"_ustr,
+    u"OutlineLevel2"_ustr,
+    u"OutlineLevel3"_ustr,
+    u"OutlineLevel4"_ustr,
+    u"OutlineLevel5"_ustr,
+    u"OutlineLevel6"_ustr,
+    u"OutlineLevel7"_ustr,
+    u"OutlineLevel8"_ustr,
+    u"OutlineLevel9"_ustr,
+    u"OutlineLevel10"_ustr,
+    u"NumberingLevel1"_ustr,
+    u"NumberingLevel2"_ustr,
+    u"NumberingLevel3"_ustr,
+    u"NumberingLevel4"_ustr,
+    u"NumberingLevel5"_ustr,
+    u"NumberingLevel6"_ustr,
+    u"NumberingLevel7"_ustr,
+    u"NumberingLevel8"_ustr,
+    u"NumberingLevel9"_ustr,
+    u"NumberingLevel10"_ustr
 };
 
 sal_Int16 GetCommandContextIndex( std::u16string_view rContextName )
@@ -65,7 +65,7 @@ sal_Int16 GetCommandContextIndex( std::u16string_view rContextName )
     sal_Int16 nRes = -1;
     for (sal_Int16 i = 0;  nRes == -1 && i < COND_COMMAND_COUNT;  ++i)
     {
-        if (o3tl::equalsAscii( rContextName, aCommandContext[i] ))
+        if (aCommandContext[i] == rContextName)
             nRes = i;
     }
     return nRes;
@@ -76,7 +76,7 @@ OUString GetCommandContextByIndex( sal_Int16 nIndex )
     OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = OUString::createFromAscii( aCommandContext[ nIndex ] );
+        aRes = aCommandContext[ nIndex ];
     }
     return aRes;
 }
