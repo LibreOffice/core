@@ -289,7 +289,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                      (bFirst ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
                 {
                     SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                            bFirst ? "First header" : "Left header",
+                            bFirst ? u"First header"_ustr : u"Left header"_ustr,
                                                     GetDfltFrameFormat() );
                     ::lcl_DescSetAttr( *pRight, *pFormat, false );
                     // The section which the right header attribute is pointing
@@ -366,7 +366,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                      (bFirst ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
                 {
                     SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                            bFirst ? "First footer" : "Left footer",
+                            bFirst ? u"First footer"_ustr : u"Left footer"_ustr,
                                                     GetDfltFrameFormat() );
                     ::lcl_DescSetAttr( *pRight, *pFormat, false );
                     // The section to which the right footer attribute is pointing

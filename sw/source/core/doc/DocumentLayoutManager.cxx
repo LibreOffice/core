@@ -129,7 +129,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
     case RndStdIds::FOOTER:
         {
             pFormat = new SwFrameFormat( m_rDoc.GetAttrPool(),
-                                 (bHeader ? "Right header" : "Right footer"),
+                                 (bHeader ? u"Right header"_ustr : u"Right footer"_ustr),
                                  m_rDoc.GetDfltFrameFormat() );
 
             const SwNode& rEndOfAutotext( m_rDoc.GetNodes().GetEndOfAutotext() );

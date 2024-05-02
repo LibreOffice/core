@@ -36,31 +36,10 @@
 
 using namespace com::sun::star;
 
-SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
+SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
               const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
-    m_aFormatName( OUString::createFromAscii(pFormatNm) ),
-    m_aSet( rPool, pWhichRanges ),
-    m_nWhichId( nFormatWhich ),
-    m_nPoolFormatId( USHRT_MAX ),
-    m_nPoolHelpId( USHRT_MAX ),
-    m_nPoolHlpFileId( UCHAR_MAX )
-{
-    m_bAutoUpdateOnDirectFormat = false; // LAYER_IMPL
-    m_bAutoFormat = true;
-    m_bFormatInDTOR = m_bHidden = false;
-
-    if( pDrvdFrame )
-    {
-        pDrvdFrame->Add(*this);
-        m_aSet.SetParent( &pDrvdFrame->m_aSet );
-    }
-}
-
-SwFormat::SwFormat( SwAttrPool& rPool, OUString aFormatNm,
-              const WhichRangesContainer& pWhichRanges, SwFormat* pDrvdFrame,
-              sal_uInt16 nFormatWhich ) :
-    m_aFormatName( std::move(aFormatNm) ),
+    m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
     m_nPoolFormatId( USHRT_MAX ),

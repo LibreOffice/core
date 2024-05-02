@@ -2566,17 +2566,6 @@ SwHeaderAndFooterEatSpacingItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItem
 
 SwFrameFormat::SwFrameFormat(
     SwAttrPool& rPool,
-    const char* pFormatNm,
-    SwFrameFormat *pDrvdFrame,
-    sal_uInt16 nFormatWhich,
-    const WhichRangesContainer& pWhichRange)
-:   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
-    m_ffList(nullptr)
-{
-}
-
-SwFrameFormat::SwFrameFormat(
-    SwAttrPool& rPool,
     const OUString &rFormatNm,
     SwFrameFormat *pDrvdFrame,
     sal_uInt16 nFormatWhich,

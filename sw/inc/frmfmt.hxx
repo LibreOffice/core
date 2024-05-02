@@ -99,13 +99,6 @@ class SAL_DLLPUBLIC_RTTI SwFrameFormat
 protected:
     SwFrameFormat(
         SwAttrPool& rPool,
-        const char* pFormatNm,
-        SwFrameFormat *pDrvdFrame,
-        sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const WhichRangesContainer& pWhichRange = aFrameFormatSetRange);
-
-    SwFrameFormat(
-        SwAttrPool& rPool,
         const OUString &rFormatNm,
         SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,

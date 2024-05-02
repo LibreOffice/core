@@ -1390,7 +1390,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     if( !pOldFormat )
         return;
 
-    SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), "CpyDesc",
+    SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), u"CpyDesc"_ustr,
                                         GetDfltFrameFormat() );
     pNewFormat->CopyAttrs( *pOldFormat );
 
@@ -1559,7 +1559,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                 {
                     if (pStashedFormatSrc->GetDoc() != this)
                     {
-                        SwFrameFormat newFormat(GetAttrPool(), "CopyDesc", GetDfltFrameFormat());
+                        SwFrameFormat newFormat(GetAttrPool(), u"CopyDesc"_ustr, GetDfltFrameFormat());
 
                         SfxItemSet aAttrSet(pStashedFormatSrc->GetAttrSet());
                         aAttrSet.ClearItem(RES_HEADER);
