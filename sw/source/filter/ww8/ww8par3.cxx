@@ -2273,18 +2273,18 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     struct CtrlFontMapEntry
     {
         sal_uInt16 nWhichId;
-        const char* pPropNm;
+        OUString pPropNm;
     };
-    const CtrlFontMapEntry aMapTable[] =
+    constexpr CtrlFontMapEntry aMapTable[] =
     {
-        { RES_CHRATR_COLOR,           "TextColor" },
-        { RES_CHRATR_FONT,            "FontName" },
-        { RES_CHRATR_FONTSIZE,        "FontHeight" },
-        { RES_CHRATR_WEIGHT,          "FontWeight" },
-        { RES_CHRATR_UNDERLINE,       "FontUnderline" },
-        { RES_CHRATR_CROSSEDOUT,      "FontStrikeout" },
-        { RES_CHRATR_POSTURE,         "FontSlant" },
-        { 0,                          nullptr }
+        { RES_CHRATR_COLOR,           u"TextColor"_ustr },
+        { RES_CHRATR_FONT,            u"FontName"_ustr },
+        { RES_CHRATR_FONTSIZE,        u"FontHeight"_ustr },
+        { RES_CHRATR_WEIGHT,          u"FontWeight"_ustr },
+        { RES_CHRATR_UNDERLINE,       u"FontUnderline"_ustr },
+        { RES_CHRATR_CROSSEDOUT,      u"FontStrikeout"_ustr },
+        { RES_CHRATR_POSTURE,         u"FontSlant"_ustr },
+        { 0,                          u""_ustr }
     };
 
     vcl::Font aFont;
@@ -2383,8 +2383,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             break;
         }
 
-        if (bSet && xPropSetInfo->hasPropertyByName(OUString::createFromAscii(pMap->pPropNm)))
-            rPropSet->setPropertyValue(OUString::createFromAscii(pMap->pPropNm), aTmp);
+        if (bSet && xPropSetInfo->hasPropertyByName(pMap->pPropNm))
+            rPropSet->setPropertyValue(pMap->pPropNm, aTmp);
     }
     // now calculate the size of the control
     OutputDevice* pOut = Application::GetDefaultDevice();
