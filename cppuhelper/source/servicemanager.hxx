@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <compbase2.hxx>
 #include <rtl/ustring.hxx>
+#include <boost/container/small_vector.hpp>
 
 namespace com::sun::star::lang {
     class XSingleComponentFactory;
@@ -174,7 +175,7 @@ public:
         typedef
             std::unordered_map<
                 OUString,
-                std::vector< std::shared_ptr< Implementation > > >
+                boost::container::small_vector< std::shared_ptr< Implementation >, 2 > >
             ImplementationMap;
 
         NamedImplementations namedImplementations;

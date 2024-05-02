@@ -68,10 +68,7 @@ void insertImplementationMap(
     assert(destination != nullptr);
     for (const auto& [rName, rImpls] : source)
     {
-        std::vector<
-            std::shared_ptr<
-                cppuhelper::ServiceManager::Data::Implementation > > & impls
-            = (*destination)[rName];
+        auto & impls = (*destination)[rName];
         impls.insert(impls.end(), rImpls.begin(), rImpls.end());
     }
 }
@@ -87,13 +84,9 @@ void removeFromImplementationMap(
     assert(map != nullptr);
     for (const auto& rElement : elements)
     {
-        cppuhelper::ServiceManager::Data::ImplementationMap::iterator j(
-            map->find(rElement));
+        auto j(map->find(rElement));
         assert(j != map->end());
-        std::vector<
-            std::shared_ptr<
-                cppuhelper::ServiceManager::Data::Implementation > >::iterator
-            k(std::find(j->second.begin(), j->second.end(), implementation));
+        auto k(std::find(j->second.begin(), j->second.end(), implementation));
         assert(k != j->second.end());
         j->second.erase(k);
         if (j->second.empty()) {
@@ -1139,7 +1132,7 @@ css::uno::Reference< css::container::XEnumeration >
 cppuhelper::ServiceManager::createContentEnumeration(
     OUString const & aServiceName)
 {
-    std::vector< std::shared_ptr< Data::Implementation > > impls;
+    boost::container::small_vector< std::shared_ptr< Data::Implementation >, 2 > impls;
     {
         std::unique_lock g(m_aMutex);
         Data::ImplementationMap::const_iterator i(

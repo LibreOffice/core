@@ -39,6 +39,10 @@ $(eval $(call gb_Library_use_static_libraries,cppuhelper,\
 	findsofficepath \
 ))
 
+$(eval $(call gb_Library_use_externals,cppuhelper,\
+    boost_headers \
+))
+
 ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,cppuhelper,\
     $(gb_OBJCXXFLAGS) \
