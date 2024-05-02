@@ -249,10 +249,9 @@ namespace svt
     protected:
         css::uno::Any   getProperty(const OUString& _rLocalName) const;
 
-        OUString        getStringProperty(const char* _pLocalName) const;
         OUString        getStringProperty(const OUString& _rLocalName) const;
 
-        void            setStringProperty(const char* _pLocalName, const OUString& _rValue);
+        void            setStringProperty(const OUString& _pLocalName, const OUString& _rValue);
 
     public:
         AssignmentPersistentData();
@@ -328,17 +327,9 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    OUString AssignmentPersistentData::getStringProperty(const char* _pLocalName) const
+    void AssignmentPersistentData::setStringProperty(const OUString& _pLocalName, const OUString& _rValue)
     {
-        OUString sReturn;
-        getProperty(OUString::createFromAscii(_pLocalName)) >>= sReturn;
-        return sReturn;
-    }
-
-
-    void AssignmentPersistentData::setStringProperty(const char* _pLocalName, const OUString& _rValue)
-    {
-        Sequence< OUString > aNames { OUString::createFromAscii(_pLocalName) };
+        Sequence< OUString > aNames { _pLocalName };
         Sequence< Any > aValues{ Any(_rValue) };
         PutProperties(aNames, aValues);
     }
@@ -391,25 +382,25 @@ void AssignmentPersistentData::ImplCommit()
 
     OUString AssignmentPersistentData::getDatasourceName() const
     {
-        return getStringProperty( "DataSourceName" );
+        return getStringProperty( u"DataSourceName"_ustr );
     }
 
 
     OUString AssignmentPersistentData::getCommand() const
     {
-        return getStringProperty( "Command" );
+        return getStringProperty( u"Command"_ustr );
     }
 
 
     void AssignmentPersistentData::setDatasourceName(const OUString& _rName)
     {
-        setStringProperty( "DataSourceName", _rName );
+        setStringProperty( u"DataSourceName"_ustr, _rName );
     }
 
 
     void AssignmentPersistentData::setCommand(const OUString& _rCommand)
     {
-        setStringProperty( "Command", _rCommand );
+        setStringProperty( u"Command"_ustr, _rCommand );
     }
 
 
