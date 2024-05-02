@@ -58,12 +58,10 @@ OUString
 getContentPart( std::u16string_view _rRawString )
 {
     // search over some parts to find a string
-    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", nullptr };
+    static constexpr OUString aIDs[] = { u"CN="_ustr, u"OU="_ustr, u"O="_ustr, u"E="_ustr };
     OUString sPart;
-    int i = 0;
-    while ( aIDs[i] )
+    for (const OUString & sPartId : aIDs )
     {
-        OUString sPartId = OUString::createFromAscii( aIDs[i++] );
         size_t nContStart = _rRawString.find( sPartId );
         if ( nContStart != std::u16string_view::npos )
         {
