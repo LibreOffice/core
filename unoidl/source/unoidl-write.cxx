@@ -35,7 +35,7 @@
 
 namespace {
 
-void badUsage() {
+[[noreturn]] void badUsage() {
     std::cerr
         << "Usage:" << std::endl << std::endl
         << "  unoidl-write [<registries>] [@<entities file>] <unoidl file>"

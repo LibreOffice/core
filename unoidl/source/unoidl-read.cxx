@@ -30,7 +30,7 @@
 
 namespace {
 
-void badUsage() {
+[[noreturn]] void badUsage() {
     std::cerr
         << "Usage:" << std::endl << std::endl
         << "  unoidl-read [--published] [--summary] [<extra registries>] <registry>"

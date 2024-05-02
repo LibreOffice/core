@@ -72,7 +72,7 @@ static bool operator ==(
 
 namespace {
 
-void badUsage() {
+[[noreturn]] void badUsage() {
     std::cerr
         << "Usage:" << std::endl << std::endl
         << ("  unoidl-check [--ignore-unpublished] [<extra registries A>]"
