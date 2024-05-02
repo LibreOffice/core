@@ -49,7 +49,7 @@ namespace frm
         */
         virtual void dispatchWithArgument(
                 sal_Int16 _nFeatureId,
-                const char* _pParamName,
+                const OUString& _pParamName,
                 const css::uno::Any& _rParamValue
              ) const = 0;
 

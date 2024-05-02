@@ -90,7 +90,7 @@ namespace frm
 
         // IFeatureDispatcher
         virtual void            dispatch( sal_Int16 _nFeatureId ) const override;
-        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const char* _pParamName, const css::uno::Any& _rParamValue ) const override;
+        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const OUString& _pParamName, const css::uno::Any& _rParamValue ) const override;
         virtual bool            isEnabled( sal_Int16 _nFeatureId ) const override;
         virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const override;
         virtual OUString getStringState( sal_Int16 _nFeatureId ) const override;

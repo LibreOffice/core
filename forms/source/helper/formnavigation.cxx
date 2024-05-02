@@ -266,7 +266,7 @@ namespace frm
     }
 
 
-    void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const char* _pParamAsciiName,
+    void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const OUString& _pParamAsciiName,
         const Any& _rParamValue ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -275,7 +275,7 @@ namespace frm
             if ( aInfo->second.xDispatcher.is() )
             {
                 Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-                    OUString::createFromAscii( _pParamAsciiName ), _rParamValue) };
+                    _pParamAsciiName, _rParamValue) };
 
                 aInfo->second.xDispatcher->dispatch( aInfo->second.aURL, aArgs );
             }

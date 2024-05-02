@@ -633,7 +633,7 @@ namespace frm
     {
         if (!m_pDispatcher)
             return;
-        m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", Any( static_cast<sal_Int32>(nRecord) ) );
+        m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, u"Position"_ustr, Any( static_cast<sal_Int32>(nRecord) ) );
     }
 
 }   // namespace frm
