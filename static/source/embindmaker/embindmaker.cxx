@@ -43,7 +43,7 @@
 
 namespace
 {
-void badUsage()
+[[noreturn]] void badUsage()
 {
     std::cerr
         << "Usage:\n\n"

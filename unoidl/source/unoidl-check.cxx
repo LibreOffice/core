@@ -72,7 +72,7 @@ static bool operator ==(
 
 namespace {
 
-void badUsage() {
+[[noreturn]] void badUsage() {
     std::cerr
         << "Usage:" << std::endl << std::endl
         << ("  unoidl-check [--ignore-unpublished] [<extra registries A>]"
@@ -106,7 +106,6 @@ bool getArgument(
         if (delimiter == nullptr) {
             badUsage();
         }
-        assert(delimiter && "badUsage exits otherwise");
         *delimiter = true;
         return false;
     }
