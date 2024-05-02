@@ -2494,7 +2494,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
         }
     }
 
-    rFormula = OUString::createFromAscii( sCalc_Sum );
+    rFormula = sCalc_Sum;
     if (!sFields.isEmpty())
     {
         rFormula += "(" + sFields + ")";

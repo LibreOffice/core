@@ -55,53 +55,15 @@
 
 using namespace ::com::sun::star;
 
-const char sCalc_Add[]  =   "add";
-const char sCalc_Sub[]  =   "sub";
-const char sCalc_Mul[]  =   "mul";
-const char sCalc_Div[]  =   "div";
-const char sCalc_Phd[]  =   "phd";
-const char sCalc_Sqrt[] =   "sqrt";
-const char sCalc_Pow[]  =   "pow";
-const char sCalc_Or[]   =   "or";
-const char sCalc_Xor[]  =   "xor";
-const char sCalc_And[]  =   "and";
-const char sCalc_Not[]  =   "not";
-const char sCalc_Eq[]   =   "eq";
-const char sCalc_Neq[]  =   "neq";
-const char sCalc_Leq[]  =   "leq";
-const char sCalc_Geq[]  =   "geq";
-const char sCalc_L[]    =   "l";
-const char sCalc_G[]    =   "g";
-const char sCalc_Sum[]  =   "sum";
-const char sCalc_Mean[] =   "mean";
-const char sCalc_Min[]  =   "min";
-const char sCalc_Max[]  =   "max";
-const char sCalc_Sin[]  =   "sin";
-const char sCalc_Cos[]  =   "cos";
-const char sCalc_Tan[]  =   "tan";
-const char sCalc_Asin[] =   "asin";
-const char sCalc_Acos[] =   "acos";
-const char sCalc_Atan[] =   "atan";
-const char sCalc_Round[]=   "round";
-const char sCalc_Date[] =   "date";
-const char sCalc_Product[] = "product";
-const char sCalc_Average[] = "average";
-const char sCalc_Count[]=   "count";
-const char sCalc_Sign[] =   "sign";
-const char sCalc_Abs[]  =   "abs";
-const char sCalc_Int[]  =   "int";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
 {
-    union{
-        const char* pName;
-        const OUString* pUName;
-    };
+    OUString aName;
     SwCalcOper eOp;
 };
 
-CalcOp const aOpTable[] = {
+CalcOp constexpr aOpTable[] = {
 /* ABS */     {{sCalc_Abs},        CALC_ABS},   // Abs (since LibreOffice 7.1)
 /* ACOS */    {{sCalc_Acos},       CALC_ACOS},  // Arc cosine
 /* ADD */     {{sCalc_Add},        CALC_PLUS},  // Addition
@@ -163,20 +125,20 @@ static int OperatorCompare( const void *pFirst, const void *pSecond)
     if( CALC_NAME == static_cast<const CalcOp*>(pFirst)->eOp )
     {
         if( CALC_NAME == static_cast<const CalcOp*>(pSecond)->eOp )
-            nRet = static_cast<const CalcOp*>(pFirst)->pUName->compareTo(
-                   *static_cast<const CalcOp*>(pSecond)->pUName );
+            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
+                    static_cast<const CalcOp*>(pSecond)->aName );
         else
-            nRet = static_cast<const CalcOp*>(pFirst)->pUName->compareToAscii(
-                   static_cast<const CalcOp*>(pSecond)->pName );
+            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
+                     static_cast<const CalcOp*>(pSecond)->aName );
     }
     else
     {
         if( CALC_NAME == static_cast<const CalcOp*>(pSecond)->eOp )
-            nRet = -1 * static_cast<const CalcOp*>(pSecond)->pUName->compareToAscii(
-                        static_cast<const CalcOp*>(pFirst)->pName );
+            nRet = -1 * static_cast<const CalcOp*>(pSecond)->aName.compareTo(
+                        static_cast<const CalcOp*>(pFirst)->aName );
         else
-            nRet = strcmp( static_cast<const CalcOp*>(pFirst)->pName,
-                           static_cast<const CalcOp*>(pSecond)->pName );
+            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
+                     static_cast<const CalcOp*>(pSecond)->aName );
     }
     return nRet;
 }
@@ -185,7 +147,7 @@ static int OperatorCompare( const void *pFirst, const void *pSecond)
 CalcOp* FindOperator( const OUString& rSrch )
 {
     CalcOp aSrch;
-    aSrch.pUName = &rSrch;
+    aSrch.aName = rSrch;
     aSrch.eOp = CALC_NAME;
 
     return static_cast<CalcOp*>(bsearch( static_cast<void*>(&aSrch),
