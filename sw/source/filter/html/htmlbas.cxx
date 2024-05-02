@@ -298,9 +298,9 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
 #endif
 }
 
-static const char* aEventNames[] =
+constexpr OUString aEventNames[] =
 {
-    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus"
+    u"OnLoad"_ustr, u"OnPrepareUnload"_ustr, u"OnFocus"_ustr, u"OnUnfocus"_ustr
 };
 
 void SwHTMLWriter::OutBasicBodyEvents()
@@ -315,7 +315,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
     for ( sal_Int32 i=0; i<4; i++ )
     {
-        std::unique_ptr<SvxMacro> pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( OUString::createFromAscii(aEventNames[i]) ), pDocSh );
+        std::unique_ptr<SvxMacro> pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( aEventNames[i] ), pDocSh );
         if ( pMacro )
         {
             aDocTable.Insert( aBodyEventTable[i].nEvent, *pMacro );
