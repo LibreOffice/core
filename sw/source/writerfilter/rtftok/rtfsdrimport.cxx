@@ -164,18 +164,16 @@ void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame,
     }
     else
     {
-        static const char* aBorders[]
-            = { "TopBorder", "LeftBorder", "BottomBorder", "RightBorder" };
-        for (const char* pBorder : aBorders)
+        static constexpr OUString aBorders[]
+            = { u"TopBorder"_ustr, u"LeftBorder"_ustr, u"BottomBorder"_ustr, u"RightBorder"_ustr };
+        for (const OUString& pBorder : aBorders)
         {
-            auto aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder))
-                                   .get<table::BorderLine2>();
+            auto aBorderLine = xPropertySet->getPropertyValue(pBorder).get<table::BorderLine2>();
             if (rLineColor.hasValue())
                 aBorderLine.Color = rLineColor.get<sal_Int32>();
             if (rLineWidth.hasValue())
                 aBorderLine.LineWidth = rLineWidth.get<sal_Int32>();
-            xPropertySet->setPropertyValue(OUString::createFromAscii(pBorder),
-                                           uno::Any(aBorderLine));
+            xPropertySet->setPropertyValue(pBorder, uno::Any(aBorderLine));
         }
     }
 }
