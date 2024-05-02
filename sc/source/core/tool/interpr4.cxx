@@ -2194,6 +2194,15 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
     return nResultVal;
 }
 
+bool ScInterpreter::GetBoolWithDefault(bool bDefault)
+{
+    bool bMissing = IsMissing();
+    bool bResultVal = (GetDouble() != 0.0);
+    if (bMissing)
+        bResultVal = bDefault;
+    return bResultVal;
+}
+
 sal_Int32 ScInterpreter::double_to_int32(double fVal)
 {
     if (!std::isfinite(fVal))
@@ -4146,6 +4155,7 @@ StackVar ScInterpreter::Interpret()
                     case ocPercentSign      : ScPercentSign();              break;
                     case ocPi               : ScPi();                       break;
                     case ocRandom           : ScRandom();                   break;
+                    case ocRandArray        : ScRandArray();                break;
                     case ocRandomNV         : ScRandom();                   break;
                     case ocRandbetweenNV    : ScRandbetween();              break;
                     case ocFilter           : ScFilter();                   break;

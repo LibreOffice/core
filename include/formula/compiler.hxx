@@ -514,7 +514,8 @@
 #define SC_OPCODE_SORT              501
 #define SC_OPCODE_SORTBY            502
 #define SC_OPCODE_MAT_SEQUENCE      503
-#define SC_OPCODE_STOP_2_PAR        504     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_RANDARRAY         504
+#define SC_OPCODE_STOP_2_PAR        505     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

@@ -1548,6 +1548,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocNegSub:
             case ocAveDev:
             case ocMatSequence:
+            case ocRandArray:
             // Don't change the state.
             break;
             default:

@@ -2703,6 +2703,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "RADIANS",
         "RAND",
         "RAND.NV",
+        "RANDARRAY",
         "RANDBETWEEN.NV",
         "RAWSUBTRACT",
         "ROUND",
