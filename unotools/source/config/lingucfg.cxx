@@ -219,55 +219,55 @@ namespace {
 
 struct NamesToHdl
 {
-    const char   *pFullPropName;      // full qualified name as used in configuration
+    OUString     aFullPropName;      // full qualified name as used in configuration
     OUString     aPropName;          // property name only (atom) of above
     sal_Int32    nHdl;               // numeric handle representing the property
 };
 
 }
 
-NamesToHdl const aNamesToHdl[] =
+NamesToHdl constexpr aNamesToHdl[] =
 {
-{/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
-{/*  1 */    "General/DictionaryList/ActiveDictionaries",     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},
-{/*  2 */    "General/DictionaryList/IsUseDictionaryList",    UPN_IS_USE_DICTIONARY_LIST,            UPH_IS_USE_DICTIONARY_LIST},
-{/*  3 */    "General/IsIgnoreControlCharacters",             UPN_IS_IGNORE_CONTROL_CHARACTERS,      UPH_IS_IGNORE_CONTROL_CHARACTERS},
-{/*  5 */    "General/DefaultLocale_CJK",                     UPN_DEFAULT_LOCALE_CJK,                UPH_DEFAULT_LOCALE_CJK},
-{/*  6 */    "General/DefaultLocale_CTL",                     UPN_DEFAULT_LOCALE_CTL,                UPH_DEFAULT_LOCALE_CTL},
+{/*  0 */    u"General/DefaultLocale"_ustr,                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
+{/*  1 */    u"General/DictionaryList/ActiveDictionaries"_ustr,     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},
+{/*  2 */    u"General/DictionaryList/IsUseDictionaryList"_ustr,    UPN_IS_USE_DICTIONARY_LIST,            UPH_IS_USE_DICTIONARY_LIST},
+{/*  3 */    u"General/IsIgnoreControlCharacters"_ustr,             UPN_IS_IGNORE_CONTROL_CHARACTERS,      UPH_IS_IGNORE_CONTROL_CHARACTERS},
+{/*  5 */    u"General/DefaultLocale_CJK"_ustr,                     UPN_DEFAULT_LOCALE_CJK,                UPH_DEFAULT_LOCALE_CJK},
+{/*  6 */    u"General/DefaultLocale_CTL"_ustr,                     UPN_DEFAULT_LOCALE_CTL,                UPH_DEFAULT_LOCALE_CTL},
 
-{/*  7 */    "SpellChecking/IsSpellUpperCase",                UPN_IS_SPELL_UPPER_CASE,               UPH_IS_SPELL_UPPER_CASE},
-{/*  8 */    "SpellChecking/IsSpellWithDigits",               UPN_IS_SPELL_WITH_DIGITS,              UPH_IS_SPELL_WITH_DIGITS},
-{/*  9 */    "SpellChecking/IsSpellAuto",                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
-{/* 10 */    "SpellChecking/IsSpellSpecial",                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
-{/* 11 */    "SpellChecking/IsSpellClosedCompound",           UPN_IS_SPELL_CLOSED_COMPOUND,          UPH_IS_SPELL_CLOSED_COMPOUND},
-{/* 12 */    "SpellChecking/IsSpellHyphenatedCompound",       UPN_IS_SPELL_HYPHENATED_COMPOUND,      UPH_IS_SPELL_HYPHENATED_COMPOUND},
-{/* 13 */    "SpellChecking/IsReverseDirection",              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
+{/*  7 */    u"SpellChecking/IsSpellUpperCase"_ustr,                UPN_IS_SPELL_UPPER_CASE,               UPH_IS_SPELL_UPPER_CASE},
+{/*  8 */    u"SpellChecking/IsSpellWithDigits"_ustr,               UPN_IS_SPELL_WITH_DIGITS,              UPH_IS_SPELL_WITH_DIGITS},
+{/*  9 */    u"SpellChecking/IsSpellAuto"_ustr,                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
+{/* 10 */    u"SpellChecking/IsSpellSpecial"_ustr,                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
+{/* 11 */    u"SpellChecking/IsSpellClosedCompound"_ustr,           UPN_IS_SPELL_CLOSED_COMPOUND,          UPH_IS_SPELL_CLOSED_COMPOUND},
+{/* 12 */    u"SpellChecking/IsSpellHyphenatedCompound"_ustr,       UPN_IS_SPELL_HYPHENATED_COMPOUND,      UPH_IS_SPELL_HYPHENATED_COMPOUND},
+{/* 13 */    u"SpellChecking/IsReverseDirection"_ustr,              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
 
-{/* 14 */    "Hyphenation/MinLeading",                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
-{/* 15 */    "Hyphenation/MinTrailing",                       UPN_HYPH_MIN_TRAILING,                 UPH_HYPH_MIN_TRAILING},
-{/* 16 */    "Hyphenation/MinWordLength",                     UPN_HYPH_MIN_WORD_LENGTH,              UPH_HYPH_MIN_WORD_LENGTH},
-{/* 17*/    "Hyphenation/IsHyphSpecial",                     UPN_IS_HYPH_SPECIAL,                   UPH_IS_HYPH_SPECIAL},
-{/* 18 */    "Hyphenation/IsHyphAuto",                        UPN_IS_HYPH_AUTO,                      UPH_IS_HYPH_AUTO},
+{/* 14 */    u"Hyphenation/MinLeading"_ustr,                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
+{/* 15 */    u"Hyphenation/MinTrailing"_ustr,                       UPN_HYPH_MIN_TRAILING,                 UPH_HYPH_MIN_TRAILING},
+{/* 16 */    u"Hyphenation/MinWordLength"_ustr,                     UPN_HYPH_MIN_WORD_LENGTH,              UPH_HYPH_MIN_WORD_LENGTH},
+{/* 17*/     u"Hyphenation/IsHyphSpecial"_ustr,                     UPN_IS_HYPH_SPECIAL,                   UPH_IS_HYPH_SPECIAL},
+{/* 18 */    u"Hyphenation/IsHyphAuto"_ustr,                        UPN_IS_HYPH_AUTO,                      UPH_IS_HYPH_AUTO},
 
-{/* 19 */    "TextConversion/ActiveConversionDictionaries",   UPN_ACTIVE_CONVERSION_DICTIONARIES,        UPH_ACTIVE_CONVERSION_DICTIONARIES},
-{/* 20 */    "TextConversion/IsIgnorePostPositionalWord",     UPN_IS_IGNORE_POST_POSITIONAL_WORD,        UPH_IS_IGNORE_POST_POSITIONAL_WORD},
-{/* 21 */    "TextConversion/IsAutoCloseDialog",              UPN_IS_AUTO_CLOSE_DIALOG,                  UPH_IS_AUTO_CLOSE_DIALOG},
-{/* 22 */    "TextConversion/IsShowEntriesRecentlyUsedFirst", UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST,   UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST},
-{/* 23 */    "TextConversion/IsAutoReplaceUniqueEntries",     UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES,        UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES},
-{/* 24 */    "TextConversion/IsDirectionToSimplified",        UPN_IS_DIRECTION_TO_SIMPLIFIED,            UPH_IS_DIRECTION_TO_SIMPLIFIED},
-{/* 25 */    "TextConversion/IsUseCharacterVariants",         UPN_IS_USE_CHARACTER_VARIANTS,             UPH_IS_USE_CHARACTER_VARIANTS},
-{/* 26 */    "TextConversion/IsTranslateCommonTerms",         UPN_IS_TRANSLATE_COMMON_TERMS,             UPH_IS_TRANSLATE_COMMON_TERMS},
-{/* 27 */    "TextConversion/IsReverseMapping",               UPN_IS_REVERSE_MAPPING,                    UPH_IS_REVERSE_MAPPING},
+{/* 19 */    u"TextConversion/ActiveConversionDictionaries"_ustr,   UPN_ACTIVE_CONVERSION_DICTIONARIES,        UPH_ACTIVE_CONVERSION_DICTIONARIES},
+{/* 20 */    u"TextConversion/IsIgnorePostPositionalWord"_ustr,     UPN_IS_IGNORE_POST_POSITIONAL_WORD,        UPH_IS_IGNORE_POST_POSITIONAL_WORD},
+{/* 21 */    u"TextConversion/IsAutoCloseDialog"_ustr,              UPN_IS_AUTO_CLOSE_DIALOG,                  UPH_IS_AUTO_CLOSE_DIALOG},
+{/* 22 */    u"TextConversion/IsShowEntriesRecentlyUsedFirst"_ustr, UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST,   UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST},
+{/* 23 */    u"TextConversion/IsAutoReplaceUniqueEntries"_ustr,     UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES,        UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES},
+{/* 24 */    u"TextConversion/IsDirectionToSimplified"_ustr,        UPN_IS_DIRECTION_TO_SIMPLIFIED,            UPH_IS_DIRECTION_TO_SIMPLIFIED},
+{/* 25 */    u"TextConversion/IsUseCharacterVariants"_ustr,         UPN_IS_USE_CHARACTER_VARIANTS,             UPH_IS_USE_CHARACTER_VARIANTS},
+{/* 26 */    u"TextConversion/IsTranslateCommonTerms"_ustr,         UPN_IS_TRANSLATE_COMMON_TERMS,             UPH_IS_TRANSLATE_COMMON_TERMS},
+{/* 27 */    u"TextConversion/IsReverseMapping"_ustr,               UPN_IS_REVERSE_MAPPING,                    UPH_IS_REVERSE_MAPPING},
 
-{/* 28 */    "ServiceManager/DataFilesChangedCheckValue",     UPN_DATA_FILES_CHANGED_CHECK_VALUE,        UPH_DATA_FILES_CHANGED_CHECK_VALUE},
+{/* 28 */    u"ServiceManager/DataFilesChangedCheckValue"_ustr,     UPN_DATA_FILES_CHANGED_CHECK_VALUE,        UPH_DATA_FILES_CHANGED_CHECK_VALUE},
 
-{/* 29 */    "GrammarChecking/IsAutoCheck",                   UPN_IS_GRAMMAR_AUTO,                      UPH_IS_GRAMMAR_AUTO},
-{/* 30 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
+{/* 29 */    u"GrammarChecking/IsAutoCheck"_ustr,                   UPN_IS_GRAMMAR_AUTO,                      UPH_IS_GRAMMAR_AUTO},
+{/* 30 */    u"GrammarChecking/IsInteractiveCheck"_ustr,            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
-{            nullptr,                                         UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
+{            u""_ustr,                                         UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
 
-{            nullptr,                                         "",                                      -1}
+{            u""_ustr,                                         u""_ustr,                                      -1}
 };
 
 uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
@@ -278,9 +278,8 @@ uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
     sal_Int32 nIdx = 0;
     for (auto const & nameToHdl: aNamesToHdl)
     {
-        const char *pFullPropName = nameToHdl.pFullPropName;
-        if (pFullPropName)
-            pNames[ nIdx++ ] = OUString::createFromAscii( pFullPropName );
+        if (!nameToHdl.aFullPropName.isEmpty())
+            pNames[ nIdx++ ] = nameToHdl.aFullPropName;
     }
     aNames.realloc( nIdx );
 
@@ -296,20 +295,20 @@ bool SvtLinguConfigItem::GetHdlByName(
 
     if (bFullPropName)
     {
-        while (pEntry && pEntry->pFullPropName != nullptr)
+        while (pEntry && !pEntry->aFullPropName.isEmpty())
         {
-            if (o3tl::equalsAscii(rPropertyName, pEntry->pFullPropName ))
+            if (pEntry->aFullPropName == rPropertyName)
             {
                 rnHdl = pEntry->nHdl;
                 break;
             }
             ++pEntry;
         }
-        return pEntry && pEntry->pFullPropName != nullptr;
+        return pEntry && !pEntry->aFullPropName.isEmpty();
     }
     else
     {
-        while (pEntry && pEntry->pFullPropName != nullptr)
+        while (pEntry && !pEntry->aFullPropName.isEmpty())
         {
             if (rPropertyName == pEntry->aPropName )
             {
@@ -318,7 +317,7 @@ bool SvtLinguConfigItem::GetHdlByName(
             }
             ++pEntry;
         }
-        return pEntry && pEntry->pFullPropName != nullptr;
+        return pEntry && !pEntry->aFullPropName.isEmpty();
     }
 }
 
