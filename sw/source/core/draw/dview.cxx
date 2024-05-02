@@ -332,8 +332,7 @@ sal_uInt32 SwDrawView::GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
     sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
 
     const SdrPage* pDrawPage = _rParentObj.GetDrawObj()->getSdrPageFromSdrObject();
-    OSL_ENSURE( pDrawPage,
-            "<SwDrawView::GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
+    assert(pDrawPage && "<SwDrawView::GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!");
 
     const size_t nObjCount = pDrawPage->GetObjCount();
     for ( size_t i = nObjCount-1; i > _rParentObj.GetDrawObj()->GetOrdNum() ; --i )

@@ -146,6 +146,7 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
         nActualToken++;
     }
 
+    assert(pLeap && "otherwise would early return");
     *pLeap = 0;
 
     return OUString(pBuffer);
@@ -196,6 +197,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
         nActualToken++;
     }
 
+    assert(pLeap && "otherwise would early return");
     *pLeap = 0;
 
     return pBuffer;

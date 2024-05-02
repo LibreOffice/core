@@ -224,6 +224,8 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             if (!pContact)
                 continue;
 
+            assert(pObj);
+
             // #i53320#
 #if OSL_DEBUG_LEVEL > 0
             SwAnchoredDrawObject* pAnchoredDrawObj =
@@ -503,6 +505,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 {
                     const SdrMark& rMark = *rMrkList.GetMark( i );
                     pObj = rMark.GetMarkedSdrObj();
+                    assert(pObj);
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
                     if( pContact ) // of course not for grouped objects
                     {

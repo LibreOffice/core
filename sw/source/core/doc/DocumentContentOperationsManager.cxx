@@ -3914,6 +3914,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
                 sw::RecreateStartTextFrames(*pNode);
                 if (!frames.empty())
                 {   // tdf#132187 check if the end node needs new frames
+                    assert(pEndNode);
                     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
                     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                     {

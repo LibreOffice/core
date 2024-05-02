@@ -738,7 +738,7 @@ bool SwCursorShell::MoveFieldType(
         const SwPosition& rPos = *pCursor->GetPoint();
 
         SwTextNode* pTNd = rPos.GetNode().GetTextNode();
-        OSL_ENSURE( pTNd, "No ContentNode" );
+        assert(pTNd && "No ContentNode");
 
         SwTextField * pTextField = pTNd->GetFieldTextAttrAt(rPos.GetContentIndex(), ::sw::GetTextAttrMode::Default);
         const bool bDelField = ( pTextField == nullptr );

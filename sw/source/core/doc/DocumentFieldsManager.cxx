@@ -494,7 +494,7 @@ void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
 bool DocumentFieldsManager::UpdateField(SwTextField* pDstTextField, SwField& rSrcField, bool bUpdateFields)
 {
     //static const sw::RefmarkFieldUpdate aRefMarkHint;
-    OSL_ENSURE(pDstTextField, "no field to update!");
+    assert(pDstTextField && "no field to update!");
 
     bool bTableSelBreak = false;
 

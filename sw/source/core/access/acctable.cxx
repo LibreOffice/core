@@ -1276,7 +1276,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // preliminaries: get 'our' table box, and get the cursor shell
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    OSL_ENSURE( pBox != nullptr, "We need the table box." );
 
     SwCursorShell* pCursorShell = GetCursorShell();
     if( pCursorShell == nullptr )
@@ -1284,9 +1283,9 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // assure, that child, identified by the given index, isn't already selected.
     if ( IsChildSelected( nChildIndex ) )
-    {
         return;
-    }
+
+    assert(pBox != nullptr && "We need the table box.");
 
     // now we can start to do the work: check whether we already have
     // a table selection (in 'our' table). If so, extend the
@@ -1445,7 +1444,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
         return;
 
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    OSL_ENSURE( pBox != nullptr, "We need the table box." );
+    assert(pBox != nullptr && "We need the table box.");
 
     // If we unselect point, then set cursor to mark. If we clear another
     // selected box, then set cursor to point.

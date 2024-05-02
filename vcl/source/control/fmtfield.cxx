@@ -457,6 +457,7 @@ void Formatter::ImplSetFormatKey(sal_uLong nFormatKey)
     if (bNeedFormatter)
     {
         GetOrCreateFormatter(); // this creates a standard formatter
+        assert(m_pFormatter);
 
         // It might happen that the standard formatter makes no sense here, but it takes a default
         // format. Thus, it is possible to set one of the other standard keys (which are spanning

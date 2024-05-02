@@ -1161,7 +1161,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 
             // #i99665#
             // Adjust AntiAliasing mode at output device for chart OLE
-            if ( pOLENd->IsChart() )
+            if (pOLENd && pOLENd->IsChart())
                 nNewAntialiasingAtOutput |= AntialiasingFlags::PixelSnapHairline;
 
             pOut->SetAntialiasing( nNewAntialiasingAtOutput );

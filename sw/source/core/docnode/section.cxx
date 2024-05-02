@@ -836,9 +836,9 @@ static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond
 {
     const SwSectionFormat* pFSectFormat = pFirst->GetFormat();
     const SwSectionFormat* pSSectFormat = pSecond->GetFormat();
-    OSL_ENSURE( pFSectFormat && pSSectFormat &&
+    assert( pFSectFormat && pSSectFormat &&
             pFSectFormat->GetContent(false).GetContentIdx() &&
-            pSSectFormat->GetContent(false).GetContentIdx(),
+            pSSectFormat->GetContent(false).GetContentIdx() &&
                 "Invalid sections" );
     return pFSectFormat->GetContent(false).GetContentIdx()->GetIndex() <
                   pSSectFormat->GetContent(false).GetContentIdx()->GetIndex();

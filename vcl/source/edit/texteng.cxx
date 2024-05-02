@@ -1325,7 +1325,7 @@ TextPaM TextEngine::SplitContent( sal_uInt32 nNode, sal_Int32 nSepPos )
 {
 #ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes()[ nNode ].get();
-    SAL_WARN_IF( !pNode, "vcl", "SplitContent: Invalid Node!" );
+    assert(pNode && "SplitContent: Invalid Node!");
     SAL_WARN_IF( !IsInUndo(), "vcl", "SplitContent: only in Undo()!" );
     SAL_WARN_IF( nSepPos > pNode->GetText().getLength(), "vcl", "SplitContent: Bad index" );
 #endif

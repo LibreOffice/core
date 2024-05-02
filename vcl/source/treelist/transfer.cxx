@@ -1015,9 +1015,8 @@ void TransferableHelper::CopyToPrimarySelection() const
 }
 
 void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions )
-
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    assert(pWindow && "Window pointer is NULL");
     Reference< XDragSource > xDragSource( pWindow->GetDragSource() );
 
     if( !xDragSource.is() )

@@ -711,6 +711,7 @@ void SwDoc::DelCharFormat( SwCharFormat const *pFormat, bool bBroadcast )
 
 void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
 {
+    assert(pFormat && "ContainsFormat will always deref pFormat");
     if( dynamic_cast<const SwTableBoxFormat*>( pFormat) != nullptr || dynamic_cast<const SwTableLineFormat*>( pFormat) != nullptr )
     {
         OSL_ENSURE( false, "Format is not in the DocArray any more, "

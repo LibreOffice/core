@@ -2370,7 +2370,9 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
         }
 
         SwSectionNode* pSectionNode = pNode->GetSectionNode();
-        if (comphelper::LibreOfficeKit::isActive() && pSectionNode && !GetDoc().IsClipBoard() && SfxViewShell::Current())
+        SfxViewShell* pKitClipSh = (comphelper::LibreOfficeKit::isActive() && pSectionNode && !GetDoc().IsClipBoard())
+            ? SfxViewShell::Current() : nullptr;
+        if (pKitClipSh)
         {
             OUString fieldCommand = pSectionNode->GetSection().GetSectionName();
             tools::JsonWriter aJson;
@@ -2381,8 +2383,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
                 aJson.put("DeleteSection", fieldCommand);
             }
 
-            SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
-
+            pKitClipSh->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
     }
 

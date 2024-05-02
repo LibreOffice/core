@@ -210,8 +210,10 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
     {
         SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
         const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-        const SwTableLine *pRedTabLine = pTableRowRedline ? &pTableRowRedline->GetTableLine() : nullptr;
-        if ( pRedTabLine == &rTableLine )
+        if (!pTableRowRedline)
+            continue;
+        const SwTableLine& rRedTabLine = pTableRowRedline->GetTableLine();
+        if ( &rRedTabLine == &rTableLine )
         {
             // Redline for this table row
             const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
@@ -254,8 +256,10 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     {
         SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
         const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
-        const SwTableBox *pRedTabBox = pTableCellRedline ? &pTableCellRedline->GetTableBox() : nullptr;
-        if ( pRedTabBox == &rTableBox )
+        if (!pTableCellRedline)
+            continue;
+        const SwTableBox& rRedTabBox = pTableCellRedline->GetTableBox();
+        if (&rRedTabBox == &rTableBox)
         {
             // Redline for this table cell
             const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();

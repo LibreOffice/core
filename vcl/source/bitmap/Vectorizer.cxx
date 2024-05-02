@@ -221,6 +221,8 @@ ImplVectMap::ImplVectMap( tools::Long nWidth, tools::Long nHeight ) :
     mnWidth ( nWidth ),
     mnHeight( nHeight )
 {
+    assert(mpScan && "Don't handle OOM conditions");
+
     const tools::Long  nWidthAl = ( nWidth >> 2 ) + 1;
     Scanline    pTmp = mpBuf;
 

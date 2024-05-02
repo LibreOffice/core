@@ -1098,6 +1098,8 @@ void PrintDialog::checkOptionalControlDependencies()
 {
     for( const auto& rEntry : maControlToPropertyMap )
     {
+        assert(rEntry.first);
+
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( rEntry.second );
 
         if (bShouldbeEnabled && dynamic_cast<weld::RadioButton*>(rEntry.first))

@@ -426,6 +426,7 @@ namespace
                     if( rInfo.mbSelected || nCol > nCurrStartCol )
                     {
                         rInfo.mpCopy = pCurrBox->mpBox;
+                        assert(rInfo.mpCopy);
                         if( rInfo.mbSelected && rInfo.mpCopy->getDummyFlag() )
                         {
                             ++pCurrBox;
@@ -711,7 +712,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
     SwTableBox* pMyBox = GetTableBox(
             rSttBox.GetNode().FindTableBoxStartNode()->GetIndex() );
 
-    OSL_ENSURE( pMyBox, "Index is not in a Box in this Table" );
+    assert(pMyBox && "Index is not in a Box in this Table");
 
     // First delete the Table's Frames
     FndBox_ aFndBox( nullptr, nullptr );

@@ -2750,6 +2750,8 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA
 void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentChild,
                                     std::string_view sType, std::string_view sInternalChild)
 {
+    assert(pCurrentChild);
+
     //Internal-children default in glade to not having their visible bits set
     //even though they are visible (generally anyway)
     if (!sInternalChild.empty())

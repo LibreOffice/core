@@ -108,7 +108,7 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
             xD->addAuthorToTrustedSources( mxCert );
         else if( mxStore.is() )
         {
-            DBG_ASSERT( mpInfos, "-MacroWarning::EnableBtnHdl(): no infos, search in nirvana..." );
+            assert(mpInfos && "-MacroWarning::EnableBtnHdl(): no infos, search in nirvana...");
 
             sal_Int32   nCnt = mpInfos->getLength();
             for( sal_Int32 i = 0 ; i < nCnt ; ++i )

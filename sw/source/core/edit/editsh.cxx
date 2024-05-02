@@ -330,7 +330,7 @@ void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
 void SwEditShell::ClearAutomaticContour()
 {
     SwNoTextNode *pNd = GetCursor()->GetPointNode().GetNoTextNode();
-    OSL_ENSURE( pNd, "is no NoTextNode!" );
+    assert(pNd && "is no NoTextNode!");
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();

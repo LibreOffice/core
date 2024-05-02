@@ -1416,7 +1416,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
 
 void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode )
 {
-    SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
+    assert(pElement && "pElement is not set!");
     SAL_WARN_IF( !pElement->m_bIsStorage, "package.xstor", "Storage flag is not set!" );
 
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
@@ -1437,7 +1437,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
 
 void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 {
-    SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
+    assert(pElement && "pElement is not set!");
     SAL_WARN_IF( pElement->m_bIsStorage, "package.xstor", "Storage flag is set!" );
 
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
@@ -1985,7 +1985,7 @@ SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, 
         throw io::IOException( THROW_WHERE );
     }
 
-    SAL_WARN_IF( !pElement, "package.xstor", "In case element can not be created an exception must be thrown!" );
+    assert(pElement && "In case element can not be created an exception must be thrown!");
 
     if (!pElement->m_xStream)
         m_pImpl->OpenSubStream( pElement );
@@ -2231,7 +2231,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     try
     {
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, false );
-        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
+        assert(pElement && pElement->m_xStream && "In case element can not be created an exception must be thrown!");
 
         xResult = pElement->m_xStream->GetStream(nOpenMode, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
@@ -3120,7 +3120,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     try
     {
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, true );
-        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
+        assert(pElement && pElement->m_xStream && "In case element can not be created an exception must be thrown!");
 
         xResult = pElement->m_xStream->GetStream(nOpenMode, aEncryptionData, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
@@ -4930,7 +4930,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
             throw container::ElementExistException( THROW_WHERE );
 
         pElement = OpenStreamElement_Impl( aStreamName, embed::ElementModes::READWRITE, false );
-        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
+        assert(pElement && pElement->m_xStream && "In case element can not be created an exception must be thrown!");
 
         pElement->m_xStream->InsertStreamDirectly(xInStream, aProps);
     }
@@ -5464,7 +5464,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
         // the transacted version of the stream should be opened
 
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, true );
-        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
+        assert(pElement && pElement->m_xStream && "In case element can not be created an exception must be thrown!");
 
         xResult.set(pElement->m_xStream->GetStream(nOpenMode, aEncryptionData, true),
                     uno::UNO_QUERY_THROW);

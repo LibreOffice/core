@@ -682,7 +682,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
             // The Frame is created automatically.
             {
                 SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
-                OSL_ENSURE( pSttNd, "No StartNode in InsertLabel." );
+                assert(pSttNd && "No StartNode in InsertLabel.");
                 SwNodeOffset nNode;
                 if( bBefore )
                 {

@@ -86,7 +86,7 @@ void SvTreeList::Broadcast(
 // an entry is visible if all parents are expanded
 bool SvTreeList::IsEntryVisible( const SvListView* pView, SvTreeListEntry* pEntry ) const
 {
-    DBG_ASSERT(pView&&pEntry,"IsVisible:Invalid Params");
+    assert(pView && pEntry && "IsVisible:Invalid Params");
     bool bRetVal = false;
     do
     {
@@ -176,7 +176,7 @@ sal_uInt32 findEntryPosition(const SvTreeListEntries& rDst, const SvTreeListEntr
 sal_uInt32 SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetParent,sal_uInt32 nListPos)
 {
     // pDest may be 0!
-    DBG_ASSERT(pSrcEntry,"Entry?");
+    assert(pSrcEntry && "Entry?");
     if ( !pTargetParent )
         pTargetParent = pRootItem.get();
     DBG_ASSERT(pSrcEntry!=pTargetParent,"Move:Source=Target");
@@ -416,7 +416,7 @@ sal_uInt32 SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
 
 sal_uInt32 SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListEntry* pParent) const
 {
-    DBG_ASSERT(pView,"GetVisChildCount:No View");
+    assert(pView && "GetVisChildCount:No View");
     if ( !pParent )
         pParent = pRootItem.get();
 
@@ -437,7 +437,7 @@ sal_uInt32 SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListE
 
 sal_uInt32 SvTreeList::GetChildSelectionCount(const SvListView* pView,SvTreeListEntry* pParent) const
 {
-    DBG_ASSERT(pView,"GetChildSelCount:No View");
+    assert(pView && "GetChildSelCount:No View");
     if ( !pParent )
         pParent = pRootItem.get();
 
@@ -525,7 +525,7 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
 
 SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
 {
-    DBG_ASSERT(pActEntry!=nullptr,"Entry?");
+    assert(pActEntry && "Entry?");
 
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uInt32 nActualPos = pActEntry->GetChildListPos();
@@ -566,7 +566,8 @@ SvTreeListEntry* SvTreeList::Last() const
 
 sal_uInt32 SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry const * pEntry ) const
 {
-    DBG_ASSERT(pView&&pEntry,"View/Entry?");
+    assert(pView && "View?");
+    DBG_ASSERT(pEntry,"Entry?");
 
     if (!pView->m_pImpl->m_bVisPositionsValid)
     {
@@ -611,9 +612,10 @@ sal_uInt32 SvTreeList::GetVisibleCount( SvListView* pView ) const
 // already visible.
 SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry* pActEntry,sal_uInt16* pActDepth) const
 {
-    DBG_ASSERT(pView,"NextVisible:No View");
     if ( !pActEntry )
         return nullptr;
+
+    assert(pView && "NextVisible:No View");
 
     sal_uInt16 nDepth = 0;
     bool bWithDepth = false;
@@ -672,7 +674,7 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry
 
 SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntry* pActEntry) const
 {
-    DBG_ASSERT(pView&&pActEntry,"PrevVis:View/Entry?");
+    assert(pView && pActEntry && "PrevVis:View/Entry?");
 
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uInt32 nActualPos = pActEntry->GetChildListPos();
@@ -710,7 +712,8 @@ SvTreeListEntry* SvTreeList::LastVisible( const SvListView* pView) const
 
 SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry* pEntry,sal_uInt16& nDelta) const
 {
-    DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"NextVis:Wrong Prms/!Vis");
+    assert(pView && pEntry && "NextVis:Wrong Prms!");
+    DBG_ASSERT(IsEntryVisible(pView,pEntry), "NextVis:Wrong Vis");
 
     sal_uInt32 nVisPos = GetVisiblePos( pView, pEntry );
     // nDelta entries existent?
@@ -777,7 +780,7 @@ SvTreeListEntry* SvTreeList::FirstChild( SvTreeListEntry* pParent ) const
 
 SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEntry* pEntry ) const
 {
-    DBG_ASSERT(pView&&pEntry,"NextSel:View/Entry?");
+    assert(pView && pEntry && "NextSel:View/Entry?");
     pEntry = Next( pEntry );
     while( pEntry && !pView->IsSelected(pEntry) )
         pEntry = Next( pEntry );
@@ -786,7 +789,7 @@ SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEn
 
 sal_uInt32 SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uInt32 nPos )
 {
-    DBG_ASSERT( pEntry,"Entry?");
+    assert(pEntry && "Entry?");
 
     if ( !pParent )
         pParent = pRootItem.get();
@@ -845,7 +848,7 @@ void SvTreeList::SetAbsolutePositions()
 
 void SvListView::ExpandListEntry( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry,"Expand:View/Entry?");
+    assert(pEntry && "Expand:View/Entry?");
     if ( IsExpanded(pEntry) )
         return;
 
@@ -864,7 +867,7 @@ void SvListView::ExpandListEntry( SvTreeListEntry* pEntry )
 
 void SvListView::CollapseListEntry( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry,"Collapse:View/Entry?");
+    assert(pEntry && "Collapse:View/Entry?");
     if ( !IsExpanded(pEntry) )
         return;
 
@@ -910,7 +913,7 @@ bool SvListView::SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
 
 bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry,"Cannot remove root, use clear");
+    assert(pEntry && "Cannot remove root, use clear");
 
     if( !pEntry->pParent )
     {
@@ -1121,7 +1124,7 @@ void SvListView::ModelHasEntryInvalidated( SvTreeListEntry*)
 void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry )
 {
     SvTreeListEntry* pParent = pEntry->pParent;
-    DBG_ASSERT(pParent,"Model not consistent");
+    assert(pParent && "Model not consistent");
     if (pParent != m_rThis.pModel->pRootItem.get() && pParent->m_Children.size() == 1)
     {
         const auto iter = m_DataTable.find(pParent);
@@ -1393,7 +1396,7 @@ public:
 
 void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
 {
-    DBG_ASSERT(pParent,"Parent not set");
+    assert(pParent && "Parent not set");
 
     if (pParent->m_Children.empty())
         return;

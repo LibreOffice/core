@@ -237,7 +237,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
     if( pFndBox )
     {   // Get StartNode and skip it
         const SwTableBox* pMyBox = pFndBox->GetBox();
-        OSL_ENSURE(pMyBox, "No atomic Box");
+        assert(pMyBox && "No atomic Box");
 
         if( pMyBox->GetSttNd() )
         {
@@ -674,7 +674,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               bool bMovedBefore, SwUndoSort* pUD)
 {
-    OSL_ENSURE(pSource && pTar,"Source or target missing");
+    assert(pSource && pTar && "Source or target missing");
 
     if(pSource == pTar)
         return;

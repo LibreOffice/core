@@ -1036,7 +1036,7 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OUString&
     if (pNotebook && pNotebook->GetType() == WindowType::TABCONTROL)
         pWeldWidget
             = std::make_unique<JSNotebook>(this, static_cast<TabControl*>(pNotebook), this, false);
-    else if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
+    else if (pNotebook && pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
         pWeldWidget = std::make_unique<JSVerticalNotebook>(
             this, static_cast<VerticalTabControl*>(pNotebook), this, false);
 

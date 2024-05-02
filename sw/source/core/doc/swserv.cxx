@@ -214,6 +214,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 
     if( nSttNd && nEndNd )
     {
+        assert(pNds);
         // Get LinkManager
         const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc().getIDocumentLinksAdministration().GetLinkManager().GetLinks();
 

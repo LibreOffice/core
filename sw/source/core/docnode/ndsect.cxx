@@ -1149,7 +1149,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 // the corresponding ContentFrame
 void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 {
-    OSL_ENSURE( pIdxBehind, "no Index" );
+    assert(pIdxBehind && "no Index");
     SwNodes& rNds = GetNodes();
     SwDoc& rDoc = rNds.GetDoc();
 

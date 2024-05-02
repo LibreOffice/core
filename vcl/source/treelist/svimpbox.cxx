@@ -180,7 +180,7 @@ short SvImpLBox::UpdateContextBmpWidthVector( SvTreeListEntry const * pEntry, sh
 
 void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT( pEntry, "Moved Entry is invalid!" );
+    assert(pEntry && "Moved Entry is invalid!");
 
     SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem(SvLBoxItemType::ContextBmp) );
     short nExpWidth = static_cast<short>(pBmpItem->GetBitmap1().GetSizePixel().Width());

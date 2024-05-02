@@ -1399,6 +1399,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
         SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
+        assert(pOldObj);
 
         if( SwPasteSdr::SetAttr == nAction && dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
             nAction = SwPasteSdr::Replace;
@@ -1458,7 +1459,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                         const SwTextFrame* pTmp = static_cast<const SwTextFrame*>(pAnchor);
                         do {
                             pTmp = pTmp->FindMaster();
-                            OSL_ENSURE( pTmp, "Where's my Master?" );
+                            assert(pTmp && "Where's my Master?");
                         } while( pTmp->IsFollow() );
                         pAnchor = pTmp;
                     }
@@ -1568,6 +1569,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
             if ( nCnt > 1 )
                 pView->GroupMarked();
             SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            assert(pObj);
             if( dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr )
             {
                 pObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );

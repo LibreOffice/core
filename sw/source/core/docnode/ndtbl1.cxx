@@ -672,7 +672,7 @@ static void lcl_CollectCells( std::vector<SwCellFrame*> &rArr, const SwRect &rUn
         // in order to get to the Cell
         while ( !pCell->IsCellFrame() )
             pCell = pCell->GetUpper();
-        OSL_ENSURE( pCell, "Frame is not a Cell" );
+        assert(pCell && "Frame is not a Cell");
         if ( rUnion.Overlaps( pCell->getFrameArea() ) )
             ::InsertCell( rArr, static_cast<SwCellFrame*>(pCell) );
 

@@ -2316,6 +2316,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
     // set area for autoformatting
     if( pSttNd )
     {
+        assert(pEndNd);
         m_aNdIdx = *pSttNd;
         // for GoNextPara, one paragraph prior to that
         sw::GotoPrevLayoutTextFrame(m_aNdIdx, m_pEditShell->GetLayout());
@@ -2398,6 +2399,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
             break;
 
         case TST_EMPTY_LINE:
+            assert(m_pCurTextFrame);
             if (IsEmptyLine(*m_pCurTextFrame))
             {
                 if (m_aFlags.bDelEmptyNode && !HasObjects(*m_pCurTextFrame))
@@ -2419,6 +2421,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
             break;
 
         case TST_ALPHA_LINE:
+            assert(m_pCurTextFrame);
             if (IsNoAlphaLine(*m_pCurTextFrame))
             {
                 // recognize a table definition +---+---+
@@ -2457,6 +2460,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
 
         case GET_ALL_INFO:
             {
+                assert(m_pCurTextFrame);
                 if (m_pCurTextFrame->GetTextNodeForParaProps()->GetNumRule())
                 {
                     // do nothing in numbering, go to next
@@ -2567,6 +2571,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 if( !bReplaceStyles )
                     break;
 
+                assert(m_pCurTextFrame);
+
                 const OUString sClrStr( DelLeadingBlanks(m_pCurTextFrame->GetText()) );
 
                 if( sClrStr.isEmpty() )
@@ -2631,6 +2637,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
         case TST_ENUMERIC:
             {
                 bEmptyLine = false;
+                assert(m_pCurTextFrame);
                 if (IsEnumericChar(*m_pCurTextFrame))
                 {
                     if( nLevel >= MAXLEVEL )

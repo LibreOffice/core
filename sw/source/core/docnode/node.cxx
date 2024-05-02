@@ -829,6 +829,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel(sal_uInt8 const nLvl,
 
             Point aPt( 0, 0 );
             std::pair<Point, bool> const tmp(aPt, false);
+            assert(pRet);
             const SwFrame* pFrame = pRet->getLayoutFrame(pRet->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp),
                        * pMyFrame = pCNd ? pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;

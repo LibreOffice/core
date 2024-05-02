@@ -408,7 +408,7 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
 SwFrameFormat *SwHTMLTableLayout::FindFlyFrameFormat() const
 {
     const SwTableNode *pTableNd = GetAnyBoxStartNode()->FindTableNode();
-    OSL_ENSURE( pTableNd, "No Table-Node?" );
+    assert(pTableNd && "No Table-Node?");
     return pTableNd->GetFlyFormat();
 }
 

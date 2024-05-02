@@ -2418,7 +2418,7 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
     SwFrame *pFrame;
     SwContentNode * pNode = rIdx.GetNode().GetContentNode();
 
-    OSL_ENSURE( pNode, "No ContentNode or CopyNode and new Node is identical");
+    assert(pNode && "No ContentNode or CopyNode and new Node is identical");
 
     bool bBefore = rIdx < GetIndex();
 

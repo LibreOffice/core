@@ -100,7 +100,7 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
     if( pFrame && pFrame->IsInSct() )
     {
         SwSectionFrame* pSect = pFrame->FindSctFrame();
-        OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
+        assert(pSect && "GetAnySection: Where's my Sect?");
         if( pSect->IsInFootnote() && pSect->GetUpper()->IsInSct() )
         {
             pSect = pSect->GetUpper()->FindSctFrame();

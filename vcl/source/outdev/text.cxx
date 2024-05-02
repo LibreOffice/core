@@ -778,6 +778,7 @@ double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
     // convert from font units to logical units
     if (pDXPixelArray)
     {
+        assert(pKernArray && "pDXPixelArray depends on pKernArray existing");
         int nSubPixelFactor = pKernArray->get_factor();
         if (mbMap)
         {

@@ -497,6 +497,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     if (!pContact)
         return aRet;
 
+    assert(pObj);
+
     // #i28701#
     SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
     SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();

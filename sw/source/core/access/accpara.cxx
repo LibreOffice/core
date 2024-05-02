@@ -461,7 +461,7 @@ void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
     OSL_ENSURE( GetMap() != nullptr, "no map?" );
     SwViewShell* pViewShell = GetMap()->GetShell();
 
-    OSL_ENSURE( pViewShell != nullptr, "View shell expected!" );
+    assert(pViewShell != nullptr && "View shell expected!");
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
 
     OSL_ENSURE( pSfxShell != nullptr, "SfxViewShell shell expected!" );

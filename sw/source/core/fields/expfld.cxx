@@ -172,7 +172,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
         {
             // get the FlyFormat
             const SwFrameFormat* pFlyFormat = static_cast<const SwFlyFrame*>(pLayout)->GetFormat();
-            OSL_ENSURE( pFlyFormat, "Could not find FlyFormat, where is the field?" );
+            assert(pFlyFormat && "Could not find FlyFormat, where is the field?");
 
             const SwFormatAnchor &rAnchor = pFlyFormat->GetAnchor();
 

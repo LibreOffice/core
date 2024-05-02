@@ -582,6 +582,8 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     else
         aCpyPara.nDelBorderFlag = 2;
 
+    assert(pDoc);
+
     for( sal_uInt16 nCpyCnt = 0; nCpyCnt < nCnt; ++nCpyCnt )
     {
         if( bBehind )
@@ -2920,7 +2922,7 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
                     bool bMinSize )
 {
     SwLayoutFrame* pLineFrame = GetRowFrame( rLine );
-    OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine?" );
+    assert(pLineFrame && "Where is the Frame from the SwTableLine?");
 
     SwFrameFormat* pFormat = rLine.ClaimFrameFormat();
 
@@ -2983,7 +2985,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& 
         {
             // Calculate the new relative size by means of the old one
             SwLayoutFrame* pLineFrame = GetRowFrame( *pLine );
-            OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine?" );
+            assert(pLineFrame && "Where is the Frame from the SwTableLine?");
 
             if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
             {
@@ -3000,7 +3002,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& 
         if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
         {
             SwLayoutFrame* pLineFrame = GetRowFrame( *pLine );
-            OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine??" );
+            assert(pLineFrame && "Where is the Frame from the SwTableLine??");
 
             // Calculate the new relative size by means of the old one
             // If the selected Box get bigger, adjust via the max space else

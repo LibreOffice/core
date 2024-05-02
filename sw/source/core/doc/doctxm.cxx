@@ -474,7 +474,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
     assert( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) && "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFormat const * pFormat = rTOXSect.GetFormat();
-    OSL_ENSURE( pFormat, "invalid TOXBaseSection!" );
+    assert(pFormat && "invalid TOXBaseSection!");
     return pFormat->GetAttrSet();
 }
 
