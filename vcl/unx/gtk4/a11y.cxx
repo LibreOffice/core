@@ -93,10 +93,9 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_LINK;
                 break;
             case css::accessibility::AccessibleRole::PANEL:
-                eRole = GTK_ACCESSIBLE_ROLE_GROUP;
-                break;
             case css::accessibility::AccessibleRole::ROOT_PANE:
-                eRole = GTK_ACCESSIBLE_ROLE_GROUP;
+            case css::accessibility::AccessibleRole::SPLIT_PANE:
+                eRole = GTK_ACCESSIBLE_ROLE_GENERIC;
                 break;
             case css::accessibility::AccessibleRole::MENU_BAR:
                 eRole = GTK_ACCESSIBLE_ROLE_MENU_BAR;
@@ -107,9 +106,6 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::MENU:
             case css::accessibility::AccessibleRole::POPUP_MENU:
                 eRole = GTK_ACCESSIBLE_ROLE_MENU;
-                break;
-            case css::accessibility::AccessibleRole::SPLIT_PANE:
-                eRole = GTK_ACCESSIBLE_ROLE_GROUP;
                 break;
             case css::accessibility::AccessibleRole::TOOL_BAR:
                 eRole = GTK_ACCESSIBLE_ROLE_TOOLBAR;
@@ -159,7 +155,8 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
 #endif
                 break;
             case css::accessibility::AccessibleRole::FILLER:
-                eRole = GTK_ACCESSIBLE_ROLE_GENERIC;
+                // GTK maps this to ATSPI_ROLE_FILLER
+                eRole = GTK_ACCESSIBLE_ROLE_WIDGET;
                 break;
             case css::accessibility::AccessibleRole::PUSH_BUTTON:
             case css::accessibility::AccessibleRole::BUTTON_DROPDOWN:
