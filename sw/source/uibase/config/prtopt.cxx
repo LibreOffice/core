@@ -29,29 +29,29 @@ using namespace com::sun::star::uno;
 // Ctor
 Sequence<OUString> SwPrintOptions::GetPropertyNames() const
 {
-    static const char* aPropNames[] =
+    static constexpr OUString aPropNames[] =
     {
-        "Content/Graphic",              //  0
-        "Content/Control",              //  1
-        "Content/Background",           //  2
-        "Content/PrintBlack",           //  3
-        "Content/Note",                 //  4
-        "Page/Brochure",                //  5
-        "Page/BrochureRightToLeft",     //  6
-        "Output/Fax",                   //  7
-        "Papertray/FromPrinterSetup",   //  8
-        "Page/LeftPage",                //  9 not in SW/Web
-        "Page/RightPage",               // 10 not in SW/Web
-        "EmptyPages",                   // 11 not in SW/Web
-        "Content/PrintPlaceholders",    // 12 not in Sw/Web
-        "Content/PrintHiddenText"       // 13 not in Sw/Web
+        u"Content/Graphic"_ustr,              //  0
+        u"Content/Control"_ustr,              //  1
+        u"Content/Background"_ustr,           //  2
+        u"Content/PrintBlack"_ustr,           //  3
+        u"Content/Note"_ustr,                 //  4
+        u"Page/Brochure"_ustr,                //  5
+        u"Page/BrochureRightToLeft"_ustr,     //  6
+        u"Output/Fax"_ustr,                   //  7
+        u"Papertray/FromPrinterSetup"_ustr,   //  8
+        u"Page/LeftPage"_ustr,                //  9 not in SW/Web
+        u"Page/RightPage"_ustr,               // 10 not in SW/Web
+        u"EmptyPages"_ustr,                   // 11 not in SW/Web
+        u"Content/PrintPlaceholders"_ustr,    // 12 not in Sw/Web
+        u"Content/PrintHiddenText"_ustr       // 13 not in Sw/Web
     };
     const int nCount = m_bIsWeb ? 9 : 14;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
     {
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        pNames[i] = aPropNames[i];
     }
     return aNames;
 }
