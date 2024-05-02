@@ -139,4 +139,18 @@
     <string name="create_file">Neue Datei erstellen</string>
     <string name="search_find_next">Nächste suchen</string>
     <string name="search_find_previous">Vorherige suchen</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
+    <string name="action_underline">Unterstrichen</string>
+    <string name="unable_to_go_further">Kann nicht weiter gehen.</string>
+    <string name="action_bold">Fett</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Suchen</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Durchgestrichen</string>
+    <string name="search_not_found">Suchbegriff nicht gefunden</string>
+    <string name="menu_preferences">Einstellungen</string>
+    <string name="directory_not_saved">Verzeichnis nicht gespeichert.</string>
+    <string name="action_italic">Kursiv</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Ihr Android-Gerät unterstützt keine In-App-SVG-Präsentation. Wir haben den Link zur Präsentation in die Zwischenablage kopiert. Drücken Sie den Home-Button, öffnen Sie einen modernen Web-Browser, fügen Sie in die Adressleiste ein und los.</string>
 </resources>

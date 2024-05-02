@@ -139,4 +139,16 @@
     <string name="unable_to_save">Dosya kaydedilemiyor</string>
     <string name="message_saving_failed">Belge kaydedilemedi.</string>
     <string name="select_file_to_open">Açılacak dosyayı seçin</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Tamam</string>
+    <string name="message_save_incomplete">Kayıt tamamlanmadı. Değişiklik yapıldı mı?</string>
+    <string name="action_underline">Altı çizgili</string>
+    <string name="unable_to_go_further">Daha fazla ilerlenemiyor.</string>
+    <string name="action_bold">Kalın</string>
+    <string name="browser_app_name">LibreOffice Tarayıcı</string>
+    <string name="app_about_name"><b>LibreOffice Görüntüleyici \'Beta\'</b></string>
+    <string name="action_strikeout">Üzeri çizgili</string>
+    <string name="menu_preferences">Seçenekler</string>
+    <string name="directory_not_saved">Dizin kaydedilmedi.</string>
+    <string name="action_italic">Yana yatık</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Cihazınız uygulama içi slayt gösterisini desteklemiyor. Sunumu panoya kopyaladık. Lütfen ev tuşuna basıp modern bir tarayıcı açıp arama çubuğuna yapıştırın ve sunumu görüntüleyin.</string>
 </resources>
