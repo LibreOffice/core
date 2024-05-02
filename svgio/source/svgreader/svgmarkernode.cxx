@@ -174,7 +174,7 @@ namespace svgio::svgreader
 
         const drawinglayer::primitive2d::Primitive2DContainer& SvgMarkerNode::getMarkerPrimitives() const
         {
-            if(aPrimitives.empty() && Display::None != getDisplay())
+            if(Display::None != getDisplay())
             {
                 decomposeSvgNode(const_cast< SvgMarkerNode* >(this)->aPrimitives, true);
             }

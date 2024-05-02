@@ -247,9 +247,14 @@ namespace svgio::svgreader
             // #121221# Defines if evtl. an empty array *is* set
             bool                        mbStrokeDasharraySet : 1;
 
+            // tdf#155651 Defines if 'context-stroke' is used in stroke
+            bool                        mbContextStroke : 1;
+
             // tdf#94765 Check id references in gradient/pattern getters
             OUString                    maNodeFillURL;
             OUString                    maNodeStrokeURL;
+
+            const basegfx::BColor*  maContextStroke;
 
             /// internal helpers
             void add_fillGradient(
@@ -326,6 +331,9 @@ namespace svgio::svgreader
 
             /// stroke content
             const basegfx::BColor* getStroke() const;
+
+            /// context stroke content
+            const basegfx::BColor* getContextStroke() const;
 
             /// stop color content
             const basegfx::BColor& getStopColor() const;
