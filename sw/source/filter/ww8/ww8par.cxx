@@ -6247,13 +6247,13 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
     ErrCode nErrRet = ERRCODE_NONE;
 
     {
-        static const char* aNames[ 13 ] = {
-            "WinWord/WW", "WinWord/WW8", "WinWord/WWFT",
-            "WinWord/WWFLX", "WinWord/WWFLY",
-            "WinWord/WWF",
-            "WinWord/WWFA0", "WinWord/WWFA1", "WinWord/WWFA2",
-            "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2",
-            "WinWord/RegardHindiDigits"
+        static constexpr OUString aNames[ 13 ] = {
+            u"WinWord/WW"_ustr, u"WinWord/WW8"_ustr, u"WinWord/WWFT"_ustr,
+            u"WinWord/WWFLX"_ustr, u"WinWord/WWFLY"_ustr,
+            u"WinWord/WWF"_ustr,
+            u"WinWord/WWFA0"_ustr, u"WinWord/WWFA1"_ustr, u"WinWord/WWFA2"_ustr,
+            u"WinWord/WWFB0"_ustr, u"WinWord/WWFB1"_ustr, u"WinWord/WWFB2"_ustr,
+            u"WinWord/RegardHindiDigits"_ustr
         };
         sal_uInt64 aVal[ 13 ];
 

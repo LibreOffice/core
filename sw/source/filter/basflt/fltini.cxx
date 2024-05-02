@@ -212,14 +212,14 @@ bool StgWriter::IsStgWriter() const { return true; }
 </FilterFlags>
 */
 
-SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const char** ppNames,
+SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const OUString* ppNames,
                                                                 sal_uInt64* pValues )
     : ConfigItem( "Office.Writer/FilterFlags" )
 {
     GetValues( nCnt, ppNames, pValues );
 }
 
-void SwFilterOptions::GetValues( sal_uInt16 nCnt, const char** ppNames,
+void SwFilterOptions::GetValues( sal_uInt16 nCnt, const OUString* ppNames,
                                                                         sal_uInt64* pValues )
 {
     Sequence<OUString> aNames( nCnt );
@@ -227,7 +227,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const char** ppNames,
     sal_uInt16 n;
 
     for( n = 0; n < nCnt; ++n )
-        pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
+        pNames[ n ] = ppNames[ n ];
     Sequence<Any> aValues = GetProperties( aNames );
 
     if( nCnt == aValues.getLength() )
