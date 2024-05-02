@@ -704,16 +704,16 @@ std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
             if( pFly )
             {
                 aText = "#" + pFly->GetName() + OUStringChar(cMarkSeparator);
-                const char* pStr;
+                std::optional<OUString> pStr;
                 switch( eType )
                 {
-                case SwTOXElement::Ole:       pStr = "ole"; break;
-                case SwTOXElement::Graphic:   pStr = "graphic"; break;
-                case SwTOXElement::Frame:     pStr = "frame"; break;
-                default:            pStr = nullptr;
+                case SwTOXElement::Ole:       pStr = u"ole"_ustr; break;
+                case SwTOXElement::Graphic:   pStr = u"graphic"_ustr; break;
+                case SwTOXElement::Frame:     pStr = u"frame"_ustr; break;
+                default: break;
                 }
                 if( pStr )
-                    aText += OUString::createFromAscii( pStr );
+                    aText += *pStr;
             }
         }
         break;
