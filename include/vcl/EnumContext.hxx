@@ -130,6 +130,7 @@ public:
 
     Application GetApplication() const;
     Application GetApplication_DI() const;
+    Context GetContext() const {return meContext;}
 
     bool operator == (const EnumContext& rOther) const;
     bool operator != (const EnumContext& rOther) const;

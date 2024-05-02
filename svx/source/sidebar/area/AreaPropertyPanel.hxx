@@ -83,6 +83,8 @@ private:
     ::sfx2::sidebar::ControllerItem maFillUseSlideBackgroundController;
 
     SfxBindings* mpBindings;
+    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
+
 };
 
 

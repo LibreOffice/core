@@ -154,6 +154,17 @@ void AreaPropertyPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
             : std::initializer_list<SfxPoolItem const*>{ &rBitmapItem });
 }
 
+void AreaPropertyPanel::HandleContextChange(const vcl::EnumContext& rContext)
+{
+    AreaPropertyPanelBase::HandleContextChange(rContext);
+    if (rContext.GetContext() != vcl::EnumContext::Context::Default)
+    {
+        std::unique_ptr<SfxPoolItem> pFillState;
+        SfxItemState eState = mpBindings->QueryState( SID_ATTR_FILL_STYLE, pFillState );
+        NotifyItemUpdate(SID_ATTR_FILL_STYLE, eState, pFillState.get());
+    }
+}
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
