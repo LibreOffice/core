@@ -1301,14 +1301,14 @@ uno::Reference< frame::XController >
     return aRet;
 }
 
-static const char* s_EventNames[] =
+constexpr OUString s_EventNames[] =
 {
-    "OnPageCountChange",
-    "OnMailMerge",
-    "OnMailMergeFinished",
-    "OnFieldMerge",
-    "OnFieldMergeFinished",
-    "OnLayoutFinished"
+    u"OnPageCountChange"_ustr,
+    u"OnMailMerge"_ustr,
+    u"OnMailMergeFinished"_ustr,
+    u"OnFieldMerge"_ustr,
+    u"OnFieldMergeFinished"_ustr,
+    u"OnLayoutFinished"_ustr
 };
 sal_Int32 const s_nEvents(SAL_N_ELEMENTS(s_EventNames));
 
@@ -1332,7 +1332,7 @@ OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 {
     if (nIndex < s_nEvents)
     {
-        return OUString::createFromAscii(s_EventNames[nIndex]);
+        return s_EventNames[nIndex];
     }
     return OUString();
 }
