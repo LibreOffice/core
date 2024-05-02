@@ -175,6 +175,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_writerfilter_dmapper \
     CppunitTest_sw_writerfilter_ooxml \
     CppunitTest_sw_writerfilter_rtftok \
+    CppunitTest_sw_writerfilter_filter \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
