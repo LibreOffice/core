@@ -152,10 +152,10 @@ static void lcl_html_outEvents( SvStream& rStrm,
         OUString sMethod( rDesc.EventMethod );
 
         const char *pOpt = nullptr;
-        for( int j=0; aEventListenerTable[j]; j++ )
+        for( int j=0; !aEventListenerTable[j].isEmpty(); j++ )
         {
-            if( sListener.equalsAscii( aEventListenerTable[j] ) &&
-                sMethod.equalsAscii( aEventMethodTable[j] ) )
+            if( sListener == aEventListenerTable[j] &&
+                sMethod == aEventMethodTable[j] )
             {
                 pOpt = (STARBASIC==eScriptType ? aEventSDOptionTable
                                                : aEventOptionTable)[j];

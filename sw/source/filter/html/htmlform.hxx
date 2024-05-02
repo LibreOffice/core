@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 
-extern const char* aEventListenerTable[];
-extern const char* aEventMethodTable[];
+extern const OUString aEventListenerTable[];
+extern const OUString aEventMethodTable[];
 extern const char* aEventSDOptionTable[];
 extern const char* aEventOptionTable[];
 

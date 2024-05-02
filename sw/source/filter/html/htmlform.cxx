@@ -136,28 +136,28 @@ static SvMacroItemId aEventTypeTable[] =
     SvMacroItemId::NONE
 };
 
-const char * aEventListenerTable[] =
+const OUString aEventListenerTable[] =
 {
-    "XSubmitListener",
-    "XResetListener",
-    "XFocusListener",
-    "XFocusListener",
-    "XApproveActionListener",
-    "XItemListener",
-    "XChangeListener",
-    ""
+    u"XSubmitListener"_ustr,
+    u"XResetListener"_ustr,
+    u"XFocusListener"_ustr,
+    u"XFocusListener"_ustr,
+    u"XApproveActionListener"_ustr,
+    u"XItemListener"_ustr,
+    u"XChangeListener"_ustr,
+    u""_ustr
 };
 
-const char * aEventMethodTable[] =
+const OUString aEventMethodTable[] =
 {
-    "approveSubmit",
-    "approveReset",
-    "focusGained",
-    "focusLost",
-    "approveAction",
-    "itemStateChanged",
-    "changed",
-    ""
+    u"approveSubmit"_ustr,
+    u"approveReset"_ustr,
+    u"focusGained"_ustr,
+    u"focusLost"_ustr,
+    u"approveAction"_ustr,
+    u"itemStateChanged"_ustr,
+    u"changed"_ustr,
+    u""_ustr
 };
 
 const char * aEventSDOptionTable[] =
@@ -735,7 +735,7 @@ static bool lcl_html_setEvents(
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         // As long as not all events are implemented the table also holds empty strings
-        if( pMacro && aEventListenerTable[i] )
+        if( pMacro && !aEventListenerTable[i].isEmpty() )
             nEvents++;
     }
     for( const auto &rStr : rUnoMacroTable )
@@ -759,12 +759,11 @@ static bool lcl_html_setEvents(
     for( int i=0; SvMacroItemId::NONE != aEventTypeTable[i]; ++i )
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
-        if( pMacro && aEventListenerTable[i] )
+        if( pMacro && !aEventListenerTable[i].isEmpty() )
         {
             script::ScriptEventDescriptor& rDesc = pDescs[nEvent++];
-            rDesc.ListenerType =
-                    OUString::createFromAscii(aEventListenerTable[i]);
-            rDesc.EventMethod = OUString::createFromAscii(aEventMethodTable[i]);
+            rDesc.ListenerType = aEventListenerTable[i];
+            rDesc.EventMethod = aEventMethodTable[i];
             rDesc.ScriptType = pMacro->GetLanguage();
             rDesc.ScriptCode = pMacro->GetMacName();
         }
