@@ -40,7 +40,7 @@ namespace {
 
 struct PropertyInfo
 {
-    const char* pName;
+    OUString    aName;
     sal_Int32   nHandle;
     sal_Int16   nAttributes;
     const uno::Type& (*pGetCppuType)();
@@ -58,19 +58,19 @@ static const uno::Type& sal_Bool_getCppuType()
     return cppu::UnoType<bool>::get();
 }
 
-const PropertyInfo aPropertyTable[] =
+constexpr PropertyInfo aPropertyTable[] =
 {
-    { "IsRowCountFinal",
+    { u"IsRowCountFinal"_ustr,
       1000,
       beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
       &sal_Bool_getCppuType
     },
-    { "RowCount",
+    { u"RowCount"_ustr,
       1001,
       beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
       &sal_Int32_getCppuType
     },
-    { nullptr,
+    { u""_ustr,
       0,
       0,
       nullptr
@@ -1390,7 +1390,7 @@ PropertySetInfo::PropertySetInfo(
     {
         beans::Property& rProp = pProperties[ n ];
 
-        rProp.Name       = OUString::createFromAscii( pEntry->pName );
+        rProp.Name       = pEntry->aName;
         rProp.Handle     = pEntry->nHandle;
         rProp.Type       = pEntry->pGetCppuType();
         rProp.Attributes = pEntry->nAttributes;
