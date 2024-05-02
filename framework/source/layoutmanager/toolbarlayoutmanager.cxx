@@ -1004,7 +1004,7 @@ void ToolbarLayoutManager::resetDockingArea()
 void ToolbarLayoutManager::setParentWindow(
     const uno::Reference< awt::XVclWindowPeer >& xParentWindow )
 {
-    static const char DOCKINGAREASTRING[] = "dockingarea";
+    static constexpr OUString DOCKINGAREASTRING = u"dockingarea"_ustr;
 
     uno::Reference< awt::XWindow > xTopDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
     uno::Reference< awt::XWindow > xLeftDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );

@@ -154,14 +154,14 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     return bRet;
 }
 
-uno::Reference< awt::XVclWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XVclWindowPeer >& rParent, const char* pService )
+uno::Reference< awt::XVclWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XVclWindowPeer >& rParent, const OUString& pService )
 {
     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create( rxContext );
 
     // describe window properties.
     css::awt::WindowDescriptor aDescriptor;
     aDescriptor.Type                =   awt::WindowClass_SIMPLE;
-    aDescriptor.WindowServiceName   =   OUString::createFromAscii( pService );
+    aDescriptor.WindowServiceName   =   pService;
     aDescriptor.ParentIndex         =   -1;
     aDescriptor.Parent = rParent;
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
