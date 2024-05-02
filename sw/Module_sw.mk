@@ -168,6 +168,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_a11y \
     CppunitTest_sw_core_theme \
     CppunitTest_sw_pdf_test \
+    CppunitTest_sw_writerfilter_filter \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
