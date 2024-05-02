@@ -63,66 +63,66 @@ namespace {
 struct ResIdToResName
 {
     ToolbarId   eId;
-    const char* pName;
+    OUString pName;
 };
 
 }
 
-const ResIdToResName pToolBarResToName[] =
+constexpr ResIdToResName pToolBarResToName[] =
 {
-    { ToolbarId::FullScreenToolbox,       "fullscreenbar"        },
-    { ToolbarId::EnvToolbox,              "standardbar",         },
-    { ToolbarId::SvxTbx_Form_Navigation,  "formsnavigationbar"   },
-    { ToolbarId::SvxTbx_Form_Filter,      "formsfilterbar"       },
-    { ToolbarId::SvxTbx_Text_Control_Attributes, "formtextobjectbar"    },
-    { ToolbarId::SvxTbx_Controls,         "formcontrols"         },
-    { ToolbarId::SvxTbx_FormDesign,       "formdesign"           },
-    { ToolbarId::Math_Toolbox,            "toolbar"              },      //math
-    { ToolbarId::Text_Toolbox_Sc,         "textobjectbar"        },      //calc
-    { ToolbarId::Draw_Objectbar,          "drawobjectbar"        },
-    { ToolbarId::Graphic_Objectbar,       "graphicobjectbar"     },
-    { ToolbarId::Objectbar_Format,        "formatobjectbar"      },
-    { ToolbarId::Objectbar_Preview,       "previewbar"           },
-    { ToolbarId::Objectbar_Tools,         "toolbar"              },      //calc
-    { ToolbarId::Bezier_Toolbox_Sd,       "bezierobjectbar"      },      //draw/impress
-    { ToolbarId::Gluepoints_Toolbox,      "gluepointsobjectbar"  },
-    { ToolbarId::Draw_Graf_Toolbox,       "graphicobjectbar"     },
-    { ToolbarId::Draw_Obj_Toolbox,        "drawingobjectbar"     },      //impress
-    { ToolbarId::Draw_Text_Toolbox_Sd,    "textobjectbar"        },      //impress
-    { ToolbarId::Draw_Toolbox_Sd,         "toolbar"              },      //impress
-    { ToolbarId::Draw_Options_Toolbox,    "optionsbar"           },
-    { ToolbarId::Draw_CommonTask_Toolbox, "commontaskbar"        },
-    { ToolbarId::Graphic_Obj_Toolbox,     "drawingobjectbar"     },      //draw
-    { ToolbarId::Outline_Toolbox,         "outlinetoolbar"       },      //impress
-    { ToolbarId::Slide_Toolbox,           "slideviewtoolbar"     },
-    { ToolbarId::Slide_Obj_Toolbox,       "slideviewobjectbar"   },
-    { ToolbarId::Bezier_Toolbox_Sw,       "bezierobjectbar"      },
-    { ToolbarId::Draw_Toolbox_Sw,         "drawingobjectbar"     },
-    { ToolbarId::Draw_Text_Toolbox_Sw,    "drawtextobjectbar"    },
-    { ToolbarId::Frame_Toolbox,           "frameobjectbar"       },
-    { ToolbarId::Grafik_Toolbox,          "graphicobjectbar"     },
-    { ToolbarId::Num_Toolbox,             "numobjectbar"         },
-    { ToolbarId::Ole_Toolbox,             "oleobjectbar"         },
-    { ToolbarId::Table_Toolbox,           "tableobjectbar"       },
-    { ToolbarId::Text_Toolbox_Sw,         "textobjectbar"        },
-    { ToolbarId::PView_Toolbox,           "previewobjectbar"     },      //writer
-    { ToolbarId::Webtools_Toolbox,        "toolbar"              },      //web
-    { ToolbarId::Webtext_Toolbox,         "textobjectbar"        },
-    { ToolbarId::Tools_Toolbox,           "toolbar"              },      //writer
-    { ToolbarId::Webframe_Toolbox,        "frameobjectbar"       },      //web
-    { ToolbarId::Webgraphic_Toolbox,      "graphicobjectbar"     },
-    { ToolbarId::Webole_Toolbox,          "oleobjectbar"         },
-    { ToolbarId::Basicide_Objectbar,      "macrobar"             },
-    { ToolbarId::Svx_Fontwork_Bar,        "fontworkobjectbar"    },      //global
-    { ToolbarId::Svx_Extrusion_Bar,       "extrusionobjectbar"   },
-    { ToolbarId::FormLayer_Toolbox,       "formsobjectbar"       },
-    { ToolbarId::Module_Toolbox,          "viewerbar"            },      //writer (plugin)
-    { ToolbarId::Objectbar_App,           "viewerbar"            },      //calc   (plugin)
-    { ToolbarId::Draw_Viewer_Toolbox,     "viewerbar"            },      //impress(plugin)
-    { ToolbarId::Draw_Media_Toolbox,      "mediaobjectbar"       },      //draw/impress
-    { ToolbarId::Media_Objectbar,         "mediaobjectbar"       },      //calc
-    { ToolbarId::Media_Toolbox,           "mediaobjectbar"       },      //writer
-    { ToolbarId::None,                           ""                     }
+    { ToolbarId::FullScreenToolbox,       u"fullscreenbar"_ustr        },
+    { ToolbarId::EnvToolbox,              u"standardbar"_ustr,         },
+    { ToolbarId::SvxTbx_Form_Navigation,  u"formsnavigationbar"_ustr   },
+    { ToolbarId::SvxTbx_Form_Filter,      u"formsfilterbar"_ustr       },
+    { ToolbarId::SvxTbx_Text_Control_Attributes, u"formtextobjectbar"_ustr    },
+    { ToolbarId::SvxTbx_Controls,         u"formcontrols"_ustr         },
+    { ToolbarId::SvxTbx_FormDesign,       u"formdesign"_ustr           },
+    { ToolbarId::Math_Toolbox,            u"toolbar"_ustr              },      //math
+    { ToolbarId::Text_Toolbox_Sc,         u"textobjectbar"_ustr        },      //calc
+    { ToolbarId::Draw_Objectbar,          u"drawobjectbar"_ustr        },
+    { ToolbarId::Graphic_Objectbar,       u"graphicobjectbar"_ustr     },
+    { ToolbarId::Objectbar_Format,        u"formatobjectbar"_ustr      },
+    { ToolbarId::Objectbar_Preview,       u"previewbar"_ustr           },
+    { ToolbarId::Objectbar_Tools,         u"toolbar"_ustr              },      //calc
+    { ToolbarId::Bezier_Toolbox_Sd,       u"bezierobjectbar"_ustr      },      //draw/impress
+    { ToolbarId::Gluepoints_Toolbox,      u"gluepointsobjectbar"_ustr  },
+    { ToolbarId::Draw_Graf_Toolbox,       u"graphicobjectbar"_ustr     },
+    { ToolbarId::Draw_Obj_Toolbox,        u"drawingobjectbar"_ustr     },      //impress
+    { ToolbarId::Draw_Text_Toolbox_Sd,    u"textobjectbar"_ustr        },      //impress
+    { ToolbarId::Draw_Toolbox_Sd,         u"toolbar"_ustr              },      //impress
+    { ToolbarId::Draw_Options_Toolbox,    u"optionsbar"_ustr           },
+    { ToolbarId::Draw_CommonTask_Toolbox, u"commontaskbar"_ustr        },
+    { ToolbarId::Graphic_Obj_Toolbox,     u"drawingobjectbar"_ustr     },      //draw
+    { ToolbarId::Outline_Toolbox,         u"outlinetoolbar"_ustr       },      //impress
+    { ToolbarId::Slide_Toolbox,           u"slideviewtoolbar"_ustr     },
+    { ToolbarId::Slide_Obj_Toolbox,       u"slideviewobjectbar"_ustr   },
+    { ToolbarId::Bezier_Toolbox_Sw,       u"bezierobjectbar"_ustr      },
+    { ToolbarId::Draw_Toolbox_Sw,         u"drawingobjectbar"_ustr     },
+    { ToolbarId::Draw_Text_Toolbox_Sw,    u"drawtextobjectbar"_ustr    },
+    { ToolbarId::Frame_Toolbox,           u"frameobjectbar"_ustr       },
+    { ToolbarId::Grafik_Toolbox,          u"graphicobjectbar"_ustr     },
+    { ToolbarId::Num_Toolbox,             u"numobjectbar"_ustr         },
+    { ToolbarId::Ole_Toolbox,             u"oleobjectbar"_ustr         },
+    { ToolbarId::Table_Toolbox,           u"tableobjectbar"_ustr       },
+    { ToolbarId::Text_Toolbox_Sw,         u"textobjectbar"_ustr        },
+    { ToolbarId::PView_Toolbox,           u"previewobjectbar"_ustr     },      //writer
+    { ToolbarId::Webtools_Toolbox,        u"toolbar"_ustr              },      //web
+    { ToolbarId::Webtext_Toolbox,         u"textobjectbar"_ustr        },
+    { ToolbarId::Tools_Toolbox,           u"toolbar"_ustr              },      //writer
+    { ToolbarId::Webframe_Toolbox,        u"frameobjectbar"_ustr       },      //web
+    { ToolbarId::Webgraphic_Toolbox,      u"graphicobjectbar"_ustr     },
+    { ToolbarId::Webole_Toolbox,          u"oleobjectbar"_ustr         },
+    { ToolbarId::Basicide_Objectbar,      u"macrobar"_ustr             },
+    { ToolbarId::Svx_Fontwork_Bar,        u"fontworkobjectbar"_ustr    },      //global
+    { ToolbarId::Svx_Extrusion_Bar,       u"extrusionobjectbar"_ustr   },
+    { ToolbarId::FormLayer_Toolbox,       u"formsobjectbar"_ustr       },
+    { ToolbarId::Module_Toolbox,          u"viewerbar"_ustr            },      //writer (plugin)
+    { ToolbarId::Objectbar_App,           u"viewerbar"_ustr            },      //calc   (plugin)
+    { ToolbarId::Draw_Viewer_Toolbox,     u"viewerbar"_ustr            },      //impress(plugin)
+    { ToolbarId::Draw_Media_Toolbox,      u"mediaobjectbar"_ustr       },      //draw/impress
+    { ToolbarId::Media_Objectbar,         u"mediaobjectbar"_ustr       },      //calc
+    { ToolbarId::Media_Toolbox,           u"mediaobjectbar"_ustr       },      //writer
+    { ToolbarId::None,                    u""_ustr                     }
 };
 
 // Sort the Children according their alignment
@@ -311,7 +311,7 @@ namespace
             sal_Int32 nIndex( 0 );
             while (pToolBarResToName[nIndex].eId != ToolbarId::None)
             {
-                OUString aResourceURL( OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
+                OUString aResourceURL( pToolBarResToName[nIndex].pName );
                 m_aResIdToResourceURLMap.emplace(pToolBarResToName[nIndex].eId, aResourceURL);
                 ++nIndex;
             }
