@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
 {
-    // initializeFirstNDialog() can take a long time, show wait cursor and disable input
+    // initializeAllDialogs() can take a long time, show wait cursor and disable input
     std::unique_ptr<weld::WaitObject> xWait(m_pParent ? new weld::WaitObject(m_pParent) : nullptr);
 
     // Pause redraw
@@ -806,7 +806,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
         m_xSearchEdit->freeze();
         xTreeLB->hide();
 
-        initializeFirstNDialog();
+        initializeAllDialogs();
 
         m_xSearchEdit->thaw();
         xTreeLB->show();
@@ -852,10 +852,9 @@ void OfaTreeOptionsDialog::selectFirstEntry()
     }
 }
 
-void OfaTreeOptionsDialog::initializeFirstNDialog(sal_Int16 nNumberOfNode)
+void OfaTreeOptionsDialog::initializeAllDialogs()
 {
     std::unique_ptr<weld::TreeIter> xEntry;
-    sal_Int16 nCount = 0;
 
     std::unique_ptr<weld::TreeIter> xTemp = xTreeLB->make_iterator();
     bool bTemp = xTreeLB->get_iter_first(*xTemp);
@@ -882,12 +881,6 @@ void OfaTreeOptionsDialog::initializeFirstNDialog(sal_Int16 nNumberOfNode)
             }
         }
 
-        /* if nNumberOfNode is -1 (which is the default value if no parameter provided),
-           this function will initialize all dialogs since nCount always greater than -1 */
-        if (nCount == nNumberOfNode)
-            break;
-
-        ++nCount;
         bTemp = xTreeLB->iter_next(*xTemp);
     }
 }
@@ -1191,15 +1184,6 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     xTreeLB->set_cursor(*xEntry);
     xTreeLB->select(*xEntry);
     m_xSearchEdit->grab_focus();
-    SelectHdl_Impl();
-
-    // initializeFirstNDialog() can take a long time, show wait cursor
-    std::unique_ptr<weld::WaitObject> xWait(m_pParent ? new weld::WaitObject(m_pParent) : nullptr);
-
-    /* initialize first 25 dialogs which are almost half of the dialogs
-    in a row while Options dialog opens. then clear&reselect to avoid UI test failures. */
-    initializeFirstNDialog(25);
-    clearOptionsDialog();
     SelectHdl_Impl();
 }
 
