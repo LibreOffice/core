@@ -45,27 +45,27 @@ using namespace com::sun::star;
 
 // vOptionNames[] -- names of the user option entries
 // The order must correspond to the enum class UserOptToken in useroptions.hxx.
-static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
-    "l",                         // UserOptToken::City
-    "o",                         // UserOptToken::Company
-    "c",                         // UserOptToken::Country
-    "mail",                      // UserOptToken::Email
-    "facsimiletelephonenumber",  // UserOptToken::Fax
-    "givenname",                 // UserOptToken::FirstName
-    "sn",                        // UserOptToken::LastName
-    "position",                  // UserOptToken::Position
-    "st",                        // UserOptToken::State
-    "street",                    // UserOptToken::Street
-    "homephone",                 // UserOptToken::TelephoneHome
-    "telephonenumber",           // UserOptToken::TelephoneWork
-    "title",                     // UserOptToken::Title
-    "initials",                  // UserOptToken::ID
-    "postalcode",                // UserOptToken::Zip
-    "fathersname",               // UserOptToken::FathersName
-    "apartment",                 // UserOptToken::Apartment
-    "signingkey",                // UserOptToken::SigningKey
-    "encryptionkey",             // UserOptToken::EncryptionKey
-    "encrypttoself"              // UserOptToken::EncryptToSelf
+constexpr o3tl::enumarray<UserOptToken, OUString> vOptionNames = {
+    u"l"_ustr,                         // UserOptToken::City
+    u"o"_ustr,                         // UserOptToken::Company
+    u"c"_ustr,                         // UserOptToken::Country
+    u"mail"_ustr,                      // UserOptToken::Email
+    u"facsimiletelephonenumber"_ustr,  // UserOptToken::Fax
+    u"givenname"_ustr,                 // UserOptToken::FirstName
+    u"sn"_ustr,                        // UserOptToken::LastName
+    u"position"_ustr,                  // UserOptToken::Position
+    u"st"_ustr,                        // UserOptToken::State
+    u"street"_ustr,                    // UserOptToken::Street
+    u"homephone"_ustr,                 // UserOptToken::TelephoneHome
+    u"telephonenumber"_ustr,           // UserOptToken::TelephoneWork
+    u"title"_ustr,                     // UserOptToken::Title
+    u"initials"_ustr,                  // UserOptToken::ID
+    u"postalcode"_ustr,                // UserOptToken::Zip
+    u"fathersname"_ustr,               // UserOptToken::FathersName
+    u"apartment"_ustr,                 // UserOptToken::Apartment
+    u"signingkey"_ustr,                // UserOptToken::SigningKey
+    u"encryptionkey"_ustr,             // UserOptToken::EncryptionKey
+    u"encrypttoself"_ustr              // UserOptToken::EncryptToSelf
 };
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
@@ -165,7 +165,7 @@ ValueType SvtUserOptions::Impl::GetValue_Impl (UserOptToken nToken) const
     try
     {
         if (m_xData.is())
-            m_xData->getPropertyValue(OUString::createFromAscii(vOptionNames[nToken])) >>= sToken;
+            m_xData->getPropertyValue(vOptionNames[nToken]) >>= sToken;
     }
     catch (uno::Exception const&)
     {
@@ -180,7 +180,7 @@ void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& 
     try
     {
         if (m_xData.is())
-             m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::Any(sToken));
+             m_xData->setPropertyValue(vOptionNames[nToken], uno::Any(sToken));
         comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch (uno::Exception const&)
@@ -254,7 +254,7 @@ bool SvtUserOptions::Impl::IsTokenReadonly (UserOptToken nToken) const
 {
     uno::Reference<beans::XPropertySet> xData(m_xCfg, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xInfo = xData->getPropertySetInfo();
-    beans::Property aProp = xInfo->getPropertyByName(OUString::createFromAscii(vOptionNames[nToken]));
+    beans::Property aProp = xInfo->getPropertyByName(vOptionNames[nToken]);
     return ((aProp.Attributes & beans::PropertyAttribute::READONLY) ==
             beans::PropertyAttribute::READONLY);
 }
