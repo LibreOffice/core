@@ -580,6 +580,7 @@ void Formula::parse()
      }
 
      char *buf = static_cast<char *>(malloc(a.getLength()+1));
+     assert(buf && "Don't handle OOM conditions");
      bool bStart = false;
      int i, j;
      for( i = 0, j=0 ; i < a.getLength() ; i++){ // rtrim and ltrim 32 10 13
@@ -618,6 +619,7 @@ void Formula::trim()
 {
      int len = strlen(eq);
      char *buf = static_cast<char *>(malloc(len+1));
+     assert(buf && "Don't handle OOM conditions");
      bool bStart = false;
      int i, j;
      for( i = 0, j=0 ; i < len ; i++){ // rtrim and ltrim 32 10 13
