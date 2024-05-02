@@ -117,45 +117,45 @@ void SvtSearchOptions_Impl::SetModified( bool bVal )
 
 Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
 {
-    static const char* aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
+    static constexpr OUString aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
     {
-        "IsWholeWordsOnly",                     //  0
-        "IsBackwards",                          //  1
-        "IsUseRegularExpression",               //  2
+        u"IsWholeWordsOnly"_ustr,                     //  0
+        u"IsBackwards"_ustr,                          //  1
+        u"IsUseRegularExpression"_ustr,               //  2
         //"IsCurrentSelectionOnly",             // interactively set or not...
-        "IsSearchForStyles",                    //  3
-        "IsSimilaritySearch",                   //  4
-        "IsUseAsianOptions",                    //  5
-        "IsMatchCase",                          //  6
-        "Japanese/IsMatchFullHalfWidthForms",   //  7
-        "Japanese/IsMatchHiraganaKatakana",     //  8
-        "Japanese/IsMatchContractions",         //  9
-        "Japanese/IsMatchMinusDashCho-on",      // 10
-        "Japanese/IsMatchRepeatCharMarks",      // 11
-        "Japanese/IsMatchVariantFormKanji",     // 12
-        "Japanese/IsMatchOldKanaForms",         // 13
-        "Japanese/IsMatch_DiZi_DuZu",           // 14
-        "Japanese/IsMatch_BaVa_HaFa",           // 15
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 16
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 17
-        "Japanese/IsMatch_SeShe_ZeJe",          // 18
-        "Japanese/IsMatch_IaIya",               // 19
-        "Japanese/IsMatch_KiKu",                // 20
-        "Japanese/IsIgnorePunctuation",         // 21
-        "Japanese/IsIgnoreWhitespace",          // 22
-        "Japanese/IsIgnoreProlongedSoundMark",  // 23
-        "Japanese/IsIgnoreMiddleDot",           // 24
-        "IsNotes",                              // 25
-        "IsIgnoreDiacritics_CTL",               // 26
-        "IsIgnoreKashida_CTL",                  // 27
-        "IsSearchFormatted",                    // 28
-        "IsUseWildcard"                         // 29
+        u"IsSearchForStyles"_ustr,                    //  3
+        u"IsSimilaritySearch"_ustr,                   //  4
+        u"IsUseAsianOptions"_ustr,                    //  5
+        u"IsMatchCase"_ustr,                          //  6
+        u"Japanese/IsMatchFullHalfWidthForms"_ustr,   //  7
+        u"Japanese/IsMatchHiraganaKatakana"_ustr,     //  8
+        u"Japanese/IsMatchContractions"_ustr,         //  9
+        u"Japanese/IsMatchMinusDashCho-on"_ustr,      // 10
+        u"Japanese/IsMatchRepeatCharMarks"_ustr,      // 11
+        u"Japanese/IsMatchVariantFormKanji"_ustr,     // 12
+        u"Japanese/IsMatchOldKanaForms"_ustr,         // 13
+        u"Japanese/IsMatch_DiZi_DuZu"_ustr,           // 14
+        u"Japanese/IsMatch_BaVa_HaFa"_ustr,           // 15
+        u"Japanese/IsMatch_TsiThiChi_DhiZi"_ustr,     // 16
+        u"Japanese/IsMatch_HyuIyu_ByuVyu"_ustr,       // 17
+        u"Japanese/IsMatch_SeShe_ZeJe"_ustr,          // 18
+        u"Japanese/IsMatch_IaIya"_ustr,               // 19
+        u"Japanese/IsMatch_KiKu"_ustr,                // 20
+        u"Japanese/IsIgnorePunctuation"_ustr,         // 21
+        u"Japanese/IsIgnoreWhitespace"_ustr,          // 22
+        u"Japanese/IsIgnoreProlongedSoundMark"_ustr,  // 23
+        u"Japanese/IsIgnoreMiddleDot"_ustr,           // 24
+        u"IsNotes"_ustr,                              // 25
+        u"IsIgnoreDiacritics_CTL"_ustr,               // 26
+        u"IsIgnoreKashida_CTL"_ustr,                  // 27
+        u"IsSearchFormatted"_ustr,                    // 28
+        u"IsUseWildcard"_ustr                         // 29
     };
 
     Sequence< OUString > aNames(std::size(aPropNames));
     OUString* pNames = aNames.getArray();
     for (std::size_t i = 0;  i < std::size(aPropNames); ++i)
-        pNames[i] = OUString::createFromAscii( aPropNames[i] );
+        pNames[i] = aPropNames[i];
 
     return aNames;
 }
