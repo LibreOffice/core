@@ -8351,6 +8351,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf159565)
                          xSelection->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf160898)
+{
+    // Given a document with a 1-cell table in another 1-cell table:
+    createDoc("table-in-table.fodt");
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // Move to the normally hidden paragraph inside the outer table cell, following the inner table
+    pWrtShell->Down(false, 2);
+    // Without the fix, this would crash:
+    pWrtShell->SelAll();
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
