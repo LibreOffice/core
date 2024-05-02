@@ -126,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/imagealign \
     toolkit/source/helper/listenermultiplexer \
     toolkit/source/helper/property \
-    toolkit/source/helper/servicenames \
     toolkit/source/helper/tkresmgr \
     toolkit/source/helper/unopropertyarrayhelper \
     toolkit/source/helper/unowrapper \

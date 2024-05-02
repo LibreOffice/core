@@ -19,6 +19,8 @@
 
 #pragma once
 
-extern const char szServiceName_UnoControlDialog[];
+#include <rtl/ustring.hxx>
+
+inline constexpr OUString sServiceName_UnoControlDialog = u"stardiv.vcl.control.Dialog"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -239,7 +239,7 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= OUString::createFromAscii( szServiceName_UnoControlDialog );
+            aAny <<= sServiceName_UnoControlDialog;
             break;
         case BASEPROPERTY_SCROLLWIDTH:
         case BASEPROPERTY_SCROLLHEIGHT:

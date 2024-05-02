@@ -165,7 +165,7 @@ Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= OUString::createFromAscii( szServiceName_UnoControlDialog );
+            aAny <<= sServiceName_UnoControlDialog;
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
