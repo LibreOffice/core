@@ -379,8 +379,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     // annotations
     for (auto const& rSourceAnnotation : rSrcPage.maAnnotations)
     {
-        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation;
-        createAnnotation(aNewAnnotation);
+        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation = createAnnotation();
         aNewAnnotation->setPosition(rSourceAnnotation->getPosition());
         aNewAnnotation->setSize(rSourceAnnotation->getSize());
         aNewAnnotation->setAuthor(rSourceAnnotation->getAuthor());
@@ -552,9 +551,9 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
     return true;
  }
 
-void SdPage::createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation)
+rtl::Reference<sdr::annotation::Annotation> SdPage::createAnnotation()
 {
-    sd::createAnnotation(xAnnotation, this);
+    return sd::createAnnotation(this);
 }
 
 void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex )

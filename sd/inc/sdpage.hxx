@@ -364,7 +364,7 @@ public:
     */
     bool IsPrecious() const { return mbIsPrecious; }
 
-    void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation) override;
+    rtl::Reference<sdr::annotation::Annotation> createAnnotation() override;
     void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex) override;
     void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
 

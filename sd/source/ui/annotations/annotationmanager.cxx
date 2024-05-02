@@ -493,8 +493,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         }
     }
 
-    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
-    pPage->createAnnotation(xAnnotation);
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
 
     OUString sAuthor;
     if (comphelper::LibreOfficeKit::isActive())
