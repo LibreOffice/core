@@ -23,183 +23,183 @@ $(eval $(call gb_CustomTarget_CustomTarget,unoidl/unoidl-check_test))
 
 $(call gb_CustomTarget_get_target,unoidl/unoidl-check_test): \
         $(call gb_Executable_get_runtime_dependencies,unoidl-check) \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other1.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other2.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/pe.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psb.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/ue.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-        $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usb.rdb
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other1.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other2.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/pe.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psb.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/ue.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+        $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/pe.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/pe.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/ue.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/ue.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other1.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other1.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other2.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/pe.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/pe.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/ue.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/ue.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other1.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other1.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other2.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/pe.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/pe.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/ue.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/ue.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other1.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other1.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other2.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/psb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/psb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usb.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/pe.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/pe.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/ue.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/ue.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other1.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other1.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 	$(call gb_Helper_abbreviate_dirs,( \
         ! $(call gb_Executable_get_command,unoidl-check) \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/other2.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
+            -- $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 endif
 
-$(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/%.rdb: \
+$(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/%.rdb: \
         $(SRCDIR)/unoidl/qa/unoidl-check/%.idl \
         $(call gb_Executable_get_runtime_dependencies,unoidl-write) \
-        | $(call gb_CustomTarget_get_workdir,unoidl/unoidl-check_test)/.dir
+        | $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/.dir
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-write) $< $@))
 

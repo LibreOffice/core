@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_glade,$(call gb_CustomTarget_get_workdir,extras/source/glade)))
+$(eval $(call gb_Package_Package,extras_glade,$(gb_CustomTarget_workdir)/extras/source/glade))
 
 $(eval $(call gb_Package_add_file,extras_glade,$(LIBO_SHARE_FOLDER)/glade/libreoffice-catalog.xml,libreoffice-catalog.xml))
 

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,wizards/locproperties))
 
-wizards_DIR := $(call gb_CustomTarget_get_workdir,wizards/locproperties)
+wizards_DIR := $(gb_CustomTarget_workdir)/wizards/locproperties
 
 define wizards_Properties_Properties
 $(call wizards_Properties__Properties_impl,$(wizards_DIR)/resources_$(1).properties,$(SRCDIR)/wizards/source/resources/resources_en_US.properties,$(gb_POLOCATION)/$(2)/wizards/source/resources.po,$(2))

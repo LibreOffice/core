@@ -10,13 +10,13 @@
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/textconversion))
 
 $(call gb_CustomTarget_get_target,i18npool/textconversion) : \
-	$(patsubst %.dic,$(call gb_CustomTarget_get_workdir,i18npool/textconversion)/%.cxx,$(notdir \
+	$(patsubst %.dic,$(gb_CustomTarget_workdir)/i18npool/textconversion/%.cxx,$(notdir \
 		$(wildcard $(SRCDIR)/i18npool/source/textconversion/data/*.dic)))
 
-$(call gb_CustomTarget_get_workdir,i18npool/textconversion)/%.cxx : \
+$(gb_CustomTarget_workdir)/i18npool/textconversion/%.cxx : \
 		$(SRCDIR)/i18npool/source/textconversion/data/%.dic \
 		$(call gb_Executable_get_runtime_dependencies,genconv_dict) \
-		| $(call gb_CustomTarget_get_workdir,i18npool/textconversion)/.dir
+		| $(gb_CustomTarget_workdir)/i18npool/textconversion/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CDC,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CDC)
 	$(call gb_Helper_abbreviate_dirs, \

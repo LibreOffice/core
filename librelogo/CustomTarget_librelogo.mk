@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,librelogo/locproperties))
 
-librelogo_DIR := $(call gb_CustomTarget_get_workdir,librelogo/locproperties)
+librelogo_DIR := $(gb_CustomTarget_workdir)/librelogo/locproperties
 
 define librelogo_Properties_Properties
 $(call librelogo_Properties__Properties_impl,$(librelogo_DIR)/LibreLogo_$(1).properties,$(SRCDIR)/librelogo/source/pythonpath/LibreLogo_en_US.properties,$(gb_POLOCATION)/$(2)/librelogo/source/pythonpath.po,$(2))

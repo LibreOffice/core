@@ -16,9 +16,9 @@ bridges_SELECTED_BRIDGE := gcc3_linux_arm
 bridge_noopt_objects := cpp2uno except uno2cpp
 # HACK
 $(call gb_Library_get_linktarget_target,gcc3_uno) : \
-	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
+	$(gb_CustomTarget_workdir)/bridges/source/cpp_uno/gcc3_linux_arm/armhelper.objectlist
 $(call gb_Library_get_linktarget_target,gcc3_uno) : \
-	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
+	EXTRAOBJECTLISTS += $(gb_CustomTarget_workdir)/bridges/source/cpp_uno/gcc3_linux_arm/armhelper.objectlist
 endif
 
 else ifeq ($(CPUNAME),AARCH64)

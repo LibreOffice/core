@@ -14,29 +14,29 @@ include $(SRCDIR)/cli_ure/version/version.txt
 $(eval $(call gb_CustomTarget_CustomTarget,cli_ure/source))
 
 $(call gb_CustomTarget_get_target,cli_ure/source) : \
-	$(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs \
-	$(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx \
-	$(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs
+	$(gb_CustomTarget_workdir)/cli_ure/source/basetypes/assembly.cs \
+	$(gb_CustomTarget_workdir)/cli_ure/source/native/assembly.cxx \
+	$(gb_CustomTarget_workdir)/cli_ure/source/ure/assembly.cs
 
-$(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs : \
+$(gb_CustomTarget_workdir)/cli_ure/source/basetypes/assembly.cs : \
         $(SRCDIR)/cli_ure/source/basetypes/assembly.cs \
         $(SRCDIR)/cli_ure/version/version.txt \
         $(cli_ure_source_MAKEFILE) \
-        | $(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/.dir
+        | $(gb_CustomTarget_workdir)/cli_ure/source/basetypes/.dir
 	sed -e "s/@CLI_BASETYPES_NEW_VERSION@/$(CLI_BASETYPES_NEW_VERSION)/g" $< > $@
 
-$(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx : \
+$(gb_CustomTarget_workdir)/cli_ure/source/native/assembly.cxx : \
         $(SRCDIR)/cli_ure/source/native/assembly.cxx \
         $(SRCDIR)/cli_ure/version/version.txt \
         $(cli_ure_source_MAKEFILE) \
-        | $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/.dir
+        | $(gb_CustomTarget_workdir)/cli_ure/source/native/.dir
 	sed -e "s/@CLI_CPPUHELPER_NEW_VERSION@/$(CLI_CPPUHELPER_NEW_VERSION)/g" $< > $@
 
-$(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs : \
+$(gb_CustomTarget_workdir)/cli_ure/source/ure/assembly.cs : \
         $(SRCDIR)/cli_ure/source/ure/assembly.cs \
         $(SRCDIR)/cli_ure/version/version.txt \
         $(cli_ure_source_MAKEFILE) \
-        | $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/.dir
+        | $(gb_CustomTarget_workdir)/cli_ure/source/ure/.dir
 	sed -e "s/@CLI_URE_NEW_VERSION@/$(CLI_URE_NEW_VERSION)/g" $< > $@
 
 # vim: set noet sw=4 ts=4:

@@ -48,31 +48,31 @@ extras_TEMPLATES_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_TEM
 # secondexpansion since the patterns not just cover a filename portion, but also include a
 # directory portion with different number of elements
 # copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
-$(call gb_CustomTarget_get_workdir,extras/source/templates)/% : $(SRCDIR)/extras/source/templates/% \
-        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*).dir
+$(gb_CustomTarget_workdir)/extras/source/templates/% : $(SRCDIR)/extras/source/templates/% \
+        | $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/$$*).dir
 	$(call gb_Output_announce,templates/$*,$(true),CPY,1)
 	$(call gb_Trace_StartRange,templates/$*,CPY)
 	cp $< $@
 	$(call gb_Trace_EndRange,templates/$*,CPY)
 
 # test and copy xml files
-$(call gb_CustomTarget_get_workdir,extras/source/templates)/%.xml : $(SRCDIR)/extras/source/templates/%.xml \
+$(gb_CustomTarget_workdir)/extras/source/templates/%.xml : $(SRCDIR)/extras/source/templates/%.xml \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
-          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*.xml).dir
+          $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/$$*.xml).dir
 	$(call gb_Output_announce,templates/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,templates/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/$*.xml,XSL)
 
 # zip files to OTT
-$(call gb_CustomTarget_get_workdir,extras/source/templates)/%.ott : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/templates/%.ott : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             mimetype $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             styles.xml $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             META-INF/manifest.xml $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             Thumbnails/thumbnail.png $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/$*.ott,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/$*.ott,ZIP)
@@ -86,16 +86,16 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates)/%.ott : \
 	$(call gb_Trace_EndRange,templates/$*.ott,ZIP)
 
 # zip files to OTG
-$(call gb_CustomTarget_get_workdir,extras/source/templates)/%.otg : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/templates/%.otg : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             mimetype $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             content.xml $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             styles.xml $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             META-INF/manifest.xml $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/$$*/,\
             Thumbnails/thumbnail.png $$(call extras_TEMPLATES_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/$*.otg,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/$*.otg,ZIP)

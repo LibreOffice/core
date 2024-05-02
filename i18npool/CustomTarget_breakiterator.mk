@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
-i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
+i18npool_BIDIR := $(gb_CustomTarget_workdir)/i18npool/breakiterator
 
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/OpenOffice_dat.c

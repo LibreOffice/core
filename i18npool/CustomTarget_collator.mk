@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator))
 
-i18npool_CODIR := $(call gb_CustomTarget_get_workdir,i18npool/collator)
+i18npool_CODIR := $(gb_CustomTarget_workdir)/i18npool/collator
 i18npool_COTXTS := \
 	cu_charset.txt \
     $(call gb_Helper_optional_locale,ca, \

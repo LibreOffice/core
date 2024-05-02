@@ -121,33 +121,33 @@ extras_PRESNT_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_PRESEN
 # secondexpansion since the patterns not just cover a filename portion, but also include a
 # directory portion withdifferent number of elements
 # copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/% : $(SRCDIR)/extras/source/templates/presnt/% \
-        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*).dir
+$(gb_CustomTarget_workdir)/extras/source/templates/presnt/% : $(SRCDIR)/extras/source/templates/presnt/% \
+        | $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*).dir
 	$(call gb_Output_announce,templates/presnt/$*,$(true),CPY,1)
 	$(call gb_Trace_StartRange,templates/presnt/$*,CPY)
 	cp $< $@
 	$(call gb_Trace_EndRange,templates/presnt/$*,CPY)
 
 # test and copy xml files
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.xml : $(SRCDIR)/extras/source/templates/presnt/%.xml \
+$(gb_CustomTarget_workdir)/extras/source/templates/presnt/%.xml : $(SRCDIR)/extras/source/templates/presnt/%.xml \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
-          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*.xml).dir
+          $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*.xml).dir
 	$(call gb_Output_announce,templates/presnt/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,templates/presnt/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/presnt/$*.xml,XSL)
 
 # zip files to OTP
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/templates/presnt/%.otp : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*/,\
             mimetype $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*/,\
             content.xml $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*/,\
             styles.xml $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*/,\
             META-INF/manifest.xml $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/presnt/$$*/,\
             Thumbnails/thumbnail.png $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/presnt/$*.otp,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/presnt/$*.otp,ZIP)

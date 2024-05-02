@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_templates,$(call gb_CustomTarget_get_workdir,extras/source/templates)))
+$(eval $(call gb_Package_Package,extras_templates,$(gb_CustomTarget_workdir)/extras/source/templates))
 
 $(eval $(call gb_Package_add_files_with_dir,extras_templates,$(LIBO_SHARE_FOLDER)/template/common,\
 	officorr/Modern_business_letter_sans_serif.ott \

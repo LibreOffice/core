@@ -20,15 +20,15 @@ else
 pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION)
 endif
 
-$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh : \
+$(gb_CustomTarget_workdir)/pyuno/python_shell/python.sh : \
 		$(SRCDIR)/pyuno/zipcore/python.sh \
-		$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh
+		$(gb_CustomTarget_workdir)/pyuno/python_shell/os.sh
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CAT)
 	cat $^ > $@ && chmod +x $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CAT)
 
-$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh : \
+$(gb_CustomTarget_workdir)/pyuno/python_shell/os.sh : \
 		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh \
 		$(BUILDDIR)/config_$(gb_Side)/config_python.h
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)

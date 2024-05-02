@@ -28,14 +28,14 @@ odk_cpp_PREFIX := $(call odk_cygwin_path,$(INSTDIR)/$(SDKDIRNAME)/include/)
 odk_cpp_DOXY_INPUT := $(call odk_cygwin_path,$(SRCDIR)/odk/docs/cpp/main.dox \
 	$(SRCDIR)/include/sal/log-areas.dox \
 	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST)))
-odk_cpp_DOXY_WORKDIR := $(call odk_cygwin_path,$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref)
+odk_cpp_DOXY_WORKDIR := $(call odk_cygwin_path,$(gb_CustomTarget_workdir)/odk/docs/cpp/ref)
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 	cpp/Doxyfile \
 	cpp/doxygen.log \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
+$(gb_CustomTarget_workdir)/odk/docs/cpp/Doxyfile : \
 		$(SRCDIR)/odk/docs/cpp/Doxyfile \
 		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
@@ -49,8 +49,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 		$< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
-$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
-		$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile \
+$(gb_CustomTarget_workdir)/odk/docs/cpp/doxygen.log : \
+		$(gb_CustomTarget_workdir)/odk/docs/cpp/Doxyfile \
 		$(SRCDIR)/include/sal/log-areas.dox \
 		$(SRCDIR)/odk/docs/cpp/main.dox \
 		$(call gb_Package_get_target,odk_headers) \
@@ -72,11 +72,11 @@ odk_idl_DOXY_INPUT := $(call odk_cygwin_path,$(SRCDIR)/odk/docs/idl/main.dox \
 	$(addsuffix com,$(odk_idl_PREFIX)) \
 	$(addsuffix org,$(odk_idl_PREFIX)) \
 	$(SRCDIR)/odk/docs/idl/generated_idl_chapter_refs.idl)
-odk_idl_DOXY_WORKDIR := $(call odk_cygwin_path,$(call gb_CustomTarget_get_workdir,odk/docs/idl)/ref)
+odk_idl_DOXY_WORKDIR := $(call odk_cygwin_path,$(gb_CustomTarget_workdir)/odk/docs/idl/ref)
 
 # don't depend on the IDL files directly but instead on the udkapi/offapi
 # which will get rebuilt when any IDL file changes
-$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
+$(gb_CustomTarget_workdir)/odk/docs/idl/Doxyfile : \
 		$(SRCDIR)/odk/docs/idl/Doxyfile \
 		$(call gb_UnoApi_get_target,udkapi) \
 		$(call gb_UnoApi_get_target,offapi) \
@@ -93,8 +93,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 		$< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
-$(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \
-		$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile \
+$(gb_CustomTarget_workdir)/odk/docs/idl/doxygen.log : \
+		$(gb_CustomTarget_workdir)/odk/docs/idl/Doxyfile \
 		$(SRCDIR)/odk/docs/idl/main.dox
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GEN)

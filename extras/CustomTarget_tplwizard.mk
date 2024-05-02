@@ -176,33 +176,33 @@ extras_WIZARD_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_WIZARD
 # secondexpansion since the patterns not just cover a filename portion, but also include a
 # directory portion with different number of elements
 # copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
-$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/% : $(SRCDIR)/extras/source/templates/wizard/% \
-        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*).dir
+$(gb_CustomTarget_workdir)/extras/source/templates/wizard/% : $(SRCDIR)/extras/source/templates/wizard/% \
+        | $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*).dir
 	$(call gb_Output_announce,templates/wizard/$*,$(true),CPY,1)
 	$(call gb_Trace_StartRange,templates/wizard/$*,CPY)
 	cp $< $@
 	$(call gb_Trace_EndRange,templates/wizard/$*,CPY)
 
 # test and copy xml files
-$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.xml : $(SRCDIR)/extras/source/templates/wizard/%.xml \
+$(gb_CustomTarget_workdir)/extras/source/templates/wizard/%.xml : $(SRCDIR)/extras/source/templates/wizard/%.xml \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
-          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*.xml).dir
+          $$(dir $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*.xml).dir
 	$(call gb_Output_announce,templates/wizard/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,templates/wizard/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/wizard/$*.xml,XSL)
 
 # zip files to OTT
-$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.ott : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/templates/wizard/%.ott : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             mimetype $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             content.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             settings.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             styles.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/wizard/$*.ott,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/wizard/$*.ott,ZIP)
@@ -216,16 +216,16 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.ott : \
 	$(call gb_Trace_EndRange,templates/wizard/$*.ott,ZIP)
 
 # zip files to OTS
-$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.ots : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/templates/wizard/%.ots : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             mimetype $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             content.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             settings.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             styles.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/templates/wizard/$$*/,\
             META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/wizard/$*.ots,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/wizard/$*.ots,ZIP)

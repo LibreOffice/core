@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(call gb_CustomTarget_get_workdir,extras/source/autotext)))
+$(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(gb_CustomTarget_workdir)/extras/source/autotext))
 
 $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/autotext,\
 	af/standard.bau \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extensions/automationtest))
 
-extensions_AUTOMATIONTESTDIR := $(call gb_CustomTarget_get_workdir,extensions/automationtest)
+extensions_AUTOMATIONTESTDIR := $(gb_CustomTarget_workdir)/extensions/automationtest
 
 extensions_AUTOMATIONTESTLOG1 := $(extensions_AUTOMATIONTESTDIR)/automationtest.1.log
 extensions_AUTOMATIONTESTLOG2 := $(extensions_AUTOMATIONTESTDIR)/automationtest.2.log

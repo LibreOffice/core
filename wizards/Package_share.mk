@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Package_Package,wizards_basicshare,$(call gb_CustomTarget_get_workdir,wizards/share)))
+$(eval $(call gb_Package_Package,wizards_basicshare,$(gb_CustomTarget_workdir)/wizards/share))
 
 $(eval $(call gb_Package_add_files,wizards_basicshare,$(LIBO_SHARE_FOLDER)/basic,\
 	dialog.xlc \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,readlicense_oo/license))
 
-readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/license)
+readlicense_oo_DIR := $(gb_CustomTarget_workdir)/readlicense_oo/license
 readlicense_oo_LICENSE_xml := $(SRCDIR)/readlicense_oo/license/license.xml
 
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/LICENSE.html

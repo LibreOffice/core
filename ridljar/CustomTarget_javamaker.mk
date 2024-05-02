@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,ridljar/javamaker))
 
-ridljar_DIR := $(call gb_CustomTarget_get_workdir,ridljar/javamaker)
+ridljar_DIR := $(gb_CustomTarget_workdir)/ridljar/javamaker
 
 $(call gb_CustomTarget_get_target,ridljar/javamaker) : $(ridljar_DIR)/done
 

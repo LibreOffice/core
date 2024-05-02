@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_GeneratedPackage_GeneratedPackage,desktop_unopackages_install,$(call gb_CustomTarget_get_workdir,desktop/unopackages_install)))
+$(eval $(call gb_GeneratedPackage_GeneratedPackage,desktop_unopackages_install,$(gb_CustomTarget_workdir)/desktop/unopackages_install))
 
 $(eval $(call gb_GeneratedPackage_use_customtarget,desktop_unopackages_install,desktop/unopackages_install))
 

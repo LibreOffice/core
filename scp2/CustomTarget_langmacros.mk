@@ -9,11 +9,11 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,scp2/macros))
 
-$(call gb_CustomTarget_get_target,scp2/macros) : $(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc
+$(call gb_CustomTarget_get_target,scp2/macros) : $(gb_CustomTarget_workdir)/scp2/macros/langmacros.inc
 
-$(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc :| $(call gb_CustomTarget_get_workdir,scp2/macros)/.dir
+$(gb_CustomTarget_workdir)/scp2/macros/langmacros.inc :| $(gb_CustomTarget_workdir)/scp2/macros/.dir
 
-$(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc : $(SRCDIR)/scp2/macros/macro.pl $(BUILDDIR)/config_host.mk.stamp
+$(gb_CustomTarget_workdir)/scp2/macros/langmacros.inc : $(SRCDIR)/scp2/macros/macro.pl $(BUILDDIR)/config_host.mk.stamp
 	$(call gb_Helper_abbreviate_dirs,\
 		export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
 		export HELP_LANGS='$(gb_HELP_LANGS)' && \

@@ -111,7 +111,7 @@ endef
 
 define gb_WinResTarget__use_custom_headers
 $(call gb_WinResTarget_get_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
-$(call gb_WinResTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
+$(call gb_WinResTarget__add_include,$(1),$(gb_CustomTarget_workdir)/$(2))
 
 endef
 

@@ -9,7 +9,7 @@
 
 include $(SRCDIR)/sysui/productlist.mk
 
-solaris_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/solaris)
+solaris_WORKDIR := $(gb_CustomTarget_workdir)/sysui/solaris
 solaris_SRCDIR := $(SRCDIR)/sysui/desktop/solaris
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/solaris))
@@ -46,9 +46,9 @@ $(solaris_WORKDIR)/%/postremove: $(solaris_SRCDIR)/postremove
 	cat $< | tr -d "\015" > $@
 
 $(solaris_WORKDIR)/%/prototype: $(solaris_SRCDIR)/prototype
-	cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$*)/g" -e "s_%SOURCE_$(call gb_CustomTarget_get_workdir,sysui/share)/$*_g" -e "s/%ICONPREFIX/$(UNIXFILENAME.$*)/g" > $@
+	cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$*)/g" -e "s_%SOURCE_$(gb_CustomTarget_workdir)/sysui/share/$*_g" -e "s/%ICONPREFIX/$(UNIXFILENAME.$*)/g" > $@
 
-$(solaris_WORKDIR)/%-desktop-integration.tar.gz: $(solaris_WORKDIR)/%/copyright $(solaris_WORKDIR)/%/pkginfo $(solaris_WORKDIR)/%/depend $(solaris_WORKDIR)/%/mailcap $(solaris_WORKDIR)/%/postinstall $(solaris_WORKDIR)/%/postremove $(solaris_WORKDIR)/%/prototype $(call gb_CustomTarget_get_workdir,sysui/share)/%/openoffice.org.xml
+$(solaris_WORKDIR)/%-desktop-integration.tar.gz: $(solaris_WORKDIR)/%/copyright $(solaris_WORKDIR)/%/pkginfo $(solaris_WORKDIR)/%/depend $(solaris_WORKDIR)/%/mailcap $(solaris_WORKDIR)/%/postinstall $(solaris_WORKDIR)/%/postremove $(solaris_WORKDIR)/%/prototype $(gb_CustomTarget_workdir)/sysui/share/%/openoffice.org.xml
 #	pkgmk -l 1073741824 -r $(solaris_WORKDIR) -f $(solaris_WORKDIR)/$*/prototype -o -d $(solaris_WORKDIR) ARCH=all VERSION=$(PKGVERSION.$*)
 	fakeroot $(GNUTAR) -cf - -C $(solaris_WORKDIR) $* | gzip > $@
 

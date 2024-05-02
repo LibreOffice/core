@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,external/onlineupdate/generated))
 
-onlineupdate_INC := $(call gb_CustomTarget_get_workdir,external/onlineupdate/generated)
+onlineupdate_INC := $(gb_CustomTarget_workdir)/external/onlineupdate/generated
 
 $(onlineupdate_INC)/primaryCert.h $(onlineupdate_INC)/secondaryCert.h : \
 		$(call gb_ExternalExecutable_get_dependencies,python) \

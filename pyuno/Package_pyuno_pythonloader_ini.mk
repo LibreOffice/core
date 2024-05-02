@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,pyuno_pythonloader_ini,$(call gb_CustomTarget_get_workdir,pyuno/pythonloader_ini)))
+$(eval $(call gb_Package_Package,pyuno_pythonloader_ini,$(gb_CustomTarget_workdir)/pyuno/pythonloader_ini))
 
 $(eval $(call gb_Package_add_files,pyuno_pythonloader_ini,$(LIBO_ETC_FOLDER), \
     $(call gb_Helper_get_rcfile,pythonloader.uno) \

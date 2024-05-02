@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,jvmfwk_jvmfwk3_ini,$(call gb_CustomTarget_get_workdir,jvmfwk/jvmfwk3_ini)))
+$(eval $(call gb_Package_Package,jvmfwk_jvmfwk3_ini,$(gb_CustomTarget_workdir)/jvmfwk/jvmfwk3_ini))
 
 $(eval $(call gb_Package_add_files,jvmfwk_jvmfwk3_ini,$(LIBO_URE_ETC_FOLDER), \
     $(call gb_Helper_get_rcfile,jvmfwk3) \

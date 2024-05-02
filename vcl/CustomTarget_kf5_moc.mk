@@ -10,11 +10,11 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kf5))
 
 $(call gb_CustomTarget_get_target,vcl/unx/kf5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/KFFilePicker.moc
+	$(gb_CustomTarget_workdir)/vcl/unx/kf5/KFFilePicker.moc
 
-$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/%.moc : \
+$(gb_CustomTarget_workdir)/vcl/unx/kf5/%.moc : \
 		$(SRCDIR)/vcl/unx/kf5/%.hxx \
-		| $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/.dir
+		| $(gb_CustomTarget_workdir)/vcl/unx/kf5/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MOC)
 	$(MOC5) $< -o $@

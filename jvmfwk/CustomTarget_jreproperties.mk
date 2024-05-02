@@ -9,11 +9,11 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,jvmfwk/jreproperties))
 
-$(call gb_CustomTarget_get_target,jvmfwk/jreproperties) : $(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)/JREProperties.class
+$(call gb_CustomTarget_get_target,jvmfwk/jreproperties) : $(gb_CustomTarget_workdir)/jvmfwk/jreproperties/JREProperties.class
 
-$(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)/JREProperties.class : \
+$(gb_CustomTarget_workdir)/jvmfwk/jreproperties/JREProperties.class : \
 		$(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
-		| $(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)/.dir
+		| $(gb_CustomTarget_workdir)/jvmfwk/jreproperties/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JCS,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),JCS)
 	$(call gb_Helper_abbreviate_dirs, \

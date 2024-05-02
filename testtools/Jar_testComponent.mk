@@ -28,7 +28,7 @@ $(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star
 $(eval $(call gb_Jar_set_componentfile,testComponent,testtools/source/bridgetest/testComponent,NONE,uno_services))
 
 $(eval $(call gb_Jar_add_packagedirs,testComponent,\
-    $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)/test \
+    $(gb_CustomTarget_workdir)/testtools/bridgetest_javamaker/test \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,testComponent,\

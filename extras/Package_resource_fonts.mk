@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,resource_fonts,$(call gb_CustomTarget_get_workdir,extras/fonts)))
+$(eval $(call gb_Package_Package,resource_fonts,$(gb_CustomTarget_workdir)/extras/fonts))
 
 $(eval $(call gb_Package_use_customtarget,resource_fonts,extras/fonts))
 

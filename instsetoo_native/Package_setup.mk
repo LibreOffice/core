@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,instsetoo_native_setup,$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)))
+$(eval $(call gb_Package_Package,instsetoo_native_setup,$(gb_CustomTarget_workdir)/instsetoo_native/setup))
 
 $(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,bootstrap) \

@@ -13,7 +13,7 @@ $(eval $(call gb_CustomTarget_register_targets,pyuno/pythonloader_ini, \
     $(call gb_Helper_get_rcfile,pythonloader.uno) \
 ))
 
-$(call gb_CustomTarget_get_workdir,pyuno/pythonloader_ini)/$(call gb_Helper_get_rcfile,pythonloader.uno): \
+$(gb_CustomTarget_workdir)/pyuno/pythonloader_ini/$(call gb_Helper_get_rcfile,pythonloader.uno): \
 			$(BUILDDIR)/config_$(gb_Side)/config_python.h \
             $(SRCDIR)/pyuno/CustomTarget_pyuno_pythonloader_ini.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)

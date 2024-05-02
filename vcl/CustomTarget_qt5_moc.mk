@@ -10,21 +10,21 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/qt5))
 
 $(call gb_CustomTarget_get_target,vcl/qt5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtClipboard.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFilePicker.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFrame.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtInstance.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtInstanceMessageDialog.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtMainWindow.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtMenu.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtObject.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtTimer.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtWidget.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtXAccessible.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtClipboard.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtFilePicker.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtFrame.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstance.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceMessageDialog.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtMainWindow.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtMenu.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtObject.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtTimer.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtWidget.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtXAccessible.moc \
 
-$(call gb_CustomTarget_get_workdir,vcl/qt5)/%.moc : \
+$(gb_CustomTarget_workdir)/vcl/qt5/%.moc : \
 		$(SRCDIR)/vcl/inc/qt5/%.hxx \
-		| $(call gb_CustomTarget_get_workdir,vcl/qt5)/.dir
+		| $(gb_CustomTarget_workdir)/vcl/qt5/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MOC)
 	$(MOC5) $< -o $@

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,postprocess_images,$(call gb_CustomTarget_get_workdir,postprocess/images)))
+$(eval $(call gb_Package_Package,postprocess_images,$(gb_CustomTarget_workdir)/postprocess/images))
 
 $(eval $(call gb_Package_add_files,postprocess_images,$(LIBO_SHARE_FOLDER)/config,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \

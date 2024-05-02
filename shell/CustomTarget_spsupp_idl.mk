@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,shell/source/win32/spsupp/idl))
 
-spsupp_IDLDIR := $(call gb_CustomTarget_get_workdir,shell/source/win32/spsupp/idl)
+spsupp_IDLDIR := $(gb_CustomTarget_workdir)/shell/source/win32/spsupp/idl
 
 $(call gb_CustomTarget_get_target,shell/source/win32/spsupp/idl) : \
 	$(spsupp_IDLDIR)/spsupp.tlb

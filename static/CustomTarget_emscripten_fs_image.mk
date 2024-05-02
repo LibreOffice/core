@@ -1487,7 +1487,7 @@ gb_emscripten_fs_image_filelists += $(call gb_Package_get_target,fontconfig_data
 # Ruleset
 #
 
-emscripten_fs_image_WORKDIR := $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)
+emscripten_fs_image_WORKDIR := $(gb_CustomTarget_workdir)/static/emscripten_fs_image
 
 # we just need data.js.link at link time, which is equal to soffice.data.js
 $(call gb_CustomTarget_get_target,static/emscripten_fs_image): \

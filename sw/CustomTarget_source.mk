@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,sw/source/writerfilter))
 
-writerfilter_WORK := $(call gb_CustomTarget_get_workdir,sw/source/writerfilter)
+writerfilter_WORK := $(gb_CustomTarget_workdir)/sw/source/writerfilter
 writerfilter_SRC := $(SRCDIR)/sw/source/writerfilter
 
 writerfilter_PYTHONCOMMAND := $(call gb_ExternalExecutable_get_command,python)
@@ -56,7 +56,7 @@ writerfilter_ALL = \
 	$(patsubst %,$(writerfilter_WORK)/ooxml/OOXMLFactory_%.hxx,$(writerfilter_OOXMLNAMESPACES)) \
 	$(patsubst %,$(writerfilter_WORK)/ooxml/OOXMLFactory_%.cxx,$(writerfilter_OOXMLNAMESPACES)) \
 
-writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/generated)/misc/namespaces.txt
+writerfilter_DEP_ooxml_Namespaces_txt=$(gb_CustomTarget_workdir)/oox/generated/misc/namespaces.txt
 writerfilter_GEN_ooxml_FactoryValues_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_values.hxx
 writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.cxx
 writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.hxx

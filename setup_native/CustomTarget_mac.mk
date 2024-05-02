@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,setup_native/mac))
 $(eval $(call gb_CustomTarget_register_target,setup_native/mac,macinstall.ulf))
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
-	$(call gb_CustomTarget_get_workdir,setup_native/mac)/macinstall.ulf,\
+	$(gb_CustomTarget_workdir)/setup_native/mac/macinstall.ulf,\
 	$(SRCDIR)/setup_native/source/mac/macinstall.ulf,\
 	$(foreach lang,$(gb_TRANS_LANGS),\
 		$(gb_POLOCATION)/$(lang)/setup_native/source/mac.po)))

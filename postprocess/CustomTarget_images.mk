@@ -10,7 +10,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,postprocess/images))
 
-packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
+packimages_DIR := $(gb_CustomTarget_workdir)/postprocess/images
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \

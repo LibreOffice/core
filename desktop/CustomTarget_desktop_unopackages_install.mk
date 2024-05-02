@@ -10,10 +10,10 @@
 $(eval $(call gb_CustomTarget_CustomTarget,desktop/unopackages_install))
 
 $(call gb_CustomTarget_get_target,desktop/unopackages_install) : | \
-    $(call gb_CustomTarget_get_workdir,desktop/unopackages_install)/uno_packages/cache/uno_packages
+    $(gb_CustomTarget_workdir)/desktop/unopackages_install/uno_packages/cache/uno_packages
 
-$(call gb_CustomTarget_get_workdir,desktop/unopackages_install)/uno_packages/cache/uno_packages : | \
-    $(call gb_CustomTarget_get_workdir,desktop/unopackages_install)/.dir
+$(gb_CustomTarget_workdir)/desktop/unopackages_install/uno_packages/cache/uno_packages : | \
+    $(gb_CustomTarget_workdir)/desktop/unopackages_install/.dir
 	mkdir -p $@
 
 # vim: set noet sw=4 ts=4:

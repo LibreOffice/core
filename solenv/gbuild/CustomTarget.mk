@@ -18,7 +18,7 @@
 #
 
 # the .dir is for make 3.81, which ignores trailing /
-$(call gb_CustomTarget_get_workdir,%)/.dir :
+$(gb_CustomTarget_workdir)/%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CustomTarget_get_target,%) :
@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_target,%) :
 $(call gb_CustomTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CUS,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
+		rm -rf $(gb_CustomTarget_workdir)/$* && \
 		rm -f $(call gb_CustomTarget_get_target,$*))
 
 define gb_CustomTarget_CustomTarget
@@ -41,8 +41,8 @@ $(call gb_CustomTarget_get_target,$(1)) :| $(dir $(call gb_CustomTarget_get_targ
 endef
 
 define gb_CustomTarget_register_target
-$(call gb_CustomTarget_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(1))/$(2)
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) :| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
+$(call gb_CustomTarget_get_target,$(1)) : $(gb_CustomTarget_workdir)/$(1)/$(2)
+$(gb_CustomTarget_workdir)/$(1)/$(2) :| $(dir $(gb_CustomTarget_workdir)/$(1)/$(2)).dir
 
 endef
 
@@ -81,8 +81,8 @@ endef
 
 #$(call gb_CustomTarget_token_hash,oox/generated,tokenhash.inc,tokenhash.gperf)
 define gb_CustomTarget_token_hash
-$(call gb_CustomTarget_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(1))/$(2)
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(call gb_CustomTarget_get_workdir,$(1))/misc/$(3)
+$(call gb_CustomTarget_get_target,$(1)) : $(gb_CustomTarget_workdir)/$(1)/$(2)
+$(gb_CustomTarget_workdir)/$(1)/$(2) : $(gb_CustomTarget_workdir)/$(1)/misc/$(3)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,GPF,1)
 	$$(call gb_Helper_wsl_path,$(GPERF) --compare-strncmp --switch=2 --readonly-tables $$<) \
 		| sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, 0/g' > $$@
@@ -92,14 +92,14 @@ endef
 #$(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,
 #namespaces,namespace,namespaces.txt,namespaces-strict,namespaces.pl)
 define gb_CustomTarget_generate_tokens
-$(call gb_CustomTarget_get_workdir,$(1))/misc/$(5)ids.inc \
-$(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \
-$(if $(6),$(call gb_CustomTarget_get_workdir,$(1))/misc/$(6)) \
-$(if $(7),$(call gb_CustomTarget_get_workdir,$(1))/$(7)names.inc) : \
-		$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx
+$(gb_CustomTarget_workdir)/$(1)/misc/$(5)ids.inc \
+$(gb_CustomTarget_workdir)/$(1)/$(5)names.inc \
+$(if $(6),$(gb_CustomTarget_workdir)/$(1)/misc/$(6)) \
+$(if $(7),$(gb_CustomTarget_workdir)/$(1)/$(7)names.inc) : \
+		$(gb_CustomTarget_workdir)/$(1)/$(2)/token/$(4).hxx
 	touch $$@
 
-$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
+$(gb_CustomTarget_workdir)/$(1)/$(2)/token/$(4).hxx : \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
 		$(if $(7),$(SRCDIR)/$(3)/$(7).txt) \
 		$(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.py) \
@@ -108,28 +108,28 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
 		$(SRCDIR)/$(3)/$(4).hxx.tail
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,PRL,1)
 	$$(call gb_Trace_StartRange,$$(subst $(WORKDIR)/,,$$@),PRL)
-	mkdir -p $(call gb_CustomTarget_get_workdir,$(1))/misc \
-	    	$(call gb_CustomTarget_get_workdir,$(1)) \
-		$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token
+	mkdir -p $(gb_CustomTarget_workdir)/$(1)/misc \
+	    	$(gb_CustomTarget_workdir)/$(1) \
+		$(gb_CustomTarget_workdir)/$(1)/$(2)/token
 	$(call gb_ExternalExecutable_get_command,python) $(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.py) \
 	    	$(SRCDIR)/$(3)/$(4).txt \
-		$(call gb_CustomTarget_get_workdir,$(1))/misc/$(5)ids.inc \
-		$(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \
-		$(if $(6), $(call gb_CustomTarget_get_workdir,$(1))/misc/$(6)) \
+		$(gb_CustomTarget_workdir)/$(1)/misc/$(5)ids.inc \
+		$(gb_CustomTarget_workdir)/$(1)/$(5)names.inc \
+		$(if $(6), $(gb_CustomTarget_workdir)/$(1)/misc/$(6)) \
 		$(if $(7), $(SRCDIR)/$(3)/$(7).txt \
-			$(call gb_CustomTarget_get_workdir,$(1))/$(7)names.inc) \
+			$(gb_CustomTarget_workdir)/$(1)/$(7)names.inc) \
 	&& cat $(SRCDIR)/$(3)/$(4).hxx.head \
-		$(call gb_CustomTarget_get_workdir,$(1))/misc/$(5)ids.inc \
+		$(gb_CustomTarget_workdir)/$(1)/misc/$(5)ids.inc \
 		$(SRCDIR)/$(3)/$(4).hxx.tail \
-		> $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx \
+		> $(gb_CustomTarget_workdir)/$(1)/$(2)/token/$(4).hxx \
 	&& touch $$@
 	$$(call gb_Trace_EndRange,$$(subst $(WORKDIR)/,,$$@),PRL)
 
 $(call gb_CustomTarget_get_target,$(1)) : \
-    $(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \
-    $(if $(7),$(call gb_CustomTarget_get_workdir,$(1))/$(7)names.inc) \
-    $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx \
-    $(if $(6),$(call gb_CustomTarget_get_workdir,$(1))/misc/$(6)) \
+    $(gb_CustomTarget_workdir)/$(1)/$(5)names.inc \
+    $(if $(7),$(gb_CustomTarget_workdir)/$(1)/$(7)names.inc) \
+    $(gb_CustomTarget_workdir)/$(1)/$(2)/token/$(4).hxx \
+    $(if $(6),$(gb_CustomTarget_workdir)/$(1)/misc/$(6)) \
 
 endef
 

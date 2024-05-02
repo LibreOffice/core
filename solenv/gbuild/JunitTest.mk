@@ -153,7 +153,7 @@ endef
 
 define gb_JunitTest_use_customtarget
 $(call gb_JavaClassSet_use_customtarget,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(call gb_CustomTarget_get_workdir,$(2))
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(gb_CustomTarget_workdir)/$(2)
 
 endef
 

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,python_shell,$(call gb_CustomTarget_get_workdir,pyuno/python_shell)))
+$(eval $(call gb_Package_Package,python_shell,$(gb_CustomTarget_workdir)/pyuno/python_shell))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Package_add_file,python_shell,$(LIBO_ETC_FOLDER)/python,python.sh))

@@ -11,8 +11,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,xmloff/generated))
 
 #Generates a hashtable for the odf-tags
 xmloff_SRC := $(SRCDIR)/xmloff/source/token
-xmloff_MISC := $(call gb_CustomTarget_get_workdir,xmloff/generated)/misc
-xmloff_INC := $(call gb_CustomTarget_get_workdir,xmloff/generated)
+xmloff_MISC := $(gb_CustomTarget_workdir)/xmloff/generated/misc
+xmloff_INC := $(gb_CustomTarget_workdir)/xmloff/generated
 xmloff_GENHEADERPATH := $(xmloff_INC)/xmloff/token
 
 $(eval $(call gb_CustomTarget_token_hash,xmloff/generated,tokenhash.inc,tokenhash.gperf))

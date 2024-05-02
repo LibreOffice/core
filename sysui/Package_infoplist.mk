@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,infoplist,$(call gb_CustomTarget_get_workdir,sysui/infoplist)))
+$(eval $(call gb_Package_Package,infoplist,$(gb_CustomTarget_workdir)/sysui/infoplist))
 
 # workaround to avoid gb_Package_add_files with empty directory adding extra '/'
 $(eval $(call gb_Package_set_outdir,infoplist,$(INSTDIR)))

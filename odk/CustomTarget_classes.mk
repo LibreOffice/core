@@ -22,7 +22,7 @@ $(eval $(call gb_JavaClassSet_add_sourcefiles,loader,\
 	odk/source/com/sun/star/lib/loader/WinRegKeyException \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/classes)/java.done: $(call gb_JavaClassSet_get_target,loader)
+$(gb_CustomTarget_workdir)/odk/classes/java.done: $(call gb_JavaClassSet_get_target,loader)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CPY,1)
 	cp -a $(call gb_JavaClassSet_get_classdir,loader)/com $(dir $@) && \
 	touch $@

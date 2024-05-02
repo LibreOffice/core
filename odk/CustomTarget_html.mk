@@ -17,7 +17,7 @@ $(eval $(call gb_CustomTarget_register_targets,odk/html,\
 	index.html \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/html)/%.html : $(SRCDIR)/odk/%.html
+$(gb_CustomTarget_workdir)/odk/html/%.html : $(SRCDIR)/odk/%.html
 	$(call gb_Output_announce,$*.html,$(true),SED,1)
 	$(call gb_Trace_StartRange,$*.html,SED)
 	sed -e 's|%PRODUCT_RELEASE%|$(PRODUCTVERSION)|g' \

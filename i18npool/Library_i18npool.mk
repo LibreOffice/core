@@ -127,7 +127,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,i18npool,\
 ))
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(call gb_CxxObject_get_target,i18npool/source/localedata/localedata): $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx
+$(call gb_CxxObject_get_target,i18npool/source/localedata/localedata): $(gb_CustomTarget_workdir)/i18npool/localedata/localedata_static.hxx
 
 ifeq ($(WITH_LOCALES),)
 i18npool_locale_pattern=%
@@ -135,19 +135,19 @@ else
 i18npool_locale_pattern=$(WITH_LOCALES) $(addsuffix _%,$(WITH_LOCALES))
 endif
 
-$(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx : $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl
-	mkdir -p $(call gb_CustomTarget_get_workdir,i18npool/localedata) && $(PERL) $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl $(filter $(i18npool_locale_pattern),$(patsubst $(SRCDIR)/i18npool/source/localedata/data/%.xml,%,$(shell echo $(SRCDIR)/i18npool/source/localedata/data/*.xml))) >$@
+$(gb_CustomTarget_workdir)/i18npool/localedata/localedata_static.hxx : $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl
+	mkdir -p $(gb_CustomTarget_workdir)/i18npool/localedata && $(PERL) $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl $(filter $(i18npool_locale_pattern),$(patsubst $(SRCDIR)/i18npool/source/localedata/data/%.xml,%,$(shell echo $(SRCDIR)/i18npool/source/localedata/data/*.xml))) >$@
 
 $(call gb_CxxObject_get_target,i18npool/source/localedata/localedata) : \
-	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/localedata)
+	INCLUDE += -I$(gb_CustomTarget_workdir)/i18npool/localedata
 
 endif # DISABLE_DYNLOADING
 
 # collator_unicode.cxx includes generated lrl_include.hxx
 $(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) : \
-	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/collator)
+	INCLUDE += -I$(gb_CustomTarget_workdir)/i18npool/collator
 $(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) :| \
-	$(call gb_CustomTarget_get_workdir,i18npool/collator)/lrl_include.hxx
+	$(gb_CustomTarget_workdir)/i18npool/collator/lrl_include.hxx
 
 $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
 	CustomTarget/i18npool/breakiterator/OpenOffice_dat \

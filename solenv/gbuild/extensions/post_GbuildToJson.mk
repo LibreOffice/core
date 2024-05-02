@@ -160,7 +160,7 @@ $(WORKDIR)/LinkTarget/Library/%.exports:
 	@true
 
 define gb_LinkTarget__use_custom_headers
-$(call gb_LinkTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
+$(call gb_LinkTarget__add_include,$(1),$(gb_CustomTarget_workdir)/$(2))
 
 endef
 

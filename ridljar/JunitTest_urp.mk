@@ -16,7 +16,7 @@ $(eval $(call gb_JunitTest_use_customtargets,ridl_urp,\
 
 $(eval $(call gb_JunitTest_use_jar_classset,ridl_urp,libreoffice))
 
-$(eval $(call gb_JunitTest_add_classpath,ridl_urp,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
+$(eval $(call gb_JunitTest_add_classpath,ridl_urp,$(gb_CustomTarget_workdir)/ridljar/javamaker))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridl_urp,\
     ridljar/test/com/sun/star/lib/uno/protocols/urp/Cache_Test \

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_javadoc,$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)))
+$(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_javadoc,$(gb_CustomTarget_workdir)/odk/docs/java/ref))
 
 $(eval $(call gb_GeneratedPackage_add_dir,odk_javadoc,$(INSTDIR)/$(SDKDIRNAME)/docs/java/ref,.))
 

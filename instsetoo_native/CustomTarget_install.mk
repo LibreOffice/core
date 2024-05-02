@@ -27,17 +27,17 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 	$(foreach ulf,$(instsetoo_ULFLIST),win_ulffiles/$(ulf).ulf) \
 ))
 
-.PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony
+.PHONY: $(gb_CustomTarget_workdir)/instsetoo_native/install/install.phony
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%.sh: $(SRCDIR)/instsetoo_native/inc_openoffice/unix/find-requires-%.sh
+$(gb_CustomTarget_workdir)/instsetoo_native/install/bin/find-requires-%.sh: $(SRCDIR)/instsetoo_native/inc_openoffice/unix/find-requires-%.sh
 	cat $< | tr -d "\015" > $@
 	chmod a+x $@
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
+$(gb_CustomTarget_workdir)/instsetoo_native/install/win_ulffiles/%.ulf: \
 		| $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
-	$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf,\
+	$(gb_CustomTarget_workdir)/instsetoo_native/install/win_ulffiles/%.ulf,\
 	$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf,\
 	$(foreach lang,$(gb_TRANS_LANGS),\
 		$(gb_POLOCATION)/$(lang)/instsetoo_native/inc_openoffice/windows/msi_languages.po)))
@@ -83,15 +83,15 @@ instsetoo_wipe:
 # list both as prerequisites so that make won't treat the $(template) one as intermediate /
 # won't attempt to delete it after the $(template)/Binary and the rest of the chain was made
 instsetoo_msi_templates: $(foreach template,openoffice ooohelppack sdkoo,$(addprefix \
-        $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/,$(template) $(template)/Binary))
+        $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_templates/,$(template) $(template)/Binary))
 
 # use awk instead of grep to not have to deal with grep exiting with error on files with no comments
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/%: $(SRCDIR)/instsetoo_native/inc_%/windows/msi_templates/*.*
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_templates/%: $(SRCDIR)/instsetoo_native/inc_%/windows/msi_templates/*.*
 	$(call gb_Output_announce,setting up msi templates for type $(@F),$(true),AWK,4)
 	rm -rf $@ && mkdir -p $@ && cd $@ $(foreach file,$(^F),&& awk '!/^#/{print}' $(<D)/$(file) > $(file))
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/%/Binary: $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* \
-            $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/%
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_templates/%/Binary: $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* \
+            $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_templates/%
 	$(call gb_Output_announce,setting up msi templates for type $* - copying binary assets,$(true),CPY,4)
 	rm -rf $@ && mkdir -p $@ && cd $@ && cp $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* ./
 
@@ -109,9 +109,9 @@ $(gb_Make_JobLimiter): $(SRCDIR)/solenv/bin/job-limiter.cpp
 # even with the reduced parallelism (the higher the parallelism, the higher the chance for random
 # failures during the cscript call to WiLangId.vbs)
 $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
-        $(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
+        $(foreach ulf,$(instsetoo_ULFLIST),$(gb_CustomTarget_workdir)/instsetoo_native/install/win_ulffiles/$(ulf).ulf) \
         $(if $(filter-out WNT,$(OS)),\
-            $(addprefix $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/,\
+            $(addprefix $(gb_CustomTarget_workdir)/instsetoo_native/install/,\
                 bin/find-requires-gnome.sh \
                 bin/find-requires-x11.sh) \
         ,instsetoo_msi_templates) \
@@ -123,11 +123,11 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
 	$(call gb_Helper_print_on_error, \
 	    $(if $(MSYSTEM),export PERLIO=:unix PERL=$(STRAWBERRY_PERL) &&) \
 	    $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(subst ‧,:,$@),\
-	    $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@).log)
+	    $(gb_CustomTarget_workdir)/instsetoo_native/install/$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@).log)
 	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) release)
 	$(call gb_Trace_EndRange,$@,INSTALLER)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: $(instsetoo_installer_targets)
+$(gb_CustomTarget_workdir)/instsetoo_native/install/install.phony: $(instsetoo_installer_targets)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(if $(ENABLE_WIX),$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/msicreator/create_installer.py $(BUILDDIR) $(SRCDIR) $(LIBO_VERSION) $(PRODUCTNAME_WITHOUT_SPACES))
@@ -148,21 +148,21 @@ endif # LIBO_TEST_INSTALL
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_signing.done: \
-        $(if $(filter HELP,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done) \
-        $(if $(filter ODK,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done) \
-        $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_signing.done: \
+        $(if $(filter HELP,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done) \
+        $(if $(filter ODK,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done) \
+        $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_main_signing.done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done \
-    : $(SRCDIR)/postprocess/signing/signing.pl $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done \
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done \
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_main_signing.done \
+    : $(SRCDIR)/postprocess/signing/signing.pl $(gb_CustomTarget_workdir)/instsetoo_native/install/install.phony
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done:
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_main_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
@@ -176,7 +176,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done:
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
@@ -190,7 +190,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done:
+$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \

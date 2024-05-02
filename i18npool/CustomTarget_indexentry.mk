@@ -22,12 +22,12 @@ i18npool_IDXTXTS := \
     zh_zhuyin.txt
 
 $(call gb_CustomTarget_get_target,i18npool/indexentry) : $(SRCDIR)/i18npool/CustomTarget_indexentry.mk \
-	$(patsubst %.txt,$(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx,$(i18npool_IDXTXTS))
+	$(patsubst %.txt,$(gb_CustomTarget_workdir)/i18npool/indexentry/%.cxx,$(i18npool_IDXTXTS))
 
-$(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx : \
+$(gb_CustomTarget_workdir)/i18npool/indexentry/%.cxx : \
 		$(SRCDIR)/i18npool/source/indexentry/data/%.txt \
 		$(call gb_Executable_get_runtime_dependencies,genindex_data) \
-		| $(call gb_CustomTarget_get_workdir,i18npool/indexentry)/.dir
+		| $(gb_CustomTarget_workdir)/i18npool/indexentry/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IND,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),IND)
 	$(call gb_Helper_abbreviate_dirs, \

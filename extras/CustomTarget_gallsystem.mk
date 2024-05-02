@@ -15,7 +15,7 @@ $(eval $(call gb_CustomTarget_register_targets,extras/gallsysstr,\
 ))
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
-    $(call gb_CustomTarget_get_workdir,extras/gallsysstr)/extras_gallsystem.ulf,\
+    $(gb_CustomTarget_workdir)/extras/gallsysstr/extras_gallsystem.ulf,\
     $(SRCDIR)/extras/source/gallery/share/gallery_names.ulf,\
     $(foreach lang,$(gb_TRANS_LANGS),\
         $(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po)))
@@ -23,8 +23,8 @@ $(eval $(call gb_CustomTarget_ulfex_rule,\
 # desktop-translate.py is ugly af/doesn't play nice with make dependencies.
 # It expects the target filename to exist and modifies it, so do the hack with own
 # temporary dir
-$(call gb_CustomTarget_get_workdir,extras/gallsysstr)/%.str : \
-                    $(call gb_CustomTarget_get_workdir,extras/gallsysstr)/extras_gallsystem.ulf \
+$(gb_CustomTarget_workdir)/extras/gallsysstr/%.str : \
+                    $(gb_CustomTarget_workdir)/extras/gallsysstr/extras_gallsystem.ulf \
                     $(SRCDIR)/extras/source/gallery/gallery_system/dummy.str \
                     $(call gb_ExternalExecutable_get_dependencies,python) \
                     $(SRCDIR)/solenv/bin/desktop-translate.py

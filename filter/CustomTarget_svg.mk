@@ -11,7 +11,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,filter/source/svg))
 
 filter_SVGSRC := $(SRCDIR)/filter/source/svg
-filter_SVGWORK := $(call gb_CustomTarget_get_workdir,filter/source/svg)
+filter_SVGWORK := $(gb_CustomTarget_workdir)/filter/source/svg
 
 filter_SRC_svg_Tokens := $(filter_SVGSRC)/tokens.txt
 filter_SRC_svg_GenToken := $(filter_SVGSRC)/gentoken.py

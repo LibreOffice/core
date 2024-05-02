@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,unoil/javamaker))
 
-unoil_JAVADIR := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
+unoil_JAVADIR := $(gb_CustomTarget_workdir)/unoil/javamaker
 
 $(call gb_CustomTarget_get_target,unoil/javamaker) : $(unoil_JAVADIR)/done
 

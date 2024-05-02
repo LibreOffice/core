@@ -261,7 +261,7 @@ endef
 
 define gb_InstallModuleTarget_use_custom_header
 $(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2)) \
+$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE += -I$(gb_CustomTarget_workdir)/$(2) \
 
 endef
 

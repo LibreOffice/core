@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest_javamaker))
 
-testtools_JAVADIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)
+testtools_JAVADIR := $(gb_CustomTarget_workdir)/testtools/bridgetest_javamaker
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(testtools_JAVADIR)/done
 

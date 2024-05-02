@@ -126,7 +126,7 @@ $(call gb_UITest_get_target,$(1)) : MODULES += $(strip $(2))/$(strip $(3))
 endef
 
 define gb_UITest_use_customtarget
-$(call gb_UITest_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(2))
+$(call gb_UITest_get_target,$(1)) : $(gb_CustomTarget_workdir)/$(2)
 
 endef
 

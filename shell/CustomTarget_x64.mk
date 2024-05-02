@@ -59,11 +59,11 @@ SHELL_HEADERS := \
 
 $(call gb_CustomTarget_get_target,shell/source) : \
 	$(foreach source,$(SHELL_SHLXTHANDLER_COMMON_FILES) $(SHELL_SHLXTHDL_FILES) $(SHELL_OOOFILT_FILES) $(SHELL_PROPERTYHDL_FILES) $(SHELL_XMLPARSER_FILES),\
-		$(call gb_CustomTarget_get_workdir,shell/source)/$(source).cxx) \
+		$(gb_CustomTarget_workdir)/shell/source/$(source).cxx) \
 	$(foreach header,$(SHELL_HEADERS),\
-		$(call gb_CustomTarget_get_workdir,shell/source)/$(header).hxx)
+		$(gb_CustomTarget_workdir)/shell/source/$(header).hxx)
 
-$(call gb_CustomTarget_get_workdir,shell/source)/% : $(SRCDIR)/shell/source/%
+$(gb_CustomTarget_workdir)/shell/source/% : $(SRCDIR)/shell/source/%
 	mkdir -p $(dir $@) && $(call gb_Deliver_deliver,$<,$@)
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

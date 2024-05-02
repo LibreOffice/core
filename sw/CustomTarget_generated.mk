@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,sw/generated))
 
 sw_SRC := $(SRCDIR)/sw/source/core/swg
 sw_PY := $(SRCDIR)/solenv/bin/gentoken.py
-sw_INC := $(call gb_CustomTarget_get_workdir,sw/generated)
+sw_INC := $(gb_CustomTarget_workdir)/sw/generated
 
 # static pattern rule
 $(sw_INC)/TextBlockTokens.gperf \

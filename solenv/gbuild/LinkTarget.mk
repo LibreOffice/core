@@ -1940,7 +1940,7 @@ endef
 define gb_LinkTarget__use_custom_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) :| \
 	$(call gb_CustomTarget_get_target,$(2))
-$(call gb_LinkTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
+$(call gb_LinkTarget__add_include,$(1),$(gb_CustomTarget_workdir)/$(2))
 
 endef
 
