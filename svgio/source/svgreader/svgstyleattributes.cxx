@@ -817,6 +817,11 @@ namespace svgio::svgreader
             rMarkerTransform.identity();
             rClipRange.reset();
 
+            // Set the current stroke to the marker before calling getMarkerPrimitives,
+            // which calls decomposeSvgNode to decompose the children of the marker.
+            // If any of the children uses 'stroke="context-stroke"', then it will use it
+            const_cast<SvgStyleAttributes*>(rMarker.getSvgStyleAttributes())->maContextStroke = getStroke();
+
             // get marker primitive representation
             rMarkerPrimitives = rMarker.getMarkerPrimitives();
 
@@ -1287,8 +1292,9 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(32, 0),
-            mbStrokeDasharraySet(false)
+            maResolvingParent(33, 0),
+            mbStrokeDasharraySet(false),
+            mbContextStroke(false)
         {
         }
 
@@ -1353,7 +1359,11 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
+                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-stroke"))
+                    {
+                        mbContextStroke = true;
+                    }
+                    else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         maStroke = aSvgPaint;
                         if(aOpacity.isSet())
@@ -1996,6 +2006,23 @@ namespace svgio::svgreader
             }
         }
 
+        const basegfx::BColor* SvgStyleAttributes::getContextStroke() const
+        {
+            if (SVGToken::Marker == mrOwner.getType())
+                return maContextStroke;
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[32];
+                auto ret = pSvgStyleAttributes->getContextStroke();
+                --maResolvingParent[32];
+                return ret;
+            }
+
+            return nullptr;
+        }
+
         bool SvgStyleAttributes::isClipPathContent() const
         {
             if (SVGToken::ClipPathNode == mrOwner.getType())
@@ -2108,6 +2135,10 @@ namespace svgio::svgreader
                 {
                     return &maStroke.getBColor();
                 }
+            }
+            else if (mbContextStroke)
+            {
+                return getContextStroke();
             }
             else if (maNodeStrokeURL.isEmpty())
             {
