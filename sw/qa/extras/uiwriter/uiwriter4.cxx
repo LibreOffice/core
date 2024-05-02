@@ -2597,7 +2597,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
