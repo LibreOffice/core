@@ -39,28 +39,28 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 
-static const char* aCommands[] =
+constexpr OUString aCommands[]
 {
-    ".uno:ConvertToEdit",
-    ".uno:ConvertToButton",
-    ".uno:ConvertToFixed",
-    ".uno:ConvertToList",
-    ".uno:ConvertToCheckBox",
-    ".uno:ConvertToRadio",
-    ".uno:ConvertToGroup",
-    ".uno:ConvertToCombo",
-    ".uno:ConvertToImageBtn",
-    ".uno:ConvertToFileControl",
-    ".uno:ConvertToDate",
-    ".uno:ConvertToTime",
-    ".uno:ConvertToNumeric",
-    ".uno:ConvertToCurrency",
-    ".uno:ConvertToPattern",
-    ".uno:ConvertToImageControl",
-    ".uno:ConvertToFormatted",
-    ".uno:ConvertToScrollBar",
-    ".uno:ConvertToSpinButton",
-    ".uno:ConvertToNavigationBar"
+    u".uno:ConvertToEdit"_ustr,
+    u".uno:ConvertToButton"_ustr,
+    u".uno:ConvertToFixed"_ustr,
+    u".uno:ConvertToList"_ustr,
+    u".uno:ConvertToCheckBox"_ustr,
+    u".uno:ConvertToRadio"_ustr,
+    u".uno:ConvertToGroup"_ustr,
+    u".uno:ConvertToCombo"_ustr,
+    u".uno:ConvertToImageBtn"_ustr,
+    u".uno:ConvertToFileControl"_ustr,
+    u".uno:ConvertToDate"_ustr,
+    u".uno:ConvertToTime"_ustr,
+    u".uno:ConvertToNumeric"_ustr,
+    u".uno:ConvertToCurrency"_ustr,
+    u".uno:ConvertToPattern"_ustr,
+    u".uno:ConvertToImageControl"_ustr,
+    u".uno:ConvertToFormatted"_ustr,
+    u".uno:ConvertToScrollBar"_ustr,
+    u".uno:ConvertToSpinButton"_ustr,
+    u".uno:ConvertToNavigationBar"_ustr
 };
 
 static TranslateId aLabels[] =
@@ -209,7 +209,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > con
     for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         sal_Int16 nItemId = i + 1;
-        OUString sCommand(OUString::createFromAscii(aCommands[i]));
+        OUString sCommand(aCommands[i]);
         rPopupMenu->insertItem(nItemId, FwkResId(aLabels[i]), 0, i);
         rPopupMenu->setCommand(nItemId, sCommand);
         rPopupMenu->enableItem(nItemId, false);
@@ -247,7 +247,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     sal_Int16 nItemId = 0;
     for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
-        if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
+        if ( Event.FeatureURL.Complete == aCommands[i] )
         {
             nItemId = i + 1;
             break;
@@ -293,9 +293,9 @@ void SAL_CALL ControlMenuController::updatePopupMenu()
     fillPopupMenu( m_xPopupMenu );
     m_aURLToDispatchMap.free();
 
-    for (const char* aCommand : aCommands)
+    for (const OUString& aCommand : aCommands)
     {
-        aTargetURL.Complete = OUString::createFromAscii( aCommand );
+        aTargetURL.Complete = aCommand;
         m_xURLTransformer->parseStrict( aTargetURL );
 
         Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
