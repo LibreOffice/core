@@ -76,36 +76,36 @@ enum PreDefVariable
 
 struct FixedVariable
 {
-    const char*     pVarName;
-    bool            bAbsPath;
+    OUString     pVarName;
+    bool         bAbsPath;
 };
 
 // Table with all fixed/predefined variables supported.
-const FixedVariable aFixedVarTable[PREDEFVAR_COUNT] =
+constexpr FixedVariable aFixedVarTable[PREDEFVAR_COUNT] =
 {
-    { "$(inst)",         true  }, // PREDEFVAR_INST
-    { "$(prog)",         true  }, // PREDEFVAR_PROG
-    { "$(user)",         true  }, // PREDEFVAR_USER
-    { "$(work)",         true  }, // PREDEFVAR_WORK, special variable
+    { u"$(inst)"_ustr,         true  }, // PREDEFVAR_INST
+    { u"$(prog)"_ustr,         true  }, // PREDEFVAR_PROG
+    { u"$(user)"_ustr,         true  }, // PREDEFVAR_USER
+    { u"$(work)"_ustr,         true  }, // PREDEFVAR_WORK, special variable
                                   //  (transient)
-    { "$(home)",         true  }, // PREDEFVAR_HOME
-    { "$(temp)",         true  }, // PREDEFVAR_TEMP
-    { "$(path)",         true  }, // PREDEFVAR_PATH
-    { "$(username)",     false }, // PREDEFVAR_USERNAME
-    { "$(langid)",       false }, // PREDEFVAR_LANGID
-    { "$(vlang)",        false }, // PREDEFVAR_VLANG
-    { "$(instpath)",     true  }, // PREDEFVAR_INSTPATH
-    { "$(progpath)",     true  }, // PREDEFVAR_PROGPATH
-    { "$(userpath)",     true  }, // PREDEFVAR_USERPATH
-    { "$(insturl)",      true  }, // PREDEFVAR_INSTURL
-    { "$(progurl)",      true  }, // PREDEFVAR_PROGURL
-    { "$(userurl)",      true  }, // PREDEFVAR_USERURL
-    { "$(workdirurl)",   true  }, // PREDEFVAR_WORKDIRURL, special variable
+    { u"$(home)"_ustr,         true  }, // PREDEFVAR_HOME
+    { u"$(temp)"_ustr,         true  }, // PREDEFVAR_TEMP
+    { u"$(path)"_ustr,         true  }, // PREDEFVAR_PATH
+    { u"$(username)"_ustr,     false }, // PREDEFVAR_USERNAME
+    { u"$(langid)"_ustr,       false }, // PREDEFVAR_LANGID
+    { u"$(vlang)"_ustr,        false }, // PREDEFVAR_VLANG
+    { u"$(instpath)"_ustr,     true  }, // PREDEFVAR_INSTPATH
+    { u"$(progpath)"_ustr,     true  }, // PREDEFVAR_PROGPATH
+    { u"$(userpath)"_ustr,     true  }, // PREDEFVAR_USERPATH
+    { u"$(insturl)"_ustr,      true  }, // PREDEFVAR_INSTURL
+    { u"$(progurl)"_ustr,      true  }, // PREDEFVAR_PROGURL
+    { u"$(userurl)"_ustr,      true  }, // PREDEFVAR_USERURL
+    { u"$(workdirurl)"_ustr,   true  }, // PREDEFVAR_WORKDIRURL, special variable
                                   //  (transient) and don't use for
                                   //  resubstitution
-    { "$(baseinsturl)",  true  }, // PREDEFVAR_BASEINSTURL
-    { "$(userdataurl)",  true  }, // PREDEFVAR_USERDATAURL
-    { "$(brandbaseurl)", true  }  // PREDEFVAR_BRANDBASEURL
+    { u"$(baseinsturl)"_ustr,  true  }, // PREDEFVAR_BASEINSTURL
+    { u"$(userdataurl)"_ustr,  true  }, // PREDEFVAR_USERDATAURL
+    { u"$(brandbaseurl)"_ustr, true  }  // PREDEFVAR_BRANDBASEURL
 };
 
 struct PredefinedPathVariables
@@ -195,7 +195,7 @@ SubstitutePathVariables::SubstitutePathVariables()
     for ( int i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         // Store variable name into struct of predefined/fixed variables
-        m_aPreDefVars.m_FixedVarNames[i] = OUString::createFromAscii( aFixedVarTable[i].pVarName );
+        m_aPreDefVars.m_FixedVarNames[i] = aFixedVarTable[i].pVarName;
 
         // Create hash map entry
         m_aPreDefVarMap.emplace( m_aPreDefVars.m_FixedVarNames[i], PreDefVariable(i) );
