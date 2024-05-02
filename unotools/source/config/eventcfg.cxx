@@ -45,36 +45,36 @@ using namespace ::com::sun::star;
 #define SETNODE_BINDINGS "Bindings"
 #define PROPERTYNAME_BINDINGURL "BindingURL"
 
-static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
+constexpr o3tl::enumarray<GlobalEventId, OUString> pEventAsciiNames =
 {
-"OnStartApp",
-"OnCloseApp",
-"OnCreate",
-"OnNew",
-"OnLoadFinished",
-"OnLoad",
-"OnPrepareUnload",
-"OnUnload",
-"OnSave",
-"OnSaveDone",
-"OnSaveFailed",
-"OnSaveAs",
-"OnSaveAsDone",
-"OnSaveAsFailed",
-"OnCopyTo",
-"OnCopyToDone",
-"OnCopyToFailed",
-"OnFocus",
-"OnUnfocus",
-"OnPrint",
-"OnViewCreated",
-"OnPrepareViewClosing",
-"OnViewClosed",
-"OnModifyChanged",
-"OnTitleChanged",
-"OnVisAreaChanged",
-"OnModeChanged",
-"OnStorageChanged"
+u"OnStartApp"_ustr,
+u"OnCloseApp"_ustr,
+u"OnCreate"_ustr,
+u"OnNew"_ustr,
+u"OnLoadFinished"_ustr,
+u"OnLoad"_ustr,
+u"OnPrepareUnload"_ustr,
+u"OnUnload"_ustr,
+u"OnSave"_ustr,
+u"OnSaveDone"_ustr,
+u"OnSaveFailed"_ustr,
+u"OnSaveAs"_ustr,
+u"OnSaveAsDone"_ustr,
+u"OnSaveAsFailed"_ustr,
+u"OnCopyTo"_ustr,
+u"OnCopyToDone"_ustr,
+u"OnCopyToFailed"_ustr,
+u"OnFocus"_ustr,
+u"OnUnfocus"_ustr,
+u"OnPrint"_ustr,
+u"OnViewCreated"_ustr,
+u"OnPrepareViewClosing"_ustr,
+u"OnViewClosed"_ustr,
+u"OnModifyChanged"_ustr,
+u"OnTitleChanged"_ustr,
+u"OnVisAreaChanged"_ustr,
+u"OnModeChanged"_ustr,
+u"OnStorageChanged"_ustr
 };
 
 typedef std::unordered_map< OUString, OUString > EventBindingHash;
@@ -128,7 +128,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
 {
     // the supported event names
     for (const GlobalEventId id : o3tl::enumrange<GlobalEventId>())
-        m_supportedEvents[id] = OUString::createFromAscii( pEventAsciiNames[id] );
+        m_supportedEvents[id] = pEventAsciiNames[id];
 
     initBindingInfo();
 
