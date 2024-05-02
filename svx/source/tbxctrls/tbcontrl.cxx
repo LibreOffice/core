@@ -3050,13 +3050,13 @@ struct SvxStyleToolBoxControl::Impl
 // mapping table from bound items. BE CAREFUL this table must be in the
 // same order as the uno commands bound to the slots SID_STYLE_FAMILY1..n
 // MAX_FAMILIES must also be correctly set!
-static const char* StyleSlotToStyleCommand[MAX_FAMILIES] =
+constexpr OUString StyleSlotToStyleCommand[MAX_FAMILIES] =
 {
-    ".uno:CharStyle",
-    ".uno:ParaStyle",
-    ".uno:FrameStyle",
-    ".uno:PageStyle",
-    ".uno:TemplateFamily5"
+    u".uno:CharStyle"_ustr,
+    u".uno:ParaStyle"_ustr,
+    u".uno:FrameStyle"_ustr,
+    u".uno:PageStyle"_ustr,
+    u".uno:TemplateFamily5"_ustr
 };
 
 SvxStyleToolBoxControl::SvxStyleToolBoxControl()
@@ -3090,7 +3090,7 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
     {
         m_xBoundItems[i] = new SfxStyleControllerItem_Impl( xDispatchProvider,
                                                             SID_STYLE_FAMILY_START + i,
-                                                            OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
+                                                            StyleSlotToStyleCommand[i],
                                                             *this );
         pFamilyState[i]  = nullptr;
     }
