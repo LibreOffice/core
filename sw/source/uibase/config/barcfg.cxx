@@ -91,19 +91,19 @@ void SwToolbarConfigItem::SetTopToolbar(SelectionType nSelType, ToolbarId eBarId
 
 Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static constexpr OUString aPropNames[] =
     {
-        "Selection/Table",                   //  SEL_TYPE_TABLE_TEXT
-        "Selection/NumberedList",            //  SEL_TYPE_LIST_TEXT
-        "Selection/NumberedList_InTable",     //  SEL_TYPE_TABLE_LIST
-        "Selection/BezierObject",           //  SEL_TYPE_BEZIER
-        "Selection/Graphic"                 //SEL_TYPE_GRAPHIC
+        u"Selection/Table"_ustr,                   //  SEL_TYPE_TABLE_TEXT
+        u"Selection/NumberedList"_ustr,            //  SEL_TYPE_LIST_TEXT
+        u"Selection/NumberedList_InTable"_ustr,     //  SEL_TYPE_TABLE_LIST
+        u"Selection/BezierObject"_ustr,           //  SEL_TYPE_BEZIER
+        u"Selection/Graphic"_ustr                 //SEL_TYPE_GRAPHIC
     };
     const int nCount = 5;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        pNames[i] = aPropNames[i];
     return aNames;
 }
 
