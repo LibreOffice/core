@@ -45,7 +45,7 @@ class KeyMapping
         struct KeyIdentifierInfo
         {
             sal_Int16       Code;
-            const char*     Identifier;
+            OUString        Identifier;
         };
 
         /** @short  hash structure to map identifier to key codes. */

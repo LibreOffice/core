@@ -27,18 +27,11 @@ inline constexpr OUString XMLNS_TOOLBAR_PREFIX = u"toolbar:"_ustr;
 
 #define XMLNS_FILTER_SEPARATOR      "^"
 
-#define ELEMENT_TOOLBAR             "toolbar"
-#define ELEMENT_TOOLBARITEM         "toolbaritem"
-#define ELEMENT_TOOLBARSPACE        "toolbarspace"
-#define ELEMENT_TOOLBARBREAK        "toolbarbreak"
-#define ELEMENT_TOOLBARSEPARATOR    "toolbarseparator"
-
-#define ATTRIBUTE_UINAME            "uiname"
-
-#define ATTRIBUTE_TEXT              "text"
-#define ATTRIBUTE_URL               "href"
-#define ATTRIBUTE_VISIBLE           "visible"
-#define ATTRIBUTE_ITEMSTYLE         "style"
+inline constexpr OUString ATTRIBUTE_UINAME = u"uiname"_ustr;
+inline constexpr OUString ATTRIBUTE_TEXT = u"text"_ustr;
+inline constexpr OUString ATTRIBUTE_URL = u"href"_ustr;
+inline constexpr OUString ATTRIBUTE_VISIBLE = u"visible"_ustr;
+inline constexpr OUString ATTRIBUTE_ITEMSTYLE = u"style"_ustr;
 
 inline constexpr OUString ELEMENT_NS_TOOLBAR = u"toolbar:toolbar"_ustr;
 inline constexpr OUString ELEMENT_NS_TOOLBARITEM = u"toolbar:toolbaritem"_ustr;
