@@ -163,35 +163,35 @@ void SvxAutoCorrCfg::SetAutoCorrect(SvxAutoCorrect *const pNew)
 
 Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static constexpr OUString aPropNames[]
     {
-        "Exceptions/TwoCapitalsAtStart",        //  0
-        "Exceptions/CapitalAtStartSentence",    //  1
-        "UseReplacementTable",                  //  2
-        "TwoCapitalsAtStart",                   //  3
-        "CapitalAtStartSentence",               //  4
-        "ChangeUnderlineWeight",                //  5
-        "SetInetAttribute",                     //  6
-        "ChangeOrdinalNumber",                  //  7
-        "AddNonBreakingSpace",                  //  8
-        "ChangeDash",                           //  9
-        "RemoveDoubleSpaces",                   // 10
-        "ReplaceSingleQuote",                   // 11
-        "SingleQuoteAtStart",                   // 12
-        "SingleQuoteAtEnd",                     // 13
-        "ReplaceDoubleQuote",                   // 14
-        "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd",                     // 16
-        "CorrectAccidentalCapsLock",            // 17
-        "TransliterateRTL",                     // 18
-        "ChangeAngleQuotes",                    // 19
-        "SetDOIAttribute",                      // 20
+        u"Exceptions/TwoCapitalsAtStart"_ustr,        //  0
+        u"Exceptions/CapitalAtStartSentence"_ustr,    //  1
+        u"UseReplacementTable"_ustr,                  //  2
+        u"TwoCapitalsAtStart"_ustr,                   //  3
+        u"CapitalAtStartSentence"_ustr,               //  4
+        u"ChangeUnderlineWeight"_ustr,                //  5
+        u"SetInetAttribute"_ustr,                     //  6
+        u"ChangeOrdinalNumber"_ustr,                  //  7
+        u"AddNonBreakingSpace"_ustr,                  //  8
+        u"ChangeDash"_ustr,                           //  9
+        u"RemoveDoubleSpaces"_ustr,                   // 10
+        u"ReplaceSingleQuote"_ustr,                   // 11
+        u"SingleQuoteAtStart"_ustr,                   // 12
+        u"SingleQuoteAtEnd"_ustr,                     // 13
+        u"ReplaceDoubleQuote"_ustr,                   // 14
+        u"DoubleQuoteAtStart"_ustr,                   // 15
+        u"DoubleQuoteAtEnd"_ustr,                     // 16
+        u"CorrectAccidentalCapsLock"_ustr,            // 17
+        u"TransliterateRTL"_ustr,                     // 18
+        u"ChangeAngleQuotes"_ustr,                    // 19
+        u"SetDOIAttribute"_ustr,                      // 20
     };
     const int nCount = 21;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        pNames[i] = aPropNames[i];
     return aNames;
 }
 
@@ -370,63 +370,63 @@ void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
 
 Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static constexpr OUString aPropNames[]
     {
-        "Text/FileLinks",                             // 0
-        "Text/InternetLinks",                         // 1
-        "Text/ShowPreview",                           // 2
-        "Text/ShowToolTip",                           // 3
-        "Text/SearchInAllCategories",                                   // 4
-        "Format/Option/UseReplacementTable",                            // 5
-        "Format/Option/TwoCapitalsAtStart",                             // 6
-        "Format/Option/CapitalAtStartSentence",                         // 7
-        "Format/Option/ChangeUnderlineWeight",                          // 8
-        "Format/Option/SetInetAttribute",                               // 9
-        "Format/Option/ChangeOrdinalNumber",                            //10
-        "Format/Option/AddNonBreakingSpace",                            //11
-        "Format/Option/ChangeDash",                                     //12
-        "Format/Option/DelEmptyParagraphs",                             //13
-        "Format/Option/ReplaceUserStyle",                               //14
-        "Format/Option/ChangeToBullets/Enable",                         //15
-        "Format/Option/ChangeToBullets/SpecialCharacter/Char",          //16
-        "Format/Option/ChangeToBullets/SpecialCharacter/Font",          //17
-        "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",    //18
-        "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",   //19
-        "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",     //20
-        "Format/Option/CombineParagraphs",                              //21
-        "Format/Option/CombineValue",                                   //22
-        "Format/Option/DelSpacesAtStartEnd",                            //23
-        "Format/Option/DelSpacesBetween",                               //24
-        "Format/ByInput/Enable",                                        //25
-        "Format/ByInput/ChangeDash",                                    //26
-        "Format/ByInput/ApplyNumbering/Enable",                         //27
-        "Format/ByInput/ChangeToBorders",                               //28
-        "Format/ByInput/ChangeToTable",                                 //29
-        "Format/ByInput/ReplaceStyle",                                  //30
-        "Format/ByInput/DelSpacesAtStartEnd",                           //31
-        "Format/ByInput/DelSpacesBetween",                              //32
-        "Completion/Enable",                                            //33
-        "Completion/MinWordLen",                                        //34
-        "Completion/MaxListLen",                                        //35
-        "Completion/CollectWords",                                      //36
-        "Completion/EndlessList",                                       //37
-        "Completion/AppendBlank",                                       //38
-        "Completion/ShowAsTip",                                         //39
-        "Completion/AcceptKey",                                         //40
-        "Completion/KeepList",                                          //41
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",          //42
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",          //43
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //44
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //46
-        "Format/Option/SetDOIAttribute",                                //47
-        "Format/ByInput/ApplyBulletsAfterSpace",                        //48
+        u"Text/FileLinks"_ustr,                             // 0
+        u"Text/InternetLinks"_ustr,                         // 1
+        u"Text/ShowPreview"_ustr,                           // 2
+        u"Text/ShowToolTip"_ustr,                           // 3
+        u"Text/SearchInAllCategories"_ustr,                                   // 4
+        u"Format/Option/UseReplacementTable"_ustr,                            // 5
+        u"Format/Option/TwoCapitalsAtStart"_ustr,                             // 6
+        u"Format/Option/CapitalAtStartSentence"_ustr,                         // 7
+        u"Format/Option/ChangeUnderlineWeight"_ustr,                          // 8
+        u"Format/Option/SetInetAttribute"_ustr,                               // 9
+        u"Format/Option/ChangeOrdinalNumber"_ustr,                            //10
+        u"Format/Option/AddNonBreakingSpace"_ustr,                            //11
+        u"Format/Option/ChangeDash"_ustr,                                     //12
+        u"Format/Option/DelEmptyParagraphs"_ustr,                             //13
+        u"Format/Option/ReplaceUserStyle"_ustr,                               //14
+        u"Format/Option/ChangeToBullets/Enable"_ustr,                         //15
+        u"Format/Option/ChangeToBullets/SpecialCharacter/Char"_ustr,          //16
+        u"Format/Option/ChangeToBullets/SpecialCharacter/Font"_ustr,          //17
+        u"Format/Option/ChangeToBullets/SpecialCharacter/FontFamily"_ustr,    //18
+        u"Format/Option/ChangeToBullets/SpecialCharacter/FontCharset"_ustr,   //19
+        u"Format/Option/ChangeToBullets/SpecialCharacter/FontPitch"_ustr,     //20
+        u"Format/Option/CombineParagraphs"_ustr,                              //21
+        u"Format/Option/CombineValue"_ustr,                                   //22
+        u"Format/Option/DelSpacesAtStartEnd"_ustr,                            //23
+        u"Format/Option/DelSpacesBetween"_ustr,                               //24
+        u"Format/ByInput/Enable"_ustr,                                        //25
+        u"Format/ByInput/ChangeDash"_ustr,                                    //26
+        u"Format/ByInput/ApplyNumbering/Enable"_ustr,                         //27
+        u"Format/ByInput/ChangeToBorders"_ustr,                               //28
+        u"Format/ByInput/ChangeToTable"_ustr,                                 //29
+        u"Format/ByInput/ReplaceStyle"_ustr,                                  //30
+        u"Format/ByInput/DelSpacesAtStartEnd"_ustr,                           //31
+        u"Format/ByInput/DelSpacesBetween"_ustr,                              //32
+        u"Completion/Enable"_ustr,                                            //33
+        u"Completion/MinWordLen"_ustr,                                        //34
+        u"Completion/MaxListLen"_ustr,                                        //35
+        u"Completion/CollectWords"_ustr,                                      //36
+        u"Completion/EndlessList"_ustr,                                       //37
+        u"Completion/AppendBlank"_ustr,                                       //38
+        u"Completion/ShowAsTip"_ustr,                                         //39
+        u"Completion/AcceptKey"_ustr,                                         //40
+        u"Completion/KeepList"_ustr,                                          //41
+        u"Format/ByInput/ApplyNumbering/SpecialCharacter/Char"_ustr,          //42
+        u"Format/ByInput/ApplyNumbering/SpecialCharacter/Font"_ustr,          //43
+        u"Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"_ustr,    //44
+        u"Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"_ustr,   //45
+        u"Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"_ustr,     //46
+        u"Format/Option/SetDOIAttribute"_ustr,                                //47
+        u"Format/ByInput/ApplyBulletsAfterSpace"_ustr,                        //48
     };
     const int nCount = 49;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        pNames[i] = aPropNames[i];
     return aNames;
 }
 

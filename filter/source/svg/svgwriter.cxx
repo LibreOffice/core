@@ -1218,7 +1218,7 @@ bool SVGTextWriter::nextTextPortion()
                                 bool bIsDate = true;
                                 if( xPropSetInfo->hasPropertyByName("IsDate") && ( ( xTextFieldPropSet->getPropertyValue( "IsDate" ) ) >>= bIsDate ) )
                                 {
-                                    msDateTimeType = OUString::createFromAscii( bIsDate ? "Date" : "Time" );
+                                    msDateTimeType = bIsDate ? u"Date"_ustr : u"Time"_ustr;
                                 }
                             }
                         }
