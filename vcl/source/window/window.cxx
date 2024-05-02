@@ -3352,6 +3352,7 @@ std::string_view windowTypeName(WindowType nWindowType)
         case WindowType::HEADERBAR:                 return "headerbar";
         case WindowType::VERTICALTABCONTROL:        return "verticaltabcontrol";
         case WindowType::PROGRESSBAR:               return "progressbar";
+        case WindowType::LINK_BUTTON:               return "linkbutton";
 
         // nothing to do here, but for completeness
         case WindowType::TOOLKIT_FRAMEWINDOW:       return "toolkit_framewindow";

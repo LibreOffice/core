@@ -94,8 +94,8 @@ const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
     return _rStyle.GetLabelTextColor();
 }
 
-FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
-    : Control(WindowType::FIXEDTEXT)
+FixedText::FixedText(vcl::Window* pParent, WinBits nStyle, WindowType eType)
+    : Control(eType)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
     , m_pMnemonicWindow(nullptr)

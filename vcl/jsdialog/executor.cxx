@@ -164,6 +164,18 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                 }
             }
         }
+        else if (sControlType == "linkbutton")
+        {
+            auto pButton = dynamic_cast<weld::LinkButton*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "click")
+                {
+                    LOKTrigger::activate_link(*pButton);
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "menubutton")
         {
             auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);

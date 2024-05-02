@@ -126,6 +126,11 @@ public:
     {
         rNotebook.m_aLeavePageHdl.Call(rPage);
     }
+
+    static bool activate_link(weld::LinkButton& rLinkButton)
+    {
+        return rLinkButton.signal_activate_link();
+    }
 };
 
 namespace jsdialog
