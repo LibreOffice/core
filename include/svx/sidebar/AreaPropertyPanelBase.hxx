@@ -102,7 +102,6 @@ public:
 
 private:
     void Initialize();
-    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
 
 protected:
     const css::uno::Reference<css::frame::XFrame>&      mxFrame;
@@ -177,6 +176,8 @@ protected:
 
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
+
+    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
 };
 
 } // end of namespace svx::sidebar
