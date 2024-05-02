@@ -332,19 +332,32 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
                                              bool bIsVertical)
     : mpRenderTarget(pRenderTarget)
 {
+    const float hscale = [&font = rLayout.GetFont()]
+    {
+        const auto& rPattern = font.GetFontSelectPattern();
+        if (!rPattern.mnHeight || !rPattern.mnWidth)
+            return 1.0;
+        return rPattern.mnWidth * font.GetAverageWidthFactor() / rPattern.mnHeight;
+    }();
+
     Degree10 angle = rLayout.GetOrientation();
     if (bIsVertical)
         angle += 900_deg10;
 
-    if (angle)
+    if (hscale != 1.0f || angle)
     {
         D2D1::Matrix3x2F aTransform;
         pRenderTarget->GetTransform(&aTransform);
         moTransform = aTransform;
 
+        if (hscale != 1.0f) // basegfx::fTools::equal is useless with float
+            aTransform = aTransform * D2D1::Matrix3x2F::Scale(hscale, 1.0f, { 0, 0 });
+
         // DWrite angle is in clockwise degrees, our orientation is in counter-clockwise 10th
         // degrees.
-        aTransform = aTransform * D2D1::Matrix3x2F::Rotation(-toDegrees(angle), rBaseline);
+        if (angle)
+            aTransform = aTransform * D2D1::Matrix3x2F::Rotation(-toDegrees(angle), rBaseline);
+
         mpRenderTarget->SetTransform(aTransform);
     }
 }
