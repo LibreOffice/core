@@ -1202,6 +1202,8 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         case ocOffset:
             // ocDebugVar shows internal value that may change as the internal state changes.
         case ocDebugVar:
+            // ocRandArray is a volatile function.
+        case ocRandArray:
             bRet = true;
             break;
         default:
@@ -1265,6 +1267,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocFilter :
         case ocSort :
         case ocSortBy :
+        case ocRandArray :
             return true;
         default:
         {

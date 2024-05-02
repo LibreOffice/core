@@ -1803,7 +1803,86 @@ void ScInterpreter::ScRandom()
         std::uniform_real_distribution<double> dist(0.0, 1.0);
         return dist(mrContext.aRNG);
     };
-    ScRandomImpl( RandomFunc, 0.0, 0.0);
+    ScRandomImpl( RandomFunc, 0.0, 0.0 );
+}
+
+void ScInterpreter::ScRandArray()
+{
+    sal_uInt8 nParamCount = GetByte();
+    // optional 5th para:
+    // TRUE for a whole number
+    // FALSE for a decimal number - default.
+    bool bWholeNumber = false;
+    if (nParamCount == 5)
+        bWholeNumber = GetBoolWithDefault(false);
+
+    // optional 4th para: The maximum value of the random numbers
+    double fMax = 1.0;
+    if (nParamCount >= 4)
+        fMax = GetDoubleWithDefault(1.0);
+
+    // optional 3rd para: The minimum value of the random numbers
+    double fMin = 0.0;
+    if (nParamCount >= 3)
+        fMin = GetDoubleWithDefault(0.0);
+
+    // optional 2nd para: The number of columns of the return array
+    SCCOL nCols = 1;
+    if (nParamCount >= 2)
+        nCols = static_cast<SCCOL>(GetInt32WithDefault(1));
+
+    // optional 1st para: The number of rows of the return array
+    SCROW nRows = 1;
+    if (nParamCount >= 1)
+        nRows = static_cast<SCROW>(GetInt32WithDefault(1));
+
+    if (bWholeNumber)
+    {
+        fMax = rtl::math::round(fMax, 0, rtl_math_RoundingMode_Up);
+        fMin = rtl::math::round(fMin, 0, rtl_math_RoundingMode_Up);
+    }
+
+    if (nGlobalError != FormulaError::NONE || fMin > fMax || nCols <= 0 || nRows <= 0)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    if (bWholeNumber)
+        fMax = std::nextafter(fMax + 1, -DBL_MAX);
+    else
+        fMax = std::nextafter(fMax, DBL_MAX);
+
+    auto RandomFunc = [this](double fFirst, double fLast, bool bWholeNum)
+        {
+            std::uniform_real_distribution<double> dist(fFirst, fLast);
+            if (bWholeNum)
+                return floor(dist(mrContext.aRNG));
+            else
+                return dist(mrContext.aRNG);
+        };
+
+    if (nCols == 1 && nRows == 1)
+    {
+        PushDouble(RandomFunc(fMin, fMax, bWholeNumber));
+        return;
+    }
+
+    ScMatrixRef pResMat = GetNewMat(static_cast<SCSIZE>(nCols), static_cast<SCSIZE>(nRows), /*bEmpty*/true);
+    if (!pResMat)
+        PushError(FormulaError::MatrixSize);
+    else
+    {
+        for (SCCOL i = 0; i < nCols; ++i)
+        {
+            for (SCROW j = 0; j < nRows; ++j)
+            {
+                pResMat->PutDouble(RandomFunc(fMin, fMax, bWholeNumber),
+                    static_cast<SCSIZE>(i), static_cast<SCSIZE>(j));
+            }
+        }
+        PushMatrix(pResMat);
+    }
 }
 
 void ScInterpreter::ScRandbetween()

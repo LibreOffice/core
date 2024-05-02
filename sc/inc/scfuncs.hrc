@@ -4235,4 +4235,20 @@ const TranslateId SC_OPCODE_MAT_SEQUENCE_ARY[] =
     NC_("SC_OPCODE_MAT_SEQUENCE", "The amount to increment each subsequent value in the array.")
 };
 
+// -=*# Resource for function RANDARRAY #*=-
+const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
+{
+    NC_("SC_OPCODE_RANDARRAY", "RANDARRAY function generates an array of random numbers between two values."),
+    NC_("SC_OPCODE_RANDARRAY", "Rows"),
+    NC_("SC_OPCODE_RANDARRAY", "The number of rows to return."),
+    NC_("SC_OPCODE_RANDARRAY", "Columns"),
+    NC_("SC_OPCODE_RANDARRAY", "The number of columns to return."),
+    NC_("SC_OPCODE_RANDARRAY", "Min"),
+    NC_("SC_OPCODE_RANDARRAY", "The minimum number you would like returned."),
+    NC_("SC_OPCODE_RANDARRAY", "Max"),
+    NC_("SC_OPCODE_RANDARRAY", "The maximum number you would like returned."),
+    NC_("SC_OPCODE_RANDARRAY", "Whole number"),
+    NC_("SC_OPCODE_RANDARRAY", "Return a whole number or a decimal value.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
