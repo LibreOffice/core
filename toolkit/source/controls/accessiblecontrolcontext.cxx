@@ -143,14 +143,14 @@ namespace toolkit
     OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  )
     {
         OContextEntryGuard aGuard( this );
-        return getModelStringProperty( "HelpText" );
+        return getModelStringProperty( u"HelpText"_ustr );
     }
 
 
     OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  )
     {
         OContextEntryGuard aGuard( this );
-        return getModelStringProperty( "Name" );
+        return getModelStringProperty( u"Name"_ustr );
     }
 
 
@@ -191,7 +191,7 @@ namespace toolkit
     }
 
 
-    OUString OAccessibleControlContext::getModelStringProperty( const char* _pPropertyName )
+    OUString OAccessibleControlContext::getModelStringProperty( const OUString& _pPropertyName )
     {
         OUString sReturn;
         try
@@ -199,7 +199,7 @@ namespace toolkit
             if ( !m_xModelPropsInfo.is() && m_xControlModel.is() )
                 m_xModelPropsInfo = m_xControlModel->getPropertySetInfo();
 
-            OUString sPropertyName( OUString::createFromAscii( _pPropertyName ) );
+            OUString sPropertyName( _pPropertyName );
             if ( m_xModelPropsInfo.is() && m_xModelPropsInfo->hasPropertyByName( sPropertyName ) )
                 m_xControlModel->getPropertyValue( sPropertyName ) >>= sReturn;
         }

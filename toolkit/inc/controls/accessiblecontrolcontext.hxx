@@ -81,7 +81,7 @@ namespace toolkit
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // retrieves the value of a string property from the model, if the property is present
-        OUString getModelStringProperty( const char* _pPropertyName );
+        OUString getModelStringProperty( const OUString& _pPropertyName );
 
         // starts listening at the control model (currently for disposal only)
         void startModelListening( );
