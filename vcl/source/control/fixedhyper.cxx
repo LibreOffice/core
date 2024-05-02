@@ -34,7 +34,7 @@
 using namespace css;
 
 FixedHyperlink::FixedHyperlink(vcl::Window* pParent, WinBits nWinStyle)
-    : FixedText(pParent, nWinStyle)
+    : FixedText(pParent, nWinStyle, WindowType::LINK_BUTTON)
     , m_nTextLen(0)
     , m_aOldPointer(PointerStyle::Arrow)
 {

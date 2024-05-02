@@ -53,7 +53,7 @@ protected:
     virtual vcl::Window* getAccessibleRelationLabelFor() const override;
 
 public:
-    explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit FixedText(vcl::Window* pParent, WinBits nStyle = 0, WindowType eType = WindowType::FIXEDTEXT);
     virtual         ~FixedText() override;
     virtual void    dispose() override;
 

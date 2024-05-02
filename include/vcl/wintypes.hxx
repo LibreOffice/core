@@ -99,7 +99,8 @@ enum class WindowType : sal_uInt16
     HEADERBAR            ,
     VERTICALTABCONTROL   ,
     PROGRESSBAR          ,
-    LAST                 = PROGRESSBAR,
+    LINK_BUTTON,
+    LAST = LINK_BUTTON,
     // only used in vclxtoolkit.cxx
     TOOLKIT_FRAMEWINDOW        = 0x1000,
     TOOLKIT_SYSTEMCHILDWINDOW  = 0x1001,

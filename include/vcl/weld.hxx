@@ -1665,6 +1665,8 @@ class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
 
 class VCL_DLLPUBLIC LinkButton : virtual public Widget
 {
+    friend class ::LOKTrigger;
+
     Link<LinkButton&, bool> m_aActivateLinkHdl;
 
 protected:
