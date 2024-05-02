@@ -229,8 +229,8 @@ public:
     void                ActivatePage( const OUString& rPageURL );
     void                ApplyItemSets();
 
-    // default value initializes all dialogs
-    void initializeFirstNDialog(sal_Int16 nNumberOfNode = -1);
+    // initialize all dialogs in "Tools > Options"
+    void initializeAllDialogs();
 
     // helper functions to call the Languages and Locales TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);
