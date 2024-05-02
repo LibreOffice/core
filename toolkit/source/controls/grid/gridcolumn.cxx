@@ -72,12 +72,12 @@ namespace toolkit
     }
 
 
-    void GridColumn::broadcast_changed( char const * const i_asciiAttributeName, const Any& i_oldValue, const Any& i_newValue,
+    void GridColumn::broadcast_changed( const OUString& i_asciiAttributeName, const Any& i_oldValue, const Any& i_newValue,
         std::unique_lock<std::mutex>& i_Guard )
     {
         Reference< XInterface > const xSource( getXWeak() );
         GridColumnEvent const aEvent(
-            xSource, OUString::createFromAscii( i_asciiAttributeName ),
+            xSource, i_asciiAttributeName,
             i_oldValue, i_newValue, m_nIndex
         );
 
@@ -108,7 +108,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value)
     {
-        impl_set( m_nColumnWidth, value, "ColumnWidth" );
+        impl_set( m_nColumnWidth, value, u"ColumnWidth"_ustr );
     }
 
 
@@ -121,7 +121,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value)
     {
-        impl_set( m_nMaxWidth, value, "MaxWidth" );
+        impl_set( m_nMaxWidth, value, u"MaxWidth"_ustr );
     }
 
 
@@ -134,7 +134,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value)
     {
-        impl_set( m_nMinWidth, value, "MinWidth" );
+        impl_set( m_nMinWidth, value, u"MinWidth"_ustr );
     }
 
 
@@ -147,7 +147,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setTitle(const OUString & value)
     {
-        impl_set( m_sTitle, value, "Title" );
+        impl_set( m_sTitle, value, u"Title"_ustr );
     }
 
 
@@ -160,7 +160,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setHelpText( const OUString & value )
     {
-        impl_set( m_sHelpText, value, "HelpText" );
+        impl_set( m_sHelpText, value, u"HelpText"_ustr );
     }
 
 
@@ -173,7 +173,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setResizeable(sal_Bool value)
     {
-        impl_set( m_bResizeable, bool(value), "Resizeable" );
+        impl_set( m_bResizeable, bool(value), u"Resizeable"_ustr );
     }
 
 
@@ -188,7 +188,7 @@ namespace toolkit
     {
         if ( i_value < 0 )
             throw IllegalArgumentException( OUString(), *this, 1 );
-        impl_set( m_nFlexibility, i_value, "Flexibility" );
+        impl_set( m_nFlexibility, i_value, u"Flexibility"_ustr );
     }
 
 
@@ -201,7 +201,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align)
     {
-        impl_set( m_eHorizontalAlign, align, "HorizontalAlign" );
+        impl_set( m_eHorizontalAlign, align, u"HorizontalAlign"_ustr );
     }
 
 
@@ -250,7 +250,7 @@ namespace toolkit
 
     void SAL_CALL GridColumn::setDataColumnIndex( ::sal_Int32 i_dataColumnIndex )
     {
-        impl_set( m_nDataColumnIndex, i_dataColumnIndex, "DataColumnIndex" );
+        impl_set( m_nDataColumnIndex, i_dataColumnIndex, u"DataColumnIndex"_ustr );
     }
 
 

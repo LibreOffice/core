@@ -81,14 +81,14 @@ public:
 
 private:
     void broadcast_changed(
-            char const * const i_asciiAttributeName,
+            const OUString & i_asciiAttributeName,
             const css::uno::Any& i_oldValue,
             const css::uno::Any& i_newValue,
             std::unique_lock<std::mutex>& i_Guard
         );
 
     template< class TYPE >
-    void impl_set( TYPE & io_attribute, TYPE const & i_newValue, char const * i_attributeName )
+    void impl_set( TYPE & io_attribute, TYPE const & i_newValue, const OUString& i_attributeName )
     {
         std::unique_lock aGuard(m_aMutex);
         if (m_bDisposed)
