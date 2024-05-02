@@ -28,11 +28,11 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
 ))
 
 ifeq ($(OS),EMSCRIPTEN)
-$(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link
+$(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(gb_CustomTarget_workdir)/static/emscripten_fs_image/soffice.data.js.link
 
 # don't sort; later can override previous settings!
 $(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/environment.js))
-$(eval $(call gb_Executable_add_prejs,soffice_bin,$(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link))
+$(eval $(call gb_Executable_add_prejs,soffice_bin,$(gb_CustomTarget_workdir)/static/emscripten_fs_image/soffice.data.js.link))
 ifeq ($(ENABLE_QT5),TRUE)
 $(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/soffice_args.js))
 endif
@@ -74,11 +74,11 @@ endif
 ifneq ($(ENABLE_DBGUTIL),)
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
-    $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js \
+    $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
     $(SRCDIR)/unotest/source/embindtest/embindtest.js
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    --post-js $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js \
+    --post-js $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
     --post-js $(SRCDIR)/unotest/source/embindtest/embindtest.js \
 ))
 

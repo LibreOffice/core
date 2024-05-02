@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,odk/settings))
 
 $(eval $(call gb_CustomTarget_register_target,odk/settings,dk.mk))
 
-$(call gb_CustomTarget_get_workdir,odk/settings)/dk.mk : $(SRCDIR)/odk/settings/dk.mk
+$(gb_CustomTarget_workdir)/odk/settings/dk.mk : $(SRCDIR)/odk/settings/dk.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,SED,1)
 	tr -d "\015" < $< | sed \
 		-e 's/@@PLATFORM@@/$(firstword $(subst _, ,$(PLATFORMID)))/' \

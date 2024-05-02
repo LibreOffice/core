@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-info_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/infoplist)
+info_WORKDIR := $(gb_CustomTarget_workdir)/sysui/infoplist
 info_SRCDIR := $(SRCDIR)/sysui/desktop/macosx
 info_BUILDDIR := $(BUILDDIR)/sysui/desktop/macosx
 

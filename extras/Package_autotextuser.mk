@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_autotextuser,$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)))
+$(eval $(call gb_Package_Package,extras_autotextuser,$(gb_CustomTarget_workdir)/extras/source/autotext/user))
 
 $(eval $(call gb_Package_add_files,extras_autotextuser,$(LIBO_SHARE_PRESETS_FOLDER)/autotext,\
 	mytexts.bau \

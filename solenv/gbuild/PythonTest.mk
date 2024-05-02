@@ -104,7 +104,7 @@ $(call gb_PythonTest_get_target,$(1)) : MODULES += $(3)
 endef
 
 define gb_PythonTest_use_customtarget
-$(call gb_PythonTest_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(2))
+$(call gb_PythonTest_get_target,$(1)) : $(gb_CustomTarget_workdir)/$(2)
 
 endef
 

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tplwizard,$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)))
+$(eval $(call gb_Package_Package,extras_tplwizard,$(gb_CustomTarget_workdir)/extras/source/templates/wizard))
 
 $(eval $(call gb_Package_add_files_with_dir,extras_tplwizard,$(LIBO_SHARE_FOLDER)/template/common/wizard,\
     agenda/10grey.ott \

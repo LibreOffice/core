@@ -19,16 +19,16 @@ $(eval $(call gb_CustomTarget_register_targets,odk/docs/java/ref,\
 	javadoc_log.txt \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/package-list : $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt
+$(gb_CustomTarget_workdir)/odk/docs/java/ref/package-list : $(gb_CustomTarget_workdir)/odk/docs/java/ref/javadoc_log.txt
 	touch $@
 
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.css \
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.gif \
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
-		$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt
+$(gb_CustomTarget_workdir)/odk/docs/java/ref/%.css \
+$(gb_CustomTarget_workdir)/odk/docs/java/ref/%.gif \
+$(gb_CustomTarget_workdir)/odk/docs/java/ref/%.html : \
+		$(gb_CustomTarget_workdir)/odk/docs/java/ref/javadoc_log.txt
 	touch $@
 
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
+$(gb_CustomTarget_workdir)/odk/docs/java/ref/javadoc_log.txt : \
 		$(call gb_Jar_get_target,libreoffice)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),JDC)

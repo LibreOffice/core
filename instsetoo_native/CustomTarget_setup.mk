@@ -22,18 +22,18 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,crashreport) \
 ))
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,fundamental) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,redirect) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,setup) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,crashreport) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bootstrap) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,fundamental) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,louno) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,redirect) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,setup) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,soffice) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,uno) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,version) \
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,crashreport) \
 	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bootstrap) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -46,7 +46,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,fundamental) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,fundamental) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -83,7 +83,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,louno) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -103,7 +103,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,redirect) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,redirect) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -112,8 +112,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-.PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,setup)
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,setup) :
+.PHONY: $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,setup)
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,setup) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -133,7 +133,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 #                                           2 : everything in the user config directory
 #  SecureUserConfigExtensions:  boolean - defines to also safe the extension configuration (which extensions
 #                                         are installed, which are activated) - default is true
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,soffice) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -160,7 +160,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,uno) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
@@ -192,8 +192,8 @@ endef
 
 
 
-.PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version)
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version) :
+.PHONY: $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,version)
+$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,version) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(file > $@,$(call instsetoo_native_genversionini))

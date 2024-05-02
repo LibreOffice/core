@@ -13,7 +13,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,extras/glade))
 # Rules
 #
 
-$(call gb_CustomTarget_get_workdir,extras/source/glade)/libreoffice-catalog.xml : \
+$(gb_CustomTarget_workdir)/extras/source/glade/libreoffice-catalog.xml : \
         $(SRCDIR)/extras/source/glade/libreoffice-catalog.xml.in \
         $(SRCDIR)/extras/source/glade/makewidgetgroup.xslt \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)

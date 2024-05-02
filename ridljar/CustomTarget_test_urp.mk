@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,ridljar/test/com/sun/star/lib/uno/protocols/urp))
 
-ridljar_TESTURP := $(call gb_CustomTarget_get_workdir,ridljar/test/com/sun/star/lib/uno/protocols/urp)
+ridljar_TESTURP := $(gb_CustomTarget_workdir)/ridljar/test/com/sun/star/lib/uno/protocols/urp
 
 $(call gb_CustomTarget_get_target,ridljar/test/com/sun/star/lib/uno/protocols/urp) : $(ridljar_TESTURP)/done
 

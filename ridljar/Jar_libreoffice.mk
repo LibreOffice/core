@@ -34,8 +34,8 @@ $(eval $(call gb_Jar_add_manifest_classpath,libreoffice, \
 
 # ugly: the module-info.class is manually added here since it's not in "com" dir
 $(eval $(call gb_Jar_add_packagedirs,libreoffice,\
-    $(call gb_CustomTarget_get_workdir,ridljar/javamaker)/com \
-    $(call gb_CustomTarget_get_workdir,unoil/javamaker)/com \
+    $(gb_CustomTarget_workdir)/ridljar/javamaker/com \
+    $(gb_CustomTarget_workdir)/unoil/javamaker/com \
 	$(if $(MODULAR_JAVA),$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,libreoffice))/module-info.class) \
 ))
 

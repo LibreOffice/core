@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,readlicense_oo_readmes,$(call gb_CustomTarget_get_workdir,readlicense_oo/readme)))
+$(eval $(call gb_Package_Package,readlicense_oo_readmes,$(gb_CustomTarget_workdir)/readlicense_oo/readme))
 
 $(eval $(call gb_Package_add_files,readlicense_oo_readmes,$(LIBO_SHARE_READMES_FOLDER), \
     $(foreach lang,$(readlicense_oo_LANGS),$(call gb_README,$(lang))) \

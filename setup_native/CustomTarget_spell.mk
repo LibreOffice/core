@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,setup_native/spell))
 
 $(eval $(call gb_CustomTarget_register_target,setup_native/spell,spellchecker_selection.hxx))
 
-$(call gb_CustomTarget_get_workdir,setup_native/spell)/spellchecker_selection.hxx: $(SRCDIR)/setup_native/source/packinfo/spellchecker_selection.txt $(SRCDIR)/setup_native/source/packinfo/spellchecker_selection.pl
+$(gb_CustomTarget_workdir)/setup_native/spell/spellchecker_selection.hxx: $(SRCDIR)/setup_native/source/packinfo/spellchecker_selection.txt $(SRCDIR)/setup_native/source/packinfo/spellchecker_selection.pl
 	$(PERL) -w $(SRCDIR)/setup_native/source/packinfo/spellchecker_selection.pl  <$< >$@
 
 # vim: set noet sw=4 ts=4:

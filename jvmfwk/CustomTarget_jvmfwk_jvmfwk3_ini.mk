@@ -23,7 +23,7 @@ $(eval $(call gb_CustomTarget_register_targets,jvmfwk/jvmfwk3_ini, \
     $(call gb_Helper_get_rcfile,jvmfwk3) \
 ))
 
-$(call gb_CustomTarget_get_workdir,jvmfwk/jvmfwk3_ini)/$(call gb_Helper_get_rcfile,jvmfwk3): \
+$(gb_CustomTarget_workdir)/jvmfwk/jvmfwk3_ini/$(call gb_Helper_get_rcfile,jvmfwk3): \
             $(SRCDIR)/jvmfwk/CustomTarget_jvmfwk_jvmfwk3_ini.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)

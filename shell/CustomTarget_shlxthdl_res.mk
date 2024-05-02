@@ -14,8 +14,8 @@ $(eval $(call gb_CustomTarget_register_targets,shell/source/win32/shlxthandler/r
 	shlxthdl_impl.rc \
 ))
 
-$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc : \
-		$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf \
+$(gb_CustomTarget_workdir)/shell/source/win32/shlxthandler/res/shlxthdl_impl.rc : \
+		$(gb_CustomTarget_workdir)/shell/source/win32/shlxthandler/res/shlxthdl.ulf \
 		$(SRCDIR)/shell/source/win32/shlxthandler/res/rcfooter.txt \
 		$(SRCDIR)/shell/source/win32/shlxthandler/res/rcheader.txt \
 		$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),LCX)
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
-	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf,\
+	$(gb_CustomTarget_workdir)/shell/source/win32/shlxthandler/res/shlxthdl.ulf,\
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/shlxthdl.ulf,\
 	$(foreach lang,$(gb_TRANS_LANGS),\
 		$(gb_POLOCATION)/$(lang)/shell/source/win32/shlxthandler/res.po)))

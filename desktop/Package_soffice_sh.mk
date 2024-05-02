@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,desktop_soffice_sh,$(call gb_CustomTarget_get_workdir,desktop/soffice)))
+$(eval $(call gb_Package_Package,desktop_soffice_sh,$(gb_CustomTarget_workdir)/desktop/soffice))
 
 $(eval $(call gb_Package_add_file,desktop_soffice_sh,$(LIBO_BIN_FOLDER)/soffice,soffice.sh))
 

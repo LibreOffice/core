@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest))
 
-testtools_BRIDGEDIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest)
+testtools_BRIDGEDIR := $(gb_CustomTarget_workdir)/testtools/bridgetest
 
 ifeq ($(OS),WNT)
 testtools_BATCHSUFFIX := .bat

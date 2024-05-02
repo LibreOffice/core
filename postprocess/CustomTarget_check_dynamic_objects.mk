@@ -13,7 +13,7 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/check_dynamic_objects
 	check.done \
 ))
 
-$(call gb_CustomTarget_get_workdir,postprocess/check_dynamic_objects)/check.done: \
+$(gb_CustomTarget_workdir)/postprocess/check_dynamic_objects/check.done: \
 		$(call gb_Postprocess_get_target,AllLibraries) \
 		$(call gb_Postprocess_get_target,AllExecutables) \
 		$(call gb_Postprocess_get_target,AllPackages)

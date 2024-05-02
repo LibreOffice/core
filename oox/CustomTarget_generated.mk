@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,oox/generated))
 
-oox_MISC := $(call gb_CustomTarget_get_workdir,oox/generated)/misc
+oox_MISC := $(gb_CustomTarget_workdir)/oox/generated/misc
 
 $(oox_MISC)/vml-shape-types : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/license)
+readlicense_oo_DIR := $(gb_CustomTarget_workdir)/readlicense_oo/license
 $(eval $(call gb_Package_Package,odk_share_readme,$(readlicense_oo_DIR)))
 
 $(eval $(call gb_Package_set_outdir,odk_share_readme,$(INSTDIR)))

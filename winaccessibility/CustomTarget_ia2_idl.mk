@@ -10,7 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,winaccessibility/ia2/idl))
 
 iaccessible2_DIR := $(call gb_UnpackedTarball_get_dir,IAccessible2)
-wina11y_COMIDLDIR := $(call gb_CustomTarget_get_workdir,winaccessibility/ia2/idl)
+wina11y_COMIDLDIR := $(gb_CustomTarget_workdir)/winaccessibility/ia2/idl
 wina11y_SOURCE := $(SRCDIR)/winaccessibility/source/UAccCOMIDL
 
 # We cannot depend on *.tlb because they only produced by IDL compiler

@@ -77,8 +77,8 @@ $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2),$(gb_Executable_BINDIR)/$(1).lib)
 ifeq ($(OS),EMSCRIPTEN)
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : \
-    $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data \
-    $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata
+    $(gb_CustomTarget_workdir)/static/emscripten_fs_image/soffice.data \
+    $(gb_CustomTarget_workdir)/static/emscripten_fs_image/soffice.data.js.metadata
 endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))

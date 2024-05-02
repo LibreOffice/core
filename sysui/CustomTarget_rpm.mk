@@ -9,7 +9,7 @@
 
 include $(SRCDIR)/sysui/productlist.mk
 
-rpm_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/rpm)
+rpm_WORKDIR := $(gb_CustomTarget_workdir)/sysui/rpm
 rpm_SRCDIR := $(SRCDIR)/sysui/desktop
 
 RPMDISTROS := freedesktop
@@ -20,12 +20,12 @@ $(call gb_CustomTarget_get_target,sysui/rpm): $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSI
 $(rpm_WORKDIR)/$(1)-desktop-integration.tar.gz: $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm
 $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm : \
 		$(rpm_SRCDIR)/$(2)/$(2)-menus.spec \
-		$(call gb_CustomTarget_get_workdir,sysui/share)/$(1)/create_tree.sh \
+		$(gb_CustomTarget_workdir)/sysui/share/$(1)/create_tree.sh \
 		| $(rpm_WORKDIR)/$(1)/.dir
 	$(call gb_Helper_print_on_error,\
 		$(RPM) -bb $$< \
 			--buildroot $(rpm_WORKDIR)/$(1)/$(2) \
-			--define "_builddir $(call gb_CustomTarget_get_workdir,sysui/share)/$(1)" \
+			--define "_builddir $(gb_CustomTarget_workdir)/sysui/share/$(1)" \
 			--define "_rpmdir $(rpm_WORKDIR)/$(1)" \
 			--define "_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
 			--define "productname $(PRODUCTNAME.$(1))" \

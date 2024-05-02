@@ -15,7 +15,7 @@ $(eval $(call gb_Jar_use_customtargets,ridl_java, \
 
 $(eval $(call gb_JunitTest_use_jar_classset,ridl_java,libreoffice))
 
-$(eval $(call gb_JunitTest_add_classpath,ridl_java,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
+$(eval $(call gb_JunitTest_add_classpath,ridl_java,$(gb_CustomTarget_workdir)/ridljar/javamaker))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridl_java,\
     ridljar/test/com/sun/star/lib/uno/environments/java/java_environment_Test \

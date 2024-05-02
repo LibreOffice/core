@@ -10,12 +10,12 @@
 $(eval $(call gb_CustomTarget_CustomTarget,wizards/share))
 
 $(call gb_CustomTarget_get_target,wizards/share): \
-    $(call gb_CustomTarget_get_workdir,wizards/share)/dialog.xlc \
-    $(call gb_CustomTarget_get_workdir,wizards/share)/script.xlc
+    $(gb_CustomTarget_workdir)/wizards/share/dialog.xlc \
+    $(gb_CustomTarget_workdir)/wizards/share/script.xlc
 
-$(call gb_CustomTarget_get_workdir,wizards/share)/%.xlc: \
+$(gb_CustomTarget_workdir)/wizards/share/%.xlc: \
     $(SRCDIR)/wizards/source/configshare/%.xlc \
-    | $(call gb_CustomTarget_get_workdir,wizards/share)/.dir
+    | $(gb_CustomTarget_workdir)/wizards/share/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
 	sed -e 's/@LIBO_SHARE_FOLDER@/$(LIBO_SHARE_FOLDER)/' $< > $@

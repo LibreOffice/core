@@ -9,7 +9,7 @@
 
 include $(SRCDIR)/sysui/productlist.mk
 
-deb_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/deb)
+deb_WORKDIR := $(gb_CustomTarget_workdir)/sysui/deb
 deb_SRCDIR := $(SRCDIR)/sysui/desktop/debian
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/deb))
@@ -39,9 +39,9 @@ $(deb_WORKDIR)/%/DEBIAN/prerm: $(deb_SRCDIR)/prerm
 	cat $< | tr -d "\015" | \
 		sed 's/%PREFIX/$(UNIXFILENAME.$*)/g' >> $@
 
-$(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_get_workdir,sysui/share)/%/create_tree.sh
+$(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(gb_CustomTarget_workdir)/sysui/share/%/create_tree.sh
 	mkdir -p $(deb_WORKDIR)/$*/usr/lib/menu
-	cd $(call gb_CustomTarget_get_workdir,sysui/share)/$* \
+	cd $(gb_CustomTarget_workdir)/sysui/share/$* \
 		&& DESTDIR=$(deb_WORKDIR)/$* \
 		ICON_PREFIX=$(UNIXFILENAME.$*) \
 		KDEMAINDIR=/usr \

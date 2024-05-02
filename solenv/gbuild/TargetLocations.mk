@@ -58,6 +58,7 @@ gb_CustomPackage_get_target = $(WORKDIR)/CustomPackage/$(1).filelist
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)
+gb_CustomTarget_workdir := $(WORKDIR)/CustomTarget
 gb_DescriptionTranslateTarget_get_target = $(WORKDIR)/DescriptionTranslateTarget/$(1).xml
 gb_Dictionary_get_target = $(WORKDIR)/Dictionary/$(1).done
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o

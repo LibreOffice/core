@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,odk_html,$(call gb_CustomTarget_get_workdir,odk/html)))
+$(eval $(call gb_Package_Package,odk_html,$(gb_CustomTarget_workdir)/odk/html))
 
 $(eval $(call gb_Package_set_outdir,odk_html,$(INSTDIR)))
 

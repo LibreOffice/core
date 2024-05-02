@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/components))
 
 ifeq (,$(gb_PARTIAL_BUILD))
 
-postprocess_WORKDIR := $(call gb_CustomTarget_get_workdir,postprocess)
+postprocess_WORKDIR := $(gb_CustomTarget_workdir)/postprocess
 
 $(call gb_CustomTarget_get_target,postprocess/components): \
     $(postprocess_WORKDIR)/services_constructors.list \

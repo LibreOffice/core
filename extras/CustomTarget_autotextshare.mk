@@ -3637,31 +3637,31 @@ extras_AUTOTEXTSHARE_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras
 .SECONDEXPANSION:
 # secondexpansion since the patterns not just cover a filename portion, but also include a
 # directory portion withdifferent number of elements
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : \
-        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*/mimetype).dir
+$(gb_CustomTarget_workdir)/extras/source/autotext/%/mimetype : \
+        | $$(dir $(gb_CustomTarget_workdir)/extras/source/autotext/$$*/mimetype).dir
 	$(call gb_Output_announce,autotext/$*/mimetype,$(true),TCH,1)
 	$(call gb_Trace_StartRange,autotext/$*/mimetype,TCH)
 	touch $@
 	$(call gb_Trace_EndRange,autotext/$*/mimetype,TCH)
 
 # rule for *.rdf, *.svm, *.png, …
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/% : $(SRCDIR)/extras/source/autotext/lang/% \
-        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*).dir
+$(gb_CustomTarget_workdir)/extras/source/autotext/% : $(SRCDIR)/extras/source/autotext/lang/% \
+        | $$(dir $(gb_CustomTarget_workdir)/extras/source/autotext/$$*).dir
 	$(call gb_Output_announce,autotext/$*,$(true),CPY,1)
 	$(call gb_Trace_StartRange,autotext/$*,CPY)
 	cp $< $@
 	$(call gb_Trace_EndRange,autotext/$*,CPY)
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
+$(gb_CustomTarget_workdir)/extras/source/autotext/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
-          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*.xml).dir
+          $$(dir $(gb_CustomTarget_workdir)/extras/source/autotext/$$*.xml).dir
 	$(call gb_Output_announce,autotext/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,autotext/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,autotext/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.bau : \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*/,\
+$(gb_CustomTarget_workdir)/extras/source/autotext/%.bau : \
+        $$(addprefix $(gb_CustomTarget_workdir)/extras/source/autotext/$$*/,\
             mimetype $$(call extras_AUTOTEXTSHARE_XMLFILES_RELATIVE,$$*))
 	$(call gb_Output_announce,autotext/$*.bau,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,autotext/$*.bau,ZIP)

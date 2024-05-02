@@ -18,7 +18,7 @@ else
 	brand_URIPARAM :=
 endif
 
-share_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/share)
+share_WORKDIR := $(gb_CustomTarget_workdir)/sysui/share
 share_SRCDIR := $(SRCDIR)/sysui/desktop
 
 share_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.py

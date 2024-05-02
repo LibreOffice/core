@@ -10,9 +10,9 @@ $(eval $(call gb_CustomTarget_CustomTarget,vcl/workben))
 
 fuzzer_PYTHONCOMMAND := $(call gb_ExternalExecutable_get_command,python)
 
-fuzzer_Native_cxx=$(call gb_CustomTarget_get_workdir,vcl/workben)/native-core.cxx
+fuzzer_Native_cxx=$(gb_CustomTarget_workdir)/vcl/workben/native-core.cxx
 
-$(fuzzer_Native_cxx): $(SRCDIR)/solenv/bin/native-code.py | $(call gb_CustomTarget_get_workdir,vcl/workben)/.dir
+$(fuzzer_Native_cxx): $(SRCDIR)/solenv/bin/native-code.py | $(gb_CustomTarget_workdir)/vcl/workben/.dir
 	$(call gb_Helper_abbreviate_dirs, $(fuzzer_PYTHONCOMMAND) $(SRCDIR)/solenv/bin/native-code.py -g core) > $@
 
 # vim: set noet sw=4 ts=4:

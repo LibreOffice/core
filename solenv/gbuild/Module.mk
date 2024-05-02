@@ -499,7 +499,7 @@ unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 slowcheck : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 screenshot : $$(firstword $$(gb_Module_SCREENSHOTTARGETSTACK))
 ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)
-screenshot : $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done
+screenshot : $(gb_CustomTarget_workdir)/postprocess/signing/signing.done
 endif
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 perfcheck : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))

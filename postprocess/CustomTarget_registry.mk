@@ -524,42 +524,42 @@ $(call gb_CustomTarget_get_target,postprocess/registry) : \
 
 define postprocess_xcd_deps
 $(call gb_XcdTarget_get_target,$(1)).xcd : \
-	$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list
+	$(gb_CustomTarget_workdir)/postprocess/registry/$(1).list
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list : \
+$(gb_CustomTarget_workdir)/postprocess/registry/$(1).list : \
 	$(postprocess_FILES_$(1)) \
 	$(SRCDIR)/postprocess/CustomTarget_registry.mk \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
 endef
 $(foreach xcd,$(postprocess_XCDS),$(eval $(call postprocess_xcd_deps,$(basename $(xcd)))))
 
 define postprocess_lang_deps
 $(call gb_XcdTarget_get_target,Langpack-$(1).xcd) : \
-	$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list
+	$(gb_CustomTarget_workdir)/postprocess/registry/Langpack-$(1).list
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list : \
+$(gb_CustomTarget_workdir)/postprocess/registry/Langpack-$(1).list : \
 	$(call gb_XcuLangpackTarget_get_target,Langpack-$(1).xcu) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
 $(call gb_XcdTarget_get_target,fcfg_langpack_$(1).xcd) : \
-	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	$(gb_CustomTarget_workdir)/postprocess/registry/fcfg_langpack_$(1).list \
+	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list : \
+$(gb_CustomTarget_workdir)/postprocess/registry/fcfg_langpack_$(1).list : \
 	$(call gb_Configuration_get_target,fcfg_langpack) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
 $(call gb_XcdTarget_get_target,registry_$(1).xcd) : \
-	$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list
+	$(gb_CustomTarget_workdir)/postprocess/registry/registry_$(1).list
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list : \
+$(gb_CustomTarget_workdir)/postprocess/registry/registry_$(1).list : \
 	$(call gb_Configuration_get_target,registry) \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
 		$(foreach driver,$(postprocess_DRIVERS),$(call gb_Configuration_get_target,$(driver))) \
 	) \
 	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),$(call gb_Configuration_get_target,updchk)) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
 endef
 $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(lang))))
@@ -589,7 +589,7 @@ $(call gb_XcdTarget_get_target,main.xcd) \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 			$(SRCDIR)/solenv/bin/packregistry.xslt \
-			$(call gb_CustomTarget_get_workdir,postprocess/registry)/main.list \
+			$(gb_CustomTarget_workdir)/postprocess/registry/main.list \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
 	$(call gb_Trace_EndRange,main,XCD)
@@ -620,7 +620,7 @@ $(call gb_XcdTarget_get_target,%.xcd) : \
 	)
 	$(call gb_Trace_EndRange,$*,XCD)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
+$(gb_CustomTarget_workdir)/postprocess/registry/Langpack-%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_target,Langpack-$*.xcu)</filename></list>' > $@
@@ -629,7 +629,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 # It can happen that localized fcfg_langpack_*.zip contains
 # zero-sized org/openoffice/TypeDetection/Filter.xcu; filter them out in the
 # find shell command below (see issue 110041):
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
+$(gb_CustomTarget_workdir)/postprocess/registry/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),AWK)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -642,7 +642,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
+$(gb_CustomTarget_workdir)/postprocess/registry/registry_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),AWK)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -660,7 +660,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
+$(gb_CustomTarget_workdir)/postprocess/registry/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(file >$@,<list> $(foreach i,$(postprocess_DEPS_$*), <dependency file='$i'/>) \

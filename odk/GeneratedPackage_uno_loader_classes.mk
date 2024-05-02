@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_uno_loader_classes,$(call gb_CustomTarget_get_workdir,odk/classes)))
+$(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_uno_loader_classes,$(gb_CustomTarget_workdir)/odk/classes))
 
 $(eval $(call gb_GeneratedPackage_use_customtarget,odk_uno_loader_classes,odk/classes))
 

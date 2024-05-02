@@ -10,7 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,sfx2/classification))
 
 sfx2_classification_SRC := $(SRCDIR)/sfx2/classification
-sfx2_classification_WORK := $(call gb_CustomTarget_get_workdir,sfx2/classification)
+sfx2_classification_WORK := $(gb_CustomTarget_workdir)/sfx2/classification
 sfx2_classification_GEN_example_validated=$(sfx2_classification_WORK)/example.validated
 
 sfx2_classification_XMLLINTCOMMAND := $(call gb_ExternalExecutable_get_command,xmllint)

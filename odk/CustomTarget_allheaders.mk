@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/allheaders))
 
-odk_allheaders_DIR := $(call gb_CustomTarget_get_workdir,odk/allheaders)
+odk_allheaders_DIR := $(gb_CustomTarget_workdir)/odk/allheaders
 
 $(call gb_CustomTarget_get_target,odk/allheaders) : \
 	$(odk_allheaders_DIR)/allheaders.hxx

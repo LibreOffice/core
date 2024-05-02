@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest_climaker))
 
-testtools_CLIDIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_climaker)
+testtools_CLIDIR := $(gb_CustomTarget_workdir)/testtools/bridgetest_climaker
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
 	$(testtools_CLIDIR)/cli_types_bridgetest.dll

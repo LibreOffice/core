@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex/idl))
 
-extensions_AXIDLDIR := $(call gb_CustomTarget_get_workdir,extensions/source/activex/idl)
+extensions_AXIDLDIR := $(gb_CustomTarget_workdir)/extensions/source/activex/idl
 
 $(call gb_CustomTarget_get_target,extensions/source/activex/idl) : \
 	$(extensions_AXIDLDIR)/so_activex.tlb

@@ -10,8 +10,8 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,static/components))
 
-static_WORKDIR := $(call gb_CustomTarget_get_workdir,static)
-postprocess_WORKDIR := $(call gb_CustomTarget_get_workdir,postprocess)
+static_WORKDIR := $(gb_CustomTarget_workdir)/static
+postprocess_WORKDIR := $(gb_CustomTarget_workdir)/postprocess
 
 $(call gb_CustomTarget_get_target,static/components): \
     $(static_WORKDIR)/component_maps.cxx \

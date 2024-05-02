@@ -25,77 +25,77 @@ $(call gb_CustomTarget_get_target,unoidl/unoidl-write_test) : \
         $(SRCDIR)/idlc/test/parser/published.tests \
         $(SRCDIR)/idlc/test/parser/struct.tests \
         $(SRCDIR)/idlc/test/parser/typedef.tests \
-        | $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/.dir
+        | $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/.dir
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Helper_abbreviate_dirs,( \
         $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/attribute.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/constant.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/constructor.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/conversion.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/interfaceinheritance.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/methodoverload.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/oldstyle.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/polystruct.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/published.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/struct.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/typedef.tests \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
-            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb) \
+            $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/out.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
 endif
 

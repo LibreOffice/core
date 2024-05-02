@@ -15,7 +15,7 @@ $(eval $(call gb_Jar_use_customtargets,ridl_connections, \
 
 $(eval $(call gb_JunitTest_use_jar_classset,ridl_connections,libreoffice))
 
-$(eval $(call gb_JunitTest_add_classpath,ridl_connections,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
+$(eval $(call gb_JunitTest_add_classpath,ridl_connections,$(gb_CustomTarget_workdir)/ridljar/javamaker))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridl_connections,\
     ridljar/test/com/sun/star/comp/connections/PipedConnection_Test \

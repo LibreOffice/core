@@ -9,11 +9,11 @@
 $(eval $(call gb_CustomTarget_CustomTarget,tools/string))
 
 $(call gb_CustomTarget_get_target,tools/string) : \
-	$(call gb_CustomTarget_get_workdir,tools/string)/reversemap.cxx
+	$(gb_CustomTarget_workdir)/tools/string/reversemap.cxx
 
-$(call gb_CustomTarget_get_workdir,tools/string)/reversemap.cxx : \
+$(gb_CustomTarget_workdir)/tools/string/reversemap.cxx : \
 		$(call gb_Executable_get_runtime_dependencies,bestreversemap) \
-		| $(call gb_CustomTarget_get_workdir,tools/string)/.dir
+		| $(gb_CustomTarget_workdir)/tools/string/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRM,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),BRM)
 	$(call gb_Helper_execute,bestreversemap > $@)

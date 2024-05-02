@@ -14,7 +14,7 @@ $(eval $(call gb_WinResTarget_use_custom_headers,spsupp,\
 ))
 
 $(eval $(call gb_WinResTarget_add_defs,spsupp,\
-	-DTLB_FILE=\"$(call gb_CustomTarget_get_workdir,shell/source/win32/spsupp/idl)/spsupp.tlb\" \
+	-DTLB_FILE=\"$(gb_CustomTarget_workdir)/shell/source/win32/spsupp/idl/spsupp.tlb\" \
 ))
 
 $(eval $(call gb_WinResTarget_set_rcfile,spsupp,shell/source/win32/spsupp/res/spsupp))

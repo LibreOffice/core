@@ -29,12 +29,12 @@ define odk_build-examples_test
 $(eval $(call gb_CustomTarget_CustomTarget,$(1)))
 
 $(call gb_CustomTarget_get_target,$(1)): \
-	$(call gb_CustomTarget_get_workdir,$(1))/setsdkenv
+	$(gb_CustomTarget_workdir)/$(1)/setsdkenv
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),CHK,1)
-	rm -fr $(call gb_CustomTarget_get_workdir,$(1))/{out,user}
+	rm -fr $(gb_CustomTarget_workdir)/$(1)/{out,user}
 	$(if $(MACOSX_SHELL_HACK), \
 	    ODK_BUILD_SHELL=$$$$($(gb_MKTEMP)) && \
 	    cp /bin/sh "$$$$ODK_BUILD_SHELL" && \
@@ -43,24 +43,24 @@ else
 	$(if $(filter MACOSX,$(OS)),, \
 	    && $(gb_Helper_LIBRARY_PATH_VAR)=$$$$saved_library_path) \
 	&& export \
-	    UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,$(1))/user) \
+	    UserInstallation=$(call gb_Helper_make_url,$(gb_CustomTarget_workdir)/$(1)/user) \
 	$(foreach my_dir,$(2), \
 	    && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
 		&& printf 'yes\n' | LANGUAGE= LC_ALL=C make -j1 \
 			CC="$(CXX) $(gb_CXX03FLAGS)" LINK="$(CXX)" LIB="$(CXX)" \
 		    $(if $(MACOSX_SHELL_HACK), SHELL="$$$$ODK_BUILD_SHELL", ))) \
 	$(if $(MACOSX_SHELL_HACK),&& rm -f "$$$$ODK_BUILD_SHELL")) \
-	    >$(call gb_CustomTarget_get_workdir,$(1))/log 2>&1 \
+	    >$(gb_CustomTarget_workdir)/$(1)/log 2>&1 \
 	|| (RET=$$$$? \
 	    $(if $(MACOSX_SHELL_HACK), && rm -f "$$$$ODK_BUILD_SHELL" , ) \
-	    && cat $(call gb_CustomTarget_get_workdir,$(1))/log \
+	    && cat $(gb_CustomTarget_workdir)/$(1)/log \
 	    && exit $$$$RET)
 endif
 
-$(call gb_CustomTarget_get_workdir,$(1))/setsdkenv: \
+$(gb_CustomTarget_workdir)/$(1)/setsdkenv: \
 	$(SRCDIR)/odk/config/setsdkenv_unix.sh.in \
 	$(BUILDDIR)/config_$(gb_Side).mk | \
-	$(call gb_CustomTarget_get_workdir,$(1))/.dir
+	$(gb_CustomTarget_workdir)/$(1)/.dir
 	$$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),SED,1)
 	sed -e 's!@OO_SDK_NAME@!sdk!' \
 	-e 's!@OO_SDK_HOME@!$(INSTDIR)/$(SDKDIRNAME)!' \
@@ -68,7 +68,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/setsdkenv: \
 	-e 's!@OO_SDK_ZIP_HOME@!!' -e 's!@OO_SDK_CAT_HOME@!!' \
 	-e 's!@OO_SDK_SED_HOME@!!' -e 's!@OO_SDK_CPP_HOME@!!' \
 	-e 's!@OO_SDK_JAVA_HOME@!$(JAVA_HOME)!' \
-	-e 's!@OO_SDK_OUTPUT_DIR@!$(call gb_CustomTarget_get_workdir,$(1))/out!' \
+	-e 's!@OO_SDK_OUTPUT_DIR@!$(gb_CustomTarget_workdir)/$(1)/out!' \
 	-e 's!@SDK_AUTO_DEPLOYMENT@!YES!' $$< > $$@
 
 .PHONY: $(call gb_CustomTarget_get_target,$(1))

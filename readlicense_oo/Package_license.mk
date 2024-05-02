@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,readlicense_oo_license,$(call gb_CustomTarget_get_workdir,readlicense_oo/license)))
+$(eval $(call gb_Package_Package,readlicense_oo_license,$(gb_CustomTarget_workdir)/readlicense_oo/license))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_file,readlicense_oo_license,license.txt,license.txt))

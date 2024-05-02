@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-icns_WRKDIR := $(call gb_CustomTarget_get_workdir,sysui/icns)
+icns_WRKDIR := $(gb_CustomTarget_workdir)/sysui/icns
 icns_SRCDIR := $(SRCDIR)/sysui/desktop/icons/macos
 
 icns_mimetypes := database drawing drawing-template extension formula master-document \
@@ -31,7 +31,7 @@ $(icns_WRKDIR)/oasis-%.icns: $(foreach size,$(icns_sizes),$(icns_SRCDIR)/mime-oa
 	$(call gb_Output_announce,$(@F),$(true),ICNS,2)
 	iconutil -c icns -o $@ $(<D)
 
-$(eval $(call gb_Package_Package,sysui_osxicons,$(call gb_CustomTarget_get_workdir,sysui/icns)))
+$(eval $(call gb_Package_Package,sysui_osxicons,$(gb_CustomTarget_workdir)/sysui/icns))
 $(call gb_Package_get_clean_target,sysui_osxicons): $(call gb_CustomTarget_get_clean_target,sysui/icns)
 
 $(eval $(call gb_Package_add_files_with_dir,sysui_osxicons,Resources,\

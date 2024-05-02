@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry))
 
 $(call gb_CustomTarget_get_target,officecfg/registry) : \
 	$(foreach i,officecfg_qa_allheaders $(officecfg_XCSFILES),\
-		$(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/$(i).hxx)
+		$(gb_CustomTarget_workdir)/officecfg/registry/officecfg/$(i).hxx)
 
 # via define so it can end with a newline
 define officecfg_geninclude
@@ -20,7 +20,7 @@ define officecfg_geninclude
 endef
 
 # auto generated header file for unit test qa/cppheader.cxx
-$(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_allheaders.hxx: \
+$(gb_CustomTarget_workdir)/officecfg/registry/officecfg/officecfg_qa_allheaders.hxx: \
 		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
 	$(call gb_Trace_StartRange,officecfg_qa_allheaders.hxx,CAT)
@@ -31,7 +31,7 @@ $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_al
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
 officecfg_xsltparams=$(if $(filter-out $(lastword $1),$1),$(call officecfg_xsltparams,$(filter-out $(lastword $1),$1))) --stringparam ns$(words $1) $(lastword $1)
 
-$(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/%.hxx: \
+$(gb_CustomTarget_workdir)/officecfg/registry/officecfg/%.hxx: \
             $(SRCDIR)/officecfg/registry/schema/org/openoffice/%.xcs \
             $(SRCDIR)/officecfg/registry/cppheader.xsl\
 	    | $(call gb_ExternalExecutable_get_dependencies,xsltproc)

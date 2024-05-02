@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,unoembind,$(call gb_CustomTarget_get_workdir,static/unoembind)))
+$(eval $(call gb_Package_Package,unoembind,$(gb_CustomTarget_workdir)/static/unoembind))
 
 $(eval $(call gb_Package_use_custom_target,unoembind,static/unoembind))
 

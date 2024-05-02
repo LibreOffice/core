@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,postprocess_fontconfig,$(call gb_CustomTarget_get_workdir,postprocess/fontconfig)))
+$(eval $(call gb_Package_Package,postprocess_fontconfig,$(gb_CustomTarget_workdir)/postprocess/fontconfig))
 
 $(eval $(call gb_Package_add_files,postprocess_fontconfig,$(LIBO_SHARE_FOLDER)/fonts/truetype, \
     fc_local.conf \

@@ -8,7 +8,7 @@
 #
 
 # defining extra package for that is a little hacky - maybe use PackageSet instead?
-$(eval $(call gb_Package_Package,extras_gallsystemstr,$(call gb_CustomTarget_get_workdir,extras/gallsysstr)))
+$(eval $(call gb_Package_Package,extras_gallsystemstr,$(gb_CustomTarget_workdir)/extras/gallsysstr))
 $(eval $(call gb_Package_use_customtarget,extras_gallsystemstr,extras/gallsysstr))
 
 $(eval $(call gb_Package_add_files,extras_gallsystemstr,$(LIBO_SHARE_FOLDER)/gallery,\

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_autocorr,$(call gb_CustomTarget_get_workdir,extras/source/autocorr)))
+$(eval $(call gb_Package_Package,extras_autocorr,$(gb_CustomTarget_workdir)/extras/source/autocorr))
 
 $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr,\
 	acor_af-ZA.dat \

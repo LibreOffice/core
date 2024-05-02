@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-scripts_WORKDIR :=$(call gb_CustomTarget_get_workdir,setup_native/scripts)
+scripts_WORKDIR :=$(gb_CustomTarget_workdir)/setup_native/scripts
 
 $(eval $(call gb_CustomTarget_CustomTarget,setup_native/scripts))
 

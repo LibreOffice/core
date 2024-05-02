@@ -8,7 +8,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,android/loandroid3))
 
-loandroid3_DIR := $(call gb_CustomTarget_get_workdir,android/source)
+loandroid3_DIR := $(gb_CustomTarget_workdir)/android/source
 
 $(call gb_CustomTarget_get_target,android/loandroid3) : \
 	$(loandroid3_DIR)/done

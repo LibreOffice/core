@@ -19,7 +19,7 @@ $(eval $(call gb_Jar_use_customtargets,ridl_java_remote, \
 
 $(eval $(call gb_JunitTest_use_jar_classset,ridl_java_remote,libreoffice))
 
-$(eval $(call gb_JunitTest_add_classpath,ridl_java_remote,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
+$(eval $(call gb_JunitTest_add_classpath,ridl_java_remote,$(gb_CustomTarget_workdir)/ridljar/javamaker))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridl_java_remote,\
     ridljar/test/com/sun/star/lib/uno/bridges/java_remote/BridgedObject_Test \

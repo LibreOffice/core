@@ -10,12 +10,12 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/gtk3_kde5))
 
 $(call gb_CustomTarget_get_target,vcl/unx/gtk3_kde5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/gtk3_kde5)/kde5_filepicker.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/gtk3_kde5)/kde5_filepicker_ipc.moc \
+	$(gb_CustomTarget_workdir)/vcl/unx/gtk3_kde5/kde5_filepicker.moc \
+	$(gb_CustomTarget_workdir)/vcl/unx/gtk3_kde5/kde5_filepicker_ipc.moc \
 
-$(call gb_CustomTarget_get_workdir,vcl/unx/gtk3_kde5)/%.moc : \
+$(gb_CustomTarget_workdir)/vcl/unx/gtk3_kde5/%.moc : \
 		$(SRCDIR)/vcl/unx/gtk3_kde5/%.hxx \
-		| $(call gb_CustomTarget_get_workdir,vcl/unx/gtk3_kde5)/.dir
+		| $(gb_CustomTarget_workdir)/vcl/unx/gtk3_kde5/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MOC)
 	$(MOC5) $< -o $@

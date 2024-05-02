@@ -245,8 +245,8 @@ extras_AUTOCORR_XMLFILES := \
 # param: shortlang
 extras_AUTOCORR_XMLFILES_LANG = $(subst $(1)/,,$(filter $(1)/%,$(extras_AUTOCORR_XMLFILES)))
 
-$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype : \
-        | $(dir $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype).dir
+$(gb_CustomTarget_workdir)/extras/source/autocorr/%/mimetype : \
+        | $(dir $(gb_CustomTarget_workdir)/extras/source/autocorr/%/mimetype).dir
 	$(call gb_Output_announce,autocorr/$*/mimetype,$(true),TCH,1)
 	$(call gb_Trace_StartRange,autocorr/$*/mimetype,TCH)
 	touch $@
@@ -256,9 +256,9 @@ $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype : \
 # secondexpansion since the pattern not just covers a file, but also a directory portion with
 # different number of elements (just the lang or lang/META-INF) and thus the directory dependency
 # needs the stem of the actual target to work as intended
-$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml \
+$(gb_CustomTarget_workdir)/extras/source/autocorr/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
-          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/$$*.xml).dir
+          $$(dir $(gb_CustomTarget_workdir)/extras/source/autocorr/$$*.xml).dir
 	$(call gb_Output_announce,autocorr/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,autocorr/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
@@ -269,9 +269,9 @@ $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/ext
 # allows the actual stem from the target to be used in the macro calls
 # there's no reason for the different directories though, so a janitorial cleanup would be
 # TODO: get rid of the shortform:longform language names when assembling the autocorr files
-$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/acor_%.dat : \
+$(gb_CustomTarget_workdir)/extras/source/autocorr/acor_%.dat : \
         $$(addprefix \
-            $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/$$(call extras_AUTOCORR_SHORTLANG,$$*)/,\
+            $(gb_CustomTarget_workdir)/extras/source/autocorr/$$(call extras_AUTOCORR_SHORTLANG,$$*)/,\
                 mimetype \
                 $$(call extras_AUTOCORR_XMLFILES_LANG,$$(call extras_AUTOCORR_SHORTLANG,$$*))) \
 		| $(call gb_ExternalExecutable_get_dependencies,python)
