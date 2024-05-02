@@ -322,7 +322,7 @@ bool fcTLbeforeIDAT(SvStream& rStream)
     return false;
 }
 
-#if defined __GNUC__ && __GNUC__ == 14 && !defined __clang__
+#if defined __GNUC__ && __GNUC__ <= 14 && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclobbered"
 #endif
@@ -821,7 +821,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
             return {};
     }
 }
-#if defined __GNUC__ && __GNUC__ == 14 && !defined __clang__
+#if defined __GNUC__ && __GNUC__ <= 14 && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
 
