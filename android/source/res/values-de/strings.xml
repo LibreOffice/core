@@ -1,32 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">LibreOffice Viewer</string>
     <string name="app_name_settings">LibreOffice-Viewer-Einstellungen</string>
-
-    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
-    <string name="app_version">Version: %1$s&lt;br&gt;Build ID: &lt;a href=&quot;https://hub.libreoffice.org/git-core/%2$s&quot;&gt;%2$s&lt;/a&gt;</string>
+    <string name="app_version">Version: %1$s&lt;br&gt;Build ID: &lt;a href="https://hub.libreoffice.org/git-core/%2$s"&gt;%2$s&lt;/a&gt;</string>
     <string name="app_description">LibreOffice Viewer ist ein Dokumentenbetrachter, der auf LibreOffice basiert.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Dieses Release wurde bereitgestellt durch $VENDOR.</string>
     <string name="readonly_file">Diese Datei ist schreibgeschützt.</string>
-
     <string name="about_license">Lizenz anzeigen</string>
     <string name="about_notice">Hinweise anzeigen</string>
     <string name="about_privacy_policy">Datenschutzerklärung</string>
-
     <string name="new_textdocument">Neues Textdokument</string>
     <string name="new_presentation">Neue Präsentation</string>
     <string name="new_spreadsheet">Neues Tabellendokument</string>
     <string name="new_drawing">Neue Zeichnung</string>
     <string name="default_document_name">unbenannt</string>
-
     <string name="select_file_to_open">Datei zum Öffnen auswählen</string>
-
-    <string name="browser_app_name">LibreOffice Browser</string>
-    <string name="menu_search">Suchen</string>
-    <string name="search_not_found">Suchbegriff nicht gefunden</string>
-    <string name="menu_preferences">Einstellungen</string>
     <string name="file_icon_desc">Datei-Icon</string>
     <string name="title_recents">Zuletzt verwendete Dateien</string>
     <string name="title_browser">Alle Dateien</string>
@@ -35,46 +24,32 @@
     <string name="pref_experimental_editing_summary">Den experimentellen Editier-Modus aktivieren. Verwendung auf eigene Gefahr.</string>
     <string name="pref_developer_mode">Entwickler-Modus</string>
     <string name="pref_developer_mode_summary">Entwickler-Modus, in dem in der App UNO-Kommandos gesendet werden können. Verwendung auf eigene Gefahr.</string>
-
     <string name="action_about">Info</string>
     <string name="action_parts">Abschnitte</string>
     <string name="action_settings">Einstellungen</string>
-
     <!-- Edit action names -->
-    <string name="action_bold">Fett</string>
-    <string name="action_underline">Unterstrichen</string>
-    <string name="action_italic">Kursiv</string>
-    <string name="action_strikeout">Durchgestrichen</string>
     <string name="action_keyboard">Tastatur anzeigen</string>
     <string name="action_save">Speichern</string>
-    <string name="action_save_as">Speichern unter...</string>
+    <string name="action_save_as">Speichern unter…</string>
     <string name="action_fromat">Format anwenden</string>
     <string name="action_search">Suchen</string>
     <string name="action_UNO_commands">UNO-Kommando senden</string>
-
     <!-- Feedback messages -->
     <string name="message_saved">Speichern beendet</string>
     <string name="message_saving">Dokument wird gespeichert…</string>
-    <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
     <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
-
     <string name="password">Passwort</string>
     <string name="action_undo">Rückgängig</string>
     <string name="action_redo">Wiederherstellen</string>
-
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Dokument vor dem Schließen speichern?</string>
     <string name="save_document">SPEICHERN</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="no_save_document">NEIN</string>
-
     <!-- Presentation Mode Strings -->
     <string name="action_presentation">Präsentation</string>
     <string name="action_add_slide">Folie hinzufügen</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Ihr Android-Gerät unterstützt keine In-App-SVG-Präsentation. Wir haben den Link zur Präsentation in die Zwischenablage kopiert. Drücken Sie den Home-Button, öffnen Sie einen modernen Web-Browser, fügen Sie in die Adressleiste ein und los.</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
     <string name="slideshow_action_back">Zurück</string>
-
     <!-- Calc Header Menu Strings -->
     <string name="calc_insert_before">Einfügen</string>
     <string name="calc_delete">Löschen</string>
@@ -90,12 +65,10 @@
     <string name="calc_optimal_length_default_text">Geben Sie die zusätzliche Höhe in 100tel/mm ein</string>
     <string name="calc_alert_double_click_optimal_length">Hinweis: Doppeltes Antippen auf eine Überschrift setzt die optimale Breite/Höhe.</string>
     <string name="action_add_worksheet">Arbeitsblatt hinzufügen</string>
-
     <!-- Password dialog strings -->
     <string name="action_pwd_dialog_OK">OK</string>
     <string name="action_pwd_dialog_cancel">Abbrechen</string>
     <string name="action_pwd_dialog_title">Bitte Passwort eingeben</string>
-
     <!-- Insert Image Strings -->
     <string name="take_photo">Foto Machen</string>
     <string name="select_photo">Foto Auswählen</string>
@@ -106,7 +79,6 @@
     <string name="compress_photo_max_quality">Maximale Qualität</string>
     <string name="compress_photo_no_compress">Nicht komprimieren</string>
     <string name="compress_photo_title">Wollen Sie das Foto komprimieren?</string>
-
     <!-- Clipboard Actions -->
     <string name="action_copy">Kopieren</string>
     <string name="action_paste">Einfügen</string>
@@ -134,7 +106,6 @@
         <item>Spalten Löschen</item>
         <item>Tabelle Löschen</item>
     </string-array>
-
     <!-- UNO cmd controller Strings -->
     <string name="UNO_commands_string_hint">UNO-Kommando</string>
     <string name="UNO_commands_string_type_hint">Typ</string>
@@ -148,7 +119,6 @@
     <string name="tabhost_style">Format</string>
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Abbrechen</string>
-    <string name="unable_to_go_further">Kann nicht weiter gehen.</string>
     <string name="current_uno_command">Aktuelles UNO-Kommando</string>
     <string name="display_language">Anzeigesprache</string>
     <string name="display_language_summary">Wählen Sie die Standard-Anzeigesprache</string>
@@ -158,7 +128,6 @@
     <string name="error">Fehler</string>
     <string name="enter_part_name">Name für Abschnitt eingeben</string>
     <string name="bmp_null">Bmp ist null!</string>
-    <string name="directory_not_saved">Verzeichnis nicht gespeichert.</string>
     <string name="page">Seite</string>
     <string name="sheet">Arbeitsblatt</string>
     <string name="slide">Folie</string>
@@ -167,4 +136,7 @@
     <string name="font_color">Schriftfarbe</string>
     <string name="action_rename_slide">Folie umbenennen</string>
     <string name="automatic">Automatisch</string>
+    <string name="create_file">Neue Datei erstellen</string>
+    <string name="search_find_next">Nächste suchen</string>
+    <string name="search_find_previous">Vorherige suchen</string>
 </resources>

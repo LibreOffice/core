@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">LibreOffice Görüntüleyici</string>
     <string name="app_name_settings">LibreOffice Görüntüleyici Ayarları</string>
-
-    <string name="app_about_name"><b>LibreOffice Görüntüleyici \'Beta\'</b></string>
-    <string name="app_version">Versiyon: %1$s&lt;br&gt;Build ID: &lt;a href=&quot;https://hub.libreoffice.org/git-core/%2$s&quot;&gt;%2$s&lt;/a&gt;</string>
+    <string name="app_version">Versiyon: %1$s&lt;br&gt;Build ID: &lt;a href="https://hub.libreoffice.org/git-core/%2$s"&gt;%2$s&lt;/a&gt;</string>
     <string name="app_description">LibreOffice Görüntüleyici LibreOffice tabanlı bir belge görüntüleyicisidir.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Bu sürüm $VENDOR tarafından derlenmiştir.</string>
     <string name="readonly_file">Bu dosya salt okunabilir haldedir.</string>
-
     <string name="about_license">Lisansı Görüntüle</string>
     <string name="about_notice">Bildiriyi Görüntüle</string>
-
     <string name="new_textdocument">Yeni Kelime İşlemci</string>
     <string name="new_presentation">Yeni Sunum</string>
     <string name="new_spreadsheet">Yeni Hesap Tablosu</string>
     <string name="new_drawing">Yeni Çizim</string>
     <string name="default_document_name">adsız</string>
-
-    <string name="browser_app_name">LibreOffice Tarayıcı</string>
-    <string name="menu_search">Ara</string>
-    <string name="search_not_found">Söz dizimi bulunamadı.</string>
-    <string name="menu_preferences">Seçenekler</string>
     <string name="file_icon_desc">dosya_simgesi</string>
     <string name="title_recents">Son açılan dosyalar</string>
     <string name="title_browser">Tüm dosyalar</string>
@@ -32,44 +22,30 @@
     <string name="pref_experimental_editing_summary">Deneysel düzenleme modunu etkinleştirin. Kullanım riski size aittir.</string>
     <string name="pref_developer_mode">Geliştirici Modu</string>
     <string name="pref_developer_mode_summary">Geliştirici modunu etkinleştirerek UNO komutları gönderin. Kullanım riski size aittir.</string>
-
     <string name="action_about">Hakkında</string>
     <string name="action_parts">Bölümler</string>
     <string name="action_settings">Ayarlar</string>
-
     <!-- Edit action names -->
-    <string name="action_bold">Kalın</string>
-    <string name="action_underline">Altı çizgili</string>
-    <string name="action_italic">Yana yatık</string>
-    <string name="action_strikeout">Üzeri çizgili</string>
     <string name="action_keyboard">Klaveyi göster</string>
     <string name="action_save">Kaydet</string>
     <string name="action_fromat">Biçimlendirmeyi etkinleştir.</string>
     <string name="action_search">Ara</string>
     <string name="action_UNO_commands">UNO komutu yolla</string>
-
     <!-- Feedback messages -->
     <string name="message_saved">Kaydetme tamamlandı.</string>
     <string name="message_saving">Belge kaydediliyor…</string>
-    <string name="message_save_incomplete">Kayıt tamamlanmadı. Değişiklik yapıldı mı?</string>
-
     <string name="password">Parola</string>
     <string name="action_undo">Geri Al</string>
     <string name="action_redo">Yinele</string>
-
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Değişiklikleri kaydetmek istiyor musunuz?</string>
     <string name="save_document">Kaydet</string>
     <string name="action_cancel">İptal</string>
     <string name="no_save_document">Hayır</string>
-
     <!-- Presentation Mode Strings -->
     <string name="action_presentation">Slayt Gösterisi</string>
     <string name="action_add_slide">Slayt Ekle</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Cihazınız uygulama içi slayt gösterisini desteklemiyor. Sunumu panoya kopyaladık. Lütfen ev tuşuna basıp modern bir tarayıcı açıp arama çubuğuna yapıştırın ve sunumu görüntüleyin.</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Tamam</string>
     <string name="slideshow_action_back">Geri</string>
-
     <!-- Calc Header Menu Strings -->
     <string name="calc_insert_before">Ekle</string>
     <string name="calc_delete">Sil</string>
@@ -85,12 +61,10 @@
     <string name="calc_optimal_length_default_text">Extra uzunluk giriniz: 100th/mm</string>
     <string name="calc_alert_double_click_optimal_length">İpucu: Başlığa çift dokunuş en iyi uzunluk ve genişliği ayarlar.</string>
     <string name="action_add_worksheet">Hesap Tablosu Ekle</string>
-
     <!-- Password dialog strings -->
     <string name="action_pwd_dialog_OK">Tamam</string>
     <string name="action_pwd_dialog_cancel">İptal</string>
     <string name="action_pwd_dialog_title">Lütfen parola giriniz.</string>
-
     <!-- Insert Image Strings -->
     <string name="take_photo">Fotoğraf Çek</string>
     <string name="select_photo">Fotoğraf Seç</string>
@@ -101,7 +75,6 @@
     <string name="compress_photo_max_quality">Maksimum Kalite</string>
     <string name="compress_photo_no_compress">Sıkıştırma yapma</string>
     <string name="compress_photo_title">Fotoğrafı sıkıştırmak ister misiniz?</string>
-
     <!-- Clipboard Actions -->
     <string name="action_copy">Kopyala</string>
     <string name="action_paste">Yapıştır</string>
@@ -129,7 +102,6 @@
         <item>Sütun Sil</item>
         <item>Tablo Sil</item>
     </string-array>
-
     <!-- UNO cmd controller Strings -->
     <string name="UNO_commands_string_hint">UNO Komutu</string>
     <string name="UNO_commands_string_type_hint">Tip</string>
@@ -143,7 +115,6 @@
     <string name="tabhost_style">Biçim</string>
     <string name="alert_ok">Tamam</string>
     <string name="alert_cancel">İptal</string>
-    <string name="unable_to_go_further">Daha fazla ilerlenemiyor.</string>
     <string name="current_uno_command">Şuan ki UNO komutu</string>
     <string name="display_language">Uygulama Dili</string>
     <string name="display_language_summary">Varsayılan dili değiştir</string>
@@ -151,7 +122,6 @@
     <string name="error">Hata</string>
     <string name="enter_part_name">Bölüm ismi girin.</string>
     <string name="bmp_null">Bmp boş!</string>
-    <string name="directory_not_saved">Dizin kaydedilmedi.</string>
     <string name="page">Sayfa</string>
     <string name="sheet">Tablo</string>
     <string name="slide">Slayt</string>
@@ -159,4 +129,14 @@
     <string name="highlight_color">Vurgulama Rengi</string>
     <string name="font_color">Metin Rengi</string>
     <string name="action_rename_slide">Slaytı yeniden adlandır</string>
+    <string name="about_privacy_policy">Gizlilik Politikası</string>
+    <string name="action_save_as">Farklı Kaydet…</string>
+    <string name="automatic">Otomatik</string>
+    <string name="create_file">Yeni Dosya Oluştur</string>
+    <string name="search_find_next">Sonrakini Bul</string>
+    <string name="search_find_previous">Öncekini Bul</string>
+    <string name="pdf_export_finished">PDF dışa aktarıldı</string>
+    <string name="unable_to_save">Dosya kaydedilemiyor</string>
+    <string name="message_saving_failed">Belge kaydedilemedi.</string>
+    <string name="select_file_to_open">Açılacak dosyayı seçin</string>
 </resources>
