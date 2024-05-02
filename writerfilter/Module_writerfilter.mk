@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,writerfilter,\
     CppunitTest_writerfilter_dmapper \
     CppunitTest_writerfilter_ooxml \
     CppunitTest_writerfilter_rtftok \
+    CppunitTest_writerfilter_filter \
 ))
 
 # vim: set noet sw=4 ts=4:
