@@ -6970,21 +6970,18 @@ static OUString UnquoteFieldText(std::u16string_view s)
 OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
 {
     assert(!rTOCStyleName.isEmpty());
-    if (auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(rTOCStyleName))
-    {   // theoretical case: what OOXML says
-        return pStyle->m_sStyleName;
-    }
-    auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(FilterChars(rTOCStyleName));
-    if (pStyle && m_bIsNewDoc)
-    {   // practical case: Word wrote i18n name to TOC field, but it doesn't
-        // exist in styles.xml; tdf#153083 clone it for best roundtrip
-        SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rTOCStyleName << " from " << pStyle->m_sStyleName);
-        return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
-    }
-    else
+    if (auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(FilterChars(rTOCStyleName)))
     {
-        return GetStyleSheetTable()->ConvertStyleName(rTOCStyleName);
+        auto const [convertedStyleName, isBuiltIn] = StyleSheetTable::ConvertStyleName(pStyle->m_sStyleName);
+        if (isBuiltIn && m_bIsNewDoc)
+        {   // practical case: Word wrote i18n name to TOC field, but it doesn't
+            // exist in styles.xml; tdf#153083 clone it for best roundtrip
+            assert(convertedStyleName == pStyle->m_sConvertedStyleName);
+            return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+        }
     }
+    // theoretical case: what OOXML says
+    return StyleSheetTable::ConvertStyleName(rTOCStyleName).first;
 }
 
 void DomainMapper_Impl::handleToc
@@ -8052,27 +8049,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                                 uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
 
-                            OUString sStyleSheetName
-                                = GetStyleSheetTable()->ConvertStyleName(sFirstParam, true);
-
                             uno::Any aStyleDisplayName;
-
-                            uno::Reference<container::XNameAccess> xStyleFamilies
-                                = GetTextDocument()->getStyleFamilies();
-                            uno::Reference<container::XNameAccess> xStyles;
-                            xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES))
-                                >>= xStyles;
-                            uno::Reference<css::beans::XPropertySet> xStyle;
-
-                            try
-                            {
-                                xStyles->getByName(sStyleSheetName) >>= xStyle;
-                                aStyleDisplayName = xStyle->getPropertyValue("DisplayName");
-                            }
-                            catch (css::container::NoSuchElementException)
-                            {
-                                aStyleDisplayName <<= sStyleSheetName;
-                            }
+                            aStyleDisplayName <<= ConvertTOCStyleName(sFirstParam);
 
                             xFieldProperties->setPropertyValue(
                                 getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);

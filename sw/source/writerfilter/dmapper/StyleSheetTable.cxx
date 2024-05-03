@@ -815,7 +815,7 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
     if( !m_pImpl->m_rDMapper.IsOOXMLImport() || !m_pImpl->m_pCurrentEntry->m_sStyleName.isEmpty())
     {
-        m_pImpl->m_pCurrentEntry->m_sConvertedStyleName = ConvertStyleName( m_pImpl->m_pCurrentEntry->m_sStyleName );
+        m_pImpl->m_pCurrentEntry->m_sConvertedStyleName = ConvertStyleName(m_pImpl->m_pCurrentEntry->m_sStyleName).first;
         m_pImpl->m_aStyleSheetEntries.push_back( m_pImpl->m_pCurrentEntry );
         m_pImpl->m_aStyleSheetEntriesMap.emplace( m_pImpl->m_pCurrentEntry->m_sStyleIdentifierD, m_pImpl->m_pCurrentEntry );
     }
@@ -922,7 +922,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                 if (pStyleSheetProperties->props().GetListId() > -1)
                 {
                     uno::Reference< style::XStyle > xStyle;
-                    xParaStyles->getByName( ConvertStyleName(pEntry->m_sStyleName) ) >>= xStyle;
+                    xParaStyles->getByName(ConvertStyleName(pEntry->m_sStyleName).first) >>= xStyle;
 
                     if ( !xStyle.is() )
                         break;
@@ -1077,14 +1077,19 @@ void StyleSheetTable::ApplyClonedTOCStyles()
 
 OUString StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rNewName)
 {
+    auto const it = m_pImpl->m_ClonedTOCStylesMap.find(pStyle->m_sConvertedStyleName);
+    if (it != m_pImpl->m_ClonedTOCStylesMap.end())
+    {
+        return it->second;
+    }
+    SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rNewName << " from " << pStyle->m_sStyleName);
     StyleSheetEntryPtr const pClone(new StyleSheetEntry(*pStyle));
     pClone->m_sStyleIdentifierD = rNewName;
     pClone->m_sStyleName = rNewName;
-    pClone->m_sConvertedStyleName = ConvertStyleName(rNewName);
+    pClone->m_sConvertedStyleName = ConvertStyleName(rNewName).first;
     m_pImpl->m_aStyleSheetEntries.push_back(pClone);
-    // add it so it will be found if referenced from another TOC
-    m_pImpl->m_aStyleSheetEntriesMap.emplace(rNewName, pClone);
-    m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->m_sStyleName, pClone->m_sConvertedStyleName);
+    // the old converted name is what is applied to paragraphs
+    m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->m_sConvertedStyleName, pClone->m_sConvertedStyleName);
     std::vector<StyleSheetEntryPtr> const styles{ pClone };
     ApplyStyleSheetsImpl(rFontTable, styles);
     return pClone->m_sConvertedStyleName;
@@ -1128,7 +1133,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
                     uno::Reference< style::XStyle > xStyle;
-                    const OUString sConvertedStyleName = ConvertStyleName( pEntry->m_sStyleName );
+                    const OUString sConvertedStyleName(ConvertStyleName(pEntry->m_sStyleName).first);
 
                     if(xStyles->hasByName( sConvertedStyleName ))
                     {
@@ -1196,7 +1201,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             // Writer core doesn't support numbering styles having a parent style, it seems
                             if (pParent && !bListStyle)
                             {
-                                const OUString sParentStyleName = ConvertStyleName( pParent->m_sStyleName );
+                                const OUString sParentStyleName(ConvertStyleName(pParent->m_sStyleName).first);
                                 if ( !sParentStyleName.isEmpty() && !xStyles->hasByName( sParentStyleName ) )
                                     aMissingParent.emplace_back( sParentStyleName, xStyle );
                                 else
@@ -1256,7 +1261,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             StyleSheetEntryPtr pLinkStyle
                                 = FindStyleSheetByISTD(pEntry->m_sLinkStyleIdentifier);
                             if (pLinkStyle && !pLinkStyle->m_sStyleName.isEmpty())
-                                aMissingLink.emplace_back(ConvertStyleName(pLinkStyle->m_sStyleName),
+                                aMissingLink.emplace_back(ConvertStyleName(pLinkStyle->m_sStyleName).first,
                                                           xStyle);
                         }
                     }
@@ -1268,7 +1273,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         {
                             StyleSheetEntryPtr pFollowStyle = FindStyleSheetByISTD( pEntry->m_sNextStyleIdentifier );
                             if ( pFollowStyle && !pFollowStyle->m_sStyleName.isEmpty() )
-                                aMissingFollow.emplace_back( ConvertStyleName( pFollowStyle->m_sStyleName ), xStyle );
+                                aMissingFollow.emplace_back(ConvertStyleName(pFollowStyle->m_sStyleName).first, xStyle);
                         }
 
                         // Set the outline levels
@@ -1515,10 +1520,9 @@ const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
     return m_pImpl->m_pCurrentEntry;
 }
 
-OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExtendedSearch)
+OUString StyleSheetTable::ConvertStyleNameExt(const OUString& rWWName)
 {
     OUString sRet( rWWName );
-    if( bExtendedSearch )
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
         auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(rWWName);
@@ -1529,6 +1533,14 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
             sRet = findIt->second->m_sStyleName;
         }
     }
+
+    return ConvertStyleName(sRet).first;
+}
+
+std::pair<OUString, bool>
+StyleSheetTable::ConvertStyleName(const OUString& rWWName)
+{
+    OUString sRet(rWWName);
 
     // create a map only once
     // This maps Word's special style manes to Writer's (the opposite to what MSWordStyles::GetWWId
@@ -1657,6 +1669,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
 //        { "Message Header", "" },
         { "Subtitle", "Subtitle" }, // RES_POOLCOLL_DOC_SUBTITLE
         { "Salutation", "Salutation" }, // RES_POOLCOLL_GREETING
+        { "Intense Quote", "Intense Quote" }, // N/A
 //        { "Date", "" },
         { "Body Text First Indent", "First line indent" }, // RES_POOLCOLL_TEXT_IDENT
 //        { "Body Text First Indent 2", "" },
@@ -1668,6 +1681,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
 //        { "Block Text", "" },
         { "Hyperlink", "Internet link" }, // RES_POOLCHR_INET_NORMAL
         { "FollowedHyperlink", "Visited Internet Link" }, // RES_POOLCHR_INET_VISIT
+        { "Intense Emphasis", "Intense Emphasis" }, // N/A
         { "Strong", "Strong Emphasis" }, // RES_POOLCHR_HTML_STRONG
         { "Emphasis", "Emphasis" }, // RES_POOLCHR_HTML_EMPHASIS
 //        { "Document Map", "" },
@@ -1684,6 +1698,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     if (const auto aIt = StyleNameMap.find(sRet); aIt != StyleNameMap.end())
     {
         sRet = aIt->second;
+        return { sRet, true };
     }
     else
     {
@@ -1705,9 +1720,8 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
         // the UI names of built-in styles.
         if (ReservedStyleNames.find(sRet) != ReservedStyleNames.end() || sRet.endsWith(" (WW)"))
             sRet += " (WW)";
+        return { sRet, false };
     }
-
-    return sRet;
 }
 
 void StyleSheetTable::applyDefaults(bool bParaProperties)

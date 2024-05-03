@@ -100,7 +100,8 @@ public:
     StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(std::u16string_view rIndex);
     StyleSheetEntryPtr FindDefaultParaStyle();
 
-    OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
+    OUString ConvertStyleNameExt(const OUString& rWWName);
+    static std::pair<OUString, bool> ConvertStyleName(const OUString& rWWName);
     OUString CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
     void ApplyClonedTOCStyles();
 
