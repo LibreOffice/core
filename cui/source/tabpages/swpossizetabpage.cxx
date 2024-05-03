@@ -37,6 +37,7 @@
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 #include <osl/diagnose.h>
+#include <svl/grabbagitem.hxx>
 
 using namespace ::com::sun::star::text;
 
@@ -431,14 +432,16 @@ static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 }
 
 static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
-            SvxSwFramePosString::StringId eStringId, bool bVertical, bool bRTL)
+            SvxSwFramePosString::StringId eStringId, bool bVertical, bool bRTL, bool bDontMirrorRTL)
 {
     //special handling of STR_FROMLEFT
     if(SvxSwFramePosString::FROMLEFT == eStringId)
     {
+        bool bMirrorRtlDrawObjs = !bDontMirrorRTL;
+        bool bSwapLR = bRTL && bMirrorRtlDrawObjs;
         eStringId = bVertical ?
             bRTL ? SvxSwFramePosString::FROMBOTTOM : SvxSwFramePosString::FROMTOP :
-            bRTL ? SvxSwFramePosString::FROMRIGHT : SvxSwFramePosString::FROMLEFT;
+            bSwapLR ? SvxSwFramePosString::FROMRIGHT : SvxSwFramePosString::FROMLEFT;
         return eStringId;
     }
     if(bVertical)
@@ -728,7 +731,8 @@ WhichRangesContainer SvxSwPosSizeTabPage::GetRanges()
         SID_ATTR_TRANSFORM_AUTOWIDTH, SID_ATTR_TRANSFORM_VERT_ORIENT,
         SID_HTML_MODE, SID_HTML_MODE,
         SID_SW_FOLLOW_TEXT_FLOW, SID_SW_FOLLOW_TEXT_FLOW,
-        SID_ATTR_TRANSFORM_HORI_POSITION, SID_ATTR_TRANSFORM_VERT_POSITION
+        SID_ATTR_TRANSFORM_HORI_POSITION, SID_ATTR_TRANSFORM_VERT_POSITION,
+        SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG
     >);
     return ranges;
 }
@@ -966,6 +970,17 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         m_xFollowCB->set_active(bFollowTextFlow);
     }
     m_xFollowCB->save_state();
+
+    const SfxGrabBagItem* pGrabBag = GetItem(*rSet, SID_ATTR_CHAR_GRABBAG);
+    if (pGrabBag)
+    {
+        const std::map<OUString, css::uno::Any>& rMap = pGrabBag->GetGrabBag();
+        auto it = rMap.find("DoNotMirrorRtlDrawObjs");
+        if (it != rMap.end())
+        {
+            it->second >>= m_bDoNotMirrorRtlDrawObjs;
+        }
+    }
 
     if(m_bHtmlMode)
     {
@@ -1651,7 +1666,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                         {
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
-                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
+                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft, m_bDoNotMirrorRtlDrawObjs);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
                             rLB.append(weld::toId(&aAsCharRelationMap[nRelPos]), sEntry);
                             if (pMap[_nMapPos].nAlign == nAlign)
@@ -1706,7 +1721,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                         if (aRelationMap[nRelPos].nLBRelation == static_cast<LB>(nBit))
                         {
                             SvxSwFramePosString::StringId sStrId1 = m_xHoriMirrorCB->get_active() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
-                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
+                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft, m_bDoNotMirrorRtlDrawObjs);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
                             rLB.append(weld::toId(&aRelationMap[nRelPos]), sEntry);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
@@ -1783,7 +1798,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
     for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
         SvxSwFramePosString::StringId eStrId = m_xHoriMirrorCB->get_active() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-        eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
+        eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft, m_bDoNotMirrorRtlDrawObjs);
         OUString sEntry(SvxSwFramePosString::GetString(eStrId));
         if (_rLB.find_text(sEntry) == -1)
         {
