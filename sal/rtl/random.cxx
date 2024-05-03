@@ -63,12 +63,11 @@ rtlRandomError SAL_CALL rtl_random_addBytes(
 }
 
 rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool Pool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
+    rtlRandomPool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
     sal_uInt8 *pBuffer = static_cast< sal_uInt8* >(Buffer);
 
-    if (!pImpl || !pBuffer)
+    if (!pBuffer)
         return rtl_Random_E_Argument;
 
     if (!osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))

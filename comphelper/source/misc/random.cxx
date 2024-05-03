@@ -60,10 +60,8 @@ struct RandomNumberGenerator
         }
 
         size_t seed = 0;
-        rtlRandomPool aRandomPool = rtl_random_createPool();
-        if (rtl_random_getBytes(aRandomPool, &seed, sizeof(seed)) != rtl_Random_E_None)
+        if (rtl_random_getBytes(nullptr, &seed, sizeof(seed)) != rtl_Random_E_None)
             seed = 0;
-        rtl_random_destroyPool(aRandomPool);
 
         // initialises the state of the global random number generator
         // should only be called once.

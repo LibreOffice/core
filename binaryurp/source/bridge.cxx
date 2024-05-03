@@ -74,9 +74,7 @@ namespace {
 
 sal_Int32 random() {
     sal_Int32 n;
-    rtlRandomPool pool = rtl_random_createPool();
-    (void)rtl_random_getBytes(pool, &n, sizeof n);
-    rtl_random_destroyPool(pool);
+    (void)rtl_random_getBytes(nullptr, &n, sizeof n);
     return n;
 }
 

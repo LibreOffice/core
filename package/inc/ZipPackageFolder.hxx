@@ -99,8 +99,7 @@ public:
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
-                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
-                            const rtlRandomPool &rRandomPool ) override;
+                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) override;
 
     // Recursive functions
     /// @throws css::uno::RuntimeException
@@ -110,8 +109,7 @@ public:
             ZipOutputStream & rZipOut,
             const css::uno::Sequence< sal_Int8 > &rEncryptionKey,
             ::std::optional<sal_Int32> oPBKDF2IterationCount,
-            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
-            const rtlRandomPool & rRandomPool) const;
+            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) const;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
