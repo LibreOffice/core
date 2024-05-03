@@ -16,6 +16,7 @@
 #include <time.h>
 #include <mutex>
 #include <random>
+#include <rtl/random.h>
 #include <stdexcept>
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
@@ -40,7 +41,9 @@ struct RandomNumberGenerator
 {
     std::mutex mutex;
     STD_RNG_ALGO global_rng;
-    RandomNumberGenerator()
+    RandomNumberGenerator() { reseed(); }
+
+    void reseed()
     {
         // make RR easier to use, breaks easily without the RNG being repeatable
         bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != nullptr) || (getenv("RR") != nullptr);
@@ -56,21 +59,18 @@ struct RandomNumberGenerator
             return;
         }
 
-        try
-        {
-            std::random_device rd;
-            // initialises the state of the global random number generator
-            // should only be called once.
-            // (note, a few std::variate_generator<> (like normal) have their
-            // own state which would need a reset as well to guarantee identical
-            // sequence of numbers, e.g. via myrand.distribution().reset())
-            global_rng.seed(rd() ^ time(nullptr));
-        }
-        catch (std::runtime_error& e)
-        {
-            SAL_WARN("comphelper", "Using std::random_device failed: " << e.what());
-            global_rng.seed(time(nullptr));
-        }
+        size_t seed = 0;
+        rtlRandomPool aRandomPool = rtl_random_createPool();
+        if (rtl_random_getBytes(aRandomPool, &seed, sizeof(seed)) != rtl_Random_E_None)
+            seed = 0;
+        rtl_random_destroyPool(aRandomPool);
+
+        // initialises the state of the global random number generator
+        // should only be called once.
+        // (note, a few std::variate_generator<> (like normal) have their
+        // own state which would need a reset as well to guarantee identical
+        // sequence of numbers, e.g. via myrand.distribution().reset())
+        global_rng.seed(seed ^ time(nullptr));
     }
 };
 
@@ -80,6 +80,8 @@ RandomNumberGenerator& GetTheRandomNumberGenerator()
     return RANDOM;
 }
 }
+
+void reseed() { GetTheRandomNumberGenerator().reseed(); }
 
 // uniform ints [a,b] distribution
 int uniform_int_distribution(int a, int b)
