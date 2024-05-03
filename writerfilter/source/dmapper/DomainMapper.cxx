@@ -2659,7 +2659,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
         StyleSheetTablePtr pStyleTable = m_pImpl->GetStyleSheetTable();
-        const OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
+        const OUString sConvertedStyleName = pStyleTable->ConvertStyleNameExt(sStringValue);
         m_pImpl->SetCurrentParaStyleName( sConvertedStyleName );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sConvertedStyleName ));
@@ -2667,7 +2667,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         {
-            OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
+            OUString const sConvertedName(m_pImpl->GetStyleSheetTable()->ConvertStyleNameExt(sStringValue));
             if (m_pImpl->CheckFootnoteStyle() && m_pImpl->GetFootnoteContext())
                 m_pImpl->SetHasFootnoteStyle(m_pImpl->GetFootnoteContext()->GetFootnoteStyle() == sConvertedName);
 
