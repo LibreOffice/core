@@ -4640,6 +4640,54 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaAfterDeleteRows)
     ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong value at A4", 3.0, m_pDoc->GetValue(aPos));
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    // Temporarily switch regex search mode.
+    bool bOldWildCard = false;
+    ScDocOptions aDocOpt = m_pDoc->GetDocOptions();
+    if (!aDocOpt.IsFormulaRegexEnabled())
+    {
+        aDocOpt.SetFormulaRegexEnabled(true);
+        m_pDoc->SetDocOptions(aDocOpt);
+        bOldWildCard = true;
+    }
+
+    m_pDoc->InsertTab(0, "Test1");
+
+    std::vector<std::vector<const char*>> aData = { { "Element", "Relative Atomic Mass" },
+                                                    { "Hydrogen", "1.008" },
+                                                    { "Helium", "4.003" },
+                                                    { "Lithium", "6.94" },
+                                                    { "Beryllium", "9.012" },
+                                                    { "Boron", "10.81" },
+                                                    { "Carbon", "12.011" },
+                                                    { "Nitrogen", "14.007" },
+                                                    { "Oxygen", "15.999" },
+                                                    { "Florine", "18.998" },
+                                                    { "Neon", "20.18" } };
+
+    insertRangeData(m_pDoc, ScAddress(0, 0, 0), aData); // A1:B11
+    m_pDoc->SetString(4, 14, 0, "^bo.*"); // E15 - search regex string
+
+    m_pDoc->SetFormula(ScAddress(5, 14, 0), "=XLOOKUP(E15;A$2:A$11;B$2:B$11;;2)",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI); // F15
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 10.81
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(10.81, m_pDoc->GetValue(5, 14, 0));
+
+    // Switch back to wildcard mode if necessary.
+    if (bOldWildCard)
+    {
+        aDocOpt.SetFormulaWildcardsEnabled(true);
+        m_pDoc->SetDocOptions(aDocOpt);
+    }
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
