@@ -274,7 +274,7 @@ bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const ScPatternAttr*
         return true;
     if (cmp > 0)
         return false;
-    return lhs < static_cast<const ScPatternAttr*>(nullptr);
+    return false;
 }
 bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const OUString* lhs, const ScPatternAttr* rhs) const
 {
@@ -283,7 +283,7 @@ bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const OUString* lhs,
         return true;
     if (cmp > 0)
         return false;
-    return static_cast<const ScPatternAttr*>(nullptr) < rhs;
+    return true;
 }
 
 
