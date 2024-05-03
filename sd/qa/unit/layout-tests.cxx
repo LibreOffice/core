@@ -380,6 +380,54 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
                        u"11\u202f\u1824"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
+{
+    // Test that the text adjusts to contour properly
+
+    constexpr OUString sText
+        = u"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis "
+          "pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. "
+          "Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec "
+          "pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris "
+          "vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, "
+          "nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce "
+          "pellentesque est orci."_ustr;
+
+    // index, length, x, y
+    const std::tuple<int, int, int, int> strings[] = {
+        { 0, 6, 9599, 8647 }, //                        Lorem
+        { 6, 22, 7570, 9358 }, //               ipsum dolor sit amet,
+        { 28, 29, 6775, 10069 }, //         consectetur adipiscing elit.
+        { 57, 29, 6299, 10780 }, //         Vestibulum consequat mi quis
+        { 86, 37, 5453, 11491 }, //     pretium semper. Proin luctus orci ac
+        { 123, 36, 5134, 12202 }, //     neque venenatis, quis commodo dolor
+        { 159, 41, 4764, 12913 }, //  posuere. Curabitur dignissim sapien quis
+        { 200, 43, 4481, 13624 }, // cursus egestas. Donec blandit auctor arcu,
+        { 243, 40, 4975, 14335 }, //   nec pellentesque eros molestie eget. In
+        { 283, 42, 4552, 15046 }, //  consectetur aliquam hendrerit. Sed cursus
+        { 325, 38, 5363, 15757 }, //    mauris vitae ligula pellentesque, non
+        { 363, 42, 4692, 16468 }, //  pellentesque urna aliquet. Fusce placerat
+        { 405, 37, 5047, 17179 }, //    mauris enim, nec rutrum purus semper
+        { 442, 33, 5963, 17890 }, //      vel. Praesent tincidunt neque eu
+        { 475, 29, 6387, 18601 }, //        pellentesque pharetra. Fusce
+        { 504, 22, 7499, 19312 }, //           pellentesque est orci.
+    };
+
+    xmlDocUniquePtr pXmlDoc = load("odg/adjust-to-contour.fodg");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, std::size(strings));
+    for (size_t i = 0; i < std::size(strings); ++i)
+    {
+        const auto & [ index, length, x, y ] = strings[i];
+        OString sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
+        assertXPathContent(pXmlDoc, sXPath + "/text", sText);
+        assertXPath(pXmlDoc, sXPath, "index"_ostr, OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length"_ostr, OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "x"_ostr, OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y"_ostr, OUString::number(y));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -923,7 +923,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             GetTextRanger()->SetVertical( IsEffectivelyVertical() );
 
-            tools::Long nTextY = nStartPosY + GetEditCursor(rParaPortion, *pLine, pLine->GetStart(), CursorFlags()).Top();
+            tools::Long nTextY = nCurrentPosY + GetEditCursor(rParaPortion, *pLine, pLine->GetStart(), CursorFlags()).Top();
             if ( !bSameLineAgain )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
