@@ -56,8 +56,8 @@ const FontCharMapRef& BuildinFont::GetFontCharMap() const
 FontAttributes BuildinFont::GetFontAttributes() const
 {
     FontAttributes aDFA;
-    aDFA.SetFamilyName(OUString::createFromAscii(m_pName));
-    aDFA.SetStyleName(OUString::createFromAscii(m_pStyleName));
+    aDFA.SetFamilyName(m_aName);
+    aDFA.SetStyleName(m_aStyleName);
     aDFA.SetFamilyType(m_eFamily);
     // dubious, see BuildinFont::GetFontCharMap
     aDFA.SetMicrosoftSymbolEncoded(m_eCharSet != RTL_TEXTENCODING_MS_1252);
@@ -69,9 +69,9 @@ FontAttributes BuildinFont::GetFontAttributes() const
     return aDFA;
 }
 
-const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
-    = { { "Courier", // family name
-          "Normal", // style
+constinit const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
+    = { { u"Courier"_ustr, // family name
+          u"Normal"_ustr, // style
           "Courier", // PSName
           629,
           -157, // ascend, descend
@@ -115,10 +115,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Courier", // family name
-          "Italic", // style
+        { u"Courier"_ustr, // family name
+          u"Italic"_ustr, // style
           "Courier-Oblique", // PSName
           629,
           -157, // ascend, descend
@@ -162,10 +162,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Courier", // family name
-          "Bold", // style
+        { u"Courier"_ustr, // family name
+          u"Bold"_ustr, // style
           "Courier-Bold", // PSName
           629,
           -157, // ascend, descend
@@ -209,10 +209,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Courier", // family name
-          "Bold Italic", // style
+        { u"Courier"_ustr, // family name
+          u"Bold Italic"_ustr, // style
           "Courier-BoldOblique", // PSName
           629,
           -157, // ascend, descend
@@ -256,10 +256,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Helvetica", // family name
-          "Normal", // style
+        { u"Helvetica"_ustr, // family name
+          u"Normal"_ustr, // style
           "Helvetica", // PSName
           718,
           -207, // ascend, descend
@@ -303,10 +303,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556,  556,  556, 556, 556,  556,  556,  584, // 240 - 247
               611,  556,  556, 556, 556,  500,  556,  500 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Helvetica", // family name
-          "Italic", // style
+        { u"Helvetica"_ustr, // family name
+          u"Italic"_ustr, // style
           "Helvetica-Oblique", // PSName
           718,
           -207, // ascend, descend
@@ -350,10 +350,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556,  556,  556, 556, 556,  556,  556,  584, // 240 - 247
               611,  556,  556, 556, 556,  500,  556,  500 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Helvetica", // family name
-          "Bold", // style
+        { u"Helvetica"_ustr, // family name
+          u"Bold"_ustr, // style
           "Helvetica-Bold", // PSName
           718,
           -207, // ascend, descend
@@ -397,10 +397,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               611, 611,  611, 611, 611,  611,  611,  584, // 240 - 247
               611, 611,  611, 611, 611,  556,  611,  556 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Helvetica", // family name
-          "Bold Italic", // style
+        { u"Helvetica"_ustr, // family name
+          u"Bold Italic"_ustr, // style
           "Helvetica-BoldOblique", // PSName
           718,
           -207, // ascend, descend
@@ -444,10 +444,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               611, 611,  611, 611, 611,  611,  611,  584, // 240 - 247
               611, 611,  611, 611, 611,  556,  611,  556 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Times", // family name
-          "Normal", // style
+        { u"Times"_ustr, // family name
+          u"Normal"_ustr, // style
           "Times-Roman", // PSName
           683,
           -217, // ascend, descend
@@ -491,10 +491,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               500, 500,  500, 500, 500, 500,  500, 564, // 240 - 247
               500, 500,  500, 500, 500, 500,  500, 500 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Times", // family name
-          "Italic", // style
+        { u"Times"_ustr, // family name
+          u"Italic"_ustr, // style
           "Times-Italic", // PSName
           683,
           -217, // ascend, descend
@@ -538,10 +538,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               500, 500,  500, 500, 500, 500, 500, 675, // 240 - 247
               500, 500,  500, 500, 500, 444, 500, 444 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Times", // family name
-          "Bold", // style
+        { u"Times"_ustr, // family name
+          u"Bold"_ustr, // style
           "Times-Bold", // PSName
           683,
           -217, // ascend, descend
@@ -585,10 +585,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               500, 556,  500, 500, 500,  500,  500,  570, // 240 - 247
               500, 556,  556, 556, 556,  500,  556,  500 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "Times", // family name
-          "Bold Italic", // style
+        { u"Times"_ustr, // family name
+          u"Bold Italic"_ustr, // style
           "Times-BoldItalic", // PSName
           683,
           -217, // ascend, descend
@@ -632,12 +632,12 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               500, 556,  500, 500, 500, 500,  500, 570, // 240 - 247
               500, 556,  556, 556, 556, 444,  500, 444 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
         // The font name "Symbol" is too generic and causes plenty of trouble.
         // To ensure WYSIWIG the PDF-Base14 variant gets a not-confusable name
-        { "PDF_Base14_Symbol", // family name
-          "Normal", // style
+        { u"PDF_Base14_Symbol"_ustr, // family name
+          u"Normal"_ustr, // style
           "Symbol", // PSName
           1010,
           -293, // ascend, descend
@@ -681,10 +681,10 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               0,   329, 274, 686,  686,  686, 384,  384, // 240 - 247
               384, 384, 384, 384,  494,  494, 494,  0 // 248 - 255
           },
-          nullptr },
+          FontCharMapRef() },
 
-        { "ZapfDingbats", // family name
-          "Normal", // style
+        { u"ZapfDingbats"_ustr, // family name
+          u"Normal"_ustr, // style
           "ZapfDingbats", // PSName
           820,
           -143, // ascend, descend
@@ -728,7 +728,7 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               0,   874, 760, 946, 771, 865, 771,  888, // 240 - 247
               967, 888, 831, 873, 927, 970, 918,  0 // 248 - 255
           },
-          nullptr }
+          FontCharMapRef() }
 
       };
 

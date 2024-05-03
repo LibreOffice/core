@@ -28,8 +28,8 @@ namespace vcl::pdf
 {
 struct BuildinFont
 {
-    const char* m_pName;
-    const char* m_pStyleName;
+    OUString m_aName;
+    OUString m_aStyleName;
     const char* m_pPSName;
     int const m_nAscent;
     int const m_nDescent;
