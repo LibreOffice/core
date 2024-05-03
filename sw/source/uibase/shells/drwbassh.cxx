@@ -60,6 +60,8 @@
 #include <fmtfollowtextflow.hxx>
 #include <textboxhelper.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
+#include <svl/grabbagitem.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::beans;
@@ -242,6 +244,14 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
                         aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_HORI_POSITION, aHOrient.GetPos()));
+
+                        const IDocumentSettingAccess& rIDSA = pFrameFormat->getIDocumentSettingAccess();
+                        if (rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS))
+                        {
+                            SfxGrabBagItem aItem(RES_CHRATR_GRABBAG);
+                            aItem.GetGrabBag()["DoNotMirrorRtlDrawObjs"] <<= true;
+                            aSet.Put(aItem);
+                        }
 
                         aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
 

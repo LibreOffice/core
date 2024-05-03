@@ -53,6 +53,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     bool    m_bPositioningDisabled;
     bool    m_bIsMultiSelection;
     bool    m_bIsInRightToLeft;
+    bool m_bDoNotMirrorRtlDrawObjs = false;
     TriState    m_nProtectSizeState;
 
     SwFrameExample m_aExampleWN;
