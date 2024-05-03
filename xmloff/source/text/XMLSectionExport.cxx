@@ -930,29 +930,29 @@ static const XMLTokenEnum* aTypeLevelNameMap[] =
     aLevelNameBibliographyMap   // bibliography
 };
 
-static const char* aLevelStylePropNameTOCMap[] =
-    { nullptr, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
-          "ParaStyleLevel4", "ParaStyleLevel5", "ParaStyleLevel6",
-          "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
-          "ParaStyleLevel10", nullptr };
-static const char* aLevelStylePropNameTableMap[] =
-    { nullptr, "ParaStyleLevel1", nullptr };
-static const char* aLevelStylePropNameAlphaMap[] =
-    { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
-          "ParaStyleLevel3", nullptr };
-static const char* aLevelStylePropNameBibliographyMap[] =
+constexpr OUString aLevelStylePropNameTOCMap[] =
+    { u""_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel2"_ustr, u"ParaStyleLevel3"_ustr,
+          u"ParaStyleLevel4"_ustr, u"ParaStyleLevel5"_ustr, u"ParaStyleLevel6"_ustr,
+          u"ParaStyleLevel7"_ustr, u"ParaStyleLevel8"_ustr, u"ParaStyleLevel9"_ustr,
+          u"ParaStyleLevel10"_ustr, u""_ustr };
+constexpr OUString aLevelStylePropNameTableMap[] =
+    { u""_ustr, u"ParaStyleLevel1"_ustr, u""_ustr };
+constexpr OUString aLevelStylePropNameAlphaMap[] =
+    { u""_ustr, u"ParaStyleSeparator"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel2"_ustr,
+          u"ParaStyleLevel3"_ustr, u""_ustr };
+constexpr OUString aLevelStylePropNameBibliographyMap[] =
           // TODO: replace with real property names, when available
-    { nullptr, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-          "ParaStyleLevel1",
-          nullptr };
+    { u""_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+          u"ParaStyleLevel1"_ustr,
+          u""_ustr };
 
-static const char** aTypeLevelStylePropNameMap[] =
+constexpr const OUString* aTypeLevelStylePropNameMap[] =
 {
     aLevelStylePropNameTOCMap,          // TOC
     aLevelStylePropNameTableMap,        // table index
@@ -1027,13 +1027,12 @@ bool XMLSectionExport::ExportIndexTemplate(
         }
 
         // paragraph level style name
-        const char* pPropName(
+        const OUString pPropName(
             aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
-        OSL_ENSURE(nullptr != pPropName, "can't find property name");
-        if (nullptr != pPropName)
+        OSL_ENSURE(!pPropName.isEmpty(), "can't find property name");
+        if (!pPropName.isEmpty())
         {
-            Any aAny = rPropertySet->getPropertyValue(
-                OUString::createFromAscii(pPropName));
+            Any aAny = rPropertySet->getPropertyValue(pPropName);
             OUString sParaStyleName;
             aAny >>= sParaStyleName;
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
