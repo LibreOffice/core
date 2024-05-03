@@ -28,6 +28,7 @@
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
@@ -307,7 +308,14 @@ void BackingWindow::initControls()
     mxExtensionsButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     mxOpenButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
-    mxRemoteButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+
+    // Hide OpenRemote button on startpage if the OpenRemote uno command is not available
+    SvtCommandOptions aCmdOptions;
+    if (SvtCommandOptions().HasEntriesDisabled() && aCmdOptions.LookupDisabled("OpenRemote"))
+        mxRemoteButton->set_visible(false);
+    else
+        mxRemoteButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+
     mxWriterAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxDrawAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxCalcAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
