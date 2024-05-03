@@ -576,6 +576,12 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     if (SvxFrameDirection::Horizontal_RL_TB != m_rDoc.GetTextDirection(rFrameFormat.GetPosition()))
         return;
 
+    if (m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS))
+    {
+        // Swap is handled at a layout-level, no need to compensate for it at export time.
+        return;
+    }
+
     SwTwips nWidth = rRight - rLeft;
     SwTwips nPageLeft, nPageRight;
     SwTwips nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
