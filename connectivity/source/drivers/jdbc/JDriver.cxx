@@ -208,7 +208,6 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
-    return Sequence< DriverPropertyInfo >();
 }
 
 sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  )

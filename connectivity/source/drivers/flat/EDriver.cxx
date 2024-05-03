@@ -128,7 +128,6 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
-    return Sequence< DriverPropertyInfo >();
 }
 
 

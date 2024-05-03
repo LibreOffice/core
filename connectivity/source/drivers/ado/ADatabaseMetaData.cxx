@@ -1027,8 +1027,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  )
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XDatabaseMetaData::getUDTs", *this );
-    return Reference< XResultSet >();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

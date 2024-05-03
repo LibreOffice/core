@@ -117,7 +117,6 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
     return m_aValue.getInt32();
 }
 
-
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
@@ -127,13 +126,10 @@ sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
     return static_cast<sal_Int64>(m_aValue.getCurrency().int64);
 }
 
-
 Any SAL_CALL OCallableStatement::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getObject", *this );
-    return Any();
 }
-
 
 sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
 {
@@ -144,7 +140,6 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
     return m_aValue.getInt16();
 }
 
-
 OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
@@ -154,8 +149,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
     return m_aValue.getString();
 }
 
-
- css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
+css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -202,42 +196,32 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBinaryStream", *this );
-    return nullptr;
 }
 
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return nullptr;
 }
-
 
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
-    return nullptr;
 }
-
 
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
-    return nullptr;
 }
-
 
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
-    return nullptr;
 }
-
 
 void SAL_CALL OCallableStatement::acquire() noexcept
 {
@@ -248,6 +232,5 @@ void SAL_CALL OCallableStatement::release() noexcept
 {
     OPreparedStatement::release();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

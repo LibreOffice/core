@@ -153,7 +153,6 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
         const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     } // if ( ! acceptsURL(url) )
-    return Sequence< DriverPropertyInfo >();
 }
 
 sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  )

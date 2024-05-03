@@ -162,7 +162,6 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    O3TL_UNREACHABLE;
 }
 
 void ODatabaseMetaDataResultSet::checkIndex(std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 columnIndex )
@@ -318,15 +317,12 @@ bool ODatabaseMetaDataResultSet::isAfterLast( std::unique_lock<std::mutex>& /*rG
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
-
 
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  )
 {
@@ -348,63 +344,50 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  )
     dispose();
 }
 
-
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
-
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
-
 
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
 {
     return m_aStatement.get();
 }
 
-
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    O3TL_UNREACHABLE;
 }
-
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst()
 {

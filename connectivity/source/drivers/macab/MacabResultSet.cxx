@@ -394,8 +394,7 @@ Date SAL_CALL MacabResultSet::getDate(sal_Int32)
 
     ::dbtools::throwFunctionNotSupportedSQLException("getDate", nullptr);
 
-    Date aRet;
-    return aRet;
+    return Date();
 }
 
 Time SAL_CALL MacabResultSet::getTime(sal_Int32)
@@ -405,8 +404,7 @@ Time SAL_CALL MacabResultSet::getTime(sal_Int32)
 
     ::dbtools::throwFunctionNotSupportedSQLException("getTime", nullptr);
 
-    css::util::Time nRet;
-    return nRet;
+    return css::util::Time();
 }
 
 DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex)

@@ -139,7 +139,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  )
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 
-
 sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,9 +156,8 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName )
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
+
 #define BLOCK_SIZE 256
 
 Reference< css::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex )
@@ -205,7 +203,6 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int
 Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return nullptr;
 }
 
 OLEVariant OResultSet::getValue(sal_Int32 columnIndex )
@@ -276,7 +273,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  )
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getLong", *this );
-    return sal_Int64(0);
 }
 
 
@@ -294,29 +290,22 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  )
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
-    return nullptr;
 }
-
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
-    return nullptr;
 }
-
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
-    return nullptr;
 }
-
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {

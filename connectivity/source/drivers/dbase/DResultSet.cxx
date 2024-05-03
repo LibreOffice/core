@@ -150,7 +150,6 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFeatureNotImplementedSQLException( "XDeleteRows::deleteRows", *this );
-    return Sequence< sal_Int32 >();
 }
 
 bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)

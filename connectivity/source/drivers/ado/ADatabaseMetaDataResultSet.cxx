@@ -112,7 +112,6 @@ void ODatabaseMetaDataResultSet::checkRecordSet()
         throwFunctionSequenceException(*this);
 }
 
-
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -130,9 +129,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
+
 #define BLOCK_SIZE 256
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex )
@@ -181,9 +179,7 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinar
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return nullptr;
 }
-
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
@@ -261,20 +257,15 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
     return m_aValue.getInt32();
 }
 
-
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XResultSet::getRow", *this );
-    return 0;
 }
-
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getLong", *this );
-    return sal_Int64(0);
 }
-
 
 Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  )
 {
@@ -293,29 +284,22 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return nullptr;
 }
-
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return nullptr;
 }
-
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return nullptr;
 }
-
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {

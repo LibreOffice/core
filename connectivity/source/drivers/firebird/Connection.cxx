@@ -746,7 +746,6 @@ void SAL_CALL Connection::setCatalog(const OUString& /*catalog*/)
 OUString SAL_CALL Connection::getCatalog()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("getCatalog", *this);
-    return OUString();
 }
 
 void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level )
@@ -769,7 +768,6 @@ sal_Int32 SAL_CALL Connection::getTransactionIsolation(  )
 Reference< XNameAccess > SAL_CALL Connection::getTypeMap()
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
-    return nullptr;
 }
 
 void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >&)

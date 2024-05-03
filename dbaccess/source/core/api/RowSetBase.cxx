@@ -372,7 +372,6 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *m_pMySelf );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex )
@@ -388,7 +387,6 @@ Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex )
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *m_pMySelf );
-    return nullptr;
 }
 
 // css::sdbcx::XRowLocate

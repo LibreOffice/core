@@ -118,7 +118,6 @@ sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::changePassword", *this );
-    O3TL_UNREACHABLE;
 }
 
 sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
@@ -126,7 +125,6 @@ sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, s
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::getGrantablePrivileges", *this );
-    O3TL_UNREACHABLE;
 }
 
 void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )

@@ -51,13 +51,11 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStrea
 ::sal_Int64 SAL_CALL BlobHelper::position( const css::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::position", *this );
-    O3TL_UNREACHABLE;
 }
 
 ::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
-    O3TL_UNREACHABLE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -292,7 +292,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return nullptr;
 }
 
 OUString SAL_CALL OConnection::nativeSQL( const OUString& sql )

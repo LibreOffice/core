@@ -212,13 +212,13 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedSQLException(
         const OUString& _rFunctionName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
     );
 
 /// @throws css::uno::RuntimeException
-OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
         const OUString& _rFunctionName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
     );
@@ -227,7 +227,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
 
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
         const css::uno::Reference< css::uno::XInterface >& Context,
         const css::uno::Any& Next = css::uno::Any()
     );
@@ -237,7 +237,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
 
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
         const css::uno::Reference< css::uno::XInterface >& Context,
         const css::uno::Any& Next = css::uno::Any()
     );
@@ -247,7 +247,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
 
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
         const css::uno::Reference< css::uno::XInterface >& _rxSource
     );
@@ -257,7 +257,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
         const css::uno::Reference< css::uno::XInterface >& _rxSource,
         const css::uno::Any& _rNextException
@@ -272,7 +272,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         the context of the exception
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const css::uno::Any& _rNextException = css::uno::Any()
@@ -286,7 +286,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         the context of the exception
     @throws css::uno::RuntimeException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
     );
@@ -298,7 +298,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
         the context of the exception
     @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
         const OUString& _rColumnName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
     );
@@ -306,7 +306,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
 
 /** @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rMessage,
         const OUString& _rSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
@@ -316,7 +316,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
 
 /** @throws css::sdbc::SQLException
 */
-OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
+[[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rMessage,
         StandardSQLState _eSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,

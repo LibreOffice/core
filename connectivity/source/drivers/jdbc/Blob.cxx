@@ -138,7 +138,6 @@ sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const css::uno::Reference< css
     // to translated pattern into a byte[] -, we defer this functionality for the moment (hey, it was
     // unusable, anyway)
     // #i57457#
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

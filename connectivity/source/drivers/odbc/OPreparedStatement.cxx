@@ -656,14 +656,10 @@ void SAL_CALL OPreparedStatement::addBatch( )
     ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::addBatch", *this );
 }
 
-
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::executeBatch", *this );
-    // not reached, but keep -Werror happy
-    return Sequence< sal_Int32 > ();
 }
-
 
 // methods
 

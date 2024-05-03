@@ -131,7 +131,6 @@ Sequence< sal_Int32 > SAL_CALL OComponentResultSet::deleteRows( const  Sequence<
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFeatureNotImplementedSQLException( "XDeleteRows::deleteRows", *this );
-    return Sequence< sal_Int32 >();
 }
 
 bool OComponentResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)

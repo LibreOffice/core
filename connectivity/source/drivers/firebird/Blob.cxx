@@ -235,14 +235,12 @@ sal_Int64 SAL_CALL  Blob::position(const uno::Sequence< sal_Int8 >& /*rPattern*/
                                    sal_Int64 /*nStart*/)
 {
     ::dbtools::throwFeatureNotImplementedSQLException("Blob::position", *this);
-    return 0;
 }
 
 sal_Int64 SAL_CALL  Blob::positionOfBlob(const uno::Reference< XBlob >& /*rPattern*/,
                                          sal_Int64 /*aStart*/)
 {
     ::dbtools::throwFeatureNotImplementedSQLException("Blob::positionOfBlob", *this);
-    return 0;
 }
 
 // ---- XInputStream ----------------------------------------------------------

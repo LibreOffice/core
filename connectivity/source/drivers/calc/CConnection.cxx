@@ -254,8 +254,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUS
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return nullptr;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

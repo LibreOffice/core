@@ -117,8 +117,6 @@ sal_Int32 SAL_CALL SequenceResultSet::findColumn(
         }
     }
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
 }
 

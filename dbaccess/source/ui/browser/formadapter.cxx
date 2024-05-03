@@ -297,8 +297,6 @@ sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName)
         return xIface->findColumn(columnName);
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
 
 // css::sdbcx::XColumnsSupplier

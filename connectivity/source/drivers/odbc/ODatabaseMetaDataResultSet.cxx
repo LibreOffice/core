@@ -150,8 +150,6 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
 
 template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::getInteger ( sal_Int32 columnIndex )
@@ -182,15 +180,12 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
-    return nullptr;
 }
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
-    return nullptr;
 }
-
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
@@ -342,33 +337,28 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
-    return nullptr;
 }
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
-    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
-    return nullptr;
 }
 
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
-    return Any();
 }
 
 

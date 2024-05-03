@@ -103,8 +103,6 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return nullptr;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

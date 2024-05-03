@@ -153,14 +153,12 @@ sal_Bool SAL_CALL OResultSet::previous()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("previous not supported in firebird",
                                                   *this);
-    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::isLast()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("isLast not supported in firebird",
                                                   *this);
-    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst()
@@ -234,7 +232,6 @@ sal_Bool SAL_CALL OResultSet::last()
     // row, hence we can't actually move to last.
     ::dbtools::throwFunctionNotSupportedSQLException("last not supported in firebird",
                                                   *this);
-    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow)
@@ -334,8 +331,6 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
     }
 
     ::dbtools::throwInvalidColumnException(rColumnName, *this);
-    assert(false);
-    return 0; // Never reached
 }
 
 uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 )
@@ -849,20 +844,18 @@ sal_Bool SAL_CALL OResultSet::rowDeleted()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowDeleted not supported in firebird",
                                                   *this);
-    return false;
 }
+
 sal_Bool SAL_CALL OResultSet::rowInserted()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowInserted not supported in firebird",
                                                   *this);
-    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::rowUpdated()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowUpdated not supported in firebird",
                                                   *this);
-    return false;
 }
 
 void SAL_CALL OResultSet::refreshRow()
@@ -870,7 +863,6 @@ void SAL_CALL OResultSet::refreshRow()
     ::dbtools::throwFunctionNotSupportedSQLException("refreshRow not supported in firebird",
                                                   *this);
 }
-
 
 void SAL_CALL OResultSet::cancel(  )
 {

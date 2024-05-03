@@ -433,10 +433,7 @@ void OCollection::notifyElementRemoved(const OUString& _sName)
 sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName )
 {
     if ( !m_pElements->exists(columnName) )
-    {
         ::dbtools::throwInvalidColumnException( columnName, static_cast< XIndexAccess*>(this) );
-        O3TL_UNREACHABLE;
-    }
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }

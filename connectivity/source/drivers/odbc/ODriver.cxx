@@ -176,7 +176,6 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
-    return Sequence< DriverPropertyInfo >();
 }
 
 sal_Int32 SAL_CALL ODBCDriver::getMajorVersion(  )

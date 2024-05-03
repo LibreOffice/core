@@ -120,13 +120,6 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
 sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XClob::positionOfClob", *this );
-    // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore
-    // the pattern parameter. Since the effort for proper implementation is rather high - we would need
-    // to translated pattern into a byte[] -, we defer this functionality for the moment (hey, it was
-    // unusable, anyway)
-    // 2005-11-15 / #i57457# / frank.schoenheit@sun.com
-    return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

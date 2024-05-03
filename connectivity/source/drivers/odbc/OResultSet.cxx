@@ -369,8 +369,6 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName )
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
 
 void OResultSet::ensureCacheForColumn(sal_Int32 columnIndex)
@@ -408,8 +406,6 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*colu
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
-
-    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
@@ -418,8 +414,6 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
-
-    return nullptr;
 }
 
 template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType )
@@ -598,29 +592,22 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  )
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
-    return nullptr;
 }
-
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
-    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
-    return nullptr;
 }
-
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
-    return nullptr;
 }
-
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
@@ -1250,7 +1237,6 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& /*bookmark*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRowLocate::hashBookmark", *this );
-    return 0;
 }
 
 // XDeleteRows
@@ -1378,15 +1364,9 @@ bool  OResultSet::isBookmarkable() const
     return (m_nUseBookmarks != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
 }
 
-void OResultSet::setFetchDirection(sal_Int32 _par0)
+void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "setFetchDirection", *this );
-
-    OSL_ENSURE(_par0>0,"Illegal fetch direction!");
-    if ( _par0 > 0 )
-    {
-        setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE, _par0);
-    }
 }
 
 void OResultSet::setFetchSize(sal_Int32 _par0)

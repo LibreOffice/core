@@ -182,8 +182,6 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName )
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
-    assert(false);
-    return 0; // Never reached
 }
 
 const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex)

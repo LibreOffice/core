@@ -237,7 +237,6 @@ uno::Reference<sdbc::XPreparedStatement>
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     ::dbtools::throwFeatureNotImplementedSQLException("XConnection::prepareCall", *this);
-    return nullptr;
 }
 
 } // namespace

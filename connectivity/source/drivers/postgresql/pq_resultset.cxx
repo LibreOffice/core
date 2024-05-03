@@ -165,7 +165,6 @@ sal_Int32 ResultSet::findColumn( const OUString& columnName )
     else
     {
         ::dbtools::throwInvalidColumnException( columnName, *this );
-        assert(false);
     }
     return res;
 }
