@@ -2965,8 +2965,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
         {
             auto nToken = aIter.getToken() & TOKEN_MASK;
             PropertyValue aValue;
-            aValue.Name = OUString::createFromAscii(
-                MapBibliographyFieldName(nToken));
+            aValue.Name = MapBibliographyFieldName(nToken);
             Any aAny;
 
             // special treatment for bibliography type
@@ -3027,120 +3026,119 @@ void XMLBibliographyFieldImportContext::PrepareField(
     xPropertySet->setPropertyValue("Fields", Any(aValueSequence));
 }
 
-const char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
+OUString XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     sal_Int32 nElement)
 {
-    const char* pName = nullptr;
+    OUString pName;
 
     switch (nElement & TOKEN_MASK)
     {
         case XML_IDENTIFIER:
-            pName = "Identifier";
+            pName = u"Identifier"_ustr;
             break;
         case XML_BIBILIOGRAPHIC_TYPE:
         case XML_BIBLIOGRAPHY_TYPE:
             // biblio... vs bibilio...: #96658#: also read old documents
-            pName = "BibiliographicType";
+            pName = u"BibiliographicType"_ustr;
             break;
         case XML_ADDRESS:
-            pName = "Address";
+            pName = u"Address"_ustr;
             break;
         case XML_ANNOTE:
-            pName = "Annote";
+            pName = u"Annote"_ustr;
             break;
         case XML_AUTHOR:
-            pName = "Author";
+            pName = u"Author"_ustr;
             break;
         case XML_BOOKTITLE:
-            pName = "Booktitle";
+            pName = u"Booktitle"_ustr;
             break;
         case XML_CHAPTER:
-            pName = "Chapter";
+            pName = u"Chapter"_ustr;
             break;
         case XML_EDITION:
-            pName = "Edition";
+            pName = u"Edition"_ustr;
             break;
         case XML_EDITOR:
-            pName = "Editor";
+            pName = u"Editor"_ustr;
             break;
         case XML_HOWPUBLISHED:
-            pName = "Howpublished";
+            pName = u"Howpublished"_ustr;
             break;
         case XML_INSTITUTION:
-            pName = "Institution";
+            pName = u"Institution"_ustr;
             break;
         case XML_JOURNAL:
-            pName = "Journal";
+            pName = u"Journal"_ustr;
             break;
         case XML_MONTH:
-            pName = "Month";
+            pName = u"Month"_ustr;
             break;
         case XML_NOTE:
-            pName = "Note";
+            pName = u"Note"_ustr;
             break;
         case XML_NUMBER:
-            pName = "Number";
+            pName = u"Number"_ustr;
             break;
         case XML_ORGANIZATIONS:
-            pName = "Organizations";
+            pName = u"Organizations"_ustr;
             break;
         case XML_PAGES:
-            pName = "Pages";
+            pName = u"Pages"_ustr;
             break;
         case XML_PUBLISHER:
-            pName = "Publisher";
+            pName = u"Publisher"_ustr;
             break;
         case XML_SCHOOL:
-            pName = "School";
+            pName = u"School"_ustr;
             break;
         case XML_SERIES:
-            pName = "Series";
+            pName = u"Series"_ustr;
             break;
         case XML_TITLE:
-            pName = "Title";
+            pName = u"Title"_ustr;
             break;
         case XML_REPORT_TYPE:
-            pName = "Report_Type";
+            pName = u"Report_Type"_ustr;
             break;
         case XML_VOLUME:
-            pName = "Volume";
+            pName = u"Volume"_ustr;
             break;
         case XML_YEAR:
-            pName = "Year";
+            pName = u"Year"_ustr;
             break;
         case XML_URL:
-            pName = "URL";
+            pName = u"URL"_ustr;
             break;
         case XML_CUSTOM1:
-            pName = "Custom1";
+            pName = u"Custom1"_ustr;
             break;
         case XML_CUSTOM2:
-            pName = "Custom2";
+            pName = u"Custom2"_ustr;
             break;
         case XML_CUSTOM3:
-            pName = "Custom3";
+            pName = u"Custom3"_ustr;
             break;
         case XML_CUSTOM4:
-            pName = "Custom4";
+            pName = u"Custom4"_ustr;
             break;
         case XML_CUSTOM5:
-            pName = "Custom5";
+            pName = u"Custom5"_ustr;
             break;
         case XML_ISBN:
-            pName = "ISBN";
+            pName = u"ISBN"_ustr;
             break;
         case XML_LOCAL_URL:
-            pName = "LocalURL";
+            pName = u"LocalURL"_ustr;
             break;
         case XML_TARGET_TYPE:
-            pName = "TargetType";
+            pName = u"TargetType"_ustr;
             break;
         case XML_TARGET_URL:
-            pName = "TargetURL";
+            pName = u"TargetURL"_ustr;
             break;
         default:
             assert(false && "Unknown bibliography info data");
-            pName = nullptr;
     }
     return pName;
 }

@@ -953,7 +953,7 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapBibliographyFieldName(sal_Int32 nElement);
+    static OUString MapBibliographyFieldName(sal_Int32 nElement);
 };
 
 /** Import an annotation field (<text:annotation>) */
