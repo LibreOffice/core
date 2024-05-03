@@ -73,17 +73,13 @@ namespace comphelper::xml
 {
         OString makeXMLChaff()
         {
-            rtlRandomPool pool = rtl_random_createPool();
-
             sal_Int8 n;
-            rtl_random_getBytes(pool, &n, 1);
+            (void)rtl_random_getBytes(nullptr, &n, 1);
 
             sal_Int32 nLength = 1024+n;
             // coverity[tainted_data] - 1024 deliberate random minus max -127/plus max 128
             std::vector<sal_uInt8> aChaff(nLength);
-            rtl_random_getBytes(pool, aChaff.data(), nLength);
-
-            rtl_random_destroyPool(pool);
+            (void)rtl_random_getBytes(nullptr, aChaff.data(), nLength);
 
             encodeChaff(aChaff);
 

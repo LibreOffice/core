@@ -443,16 +443,12 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     // generate session key
     // --------------------
 
-    rtlRandomPool aRandomPool = rtl_random_createPool();
-
     // get 32 random chars out of it
     uno::Sequence < sal_Int8 > aVector(32);
-    if (rtl_random_getBytes(aRandomPool, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
+    if (rtl_random_getBytes(nullptr, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
     {
         throw uno::RuntimeException("rtl_random_getBytes failed");
     }
-
-    rtl_random_destroyPool(aRandomPool);
 
     std::vector< uno::Sequence< beans::NamedValue > > aGpgEncryptions;
 

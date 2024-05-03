@@ -563,12 +563,10 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
     maCodec.GetDocId( mpnDocId );
 
     // generate the salt here
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    if (rtl_random_getBytes(aRandomPool, mpnSalt, 16) != rtl_Random_E_None)
+    if (rtl_random_getBytes(nullptr, mpnSalt, 16) != rtl_Random_E_None)
     {
         throw uno::RuntimeException("rtl_random_getBytes failed");
     }
-    rtl_random_destroyPool( aRandomPool );
 
     memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
 

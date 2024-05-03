@@ -452,8 +452,7 @@ bool ZipPackageStream::saveChild(
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
         ::std::optional<sal_Int32> const oPBKDF2IterationCount,
-        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args,
-        const rtlRandomPool &rRandomPool)
+        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args)
 {
     bool bSuccess = true;
 
@@ -592,11 +591,11 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence<sal_Int8> aSalt(16);
                 // note: for GCM it's particularly important that IV is unique
                 uno::Sequence<sal_Int8> aVector(GetIVSize());
-                if (rtl_random_getBytes(rRandomPool, aSalt.getArray(), 16) != rtl_Random_E_None)
+                if (rtl_random_getBytes(nullptr, aSalt.getArray(), 16) != rtl_Random_E_None)
                 {
                     throw uno::RuntimeException("rtl_random_getBytes failed");
                 }
-                if (rtl_random_getBytes(rRandomPool, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
+                if (rtl_random_getBytes(nullptr, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
                 {
                     throw uno::RuntimeException("rtl_random_getBytes failed");
                 }

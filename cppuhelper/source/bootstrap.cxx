@@ -139,14 +139,10 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException( "no local component context!" );
 
         // create a random pipe name
-        rtlRandomPool hPool = rtl_random_createPool();
-        if ( hPool == nullptr )
-            throw BootstrapException( "cannot create random pool!" );
         sal_uInt8 bytes[ 16 ];
-        if ( rtl_random_getBytes( hPool, bytes, std::size( bytes ) )
+        if ( rtl_random_getBytes( nullptr, bytes, std::size( bytes ) )
             != rtl_Random_E_None )
             throw BootstrapException( "random pool error!" );
-        rtl_random_destroyPool( hPool );
         OUStringBuffer buf("uno");
         for (unsigned char byte : bytes)
             buf.append( static_cast< sal_Int32 >( byte ) );

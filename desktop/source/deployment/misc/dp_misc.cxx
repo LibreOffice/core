@@ -410,12 +410,9 @@ oslProcess raiseProcess(
 OUString generateRandomPipeId()
 {
     // compute some good pipe id:
-    static rtlRandomPool s_hPool = rtl_random_createPool();
-    if (s_hPool == nullptr)
-        throw RuntimeException( "cannot create random pool!?", nullptr );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
-            s_hPool, bytes, std::size(bytes) ) != rtl_Random_E_None) {
+            nullptr, bytes, std::size(bytes) ) != rtl_Random_E_None) {
         throw RuntimeException( "random pool error!?", nullptr );
     }
     OUStringBuffer buf;

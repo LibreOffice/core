@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mutex>
 #include <string.h>
 #include <stdlib.h>
 
@@ -84,28 +83,13 @@ extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
                                         SAL_UNUSED_PARAMETER sal_Bool)
 {
+    if (rtl_random_getBytes(nullptr, pTargetUUID, 16) != rtl_Random_E_None)
     {
-        static rtlRandomPool pool = []() {
-            rtlRandomPool aPool = rtl_random_createPool();
-            if (!aPool)
-            {
-                abort();
-                // only possible way to signal failure here (rtl_createUuid
-                // being part of a fixed C API)
-            }
-            return aPool;
-        }();
-
-        static std::mutex aMutex;
-
-        std::scoped_lock g(aMutex);
-        if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None)
-        {
-            abort();
-                // only possible way to signal failure here (rtl_createUuid
-                // being part of a fixed C API)
-        }
+        abort();
+            // only possible way to signal failure here (rtl_createUuid
+            // being part of a fixed C API)
     }
+
     // See ITU-T Recommendation X.667:
     pTargetUUID[6] &= 0x0F;
     pTargetUUID[6] |= 0x40;

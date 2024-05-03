@@ -139,8 +139,7 @@ public:
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
-                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
-                            const rtlRandomPool &rRandomPool ) override;
+                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) override;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     void successfullyWritten( ZipEntry const *pEntry );

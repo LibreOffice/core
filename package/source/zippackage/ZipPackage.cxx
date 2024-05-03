@@ -1216,28 +1216,6 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
         m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, false);
 }
 
-namespace
-{
-    class RandomPool
-    {
-    private:
-        rtlRandomPool m_aRandomPool;
-    public:
-        RandomPool() : m_aRandomPool(rtl_random_createPool ())
-        {
-        }
-        rtlRandomPool get()
-        {
-            return m_aRandomPool;
-        }
-        ~RandomPool()
-        {
-            // Clean up random pool memory
-            rtl_random_destroyPool(m_aRandomPool);
-        }
-    };
-}
-
 uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 {
     // In case the target local file does not exist or empty
@@ -1349,10 +1327,6 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         }
 
         {
-            // This will be used to generate random salt and initialisation vectors
-            // for encrypted streams
-            RandomPool aRandomPool;
-
             ::std::optional<sal_Int32> oPBKDF2IterationCount;
             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args;
 
@@ -1371,7 +1345,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             // call saveContents - it will recursively save sub-directories
             m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(),
-                oPBKDF2IterationCount, oArgon2Args, aRandomPool.get());
+                oPBKDF2IterationCount, oArgon2Args);
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )

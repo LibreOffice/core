@@ -32,7 +32,6 @@
 #include <optional>
 #include <tuple>
 
-typedef void* rtlRandomPool;
 class ZipOutputStream;
 class ZipPackageFolder;
 
@@ -69,8 +68,7 @@ public:
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
-                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
-                            const rtlRandomPool &rRandomPool ) = 0;
+                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) = 0;
 
     void clearParent()
     {

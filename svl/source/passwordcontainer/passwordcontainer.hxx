@@ -245,28 +245,7 @@ private:
     css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
 
-    class RandomPool
-    {
-    private:
-        rtlRandomPool m_aRandomPool;
-    public:
-        RandomPool() : m_aRandomPool(rtl_random_createPool())
-        {
-        }
-        rtlRandomPool get()
-        {
-            return m_aRandomPool;
-        }
-        ~RandomPool()
-        {
-            // Clean up random pool memory
-            rtl_random_destroyPool(m_aRandomPool);
-        }
-    };
-
-    RandomPool mRandomPool;
-
-    OUString createIV();
+    static OUString createIV();
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(

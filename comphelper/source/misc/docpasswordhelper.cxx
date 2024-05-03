@@ -426,12 +426,10 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 {
     uno::Sequence< sal_Int8 > aResult( nLength );
 
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    if (rtl_random_getBytes(aRandomPool, aResult.getArray(), nLength) != rtl_Random_E_None)
+    if (rtl_random_getBytes(nullptr, aResult.getArray(), nLength) != rtl_Random_E_None)
     {
         throw uno::RuntimeException("rtl_random_getBytes failed");
     }
-    rtl_random_destroyPool ( aRandomPool );
 
     return aResult;
 }

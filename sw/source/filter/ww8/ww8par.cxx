@@ -5672,13 +5672,11 @@ namespace
                 // in the MediaDescriptor
                 ::msfilter::MSCodec_Std97 aCodec97;
 
-                rtlRandomPool aRandomPool = rtl_random_createPool();
                 sal_uInt8 pDocId[ 16 ];
-                if (rtl_random_getBytes(aRandomPool, pDocId, 16) != rtl_Random_E_None)
+                if (rtl_random_getBytes(nullptr, pDocId, 16) != rtl_Random_E_None)
                 {
                     throw uno::RuntimeException("rtl_random_getBytes failed");
                 }
-                rtl_random_destroyPool( aRandomPool );
 
                 sal_uInt16 pStd97Pass[16] = {};
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )

@@ -27,12 +27,10 @@ namespace
 
 void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 {
-    rtlRandomPool aRandomPool = rtl_random_createPool();
-    if (rtl_random_getBytes(aRandomPool, aArray, aSize) != rtl_Random_E_None)
+    if (rtl_random_getBytes(nullptr, aArray, aSize) != rtl_Random_E_None)
     {
         throw css::uno::RuntimeException("rtl_random_getBytes failed");
     }
-    rtl_random_destroyPool(aRandomPool);
 }
 
 constexpr OUString lclCspName = u"Microsoft Enhanced RSA and AES Cryptographic Provider"_ustr;
