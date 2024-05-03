@@ -40,33 +40,33 @@ struct SdXMLDataStyleNumber
     bool    mbLong;
     bool    mbTextual;
     bool    mbDecimal02;
-    const char* mpText;
+    OUString maText;
 };
 
 }
 
-SdXMLDataStyleNumber const aSdXMLDataStyleNumbers[] =
+SdXMLDataStyleNumber constexpr aSdXMLDataStyleNumbers[] =
 {
-    { XML_DAY,          false,      false,      false,      nullptr },
-    { XML_DAY,          true,       false,      false,      nullptr },
-    { XML_MONTH,        true,       false,      false,      nullptr },
-    { XML_MONTH,        false,      true,       false,      nullptr },
-    { XML_MONTH,        true,       true,       false,      nullptr },
-    { XML_YEAR,         false,      false,      false,      nullptr },
-    { XML_YEAR,         true,       false,      false,      nullptr },
-    { XML_DAY_OF_WEEK,  false,      false,      false,      nullptr },
-    { XML_DAY_OF_WEEK,  true,       false,      false,      nullptr },
-    { XML_TEXT,         false,      false,      false,      "."  },
-    { XML_TEXT,         false,      false,      false,      " "  },
-    { XML_TEXT,         false,      false,      false,      ", " },
-    { XML_TEXT,         false,      false,      false,      ". " },
-    { XML_HOURS,        false,      false,      false,      nullptr },
-    { XML_MINUTES,      false,      false,      false,      nullptr },
-    { XML_TEXT,         false,      false,      false,      ":"  },
-    { XML_AM_PM,        false,      false,      false,      nullptr },
-    { XML_SECONDS,      false,      false,      false,      nullptr },
-    { XML_SECONDS,      false,      false,      true,       nullptr },
-    { XML_TOKEN_INVALID,        false,              false,             false,       nullptr  }
+    { XML_DAY,          false,      false,      false,      u""_ustr },
+    { XML_DAY,          true,       false,      false,      u""_ustr },
+    { XML_MONTH,        true,       false,      false,      u""_ustr },
+    { XML_MONTH,        false,      true,       false,      u""_ustr },
+    { XML_MONTH,        true,       true,       false,      u""_ustr },
+    { XML_YEAR,         false,      false,      false,      u""_ustr },
+    { XML_YEAR,         true,       false,      false,      u""_ustr },
+    { XML_DAY_OF_WEEK,  false,      false,      false,      u""_ustr },
+    { XML_DAY_OF_WEEK,  true,       false,      false,      u""_ustr },
+    { XML_TEXT,         false,      false,      false,      u"."_ustr  },
+    { XML_TEXT,         false,      false,      false,      u" "_ustr  },
+    { XML_TEXT,         false,      false,      false,      u", "_ustr },
+    { XML_TEXT,         false,      false,      false,      u". "_ustr },
+    { XML_HOURS,        false,      false,      false,      u""_ustr },
+    { XML_MINUTES,      false,      false,      false,      u""_ustr },
+    { XML_TEXT,         false,      false,      false,      u":"_ustr  },
+    { XML_AM_PM,        false,      false,      false,      u""_ustr },
+    { XML_SECONDS,      false,      false,      false,      u""_ustr },
+    { XML_SECONDS,      false,      false,      true,       u""_ustr },
+    { XML_TOKEN_INVALID,        false,              false,             false,       u""_ustr  }
 };
 
 // date
@@ -339,10 +339,9 @@ static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumb
     }
 
     SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, true, false );
-    if( rElement.mpText )
+    if( !rElement.maText.isEmpty() )
     {
-        OUString sAttrValue( OUString::createFromAscii( rElement.mpText ) );
-        rExport.GetDocHandler()->characters( sAttrValue );
+        rExport.GetDocHandler()->characters( rElement.maText );
     }
 }
 
@@ -613,8 +612,8 @@ void SdXMLNumberFormatImportContext::add( std::u16string_view rNumberStyle, bool
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
-            ( ( (pStyleMember->mpText == nullptr) && (rText.empty()) ) ||
-              ( pStyleMember->mpText && (o3tl::equalsAscii( rText, pStyleMember->mpText ) ) ) ) )
+            ( ( (pStyleMember->maText.isEmpty()) && (rText.empty()) ) ||
+              ( !pStyleMember->maText.isEmpty() && rText == pStyleMember->maText ) ) )
         {
             mnElements[mnIndex++] = static_cast<DataStyleNumber>(nIndex + 1);
             return;
