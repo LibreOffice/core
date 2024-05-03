@@ -62,6 +62,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/intitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
@@ -410,13 +411,17 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
             case SfxEventHintId::OpenDoc:
-                if( GetDocument() && GetDocument()->IsStartWithPresentation() )
+            {
+                const sal_uInt16 nStartingSlide
+                    = GetDocument() ? GetDocument()->GetStartWithPresentation() : 0;
+                if (nStartingSlide)
                 {
-                    GetViewFrame().GetDispatcher()->Execute(
-                        SID_PRESENTATION, SfxCallMode::ASYNCHRON );
+                    SfxUInt16Item aItem(FN_PARAM_1, nStartingSlide);
+                    GetViewFrame().GetDispatcher()->ExecuteList(
+                        SID_PRESENTATION, SfxCallMode::ASYNCHRON, { &aItem });
                 }
                 break;
-
+            }
             default:
                 break;
         }

@@ -433,7 +433,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet& rSet = rMedium.GetItemSet();
-    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION) )
+    if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))
     {
         sal_uInt16 nStartingSlide = rSet.Get(SID_DOC_STARTPRESENTATION).GetValue();
         if (nStartingSlide == 0)
@@ -451,9 +451,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetStartWithPresentation(nStartingSlide);
 
         // tell SFX to change viewshell when in preview mode
-        if( IsPreview() )
+        if (IsPreview())
         {
-            GetMedium()->GetItemSet().Put( SfxUInt16Item( SID_VIEW_ID, 1 ) );
+            GetMedium()->GetItemSet().Put(SfxUInt16Item(SID_VIEW_ID, 1));
         }
     }
 
@@ -477,7 +477,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->SetStarDrawPreviewMode( true );
     }
 
-    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION) )
+    if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))
     {
         sal_uInt16 nStartingSlide = rSet.Get(SID_DOC_STARTPRESENTATION).GetValue();
         if (nStartingSlide == 0)

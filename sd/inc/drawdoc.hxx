@@ -154,8 +154,8 @@ private:
 
     bool                mbOnlineSpell;
     bool                mbSummationOfParagraphs;
-    bool                mbStartWithPresentation;        ///< is set to true when starting with command line parameter -start
-    bool                mbExitAfterPresenting;         ///< true if mbStartWithPresentation AND Presentation was shown fully
+    sal_uInt16          mnStartWithPresentation; ///< 1-based starting slide# when presenting via command line parameter --show
+    bool                mbExitAfterPresenting; ///< true if GetStartWithPresentation AND Presentation was shown fully
     LanguageType        meLanguage;
     LanguageType        meLanguageCJK;
     LanguageType        meLanguageCTL;
@@ -284,8 +284,8 @@ public:
                             ::sd::DrawDocShell* pBookmarkDocSh,
                             Point const * pObjPos);
 
-    SAL_DLLPRIVATE bool IsStartWithPresentation() const { return mbStartWithPresentation;}
-    SAL_DLLPRIVATE void SetStartWithPresentation( bool bStartWithPresentation );
+    SAL_DLLPRIVATE sal_uInt16 GetStartWithPresentation() const { return mnStartWithPresentation; }
+    SAL_DLLPRIVATE void SetStartWithPresentation(sal_uInt16 nStartingSlide);
 
     SAL_DLLPRIVATE bool IsExitAfterPresenting() const { return mbExitAfterPresenting;}
     SAL_DLLPRIVATE void SetExitAfterPresenting( bool bExitAfterPresenting );
