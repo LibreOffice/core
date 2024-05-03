@@ -1351,6 +1351,8 @@ xmloff/source/forms/officeforms.hxx:68
 xmloff/source/text/txtimp.cxx:104
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
 xmlsecurity/inc/certificatechooser.hxx:57
+    CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >
+xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:52
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>

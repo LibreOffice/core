@@ -217,6 +217,9 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
 
+            // Needed to keep userData alive. (reference to shared_ptr prevents delete)
+            mvUserData.push_back(userData);
+
             OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName(), xCert->getCertificateKind());
             OUString sExpDate = utl::GetDateString(xCert->getNotValidAfter());
 
