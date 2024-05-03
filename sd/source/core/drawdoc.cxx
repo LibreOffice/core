@@ -123,7 +123,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mbInitialOnlineSpellingEnabled(true)
 , mbNewOrLoadCompleted(false)
 , mbOnlineSpell(false)
-, mbStartWithPresentation( false )
+, mnStartWithPresentation(0)
 , mbExitAfterPresenting( false )
 , meLanguage( LANGUAGE_SYSTEM )
 , meLanguageCJK( LANGUAGE_SYSTEM )
@@ -1055,9 +1055,9 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
     }
 }
 
-void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
+void SdDrawDocument::SetStartWithPresentation(sal_uInt16 nStartingSlide)
 {
-    mbStartWithPresentation = bStartWithPresentation;
+    mnStartWithPresentation = nStartingSlide;
 }
 
 void SdDrawDocument::SetExitAfterPresenting( bool bExitAfterPresenting )

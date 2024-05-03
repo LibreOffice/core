@@ -344,7 +344,7 @@ class SvxZoomItem;
 #define SID_MODIFIER                        TypedWhichId<SfxUInt16Item>(SID_SFX_START + 669)
 #define SID_SETOPTIONS                      (SID_SFX_START + 670)
 #define SID_SOURCEVIEW                      (SID_SFX_START + 675)
-#define SID_DOC_STARTPRESENTATION           TypedWhichId<SfxBoolItem>(SID_SFX_START + 695)
+#define SID_DOC_STARTPRESENTATION           TypedWhichId<SfxUInt16Item>(SID_SFX_START + 695)
 #define SID_DDE_RECONNECT_ONLOAD            TypedWhichId<SfxBoolItem>(SID_SFX_START + 696)
 
 #define SID_DOCTEMPLATE                     (SID_SFX_START + 538)

@@ -503,7 +503,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
             // if we are called with --show set Start in mediadescriptor
             if(aDispatchRequest.aRequestType == REQUEST_START) {
-                aArgs.emplace_back("StartPresentation", 0, Any(true), PropertyState_DIRECT_VALUE);
+                const sal_Int32 nStartingSlide = aDispatchRequest.aParam.toInt32();
+                const sal_uInt16 nSlide = nStartingSlide > 0 ? nStartingSlide : 1;
+                aArgs.emplace_back("StartPresentation", 0, Any(nSlide), PropertyState_DIRECT_VALUE);
             }
 
             // Force input filter, if possible
@@ -566,7 +568,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 // FIXME: factor out into a method ...
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
-                            OUString aParam = aDispatchRequest.aPrinterName;
+                            const OUString& aParam = aDispatchRequest.aParam;
                             sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
                             sal_Int32 nFilterIndex = aParam.indexOf( ':' );
                             sal_Int32 nImgFilterIndex = aParam.lastIndexOf( '|' );
@@ -746,7 +748,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     }
                     else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT )
                     {
-                        batchPrint( aDispatchRequest.aPrinterName, xDoc, aObj, aName );
+                        batchPrint(aDispatchRequest.aParam, xDoc, aObj, aName);
                     }
                     else
                     {
@@ -754,7 +756,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                         {
                             // create the printer
                             Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue(
-                                "Name", aDispatchRequest.aPrinterName) };
+                                u"Name"_ustr, aDispatchRequest.aParam) };
                             xDoc->setPrinter( aPrinterArgs );
                         }
 

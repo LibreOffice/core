@@ -2971,7 +2971,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testStartPresentation)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("test.ppsx");
     ViewCallback aView;
-    CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->IsStartWithPresentation());
+    CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->GetStartWithPresentation());
     Scheduler::ProcessEventsToIdle();
 
     const auto it = aView.m_aStateChanges.find(".uno:StartWithPresentation");

@@ -650,7 +650,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             SetError(nError);
 
         if (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARTPRESENTATION)
-            rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, true) );
+            rSet.Put(SfxUInt16Item(SID_DOC_STARTPRESENTATION, 1));
     }
 
     EnableSetModified( false );
