@@ -55,14 +55,14 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
 
     XMLTransformerOASISEventMap_Impl::key_type aKey;
     XMLTransformerOASISEventMap_Impl::mapped_type aData;
-    while( pInit->m_pOASISName )
+    while( !pInit->m_pOASISName.isEmpty() )
     {
         aKey.m_nPrefix = pInit->m_nOASISPrefix;
-        aKey.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
+        aKey.m_aLocalName = pInit->m_pOASISName;
 
         OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
 
-        aData = OUString::createFromAscii(pInit->m_pOOoName);
+        aData = pInit->m_pOOoName;
 
         XMLTransformerOASISEventMap_Impl::value_type aVal( aKey, aData );
 

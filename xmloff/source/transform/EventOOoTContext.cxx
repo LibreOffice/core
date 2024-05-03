@@ -47,14 +47,14 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry const *
 {
     XMLTransformerOOoEventMap_Impl::key_type aKey;
     XMLTransformerOOoEventMap_Impl::mapped_type aData;
-    while( pInit->m_pOOoName )
+    while( !pInit->m_pOOoName.isEmpty() )
     {
-        aKey = OUString::createFromAscii(pInit->m_pOOoName);
+        aKey = pInit->m_pOOoName;
 
         OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
 
         aData.m_nPrefix = pInit->m_nOASISPrefix;
-        aData.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
+        aData.m_aLocalName = pInit->m_pOASISName;
 
         XMLTransformerOOoEventMap_Impl::value_type aVal( aKey, aData );
 
