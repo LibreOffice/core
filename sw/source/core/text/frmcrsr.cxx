@@ -339,7 +339,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if( bRet )
     {
         SwPageFrame *pPage = pFrame->FindPageFrame();
-        OSL_ENSURE( pPage, "Text escaped from page?" );
+        assert(pPage && "Text escaped from page?");
         const SwTwips nOrigTop = aRectFnSet.GetTop(rOrig);
         const SwTwips nPageTop = aRectFnSet.GetTop(pPage->getFrameArea());
         const SwTwips nPageBott = aRectFnSet.GetBottom(pPage->getFrameArea());

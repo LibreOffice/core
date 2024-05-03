@@ -86,7 +86,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         {
             pPage   = static_cast<SwPageFrame*>(pPage->GetNext());
             pFlow = pPage->FindFirstBodyContent();
-            OSL_ENSURE( pFlow, "Document without content?!?" );
+            assert(pFlow && "Document without content?!?");
         }
     }
 

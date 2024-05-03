@@ -917,7 +917,7 @@ void SwPageFrame::Cut()
 void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
 {
     OSL_ENSURE( pParent->IsRootFrame(), "Parent is no Root." );
-    OSL_ENSURE( pParent, "No parent for Paste()." );
+    assert(pParent && "No parent for Paste().");
     OSL_ENSURE( pParent != this, "I'm my own parent." );
     OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
@@ -1536,7 +1536,7 @@ void SwRootFrame::RemoveSuperfluous()
                 while ( pPage->IsFootnotePage() )
                 {
                     pPage = static_cast<SwPageFrame*>(pPage->GetPrev());
-                    OSL_ENSURE( pPage, "only endnote pages remain." );
+                    assert(pPage && "only endnote pages remain.");
                 }
                 continue;
             }
@@ -1650,6 +1650,8 @@ void SwRootFrame::AssertFlyPages()
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
 
+    assert(pPage);
+
     if ( nMaxPg > pPage->GetPhyPageNum() )
     {
         for ( sal_uInt16 i = pPage->GetPhyPageNum(); i < nMaxPg; ++i )
@@ -1688,7 +1690,7 @@ void SwRootFrame::AssertFlyPages()
 
 #if OSL_DEBUG_LEVEL > 0
     pPage = static_cast<SwPageFrame*>(Lower());
-    while ( pPage && pPage->GetNext() &&
+    while ( pPage->GetNext() &&
             !static_cast<SwPageFrame*>(pPage->GetNext())->IsFootnotePage() )
     {
         SAL_INFO( "sw.pageframe",  "AssertFlyPages p: " << pPage << " d: " << pPage->GetPageDesc()

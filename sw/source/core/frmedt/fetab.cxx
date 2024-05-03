@@ -1748,7 +1748,7 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                 if ( !bMouseMoveRowCols )
                 {
 
-                    OSL_ENSURE( pbCol && pbRow, "pbCol or pbRow missing" );
+                    assert(pbCol && pbRow && "pbCol or pbRow missing");
 
                     if ( bCloseToRow || bCloseToCol )
                     {

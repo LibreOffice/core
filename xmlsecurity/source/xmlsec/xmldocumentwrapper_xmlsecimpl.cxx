@@ -89,7 +89,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
  *  NODEPOSITION_NORMAL for other SAX events;
  ******************************************************************************/
 {
-    OSL_ASSERT( m_pCurrentElement != nullptr );
+    assert(m_pCurrentElement != nullptr);
 
         /*
          * Get the next event through tree order.

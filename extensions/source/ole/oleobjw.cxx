@@ -695,6 +695,7 @@ Any SAL_CALL IUnknownWrapper::createBridge( const Any& modelDepObject,
         if (xInt == xSelf)
         {
             VARIANT* pVariant = static_cast<VARIANT*>(CoTaskMemAlloc(sizeof(VARIANT)));
+            assert(pVariant && "Don't handle OOM conditions");
 
             VariantInit(pVariant);
             if (m_bOriginalDispatch)

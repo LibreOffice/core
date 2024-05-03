@@ -494,6 +494,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             while ( !aDrawObjs.empty() )
             {
                 SdrObject* pDrawObj = aDrawObjs.back();
+                assert(pDrawObj);
                 if ( dynamic_cast<const SwVirtFlyDrawObj*>( pDrawObj) ==  nullptr &&
                      dynamic_cast<const SwFlyDrawObj*>( pDrawObj) ==  nullptr )
                 {

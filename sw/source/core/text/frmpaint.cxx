@@ -135,7 +135,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         m_nDivider = !m_rLineInf.GetDivider().isEmpty() ? m_rLineInf.GetDividerCountBy() : 0;
         m_nX = pFrame->getFrameArea().Left();
         SwCharFormat* pFormat = m_rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetDoc().getIDocumentStylePoolAccess()) );
-        OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
+        assert(pFormat && "PaintExtraData without CharFormat");
         m_pFnt.reset( new SwFont(&pFormat->GetAttrSet(), &pFrame->GetDoc().getIDocumentSettingAccess()) );
         m_pFnt->Invalidate();
         m_pFnt->ChgPhysFnt( m_pSh, *m_pSh->GetOut() );

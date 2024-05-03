@@ -991,7 +991,7 @@ bool SwContentFrame::UnitDown( SwPaM* pPam, const SwTwips, bool bInReadOnly ) co
  */
 sal_uInt16 SwRootFrame::GetCurrPage( const SwPaM *pActualCursor ) const
 {
-    OSL_ENSURE( pActualCursor, "got no page cursor" );
+    assert(pActualCursor && "got no page cursor");
     SwFrame const*const pActFrame = pActualCursor->GetPoint()->GetNode().
                                     GetContentNode()->getLayoutFrame(this,
                                                     pActualCursor->GetPoint());
@@ -1466,6 +1466,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     }
 
     //Bring the point into the PrtArea.
+    assert(pAct);
     const SwRect aRect( pAct->getFrameArea().Pos() + pAct->getFramePrintArea().Pos(), pAct->getFramePrintArea().SSize() );
     if ( aAct.Y() < aRect.Top() )
         aAct.setY( aRect.Top() );
@@ -1524,6 +1525,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     {
         // As long as the point lies before the first ContentFrame and there are
         // still precedent pages I'll go to the next page.
+        assert(pPage);
         while ( rPoint.Y() < pCnt->getFrameArea().Top() && pPage->GetPrev() )
         {
             pPage = static_cast<const SwLayoutFrame*>(pPage->GetPrev());
@@ -1794,6 +1796,7 @@ bool SwFrame::WannaRightPage() const
     }
     if( !pPage->IsEmptyPage() )
     {
+        assert(pDesc && "No pagedescriptor");
         if( !pDesc->GetRightFormat() )
             isRightPage = false;
         else if( !pDesc->GetLeftFormat() )
@@ -1990,7 +1993,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
                                 while( !pCell->IsCellFrame() )
                                 {
                                     pCell = pCell->GetUpper();
-                                    OSL_ENSURE( pCell, "Where's my cell?" );
+                                    assert(pCell && "Where's my cell?");
                                 }
                             }
                         }
@@ -2513,6 +2516,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
         bool const bBody = pStartFrame->IsInDocBody();
         const SwTableBox* pCellBox = pStartFrame->GetUpper()->IsCellFrame() ?
             static_cast<const SwCellFrame*>(pStartFrame->GetUpper())->GetTabBox() : nullptr;
+        assert(pSh);
         if (pSh->IsSelectAll())
             pCellBox = nullptr;
 

@@ -2297,6 +2297,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
             pCnt->InvalidateSize_();
             pCnt->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             SwFootnoteFrame* pFootnoteFrame = pCnt->FindFootnoteFrame();
+            assert(pFootnoteFrame);
             // #i49383#
             if ( pFootnoteFrame != pLastFootnoteFrame )
             {
@@ -2622,7 +2623,10 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                 nRet += nTmp;
         }
         else
+        {
+            assert(pPg);
             nRet -= aRectFnSet.GetHeight(pPg->getFramePrintArea())/5;
+        }
         if( nRet < 0 )
             nRet = 0;
     }
@@ -2665,7 +2669,7 @@ SwNeighbourAdjust SwFootnoteBossFrame::NeighbourhoodAdjustment_() const
             else
             {
                 const SwFrame* pTmp = Lower();
-                OSL_ENSURE( pTmp, "NeighbourhoodAdjustment: Missing Lower()" );
+                assert(pTmp && "NeighbourhoodAdjustment: Missing Lower()");
                 if( !pTmp->GetNext() )
                     nRet = SwNeighbourAdjust::GrowShrink;
                 else if( !GetUpper()->IsColLocked() )

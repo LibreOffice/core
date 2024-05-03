@@ -3740,6 +3740,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
 
     while ( IsAnLower( pFrame ) )
     {
+        assert(pFrame);
         SwRect aPaintRect( pFrame->GetPaintArea() );
         if( aShortCut.Stop( aPaintRect ) )
             break;
@@ -4145,6 +4146,8 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 
     if ( nullptr == pUserCall )
         return true;
+
+    assert(pObj);
 
     //Attribute dependent, don't paint for printer or Preview
     bool bPaint =  gProp.pSFlyOnlyDraw ||

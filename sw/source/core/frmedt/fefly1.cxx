@@ -403,7 +403,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
             pFly = static_cast<SwDrawContact*>(pContact)->GetAnchorFrame(pObj);
         }
 
-        OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
+        assert(pFly && "IsFlyInFly: Where's my anchor?");
         OSL_ENSURE( pFly->IsFlyFrame(), "IsFlyInFly: Funny anchor!" );
         return static_cast<const SwFlyFrame*>(pFly)->GetFormat();
     }
@@ -1910,6 +1910,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
         return;
 
     SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+    assert(pObj);
     SwFrameFormat *pFormat = FindFrameFormat( pObj );
 
     // store attributes, then set the graphic
@@ -1955,7 +1956,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 
 static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)
 {
-    OSL_ENSURE(pFormat != nullptr, "invalid argument");
+    assert(pFormat != nullptr && "invalid argument");
 
     SwFlyFrame * pFrame = pFormat->GetFrame();
 

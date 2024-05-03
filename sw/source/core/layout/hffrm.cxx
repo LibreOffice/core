@@ -414,7 +414,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
 void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderAttrs * pAttrs)
 {
-    OSL_ENSURE( pAttrs, "SwFooterFrame::Format, pAttrs is 0." );
+    assert(pAttrs && "SwFooterFrame::Format, pAttrs is 0.");
 
     if ( isFramePrintAreaValid() && isFrameAreaSizeValid() )
         return;
@@ -652,7 +652,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 bool SwHeadFootFrame::GetEatSpacing() const
 {
     const SwFrameFormat * pFormat = GetFormat();
-    OSL_ENSURE(pFormat, "SwHeadFootFrame: no format?");
+    assert(pFormat && "SwHeadFootFrame: no format?");
 
     return pFormat->GetHeaderAndFooterEatSpacing().GetValue();
 }

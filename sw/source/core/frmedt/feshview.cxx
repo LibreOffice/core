@@ -2104,7 +2104,7 @@ bool SwFEShell::ImpEndCreate()
             const SwTextFrame* pTmp = static_cast<const SwTextFrame*>(pAnch);
             do {
                 pTmp = pTmp->FindMaster();
-                OSL_ENSURE( pTmp, "Where's my Master?" );
+                assert(pTmp && "Where's my Master?");
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
@@ -2320,7 +2320,7 @@ Size SwFEShell::GetObjSize() const
 Point SwFEShell::GetAnchorObjDiff() const
 {
     const SdrView *pView = Imp()->GetDrawView();
-    OSL_ENSURE( pView, "GetAnchorObjDiff without DrawView?" );
+    assert(pView && "GetAnchorObjDiff without DrawView?");
 
     tools::Rectangle aRect;
     if ( Imp()->GetDrawView()->IsAction() )

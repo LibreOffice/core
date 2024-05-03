@@ -213,6 +213,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 else if( pTmp->IsTabFrame() )
                 {
                     SwTabFrame* pTab = static_cast<SwTabFrame*>(pTmp);
+                    assert(pTab);
                     sal_uLong nOfst = COMPLETE_STRING;
                     if( pTab->IsFollow() )
                     {
@@ -417,6 +418,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                                     pSub = pSub->GetNext();
                                 }
                                 pTab = pTab->GetFollow();
+                                assert(pTab && "Table follow without master");
                                 const SwPageFrame *pTabPage = pTab->FindPageFrame();
                                 if( pTabPage != pPage )
                                 {
@@ -560,7 +562,7 @@ SwLayHelper::~SwLayHelper()
 {
     if( mpImpl )
     {
-        OSL_ENSURE( mpDoc && mpDoc->GetLayoutCache(), "Missing layoutcache" );
+        assert(mpDoc && mpDoc->GetLayoutCache() && "Missing layoutcache");
         mpDoc->GetLayoutCache()->UnlockImpl();
     }
 }

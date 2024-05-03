@@ -1323,8 +1323,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         // #i81002#
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
-                            OSL_ENSURE( pTextNd,
-                                    "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
+                            assert(pTextNd &&
+                                    "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash");
                             *pEnd = pTextNd->Len();
                         }
                     }

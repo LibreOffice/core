@@ -1591,6 +1591,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     // ensure that the end of this range is positioned before EndIndex!
     for ( ; nEndIndex == SwNodeOffset(0) || nIndex < nEndIndex; ++nIndex)
     {
+        assert(pLayout);
         SwNode *pNd = pDoc->GetNodes()[nIndex];
         if ( pNd->IsContentNode() )
         {
@@ -2926,8 +2927,8 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart )
         } while ( pFloat );
 
         // search next chain part and connect both chains
-        SwFrame *pTmp = pFloat->FindNext();
-        if( bGo )
+        SwFrame *pTmp = pFloat ? pFloat->FindNext() : nullptr;
+        if (bGo && pFloat)
             pFloat->mpUpper = nullptr;
 
         if( !pLay->IsInFootnote() )

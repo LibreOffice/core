@@ -518,7 +518,7 @@ void SwFlyFrame::FinitDrawObj()
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
 {
-    OSL_ENSURE( pMaster && pFollow, "incomplete chain" );
+    assert(pMaster && pFollow && "incomplete chain");
     OSL_ENSURE( !pMaster->GetNextLink(), "link can not be changed" );
     OSL_ENSURE( !pFollow->GetPrevLink(), "link can not be changed" );
 

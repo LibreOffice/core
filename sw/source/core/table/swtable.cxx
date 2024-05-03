@@ -138,7 +138,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
         pCNd = SwNodes::GoNext(&aIdx);
-    OSL_ENSURE( pCNd, "Box with no content node" );
+    assert(pCNd && "Box with no content node");
 
     if( pCNd->IsTextNode() )
     {
@@ -2059,7 +2059,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
 
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
-    OSL_ENSURE( pTableNd, "In which table is the box?" );
+    assert(pTableNd && "In which table is the box?");
     SwTableSortBoxes& rSrtArr = const_cast<SwTableSortBoxes&>(pTableNd->GetTable().
                                 GetTabSortBoxes());
     SwTableBox* p = this;   // error: &this

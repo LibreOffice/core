@@ -555,7 +555,7 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
         !pRet->GetNext() && !pRet->GetPrev() )
     {
         SwSectionFrame* pSct = pRet->FindSctFrame();
-        OSL_ENSURE( pSct, "FindFootnoteBossFrame: Single column outside section?" );
+        assert(pSct && "FindFootnoteBossFrame: Single column outside section?");
         if( !pSct->IsFootnoteAtEnd() )
             return pSct->FindFootnoteBossFrame( true );
     }

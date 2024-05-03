@@ -1783,7 +1783,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
             for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-                OSL_ENSURE( pBox, "Missing table box" );
+                assert(pBox && "Missing table box");
                 if( pBox->getRowSpan() > 0 && ( !bChkProtected ||
                     !pBox->GetFrameFormat()->GetProtect().IsContentProtected() ) )
                     rBoxes.insert( pBox );
@@ -2030,7 +2030,7 @@ SwSaveRowSpan::SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn )
     for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = rBoxes[nCurrCol];
-        OSL_ENSURE( pBox, "Missing Table Box" );
+        assert(pBox && "Missing Table Box");
         sal_Int32 nRowSp = pBox->getRowSpan();
         mnRowSpans[ nCurrCol ] = nRowSp;
         if( nRowSp < 0 )
@@ -2065,7 +2065,7 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
     for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-        OSL_ENSURE( pBox, "Missing Table Box" );
+        assert(pBox && "Missing Table Box");
         sal_Int32 nRowSp = pBox->getRowSpan();
         if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
         {
@@ -2121,7 +2121,7 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
     for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-        OSL_ENSURE( pBox, "Missing Table Box" );
+        assert(pBox && "Missing Table Box");
         sal_Int32 nRowSp = pBox->getRowSpan();
         if( nRowSp < 0 )
             nRowSp = -nRowSp;

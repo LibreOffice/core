@@ -2633,7 +2633,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             {
                 // Check if outline is hidden
                 const SwTextNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTextNode();
-                OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
+                assert(pTNd && "Enhanced pdf export - text node is missing");
 
                 if ( pTNd->IsHidden() ||
                      !sw::IsParaPropsNode(*mrSh.GetLayout(), *pTNd) ||

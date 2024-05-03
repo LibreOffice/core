@@ -43,7 +43,7 @@ namespace bib
     {
         vcl::Window*             pParent = pWindow->GetParent();
 
-        DBG_ASSERT( pParent, "-GetTaskPaneList(): everybody here should have a parent!" );
+        assert(pParent && "-GetTaskPaneList(): everybody here should have a parent!");
 
         SystemWindow*       pSysWin = pParent->GetSystemWindow();
         if( pSysWin )

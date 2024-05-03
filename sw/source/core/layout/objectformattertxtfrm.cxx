@@ -707,6 +707,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                     && pObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                         != RndStdIds::FLY_AS_CHAR)
                 {
+                    assert(pPageFrameOfAnchor);
                     if (pPageFrameOfAnchor->GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
                     {
                         SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next page");

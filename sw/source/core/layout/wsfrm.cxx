@@ -906,7 +906,6 @@ void SwFrame::InsertBefore( SwLayoutFrame* pParent, SwFrame* pBehind )
  */
 void SwFrame::InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore )
 {
-    OSL_ENSURE( pParent, "No Parent for Insert." );
     OSL_ENSURE( (!pBefore || pParent == pBefore->GetUpper()),
             "Frame tree is inconsistent." );
 
@@ -922,6 +921,7 @@ void SwFrame::InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore )
     }
     else
     {
+        assert(pParent && "No Parent for Insert.");
         //Insert at the beginning of the chain
         mpNext = pParent->Lower();
         if ( pParent->Lower() )
@@ -1350,7 +1350,7 @@ void SwContentFrame::Cut()
             }
             else
             {
-
+                assert(pSct);
                 if ( pSct->IsColLocked() || !pSct->IsInFootnote() ||
                      ( pUp->IsFootnoteFrame() && pUp->IsColLocked() ) )
                 {

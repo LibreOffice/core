@@ -78,7 +78,7 @@ size_t SwInputFieldList::Count() const
 SwField* SwInputFieldList::GetField(size_t nId)
 {
     const SwTextField* pTextField = (*mpSrtLst)[ nId ]->GetTextField();
-    OSL_ENSURE( pTextField, "no TextField" );
+    assert(pTextField && "no TextField");
     return const_cast<SwField*>(pTextField->GetFormatField().GetField());
 }
 

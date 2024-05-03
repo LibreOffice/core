@@ -240,7 +240,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
     SwTwips nFlyLower = aRectFnSet.IsVert() ? LONG_MAX : 0;
     while ( pStartFrame != pFrame )
     {
-        OSL_ENSURE( pStartFrame, "Frame chain is broken" );
+        assert(pStartFrame && "Frame chain is broken");
         if ( pStartFrame->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pStartFrame->GetDrawObjs();

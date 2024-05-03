@@ -49,8 +49,8 @@ const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFram
                 !pHoriEnvironmentLayFrame->IsPageFrame() )
         {
             pHoriEnvironmentLayFrame = pHoriEnvironmentLayFrame->GetUpper();
-            OSL_ENSURE( pHoriEnvironmentLayFrame,
-                    "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(..) - no page|fly|cell frame found" );
+            assert(pHoriEnvironmentLayFrame &&
+                    "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(..) - no page|fly|cell frame found");
         }
     }
 
@@ -83,8 +83,8 @@ const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFram
                 !pVertEnvironmentLayFrame->IsPageFrame() )
         {
             pVertEnvironmentLayFrame = pVertEnvironmentLayFrame->GetUpper();
-            OSL_ENSURE( pVertEnvironmentLayFrame,
-                    "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(..) - proposed frame not found" );
+            assert(pVertEnvironmentLayFrame &&
+                    "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(..) - proposed frame not found");
         }
     }
 

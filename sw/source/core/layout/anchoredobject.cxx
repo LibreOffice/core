@@ -779,7 +779,7 @@ bool SwAnchoredObject::IsFormatPossible() const
 
 bool SwAnchoredObject::IsDraggingOffPageAllowed(const SwFrameFormat* pFrameFormat)
 {
-    OSL_ASSERT(pFrameFormat);
+    assert(pFrameFormat);
     const bool bDisablePositioning = pFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
     const bool bIsWrapThrough = pFrameFormat->GetSurround().GetSurround() == text::WrapTextMode::WrapTextMode_THROUGH;
 

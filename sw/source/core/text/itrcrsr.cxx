@@ -54,7 +54,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
                                  const SwCursorMoveState& rCMS,
                                  const SwLinePortion& rPor )
 {
-    OSL_ENSURE( rCMS.m_pSpecialPos, "Information about special pos missing" );
+    assert(rCMS.m_pSpecialPos && "Information about special pos missing");
 
     if ( rPor.InFieldGrp() && !static_cast<const SwFieldPortion&>(rPor).GetExp().isEmpty() )
     {

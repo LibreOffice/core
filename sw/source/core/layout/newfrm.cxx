@@ -323,7 +323,7 @@ void FrameFinit()
 
 CurrShell::CurrShell( SwViewShell *pNew )
 {
-    OSL_ENSURE( pNew, "insert 0-Shell?" );
+    assert(pNew && "insert 0-Shell?");
     pRoot = pNew->GetLayout();
     if ( pRoot )
     {

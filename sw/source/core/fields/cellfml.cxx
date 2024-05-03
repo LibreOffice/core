@@ -429,7 +429,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTable, OUStringBuffer& rNew
 {
     // relative name w.r.t. box name (external presentation)
     SwNode* pNd = static_cast<SwNode*>(pPara);
-    OSL_ENSURE( pNd, "Field isn't in any TextNode" );
+    assert(pNd && "Field isn't in any TextNode");
     const SwTableBox *pBox = rTable.GetTableBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -462,7 +462,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNew
 {
     // relative name w.r.t. box name (internal presentation)
     SwNode* pNd = static_cast<SwNode*>(pPara);
-    OSL_ENSURE( pNd, "Field not placed in any Node" );
+    assert(pNd && "Field not placed in any Node");
     const SwTableBox *pBox = rTable.GetTableBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -494,7 +494,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTable, OUStringBuffer& rNewS
 {
     // box name (external presentation) w.r.t. relative name
     SwNode* pNd = static_cast<SwNode*>(pPara);
-    OSL_ENSURE( pNd, "Field not placed in any Node" );
+    assert(pNd && "Field not placed in any Node");
     const SwTableNode* pTableNd = pNd->FindTableNode();
 
     OUString sRefBoxNm;
@@ -502,7 +502,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTable, OUStringBuffer& rNewS
     {
         const SwTableBox *pBox = rTable.GetTableBox(
                 pNd->FindTableBoxStartNode()->GetIndex() );
-        OSL_ENSURE( pBox, "Field not placed in any Table" );
+        assert(pBox && "Field not placed in any Table");
         sRefBoxNm = pBox->GetName();
     }
 
@@ -597,6 +597,7 @@ void SwTableFormula::PtrToBoxNm( const SwTable* pTable )
     case EXTRNL_NAME:
         return;
     }
+    assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = EXTRNL_NAME;
 }
@@ -622,6 +623,7 @@ void SwTableFormula::BoxNmToPtr( const SwTable* pTable )
     case INTRNL_NAME:
         return;
     }
+    assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = INTRNL_NAME;
 }
@@ -644,6 +646,7 @@ void SwTableFormula::ToRelBoxNm( const SwTable* pTable )
     case REL_NAME:
         return;
     }
+    assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = REL_NAME;
 }
@@ -773,7 +776,7 @@ static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
-    OSL_ENSURE( pCNd, "Box has no TextNode" );
+    assert(pCNd && "Box has no TextNode");
     Point aPt;      // get the first frame of the layout - table headline
     std::pair<Point, bool> const tmp(aPt, false);
     return pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);

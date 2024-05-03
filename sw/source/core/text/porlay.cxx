@@ -2565,6 +2565,8 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
 
     while (nCntKash < CountKashida() && nKashidaPosIdx < nCnt)
     {
+        assert(pKashidaPositions && "Where are kashidas?");
+
         if ( pKashidaPositions [nKashidaPosIdx] > GetKashida( nCntKash ) )
         {
             ++nCntKash;
