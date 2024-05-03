@@ -1047,7 +1047,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
         return false;
 
     // Autoplay (pps/ppsx)
-    if (mpViewShell->GetDoc()->IsStartWithPresentation()){
+    if (mpViewShell->GetDoc()->GetStartWithPresentation())
+    {
         mpViewShell->GetDoc()->SetExitAfterPresenting(true);
     }
 
@@ -2245,7 +2246,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
     xMenu->set_visible("next", mpSlideController->getNextSlideIndex() != -1);
     xMenu->set_visible("prev", (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
-    xMenu->set_visible("edit", mpViewShell->GetDoc()->IsStartWithPresentation());
+    xMenu->set_visible("edit", mpViewShell->GetDoc()->GetStartWithPresentation() != 0);
 
     std::unique_ptr<weld::Menu> xPageMenu(xBuilder->weld_menu("gotomenu"));
     OUString sFirstImage(BMP_MENU_FIRST), sLastImage(BMP_MENU_LAST);
@@ -3115,7 +3116,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  )
                     if( mpShowWindow )
                     {
                         mpShowWindow->SetEndMode();
-                        if( !mpViewShell->GetDoc()->IsStartWithPresentation() )
+                        if (!mpViewShell->GetDoc()->GetStartWithPresentation())
                             pause();
                     }
                 }

@@ -60,6 +60,7 @@ struct ProcessDocumentsRequest
     OUString aConversionParams;
     OUString aConversionOut;
     OUString aImageConversionType;
+    OUString aStartListParams;
     std::vector< OUString > aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
     bool* mpbSuccess = nullptr; // pointer to boolean receiving if the processing was successful

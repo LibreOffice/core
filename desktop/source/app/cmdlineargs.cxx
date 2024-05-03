@@ -537,10 +537,12 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // open in viewmode
                 eCurrentEvent = CommandLineEvent::View;
             }
-            else if ( oArg == "show" )
+            else if (oArg == "show" || oArg.startsWith("show=", &rest))
             {
                 // open in viewmode
                 eCurrentEvent = CommandLineEvent::Start;
+                // start on the first slide unless a valid starting slide # was provided
+                m_startListParams = rest.toUInt32() > 0 ? rest : "1";
             }
             else if ( oArg == "display" )
             {

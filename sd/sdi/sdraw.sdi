@@ -3192,7 +3192,7 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
 ]
 
 SfxVoidItem Presentation SID_PRESENTATION
-()
+(SfxUInt16Item StartingSlide FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

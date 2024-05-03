@@ -502,7 +502,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
             // if we are called with --show set Start in mediadescriptor
             if(aDispatchRequest.aRequestType == REQUEST_START) {
-                aArgs.emplace_back("StartPresentation", 0, Any(true), PropertyState_DIRECT_VALUE);
+                const sal_Int32 nStartingSlide = aDispatchRequest.aParam.toInt32();
+                const sal_uInt16 nSlide = nStartingSlide > 0 ? nStartingSlide : 1;
+                aArgs.emplace_back("StartPresentation", 0, Any(nSlide), PropertyState_DIRECT_VALUE);
             }
 
             // Force input filter, if possible

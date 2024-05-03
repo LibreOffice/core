@@ -1709,8 +1709,13 @@ namespace slideshowhelp
         {
             //Start at page 0, this would blow away any custom
             //show settings if any were set
+            const SfxUInt16Item* pStartingSlide = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+            const sal_uInt16 nStartingSlide = pStartingSlide ? pStartingSlide->GetValue() - 1 : 0;
+            SdPage* pSlide = rDoc.GetSdPage(nStartingSlide, PageKind::Standard);
+            const OUString& rStartingSlide = pSlide ? pSlide->GetName() : OUString();
+
             Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("FirstPage",
-                                                                                OUString("0")) };
+                                                                                rStartingSlide) };
             xPresentation->startWithArguments( aArguments );
         }
         sfx2::SfxNotebookBar::UnlockNotebookBar();

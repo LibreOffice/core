@@ -543,11 +543,11 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             }
             else if ( aName == sStartPresentation )
             {
-                bool bVal = false;
-                bool bOK = (rProp.Value >>= bVal);
+                sal_uInt16 nVal = 0;
+                bool bOK = (rProp.Value >>= nVal);
                 DBG_ASSERT( bOK, "invalid type for StartPresentation" );
                 if (bOK)
-                    rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
+                    rSet.Put(SfxUInt16Item(SID_DOC_STARTPRESENTATION, nVal));
             }
             else if ( aName == sSelectionOnly )
             {
@@ -1489,7 +1489,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             pValue[nActProp].Name = sDdeReconnect;
             pValue[nActProp++].Value <<= pItem->GetValue();
         }
-        if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_DOC_STARTPRESENTATION, false) )
+        if (const SfxUInt16Item* pItem = rSet.GetItemIfSet(SID_DOC_STARTPRESENTATION, false))
         {
             pValue[nActProp].Name = sStartPresentation;
             pValue[nActProp++].Value <<= pItem->GetValue();

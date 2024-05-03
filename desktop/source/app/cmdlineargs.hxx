@@ -114,6 +114,7 @@ class CommandLineArgs
         const OUString&         GetConversionParams() const { return m_conversionparams;}
         OUString                GetConversionOut() const;
         OUString const &        GetImageConversionType() const { return m_convertimages; }
+        const OUString&         GetStartListParams() const { return m_startListParams; }
         const OUString&         GetPidfileName() const { return m_pidfile;}
 
         // Special analyzed states (does not match directly to a command line parameter!)
@@ -177,6 +178,7 @@ class CommandLineArgs
         OUString m_conversionparams;
         OUString m_conversionout; // contains external URIs
         OUString m_convertimages; // The format in which images should be converted
+        OUString m_startListParams;
         std::vector< OUString > m_infilter;
         OUString m_language;
         OUString m_pidfile;

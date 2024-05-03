@@ -984,6 +984,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         pRequest->aConversionParams = aCmdLineArgs->GetConversionParams();
         pRequest->aConversionOut = aCmdLineArgs->GetConversionOut();
         pRequest->aImageConversionType = aCmdLineArgs->GetImageConversionType();
+        pRequest->aStartListParams = aCmdLineArgs->GetStartListParams();
         pRequest->aInFilter = aCmdLineArgs->GetInFilter();
         pRequest->bTextCat = aCmdLineArgs->IsTextCat();
         pRequest->bScriptCat = aCmdLineArgs->IsScriptCat();
@@ -1309,7 +1310,7 @@ bool RequestHandler::ExecuteCmdLineRequests(
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aInFilter, DispatchWatcher::REQUEST_INFILTER, u""_ustr, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, u""_ustr, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, u""_ustr, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aStartList, DispatchWatcher::REQUEST_START, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aStartList, DispatchWatcher::REQUEST_START, aRequest.aStartListParams, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, u""_ustr, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, u""_ustr, aRequest.aModule );
