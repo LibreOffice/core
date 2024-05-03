@@ -816,6 +816,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         bPagebreak  ( false ),
         bSelCtrlMouseClick( false ),
         bMoveArea ( false ),
+        bEditHighlight ( false ),
         bGrowing (false),
         nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )

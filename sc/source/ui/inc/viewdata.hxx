@@ -329,6 +329,7 @@ private:
     bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
     bool                bMoveArea:1;
+    bool                bEditHighlight:1;
 
     bool                bGrowing;
     sal_Int16           nFormulaBarLines;           // Visible lines in the formula bar
@@ -568,6 +569,9 @@ public:
     bool    IsHScrollMode   () const            { return maOptions.GetOption(VOPT_HSCROLL); }
     bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
     bool    IsThemedCursor  () const            { return maOptions.GetOption(VOPT_THEMEDCURSOR); }
+
+    bool    GetEditHighlight() const            { return bEditHighlight; }
+    void    SetEditHighlight(bool bNewHighlight) { bEditHighlight = bNewHighlight; }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(tools::Long nTwips) { m_nLOKPageUpDownOffset = nTwips; }

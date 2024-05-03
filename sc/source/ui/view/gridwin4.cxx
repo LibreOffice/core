@@ -758,13 +758,22 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         SCCOL nEditEndCol = mrViewData.GetEditEndCol();
         SCROW nEditEndRow = mrViewData.GetEditEndRow();
 
-        if (officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get()
-                && !getViewData().GetMarkData().IsMarked())
+
+        if (officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get())
         {
-            const Color aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
-            aHighlightColor.Merge(aBackgroundColor, 100);
-            pEditView->SetBackgroundColor(aHighlightColor);
+            Color aDocColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            if (!getViewData().GetMarkData().IsMarked() && mrViewData.GetEditHighlight())
+            {
+                Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+                aHighlightColor.Merge(aDocColor, 100);
+                aDocColor = aHighlightColor;
+            }
+
+            Color aBackColor = rDoc.GetPattern(nEditCol, nEditRow, getViewData().GetTabNo())->GetItem(ATTR_BACKGROUND).GetColor();
+            if (!aBackColor.IsTransparent())
+                aDocColor = aBackColor;
+
+            pEditView->SetBackgroundColor(aDocColor);
         }
 
         if ( nEditEndCol >= nX1 && nEditCol <= nX2 && nEditEndRow >= nY1 && nEditRow <= nY2 )

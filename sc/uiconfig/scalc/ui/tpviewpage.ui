@@ -274,7 +274,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="editcellbg">
-                    <property name="label" translatable="yes" context="tpviewpage|value">Edit cell background highlighting</property>
+                    <property name="label" translatable="yes" context="tpviewpage|value">Edit cell highlighting</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -282,7 +282,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="editcellbg-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|value">Mark the Edit cell background highlighting checkbox to show cell frame background color as the edit cell background.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|value">Mark this box to show highlighted background when the cell is in edit mode.</property>
                       </object>
                     </child>
                   </object>

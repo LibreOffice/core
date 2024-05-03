@@ -2870,6 +2870,7 @@ void ScInputHandler::UpdateFormulaMode()
     {
         if (!bFormulaMode)
         {
+            pActiveViewSh->GetViewData().SetEditHighlight(true);
             bFormulaMode = true;
             pRefViewSh = pActiveViewSh;
             pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
@@ -2891,6 +2892,7 @@ void ScInputHandler::UpdateFormulaMode()
     {
         if (bFormulaMode)
         {
+            pActiveViewSh->GetViewData().SetEditHighlight(false);
             ShowRefFrame();
             bFormulaMode = false;
             pRefViewSh = nullptr;
@@ -3054,6 +3056,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
     {
         if (pTableView)
             pTableView->SetEditEngineUpdateLayout(true);
+        pActiveViewSh->GetViewData().SetEditHighlight(true);
     }
     else
     {

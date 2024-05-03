@@ -785,6 +785,7 @@ void ScTabViewShell::SetEditShell(EditView* pView, bool bActive )
     else if(bActiveEditSh)
     {
         SetCurSubShell(OST_Cell);
+        GetViewData().SetEditHighlight(false);
     }
     bActiveEditSh = bActive;
 }
