@@ -724,7 +724,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( pNameItem )
             {
                 const OUString& aName( pNameItem->GetValue() );
-                OUString aModType( "Module" );
+                OUString aModType( u"Module"_ustr );
                 OUString aType( aModType );
                 const SfxStringItem* pTypeItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_TYPE);
                 if ( pTypeItem )
@@ -1137,7 +1137,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_STAT_DATE:
             {
-                SfxStringItem aItem( SID_BASICIDE_STAT_DATE, "Datum?!" );
+                SfxStringItem aItem( SID_BASICIDE_STAT_DATE, u"Datum?!"_ustr );
                 rSet.Put( aItem );
             }
             break;
@@ -1434,7 +1434,7 @@ void Shell::ManageToolbars()
         return;
 
     Reference< css::frame::XLayoutManager > xLayoutManager;
-    uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
+    uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
     a >>= xLayoutManager;
     if ( !xLayoutManager.is() )
         return;

@@ -509,7 +509,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
             ::TabBar::MouseButtonDown( aMouseEvent ); // base class
         }
         if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->ExecutePopup("tabbar", this, &aPos);
+            pDispatcher->ExecutePopup(u"tabbar"_ustr, this, &aPos);
     }
 }
 

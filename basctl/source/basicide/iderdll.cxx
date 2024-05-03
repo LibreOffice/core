@@ -124,7 +124,7 @@ Dll::Dll () :
 
     GetExtraData(); // to cause GlobalErrorHdl to be set
 
-    rFactory.SetDocumentServiceName( "com.sun.star.script.BasicIDE" );
+    rFactory.SetDocumentServiceName( u"com.sun.star.script.BasicIDE"_ustr );
 
     DocShell::RegisterInterface( pMod );
     Shell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );

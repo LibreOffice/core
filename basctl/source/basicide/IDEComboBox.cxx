@@ -89,8 +89,8 @@ VclPtr<InterimItemWindow> LibBoxControl::CreateItemWindow(vcl::Window* pParent)
 }
 
 DocListenerBox::DocListenerBox(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/BasicIDE/ui/combobox.ui", "ComboBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+    : InterimItemWindow(pParent, u"modules/BasicIDE/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_combo_box(u"combobox"_ustr))
     , maNotifier(*this)
 {
     InitControlBase(m_xWidget.get());

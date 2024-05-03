@@ -44,32 +44,32 @@ Renderable::Renderable (BaseWindow* pWin)
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
 
-    m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
+    m_aUIProperties[0].Value = setSubgroupControlOpt(u"printrange"_ustr,
         IDEResId( RID_STR_PRINTDLG_PAGES ), OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
-    OUString aPrintContentName( "PrintContent" );
+    OUString aPrintContentName( u"PrintContent"_ustr );
     const Sequence<OUString> aChoices{IDEResId(RID_STR_PRINTDLG_PRINTALLPAGES),
                                       IDEResId(RID_STR_PRINTDLG_PRINTPAGES)};
-    const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
-                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"};
-    const Sequence<OUString> aWidgetIds{"rbAllPages",
-                                        "rbRangePages"};
+    const Sequence<OUString> aHelpIds{u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
+                                      u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr};
+    const Sequence<OUString> aWidgetIds{u"rbAllPages"_ustr,
+                                        u"rbRangePages"_ustr};
     m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
 
     // create an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
-    m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
-                                                 OUString(), "PageRange",
+    m_aUIProperties[2].Value = setEditControlOpt(u"pagerange"_ustr, OUString(),
+                                                 OUString(), u"PageRange"_ustr,
                                                  OUString(), aPageRangeOpt);
 
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintContentName, 0, true);
-    m_aUIProperties[3].Value = setChoiceListControlOpt("evenoddbox",
+    m_aUIProperties[3].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                         OUString(),
                                                         uno::Sequence<OUString>(),
-                                                        "EvenOdd",
+                                                        u"EvenOdd"_ustr,
                                                         uno::Sequence<OUString>(),
                                                         0,
                                                         uno::Sequence< sal_Bool >(),
@@ -83,7 +83,7 @@ Renderable::~Renderable()
 VclPtr< Printer > Renderable::getPrinter() const
 {
     VclPtr< Printer > pPrinter;
-    Any aValue( getValue( "RenderDevice" ) );
+    Any aValue( getValue( u"RenderDevice"_ustr ) );
     Reference<awt::XDevice> xRenderDevice;
 
     if( aValue >>= xRenderDevice )
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
     {
         VclPtr<Printer> pPrinter = getPrinter();
         if (!pPrinter)
-            throw lang::IllegalArgumentException("no printer", static_cast<cppu::OWeakObject*>(this), -1);
+            throw lang::IllegalArgumentException(u"no printer"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
 
         nCount = mpWindow->countPages( pPrinter );
 
@@ -192,7 +192,7 @@ void SAL_CALL Renderable::render (
 
     VclPtr<Printer> pPrinter = getPrinter();
     if (!pPrinter)
-        throw lang::IllegalArgumentException("no printer", static_cast<cppu::OWeakObject*>(this), -1);
+        throw lang::IllegalArgumentException(u"no printer"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
 
     sal_Int64 nContent = getIntValue( "PrintContent", -1 );
     if( nContent == 1 )

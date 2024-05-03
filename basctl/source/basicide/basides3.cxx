@@ -74,7 +74,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
                 // create dialog model
                 Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
                 Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
-                    ( "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
+                    ( u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );

@@ -159,7 +159,7 @@ void basctl_Shell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_SHOW_PROPERTYBROWSER, false, SfxShellFeature::BasicShowBrowser);
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
-    GetStaticInterface()->RegisterPopupMenu("dialog");
+    GetStaticInterface()->RegisterPopupMenu(u"dialog"_ustr);
 }
 
 unsigned Shell::nShellCount = 0;
@@ -189,7 +189,7 @@ void Shell::Init()
 
     GetExtraData()->ShellInCriticalSection() = true;
 
-    SetName( "BasicIDE" );
+    SetName( u"BasicIDE"_ustr );
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
@@ -219,7 +219,7 @@ void Shell::Init()
     if (!bObjCatVisible)
         aObjectCatalog->Show(bObjCatVisible);
 
-    SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", false, false );
+    SetCurLib( ScriptDocument::getApplicationScriptDocument(), u"Standard"_ustr, false, false );
 
     ShellCreated(this);
 
@@ -356,7 +356,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         pData->GetLibInfo().RemoveInfoFor( _rDocument );
 
     if ( bSetCurLib )
-        SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", true, false );
+        SetCurLib( ScriptDocument::getApplicationScriptDocument(), u"Standard"_ustr, true, false );
     else if ( bSetCurWindow )
         SetCurWindow( FindApplicationWindow(), true );
 }

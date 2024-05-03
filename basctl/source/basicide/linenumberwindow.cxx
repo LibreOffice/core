@@ -29,7 +29,7 @@ LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWind
     GetWindow(GetWindowType::Border)->SetBackground(aBackground);
     m_FontColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     m_HighlightColor = GetSettings().GetStyleSettings().GetFaceColor();
-    m_nBaseWidth = GetTextWidth("8");
+    m_nBaseWidth = GetTextWidth(u"8"_ustr);
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
@@ -71,7 +71,7 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
     // FIXME: it would be best if we could get notified of a font change
     // rather than doing that re-calculation at each Paint event
-    m_nBaseWidth = GetTextWidth("8");
+    m_nBaseWidth = GetTextWidth(u"8"_ustr);
 
     // reserve enough for 3 digit minimum, with a bit to spare for comfort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;

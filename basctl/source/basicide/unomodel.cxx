@@ -115,7 +115,7 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  )
 
 OUString SIDEModel::getImplementationName()
 {
-    return "com.sun.star.comp.basic.BasicIDE";
+    return u"com.sun.star.comp.basic.BasicIDE"_ustr;
 }
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
@@ -125,7 +125,7 @@ sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.BasicIDE" };
+    return { u"com.sun.star.script.BasicIDE"_ustr };
 }
 
 //  XStorable
@@ -147,7 +147,7 @@ void SAL_CALL SIDEModel::storeToURL( const OUString&,
 
 void  SIDEModel::notImplemented()
 {
-    throw io::IOException("Can't store IDE model" );
+    throw io::IOException(u"Can't store IDE model"_ustr );
 }
 
 // XModel

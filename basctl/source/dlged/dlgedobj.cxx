@@ -542,7 +542,7 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nStep = GetStep();
 
     SdrLayerAdmin& rLayerAdmin(getSdrModelFromSdrObject().GetLayerAdmin());
-    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( "HiddenLayer" );
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( u"HiddenLayer"_ustr );
     SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
     if( nCurStep )
@@ -670,99 +670,99 @@ OUString DlgEdObj::GetDefaultName() const
 {
     OUString sResId;
     OUString aDefaultName;
-    if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
+    if ( supportsService( u"com.sun.star.awt.UnoControlDialogModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_DIALOG;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlButtonModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_BUTTON;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_RADIOBUTTON;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_CHECKBOX;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlListBoxModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_LISTBOX;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlComboBoxModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_COMBOBOX;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_GROUPBOX;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlEditModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_EDIT;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedTextModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_FIXEDTEXT;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlImageControlModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_IMAGECONTROL;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlProgressBarModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_PROGRESSBAR;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlScrollBarModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_SCROLLBAR;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedLineModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_FIXEDLINE;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlDateFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_DATEFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_TIMEFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_NUMERICFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_CURRENCYFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_FORMATTEDFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_PATTERNFIELD;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFileControlModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_FILECONTROL;
     }
-    else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.tree.TreeControlModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_TREECONTROL;
     }
-    else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.grid.UnoControlGridModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_GRIDCONTROL;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_HYPERLINKCONTROL;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
+    else if ( supportsService( u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr ) )
     {
         sResId = RID_STR_CLASS_SPINCONTROL;
     }
@@ -803,95 +803,95 @@ SdrInventor DlgEdObj::GetObjInventor()   const
 
 SdrObjKind DlgEdObj::GetObjIdentifier() const
 {
-    if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ))
+    if ( supportsService( u"com.sun.star.awt.UnoControlDialogModel"_ustr ))
     {
         return SdrObjKind::BasicDialogDialog;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlButtonModel"_ustr ))
     {
         return SdrObjKind::BasicDialogPushButton;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr ))
     {
         return SdrObjKind::BasicDialogRadioButton;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr ))
     {
         return SdrObjKind::BasicDialogCheckbox;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlListBoxModel"_ustr ))
     {
         return SdrObjKind::BasicDialogListbox;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlComboBoxModel"_ustr ))
     {
         return SdrObjKind::BasicDialogCombobox;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr ))
     {
         return SdrObjKind::BasicDialogGroupBox;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlEditModel"_ustr ))
     {
         return SdrObjKind::BasicDialogEdit;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedTextModel"_ustr ))
     {
         return SdrObjKind::BasicDialogFixedText;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlImageControlModel"_ustr ))
     {
         return SdrObjKind::BasicDialogImageControl;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlProgressBarModel"_ustr ))
     {
         return SdrObjKind::BasicDialogProgressbar;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlScrollBarModel"_ustr ))
     {
         return SdrObjKind::BasicDialogHorizontalScrollbar;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedLineModel"_ustr ))
     {
         return SdrObjKind::BasicDialogHorizontalFixedLine;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlDateFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogDateField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogTimeField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogNumericField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogCurencyField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogFormattedField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr ))
     {
         return SdrObjKind::BasicDialogPatternField;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFileControlModel"_ustr ))
     {
         return SdrObjKind::BasicDialogFileControl;
     }
-    else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ))
+    else if ( supportsService( u"com.sun.star.awt.tree.TreeControlModel"_ustr ))
     {
         return SdrObjKind::BasicDialogTreeControl;
     }
-    else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ))
+    else if ( supportsService( u"com.sun.star.awt.grid.UnoControlGridModel"_ustr ))
     {
         return SdrObjKind::BasicDialogGridControl;
     }
-    else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ))
+    else if ( supportsService( u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr ))
     {
         return SdrObjKind::BasicDialogHyperlinkControl;
     }
@@ -991,17 +991,17 @@ void DlgEdObj::SetDefaults()
         xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
 
         // set labels
-        if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
+        if ( supportsService( u"com.sun.star.awt.UnoControlButtonModel"_ustr ) ||
+            supportsService( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr ) ||
+            supportsService( u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr ) ||
+            supportsService( u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr ) ||
+            supportsService( u"com.sun.star.awt.UnoControlFixedTextModel"_ustr ) )
         {
             xPSet->setPropertyValue( DLGED_PROP_LABEL, Any(aOUniqueName) );
         }
 
         // set number formats supplier for formatted field
-        if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
+        if ( supportsService( u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr ) )
         {
             Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor().GetNumberFormatsSupplier();
             if ( xSupplier.is() )
@@ -1158,7 +1158,7 @@ void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
             catch (container::NoSuchElementException const&)
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
-                throw lang::WrappedTargetRuntimeException("", nullptr,
+                throw lang::WrappedTargetRuntimeException(u""_ustr, nullptr,
                         anyEx);
             }
         }
@@ -1675,12 +1675,12 @@ void DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
 
     if ( xBindable.is() )
     {
-        Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), UNO_QUERY );
+        Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr, aArgs ), UNO_QUERY );
         xBindable->setValueBinding( xBinding );
     }
     if ( xListEntrySink.is() )
     {
-        Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY );
+        Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( u"com.sun.star.table.CellRangeListSource"_ustr, aArgs ), UNO_QUERY );
         xListEntrySink->setListEntrySource( xSource );
     }
 }

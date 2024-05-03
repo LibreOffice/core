@@ -88,7 +88,7 @@ void LocalizationMgr::handleTranslationbar ()
         return;
 
     Reference< css::frame::XLayoutManager > xLayoutManager;
-    uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
+    uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
     a >>= xLayoutManager;
     if ( xLayoutManager.is() )
     {
@@ -845,7 +845,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
     }
 
     Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-    xDlgPSet->setPropertyValue( "ResourceResolver", Any(xStringResourceManager) );
+    xDlgPSet->setPropertyValue( u"ResourceResolver"_ustr, Any(xStringResourceManager) );
 }
 
 void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName,

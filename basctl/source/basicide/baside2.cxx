@@ -297,7 +297,7 @@ void ModulWindow::CheckCompileBasic()
 
     {
         // tdf#106529: only use strict compilation mode when compiling from the IDE
-        css::uno::ContextLayer layer(comphelper::NewFlagContext("BasicStrict"));
+        css::uno::ContextLayer layer(comphelper::NewFlagContext(u"BasicStrict"_ustr));
         bDone = m_xModule->Compile();
     }
     if ( !bWasModified )
@@ -422,9 +422,9 @@ void ModulWindow::LoadBasic()
     aDlg.SetContext(sfx2::FileDialogHelper::BasicImportSource);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
-    xFP->appendFilter( "BASIC" , "*.bas" );
+    xFP->appendFilter( u"BASIC"_ustr , u"*.bas"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
-    xFP->setCurrentFilter( "BASIC" );
+    xFP->setCurrentFilter( u"BASIC"_ustr );
 
     if( aDlg.Execute() != ERRCODE_NONE )
         return;
@@ -470,9 +470,9 @@ void ModulWindow::SaveBasicSource()
 
     xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
 
-    xFP->appendFilter( "BASIC", "*.bas" );
+    xFP->appendFilter( u"BASIC"_ustr, u"*.bas"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
-    xFP->setCurrentFilter( "BASIC" );
+    xFP->setCurrentFilter( u"BASIC"_ustr );
 
     if( aDlg.Execute() != ERRCODE_NONE )
         return;

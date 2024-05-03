@@ -372,7 +372,7 @@ OUString AccessibleDialogControlShape::getAccessibleDescription(  )
 {
     OExternalLockGuard aGuard( this );
 
-    return GetModelStringProperty( "HelpText" );
+    return GetModelStringProperty( u"HelpText"_ustr );
 }
 
 
@@ -380,7 +380,7 @@ OUString AccessibleDialogControlShape::getAccessibleName(  )
 {
     OExternalLockGuard aGuard( this );
 
-    return GetModelStringProperty( "Name" );
+    return GetModelStringProperty( u"Name"_ustr );
 }
 
 

@@ -161,7 +161,7 @@ void Shell::CopyDialogResources(
     // create dialog model
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
-        ( "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
+        ( u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
@@ -200,11 +200,11 @@ void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFram
 
 // OrganizeDialog
 OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/organizedialog.ui", "OrganizeDialog")
-    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page("modules"), "ModulePage", BrowseMode::Modules, this))
-    , m_xDialogPage(new ObjectPage(m_xTabCtrl->get_page("dialogs"), "DialogPage", BrowseMode::Dialogs, this))
-    , m_xLibPage(new LibPage(m_xTabCtrl->get_page("libraries"), this))
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/organizedialog.ui"_ustr, u"OrganizeDialog"_ustr)
+    , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page(u"modules"_ustr), u"ModulePage"_ustr, BrowseMode::Modules, this))
+    , m_xDialogPage(new ObjectPage(m_xTabCtrl->get_page(u"dialogs"_ustr), u"DialogPage"_ustr, BrowseMode::Dialogs, this))
+    , m_xLibPage(new LibPage(m_xTabCtrl->get_page(u"libraries"_ustr), this))
 {
     m_xTabCtrl->connect_enter_page(LINK(this, OrganizeDialog, ActivatePageHdl));
 
@@ -565,11 +565,11 @@ public:
 ObjectPage::ObjectPage(weld::Container* pParent, const OUString &rName, BrowseMode nMode, OrganizeDialog* pDialog)
     : OrganizePage(pParent, "modules/BasicIDE/ui/" + rName.toAsciiLowerCase() + ".ui",
         rName, pDialog)
-    , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view("library"), pDialog->getDialog()))
-    , m_xEditButton(m_xBuilder->weld_button("edit"))
-    , m_xNewModButton(m_xBuilder->weld_button("newmodule"))
-    , m_xNewDlgButton(m_xBuilder->weld_button("newdialog"))
-    , m_xDelButton(m_xBuilder->weld_button("delete"))
+    , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"library"_ustr), pDialog->getDialog()))
+    , m_xEditButton(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xNewModButton(m_xBuilder->weld_button(u"newmodule"_ustr))
+    , m_xNewDlgButton(m_xBuilder->weld_button(u"newdialog"_ustr))
+    , m_xDelButton(m_xBuilder->weld_button(u"delete"_ustr))
 {
     Size aSize(m_xBasicBox->get_approximate_digit_width() * 40,
                m_xBasicBox->get_height_rows(14));
@@ -926,11 +926,11 @@ void ObjectPage::EndTabDialog()
 }
 
 LibDialog::LibDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/importlibdialog.ui", "ImportLibDialog")
-    , m_xStorageFrame(m_xBuilder->weld_frame("storageframe"))
-    , m_xLibBox(m_xBuilder->weld_tree_view("entries"))
-    , m_xReferenceBox(m_xBuilder->weld_check_button("ref"))
-    , m_xReplaceBox(m_xBuilder->weld_check_button("replace"))
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/importlibdialog.ui"_ustr, u"ImportLibDialog"_ustr)
+    , m_xStorageFrame(m_xBuilder->weld_frame(u"storageframe"_ustr))
+    , m_xLibBox(m_xBuilder->weld_tree_view(u"entries"_ustr))
+    , m_xReferenceBox(m_xBuilder->weld_check_button(u"ref"_ustr))
+    , m_xReplaceBox(m_xBuilder->weld_check_button(u"replace"_ustr))
 {
     m_xLibBox->set_size_request(m_xLibBox->get_approximate_digit_width() * 28,
                                 m_xLibBox->get_height_rows(8));

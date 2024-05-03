@@ -124,7 +124,7 @@ void DlgEditor::ShowDialog()
             if( !bDecoration )
             {
                 xNewDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
-                xNewDlgModPropSet->setPropertyValue( "Title", Any( OUString() ) );
+                xNewDlgModPropSet->setPropertyValue( u"Title"_ustr, Any( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )
@@ -183,12 +183,12 @@ DlgEditor::DlgEditor (
     ,pDlgEdModel(new DlgEdModel())
     ,pDlgEdPage(new DlgEdPage(*pDlgEdModel))
     // set clipboard data flavors
-    ,m_ClipboardDataFlavors{ { /* MimeType */ "application/vnd.sun.xml.dialog",
-                               /* HumanPresentableName */ "Dialog 6.0",
+    ,m_ClipboardDataFlavors{ { /* MimeType */ u"application/vnd.sun.xml.dialog"_ustr,
+                               /* HumanPresentableName */ u"Dialog 6.0"_ustr,
                                /* DataType */ cppu::UnoType<Sequence< sal_Int8 >>::get() } }
     ,m_ClipboardDataFlavorsResource{ m_ClipboardDataFlavors[0],
-                                     { /* MimeType */ "application/vnd.sun.xml.dialogwithresource",
-                                       /* HumanPresentableName */ "Dialog 8.0",
+                                     { /* MimeType */ u"application/vnd.sun.xml.dialogwithresource"_ustr,
+                                       /* HumanPresentableName */ u"Dialog 8.0"_ustr,
                                        /* DataType */ cppu::UnoType<Sequence< sal_Int8 >>::get() } }
     ,pObjFac(new DlgEdFactory(xModel))
     ,rWindow(rWindow_)
@@ -208,7 +208,7 @@ DlgEditor::DlgEditor (
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewLayer( rAdmin.GetControlLayerName() );
-    rAdmin.NewLayer( "HiddenLayer" );
+    rAdmin.NewLayer( u"HiddenLayer"_ustr );
 
     pDlgEdModel->InsertPage(pDlgEdPage);
 
@@ -218,7 +218,7 @@ DlgEditor::DlgEditor (
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel().GetPage(0));
-    pDlgEdView->SetLayerVisible( "HiddenLayer", false );
+    pDlgEdView->SetLayerVisible( u"HiddenLayer"_ustr, false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
     pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
@@ -825,7 +825,7 @@ void DlgEditor::Paste()
     // create clipboard dialog model from xml
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
+        u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), uno::UNO_QUERY );
 
     bool bSourceIsLocalized = false;
     Sequence< sal_Int8 > DialogModelBytes;

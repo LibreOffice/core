@@ -31,7 +31,7 @@ StringMap EditorWindowUIObject::get_state()
         aRes.append(pEditEngine->GetText(i) + "\n");
     }
 
-    aMap["Text"] = aRes.makeStringAndClear();
+    aMap[u"Text"_ustr] = aRes.makeStringAndClear();
 
     return aMap;
 }
@@ -43,7 +43,7 @@ std::unique_ptr<UIObject> EditorWindowUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new EditorWindowUIObject(pEditorWindow));
 }
 
-OUString EditorWindowUIObject::get_name() const { return "EditorWindowUIObject"; }
+OUString EditorWindowUIObject::get_name() const { return u"EditorWindowUIObject"_ustr; }
 
 } // namespace basctl
 

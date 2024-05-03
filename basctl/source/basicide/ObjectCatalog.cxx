@@ -28,12 +28,13 @@
 namespace basctl
 {
 ObjectCatalog::ObjectCatalog(vcl::Window* pParent)
-    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingorganizer.ui", "DockingOrganizer")
+    : DockingWindow(pParent, u"modules/BasicIDE/ui/dockingorganizer.ui"_ustr,
+                    u"DockingOrganizer"_ustr)
 {
-    m_xTitle = m_xBuilder->weld_label("title");
-    m_xTree.reset(new SbTreeListBox(m_xBuilder->weld_tree_view("libraries"), GetFrameWeld()));
+    m_xTitle = m_xBuilder->weld_label(u"title"_ustr);
+    m_xTree.reset(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), GetFrameWeld()));
 
-    SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
+    SetHelpId(u"basctl:FloatingWindow:RID_BASICIDE_OBJCAT"_ustr);
     SetText(IDEResId(RID_BASICIDE_OBJCAT));
 
     // title

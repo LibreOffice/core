@@ -33,12 +33,13 @@ namespace basctl
 {
 ColorSchemeDialog::ColorSchemeDialog(weld::Window* pParent,
                                      VclPtr<ModulWindowLayout> pModulWinLayout)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/colorscheme.ui", "ColorSchemeDialog")
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/colorscheme.ui"_ustr,
+                              u"ColorSchemeDialog"_ustr)
     , m_pModulWinLayout(std::move(pModulWinLayout))
-    , m_xSchemeList(m_xBuilder->weld_tree_view("schemelist"))
-    , m_xUseAppCollors(m_xBuilder->weld_radio_button("opt_appcolors"))
-    , m_xUseScheme(m_xBuilder->weld_radio_button("opt_usescheme"))
-    , m_xOk(m_xBuilder->weld_button("btn_ok"))
+    , m_xSchemeList(m_xBuilder->weld_tree_view(u"schemelist"_ustr))
+    , m_xUseAppCollors(m_xBuilder->weld_radio_button(u"opt_appcolors"_ustr))
+    , m_xUseScheme(m_xBuilder->weld_radio_button(u"opt_usescheme"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"btn_ok"_ustr))
 {
     m_pColorConfig = GetShell()->GetColorConfig();
     m_sSelectedSchemeId = m_pColorConfig->GetCurrentColorSchemeName();

@@ -133,7 +133,7 @@ static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, s
             // from DlgEdForm::CheckHit; exclude inner for DlgEdForm
             bExcludeInner = true;
         }
-        else if(pDlgEdObj->supportsService("com.sun.star.awt.UnoControlGroupBoxModel"))
+        else if(pDlgEdObj->supportsService(u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr))
         {
             // from DlgEdObj::CheckHit; exclude inner for group shapes
             bExcludeInner = true;

@@ -130,9 +130,9 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, weld::Button&, void)
 }
 
 NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool bCheckName)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/newlibdialog.ui", "NewLibDialog")
-    , m_xEdit(m_xBuilder->weld_entry("entry"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/newlibdialog.ui"_ustr, u"NewLibDialog"_ustr)
+    , m_xEdit(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     , m_bCheckName(bCheckName)
 {
     switch (eMode)
@@ -154,10 +154,10 @@ NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool 
 
 // GotoLineDialog
 GotoLineDialog::GotoLineDialog(weld::Window* pParent, sal_uInt32 nCurLine, sal_uInt32 nLineCount)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/gotolinedialog.ui", "GotoLineDialog")
-    , m_xSpinButton(m_xBuilder->weld_spin_button("spin"))
-    , m_xLineCount(m_xBuilder->weld_label("line_count"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr, u"GotoLineDialog"_ustr)
+    , m_xSpinButton(m_xBuilder->weld_spin_button(u"spin"_ustr))
+    , m_xLineCount(m_xBuilder->weld_label(u"line_count"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     , m_nCurLine(nCurLine)
     , m_nLineCount(nLineCount)
 {
@@ -206,10 +206,10 @@ IMPL_LINK_NOARG(ExportDialog, OkButtonHandler, weld::Button&, void)
 }
 
 ExportDialog::ExportDialog(weld::Window * pParent)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/exportdialog.ui", "ExportDialog")
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/exportdialog.ui"_ustr, u"ExportDialog"_ustr)
     , m_bExportAsPackage(false)
-    , m_xExportAsPackageButton(m_xBuilder->weld_radio_button("extension"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xExportAsPackageButton(m_xBuilder->weld_radio_button(u"extension"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xExportAsPackageButton->set_active(true);
     m_xOKButton->connect_clicked(LINK(this, ExportDialog, OkButtonHandler));
@@ -221,15 +221,15 @@ ExportDialog::~ExportDialog()
 
 // LibPage
 LibPage::LibPage(weld::Container* pParent, OrganizeDialog* pDialog)
-    : OrganizePage(pParent, "modules/BasicIDE/ui/libpage.ui", "LibPage", pDialog)
-    , m_xBasicsBox(m_xBuilder->weld_combo_box("location"))
-    , m_xLibBox(m_xBuilder->weld_tree_view("library"))
-    , m_xEditButton(m_xBuilder->weld_button("edit"))
-    , m_xPasswordButton(m_xBuilder->weld_button("password"))
-    , m_xNewLibButton(m_xBuilder->weld_button("new"))
-    , m_xInsertLibButton(m_xBuilder->weld_button("import"))
-    , m_xExportButton(m_xBuilder->weld_button("export"))
-    , m_xDelButton(m_xBuilder->weld_button("delete"))
+    : OrganizePage(pParent, u"modules/BasicIDE/ui/libpage.ui"_ustr, u"LibPage"_ustr, pDialog)
+    , m_xBasicsBox(m_xBuilder->weld_combo_box(u"location"_ustr))
+    , m_xLibBox(m_xBuilder->weld_tree_view(u"library"_ustr))
+    , m_xEditButton(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xPasswordButton(m_xBuilder->weld_button(u"password"_ustr))
+    , m_xNewLibButton(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xInsertLibButton(m_xBuilder->weld_button(u"import"_ustr))
+    , m_xExportButton(m_xBuilder->weld_button(u"export"_ustr))
+    , m_xDelButton(m_xBuilder->weld_button(u"delete"_ustr))
     , m_aCurDocument(ScriptDocument::getApplicationScriptDocument())
     , m_eCurLocation(LIBRARY_LOCATION_UNKNOWN)
 {
@@ -575,7 +575,7 @@ void LibPage::InsertLib()
 
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC));
-    xFP->appendFilter( aTitle, "*.sbl;*.xlc;*.xlb"        // library files
+    xFP->appendFilter( aTitle, u"*.sbl;*.xlc;*.xlb"        // library files
               ";*.sdw;*.sxw;*.odt"       // text
               ";*.vor;*.stw;*.ott"       // text template
               ";*.sgl;*.sxg;*.odm"       // master document
@@ -586,7 +586,7 @@ void LibPage::InsertLib()
               ";*.std;*.otg"             // drawing template
               ";*.sdd;*.sxi;*.odp"       // presentation
               ";*.sti;*.otp"             // presentation template
-              ";*.sxm;*.odf" );          // formula
+              ";*.sxm;*.odf"_ustr );          // formula
 
     OUString aLastFilter(GetExtraData()->GetAddLibFilter());
     if ( !aLastFilter.isEmpty() )
@@ -611,8 +611,8 @@ void LibPage::InsertLib()
     auto xDlgURLObj = std::make_shared<INetURLObject>(aURLObj);
 
     OUString aBase = aURLObj.getBase();
-    OUString aModBase( "script" );
-    OUString aDlgBase( "dialog" );
+    OUString aModBase( u"script"_ustr );
+    OUString aDlgBase( u"dialog"_ustr );
 
     if ( aBase == aModBase || aBase == aDlgBase )
     {
@@ -678,8 +678,8 @@ void LibPage::InsertLib()
     }
 
     OUString aExtension( aURLObj.getExtension() );
-    OUString aLibExtension( "xlb" );
-    OUString aContExtension( "xlc" );
+    OUString aLibExtension( u"xlb"_ustr );
+    OUString aContExtension( u"xlc"_ustr );
 
     // disable reference checkbox for documents and sbls
     if ( aExtension != aLibExtension && aExtension != aContExtension )
@@ -1022,7 +1022,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
     // filter
     OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE));
-    xFP->appendFilter( aTitle, "*.oxt" ); // library files
+    xFP->appendFilter( aTitle, u"*.oxt"_ustr ); // library files
 
     xFP->setCurrentFilter( aTitle );
 
@@ -1080,7 +1080,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
                       + "/" ;
     auto attribs(::comphelper::InitPropertySequence({
         { "FullPath", Any(fullPath) },
-        { "MediaType", Any(OUString("application/vnd.sun.star.basic-library")) }
+        { "MediaType", Any(u"application/vnd.sun.star.basic-library"_ustr) }
     }));
     manifest.push_back( attribs );
 

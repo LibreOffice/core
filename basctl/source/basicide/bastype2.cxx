@@ -60,7 +60,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
             uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
-            if( xServiceInfo.is() && xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )
+            if( xServiceInfo.is() && xServiceInfo->supportsService( u"ooo.vba.excel.Worksheet"_ustr ) )
             {
                 uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
                 if( xNamed.is() )
@@ -702,8 +702,8 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
     {
         aDesc = EntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
-            LIBRARY_LOCATION_USER, "Standard",
-            OUString(), ".", OBJ_TYPE_UNKNOWN
+            LIBRARY_LOCATION_USER, u"Standard"_ustr,
+            OUString(), u"."_ustr, OBJ_TYPE_UNKNOWN
         );
     }
     ScriptDocument aDocument = aDesc.GetDocument();

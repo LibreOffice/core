@@ -47,9 +47,9 @@ private:
 
     // Names of default color schemes shipped with LibreOffice
     css::uno::Sequence<OUString> m_aDefaultSchemes
-        = { "COLORSCHEME_LIBREOFFICE_LIGHT", "COLORSCHEME_LIBREOFFICE_DARK",
-            "COLORSCHEME_BREEZE_LIGHT",      "COLORSCHEME_BREEZE_DARK",
-            "COLORSCHEME_SOLARIZED_LIGHT",   "COLORSCHEME_SOLARIZED_DARK" };
+        = { u"COLORSCHEME_LIBREOFFICE_LIGHT"_ustr, u"COLORSCHEME_LIBREOFFICE_DARK"_ustr,
+            u"COLORSCHEME_BREEZE_LIGHT"_ustr,      u"COLORSCHEME_BREEZE_DARK"_ustr,
+            u"COLORSCHEME_SOLARIZED_LIGHT"_ustr,   u"COLORSCHEME_SOLARIZED_DARK"_ustr };
 
     // Maps the scheme names to their TranslateId
     SchemeTranslateIdMap m_aTranslateIdsMap = {

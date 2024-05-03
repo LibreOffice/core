@@ -51,29 +51,29 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame >& xDocFrame)
-    : SfxDialogController(pParnt, "modules/BasicIDE/ui/basicmacrodialog.ui", "BasicMacroDialog")
+    : SfxDialogController(pParnt, u"modules/BasicIDE/ui/basicmacrodialog.ui"_ustr, u"BasicMacroDialog"_ustr)
     , m_xDocumentFrame(xDocFrame)
     // the Sfx doesn't ask the BasicManager whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
     , bForceStoreBasic(false)
     , nMode(All)
-    , m_xMacroNameEdit(m_xBuilder->weld_entry("macronameedit"))
-    , m_xMacroFromTxT(m_xBuilder->weld_label("macrofromft"))
-    , m_xMacrosSaveInTxt(m_xBuilder->weld_label("macrotoft"))
-    , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view("libraries"), m_xDialog.get()))
+    , m_xMacroNameEdit(m_xBuilder->weld_entry(u"macronameedit"_ustr))
+    , m_xMacroFromTxT(m_xBuilder->weld_label(u"macrofromft"_ustr))
+    , m_xMacrosSaveInTxt(m_xBuilder->weld_label(u"macrotoft"_ustr))
+    , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), m_xDialog.get()))
     , m_xBasicBoxIter(m_xBasicBox->make_iterator())
-    , m_xMacrosInTxt(m_xBuilder->weld_label("existingmacrosft"))
-    , m_xMacroBox(m_xBuilder->weld_tree_view("macros"))
+    , m_xMacrosInTxt(m_xBuilder->weld_label(u"existingmacrosft"_ustr))
+    , m_xMacroBox(m_xBuilder->weld_tree_view(u"macros"_ustr))
     , m_xMacroBoxIter(m_xMacroBox->make_iterator())
-    , m_xRunButton(m_xBuilder->weld_button("ok"))
-    , m_xCloseButton(m_xBuilder->weld_button("close"))
-    , m_xAssignButton(m_xBuilder->weld_button("assign"))
-    , m_xEditButton(m_xBuilder->weld_button("edit"))
-    , m_xDelButton(m_xBuilder->weld_button("delete"))
-    , m_xNewButton(m_xBuilder->weld_button("new"))
-    , m_xOrganizeButton(m_xBuilder->weld_button("organize"))
-    , m_xNewLibButton(m_xBuilder->weld_button("newlibrary"))
-    , m_xNewModButton(m_xBuilder->weld_button("newmodule"))
+    , m_xRunButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xAssignButton(m_xBuilder->weld_button(u"assign"_ustr))
+    , m_xEditButton(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xDelButton(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xNewButton(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xOrganizeButton(m_xBuilder->weld_button(u"organize"_ustr))
+    , m_xNewLibButton(m_xBuilder->weld_button(u"newlibrary"_ustr))
+    , m_xNewModButton(m_xBuilder->weld_button(u"newmodule"_ustr))
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
@@ -785,11 +785,11 @@ IMPL_LINK(MacroChooser, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !m_xMacroBox->n_children())
          return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xMacroBox.get(), "modules/BasicIDE/ui/sortmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("sortmenu"));
-    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("sortsubmenu"));
-    xDropMenu->set_active("alphabetically", m_xMacroBox->get_sort_order());
-    xDropMenu->set_active("properorder", !m_xMacroBox->get_sort_order());
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xMacroBox.get(), u"modules/BasicIDE/ui/sortmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"sortmenu"_ustr));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu(u"sortsubmenu"_ustr));
+    xDropMenu->set_active(u"alphabetically"_ustr, m_xMacroBox->get_sort_order());
+    xDropMenu->set_active(u"properorder"_ustr, !m_xMacroBox->get_sort_order());
 
     OUString sCommand(xPopup->popup_at_rect(m_xMacroBox.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand == "alphabetically")
@@ -812,7 +812,7 @@ IMPL_LINK(MacroChooser, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
 void MacroChooser::UpdateFields()
 {
     auto nMacroEntry = m_xMacroBox->get_selected_index();
-    m_xMacroNameEdit->set_text("");
+    m_xMacroNameEdit->set_text(u""_ustr);
     if (nMacroEntry != -1)
         m_xMacroNameEdit->set_text(m_xMacroBox->get_text(nMacroEntry));
 }

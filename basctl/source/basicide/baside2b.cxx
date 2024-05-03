@@ -252,7 +252,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     m_nLastHighlightPara(0),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
-    set_id("EditorWindow");
+    set_id(u"EditorWindow"_ustr);
     const Wallpaper aBackground(rModulWindow.GetLayout().GetSyntaxBackgroundColor());
     SetBackground(aBackground);
     GetWindow(GetWindowType::Border)->SetBackground(aBackground);
@@ -272,7 +272,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     // The zoom level applied to the editor window is the zoom slider value in the shell
     nCurrentZoomLevel = GetShell()->GetCurrentZoomSliderValue();
 
-    const Sequence<OUString> aPropertyNames{"FontHeight", "FontName"};
+    const Sequence<OUString> aPropertyNames{u"FontHeight"_ustr, u"FontName"_ustr};
     n->addPropertiesChangeListener(aPropertyNames, listener_);
 }
 
@@ -776,7 +776,7 @@ void EditorWindow::HandleAutoCloseParen()
 
     if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
     {
-        GetEditView()->InsertText(")");
+        GetEditView()->InsertText(u")"_ustr);
         //leave the cursor on its place: inside the parenthesis
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
@@ -797,7 +797,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
 
     if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions.back().tokenType != TokenType::String) )
     {
-        GetEditView()->InsertText("\"");
+        GetEditView()->InsertText(u"\""_ustr);
         //leave the cursor on its place: inside the two double quotes
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
@@ -817,7 +817,7 @@ void EditorWindow::HandleProcedureCompletion()
     if (!bFoundName)
       return;
 
-    OUString sText("\nEnd ");
+    OUString sText(u"\nEnd "_ustr);
     aSel = GetEditView()->GetSelection();
     if( sProcType.equalsIgnoreAsciiCase("function") )
         sText += "Function\n";
@@ -1266,7 +1266,7 @@ void EditorWindow::InitScrollBars()
 
     rModulWindow.GetEditHScrollBar().SetVisibleSize(aOutSz.Width());
     rModulWindow.GetEditHScrollBar().SetPageSize(aOutSz.Width() * 8 / 10);
-    rModulWindow.GetEditHScrollBar().SetLineSize(GetTextWidth( "x" ));
+    rModulWindow.GetEditHScrollBar().SetLineSize(GetTextWidth( u"x"_ustr ));
     rModulWindow.GetEditHScrollBar().SetThumbPos(pEditView->GetStartDocPos().X());
     rModulWindow.GetEditHScrollBar().Show();
 }
@@ -1603,15 +1603,15 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     tools::Rectangle aRect(aPos, Size(1, 1));
     weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
 
-    std::unique_ptr<weld::Builder> xUIBuilder(Application::CreateBuilder(pPopupParent, "modules/BasicIDE/ui/breakpointmenus.ui"));
+    std::unique_ptr<weld::Builder> xUIBuilder(Application::CreateBuilder(pPopupParent, u"modules/BasicIDE/ui/breakpointmenus.ui"_ustr));
 
     Point aEventPos( PixelToLogic( aPos ) );
     BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
     if ( pBrk )
     {
         // test if break point is enabled...
-        std::unique_ptr<weld::Menu> xBrkPropMenu = xUIBuilder->weld_menu("breakmenu");
-        xBrkPropMenu->set_active("active", pBrk->bEnabled);
+        std::unique_ptr<weld::Menu> xBrkPropMenu = xUIBuilder->weld_menu(u"breakmenu"_ustr);
+        xBrkPropMenu->set_active(u"active"_ustr, pBrk->bEnabled);
         OUString sCommand = xBrkPropMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "active")
         {
@@ -1629,7 +1629,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     }
     else
     {
-        std::unique_ptr<weld::Menu> xBrkListMenu = xUIBuilder->weld_menu("breaklistmenu");
+        std::unique_ptr<weld::Menu> xBrkListMenu = xUIBuilder->weld_menu(u"breaklistmenu"_ustr);
         OUString sCommand = xBrkListMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "manage")
         {
@@ -1713,19 +1713,19 @@ struct WatchItem
 }
 
 WatchWindow::WatchWindow(Layout* pParent)
-    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingwatch.ui", "DockingWatch")
+    : DockingWindow(pParent, u"modules/BasicIDE/ui/dockingwatch.ui"_ustr, u"DockingWatch"_ustr)
     , m_nUpdateWatchesId(nullptr)
 {
-    m_xTitleArea = m_xBuilder->weld_container("titlearea");
+    m_xTitleArea = m_xBuilder->weld_container(u"titlearea"_ustr);
 
     nVirtToolBoxHeight = m_xTitleArea->get_preferred_size().Height();
 
-    m_xTitle = m_xBuilder->weld_label("title");
+    m_xTitle = m_xBuilder->weld_label(u"title"_ustr);
     m_xTitle->set_label(IDEResId(RID_STR_REMOVEWATCH));
 
-    m_xEdit = m_xBuilder->weld_entry("edit");
-    m_xRemoveWatchButton = m_xBuilder->weld_button("remove");
-    m_xTreeListBox = m_xBuilder->weld_tree_view("treeview");
+    m_xEdit = m_xBuilder->weld_entry(u"edit"_ustr);
+    m_xRemoveWatchButton = m_xBuilder->weld_button(u"remove"_ustr);
+    m_xTreeListBox = m_xBuilder->weld_tree_view(u"treeview"_ustr);
 
     m_xEdit->set_accessible_name(IDEResId(RID_STR_WATCHNAME));
     m_xEdit->set_help_id(HID_BASICIDE_WATCHWINDOW_EDIT);
@@ -1838,8 +1838,8 @@ void WatchWindow::AddWatch( const OUString& rVName )
     OUString sId(weld::toId(pWatchItem));
     std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
     m_xTreeListBox->insert(nullptr, -1, &aVar, &sId, nullptr, nullptr, false, xRet.get());
-    m_xTreeListBox->set_text(*xRet, "", 1);
-    m_xTreeListBox->set_text(*xRet, "", 2);
+    m_xTreeListBox->set_text(*xRet, u""_ustr, 1);
+    m_xTreeListBox->set_text(*xRet, u""_ustr, 2);
 
     m_xTreeListBox->set_cursor(*xRet);
     m_xTreeListBox->select(*xRet);
@@ -1911,14 +1911,14 @@ IMPL_LINK(WatchWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 // StackWindow
 StackWindow::StackWindow(Layout* pParent)
-    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingstack.ui", "DockingStack")
+    : DockingWindow(pParent, u"modules/BasicIDE/ui/dockingstack.ui"_ustr, u"DockingStack"_ustr)
 {
-    m_xTitle = m_xBuilder->weld_label("title");
+    m_xTitle = m_xBuilder->weld_label(u"title"_ustr);
     m_xTitle->set_label(IDEResId(RID_STR_STACK));
 
     m_xTitle->set_size_request(-1, nVirtToolBoxHeight); // so the two title areas are the same height
 
-    m_xTreeListBox = m_xBuilder->weld_tree_view("stack");
+    m_xTreeListBox = m_xBuilder->weld_tree_view(u"stack"_ustr);
 
     m_xTreeListBox->set_help_id(HID_BASICIDE_STACKWINDOW_LIST);
     m_xTreeListBox->set_accessible_name(IDEResId(RID_STR_STACKNAME));
@@ -2220,8 +2220,8 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
             OUString sId(weld::toId(pWatchItem));
 
             m_xTreeListBox->insert(&rParent, -1, &rName, &sId, nullptr, nullptr, false, xRet.get());
-            m_xTreeListBox->set_text(*xRet, "", 1);
-            m_xTreeListBox->set_text(*xRet, "", 2);
+            m_xTreeListBox->set_text(*xRet, u""_ustr, 1);
+            m_xTreeListBox->set_text(*xRet, u""_ustr, 2);
         }
 
         if (nPropCount > 0 && !m_nUpdateWatchesId)
@@ -2272,8 +2272,8 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
 
                 m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, false,
                                        xRet.get());
-                m_xTreeListBox->set_text(*xRet, "", 1);
-                m_xTreeListBox->set_text(*xRet, "", 2);
+                m_xTreeListBox->set_text(*xRet, u""_ustr, 1);
+                m_xTreeListBox->set_text(*xRet, u""_ustr, 2);
 
                 nElementCount++;
             }
@@ -2601,7 +2601,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                     }
 
                     bool bString = (static_cast<sal_uInt8>(eType) == sal_uInt8(SbxSTRING));
-                    OUString aStrStr( "\"" );
+                    OUString aStrStr( u"\""_ustr );
                     if( bString )
                     {
                         aWatchStr += aStrStr;
@@ -2854,9 +2854,9 @@ void CodeCompleteWindow::HideAndRestoreFocus()
 }
 
 CodeCompleteWindow::CodeCompleteWindow(EditorWindow* pPar)
-    : InterimItemWindow(pPar, "modules/BasicIDE/ui/codecomplete.ui", "CodeComplete")
+    : InterimItemWindow(pPar, u"modules/BasicIDE/ui/codecomplete.ui"_ustr, u"CodeComplete"_ustr)
     , pParent(pPar)
-    , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
+    , m_xListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xListBox->connect_row_activated(LINK(this, CodeCompleteWindow, ImplDoubleClickHdl));
     m_xListBox->connect_changed(LINK(this, CodeCompleteWindow, ImplSelectHdl));

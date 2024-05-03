@@ -606,7 +606,7 @@ namespace basctl
                     xDialogModel.set(
                         ( aContext->getServiceManager()->
                           createInstanceWithContext(
-                              "com.sun.star.awt.UnoControlDialogModel",
+                              u"com.sun.star.awt.UnoControlDialogModel"_ustr,
                               aContext ) ),
                         UNO_QUERY_THROW );
 
@@ -737,7 +737,7 @@ namespace basctl
                 comphelper::getProcessComponentContext() );
             Reference< XNameContainer > xDialogModel(
                 aContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.awt.UnoControlDialogModel", aContext ),
+                    u"com.sun.star.awt.UnoControlDialogModel"_ustr, aContext ),
                 UNO_QUERY_THROW );
 
             // set name property
@@ -819,7 +819,7 @@ namespace basctl
 
             Reference< XDispatchProvider > xDispProv( xFrame, UNO_QUERY_THROW );
             Reference< XDispatch > xDispatch(
-                xDispProv->queryDispatch( aURL, "_self", FrameSearchFlag::AUTO ),
+                xDispProv->queryDispatch( aURL, u"_self"_ustr, FrameSearchFlag::AUTO ),
                 UNO_SET_THROW );
 
             xDispatch->dispatch( aURL, aArgs );
@@ -1225,7 +1225,7 @@ namespace basctl
     {
         OUString aObjectName;
 
-        OUString aBaseName = _eType == E_SCRIPTS ? OUString("Module") : OUString("Dialog");
+        OUString aBaseName = _eType == E_SCRIPTS ? u"Module"_ustr : u"Dialog"_ustr;
 
         const Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
         std::set< OUString > aUsedNamesCheck( aUsedNames.begin(), aUsedNames.end() );

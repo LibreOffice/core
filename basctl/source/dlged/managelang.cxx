@@ -53,14 +53,14 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
 }
 
 ManageLanguageDialog::ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/managelanguages.ui", "ManageLanguagesDialog")
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/managelanguages.ui"_ustr, u"ManageLanguagesDialog"_ustr)
     , m_xLocalizationMgr(std::move(xLMgr))
     , m_sDefLangStr(IDEResId(RID_STR_DEF_LANG))
     , m_sCreateLangStr(IDEResId(RID_STR_CREATE_LANG))
-    , m_xLanguageLB(m_xBuilder->weld_tree_view("treeview"))
-    , m_xAddPB(m_xBuilder->weld_button("add"))
-    , m_xDeletePB(m_xBuilder->weld_button("delete"))
-    , m_xMakeDefPB(m_xBuilder->weld_button("default"))
+    , m_xLanguageLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
+    , m_xAddPB(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xDeletePB(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xMakeDefPB(m_xBuilder->weld_button(u"default"_ustr))
 {
     m_xLanguageLB->set_size_request(m_xLanguageLB->get_approximate_digit_width() * 42,
                                     m_xLanguageLB->get_height_rows(10));
@@ -149,8 +149,8 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/BasicIDE/ui/deletelangdialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("DeleteLangDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), u"modules/BasicIDE/ui/deletelangdialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"DeleteLangDialog"_ustr));
     if (xQBox->run() != RET_OK)
         return;
 
@@ -211,16 +211,16 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, weld::TreeView&, void)
 // class SetDefaultLanguageDialog -----------------------------------------------
 
 SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/defaultlanguage.ui", "DefaultLanguageDialog")
+    : GenericDialogController(pParent, u"modules/BasicIDE/ui/defaultlanguage.ui"_ustr, u"DefaultLanguageDialog"_ustr)
     , m_xLocalizationMgr(std::move(xLMgr))
-    , m_xLanguageFT(m_xBuilder->weld_label("defaultlabel"))
-    , m_xLanguageLB(m_xBuilder->weld_tree_view("entries"))
-    , m_xCheckLangFT(m_xBuilder->weld_label("checkedlabel"))
-    , m_xCheckLangLB(m_xBuilder->weld_tree_view("checkedentries"))
-    , m_xDefinedFT(m_xBuilder->weld_label("defined"))
-    , m_xAddedFT(m_xBuilder->weld_label("added"))
-    , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-    , m_xLanguageCB(new SvxLanguageBox(m_xBuilder->weld_combo_box("hidden")))
+    , m_xLanguageFT(m_xBuilder->weld_label(u"defaultlabel"_ustr))
+    , m_xLanguageLB(m_xBuilder->weld_tree_view(u"entries"_ustr))
+    , m_xCheckLangFT(m_xBuilder->weld_label(u"checkedlabel"_ustr))
+    , m_xCheckLangLB(m_xBuilder->weld_tree_view(u"checkedentries"_ustr))
+    , m_xDefinedFT(m_xBuilder->weld_label(u"defined"_ustr))
+    , m_xAddedFT(m_xBuilder->weld_label(u"added"_ustr))
+    , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
+    , m_xLanguageCB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"hidden"_ustr)))
 {
     m_xLanguageLB->set_size_request(-1, m_xLanguageLB->get_height_rows(10));
     m_xCheckLangLB->set_size_request(-1, m_xCheckLangLB->get_height_rows(10));

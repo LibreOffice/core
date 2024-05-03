@@ -250,7 +250,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
         if ( xModel.is() )
         {
             Reference< lang::XServiceInfo > xServiceInfo ( xModel, UNO_QUERY );
-            if ( xServiceInfo.is() && xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            if ( xServiceInfo.is() && xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
                 bIsCalc = true;
         }
     }
@@ -610,7 +610,7 @@ void DialogWindow::SaveDialog()
     xFP->setDefaultName( GetName() );
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, "*.xdl" );
+    xFP->appendFilter( aDialogStr, u"*.xdl"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
@@ -652,7 +652,7 @@ void DialogWindow::SaveDialog()
     {
         try
         {
-            Any aResourceResolver = xDialogModelPropSet->getPropertyValue( "ResourceResolver" );
+            Any aResourceResolver = xDialogModelPropSet->getPropertyValue( u"ResourceResolver"_ustr );
             aResourceResolver >>= xStringResourceResolver;
         }
         catch(const beans::UnknownPropertyException& )
@@ -792,7 +792,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, "*.xdl" );
+    xFP->appendFilter( aDialogStr, u"*.xdl"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
@@ -810,7 +810,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
         {
             // create dialog model
             Reference< container::XNameContainer > xDialogModel(
-                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", xContext),
+                xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext),
                 UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
