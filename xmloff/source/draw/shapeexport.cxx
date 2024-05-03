@@ -2526,8 +2526,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
         //Resolves: fdo#62461 put preferred image first above, followed by
         //fallback here
-        const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
-        if( !bIsEmptyPresObj && bAddReplacementImages)
+        if (!bIsEmptyPresObj
+            && officecfg::Office::Common::Save::Graphic::AddReplacementImages::get())
         {
             uno::Reference<graphic::XGraphic> xReplacementGraphic;
             xPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
@@ -3574,13 +3574,16 @@ void XMLShapeExport::ImpExportMediaShape(
 
     pPluginOBJ.reset();
 
-    uno::Reference<graphic::XGraphic> xGraphic;
-    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
-    Graphic aGraphic(xGraphic);
-    if (!aGraphic.IsNone())
+    if (officecfg::Office::Common::Save::Graphic::AddReplacementImages::get())
     {
-        // The media has a preview, export it.
-        ExportGraphicPreview(xGraphic, mrExport, u"MediaPreview", u".png", "image/png");
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+        Graphic aGraphic(xGraphic);
+        if (!aGraphic.IsNone())
+        {
+            // The media has a preview, export it.
+            ExportGraphicPreview(xGraphic, mrExport, u"MediaPreview", u".png", "image/png");
+        }
     }
 
     ImpExportDescription(xShape);
@@ -5170,7 +5173,8 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             }
         }
 
-        if( !bIsEmptyPresObj )
+        if (!bIsEmptyPresObj
+            && officecfg::Office::Common::Save::Graphic::AddReplacementImages::get())
         {
             uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue("ReplacementGraphic"), uno::UNO_QUERY );
             ExportGraphicPreview(xGraphic, mrExport, u"TablePreview", u".svm", "image/x-vclgraphic");

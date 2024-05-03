@@ -36,6 +36,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
+#include <comphelper/classids.hxx>
+#include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1158,6 +1160,15 @@ namespace {
 
 }
 
+static bool AlwaysStoreReplacementImages(const uno::Reference<embed::XEmbeddedObject>& xObj)
+{
+    const auto clsid = xObj->getClassID();
+    if (clsid == MimeConfigurationHelper::GetSequenceClassID(SO3_SCH_CLASSID)
+        || clsid == MimeConfigurationHelper::GetSequenceClassID(SO3_SM_CLASSID))
+        return false;
+    return true;
+}
+
 bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEmbedded, bool _bAutoSaveEvent,
                                               const uno::Reference < embed::XStorage >& _xStorage)
 {
@@ -1176,26 +1187,28 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
 
                 uno::Reference < io::XInputStream > xStream;
                 OUString aMediaType;
-
-                sal_Int32 nCurState = xObj->getCurrentState();
-                if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+                if (officecfg::Office::Common::Save::Graphic::AddReplacementImages::get()
+                    || AlwaysStoreReplacementImages(xObj))
                 {
-                    // means that the object is not active
-                    // copy replacement image from old to new container
-                    xStream = GetGraphicStream( xObj, &aMediaType );
-                }
+                    sal_Int32 nCurState = xObj->getCurrentState();
+                    if (nCurState == embed::EmbedStates::LOADED
+                        || nCurState == embed::EmbedStates::RUNNING)
+                    {
+                        // means that the object is not active
+                        // copy replacement image from old to new container
+                        xStream = GetGraphicStream(xObj, &aMediaType);
+                    }
 
-                if ( !xStream.is() && getUserAllowsLinkUpdate() )
-                {
-                    // the image must be regenerated
-                    // TODO/LATER: another aspect could be used
-                    if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
+                    if (!xStream.is() && getUserAllowsLinkUpdate())
+                    {
+                        // the image must be regenerated
+                        // TODO/LATER: another aspect could be used
+                        if (xObj->getCurrentState() == embed::EmbedStates::LOADED)
                             bSwitchBackToLoaded = true;
 
-                    xStream = GetGraphicReplacementStream(
-                                                            embed::Aspects::MSOLE_CONTENT,
-                                                            xObj,
-                                                            &aMediaType );
+                        xStream = GetGraphicReplacementStream(embed::Aspects::MSOLE_CONTENT, xObj,
+                                                              &aMediaType);
+                    }
                 }
 
                 if ( _bOasisFormat || (xLink.is() && xLink->isLink()) )
