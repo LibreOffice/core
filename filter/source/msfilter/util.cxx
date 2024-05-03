@@ -320,11 +320,8 @@ OUString CreateDOCXStyleId(std::u16string_view const aName)
         sal_Unicode nChar = aName[i];
         if (rtl::isAsciiAlphanumeric(nChar) || nChar == '-')
         {
-            // first letter should be uppercase
-            if (aStyleIdBuf.isEmpty())
-                aStyleIdBuf.append(char(rtl::toAsciiUpperCase(nChar)));
-            else
-                aStyleIdBuf.append(char(nChar));
+            // do not uppercase first letter
+            aStyleIdBuf.append(char(nChar));
         }
     }
     return aStyleIdBuf.makeStringAndClear();
