@@ -35,6 +35,7 @@
 #include <tabview.hxx>
 #include <viewdata.hxx>
 #include <columnspanset.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #define SC_DRAG_MIN     2
 
@@ -627,6 +628,9 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
 SCCOLROW ScHeaderControl::GetMousePos(const Point& rPos, bool& rBorder) const
 {
+    // #define nHitArea 5
+    const int nHitArea( officecfg::Office::Common::Misc::ExperimentalMode::get() ? 5 : 2 );
+
     bool        bFound = false;
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
@@ -650,7 +654,7 @@ SCCOLROW ScHeaderControl::GetMousePos(const Point& rPos, bool& rBorder) const
             nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
 
         nDif = nMousePos - nScrPos;
-        if (nDif >= -2 && nDif <= 2)
+        if (nDif >= -nHitArea && nDif <= +nHitArea)
         {
             bFound = true;
             nHitNo=nEntryNo-1;
