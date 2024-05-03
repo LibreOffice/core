@@ -138,7 +138,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_HELPLINES_USE:
         {
-            pOptions->SetSnapHelplines( !mpDrawView->IsHlplSnap() );
+            if (GetDoc()->GetDocumentType() == DocumentType::Impress)
+                officecfg::Office::Impress::Snap::Object::SnapLine::set(!mpDrawView->IsHlplSnap(), batch);
+            else
+                officecfg::Office::Draw::Snap::Object::SnapLine::set(!mpDrawView->IsHlplSnap(), batch);
         }
         break;
 

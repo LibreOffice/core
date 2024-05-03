@@ -58,8 +58,20 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem aOptsItem;
+    bool bDrawMode = SvxGridTabPage::IsDrawMode();
 
-    aOptsItem.GetOptionsSnap().SetSnapHelplines( m_xCbxSnapHelplines->get_active() );
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+
+    if (bDrawMode)
+    {
+        officecfg::Office::Draw::Snap::Object::SnapLine::set( m_xCbxSnapHelplines->get_active(), batch );
+    }
+    else
+    {
+        officecfg::Office::Impress::Snap::Object::SnapLine::set( m_xCbxSnapHelplines->get_active(), batch );
+    }
+
     aOptsItem.GetOptionsSnap().SetSnapBorder( m_xCbxSnapBorder->get_active() );
     aOptsItem.GetOptionsSnap().SetSnapFrame( m_xCbxSnapFrame->get_active() );
     aOptsItem.GetOptionsSnap().SetSnapPoints( m_xCbxSnapPoints->get_active() );
@@ -71,6 +83,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
     aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle(Degree100(m_xMtrFldBezAngle->get_value(FieldUnit::DEGREE)));
 
     rAttrs->Put( aOptsItem );
+    batch->commit();
 
     // we get a possible existing GridItem, this ensures that we do not set
     // some default values by accident
@@ -84,9 +97,17 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     SdOptionsSnapItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_SNAP ) );
 
     bool bDrawMode = SvxGridTabPage::IsDrawMode();
+    if (bDrawMode)
+    {
+        m_xCbxSnapHelplines->set_active( officecfg::Office::Draw::Snap::Object::SnapLine::get() );
+    }
+    else
+    {
+        m_xCbxSnapHelplines->set_active( officecfg::Office::Impress::Snap::Object::SnapLine::get() );
+    }
+
     bool bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::SnapLine::isReadOnly() :
         officecfg::Office::Impress::Snap::Object::SnapLine::isReadOnly();
-    m_xCbxSnapHelplines->set_active( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
     m_xCbxSnapHelplines->set_sensitive(!bReadOnly);
     m_xCbxSnapHelplinesImg->set_visible(bReadOnly);
 
