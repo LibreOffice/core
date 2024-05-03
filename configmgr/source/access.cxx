@@ -326,7 +326,7 @@ void Access::removeEventListener(
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    DisposeListeners::iterator i(disposeListeners_.find(aListener));
+    auto i(disposeListeners_.find(aListener));
     if (i != disposeListeners_.end()) {
         disposeListeners_.erase(i);
     }
@@ -580,7 +580,7 @@ void Access::removeContainerListener(
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    ContainerListeners::iterator i(containerListeners_.find(xListener));
+    auto i(containerListeners_.find(xListener));
     if (i != containerListeners_.end()) {
         containerListeners_.erase(i);
     }
@@ -823,7 +823,7 @@ void Access::removePropertyChangeListener(
     PropertyChangeListeners::iterator i(
         propertyChangeListeners_.find(aPropertyName));
     if (i != propertyChangeListeners_.end()) {
-        PropertyChangeListenersElement::iterator j(i->second.find(aListener));
+        auto j(i->second.find(aListener));
         if (j != i->second.end()) {
             i->second.erase(j);
             if (i->second.empty()) {
@@ -869,7 +869,7 @@ void Access::removeVetoableChangeListener(
     VetoableChangeListeners::iterator i(
         vetoableChangeListeners_.find(PropertyName));
     if (i != vetoableChangeListeners_.end()) {
-        VetoableChangeListenersElement::iterator j(i->second.find(aListener));
+        auto j(i->second.find(aListener));
         if (j != i->second.end()) {
             i->second.erase(j);
             if (i->second.empty()) {
@@ -958,8 +958,7 @@ void Access::removePropertiesChangeListener(
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    PropertiesChangeListeners::iterator i(
-        propertiesChangeListeners_.find(xListener));
+    auto i(propertiesChangeListeners_.find(xListener));
     if (i != propertiesChangeListeners_.end()) {
         propertiesChangeListeners_.erase(i);
     }
@@ -1285,13 +1284,17 @@ Access::~Access() {}
 
 void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     assert(broadcaster != nullptr);
-    for (auto const& disposeListener : disposeListeners_)
+    // make copies when we fire listeners, since the vectors can
+    // be modified by the callees.
+    auto disposeCopy = disposeListeners_;
+    for (auto const& disposeListener : disposeCopy)
     {
         broadcaster->addDisposeNotification(
             disposeListener,
             css::lang::EventObject(getXWeak()));
     }
-    for (auto const& containerListener : containerListeners_)
+    auto containerCopy = containerListeners_;
+    for (auto const& containerListener : containerCopy)
     {
         broadcaster->addDisposeNotification(
             containerListener,
@@ -1299,7 +1302,8 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     }
     for (auto const& propertyChangeListener : propertyChangeListeners_)
     {
-        for (auto const& propertyChangeListenerElement : propertyChangeListener.second)
+        auto propChangeCopy = propertyChangeListener.second;
+        for (auto const& propertyChangeListenerElement : propChangeCopy)
         {
             broadcaster->addDisposeNotification(
                 propertyChangeListenerElement,
@@ -1309,7 +1313,8 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     }
     for (auto const& vetoableChangeListener : vetoableChangeListeners_)
     {
-        for (auto const& vetoableChangeListenerElement : vetoableChangeListener.second)
+        auto vetoCopy = vetoableChangeListener.second;
+        for (auto const& vetoableChangeListenerElement : vetoCopy)
         {
             broadcaster->addDisposeNotification(
                 vetoableChangeListenerElement,
@@ -1317,7 +1322,8 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
                     getXWeak()));
         }
     }
-    for (auto const& propertiesChangeListener : propertiesChangeListeners_)
+    auto propCopy = propertiesChangeListeners_;
+    for (auto const& propertiesChangeListener : propCopy)
     {
         broadcaster->addDisposeNotification(
             propertiesChangeListener,
