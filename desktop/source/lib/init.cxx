@@ -80,6 +80,7 @@
 #include <svl/zforlist.hxx>
 #include <linguistic/misc.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
@@ -8024,7 +8025,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         }
         rtl::Bootstrap::set(u"UserInstallation"_ustr, url);
         if (eStage == SECOND_INIT)
+        {
+            comphelper::rng::reseed();
             utl::Bootstrap::reloadData();
+        }
     }
 
     OUString aAppPath;

@@ -17,6 +17,8 @@ namespace comphelper::rng
 // These functions obey the SAL_RAND_REPEATABLE environment
 // variable: If it is set, use a fixed seed.
 
+COMPHELPER_DLLPUBLIC void reseed();
+
 // note that uniform_int_distribution is inclusive of b, i.e. [a,b] while
 // uniform_real_distribution is exclusive of b, i.e. [a,b), std::nextafter may be your friend there
 
