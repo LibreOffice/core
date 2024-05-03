@@ -165,7 +165,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_SNAP_FRAME:
         {
-            pOptions->SetSnapFrame( !mpDrawView->IsOFrmSnap() );
+            if ( GetDoc()->GetDocumentType() == DocumentType::Impress )
+                officecfg::Office::Impress::Snap::Object::ObjectFrame::set(!mpDrawView->IsOFrmSnap(), batch);
+            else
+                officecfg::Office::Draw::Snap::Object::ObjectFrame::set(!mpDrawView->IsOFrmSnap(), batch);
         }
         break;
 

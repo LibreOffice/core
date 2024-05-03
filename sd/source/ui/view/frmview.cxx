@@ -292,6 +292,7 @@ void FrameView::Update(SdOptions const * pOptions)
         SetHlplSnap( officecfg::Office::Impress::Snap::Object::SnapLine::get() );
         SetHlplVisible( officecfg::Office::Impress::Layout::Display::Helpline::get() );
         SetNoDragXorPolys ( !officecfg::Office::Impress::Layout::Display::Contour::get() );
+        SetOFrmSnap( officecfg::Office::Impress::Snap::Object::ObjectFrame::get() );
         SetPlusHandlesAlwaysVisible( officecfg::Office::Impress::Layout::Display::Bezier::get() );
     }
     else
@@ -302,13 +303,13 @@ void FrameView::Update(SdOptions const * pOptions)
         SetHlplSnap( officecfg::Office::Draw::Snap::Object::SnapLine::get() );
         SetHlplVisible( officecfg::Office::Draw::Layout::Display::Helpline::get() );
         SetNoDragXorPolys ( !officecfg::Office::Draw::Layout::Display::Contour::get() );
+        SetOFrmSnap( officecfg::Office::Draw::Snap::Object::ObjectFrame::get() );
         SetPlusHandlesAlwaysVisible( officecfg::Office::Draw::Layout::Display::Bezier::get() );
     }
 
     SetGridVisible( pOptions->IsGridVisible() );
     SetSnapAngle( pOptions->GetAngle() );
     SetGridSnap( pOptions->IsUseGridSnap() );
-    SetOFrmSnap( pOptions->IsSnapFrame() );
     SetOPntSnap( pOptions->IsSnapPoints() );
     SetSnapMagneticPixel( pOptions->GetSnapArea() );
     SetMarkedHitMovesAlways( pOptions->IsMarkedHitMovesAlways() );
