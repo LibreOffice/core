@@ -110,10 +110,10 @@ namespace {
 
 struct ExportTable
 {
-    const char* pPropertyName;
-    sal_uInt16 const nNamespace;
+    OUString pPropertyName;
+    sal_uInt16 nNamespace;
     sal_uInt16 nToken;
-    convert_t const aConverter;
+    convert_t aConverter;
 };
 
 }
@@ -122,7 +122,7 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
                  const ExportTable* pTable );
 
-#define TABLE_END { nullptr, 0, 0, nullptr }
+#define TABLE_END { u""_ustr, 0, 0, nullptr }
 
 // any conversion functions
 static OUString xforms_string( const Any& );
@@ -153,10 +153,10 @@ static OUString lcl_getXSDType( SvXMLExport const & rExport,
 // the model
 
 
-const ExportTable aXFormsModelTable[] =
+constexpr ExportTable aXFormsModelTable[] =
 {
-    { "ID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
-    { "SchemaRef", XML_NAMESPACE_NONE, xmloff::token::XML_SCHEMA, xforms_string },
+    { u"ID"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { u"SchemaRef"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_SCHEMA, xforms_string },
     TABLE_END
 };
 
@@ -252,15 +252,15 @@ void exportXFormsInstance( SvXMLExport& rExport,
 // the binding
 
 
-const ExportTable aXFormsBindingTable[] =
+constexpr ExportTable aXFormsBindingTable[] =
 {
-    { "BindingID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
-    { "BindingExpression", XML_NAMESPACE_NONE, xmloff::token::XML_NODESET, xforms_string },
-    { "ReadonlyExpression", XML_NAMESPACE_NONE, xmloff::token::XML_READONLY, xforms_string },
-    { "RelevantExpression", XML_NAMESPACE_NONE, xmloff::token::XML_RELEVANT, xforms_string },
-    { "RequiredExpression", XML_NAMESPACE_NONE, xmloff::token::XML_REQUIRED, xforms_string },
-    { "ConstraintExpression", XML_NAMESPACE_NONE, xmloff::token::XML_CONSTRAINT, xforms_string },
-    { "CalculateExpression", XML_NAMESPACE_NONE, xmloff::token::XML_CALCULATE, xforms_string },
+    { u"BindingID"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { u"BindingExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_NODESET, xforms_string },
+    { u"ReadonlyExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_READONLY, xforms_string },
+    { u"RelevantExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_RELEVANT, xforms_string },
+    { u"RequiredExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_REQUIRED, xforms_string },
+    { u"ConstraintExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_CONSTRAINT, xforms_string },
+    { u"CalculateExpression"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_CALCULATE, xforms_string },
     // type handled separately, for type name <-> XSD type conversion
     // { "Type", XML_NAMESPACE_NONE, xmloff::token::XML_TYPE, xforms_string },
     TABLE_END
@@ -366,23 +366,23 @@ void exportXFormsBinding( SvXMLExport& rExport,
 // the submission
 
 
-const ExportTable aXFormsSubmissionTable[] =
+constexpr ExportTable aXFormsSubmissionTable[] =
 {
-    { "ID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
-    { "Bind", XML_NAMESPACE_NONE, xmloff::token::XML_BIND, xforms_string },
-    { "Ref", XML_NAMESPACE_NONE, xmloff::token::XML_REF, xforms_string },
-    { "Action", XML_NAMESPACE_NONE, xmloff::token::XML_ACTION, xforms_string },
-    { "Method", XML_NAMESPACE_NONE, xmloff::token::XML_METHOD, xforms_string },
-    { "Version", XML_NAMESPACE_NONE, xmloff::token::XML_VERSION, xforms_string },
-    { "Indent", XML_NAMESPACE_NONE, xmloff::token::XML_INDENT, xforms_bool },
-    { "MediaType", XML_NAMESPACE_NONE, xmloff::token::XML_MEDIATYPE, xforms_string },
-    { "Encoding", XML_NAMESPACE_NONE, xmloff::token::XML_ENCODING, xforms_string },
-    { "OmitXmlDeclaration", XML_NAMESPACE_NONE, xmloff::token::XML_OMIT_XML_DECLARATION, xforms_bool },
-    { "Standalone", XML_NAMESPACE_NONE, xmloff::token::XML_STANDALONE, xforms_bool },
-    { "CDataSectionElement", XML_NAMESPACE_NONE, xmloff::token::XML_CDATA_SECTION_ELEMENTS, xforms_string },
-    { "Replace", XML_NAMESPACE_NONE, xmloff::token::XML_REPLACE, xforms_string },
-    { "Separator", XML_NAMESPACE_NONE, xmloff::token::XML_SEPARATOR, xforms_string },
-    { "IncludeNamespacePrefixes", XML_NAMESPACE_NONE, xmloff::token::XML_INCLUDENAMESPACEPREFIXES, xforms_string },
+    { u"ID"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { u"Bind"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_BIND, xforms_string },
+    { u"Ref"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_REF, xforms_string },
+    { u"Action"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_ACTION, xforms_string },
+    { u"Method"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_METHOD, xforms_string },
+    { u"Version"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_VERSION, xforms_string },
+    { u"Indent"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_INDENT, xforms_bool },
+    { u"MediaType"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_MEDIATYPE, xforms_string },
+    { u"Encoding"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_ENCODING, xforms_string },
+    { u"OmitXmlDeclaration"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_OMIT_XML_DECLARATION, xforms_bool },
+    { u"Standalone"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_STANDALONE, xforms_bool },
+    { u"CDataSectionElement"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_CDATA_SECTION_ELEMENTS, xforms_string },
+    { u"Replace"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_REPLACE, xforms_string },
+    { u"Separator"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_SEPARATOR, xforms_string },
+    { u"IncludeNamespacePrefixes"_ustr, XML_NAMESPACE_NONE, xmloff::token::XML_INCLUDENAMESPACEPREFIXES, xforms_string },
     TABLE_END
 };
 
@@ -400,34 +400,34 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 
 const ExportTable aDataTypeFacetTable[] =
 {
-    { "Length", XML_NAMESPACE_XSD, xmloff::token::XML_LENGTH, xforms_int32 },
-    { "MinLength", XML_NAMESPACE_XSD, xmloff::token::XML_MINLENGTH, xforms_int32 },
-    { "MaxLength", XML_NAMESPACE_XSD, xmloff::token::XML_MAXLENGTH, xforms_int32 },
-    { "MinInclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_int32 },
-    { "MinExclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_int32 },
-    { "MaxInclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_int32 },
-    { "MaxExclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_int32 },
-    { "MinInclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_double },
-    { "MinExclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_double },
-    { "MaxInclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_double },
-    { "MaxExclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_double },
-    { "MinInclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_date },
-    { "MinExclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_date },
-    { "MaxInclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_date },
-    { "MaxExclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_date },
-    { "MinInclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_time },
-    { "MinExclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_time },
-    { "MaxInclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_time },
-    { "MaxExclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_time },
-    { "MinInclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_dateTime },
-    { "MinExclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_dateTime },
-    { "MaxInclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_dateTime },
-    { "MaxExclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_dateTime },
-    { "Pattern", XML_NAMESPACE_XSD, xmloff::token::XML_PATTERN, xforms_string },
+    { u"Length"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_LENGTH, xforms_int32 },
+    { u"MinLength"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINLENGTH, xforms_int32 },
+    { u"MaxLength"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXLENGTH, xforms_int32 },
+    { u"MinInclusiveInt"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_int32 },
+    { u"MinExclusiveInt"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_int32 },
+    { u"MaxInclusiveInt"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_int32 },
+    { u"MaxExclusiveInt"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_int32 },
+    { u"MinInclusiveDouble"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_double },
+    { u"MinExclusiveDouble"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_double },
+    { u"MaxInclusiveDouble"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_double },
+    { u"MaxExclusiveDouble"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_double },
+    { u"MinInclusiveDate"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_date },
+    { u"MinExclusiveDate"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_date },
+    { u"MaxInclusiveDate"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_date },
+    { u"MaxExclusiveDate"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_date },
+    { u"MinInclusiveTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_time },
+    { u"MinExclusiveTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_time },
+    { u"MaxInclusiveTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_time },
+    { u"MaxExclusiveTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_time },
+    { u"MinInclusiveDateTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_dateTime },
+    { u"MinExclusiveDateTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_dateTime },
+    { u"MaxInclusiveDateTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_dateTime },
+    { u"MaxExclusiveDateTime"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_dateTime },
+    { u"Pattern"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_PATTERN, xforms_string },
     // ??? XML_ENUMERATION,
-    { "WhiteSpace", XML_NAMESPACE_XSD, xmloff::token::XML_WHITESPACE, xforms_whitespace },
-    { "TotalDigits", XML_NAMESPACE_XSD, xmloff::token::XML_TOTALDIGITS, xforms_int32 },
-    { "FractionDigits", XML_NAMESPACE_XSD, xmloff::token::XML_FRACTIONDIGITS, xforms_int32 },
+    { u"WhiteSpace"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_WHITESPACE, xforms_whitespace },
+    { u"TotalDigits"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_TOTALDIGITS, xforms_int32 },
+    { u"FractionDigits"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_FRACTIONDIGITS, xforms_int32 },
     TABLE_END
 };
 
@@ -438,10 +438,10 @@ static void lcl_exportDataTypeFacets( SvXMLExport& rExport,
 {
     Reference<XPropertySetInfo> xInfo = rPropertySet->getPropertySetInfo();
     for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != nullptr;
+         !pCurrent->pPropertyName.isEmpty();
          pCurrent++ )
     {
-        OUString sName( OUString::createFromAscii( pCurrent->pPropertyName ) );
+        OUString sName( pCurrent->pPropertyName );
         if( xInfo->hasPropertyByName( sName ) )
         {
             OUString sValue = (*pCurrent->aConverter)(
@@ -598,11 +598,10 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  const ExportTable* pTable )
 {
     for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != nullptr;
+         !pCurrent->pPropertyName.isEmpty();
          pCurrent++ )
     {
-        Any aAny = rPropertySet->getPropertyValue(
-                       OUString::createFromAscii( pCurrent->pPropertyName ) );
+        Any aAny = rPropertySet->getPropertyValue( pCurrent->pPropertyName );
         OUString sValue = (*pCurrent->aConverter)( aAny );
 
         if( !sValue.isEmpty() )
