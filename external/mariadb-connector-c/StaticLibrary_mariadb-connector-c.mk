@@ -53,11 +53,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_net \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_password \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_pvio \
-	$(ifneq $(filter $(OS),WNT), \
-		UnpackedTarball/mariadb-connector-c/plugins/auth/auth_gssapi_client \
-		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_client \
-		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_errmsg \
-	) \
+	UnpackedTarball/mariadb-connector-c/plugins/auth/auth_gssapi_client \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_sha1 \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_stmt_codec \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_string \
@@ -77,8 +73,12 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 		UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv \
 		UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_npipe \
 		UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_shmem \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/sspi_client \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/sspi_errmsg \
 		, \
 		UnpackedTarball/mariadb-connector-c/libmariadb/secure/openssl_crypt \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_client \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_errmsg \
 	) \
 ))
 

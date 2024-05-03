@@ -36,9 +36,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,mariadb-connector-c, \
 			extern struct st_mysql_client_plugin pvio_socket_client_plugin\; \
 			extern struct st_mysql_client_plugin caching_sha2_password_client_plugin\; \
 			extern struct st_mysql_client_plugin mysql_native_password_client_plugin\; \
-			$(ifneq $(filter WNT,$(OS)), \
-				extern struct st_mysql_client_plugin_AUTHENTICATION auth_gssapi_client_client_plugin\; \
-			) \
+			extern struct st_mysql_client_plugin_AUTHENTICATION auth_gssapi_client_client_plugin\; \
 			$(if $(filter WNT,$(OS)), \
 				extern struct st_mysql_client_plugin pvio_shmem_client_plugin\; \
 				extern struct st_mysql_client_plugin pvio_npipe_client_plugin\; \
@@ -48,9 +46,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,mariadb-connector-c, \
 			(struct st_mysql_client_plugin *)\&pvio_socket_client_plugin$(COMMA) \
 			(struct st_mysql_client_plugin *)\&caching_sha2_password_client_plugin$(COMMA) \
 			(struct st_mysql_client_plugin *)\&mysql_native_password_client_plugin$(COMMA) \
-			$(ifneq $(filter WNT,$(OS)), \
-				(struct st_mysql_client_plugin_AUTHENTICATION *)\&auth_gssapi_client_client_plugin$(COMMA) \
-			) \
+			(struct st_mysql_client_plugin_AUTHENTICATION *)\&auth_gssapi_client_client_plugin$(COMMA) \
 			$(if $(filter WNT,$(OS)), \
 				(struct st_mysql_client_plugin *)\&pvio_shmem_client_plugin$(COMMA) \
 				(struct st_mysql_client_plugin *)\&pvio_npipe_client_plugin$(COMMA) \

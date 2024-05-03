@@ -31,6 +31,12 @@ $(eval $(call gb_Library_add_libs,mysqlc,\
 
 $(eval $(call gb_Library_use_sdk_api,mysqlc))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,mysqlc,\
+	Secur32 \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,mysqlc,\
 	comphelper \
 	cppu \
