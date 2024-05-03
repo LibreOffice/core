@@ -29,168 +29,163 @@ namespace {
 
 struct TokenTable
 {
-    const char*                         pS;
+    OUString                            aS;
     EnhancedCustomShapeTokenEnum        pE;
 };
 
 }
 
-const TokenTable pTokenTableArray[] =
+constexpr TokenTable pTokenTableArray[] =
 {
-    { "type",                               EAS_type },
-    { "name",                               EAS_name },
-    { "mirror-horizontal",                  EAS_mirror_horizontal },
-    { "mirror-vertical",                    EAS_mirror_vertical },
-    { "viewBox",                            EAS_viewBox },
-    { "text-rotate-angle",                  EAS_text_rotate_angle },
-    { "extrusion-allowed",                  EAS_extrusion_allowed },
-    { "extrusion-text-path-allowed",        EAS_text_path_allowed },
-    { "extrusion-concentric-gradient-fill", EAS_concentric_gradient_fill_allowed },
-    { "extrusion",                          EAS_extrusion },
-    { "extrusion-brightness",               EAS_extrusion_brightness },
-    { "extrusion-depth",                    EAS_extrusion_depth },
-    { "extrusion-diffusion",                EAS_extrusion_diffusion },
-    { "extrusion-number-of-line-segments",  EAS_extrusion_number_of_line_segments },
-    { "extrusion-light-face",               EAS_extrusion_light_face },
-    { "extrusion-first-light-harsh",        EAS_extrusion_first_light_harsh },
-    { "extrusion-second-light-harsh",       EAS_extrusion_second_light_harsh },
-    { "extrusion-first-light-level",        EAS_extrusion_first_light_level },
-    { "extrusion-second-light-level",       EAS_extrusion_second_light_level },
-    { "extrusion-first-light-direction",    EAS_extrusion_first_light_direction },
-    { "extrusion-second-light-direction",   EAS_extrusion_second_light_direction },
-    { "extrusion-metal",                    EAS_extrusion_metal },
-    { "extrusion-metal-type",               EAS_extrusion_metal_type },
-    { "shade-mode",                         EAS_shade_mode },
-    { "extrusion-rotation-angle",           EAS_extrusion_rotation_angle },
-    { "extrusion-rotation-center",          EAS_extrusion_rotation_center },
-    { "extrusion-shininess",                EAS_extrusion_shininess },
-    { "extrusion-skew",                     EAS_extrusion_skew },
-    { "extrusion-specularity",              EAS_extrusion_specularity },
-    { "extrusion-specularity-loext",        EAS_extrusion_specularity_loext },
-    { "projection",                         EAS_projection },
-    { "extrusion-viewpoint",                EAS_extrusion_viewpoint },
-    { "extrusion-origin",                   EAS_extrusion_origin },
-    { "extrusion-color",                    EAS_extrusion_color },
-    { "enhanced-path",                      EAS_enhanced_path },
-    { "path-stretchpoint-x",                EAS_path_stretchpoint_x },
-    { "path-stretchpoint-y",                EAS_path_stretchpoint_y },
-    { "text-areas",                         EAS_text_areas },
-    { "glue-points",                        EAS_glue_points },
-    { "glue-point-type",                    EAS_glue_point_type },
-    { "glue-point-leaving-directions",      EAS_glue_point_leaving_directions },
-    { "text-path",                          EAS_text_path },
-    { "text-path-mode",                     EAS_text_path_mode },
-    { "text-path-scale",                    EAS_text_path_scale },
-    { "text-path-same-letter-heights",      EAS_text_path_same_letter_heights },
-    { "modifiers",                          EAS_modifiers },
-    { "equation",                           EAS_equation },
-    { "formula",                            EAS_formula },
-    { "handle",                             EAS_handle },
-    { "handle-mirror-horizontal",           EAS_handle_mirror_horizontal },
-    { "handle-mirror-vertical",             EAS_handle_mirror_vertical },
-    { "handle-switched",                    EAS_handle_switched },
-    { "handle-position",                    EAS_handle_position },
-    { "handle-range-x-minimum",             EAS_handle_range_x_minimum },
-    { "handle-range-x-maximum",             EAS_handle_range_x_maximum },
-    { "handle-range-y-minimum",             EAS_handle_range_y_minimum },
-    { "handle-range-y-maximum",             EAS_handle_range_y_maximum },
-    { "handle-polar",                       EAS_handle_polar },
-    { "handle-radius-range-minimum",        EAS_handle_radius_range_minimum },
-    { "handle-radius-range-maximum",        EAS_handle_radius_range_maximum },
-    { "sub-view-size",                      EAS_sub_view_size },
+    { u"type"_ustr,                               EAS_type },
+    { u"name"_ustr,                               EAS_name },
+    { u"mirror-horizontal"_ustr,                  EAS_mirror_horizontal },
+    { u"mirror-vertical"_ustr,                    EAS_mirror_vertical },
+    { u"viewBox"_ustr,                            EAS_viewBox },
+    { u"text-rotate-angle"_ustr,                  EAS_text_rotate_angle },
+    { u"extrusion-allowed"_ustr,                  EAS_extrusion_allowed },
+    { u"extrusion-text-path-allowed"_ustr,        EAS_text_path_allowed },
+    { u"extrusion-concentric-gradient-fill"_ustr, EAS_concentric_gradient_fill_allowed },
+    { u"extrusion"_ustr,                          EAS_extrusion },
+    { u"extrusion-brightness"_ustr,               EAS_extrusion_brightness },
+    { u"extrusion-depth"_ustr,                    EAS_extrusion_depth },
+    { u"extrusion-diffusion"_ustr,                EAS_extrusion_diffusion },
+    { u"extrusion-number-of-line-segments"_ustr,  EAS_extrusion_number_of_line_segments },
+    { u"extrusion-light-face"_ustr,               EAS_extrusion_light_face },
+    { u"extrusion-first-light-harsh"_ustr,        EAS_extrusion_first_light_harsh },
+    { u"extrusion-second-light-harsh"_ustr,       EAS_extrusion_second_light_harsh },
+    { u"extrusion-first-light-level"_ustr,        EAS_extrusion_first_light_level },
+    { u"extrusion-second-light-level"_ustr,       EAS_extrusion_second_light_level },
+    { u"extrusion-first-light-direction"_ustr,    EAS_extrusion_first_light_direction },
+    { u"extrusion-second-light-direction"_ustr,   EAS_extrusion_second_light_direction },
+    { u"extrusion-metal"_ustr,                    EAS_extrusion_metal },
+    { u"extrusion-metal-type"_ustr,               EAS_extrusion_metal_type },
+    { u"shade-mode"_ustr,                         EAS_shade_mode },
+    { u"extrusion-rotation-angle"_ustr,           EAS_extrusion_rotation_angle },
+    { u"extrusion-rotation-center"_ustr,          EAS_extrusion_rotation_center },
+    { u"extrusion-shininess"_ustr,                EAS_extrusion_shininess },
+    { u"extrusion-skew"_ustr,                     EAS_extrusion_skew },
+    { u"extrusion-specularity"_ustr,              EAS_extrusion_specularity },
+    { u"extrusion-specularity-loext"_ustr,        EAS_extrusion_specularity_loext },
+    { u"projection"_ustr,                         EAS_projection },
+    { u"extrusion-viewpoint"_ustr,                EAS_extrusion_viewpoint },
+    { u"extrusion-origin"_ustr,                   EAS_extrusion_origin },
+    { u"extrusion-color"_ustr,                    EAS_extrusion_color },
+    { u"enhanced-path"_ustr,                      EAS_enhanced_path },
+    { u"path-stretchpoint-x"_ustr,                EAS_path_stretchpoint_x },
+    { u"path-stretchpoint-y"_ustr,                EAS_path_stretchpoint_y },
+    { u"text-areas"_ustr,                         EAS_text_areas },
+    { u"glue-points"_ustr,                        EAS_glue_points },
+    { u"glue-point-type"_ustr,                    EAS_glue_point_type },
+    { u"glue-point-leaving-directions"_ustr,      EAS_glue_point_leaving_directions },
+    { u"text-path"_ustr,                          EAS_text_path },
+    { u"text-path-mode"_ustr,                     EAS_text_path_mode },
+    { u"text-path-scale"_ustr,                    EAS_text_path_scale },
+    { u"text-path-same-letter-heights"_ustr,      EAS_text_path_same_letter_heights },
+    { u"modifiers"_ustr,                          EAS_modifiers },
+    { u"equation"_ustr,                           EAS_equation },
+    { u"formula"_ustr,                            EAS_formula },
+    { u"handle"_ustr,                             EAS_handle },
+    { u"handle-mirror-horizontal"_ustr,           EAS_handle_mirror_horizontal },
+    { u"handle-mirror-vertical"_ustr,             EAS_handle_mirror_vertical },
+    { u"handle-switched"_ustr,                    EAS_handle_switched },
+    { u"handle-position"_ustr,                    EAS_handle_position },
+    { u"handle-range-x-minimum"_ustr,             EAS_handle_range_x_minimum },
+    { u"handle-range-x-maximum"_ustr,             EAS_handle_range_x_maximum },
+    { u"handle-range-y-minimum"_ustr,             EAS_handle_range_y_minimum },
+    { u"handle-range-y-maximum"_ustr,             EAS_handle_range_y_maximum },
+    { u"handle-polar"_ustr,                       EAS_handle_polar },
+    { u"handle-radius-range-minimum"_ustr,        EAS_handle_radius_range_minimum },
+    { u"handle-radius-range-maximum"_ustr,        EAS_handle_radius_range_maximum },
+    { u"sub-view-size"_ustr,                      EAS_sub_view_size },
 
-    { "CustomShapeEngine",                  EAS_CustomShapeEngine },
-    { "CustomShapeData",                    EAS_CustomShapeData },
-    { "Type",                               EAS_Type },
-    { "MirroredX",                          EAS_MirroredX },
-    { "MirroredY",                          EAS_MirroredY },
-    { "ViewBox",                            EAS_ViewBox },
-    { "TextRotateAngle",                    EAS_TextRotateAngle },
-    { "TextPreRotateAngle",                 EAS_TextPreRotateAngle },
-    { "ExtrusionAllowed",                   EAS_ExtrusionAllowed },
-    { "TextPathAllowed",                    EAS_TextPathAllowed },
-    { "ConcentricGradientFillAllowed",      EAS_ConcentricGradientFillAllowed },
-    { "Extrusion",                          EAS_Extrusion },
-    { "Equations",                          EAS_Equations },
-    { "Equation",                           EAS_Equation },
-    { "Path",                               EAS_Path },
-    { "TextPath",                           EAS_TextPath },
-    { "Handles",                            EAS_Handles },
-    { "Handle",                             EAS_Handle },
-    { "Brightness",                         EAS_Brightness },
-    { "Depth",                              EAS_Depth },
-    { "Diffusion",                          EAS_Diffusion },
-    { "NumberOfLineSegments",               EAS_NumberOfLineSegments },
-    { "LightFace",                          EAS_LightFace },
-    { "FirstLightHarsh",                    EAS_FirstLightHarsh },
-    { "SecondLightHarsh",                   EAS_SecondLightHarsh },
-    { "FirstLightLevel",                    EAS_FirstLightLevel },
-    { "SecondLightLevel",                   EAS_SecondLightLevel },
-    { "FirstLightDirection",                EAS_FirstLightDirection },
-    { "SecondLightDirection",               EAS_SecondLightDirection },
-    { "Metal",                              EAS_Metal },
-    { "MetalType",                          EAS_MetalType },
-    { "ShadeMode",                          EAS_ShadeMode },
-    { "RotateAngle",                        EAS_RotateAngle },
-    { "RotationCenter",                     EAS_RotationCenter },
-    { "Shininess",                          EAS_Shininess },
-    { "Skew",                               EAS_Skew },
-    { "Specularity",                        EAS_Specularity },
-    { "ProjectionMode",                     EAS_ProjectionMode },
-    { "ViewPoint",                          EAS_ViewPoint },
-    { "Origin",                             EAS_Origin },
-    { "Color",                              EAS_Color },
-    { "Switched",                           EAS_Switched },
-    { "Polar",                              EAS_Polar },
-    { "RangeXMinimum",                      EAS_RangeXMinimum },
-    { "RangeXMaximum",                      EAS_RangeXMaximum },
-    { "RangeYMinimum",                      EAS_RangeYMinimum },
-    { "RangeYMaximum",                      EAS_RangeYMaximum },
-    { "RadiusRangeMinimum",                 EAS_RadiusRangeMinimum },
-    { "RadiusRangeMaximum",                 EAS_RadiusRangeMaximum },
-    { "Coordinates",                        EAS_Coordinates },
-    { "Segments",                           EAS_Segments },
-    { "StretchX",                           EAS_StretchX },
-    { "StretchY",                           EAS_StretchY },
-    { "TextFrames",                         EAS_TextFrames },
-    { "GluePoints",                         EAS_GluePoints },
-    { "GluePointLeavingDirections",         EAS_GluePointLeavingDirections },
-    { "GluePointType",                      EAS_GluePointType },
-    { "TextPathMode",                       EAS_TextPathMode },
-    { "ScaleX",                             EAS_ScaleX },
-    { "SameLetterHeights",                  EAS_SameLetterHeights },
-    { "Position",                           EAS_Position },
-    { "AdjustmentValues",                   EAS_AdjustmentValues },
-    { "SubViewSize",                        EAS_SubViewSize },
+    { u"CustomShapeEngine"_ustr,                  EAS_CustomShapeEngine },
+    { u"CustomShapeData"_ustr,                    EAS_CustomShapeData },
+    { u"Type"_ustr,                               EAS_Type },
+    { u"MirroredX"_ustr,                          EAS_MirroredX },
+    { u"MirroredY"_ustr,                          EAS_MirroredY },
+    { u"ViewBox"_ustr,                            EAS_ViewBox },
+    { u"TextRotateAngle"_ustr,                    EAS_TextRotateAngle },
+    { u"TextPreRotateAngle"_ustr,                 EAS_TextPreRotateAngle },
+    { u"ExtrusionAllowed"_ustr,                   EAS_ExtrusionAllowed },
+    { u"TextPathAllowed"_ustr,                    EAS_TextPathAllowed },
+    { u"ConcentricGradientFillAllowed"_ustr,      EAS_ConcentricGradientFillAllowed },
+    { u"Extrusion"_ustr,                          EAS_Extrusion },
+    { u"Equations"_ustr,                          EAS_Equations },
+    { u"Equation"_ustr,                           EAS_Equation },
+    { u"Path"_ustr,                               EAS_Path },
+    { u"TextPath"_ustr,                           EAS_TextPath },
+    { u"Handles"_ustr,                            EAS_Handles },
+    { u"Handle"_ustr,                             EAS_Handle },
+    { u"Brightness"_ustr,                         EAS_Brightness },
+    { u"Depth"_ustr,                              EAS_Depth },
+    { u"Diffusion"_ustr,                          EAS_Diffusion },
+    { u"NumberOfLineSegments"_ustr,               EAS_NumberOfLineSegments },
+    { u"LightFace"_ustr,                          EAS_LightFace },
+    { u"FirstLightHarsh"_ustr,                    EAS_FirstLightHarsh },
+    { u"SecondLightHarsh"_ustr,                   EAS_SecondLightHarsh },
+    { u"FirstLightLevel"_ustr,                    EAS_FirstLightLevel },
+    { u"SecondLightLevel"_ustr,                   EAS_SecondLightLevel },
+    { u"FirstLightDirection"_ustr,                EAS_FirstLightDirection },
+    { u"SecondLightDirection"_ustr,               EAS_SecondLightDirection },
+    { u"Metal"_ustr,                              EAS_Metal },
+    { u"MetalType"_ustr,                          EAS_MetalType },
+    { u"ShadeMode"_ustr,                          EAS_ShadeMode },
+    { u"RotateAngle"_ustr,                        EAS_RotateAngle },
+    { u"RotationCenter"_ustr,                     EAS_RotationCenter },
+    { u"Shininess"_ustr,                          EAS_Shininess },
+    { u"Skew"_ustr,                               EAS_Skew },
+    { u"Specularity"_ustr,                        EAS_Specularity },
+    { u"ProjectionMode"_ustr,                     EAS_ProjectionMode },
+    { u"ViewPoint"_ustr,                          EAS_ViewPoint },
+    { u"Origin"_ustr,                             EAS_Origin },
+    { u"Color"_ustr,                              EAS_Color },
+    { u"Switched"_ustr,                           EAS_Switched },
+    { u"Polar"_ustr,                              EAS_Polar },
+    { u"RangeXMinimum"_ustr,                      EAS_RangeXMinimum },
+    { u"RangeXMaximum"_ustr,                      EAS_RangeXMaximum },
+    { u"RangeYMinimum"_ustr,                      EAS_RangeYMinimum },
+    { u"RangeYMaximum"_ustr,                      EAS_RangeYMaximum },
+    { u"RadiusRangeMinimum"_ustr,                 EAS_RadiusRangeMinimum },
+    { u"RadiusRangeMaximum"_ustr,                 EAS_RadiusRangeMaximum },
+    { u"Coordinates"_ustr,                        EAS_Coordinates },
+    { u"Segments"_ustr,                           EAS_Segments },
+    { u"StretchX"_ustr,                           EAS_StretchX },
+    { u"StretchY"_ustr,                           EAS_StretchY },
+    { u"TextFrames"_ustr,                         EAS_TextFrames },
+    { u"GluePoints"_ustr,                         EAS_GluePoints },
+    { u"GluePointLeavingDirections"_ustr,         EAS_GluePointLeavingDirections },
+    { u"GluePointType"_ustr,                      EAS_GluePointType },
+    { u"TextPathMode"_ustr,                       EAS_TextPathMode },
+    { u"ScaleX"_ustr,                             EAS_ScaleX },
+    { u"SameLetterHeights"_ustr,                  EAS_SameLetterHeights },
+    { u"Position"_ustr,                           EAS_Position },
+    { u"AdjustmentValues"_ustr,                   EAS_AdjustmentValues },
+    { u"SubViewSize"_ustr,                        EAS_SubViewSize },
 
-    { "Last",                               EAS_Last },
-    { "NotFound",                           EAS_NotFound }
+    { u"Last"_ustr,                               EAS_Last },
+    { u"NotFound"_ustr,                           EAS_NotFound }
 };
 
-typedef std::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+typedef std::unordered_map< OUString, EnhancedCustomShapeTokenEnum> TypeNameHashMap;
 static const TypeNameHashMap& GetNameHashMap()
 {
     static TypeNameHashMap aHashMap = []()
         {   // init hash map
             TypeNameHashMap res;
             for (auto const & pair : pTokenTableArray)
-                res[pair.pS] = pair.pE;
+                res[pair.aS] = pair.pE;
             return res;
         }();
 
     return aHashMap;
 }
 
-EnhancedCustomShapeTokenEnum EASGet( std::u16string_view rShapeType )
+EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
 {
     EnhancedCustomShapeTokenEnum eRetValue = EAS_NotFound;
-    size_t i, nLen = rShapeType.size();
-    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
-    for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
-    pBuf[ i ] = 0;
     auto& rHashMap = GetNameHashMap();
-    TypeNameHashMap::const_iterator aHashIter( rHashMap.find( pBuf.get() ) );
+    TypeNameHashMap::const_iterator aHashIter( rHashMap.find( rShapeType ) );
     if ( aHashIter != rHashMap.end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
@@ -201,12 +196,12 @@ EnhancedCustomShapeTokenEnum EASGet( sal_Int32 nToken )
     return EASGet(SvXMLImport::getNameFromToken(nToken));
 }
 
-OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
+const OUString & EASGet( const EnhancedCustomShapeTokenEnum eToken )
 {
     sal_uInt32 i = eToken >= EAS_Last
         ? sal_uInt32(EAS_NotFound)
         : static_cast<sal_uInt32>(eToken);
-    return OUString::createFromAscii( pTokenTableArray[ i ].pS );
+    return pTokenTableArray[ i ].aS;
 }
 
 }
