@@ -177,6 +177,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
     CPPUNIT_ASSERT(tocContent.startsWith("National Infrastructure Bank Aff/Neg Index"));
+    // check that 1st paragraph has outline level 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_u)
