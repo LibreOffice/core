@@ -470,12 +470,11 @@ static bool txtparae_bContainsIllegalCharacters = false;
 // For the export pass all properties can be queried using a multi property
 // set.
 
-static const char* aParagraphPropertyNamesAuto[] =
+constexpr OUString aParagraphPropertyNamesAuto[] =
 {
-    "NumberingRules",
-    "ParaConditionalStyleName",
-    "ParaStyleName",
-    nullptr
+    u"NumberingRules"_ustr,
+    u"ParaConditionalStyleName"_ustr,
+    u"ParaStyleName"_ustr
 };
 
 namespace {
@@ -489,16 +488,15 @@ enum eParagraphPropertyNamesEnumAuto
 
 }
 
-static const char* aParagraphPropertyNames[] =
+constexpr OUString aParagraphPropertyNames[] =
 {
-    "NumberingIsNumber",
-    "NumberingStyleName",
-    "OutlineLevel",
-    "ParaConditionalStyleName",
-    "ParaStyleName",
-    "TextSection",
-    "OutlineContentVisible",
-    nullptr
+    u"NumberingIsNumber"_ustr,
+    u"NumberingStyleName"_ustr,
+    u"OutlineLevel"_ustr,
+    u"ParaConditionalStyleName"_ustr,
+    u"ParaStyleName"_ustr,
+    u"TextSection"_ustr,
+    u"OutlineContentVisible"_ustr
 };
 
 namespace {
@@ -1830,8 +1828,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
     Reference<XTextSection> xCurrentTextSection(rBaseSection);
 
     MultiPropertySetHelper aPropSetHelper(
-                               bAutoStyles ? aParagraphPropertyNamesAuto :
-                                          aParagraphPropertyNames );
+                               bAutoStyles ? std::span<const OUString>(aParagraphPropertyNamesAuto) :
+                                          std::span<const OUString>(aParagraphPropertyNames) );
 
     bool bHoldElement = false;
     Reference < XTextContent > xTxtCntnt;

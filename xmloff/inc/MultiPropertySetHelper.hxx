@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <memory>
+#include <span>
 
 namespace com::sun::star
 {
@@ -62,10 +63,7 @@ class XPropertySetInfo;
 class MultiPropertySetHelper
 {
     /// names of all properties
-    std::unique_ptr<OUString[]> pPropertyNames;
-
-    /// length of pPropertyNames array
-    sal_Int16 nLength;
+    std::span<const OUString> pPropertyNames;
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
@@ -85,7 +83,7 @@ class MultiPropertySetHelper
     css::uno::Any aEmptyAny;
 
 public:
-    MultiPropertySetHelper(const char** pNames);
+    MultiPropertySetHelper(std::span<const OUString> pNames);
 
     ~MultiPropertySetHelper();
 
@@ -169,7 +167,7 @@ const css::uno::Any& MultiPropertySetHelper::getValue(sal_Int16 nValueNo)
 {
     assert(pValues && "called getValue() without calling getValues()");
     assert(pSequenceIndex && "called getValue() without calling hasProperties()");
-    assert(nValueNo < nLength);
+    assert(o3tl::make_unsigned(nValueNo) < pPropertyNames.size());
 
     sal_Int16 nIndex = pSequenceIndex[nValueNo];
     return (nIndex != -1) ? pValues[nIndex] : aEmptyAny;
@@ -178,7 +176,7 @@ const css::uno::Any& MultiPropertySetHelper::getValue(sal_Int16 nValueNo)
 bool MultiPropertySetHelper::hasProperty(sal_Int16 nValueNo)
 {
     assert(pSequenceIndex && "called hasProperty() without calling hasProperties()");
-    assert(nValueNo < nLength);
+    assert(o3tl::make_unsigned(nValueNo) < pPropertyNames.size());
 
     return pSequenceIndex[nValueNo] != -1;
 }

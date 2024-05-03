@@ -34,18 +34,10 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 
 MultiPropertySetHelper::MultiPropertySetHelper(
-    const char** pNames ) :
-        nLength( 0 ),
+    std::span<const OUString> pNames ) :
+        pPropertyNames( pNames ),
         pValues( nullptr )
 {
-    // first count the elements
-    for( const char** pPtr = pNames; *pPtr != nullptr; pPtr++ )
-        nLength++;
-
-    // allocate array and create strings
-    pPropertyNames.reset( new OUString[nLength] );
-    for( sal_Int16 i = 0; i < nLength; i++ )
-        pPropertyNames[i] = OUString::createFromAscii( pNames[i] );
 }
 
 
@@ -62,13 +54,12 @@ void MultiPropertySetHelper::hasProperties(
 
     // allocate sequence index
     if ( !pSequenceIndex )
-        pSequenceIndex.reset( new sal_Int16[nLength] );
+        pSequenceIndex.reset( new sal_Int16[pPropertyNames.size()] );
 
     // construct pSequenceIndex
     sal_Int16 nNumberOfProperties = 0;
-    sal_Int16 i;
 
-    for( i = 0; i < nLength; i++ )
+    for( size_t i = 0; i < pPropertyNames.size(); i++ )
     {
         // ask for property
         bool bHasProperty =
@@ -84,7 +75,7 @@ void MultiPropertySetHelper::hasProperties(
     if ( aPropertySequence.getLength() != nNumberOfProperties )
         aPropertySequence.realloc( nNumberOfProperties );
     OUString* pPropertySequence = aPropertySequence.getArray();
-    for( i = 0; i < nLength; i ++ )
+    for( size_t i = 0; i < pPropertyNames.size(); i ++ )
     {
         sal_Int16 nIndex = pSequenceIndex[i];
         if ( nIndex != -1 )
