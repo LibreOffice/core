@@ -252,6 +252,30 @@ CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDOCExportDoNotMirrorRtlDrawObjs)
+{
+    // Given a document with a shape, anchored in an RTL paragraph, loaded from DOCX:
+    createSwDoc("draw-obj-rtl-no-mirror-vml.docx");
+
+    // When saving that to DOC:
+    saveAndReload(mpFilter);
+
+    // Then make sure the shape is on the right margin:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nPageRight = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nShapeLeft
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
+    CPPUNIT_ASSERT_GREATER(nBodyRight, nShapeLeft);
+    sal_Int32 nShapeRight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds"_ostr, "right"_ostr).toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 12523
+    // - Actual  : 12536
+    // i.e. the shape was outside of the page right margin area, due to an unwanted mapping.
+    CPPUNIT_ASSERT_LESS(nPageRight, nShapeRight);
+}
+
 DECLARE_WW8EXPORT_TEST(testNonInlinePageBreakFirstLine, "nonInlinePageBreakFirstLine.doc")
 {
     SwDoc* pDoc = getSwDoc();
