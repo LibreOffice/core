@@ -53,7 +53,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     Reference<XPropertySet> & rPropSet,
     const SvXMLEnumMapEntry<sal_uInt16>* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
-    const char** pLevelStylePropMap,
+    std::span<const OUString> pLevelStylePropMap,
     const bool* pAllowedTokenTypes,
     bool bT )
 :   SvXMLImportContext(rImport)
@@ -70,7 +70,6 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (nullptr != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (nullptr == pLevelNameMap)),
                 "need both, attribute name and value map, or neither" );
-    SAL_WARN_IF( nullptr == pOutlineLevelStylePropMap, "xmloff", "need property name map" );
     SAL_WARN_IF( nullptr == pAllowedTokenTypes, "xmloff", "need allowed tokens map" );
 
     // no map for outline-level? then use 1
@@ -142,11 +141,11 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
     if (!bStyleNameOK)
         return;
 
-    const char* pStyleProperty =
+    const OUString pStyleProperty =
         pOutlineLevelStylePropMap[nOutlineLevel];
 
-    DBG_ASSERT(nullptr != pStyleProperty, "need property name");
-    if (nullptr == pStyleProperty)
+    DBG_ASSERT(!pStyleProperty.isEmpty(), "need property name");
+    if (pStyleProperty.isEmpty())
         return;
 
     OUString sDisplayStyleName =
@@ -160,7 +159,7 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
         rStyles->hasByName( sDisplayStyleName ) )
     {
         rPropertySet->setPropertyValue(
-            OUString::createFromAscii(pStyleProperty), css::uno::Any(sDisplayStyleName));
+            pStyleProperty, css::uno::Any(sDisplayStyleName));
     }
 }
 
@@ -283,11 +282,12 @@ const SvXMLEnumMapEntry<sal_uInt16> aSvLevelNameTOCMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const char* aLevelStylePropNameTOCMap[] =
-    { nullptr, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
-          "ParaStyleLevel4", "ParaStyleLevel5", "ParaStyleLevel6",
-          "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
-          "ParaStyleLevel10", nullptr };
+constexpr OUString aLevelStylePropNameTOCMapArray[] =
+    { u""_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel2"_ustr, u"ParaStyleLevel3"_ustr,
+          u"ParaStyleLevel4"_ustr, u"ParaStyleLevel5"_ustr, u"ParaStyleLevel6"_ustr,
+          u"ParaStyleLevel7"_ustr, u"ParaStyleLevel8"_ustr, u"ParaStyleLevel9"_ustr,
+          u"ParaStyleLevel10"_ustr, u""_ustr };
+std::span<const OUString> const aLevelStylePropNameTOCMap = aLevelStylePropNameTOCMapArray;
 
 const bool aAllowedTokenTypesTOC[] =
 {
@@ -325,9 +325,10 @@ const SvXMLEnumMapEntry<sal_uInt16> aLevelNameAlphaMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const char* aLevelStylePropNameAlphaMap[] =
-    { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
-          "ParaStyleLevel3", nullptr };
+constexpr OUString aLevelStylePropNameAlphaMapArray[] =
+    { u""_ustr, u"ParaStyleSeparator"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel2"_ustr,
+          u"ParaStyleLevel3"_ustr, u""_ustr };
+std::span<const OUString> const aLevelStylePropNameAlphaMap = aLevelStylePropNameAlphaMapArray;
 
 const bool aAllowedTokenTypesAlpha[] =
 {
@@ -372,16 +373,17 @@ const SvXMLEnumMapEntry<sal_uInt16> aLevelNameBibliographyMap[] =
 };
 
 // TODO: replace with real property names, when available
-const char* aLevelStylePropNameBibliographyMap[] =
+constexpr OUString aLevelStylePropNameBibliographyMapArray[] =
 {
-    nullptr, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
-    "ParaStyleLevel1", nullptr };
+    u""_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr, u"ParaStyleLevel1"_ustr,
+    u"ParaStyleLevel1"_ustr, u""_ustr };
+std::span<const OUString> const aLevelStylePropNameBibliographyMap = aLevelStylePropNameBibliographyMapArray;
 
 const bool aAllowedTokenTypesBibliography[] =
 {
@@ -401,8 +403,9 @@ const bool aAllowedTokenTypesBibliography[] =
 // no name map
 const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap = nullptr;
 
-const char* aLevelStylePropNameTableMap[] =
-    { nullptr, "ParaStyleLevel1", nullptr };
+constexpr OUString aLevelStylePropNameTableMapArray[] =
+    { u""_ustr, u"ParaStyleLevel1"_ustr, u""_ustr };
+std::span<const OUString> const aLevelStylePropNameTableMap = aLevelStylePropNameTableMapArray;
 
 const bool aAllowedTokenTypesTable[] =
 {
