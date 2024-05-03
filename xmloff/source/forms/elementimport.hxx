@@ -136,7 +136,7 @@ namespace xmloff
             property value as if the attribute was encountered.</p>
             @see encounteredAttribute
         */
-        void        simulateDefaultedAttribute(sal_Int32 nElement, const OUString& _rPropertyName, const char* _pAttributeDefault);
+        void        simulateDefaultedAttribute(sal_Int32 nElement, const OUString& _rPropertyName, const OUString& _pAttributeDefault);
 
         /** to be called from within handleAttribute, checks whether the given attribute is covered by our generic
             attribute handler mechanisms

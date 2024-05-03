@@ -580,14 +580,14 @@ namespace xmloff
         m_rEventManager.registerEvents(m_xElement, _rEvents);
     }
 
-    void OElementImport::simulateDefaultedAttribute(sal_Int32 nElement, const OUString& _rPropertyName, const char* _pAttributeDefault)
+    void OElementImport::simulateDefaultedAttribute(sal_Int32 nElement, const OUString& _rPropertyName, const OUString& _pAttributeDefault)
     {
         OSL_ENSURE( m_xInfo.is(), "OPropertyImport::simulateDefaultedAttribute: the component should be more gossipy about it's properties!" );
 
         if ( !m_xInfo.is() || m_xInfo->hasPropertyByName( _rPropertyName ) )
         {
             if ( !encounteredAttribute( nElement ) )
-                OSL_VERIFY( handleAttribute( XML_ELEMENT(FORM, (nElement & TOKEN_MASK)), OUString::createFromAscii( _pAttributeDefault ) ) );
+                OSL_VERIFY( handleAttribute( XML_ELEMENT(FORM, (nElement & TOKEN_MASK)), _pAttributeDefault ) );
         }
     }
 
@@ -1258,7 +1258,7 @@ namespace xmloff
         OURLReferenceImport::startFastElement(nElement, _rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, u"_blank"_ustr);
     }
 
     //= OValueRangeImport
@@ -1353,7 +1353,7 @@ namespace xmloff
         // same XML element), though not all of them know this property.
         // So we have to do a check ...
         if (m_xElement.is() && m_xInfo.is() && m_xInfo->hasPropertyByName(PROPERTY_EMPTY_IS_NULL) )
-            simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeToken(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeToken(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, u"false"_ustr);
     }
 
     namespace {
@@ -1514,10 +1514,10 @@ namespace xmloff
             // for the auto-completion
             // the attribute default does not equal the property default, so in case we did not read this attribute,
             // we have to simulate it
-            simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeToken( SCAFlags::AutoCompletion ), PROPERTY_AUTOCOMPLETE, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeToken( SCAFlags::AutoCompletion ), PROPERTY_AUTOCOMPLETE, u"false"_ustr);
 
             // same for the convert-empty-to-null attribute, which's default is different from the property default
-            simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeToken( DAFlags::ConvertEmpty ), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeToken( DAFlags::ConvertEmpty ), PROPERTY_EMPTY_IS_NULL, u"false"_ustr);
         }
     }
 
@@ -1925,7 +1925,7 @@ namespace xmloff
         OElementImport::startFastElement(nElement, _rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, u"_blank"_ustr);
     }
 
     void OFormImport::endFastElement(sal_Int32 nElement)
