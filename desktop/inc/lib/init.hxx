@@ -93,12 +93,11 @@ namespace desktop {
     };
 
     /// One instance of this per view, handles flushing callbacks
-    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
+    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public SfxLokCallbackInterface
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
         virtual ~CallbackFlushHandler() override;
-        virtual void Invoke() override;
         // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
         void queue(const int type, const OString& data);
 
@@ -189,7 +188,8 @@ namespace desktop {
         typedef std::vector<int> queue_type1;
         typedef std::vector<CallbackData> queue_type2;
 
-        void startTimer();
+        void scheduleFlush();
+        void invoke();
         bool removeAll(int type);
         bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
         bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
@@ -199,6 +199,8 @@ namespace desktop {
         void queue(const int type, CallbackData& data);
         void enqueueUpdatedTypes();
         void enqueueUpdatedType( int type, const SfxViewShell* sourceViewShell, int viewId );
+
+        void stop();
 
         /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
             so we split the queue in 2 to make the scanning cache friendly. */
@@ -230,18 +232,12 @@ namespace desktop {
         LibreOfficeKitDocument* m_pDocument;
         int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;
+        ImplSVEvent* m_pFlushEvent;
         void *m_pData;
         int m_nDisableCallbacks;
         std::recursive_mutex m_mutex;
-        class TimeoutIdle : public Timer
-        {
-        public:
-            TimeoutIdle( CallbackFlushHandler* handler );
-            virtual void Invoke() override;
-        private:
-            CallbackFlushHandler* mHandler;
-        };
-        TimeoutIdle m_TimeoutIdle;
+
+        DECL_LINK(FlushQueue, void*, void);
     };
 
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
