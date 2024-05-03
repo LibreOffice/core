@@ -1219,7 +1219,9 @@ namespace
     /// Picks the first text node with a matching style from a double ended queue, starting at the front
     /// This allows us to use the deque either as a stack or as a queue depending on whether we want to search up or down
     SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, const std::deque<SwNode*>& pToSearch,
-                                    std::u16string_view rStyleName, bool bCaseSensitive = true)
+                                    std::u16string_view rStyleName,
+                                    sal_Int32 *const pStart, sal_Int32 *const pEnd,
+                                    bool bCaseSensitive = true)
     {
         std::deque<SwNode*> pSearching(pToSearch);
         while (!pSearching.empty())
@@ -1234,15 +1236,38 @@ namespace
             if (!pTextNode)
                 continue;
 
-            if (bCaseSensitive)
+            if (bCaseSensitive
+                ? pTextNode->GetFormatColl()->GetName() == rStyleName
+                : pTextNode->GetFormatColl()->GetName().equalsIgnoreAsciiCase(rStyleName))
             {
-                if (pTextNode->GetFormatColl()->GetName() == rStyleName)
-                    return pTextNode;
+                *pStart = 0;
+                if (pEnd)
+                {
+                    *pEnd = pTextNode->GetText().getLength();
+                }
+                return pTextNode;
             }
-            else
+
+            if (auto const pHints = pTextNode->GetpSwpHints())
             {
-                if (pTextNode->GetFormatColl()->GetName().equalsIgnoreAsciiCase(rStyleName))
-                    return pTextNode;
+                for (size_t i = 0; i < pHints->Count(); ++i)
+                {
+                    auto const*const pHint(pHints->Get(i));
+                    if (pHint->Which() == RES_TXTATR_CHARFMT)
+                    {
+                        if (bCaseSensitive
+                            ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
+                            : pHint->GetCharFormat().GetCharFormat()->GetName().equalsIgnoreAsciiCase(rStyleName))
+                        {
+                            *pStart = pHint->GetStart();
+                            if (pEnd)
+                            {
+                                *pEnd = *pHint->End();
+                            }
+                            return pTextNode;
+                        }
+                    }
+                }
             }
         }
 
@@ -1503,21 +1528,21 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                             pSearchThird.push_back(nodes[n]);
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, rRefMark, pStt, pEnd);
                     if (pTextNd)
                     {
                         break;
                     }
 
                     // 2. Search up from the top of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark, pStt, pEnd);
                     if (pTextNd)
                     {
                         break;
                     }
 
                     // 3. Search down from the bottom of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark, pStt, pEnd);
                     if (pTextNd)
                     {
                         break;
@@ -1526,21 +1551,21 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                     // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
                     // it yet, maybe we could with a case insensitive search. Let's do that
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, rRefMark, pStt, pEnd,
                                                    false /* bCaseSensitive */);
                     if (pTextNd)
                     {
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark, pStt, pEnd,
                                                    false /* bCaseSensitive */);
                     if (pTextNd)
                     {
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark, pStt, pEnd,
                                                    false /* bCaseSensitive */);
                     break;
                 }
@@ -1572,7 +1597,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                     // 1. Search up until we hit the top of the document
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark, pStt, pEnd);
                     if (pTextNd)
                     {
                         break;
@@ -1580,7 +1605,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                     // 2. Search down until we hit the bottom of the document
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark, pStt, pEnd);
                     if (pTextNd)
                     {
                         break;
@@ -1588,26 +1613,19 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                     // Again, we need to remember that Word styles are not case sensitive
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark, pStt, pEnd,
                                                    false /* bCaseSensitive */);
                     if (pTextNd)
                     {
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark, pStt, pEnd,
                                                    false /* bCaseSensitive */);
                     break;
                 }
                 default:
                     OSL_FAIL("<SwGetRefFieldType::FindAnchor(..)> - unknown getref element type");
-            }
-
-            if (pTextNd)
-            {
-                *pStt = 0;
-                if (pEnd)
-                    *pEnd = pTextNd->GetText().getLength();
             }
 
             break;

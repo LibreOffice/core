@@ -746,9 +746,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160402, "StyleRef-DE.docx")
     xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Heading 1");
     assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
-    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Error: Reference source not found"); // TODO
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Cras faucibus condimentum odio. Sed ac ligula. Aliquam at eros.");
     assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
-    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Error: Reference source not found"); // TODO
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
