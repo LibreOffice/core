@@ -344,7 +344,7 @@ void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno:
 tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
+    assert(pParent && "implGetBoundingBox - missing parent window");
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ));
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
     tools::Long nX = aGridRect.Left() + aTableRect.Left();

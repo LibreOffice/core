@@ -178,27 +178,25 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 }
 
 // XServiceInfo ---------------------------------------------------------------
-
 OUString SAL_CALL AccessibleGridControl::getImplementationName()
 {
     return u"com.sun.star.accessibility.AccessibleGridControl"_ustr;
 }
-
 
 // internal virtual methods ---------------------------------------------------
 
 tools::Rectangle AccessibleGridControl::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
+    assert(pParent && "implGetBoundingBox - missing parent window");
     return m_aTable.GetWindowExtentsRelative( *pParent );
 }
-
 
 AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
     return m_aTable.GetWindowExtentsAbsolute();
 }
+
 // internal helper methods ----------------------------------------------------
 
 css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControl::implGetTable()
@@ -209,7 +207,6 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControl::im
     }
     return m_xTable;
 }
-
 
 css::uno::Reference< css::accessibility::XAccessible >
 AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType )

@@ -320,7 +320,7 @@ namespace accessibility
     tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
     {
         vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-        DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
+        assert(pParent && "implGetBoundingBox - missing parent window");
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( *pParent );
         sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());

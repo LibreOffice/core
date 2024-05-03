@@ -168,22 +168,18 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
 }
 
 // XServiceInfo
-
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleBrowseBox"_ustr;
 }
 
-
 // internal virtual methods
-
 tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {
     vcl::Window* pParent = mpBrowseBox->GetAccessibleParentWindow();
-    OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
+    assert(pParent && "implGetBoundingBox - missing parent window");
     return mpBrowseBox->GetWindowExtentsRelative( *pParent );
 }
-
 
 AbsoluteScreenPixelRectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
