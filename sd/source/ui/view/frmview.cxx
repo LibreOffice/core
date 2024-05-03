@@ -287,6 +287,7 @@ void FrameView::Update(SdOptions const * pOptions)
     if (bImpress)
     {
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
+        SetBordSnap( officecfg::Office::Impress::Snap::Object::PageMargin::get() );
         SetDragStripes( officecfg::Office::Impress::Layout::Display::Guide::get() );
         SetHlplSnap( officecfg::Office::Impress::Snap::Object::SnapLine::get() );
         SetHlplVisible( officecfg::Office::Impress::Layout::Display::Helpline::get() );
@@ -296,6 +297,7 @@ void FrameView::Update(SdOptions const * pOptions)
     else
     {
         mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
+        SetBordSnap( officecfg::Office::Draw::Snap::Object::PageMargin::get() );
         SetDragStripes( officecfg::Office::Draw::Layout::Display::Guide::get() );
         SetHlplSnap( officecfg::Office::Draw::Snap::Object::SnapLine::get() );
         SetHlplVisible( officecfg::Office::Draw::Layout::Display::Helpline::get() );
@@ -306,7 +308,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetGridVisible( pOptions->IsGridVisible() );
     SetSnapAngle( pOptions->GetAngle() );
     SetGridSnap( pOptions->IsUseGridSnap() );
-    SetBordSnap( pOptions->IsSnapBorder()  );
     SetOFrmSnap( pOptions->IsSnapFrame() );
     SetOPntSnap( pOptions->IsSnapPoints() );
     SetSnapMagneticPixel( pOptions->GetSnapArea() );

@@ -156,7 +156,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_SNAP_BORDER:
         {
-            pOptions->SetSnapBorder( !mpDrawView->IsBordSnap() );
+            if ( GetDoc()->GetDocumentType() == DocumentType::Impress )
+                officecfg::Office::Impress::Snap::Object::PageMargin::set( !mpDrawView->IsBordSnap(), batch );
+            else
+                officecfg::Office::Draw::Snap::Object::PageMargin::set( !mpDrawView->IsBordSnap(), batch );
         }
         break;
 
