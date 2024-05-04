@@ -411,6 +411,9 @@ MetaPieAction::MetaPieAction( const tools::Rectangle& rRect,
 
 void MetaPieAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawPie( maRect, maStartPt, maEndPt );
 }
 
