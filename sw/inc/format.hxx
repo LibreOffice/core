@@ -66,7 +66,7 @@ class SAL_DLLPUBLIC_RTTI SwFormat : public sw::BorderCacheOwner, public sw::Broa
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
 
 protected:
-    SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+    SW_DLLPUBLIC SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
             const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
