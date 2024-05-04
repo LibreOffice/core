@@ -116,6 +116,6 @@
     <string name="highlight_color">Color de resalte</string>
     <string name="font_color">Color de la lletra</string>
     <string name="action_rename_slide">Cambiar el nome de la diapositiva</string>
-    <string name="automatic">Automaticu</string>
+    <string name="automatic">Automáticu</string>
     <string name="display_language_summary">Afitar la llingua predeterminada de la interfaz</string>
 </resources>
