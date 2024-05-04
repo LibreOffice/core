@@ -48,14 +48,11 @@ $(if $(PLATFORM),\
 	cp -f $(1) $(2))
 endef
 
-$(call gb_Extension_get_workdir,%)/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 # remove extension directory in workdir and oxt file in workdir
 $(call gb_Extension_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),OXT,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f -r $(call gb_Extension_get_workdir,$*) && \
+		rm -f -r $(gb_Extension_workdir)/$* && \
 		rm -f $(call gb_Extension__get_preparation_target,$*) \
 			  $(call gb_Extension_get_target,$*) \
 	)
@@ -70,20 +67,20 @@ $(call gb_Extension__get_preparation_target,%) :
 		mkdir -p $(dir $@) && touch $@)
 
 ifeq ($(strip $(gb_WITH_LANG)),)
-$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Helper_LANGSTARGET)
+$(gb_Extension_workdir)/%/description.xml : $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),CPY,3)
 	$(call gb_Trace_StartRange,$*/description.xml,CPY)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(call gb_Extension_get_workdir,$*) && \
+		mkdir -p $(gb_Extension_workdir)/$* && \
 		cp -f $(LOCATION)/description.xml $@)
 	$(call gb_Trace_EndRange,$*/description.xml,CPY)
 else
-$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS) $(gb_Helper_LANGSTARGET)
+$(gb_Extension_workdir)/%/description.xml : $(gb_Extension_XRMEXDEPS) $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
 	$(call gb_Trace_StartRange,$*/description.xml,XRM)
 	MERGEINPUT=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(POFILES)) && \
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(call gb_Extension_get_workdir,$*) && \
+		mkdir -p $(gb_Extension_workdir)/$* && \
 		$(gb_Extension_XRMEXCOMMAND) \
 			-i $(filter %.xml,$^) \
 			-o $@ \
@@ -99,17 +96,17 @@ endif
 # TODO: kinda pointless/ineffective to copy from one point in workdir to another, also makes the command
 # very long when building with all languages (nlpsolver extension for example), hence read list via pipe
 $(call gb_Extension_get_target,%) : \
-		$(call gb_Extension_get_workdir,%)/description.xml
+		$(gb_Extension_workdir)/%/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Trace_StartRange,$*,OXT)
 	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(subst $(WHITESPACE),$(NEWLINE),$(sort $(FILES)))) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_Extension_get_rootdir,$*)/registration) && \
-		$(call gb_Extension__subst_platform,$(call gb_Extension_get_workdir,$*)/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \
+		$(call gb_Extension__subst_platform,$(gb_Extension_workdir)/$*/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \
 		$(call gb_Extension__subst_platform,$(LOCATION)/META-INF/manifest.xml,$(call gb_Extension_get_rootdir,$*)/META-INF/manifest.xml) && \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_Extension_get_rootdir,$*)/registration &&) \
-		$(if $(and $(gb_Extension_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_Extension_TRANS_LANGS),$(call gb_Extension_get_workdir,$*)/description-$(lang).txt) $(call gb_Extension_get_rootdir,$*) &&) \
+		$(if $(and $(gb_Extension_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_Extension_TRANS_LANGS),$(gb_Extension_workdir)/$*/description-$(lang).txt) $(call gb_Extension_get_rootdir,$*) &&) \
 		cd $(call gb_Extension_get_rootdir,$*) && \
 		cat $$RESPONSEFILE | $(call gb_Helper_wsl_path,$(WSL) $(gb_Extension_ZIPCOMMAND) -rX --filesync --must-match \
 			$(call gb_Extension_get_target,$*) --names-stdin)) && rm -f $$RESPONSEFILE
@@ -128,9 +125,9 @@ $(call gb_Extension_get_target,$(1)) : LICENSE :=
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_Extension_get_target,$(1)) : PLATFORM := $(PLATFORMID)
 $(call gb_Extension_get_target,$(1)) : $(SRCDIR)/$(2)/META-INF/manifest.xml
-$(call gb_Extension_get_workdir,$(1))/description.xml : \
+$(gb_Extension_workdir)/$(1)/description.xml : \
 	$(SRCDIR)/$(2)/description.xml
-$(call gb_Extension_get_workdir,$(1))/description.xml :| \
+$(gb_Extension_workdir)/$(1)/description.xml :| \
 	$(call gb_Extension__get_preparation_target,$(1))
 $(call gb_Extension__get_final_target,$(1)) : $(call gb_Extension_get_target,$(1))
 
@@ -139,7 +136,7 @@ $(if $(filter nodeliver,$(3)),,$(call gb_Extension__Extension_deliver,$(1),Exten
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : \
 	POFILES := $(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po))
-$(call gb_Extension_get_workdir,$(1))/description.xml : \
+$(gb_Extension_workdir)/$(1)/description.xml : \
 	$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po))
 $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po) :
 endif
@@ -345,22 +342,22 @@ endef
 define gb_Extension__localize_helpfile_onelang
 $(call gb_Extension_get_rootdir,$(1))/help/$(5).done : HELPFILES += $(3)
 $(call gb_Extension_get_rootdir,$(1))/help/$(5).done : \
-        $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3)
+        $(gb_Extension_workdir)/$(1)/help/$(5)/$(3)
 $(call gb_Extension_get_rootdir,$(1))/help/$(5)-xhp.done : \
-        $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3)
+        $(gb_Extension_workdir)/$(1)/help/$(5)/$(3)
 ifneq ($(filter-out en-US,$(5)),)
 ifneq ($(filter-out qtz,$(5)),)
-$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
+$(gb_Extension_workdir)/$(1)/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
-$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
+$(gb_Extension_workdir)/$(1)/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3))))) :
 endif
 endif
-$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
+$(gb_Extension_workdir)/$(1)/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_Extension_HELPEXDEPS)) | \
-        $(call gb_Extension_get_workdir,$(1))/help/.dir
-$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
+        $(gb_Extension_workdir)/$(1)/help/.dir
+$(gb_Extension_workdir)/$(1)/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),XHP,3)
 	$$(call gb_Trace_StartRange,$(1) $(3) $(5),XHP)
@@ -421,18 +418,18 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(5)), \
 			$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) -m \
-				-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) \
+				-r $(gb_Extension_workdir)/$(1)/help/$(5)/$(6) \
 			, \
 			$(if $(filter-out en-US,$(5)), \
 				MERGEINPUT=`$(gb_MKTEMP)` && \
 				echo $$(POFILE) > $$$${MERGEINPUT} && \
 				$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) \
 					-m $$$${MERGEINPUT} \
-					-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) && \
+					-r $(gb_Extension_workdir)/$(1)/help/$(5)/$(6) && \
 				rm -rf $$$${MERGEINPUT} \
 				, \
 				$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) \
-					-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) \
+					-r $(gb_Extension_workdir)/$(1)/help/$(5)/$(6) \
 			) \
 		) \
 	)
@@ -459,13 +456,13 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(basename $$@) && \
         $$(gb_Extension_HELPLINKERCOMMAND) -mod help \
-            -extlangsrc $(call gb_Extension_get_workdir,$(1))/help/$(2) \
+            -extlangsrc $(gb_Extension_workdir)/$(1)/help/$(2) \
             -sty $(SRCDIR)/xmlhelp/util/embed.xsl \
             -extlangdest $$(basename $$@) \
             -idxcaption $(SRCDIR)/xmlhelp/util/idxcaption.xsl \
             -idxcontent $(SRCDIR)/xmlhelp/util/idxcontent.xsl \
             $$(HELPFILES) && \
-        (cd $(call gb_Extension_get_workdir,$(1))/help/$(2) && \
+        (cd $(gb_Extension_workdir)/$(1)/help/$(2) && \
             $$(call gb_Helper_wsl_path,$(WSL) $$(gb_Extension_ZIPCOMMAND) -r $$(basename $$@)/help.jar \
             $$(HELPFILES))) && \
         $$(gb_Extension_HELPINDEXERCOMMAND) -lang $(2) -mod help \
