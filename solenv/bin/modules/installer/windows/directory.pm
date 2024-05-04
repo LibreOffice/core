@@ -478,7 +478,7 @@ sub add_root_directories
             $baseproductversion = $allvariableshashref->{'BASEPRODUCTVERSION'};  # for example "2.0" for OOo
         }
 
-        my $realproductkey = $productname . " " . $productversion;
+        my $realproductkey = $productname;
         my $productkey = $productname . " " . $baseproductversion;
 
         if (( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) && ( ! $allvariableshashref->{'DONTUSEEXTENSIONINDEFAULTDIR'} ))
