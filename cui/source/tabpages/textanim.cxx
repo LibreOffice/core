@@ -107,7 +107,7 @@ SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogC
 {
     eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rInAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     m_xLbEffect->connect_changed( LINK( this, SvxTextAnimationPage, SelectEffectHdl_Impl ) );

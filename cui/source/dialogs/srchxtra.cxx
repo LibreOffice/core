@@ -167,8 +167,11 @@ SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 {
-    DBG_ASSERT( SfxObjectShell::Current(), "No DocShell" );
-    SfxItemPool& rPool(SfxObjectShell::Current()->GetPool());
+    SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    DBG_ASSERT( pObjSh, "No DocShell" );
+    if (!pObjSh)
+        return;
+    SfxItemPool& rPool(pObjSh->GetPool());
 
     for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {

@@ -86,7 +86,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     m_ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
 
     // setting the output device

@@ -503,7 +503,7 @@ void SvxCharNamePage::EnableFeatureButton(const weld::Widget& rNameBox)
 void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
 {
     const FontList* pFontList = GetFontList();
-    DBG_ASSERT( pFontList, "no fontlist" );
+    assert(pFontList && "no fontlist");
 
     FontStyleBox* pStyleBox = nullptr;
     OUString sFontName;

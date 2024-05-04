@@ -164,7 +164,7 @@ SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController*
 {
     // calculate PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
-    DBG_ASSERT( pPool, "no pool (!)" );
+    assert(pPool && "no pool (!)");
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
     m_xCtlAngle->SetLinkedField(m_xNfAngle.get(), 2);
@@ -176,7 +176,7 @@ SvxAngleTabPage::~SvxAngleTabPage()
 
 void SvxAngleTabPage::Construct()
 {
-    DBG_ASSERT(pView, "No valid view (!)");
+    assert(pView && "No valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(*m_xMtrPosX, eDlgUnit, true);
     SetFieldUnit(*m_xMtrPosY, eDlgUnit, true);
@@ -410,7 +410,7 @@ SvxSlantTabPage::~SvxSlantTabPage()
 void SvxSlantTabPage::Construct()
 {
     // get the range
-    DBG_ASSERT(pView, "no valid view (!)");
+    assert(pView && "no valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(*m_xMtrRadius, eDlgUnit, true);
     for (int i = 0; i < 2; ++i)
@@ -760,7 +760,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
 
     // evaluate PoolUnit
     SfxItemPool* pPool = mrOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "no pool (!)" );
+    assert(pPool && "no pool (!)");
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
     m_aCtlPos.SetActualRP(RectPoint::LT);
@@ -795,7 +795,7 @@ SvxPositionSizeTabPage::~SvxPositionSizeTabPage()
 void SvxPositionSizeTabPage::Construct()
 {
     // get range and work area
-    DBG_ASSERT( mpView, "no valid view (!)" );
+    assert(mpView && "no valid view (!)");
     meDlgUnit = GetModuleFieldUnit( GetItemSet() );
     SetFieldUnit( *m_xMtrPosX, meDlgUnit, true );
     SetFieldUnit( *m_xMtrPosY, meDlgUnit, true );

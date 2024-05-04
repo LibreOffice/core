@@ -95,7 +95,7 @@ SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogControl
 
     // determine PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
     rXLSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );

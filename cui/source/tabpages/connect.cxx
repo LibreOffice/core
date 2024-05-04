@@ -78,7 +78,7 @@ SvxConnectionPage::SvxConnectionPage(weld::Container* pPage, weld::DialogControl
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
 {
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool" );
+    assert(pPool && "Where is the pool");
     eUnit = pPool->GetMetric( SDRATTR_EDGENODE1HORZDIST );
 
     FillTypeLB();

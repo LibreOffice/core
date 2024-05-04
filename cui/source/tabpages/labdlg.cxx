@@ -137,8 +137,8 @@ void SvxCaptionTabPage::Construct()
 
 bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 {
-    SfxItemPool*    pPool = _rOutAttrs->GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    SfxItemPool* pPool = _rOutAttrs->GetPool();
+    assert(pPool && "Where is the pool?");
 
     MapUnit      eUnit;
 
@@ -227,7 +227,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetFieldUnit( *m_xMF_LENGTH, eFUnit );
 
     SfxItemPool*    pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
 
     sal_uInt16   nWhich;
     MapUnit      eUnit;

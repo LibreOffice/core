@@ -174,7 +174,7 @@ static sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 void SvxStdParagraphTabPage::ELRLoseFocus()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit =
         MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
@@ -1113,7 +1113,7 @@ void SvxStdParagraphTabPage::Init_Impl()
 
     m_xAutoCB->connect_toggled(LINK(this, SvxStdParagraphTabPage, AutoHdl_Impl));
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
     m_aTopDist.set_max( m_aTopDist.normalize( MAX_DURCH ), eUnit );

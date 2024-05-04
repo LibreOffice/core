@@ -361,7 +361,7 @@ DeactivateRC SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -390,7 +390,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
 IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -426,7 +426,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
 IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -511,7 +511,7 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
 IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, weld::Button&, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(SvxGrfCropPage, UncropHdl, weld::Button&, void)
 void SvxGrfCropPage::CalcZoom()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -589,7 +589,7 @@ void SvxGrfCropPage::CalcZoom()
 void SvxGrfCropPage::CalcMinMaxBorder()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
     tools::Long nR = lcl_GetValue(*m_xRightMF, eUnit );
@@ -620,7 +620,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
     if( bFound )
     {
         SfxItemPool* pPool = GetItemSet().GetPool();
-        DBG_ASSERT( pPool, "Where is the pool?" );
+        assert(pPool && "Where is the pool?");
         FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ));
 

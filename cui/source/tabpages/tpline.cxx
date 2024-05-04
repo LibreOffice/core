@@ -157,7 +157,7 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    assert(pPool && "Where is the pool?");
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
     m_xLbLineStyle->connect_changed(LINK(this, SvxLineTabPage, ClickInvisibleHdl_Impl));
