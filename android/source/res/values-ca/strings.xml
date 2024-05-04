@@ -118,4 +118,18 @@
     <string name="action_rename_slide">Canvia el nom de la diapositiva</string>
     <string name="unable_to_save">No s\'ha pogut desar el fitxer</string>
     <string name="calc_alert_double_click_optimal_length">Suggeriment: toqueu dues vegades una capçalera per a establir l\'amplada/alçada òptima.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">D\'acord</string>
+    <string name="message_save_incomplete">No s\'ha completat el desament. Hi havia canvis?</string>
+    <string name="action_underline">Subratllat</string>
+    <string name="unable_to_go_further">No es pot anar més enllà.</string>
+    <string name="action_bold">Negreta</string>
+    <string name="browser_app_name">Navegador del LibreOffice</string>
+    <string name="menu_search">Cerca</string>
+    <string name="app_about_name"><b>Beta del Visor del LibreOffice</b></string>
+    <string name="action_strikeout">Ratllat</string>
+    <string name="search_not_found">No s\'ha trobat l\'expressió</string>
+    <string name="menu_preferences">Preferències</string>
+    <string name="directory_not_saved">No s\'ha desat el directori.</string>
+    <string name="action_italic">Cursiva</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">El dispositiu Android no admet la presentació de diapositives SVG a l\'aplicació. S\'ha copiat l\'enllaç de la presentació de diapositives al porta-retalls. Premeu el botó d\'inici, obriu un navegador web modern, enganxeu-lo a la barra d\'adreces i visiteu l\'enllaç.</string>
 </resources>

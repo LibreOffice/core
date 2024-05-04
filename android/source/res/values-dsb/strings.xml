@@ -118,4 +118,18 @@
     <string name="pref_developer_mode_summary">Wuwijaŕski modus zmóžniś, źož móžośo pśikaze UNO w nałoženju pósłaś. Wužywanje na swójske riziko.</string>
     <string name="save_alert_dialog_title">Dokument do zacynjanja składowaś\?</string>
     <string name="calc_alert_double_click_optimal_length">Pokaz: Pótusniśo dwójcy nadpismo, aby optimalnu šyrokosć/wusokosć nastajił.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">W pórěźe</string>
+    <string name="message_save_incomplete">Składowanje njejo dokóńcone. Su změny byli?</string>
+    <string name="action_underline">Pódšmarnuś</string>
+    <string name="unable_to_go_further">Njejo móžno dalej hyś.</string>
+    <string name="action_bold">Tucny</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Pytaś</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Pśešmarnuś</string>
+    <string name="search_not_found">Klucowe słowo njejo se namakało</string>
+    <string name="menu_preferences">Nastajenja</string>
+    <string name="directory_not_saved">Zapis njejo se składł.</string>
+    <string name="action_italic">Kursiwny</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Waš rěd Android SVG-prezentaciju w nałoženju njepódpěra. Smy kopěrowali wótkaz na prezentaciju do mjazywótkłada. Pšosym tłocćo tłocašk Start, wócyńśo moderny webwobglědowak, zasajźćo do adresowego póla a startujśo.</string>
 </resources>

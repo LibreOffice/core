@@ -118,4 +118,18 @@
     <string name="calc_alert_double_click_optimal_length">Consejo: tocar dos veces una cabecera define la anchura/altura óptima.</string>
     <string name="calc_optimal_length_default_text">Introduzca la longitud adicional en centésimas de milímetro</string>
     <string name="UNO_commands_string_parent_value_hint">Valor superior</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Aceptar</string>
+    <string name="message_save_incomplete">No se completó el guardado. ¿Hubo cambios?</string>
+    <string name="action_underline">Subrayar</string>
+    <string name="unable_to_go_further">No se puede ir más allá.</string>
+    <string name="action_bold">Negrita</string>
+    <string name="browser_app_name">Navegador de LibreOffice</string>
+    <string name="menu_search">Buscar</string>
+    <string name="app_about_name"><b>Beta del Visor de LibreOffice</b></string>
+    <string name="action_strikeout">Tachar</string>
+    <string name="search_not_found">No se encontró la expresión</string>
+    <string name="menu_preferences">Preferencias</string>
+    <string name="directory_not_saved">No se guardó el directorio.</string>
+    <string name="action_italic">Itálica</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">El dispositivo Android no admite presentaciones con SVG dentro de la aplicación. Se copió el enlace del pase de diapositivas en el portapapeles. Abra un navegador web moderno, pegue el valor en la barra de direcciones y visítela.</string>
 </resources>

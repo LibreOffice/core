@@ -116,6 +116,19 @@
     <string name="highlight_color">Color de resalte</string>
     <string name="font_color">Color de la lletra</string>
     <string name="action_rename_slide">Cambiar el nome de la diapositiva</string>
-    <string name="automatic">Automaticu</string>
+    <string name="automatic">Automáticu</string>
     <string name="display_language_summary">Afitar la llingua predeterminada de la interfaz</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Val</string>
+    <string name="message_save_incomplete">Nun terminó\'l grabar. ¿Hebo dalgún cambéu?</string>
+    <string name="action_underline">Sorrayar</string>
+    <string name="unable_to_go_further">Nun se pue dir más allá.</string>
+    <string name="action_bold">Negrina</string>
+    <string name="browser_app_name">Restolador del LibreOffice</string>
+    <string name="menu_search">Guetar</string>
+    <string name="app_about_name"><b>Beta del Visor del LibreOffice</b></string>
+    <string name="action_strikeout">Tachar</string>
+    <string name="search_not_found">Nun s\'atopó la espresión</string>
+    <string name="menu_preferences">Preferencies</string>
+    <string name="action_italic">Cursiva</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">El preséu Android nun almite presentaciones con SVG dientro de l\'aplicación. Copióse l\'enllaz de la presentación de diapositives nel cartafueyu. Abri un restolador web modernu, apega\'l valor na barra de direiciones y visítala.</string>
 </resources>

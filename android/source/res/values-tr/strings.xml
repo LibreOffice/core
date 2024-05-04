@@ -151,4 +151,6 @@
     <string name="directory_not_saved">Dizin kaydedilmedi.</string>
     <string name="action_italic">Yana yatık</string>
     <string name="alert_copy_svg_slide_show_to_clipboard">Cihazınız uygulama içi slayt gösterisini desteklemiyor. Sunumu panoya kopyaladık. Lütfen ev tuşuna basıp modern bir tarayıcı açıp arama çubuğuna yapıştırın ve sunumu görüntüleyin.</string>
+    <string name="menu_search">Ara</string>
+    <string name="search_not_found">Anahtar kelime bulunamadı</string>
 </resources>

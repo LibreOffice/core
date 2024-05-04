@@ -118,4 +118,18 @@
     <string name="compress_photo_no_compress">Njekomprimować</string>
     <string name="select_delete_options">Zhašenske nastajenja wubrać:</string>
     <string name="UNO_commands_string_hint">Přikaz UNO</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">W porjadku</string>
+    <string name="message_save_incomplete">Składowanje dokónčene njeje. Su změny byli?</string>
+    <string name="action_underline">Podšmórnyć</string>
+    <string name="unable_to_go_further">Njeje móžno dale hić.</string>
+    <string name="action_bold">Tučny</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Pytać</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Přešmórnyć</string>
+    <string name="search_not_found">Klučowe słowo njeje so namakało</string>
+    <string name="menu_preferences">Nastajenja</string>
+    <string name="directory_not_saved">Zapis njeje so składował.</string>
+    <string name="action_italic">Kursiwny</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Waš grat Android SVG-prezentaciju w nałoženju njepodpěruje. Smy wotkaz na prezentaciju do mjezyskłada kopěrowali. Prošu tłóčće tłóčatko Start, wočińće moderny webwobhladowak, zasadźće do adresoweho pola a startujće.</string>
 </resources>

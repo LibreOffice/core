@@ -118,4 +118,18 @@
     <string name="UNO_commands_string_hint">UNO հրաման</string>
     <string name="enter_part_name">Մուտքագրեք մասի անունը</string>
     <string name="action_rename_slide">Անվանափոխեք սահիկը</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">ԼԱՎ</string>
+    <string name="message_save_incomplete">Պահպանելը անավարտ է: Փոփոխություններ եղե՞լ են։</string>
+    <string name="action_underline">Ընդգծում</string>
+    <string name="unable_to_go_further">Անհնար է առաջ գնալ:</string>
+    <string name="action_bold">Թավ</string>
+    <string name="browser_app_name">LibreOffice զննարկիչ</string>
+    <string name="menu_search">Որոնում</string>
+    <string name="app_about_name"><b>LibreOffice Դիտակ \'Beta\'</b></string>
+    <string name="action_strikeout">Քաշել վրայով</string>
+    <string name="search_not_found">Բանալի բառը չի գտնվել</string>
+    <string name="menu_preferences">Նախապատվություններ</string>
+    <string name="directory_not_saved">Գրացուցակը չի պահվել:</string>
+    <string name="action_italic">Շեղագիր</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Ձեր Android սարքը չի աջակցում ներծրագրային svg սահիկների ցուցադրում: Մենք պատճենեցինք սահիկների ցուցադրման հղումը սեղմատախտակի վրա: Խնդրում ենք սեղմել գլխավոր կոճակը, բացել ժամանակակից վեբ զննարկիչը, տեղադրել հասցեագոտում և գնալ:</string>
 </resources>

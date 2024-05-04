@@ -118,4 +118,18 @@
     <string name="calc_optimal_height">Altezza ottimale</string>
     <string name="tabhost_character">Carattere</string>
     <string name="calc_alert_double_click_optimal_length">Suggerimento: doppio tocco su un\'intestazione imposta altezza/larghezza ottimale.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Salvataggio incompleto. Sono state apportate modifiche?</string>
+    <string name="action_underline">Sottolineato</string>
+    <string name="unable_to_go_further">Impossibile avanzare.</string>
+    <string name="action_bold">Grassetto</string>
+    <string name="browser_app_name">Navigatore di LibreOffice</string>
+    <string name="menu_search">Cerca</string>
+    <string name="app_about_name"><b>Visualizzatore di LibreOffice \'Beta\'</b></string>
+    <string name="action_strikeout">Barrato</string>
+    <string name="search_not_found">Parola chiave non trovata</string>
+    <string name="menu_preferences">Preferenze</string>
+    <string name="directory_not_saved">Cartella non salvata.</string>
+    <string name="action_italic">Corsivo</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Quest dispositivo Android non supporta le presentazioni svg in-app. Il collegamento alla presentazione è stato copiato negli appunti. Premere il pulsante Home, aprire un browser Web, incollare nella barra degli indirizzi e premere invio.</string>
 </resources>

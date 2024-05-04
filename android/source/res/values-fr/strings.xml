@@ -118,4 +118,18 @@
     <string name="font_color">Couleur de police</string>
     <string name="action_rename_slide">Renommer la diapo</string>
     <string name="automatic">Automatique</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Enregistrement incomplet. Y a-t-il eu des modifications ?</string>
+    <string name="action_underline">Souligné</string>
+    <string name="unable_to_go_further">Impossible d\'aller plus loin.</string>
+    <string name="action_bold">Gras</string>
+    <string name="browser_app_name">Navigateur LibreOffice</string>
+    <string name="menu_search">Rechercher</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Barré</string>
+    <string name="search_not_found">Mot-clé non trouvé</string>
+    <string name="menu_preferences">Préférences</string>
+    <string name="directory_not_saved">Répertoire non enregistré.</string>
+    <string name="action_italic">Italique</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Votre appareil Android ne prend pas en charge le diaporama SVG intégré à l\'application. Le lien du diaporama a été copié dans le presse-papiers. Veuillez appuyer sur le bouton d\'accueil, ouvrir un navigateur Web moderne, le coller dans la barre d\'adresse et c\'est parti.</string>
 </resources>

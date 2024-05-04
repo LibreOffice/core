@@ -118,4 +118,18 @@
     <string name="action_paste">Wklej</string>
     <string name="action_text_copied">Tekst skopiowano do schowka</string>
     <string name="automatic">Automatyczny</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Zapisywanie nieukończone. Czy były jakieś zmiany?</string>
+    <string name="action_underline">Podkreślenie</string>
+    <string name="unable_to_go_further">Nie można przejść dalej.</string>
+    <string name="action_bold">Pogrubiona</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Szukaj</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Przekreślenie</string>
+    <string name="search_not_found">Nie znaleziono słowa kluczowego</string>
+    <string name="menu_preferences">Preferencje</string>
+    <string name="directory_not_saved">Katalog nie został zapisany.</string>
+    <string name="action_italic">Kursywa</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">To urządzenie z systemem Android nie obsługuje pokazu slajdów SVG w aplikacji. Skopiowaliśmy do schowka łącze do pokazu slajdów. Naciśnij przycisk ekranu głównego (Home), otwórz nowoczesną przeglądarkę internetową, wklej w pasek adresu i gotowe.</string>
 </resources>
