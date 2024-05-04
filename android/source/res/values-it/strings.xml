@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name_settings">Impostazioni del Visualizzatore di LibreOffice</string>
     <string name="app_name">Visualizzatore di LibreOffice</string>
-    <string name="app_about_name"><b>Visualizzatore LibreOffice \'Beta\'</b></string>
+    <string name="app_about_name"><b>Visualizzatore di LibreOffice \'Beta\'</b></string>
     <string name="app_description">Il Visualizzatore di LibreOffice è un\'app per visualizzare i documenti basata su LibreOffice.</string>
     <string name="app_credits">https://it.libreoffice.org/</string>
     <string name="app_vendor">Versione fornita da $VENDOR.</string>

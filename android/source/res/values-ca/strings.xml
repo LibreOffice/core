@@ -11,7 +11,7 @@
     <string name="default_document_name">sense títol</string>
     <string name="app_name">Visualitzador del LibreOffice</string>
     <string name="app_name_settings">Paràmetres del visualitzador del LibreOffice</string>
-    <string name="app_about_name"><b>«Beta» del visualitzador del LibreOffice</b></string>
+    <string name="app_about_name"><b>Beta del Visor del LibreOffice</b></string>
     <string name="app_description">Aquesta aplicació és un visualitzador de documents basat en el LibreOffice.</string>
     <string name="pref_experimental_editing">Mode experimental</string>
     <string name="title_browser">Tots els fitxers</string>
