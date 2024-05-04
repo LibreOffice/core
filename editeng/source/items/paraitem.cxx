@@ -451,7 +451,7 @@ OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_ADJUST_CENTER,
         RID_SVXITEMS_ADJUST_BLOCKLINE
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_ADJUST) - 1 == size_t(SvxAdjust::BlockLine), "unexpected size");
+    static_assert(std::size(RID_SVXITEMS_ADJUST) - 1 == static_cast<size_t>(SvxAdjust::BlockLine), "unexpected size");
     assert(nPos <= sal_uInt16(SvxAdjust::BlockLine) && "enum overflow!");
     return EditResId(RID_SVXITEMS_ADJUST[nPos]);
 }

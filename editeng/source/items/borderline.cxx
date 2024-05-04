@@ -455,24 +455,22 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
             SvxBorderLineStyle::THICKTHIN_LARGEGAP
         };
 
-        static size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
         tools::Long nWidth = 0;
-        SvxBorderLineStyle nTestStyle(SvxBorderLineStyle::NONE);
-        for (size_t i = 0; i < len && nWidth == 0; ++i)
+        for (auto nTestStyle : aDoubleStyles)
         {
-            nTestStyle = aDoubleStyles[i];
             BorderWidthImpl aWidthImpl = getWidthImpl( nTestStyle );
             nWidth = aWidthImpl.GuessWidth( nOut, nIn, nDist );
+            if (nWidth != 0)
+            {
+                // If anything matched, then set it
+                nStyle = nTestStyle;
+                SetBorderLineStyle(nStyle);
+                m_nWidth = nWidth;
+                break;
+            }
         }
 
-        // If anything matched, then set it
-        if ( nWidth > 0 )
-        {
-            nStyle = nTestStyle;
-            SetBorderLineStyle(nStyle);
-            m_nWidth = nWidth;
-        }
-        else
+        if (nWidth == 0)
         {
             // fdo#38542: not a known double, default to something custom...
             SetBorderLineStyle(nStyle);
@@ -664,7 +662,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
     };
     OUString aStr = "(" + ::GetColorString(m_aColor) + cpDelim;
 
-    if ( static_cast<int>(m_nStyle) < int(SAL_N_ELEMENTS(aStyleIds)) )
+    if ( static_cast<size_t>(m_nStyle) < std::size(aStyleIds) )
     {
         TranslateId pResId = aStyleIds[static_cast<int>(m_nStyle)];
         aStr += EditResId(pResId);
