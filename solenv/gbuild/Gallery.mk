@@ -16,16 +16,16 @@ gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 define gb_Gallery__command
 $(call gb_Helper_abbreviate_dirs,\
-	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
+	rm -f $(gb_Gallery_workdir)/$(2)/* && \
 	RESPONSEFILE=$(call gb_var2file,$(shell $(call gb_MKTEMP)),$(GALLERY_FILES)) && \
 	$(call gb_Helper_print_on_error,\
 		$(call gb_Executable_get_command,gengal,$(ICECREAM_RUN)) \
 			--build-tree \
 			--destdir $(GALLERY_BASEDIR) \
 			--name "$(GALLERY_NAME)" \
-			--path $(call gb_Gallery_get_workdir,$(2)) \
+			--path $(gb_Gallery_workdir)/$(2) \
 			--filenames $(call gb_Helper_make_url,$$RESPONSEFILE) \
-			-env:UserInstallation=$(call gb_Helper_make_url,$(call gb_Gallery_get_workdir,$(2))/user),\
+			-env:UserInstallation=$(call gb_Helper_make_url,$(gb_Gallery_workdir)/$(2)/user),\
 		$@.log \
 	) && \
 	rm $$RESPONSEFILE && \
@@ -61,13 +61,13 @@ $(call gb_Gallery__get_final_target,%) :
 	touch $@
 
 # difficult to determine source dep for this one...
-$(call gb_Gallery_get_workdir,%).ulf : \
+$(gb_Gallery_workdir)/%.ulf : \
 		$(call gb_Executable_get_runtime_dependencies,ulfex)
 	$(call gb_CustomTarget_ulfex__command,$@,$(GALLERY_ULFFILE),\
 		$(foreach lang,$(gb_TRANS_LANGS),\
 			$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po))
 
-$(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE) \
+$(gb_Gallery_workdir)/%.str : $(gb_Gallery_TRANSLATE) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),STR,1)
 	$(call gb_Trace_StartRange,$*,STR)
@@ -82,7 +82,7 @@ $(call gb_Gallery_get_clean_target,%) :
 			$(call gb_Gallery__get_final_target,$*) \
 			$(call gb_Gallery_get_target,$*) \
 			$(call gb_Gallery_get_target,$*).log \
-			$(call gb_Gallery_get_workdir,$*) \
+			$(gb_Gallery_workdir)/$* \
 	)
 
 # the theme package
@@ -114,7 +114,7 @@ gb_Gallery_basedir = $(patsubst %/,%,$(dir $(SRCDIR)/$(1)))
 #
 # gb_Gallery__Gallery_impl gallery package basedir name
 define gb_Gallery__Gallery_impl
-$(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
+$(call gb_Package_Package_internal,$(2),$(gb_Gallery_workdir)/$(1))
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,$(1).sdg)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,$(1).sdv)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,$(1).thm)
@@ -124,25 +124,25 @@ $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).str,$(1).str)
 $(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(call gb_Helper_make_url,$(call gb_Gallery_basedir,$(3)))
 $(call gb_Gallery_get_target,$(1)) : GALLERY_FILES :=
 $(call gb_Gallery_get_target,$(1)) : GALLERY_NAME := $(1)
-$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_STRFILE := $(SRCDIR)/$(3)/$(1).str
-$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_ULFFILE := $(call gb_Gallery_get_workdir,$(1))/$(1).ulf
-$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_WORKDIR := $(call gb_Gallery_get_workdir,$(1))
-$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : GALLERY_BASEDIR := $(3)
-$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : GALLERY_ULFFILE := $(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
+$(gb_Gallery_workdir)/$(1)/$(1).str : GALLERY_STRFILE := $(SRCDIR)/$(3)/$(1).str
+$(gb_Gallery_workdir)/$(1)/$(1).str : GALLERY_ULFFILE := $(gb_Gallery_workdir)/$(1)/$(1).ulf
+$(gb_Gallery_workdir)/$(1)/$(1).str : GALLERY_WORKDIR := $(gb_Gallery_workdir)/$(1)
+$(gb_Gallery_workdir)/$(1)/$(1).ulf : GALLERY_BASEDIR := $(3)
+$(gb_Gallery_workdir)/$(1)/$(1).ulf : GALLERY_ULFFILE := $(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
 
-$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
+$(gb_Gallery_workdir)/$(1)/$(1).ulf : \
 	$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf \
 	$(call gb_Gallery_get_target,$(1)) # that rule pre-cleans our output directory
 
-$(call gb_Gallery_get_workdir,$(1))/$(1).str : $(call gb_Gallery_get_workdir,$(1))/$(1).ulf
+$(gb_Gallery_workdir)/$(1)/$(1).str : $(gb_Gallery_workdir)/$(1)/$(1).ulf
 
 # order-only, the Gallery-Target also makes those files
-$(addprefix $(call gb_Gallery_get_workdir,$(1))/$(1),.sdg .sdv .thm): | $(call gb_Gallery_get_target,$(1))
+$(addprefix $(gb_Gallery_workdir)/$(1)/$(1),.sdg .sdv .thm): | $(call gb_Gallery_get_target,$(1))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
 
 $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).dir \
-	$(call gb_Gallery_get_workdir,$(1))/.dir
+	$(gb_Gallery_workdir)/$(1)/.dir
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Gallery__get_final_target,$(1)),$(call gb_Gallery_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Gallery,$(call gb_Gallery__get_final_target,$(1)))
