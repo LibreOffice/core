@@ -948,10 +948,31 @@ typedef LONG NTSTATUS;
 typedef NTSTATUS(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
 constexpr NTSTATUS STATUS_SUCCESS = 0x00000000;
 
+static OUString getWinBits()
+{
+#if _WIN64
+
+    return " X86_64";
+
+#else
+
+    BOOL isWow64 = FALSE;
+
+    IsWow64Process(GetCurrentProcess(), &isWow64);
+
+    if (isWow64)
+        return " X86_64"; //32-bit process on 64-bit Windows.
+    else
+        return " X86_32";
+
+#endif
+}
+
 static OUString getOSVersionString(const OUString& aNtVersionString, DWORD nBuildNumber)
 {
+    OUString winArch = getWinBits();
     OUString aVersionPlusBuild
-        = " (" + aNtVersionString + " build " + OUString::number(nBuildNumber) + ")";
+        = winArch + " (" + aNtVersionString + " build " + OUString::number(nBuildNumber) + ")";
 
     if (aNtVersionString == "6.1")
         return "Windows 7 Service Pack 1" + aVersionPlusBuild;
