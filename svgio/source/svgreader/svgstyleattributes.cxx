@@ -672,8 +672,14 @@ namespace svgio::svgreader
             // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
             const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
-            if(!basegfx::fTools::more(fStrokeWidth, 0.0))
+            if (!basegfx::fTools::more(fStrokeWidth, 0.0))
                 return;
+
+            if (fStrokeWidth > std::numeric_limits<sal_Int32>::max())
+            {
+                SAL_WARN("svgio", "ignoring ludicrous stroke width: " << fStrokeWidth);
+                return;
+            }
 
             drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
 
