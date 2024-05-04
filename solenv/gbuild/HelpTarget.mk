@@ -377,7 +377,7 @@ endef
 # gb_HelpLinkTarget_set_indexed target indexfiles
 define gb_HelpLinkTarget_set_indexed
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED := $(2)
-$(addprefix $(call gb_HelpTarget_get_workdir,$(1))/,$(2)) : $(call gb_HelpIndexTarget_get_target,$(1))
+$(addprefix $(gb_HelpTarget_workdir)/$(1)/,$(2)) : $(call gb_HelpIndexTarget_get_target,$(1))
 
 endef
 
@@ -407,7 +407,7 @@ endef
 define gb_HelpLinkTarget_add_renamed_file
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES += $(strip $(2)),$(strip $(3))
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(3)
-$(call gb_HelpTarget_get_workdir,$(1))/$(2) : $(call gb_HelpLinkTarget_get_target,$(1))
+$(gb_HelpTarget_workdir)/$(1)/$(2) : $(call gb_HelpLinkTarget_get_target,$(1))
 	touch $$@
 
 endef
@@ -582,7 +582,7 @@ endif
 			$(call gb_HelpTarget_get_linked_target,$*) \
 			$(call gb_HelpTarget_get_target,$*) \
 			$(call gb_HelpTarget_get_translation_target,$*) \
-			$(call gb_HelpTarget_get_workdir,$*) \
+			$(gb_HelpTarget_workdir)/$* \
 	)
 
 gb_HelpTarget_get_packagename = HelpTarget/$(1)
@@ -599,7 +599,7 @@ $(call gb_HelpTarget_get_target,$(1)) : HELP_LANG := $(3)
 $(call gb_HelpTarget_get_translation_target,$(1)) : HELP_FILES :=
 $(call gb_HelpTarget_get_translation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 
-$(call gb_HelpTarget__HelpTarget_impl,$(1),$(2),$(3),$(call gb_HelpTarget_get_workdir,$(1)),$(call gb_HelpTarget_get_packagename,$(1)))
+$(call gb_HelpTarget__HelpTarget_impl,$(1),$(2),$(3),$(gb_HelpTarget_workdir)/$(1),$(call gb_HelpTarget_get_packagename,$(1)))
 
 endef
 
@@ -617,7 +617,7 @@ endif
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 ifeq ($(ENABLE_HTMLHELP),)
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
-$(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
+$(call gb_HelpLinkTarget_get_target,$(1)) :| $(gb_HelpTarget_workdir)/$(1)/.dir
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_Package_get_preparation_target,$(5)) : $(call gb_HelpTarget_get_target,$(1))
 endif
