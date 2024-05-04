@@ -59,8 +59,6 @@ class SwTextFrame;
 class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
                 public DropTargetHelper, public DragSourceHelper
 {
-    friend class SwEditWinUIObject;
-
     static  QuickHelpData* s_pQuickHlpData;
 
     static  tools::Long    s_nDDStartPosX;

@@ -429,7 +429,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
 
-    bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark, bool completeSelection = false);
+    bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
 
     SW_DLLPUBLIC bool GotoField( const SwFormatField& rField );
 

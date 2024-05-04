@@ -593,7 +593,7 @@ public:
     ::sw::mark::IFieldmark* GetCurrentFieldmark();
     sw::mark::IFieldmark* GetFieldmarkAfter();
     sw::mark::IFieldmark* GetFieldmarkBefore();
-    bool GotoFieldmark( const ::sw::mark::IFieldmark* const pMark, bool completeSelection = false );
+    bool GotoFieldmark(const ::sw::mark::IFieldmark* const pMark);
 
     // update Cursr, i.e. reset it into content should only be called when the
     // cursor was set to a random position e.g. when deleting frames
