@@ -281,37 +281,33 @@ namespace dlgprov
             // We know that we have to do with instances of XControl.
             // Otherwise this is not the right implementation for
             // XScriptEventsAttacher and we have to give up.
-            Reference< XControl > xControl( rObject, UNO_QUERY );
-            Reference< XControlContainer > xControlContainer( xControl, UNO_QUERY );
-            Reference< XDialog > xDialog( xControl, UNO_QUERY );
-            if ( !xControl.is() )
-                throw IllegalArgumentException();
+            nestedAttachEvents(rObject.query<XControl>(), Helper, sDialogCodeName);
+        }
+    }
 
-            // get XEventsSupplier from control model
-            Reference< XControlModel > xControlModel = xControl->getModel();
-            Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
-            attachEventsToControl( xControl, xEventsSupplier, Helper );
-            if ( mbUseFakeVBAEvents )
-            {
-                xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
-                Any newHelper(xControl );
-                attachEventsToControl( xControl, xEventsSupplier, newHelper );
-            }
-            if ( xControlContainer.is() && !xDialog.is() )
-            {
-                Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
-                sal_Int32 nControlCount = aControls.getLength();
+    void DialogEventsAttacherImpl::nestedAttachEvents(
+        const css::uno::Reference<css::awt::XControl>& xControl, const css::uno::Any& Helper,
+        OUString& sDialogCodeName)
+    {
+        if (!xControl.is())
+            throw IllegalArgumentException();
+        Reference<XControlContainer> xControlContainer(xControl, UNO_QUERY);
+        Reference<XDialog> xDialog(xControl, UNO_QUERY);
 
-                Sequence< Reference< XInterface > > aObjects( nControlCount );
-                Reference< XInterface >* pObjects2 = aObjects.getArray();
-                const Reference< XControl >* pControls = aControls.getConstArray();
-
-                for ( sal_Int32 i2 = 0; i2 < nControlCount; ++i2 )
-                {
-                    pObjects2[i2].set( pControls[i2], UNO_QUERY );
-                }
-                nestedAttachEvents( aObjects, Helper, sDialogCodeName );
-            }
+        // get XEventsSupplier from control model
+        Reference<XControlModel> xControlModel = xControl->getModel();
+        Reference<XScriptEventsSupplier> xEventsSupplier(xControlModel, UNO_QUERY);
+        attachEventsToControl(xControl, xEventsSupplier, Helper);
+        if (mbUseFakeVBAEvents)
+        {
+            xEventsSupplier.set(getFakeVbaEventsSupplier(xControl, sDialogCodeName));
+            Any newHelper(xControl);
+            attachEventsToControl(xControl, xEventsSupplier, newHelper);
+        }
+        if (xControlContainer.is() && !xDialog.is())
+        {
+            for (auto& xChildControl : xControlContainer->getControls())
+                nestedAttachEvents(xChildControl, Helper, sDialogCodeName);
         }
     }
 
@@ -527,8 +523,7 @@ namespace dlgprov
     {
         OUString aMethodName = aScriptEvent.ScriptCode.copy( strlen("vnd.sun.star.UNO:") );
 
-        const Any* pArguments = aScriptEvent.Arguments.getConstArray();
-        Any aEventObject = pArguments[0];
+        Any aEventObject = aScriptEvent.Arguments[0];
 
         bool bHandled = false;
         if( m_xHandler.is() )

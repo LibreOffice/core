@@ -796,11 +796,14 @@ namespace accessibility
 
     struct IndexCompare
     {
-        const PropertyValue* pValues;
-        explicit IndexCompare( const PropertyValue* pVals ) : pValues(pVals) {}
+        const uno::Sequence<beans::PropertyValue>& m_rValues;
+        explicit IndexCompare(const uno::Sequence<beans::PropertyValue>& rValues)
+            : m_rValues(rValues)
+        {
+        }
         bool operator() ( sal_Int32 a, sal_Int32 b ) const
         {
-            return pValues[a].Name < pValues[b].Name;
+            return m_rValues[a].Name < m_rValues[b].Name;
         }
     };
 
@@ -1228,19 +1231,13 @@ namespace accessibility
             //sort property values
             // build sorted index array
             sal_Int32 nLength = aRes.getLength();
-            const beans::PropertyValue* pPairs = aRes.getConstArray();
-            std::unique_ptr<sal_Int32[]> pIndices(new sal_Int32[nLength]);
-            sal_Int32 i = 0;
-            for( i = 0; i < nLength; i++ )
-                pIndices[i] = i;
-            std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+            std::vector<sal_Int32> indices(nLength);
+            std::iota(indices.begin(), indices.end(), 0);
+            std::sort(indices.begin(), indices.end(), IndexCompare(aRes));
             // create sorted sequences according to index array
             uno::Sequence<beans::PropertyValue> aNewValues( nLength );
-            beans::PropertyValue* pNewValues = aNewValues.getArray();
-            for( i = 0; i < nLength; i++ )
-            {
-                pNewValues[i] = pPairs[pIndices[i]];
-            }
+            std::transform(indices.begin(), indices.end(), aNewValues.getArray(),
+                           [&aRes](sal_Int32 index) { return aRes[index]; });
 
             return aNewValues;
         }

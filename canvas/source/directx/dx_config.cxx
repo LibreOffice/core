@@ -48,7 +48,7 @@ namespace dxcanvas
             uno::Sequence< uno::Any > aProps( GetProperties( { "DeviceDenylist" } ));
             uno::Sequence< sal_Int32 > aValues;
 
-            if( aProps.getLength() > 0 &&
+            if (aProps.hasElements() &&
                 (aProps[0] >>= aValues) )
             {
                 const sal_Int32* pValues = aValues.getConstArray();

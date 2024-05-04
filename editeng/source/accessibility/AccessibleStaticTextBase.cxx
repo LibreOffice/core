@@ -903,13 +903,9 @@ namespace accessibility
 
             for ( const auto& rDefAttr : aDefAttrVec )
             {
-                const beans::PropertyValue* pItr = aSeq.getConstArray();
-                const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
-                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, PropertyValueEqualFunctor(rDefAttr) );
-                if ( pFind != pEnd )
-                {
-                    aIntersectionVec.push_back( *pFind );
-                }
+                auto it = std::find_if(aSeq.begin(), aSeq.end(), PropertyValueEqualFunctor(rDefAttr));
+                if (it != aSeq.end())
+                    aIntersectionVec.push_back(*it);
             }
 
             aDefAttrVec.swap( aIntersectionVec );
@@ -937,16 +933,13 @@ namespace accessibility
         uno::Sequence< beans::PropertyValue > aIntersectionSeq = getDefaultAttributes( RequestedAttributes );
         PropertyValueVector aDiffVec;
 
-        const beans::PropertyValue* pDefAttr = aDefAttrSeq.getConstArray();
-        const sal_Int32 nLength = aDefAttrSeq.getLength();
-        for ( sal_Int32 i = 0; i < nLength; ++i )
+        for (auto& defAttr : aDefAttrSeq)
         {
-            const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
-            const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
-            bool bNone = std::none_of( pItr, pEnd, PropertyValueEqualFunctor( pDefAttr[i] ) );
-            if ( bNone && pDefAttr[i].Handle != 0)
+            bool bNone = std::none_of(aIntersectionSeq.begin(), aIntersectionSeq.end(),
+                                      PropertyValueEqualFunctor(defAttr));
+            if (bNone && defAttr.Handle != 0)
             {
-                aDiffVec.push_back( pDefAttr[i] );
+                aDiffVec.push_back(defAttr);
             }
         }
 

@@ -440,15 +440,12 @@ namespace dlgprov
             return;
 
         Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
-        const Reference< XControl >* pControls = aControls.getConstArray();
         sal_Int32 nControlCount = aControls.getLength();
 
         Sequence< Reference< XInterface > > aObjects( nControlCount + 1 );
         Reference< XInterface >* pObjects = aObjects.getArray();
-        for ( sal_Int32 i = 0; i < nControlCount; ++i )
-        {
-            pObjects[i].set( pControls[i], UNO_QUERY );
-        }
+        std::transform(aControls.begin(), aControls.end(), pObjects,
+                       [](auto& xControl) { return xControl.template query<XInterface>(); });
 
         // also add the dialog control itself to the sequence
         pObjects[nControlCount].set( rxControl, UNO_QUERY );

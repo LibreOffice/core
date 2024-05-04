@@ -360,10 +360,8 @@ namespace canvas
             const css::uno::Reference< css::uno::XInterface >&          xIf,
             ::sal_Int16                                                 nArgPos )
         {
-            const SequenceContent* pCurr = rSequence.getConstArray();
-            const SequenceContent* pEnd  = pCurr + rSequence.getLength();
-            while( pCurr != pEnd )
-                verifyInput( *pCurr++, pStr, xIf, nArgPos );
+            for (auto& element : rSequence)
+                verifyInput(element, pStr, xIf, nArgPos);
         }
 
         /// Catch-all, to handle cases that DON'T need input checking (i.e. the Integer geometry ones)
