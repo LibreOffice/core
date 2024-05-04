@@ -24,7 +24,7 @@ public:
 
     CPPUNIT_TEST_SUITE(VariadicTemplatesTest);
 // This unit test sometimes generates a compiler crash on macos Intel. Unfortunately the crash
-// is sometimes in the codegen phase, so its not obvious how to fix it.
+// is sometimes in the codegen phase, so it's not obvious how to fix it.
 #if !(defined(MACOSX) && defined __x86_64__ && __clang_major__ <= 14)
     CPPUNIT_TEST(testUnwrapArgs);
 #endif
