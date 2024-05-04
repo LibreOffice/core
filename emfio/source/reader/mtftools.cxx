@@ -1753,8 +1753,8 @@ namespace emfio
             // check whether there is a font rotation applied via transformation
             Point aP1( ImplMap( Point() ) );
             Point aP2( ImplMap( Point( 0, 100 ) ) );
-            aP2.AdjustX( -(aP1.X()) );
-            aP2.AdjustY( -(aP1.Y()) );
+            aP2.setX(o3tl::saturating_sub(aP2.X(), aP1.X()));
+            aP2.setY(o3tl::saturating_sub(aP2.Y(), aP1.Y()));
             double fX = aP2.X();
             double fY = aP2.Y();
             if ( fX )
