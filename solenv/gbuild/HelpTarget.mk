@@ -45,14 +45,14 @@ $(call gb_Helper_abbreviate_dirs, \
 			-l $(HELP_LANG) \
 			-mi $${HELPFILES} \
 			-m $${POFILES} \
-			-o $(call gb_HelpTranslatePartTarget_get_workdir,$(2)) && \
+			-o $(gb_HelpTranslatePartTarget_workdir)/$(2) && \
 		rm -f $${POFILES} \
 		, \
 		$(gb_HelpTranslatePartTarget_COMMAND) \
 			-l $(HELP_LANG) \
 			-mi $${HELPFILES} \
 			-m \
-			-o $(call gb_HelpTranslatePartTarget_get_workdir,$(2)) \
+			-o $(gb_HelpTranslatePartTarget_workdir)/$(2) \
 	) \
 ) && \
 touch $@ && \
@@ -83,7 +83,7 @@ $(call gb_HelpTranslatePartTarget_get_target,$(1)) : POFILES := $(3)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(3)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(dir $(call gb_HelpTranslatePartTarget_get_target,$(1))).dir
-$(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(call gb_HelpTranslatePartTarget_get_workdir,$(1))/.dir
+$(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(gb_HelpTranslatePartTarget_workdir)/$(1)/.dir
 
 endef
 
@@ -99,7 +99,7 @@ endef
 gb_HelpTranslateTarget__get_lang = $(lastword $(subst /, ,$(1)))
 
 gb_HelpTranslateTarget__get_partname = $(call gb_HelpTranslateTarget__get_lang,$(1))/$(patsubst %/,%,$(2))
-gb_HelpTranslateTarget__get_part_workdir = $(call gb_HelpTranslatePartTarget_get_workdir,$(call gb_HelpTranslateTarget__get_partname,$(1),$(2)))
+gb_HelpTranslateTarget__get_part_workdir = $(gb_HelpTranslatePartTarget_workdir)/$(call gb_HelpTranslateTarget__get_partname,$(1),$(2))
 
 gb_HelpTranslateTarget_get_translated_target = $(call gb_HelpTranslatePartTarget_get_translated_target,$(call gb_HelpTranslateTarget__get_partname,$(1),$(dir $(2))),$(notdir $(2)))
 gb_HelpTranslateTarget__get_any_translated_target = $(abspath $(call gb_HelpTranslatePartTarget_get_translated_target,,$(1)))

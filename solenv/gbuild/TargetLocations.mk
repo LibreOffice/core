@@ -99,6 +99,7 @@ gb_HelpTarget_workdir := $(WORKDIR)/HelpTarget
 gb_HelpTranslatePartTarget_get_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/done
 gb_HelpTranslatePartTarget_get_translated_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/$(2).xhp
 gb_HelpTranslatePartTarget_get_workdir = $(WORKDIR)/HelpTranslatePartTarget/$(1)
+gb_HelpTranslatePartTarget_workdir := $(WORKDIR)/HelpTranslatePartTarget
 gb_HelpTranslateTarget_get_target = $(WORKDIR)/HelpTranslateTarget/$(1).done
 gb_HelpTreeTarget_get_target = $(WORKDIR)/HelpTreeTarget/$(1).tree
 gb_InstallModule_get_filelist = $(call gb_InstallModuleTarget_get_filelist,$(1))
