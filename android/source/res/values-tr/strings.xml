@@ -18,7 +18,7 @@
     <string name="default_document_name">adsız</string>
     <string name="browser_app_name">LibreOffice Tarayıcı</string>
     <string name="menu_search">Ara</string>
-    <string name="search_not_found">Söz dizimi bulunamadı.</string>
+    <string name="search_not_found">Anahtar kelime bulunamadı</string>
     <string name="menu_preferences">Seçenekler</string>
     <string name="file_icon_desc">dosya_simgesi</string>
     <string name="title_recents">Son açılan dosyalar</string>

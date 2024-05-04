@@ -6,7 +6,7 @@
     <string name="printing_not_supported">El dispositivo no admite la impresión</string>
     <string name="app_name">Visor de LibreOffice</string>
     <string name="app_name_settings">Configuración del visor de LibreOffice</string>
-    <string name="app_about_name"><b>«Beta» del visor de LibreOffice</b></string>
+    <string name="app_about_name"><b>Beta del Visor de LibreOffice</b></string>
     <string name="app_version">Versión: %1$s&lt;br&gt;Id. de montaje: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
     <string name="app_description">Esta aplicación es un visor de documentos basado en LibreOffice.</string>
     <string name="app_credits">https://es.libreoffice.org</string>
