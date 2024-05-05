@@ -117,7 +117,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Change the basic fonts for the predefined template or current document per Tools ▸ Options ▸ %PRODUCTNAME Writer ▸ Basic Fonts."), "modules/swriter/ui/optfonttabpage/OptFontTabPage", "", swriter}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/optionen/01040300.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to find words containing more than 10 characters? Edit ▸ Find and Replace ▸ Search ▸ [a-z]{10,} ▸ Other Options ▸ check Regular expressions."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Open a CSV file as a new sheet in the current spreadsheet via Sheet ▸ Sheet from file."), "", "", scalc},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can continue writing with the default formatting attributes after manually applying bold, italic or underline by pressing %MOD1+Shift+X."), "", "", swriter},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can continue writing with the default formatting attributes after manually applying bold, italic or underline by pressing %MOD1+M."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use %MOD1+%MOD2+Shift+V to paste the contents of the clipboard as unformatted text."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Customize footnote appearance with Tools ▸ Footnote/Endnote Settings…"), ".uno:FootnoteDialog", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "With Slide Show ▸ Custom Slide Show, reorder and pick slides to fit a slideshow to the needs of your viewers."), "", "", simpress},
