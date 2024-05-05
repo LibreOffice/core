@@ -522,6 +522,7 @@ define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration: gbuildtojson $(if $(filter MACOSX,$(OS_FOR_BUILD)),python3.allbuild)
 	cd $(SRCDIR) && \
 		$(if $(filter MACOSX,$(OS_FOR_BUILD)),PATH="$(INSTROOT_FOR_BUILD)/Frameworks/LibreOfficePython.framework/Versions/Current/bin:$(PATH)") \
+		$(if $(filter WNT,$(OS_FOR_BUILD)$(PYTHON_FOR_BUILD)),$(INSTROOT_FOR_BUILD)/program/python.exe) \
 		bin/gbuild-to-ide --ide $(1) --make $(MAKE)
 
 endef
