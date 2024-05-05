@@ -286,7 +286,8 @@ compat::optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
     }
 
     auto calleeExpr = callExpr->getCallee();
-    if (isa<CXXDependentScopeMemberExpr>(calleeExpr) || isa<UnresolvedLookupExpr>(calleeExpr))
+    if (isa<CXXDependentScopeMemberExpr>(calleeExpr) || isa<UnresolvedLookupExpr>(calleeExpr)
+        || isa<UnresolvedMemberExpr>(calleeExpr))
     {
         m_CannotFix.back() = true;
         return true;
