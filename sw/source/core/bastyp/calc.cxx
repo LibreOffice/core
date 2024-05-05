@@ -124,12 +124,8 @@ static int OperatorCompare( const void *pFirst, const void *pSecond)
     int nRet = 0;
     if( CALC_NAME == static_cast<const CalcOp*>(pFirst)->eOp )
     {
-        if( CALC_NAME == static_cast<const CalcOp*>(pSecond)->eOp )
-            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
-                    static_cast<const CalcOp*>(pSecond)->aName );
-        else
-            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
-                     static_cast<const CalcOp*>(pSecond)->aName );
+        nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
+                static_cast<const CalcOp*>(pSecond)->aName );
     }
     else
     {
