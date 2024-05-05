@@ -62,24 +62,24 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
-constexpr OUString BASICFORMAT_GENERALNUMBER = u"General Number"_ustr;
-constexpr OUString BASICFORMAT_CURRENCY = u"Currency"_ustr;
-constexpr OUString BASICFORMAT_FIXED = u"Fixed"_ustr;
-constexpr OUString BASICFORMAT_STANDARD = u"Standard"_ustr;
-constexpr OUString BASICFORMAT_PERCENT = u"Percent"_ustr;
-constexpr OUString BASICFORMAT_SCIENTIFIC = u"Scientific"_ustr;
-constexpr OUString BASICFORMAT_YESNO = u"Yes/No"_ustr;
-constexpr OUString BASICFORMAT_TRUEFALSE = u"True/False"_ustr;
-constexpr OUString BASICFORMAT_ONOFF = u"On/Off"_ustr;
+constexpr std::u16string_view BASICFORMAT_GENERALNUMBER = u"General Number";
+constexpr std::u16string_view BASICFORMAT_CURRENCY = u"Currency";
+constexpr std::u16string_view BASICFORMAT_FIXED = u"Fixed";
+constexpr std::u16string_view BASICFORMAT_STANDARD = u"Standard";
+constexpr std::u16string_view BASICFORMAT_PERCENT = u"Percent";
+constexpr std::u16string_view BASICFORMAT_SCIENTIFIC = u"Scientific";
+constexpr std::u16string_view BASICFORMAT_YESNO = u"Yes/No";
+constexpr std::u16string_view BASICFORMAT_TRUEFALSE = u"True/False";
+constexpr std::u16string_view BASICFORMAT_ONOFF = u"On/Off";
 
 // Comment: Visual-Basic has a maximum of 12 positions after the
 //          decimal point for floating-point-numbers.
 // all format-strings are compatible to Visual-Basic:
-constexpr OUStringLiteral GENERALNUMBER_FORMAT = u"0.############";
-constexpr OUStringLiteral FIXED_FORMAT = u"0.00";
-constexpr OUStringLiteral STANDARD_FORMAT = u"@0.00";
-constexpr OUStringLiteral PERCENT_FORMAT = u"0.00%";
-constexpr OUStringLiteral SCIENTIFIC_FORMAT = u"#.00E+00";
+constexpr OUString GENERALNUMBER_FORMAT = u"0.############"_ustr;
+constexpr OUString FIXED_FORMAT = u"0.00"_ustr;
+constexpr OUString STANDARD_FORMAT = u"@0.00"_ustr;
+constexpr OUString PERCENT_FORMAT = u"0.00%"_ustr;
+constexpr OUString SCIENTIFIC_FORMAT = u"#.00E+00"_ustr;
 // Comment: the character @ means that thousand-separators shall
 //          be generated. That's a StarBasic 'extension'.
 
