@@ -65,7 +65,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long*
         *nActions = pRXAct->getAccessibleActionCount();
         return S_OK;
     }
-    *nActions = 0;
+    if( nActions != nullptr )
+        *nActions = 0;
 
     return S_OK;
 

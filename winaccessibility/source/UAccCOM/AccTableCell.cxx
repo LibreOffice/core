@@ -109,6 +109,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnHeaderCells(IUnknown*
     const sal_Int32 nCount = xHeaders->getAccessibleRowCount();
     *pColumnHeaderCellCount = nCount;
     *cellAccessibles = static_cast<IUnknown**>(CoTaskMemAlloc(nCount * sizeof(IUnknown*)));
+    assert(*cellAccessibles && "Don't handle OOM conditions");
     sal_Int32 nCol = 0;
     get_columnIndex(&nCol);
     for (sal_Int32 nRow = 0; nRow < nCount; nRow++)
@@ -196,6 +197,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowHeaderCells(IUnknown*** 
     const sal_Int32 nCount = xHeaders->getAccessibleColumnCount();
     *pRowHeaderCellCount = nCount;
     *cellAccessibles = static_cast<IUnknown**>(CoTaskMemAlloc(nCount * sizeof(IUnknown*)));
+    assert(*cellAccessibles && "Don't handle OOM conditions");
     sal_Int32 nRow = 0;
     get_rowIndex(&nRow);
     for (sal_Int32 nCol = 0; nCol < nCount; nCol++)

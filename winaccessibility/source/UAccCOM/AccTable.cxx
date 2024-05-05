@@ -987,6 +987,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
 
     *nChildren = nChildCount;
     *children = static_cast<long*>(CoTaskMemAlloc(nChildCount * sizeof(long)));
+    assert(*children && "Don't handle OOM conditions");
 
     for( sal_Int64 i = 0; i< nChildCount; i++)
     {
@@ -1049,6 +1050,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedCells(IUnknown * * * ce
     *nSelectedCells = nSelected;
 
     *cells = static_cast<IUnknown**>(CoTaskMemAlloc(nSelected * sizeof(IUnknown*)));
+    assert(*cells && "Don't handle OOM conditions");
 
     for (sal_Int64 i = 0; i < nSelected; i++)
     {
