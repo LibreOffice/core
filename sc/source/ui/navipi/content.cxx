@@ -1499,7 +1499,7 @@ void ScContentTree::SelectEntryByName(const ScContentId nRoot, std::u16string_vi
 {
     weld::TreeIter* pParent = m_aRootNodes[nRoot].get();
 
-    if (pParent || !m_xTreeView->iter_has_child(*pParent))
+    if (!pParent || !m_xTreeView->iter_has_child(*pParent))
         return;
 
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pParent));
