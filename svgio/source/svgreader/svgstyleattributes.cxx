@@ -1294,7 +1294,8 @@ namespace svgio::svgreader
             maDominantBaseline(DominantBaseline::Auto),
             maResolvingParent(33, 0),
             mbStrokeDasharraySet(false),
-            mbContextStroke(false)
+            mbContextStroke(false),
+            maContextStroke(nullptr)
         {
         }
 
