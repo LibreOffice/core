@@ -119,22 +119,22 @@ const sal_Int32 coContFlags =
         & ~i18n::KParseTokens::IGNORE_LEADING_WS;
 
 extern "C" {
-static int OperatorCompare( const void *pFirst, const void *pSecond)
+static int OperatorCompare(const void *pA, const void *pB)
 {
+    const CalcOp *pFirst = static_cast<const CalcOp*>(pA);
+    const CalcOp *pSecond = static_cast<const CalcOp*>(pB);
+
     int nRet = 0;
-    if( CALC_NAME == static_cast<const CalcOp*>(pFirst)->eOp )
+    if( CALC_NAME == pFirst->eOp )
     {
-        nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
-                static_cast<const CalcOp*>(pSecond)->aName );
+        nRet = pFirst->aName.compareTo(pSecond->aName );
     }
     else
     {
-        if( CALC_NAME == static_cast<const CalcOp*>(pSecond)->eOp )
-            nRet = -1 * static_cast<const CalcOp*>(pSecond)->aName.compareTo(
-                        static_cast<const CalcOp*>(pFirst)->aName );
+        if( CALC_NAME == pSecond->eOp )
+            nRet = -1 * pSecond->aName.compareTo(pFirst->aName);
         else
-            nRet = static_cast<const CalcOp*>(pFirst)->aName.compareTo(
-                     static_cast<const CalcOp*>(pSecond)->aName );
+            nRet = pFirst->aName.compareTo(pSecond->aName);
     }
     return nRet;
 }
