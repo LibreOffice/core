@@ -9,7 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,winaccessibility/ia2/idl))
 
-iaccessible2_DIR := $(call gb_UnpackedTarball_get_dir,IAccessible2)
+iaccessible2_DIR := $(gb_UnpackedTarball_workdir)/IAccessible2
 wina11y_COMIDLDIR := $(gb_CustomTarget_workdir)/winaccessibility/ia2/idl
 wina11y_SOURCE := $(SRCDIR)/winaccessibility/source/UAccCOMIDL
 

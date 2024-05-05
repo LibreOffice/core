@@ -25,12 +25,12 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			$(if $(verbose),-v,-q) \
 			-f build.xml \
 			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-			-Dlibbase.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libbase)/dist/libbase-$(LIBBASE_VERSION).jar \
-			-Dlibformula.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libformula)/dist/libformula-$(LIBFORMULA_VERSION).jar \
-			-Dliblayout.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_liblayout)/build/lib/liblayout.jar \
-			-Dlibloader.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)/dist/libloader-$(LIBLOADER_VERSION).jar \
-			-Dlibserializer.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libserializer)/dist/libserializer-$(LIBBASE_VERSION).jar \
-			-Dlibxml.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libxml)/dist/libxml-$(LIBXML_VERSION).jar \
+			-Dlibbase.jar=$(gb_UnpackedTarball_workdir)/jfreereport_libbase/dist/libbase-$(LIBBASE_VERSION).jar \
+			-Dlibformula.jar=$(gb_UnpackedTarball_workdir)/jfreereport_libformula/dist/libformula-$(LIBFORMULA_VERSION).jar \
+			-Dliblayout.jar=$(gb_UnpackedTarball_workdir)/jfreereport_liblayout/build/lib/liblayout.jar \
+			-Dlibloader.jar=$(gb_UnpackedTarball_workdir)/jfreereport_libloader/dist/libloader-$(LIBLOADER_VERSION).jar \
+			-Dlibserializer.jar=$(gb_UnpackedTarball_workdir)/jfreereport_libserializer/dist/libserializer-$(LIBBASE_VERSION).jar \
+			-Dlibxml.jar=$(gb_UnpackedTarball_workdir)/jfreereport_libxml/dist/libxml-$(LIBXML_VERSION).jar \
 			-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
 			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 			$(if $(debug),-Dbuild.debug="on") jar \

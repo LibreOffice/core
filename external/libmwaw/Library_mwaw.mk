@@ -20,7 +20,7 @@ $(eval $(call gb_Library_set_warnings_disabled,mwaw))
 $(eval $(call gb_Library_set_precompiled_header,mwaw,external/libmwaw/inc/pch/precompiled_mwaw))
 
 $(eval $(call gb_Library_set_include,mwaw,\
-    -I$(call gb_UnpackedTarball_get_dir,libmwaw)/inc \
+    -I$(gb_UnpackedTarball_workdir)/libmwaw/inc \
     $$(INCLUDE) \
 ))
 

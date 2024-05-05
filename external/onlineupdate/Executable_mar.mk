@@ -12,10 +12,10 @@ $(eval $(call gb_Executable_Executable,mar))
 $(eval $(call gb_Executable_use_unpacked,mar,onlineupdate))
 
 $(eval $(call gb_Executable_set_include,mar,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/src/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/verify/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/sign/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/src/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/verify/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/sign/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
 	$$(INCLUDE) \
 ))
 

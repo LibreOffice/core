@@ -14,17 +14,17 @@ $(eval $(call gb_Executable_use_unpacked,update_service,onlineupdate))
 $(eval $(call gb_Executable_set_targettype_gui,update_service,YES))
 
 $(eval $(call gb_Executable_set_include,update_service,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/inc \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/src/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/verify/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/sign/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/common/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/toolkit/mozapps/update/common \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/toolkit/xre \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/xpcom/base \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/xpcom/string \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/inc \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/src/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/verify/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/sign/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/common/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/toolkit/mozapps/update/common \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/toolkit/xre \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/xpcom/base \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/xpcom/string \
 	$$(INCLUDE) \
 ))
 

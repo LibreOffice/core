@@ -12,13 +12,13 @@ $(eval $(call gb_Executable_Executable,test_updater_dialog))
 $(eval $(call gb_Executable_use_unpacked,test_updater_dialog,onlineupdate))
 
 $(eval $(call gb_Executable_set_include,test_updater_dialog,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/inc \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/common \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/updater/xpcom/glue \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/updater \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/toolkit/mozapps/update/common \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/inc \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/common \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/updater/xpcom/glue \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/updater \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/toolkit/mozapps/update/common \
 	$$(INCLUDE) \
 	$(if $(filter-out WNT,$(OS)),$$(GTK3_CFLAGS) ) \
 ))

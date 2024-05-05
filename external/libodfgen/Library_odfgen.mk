@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_externals,odfgen,\
 $(eval $(call gb_Library_set_warnings_disabled,odfgen))
 
 $(eval $(call gb_Library_set_include,odfgen,\
-    -I$(call gb_UnpackedTarball_get_dir,libodfgen)/inc \
+    -I$(gb_UnpackedTarball_workdir)/libodfgen/inc \
     $$(INCLUDE) \
 ))
 

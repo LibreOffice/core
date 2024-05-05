@@ -30,10 +30,10 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 $(LIBXML_LIBS)" \
-		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
-		RASQAL_LIBS="-L$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs -lrasqal" \
+		RAPTOR2_CFLAGS="-I$(gb_UnpackedTarball_workdir)/raptor/src" \
+		RAPTOR2_LIBS="-L$(gb_UnpackedTarball_workdir)/raptor/src/.libs -lraptor2 $(LIBXML_LIBS)" \
+		RASQAL_CFLAGS="-I$(gb_UnpackedTarball_workdir)/rasqal/src" \
+		RASQAL_LIBS="-L$(gb_UnpackedTarball_workdir)/rasqal/src/.libs -lrasqal" \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			--disable-modular \
 			--without-threads \

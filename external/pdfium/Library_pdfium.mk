@@ -16,10 +16,10 @@ $(eval $(call gb_Library_set_warnings_disabled,pdfium))
 $(eval $(call gb_Library_set_precompiled_header,pdfium,external/pdfium/inc/pch/precompiled_pdfium))
 
 $(eval $(call gb_Library_set_include,pdfium,\
-    -I$(call gb_UnpackedTarball_get_dir,pdfium) \
-    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party \
-    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/agg23 \
-    $(if $(filter TRUE,$(SYSTEM_ABSEIL)),$(ABSEIL_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/abseil-cpp) \
+    -I$(gb_UnpackedTarball_workdir)/pdfium \
+    -I$(gb_UnpackedTarball_workdir)/pdfium/third_party \
+    -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/agg23 \
+    $(if $(filter TRUE,$(SYSTEM_ABSEIL)),$(ABSEIL_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/abseil-cpp) \
     $(if $(filter TRUE,$(SYSTEM_OPENJPEG2)),$(OPENJPEG2_CFLAGS)) \
     $$(INCLUDE) \
 ))
@@ -603,8 +603,8 @@ $(eval $(call gb_Library_add_defs,pdfium,\
 
 else
 $(eval $(call gb_Library_set_include,pdfium,\
-    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/freetype/include/ \
-    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/freetype/src/include/ \
+    -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/freetype/include/ \
+    -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/freetype/src/include/ \
     $$(INCLUDE) \
 ))
 

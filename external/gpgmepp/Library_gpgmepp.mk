@@ -22,18 +22,18 @@ $(eval $(call gb_LinkTarget_use_external_project,\
 $(eval $(call gb_Library_set_warnings_disabled,gpgmepp))
 
 $(eval $(call gb_Library_set_include,gpgmepp,\
-    -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/lang/cpp/src \
-    -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/lang/cpp/src/interfaces \
-    -I$(call gb_UnpackedTarball_get_dir,gpgmepp) \
-    -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/src \
-    -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/conf \
-    -I$(call gb_UnpackedTarball_get_dir,libgpg-error)/src \
+    -I$(gb_UnpackedTarball_workdir)/gpgmepp/lang/cpp/src \
+    -I$(gb_UnpackedTarball_workdir)/gpgmepp/lang/cpp/src/interfaces \
+    -I$(gb_UnpackedTarball_workdir)/gpgmepp \
+    -I$(gb_UnpackedTarball_workdir)/gpgmepp/src \
+    -I$(gb_UnpackedTarball_workdir)/gpgmepp/conf \
+    -I$(gb_UnpackedTarball_workdir)/libgpg-error/src \
     $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_libs,gpgmepp,\
        ws2_32.lib shell32.lib \
-       -LIBPATH:$(call gb_UnpackedTarball_get_dir,gpgmepp)/src/.libs libgpgme.lib \
+       -LIBPATH:$(gb_UnpackedTarball_workdir)/gpgmepp/src/.libs libgpgme.lib \
 ))
 
 $(eval $(call gb_Library_add_defs,gpgmepp,\

@@ -19,7 +19,7 @@ $(eval $(call gb_StaticLibrary_add_defs,boost_locale,\
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,boost_locale, \
-    -I$(call gb_UnpackedTarball_get_dir,boost)/libs/locale/src \
+    -I$(gb_UnpackedTarball_workdir)/boost/libs/locale/src \
     $$(INCLUDE) \
 ))
 

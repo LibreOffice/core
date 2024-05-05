@@ -12,8 +12,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libmarverify))
 $(eval $(call gb_StaticLibrary_use_unpacked,libmarverify,onlineupdate))
 
 $(eval $(call gb_StaticLibrary_set_include,libmarverify,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/src/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/src/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
 	$$(INCLUDE) \
 ))
 

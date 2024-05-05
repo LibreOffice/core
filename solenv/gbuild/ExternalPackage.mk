@@ -58,7 +58,7 @@ endef
 #
 # gb_ExternalPackage_ExternalPackage_internal name unpacked
 define gb_ExternalPackage_ExternalPackage_internal
-$(call gb_Package_Package_internal,$(1),$(call gb_UnpackedTarball_get_dir,$(2)))
+$(call gb_Package_Package_internal,$(1),$(gb_UnpackedTarball_workdir)/$(2))
 $(call gb_Package_use_unpacked,$(1),$(2))
 
 $(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(1))
@@ -86,7 +86,7 @@ endef
 #
 # gb_ExternalPackage_mark_generated_file package file
 define gb_ExternalPackage_mark_generated_file
-$(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(2) : \
+$(gb_UnpackedTarball_workdir)/$(gb_ExternalPackage_UNPACKED_$(1))/$(2) : \
 		$(call gb_ExternalProject_get_target,$(gb_ExternalPackage_PROJECT_$(1)))
 $(if $(suffix $(2)),\
 	$(call gb_UnpackedTarbal__ensure_pattern_rule,$(gb_ExternalPackage_UNPACKED_$(1)),$(suffix $(2))),\

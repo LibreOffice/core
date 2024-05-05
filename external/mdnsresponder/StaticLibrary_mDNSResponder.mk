@@ -14,7 +14,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,mDNSResponder))
 $(eval $(call gb_StaticLibrary_use_unpacked,mDNSResponder,mDNSResponder))
 
 $(eval $(call gb_StaticLibrary_set_include,mDNSResponder,\
-	-I$(call gb_UnpackedTarball_get_dir,mDNSResponder)/mDNSShared \
+	-I$(gb_UnpackedTarball_workdir)/mDNSResponder/mDNSShared \
 	$$(INCLUDE) \
 ))
 

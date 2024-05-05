@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,IAccessible2,\
 $(call gb_ExternalProject_get_state_target,IAccessible2,build) :
 	$(call gb_Trace_StartRange,IAccessible2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		cd $(call gb_UnpackedTarball_get_dir,IAccessible2)\
+		cd $(gb_UnpackedTarball_workdir)/IAccessible2\
 		&& ./concatidl.sh\
 	)
 	$(call gb_Trace_EndRange,IAccessible2,EXTERNAL)

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_GeneratedPackage_GeneratedPackage,python3,$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO))
+$(eval $(call gb_GeneratedPackage_GeneratedPackage,python3,$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO))
 
 $(eval $(call gb_GeneratedPackage_use_unpacked,python3,python3))
 

@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js crypto=mscng xslt=no iconv=no static=no \
-			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
+			lib=$(gb_UnpackedTarball_workdir)/libxml2/win32/bin.msvc \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes cruntime=/MDd) \
 			cflags="$(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
 		&& nmake \
@@ -57,13 +57,13 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 				--without-openssl \
 				$(if $(SYSTEM_NSS),, \
 					$(if $(filter MACOSX,$(OS_FOR_BUILD)),--disable-pkgconfig) \
-					NSPR_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" NSPR_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lnspr4" \
-					NSS_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss" NSS_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lsmime3 -lnss3 -lnssutil3" \
+					NSPR_CFLAGS="-I$(gb_UnpackedTarball_workdir)/nss/dist/out/include" NSPR_LIBS="-L$(gb_UnpackedTarball_workdir)/nss/dist/out/lib -lnspr4" \
+					NSS_CFLAGS="-I$(gb_UnpackedTarball_workdir)/nss/dist/public/nss" NSS_LIBS="-L$(gb_UnpackedTarball_workdir)/nss/dist/out/lib -lsmime3 -lnss3 -lnssutil3" \
 				), \
 				$(if $(ENABLE_OPENSSL), \
 					$(if $(SYSTEM_OPENSSL),, \
-						OPENSSL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
-						OPENSSL_LIBS="-L$(call gb_UnpackedTarball_get_dir,openssl) -lcrypto -lssl" \
+						OPENSSL_CFLAGS="-I$(gb_UnpackedTarball_workdir)/openssl/include" \
+						OPENSSL_LIBS="-L$(gb_UnpackedTarball_workdir)/openssl -lcrypto -lssl" \
 					), \
 					--without-openssl) \
 			) \

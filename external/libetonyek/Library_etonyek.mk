@@ -26,9 +26,9 @@ $(eval $(call gb_Library_set_warnings_disabled,etonyek))
 $(eval $(call gb_Library_set_precompiled_header,etonyek,external/libetonyek/inc/pch/precompiled_etonyek))
 
 $(eval $(call gb_Library_set_include,etonyek,\
-	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/inc \
-	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib \
-	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/contexts \
+	-I$(gb_UnpackedTarball_workdir)/libetonyek/inc \
+	-I$(gb_UnpackedTarball_workdir)/libetonyek/src/lib \
+	-I$(gb_UnpackedTarball_workdir)/libetonyek/src/lib/contexts \
 	$$(INCLUDE) \
 ))
 

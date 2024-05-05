@@ -67,8 +67,8 @@ $(eval $(call gb_Library_set_include,jpipe, \
     -I$(SRCDIR)/sal/osl/unx \
     -I$(SRCDIR)/sal/rtl \
     -I$(SRCDIR)/sal/textenc \
-    -I$(call gb_UnpackedTarball_get_dir,dtoa) \
-    -I$(call gb_UnpackedTarball_get_dir,dtoa/include) \
+    -I$(gb_UnpackedTarball_workdir)/dtoa \
+    -I$(gb_UnpackedTarball_workdir)/dtoa/include \
 ))
 
 $(eval $(call gb_Library_use_externals,jpipe, \

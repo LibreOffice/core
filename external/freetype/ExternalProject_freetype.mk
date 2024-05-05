@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-bzip2 \
 			--without-harfbuzz \
 			--without-png \
-			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
+			--prefix=$(gb_UnpackedTarball_workdir)/freetype/instdir \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 			CFLAGS="$(CFLAGS) \

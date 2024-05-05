@@ -24,17 +24,17 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
     $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Trace_StartRange,lxml,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export PYTHONPATH=$${PYTHONPATH:+$$PYTHONPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install && \
+		export PYTHONPATH=$${PYTHONPATH:+$$PYTHONPATH:}$(gb_UnpackedTarball_workdir)/lxml/install && \
 		$(if $(PYTHON_FOR_BUILD), \
 			unset MACOSX_DEPLOYMENT_TARGET && , \
-			CFLAGS="$$CFLAGS -I$(call gb_UnpackedTarball_get_dir,python3)" && \
-			CFLAGS="$$CFLAGS -I$(call gb_UnpackedTarball_get_dir,python3)/Include" && \
-			LDFLAGS="$$LDFLAGS -L$(call gb_UnpackedTarball_get_dir,python3)" && \
-			_PYTHON_PROJECT_BASE=$(call gb_UnpackedTarball_get_dir,python3) && \
+			CFLAGS="$$CFLAGS -I$(gb_UnpackedTarball_workdir)/python3" && \
+			CFLAGS="$$CFLAGS -I$(gb_UnpackedTarball_workdir)/python3/Include" && \
+			LDFLAGS="$$LDFLAGS -L$(gb_UnpackedTarball_workdir)/python3" && \
+			_PYTHON_PROJECT_BASE=$(gb_UnpackedTarball_workdir)/python3 && \
 			export CFLAGS LDFLAGS _PYTHON_PROJECT_BASE && ) \
 		$(lxml_PYTHON) setup.py build \
-			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
-			$(if $(SYSTEM_LIBXSLT),,--with-xslt-config=$(call gb_UnpackedTarball_get_dir,libxslt)/xslt-config) && \
+			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(gb_UnpackedTarball_workdir)/libxml2/xml2-config) \
+			$(if $(SYSTEM_LIBXSLT),,--with-xslt-config=$(gb_UnpackedTarball_workdir)/libxslt/xslt-config) && \
 		rm -fr install && \
 		mkdir install && \
 		$(lxml_PYTHON) setup.py install \

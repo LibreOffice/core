@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,mariadb-connector-c,mariadb-connecto
 
 $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,mariadb-connector-c)/include \
+	-I$(gb_UnpackedTarball_workdir)/mariadb-connector-c/include \
 ))
 
 # This is needed for MSVC 2008: it somehow finds a dlopen somewhere
@@ -27,7 +27,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-D_TIMESPEC_DEFINED -DHAVE_STRTOULL -DHAVE_WINCRYPT))
 $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,mariadb-connector-c)/win-iconv \
+	-I$(gb_UnpackedTarball_workdir)/mariadb-connector-c/win-iconv \
 ))
 else
 $(eval $(call gb_StaticLibrary_use_external,mariadb-connector-c,openssl_headers))

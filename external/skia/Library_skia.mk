@@ -124,10 +124,10 @@ $(eval $(call gb_Library_use_libraries,skia,\
 
 $(eval $(call gb_Library_set_include,skia,\
     $$(INCLUDE) \
-    -I$(call gb_UnpackedTarball_get_dir,skia) \
-    -I$(call gb_UnpackedTarball_get_dir,skia)/modules/skcms/ \
-    -I$(call gb_UnpackedTarball_get_dir,skia)/third_party/vulkanmemoryallocator/ \
-    -I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan/ \
+    -I$(gb_UnpackedTarball_workdir)/skia \
+    -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/include/third_party/vulkan/ \
     -I$(SRCDIR)/external/skia/inc/ \
 ))
 

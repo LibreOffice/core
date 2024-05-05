@@ -14,7 +14,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,libjpeg-turbo,libjpeg-turbo))
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,libjpeg-turbo))
 
 $(eval $(call gb_StaticLibrary_set_include,libjpeg-turbo,\
-    -I$(call gb_UnpackedTarball_get_dir,libjpeg-turbo) \
+    -I$(gb_UnpackedTarball_workdir)/libjpeg-turbo \
     $$(INCLUDE) \
 ))
 
@@ -93,8 +93,8 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
 ifneq ($(NASM),)
 
 $(eval $(call gb_StaticLibrary_add_nasmflags,libjpeg-turbo,\
-	-I$(call gb_UnpackedTarball_get_dir,libjpeg-turbo)/simd/nasm/ \
-	-I$(dir $(call gb_UnpackedTarball_get_dir,libjpeg-turbo)/$(1)) \
+	-I$(gb_UnpackedTarball_workdir)/libjpeg-turbo/simd/nasm/ \
+	-I$(dir $(gb_UnpackedTarball_workdir)/libjpeg-turbo/$(1)) \
 ))
 
 ifeq ($(CPUNAME),X86_64)

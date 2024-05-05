@@ -26,8 +26,8 @@ $(eval $(call gb_StaticLibrary_add_defs,libcmis, \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,libcmis, \
-    -I$(call gb_UnpackedTarball_get_dir,libcmis/inc) \
-    -I$(call gb_UnpackedTarball_get_dir,libcmis/src/libcmis) \
+    -I$(gb_UnpackedTarball_workdir)/libcmis/inc \
+    -I$(gb_UnpackedTarball_workdir)/libcmis/src/libcmis \
     $$(INCLUDE) \
 ))
 

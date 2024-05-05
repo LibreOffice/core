@@ -16,8 +16,8 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,box2d))
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,box2d,cpp))
 
 $(eval $(call gb_StaticLibrary_set_include,box2d,\
-    -I$(call gb_UnpackedTarball_get_dir,box2d/include/)\
-    -I$(call gb_UnpackedTarball_get_dir,box2d/src/)\
+    -I$(gb_UnpackedTarball_workdir)/box2d/include/\
+    -I$(gb_UnpackedTarball_workdir)/box2d/src/\
     $$(INCLUDE)\
 ))
 

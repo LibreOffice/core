@@ -20,7 +20,7 @@ $(eval $(call gb_StaticLibrary_use_external,zxing,icu_headers))
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,zxing))
 
 $(eval $(call gb_StaticLibrary_set_include,zxing,\
-	-I$(call gb_UnpackedTarball_get_dir,zxing/core/src/) \
+	-I$(gb_UnpackedTarball_workdir)/zxing/core/src/ \
 	$$(INCLUDE) \
 ))
 

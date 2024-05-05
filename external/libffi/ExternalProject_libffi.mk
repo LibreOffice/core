@@ -37,13 +37,13 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 				--enable-portable-binary) \
 			$(if $(filter WNT,$(OS)), \
 			    --disable-static \
-			    CC="$(call gb_UnpackedTarball_get_dir,libffi)/msvcc.sh -m$(libffi_WIN_PLATFORM)" \
-			    CXX="$(call gb_UnpackedTarball_get_dir,libffi)/msvcc.sh -m$(libffi_WIN_PLATFORM)" \
+			    CC="$(gb_UnpackedTarball_workdir)/libffi/msvcc.sh -m$(libffi_WIN_PLATFORM)" \
+			    CXX="$(gb_UnpackedTarball_workdir)/libffi/msvcc.sh -m$(libffi_WIN_PLATFORM)" \
 				LD='link' \
 				CPP='cl -nologo -EP' \
 				CXXCPP='cl -nologo -EP' \
 				CPPFLAGS="-DFFI_BUILDING_DLL $(SOLARINC)") \
-			--prefix=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM) \
+			--prefix=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM) \
 			--disable-docs \
 		&& $(MAKE) \
 	)

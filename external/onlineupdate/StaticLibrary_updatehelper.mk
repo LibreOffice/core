@@ -12,14 +12,14 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,updatehelper))
 $(eval $(call gb_StaticLibrary_use_unpacked,updatehelper,onlineupdate))
 
 $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/inc/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/service \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/common \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/mfbt/double-conversion \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/toolkit/mozapps/update/common \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/xpcom/base \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/inc/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/service \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/common \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/mfbt/double-conversion \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/toolkit/mozapps/update/common \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/xpcom/base \
 	$$(INCLUDE) \
 ))
 

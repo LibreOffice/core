@@ -14,8 +14,8 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,breakpad))
 $(eval $(call gb_StaticLibrary_use_unpacked,breakpad,breakpad))
 
 $(eval $(call gb_StaticLibrary_set_include,breakpad,\
-    -I$(call gb_UnpackedTarball_get_dir,breakpad)/src \
-    -I$(call gb_UnpackedTarball_get_dir,breakpad)/src/client/windows \
+    -I$(gb_UnpackedTarball_workdir)/breakpad/src \
+    -I$(gb_UnpackedTarball_workdir)/breakpad/src/client/windows \
     $$(INCLUDE) \
 ))
 

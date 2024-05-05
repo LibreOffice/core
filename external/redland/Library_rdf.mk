@@ -10,7 +10,7 @@
 $(eval $(call gb_Library_Library,rdf))
 
 $(eval $(call gb_Library_set_include,rdf, \
-    -I$(call gb_UnpackedTarball_get_dir,redland)/src \
+    -I$(gb_UnpackedTarball_workdir)/redland/src \
     $$(INCLUDE) \
 ))
 

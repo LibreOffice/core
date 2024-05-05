@@ -18,8 +18,8 @@ $(eval $(call gb_Library_use_externals,wps,\
 $(eval $(call gb_Library_set_warnings_disabled,wps))
 
 $(eval $(call gb_Library_set_include,wps,\
-    -I$(call gb_UnpackedTarball_get_dir,libwps)/inc \
-    -I$(call gb_UnpackedTarball_get_dir,libwps)/src/lib \
+    -I$(gb_UnpackedTarball_workdir)/libwps/inc \
+    -I$(gb_UnpackedTarball_workdir)/libwps/src/lib \
     $$(INCLUDE) \
 ))
 

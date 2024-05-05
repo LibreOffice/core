@@ -22,12 +22,12 @@ $(call gb_ExternalProject_get_state_target,argon2,build):
 	$(call gb_Trace_StartRange,argon2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe vs2015/Argon2OptDll/Argon2OptDll.vcxproj \
-			/p:SolutionDir="$(call gb_UnpackedTarball_get_dir,argon2)/" \
+			/p:SolutionDir="$(gb_UnpackedTarball_workdir)/argon2/" \
 			$(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 		&& MSBuild.exe vs2015/Argon2OptTestCI/Argon2OptTestCI.vcxproj \
-			/p:SolutionDir="$(call gb_UnpackedTarball_get_dir,argon2)/" \
+			/p:SolutionDir="$(gb_UnpackedTarball_workdir)/argon2/" \
 			$(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \

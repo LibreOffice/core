@@ -24,8 +24,8 @@ $(eval $(call gb_Library_set_warnings_disabled,orcus-parser))
 $(eval $(call gb_Library_set_precompiled_header,orcus-parser,external/liborcus/inc/pch/precompiled_orcus-parser))
 
 $(eval $(call gb_Library_set_include,orcus-parser,\
-	-I$(call gb_UnpackedTarball_get_dir,liborcus)/include \
-	-I$(call gb_UnpackedTarball_get_dir,liborcus)/src/include \
+	-I$(gb_UnpackedTarball_workdir)/liborcus/include \
+	-I$(gb_UnpackedTarball_workdir)/liborcus/src/include \
 	$$(INCLUDE) \
 ))
 

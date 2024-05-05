@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-graphite2=yes \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
-			--libdir=$(call gb_UnpackedTarball_get_dir,harfbuzz/src/.libs) \
+			--libdir=$(gb_UnpackedTarball_workdir)/harfbuzz/src/.libs \
 			$(gb_CONFIGURE_PLATFORMS) \
 			CXXFLAGS=' \
 				$(if $(filter ANDROID,$(OS)),-DHB_NO_MMAP=1,) \

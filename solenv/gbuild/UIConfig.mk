@@ -98,7 +98,7 @@ endef
 gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
 
 ifneq ($(filter LXML,$(BUILD_TYPE)),)
-gb_UIConfig_LXML_PATH := PYTHONPATH=$${PYTHONPATH:+$$PYTHONPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install ;
+gb_UIConfig_LXML_PATH := PYTHONPATH=$${PYTHONPATH:+$$PYTHONPATH:}$(gb_UnpackedTarball_workdir)/lxml/install ;
 gb_UIConfig_LXML_TARGET := $(call gb_ExternalProject_get_target,lxml)
 endif
 gb_UIConfig_gla11y_SCRIPT := $(SRCDIR)/bin/gla11y

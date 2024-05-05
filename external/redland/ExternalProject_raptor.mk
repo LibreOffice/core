@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(SYSTEM_LIBXML),$(if $(filter-out MACOSX,$(OS)),--without-xml2-config),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
+			$(if $(SYSTEM_LIBXML),$(if $(filter-out MACOSX,$(OS)),--without-xml2-config),--with-xml2-config=$(gb_UnpackedTarball_workdir)/libxml2/xml2-config) \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,raptor,EXTERNAL)

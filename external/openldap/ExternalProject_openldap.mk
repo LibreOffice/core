@@ -26,7 +26,7 @@ endif
 
 openldap_LDFLAGS = $(call gb_ExternalProject_get_link_flags,openldap)
 ifeq ($(SYSTEM_OPENSSL),)
-openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,openssl)
+openldap_LDFLAGS += -L$(gb_UnpackedTarball_workdir)/openssl
 endif
 ifeq ($(OS),LINUX)
 openldap_LDFLAGS += -pthread
@@ -50,8 +50,8 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			$(if $(SYSTEM_OPENSSL), \
 				CPPFLAGS="$(CPPFLAGS) $(OPENSSL_CFLAGS)" CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(OPENSSL_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap)" LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS) $(OPENSSL_LIBS)" \
 				, \
-				CPPFLAGS="$(CPPFLAGS) -I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
-				CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap) -I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
+				CPPFLAGS="$(CPPFLAGS) -I$(gb_UnpackedTarball_workdir)/openssl/include" \
+				CFLAGS="$(CFLAGS) $(openldap_CFLAGS) $(call gb_ExternalProject_get_build_flags,openldap) -I$(gb_UnpackedTarball_workdir)/openssl/include" \
 			) \
 			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \

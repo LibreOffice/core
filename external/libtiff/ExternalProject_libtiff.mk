@@ -52,14 +52,14 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--without-x \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
-			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(call gb_UnpackedTarball_get_dir,zlib)") \
+			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(gb_UnpackedTarball_workdir)/zlib") \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
-			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(call gb_UnpackedTarball_get_dir,libjpeg-turbo)") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(gb_UnpackedTarball_workdir)/libjpeg-turbo") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
-			$(if $(SYSTEM_LIBWEBP),,--with-webp-include-dir="$(call gb_UnpackedTarball_get_dir,libwebp/src)") \
+			$(if $(SYSTEM_LIBWEBP),,--with-webp-include-dir="$(gb_UnpackedTarball_workdir)/libwebp/src") \
 			$(if $(SYSTEM_LIBWEBP),,$(if $(filter WNT,$(OS_FOR_BUILD)),\
-				--with-webp-lib-dir="$(call gb_UnpackedTarball_get_dir,libwebp)/output/lib/libwebp$(if $(MSVC_USE_DEBUG_RUNTIME),_debug)$(gb_StaticLibrary_PLAINEXT)", \
-				--with-webp-lib-dir="$(call gb_UnpackedTarball_get_dir,libwebp)/src/.libs")) \
+				--with-webp-lib-dir="$(gb_UnpackedTarball_workdir)/libwebp/output/lib/libwebp$(if $(MSVC_USE_DEBUG_RUNTIME),_debug)$(gb_StaticLibrary_PLAINEXT)", \
+				--with-webp-lib-dir="$(gb_UnpackedTarball_workdir)/libwebp/src/.libs")) \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff) $(gb_EMSCRIPTEN_LDFLAGS)" \
 			ac_cv_lib_z_inflateEnd=yes \

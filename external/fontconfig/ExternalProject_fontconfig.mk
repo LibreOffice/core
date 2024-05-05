@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--disable-silent-rules \
 			--with-pic \
 			$(if $(filter ANDROID,$(OS)),--with-arch=arm) \
-			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
+			--with-expat-includes=$(gb_UnpackedTarball_workdir)/expat/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter ANDROID,$(OS)), \

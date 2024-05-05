@@ -20,7 +20,7 @@ $(eval $(call gb_Library_use_externals,wpg,\
 $(eval $(call gb_Library_set_warnings_disabled,wpg))
 
 $(eval $(call gb_Library_set_include,wpg,\
-    -I$(call gb_UnpackedTarball_get_dir,libwpg)/inc \
+    -I$(gb_UnpackedTarball_workdir)/libwpg/inc \
     $$(INCLUDE) \
 ))
 

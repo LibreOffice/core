@@ -62,7 +62,7 @@ $(i18npool_BIDIR)/%.brk : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt \
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),BRK)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_ExternalExecutable_get_command,genbrk) \
-		$(if $(SYSTEM_ICU),,-i $(call gb_UnpackedTarball_get_dir,icu)/source/data/out/tmp) \
+		$(if $(SYSTEM_ICU),,-i $(gb_UnpackedTarball_workdir)/icu/source/data/out/tmp) \
 		-r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),BRK)
 

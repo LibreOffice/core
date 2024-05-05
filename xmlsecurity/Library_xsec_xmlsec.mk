@@ -22,7 +22,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 	-I$(SRCDIR)/xmlsecurity/source/gpg \
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
-	-I$(call gb_UnpackedTarball_get_dir,xmlsec/include) \
+	-I$(gb_UnpackedTarball_workdir)/xmlsec/include \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,xsec_xmlsec,\
@@ -93,8 +93,8 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/win32/binaries/libxmlsec-mscng.lib \
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/win32/binaries/libxmlsec.lib \
+	$(gb_UnpackedTarball_workdir)/xmlsec/win32/binaries/libxmlsec-mscng.lib \
+	$(gb_UnpackedTarball_workdir)/xmlsec/win32/binaries/libxmlsec.lib \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,xsec_xmlsec,\
@@ -132,7 +132,7 @@ else # !$(OS),WNT
 
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
+       $(gb_UnpackedTarball_workdir)/xmlsec/src/.libs/libxmlsec1.a \
 ))
 endif
 
@@ -140,7 +140,7 @@ ifeq ($(ENABLE_NSS),TRUE)
 
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-    $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
+    $(gb_UnpackedTarball_workdir)/xmlsec/src/nss/.libs/libxmlsec1-nss.a \
 ))
 endif
 

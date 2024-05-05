@@ -18,7 +18,7 @@ $(eval $(call gb_Library_use_externals,revenge,\
 $(eval $(call gb_Library_set_warnings_disabled,revenge))
 
 $(eval $(call gb_Library_set_include,revenge,\
-    -I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \
+    -I$(gb_UnpackedTarball_workdir)/librevenge/inc \
     $$(INCLUDE) \
 ))
 

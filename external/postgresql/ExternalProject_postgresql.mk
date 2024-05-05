@@ -43,17 +43,17 @@ endif
 
 ifeq ($(ENABLE_OPENSSL),TRUE)
 ifeq ($(SYSTEM_OPENSSL),)
-postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openssl)/include
-postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl) $(if $(filter $(OS),LINUX),-pthread)
+postgresql_CPPFLAGS += -I$(gb_UnpackedTarball_workdir)/openssl/include
+postgresql_LDFLAGS  += -L$(gb_UnpackedTarball_workdir)/openssl $(if $(filter $(OS),LINUX),-pthread)
 endif
 endif
 
 ifeq ($(SYSTEM_OPENLDAP),)
-postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openldap)/include
+postgresql_CPPFLAGS += -I$(gb_UnpackedTarball_workdir)/openldap/include
 postgresql_LDFLAGS  += \
-	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs \
-	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs \
-	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs \
+	-L$(gb_UnpackedTarball_workdir)/openldap/libraries/libldap_r/.libs \
+	-L$(gb_UnpackedTarball_workdir)/openldap/libraries/libldap/.libs \
+	-L$(gb_UnpackedTarball_workdir)/openldap/libraries/liblber/.libs \
 
 endif
 

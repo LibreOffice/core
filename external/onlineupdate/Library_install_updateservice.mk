@@ -12,7 +12,7 @@ $(eval $(call gb_Library_Library,install_updateservice))
 $(eval $(call gb_Library_use_unpacked,install_updateservice,onlineupdate))
 
 $(eval $(call gb_Library_set_include,install_updateservice, \
-    -I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/common \
+    -I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/update/common \
     $$(INCLUDE) \
 ))
 

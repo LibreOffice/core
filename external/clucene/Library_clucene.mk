@@ -16,10 +16,10 @@ $(eval $(call gb_Library_use_unpacked,clucene,clucene))
 $(eval $(call gb_Library_set_warnings_disabled,clucene))
 
 $(eval $(call gb_Library_set_include,clucene,\
-	-I$(call gb_UnpackedTarball_get_dir,clucene)/inc/internal \
-	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/core \
-	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/contribs-lib \
-	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/shared \
+	-I$(gb_UnpackedTarball_workdir)/clucene/inc/internal \
+	-I$(gb_UnpackedTarball_workdir)/clucene/src/core \
+	-I$(gb_UnpackedTarball_workdir)/clucene/src/contribs-lib \
+	-I$(gb_UnpackedTarball_workdir)/clucene/src/shared \
 	$$(INCLUDE) \
 ))
 

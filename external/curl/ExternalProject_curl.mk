@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--disable-tftp  \
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-secure-transport,\
-				$(if $(ENABLE_OPENSSL),--with-openssl$(if $(SYSTEM_OPENSSL),,="$(call gb_UnpackedTarball_get_dir,openssl)"))) \
+				$(if $(ENABLE_OPENSSL),--with-openssl$(if $(SYSTEM_OPENSSL),,="$(gb_UnpackedTarball_workdir)/openssl"))) \
 			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \

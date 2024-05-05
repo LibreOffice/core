@@ -57,8 +57,8 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		LIBS="$(ZLIB_LIBS)" \
 		$(if $(filter -fsanitize=%,$(LDFLAGS)),LDFLAGS="$(LDFLAGS) -fuse-ld=bfd") \
-		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman -pthread" \
-		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
+		pixman_CFLAGS="-I$(gb_UnpackedTarball_workdir)/pixman/pixman -pthread" \
+		pixman_LIBS="-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1 \
 			$(if $(filter LINUX,$(OS)),-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\\\$$\$$ORIGIN) \
 			$(if $(filter -fsanitize=%,$(CC)), \
@@ -66,8 +66,8 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			        -Wc$(COMMA)-rtlib=compiler-rt))" \
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
-		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
-		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
+		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(gb_UnpackedTarball_workdir)/freetype/include") \
+		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(gb_UnpackedTarball_workdir)/fontconfig") \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 		$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \

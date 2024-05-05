@@ -83,9 +83,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=$(ANDROID_API_LEVEL) ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_DIR) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION) ANDROID_PREFIX=$(HOST_PLATFORM) ANDROID_SYSROOT=$(ANDROID_NDK_DIR)/sysroot) \
 			NSS_DISABLE_GTESTS=1 \
 			nss_build_all \
-		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
+		&& rm -f $(gb_UnpackedTarball_workdir)/nss/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
-			&& chmod u+w $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dylib \
+			&& chmod u+w $(gb_UnpackedTarball_workdir)/nss/dist/out/lib/*.dylib \
 			&& $(PERL) \
 				$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 				$(EXTERNAL_WORKDIR)/dist/out/lib/libfreebl3.dylib \

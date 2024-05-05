@@ -35,9 +35,9 @@ $(eval $(call gb_Library_add_defs,rasqal,\
 ))
 
 $(eval $(call gb_Library_set_include,rasqal,\
-	-I$(call gb_UnpackedTarball_get_dir,rasqal)/libmtwist \
-	-I$(call gb_UnpackedTarball_get_dir,rasqal)/libsv \
-	-I$(call gb_UnpackedTarball_get_dir,rasqal)/src \
+	-I$(gb_UnpackedTarball_workdir)/rasqal/libmtwist \
+	-I$(gb_UnpackedTarball_workdir)/rasqal/libsv \
+	-I$(gb_UnpackedTarball_workdir)/rasqal/src \
 	$$(INCLUDE) \
 ))
 

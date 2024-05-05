@@ -12,9 +12,9 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libmar))
 $(eval $(call gb_StaticLibrary_use_unpacked,libmar,onlineupdate))
 
 $(eval $(call gb_StaticLibrary_set_include,libmar,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/libmar/src/ \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/include/onlineupdate \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/other-licenses/nsis/Contrib/CityHash/cityhash \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/source/libmar/src/ \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/include/onlineupdate \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/other-licenses/nsis/Contrib/CityHash/cityhash \
 	$$(INCLUDE) \
 ))
 

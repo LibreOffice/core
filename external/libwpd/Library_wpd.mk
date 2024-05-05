@@ -19,8 +19,8 @@ $(eval $(call gb_Library_use_externals,wpd,\
 $(eval $(call gb_Library_set_warnings_disabled,wpd))
 
 $(eval $(call gb_Library_set_include,wpd,\
-    -I$(call gb_UnpackedTarball_get_dir,libwpd)/inc \
-    -I$(call gb_UnpackedTarball_get_dir,libwpd)/src/lib \
+    -I$(gb_UnpackedTarball_workdir)/libwpd/inc \
+    -I$(gb_UnpackedTarball_workdir)/libwpd/src/lib \
     $$(INCLUDE) \
 ))
 

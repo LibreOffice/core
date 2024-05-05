@@ -19,7 +19,7 @@ $(eval $(call gb_StaticLibrary_add_defs,dtoa,\
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,dtoa))
 
 $(eval $(call gb_StaticLibrary_set_include,dtoa,\
-    -I$(call gb_UnpackedTarball_get_dir,dtoa/src/)\
+    -I$(gb_UnpackedTarball_workdir)/dtoa/src/\
     $$(INCLUDE)\
 ))
 

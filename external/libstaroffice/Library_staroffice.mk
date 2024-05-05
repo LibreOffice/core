@@ -20,8 +20,8 @@ $(eval $(call gb_Library_set_warnings_disabled,staroffice))
 $(eval $(call gb_Library_set_precompiled_header,staroffice,external/libstaroffice/inc/pch/precompiled_staroffice))
 
 $(eval $(call gb_Library_set_include,staroffice,\
-    -I$(call gb_UnpackedTarball_get_dir,libstaroffice)/inc \
-    -I$(call gb_UnpackedTarball_get_dir,libstaroffice)/src/lib \
+    -I$(gb_UnpackedTarball_workdir)/libstaroffice/inc \
+    -I$(gb_UnpackedTarball_workdir)/libstaroffice/src/lib \
     $$(INCLUDE) \
 ))
 

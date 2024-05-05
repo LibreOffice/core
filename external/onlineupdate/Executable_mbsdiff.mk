@@ -12,8 +12,8 @@ $(eval $(call gb_Executable_Executable,mbsdiff))
 $(eval $(call gb_Executable_use_unpacked,mbsdiff,onlineupdate))
 
 $(eval $(call gb_Executable_set_include,mbsdiff,\
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/inc \
-	-I$(call gb_UnpackedTarball_get_dir,onlineupdate)/toolkit/mozapps/update/updater \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/onlineupdate/inc \
+	-I$(gb_UnpackedTarball_workdir)/onlineupdate/toolkit/mozapps/update/updater \
 	$$(INCLUDE) \
 ))
 

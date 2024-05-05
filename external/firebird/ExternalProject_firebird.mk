@@ -32,15 +32,15 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& export CPPFLAGS=" \
 			$(BOOST_CPPFLAGS) \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_CFLAGS), \
-				-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+				-I$(gb_UnpackedTarball_workdir)/libatomic_ops/src \
 			) \
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
-				-I$(call gb_UnpackedTarball_get_dir,libtommath) \
+				-I$(gb_UnpackedTarball_workdir)/libtommath \
 			) \
 			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
-				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
-				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+				-I$(gb_UnpackedTarball_workdir)/icu/source \
+				-I$(gb_UnpackedTarball_workdir)/icu/source/i18n \
+				-I$(gb_UnpackedTarball_workdir)/icu/source/common \
 			) \
 			$(if $(filter GCC-INTEL,$(COM)-$(CPUNAME)),-Di386=1) \
 			" \
@@ -64,16 +64,16 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& export LDFLAGS=" \
 			$(call gb_ExternalProject_get_link_flags,firebird) \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_LIBS), \
-				-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+				-L$(gb_UnpackedTarball_workdir)/libatomic_ops/src \
 			) \
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS), \
-				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
+				-L$(gb_UnpackedTarball_workdir)/libtommath \
 			) \
 			$(if $(SYSTEM_ICU),$(ICU_LIBS), \
-				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
+				-L$(gb_UnpackedTarball_workdir)/icu/source/lib \
 			) \
 		" \
-		&& export LIBREOFFICE_ICU_LIB="$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
+		&& export LIBREOFFICE_ICU_LIB="$(gb_UnpackedTarball_workdir)/icu/source/lib" \
 		&& export MSVC_USE_INDIVIDUAL_PDBS=TRUE \
 		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--without-editline \
@@ -87,8 +87,8 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(HAVE_LIBCPP),CXX='$(CXX) -D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR') \
 		&& LC_ALL=C $(MAKE) \
 			$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS") \
-			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(call gb_UnpackedTarball_get_dir,libtommath) -ltommath)" \
-			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
+			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(gb_UnpackedTarball_workdir)/libtommath -ltommath)" \
+			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(gb_UnpackedTarball_workdir)/icu/source/lib)))' \
 		$(if $(filter MACOSX,$(OS)), \
 			&& install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.$(firebird_VERSION) \
 				-delete_rpath @loader_path/.. \

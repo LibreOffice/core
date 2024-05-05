@@ -16,7 +16,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,expat_x64))
 $(eval $(call gb_StaticLibrary_use_unpacked,expat_x64,expat))
 
 $(eval $(call gb_StaticLibrary_set_include,expat_x64,\
-    -I$(call gb_UnpackedTarball_get_dir,expat) \
+    -I$(gb_UnpackedTarball_workdir)/expat \
     $$(INCLUDE) \
 ))
 

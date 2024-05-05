@@ -29,8 +29,8 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
+		RAPTOR2_CFLAGS="-I$(gb_UnpackedTarball_workdir)/raptor/src" \
+		RAPTOR2_LIBS="-L$(gb_UnpackedTarball_workdir)/raptor/src/.libs -lraptor2" \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			--with-regex-library=posix \
 			--with-decimal=none \
@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
+			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(gb_UnpackedTarball_workdir)/libxml2/xml2-config) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \

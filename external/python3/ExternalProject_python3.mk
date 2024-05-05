@@ -37,12 +37,12 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
-			/p:bz2Dir=$(call gb_UnpackedTarball_get_dir,bzip2) \
-			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
-			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
-			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
-			/p:libffiOutDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs \
-			/p:libffiIncludeDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
+			/p:bz2Dir=$(gb_UnpackedTarball_workdir)/bzip2 \
+			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
+			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
+			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
+			/p:libffiOutDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs \
+			/p:libffiIncludeDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/include \
 			/maxcpucount \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
@@ -102,22 +102,22 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			--enable-shared \
 		) \
 		$(if $(ENABLE_OPENSSL),$(if $(SYSTEM_OPENSSL),,\
-			--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl) \
+			--with-openssl=$(gb_UnpackedTarball_workdir)/openssl \
 		) ) \
 		$(if $(filter LINUX,$(OS)), \
-			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
+			PKG_CONFIG_LIBDIR="$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
 		) \
 		CC="$(strip $(CC) \
 			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
-			$(if $(SYSTEM_BZIP2),,-I$(call gb_UnpackedTarball_get_dir,bzip2)) \
-			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
+			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
+			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
 		LDFLAGS="$(strip $(LDFLAGS) \
-			$(if $(filter LINUX,$(OS)),-L$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs) \
-			$(if $(SYSTEM_BZIP2),,-L$(call gb_UnpackedTarball_get_dir,bzip2)) \
+			$(if $(filter LINUX,$(OS)),-L$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs) \
+			$(if $(SYSTEM_BZIP2),,-L$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
@@ -142,7 +142,7 @@ endif
 
 ifeq ($(OS),MACOSX)
 
-python3_fw_prefix=$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework
+python3_fw_prefix=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
 # also scripts are not allowed to be signed as executables (with extended attributes), but need to
