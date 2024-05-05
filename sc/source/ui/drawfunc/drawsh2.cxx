@@ -520,6 +520,7 @@ bool ScDrawShell::AreAllObjectsOnLayer(SdrLayerID nLayerNo,const SdrMarkList& rM
     for (size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
+        assert(pObj);
         if ( dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
         {
             if(nLayerNo!=pObj->GetLayer())

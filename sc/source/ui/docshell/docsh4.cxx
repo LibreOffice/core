@@ -336,7 +336,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
-                            OSL_ENSURE(pDBData, "Cannot create DB data");
+                            assert(pDBData && "Cannot create DB data");
                             sTarget = pDBData->GetName();
                         }
                     }
@@ -2812,7 +2812,7 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 
 IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
-    OSL_ENSURE( _pFileDlg, "ScDocShell::DialogClosedHdl(): no file dialog" );
+    assert( _pFileDlg && "ScDocShell::DialogClosedHdl(): no file dialog");
     OSL_ENSURE( m_pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )

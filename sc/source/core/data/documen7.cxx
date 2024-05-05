@@ -281,7 +281,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
-    OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
+    assert(pCell && "RemoveFromFormulaTree: pCell Null");
     ScFormulaCell* pPrev = pCell->GetPrevious();
     assert(pPrev != pCell);                 // pointing to itself?!?
     // if the cell is first or somewhere in chain
@@ -468,7 +468,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
-    OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
+    assert(pCell && "RemoveFromFormulaTrack: pCell Null");
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
     assert(pPrev != pCell);                     // pointing to itself?!?
     // if the cell is first or somewhere in chain

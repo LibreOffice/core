@@ -2169,7 +2169,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
     aMarkData( rMark ),
     pUndoDoc( std::move(pNewUndoDoc) )
 {
-    OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer is Null" );
+    assert(pW && "ScUndoClearItems: Which-Pointer is Null");
 
     sal_uInt16 nCount = 0;
     while ( pW[nCount] )

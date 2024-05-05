@@ -91,7 +91,10 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
             break;
         }
         else if( nOpcode < nOps )
+        {
+            assert(pOps);
             pOps[ nOpcode ] (rContext, aStream, nLength);
+        }
         else if (rContext.eTyp == eWK123 && nOpcode == LOTUS_PATTERN)
         {
             // This is really ugly - needs re-factoring ...

@@ -1954,6 +1954,7 @@ XclExpObjectManager::XclExpObjectManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
     InitStream( true );
+    assert(mpDffStrm);
     mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mpDffStrm );
 }
 
@@ -1961,6 +1962,7 @@ XclExpObjectManager::XclExpObjectManager( const XclExpObjectManager& rParent ) :
     XclExpRoot( rParent.GetRoot() )
 {
     InitStream( false );
+    assert(mpDffStrm);
     mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mpDffStrm, rParent.mxEscherEx.get() );
 }
 
@@ -2045,6 +2047,8 @@ void XclExpObjectManager::InitStream( bool bTempFile )
         mpBackupStrm = std::make_unique<SvMemoryStream>();
         mpDffStrm = mpBackupStrm.get();
     }
+
+    assert(mpDffStrm);
 
     mpDffStrm->SetEndian( SvStreamEndian::LITTLE );
 }

@@ -4633,6 +4633,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             // e.g. can you have an Operator without a Criteria? In LibreOffice it
             if ( Operator.hasValue()  && ( Operator >>= nOperator ) )
             {
+                assert(pTabFilts);
                 // if it's a bottom/top Ten(Percent/Value) and there
                 // is no value specified for criteria1 set it to 10
                 if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
@@ -4669,6 +4670,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             }
             if ( !bAll && bAcceptCriteria2 )
             {
+                assert(pTabFilts);
                 pTabFilts[0].Connection = sheet::FilterConnection_AND;
                 pTabFilts[0].Field = (nField - 1);
 

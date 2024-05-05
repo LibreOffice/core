@@ -1844,7 +1844,7 @@ void XclImpXFRangeColumn::Find(
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
         pMidRange = maIndexList[nMidIndex].get();
-        OSL_ENSURE( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
+        assert(pMidRange && "XclImpXFRangeColumn::Find - missing XF index range");
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
             rpNextRange = pMidRange;

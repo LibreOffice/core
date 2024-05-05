@@ -171,13 +171,13 @@ sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 
 const SvxBoxItem& ScAutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    OSL_ENSURE( pCurData, "ScAutoFmtPreview::GetBoxItem - no format data found" );
+    assert(pCurData && "ScAutoFmtPreview::GetBoxItem - no format data found");
     return * pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BORDER );
 }
 
 const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
 {
-    OSL_ENSURE( pCurData, "ScAutoFmtPreview::GetDiagItem - no format data found" );
+    assert(pCurData && "ScAutoFmtPreview::GetDiagItem - no format data found");
     return * pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR );
 }
 

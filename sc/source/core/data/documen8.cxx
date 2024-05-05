@@ -593,6 +593,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 if (!pDev)
                 {
                     pDev = GetPrinter();
+                    assert(pDev);
                     aScope.setOldMapMode(pDev->GetMapMode());
                     pDev->SetMapMode(MapMode(MapUnit::MapPixel)); // Important for GetNeededSize
 

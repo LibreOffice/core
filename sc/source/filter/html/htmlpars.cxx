@@ -434,7 +434,7 @@ void ScHTMLLayoutParser::NextRow( const HtmlImportInfo* pInfo )
 bool ScHTMLLayoutParser::SeekOffset( const ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
-    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
+    assert(pOffset && "ScHTMLLayoutParser::SeekOffset - illegal call");
     ScHTMLColOffset::const_iterator it = pOffset->find( nOffset );
     bool bFound = it != pOffset->end();
     size_t nPos = it - pOffset->begin();
@@ -461,7 +461,7 @@ bool ScHTMLLayoutParser::SeekOffset( const ScHTMLColOffset* pOffset, sal_uInt16 
 void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
         sal_uInt16& nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
-    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeCol - illegal call" );
+    assert(pOffset && "ScHTMLLayoutParser::MakeCol - illegal call");
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
@@ -479,7 +479,7 @@ void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
 void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         sal_uInt16 nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
-    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeColNoRef - illegal call" );
+    assert(pOffset && "ScHTMLLayoutParser::MakeColNoRef - illegal call");
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
@@ -495,7 +495,7 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOff
 void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOldOffset,
             sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol )
 {
-    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::ModifyOffset - illegal call" );
+    assert(pOffset && "ScHTMLLayoutParser::ModifyOffset - illegal call");
     SCCOL nPos;
     if ( !SeekOffset( pOffset, nOldOffset, &nPos, nOffsetTol ) )
     {

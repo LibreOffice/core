@@ -936,7 +936,7 @@ void ScContentTree::GetLinkNames()
         return;
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    OSL_ENSURE(pLinkManager, "no LinkManager on document?");
+    assert(pLinkManager && "no LinkManager on document?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -957,7 +957,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
 
     sal_uLong nFound = 0;
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    OSL_ENSURE(pLinkManager, "no LinkManager on document?");
+    assert(pLinkManager && "no LinkManager on document?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)

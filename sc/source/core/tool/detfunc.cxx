@@ -582,7 +582,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
 
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page ?");
+    assert(pPage && "Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -653,7 +653,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page ?");
+    assert(pPage && "Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -1164,7 +1164,7 @@ bool ScDetectiveFunc::DeleteCirclesAt( SCCOL nCol, SCROW nRow )
         return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage, "Page ?");
+    assert(pPage && "Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -1210,7 +1210,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
         return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page ?");
+    assert(pPage && "Page ?");
 
     pPage->RecalcObjOrdNums();
 

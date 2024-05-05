@@ -227,8 +227,10 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                 const bool bUnchanged(aViewRenderingOptions == pViewShell->GetViewRenderingData());
                 if (!bUnchanged)
                     pViewShell->SetViewRenderingData(aViewRenderingOptions);
-                ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(SfxObjectShell::Current()->GetModel());
-                SfxLokHelper::notifyViewRenderState(SfxViewShell::Current(), pScModelObj);
+                ScModelObj* pScModelObj = nullptr;
+                if (SfxObjectShell* pCurrentSh = SfxObjectShell::Current())
+                    pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(pCurrentSh->GetModel());
+                SfxLokHelper::notifyViewRenderState(pViewShell, pScModelObj);
                 // In Online, the document color is the one used for the background, contrary to
                 // Writer and Draw that use the application background color.
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,

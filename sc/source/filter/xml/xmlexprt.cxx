@@ -3307,6 +3307,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         {
             SvXMLElementExport aElemP(*this, sElemP, true, false);
 
+            assert(pDoc);
+
             OUString aParaStr =
                 ScCellFormat::GetOutputString(*pDoc, aCell.maCellAddress, aCell.maBaseCell);
 

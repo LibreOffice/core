@@ -478,6 +478,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrHitKind eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
                 if (eHit != SdrHitKind::NONE && aVEvt.mpObj == pObj)
                 {
+                    assert(pObj);
+
                     SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
 
                     //  OLE: activate

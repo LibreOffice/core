@@ -177,7 +177,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             vcl::Window* pRight = bHSplit ? mrViewData.GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr;
             vcl::Window* pBottom = bVSplit ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr;
             vcl::Window* pDiagonal = (bHSplit && bVSplit) ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : nullptr;
-            OSL_ENSURE( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
+            assert(pLeft && "ScGridWindow::ShowNoteMarker - missing top-left grid window");
 
             /*  If caption is shown from right or bottom windows, adjust
                 mapmode to include size of top-left window. */

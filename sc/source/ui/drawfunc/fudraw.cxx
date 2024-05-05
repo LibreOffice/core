@@ -159,6 +159,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell& rViewShell, const 
     bool bReturn = false;
     if ( DynCastSdrTextObj( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
     {
+        assert(pObj);
         // start text edit - like FuSelection::MouseButtonUp,
         // but with bCursorToEnd instead of mouse position
 

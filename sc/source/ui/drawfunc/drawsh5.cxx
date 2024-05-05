@@ -510,7 +510,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 {
                     // #i68101#
                     SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
-                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+                    assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
@@ -583,7 +583,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if(1 == pView->GetMarkedObjectCount())
                 {
                     SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
-                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+                    assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {

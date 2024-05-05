@@ -56,7 +56,7 @@ using namespace com::sun::star;
 static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSize )
 {
     SdrPage* pPage = rData.GetScDrawView()->GetModel().GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
-    OSL_ENSURE(pPage,"pPage ???");
+    assert(pPage && "pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
         aPgSize.setWidth( -aPgSize.Width() );

@@ -216,7 +216,7 @@ std::unique_ptr<weld::TreeIter> getReferenceEntry(const weld::TreeView& rTree, c
     while (bParent)
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rTree, *xParent);
-        OSL_ASSERT(pUserData);
+        assert(pUserData);
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
         {
             // This is a repeat element - a potential reference entry.
@@ -246,7 +246,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     mxCurRefEntry = getReferenceEntry(*mxLbTree, *xEntry);
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *mxCurRefEntry);
-    OSL_ASSERT(pUserData);
+    assert(pUserData);
 
     const ScAddress& rPos = pUserData->maLinkedPos;
     if (rPos.IsValid())
@@ -284,7 +284,7 @@ void ScXMLSourceDlg::DefaultElementSelected(const weld::TreeIter& rEntry)
         do
         {
             ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *xChild);
-            OSL_ASSERT(pUserData);
+            assert(pUserData);
             if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
             {
                 // This child is not an attribute. Bail out.
@@ -351,7 +351,7 @@ void ScXMLSourceDlg::AttributeSelected(const weld::TreeIter& rEntry)
     mxLbTree->iter_parent(*xParent);
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *xParent);
-    OSL_ASSERT(pUserData);
+    assert(pUserData);
     if (pUserData->maLinkedPos.IsValid() && pUserData->mbRangeParent)
     {
         // Parent element is range-linked.  Bail out.
@@ -423,7 +423,7 @@ bool ScXMLSourceDlg::IsChildrenDirty(const weld::TreeIter* pEntry) const
     do
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *xChild);
-        OSL_ASSERT(pUserData);
+        assert(pUserData);
         if (pUserData->maLinkedPos.IsValid())
             // Already linked.
             return true;

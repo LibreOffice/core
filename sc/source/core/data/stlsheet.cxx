@@ -225,6 +225,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
             case SfxStyleFamily::Frame:
             {
                 SfxItemPool* pItemPool = &GetPool()->GetPool();
+                assert(pItemPool);
                 if (dynamic_cast<SdrItemPool*>(pItemPool) == nullptr)
                     pItemPool = pItemPool->GetSecondaryPool();
                 assert(pItemPool);

@@ -675,7 +675,12 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
         return;
 
     const SdrCaptionObj* pCaption = pNote->GetCaption();
-    if (!pCaption) return;
+    if (!pCaption)
+        return;
+
+    SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+    if (!pCurrentViewShell)
+        return;
 
     tools::Rectangle aRect = pCaption->GetLogicRect();
     basegfx::B2DRange aTailRange = pCaption->getTailPolygon().getB2DRange();
@@ -694,7 +699,6 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     aInvalidRect.AdjustTop( -nBorderSize );
     aInvalidRect.AdjustBottom( nBorderSize );
 
-    SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {

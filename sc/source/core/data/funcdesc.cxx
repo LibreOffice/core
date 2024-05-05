@@ -1037,7 +1037,7 @@ ScFunctionMgr::ScFunctionMgr()
     ScFunctionList* pFuncList /**< list of all calc functions */
         = ScGlobal::GetStarCalcFunctionList();
 
-    OSL_ENSURE( pFuncList, "Functionlist not found." );
+    assert(pFuncList && "Functionlist not found.");
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
     aCatLists[0].reserve(pFuncList->GetCount());

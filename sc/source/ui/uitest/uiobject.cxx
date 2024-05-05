@@ -316,7 +316,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     else if (rAction == "SIDEBAR")
     {
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-        DBG_ASSERT(pViewFrm, "ScGridWinUIObject::execute: no viewframe");
+        assert(pViewFrm && "ScGridWinUIObject::execute: no viewframe");
         pViewFrm->ShowChildWindow(SID_SIDEBAR);
 
         auto itr = rParameters.find("PANEL");

@@ -120,7 +120,7 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
     {
         // create new attribute
         pAttr = NewAttr( nFormat, nSt );
-        OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nothing to save" );
+        assert(pAttr && "FormCache::GetAttr(): Nothing to save");
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
         bValid[ nIndex ] = true;

@@ -223,7 +223,8 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
     for (size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-        if ( dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr && (pObj->GetLayer() != SC_LAYER_INTERN) )
+        assert(pObj);
+        if ( dynamic_cast<const SdrUnoObj*>( pObj) == nullptr && (pObj->GetLayer() != SC_LAYER_INTERN) )
         {
             AddUndo( std::make_unique<SdrUndoObjectLayerChange>( *pObj, pObj->GetLayer(), nLayerNo) );
             pObj->SetLayer( nLayerNo );
@@ -446,6 +447,7 @@ void ScDrawView::MarkListHasChanged()
                 for ( size_t j = 0; j < nListCount; ++j )
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
+                    assert(pSubObj);
 
                     if (dynamic_cast<const SdrUnoObj*>( pSubObj) ==  nullptr)
                         bOnlyControls = false;

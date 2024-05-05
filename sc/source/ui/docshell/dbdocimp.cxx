@@ -112,7 +112,7 @@ void ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
     //  create database range
     ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
-    DBG_ASSERT(pDBData, "can't create DB data");
+    assert(pDBData && "can't create DB data");
     OUString sTarget = pDBData->GetName();
 
     UpdateImport( sTarget, aDesc );

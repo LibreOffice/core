@@ -1021,7 +1021,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
 
 static bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr* pNewPattern )
 {
-    OSL_ENSURE( pNewPattern, "pNewPattern" );
+    assert(pNewPattern && "pNewPattern");
 
     if ( ScPatternAttr::areSame( pNewPattern, rpOldPattern ) )
         return false;

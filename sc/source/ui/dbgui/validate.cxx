@@ -45,9 +45,6 @@
 #include <reffact.hxx>
 #include <comphelper/lok.hxx>
 
-
-#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
-
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to
     change the order of the list box entries. */
@@ -81,6 +78,14 @@ const WhichRangesContainer ScTPValidationValue::pValueRanges(svl::Items<
     FID_VALID_MODE, FID_VALID_ERRTEXT
 >);
 
+static bool isLOKMobilePhone()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return false;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    return pViewShell && pViewShell->isLOKMobilePhone();
+}
+
 ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh)
     : ScValidationDlgBase(pParent,
@@ -95,7 +100,7 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     AddTabPage("inputhelp", ScTPValidationHelp::Create, nullptr);
     AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
 
-    if (IS_MOBILE)
+    if (isLOKMobilePhone())
     {
         m_xBuilder->weld_button("cancel")->hide();
         m_xBuilder->weld_button("help")->hide();

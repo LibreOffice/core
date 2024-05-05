@@ -217,6 +217,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( ScDrawLayer::IsNoteCaption( pMarkedObj ) )
                     {
+                        assert(pHdl);
                         if(pHdl->GetKind() != SdrHdlKind::Poly && pHdl->GetKind() != SdrHdlKind::Circle)
                             bDrag = true;
                     }

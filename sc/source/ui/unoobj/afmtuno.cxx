@@ -433,7 +433,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
     ScAutoFormat::iterator it = pFormats->begin();
     std::advance(it, nFormatIndex);
     ScAutoFormatData *const pData = it->second.get();
-    OSL_ENSURE(pData,"AutoFormat data not available");
+    assert(pData && "AutoFormat data not available");
 
     std::unique_ptr<ScAutoFormatData> pNew(new ScAutoFormatData(*pData));
     pNew->SetName( aNewName );
@@ -504,7 +504,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
     if (IsInserted() && nFormatIndex < pFormats->size())
     {
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
-        OSL_ENSURE(pData,"AutoFormat data not available");
+        assert(pData && "AutoFormat data not available");
 
         bool bValue;
         bool bError = false;

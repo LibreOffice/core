@@ -596,6 +596,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
             assert(mxData->mbOk && "XclExpFmlaCompImpl::Init - missing cell address");
             if (mxData->mbOk)
             {
+                assert(pScBasePos);
                 // clone the passed token array, convert references relative to current cell position
                 mxData->mxOwnScTokArr = rScTokArr.Clone();
                 ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, GetDoc(), *pScBasePos, GetDoc().MaxCol(), GetDoc().MaxRow() );
@@ -1402,6 +1403,8 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
 
     mxData->mbOk = pFuncInfo != nullptr;
     if( !mxData->mbOk ) return;
+
+    assert(pFuncInfo);
 
     // internal functions equivalent to an existing add-in
     if( pFuncInfo->IsAddInEquivalent() )

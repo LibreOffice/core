@@ -440,6 +440,7 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
         return false;
     if (!pStr1 && pStr2)
         return false;
+    assert(pStr1 && pStr2);
     return *pStr1 == *pStr2;
 }
 

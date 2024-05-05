@@ -44,9 +44,15 @@
 // force them to take a 1/3 of the available space
 #define CommonWidgetWidth 10
 
+static bool isLOKMobilePhone()
+{
+    SfxViewShell* pCurrent = SfxViewShell::Current();
+    return pCurrent && pCurrent->isLOKMobilePhone();
+}
+
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui")))
+    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), isLOKMobilePhone()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui")))
     , mxBorder(mxBuilder->weld_widget("border"))
     , mxGrid(mxBuilder->weld_container("grid"))
     , mxFtCondNr(mxBuilder->weld_label("number"))
