@@ -141,18 +141,13 @@ static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 
 static void lcl_GetSortList( Any& rDest )
 {
-    const ScUserList* pUserList = ScGlobal::GetUserList();
-    if (pUserList)
-    {
-        size_t nCount = pUserList->size();
-        Sequence<OUString> aSeq( nCount );
-        OUString* pArray = aSeq.getArray();
-        for (size_t i=0; i<nCount; ++i)
-            pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)].GetString();
-        rDest <<= aSeq;
-    }
-    else
-        rDest <<= Sequence<OUString>(0);    // empty
+    const ScUserList& rUserList = ScGlobal::GetUserList();
+    size_t nCount = rUserList.size();
+    Sequence<OUString> aSeq( nCount );
+    OUString* pArray = aSeq.getArray();
+    for (size_t i=0; i<nCount; ++i)
+        pArray[i] = rUserList[sal::static_int_cast<sal_uInt16>(i)].GetString();
+    rDest <<= aSeq;
 }
 
 constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";

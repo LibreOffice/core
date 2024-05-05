@@ -656,16 +656,13 @@ void ScGridWindow::DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::Ext
     if (bDimOrientNotPage)
     {
         vector<OUString> aUserSortNames;
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (pUserList)
+        ScUserList& rUserList = ScGlobal::GetUserList();
+        size_t nUserListSize = rUserList.size();
+        aUserSortNames.reserve(nUserListSize);
+        for (size_t i = 0; i < nUserListSize; ++i)
         {
-            size_t n = pUserList->size();
-            aUserSortNames.reserve(n);
-            for (size_t i = 0; i < n; ++i)
-            {
-                const ScUserListData& rData = (*pUserList)[i];
-                aUserSortNames.push_back(rData.GetString());
-            }
+            const ScUserListData& rData = rUserList[i];
+            aUserSortNames.push_back(rData.GetString());
         }
 
         // Populate the menus.

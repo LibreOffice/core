@@ -609,7 +609,7 @@ void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
 
 void ScCopyPasteTest::addToUserList(const OUString& rStr)
 {
-    ScGlobal::GetUserList()->emplace_back(rStr);
+    ScGlobal::GetUserList().emplace_back(rStr);
 }
 
 void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
@@ -623,9 +623,9 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
-    ScGlobal::GetUserList()->clear();
+    ScGlobal::GetUserList().clear();
     addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
-    const ScUserListData* pListData = ScGlobal::GetUserList()->GetData("January");
+    const ScUserListData* pListData = ScGlobal::GetUserList().GetData("January");
     sal_uInt16 nIdx1 = 0, nIdx2 = 0;
     bool bHasIdx1, bHasIdx2;
     bool bMatchCase = false;
@@ -733,9 +733,9 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
-    ScGlobal::GetUserList()->clear();
+    ScGlobal::GetUserList().clear();
     addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
-    const ScUserListData* pListData = ScGlobal::GetUserList()->GetData("January");
+    const ScUserListData* pListData = ScGlobal::GetUserList().GetData("January");
     sal_uInt16 nIdx1 = 0, nIdx2 = 0;
     bool bHasIdx1, bHasIdx2;
     bool bMatchCase = false;
@@ -794,7 +794,7 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
 
     // add 1aa,2bb,3cc,4dd,5ee,6ff to userlist, to test that autofill won't confuse it with 1aa,3aa
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
-    ScGlobal::GetUserList()->clear();
+    ScGlobal::GetUserList().clear();
     addToUserList({ "1aa,2bb,3cc,4dd,5ee,6ff" });
 
     // fillauto mixed (string + number), these areas contain only merged cells

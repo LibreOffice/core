@@ -537,16 +537,13 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
 
 void ScTpSubTotalOptions::FillUserSortListBox()
 {
-    ScUserList* pUserLists = ScGlobal::GetUserList();
+    ScUserList& rUserLists = ScGlobal::GetUserList();
 
     m_xLbUserDef->freeze();
     m_xLbUserDef->clear();
-    if ( pUserLists )
-    {
-        size_t nCount = pUserLists->size();
-        for ( size_t i=0; i<nCount; ++i )
-            m_xLbUserDef->append_text((*pUserLists)[i].GetString() );
-    }
+    size_t nCount = rUserLists.size();
+    for ( size_t i=0; i<nCount; ++i )
+        m_xLbUserDef->append_text(rUserLists[i].GetString());
     m_xLbUserDef->thaw();
 }
 

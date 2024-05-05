@@ -1734,17 +1734,12 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, tools::Long nDimIndex, bool bAs
         typedef std::unordered_map<OUString, sal_uInt16> UserSortMap;
         UserSortMap aSubStrs;
         sal_uInt16 nSubCount = 0;
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (!pUserList)
+        ScUserList& rUserList = ScGlobal::GetUserList();
+        size_t nUserListSize = rUserList.size();
+        if (!nUserListSize || *pUserListId >= static_cast<sal_uInt16>(nUserListSize))
             return;
 
-        {
-            size_t n = pUserList->size();
-            if (!n || *pUserListId >= static_cast<sal_uInt16>(n))
-                return;
-        }
-
-        const ScUserListData& rData = (*pUserList)[*pUserListId];
+        const ScUserListData& rData = rUserList[*pUserListId];
         sal_uInt16 n = rData.GetSubCount();
         for (sal_uInt16 i = 0; i < n; ++i)
         {

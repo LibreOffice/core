@@ -447,7 +447,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 OUString aStr = GetString(nColCurr, nRowCurr );
                 OUString aStr2;
 
-                rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
+                rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList().GetData(aStr));
                 if (rListData)
                 {
                     bool bMatchCase = false;
@@ -684,7 +684,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         OUString aStr = GetString(nCol, nRow);
 
-        rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
+        rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList().GetData(aStr));
         if (rListData)
         {
             bool bMatchCase = false;

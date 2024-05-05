@@ -248,17 +248,17 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     }
     else if (aPropertyName == SC_UNONAME_ULISTS)
     {
-        ScUserList* pUserList = ScGlobal::GetUserList();
+        ScUserList& rUserList = ScGlobal::GetUserList();
         uno::Sequence<OUString> aSeq;
-        if ( pUserList && ( aValue >>= aSeq ) )
+        if (aValue >>= aSeq)
         {
             //  directly change the active list
             //  ScGlobal::SetUseTabCol does not do much else
 
-            pUserList->clear();
+            rUserList.clear();
             for (const OUString& aEntry : aSeq)
             {
-                pUserList->emplace_back(aEntry);
+                rUserList.emplace_back(aEntry);
             }
             bSaveApp = true;    // List with App-Options are saved
         }
@@ -325,16 +325,13 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     }
     else if (aPropertyName == SC_UNONAME_ULISTS )
     {
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (pUserList)
-        {
-            size_t nCount = pUserList->size();
-            uno::Sequence<OUString> aSeq(nCount);
-            OUString* pAry = aSeq.getArray();
-            for (size_t i=0; i<nCount; ++i)
-                pAry[i] = (*pUserList)[i].GetString();
-            aRet <<= aSeq;
-        }
+        const ScUserList& rUserList = ScGlobal::GetUserList();
+        size_t nCount = rUserList.size();
+        uno::Sequence<OUString> aSeq(nCount);
+        OUString* pAry = aSeq.getArray();
+        for (size_t i=0; i<nCount; ++i)
+            pAry[i] = rUserList[i].GetString();
+        aRet <<= aSeq;
     }
     else if (aPropertyName == SC_UNONAME_PRALLSH )
         aRet <<= pScMod->GetPrintOptions().GetAllSheets();

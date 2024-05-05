@@ -292,7 +292,7 @@ ScUnoAddInCollection* ScGlobal::GetAddInCollection()
     return comphelper::doubleCheckedInit( pAddInCollection, []() { return new ScUnoAddInCollection(); });
 }
 
-ScUserList* ScGlobal::GetUserList()
+ScUserList& ScGlobal::GetUserList()
 {
     assert(!bThreadedGroupCalcInProgress);
     // Hack: Load Cfg item at the App
@@ -300,7 +300,7 @@ ScUserList* ScGlobal::GetUserList()
 
     if (!xUserList)
         xUserList.reset(new ScUserList());
-    return xUserList.get();
+    return *xUserList;
 }
 
 void ScGlobal::SetUserList( const ScUserList* pNewList )

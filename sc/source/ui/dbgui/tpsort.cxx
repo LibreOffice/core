@@ -750,15 +750,12 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
 void ScTabPageSortOptions::FillUserSortListBox()
 {
-    ScUserList* pUserLists = ScGlobal::GetUserList();
+    ScUserList& rUserLists = ScGlobal::GetUserList();
 
     m_xLbSortUser->clear();
-    if ( pUserLists )
-    {
-        size_t nCount = pUserLists->size();
-        for (size_t i=0; i<nCount; ++i)
-            m_xLbSortUser->append_text((*pUserLists)[i].GetString());
-    }
+    size_t nCount = rUserLists.size();
+    for (size_t i=0; i<nCount; ++i)
+        m_xLbSortUser->append_text(rUserLists[i].GetString());
 }
 
 // Handler:

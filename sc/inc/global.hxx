@@ -571,7 +571,7 @@ public:
     static void                 ClearAutoFormat(); //BugId 54209
     static LegacyFuncCollection*      GetLegacyFuncCollection();
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
-    SC_DLLPUBLIC static ScUserList*         GetUserList();
+    SC_DLLPUBLIC static ScUserList&         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
     /**
      * Open the specified URL.

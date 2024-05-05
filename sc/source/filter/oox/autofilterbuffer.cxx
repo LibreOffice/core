@@ -820,12 +820,12 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     aParam.nUserIndex = 0;
     aParam.bByRow = false;
 
-    ScUserList* pUserList = ScGlobal::GetUserList();
+    ScUserList& rUserList = ScGlobal::GetUserList();
     if (!rSorConditionLoaded.maSortCustomList.isEmpty())
     {
-        for (size_t i=0; pUserList && i < pUserList->size(); i++)
+        for (size_t i=0; i < rUserList.size(); i++)
         {
-            const OUString aEntry((*pUserList)[i].GetString());
+            const OUString aEntry(rUserList[i].GetString());
             if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
             {
                 aParam.bUserDef = true;
@@ -837,9 +837,9 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
     if (!aParam.bUserDef)
     {
-        pUserList->emplace_back(rSorConditionLoaded.maSortCustomList);
+        rUserList.emplace_back(rSorConditionLoaded.maSortCustomList);
         aParam.bUserDef = true;
-        aParam.nUserIndex = pUserList->size()-1;
+        aParam.nUserIndex = rUserList.size()-1;
     }
 
     // set sort parameter if we have detected it
