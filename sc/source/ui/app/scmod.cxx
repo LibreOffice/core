@@ -217,8 +217,9 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
         {
             SfxViewShell* pSfxViewShell = SfxViewShell::Current();
             ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
+            SfxObjectShell* pCurrentSh = SfxObjectShell::Current();
 
-            if (pViewShell)
+            if (pViewShell && pCurrentSh)
             {
                 ScViewRenderingOptions aViewRenderingOptions(pViewShell->GetViewRenderingData());
                 Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
@@ -227,9 +228,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                 const bool bUnchanged(aViewRenderingOptions == pViewShell->GetViewRenderingData());
                 if (!bUnchanged)
                     pViewShell->SetViewRenderingData(aViewRenderingOptions);
-                ScModelObj* pScModelObj = nullptr;
-                if (SfxObjectShell* pCurrentSh = SfxObjectShell::Current())
-                    pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(pCurrentSh->GetModel());
+                ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(pCurrentSh->GetModel());
                 SfxLokHelper::notifyViewRenderState(pViewShell, pScModelObj);
                 // In Online, the document color is the one used for the background, contrary to
                 // Writer and Draw that use the application background color.
