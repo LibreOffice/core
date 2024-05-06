@@ -823,6 +823,11 @@ namespace svgio::svgreader
             rMarkerTransform.identity();
             rClipRange.reset();
 
+            // Set the current fill to the marker before calling getMarkerPrimitives,
+            // which calls decomposeSvgNode to decompose the children of the marker.
+            // If any of the children uses 'fill="context-fill"', then it will use it
+            const_cast<SvgStyleAttributes*>(rMarker.getSvgStyleAttributes())->maContextFill = getFill();
+
             // Set the current stroke to the marker before calling getMarkerPrimitives,
             // which calls decomposeSvgNode to decompose the children of the marker.
             // If any of the children uses 'stroke="context-stroke"', then it will use it
@@ -1298,9 +1303,11 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(33, 0),
+            maResolvingParent(34, 0),
             mbStrokeDasharraySet(false),
+            mbContextFill(false),
             mbContextStroke(false),
+            maContextFill(nullptr),
             maContextStroke(nullptr)
         {
         }
@@ -1321,7 +1328,11 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
+                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-fill"))
+                    {
+                        mbContextFill = true;
+                    }
+                    else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         setFill(aSvgPaint);
                         if(aOpacity.isSet())
@@ -2013,6 +2024,23 @@ namespace svgio::svgreader
             }
         }
 
+        const basegfx::BColor* SvgStyleAttributes::getContextFill() const
+        {
+            if (SVGToken::Marker == mrOwner.getType())
+                return maContextFill;
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[33] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[33];
+                auto ret = pSvgStyleAttributes->getContextFill();
+                --maResolvingParent[33];
+                return ret;
+            }
+
+            return nullptr;
+        }
+
         const basegfx::BColor* SvgStyleAttributes::getContextStroke() const
         {
             if (SVGToken::Marker == mrOwner.getType())
@@ -2097,6 +2125,10 @@ namespace svgio::svgreader
                         return pFill;
                     }
                 }
+            }
+            else if (mbContextFill)
+            {
+                return getContextFill();
             }
             else if (maNodeFillURL.isEmpty())
             {

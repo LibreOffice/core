@@ -646,6 +646,14 @@ CPPUNIT_TEST_FIXTURE(Test, testMarkerOrient)
     assertXPath(pDocument, "/primitive2D/transform/transform[2]"_ostr, "xy33"_ostr, "1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testContextFill)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/contextFill.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line"_ostr, "color"_ostr, "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#ff0000");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testContextStroke)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/contextStroke.svg");

@@ -247,6 +247,9 @@ namespace svgio::svgreader
             // #121221# Defines if evtl. an empty array *is* set
             bool                        mbStrokeDasharraySet : 1;
 
+            // tdf#155651 Defines if 'context-fill' is used in fill
+            bool                        mbContextFill : 1;
+
             // tdf#155651 Defines if 'context-stroke' is used in stroke
             bool                        mbContextStroke : 1;
 
@@ -254,6 +257,7 @@ namespace svgio::svgreader
             OUString                    maNodeFillURL;
             OUString                    maNodeStrokeURL;
 
+            const basegfx::BColor*  maContextFill;
             const basegfx::BColor*  maContextStroke;
 
             /// internal helpers
@@ -331,6 +335,9 @@ namespace svgio::svgreader
 
             /// stroke content
             const basegfx::BColor* getStroke() const;
+
+            /// context fill content
+            const basegfx::BColor* getContextFill() const;
 
             /// context stroke content
             const basegfx::BColor* getContextStroke() const;
