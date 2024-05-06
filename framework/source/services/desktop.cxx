@@ -201,6 +201,8 @@ sal_Bool SAL_CALL Desktop::terminate()
     aGuard.clear();
 
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
+    // try to close all open frames
+    bool bFramesClosed = impl_closeFrames(!bRestartableMainLoop);
 
     // Ask normal terminate listener. They could veto terminating the process.
     Desktop::TTerminateListenerList lCalledTerminationListener;
@@ -210,8 +212,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         return false;
     }
 
-    // try to close all open frames
-    if (!impl_closeFrames(!bRestartableMainLoop))
+    if (!bFramesClosed)
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
         return false;
