@@ -67,8 +67,8 @@ constexpr OUString updateAccessServiceName =
 
 void badNodePath() {
     throw css::uno::Exception(
-        ("com.sun.star.configuration.ConfigurationProvider expects a single,"
-         " non-empty, string nodepath argument"),
+        (u"com.sun.star.configuration.ConfigurationProvider expects a single,"
+         " non-empty, string nodepath argument"_ustr),
         nullptr);
 }
 
@@ -112,7 +112,7 @@ private:
     {
         return default_
             ? default_provider::getImplementationName()
-            : "com.sun.star.comp.configuration.ConfigurationProvider";
+            : u"com.sun.star.comp.configuration.ConfigurationProvider"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -123,7 +123,7 @@ private:
     {
         return default_
             ? default_provider::getSupportedServiceNames()
-            : css::uno::Sequence<OUString> { "com.sun.star.configuration.ConfigurationProvider" };
+            : css::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
     }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -201,8 +201,8 @@ Service::createInstanceWithArguments(
             break;
         } else {
             throw css::uno::Exception(
-                ("com.sun.star.configuration.ConfigurationProvider expects"
-                 " NamedValue or PropertyValue arguments"),
+                (u"com.sun.star.configuration.ConfigurationProvider expects"
+                 " NamedValue or PropertyValue arguments"_ustr),
                 nullptr);
         }
         // For backwards compatibility, allow "nodepath" and "Locale" in any
@@ -218,8 +218,8 @@ Service::createInstanceWithArguments(
                 locale.isEmpty())
             {
                 throw css::uno::Exception(
-                    ("com.sun.star.configuration.ConfigurationProvider expects"
-                     " at most one, non-empty, string Locale argument"),
+                    (u"com.sun.star.configuration.ConfigurationProvider expects"
+                     " at most one, non-empty, string Locale argument"_ustr),
                     nullptr);
             }
         }
@@ -368,8 +368,8 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
                 value = v2.Value;
             } else {
                 throw css::uno::Exception(
-                    ("com.sun.star.configuration.ConfigurationProvider factory"
-                     " expects NamedValue or PropertyValue arguments"),
+                    (u"com.sun.star.configuration.ConfigurationProvider factory"
+                     " expects NamedValue or PropertyValue arguments"_ustr),
                     nullptr);
             }
             // For backwards compatibility, allow "Locale" and (ignored)
@@ -379,9 +379,9 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
                     locale.isEmpty())
                 {
                     throw css::uno::Exception(
-                        ("com.sun.star.configuration.ConfigurationProvider"
+                        (u"com.sun.star.configuration.ConfigurationProvider"
                          " factory expects at most one, non-empty, string"
-                         " Locale argument"),
+                         " Locale argument"_ustr),
                         nullptr);
                 }
             } else if (!name.equalsIgnoreAsciiCase("enableasync")) {

@@ -123,7 +123,7 @@ OUString parseTemplateReference(
             return *defaultTemplateName;
         }
         throw css::uno::RuntimeException(
-            "missing node-type attribute");
+            u"missing node-type attribute"_ustr);
     }
     return Data::fullTemplateName(component, nodeType);
 }

@@ -184,7 +184,7 @@ template< typename T > css::uno::Any parseSingleValue(
 {
     T val;
     if (!parseValue(text, &val)) {
-        throw css::uno::RuntimeException("invalid value");
+        throw css::uno::RuntimeException(u"invalid value"_ustr);
     }
     return css::uno::Any(val);
 }
@@ -207,7 +207,7 @@ template< typename T > css::uno::Any parseListValue(
             if (!parseValue(
                     xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
             {
-                throw css::uno::RuntimeException("invalid value");
+                throw css::uno::RuntimeException(u"invalid value"_ustr);
             }
             seq.push_back(val);
             if (i < 0) {
@@ -225,7 +225,7 @@ css::uno::Any parseValue(
 {
     switch (type) {
     case TYPE_ANY:
-        throw css::uno::RuntimeException("invalid value of type any");
+        throw css::uno::RuntimeException(u"invalid value of type any"_ustr);
     case TYPE_BOOLEAN:
         return parseSingleValue< sal_Bool >(text);
     case TYPE_SHORT:
@@ -257,7 +257,7 @@ css::uno::Any parseValue(
             separator, text);
     default:
         assert(false);
-        throw css::uno::RuntimeException("this cannot happen");
+        throw css::uno::RuntimeException(u"this cannot happen"_ustr);
     }
 }
 

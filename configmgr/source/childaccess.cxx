@@ -150,7 +150,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
-        "setParent", getXWeak());
+        u"setParent"_ustr, getXWeak());
 }
 
 void ChildAccess::bind(
@@ -312,8 +312,8 @@ void ChildAccess::addSupportedServiceNames(
     assert(services != nullptr);
     services->push_back(
         getParentNode()->kind() == Node::KIND_GROUP
-        ? OUString("com.sun.star.configuration.GroupElement")
-        : OUString("com.sun.star.configuration.SetElement"));
+        ? u"com.sun.star.configuration.GroupElement"_ustr
+        : u"com.sun.star.configuration.SetElement"_ustr);
 }
 
 css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)

@@ -53,14 +53,14 @@ private:
     virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.configuration.ReadWriteAccess"; }
+    { return u"com.sun.star.comp.configuration.ReadWriteAccess"_ustr; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return { "com.sun.star.configuration.ReadWriteAccess" }; }
+    { return { u"com.sun.star.configuration.ReadWriteAccess"_ustr }; }
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & aArguments) override;
@@ -107,17 +107,17 @@ void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
     OUString locale;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {
         throw css::lang::IllegalArgumentException(
-            "not exactly one string argument",
+            u"not exactly one string argument"_ustr,
             getXWeak(), -1);
     }
     std::unique_lock g1(mutex_);
     if (root_.is()) {
         throw css::uno::RuntimeException(
-            "already initialized", getXWeak());
+            u"already initialized"_ustr, getXWeak());
     }
     osl::MutexGuard g2(*lock());
     Components & components = Components::getSingleton(context_);
-    root_ = new RootAccess(components, "/", locale, true);
+    root_ = new RootAccess(components, u"/"_ustr, locale, true);
     components.addRootAccess(root_);
 }
 
@@ -125,7 +125,7 @@ rtl::Reference< RootAccess > Service::getRoot() {
     std::unique_lock g(mutex_);
     if (!root_.is()) {
         throw css::lang::NotInitializedException(
-            "not initialized", getXWeak());
+            u"not initialized"_ustr, getXWeak());
     }
     return root_;
 }

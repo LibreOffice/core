@@ -42,7 +42,7 @@ rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
 }
 
 OUString LocalizedValueNode::getTemplateName() const {
-    return "*";
+    return u"*"_ustr;
 }
 
 

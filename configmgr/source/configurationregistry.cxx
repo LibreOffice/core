@@ -78,14 +78,14 @@ private:
     virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.configuration.ConfigurationRegistry"; }
+    { return u"com.sun.star.comp.configuration.ConfigurationRegistry"_ustr; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return { "com.sun.star.configuration.ConfigurationRegistry" }; }
+    { return { u"com.sun.star.configuration.ConfigurationRegistry"_ustr }; }
 
     virtual OUString SAL_CALL getURL() override;
 
@@ -221,7 +221,7 @@ Service::Service(
     try {
         provider_.set(
             context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.configuration.DefaultProvider", context),
+                u"com.sun.star.configuration.DefaultProvider"_ustr, context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;
@@ -248,13 +248,12 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
         doClose();
     }
     css::uno::Sequence< css::uno::Any > args{ css::uno::Any(
-        css::beans::NamedValue("nodepath", css::uno::Any(rURL))) };
+        css::beans::NamedValue(u"nodepath"_ustr, css::uno::Any(rURL))) };
     try {
         access_ = provider_->createInstanceWithArguments(
             (bReadOnly
-             ? OUString("com.sun.star.configuration.ConfigurationAccess")
-             : OUString(
-                 "com.sun.star.configuration.ConfigurationUpdateAccess")),
+             ? u"com.sun.star.configuration.ConfigurationAccess"_ustr
+             : u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr),
             args);
     } catch (css::uno::RuntimeException &) {
         throw;
@@ -284,7 +283,7 @@ void Service::close()
 void Service::destroy()
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -304,14 +303,14 @@ sal_Bool Service::isReadOnly() {
 void Service::mergeKey(OUString const &, OUString const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
 void Service::flush()
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -319,7 +318,7 @@ void Service::addFlushListener(
     css::uno::Reference< css::util::XFlushListener > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -327,14 +326,14 @@ void Service::removeFlushListener(
     css::uno::Reference< css::util::XFlushListener > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
 void Service::checkValid() {
     if (!access_.is()) {
         throw css::registry::InvalidRegistryException(
-            "com.sun.star.configuration.ConfigurationRegistry: not valid",
+            u"com.sun.star.configuration.ConfigurationRegistry: not valid"_ustr,
             getXWeak());
     }
 }
@@ -342,7 +341,7 @@ void Service::checkValid() {
 void Service::checkValid_RuntimeException() {
     if (!access_.is()) {
         throw css::uno::RuntimeException(
-            "com.sun.star.configuration.ConfigurationRegistry: not valid",
+            u"com.sun.star.configuration.ConfigurationRegistry: not valid"_ustr,
             getXWeak());
     }
 }
@@ -359,7 +358,7 @@ OUString RegistryKey::getKeyName() {
         return named->getName();
     }
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -417,14 +416,14 @@ sal_Int32 RegistryKey::getLongValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setLongValue(sal_Int32)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -437,14 +436,14 @@ css::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setLongListValue(css::uno::Sequence< sal_Int32 > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -457,14 +456,14 @@ OUString RegistryKey::getAsciiValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setAsciiValue(OUString const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -477,14 +476,14 @@ css::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setAsciiListValue(css::uno::Sequence< OUString > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -497,14 +496,14 @@ OUString RegistryKey::getStringValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setStringValue(OUString const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -517,7 +516,7 @@ css::uno::Sequence< OUString > RegistryKey::getStringListValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
@@ -525,7 +524,7 @@ void RegistryKey::setStringListValue(
     css::uno::Sequence< OUString > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -538,14 +537,14 @@ css::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        "com.sun.star.configuration.ConfigurationRegistry",
+        u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
         getXWeak());
 }
 
 void RegistryKey::setBinaryValue(css::uno::Sequence< sal_Int8 > const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -568,7 +567,7 @@ css::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
     OUString const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -581,7 +580,7 @@ void RegistryKey::closeKey()
 void RegistryKey::deleteKey(OUString const &)
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
@@ -589,14 +588,14 @@ css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
 RegistryKey::openKeys()
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
 css::uno::Sequence< OUString > RegistryKey::getKeyNames()
 {
     throw css::uno::RuntimeException(
-        "com.sun.star.configuration.ConfigurationRegistry: not implemented",
+        u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 

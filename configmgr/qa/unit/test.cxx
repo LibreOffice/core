@@ -138,10 +138,10 @@ void RecursiveTest::test()
 {
     properties_.set(
         test_.createUpdateAccess(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                     ".uno:WebHtml"),
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:WebHtml"_ustr),
         css::uno::UNO_QUERY_THROW);
-    properties_->addPropertyChangeListener("Label", this);
+    properties_->addPropertyChangeListener(u"Label"_ustr, this);
     step();
     CPPUNIT_ASSERT_EQUAL(0, count_);
     css::uno::Reference< css::lang::XComponent >(
@@ -169,7 +169,7 @@ void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
         css::uno::Reference<css::uno::XInterface>(
             properties_, css::uno::UNO_QUERY_THROW),
         evt.Source);
-    CPPUNIT_ASSERT_EQUAL( OUString("Label"), evt.PropertyName );
+    CPPUNIT_ASSERT_EQUAL( u"Label"_ustr, evt.PropertyName );
     if (count_ > 0) {
         --count_;
         step();
@@ -192,10 +192,10 @@ SimpleRecursiveTest::SimpleRecursiveTest(
 void SimpleRecursiveTest::step() const
 {
     test_.setKey(
-        "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                 ".uno:WebHtml",
-        "Label",
-        css::uno::Any(OUString("step")));
+        u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                 ".uno:WebHtml"_ustr,
+        u"Label"_ustr,
+        css::uno::Any(u"step"_ustr));
 }
 
 void Test::setUp()
@@ -210,12 +210,12 @@ void Test::testKeyFetch()
         OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                "/org.openoffice.System",
-                "L10N/Locale") >>=
+                u"/org.openoffice.System"_ustr,
+                u"L10N/Locale"_ustr) >>=
             s);
     }
     {
-        auto const v = getKey("/org.openoffice.System", "L10N/['Locale']");
+        auto const v = getKey(u"/org.openoffice.System"_ustr, u"L10N/['Locale']"_ustr);
         CPPUNIT_ASSERT_EQUAL(cppu::UnoType<OUString>::get(), v.getValueType());
     }
 }
@@ -223,31 +223,31 @@ void Test::testKeyFetch()
 void Test::testKeySet()
 {
     setKey(
-        "/org.openoffice.System/L10N",
-        "Locale",
-        css::uno::Any(OUString("com.sun.star.configuration.backend.LocaleBackend UILocale")));
+        u"/org.openoffice.System/L10N"_ustr,
+        u"Locale"_ustr,
+        css::uno::Any(u"com.sun.star.configuration.backend.LocaleBackend UILocale"_ustr));
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            "/org.openoffice.System/L10N",
-            "Locale") >>=
+            u"/org.openoffice.System/L10N"_ustr,
+            u"Locale"_ustr) >>=
         s);
-    CPPUNIT_ASSERT_EQUAL( OUString("com.sun.star.configuration.backend.LocaleBackend UILocale"), s );
+    CPPUNIT_ASSERT_EQUAL( u"com.sun.star.configuration.backend.LocaleBackend UILocale"_ustr, s );
 }
 
 void Test::testKeyReset()
 {
     if (resetKey(
-            "/org.openoffice.System/L10N",
-            "Locale"))
+            u"/org.openoffice.System/L10N"_ustr,
+            u"Locale"_ustr))
     {
         OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                "/org.openoffice.System/L10N",
-                "Locale") >>=
+                u"/org.openoffice.System/L10N"_ustr,
+                u"Locale"_ustr) >>=
             s);
-        CPPUNIT_ASSERT_EQUAL( OUString("com.sun.star.configuration.backend.LocaleBackend Locale"), s );
+        CPPUNIT_ASSERT_EQUAL( u"com.sun.star.configuration.backend.LocaleBackend Locale"_ustr, s );
     }
 }
 
@@ -256,21 +256,21 @@ void Test::testSetSetMemberName()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                     ".uno:FontworkShapeType",
-            "Label") >>=
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:FontworkShapeType"_ustr,
+            u"Label"_ustr) >>=
         s);
-    CPPUNIT_ASSERT_EQUAL( OUString("Fontwork Shape"), s );
+    CPPUNIT_ASSERT_EQUAL( u"Fontwork Shape"_ustr, s );
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/"
-                     "Commands"),
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/"
+                     "Commands"_ustr),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
-    access->getByName(".uno:FontworkGalleryFloater") >>= member;
+    access->getByName(u".uno:FontworkGalleryFloater"_ustr) >>= member;
     CPPUNIT_ASSERT(member.is());
-    member->setName(".uno:FontworkShapeType");
+    member->setName(u".uno:FontworkShapeType"_ustr);
     css::uno::Reference< css::util::XChangesBatch >(
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference< css::lang::XComponent >(
@@ -278,38 +278,38 @@ void Test::testSetSetMemberName()
 
     CPPUNIT_ASSERT(
         getKey(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                    ".uno:FontworkShapeType",
-            "Label") >>=
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                    ".uno:FontworkShapeType"_ustr,
+            u"Label"_ustr) >>=
         s);
-    CPPUNIT_ASSERT_EQUAL( OUString("Insert Fontwork"), s );
+    CPPUNIT_ASSERT_EQUAL( u"Insert Fontwork"_ustr, s );
 }
 
 void Test::testInsertSetMember() {
     css::uno::Reference<css::container::XNameContainer> access(
         createUpdateAccess(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands"),
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands"_ustr),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::uno::XInterface> member;
     member.set(
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
-    access->insertByName("A", css::uno::Any(member));
+    access->insertByName(u"A"_ustr, css::uno::Any(member));
     member.set(
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
     try {
-        access->insertByName("", css::uno::Any(member));
+        access->insertByName(u""_ustr, css::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName("\x01", css::uno::Any(member));
+        access->insertByName(u"\x01"_ustr, css::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName("a/b", css::uno::Any(member));
+        access->insertByName(u"a/b"_ustr, css::uno::Any(member));
     } catch (css::lang::IllegalArgumentException &) {
         CPPUNIT_FAIL("unexpected IllegalArgumentException");
     }
@@ -321,15 +321,15 @@ void Test::testInsertSetMember() {
 
 void Test::testLocalizedProperty() {
     auto const access = css::configuration::ReadOnlyAccess::create(
-        comphelper::getProcessComponentContext(), "*");
+        comphelper::getProcessComponentContext(), u"*"_ustr);
     {
         // See <https://bugs.documentfoundation.org/show_bug.cgi?id=33638> "Pagination extension
         // not localized in LibreOffice", which wants to retrieve the non-canonical xml:lang="pt-PT"
         // value for the passed-in "pt" locale:
         OUString v;
         CPPUNIT_ASSERT(
-            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*pt") >>= v);
-        CPPUNIT_ASSERT_EQUAL(OUString("pt-PT"), v);
+            access->getByHierarchicalName(u"/org.libreoffice.unittest/localized/*pt"_ustr) >>= v);
+        CPPUNIT_ASSERT_EQUAL(u"pt-PT"_ustr, v);
     }
     {
         // See <https://gerrit.libreoffice.org/c/core/+/147089> "configmgr: fix no longer found
@@ -337,30 +337,30 @@ void Test::testLocalizedProperty() {
         // "es-419" locale:
         OUString v;
         CPPUNIT_ASSERT(
-            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*es-419") >>= v);
-        CPPUNIT_ASSERT_EQUAL(OUString("es"), v);
+            access->getByHierarchicalName(u"/org.libreoffice.unittest/localized/*es-419"_ustr) >>= v);
+        CPPUNIT_ASSERT_EQUAL(u"es"_ustr, v);
     }
     {
         // See <https://git.libreoffice.org/core/+/dfc28be2487c13be36a90efd778b8d8f179c589d%5E%21>
         // "configmgr: Use a proper LanguageTag-based locale fallback mechanism":
         OUString v;
         CPPUNIT_ASSERT(
-            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*zh-Hant-TW") >>= v);
-        CPPUNIT_ASSERT_EQUAL(OUString("zh-TW"), v);
+            access->getByHierarchicalName(u"/org.libreoffice.unittest/localized/*zh-Hant-TW"_ustr) >>= v);
+        CPPUNIT_ASSERT_EQUAL(u"zh-TW"_ustr, v);
     }
     {
         // Make sure a degenerate passed-in "-" locale is handled gracefully:
         OUString v;
         CPPUNIT_ASSERT(
-            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*-") >>= v);
-        CPPUNIT_ASSERT_EQUAL(OUString("en-US"), v);
+            access->getByHierarchicalName(u"/org.libreoffice.unittest/localized/*-"_ustr) >>= v);
+        CPPUNIT_ASSERT_EQUAL(u"en-US"_ustr, v);
     }
     {
         // Make sure a degenerate passed-in "-" locale is handled gracefully:
         OUString v;
         CPPUNIT_ASSERT(
-            access->getByHierarchicalName("/org.libreoffice.unittest/noDefaultLang/*-") >>= v);
-        CPPUNIT_ASSERT_EQUAL(OUString("en-US"), v);
+            access->getByHierarchicalName(u"/org.libreoffice.unittest/noDefaultLang/*-"_ustr) >>= v);
+        CPPUNIT_ASSERT_EQUAL(u"en-US"_ustr, v);
     }
 }
 
@@ -368,8 +368,8 @@ void Test::testReadCommands()
 {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
-            "/org.openoffice.Office.UI.GenericCommands/UserInterface/"
-                     "Commands"),
+            u"/org.openoffice.Office.UI.GenericCommands/UserInterface/"
+                     "Commands"_ustr),
         css::uno::UNO_QUERY_THROW);
     const css::uno::Sequence< OUString > names(access->getElementNames());
 
@@ -381,9 +381,9 @@ void Test::testReadCommands()
             css::uno::Reference< css::container::XNameAccess > child;
             if (access->getByName(childName) >>= child) {
                 CPPUNIT_ASSERT(child.is());
-                child->getByName("Label");
-                child->getByName("ContextLabel");
-                child->getByName("Properties");
+                child->getByName(u"Label"_ustr);
+                child->getByName(u"ContextLabel"_ustr);
+                child->getByName(u"Properties"_ustr);
             }
         }
     }
@@ -395,7 +395,7 @@ void Test::testReadCommands()
 
 void Test::testListener()
 {
-    OUString aRandomPath = "/org.openoffice.Office.Math/View";
+    OUString aRandomPath = u"/org.openoffice.Office.Math/View"_ustr;
 
     // test with no props.
     {
@@ -409,7 +409,7 @@ void Test::testListener()
         rtl::Reference xListener(
             new comphelper::ConfigurationListener(aRandomPath));
 
-        comphelper::ConfigurationListenerProperty<bool> aSetting(xListener, "AutoRedraw");
+        comphelper::ConfigurationListenerProperty<bool> aSetting(xListener, u"AutoRedraw"_ustr);
         CPPUNIT_ASSERT_MESSAGE("check AutoRedraw defaults to true", aSetting.get());
 
         // set to false
@@ -497,10 +497,10 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
 {
     css::uno::Any arg(
             css::beans::NamedValue(
-                "nodepath",
+                u"nodepath"_ustr,
                 css::uno::Any(path)));
     return provider_->createInstanceWithArguments(
-        "com.sun.star.configuration.ConfigurationAccess",
+        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 
@@ -509,10 +509,10 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
 {
     css::uno::Any arg(
             css::beans::NamedValue(
-                "nodepath",
+                u"nodepath"_ustr,
                 css::uno::Any(path)));
     return provider_->createInstanceWithArguments(
-        "com.sun.star.configuration.ConfigurationUpdateAccess",
+        u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 

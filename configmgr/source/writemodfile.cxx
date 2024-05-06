@@ -67,7 +67,7 @@ OString convertToUtf8(std::u16string_view text) {
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            "cannot convert to UTF-8");
+            u"cannot convert to UTF-8"_ustr);
     }
     return s;
 }

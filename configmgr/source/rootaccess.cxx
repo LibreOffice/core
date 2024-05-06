@@ -118,7 +118,7 @@ void RootAccess::addChangesListener(
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", getXWeak());
+                u"null listener"_ustr, getXWeak());
         }
         if (!isDisposed()) {
             changesListeners_.insert(aListener);
@@ -257,9 +257,9 @@ void RootAccess::addSupportedServiceNames(
     std::vector<OUString> * services)
 {
     assert(services != nullptr);
-    services->push_back("com.sun.star.configuration.AccessRootElement");
+    services->push_back(u"com.sun.star.configuration.AccessRootElement"_ustr);
     if (update_) {
-        services->push_back("com.sun.star.configuration.UpdateRootElement");
+        services->push_back(u"com.sun.star.configuration.UpdateRootElement"_ustr);
     }
 }
 
@@ -305,7 +305,7 @@ OUString RootAccess::getImplementationName()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return "configmgr.RootAccess";
+    return u"configmgr.RootAccess"_ustr;
 }
 
 }

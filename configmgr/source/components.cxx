@@ -466,7 +466,7 @@ Components::Components(
 {
     assert(context.is());
     lock_ = lock();
-    OUString conf(expand("${CONFIGURATION_LAYERS}"));
+    OUString conf(expand(u"${CONFIGURATION_LAYERS}"_ustr));
     int layer = 0;
     for (sal_Int32 i = 0;;) {
         while (i != conf.getLength() && conf[i] == ' ') {
@@ -477,8 +477,8 @@ Components::Components(
         }
         if (modificationTarget_ != ModificationTarget::None) {
             throw css::uno::RuntimeException(
-                "CONFIGURATION_LAYERS: modification target layer followed by"
-                " further layers");
+                u"CONFIGURATION_LAYERS: modification target layer followed by"
+                " further layers"_ustr);
         }
         sal_Int32 c = i;
         for (;; ++c) {
@@ -507,7 +507,7 @@ Components::Components(
         } else if (type == "sharedext") {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: multiple \"sharedext\" layers");
+                    u"CONFIGURATION_LAYERS: multiple \"sharedext\" layers"_ustr);
             }
             sharedExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
@@ -515,7 +515,7 @@ Components::Components(
         } else if (type == "userext") {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: multiple \"userext\" layers");
+                    u"CONFIGURATION_LAYERS: multiple \"userext\" layers"_ustr);
             }
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
@@ -570,7 +570,7 @@ Components::Components(
             }
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: empty \"user\" URL");
+                    u"CONFIGURATION_LAYERS: empty \"user\" URL"_ustr);
             }
             bool ignore = false;
 #if ENABLE_DCONF
@@ -819,8 +819,8 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
 
 void Components::parseXcsXcuLayer(int layer, OUString const & url) {
     parseXcdFiles(layer, url);
-    parseFiles(layer, ".xcs", &parseXcsFile, url + "/schema", false);
-    parseFiles(layer + 1, ".xcu", &parseXcuFile, url + "/data", false);
+    parseFiles(layer, u".xcs"_ustr, &parseXcsFile, url + "/schema", false);
+    parseFiles(layer + 1, u".xcu"_ustr, &parseXcuFile, url + "/data", false);
 }
 
 void Components::parseXcsXcuIniLayer(
@@ -860,7 +860,7 @@ void Components::parseXcsXcuIniLayer(
 void Components::parseResLayer(int layer, std::u16string_view url) {
     OUString resUrl(OUString::Concat(url) + "/res");
     parseXcdFiles(layer, resUrl);
-    parseFiles(layer, ".xcu", &parseXcuFile, resUrl, false);
+    parseFiles(layer, u".xcu"_ustr, &parseXcuFile, resUrl, false);
 }
 
 void Components::parseModificationLayer(int layer, OUString const & url) {
@@ -873,10 +873,10 @@ void Components::parseModificationLayer(int layer, OUString const & url) {
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
         // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
-            layer, ".xcu", &parseXcuFile,
+            layer, u".xcu"_ustr, &parseXcuFile,
             expand(
-                "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
-                ":UserInstallation}/user/registry/data"),
+                u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
+                ":UserInstallation}/user/registry/data"_ustr),
             false);
     }
 }
@@ -885,7 +885,7 @@ int Components::getExtensionLayer(bool shared) const {
     int layer = shared ? sharedExtensionLayer_ : userExtensionLayer_;
     if (layer == -1) {
         throw css::uno::RuntimeException(
-            "insert extension xcs/xcu file into undefined layer");
+            u"insert extension xcs/xcu file into undefined layer"_ustr);
     }
     return layer;
 }

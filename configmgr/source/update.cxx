@@ -82,7 +82,7 @@ private:
         css::uno::Sequence< OUString > const & excludedPaths) override;
 
     OUString SAL_CALL getImplementationName() override {
-        return "com.sun.star.comp.configuration.Update";
+        return u"com.sun.star.comp.configuration.Update"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override {
@@ -90,7 +90,7 @@ private:
     }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
-        return {"com.sun.star.configuration.Update_Service"};
+        return {u"com.sun.star.configuration.Update_Service"_ustr};
     }
 
     std::shared_ptr<osl::Mutex> lock_;

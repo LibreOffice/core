@@ -42,11 +42,11 @@ com_sun_star_comp_configuration_DefaultProvider_get_implementation(
 
 namespace configmgr::default_provider
 {
-OUString getImplementationName() { return "com.sun.star.comp.configuration.DefaultProvider"; }
+OUString getImplementationName() { return u"com.sun.star.comp.configuration.DefaultProvider"_ustr; }
 
 css::uno::Sequence<OUString> getSupportedServiceNames()
 {
-    return { "com.sun.star.configuration.DefaultProvider" };
+    return { u"com.sun.star.configuration.DefaultProvider"_ustr };
 }
 }
 
