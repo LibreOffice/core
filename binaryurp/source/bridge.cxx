@@ -178,28 +178,28 @@ Bridge::Bridge(
     css::uno::Reference< css::bridge::XInstanceProvider > provider):
     factory_(factory), name_(std::move(name)), connection_(connection),
     provider_(std::move(provider)),
-    binaryUno_(UNO_LB_UNO),
-    cppToBinaryMapping_(CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO),
-    binaryToCppMapping_(UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME),
+    binaryUno_(u"" UNO_LB_UNO ""_ustr),
+    cppToBinaryMapping_(CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr),
+    binaryToCppMapping_(u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME),
     protPropTid_(
         reinterpret_cast< sal_Int8 const * >(".UrpProtocolPropertiesTid"),
         RTL_CONSTASCII_LENGTH(".UrpProtocolPropertiesTid")),
-    protPropOid_("UrpProtocolProperties"),
+    protPropOid_(u"UrpProtocolProperties"_ustr),
     protPropType_(
         cppu::UnoType<
             css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
-    protPropRequest_("com.sun.star.bridge.XProtocolProperties::requestChange"),
-    protPropCommit_("com.sun.star.bridge.XProtocolProperties::commitChange"),
+    protPropRequest_(u"com.sun.star.bridge.XProtocolProperties::requestChange"_ustr),
+    protPropCommit_(u"com.sun.star.bridge.XProtocolProperties::commitChange"_ustr),
     state_(STATE_INITIAL), threadPool_(nullptr), currentContextMode_(false),
     proxies_(0), calls_(0), normalCall_(false), activeCalls_(0),
     mode_(MODE_REQUESTED)
 {
     assert(factory.is() && connection.is());
     if (!binaryUno_.is()) {
-        throw css::uno::RuntimeException("URP: no binary UNO environment");
+        throw css::uno::RuntimeException(u"URP: no binary UNO environment"_ustr);
     }
     if (!(cppToBinaryMapping_.is() && binaryToCppMapping_.is())) {
-        throw css::uno::RuntimeException("URP: no C++ UNO mapping");
+        throw css::uno::RuntimeException(u"URP: no C++ UNO mapping"_ustr);
     }
     passive_.set();
     // coverity[uninit_member] - random_ is set in due course by the reader_ thread's state machine
@@ -448,7 +448,7 @@ OUString Bridge::registerOutgoingInterface(
             assert(stub != &newStub);
             if (j->second.references == SAL_MAX_UINT32) {
                 throw css::uno::RuntimeException(
-                    "URP: stub reference count overflow");
+                    u"URP: stub reference count overflow"_ustr);
             }
             ++j->second.references;
         }
@@ -489,11 +489,11 @@ void Bridge::releaseStub(
         std::lock_guard g(mutex_);
         Stubs::iterator i(stubs_.find(oid));
         if (i == stubs_.end()) {
-            throw css::uno::RuntimeException("URP: release unknown stub");
+            throw css::uno::RuntimeException(u"URP: release unknown stub"_ustr);
         }
         Stub::iterator j(i->second.find(type));
         if (j == i->second.end()) {
-            throw css::uno::RuntimeException("URP: release unknown stub");
+            throw css::uno::RuntimeException(u"URP: release unknown stub"_ustr);
         }
         assert(j->second.references > 0);
         --j->second.references;
@@ -611,7 +611,7 @@ bool Bridge::makeCall(
     if (resp == nullptr)
     {
         throw css::lang::DisposedException(
-            "Binary URP bridge disposed during call",
+            u"Binary URP bridge disposed during call"_ustr,
             getXWeak());
     }
     *returnValue = resp->returnValue;
@@ -674,7 +674,7 @@ void Bridge::handleRequestChangeReply(
     }
     if (n != exp) {
         throw css::uno::RuntimeException(
-            "URP: requestChange reply with unexpected return value received",
+            u"URP: requestChange reply with unexpected return value received"_ustr,
             getXWeak());
     }
     decrementCalls();
@@ -757,7 +757,7 @@ void Bridge::handleRequestChangeRequest(
         }
     default:
         throw css::uno::RuntimeException(
-            "URP: unexpected requestChange request received",
+            u"URP: unexpected requestChange request received"_ustr,
             getXWeak());
     }
 }
@@ -781,7 +781,7 @@ void Bridge::handleCommitChangeRequest(
             ret = mapCppToBinaryAny(
                 css::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
-                        "InvalidProtocolChangeException",
+                        u"InvalidProtocolChangeException"_ustr,
                         css::uno::Reference< css::uno::XInterface >(), pp,
                         1)));
             break;
@@ -808,7 +808,7 @@ void Bridge::handleCommitChangeRequest(
         break;
     default:
         throw css::uno::RuntimeException(
-            "URP: unexpected commitChange request received",
+            u"URP: unexpected commitChange request received"_ustr,
             getXWeak());
     }
 }
@@ -853,14 +853,14 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
 {
     if (sInstanceName.isEmpty()) {
         throw css::uno::RuntimeException(
-            "XBridge::getInstance sInstanceName must be non-empty",
+            u"XBridge::getInstance sInstanceName must be non-empty"_ustr,
             getXWeak());
     }
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
             throw css::uno::RuntimeException(
-                "XBridge::getInstance sInstanceName contains non-ASCII"
-                " character");
+                u"XBridge::getInstance sInstanceName contains non-ASCII"
+                " character"_ustr);
         }
     }
     css::uno::TypeDescription ifc(cppu::UnoType<css::uno::XInterface>::get());
@@ -874,7 +874,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     bool bExc = makeCall(
         sInstanceName,
         css::uno::TypeDescription(
-            "com.sun.star.uno.XInterface::queryInterface"),
+            u"com.sun.star.uno.XInterface::queryInterface"_ustr),
         false, std::move(inArgs), &ret, &outArgs);
     throwException(bExc, ret);
     auto const t = ret.getType();
@@ -997,7 +997,7 @@ void Bridge::makeReleaseCall(
         }();
     sendRequest(
         tid, oid, type,
-        css::uno::TypeDescription("com.sun.star.uno.XInterface::release"),
+        css::uno::TypeDescription(u"com.sun.star.uno.XInterface::release"_ustr),
         std::vector< BinaryAny >());
 }
 
@@ -1044,7 +1044,7 @@ void Bridge::checkDisposed() {
     assert(state_ != STATE_INITIAL);
     if (state_ != STATE_STARTED) {
         throw css::lang::DisposedException(
-            "Binary URP bridge already disposed",
+            u"Binary URP bridge already disposed"_ustr,
             getXWeak());
     }
 }

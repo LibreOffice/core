@@ -141,7 +141,7 @@ css::uno::TypeDescription Unmarshal::readType() {
     case typelib_TypeClass_ANY:
         if ((flags & 0x80) != 0) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: cache flag of simple type is set");
+                u"binaryurp::Unmarshal: cache flag of simple type is set"_ustr);
         }
         return css::uno::TypeDescription(
             *typelib_static_type_getByTypeClass(tc));
@@ -155,7 +155,7 @@ css::uno::TypeDescription Unmarshal::readType() {
             if ((flags & 0x80) == 0) {
                 if (idx == cache::ignore || !state_.typeCache[idx].is()) {
                     throw css::io::IOException(
-                        "binaryurp::Unmarshal: unknown type cache index");
+                        u"binaryurp::Unmarshal: unknown type cache index"_ustr);
                 }
                 return state_.typeCache[idx];
             } else {
@@ -175,15 +175,15 @@ css::uno::TypeDescription Unmarshal::readType() {
                             t2.get())->pType);
                     if (!t2.is()) {
                         throw css::io::IOException(
-                            "binaryurp::Unmarshal: sequence type with unknown"
-                            " component type");
+                            u"binaryurp::Unmarshal: sequence type with unknown"
+                            " component type"_ustr);
                     }
                     switch (t2.get()->eTypeClass) {
                     case typelib_TypeClass_VOID:
                     case typelib_TypeClass_EXCEPTION:
                         throw css::io::IOException(
-                            "binaryurp::Unmarshal: sequence type with bad"
-                            " component type");
+                            u"binaryurp::Unmarshal: sequence type with bad"
+                            " component type"_ustr);
                     default:
                         break;
                     }
@@ -196,7 +196,7 @@ css::uno::TypeDescription Unmarshal::readType() {
         }
     default:
         throw css::io::IOException(
-            "binaryurp::Unmarshal: type of unknown type class");
+            u"binaryurp::Unmarshal: type of unknown type class"_ustr);
     }
 }
 
@@ -205,14 +205,14 @@ OUString Unmarshal::readOid() {
     for (sal_Int32 i = 0; i != oid.getLength(); ++i) {
         if (oid[i] > 0x7F) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: OID contains non-ASCII character");
+                u"binaryurp::Unmarshal: OID contains non-ASCII character"_ustr);
         }
     }
     sal_uInt16 idx = readCacheIndex();
     if (oid.isEmpty() && idx != cache::ignore) {
         if (state_.oidCache[idx].isEmpty()) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: unknown OID cache index");
+                u"binaryurp::Unmarshal: unknown OID cache index"_ustr);
         }
         return state_.oidCache[idx];
     }
@@ -235,7 +235,7 @@ rtl::ByteSequence Unmarshal::readTid() {
     if (tid.getLength() == 0) {
         if (idx == cache::ignore || state_.tidCache[idx].getLength() == 0) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: unknown TID cache index");
+                u"binaryurp::Unmarshal: unknown TID cache index"_ustr);
         }
         return state_.tidCache[idx];
     }
@@ -258,7 +258,7 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
             sal_uInt8 v = read8();
             if (v > 1) {
                 throw css::io::IOException(
-                    "binaryurp::Unmarshal: boolean of unknown value");
+                    u"binaryurp::Unmarshal: boolean of unknown value"_ustr);
             }
             return BinaryAny(type, &v);
         }
@@ -304,7 +304,7 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
             css::uno::TypeDescription t(readType());
             if (t.get()->eTypeClass == typelib_TypeClass_ANY) {
                 throw css::io::IOException(
-                    "binaryurp::Unmarshal: any of type ANY");
+                    u"binaryurp::Unmarshal: any of type ANY"_ustr);
             }
             return readValue(t);
         }
@@ -326,7 +326,7 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
             }
             if (!bFound) {
                 throw css::io::IOException(
-                    "binaryurp::Unmarshal: unknown enum value");
+                    u"binaryurp::Unmarshal: unknown enum value"_ustr);
             }
             return BinaryAny(type, &v);
         }
@@ -356,14 +356,14 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
 void Unmarshal::done() const {
     if (data_ != end_) {
         throw css::io::IOException(
-            "binaryurp::Unmarshal: block contains excess data");
+            u"binaryurp::Unmarshal: block contains excess data"_ustr);
     }
 }
 
 void Unmarshal::check(sal_Int32 size) const {
     if (end_ - data_ < size) {
         throw css::io::IOException(
-            "binaryurp::Unmarshal: trying to read past end of block");
+            u"binaryurp::Unmarshal: trying to read past end of block"_ustr);
     }
 }
 
@@ -376,7 +376,7 @@ sal_uInt16 Unmarshal::readCacheIndex() {
     sal_uInt16 idx = read16();
     if (idx >= cache::size && idx != cache::ignore) {
         throw css::io::IOException(
-            "binaryurp::Unmarshal: cache index out of range");
+            u"binaryurp::Unmarshal: cache index out of range"_ustr);
     }
     return idx;
 }
@@ -397,7 +397,7 @@ OUString Unmarshal::readString() {
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
-            "binaryurp::Unmarshal: string size too large");
+            u"binaryurp::Unmarshal: string size too large"_ustr);
     }
     check(static_cast< sal_Int32 >(n));
     OUString s;
@@ -409,7 +409,7 @@ OUString Unmarshal::readString() {
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw css::io::IOException(
-            "binaryurp::Unmarshal: string does not contain UTF-8");
+            u"binaryurp::Unmarshal: string does not contain UTF-8"_ustr);
     }
     data_ += n;
     return s;
@@ -420,7 +420,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
-            "binaryurp::Unmarshal: sequence size too large");
+            u"binaryurp::Unmarshal: sequence size too large"_ustr);
     }
     if (n == 0) {
         return BinaryAny(type, nullptr);
@@ -448,7 +448,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
         // sal_uInt32 * sal_Int32 -> sal_uInt64 cannot overflow
     if (size > SAL_MAX_SIZE - SAL_SEQUENCE_HEADER_SIZE) {
         throw css::uno::RuntimeException(
-            "binaryurp::Unmarshal: sequence size too large");
+            u"binaryurp::Unmarshal: sequence size too large"_ustr);
     }
     void * buf = allocate(
         SAL_SEQUENCE_HEADER_SIZE + static_cast< sal_Size >(size));
