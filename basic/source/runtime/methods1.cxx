@@ -2325,7 +2325,7 @@ static void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUSt
             Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                xFunc.set( xFactory->createInstance("com.sun.star.sheet.FunctionAccess"), UNO_QUERY_THROW);
+                xFunc.set( xFactory->createInstance(u"com.sun.star.sheet.FunctionAccess"_ustr), UNO_QUERY_THROW);
             }
         }
         Any aRet = xFunc->callFunction( sFuncName, aArgs );
@@ -2359,7 +2359,7 @@ void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
         Any(rPar.Get(4)->GetDouble())
     };
 
-    CallFunctionAccessFunction(aParams, "SYD", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"SYD"_ustr, rPar.Get(0));
 }
 
 void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
@@ -2381,7 +2381,7 @@ void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
         Any(rPar.Get(3)->GetDouble())
     };
 
-    CallFunctionAccessFunction(aParams, "SLN", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"SLN"_ustr, rPar.Get(0));
 }
 
 void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
@@ -2425,7 +2425,7 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "Pmt", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"Pmt"_ustr, rPar.Get(0));
 }
 
 void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
@@ -2471,7 +2471,7 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "PPmt", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"PPmt"_ustr, rPar.Get(0));
 }
 
 void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
@@ -2515,7 +2515,7 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "PV", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"PV"_ustr, rPar.Get(0));
 }
 
 void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
@@ -2542,7 +2542,7 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
         aValues
     };
 
-    CallFunctionAccessFunction(aParams, "NPV", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"NPV"_ustr, rPar.Get(0));
 }
 
 void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
@@ -2586,7 +2586,7 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "NPer", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"NPer"_ustr, rPar.Get(0));
 }
 
 void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
@@ -2616,7 +2616,7 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
         Any(rPar.Get(3)->GetDouble())
     };
 
-    CallFunctionAccessFunction(aParams, "MIRR", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"MIRR"_ustr, rPar.Get(0));
 }
 
 void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
@@ -2652,7 +2652,7 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
         Any(guess)
     };
 
-    CallFunctionAccessFunction(aParams, "IRR", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"IRR"_ustr, rPar.Get(0));
 }
 
 void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
@@ -2698,7 +2698,7 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "IPmt", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"IPmt"_ustr, rPar.Get(0));
 }
 
 void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
@@ -2742,7 +2742,7 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
         Any(type)
     };
 
-    CallFunctionAccessFunction(aParams, "FV", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"FV"_ustr, rPar.Get(0));
 }
 
 void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
@@ -2780,7 +2780,7 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
         Any(factor)
     };
 
-    CallFunctionAccessFunction(aParams, "DDB", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"DDB"_ustr, rPar.Get(0));
 }
 
 void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
@@ -2838,7 +2838,7 @@ void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
         Any(guess)
     };
 
-    CallFunctionAccessFunction(aParams, "Rate", rPar.Get(0));
+    CallFunctionAccessFunction(aParams, u"Rate"_ustr, rPar.Get(0));
 }
 
 void SbRtl_StrReverse(StarBASIC *, SbxArray & rPar, bool)

@@ -63,11 +63,11 @@ public:
 }
 
 SbiInputDialog::SbiInputDialog(weld::Window* pParent, const OUString& rPrompt)
-    : GenericDialogController(pParent, "svt/ui/inputbox.ui", "InputBox")
-    , m_xInput(m_xBuilder->weld_entry("entry"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
-    , m_xPromptText(m_xBuilder->weld_label("prompt"))
+    : GenericDialogController(pParent, u"svt/ui/inputbox.ui"_ustr, u"InputBox"_ustr)
+    , m_xInput(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xPromptText(m_xBuilder->weld_label(u"prompt"_ustr))
 {
     m_xDialog->set_title(rPrompt);
     m_xPromptText->set_label(rPrompt);
@@ -141,7 +141,7 @@ bool hasUno()
         {
             Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
-            if ( !( xManager->queryContentProvider( "file:///" ).is() ) )
+            if ( !( xManager->queryContentProvider( u"file:///"_ustr ).is() ) )
             {
                 // No UCB
                 return false;

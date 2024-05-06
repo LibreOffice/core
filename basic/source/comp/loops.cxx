@@ -299,7 +299,7 @@ void SbiParser::BadBlock()
     if( eEndTok )
         Error( ERRCODE_BASIC_BAD_BLOCK, eEndTok );
     else
-        Error( ERRCODE_BASIC_BAD_BLOCK, "Loop/Next/Wend" );
+        Error( ERRCODE_BASIC_BAD_BLOCK, u"Loop/Next/Wend"_ustr );
 }
 
 // On expr Goto/Gosub n,n,n...
@@ -312,7 +312,7 @@ void SbiParser::OnGoto()
     SbiToken eTok = Next();
     if( eTok != GOTO && eTok != GOSUB )
     {
-        Error( ERRCODE_BASIC_EXPECTED, "GoTo/GoSub" );
+        Error( ERRCODE_BASIC_EXPECTED, u"GoTo/GoSub"_ustr );
         eTok = GOTO;
     }
 
@@ -533,7 +533,7 @@ void SbiParser::On()
             TestToken( NEXT );
             aGen.Gen( SbiOpcode::NOERROR_ );
         }
-        else Error( ERRCODE_BASIC_EXPECTED, "GoTo/Resume" );
+        else Error( ERRCODE_BASIC_EXPECTED, u"GoTo/Resume"_ustr );
     }
 }
 

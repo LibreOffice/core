@@ -52,19 +52,19 @@ namespace
 // tests the new behaviour, we should be able to
 // directly modify the value of the nested 'HorizontalLine' struct
 OUString sTestSource1(
-    "Function doUnitTest() as Integer\n"
+    u"Function doUnitTest() as Integer\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
     "doUnitTest = b0.HorizontalLine.OuterLineWidth\n"
-    "End Function\n"
+    "End Function\n"_ustr
 );
 
 OUString sTestSource1Alt(
-    "Function doUnitTest() as Object\n"
+    u"Function doUnitTest() as Object\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
     "doUnitTest = b0\n"
-    "End Function\n"
+    "End Function\n"_ustr
 );
 
 // tests the old behaviour, we should still be able
@@ -74,23 +74,23 @@ OUString sTestSource1Alt(
 // c) modifying the new instance
 // d) setting b0.HorizontalLine with the value of the new instance
 OUString sTestSource2(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "doUnitTest = b0.HorizontalLine.OuterLineWidth\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 OUString sTestSource2Alt(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "doUnitTest = b0\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 // it should be legal to assign a variant to a struct ( and copy by val )
 // make sure we aren't copying by reference, we make sure that l is not
@@ -98,18 +98,18 @@ OUString sTestSource2Alt(
 // OuterLineWidth of 4 & 9 respectively and we should be returning
 // 13 the sum of the two ( hopefully unique values if we haven't copied by reference )
 OUString sTestSource3(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "l.OuterLineWidth = 4\n"
     "doUnitTest = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 OUString sTestSource3Alt(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
@@ -119,24 +119,24 @@ OUString sTestSource3Alt(
     "result(0) = b0\n"
     "result(1) = l\n"
     "doUnitTest = result\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 // nearly the same as above but this time for a fixed type
 // variable
 OUString sTestSource4(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "l.OuterLineWidth = 4\n"
     "doUnitTest = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 OUString sTestSource4Alt(
-    "Function doUnitTest()\n"
+    u"Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
@@ -146,7 +146,7 @@ OUString sTestSource4Alt(
     "result(0) = b0\n"
     "result(1) = l\n"
     "doUnitTest = result\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 // Although basic might appear to correctly change nested struct elements
@@ -155,13 +155,13 @@ OUString sTestSource4Alt(
 // We need to additionally check the actual uno struct to see if the
 // changes made are *really* reflected in the object
 OUString sTestSource5(
-    "Function doUnitTest() as Object\n"
+    u"Function doUnitTest() as Object\n"
     "Dim aWinDesc as new \"com.sun.star.awt.WindowDescriptor\"\n"
     "Dim aRect as new \"com.sun.star.awt.Rectangle\"\n"
     "aRect.X = 200\n"
     "aWinDesc.Bounds = aRect\n"
     "doUnitTest = aWinDesc\n"
-"End Function\n"
+"End Function\n"_ustr
 );
 
 
@@ -300,13 +300,13 @@ void Nested_Struct::testUnoAccess()
 
 void Nested_Struct::testTdf134576()
 {
-    MacroSnippet myMacro("Function doUnitTest()\n"
+    MacroSnippet myMacro(u"Function doUnitTest()\n"
                         "  On Error Resume Next\n"
                         "  For Each a In b\n"
                         "    c.d\n"
                         "  Next\n"
                         "  doUnitTest = 1\n"
-                        "End Function\n");
+                        "End Function\n"_ustr);
 
     myMacro.Compile();
     CPPUNIT_ASSERT(!myMacro.HasError());

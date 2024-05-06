@@ -85,7 +85,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                     provider::theMasterScriptProviderFactory::get( xContext );
 
                 Any aCtx;
-                aCtx <<= OUString("user");
+                aCtx <<= u"user"_ustr;
                 xScriptProvider = xFactory->createScriptProvider( aCtx );
             }
 
@@ -318,7 +318,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 {
     css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
-    SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxClassType::Object);
+    SbxVariable* pDlgLibContVar = pBasic->Find(u"DialogLibraries"_ustr, SbxClassType::Object);
     if( auto pDlgLibContUnoObj = dynamic_cast<SbUnoObject*>( pDlgLibContVar) )
     {
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
@@ -433,7 +433,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
 
     // Create new uno dialog
     Reference< XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext(
-                      "com.sun.star.awt.UnoControlDialogModel", xContext), UNO_QUERY );
+                      u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext), UNO_QUERY );
     if( !xDialogModel.is() )
     {
         return;
@@ -455,13 +455,13 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
         try
         {
             bool bDecoration = true;
-            OUString aDecorationPropName("Decoration");
+            OUString aDecorationPropName(u"Decoration"_ustr);
             Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
             aDecorationAny >>= bDecoration;
             if( !bDecoration )
             {
                 xDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
-                xDlgModPropSet->setPropertyValue( "Title", Any( OUString() ) );
+                xDlgModPropSet->setPropertyValue( u"Title"_ustr, Any( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )

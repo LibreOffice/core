@@ -1347,7 +1347,7 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         OUString aStr;
-        OUString aStrNew("");
+        OUString aStrNew(u""_ustr);
         SbxVariableRef pArg = rPar.Get(1);
         pArg->Format( aStr );
 
@@ -2534,7 +2534,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                         }
                         else
                         {
-                            rPar.Get(0)->PutString("");
+                            rPar.Get(0)->PutString(u""_ustr);
                         }
 
                         SbAttributes nFlags = SbAttributes::NONE;
@@ -3617,7 +3617,7 @@ OUString getBasicTypeName( SbxDataType eType )
 
 static OUString getObjectTypeName( SbxVariable* pVar )
 {
-    OUString sRet( "Object" );
+    OUString sRet( u"Object"_ustr );
     if ( pVar )
     {
         SbxBase* pBaseObj = pVar->GetObject();
@@ -3659,7 +3659,7 @@ static OUString getObjectTypeName( SbxVariable* pVar )
                         {
                             try
                             {
-                                xInv->getValue( "$GetTypeName" ) >>= sRet;
+                                xInv->getValue( u"$GetTypeName"_ustr ) >>= sRet;
                             }
                             catch(const Exception& )
                             {
@@ -4133,7 +4133,7 @@ void SbRtl_Load(StarBASIC *, SbxArray & rPar, bool)
     }
     else if (SbxObject* pSbxObj = dynamic_cast<SbxObject*>(pObj))
     {
-        SbxVariable* pVar = pSbxObj->Find("Load", SbxClassType::Method);
+        SbxVariable* pVar = pSbxObj->Find(u"Load"_ustr, SbxClassType::Method);
         if( pVar )
         {
             pVar->GetInteger();
@@ -4160,7 +4160,7 @@ void SbRtl_Unload(StarBASIC *, SbxArray & rPar, bool)
     }
     else if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pObj))
     {
-        SbxVariable* pVar = pSbxObj->Find("Unload", SbxClassType::Method);
+        SbxVariable* pVar = pSbxObj->Find(u"Unload"_ustr, SbxClassType::Method);
         if( pVar )
         {
             pVar->GetInteger();

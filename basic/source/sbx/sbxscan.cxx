@@ -200,7 +200,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     {
         p++;
         eScanType = SbxLONG;
-        OUString aCmp( "0123456789ABCDEF" );
+        OUString aCmp( u"0123456789ABCDEF"_ustr );
         char base = 16;
         char ndig = 8;
         switch( *p++ )

@@ -34,7 +34,7 @@ public:
 void Language_Conditionals::testIfNot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 1\n"
+        MacroSnippet myMacro(u"Option VBASupport 1\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -45,14 +45,14 @@ void Language_Conditionals::testIfNot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 0\n"
+        MacroSnippet myMacro(u"Option VBASupport 0\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -63,7 +63,7 @@ void Language_Conditionals::testIfNot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
@@ -74,7 +74,7 @@ void Language_Conditionals::testIfNot()
 void Language_Conditionals::testIfAndNot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 1\n"
+        MacroSnippet myMacro(u"Option VBASupport 1\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -87,14 +87,14 @@ void Language_Conditionals::testIfAndNot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 0\n"
+        MacroSnippet myMacro(u"Option VBASupport 0\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -107,7 +107,7 @@ void Language_Conditionals::testIfAndNot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
@@ -118,7 +118,7 @@ void Language_Conditionals::testIfAndNot()
 void Language_Conditionals::testNENot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 1\n"
+        MacroSnippet myMacro(u"Option VBASupport 1\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -131,14 +131,14 @@ void Language_Conditionals::testNENot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        MacroSnippet myMacro("Option VBASupport 0\n"
+        MacroSnippet myMacro(u"Option VBASupport 0\n"
                              "Option Explicit\n"
                              "\n"
                              "Function doUnitTest() As Integer\n"
@@ -151,7 +151,7 @@ void Language_Conditionals::testNENot()
                              "Else\n"
                              "doUnitTest = 0\n"
                              "End If\n"
-                             "End Function\n");
+                             "End Function\n"_ustr);
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();

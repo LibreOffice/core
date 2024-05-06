@@ -38,7 +38,7 @@ bool SbiParser::Channel( bool bAlways )
         bRes = true;
     }
     else if( bAlways )
-        Error( ERRCODE_BASIC_EXPECTED, "#" );
+        Error( ERRCODE_BASIC_EXPECTED, u"#"_ustr );
     return bRes;
 }
 

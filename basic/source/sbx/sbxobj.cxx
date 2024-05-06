@@ -693,7 +693,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         return;
     }
     ++nLevel;
-    OUString aIndent("");
+    OUString aIndent(u""_ustr);
     for ( sal_uInt16 n = 1; n < nLevel; ++n )
     {
         aIndent += "    ";

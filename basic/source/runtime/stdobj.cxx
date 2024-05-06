@@ -929,8 +929,8 @@ static_assert(MethodsTableValid(aMethods));
 SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 {
     // #i92642: Remove default properties
-    Remove( "Name", SbxClassType::DontCare );
-    Remove( "Parent", SbxClassType::DontCare );
+    Remove( u"Name"_ustr, SbxClassType::DontCare );
+    Remove( u"Parent"_ustr, SbxClassType::DontCare );
 
     SetParent( pb );
 

@@ -193,14 +193,14 @@ static Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
         if( xContext.is() )
         {
             xContext->getValueByName(
-                "/singletons/com.sun.star.reflection.theTypeDescriptionManager" )
+                u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr )
                     >>= xAccess;
             OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
         }
         if( !xAccess.is() )
         {
             throw DeploymentException(
-                    "/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible" );
+                    u"/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible"_ustr );
         }
     }
     return xAccess;
@@ -223,7 +223,7 @@ static Reference< XTypeConverter > const & getTypeConverter_Impl()
         if( !xTypeConverter.is() )
         {
             throw DeploymentException(
-                "com.sun.star.script.Converter service not accessible" );
+                u"com.sun.star.script.Converter service not accessible"_ustr );
         }
     }
     return xTypeConverter;
@@ -240,7 +240,7 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
             xFactory.set(
-                xSMgr->createInstanceWithContext( "com.sun.star.bridge.OleObjectFactory", xContext ),
+                xSMgr->createInstanceWithContext( u"com.sun.star.bridge.OleObjectFactory"_ustr, xContext ),
                 UNO_QUERY );
         }
         return xFactory;
@@ -1703,7 +1703,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
                 if ( xInv.is() )
                 {
                     OUString sTypeName;
-                    xInv->getValue( "$GetTypeName" ) >>= sTypeName;
+                    xInv->getValue( u"$GetTypeName"_ustr ) >>= sTypeName;
                     if ( sTypeName.isEmpty() || sTypeName == "IDispatch" )
                     {
                         // can't check type, leave it pass
@@ -2287,8 +2287,8 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     , bNativeCOMObject( false )
 {
     // beat out again the default properties of Sbx
-    Remove( "Name", SbxClassType::DontCare );
-    Remove( "Parent", SbxClassType::DontCare );
+    Remove( u"Name"_ustr, SbxClassType::DontCare );
+    Remove( u"Parent"_ustr, SbxClassType::DontCare );
 
     // check the type of the objects
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();
@@ -3028,7 +3028,7 @@ void RTL_Impl_GetProcessServiceManager( SbxArray& rPar )
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
     // Create a SbUnoObject out of it and return it
-    SbUnoObjectRef xUnoObj = new SbUnoObject( "ProcessServiceManager", Any(xFactory) );
+    SbUnoObjectRef xUnoObj = new SbUnoObject( u"ProcessServiceManager"_ustr, Any(xFactory) );
     refVar->PutObject( xUnoObj.get() );
 }
 
@@ -3220,7 +3220,7 @@ void VBAConstantHelper::init()
     if ( isInited )
         return;
 
-    Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( "ooo.vba", {TypeClass_CONSTANTS}, TypeDescriptionSearchDepth_INFINITE  );
+    Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( u"ooo.vba"_ustr, {TypeClass_CONSTANTS}, TypeDescriptionSearchDepth_INFINITE  );
 
     if ( !xEnum.is())
     {
@@ -3706,7 +3706,7 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName )
 SbUnoSingleton::SbUnoSingleton( const OUString& aName_ )
         : SbxObject( aName_ )
 {
-    SbxVariableRef xGetMethodRef = new SbxMethod( "get", SbxOBJECT );
+    SbxVariableRef xGetMethodRef = new SbxMethod( u"get"_ustr, SbxOBJECT );
     QuickInsert( xGetMethodRef.get() );
 }
 
@@ -4064,7 +4064,7 @@ void RTL_Impl_GetDefaultContext( SbxArray& rPar )
 
     Any aContextAny( comphelper::getProcessComponentContext() );
 
-    SbUnoObjectRef xUnoObj = new SbUnoObject( "DefaultContext", aContextAny );
+    SbUnoObjectRef xUnoObj = new SbUnoObject( u"DefaultContext"_ustr, aContextAny );
     refVar->PutObject( xUnoObj.get() );
 }
 
@@ -4374,7 +4374,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
     try
     {
         xRet = xServiceMgr->createInstanceWithArgumentsAndContext(
-            "com.sun.star.custom.UnoComListener",
+            u"com.sun.star.custom.UnoComListener"_ustr,
             args, xContext );
     }
     catch( const Exception& )
@@ -4480,7 +4480,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
     Reference< XSingleServiceFactory > xComImplementsFactory
     (
-        xServiceMgr->createInstanceWithContext( "com.sun.star.custom.ComImplementsFactory", xContext ),
+        xServiceMgr->createInstanceWithContext( u"com.sun.star.custom.ComImplementsFactory"_ustr, xContext ),
         UNO_QUERY
     );
     if( !xComImplementsFactory.is() )
@@ -4559,7 +4559,7 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         // Only for native COM objects
         if( pUnoObj->isNativeCOMObject() )
         {
-            SbxVariableRef pMeth = pObj->Find( "toString", SbxClassType::Method );
+            SbxVariableRef pMeth = pObj->Find( u"toString"_ustr, SbxClassType::Method );
             if ( pMeth.is() )
             {
                 SbxValues aRes;

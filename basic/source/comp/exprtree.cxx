@@ -1034,7 +1034,7 @@ SbiExprListPtr SbiExprList::ParseParameters( SbiParser* pParser, bool bStandalon
                     // tdf#106529: only fail here in strict mode (i.e. when compiled from IDE), and
                     // allow legacy code with missing closing parenthesis when started e.g. from
                     // extensions and event handlers
-                    if (comphelper::IsContextFlagActive("BasicStrict"))
+                    if (comphelper::IsContextFlagActive(u"BasicStrict"_ustr))
                     {
                         pParser->Error(ERRCODE_BASIC_EXPECTED, RPAREN);
                         pExprList->bError = true;

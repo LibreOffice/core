@@ -158,12 +158,12 @@ SbxBaseRef SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_VARIABLE:    return new SbxVariable;
         case SBXID_ARRAY:       return new SbxArray;
         case SBXID_DIMARRAY:    return new SbxDimArray;
-        case SBXID_OBJECT:      return new SbxObject( "" );
+        case SBXID_OBJECT:      return new SbxObject( u""_ustr );
         case SBXID_COLLECTION:  return new SbxCollection;
         case SBXID_FIXCOLLECTION:
                                 return new SbxStdCollection;
-        case SBXID_METHOD:      return new SbxMethod( "", SbxEMPTY );
-        case SBXID_PROPERTY:    return new SbxProperty( "", SbxEMPTY );
+        case SBXID_METHOD:      return new SbxMethod( u""_ustr, SbxEMPTY );
+        case SBXID_PROPERTY:    return new SbxProperty( u""_ustr, SbxEMPTY );
     }
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();

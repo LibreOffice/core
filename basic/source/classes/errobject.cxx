@@ -156,13 +156,13 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  )
 {
-    return "Number";
+    return u"Number"_ustr;
 }
 
 void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext )
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException("Missing Required Parameter" );
+        throw uno::RuntimeException(u"Missing Required Parameter"_ustr );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;
@@ -202,7 +202,7 @@ SbxErrObject::getErrObject()
         static std::mutex aMutex;
         std::scoped_lock aGuard(aMutex);
         if (!rGlobErr)
-            rGlobErr = new SbxErrObject("Err",
+            rGlobErr = new SbxErrObject(u"Err"_ustr,
                                         uno::Any(uno::Reference<vba::XErrObject>(new ErrObject())));
     }
     return rGlobErr;

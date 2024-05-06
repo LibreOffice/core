@@ -3759,7 +3759,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
                     {
                         // Parameter is missing
                         pElem = new SbxVariable( SbxSTRING );
-                        pElem->PutString( "<missing parameter>");
+                        pElem->PutString( u"<missing parameter>"_ustr);
                     }
                     else
                     {

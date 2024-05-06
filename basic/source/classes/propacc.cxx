@@ -129,7 +129,7 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues()
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
 {
     if (!m_aPropVals.empty())
-        throw IllegalArgumentException("m_aPropVals not empty", getXWeak(), -1);
+        throw IllegalArgumentException(u"m_aPropVals not empty"_ustr, getXWeak(), -1);
 
     for (const PropertyValue& i : rPropertyValues)
     {

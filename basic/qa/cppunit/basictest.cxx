@@ -30,7 +30,7 @@ MacroSnippet::MacroSnippet( const OUString& sSource )
     : mbError(false)
 {
     InitSnippet();
-    MakeModule("TestModule", sSource);
+    MakeModule(u"TestModule"_ustr, sSource);
 }
 
 MacroSnippet::MacroSnippet()
@@ -74,7 +74,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
     SbxVariableRef pReturn;
     if ( !Compile() )
         return pReturn;
-    SbMethod* pMeth = mpMod.is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
+    SbMethod* pMeth = mpMod.is() ? static_cast<SbMethod*>(mpMod->Find( u"doUnitTest"_ustr,  SbxClassType::Method )) : nullptr;
     if ( pMeth )
     {
         if ( rArgs.hasElements() )

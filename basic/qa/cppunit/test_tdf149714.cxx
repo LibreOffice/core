@@ -52,7 +52,7 @@ End Function
         sBasic = sBasic.replaceFirst("$PNGFILENAME", aDataFileName);
 
         interpreter = new StarBASIC();
-        auto mod = interpreter->MakeModule("BitsPerPixel", sBasic);
+        auto mod = interpreter->MakeModule(u"BitsPerPixel"_ustr, sBasic);
 
         CPPUNIT_ASSERT(mod->Compile());
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, StarBASIC::GetErrBasic());
@@ -65,7 +65,8 @@ End Function
 void TestTdf149714::testBitsPerPixel()
 {
     auto m = Module();
-    auto GetBitsPerPixelAsString = m->FindMethod("GetBitsPerPixelAsString", SbxClassType::Method);
+    auto GetBitsPerPixelAsString
+        = m->FindMethod(u"GetBitsPerPixelAsString"_ustr, SbxClassType::Method);
     CPPUNIT_ASSERT_MESSAGE("Could not Find GetBitsPerPixelAsString in module",
                            GetBitsPerPixelAsString != nullptr);
 
@@ -75,7 +76,7 @@ void TestTdf149714::testBitsPerPixel()
     // Without the fix in place this would fail with:
     // - Expected: 24
     // - Actual:   True
-    CPPUNIT_ASSERT_EQUAL(OUString{ "24" }, returned->GetOUString());
+    CPPUNIT_ASSERT_EQUAL(u"24"_ustr, returned->GetOUString());
 }
 
 // Put the test suite in the registry

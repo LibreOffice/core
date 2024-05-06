@@ -31,18 +31,18 @@ namespace
     };
 
 OUString sTestEnableRuntime(
-    "Function doUnitTest as Integer\n"
+    u"Function doUnitTest as Integer\n"
     "Dim Enable as Integer\n"
     "Enable = 1\n"
     "Enable = Enable + 2\n"
     "doUnitTest = Enable\n"
-    "End Function\n"
+    "End Function\n"_ustr
 );
 
 OUString sTestDimEnable(
-    "Sub doUnitTest\n"
+    u"Sub doUnitTest\n"
     "Dim Enable as String\n"
-    "End Sub\n"
+    "End Sub\n"_ustr
 );
 
 void EnableTest::testEnableRuntime()
@@ -63,10 +63,10 @@ void EnableTest::testDimEnable()
 
 void EnableTest::testWin64()
 {
-    MacroSnippet myMacro("   #If Win64\n"
+    MacroSnippet myMacro(u"   #If Win64\n"
         "Declare PtrSafe Function aht_apiGetOpenFileName Lib \"comdlg32.dll\""
         "\n"
-        "#End if\n");
+        "#End if\n"_ustr);
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("#if Win64 Declare PtrSafe causes compile error", !myMacro.HasError() );
 }

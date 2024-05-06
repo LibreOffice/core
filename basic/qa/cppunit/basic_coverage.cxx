@@ -77,14 +77,14 @@ void Coverage::process_directory(const OUString& sDirName)
                 if (sFileURL.endsWith(".bas"))
                 {
                     MacroSnippet testMacro;
-                    testMacro.LoadSourceFromFile("TestUtil", sMacroUtilsURL);
-                    testMacro.LoadSourceFromFile("TestModule", sFileURL);
+                    testMacro.LoadSourceFromFile(u"TestUtil"_ustr, sMacroUtilsURL);
+                    testMacro.LoadSourceFromFile(u"TestModule"_ustr, sFileURL);
                     SbxVariableRef pReturn = testMacro.Run();
                     CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
                     fprintf(stderr, "macro result for %s\n", OUStringToOString(sFileURL,RTL_TEXTENCODING_UTF8).getStr());
                     fprintf(stderr, "macro returned:\n%s\n",
                             OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", u"OK"_ustr,
                                                  pReturn->GetOUString());
                 }
             }

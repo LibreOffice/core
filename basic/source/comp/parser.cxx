@@ -495,7 +495,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
 
     bool bEQ = ( Peek() == EQ );
     if( !bEQ && bVBASupportOn && aVar.IsBracket() )
-        Error( ERRCODE_BASIC_EXPECTED, "=" );
+        Error( ERRCODE_BASIC_EXPECTED, u"="_ustr );
 
     RecursiveMode eRecMode = ( bEQ ? PREVENT_CALL : FORCE_CALL );
     bool bSpecialMidHandling = false;
@@ -772,14 +772,14 @@ void SbiParser::Option()
                 nBase = static_cast<short>(nVal);
                 break;
             }
-            Error( ERRCODE_BASIC_EXPECTED, "0/1" );
+            Error( ERRCODE_BASIC_EXPECTED, u"0/1"_ustr );
             break;
         case PRIVATE:
         {
             OUString aString = SbiTokenizer::Symbol(Next());
             if( !aString.equalsIgnoreAsciiCase("Module") )
             {
-                Error( ERRCODE_BASIC_EXPECTED, "Module" );
+                Error( ERRCODE_BASIC_EXPECTED, u"Module"_ustr );
             }
             break;
         }
@@ -794,7 +794,7 @@ void SbiParser::Option()
             }
             else
             {
-                Error( ERRCODE_BASIC_EXPECTED, "Text/Binary" );
+                Error( ERRCODE_BASIC_EXPECTED, u"Text/Binary"_ustr );
             }
             break;
         }
@@ -825,7 +825,7 @@ void SbiParser::Option()
                     break;
                 }
             }
-            Error( ERRCODE_BASIC_EXPECTED, "0/1" );
+            Error( ERRCODE_BASIC_EXPECTED, u"0/1"_ustr );
             break;
         default:
             Error( ERRCODE_BASIC_BAD_OPTION, eCurTok );
@@ -851,39 +851,39 @@ void SbiParser::AddConstants()
 {
     // tdf#153543 - shell constants
     // See https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/shell-constants
-    addNumericConst(aPublics, "vbHide", 0);
-    addNumericConst(aPublics, "vbNormalFocus", 1);
-    addNumericConst(aPublics, "vbMinimizedFocus", 2);
-    addNumericConst(aPublics, "vbMaximizedFocus", 3);
-    addNumericConst(aPublics, "vbNormalNoFocus", 4);
-    addNumericConst(aPublics, "vbMinimizedNoFocus", 6);
+    addNumericConst(aPublics, u"vbHide"_ustr, 0);
+    addNumericConst(aPublics, u"vbNormalFocus"_ustr, 1);
+    addNumericConst(aPublics, u"vbMinimizedFocus"_ustr, 2);
+    addNumericConst(aPublics, u"vbMaximizedFocus"_ustr, 3);
+    addNumericConst(aPublics, u"vbNormalNoFocus"_ustr, 4);
+    addNumericConst(aPublics, u"vbMinimizedNoFocus"_ustr, 6);
 
     // tdf#131563 - add vba color constants
     // See https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/color-constants
-    addNumericConst(aPublics, "vbBlack", 0x0);
-    addNumericConst(aPublics, "vbRed", 0xFF);
-    addNumericConst(aPublics, "vbGreen", 0xFF00);
-    addNumericConst(aPublics, "vbYellow", 0xFFFF);
-    addNumericConst(aPublics, "vbBlue", 0xFF0000);
-    addNumericConst(aPublics, "vbMagenta", 0xFF00FF);
-    addNumericConst(aPublics, "vbCyan", 0xFFFF00);
-    addNumericConst(aPublics, "vbWhite", 0xFFFFFF);
+    addNumericConst(aPublics, u"vbBlack"_ustr, 0x0);
+    addNumericConst(aPublics, u"vbRed"_ustr, 0xFF);
+    addNumericConst(aPublics, u"vbGreen"_ustr, 0xFF00);
+    addNumericConst(aPublics, u"vbYellow"_ustr, 0xFFFF);
+    addNumericConst(aPublics, u"vbBlue"_ustr, 0xFF0000);
+    addNumericConst(aPublics, u"vbMagenta"_ustr, 0xFF00FF);
+    addNumericConst(aPublics, u"vbCyan"_ustr, 0xFFFF00);
+    addNumericConst(aPublics, u"vbWhite"_ustr, 0xFFFFFF);
 
     // #113063 Create constant RTL symbols
-    addStringConst( aPublics, "vbCr", "\x0D" );
-    addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
-    addStringConst( aPublics, "vbFormFeed", "\x0C" );
-    addStringConst( aPublics, "vbLf", "\x0A" );
+    addStringConst( aPublics, u"vbCr"_ustr, u"\x0D"_ustr );
+    addStringConst( aPublics, u"vbCrLf"_ustr, u"\x0D\x0A"_ustr );
+    addStringConst( aPublics, u"vbFormFeed"_ustr, u"\x0C"_ustr );
+    addStringConst( aPublics, u"vbLf"_ustr, u"\x0A"_ustr );
 #ifdef _WIN32
     addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
 #else
-    addStringConst( aPublics, "vbNewLine", "\x0A" );
+    addStringConst( aPublics, u"vbNewLine"_ustr, u"\x0A"_ustr );
 #endif
-    addStringConst( aPublics, "vbNullString", "" );
-    addStringConst( aPublics, "vbTab", "\x09" );
-    addStringConst( aPublics, "vbVerticalTab", "\x0B" );
+    addStringConst( aPublics, u"vbNullString"_ustr, u""_ustr );
+    addStringConst( aPublics, u"vbTab"_ustr, u"\x09"_ustr );
+    addStringConst( aPublics, u"vbVerticalTab"_ustr, u"\x0B"_ustr );
 
-    addStringConst( aPublics, "vbNullChar", OUString(u'\0') );
+    addStringConst( aPublics, u"vbNullChar"_ustr, OUString(u'\0') );
 }
 
 // ERROR n

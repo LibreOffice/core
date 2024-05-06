@@ -28,7 +28,7 @@ class GlobalAsNewTest : public CppUnit::TestFixture
     SbModuleRef Module()
     {
         interpreter = new StarBASIC();
-        auto mod = interpreter->MakeModule("GlobalAsNew", R"BAS(
+        auto mod = interpreter->MakeModule(u"GlobalAsNew"_ustr, uR"BAS(
 Global aDate As New "com.sun.star.util.Date"
 
 Function GetDateAsString As String
@@ -43,7 +43,7 @@ Function SetDate
    SetDate = GetDateAsString()
 End Function
 
-        )BAS");
+        )BAS"_ustr);
         CPPUNIT_ASSERT(mod->Compile());
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, StarBASIC::GetErrBasic());
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, SbxBase::GetError());
@@ -55,20 +55,20 @@ End Function
 void GlobalAsNewTest::testMaintainsValueAcrossCalls()
 {
     auto m = Module();
-    auto GetDateAsString = m->FindMethod("GetDateAsString", SbxClassType::Method);
+    auto GetDateAsString = m->FindMethod(u"GetDateAsString"_ustr, SbxClassType::Method);
     CPPUNIT_ASSERT_MESSAGE("Could not Find GetDateAsString in module", GetDateAsString != nullptr);
 
     // There is no SbxMethod::call(), the basic code is exercised here in the copy ctor
     SbxVariableRef returned = new SbxMethod{ *GetDateAsString };
     CPPUNIT_ASSERT(returned->IsString());
     //0-00-0 is the result of reading the default-initialized date
-    CPPUNIT_ASSERT_EQUAL(OUString{ "0-00-0" }, returned->GetOUString());
+    CPPUNIT_ASSERT_EQUAL(u"0-00-0"_ustr, returned->GetOUString());
 
-    auto SetDate = m->FindMethod("SetDate", SbxClassType::Method);
+    auto SetDate = m->FindMethod(u"SetDate"_ustr, SbxClassType::Method);
     CPPUNIT_ASSERT_MESSAGE("Could not Find SetDate in module", SetDate != nullptr);
     returned = new SbxMethod{ *SetDate };
     CPPUNIT_ASSERT(returned->IsString());
-    OUString set_val("2019-06-30");
+    OUString set_val(u"2019-06-30"_ustr);
     CPPUNIT_ASSERT_EQUAL(set_val, returned->GetOUString());
 
     returned = new SbxMethod{ *GetDateAsString };

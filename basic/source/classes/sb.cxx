@@ -136,7 +136,7 @@ void DocBasicItem::clearDependingVarsOnDelete( StarBASIC& rDeletedBasic )
 void DocBasicItem::startListening()
 {
     Any aThisComp;
-    mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
+    mrDocBasic.GetUNOConstant( u"ThisComponent"_ustr, aThisComp );
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
     mbDisposed = !xCloseBC.is();
     if( xCloseBC.is() )
@@ -150,7 +150,7 @@ void DocBasicItem::stopListening()
     if( mbDisposed ) return;
     mbDisposed = true;
     Any aThisComp;
-    if (!mrDocBasic.GetUNOConstant("ThisComponent", aThisComp))
+    if (!mrDocBasic.GetUNOConstant(u"ThisComponent"_ustr, aThisComp))
         return;
 
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
@@ -235,14 +235,14 @@ SbxObject* StarBASIC::getVBAGlobals( )
     if ( !pVBAGlobals.is() )
     {
         Any aThisDoc;
-        if ( GetUNOConstant("ThisComponent", aThisDoc) )
+        if ( GetUNOConstant(u"ThisComponent"_ustr, aThisDoc) )
         {
             Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
             if ( xDocFac.is() )
             {
                 try
                 {
-                    xDocFac->createInstance("ooo.vba.VBAGlobals");
+                    xDocFac->createInstance(u"ooo.vba.VBAGlobals"_ustr);
                 }
                 catch(const Exception& )
                 {
@@ -250,7 +250,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
-        pVBAGlobals = static_cast<SbUnoObject*>(Find( "VBAGlobals" , SbxClassType::DontCare ));
+        pVBAGlobals = static_cast<SbUnoObject*>(Find( u"VBAGlobals"_ustr , SbxClassType::DontCare ));
     }
     return pVBAGlobals.get();
 }
@@ -422,11 +422,11 @@ SbxBaseRef SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_BASIC:
             return new StarBASIC( nullptr );
         case SBXID_BASICMOD:
-            return new SbModule( "" );
+            return new SbModule( u""_ustr );
         case SBXID_BASICPROP:
-            return new SbProperty( "", SbxVARIANT, nullptr );
+            return new SbProperty( u""_ustr, SbxVARIANT, nullptr );
         case SBXID_BASICMETHOD:
-            return new SbMethod( "", SbxVARIANT, nullptr );
+            return new SbMethod( u""_ustr, SbxVARIANT, nullptr );
         case SBXID_JSCRIPTMOD:
             return new SbJScriptModule;
         case SBXID_JSCRIPTMETH:
@@ -448,14 +448,14 @@ SbxObjectRef SbiFactory::CreateObject( const OUString& rClass )
     }
     else if( rClass.equalsIgnoreAsciiCase( "Collection" ) )
     {
-        return new BasicCollection( "Collection" );
+        return new BasicCollection( u"Collection"_ustr );
     }
     else if( rClass.equalsIgnoreAsciiCase( "FileSystemObject" ) )
     {
         try
         {
             Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-            OUString aServiceName("ooo.vba.FileSystemObject");
+            OUString aServiceName(u"ooo.vba.FileSystemObject"_ustr);
             Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
             return new SbUnoObject( aServiceName, uno::Any( xInterface ) );
         }
@@ -728,7 +728,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                         }
                         else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                         {
-                            BasicCollection* pNewCollection = new BasicCollection( "Collection" );
+                            BasicCollection* pNewCollection = new BasicCollection( u"Collection"_ustr );
                             pNewCollection->SetName( pProp->GetName() );
                             pNewCollection->SetParent( pClassModule->pParent );
                             pNewProp->PutObject( pNewCollection );
@@ -794,7 +794,7 @@ void SbClassModuleObject::triggerInitializeEvent()
     mbInitializeEventDone = true;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find("Class_Initialize", SbxClassType::Method);
+    SbxVariable* pMeth = SbxObject::Find(u"Class_Initialize"_ustr, SbxClassType::Method);
     if( pMeth )
     {
         SbxValues aVals;
@@ -809,7 +809,7 @@ void SbClassModuleObject::triggerTerminateEvent()
         return;
     }
     // Search method
-    SbxVariable* pMeth = SbxObject::Find("Class_Terminate", SbxClassType::Method );
+    SbxVariable* pMeth = SbxObject::Find(u"Class_Terminate"_ustr, SbxClassType::Method );
     if( pMeth )
     {
         SbxValues aVals;
@@ -893,7 +893,7 @@ SbModule* SbClassFactory::FindClass( const OUString& rClassName )
 }
 
 StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
-    : SbxObject("StarBASIC"), bDocBasic( bIsDocBasic )
+    : SbxObject(u"StarBASIC"_ustr), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
     bNoRtl = bBreak = false;
@@ -1562,7 +1562,7 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
         OUString sError = BasResId(pErrorMsg);
         OUStringBuffer aMsg1(sError);
         // replace argument placeholder with %s
-        OUString aSrgStr( "$(ARG1)" );
+        OUString aSrgStr( u"$(ARG1)"_ustr );
         sal_Int32 nResult = sError.indexOf(aSrgStr);
 
         if( nResult >= 0 )
@@ -1831,12 +1831,12 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         }
     }
     // HACK for SFX-Bullshit!
-    SbxVariable* p = Find( "FALSE", SbxClassType::Property );
+    SbxVariable* p = Find( u"FALSE"_ustr, SbxClassType::Property );
     if( p )
     {
         Remove( p );
     }
-    p = Find( "TRUE", SbxClassType::Property );
+    p = Find( u"TRUE"_ustr, SbxClassType::Property );
     if( p )
     {
         Remove( p );
@@ -1991,15 +1991,15 @@ void BasicCollection::Initialize()
     if ( !xAddInfo.is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  "Item", SbxVARIANT );
-        xAddInfo->AddParam(  "Key", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
-        xAddInfo->AddParam(  "Before", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
-        xAddInfo->AddParam(  "After", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  u"Item"_ustr, SbxVARIANT );
+        xAddInfo->AddParam(  u"Key"_ustr, SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  u"Before"_ustr, SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  u"After"_ustr, SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
     }
     if ( !xItemInfo.is() )
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  "Index", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);
+        xItemInfo->AddParam(  u"Index"_ustr, SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);
     }
 }
 

@@ -66,7 +66,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
     if( !ppDim && pDim )
     {
         if(pDim->GetDims() )
-            Error( ERRCODE_BASIC_EXPECTED, "()" );
+            Error( ERRCODE_BASIC_EXPECTED, u"()"_ustr );
     }
     else if( ppDim )
         *ppDim = std::move(pDim);
@@ -704,8 +704,8 @@ void SbiParser::DefType()
         }
     }
 
-    pType->Remove( "Name", SbxClassType::DontCare );
-    pType->Remove( "Parent", SbxClassType::DontCare );
+    pType->Remove( u"Name"_ustr, SbxClassType::DontCare );
+    pType->Remove( u"Parent"_ustr, SbxClassType::DontCare );
 
     rTypeArray->Insert(pType, rTypeArray->Count());
 }
@@ -835,8 +835,8 @@ void SbiParser::DefEnum( bool bPrivate )
         }
     }
 
-    pEnum->Remove( "Name", SbxClassType::DontCare );
-    pEnum->Remove( "Parent", SbxClassType::DontCare );
+    pEnum->Remove( u"Name"_ustr, SbxClassType::DontCare );
+    pEnum->Remove( u"Parent"_ustr, SbxClassType::DontCare );
 
     rEnumArray->Insert(pEnum, rEnumArray->Count());
 }
@@ -1220,7 +1220,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
         else
         {
-            Error( ERRCODE_BASIC_EXPECTED, "Get or Let or Set" );
+            Error( ERRCODE_BASIC_EXPECTED, u"Get or Let or Set"_ustr );
         }
     }
 

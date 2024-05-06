@@ -851,7 +851,7 @@ OUString SbxBasicFormater::BasicFormatNull( std::u16string_view sFormatStrg )
     {
         return sNullFormatStrg;
     }
-    return "null";
+    return u"null"_ustr;
 }
 
 OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormatStrg )

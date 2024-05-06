@@ -227,7 +227,7 @@ SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
 void SbiTokenizer::Push( SbiToken t )
 {
     if( ePush != NIL )
-        Error( ERRCODE_BASIC_INTERNAL_ERROR, "PUSH" );
+        Error( ERRCODE_BASIC_INTERNAL_ERROR, u"PUSH"_ustr );
     else ePush = t;
 }
 

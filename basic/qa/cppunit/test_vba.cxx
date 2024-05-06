@@ -164,14 +164,14 @@ void VBATest::testMiscVBAFunctions()
                            + OUString::createFromAscii( macroSource[ i ] );
 
         MacroSnippet myMacro;
-        myMacro.LoadSourceFromFile("TestUtil", sMacroUtilsURL);
-        myMacro.LoadSourceFromFile("TestModule", sMacroURL);
+        myMacro.LoadSourceFromFile(u"TestUtil"_ustr, sMacroUtilsURL);
+        myMacro.LoadSourceFromFile(u"TestModule"_ustr, sMacroURL);
         SbxVariableRef pReturn = myMacro.Run();
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
         fprintf(stderr, "macro result for %s\n", macroSource[i]);
         fprintf(stderr, "macro returned:\n%s\n",
                 OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", u"OK"_ustr,
                                      pReturn->GetOUString());
     }
 }

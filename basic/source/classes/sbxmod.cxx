@@ -199,7 +199,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
     SbMethodRef pMethod = getMethod( aFunctionName );
     if ( !pMethod.is() )
-        throw RuntimeException("DocObjectWrapper::invoke - Could not get the method reference!");
+        throw RuntimeException(u"DocObjectWrapper::invoke - Could not get the method reference!"_ustr);
     // check number of parameters
     sal_Int32 nParamsCount = aParams.getLength();
     SbxInfo* pInfo = pMethod->GetInfo();
@@ -217,7 +217,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         sal_Int32 nSbxCount = n - 1;
         if ( nParamsCount < nSbxCount - nSbxOptional )
         {
-            throw RuntimeException( "wrong number of parameters!" );
+            throw RuntimeException( u"wrong number of parameters!"_ustr );
         }
     }
     // set parameters
@@ -384,7 +384,7 @@ uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
     if( pb && pb->IsDocBasic() )
     {
         uno::Any aDoc;
-        if( pb->GetUNOConstant( "ThisComponent", aDoc ) )
+        if( pb->GetUNOConstant( u"ThisComponent"_ustr, aDoc ) )
             xModel.set( aDoc, uno::UNO_QUERY );
     }
     return xModel;
@@ -396,7 +396,7 @@ static uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::
     try
     {
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
-        xVBACompat.set( xModelProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY );
+        xVBACompat.set( xModelProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {
@@ -417,7 +417,7 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 // could be found from other module.
 
 SbModule::SbModule( const OUString& rName, bool bVBASupport )
-         : SbxObject( "StarBASICModule" ),
+         : SbxObject( u"StarBASICModule"_ustr ),
            pBreaks(nullptr), mbVBASupport(bVBASupport), mbCompat(bVBASupport), bIsProxyModule(false)
 {
     SetName( rName );
@@ -425,7 +425,7 @@ SbModule::SbModule( const OUString& rName, bool bVBASupport )
     SetModuleType( script::ModuleType::NORMAL );
 
     // #i92642: Set name property to initial name
-    SbxVariable* pNameProp = pProps->Find( "Name", SbxClassType::Property );
+    SbxVariable* pNameProp = pProps->Find( u"Name"_ustr, SbxClassType::Property );
     if( pNameProp != nullptr )
     {
         pNameProp->PutString( GetName() );
@@ -922,25 +922,25 @@ static void SendHint( SbxObject* pObj, SfxHintId nId, SbMethod* p )
 static void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
-    SbxVariable* pVar = pBasic->GetRtl()->Find( "CreateUnoService", SbxClassType::Method );
+    SbxVariable* pVar = pBasic->GetRtl()->Find( u"CreateUnoService"_ustr, SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CreateUnoDialog
-    pVar = pBasic->GetRtl()->Find( "CreateUnoDialog", SbxClassType::Method );
+    pVar = pBasic->GetRtl()->Find( u"CreateUnoDialog"_ustr, SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CDec
-    pVar = pBasic->GetRtl()->Find( "CDec", SbxClassType::Method );
+    pVar = pBasic->GetRtl()->Find( u"CDec"_ustr, SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete return value of CreateObject
-    pVar = pBasic->GetRtl()->Find( "CreateObject", SbxClassType::Method );
+    pVar = pBasic->GetRtl()->Find( u"CreateObject"_ustr, SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
@@ -987,7 +987,7 @@ void SbModule::SetVBASupport( bool bSupport )
         mbCompat = true;
         StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
         uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
-        xFactory->createInstance( "ooo.vba.VBAGlobals" );
+        xFactory->createInstance( u"ooo.vba.VBAGlobals"_ustr );
     }
     catch( Exception& )
     {
@@ -1107,7 +1107,7 @@ void SbModule::Run( SbMethod* pMeth )
         // Launcher problem
         // i80726 The Find below will generate an error in Testtool so we reset it unless there was one before already
         bool bWasError = SbxBase::GetError() != ERRCODE_NONE;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxClassType::Object );
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( u"Launcher"_ustr, SbxClassType::Object );
         if ( !bWasError && (SbxBase::GetError() == ERRCODE_BASIC_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
@@ -1117,7 +1117,7 @@ void SbModule::Run( SbMethod* pMeth )
             {
                 SbxFlagBits nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SbxFlagBits::GlobalSearch;
                 pMSOMacroRuntimeLib->ResetFlag( SbxFlagBits::GlobalSearch );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxClassType::Method );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( u"Application"_ustr, SbxClassType::Method );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {
@@ -1902,7 +1902,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
 // Implementation SbJScriptModule (Basic module for JavaScript source code)
 SbJScriptModule::SbJScriptModule()
-    :SbModule( "" )
+    :SbModule( u""_ustr )
 {
 }
 
@@ -2132,7 +2132,7 @@ void SbMethod::Broadcast( SfxHintId nHintId )
 // Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
 SbJScriptMethod::SbJScriptMethod( SbxDataType t )
-        : SbMethod( "", t, nullptr )
+        : SbMethod( u""_ustr, t, nullptr )
 {
 }
 
@@ -2146,7 +2146,7 @@ SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& 
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( "Form" );
+        SetClassName( u"Form"_ustr );
     }
     else if ( mInfo.ModuleObject.is() )
     {
@@ -2167,13 +2167,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj )
     pDocObject = new SbUnoObject( GetName(), aObj );
 
     css::uno::Reference< css::lang::XServiceInfo > xServiceInfo( aObj, css::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )
+    if( xServiceInfo->supportsService( u"ooo.vba.excel.Worksheet"_ustr ) )
     {
-        SetClassName( "Worksheet" );
+        SetClassName( u"Worksheet"_ustr );
     }
-    else if( xServiceInfo->supportsService( "ooo.vba.excel.Workbook" ) )
+    else if( xServiceInfo->supportsService( u"ooo.vba.excel.Workbook"_ustr ) )
     {
-        SetClassName( "Workbook" );
+        SetClassName( u"Workbook"_ustr );
     }
 }
 
@@ -2479,36 +2479,36 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 
 void SbUserFormModule::triggerActivateEvent()
 {
-    triggerMethod( "UserForm_Activate" );
+    triggerMethod( u"UserForm_Activate"_ustr );
 }
 
 void SbUserFormModule::triggerDeactivateEvent()
 {
-    triggerMethod( "Userform_Deactivate" );
+    triggerMethod( u"Userform_Deactivate"_ustr );
 }
 
 void SbUserFormModule::triggerInitializeEvent()
 {
     if ( mbInit )
         return;
-    triggerMethod("Userform_Initialize");
+    triggerMethod(u"Userform_Initialize"_ustr);
     mbInit = true;
 }
 
 void SbUserFormModule::triggerTerminateEvent()
 {
-    triggerMethod("Userform_Terminate");
+    triggerMethod(u"Userform_Terminate"_ustr);
     mbInit=false;
 }
 
 void SbUserFormModule::triggerLayoutEvent()
 {
-    triggerMethod("Userform_Layout");
+    triggerMethod(u"Userform_Layout"_ustr);
 }
 
 void SbUserFormModule::triggerResizeEvent()
 {
-    triggerMethod("Userform_Resize");
+    triggerMethod(u"Userform_Resize"_ustr);
 }
 
 SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
@@ -2552,7 +2552,7 @@ void SbUserFormModule::Unload()
 
     Sequence< Any > aParams = { Any(nCancel), Any(sal_Int8(::ooo::vba::VbQueryClose::vbFormCode)) };
 
-    triggerMethod( "Userform_QueryClose", aParams);
+    triggerMethod( u"Userform_QueryClose"_ustr, aParams);
 
     aParams[0] >>= nCancel;
     // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
@@ -2568,7 +2568,7 @@ void SbUserFormModule::Unload()
         triggerTerminateEvent();
     }
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( "UnloadObject", SbxClassType::Method );
+    SbxVariable* pMeth = SbObjModule::Find( u"UnloadObject"_ustr, SbxClassType::Method );
     if( !pMeth )
         return;
 
@@ -2595,7 +2595,7 @@ void SbUserFormModule::InitObject()
 {
     try
     {
-        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( "VBAGlobals", SbxClassType::DontCare ));
+        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( u"VBAGlobals"_ustr, SbxClassType::DontCare ));
         if ( m_xModel.is() && pGlobs )
         {
             // broadcast INITIALIZE_USERFORM script event before the dialog is created
@@ -2603,13 +2603,13 @@ void SbUserFormModule::InitObject()
             xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::INITIALIZE_USERFORM, GetName() );
             uno::Reference< lang::XMultiServiceFactory > xVBAFactory( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-            OUString sDialogUrl( "vnd.sun.star.script:"  );
-            OUString sProjectName( "Standard" );
+            OUString sDialogUrl( u"vnd.sun.star.script:"_ustr  );
+            OUString sProjectName( u"Standard"_ustr );
 
             try
             {
                 Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
                 sProjectName = xVBAMode->getProjectName();
             }
             catch(const Exception& ) {}
@@ -2627,7 +2627,7 @@ void SbUserFormModule::InitObject()
                 Any(m_xModel),
                 Any(GetParent()->GetName())
             };
-            pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
+            pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( u"ooo.vba.msforms.UserForm"_ustr, aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 

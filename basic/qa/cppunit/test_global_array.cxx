@@ -28,7 +28,7 @@ class GlobalArrayTest : public CppUnit::TestFixture
     SbModuleRef Module()
     {
         interpreter = new StarBASIC();
-        auto mod = interpreter->MakeModule("GlobalArray", R"BAS(
+        auto mod = interpreter->MakeModule(u"GlobalArray"_ustr, uR"BAS(
 
 Type testType
     iNr    As Integer
@@ -49,7 +49,7 @@ Function Macro2 As String
     Macro2 = aTestTypes(0).iNr & aTestTypes(0).sType & aTestTypes(1).iNr & aTestTypes(1).sType
 End Function
 
-        )BAS");
+        )BAS"_ustr);
         CPPUNIT_ASSERT(mod->Compile());
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, StarBASIC::GetErrBasic());
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, SbxBase::GetError());
@@ -61,15 +61,15 @@ End Function
 void GlobalArrayTest::testMaintainsValueAcrossCalls()
 {
     auto m = Module();
-    auto Macro1 = m->FindMethod("Macro1", SbxClassType::Method);
+    auto Macro1 = m->FindMethod(u"Macro1"_ustr, SbxClassType::Method);
     CPPUNIT_ASSERT_MESSAGE("Could not Find Macro1 in module", Macro1 != nullptr);
 
     // There is no SbxMethod::call(), the basic code is exercised here in the copy ctor
     SbxVariableRef returned = new SbxMethod{ *Macro1 };
     CPPUNIT_ASSERT(returned->IsString());
-    CPPUNIT_ASSERT_EQUAL(OUString{ "1A" }, returned->GetOUString());
+    CPPUNIT_ASSERT_EQUAL(u"1A"_ustr, returned->GetOUString());
 
-    auto Macro2 = m->FindMethod("Macro2", SbxClassType::Method);
+    auto Macro2 = m->FindMethod(u"Macro2"_ustr, SbxClassType::Method);
     CPPUNIT_ASSERT_MESSAGE("Could not Find Macro2 in module", Macro2 != nullptr);
     returned = new SbxMethod{ *Macro2 };
     CPPUNIT_ASSERT(returned->IsString());
@@ -77,7 +77,7 @@ void GlobalArrayTest::testMaintainsValueAcrossCalls()
     // Without the fix in place, this test would have failed with:
     // - Expected: 1A2B
     // - Actual  : 02B
-    CPPUNIT_ASSERT_EQUAL(OUString("1A2B"), returned->GetOUString());
+    CPPUNIT_ASSERT_EQUAL(u"1A2B"_ustr, returned->GetOUString());
 }
 
 // Put the test suite in the registry

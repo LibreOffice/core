@@ -529,7 +529,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
     {
         // Register listener for lib container
         uno::Reference< container::XContainerListener > xLibContainerListener
-            = new BasMgrContainerListenerImpl( this, "" );
+            = new BasMgrContainerListenerImpl( this, u""_ustr );
 
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );
@@ -579,8 +579,8 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         }
     }
 
-    SetGlobalUNOConstant( "BasicLibraries", uno::Any( maContainerInfo.mxScriptCont ) );
-    SetGlobalUNOConstant( "DialogLibraries", uno::Any( maContainerInfo.mxDialogCont ) );
+    SetGlobalUNOConstant( u"BasicLibraries"_ustr, uno::Any( maContainerInfo.mxScriptCont ) );
+    SetGlobalUNOConstant( u"DialogLibraries"_ustr, uno::Any( maContainerInfo.mxDialogCont ) );
 }
 
 BasicManager::BasicManager( StarBASIC* pSLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
@@ -1688,7 +1688,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
-    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, "StarBasic", pMod->GetSource32() );
+    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, u"StarBasic"_ustr, pMod->GetSource32() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
@@ -1729,7 +1729,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
-        throw lang::IllegalArgumentException("types do not match", getXWeak(), 2);
+        throw lang::IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
     }
     uno::Reference< script::XStarBasicModuleInfo > xMod;
     aElement >>= xMod;
@@ -1893,7 +1893,7 @@ void DialogContainer_Impl::insertByName( const OUString&, const uno::Any& aEleme
     const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
-        throw lang::IllegalArgumentException("types do not match", getXWeak(), 2);
+        throw lang::IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
     }
     uno::Reference< script::XStarBasicDialogInfo > xMod;
     aElement >>= xMod;

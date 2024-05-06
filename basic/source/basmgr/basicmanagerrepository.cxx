@@ -272,12 +272,12 @@ namespace basic
         OUString aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( aAppBasicDir.isEmpty() )
         {
-            aPathCFG.SetBasicPath("$(prog)");
+            aPathCFG.SetBasicPath(u"$(prog)"_ustr);
         }
 
         // Create basic and load it
         // AppBasicDir is now a PATH
-        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable("$(progurl)") );
+        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable(u"$(progurl)"_ustr) );
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
@@ -307,7 +307,7 @@ namespace basic
 
         // StarDesktop
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        pBasicManager->SetGlobalUNOConstant( "StarDesktop", css::uno::Any( Desktop::create(xContext)));
+        pBasicManager->SetGlobalUNOConstant( u"StarDesktop"_ustr, css::uno::Any( Desktop::create(xContext)));
 
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
 
@@ -473,7 +473,7 @@ namespace basic
         _out_rpBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic
-        _out_rpBasicManager->SetGlobalUNOConstant( "ThisComponent", css::uno::Any( _rxDocumentModel ) );
+        _out_rpBasicManager->SetGlobalUNOConstant( u"ThisComponent"_ustr, css::uno::Any( _rxDocumentModel ) );
 
         // notify
         impl_notifyCreationListeners( _rxDocumentModel, *_out_rpBasicManager );

@@ -33,7 +33,7 @@ static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 
 SbxCollection::SbxCollection()
-             : SbxObject( "" )
+             : SbxObject( u""_ustr )
 {
     if( !nCountHash )
     {

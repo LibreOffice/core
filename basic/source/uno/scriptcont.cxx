@@ -263,7 +263,7 @@ Any SfxScriptLibraryContainer::importLibraryElement
         {
             Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-            xFactory->createInstance("ooo.vba.VBAGlobals");
+            xFactory->createInstance(u"ooo.vba.VBAGlobals"_ustr);
         }
         catch(const Exception& )
         {
@@ -293,7 +293,7 @@ Any SfxScriptLibraryContainer::importLibraryElement
             {
                 Reference<frame::XModel > xModel( mxOwnerDocument );
                 Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
-                mxCodeNameAccess.set( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), UNO_QUERY );
+                mxCodeNameAccess.set( xSF->createInstance(u"ooo.vba.VBAObjectModuleObjectProvider"_ustr), UNO_QUERY );
             }
             catch(const Exception& ) {}
 
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OU
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected )
     {
-        throw IllegalArgumentException("!passwordProtected", getXWeak(), 1);
+        throw IllegalArgumentException(u"!passwordProtected"_ustr, getXWeak(), 1);
     }
     bool bRet = pImplLib->mbPasswordVerified;
     return bRet;
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected || pImplLib->mbPasswordVerified )
     {
-        throw IllegalArgumentException("!PasswordProtected || PasswordVerified", getXWeak(), 1);
+        throw IllegalArgumentException(u"!PasswordProtected || PasswordVerified"_ustr, getXWeak(), 1);
     }
     // Test password
     bool bSuccess = false;
@@ -613,7 +613,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
                     if ( !xCodeStream.is() )
                     {
-                        throw uno::RuntimeException("null returned from openStreamElement");
+                        throw uno::RuntimeException(u"null returned from openStreamElement"_ustr);
                     }
                     SvMemoryStream aMemStream;
                     /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
@@ -653,7 +653,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                             aSourceStreamName,
                             embed::ElementModes::READWRITE );
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
+                    xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -730,14 +730,14 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                 embed::ElementModes::READWRITE );
                     if ( !xElementRootStorage.is() )
                     {
-                        throw uno::RuntimeException("null returned from GetStorageFromURL");
+                        throw uno::RuntimeException(u"null returned from GetStorageFromURL"_ustr);
                     }
                     // Write binary image stream
                     SbModule* pMod = pBasicLib->FindModule( aElementName );
                     if( pMod )
                     {
                         uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
-                                            "code.bin",
+                                            u"code.bin"_ustr,
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
@@ -758,7 +758,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     }
 
                     // Write encrypted source stream
-                    OUString aSourceStreamName( "source.xml" );
+                    OUString aSourceStreamName( u"source.xml"_ustr );
 
                     uno::Reference< io::XStream > xSourceStream;
                     try
@@ -780,7 +780,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
+                    xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -861,12 +861,12 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr);
             }
             xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
             if ( !xLibraryStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr);
             }
         }
         catch(const uno::Exception& )
@@ -897,7 +897,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                                         embed::ElementModes::READ );
                     if ( !xCodeStream.is() )
                     {
-                        throw uno::RuntimeException("null returned from openStreamElement");
+                        throw uno::RuntimeException(u"null returned from openStreamElement"_ustr);
                     }
                     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                     if ( !pStream || pStream->GetError() )
@@ -932,7 +932,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                     pLib->maPassword );
                     if ( !xSourceStream.is() )
                     {
-                        throw uno::RuntimeException("null returned from openEncryptedStreamElement");
+                        throw uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
                     }
                     // if this point is reached then the password is correct
                     if ( !bVerifyPasswordOnly )
@@ -1008,7 +1008,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         try
                         {
                             uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
-                                                                        "code.bin",
+                                                                        u"code.bin"_ustr,
                                                                         embed::ElementModes::READ );
 
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
@@ -1038,14 +1038,14 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         // Access encrypted source stream
                         try
                         {
-                            OUString aSourceStreamName( "source.xml" );
+                            OUString aSourceStreamName( u"source.xml"_ustr );
                             uno::Reference< io::XStream > xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                                                     aSourceStreamName,
                                                                     embed::ElementModes::READ,
                                                                     pLib->maPassword );
                             if ( !xSourceStream.is() )
                             {
-                                throw uno::RuntimeException("null returned from openEncryptedStreamElement");
+                                throw uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
                             }
                             if ( !bVerifyPasswordOnly )
                             {

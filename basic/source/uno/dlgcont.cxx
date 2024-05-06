@@ -140,7 +140,7 @@ static bool writeOasis2OOoLibraryElement(
     Sequence<Any> aArgs{ Any(xWriter) };
     Reference< xml::sax::XDocumentHandler > xHandler(
         xSMgr->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.Oasis2OOoTransformer",
+            u"com.sun.star.comp.Oasis2OOoTransformer"_ustr,
             aArgs, xContext ),
         UNO_QUERY );
 
@@ -244,7 +244,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                 {
                     Reference< io::XInputStream > xInput( xISP->createInputStream() );
                     Reference< XNameContainer > xDialogModel(
-                        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+                        mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, mxContext),
                         UNO_QUERY );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
                     std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
@@ -291,7 +291,7 @@ Any SfxDialogLibraryContainer::importLibraryElement
     Reference< XParser > xParser = xml::sax::Parser::create( mxContext );
 
     Reference< XNameContainer > xDialogModel(
-        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+        mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, mxContext),
         UNO_QUERY );
     if( !xDialogModel.is() )
     {
@@ -387,19 +387,19 @@ Reference< css::resource::XStringResourcePersistence >
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibrariesStor.is() )
-                throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
+                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
             xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibraryStor.is() )
-                throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
+                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
         }
         catch(const uno::Exception& )
         {
             // Something went wrong while trying to get the storage library.
             // Return an object that supports StringResourceWithStorage, give it a storage location later.
             xRet = Reference< resource::XStringResourcePersistence >(
-              mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithStorage", mxContext),
+              mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.resource.StringResourceWithStorage"_ustr, mxContext),
               UNO_QUERY );
             return xRet;
         }
@@ -440,12 +440,12 @@ void SfxDialogLibraryContainer::onNewRootStorage()
             try {
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
                 if ( !xLibrariesStor.is() )
-                    throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
+                    throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
                 OUString aLibName = pDialogLibrary->getName();
                 xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READWRITE );
                 if ( !xLibraryStor.is() )
-                    throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
+                    throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
                 Reference< resource::XStringResourceWithStorage >
                     xStringResourceWithStorage( xStringResourcePersistence, UNO_QUERY );
