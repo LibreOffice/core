@@ -113,7 +113,7 @@ OUndoContainerAction::~OUndoContainerAction()
     if ( !xChild.is() || xChild->getParent().is() )
         return;
 
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     rEnv.RemoveElement( m_xOwnElement );
 
     // -> dispose it
@@ -141,7 +141,7 @@ void OUndoContainerAction::implReInsert( )
 
 void OUndoContainerAction::implReRemove( )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -234,7 +234,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(
 
 void OUndoGroupSectionAction::implReInsert( )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -251,7 +251,7 @@ void OUndoGroupSectionAction::implReInsert( )
 
 void OUndoGroupSectionAction::implReRemove( )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -278,7 +278,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(
 
 void OUndoReportSectionAction::implReInsert( )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -301,7 +301,7 @@ void OUndoReportSectionAction::implReInsert( )
 
 void OUndoReportSectionAction::implReRemove( )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);

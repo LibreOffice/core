@@ -125,7 +125,7 @@ OSectionUndo::~OSectionUndo()
     if ( m_bInserted )
         return;
 
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( m_rMod ).GetUndoEnv();
     for (uno::Reference<drawing::XShape>& xShape : m_aControls)
     {
         rEnv.RemoveElement(xShape);

@@ -60,7 +60,7 @@ namespace svx { namespace diagram {
 class SVXCORE_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
 protected:
-    SdrModel& rMod;
+    SdrModel& m_rMod;
     ViewShellId m_nViewShellId;
 
 protected:

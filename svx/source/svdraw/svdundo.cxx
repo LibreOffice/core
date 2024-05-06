@@ -60,7 +60,7 @@ static void ImplUnmarkObject( SdrObject* pObj )
 }
 
 SdrUndoAction::SdrUndoAction(SdrModel& rNewMod)
-    : rMod(rNewMod), m_nViewShellId(-1)
+    : m_rMod(rNewMod), m_nViewShellId(-1)
 {
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
         m_nViewShellId = pViewShell->GetViewShellId();
@@ -952,7 +952,7 @@ SdrUndoSort::SdrUndoSort(const SdrPage & rPage,
 
 void SdrUndoSort::Do(::std::vector<sal_Int32> & rSortOrder)
 {
-    SdrPage & rPage(*rMod.GetPage(m_nPage));
+    SdrPage & rPage(*m_rMod.GetPage(m_nPage));
     if (rPage.GetObjCount() != rSortOrder.size())
     {
         // can probably happen with sw's cursed SdrVirtObj mess - no good solution for that
@@ -1314,11 +1314,11 @@ void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
     {
         if (mxPage->IsMasterPage())
         {
-            rMod.InsertMasterPage(mxPage.get(), nNum);
+            m_rMod.InsertMasterPage(mxPage.get(), nNum);
         }
         else
         {
-            rMod.InsertPage(mxPage.get(), nNum);
+            m_rMod.InsertPage(mxPage.get(), nNum);
         }
     }
 }
@@ -1332,11 +1332,11 @@ void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
     rtl::Reference<SdrPage> pChkPg;
     if (mxPage->IsMasterPage())
     {
-        pChkPg = rMod.RemoveMasterPage(nNum);
+        pChkPg = m_rMod.RemoveMasterPage(nNum);
     }
     else
     {
-        pChkPg = rMod.RemovePage(nNum);
+        pChkPg = m_rMod.RemovePage(nNum);
     }
     DBG_ASSERT(pChkPg==mxPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=mxPage");
 }
@@ -1348,11 +1348,11 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     {
         if (mxPage->IsMasterPage())
         {
-            rMod.MoveMasterPage(nOldNum,nNewNum);
+            m_rMod.MoveMasterPage(nOldNum,nNewNum);
         }
         else
         {
-            rMod.MovePage(nOldNum,nNewNum);
+            m_rMod.MovePage(nOldNum,nNewNum);
         }
     }
 }
@@ -1396,11 +1396,11 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     if(!mxPage->IsMasterPage())
         return;
 
-    sal_uInt16 nPageCnt(rMod.GetPageCount());
+    sal_uInt16 nPageCnt(m_rMod.GetPageCount());
 
     for(sal_uInt16 nPageNum2(0); nPageNum2 < nPageCnt; nPageNum2++)
     {
-        SdrPage* pDrawPage = rMod.GetPage(nPageNum2);
+        SdrPage* pDrawPage = m_rMod.GetPage(nPageNum2);
 
         if(pDrawPage->TRG_HasMasterPage())
         {
@@ -1410,10 +1410,10 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
             {
                 if(!pUndoGroup)
                 {
-                    pUndoGroup.reset( new SdrUndoGroup(rMod) );
+                    pUndoGroup.reset( new SdrUndoGroup(m_rMod) );
                 }
 
-                pUndoGroup->AddAction(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
+                pUndoGroup->AddAction(m_rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
             }
         }
     }

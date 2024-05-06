@@ -964,7 +964,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 
 void FmUndoPropertyAction::Undo()
 {
-    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(m_rMod).GetUndoEnv();
 
     if (!xObj.is() || rEnv.IsLocked())
         return;
@@ -984,7 +984,7 @@ void FmUndoPropertyAction::Undo()
 
 void FmUndoPropertyAction::Redo()
 {
-    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(m_rMod).GetUndoEnv();
 
     if (!xObj.is() || rEnv.IsLocked())
         return;
@@ -1125,7 +1125,7 @@ void FmUndoContainerAction::implReRemove( )
 
 void FmUndoContainerAction::Undo()
 {
-    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( m_rMod ).GetUndoEnv();
 
     if ( !(m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is()) )
         return;
@@ -1154,7 +1154,7 @@ void FmUndoContainerAction::Undo()
 
 void FmUndoContainerAction::Redo()
 {
-    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( m_rMod ).GetUndoEnv();
     if ( !(m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is()) )
         return;
 
