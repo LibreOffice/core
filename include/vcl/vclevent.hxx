@@ -121,7 +121,6 @@ enum class VclEventId
     TabpageRemovedAll,
     ToolboxActivate,
     ToolboxAllItemsChanged,
-    ToolboxButtonStateChanged, // pData = itempos
     ToolboxClick,
     ToolboxDeactivate,
     ToolboxDoubleClick,

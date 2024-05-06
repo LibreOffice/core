@@ -344,40 +344,6 @@ static void handle_toolbox_highlightoff(vcl::Window const *pWindow)
         notify_toolbox_item_focus( pToolBoxParent );
 }
 
-/*****************************************************************************/
-
-static void create_wrapper_for_child(
-    const uno::Reference< accessibility::XAccessibleContext >& xContext,
-    sal_Int32 index)
-{
-    if( xContext.is() )
-    {
-        uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(index));
-        if( xChild.is() )
-        {
-            // create the wrapper object - it will survive the unref unless it is a transient object
-            g_object_unref( atk_object_wrapper_ref( xChild ) );
-        }
-    }
-}
-
-/*****************************************************************************/
-
-static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
-{
-    vcl::Window* pWindow = pEvent->GetWindow();
-    sal_Int32 index = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEvent->GetData()));
-
-    if( pWindow && pWindow->IsReallyVisible() )
-    {
-        uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
-        if( xAccessible.is() )
-        {
-            create_wrapper_for_child(xAccessible->getAccessibleContext(), index);
-        }
-    }
-}
-
 rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
 {
     rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
@@ -432,10 +398,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 
         case VclEventId::ToolboxHighlight:
             handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
-            break;
-
-        case VclEventId::ToolboxButtonStateChanged:
-            handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
 
         case VclEventId::ToolboxHighlightOff:

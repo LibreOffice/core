@@ -1038,9 +1038,6 @@ void ToolBox::SetItemText( ToolBoxItemId nItemId, const OUString& rText )
     else
         pItem->maText = MnemonicGenerator::EraseAllMnemonicChars(rText);
 
-    // Notify button changed event to prepare accessibility bridge
-    CallEventListeners( VclEventId::ToolboxButtonStateChanged, reinterpret_cast< void* >( nPos ) );
-
     // Notify
     CallEventListeners( VclEventId::ToolboxItemTextChanged, reinterpret_cast< void* >( nPos ) );
 }
@@ -1193,9 +1190,6 @@ void ToolBox::SetItemState( ToolBoxItemId nItemId, TriState eState )
     pItem->meState = eState;
     ImplUpdateItem( nPos );
 
-    // Notify button changed event to prepare accessibility bridge
-    CallEventListeners( VclEventId::ToolboxButtonStateChanged, reinterpret_cast< void* >( nPos ) );
-
     // Call accessible listener to notify state_changed event
     CallEventListeners( VclEventId::ToolboxItemUpdated, reinterpret_cast< void* >(nPos) );
 }
@@ -1231,9 +1225,6 @@ void ToolBox::EnableItem( ToolBoxItemId nItemId, bool bEnable )
     ImplUpdateItem( nPos );
 
     ImplUpdateInputEnable();
-
-    // Notify button changed event to prepare accessibility bridge
-    CallEventListeners( VclEventId::ToolboxButtonStateChanged, reinterpret_cast< void* >( nPos ) );
 
     CallEventListeners( bEnable ? VclEventId::ToolboxItemEnabled : VclEventId::ToolboxItemDisabled, reinterpret_cast< void* >( nPos ) );
 }
