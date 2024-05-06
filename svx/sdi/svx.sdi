@@ -17,7 +17,7 @@
  */
 
 /*
- * See https://wiki.openoffice.org/wiki/Framework/Article/Implementation_of_the_Dispatch_API_In_SFX2#Slot_definitions
+ * See https://wiki.documentfoundation.org/Framework/Article/Implementation_of_the_Dispatch_API_In_SFX2#Slot_definitions
  * for details on what these mean, and what values to use.
  * Likely many of the existing ones are not defined correctly.
  *
