@@ -563,7 +563,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSecti
 
     //tdf#95114 - follow style is Text Body - DOCX test
     uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("annotation subject"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("annotation text"), getProperty<OUString>(properties, "FollowStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Marginalia"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_dontEquallyDistributeColumns.docx")
@@ -690,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
     xmlDocUniquePtr pXmlDoc = parseExport("word/endnotes.xml");
     // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle"_ostr, "val"_ostr,
-                "EndnoteCharacters");
+                "EndnoteCharacters1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103389)
