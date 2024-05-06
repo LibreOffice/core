@@ -41,85 +41,47 @@
 
 using namespace ::com::sun::star;
 
-namespace
+static void
+atk_wrapper_focus_tracker_notify(const uno::Reference<accessibility::XAccessible>& xAccessible)
 {
-    uno::WeakReference< accessibility::XAccessible > theNextFocusObject;
-}
-
-static guint focus_notify_handler = 0;
-
-/*****************************************************************************/
-
-extern "C" {
-
-static gboolean
-atk_wrapper_focus_idle_handler (gpointer data)
-{
-    SolarMutexGuard aGuard;
-
-    focus_notify_handler = 0;
-
-    uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject;
-    if( xAccessible.get() == static_cast < accessibility::XAccessible * > (data) )
+    AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
+    // Gail does not notify focus changes to NULL, so do we ..
+    if( atk_obj )
     {
-        AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
-        // Gail does not notify focus changes to NULL, so do we ..
-        if( atk_obj )
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        atk_focus_tracker_notify(atk_obj);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+        // #i93269#
+        // emit text_caret_moved event for <XAccessibleText> object,
+        // if cursor is inside the <XAccessibleText> object.
+        // also emit state-changed:focused event under the same condition.
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            atk_focus_tracker_notify(atk_obj);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            // #i93269#
-            // emit text_caret_moved event for <XAccessibleText> object,
-            // if cursor is inside the <XAccessibleText> object.
-            // also emit state-changed:focused event under the same condition.
+            AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
+            if( wrapper_obj && !wrapper_obj->mpText.is() )
             {
-                AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( wrapper_obj && !wrapper_obj->mpText.is() )
+                wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
+                if ( wrapper_obj->mpText.is() )
                 {
-                    wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
-                    if ( wrapper_obj->mpText.is() )
+                    gint caretPos = -1;
+
+                    try {
+                        caretPos = wrapper_obj->mpText->getCaretPosition();
+                    }
+                    catch(const uno::Exception&) {
+                        g_warning( "Exception in getCaretPosition()" );
+                    }
+
+                    if ( caretPos != -1 )
                     {
-                        gint caretPos = -1;
-
-                        try {
-                            caretPos = wrapper_obj->mpText->getCaretPosition();
-                        }
-                        catch(const uno::Exception&) {
-                            g_warning( "Exception in getCaretPosition()" );
-                        }
-
-                        if ( caretPos != -1 )
-                        {
-                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
-                            g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
-                        }
+                        atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
+                        g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
                     }
                 }
             }
-            g_object_unref(atk_obj);
         }
+        g_object_unref(atk_obj);
     }
-
-    return false;
 }
-
-} // extern "C"
-
-/*****************************************************************************/
-
-static void
-atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility::XAccessible > &xAccessible )
-{
-    if( focus_notify_handler )
-        g_source_remove(focus_notify_handler);
-
-    theNextFocusObject = xAccessible;
-
-    focus_notify_handler = g_idle_add (atk_wrapper_focus_idle_handler, xAccessible.get());
-}
-
-/*****************************************************************************/
 
 void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
 {
@@ -144,7 +106,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 aEvent.NewValue >>= nState;
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
-                    atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
+                    atk_wrapper_focus_tracker_notify(getAccessible(aEvent));
 
                 break;
             }
@@ -238,7 +200,7 @@ void DocumentFocusListener::attachRecursive(
 )
 {
     if( nStateSet & accessibility::AccessibleStateType::FOCUSED )
-        atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
+        atk_wrapper_focus_tracker_notify(xAccessible);
 
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
 
@@ -334,7 +296,7 @@ static void handle_tabpage_activated(vcl::Window *pWindow)
         xAccessible->getAccessibleContext(), uno::UNO_QUERY);
 
     if( xSelection.is() )
-        atk_wrapper_focus_tracker_notify_when_idle( xSelection->getSelectedAccessibleChild(0) );
+        atk_wrapper_focus_tracker_notify(xSelection->getSelectedAccessibleChild(0));
 }
 
 /*****************************************************************************/
@@ -359,7 +321,7 @@ static void notify_toolbox_item_focus(ToolBox *pToolBox)
 
     ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
     if( nPos != ToolBox::ITEM_NOTFOUND )
-        atk_wrapper_focus_tracker_notify_when_idle( xContext->getAccessibleChild( nPos ) );
+        atk_wrapper_focus_tracker_notify(xContext->getAccessibleChild(nPos));
 }
 
 static void handle_toolbox_highlight(vcl::Window *pWindow)
@@ -490,7 +452,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     if( (nStateSet & accessibility::AccessibleStateType::FOCUSED) &&
         ( pWindow->GetType() != WindowType::TREELISTBOX ) )
     {
-        atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
+        atk_wrapper_focus_tracker_notify(xAccessible);
     }
     else
     {
@@ -526,7 +488,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
                 uno::Reference< accessibility::XAccessibleContext > xContext ( xAccessible->getAccessibleContext() );
 
                 if( xContext.is() )
-                    atk_wrapper_focus_tracker_notify_when_idle( xContext->getAccessibleChild( nPos ) );
+                    atk_wrapper_focus_tracker_notify(xContext->getAccessibleChild(nPos));
             }
         }
     }
