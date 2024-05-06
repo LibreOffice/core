@@ -378,22 +378,6 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
     }
 }
 
-/*****************************************************************************/
-
-namespace {
-
-struct WindowList {
-    ~WindowList() { assert(list.empty()); };
-        // needs to be empty already on DeInitVCL, but at least check it's empty
-        // on exit
-
-    std::set< VclPtr<vcl::Window> > list;
-};
-
-WindowList g_aWindowList;
-
-}
-
 rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
 {
     rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
@@ -404,69 +388,6 @@ rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
     }
     return xDFL;
 }
-
-static void handle_get_focus(::VclWindowEvent const * pEvent)
-{
-    GtkSalData *const pSalData(GetGtkSalData());
-    assert(pSalData);
-
-    rtl::Reference<DocumentFocusListener> xDocumentFocusListener(pSalData->GetDocumentFocusListener());
-
-    vcl::Window *pWindow = pEvent->GetWindow();
-
-    // The menu bar is handled through VclEventId::MenuHighlightED
-    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WindowType::MENUBARWINDOW )
-        return;
-
-    // ToolBoxes are handled through VclEventId::ToolboxHighlight
-    if( pWindow->GetType() == WindowType::TOOLBOX )
-        return;
-
-    if( pWindow->GetType() == WindowType::TABCONTROL )
-    {
-        handle_tabpage_activated( pWindow );
-        return;
-    }
-
-    uno::Reference< accessibility::XAccessible > xAccessible =
-        pWindow->GetAccessible();
-
-    if( ! xAccessible.is() )
-        return;
-
-    uno::Reference< accessibility::XAccessibleContext > xContext =
-        xAccessible->getAccessibleContext();
-
-    if( ! xContext.is() )
-        return;
-
-    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
-
-/* the UNO ToolBox wrapper does not (yet?) support XAccessibleSelection, so we
- * need to add listeners to the children instead of re-using the tabpage stuff
- */
-    if( (nStateSet & accessibility::AccessibleStateType::FOCUSED) &&
-        ( pWindow->GetType() != WindowType::TREELISTBOX ) )
-    {
-        atk_wrapper_notify_focus_change(xAccessible);
-    }
-    else
-    {
-        if( g_aWindowList.list.insert(pWindow).second )
-        {
-            try
-            {
-                xDocumentFocusListener->attachRecursive(xAccessible, xContext, nStateSet);
-            }
-            catch (const uno::Exception&)
-            {
-                g_warning( "Exception caught processing focus events" );
-            }
-        }
-    }
-}
-
-/*****************************************************************************/
 
 static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 {
@@ -502,27 +423,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
     {
         switch (rEvent.GetId())
         {
-        case VclEventId::WindowShow:
-            break;
-        case VclEventId::WindowHide:
-            break;
-        case VclEventId::WindowClose:
-            break;
-        case VclEventId::WindowGetFocus:
-            handle_get_focus(static_cast< ::VclWindowEvent const * >(&rEvent));
-            break;
-        case VclEventId::WindowLoseFocus:
-            break;
-        case VclEventId::WindowMinimize:
-            break;
-        case VclEventId::WindowNormalize:
-            break;
-        case VclEventId::WindowKeyInput:
-        case VclEventId::WindowKeyUp:
-        case VclEventId::WindowCommand:
-        case VclEventId::WindowMouseMove:
-            break;
-
         case VclEventId::MenuHighlight:
             if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(&rEvent))
             {
@@ -538,9 +438,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
             handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
 
-        case VclEventId::ObjectDying:
-            g_aWindowList.list.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
-            [[fallthrough]];
         case VclEventId::ToolboxHighlightOff:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
