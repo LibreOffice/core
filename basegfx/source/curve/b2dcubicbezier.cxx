@@ -22,9 +22,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
 #include <osl/diagnose.h>
-
+#include <cmath>
 #include <limits>
 
 // #i37443#
@@ -645,15 +644,14 @@ namespace basegfx
         // now look for the closest point
         const sal_uInt32 nPointCount(aInitialPolygon.count());
         B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0));
-        double fQuadDist(aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY());
+        double fQuadDist(std::hypot(aVector.getX(), aVector.getY()));
         double fNewQuadDist;
         sal_uInt32 nSmallestIndex(0);
 
         for(sal_uInt32 a(1); a < nPointCount; a++)
         {
             aVector = B2DVector(rTestPoint - aInitialPolygon.getB2DPoint(a));
-            fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
-
+            fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
             if(fNewQuadDist < fQuadDist)
             {
                 fQuadDist = fNewQuadDist;
@@ -680,7 +678,7 @@ namespace basegfx
                 aVector = B2DVector(rTestPoint - interpolatePoint(fPosLeft));
             }
 
-            fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+            fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
 
             if(fTools::less(fNewQuadDist, fQuadDist))
             {
@@ -702,7 +700,7 @@ namespace basegfx
                     aVector = B2DVector(rTestPoint - interpolatePoint(fPosRight));
                 }
 
-                fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+                fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
 
                 if(fTools::less(fNewQuadDist, fQuadDist))
                 {
@@ -727,7 +725,7 @@ namespace basegfx
         }
 
         rCut = fPosition;
-        return sqrt(fQuadDist);
+        return fQuadDist;
     }
 
     void B2DCubicBezier::split(double t, B2DCubicBezier* pBezierA, B2DCubicBezier* pBezierB) const
