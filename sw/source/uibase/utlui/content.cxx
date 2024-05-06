@@ -4769,13 +4769,27 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     else if(aCode.GetCode() == KEY_DELETE && 0 == aCode.GetModifier())
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_selected(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView))
+        if (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()
+                && m_xTreeView->get_selected(xEntry.get()))
         {
-            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
-            if (weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent()->IsDeletable() &&
-                    !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
+            if (lcl_IsContent(*xEntry, *m_xTreeView))
             {
-                EditEntry(*xEntry, EditEntryMode::DELETE);
+                assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+                if (weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent()->IsDeletable())
+                {
+                    EditEntry(*xEntry, EditEntryMode::DELETE);
+                }
+            }
+            else
+            {
+                SwContentType* pContentType
+                        = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
+                if (pContentType->GetMemberCount()
+                        && (pContentType->GetType() == ContentTypeId::FOOTNOTE
+                            || pContentType->GetType() == ContentTypeId::ENDNOTE))
+                {
+                    ExecuteContextMenuAction("deleteallfootnotes");
+                }
             }
         }
     }
