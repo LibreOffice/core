@@ -142,7 +142,7 @@ bool readArgument(
     {
         if (*pIndex < osl_getCommandArgCount())
         {
-            OSL_ASSERT( pValue != nullptr );
+            assert(pValue != nullptr);
             osl_getCommandArg( *pIndex, &pValue->pData );
             dp_misc::TRACE(__FILE__ ": argument value: "
                 + *pValue + "\n");
