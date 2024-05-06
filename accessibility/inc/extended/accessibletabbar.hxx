@@ -38,9 +38,7 @@ namespace accessibility
                                        css::accessibility::XAccessible,
                                        css::lang::XServiceInfo>
     {
-        typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
-
-        AccessibleChildren      m_aAccessibleChildren;
+        std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 
         virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
         void            FillAccessibleStateSet( sal_Int64& rStateSet );
