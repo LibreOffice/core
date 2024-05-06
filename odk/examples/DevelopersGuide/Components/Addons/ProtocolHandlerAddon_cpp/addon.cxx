@@ -108,7 +108,7 @@ void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments )
 
 /**
   * Called by the Office framework.
-  * We are ask to query the given URL and return a dispatch object if the URL
+  * We are asked to query the given URL and return a dispatch object if the URL
   * contains an Add-On command.
   */
 Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
@@ -129,7 +129,7 @@ Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::r
 
 /**
   * Called by the Office framework.
-  * We are ask to execute the given Add-On command URL.
+  * We are asked to execute the given Add-On command URL.
   */
 void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs )
 {
@@ -159,7 +159,7 @@ void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >
 
 /**
   * Called by the Office framework.
-  * We are ask to query the given sequence of URLs and return dispatch objects if the URLs
+  * We are asked to query the given sequence of URLs and return dispatch objects if the URLs
   * contain Add-On commands.
   */
 Sequence < Reference< XDispatch > > SAL_CALL Addon::queryDispatches( const Sequence < DispatchDescriptor >& seqDescripts )
@@ -175,7 +175,7 @@ Sequence < Reference< XDispatch > > SAL_CALL Addon::queryDispatches( const Seque
 
 /**
   * Called by the Office framework.
-  * We are ask to query the given sequence of URLs and return dispatch objects if the URLs
+  * We are asked to query the given sequence of URLs and return dispatch objects if the URLs
   * contain Add-On commands.
   */
 void SAL_CALL Addon::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
@@ -184,7 +184,7 @@ void SAL_CALL Addon::addStatusListener( const Reference< XStatusListener >& xCon
 
 /**
   * Called by the Office framework.
-  * We are ask to query the given sequence of URLs and return dispatch objects if the URLs
+  * We are asked to query the given sequence of URLs and return dispatch objects if the URLs
   * contain Add-On commands.
   */
 void SAL_CALL Addon::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )

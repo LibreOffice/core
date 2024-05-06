@@ -59,10 +59,6 @@ SAL_IMPLEMENT_MAIN()
 
     // numbers can be simply appended
     buf.append(M_PI);
-
-    // lets the compiler count the stringlength, so this is more efficient than
-    // the above appendAscii call, where length of the string must be calculated at
-    // runtime
     buf.append(" ) multiplied with ");
     buf.append(n);
     buf.append(" gives ");
@@ -70,10 +66,10 @@ SAL_IMPLEMENT_MAIN()
     buf.append(".");
 
     // now transfer the buffer into the string.
-    // afterwards buffer is empty and may be reused again !
+    // afterwards buffer is empty and may be reused again!
     OUString string = buf.makeStringAndClear();
 
-    // I could of course also used the OStringBuffer directly
+    // You could of course use the OStringBuffer directly to get an OString
     OString oString = rtl::OUStringToOString(string, RTL_TEXTENCODING_ASCII_US);
 
     // just to print something
