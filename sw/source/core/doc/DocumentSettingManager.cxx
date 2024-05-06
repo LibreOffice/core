@@ -139,6 +139,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbNoGapAfterNoteNumber              = aOptions.get(u"NoGapAfterNoteNumber"_ustr);
         mbTabRelativeToIndent               = aOptions.get(u"TabsRelativeToIndent"_ustr);
         mbTabOverMargin                     = aOptions.get(u"TabOverMargin"_ustr);
+        mbDoNotMirrorRtlDrawObjs            = aOptions.get(u"DoNotMirrorRtlDrawObjs"_ustr);
     }
     else
     {

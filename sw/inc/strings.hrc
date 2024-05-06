@@ -1492,6 +1492,7 @@
 #define STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER     NC_("STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER", "Do not add an extra space after number in footnotes / endnotes with hanging first line")
 #define STR_COMPAT_OPT_TABSRELATIVETOINDENT     NC_("STR_COMPAT_OPT_TABSRELATIVETOINDENT", "Set tabstops relative to indent of paragraph")
 #define STR_COMPAT_OPT_TABOVERMARGIN            NC_("STR_COMPAT_OPT_TABOVERMARGIN", "Allow tabs to extend beyond the right margin")
+#define STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS NC_("DO_NOT_MIRROR_RTL_DRAW_OBJS", "Do not mirror drawing objects anchored in paragraphs with an RTL writing direction")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")

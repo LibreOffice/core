@@ -1083,6 +1083,17 @@ void SwViewShell::SetTabOverMargin(bool bNew)
     }
 }
 
+void SwViewShell::SetDoNotMirrorRtlDrawObjs(bool bDoNotMirrorRtlDrawObjs)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS) != bDoNotMirrorRtlDrawObjs)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS, bDoNotMirrorRtlDrawObjs);
+        lcl_InvalidateAllObjPos(*this);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

@@ -152,6 +152,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="DoNotMirrorRtlDrawObjs" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Do not mirror drawing objects anchored in paragraphs with an RTL writing direction</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

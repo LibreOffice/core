@@ -451,6 +451,8 @@ public:
 
     SW_DLLPUBLIC void SetTabOverMargin(bool bNew);
 
+    SW_DLLPUBLIC void SetDoNotMirrorRtlDrawObjs(bool bDoNotMirrorRtlDrawObjs);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
