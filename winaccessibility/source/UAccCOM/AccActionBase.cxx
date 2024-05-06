@@ -58,16 +58,18 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long*
 {
     SolarMutexGuard g;
 
+    if (!nActions)
+        return E_INVALIDARG;
+
     try {
 
-    if( pRXAct.is() && nActions != nullptr )
+    if (pRXAct.is())
     {
         *nActions = pRXAct->getAccessibleActionCount();
         return S_OK;
     }
-    if( nActions != nullptr )
-        *nActions = 0;
 
+    *nActions = 0;
     return S_OK;
 
     } catch(...) { return E_FAIL; }
