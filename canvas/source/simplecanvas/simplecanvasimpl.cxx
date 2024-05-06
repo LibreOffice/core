@@ -160,7 +160,7 @@ namespace
         // Ifc XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override
         {
-            return "com.sun.star.rendering.SimpleCanvas";
+            return u"com.sun.star.rendering.SimpleCanvas"_ustr;
         }
 
         // Ifc XSimpleCanvas

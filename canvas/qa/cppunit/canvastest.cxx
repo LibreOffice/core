@@ -93,7 +93,7 @@ public:
         setupCanvas(Size(10, 10));
         mCanvas->drawLine(geometry::RealPoint2D(1, 1), geometry::RealPoint2D(9, 1), mViewState,
                           mRenderState);
-        exportDevice("test-draw-line.png", mVclDevice);
+        exportDevice(u"test-draw-line.png"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
         BitmapScopedReadAccess access(bitmap);
         // Canvas uses AA, which blurs the line, and it cannot be turned off,
@@ -128,7 +128,7 @@ public:
 
         mCanvas->strokePolyPolygon(polygon, mViewState, mRenderState, strokeAttributes);
 
-        exportDevice("test-tdf134053.png", mVclDevice);
+        exportDevice(u"test-tdf134053.png"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
         BitmapScopedReadAccess access(bitmap);
         struct Check

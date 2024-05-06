@@ -377,7 +377,7 @@ namespace canvas
                 SAL_WARN("canvas", "numeric_cast detected data loss");
 #endif
                 throw css::uno::RuntimeException(
-                    "numeric_cast detected data loss",
+                    u"numeric_cast detected data loss"_ustr,
                     nullptr );
             }
 

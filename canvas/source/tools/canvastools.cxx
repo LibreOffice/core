@@ -1017,7 +1017,7 @@ namespace canvas::tools
                                                                 uno::UNO_QUERY_THROW );
 
                 o_rxParams = { uno::Any(xServiceInfo->getImplementationName()),
-                               xPropSet->getPropertyValue( "DeviceHandle" ) };
+                               xPropSet->getPropertyValue( u"DeviceHandle"_ustr ) };
             }
             catch( const uno::Exception& )
             {

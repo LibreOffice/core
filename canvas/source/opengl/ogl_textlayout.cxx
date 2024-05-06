@@ -87,7 +87,7 @@ namespace oglcanvas
         if( aPositions.hasElements() && aPositions.getLength() != maText.Length )
         {
             SAL_WARN("canvas.ogl", "TextLayout::applyKashidaPositions(): mismatching number of positions" );
-            throw lang::IllegalArgumentException("mismatching number of positions", getXWeak(), 1);
+            throw lang::IllegalArgumentException(u"mismatching number of positions"_ustr, getXWeak(), 1);
         }
 
         maKashidaPositions = aPositions;

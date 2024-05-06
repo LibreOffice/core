@@ -59,7 +59,7 @@ class TestWindow : public WorkWindow
     public:
         TestWindow() : WorkWindow(nullptr, WB_APP | WB_STDWORK)
         {
-            SetText("Canvas test");
+            SetText(u"Canvas test"_ustr);
             SetSizePixel( Size( 600, 450 ) );
             EnablePaint( true );
             Show();
@@ -643,7 +643,7 @@ void DemoApp::Init()
         uno::Reference<lang::XMultiServiceFactory> xMSF;
         xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
         if(!xMSF.is())
-            Application::Abort("Bootstrap failure - no service manager");
+            Application::Abort(u"Bootstrap failure - no service manager"_ustr);
 
         ::comphelper::setProcessServiceFactory(xMSF);
     }

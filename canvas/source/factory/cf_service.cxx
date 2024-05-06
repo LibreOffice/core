@@ -123,21 +123,21 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
             uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Canvas"))}
+                {"nodepath", uno::Any(u"/org.openoffice.Office.Canvas"_ustr)}
             }));
             m_xCanvasConfigNameAccess.set(
                 xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArgs ),
                 UNO_QUERY_THROW );
 
             uno::Sequence<uno::Any> aArgs2(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Canvas/CanvasServiceList"))}
+                {"nodepath", uno::Any(u"/org.openoffice.Office.Canvas/CanvasServiceList"_ustr)}
             }));
             Reference<container::XNameAccess> xNameAccess(
                 xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArgs2 ), UNO_QUERY_THROW );
             Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
                 xNameAccess, UNO_QUERY_THROW);
@@ -151,15 +151,15 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                 if( xEntryNameAccess.is() )
                 {
                     Sequence<OUString> implementationList;
-                    if( xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList )
+                    if( xEntryNameAccess->getByName(u"PreferredImplementations"_ustr) >>= implementationList )
                     {
                         m_aAvailableImplementations.emplace_back(serviceName, implementationList);
                     }
-                    if( xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList )
+                    if( xEntryNameAccess->getByName(u"AcceleratedImplementations"_ustr) >>= implementationList )
                     {
                         m_aAcceleratedImplementations.emplace_back(serviceName, implementationList);
                     }
-                    if( xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList )
+                    if( xEntryNameAccess->getByName(u"AntialiasingImplementations"_ustr) >>= implementationList )
                     {
                         m_aAAImplementations.emplace_back(serviceName, implementationList);
                     }
@@ -179,11 +179,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     {
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
-        m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.Canvas"),
-            Sequence<OUString>{ "com.sun.star.comp.rendering.Canvas.VCL" } );
+        m_aAvailableImplementations.emplace_back(u"com.sun.star.rendering.Canvas"_ustr,
+            Sequence<OUString>{ u"com.sun.star.comp.rendering.Canvas.VCL"_ustr } );
 
-        m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.SpriteCanvas"),
-            Sequence<OUString>{ "com.sun.star.comp.rendering.SpriteCanvas.VCL" } );
+        m_aAvailableImplementations.emplace_back(u"com.sun.star.rendering.SpriteCanvas"_ustr,
+            Sequence<OUString>{ u"com.sun.star.comp.rendering.SpriteCanvas.VCL"_ustr } );
     }
 }
 
@@ -195,7 +195,7 @@ CanvasFactory::~CanvasFactory()
 // XServiceInfo
 OUString CanvasFactory::getImplementationName()
 {
-    return "com.sun.star.comp.rendering.CanvasFactory";
+    return u"com.sun.star.comp.rendering.CanvasFactory"_ustr;
 }
 
 sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
@@ -205,7 +205,7 @@ sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
 
 Sequence<OUString> CanvasFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.rendering.CanvasFactory" };
+    return { u"com.sun.star.rendering.CanvasFactory"_ustr };
 }
 
 // XMultiComponentFactory
@@ -280,19 +280,19 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     bool bForceLastEntry(false);
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
-                     "ForceSafeServiceImpl" );
+                     u"ForceSafeServiceImpl"_ustr );
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
-                     "UseAntialiasingCanvas" );
+                     u"UseAntialiasingCanvas"_ustr );
 
     // use accelerated canvas, if config flag set (or not existing)
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
-                     "UseAcceleratedCanvas" );
+                     u"UseAcceleratedCanvas"_ustr );
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
@@ -424,7 +424,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     {
         Reference<lang::XServiceName> xServiceName(xCanvas, uno::UNO_QUERY);
         SAL_INFO("canvas", "using " << (xServiceName.is() ? xServiceName->getServiceName()
-                                                          : OUString("(unknown)")));
+                                                          : u"(unknown)"_ustr));
     }
     return xCanvas;
 }

@@ -104,22 +104,22 @@ namespace oglcanvas
         initContext();
 
         mnLinearMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"linearMultiColorGradientFragmentShader"_ustr);
 
         mnLinearTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "linearTwoColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"linearTwoColorGradientFragmentShader"_ustr);
 
         mnRadialMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "radialMultiColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"radialMultiColorGradientFragmentShader"_ustr);
 
         mnRadialTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "radialTwoColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"radialTwoColorGradientFragmentShader"_ustr);
 
         mnRectangularMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "rectangularMultiColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"rectangularMultiColorGradientFragmentShader"_ustr);
 
         mnRectangularTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "rectangularTwoColorGradientFragmentShader");
+            OpenGLHelper::LoadShaders(u"dummyVertexShader"_ustr, u"rectangularTwoColorGradientFragmentShader"_ustr);
 
         mxContext->makeCurrent();
 

@@ -35,9 +35,9 @@ namespace canvas
 {
     uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
-        return {"LinearGradient",
-                "EllipticalGradient",
-                "RectangularGradient"};
+        return {u"LinearGradient"_ustr,
+                u"EllipticalGradient"_ustr,
+                u"RectangularGradient"_ustr};
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(

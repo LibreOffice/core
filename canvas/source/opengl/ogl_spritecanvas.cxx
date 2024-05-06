@@ -54,7 +54,7 @@ namespace oglcanvas
         VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException(
-                "Parent window not VCL window, or canvas out-of-process!", nullptr);
+                u"Parent window not VCL window, or canvas out-of-process!"_ustr, nullptr);
 
         awt::Rectangle aRect;
         maArguments[1] >>= aRect;
@@ -129,7 +129,7 @@ namespace oglcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return "com.sun.star.rendering.SpriteCanvas.OGL";
+        return u"com.sun.star.rendering.SpriteCanvas.OGL"_ustr;
     }
 
     void SpriteCanvas::show( const ::rtl::Reference< CanvasCustomSprite >& xSprite )

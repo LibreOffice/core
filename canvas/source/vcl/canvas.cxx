@@ -65,7 +65,7 @@ namespace vclcanvas
 
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
         if( !pOutDev )
-            throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
+            throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 
         OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 

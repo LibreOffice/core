@@ -82,7 +82,7 @@ namespace vclcanvas
 
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
         if( !pOutDev )
-            throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
+            throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[3] >>= xParentWindow;
@@ -144,7 +144,7 @@ namespace vclcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return "com.sun.star.rendering.SpriteCanvas.VCL";
+        return u"com.sun.star.rendering.SpriteCanvas.VCL"_ustr;
     }
 
     // XServiceInfo
@@ -154,7 +154,7 @@ namespace vclcanvas
     }
     OUString SpriteCanvas::getImplementationName()
     {
-        return "com.sun.star.comp.rendering.SpriteCanvas.VCL";
+        return u"com.sun.star.comp.rendering.SpriteCanvas.VCL"_ustr;
     }
     sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
     {

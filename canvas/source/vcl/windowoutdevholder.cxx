@@ -35,7 +35,7 @@ namespace vclcanvas
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWin);
             if( !pWindow )
                 throw lang::NoSupportException(
-                    "Parent window not VCL window, or canvas out-of-process!",
+                    u"Parent window not VCL window, or canvas out-of-process!"_ustr,
                     nullptr);
             return *pWindow;
         }

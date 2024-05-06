@@ -79,7 +79,7 @@ namespace cairocanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->nSize )
-            throw lang::NoSupportException( "Passed SystemGraphicsData invalid!" );
+            throw lang::NoSupportException( u"Passed SystemGraphicsData invalid!"_ustr );
 
         bool bHasCairo = pOutDev->SupportsCairo();
         ENSURE_ARG_OR_THROW(bHasCairo, "SpriteCanvas::SpriteCanvas: No Cairo capability");
