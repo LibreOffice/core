@@ -1618,6 +1618,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xMaxHyphenEdit->get_value_changed_from_saved() ||
          m_xMinWordLength->get_value_changed_from_saved() ||
          m_aHyphenZone.get_value_changed_from_saved() ||
+         m_xAcrossParagraphBox->get_state_changed_from_saved() ||
          m_xAcrossColumnBox->get_state_changed_from_saved() ||
          m_xAcrossPageBox->get_state_changed_from_saved() ||
          m_xAcrossSpreadBox->get_state_changed_from_saved() )
@@ -1643,6 +1644,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aHyphen.GetTextHyphenZone() = static_cast<sal_uInt16>(m_aHyphenZone.GetCoreValue(eUnit));
         aHyphen.SetHyphen( eHyphenState == TRISTATE_TRUE );
         aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() != TRISTATE_TRUE);
+        const TriState eAcrossParagraphState = m_xAcrossParagraphBox->get_state();
         const TriState eAcrossColumnState = m_xAcrossColumnBox->get_state();
         const TriState eAcrossPageState = m_xAcrossPageBox->get_state();
         const TriState eAcrossSpreadState = m_xAcrossSpreadBox->get_state();
@@ -1666,11 +1668,18 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             aHyphen.GetKeepType() =
                     static_cast<sal_uInt8>(css::text::ParagraphHyphenationKeepType::PAGE);
         }
-        else
+        else if ( eAcrossParagraphState == TRISTATE_TRUE )
         {
-            // don't hyphenate across column, page and spread  -> 3 (COLUMN)
+            // hyphenate across last full paragraph line, but not page and spread  -> 2 (PAGE)
             aHyphen.GetKeepType() =
                     static_cast<sal_uInt8>(css::text::ParagraphHyphenationKeepType::COLUMN);
+        }
+        else
+        {
+            // don't hyphenate across last full paragraph line,
+            // also column, page and spread  -> 4 (COLUMN)
+            aHyphen.GetKeepType() =
+                    static_cast<sal_uInt8>(css::text::ParagraphHyphenationKeepType::ALWAYS);
         }
 
         if ( !pOld ||
@@ -1886,9 +1895,11 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xMinWordLength->set_value(rHyphen.GetMinWordLength());
         m_aHyphenZone.SetFieldUnit(eFUnit);
         m_aHyphenZone.SetMetricValue(rHyphen.GetTextHyphenZone(), MapUnit::MapTwip);
+        m_xAcrossParagraphBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 4 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xAcrossColumnBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 3 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xAcrossPageBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 2 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xAcrossSpreadBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() == 0 ? TRISTATE_TRUE : TRISTATE_FALSE);
+        aAcrossParagraphState.bTriStateEnabled = false;
         aAcrossColumnState.bTriStateEnabled = false;
         aAcrossPageState.bTriStateEnabled = false;
         aAcrossSpreadState.bTriStateEnabled = false;
@@ -1915,6 +1926,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_aHyphenZone.set_sensitive(bEnable);
     m_xAcrossText->set_sensitive(bEnable);
+    m_xAcrossParagraphBox->set_sensitive(bEnable);
     m_xAcrossColumnBox->set_sensitive(bEnable);
     m_xAcrossPageBox->set_sensitive(bEnable);
     m_xAcrossSpreadBox->set_sensitive(bEnable);
@@ -2180,6 +2192,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xMaxHyphenEdit->save_value();
     m_xMinWordLength->save_value();
     m_aHyphenZone.save_value();
+    m_xAcrossParagraphBox->save_state();
     m_xAcrossColumnBox->save_state();
     m_xAcrossPageBox->save_state();
     m_xAcrossSpreadBox->save_state();
@@ -2260,6 +2273,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xWidowRowLabel(m_xBuilder->weld_label(u"labelWidow"_ustr))
     // Avoid hyphenation across
     , m_xAcrossText(m_xBuilder->weld_label(u"labelHyphenAcross"_ustr))
+    , m_xAcrossParagraphBox(m_xBuilder->weld_check_button(u"checkAcrossParagraph"_ustr))
     , m_xAcrossColumnBox(m_xBuilder->weld_check_button(u"checkAcrossColumn"_ustr))
     , m_xAcrossPageBox(m_xBuilder->weld_check_button(u"checkAcrossPage"_ustr))
     , m_xAcrossSpreadBox(m_xBuilder->weld_check_button(u"checkAcrossSpread"_ustr))
@@ -2277,6 +2291,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xBreakPositionLB->connect_changed(LINK(this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl));
     m_xPageNumBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl));
     m_xKeepParaBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl));
+    m_xAcrossParagraphBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, AcrossParagraphHdl_Impl));
     m_xAcrossColumnBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, AcrossColumnHdl_Impl));
     m_xAcrossPageBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, AcrossPageHdl_Impl));
     m_xAcrossSpreadBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, AcrossSpreadHdl_Impl));
@@ -2323,6 +2338,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xPageNumBox->set_sensitive(false);
     m_xPagenumEdit->set_sensitive(false);
     m_xAcrossText->set_sensitive(false);
+    m_xAcrossParagraphBox->set_sensitive(false);
     m_xAcrossColumnBox->set_sensitive(false);
     m_xAcrossPageBox->set_sensitive(false);
     m_xAcrossSpreadBox->set_sensitive(false);
@@ -2464,6 +2480,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_aHyphenZone.set_sensitive(bEnable);
     m_xAcrossText->set_sensitive(bEnable);
+    m_xAcrossParagraphBox->set_sensitive(bEnable);
     m_xAcrossColumnBox->set_sensitive(bEnable);
     m_xAcrossPageBox->set_sensitive(bEnable);
     m_xAcrossSpreadBox->set_sensitive(bEnable);
@@ -2568,6 +2585,17 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                     DisablePageBreak();
 }
 
+IMPL_LINK(SvxExtParagraphTabPage, AcrossParagraphHdl_Impl, weld::Toggleable&, rToggle, void)
+{
+    aAcrossParagraphState.ButtonToggled(rToggle);
+    if (m_xAcrossParagraphBox->get_state() != TRISTATE_TRUE )
+    {
+        m_xAcrossColumnBox->set_state( TRISTATE_FALSE );
+        m_xAcrossPageBox->set_state( TRISTATE_FALSE );
+        m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
+    }
+}
+
 IMPL_LINK(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aAcrossColumnState.ButtonToggled(rToggle);
@@ -2576,13 +2604,18 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, rTogg
         m_xAcrossPageBox->set_state( TRISTATE_FALSE );
         m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
     }
+    else
+        m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
 }
 
 IMPL_LINK(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aAcrossPageState.ButtonToggled(rToggle);
     if (m_xAcrossPageBox->get_state() == TRISTATE_TRUE )
+    {
+        m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
         m_xAcrossColumnBox->set_state( TRISTATE_TRUE );
+    }
     else
         m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
 }
@@ -2592,6 +2625,7 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossSpreadHdl_Impl, weld::Toggleable&, rTogg
     aAcrossSpreadState.ButtonToggled(rToggle);
     if (m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE )
     {
+        m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
         m_xAcrossColumnBox->set_state( TRISTATE_TRUE );
         m_xAcrossPageBox->set_state( TRISTATE_TRUE );
     }

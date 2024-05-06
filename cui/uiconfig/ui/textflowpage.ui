@@ -364,6 +364,9 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">labelHyphenAcross</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -387,6 +390,26 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
+                  <object class="GtkCheckButton" id="checkAcrossParagraph">
+                    <property name="label" translatable="yes" context="textflowpage|checkAcrossParagraph">Last full line of paragraph</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkAcrossParagraph-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossParagraph">Deselect this check box, if you don't want to hyphenate across the last full line of paragraph, column, page and spread.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="checkAcrossColumn">
                     <property name="label" translatable="yes" context="textflowpage|checkAcrossColumn">Column</property>
                     <property name="visible">True</property>
@@ -403,7 +426,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -423,7 +446,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -443,7 +466,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
               </object>

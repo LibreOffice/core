@@ -233,6 +233,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaVerticalAlign_Enum[] =
 
 SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaHyphenationKeepType_Enum[] =
 {
+    { XML_ALWAYS,       ParagraphHyphenationKeepType::ALWAYS  },
     { XML_AUTO,         ParagraphHyphenationKeepType::AUTO    },
     { XML_COLUMN,       ParagraphHyphenationKeepType::COLUMN  },
     { XML_PAGE,         ParagraphHyphenationKeepType::PAGE    },

@@ -3066,7 +3066,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
-  <rng:define name="style-text-properties-attlist" combine="interleave">
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
     <rng:optional>
       <!-- default value: column -->
       <rng:attribute name="loext:hyphenation-keep-type">

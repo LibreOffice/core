@@ -323,6 +323,33 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(156), aPosition.GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("tdf132599_always.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 2nd paragraph: hyphenated last full line
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr, u"ent to any other celes"_ustr);
+
+    // hyphenation-keep-type='always'
+    // 3rd paragraph: not hyphenated last full line of the hyphenated paragraph
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr, u"ent to any other "_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");

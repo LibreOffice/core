@@ -221,6 +221,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_last_column)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // last full line of the paragraph column is not hyphenated
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="always"
+    loadAndReload("tdf132599_always.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='always']"_ostr, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
 {
     loadAndReload("tdf158885_compound-remain.fodt");

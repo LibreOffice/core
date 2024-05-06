@@ -221,6 +221,7 @@ private:
     weld::TriStateEnabled aKeepParaState;
     weld::TriStateEnabled aOrphanState;
     weld::TriStateEnabled aWidowState;
+    weld::TriStateEnabled aAcrossParagraphState;
     weld::TriStateEnabled aAcrossColumnState;
     weld::TriStateEnabled aAcrossPageState;
     weld::TriStateEnabled aAcrossSpreadState;
@@ -272,6 +273,7 @@ private:
 
     // avoid hyphenation across
     std::unique_ptr<weld::Label> m_xAcrossText;
+    std::unique_ptr<weld::CheckButton> m_xAcrossParagraphBox;
     std::unique_ptr<weld::CheckButton> m_xAcrossColumnBox;
     std::unique_ptr<weld::CheckButton> m_xAcrossPageBox;
     std::unique_ptr<weld::CheckButton> m_xAcrossSpreadBox;
@@ -294,6 +296,7 @@ private:
     DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PageNumBoxClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(KeepParaBoxClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(AcrossParagraphHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(AcrossColumnHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(AcrossPageHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(AcrossSpreadHdl_Impl, weld::Toggleable&, void);

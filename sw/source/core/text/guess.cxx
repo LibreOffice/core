@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/BreakType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <unotools/charclass.hxx>
 #include <svl/urihelper.hxx>
 #include "porfld.hxx"
@@ -349,11 +350,29 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // search start of the last word, if needed
         if ( bHyph )
         {
-            // nLastWord is the space character before the last word
+            // nLastWord is the space character before the last word of the line
             sal_Int32 nLastWord = rInf.GetText().getLength() - 1;
-            bool bHyphenationNoLastWord = false;
+            bool bDoNotHyphenateLastLine = false; // don't hyphenate last full line of the paragraph
+            bool bHyphenationNoLastWord = false;  // do not hyphenate the last word of the paragraph
             assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
-            if ( rHyphValues[3].Value >>= bHyphenationNoLastWord )
+            assert( rHyphValues.getLength() > 6 && rHyphValues[6].Name == UPN_HYPH_KEEP_TYPE );
+            assert( rHyphValues.getLength() > 8 && rHyphValues[8].Name == UPN_HYPH_KEEP );
+            rHyphValues[3].Value >>= bHyphenationNoLastWord;
+            rHyphValues[8].Value >>= bDoNotHyphenateLastLine;
+            if ( bDoNotHyphenateLastLine )
+            {
+                sal_Int16 nKeepType = css::text::ParagraphHyphenationKeepType::COLUMN;
+                rHyphValues[6].Value >>= nKeepType;
+                if ( nKeepType == css::text::ParagraphHyphenationKeepType::ALWAYS )
+                {
+                    if ( TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
+                        nLastWord = sal_Int32(m_nCutPos);
+                }
+                else
+                    bDoNotHyphenateLastLine = false;
+            }
+
+            if ( bHyphenationNoLastWord || bDoNotHyphenateLastLine )
             {
                 // skip spaces after the last word
                 bool bCutBlank = false;
@@ -367,14 +386,23 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 }
             }
 
-            // don't hyphenate the last word of the paragraph
-            if ( bHyphenationNoLastWord && sal_Int32(m_nCutPos) > nLastWord &&
+            // don't hyphenate the last word of the paragraph line
+            if ( ( bHyphenationNoLastWord || bDoNotHyphenateLastLine ) &&
+                            sal_Int32(m_nCutPos) > nLastWord &&
                             TextFrameIndex(COMPLETE_STRING) != m_nCutPos &&
                             // if the last word is multiple line long, e.g. an URL,
                             // apply this only if the space before the word is there
                             // in the actual line, i.e. start the long word in a new
                             // line, but still allows to break its last parts
-                            sal_Int32(rInf.GetIdx()) < nLastWord )
+                            sal_Int32(rInf.GetIdx()) < nLastWord &&
+                            // if the case of bDoNotHyphenateLastLine == true, skip hyphenation
+                            // only if the character length of the very last line of the paragraph
+                            // would be still less, than the length of the recent last but one line
+                            // with hyphenation, i.e. don't skip hyphenation, if the last paragraph
+                            // line is already near full.
+                            ( !bDoNotHyphenateLastLine ||
+                                  rInf.GetText().getLength() - sal_Int32(nLastWord) <
+                                  sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) ) )
             {
                 m_nCutPos = TextFrameIndex(nLastWord);
             }
