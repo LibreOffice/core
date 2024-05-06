@@ -2433,7 +2433,9 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
  * Copy between documents (Clipboard)
  */
 void ScAttrArray::CopyArea(
-    SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags) const
+    SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray,
+    std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache,
+    ScMF nStripFlags) const
 {
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;
@@ -2457,7 +2459,7 @@ void ScAttrArray::CopyArea(
         if (mvData[i].nEndRow >= nStartRow)
         {
             const ScPatternAttr* pOldPattern = mvData[i].pPattern;
-            const ScPatternAttr* pNewPattern;
+            const ScPatternAttr* pNewPattern = nullptr;
 
             if (IsDefaultItem( pOldPattern ))
             {
@@ -2484,10 +2486,21 @@ void ScAttrArray::CopyArea(
             }
             else
             {
-                if (bSamePool)
-                    pNewPattern = &pDestDocPool->DirectPutItemInPool(*pOldPattern);
-                else
-                    pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
+                if (pPatternPutCache)
+                {
+                    auto it = pPatternPutCache->find(pOldPattern);
+                    if (it != pPatternPutCache->end())
+                        pNewPattern = it->second;
+                }
+                if (!pNewPattern)
+                {
+                    if (bSamePool)
+                        pNewPattern = &pDestDocPool->DirectPutItemInPool(*pOldPattern);
+                    else
+                        pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
+                    if (pPatternPutCache)
+                        (*pPatternPutCache)[pOldPattern] = pNewPattern;
+                }
             }
 
             rAttrArray.SetPatternArea(nDestStart,

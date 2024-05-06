@@ -491,7 +491,8 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 // pTable = Clipboard
 void ScTable::CopyToClip(
     sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    ScTable* pTable )
+    ScTable* pTable,
+    std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
@@ -505,7 +506,7 @@ void ScTable::CopyToClip(
 
     pTable->CreateColumnIfNotExists(nCol2);  // prevent repeated resizing
     for ( SCCOL i = nCol1; i <= nCol2; i++)
-        aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->CreateColumnIfNotExists(i));  // notes are handled at column level
+        aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->CreateColumnIfNotExists(i), pPatternPutCache);  // notes are handled at column level
 
     //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
     //  also for all preceding columns/rows, to have valid positions for drawing objects
@@ -540,12 +541,13 @@ void ScTable::CopyToClip(
 }
 
 void ScTable::CopyToClip(
-    sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable )
+    sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable,
+    std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache )
 {
     for ( size_t i = 0, nListSize = rRanges.size(); i < nListSize; ++i )
     {
         const ScRange & r = rRanges[ i ];
-        CopyToClip( rCxt, r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), pTable);
+        CopyToClip( rCxt, r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), pTable, pPatternPutCache);
     }
 }
 

@@ -539,8 +539,10 @@ public:
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag,
         bool bBroadcast = true, sc::ColumnSpanSet* pBroadcastSpans = nullptr );
 
-    void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable );
-    void CopyToClip( sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable );
+    void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
+                     std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache = nullptr );
+    void CopyToClip( sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable,
+                     std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache = nullptr );
 
     void CopyStaticToDocument(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const SvNumberFormatterMergeMap& rMap,

@@ -880,10 +880,11 @@ public:
 }
 
 void ScColumn::CopyToClip(
-    sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const
+    sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn,
+    std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache ) const
 {
     if (!rCxt.isCopyChartRanges()) // No need to copy attributes for chart ranges
-        pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
+        pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray, pPatternPutCache,
                               rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {

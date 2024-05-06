@@ -2215,6 +2215,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
 
     // 1. Copy selected cells
+    std::unordered_map<const ScPatternAttr*, const ScPatternAttr*> aPatternPutCache;
     for (SCTAB i = 0; i < nEndTab; ++i)
     {
         if (!maTabs[i] || i >= pClipDoc->GetTableCount() || !pClipDoc->maTabs[i])
@@ -2223,7 +2224,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         if ( pMarks && !pMarks->GetTableSelect(i) )
             continue;
 
-        maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i].get());
+        maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i].get(), &aPatternPutCache);
     }
 
     // 2. Copy drawing objects in the selection. Do in after the first "copy cells" pass, because

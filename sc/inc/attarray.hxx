@@ -217,7 +217,9 @@ public:
     void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
     void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
     void    CopyArea(
-        SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags = ScMF::NONE) const;
+        SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray,
+        std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache = nullptr,
+        ScMF nStripFlags = ScMF::NONE) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 

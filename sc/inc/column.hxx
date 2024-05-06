@@ -344,7 +344,8 @@ public:
     void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag );
 
     void CopyToClip(
-        sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
+        sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn,
+        std::unordered_map<const ScPatternAttr*, const ScPatternAttr*>* pPatternPutCache = nullptr ) const;
 
     void CopyStaticToDocument(
         SCROW nRow1, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScColumn& rDestCol );
