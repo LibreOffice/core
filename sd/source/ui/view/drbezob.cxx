@@ -207,6 +207,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_SYMMTR:
         case SID_BEZIER_CLOSE:
         {
+            assert(mpView);
             const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
             IPolyPolygonEditorController* pIPPEC = nullptr;

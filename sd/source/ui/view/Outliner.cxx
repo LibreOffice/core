@@ -1695,7 +1695,7 @@ bool SdOutliner::HasNoPreviousMatch()
 {
     OutlinerView* pOutlinerView = getOutlinerView();
 
-    DBG_ASSERT (pOutlinerView!=nullptr, "outline view in SdOutliner::HasNoPreviousMatch is NULL");
+    assert(pOutlinerView && "outline view in SdOutliner::HasNoPreviousMatch is NULL");
 
     // Detect whether the cursor stands at the beginning
     // resp. at the end of the text.

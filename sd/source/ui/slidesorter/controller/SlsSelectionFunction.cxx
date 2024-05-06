@@ -586,7 +586,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
     if (pDescriptor)
     {
         SdPage* pPage = pDescriptor->GetPage();
-        OSL_ASSERT(pPage!=nullptr);
+        assert(pPage!=nullptr);
         sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
         GotoPage(nIndex + nOffset);
     }

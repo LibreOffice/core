@@ -78,6 +78,8 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
         || dynamic_cast<const DrawView*>(mpView) == nullptr)
         return;
 
+    assert(mpDocSh);
+
     SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
     if (!pInfo)
         return;

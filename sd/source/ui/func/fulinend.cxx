@@ -57,6 +57,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         return;
 
     const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    assert(pObj);
     const SdrObject* pNewObj;
     rtl::Reference<SdrObject> pConvPolyObj;
 

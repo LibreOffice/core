@@ -614,7 +614,7 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=nullptr);
+    assert(pViewShell!=nullptr);
 
     if (pViewShell->GetWindow() != pWin)
     {
@@ -694,7 +694,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
     bool bAbort = false;
     GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=nullptr);
+    assert(pViewShell!=nullptr);
     bool bChangeDefaultsForChart = false;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();

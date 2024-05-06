@@ -104,7 +104,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
     if (pActualOutline)
     {
-        const bool bUndo = mpView->IsUndoEnabled();
+        const bool bUndo = mpView && mpView->IsUndoEnabled();
 
         if( bUndo )
             mpView->BegUndo(SdResId(STR_UNDO_EXPAND_PAGE));

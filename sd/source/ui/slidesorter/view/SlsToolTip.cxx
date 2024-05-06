@@ -120,10 +120,10 @@ void ToolTip::DoShow()
     if (aBox.Bottom() >= pWindow->GetSizePixel().Height())
         return;
 
-    vcl::Window* pParent (pWindow);
-    while (pParent!=nullptr && pParent->GetParent()!=nullptr)
+    vcl::Window* pParent(pWindow);
+    while (pParent->GetParent())
         pParent = pParent->GetParent();
-    const Point aOffset (pWindow->GetWindowExtentsRelative(*pParent).TopLeft());
+    const Point aOffset(pWindow->GetWindowExtentsRelative(*pParent).TopLeft());
 
     // We do not know how high the tool tip will be but want its top
     // edge not its bottom to be at a specific position (a little below

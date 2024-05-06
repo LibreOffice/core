@@ -74,7 +74,7 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 */
 Point AccessibleViewForwarder::LogicToPixel(const Point& rPoint) const
 {
-    OSL_ASSERT(mpView != nullptr);
+    assert(mpView != nullptr);
     if (static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
@@ -88,7 +88,7 @@ Point AccessibleViewForwarder::LogicToPixel(const Point& rPoint) const
 
 Size AccessibleViewForwarder::LogicToPixel(const Size& rSize) const
 {
-    OSL_ASSERT(mpView != nullptr);
+    assert(mpView != nullptr);
     if (static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));

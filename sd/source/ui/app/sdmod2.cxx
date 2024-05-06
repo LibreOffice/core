@@ -498,6 +498,7 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     sal_Int32  nY;
     if( pDocSh )
     {
+        assert(pDoc);
         SdrPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
         Size aSize(pPage->GetSize());
         nW = aSize.Width();

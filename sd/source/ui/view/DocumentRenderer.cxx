@@ -1253,7 +1253,7 @@ public:
             return;
 
         SdDrawDocument* pDocument = pViewShell->GetDoc();
-        OSL_ASSERT(pDocument!=nullptr);
+        assert(pDocument!=nullptr);
 
         std::shared_ptr<DrawViewShell> pDrawViewShell(
             std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
@@ -1741,7 +1741,7 @@ private:
     void PrepareHandout (PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetDocument();
-        OSL_ASSERT(pDocument != nullptr);
+        assert(pDocument != nullptr);
         SdPage& rHandoutPage (*pDocument->GetSdPage(0, PageKind::Handout));
 
         const bool bScalePage (mpOptions->IsPageSize());

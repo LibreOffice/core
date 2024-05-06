@@ -1219,7 +1219,7 @@ void SdPageObjsTLV::AddShapeList (
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
-        OSL_ASSERT(pObj!=nullptr);
+        assert(pObj!=nullptr);
 
         // Get the shape name.
         OUString aStr (GetObjectName( pObj ) );

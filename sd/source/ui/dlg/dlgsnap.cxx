@@ -61,7 +61,7 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where's the Pool?" );
+    assert(pPool && "Where's the Pool?");
     MapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // #i48497# Consider page origin

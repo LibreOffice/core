@@ -96,7 +96,7 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
         if( pItem == nullptr )
             pItem = m_aInputSet.GetPool()->GetSecondaryPool()->GetUserDefaultItem(EE_PARA_NUMBULLET);
 
-        DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
+        assert(pItem && "No EE_PARA_NUMBULLET in Pool! [CL]");
 
         m_aInputSet.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
     }

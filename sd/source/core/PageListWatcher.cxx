@@ -37,7 +37,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     for(sal_uInt32 a(0); a < nPageCount; a++)
     {
         SdPage* pCandidate = ImpGetPage(a);
-        DBG_ASSERT(pCandidate, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Invalid PageList in Model (!)");
+        assert(pCandidate && "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Invalid PageList in Model (!)");
 
         switch(pCandidate->GetPageKind())
         {

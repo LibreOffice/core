@@ -581,7 +581,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     aOutliner.SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();
-    DBG_ASSERT( pStream, "No InStream!" );
+    assert(pStream && "No InStream!");
     pStream->Seek( 0 );
 
     ErrCode nErr = aOutliner.Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());

@@ -333,7 +333,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         }
 
         SfxViewShell* pViewShell = GetViewShell();
-        OSL_ASSERT (pViewShell!=nullptr);
+        assert(pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
         rBindings.Invalidate( SID_3D_STATE, true );
 

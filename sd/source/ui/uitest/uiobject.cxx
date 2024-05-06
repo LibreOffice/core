@@ -137,7 +137,7 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
     else if (rAction == "SIDEBAR")
     {
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-        DBG_ASSERT(pViewFrm, "ImpressWindowUIObject::execute: no viewframe");
+        assert(pViewFrm && "ImpressWindowUIObject::execute: no viewframe");
         pViewFrm->ShowChildWindow(SID_SIDEBAR);
 
         auto itr = rParameters.find("PANEL");
