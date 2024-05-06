@@ -61,7 +61,7 @@ namespace connectivity
         rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
         const OUString&         getURL() const  { return m_sURL; }
         void             setURL(const OUString& _rsUrl) { m_sURL = _rsUrl; }
-        void                    throwGenericSQLException(TranslateId pErrorResourceId, const css::uno::Reference< css::uno::XInterface>& _xContext);
+        [[noreturn]] void throwGenericSQLException(TranslateId pErrorResourceId, const css::uno::Reference< css::uno::XInterface>& _xContext);
         const SharedResources& getResources() const { return m_aResources;}
 
         void setConnectionInfo(const css::uno::Sequence< css::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }

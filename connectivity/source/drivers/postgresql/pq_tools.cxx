@@ -154,7 +154,7 @@ void bufferQuoteAnyConstant( OUStringBuffer & buf, const Any &val, ConnectionSet
 
 static void ibufferQuoteIdentifier( OUStringBuffer & buf, std::u16string_view toQuote, ConnectionSettings *settings )
 {
-    OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
+    assert(settings && "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
 
     OString y = iOUStringToOString( toQuote, settings );
     char *cstr = PQescapeIdentifier(settings->pConnection, y.getStr(), y.getLength());

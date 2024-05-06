@@ -131,6 +131,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql, 
     if (!pOutSqlda)
     {
         pOutSqlda = static_cast<XSQLDA*>(calloc(1, XSQLDA_LENGTH(10)));
+        assert(pOutSqlda && "Don't handle OOM conditions");
         pOutSqlda->version = SQLDA_VERSION1;
         pOutSqlda->sqln = 10;
     }
@@ -169,6 +170,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql, 
                 int n = pOutSqlda->sqld;
                 free(pOutSqlda);
                 pOutSqlda = static_cast<XSQLDA*>(calloc(1, XSQLDA_LENGTH(n)));
+                assert(pOutSqlda && "Don't handle OOM conditions");
                 pOutSqlda->version = SQLDA_VERSION1;
                 pOutSqlda->sqln = n;
                 aErr = isc_dsql_describe(m_statusVector,

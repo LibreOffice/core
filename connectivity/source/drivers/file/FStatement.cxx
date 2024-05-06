@@ -576,7 +576,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Error in Parse Tree");
 
         OSQLParseNode * pAssignmentCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pAssignmentCommalist != nullptr,"OResultSet: pAssignmentCommalist == NULL");
+        assert(pAssignmentCommalist && "OResultSet: pAssignmentCommalist == NULL");
         OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Error in Parse Tree");
         OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
@@ -585,15 +585,15 @@ void OStatement_Base::GetAssignValues()
         for (size_t i = 0; i < pAssignmentCommalist->count(); i++)
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
-            OSL_ENSURE(pAssignment != nullptr,"OResultSet: pAssignment == NULL");
+            assert(pAssignment && "OResultSet: pAssignment == NULL");
             OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Error in Parse Tree");
             OSL_ENSURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
 
             OSQLParseNode * pCol = pAssignment->getChild(0);
-            OSL_ENSURE(pCol != nullptr,"OResultSet: pCol == NULL");
+            assert(pCol && "OResultSet: pCol == NULL");
 
             OSQLParseNode * pComp = pAssignment->getChild(1);
-            OSL_ENSURE(pComp != nullptr,"OResultSet: pComp == NULL");
+            assert(pComp && "OResultSet: pComp == NULL");
             OSL_ENSURE(pComp->getNodeType() == SQLNodeType::Equal,"OResultSet: pComp->getNodeType() != SQLNodeType::Comparison");
             if (pComp->getTokenValue().toChar() != '=')
             {
@@ -614,7 +614,7 @@ void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNam
     OSL_ENSURE(o3tl::make_unsigned(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     OUString aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name not found");
-    OSL_ENSURE(pRow_Value_Constructor_Elem != nullptr,"OResultSet: pRow_Value_Constructor_Elem must not be NULL!");
+    assert(pRow_Value_Constructor_Elem != nullptr && "OResultSet: pRow_Value_Constructor_Elem must not be NULL!");
 
     if (pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::String ||
         pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::IntNum ||

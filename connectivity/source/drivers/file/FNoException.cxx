@@ -65,7 +65,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow const & _pRow)
 
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    DBG_ASSERT(pParseNode != nullptr,"OResultSet: internal error: invalid ParseNode");
+    assert(pParseNode && "OResultSet: internal error: invalid ParseNode");
 
     // found parameter Name-Rule?
     if (SQL_ISRULE(pParseNode,parameter))

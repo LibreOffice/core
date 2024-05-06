@@ -75,7 +75,7 @@ void OPredicateCompiler::start(OSQLParseNode const * pSQLParseNode)
         DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Error in Parse Tree");
 
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-        DBG_ASSERT(pTableExp != nullptr,"Error in Parse Tree");
+        assert(pTableExp && "Error in Parse Tree");
         DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Error in Parse Tree");
         DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Error in Parse Tree");
 
@@ -546,7 +546,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     m_aStack.pop();
 
     DBG_ASSERT(m_aStack.empty(), "Stack error");
-    DBG_ASSERT(pOperand, "Stack error");
+    assert(pOperand && "Stack error");
 
     const bool bResult = pOperand->isValid();
     if (typeid(OOperandResult) == typeid(*pOperand))
@@ -572,7 +572,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList, ORowSetValue
     m_aStack.pop();
 
     DBG_ASSERT(m_aStack.empty(), "Stack error");
-    DBG_ASSERT(pOperand, "Stack error");
+    assert(pOperand && "Stack error");
 
     (*_rVal) = pOperand->getValue();
     if (typeid(OOperandResult) == typeid(*pOperand))
