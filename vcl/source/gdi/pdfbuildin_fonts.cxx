@@ -69,7 +69,7 @@ FontAttributes BuildinFont::GetFontAttributes() const
     return aDFA;
 }
 
-constinit const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
+const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
     = { { u"Courier"_ustr, // family name
           u"Normal"_ustr, // style
           "Courier", // PSName
