@@ -149,11 +149,16 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aRuleFont.SetFillColor(aBackColor);
     css::uno::Sequence< OUString > aBulletSymbols;
 
-    if(ePageType == NumberingPageType::BULLET)
+    if(ePageType == NumberingPageType::BULLET || ePageType == NumberingPageType::DOCBULLET)
     {
         aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
         css::uno::Sequence< OUString > aBulletFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
         aRuleFont.SetFamilyName(aBulletFonts[nIndex]);
+        aFont = aRuleFont;
+    }
+    else if (ePageType == NumberingPageType::DOCBULLET)
+    {
+        aRuleFont.SetFamilyName(maCustomBullets[nIndex].second);
         aFont = aRuleFont;
     }
     else if(ePageType == NumberingPageType::OUTLINE)
@@ -198,7 +203,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     // Now comes the text
     static constexpr OUStringLiteral sValue(u"Value");
     if( NumberingPageType::SINGLENUM == ePageType ||
-           NumberingPageType::BULLET == ePageType )
+           NumberingPageType::BULLET == ePageType ||
+           NumberingPageType::DOCBULLET == ePageType)
     {
         Point aStart(aBLPos.X() + nRectWidth / 9,0);
         for( sal_uInt16 i = 0; i < 3; i++ )
@@ -209,6 +215,12 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             if(ePageType == NumberingPageType::BULLET)
             {
                 sText = aBulletSymbols[nIndex];
+                aStart.AdjustY( -(pDev->GetTextHeight()/2) );
+                aStart.setX( aBLPos.X() + 5 );
+            }
+            else if (ePageType == NumberingPageType::DOCBULLET)
+            {
+                sText = maCustomBullets[nIndex].first;
                 aStart.AdjustY( -(pDev->GetTextHeight()/2) );
                 aStart.setX( aBLPos.X() + 5 );
             }
@@ -443,6 +455,16 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
         InsertItem( i + 1, i );
         if( i < 8 )
             SetItemText(i + 1, SvxResId(RID_SVXSTR_OUTLINENUM_DESCRIPTIONS[i]));
+    }
+}
+
+void SvxNumValueSet::SetCustomBullets(std::vector<std::pair<OUString, OUString>> aCustomBullets)
+{
+    Clear();
+    maCustomBullets = aCustomBullets;
+    for (size_t i = 0; i < aCustomBullets.size(); i++)
+    {
+        InsertItem(i + 1, i);
     }
 }
 

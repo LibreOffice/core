@@ -341,6 +341,30 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     }
 }
 
+void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBullet,
+                                     std::u16string_view sFont, sal_uInt16 mLevel, bool isResetSize)
+{
+    sal_uInt16 nMask = 1;
+    OUString sBulletCharFormatName = GetBulletCharFmtName();
+    const vcl::Font aFont(OUString(sFont), Size(1, 1));
+    for (sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
+    {
+        if (mLevel & nMask)
+        {
+            SvxNumberFormat aFmt(aNum.GetLevel(i));
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+            aFmt.SetBulletFont(&aFont);
+            aFmt.SetBulletChar(sBullet[0]);
+            aFmt.SetCharFormatName(sBulletCharFormatName);
+            aFmt.SetListFormat("");
+            if (isResetSize)
+                aFmt.SetBulletRelSize(45);
+            aNum.SetLevel(i, aFmt);
+        }
+        nMask <<= 1;
+    }
+}
+
 OUString BulletsTypeMgr::GetDescription(sal_uInt16 /*nIndex*/, bool /*isDefault*/)
 {
     return OUString();
