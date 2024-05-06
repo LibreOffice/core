@@ -261,10 +261,12 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
     case FN_SVX_SET_BULLET:
     case FN_SVX_SET_OUTLINE:
         {
-            const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSlot);
-            if ( pItem != nullptr )
+            const SfxUInt16Item* pIndexItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_INDEX );
+            const SfxStringItem* pCharItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_CHAR );
+            const SfxStringItem* pFontItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_FONT );
+
+            if ( pIndexItem != nullptr || ( pCharItem != nullptr && pFontItem != nullptr ) )
             {
-                const sal_uInt16 nChosenItemIdx = pItem->GetValue();
                 svx::sidebar::NBOType nNBOType = svx::sidebar::NBOType::Bullets;
                 if ( nSlot == FN_SVX_SET_NUMBER )
                     nNBOType = svx::sidebar::NBOType::Numbering;
@@ -302,7 +304,15 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     aSet.Put( SvxNumBulletItem( aNewSvxNumRule, SID_ATTR_NUMBERING_RULE ) );
 
                     pNBOTypeMgr->SetItems( &aSet );
-                    pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChosenItemIdx - 1, nActNumLvl );
+                    if (pIndexItem)
+                        pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, pIndexItem->GetValue() - 1, nActNumLvl );
+                    else
+                    {
+                        svx::sidebar::BulletsTypeMgr* pBulletsTypeMgr
+                            = dynamic_cast<svx::sidebar::BulletsTypeMgr*>(pNBOTypeMgr);
+                        pBulletsTypeMgr->ApplyCustomRule(aNewSvxNumRule, pCharItem->GetValue(),
+                                                         pFontItem->GetValue(), nActNumLvl);
+                    }
 
                     aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
                     aNewNumRule.SetAutoRule( true );

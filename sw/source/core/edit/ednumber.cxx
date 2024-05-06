@@ -879,4 +879,9 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
                                     sListId, GetLayout() );
 }
 
+std::vector<OUString> SwEditShell::GetUsedBullets()
+{
+    return GetDoc()->GetUsedBullets();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -123,7 +123,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSId);
+    const SfxUInt16Item* pItem = rReq.GetArgs()->GetItem(SID_ATTR_BULLET_INDEX);
     if ( !pItem )
     {
         rReq.Done();

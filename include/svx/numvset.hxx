@@ -40,6 +40,7 @@ namespace com::sun::star {
 
 enum class NumberingPageType
 {
+    DOCBULLET,
     BULLET,
     SINGLENUM,
     OUTLINE,
@@ -54,6 +55,9 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
     css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
     css::lang::Locale aLocale;
+
+    // Pair of bullet chars (first), and their respective font (second)
+    std::vector<std::pair<OUString, OUString>> maCustomBullets;
 
     css::uno::Sequence<
         css::uno::Sequence<
@@ -81,6 +85,9 @@ public:
                 css::uno::Reference<css::container::XIndexAccess> > const & rOutline,
             css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
             const css::lang::Locale& rLocale);
+
+    std::vector<std::pair<OUString, OUString>> GetCustomBullets() { return maCustomBullets; }
+    void SetCustomBullets(std::vector<std::pair<OUString, OUString>> aCustomBullets);
 
     virtual FactoryFunction GetUITestFactory() const override;
 

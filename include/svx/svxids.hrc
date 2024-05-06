@@ -185,6 +185,7 @@ class XFillGradientItem;
 #define FN_BUL_NUM_RULE_INDEX   TypedWhichId<SfxUInt16Item>(FN_EDIT + 120) // achieving num rule index
 #define FN_NUM_NUM_RULE_INDEX   TypedWhichId<SfxUInt16Item>(FN_EDIT + 121)
 #define FN_OUTLINE_RULE_INDEX   TypedWhichId<SfxUInt16Item>(FN_EDIT + 122)
+#define FN_BUL_GET_DOC_BULLETS  TypedWhichId<SfxStringListItem>(FN_EDIT + 123)
 
 #define FN_INSERT               (SID_SW_START +  300) // 20300
 #define FN_DELETE_BOOKMARK      TypedWhichId<SfxStringItem>(FN_INSERT + 1)
@@ -1058,8 +1059,12 @@ class XFillGradientItem;
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1210 )
 #define SID_SET_DOCUMENT_LANGUAGE                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1211 )
 
+#define SID_ATTR_BULLET_CHAR                            TypedWhichId<SfxStringItem>(SID_SVX_START + 1212)
+#define SID_ATTR_BULLET_FONT                            TypedWhichId<SfxStringItem>(SID_SVX_START + 1213)
+#define SID_ATTR_BULLET_INDEX                           TypedWhichId<SfxUInt16Item>(SID_SVX_START + 1214)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1211 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1214 + 1 )
 
 
 // Overflow check for slot IDs

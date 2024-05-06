@@ -578,6 +578,7 @@ public:
      text node belongs, which applies the found list style. */
     const SwNumRule * SearchNumRule(const bool bNum,
                                     OUString& sListId );
+    std::vector<OUString> GetUsedBullets();
 
     /** Undo.
      Maintain UndoHistory in Document.

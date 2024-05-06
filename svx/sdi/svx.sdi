@@ -4991,6 +4991,21 @@ SfxUInt16Item CurrentNumListType FN_NUM_NUM_RULE_INDEX
     GroupId = SfxGroupId::Enumeration;
 ]
 
+SfxStringListItem DocumentBulletList FN_BUL_GET_DOC_BULLETS
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Enumeration;
+]
 
 SfxVoidItem InsertObject SID_INSERT_OBJECT
 ( SfxGlobalNameItem ClassId SID_INSERT_OBJECT )
@@ -6137,6 +6152,9 @@ SfxUInt16Item SetNumber FN_SVX_SET_NUMBER
 
 
 SfxUInt16Item SetBullet FN_SVX_SET_BULLET
+(SfxStringItem BulletChar SID_ATTR_BULLET_CHAR,
+ SfxStringItem BulletFont SID_ATTR_BULLET_FONT,
+ SfxUInt16Item BulletIndex SID_ATTR_BULLET_INDEX)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

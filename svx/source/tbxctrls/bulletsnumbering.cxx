@@ -9,9 +9,11 @@
 
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/propertysequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/strings.hrc>
@@ -32,8 +34,13 @@ class NumberingPopup : public WeldToolbarPopup
     NumberingToolBoxControl& mrController;
     std::unique_ptr<SvxNumValueSet> mxValueSet;
     std::unique_ptr<weld::CustomWeld> mxValueSetWin;
+    std::unique_ptr<SvxNumValueSet> mxValueSetDoc;
+    std::unique_ptr<weld::CustomWeld> mxValueSetWinDoc;
     std::unique_ptr<weld::Button> mxMoreButton;
+    std::unique_ptr<weld::Label> mxBulletsLabel;
+    std::unique_ptr<weld::Label> mxDocBulletsLabel;
     DECL_LINK(VSSelectValueSetHdl, ValueSet*, void);
+    DECL_LINK(VSSelectValueSetDocHdl, ValueSet*, void);
     DECL_LINK(VSButtonClickSetHdl, weld::Button&, void);
 
     virtual void GrabFocus() override;
@@ -70,13 +77,22 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     , mrController(rController)
     , mxValueSet(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
+    , mxValueSetDoc(new SvxNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin_doc"_ustr, true)))
+    , mxValueSetWinDoc(new weld::CustomWeld(*m_xBuilder, u"valueset_doc"_ustr, *mxValueSetDoc))
     , mxMoreButton(m_xBuilder->weld_button("more"))
+    , mxBulletsLabel(m_xBuilder->weld_label(u"label_default"_ustr))
+    , mxDocBulletsLabel(m_xBuilder->weld_label(u"label_doc"_ustr))
 {
     mxValueSet->SetStyle(WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT);
+    mxValueSetDoc->SetStyle(WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT);
     mxValueSet->init(mePageType);
+    mxValueSetDoc->init(NumberingPageType::DOCBULLET);
+    mxValueSetWinDoc->hide();
+    mxDocBulletsLabel->hide();
 
     if ( mePageType != NumberingPageType::BULLET )
     {
+        mxBulletsLabel->hide();
         css::uno::Reference< css::text::XDefaultNumberingProvider > xDefNum = css::text::DefaultNumberingProvider::create( mrController.getContext() );
         if ( xDefNum.is() )
         {
@@ -99,17 +115,25 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     }
 
     weld::DrawingArea* pDrawingArea = mxValueSet->GetDrawingArea();
+    weld::DrawingArea* pDrawingAreaDoc = mxValueSetDoc->GetDrawingArea();
     OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
     Size aItemSize(rRefDevice.LogicToPixel(Size(30, 42), MapMode(MapUnit::MapAppFont)));
     mxValueSet->SetExtraSpacing( 2 );
+    mxValueSetDoc->SetExtraSpacing( 2 );
     Size aSize(mxValueSet->CalcWindowSizePixel(aItemSize));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    pDrawingAreaDoc->set_size_request(aSize.Width(), aSize.Height());
     mxValueSet->SetOutputSizePixel(aSize);
+    mxValueSetDoc->SetOutputSizePixel(aSize);
     mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
+    mxValueSetDoc->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
 
     OUString aMoreItemText = SvxResId( RID_SVXSTR_CUSTOMIZE );
     if ( mePageType == NumberingPageType::BULLET )
+    {
         AddStatusListener( ".uno:CurrentBulletListType" );
+        AddStatusListener( ".uno:DocumentBulletList" );
+    }
     else if ( mePageType == NumberingPageType::SINGLENUM )
         AddStatusListener( ".uno:CurrentNumListType" );
     else
@@ -121,15 +145,67 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxMoreButton->connect_clicked(LINK(this, NumberingPopup, VSButtonClickSetHdl));
 
     mxValueSet->SetSelectHdl(LINK(this, NumberingPopup, VSSelectValueSetHdl));
+    mxValueSetDoc->SetSelectHdl(LINK(this, NumberingPopup, VSSelectValueSetDocHdl));
+}
+
+namespace
+{
+bool lcl_BulletIsDefault(std::u16string_view aSymbol, std::u16string_view aFont)
+{
+    css::uno::Sequence<OUString> aBulletSymbols
+        = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
+    css::uno::Sequence<OUString> aBulletFonts
+        = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
+    for (sal_Int32 i = 0; i < aBulletSymbols.getLength(); i++)
+    {
+        if (aBulletSymbols[i] == aSymbol && aBulletFonts[i] == aFont)
+            return true;
+    }
+    return false;
+}
 }
 
 void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    mxValueSet->SetNoSelection();
-
-    sal_Int32 nSelItem;
-    if ( rEvent.State >>= nSelItem )
-        mxValueSet->SelectItem( nSelItem );
+    if (rEvent.FeatureURL.Complete == ".uno:DocumentBulletList")
+    {
+        css::uno::Sequence<OUString> aSeq;
+        if (rEvent.State >>= aSeq)
+        {
+            std::vector<std::pair<OUString, OUString>> aList;
+            mxValueSetDoc->Clear();
+            int i = 1;
+            // The string contains the bullet as first character, and then the font name
+            for (const OUString& sBulletFont : aSeq)
+            {
+                OUString sBullet(sBulletFont.copy(0, 1));
+                OUString sFont(sBulletFont.copy(1, sBulletFont.getLength() - 1));
+                if (lcl_BulletIsDefault(sBullet, sFont))
+                    continue;
+                mxValueSetDoc->InsertItem(i, sBullet, i);
+                aList.emplace_back(sBullet, sFont);
+                i++;
+            }
+            if (!aList.empty())
+            {
+                mxValueSetWinDoc->show();
+                mxDocBulletsLabel->show();
+                mxValueSetDoc->SetCustomBullets(aList);
+            }
+            else
+            {
+                mxValueSetWinDoc->hide();
+                mxDocBulletsLabel->hide();
+            }
+        }
+    }
+    else
+    {
+        mxValueSet->SetNoSelection();
+        sal_Int32 nSelItem;
+        if ( rEvent.State >>= nSelItem )
+            mxValueSet->SelectItem( nSelItem );
+    }
 }
 
 IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
@@ -137,7 +213,7 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
     sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
     if ( mePageType == NumberingPageType::BULLET )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::Any( nSelItem ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "BulletIndex", css::uno::Any( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetBullet", aArgs );
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
@@ -150,6 +226,18 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
         auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::Any( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetOutline", aArgs );
     }
+    mrController.EndPopupMode();
+}
+
+IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetDocHdl, ValueSet*, void)
+{
+    sal_uInt16 nSelItem = mxValueSetDoc->GetSelectedItemId() - 1;
+    auto aCustomBullets = mxValueSetDoc->GetCustomBullets();
+    OUString nChar(aCustomBullets[nSelItem].first);
+    OUString sFont(aCustomBullets[nSelItem].second);
+    auto aArgs(comphelper::InitPropertySequence(
+        { { "BulletChar", css::uno::Any(nChar) }, { "BulletFont", css::uno::Any(sFont) } }));
+    mrController.dispatchCommand(".uno:SetBullet", aArgs);
     mrController.EndPopupMode();
 }
 
