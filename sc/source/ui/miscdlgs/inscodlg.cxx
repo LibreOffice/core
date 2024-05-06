@@ -215,7 +215,8 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
     // tdf#139858 - do not delete existing cell contents when pasting notes
     if ( mxBtnInsNotes->get_active()   )
-        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ADDNOTES;
+        ScInsertContentsDlg::nPreviousChecks
+            |= InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES;
     if ( mxBtnInsAttrs->get_active()   )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
     if ( mxBtnInsObjects->get_active() )
@@ -231,9 +232,7 @@ void ScInsertContentsDlg::SetInsContentsCmdBits(const InsertDeleteFlags eFlags)
     mxBtnInsNumbers->set_active((InsertDeleteFlags::VALUE & eFlags) == InsertDeleteFlags::VALUE);
     mxBtnInsDateTime->set_active((InsertDeleteFlags::DATETIME & eFlags) == InsertDeleteFlags::DATETIME);
     mxBtnInsStrings->set_active((InsertDeleteFlags::STRING & eFlags) == InsertDeleteFlags::STRING);
-    // tdf#160765 - additionally check either NOTE or ADDNOTES
-    mxBtnInsNotes->set_active(((InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES) & eFlags)
-                              != InsertDeleteFlags::NONE);
+    mxBtnInsNotes->set_active((InsertDeleteFlags::NOTE & eFlags) == InsertDeleteFlags::NOTE);
     mxBtnInsFormulas->set_active((InsertDeleteFlags::FORMULA & eFlags) == InsertDeleteFlags::FORMULA);
     mxBtnInsAttrs->set_active((InsertDeleteFlags::ATTRIB & eFlags) == InsertDeleteFlags::ATTRIB);
     mxBtnInsObjects->set_active((InsertDeleteFlags::OBJECTS & eFlags) == InsertDeleteFlags::OBJECTS);

@@ -12,6 +12,7 @@ from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.paste_special import reset_default_values
 
 class tdf139858(UITestCase):
@@ -50,6 +51,12 @@ class tdf139858(UITestCase):
                     xNumbersChkBox.executeAction("CLICK", tuple())
                     xCommentsChkBox = xPasteSpecialDlg.getChild("comments")
                     xCommentsChkBox.executeAction("CLICK", tuple())
+
+                # After tdf#158110 when an existing comment is overwritten, a confirmation dialog is shown
+                xCheckWarningDlg = self.xUITest.getTopFocusWindow()
+                if get_state_as_dict(xCheckWarningDlg)["ID"] == "CheckWarningDialog":
+                    xYesBtn = xCheckWarningDlg.getChild("yes")
+                    xYesBtn.executeAction("CLICK", tuple())
 
                 # Without the fix in place, this test would have failed with
                 # AssertionError: 'A1 sample text' != ''

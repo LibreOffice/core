@@ -42,7 +42,8 @@ class tdf160765(UITestCase):
                 xCommentsChkBox = xPasteSpecialDlg.getChild("comments")
                 xCommentsChkBox.executeAction("CLICK", tuple())
 
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
+            # After tdf#158110 when an existing comment is overwritten, a confirmation dialog is shown, so close dialog without any action
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial", close_button="cancel") as xPasteSpecialDlg:
                 xCommentsChkBox = xPasteSpecialDlg.getChild("comments")
                 # Without the fix in place, this test would have failed with
                 # AssertionError: 'true' != 'false'
@@ -84,6 +85,12 @@ class tdf160765(UITestCase):
                     xNumbersChkBox.executeAction("CLICK", tuple())
                     xCommentsChkBox = xPasteSpecialDlg.getChild("comments")
                     xCommentsChkBox.executeAction("CLICK", tuple())
+
+                # After tdf#158110 when an existing comment is overwritten, a confirmation dialog is shown
+                xCheckWarningDlg = self.xUITest.getTopFocusWindow()
+                if get_state_as_dict(xCheckWarningDlg)["ID"] == "CheckWarningDialog":
+                    xYesBtn = xCheckWarningDlg.getChild("yes")
+                    xYesBtn.executeAction("CLICK", tuple())
 
             # Undo both inserted comments
             self.xUITest.executeCommand(".uno:Undo")

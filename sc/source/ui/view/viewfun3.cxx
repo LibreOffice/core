@@ -846,7 +846,9 @@ static bool lcl_SelHasAttrib( const ScDocument& rDoc, SCCOL nCol1, SCROW nRow1, 
 
 namespace {
 
-bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument& rDoc, const ScMarkData& rMark, weld::Window* pParentWnd)
+bool checkDestRangeForOverwrite(InsertDeleteFlags nFlags, const ScRangeList& rDestRanges,
+                                const ScDocument& rDoc, const ScMarkData& rMark,
+                                weld::Window* pParentWnd)
 {
     bool bIsEmpty = true;
     size_t nRangeSize = rDestRanges.size();
@@ -855,9 +857,11 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
         for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
         {
             const ScRange& rRange = rDestRanges[i];
-            bIsEmpty = rDoc.IsBlockEmpty(
-                rRange.aStart.Col(), rRange.aStart.Row(),
-                rRange.aEnd.Col(), rRange.aEnd.Row(), rTab );
+            if (nFlags & InsertDeleteFlags::ADDNOTES)
+                bIsEmpty = !rDoc.HasNote(rRange.aStart) && !rDoc.HasNote(rRange.aEnd);
+            else
+                bIsEmpty = rDoc.IsBlockEmpty(rRange.aStart.Col(), rRange.aStart.Row(),
+                                             rRange.aEnd.Col(), rRange.aEnd.Row(), rTab);
         }
         if (!bIsEmpty)
             break;
@@ -894,8 +898,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     //  undo: save all or no content
     InsertDeleteFlags nContFlags = InsertDeleteFlags::NONE;
-    // tdf#160765 - save content for undo when pasting notes, even if no content was changed
-    if (nFlags & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES))
+    if (nFlags & InsertDeleteFlags::CONTENTS)
         nContFlags |= InsertDeleteFlags::CONTENTS;
     if (nFlags & InsertDeleteFlags::ATTRIB)
         nContFlags |= InsertDeleteFlags::ATTRIB;
@@ -1167,7 +1170,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bAskIfNotEmpty )
         {
             ScRangeList aTestRanges(aUserRange);
-            if (!checkDestRangeForOverwrite(aTestRanges, rDoc, aFilteredMark, GetViewData().GetDialogParent()))
+            if (!checkDestRangeForOverwrite(nFlags, aTestRanges, rDoc, aFilteredMark, GetViewData().GetDialogParent()))
                 return false;
         }
     }
@@ -1552,7 +1555,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     if (bAskIfNotEmpty)
     {
         ScRangeList aTestRanges(aMarkedRange);
-        if (!checkDestRangeForOverwrite(aTestRanges, rDoc, aMark, GetViewData().GetDialogParent()))
+        if (!checkDestRangeForOverwrite(nFlags, aTestRanges, rDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 
@@ -1719,7 +1722,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     if (bAskIfNotEmpty)
     {
-        if (!checkDestRangeForOverwrite(aRanges, rDoc, aMark, GetViewData().GetDialogParent()))
+        if (!checkDestRangeForOverwrite(nFlags, aRanges, rDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 
