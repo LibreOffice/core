@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkSizeGroup"/>
@@ -137,6 +137,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="lbInputRange"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edInputRange-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|edInputRange">Enter the cell range of the data fopr the sparklines.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -169,6 +174,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="lbOutputRange"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edOutputRange-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|edOutputRange">Select the cell range to receive the sparkline.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -261,7 +271,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colSeries">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -274,6 +283,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="lbSeries"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colSeries-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colSeries">Select the main color for the sparklines.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -291,6 +305,11 @@
                         <accessibility>
                           <relation type="label-for" target="colNegative"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbNegative-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbNegative">Check and select the color for negative points.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -299,7 +318,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colNegative">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -312,6 +330,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbNegative"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colNegative-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colNegative">Select the color for the negative points.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -329,6 +352,11 @@
                         <accessibility>
                           <relation type="label-for" target="colHigh"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbHigh-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbHigh">check and select the color for high points.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -337,7 +365,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colHigh">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -350,6 +377,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbHigh"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colHigh-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colHigh">Select the color for the high point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -367,6 +399,11 @@
                         <accessibility>
                           <relation type="label-for" target="colLow"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbLow-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbLow">Check and select the color for low points.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -375,7 +412,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colLow">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -388,6 +424,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbLow"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colLow-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colLow">Select the color for the low point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -405,6 +446,11 @@
                         <accessibility>
                           <relation type="label-for" target="colMarker"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbMarker-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMarker">Check and select the color for data points (line type only).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -413,7 +459,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colMarker">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -426,6 +471,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbMarker"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colMarker-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colMarker">Select the color for the data points markers.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -443,6 +493,11 @@
                         <accessibility>
                           <relation type="label-for" target="colFirst"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbFirst-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbFirst">Check and select the color for first point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -451,7 +506,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colFirst">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -464,6 +518,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbFirst"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colFirst-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colFirst">Select the color for the first point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -481,6 +540,11 @@
                         <accessibility>
                           <relation type="label-for" target="colLast"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbLast-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbLast">Check and select the color for last point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -489,7 +553,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colLast">
-                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -502,6 +565,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="cbLast"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colLast-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|colLast">Select the color for the last point.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -564,13 +632,18 @@
                         <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="text" translatable="yes" context="SparklineDialog|spinButton_LineWidth">1,00</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment-line-width</property>
                         <property name="climb-rate">0.25</property>
                         <property name="digits">2</property>
                         <property name="snap-to-ticks">True</property>
                         <property name="numeric">True</property>
-                        <property name="truncate-multiline">True</property>
                         <property name="value">1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="seLineWidth-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|seLineWidth">Enter the line thickness number manually or use the spin button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -600,6 +673,12 @@
                           <item id="1" translatable="yes" context="SparklineDialog|optionEmpty_Zero">Zero</item>
                           <item id="2" translatable="yes" context="SparklineDialog|optionEmpty_Span">Span</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbEmptyCells-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbEmptyCells">Display empty cells as:  Gap - the missing data is not displayed. The line type discontinues in the gap and the column is not displayed.   Zero -  the missing data is displayed as value zero. Span - for line type only, draws a continuous line connecting the previous value to the next value.
+</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -614,6 +693,11 @@
                         <property name="receives-default">False</property>
                         <property name="always-show-image">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbHidden-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbHidden">Check to show all columns or stacks in the range even when the data is in hidden cells. If unchecked, the hidden data is ignored.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -629,6 +713,11 @@
                         <property name="receives-default">False</property>
                         <property name="always-show-image">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbRTL-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbRTL">Check to have the sparklines show the data in reverse order.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -646,6 +735,12 @@
                           <item id="1" translatable="yes" context="SparklineDialog|optionType_Column">Column</item>
                           <item id="2" translatable="yes" context="SparklineDialog|optionType_Stacked">Stacked</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbType-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbType">Select the sparkline type in the drop-down list. Choices are:    Line - draws a line between data values.    Column - draws a bar for each data value.    Stacked -  also known as win/loss. Displays equally sized bars indicating positive and negative values.
+</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -709,6 +804,12 @@
                           <item id="1" translatable="yes" context="SparklineDialog|option_MinAxis_Group">Group</item>
                           <item id="2" translatable="yes" context="SparklineDialog|option_MinAxis_Custom">Custom</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbMinAxisType-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMinAxisType"> Individual: sets automatically the minimum value for each sparkline based on the sparkline data range values.    Group: sets the minimum value based on the lower and higher values found in the group of sparklines.  Custom: enter the minimum value for the sparkline group.
+</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -723,6 +824,11 @@
                         <property name="width-chars">10</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment-custom-min</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="seMinAxis-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|seMinAxis">Spin or enter number to set the minimum value for the Y axis.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
@@ -739,6 +845,11 @@
                           <item id="1" translatable="yes" context="SparklineDialog|option_MaxAxis_Group">Group</item>
                           <item id="2" translatable="yes" context="SparklineDialog|option_MaxAxis_Custom">Custom</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbMaxAxisType-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMaxAxisType"> Individual: sets automatically the maximum value for each sparkline based on the sparkline data range values.    Group: sets the maximum value based on the lower and higher values found in the group of sparklines.  Custom: enter the maximum value for the sparkline group.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -753,6 +864,11 @@
                         <property name="width-chars">10</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment-custom-max</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="seMaxAxis-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|seMaxAxis">Spin or enter number to set the maximum value for the Y axis.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
@@ -798,6 +914,11 @@
                         <property name="halign">start</property>
                         <property name="always-show-image">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbDisplayXAxis-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbDisplayXAxix">Check to show the X axis for sparklines.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
