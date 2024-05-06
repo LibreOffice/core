@@ -1052,7 +1052,7 @@ bool ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( "delete", css::uno::Any( true ) );
+            aContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
         {
@@ -1080,7 +1080,7 @@ bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
+                aMemoContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
             }
             catch(const Exception&)
             {
@@ -1098,7 +1098,7 @@ bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
+                aMemoContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
             }
             catch(const ContentCreationException&)
             {
@@ -1439,7 +1439,7 @@ bool ODbaseTable::Drop_Static(std::u16string_view _sUrl, bool _bHasMemoFields, O
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aDeleteContent.executeCommand( "delete", Any( true ) );
+                aDeleteContent.executeCommand( u"delete"_ustr, Any( true ) );
             }
             catch(const Exception&)
             {
@@ -2308,14 +2308,14 @@ namespace
         {
             Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
-            Sequence< PropertyValue > aProps{ { "Title",
+            Sequence< PropertyValue > aProps{ { u"Title"_ustr,
                                                 -1, // n/a
                                                 Any(sNewName),
                                                 css::beans::PropertyState_DIRECT_VALUE } };
             Sequence< Any > aValues;
-            aContent.executeCommand( "setPropertyValues",Any(aProps) ) >>= aValues;
+            aContent.executeCommand( u"setPropertyValues"_ustr,Any(aProps) ) >>= aValues;
             if(aValues.hasElements() && aValues[0].hasValue())
-                throw Exception("setPropertyValues returned non-zero", nullptr);
+                throw Exception(u"setPropertyValues returned non-zero"_ustr, nullptr);
         }
         catch(const Exception&)
         {

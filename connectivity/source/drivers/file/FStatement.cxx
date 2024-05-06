@@ -223,7 +223,7 @@ rtl::Reference<OResultSet> OStatement::createResultSet()
     return new OResultSet(this,m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OStatement,u"com.sun.star.sdbc.driver.file.Statement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
 void SAL_CALL OStatement::acquire() noexcept
 {

@@ -64,12 +64,12 @@ namespace
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 OUString SAL_CALL OResultSet::getImplementationName(  )
 {
-    return "com.sun.star.sdbcx.odbc.ResultSet";
+    return u"com.sun.star.sdbcx.odbc.ResultSet"_ustr;
 }
 
  Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName )
@@ -405,7 +405,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*colu
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
 }
 
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
@@ -413,7 +413,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
 }
 
 template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType )
@@ -591,22 +591,22 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  )
 
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getArray"_ustr, *this );
 }
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getClob"_ustr, *this );
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBlob"_ustr, *this );
 }
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getRef"_ustr, *this );
 }
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
@@ -1046,7 +1046,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x )
 
 void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRowUpdate::updateLong", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRowUpdate::updateLong"_ustr, *this );
 }
 
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x )
@@ -1236,7 +1236,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
 
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& /*bookmark*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRowLocate::hashBookmark", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRowLocate::hashBookmark"_ustr, *this );
 }
 
 // XDeleteRows
@@ -1366,7 +1366,7 @@ bool  OResultSet::isBookmarkable() const
 
 void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "setFetchDirection", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"setFetchDirection"_ustr, *this );
 }
 
 void OResultSet::setFetchSize(sal_Int32 _par0)
@@ -1374,7 +1374,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
     if ( _par0 != 1 )
     {
-        throw css::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", *this);
+        throw css::beans::PropertyVetoException(u"SDBC/ODBC layer not prepared for fetchSize > 1"_ustr, *this);
     }
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
     m_pRowStatusArray.reset( new SQLUSMALLINT[_par0] );

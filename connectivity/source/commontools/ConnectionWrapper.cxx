@@ -105,7 +105,7 @@ OConnectionWrapper::~OConnectionWrapper()
 
 OUString SAL_CALL OConnectionWrapper::getImplementationName(  )
 {
-    return "com.sun.star.sdbc.drivers.OConnectionWrapper";
+    return u"com.sun.star.sdbc.drivers.OConnectionWrapper"_ustr;
 }
 
 
@@ -117,7 +117,7 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
         aSupported = m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
-    OUString sConnectionService( "com.sun.star.sdbc.Connection" );
+    OUString sConnectionService( u"com.sun.star.sdbc.Connection"_ustr );
     if ( ::comphelper::findValue( aSupported, sConnectionService ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();

@@ -415,7 +415,7 @@ void OFlatTable::construct()
     m_xNumberFormatter.set( NumberFormatter::create( m_pConnection->getDriver()->getComponentContext()), UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
     Reference<XPropertySet> xProp = xSupplier->getNumberFormatSettings();
-    xProp->getPropertyValue("NullDate") >>= m_aNullDate;
+    xProp->getPropertyValue(u"NullDate"_ustr) >>= m_aNullDate;
 
     INetURLObject aURL;
     aURL.SetURL(getEntry());

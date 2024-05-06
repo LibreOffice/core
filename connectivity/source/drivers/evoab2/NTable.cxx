@@ -53,7 +53,7 @@ void OEvoabTable::refreshColumns()
     if (!isNew())
     {
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(
-                Any(), m_SchemaName, m_Name, "%");
+                Any(), m_SchemaName, m_Name, u"%"_ustr);
 
         if (xResult.is())
         {

@@ -78,7 +78,7 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
 
     sal_Int32 nIndex;
     OUString token;
-    OUString aHostName("localhost");
+    OUString aHostName(u"localhost"_ustr);
     sal_Int32 nPort = 3306;
     OUString aDbName;
 
@@ -188,7 +188,7 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     // Check if the server is 4.1 or above
     if (getMysqlVersion() < 40100)
     {
-        throw SQLException("MariaDB LibreOffice Connector requires MySQL Server 4.1 or above",
+        throw SQLException(u"MariaDB LibreOffice Connector requires MySQL Server 4.1 or above"_ustr,
                            *this, OUString(), 0, Any());
     }
 
@@ -198,12 +198,12 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
 
 OUString OConnection::getImplementationName()
 {
-    return "com.sun.star.sdbc.drivers.mysqlc.OConnection";
+    return u"com.sun.star.sdbc.drivers.mysqlc.OConnection"_ustr;
 }
 
 css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.Connection" };
+    return { u"com.sun.star.sdbc.Connection"_ustr };
 }
 
 sal_Bool OConnection::supportsService(OUString const& ServiceName)
@@ -462,11 +462,11 @@ OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
         try
         {
             Reference<XConnection> xCon = this;
-            Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection", Any(xCon))) };
+            Sequence<Any> aArgs{ Any(NamedValue(u"ActiveConnection"_ustr, Any(xCon))) };
 
             m_xParameterSubstitution.set(
                 m_xDriver->getFactory()->createInstanceWithArguments(
-                    "org.openoffice.comp.helper.ParameterSubstitution", aArgs),
+                    u"org.openoffice.comp.helper.ParameterSubstitution"_ustr, aArgs),
                 UNO_QUERY);
         }
         catch (const Exception&)

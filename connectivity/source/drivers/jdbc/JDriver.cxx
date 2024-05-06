@@ -47,7 +47,7 @@ java_sql_Driver::~java_sql_Driver()
 
 OUString SAL_CALL java_sql_Driver::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.JDBCDriver";
+    return u"com.sun.star.comp.sdbc.JDBCDriver"_ustr;
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceNam
 
 Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.Driver" };
+    return { u"com.sun.star.sdbc.Driver"_ustr };
 }
 
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url, const
@@ -108,97 +108,97 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBooleanValues{ "false", "true" };
+        Sequence< OUString > aBooleanValues{ u"false"_ustr, u"true"_ustr };
 
         return
         {
             {
-                "JavaDriverClass"
-                ,"The JDBC driver class name."
+                u"JavaDriverClass"_ustr
+                ,u"The JDBC driver class name."_ustr
                 ,true
                 ,OUString()
                 ,Sequence< OUString >()
             },
             {
-                "JavaDriverClassPath"
-                ,"The class path where to look for the JDBC driver."
+                u"JavaDriverClassPath"_ustr
+                ,u"The class path where to look for the JDBC driver."_ustr
                 ,true
-                , ""
+                , u""_ustr
                 ,Sequence< OUString >()
             },
             {
-                "SystemProperties"
-                ,"Additional properties to set at java.lang.System before loading the driver."
+                u"SystemProperties"_ustr
+                ,u"Additional properties to set at java.lang.System before loading the driver."_ustr
                 ,true
-                , ""
+                , u""_ustr
                 ,Sequence< OUString >()
             },
             {
-                "ParameterNameSubstitution"
-                ,"Change named parameters with '?'."
+                u"ParameterNameSubstitution"_ustr
+                ,u"Change named parameters with '?'."_ustr
                 ,false
-                ,"false"
+                ,u"false"_ustr
                 ,aBooleanValues
             },
             {
-                "IgnoreDriverPrivileges"
-                ,"Ignore the privileges from the database driver."
+                u"IgnoreDriverPrivileges"_ustr
+                ,u"Ignore the privileges from the database driver."_ustr
                 ,false
-                , "false"
+                , u"false"_ustr
                 ,aBooleanValues
             },
             {
-                "IsAutoRetrievingEnabled"
-                ,"Retrieve generated values."
+                u"IsAutoRetrievingEnabled"_ustr
+                ,u"Retrieve generated values."_ustr
                 ,false
-                ,"false"
+                ,u"false"_ustr
                 ,aBooleanValues
             },
             {
-                "AutoRetrievingStatement"
-                ,"Auto-increment statement."
+                u"AutoRetrievingStatement"_ustr
+                ,u"Auto-increment statement."_ustr
                 ,false
                 ,OUString()
                 ,Sequence< OUString >()
             },
             {
-                "GenerateASBeforeCorrelationName"
-                ,"Generate AS before table correlation names."
+                u"GenerateASBeforeCorrelationName"_ustr
+                ,u"Generate AS before table correlation names."_ustr
                 ,false
-                ,"false"
+                ,u"false"_ustr
                 ,aBooleanValues
             },
             {
-                "IgnoreCurrency"
-                ,"Ignore the currency field from the ResultsetMetaData."
+                u"IgnoreCurrency"_ustr
+                ,u"Ignore the currency field from the ResultsetMetaData."_ustr
                 ,false
-                ,"false"
+                ,u"false"_ustr
                 ,aBooleanValues
             },
             {
-                "EscapeDateTime"
-                ,"Escape date time format."
+                u"EscapeDateTime"_ustr
+                ,u"Escape date time format."_ustr
                 ,false
-                ,"true"
+                ,u"true"_ustr
                 ,aBooleanValues
             },
             {
-                "TypeInfoSettings"
-                ,"Defines how the type info of the database metadata should be manipulated."
+                u"TypeInfoSettings"_ustr
+                ,u"Defines how the type info of the database metadata should be manipulated."_ustr
                 ,false
                 ,OUString()
                 ,Sequence< OUString > ()
             },
             {
-                "ImplicitCatalogRestriction"
-                ,"The catalog which should be used in getTables calls, when the caller passed NULL."
+                u"ImplicitCatalogRestriction"_ustr
+                ,u"The catalog which should be used in getTables calls, when the caller passed NULL."_ustr
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ()
             },
             {
-                "ImplicitSchemaRestriction"
-                ,"The schema which should be used in getTables calls, when the caller passed NULL."
+                u"ImplicitSchemaRestriction"_ustr
+                ,u"The schema which should be used in getTables calls, when the caller passed NULL."_ustr
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ()

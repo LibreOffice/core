@@ -28,7 +28,8 @@ rtl::Reference<OResultSet> ODbasePreparedStatement::createResultSet()
     return new ODbaseResultSet(this, m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(ODbasePreparedStatement, "com.sun.star.sdbc.driver.dbase.PreparedStatement",
-                       "com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(ODbasePreparedStatement,
+                       u"com.sun.star.sdbc.driver.dbase.PreparedStatement"_ustr,
+                       u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

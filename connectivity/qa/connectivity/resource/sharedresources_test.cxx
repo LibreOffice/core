@@ -60,30 +60,30 @@ SharedResourcesTest::SharedResourcesTest()
 
 void SharedResourcesTest::testGetSourceString()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("UnitTest"), m_aResource.getResourceString(TEST_SOURCE_STRING));
+    CPPUNIT_ASSERT_EQUAL(u"UnitTest"_ustr, m_aResource.getResourceString(TEST_SOURCE_STRING));
 }
 
 void SharedResourcesTest::testGetSourceStringWithSubstitutionOne()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("One substitution UnitTest"),
+    CPPUNIT_ASSERT_EQUAL(u"One substitution UnitTest"_ustr,
                          m_aResource.getResourceStringWithSubstitution(TEST_SOURCE_ONE_SUBSTITUTION,
-                                                                       "$sub$", "UnitTest"));
+                                                                       "$sub$", u"UnitTest"_ustr));
 }
 
 void SharedResourcesTest::testGetSourceStringWithSubstitutionTwo()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Two substitution UnitTest1 UnitTest2"),
-                         m_aResource.getResourceStringWithSubstitution(TEST_SOURCE_TWO_SUBSTITUTION,
-                                                                       "$sub0$", "UnitTest1",
-                                                                       "$sub1$", "UnitTest2"));
+    CPPUNIT_ASSERT_EQUAL(u"Two substitution UnitTest1 UnitTest2"_ustr,
+                         m_aResource.getResourceStringWithSubstitution(
+                             TEST_SOURCE_TWO_SUBSTITUTION, "$sub0$", u"UnitTest1"_ustr, "$sub1$",
+                             u"UnitTest2"_ustr));
 }
 
 void SharedResourcesTest::testGetSourceStringWithSubstitutionThree()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Three substitution UnitTest1 UnitTest2 UnitTest3"),
+    CPPUNIT_ASSERT_EQUAL(u"Three substitution UnitTest1 UnitTest2 UnitTest3"_ustr,
                          m_aResource.getResourceStringWithSubstitution(
-                             TEST_SOURCE_THREE_SUBSTITUTION, "$sub0$", "UnitTest1", "$sub1$",
-                             "UnitTest2", "$sub2$", "UnitTest3"));
+                             TEST_SOURCE_THREE_SUBSTITUTION, "$sub0$", u"UnitTest1"_ustr, "$sub1$",
+                             u"UnitTest2"_ustr, "$sub2$", u"UnitTest3"_ustr));
 }
 
 void SharedResourcesTest::testGetSourceStringWithSubstitutionVector()
@@ -92,7 +92,7 @@ void SharedResourcesTest::testGetSourceStringWithSubstitutionVector()
                                                                         { "$sub1$", "vector1" },
                                                                         { "$sub2$", "vector2" } };
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Three substitution vector0 vector1 vector2"),
+    CPPUNIT_ASSERT_EQUAL(u"Three substitution vector0 vector1 vector2"_ustr,
                          m_aResource.getResourceStringWithSubstitution(
                              TEST_SOURCE_THREE_SUBSTITUTION, aStringToSubstitutes));
 }

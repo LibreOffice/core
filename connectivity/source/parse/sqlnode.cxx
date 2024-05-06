@@ -244,7 +244,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     parseNodeToStr(
         rString, _rxConnection, nullptr, nullptr, OUString(),
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
-        pContext, _bIntl, _bQuote, ".", false );
+        pContext, _bIntl, _bQuote, u"."_ustr, false );
 }
 
 
@@ -320,7 +320,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
 {
     OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
     SQLParseNodeParameter aParseParam( _rxConnection,
-        nullptr, nullptr, OUString(), OParseContext::getDefaultLocale(), nullptr, false, true, OUString("."), false, true );
+        nullptr, nullptr, OUString(), OParseContext::getDefaultLocale(), nullptr, false, true, u"."_ustr, false, true );
 
     if ( aParseParam.aMetaData.supportsSubqueriesInFrom() )
     {
@@ -1008,7 +1008,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
                             sal_Int16 nScale = 0;
                             try
                             {
-                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, "Decimals" );
+                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, u"Decimals"_ustr );
                                 aValue >>= nScale;
                             }
                             catch( Exception& )
@@ -1095,7 +1095,7 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
             sal_Int16 nScale = 0;
             try
             {
-                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, "Decimals" );
+                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, u"Decimals"_ustr );
                 aValue >>= nScale;
             }
             catch( Exception& )
@@ -1221,7 +1221,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                         css::lang::Locale aLocale;
                         aLocale.Language = "en";
                         aLocale.Country = "US";
-                        OUString sFormat("YYYY-MM-DD");
+                        OUString sFormat(u"YYYY-MM-DD"_ustr);
                         m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,false);
                         if ( m_nDateFormatKey == sal_Int32(-1) )
                             m_nDateFormatKey = xFormats->addNew(sFormat, aLocale);
@@ -1705,7 +1705,7 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
         SQL_ISTOKEN(pODBCNodeChild, TS) ))
         return false;
 
-    OUString suQuote("'");
+    OUString suQuote(u"'"_ustr);
     if (rParam.bPredicate)
     {
          if (rParam.aMetaData.shouldEscapeDateTime())

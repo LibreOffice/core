@@ -94,7 +94,7 @@ void throwFeatureNotImplementedException(const char* _pAsciiFeatureName,
 {
     const OUString sMessage
         = OUString::createFromAscii(_pAsciiFeatureName) + ": feature not implemented.";
-    throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
+    throw SQLException(sMessage, _rxContext, u"HYC00"_ustr, 0, Any());
 }
 
 void throwInvalidArgumentException(const char* _pAsciiFeatureName,
@@ -102,7 +102,7 @@ void throwInvalidArgumentException(const char* _pAsciiFeatureName,
 {
     const OUString sMessage
         = OUString::createFromAscii(_pAsciiFeatureName) + ": invalid arguments.";
-    throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
+    throw SQLException(sMessage, _rxContext, u"HYC00"_ustr, 0, Any());
 }
 
 void throwSQLExceptionWithMsg(const char* msg, const char* SQLSTATE, unsigned int errorNum,
@@ -257,93 +257,92 @@ OUString mysqlTypeToStr(unsigned type, unsigned flags)
     switch (type)
     {
         case MYSQL_TYPE_BIT:
-            return OUString{ "BIT" };
+            return u"BIT"_ustr;
         case MYSQL_TYPE_DECIMAL:
         case MYSQL_TYPE_NEWDECIMAL:
-            return isUnsigned ? (isZerofill ? OUString{ "DECIMAL UNSIGNED ZEROFILL" }
-                                            : OUString{ "DECIMAL UNSIGNED" })
-                              : OUString{ "DECIMAL" };
+            return isUnsigned
+                       ? (isZerofill ? u"DECIMAL UNSIGNED ZEROFILL"_ustr : u"DECIMAL UNSIGNED"_ustr)
+                       : u"DECIMAL"_ustr;
         case MYSQL_TYPE_TINY:
-            return isUnsigned ? (isZerofill ? OUString{ "TINYINT UNSIGNED ZEROFILL" }
-                                            : OUString{ "TINYINT UNSIGNED" })
-                              : OUString{ "TINYINT" };
+            return isUnsigned
+                       ? (isZerofill ? u"TINYINT UNSIGNED ZEROFILL"_ustr : u"TINYINT UNSIGNED"_ustr)
+                       : u"TINYINT"_ustr;
         case MYSQL_TYPE_SHORT:
-            return isUnsigned ? (isZerofill ? OUString{ "SMALLINT UNSIGNED ZEROFILL" }
-                                            : OUString{ "SMALLINT UNSIGNED" })
-                              : OUString{ "SMALLINT" };
+            return isUnsigned ? (isZerofill ? u"SMALLINT UNSIGNED ZEROFILL"_ustr
+                                            : u"SMALLINT UNSIGNED"_ustr)
+                              : u"SMALLINT"_ustr;
         case MYSQL_TYPE_LONG:
-            return isUnsigned ? (isZerofill ? OUString{ "INT UNSIGNED ZEROFILL" }
-                                            : OUString{ "INT UNSIGNED" })
-                              : OUString{ "INT" };
+            return isUnsigned ? (isZerofill ? u"INT UNSIGNED ZEROFILL"_ustr : u"INT UNSIGNED"_ustr)
+                              : u"INT"_ustr;
         case MYSQL_TYPE_FLOAT:
-            return isUnsigned ? (isZerofill ? OUString{ "FLOAT UNSIGNED ZEROFILL" }
-                                            : OUString{ "FLOAT UNSIGNED" })
-                              : OUString{ "FLOAT" };
+            return isUnsigned
+                       ? (isZerofill ? u"FLOAT UNSIGNED ZEROFILL"_ustr : u"FLOAT UNSIGNED"_ustr)
+                       : u"FLOAT"_ustr;
         case MYSQL_TYPE_DOUBLE:
-            return isUnsigned ? (isZerofill ? OUString{ "DOUBLE UNSIGNED ZEROFILL" }
-                                            : OUString{ "DOUBLE UNSIGNED" })
-                              : OUString{ "DOUBLE" };
+            return isUnsigned
+                       ? (isZerofill ? u"DOUBLE UNSIGNED ZEROFILL"_ustr : u"DOUBLE UNSIGNED"_ustr)
+                       : u"DOUBLE"_ustr;
         case MYSQL_TYPE_NULL:
-            return OUString{ "NULL" };
+            return u"NULL"_ustr;
         case MYSQL_TYPE_TIMESTAMP:
-            return OUString{ "TIMESTAMP" };
+            return u"TIMESTAMP"_ustr;
         case MYSQL_TYPE_LONGLONG:
-            return isUnsigned ? (isZerofill ? OUString{ "BIGINT UNSIGNED ZEROFILL" }
-                                            : OUString{ "BIGINT UNSIGNED" })
-                              : OUString{ "BIGINT" };
+            return isUnsigned
+                       ? (isZerofill ? u"BIGINT UNSIGNED ZEROFILL"_ustr : u"BIGINT UNSIGNED"_ustr)
+                       : u"BIGINT"_ustr;
         case MYSQL_TYPE_INT24:
-            return isUnsigned ? (isZerofill ? OUString{ "MEDIUMINT UNSIGNED ZEROFILL" }
-                                            : OUString{ "MEDIUMINT UNSIGNED" })
-                              : OUString{ "MEDIUMINT" };
+            return isUnsigned ? (isZerofill ? u"MEDIUMINT UNSIGNED ZEROFILL"_ustr
+                                            : u"MEDIUMINT UNSIGNED"_ustr)
+                              : u"MEDIUMINT"_ustr;
         case MYSQL_TYPE_DATE:
-            return OUString{ "DATE" };
+            return u"DATE"_ustr;
         case MYSQL_TYPE_TIME:
-            return OUString{ "TIME" };
+            return u"TIME"_ustr;
         case MYSQL_TYPE_DATETIME:
-            return OUString{ "DATETIME" };
+            return u"DATETIME"_ustr;
         case MYSQL_TYPE_TINY_BLOB:
         {
-            return OUString{ "TINYBLOB" };
+            return u"TINYBLOB"_ustr;
         }
         case MYSQL_TYPE_MEDIUM_BLOB:
         {
-            return OUString{ "MEDIUMBLOB" };
+            return u"MEDIUMBLOB"_ustr;
         }
         case MYSQL_TYPE_LONG_BLOB:
         {
-            return OUString{ "LONGBLOB" };
+            return u"LONGBLOB"_ustr;
         }
         case MYSQL_TYPE_BLOB:
         {
-            return OUString{ "BLOB" };
+            return u"BLOB"_ustr;
         }
         case MYSQL_TYPE_VARCHAR:
         case MYSQL_TYPE_VAR_STRING:
             if (flags & ENUM_FLAG)
             {
-                return OUString{ "ENUM" };
+                return u"ENUM"_ustr;
             }
             if (flags & SET_FLAG)
             {
-                return OUString{ "SET" };
+                return u"SET"_ustr;
             }
-            return OUString{ "VARCHAR" };
+            return u"VARCHAR"_ustr;
         case MYSQL_TYPE_STRING:
             if (flags & ENUM_FLAG)
             {
-                return OUString{ "ENUM" };
+                return u"ENUM"_ustr;
             }
             if (flags & SET_FLAG)
             {
-                return OUString{ "SET" };
+                return u"SET"_ustr;
             }
-            return OUString{ "CHAR" };
+            return u"CHAR"_ustr;
         case MYSQL_TYPE_YEAR:
-            return OUString{ "YEAR" };
+            return u"YEAR"_ustr;
         case MYSQL_TYPE_GEOMETRY:
-            return OUString{ "GEOMETRY" };
+            return u"GEOMETRY"_ustr;
         default:
-            return OUString{ "UNKNOWN" };
+            return u"UNKNOWN"_ustr;
     }
 }
 

@@ -56,7 +56,7 @@ OEvoabConnection::~OEvoabConnection()
 
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OEvoabConnection, u"com.sun.star.sdbc.drivers.evoab.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)
@@ -147,7 +147,7 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
 
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
     return nullptr;
 }
 sal_Bool SAL_CALL OEvoabConnection::isClosed(  )
@@ -189,7 +189,7 @@ void OEvoabConnection::disposing()
 // -------------------------------- stubbed methods ------------------------------------------------
 void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setAutoCommit", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setAutoCommit"_ustr, *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  )
 {
@@ -203,7 +203,7 @@ void SAL_CALL OEvoabConnection::rollback(  )
 }
 void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setReadOnly", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setReadOnly"_ustr, *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  )
 {
@@ -211,7 +211,7 @@ sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  )
 }
 void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setCatalog", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setCatalog"_ustr, *this );
 }
 
 OUString SAL_CALL OEvoabConnection::getCatalog(  )
@@ -220,7 +220,7 @@ OUString SAL_CALL OEvoabConnection::getCatalog(  )
 }
 void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTransactionIsolation", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTransactionIsolation"_ustr, *this );
 }
 
 sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  )
@@ -230,12 +230,12 @@ sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  )
 
 Reference< css::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::getTypeMap"_ustr, *this );
     return nullptr;
 }
 void SAL_CALL OEvoabConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTypeMap"_ustr, *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

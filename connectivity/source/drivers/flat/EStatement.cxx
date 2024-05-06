@@ -28,6 +28,6 @@ rtl::Reference<OResultSet> OFlatStatement::createResultSet()
     return new OFlatResultSet(this,m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OFlatStatement,"com.sun.star.sdbc.driver.flat.Statement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OFlatStatement,u"com.sun.star.sdbc.driver.flat.Statement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

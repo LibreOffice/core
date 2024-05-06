@@ -31,7 +31,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-IMPLEMENT_SERVICE_INFO(OGroup,"com.sun.star.sdbcx.VGroup","com.sun.star.sdbcx.Group");
+IMPLEMENT_SERVICE_INFO(OGroup,u"com.sun.star.sdbcx.VGroup"_ustr,u"com.sun.star.sdbcx.Group"_ustr);
 
 OGroup::OGroup(bool _bCase) :   OGroup_BASE(m_aMutex)
                 ,   ODescriptor(OGroup_BASE::rBHelper,_bCase)
@@ -125,14 +125,14 @@ void SAL_CALL OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedSQLException( "XAuthorizable::grantPrivileges", *this );
+    throwFeatureNotImplementedSQLException( u"XAuthorizable::grantPrivileges"_ustr, *this );
 }
 
 void SAL_CALL OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedSQLException( "XAuthorizable::revokePrivileges", *this );
+    throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  )
@@ -147,7 +147,7 @@ OUString SAL_CALL OGroup::getName(  )
 
 void SAL_CALL OGroup::setName( const OUString& /*aName*/ )
 {
-    throwFeatureNotImplementedRuntimeException( "XNamed::setName", *this );
+    throwFeatureNotImplementedRuntimeException( u"XNamed::setName"_ustr, *this );
 }
 
 // XInterface

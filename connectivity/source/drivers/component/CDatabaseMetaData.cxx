@@ -53,7 +53,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
     ODatabaseMetaDataResultSet::ORow aRow
     {
         ODatabaseMetaDataResultSet::getEmptyValue(),
-        new ORowSetValueDecorator(OUString("VARCHAR")),
+        new ORowSetValueDecorator(u"VARCHAR"_ustr),
         new ORowSetValueDecorator(DataType::VARCHAR),
         new ORowSetValueDecorator(sal_Int32(65535)),
         ODatabaseMetaDataResultSet::getQuoteValue(),
@@ -75,35 +75,35 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
+    aRow[1] = new ORowSetValueDecorator(u"DECIMAL"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
     aRow[3] = ODatabaseMetaDataResultSet::get0Value();
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
     aRow[15] = ODatabaseMetaDataResultSet::get0Value();
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("BOOL"));
+    aRow[1] = new ORowSetValueDecorator(u"BOOL"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::BIT);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
     aRow[15] = new ORowSetValueDecorator(sal_Int32(15));
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
+    aRow[1] = new ORowSetValueDecorator(u"DATE"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DATE);
     aRow[3] = ODatabaseMetaDataResultSet::get0Value();
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
     aRow[15] = ODatabaseMetaDataResultSet::get0Value();
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
+    aRow[1] = new ORowSetValueDecorator(u"TIME"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::TIME);
     aRow[3] = ODatabaseMetaDataResultSet::get0Value();
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
     aRow[15] = ODatabaseMetaDataResultSet::get0Value();
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+    aRow[1] = new ORowSetValueDecorator(u"TIMESTAMP"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
     aRow[3] = ODatabaseMetaDataResultSet::get0Value();
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
@@ -187,10 +187,10 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
                     switch(aRow[11]->getValue().getInt32())
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18]  = new ORowSetValueDecorator(OUString("NO"));
+                        aRow[18]  = new ORowSetValueDecorator(u"NO"_ustr);
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18]  = new ORowSetValueDecorator(OUString("YES"));
+                        aRow[18]  = new ORowSetValueDecorator(u"YES"_ustr);
                         break;
                     default:
                         aRow[18]  = new ORowSetValueDecorator(OUString());

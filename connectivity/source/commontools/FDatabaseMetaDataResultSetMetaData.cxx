@@ -165,191 +165,191 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 colu
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
     setColumnMap();
-    m_mColumns[5] = OColumn(OUString(),"GRANTOR", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"GRANTEE", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"PRIVILEGE", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
-    m_mColumns[8] = OColumn(OUString(),"IS_GRANTABLE", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"GRANTOR"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"GRANTEE"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"PRIVILEGE"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[8] = OColumn(OUString(),u"IS_GRANTABLE"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setTableNameMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"TABLE_CAT", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
-    m_mColumns[2] = OColumn(OUString(),"TABLE_SCHEM", ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
-    m_mColumns[3] = OColumn(OUString(),"TABLE_NAME", ColumnValue::NO_NULLS, 3,3,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"TABLE_CAT"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),u"TABLE_SCHEM"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),u"TABLE_NAME"_ustr, ColumnValue::NO_NULLS, 3,3,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setColumnMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(OUString(),"COLUMN_NAME", ColumnValue::NO_NULLS, 3,3,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"COLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 3,3,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
     setColumnMap();
 
-    m_mColumns[5] = OColumn(OUString(),"DATA_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[6] = OColumn(OUString(),"TYPE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"COLUMN_SIZE", ColumnValue::NO_NULLS, 3,3,0, DataType::INTEGER);
-    m_mColumns[8] = OColumn(OUString(),"BUFFER_LENGTH", ColumnValue::NULLABLE, 3,3,0, DataType::INTEGER);
-    m_mColumns[9] = OColumn(OUString(),"DECIMAL_DIGITS", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[10] = OColumn(OUString(),"NUM_PREC_RADIX", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[11] = OColumn(OUString(),"NULLABLE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[12] = OColumn(OUString(),"REMARKS", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[13] = OColumn(OUString(),"COLUMN_DEF", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[14] = OColumn(OUString(),"SQL_DATA_TYPE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[15] = OColumn(OUString(),"SQL_DATETIME_SUB", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[16] = OColumn(OUString(),"CHAR_OCTET_LENGTH", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[17] = OColumn(OUString(),"ORDINAL_POSITION", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[18] = OColumn(OUString(),"IS_NULLABLE", ColumnValue::NO_NULLS, 1,1,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[6] = OColumn(OUString(),u"TYPE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"COLUMN_SIZE"_ustr, ColumnValue::NO_NULLS, 3,3,0, DataType::INTEGER);
+    m_mColumns[8] = OColumn(OUString(),u"BUFFER_LENGTH"_ustr, ColumnValue::NULLABLE, 3,3,0, DataType::INTEGER);
+    m_mColumns[9] = OColumn(OUString(),u"DECIMAL_DIGITS"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[10] = OColumn(OUString(),u"NUM_PREC_RADIX"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[11] = OColumn(OUString(),u"NULLABLE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[12] = OColumn(OUString(),u"REMARKS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[13] = OColumn(OUString(),u"COLUMN_DEF"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[14] = OColumn(OUString(),u"SQL_DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[15] = OColumn(OUString(),u"SQL_DATETIME_SUB"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[16] = OColumn(OUString(),u"CHAR_OCTET_LENGTH"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[17] = OColumn(OUString(),u"ORDINAL_POSITION"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[18] = OColumn(OUString(),u"IS_NULLABLE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(OUString(),"TABLE_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"REMARKS", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"TABLE_TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"REMARKS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setProcedureNameMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"PROCEDURE_CAT", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[2] = OColumn(OUString(),"PROCEDURE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[3] = OColumn(OUString(),"PROCEDURE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"PROCEDURE_CAT"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),u"PROCEDURE_SCHEM"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),u"PROCEDURE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 {
     setProcedureNameMap();
-    m_mColumns[4] = OColumn(OUString(),"COLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"COLUMN_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[6] = OColumn(OUString(),"DATA_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[7] = OColumn(OUString(),"TYPE_NAME", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[8] = OColumn(OUString(),"PRECISION", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[9] = OColumn(OUString(),"LENGTH", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[10] = OColumn(OUString(),"SCALE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[11] = OColumn(OUString(),"RADIX", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[12] = OColumn(OUString(),"NULLABLE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[13] = OColumn(OUString(),"REMARKS", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"COLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"COLUMN_TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[6] = OColumn(OUString(),u"DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[7] = OColumn(OUString(),u"TYPE_NAME"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[8] = OColumn(OUString(),u"PRECISION"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[9] = OColumn(OUString(),u"LENGTH"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[10] = OColumn(OUString(),u"SCALE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[11] = OColumn(OUString(),u"RADIX"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[12] = OColumn(OUString(),u"NULLABLE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[13] = OColumn(OUString(),u"REMARKS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
     setColumnMap();
-    m_mColumns[5] = OColumn(OUString(),"KEY_SEQ", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[6] = OColumn(OUString(),"PK_NAME", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"KEY_SEQ"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[6] = OColumn(OUString(),u"PK_NAME"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(OUString(),"NON_UNIQUE", ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
-    m_mColumns[5] = OColumn(OUString(),"INDEX_QUALIFIER", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"INDEX_NAME", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[8] = OColumn(OUString(),"ORDINAL_POSITION", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[9] = OColumn(OUString(),"COLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[10] = OColumn(OUString(),"ASC_OR_DESC", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[11] = OColumn(OUString(),"CARDINALITY", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[12] = OColumn(OUString(),"PAGES", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[13] = OColumn(OUString(),"FILTER_CONDITION", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"NON_UNIQUE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
+    m_mColumns[5] = OColumn(OUString(),u"INDEX_QUALIFIER"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"INDEX_NAME"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[8] = OColumn(OUString(),u"ORDINAL_POSITION"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[9] = OColumn(OUString(),u"COLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[10] = OColumn(OUString(),u"ASC_OR_DESC"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[11] = OColumn(OUString(),u"CARDINALITY"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[12] = OColumn(OUString(),u"PAGES"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[13] = OColumn(OUString(),u"FILTER_CONDITION"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(OUString(),"GRANTOR", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"GRANTEE", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"PRIVILEGE", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"IS_GRANTABLE", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"GRANTOR"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"GRANTEE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"PRIVILEGE"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"IS_GRANTABLE"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"PKTABLE_CAT", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[2] = OColumn(OUString(),"PKTABLE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[3] = OColumn(OUString(),"PKTABLE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[4] = OColumn(OUString(),"PKCOLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"FKTABLE_CAT", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"FKTABLE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"FKTABLE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[8] = OColumn(OUString(),"FKCOLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"PKTABLE_CAT"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),u"PKTABLE_SCHEM"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),u"PKTABLE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"PKCOLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"FKTABLE_CAT"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"FKTABLE_SCHEM"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"FKTABLE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[8] = OColumn(OUString(),u"FKCOLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
 
-    m_mColumns[9] = OColumn(OUString(),"KEY_SEQ", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[10] = OColumn(OUString(),"UPDATE_RULE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[11] = OColumn(OUString(),"DELETE_RULE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[12] = OColumn(OUString(),"FK_NAME", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[13] = OColumn(OUString(),"PK_NAME", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[14] = OColumn(OUString(),"DEFERRABILITY", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[9] = OColumn(OUString(),u"KEY_SEQ"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[10] = OColumn(OUString(),u"UPDATE_RULE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[11] = OColumn(OUString(),u"DELETE_RULE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[12] = OColumn(OUString(),u"FK_NAME"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[13] = OColumn(OUString(),u"PK_NAME"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[14] = OColumn(OUString(),u"DEFERRABILITY"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"TYPE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[2] = OColumn(OUString(),"DATA_TYPE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[3] = OColumn(OUString(),"PRECISION", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[4] = OColumn(OUString(),"LITERAL_PREFIX", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"LITERAL_SUFFIX", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"CREATE_PARAMS", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"NULLABLE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[8] = OColumn(OUString(),"CASE_SENSITIVE", ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
-    m_mColumns[9] = OColumn(OUString(),"SEARCHABLE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[10] = OColumn(OUString(),"UNSIGNED_ATTRIBUTE", ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
-    m_mColumns[11] = OColumn(OUString(),"FIXED_PREC_SCALE", ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
-    m_mColumns[12] = OColumn(OUString(),"AUTO_INCREMENT", ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
-    m_mColumns[13] = OColumn(OUString(),"LOCAL_TYPE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[14] = OColumn(OUString(),"MINIMUM_SCALE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[15] = OColumn(OUString(),"MAXIMUM_SCALE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[16] = OColumn(OUString(),"SQL_DATA_TYPE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[17] = OColumn(OUString(),"SQL_DATETIME_SUB", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
-    m_mColumns[18] = OColumn(OUString(),"NUM_PREC_RADIX", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[1] = OColumn(OUString(),u"TYPE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),u"DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[3] = OColumn(OUString(),u"PRECISION"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[4] = OColumn(OUString(),u"LITERAL_PREFIX"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"LITERAL_SUFFIX"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"CREATE_PARAMS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"NULLABLE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[8] = OColumn(OUString(),u"CASE_SENSITIVE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
+    m_mColumns[9] = OColumn(OUString(),u"SEARCHABLE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[10] = OColumn(OUString(),u"UNSIGNED_ATTRIBUTE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
+    m_mColumns[11] = OColumn(OUString(),u"FIXED_PREC_SCALE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
+    m_mColumns[12] = OColumn(OUString(),u"AUTO_INCREMENT"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::BIT);
+    m_mColumns[13] = OColumn(OUString(),u"LOCAL_TYPE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[14] = OColumn(OUString(),u"MINIMUM_SCALE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[15] = OColumn(OUString(),u"MAXIMUM_SCALE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[16] = OColumn(OUString(),u"SQL_DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[17] = OColumn(OUString(),u"SQL_DATETIME_SUB"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[18] = OColumn(OUString(),u"NUM_PREC_RADIX"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
     setProcedureNameMap();
-    m_mColumns[4] = OColumn(OUString(),"RESERVED1", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"RESERVED2", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"RESERVED3", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[7] = OColumn(OUString(),"REMARKS", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[8] = OColumn(OUString(),"PROCEDURE_TYPE", ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
+    m_mColumns[4] = OColumn(OUString(),u"RESERVED1"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"RESERVED2"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"RESERVED3"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[7] = OColumn(OUString(),u"REMARKS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[8] = OColumn(OUString(),u"PROCEDURE_TYPE"_ustr, ColumnValue::NO_NULLS, 1,1,0, DataType::INTEGER);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setTableTypes()
 {
-    m_mColumns[1] = OColumn(OUString(),"TABLE_TYPE", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"TABLE_TYPE"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setCatalogsMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"TABLE_CAT", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"TABLE_CAT"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setSchemasMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"TABLE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"TABLE_SCHEM"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setVersionColumnsMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"SCOPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[2] = OColumn(OUString(),"COLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[3] = OColumn(OUString(),"DATA_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[4] = OColumn(OUString(),"TYPE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"COLUMN_SIZE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[6] = OColumn(OUString(),"BUFFER_LENGTH", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
-    m_mColumns[7] = OColumn(OUString(),"DECIMAL_DIGITS", ColumnValue::NULLABLE, 0,0,0, DataType::INTEGER);
-    m_mColumns[8] = OColumn(OUString(),"PSEUDO_COLUMN", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[1] = OColumn(OUString(),u"SCOPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[2] = OColumn(OUString(),u"COLUMN_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),u"DATA_TYPE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[4] = OColumn(OUString(),u"TYPE_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"COLUMN_SIZE"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[6] = OColumn(OUString(),u"BUFFER_LENGTH"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[7] = OColumn(OUString(),u"DECIMAL_DIGITS"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::INTEGER);
+    m_mColumns[8] = OColumn(OUString(),u"PSEUDO_COLUMN"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
 }
 
 void ODatabaseMetaDataResultSetMetaData::setUDTsMap()
 {
-    m_mColumns[1] = OColumn(OUString(),"TYPE_CAT",   ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[2] = OColumn(OUString(),"TYPE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
-    m_mColumns[3] = OColumn(OUString(),"TYPE_NAME",  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[4] = OColumn(OUString(),"CLASS_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[5] = OColumn(OUString(),"DATA_TYPE",  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
-    m_mColumns[6] = OColumn(OUString(),"REMARKS",    ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[1] = OColumn(OUString(),u"TYPE_CAT"_ustr,   ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),u"TYPE_SCHEM"_ustr, ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),u"TYPE_NAME"_ustr,  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),u"CLASS_NAME"_ustr, ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),u"DATA_TYPE"_ustr,  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),u"REMARKS"_ustr,    ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

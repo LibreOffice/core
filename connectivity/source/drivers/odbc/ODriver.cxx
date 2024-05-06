@@ -59,7 +59,7 @@ void ODBCDriver::disposing()
 
 OUString ODBCDriver::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.ODBCDriver";
+    return u"com.sun.star.comp.sdbc.ODBCDriver"_ustr;
         // this name is referenced in the configuration and in the odbc.xml
         // Please take care when changing it.
 }
@@ -67,7 +67,7 @@ OUString ODBCDriver::getImplementationName(  )
 
 Sequence< OUString > ODBCDriver::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.Driver" };
+    return { u"com.sun.star.sdbc.Driver"_ustr };
 }
 
 
@@ -104,71 +104,71 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBooleanValues{ "false", "true" };
+        Sequence< OUString > aBooleanValues{ u"false"_ustr, u"true"_ustr };
 
         return
         {
             {
-                "CharSet",
-                "CharSet of the database.",
+                u"CharSet"_ustr,
+                u"CharSet of the database."_ustr,
                 false,
                 {},
                 {}
             },
             {
-                "UseCatalog",
-                "Use catalog for file-based databases.",
+                u"UseCatalog"_ustr,
+                u"Use catalog for file-based databases."_ustr,
                 false,
-                "false",
+                u"false"_ustr,
                 aBooleanValues
             },
             {
-                "SystemDriverSettings",
-                "Driver settings.",
+                u"SystemDriverSettings"_ustr,
+                u"Driver settings."_ustr,
                 false,
                 {},
                 {}
             },
             {
-                "ParameterNameSubstitution",
-                "Change named parameters with '?'.",
+                u"ParameterNameSubstitution"_ustr,
+                u"Change named parameters with '?'."_ustr,
                 false,
-                "false",
+                u"false"_ustr,
                 aBooleanValues
             },
             {
-                "IgnoreDriverPrivileges",
-                "Ignore the privileges from the database driver.",
+                u"IgnoreDriverPrivileges"_ustr,
+                u"Ignore the privileges from the database driver."_ustr,
                 false,
-                "false",
+                u"false"_ustr,
                 aBooleanValues
             },
             {
-                "IsAutoRetrievingEnabled",
-                "Retrieve generated values.",
+                u"IsAutoRetrievingEnabled"_ustr,
+                u"Retrieve generated values."_ustr,
                 false,
-                "false",
+                u"false"_ustr,
                 aBooleanValues
             },
             {
-                "AutoRetrievingStatement",
-                "Auto-increment statement.",
+                u"AutoRetrievingStatement"_ustr,
+                u"Auto-increment statement."_ustr,
                 false,
                 {},
                 {}
             },
             {
-                "GenerateASBeforeCorrelationName",
-                "Generate AS before table correlation names.",
+                u"GenerateASBeforeCorrelationName"_ustr,
+                u"Generate AS before table correlation names."_ustr,
                 false,
-                "false",
+                u"false"_ustr,
                 aBooleanValues
             },
             {
-                "EscapeDateTime",
-                "Escape date time format.",
+                u"EscapeDateTime"_ustr,
+                u"Escape date time format."_ustr,
                 false,
-                "true",
+                u"true"_ustr,
                 aBooleanValues
             }
         };

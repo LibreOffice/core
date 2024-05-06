@@ -54,7 +54,7 @@ namespace pq_sdbc_driver
 
 OUString Array::getBaseTypeName(  )
 {
-    return "varchar";
+    return u"varchar"_ustr;
 }
 
 sal_Int32 Array::getBaseType(  )

@@ -28,11 +28,11 @@ Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
 //----- OCatalog -------------------------------------------------------------
 void Catalog::refreshTables()
 {
-    Sequence< OUString > aTypes {"TABLE", "VIEW"};
+    Sequence< OUString > aTypes {u"TABLE"_ustr, u"VIEW"_ustr};
 
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
-                                                            "%",
-                                                            "%",
+                                                            u"%"_ustr,
+                                                            u"%"_ustr,
                                                             aTypes);
 
     if (!xTables.is())
@@ -55,7 +55,7 @@ void Catalog::refreshTables()
 void Catalog::refreshViews()
 {
     css::uno::Reference<css::sdbc::XResultSet> xViews
-        = m_xMetaData->getTables(css::uno::Any(), "%", "%", { "VIEW" });
+        = m_xMetaData->getTables(css::uno::Any(), u"%"_ustr, u"%"_ustr, { u"VIEW"_ustr });
 
     if (!xViews.is())
         return;
@@ -80,7 +80,7 @@ void Catalog::refreshGroups()
 void Catalog::refreshUsers()
 {
     Reference<XStatement> xStmt= m_xMetaData->getConnection()->createStatement();
-    uno::Reference< XResultSet > xUsers = xStmt->executeQuery("SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES");
+    uno::Reference< XResultSet > xUsers = xStmt->executeQuery(u"SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES"_ustr);
 
     if (!xUsers.is())
         return;

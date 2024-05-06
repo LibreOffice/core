@@ -42,7 +42,7 @@ OConnectionWeakWrapper::~OConnectionWeakWrapper()
 }
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(OConnectionWeakWrapper, "com.sun.star.sdbc.drivers.OConnectionWeakWrapper", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OConnectionWeakWrapper, u"com.sun.star.sdbc.drivers.OConnectionWeakWrapper"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  )

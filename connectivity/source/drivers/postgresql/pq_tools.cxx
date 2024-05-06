@@ -118,7 +118,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, std::u16string_view value, Conn
         // We have no good XInterface Reference to pass here, so just give NULL
         throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
-                           "22018",
+                           u"22018"_ustr,
                            -1,
                            Any());
     }
@@ -164,7 +164,7 @@ static void ibufferQuoteIdentifier( OUStringBuffer & buf, std::u16string_view to
         // Implementation-defined SQLACCESS error
         throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
-                           "22018",
+                           u"22018"_ustr,
                            -1,
                            Any());
     }
@@ -259,7 +259,7 @@ Reference< XConnection > extractConnectionFromStatement( const Reference< XInter
             ret = myowner->getConnection();
         if( ! ret.is() )
             throw SQLException(
-                "PQSDBC: Couldn't retrieve connection from statement",
+                u"PQSDBC: Couldn't retrieve connection from statement"_ustr,
                 Reference< XInterface > () , OUString(), 0 , css::uno::Any()  );
     }
 
@@ -711,11 +711,11 @@ void fillAttnum2attnameMap(
     const OUString &table )
 {
     Reference< XPreparedStatement > prep = conn->prepareStatement(
-                   "SELECT attname,attnum "
+                   u"SELECT attname,attnum "
                    "FROM pg_attribute "
                          "INNER JOIN pg_class ON attrelid = pg_class.oid "
                          "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
-                   "WHERE relname=? AND nspname=?" );
+                   "WHERE relname=? AND nspname=?"_ustr );
 
     Reference< XParameters > paras( prep, UNO_QUERY_THROW );
     paras->setString( 1 , table );
@@ -836,8 +836,8 @@ OString extractSingleTableFromSelect( const std::vector< OString > &vec )
 OUString getColExprForDefaultSettingVal(ConnectionSettings const *settings)
 {
     return (PQserverVersion( settings->pConnection ) < 80000)?
-               OUString("pg_attrdef.adsrc"):
-               OUString("pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid, true)");
+               u"pg_attrdef.adsrc"_ustr:
+               u"pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid, true)"_ustr;
 }
 
 css::uno::Sequence< sal_Int32 > string2intarray( std::u16string_view str )

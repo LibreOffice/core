@@ -132,7 +132,7 @@ namespace dbtools
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue("Type") >>= nType;
+            _rxField->getPropertyValue(u"Type"_ustr) >>= nType;
 
             if  (   ( DataType::CHAR        == nType )
                 ||  ( DataType::VARCHAR     == nType )
@@ -178,17 +178,17 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName("FormatKey") )
+                    if ( xPSI.is() && xPSI->hasPropertyByName(u"FormatKey"_ustr) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue("FormatKey") >>= nFormatKey;
+                        _rxField->getPropertyValue(u"FormatKey"_ustr) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;
                             ::comphelper::getNumberFormatProperty(
                                 m_xFormatter,
                                 nFormatKey,
-                                "Locale"
+                                u"Locale"_ustr
                             ) >>= aFormatLocale;
 
                             // valid locale

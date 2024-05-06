@@ -216,7 +216,7 @@ namespace
 
 IObjectCollection::~IObjectCollection() {}
 
-IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
+IMPLEMENT_SERVICE_INFO(OCollection,u"com.sun.star.sdbcx.VContainer"_ustr , u"com.sun.star.sdbcx.Container"_ustr)
 
 OCollection::OCollection(::cppu::OWeakObject& _rParent
                          , bool _bCase

@@ -215,7 +215,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
 Reference< XPreparedStatement > Connection::prepareCall( const OUString& )
 {
     throw SQLException(
-        "pq_driver: Callable statements not supported",
+        u"pq_driver: Callable statements not supported"_ustr,
         Reference< XInterface > (), OUString() , 1, Any() );
 }
 
@@ -282,7 +282,7 @@ OUString Connection::getCatalog()
     MutexGuard guard( m_xMutex->GetMutex() );
     if( m_settings.pConnection == nullptr )
     {
-        throw SQLException( "pq_connection: connection is closed", *this,
+        throw SQLException( u"pq_connection: connection is closed"_ustr, *this,
                             OUString(), 1, Any() );
     }
     char * p = PQdb(m_settings.pConnection );
@@ -427,7 +427,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( ! tc.is() )
     {
         throw RuntimeException(
-            "pq_driver: Couldn't instantiate converter service" );
+            u"pq_driver: Couldn't instantiate converter service"_ustr );
     }
     if( aArguments.getLength() != 2 )
     {
@@ -479,7 +479,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
                 throw SQLException(
                     "Error in database URL '" + url + "':\n"  + errorMessage,
-                    *this, "HY092", 5, Any() );
+                    *this, u"HY092"_ustr, 5, Any() );
             }
 
             for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != nullptr; ++opt)
@@ -498,7 +498,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
     if( ! m_settings.pConnection )
-        throw RuntimeException("pq_driver: out of memory" );
+        throw RuntimeException(u"pq_driver: out of memory"_ustr );
     if( PQstatus( m_settings.pConnection ) == CONNECTION_BAD )
     {
         const char * error = PQerrorMessage( m_settings.pConnection );
@@ -528,7 +528,7 @@ void Connection::disposing()
 void Connection::checkClosed()
 {
     if( !m_settings.pConnection )
-        throw SQLException( "pq_connection: Connection already closed",
+        throw SQLException( u"pq_connection: Connection already closed"_ustr,
                             *this, OUString(), 1, Any() );
 }
 

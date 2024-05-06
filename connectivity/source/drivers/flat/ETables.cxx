@@ -28,7 +28,7 @@ using namespace connectivity::file;
 sdbcx::ObjectType OFlatTables::createObject(const OUString& _rName)
 {
     rtl::Reference<OFlatTable> pRet = new OFlatTable(this, static_cast<OFlatConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
-                                        _rName,"TABLE");
+                                        _rName,u"TABLE"_ustr);
     pRet->construct();
     return pRet;
 }

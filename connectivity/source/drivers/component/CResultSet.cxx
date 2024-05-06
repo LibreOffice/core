@@ -45,12 +45,12 @@ OComponentResultSet::OComponentResultSet( OStatement_Base* pStmt,connectivity::O
 
 OUString SAL_CALL OComponentResultSet::getImplementationName(  )
 {
-    return "com.sun.star.sdbcx.component.ResultSet";
+    return u"com.sun.star.sdbcx.component.ResultSet"_ustr;
 }
 
 Sequence< OUString > SAL_CALL OComponentResultSet::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OComponentResultSet::supportsService( const OUString& _rServiceName )
@@ -130,7 +130,7 @@ Sequence< sal_Int32 > SAL_CALL OComponentResultSet::deleteRows( const  Sequence<
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedSQLException( "XDeleteRows::deleteRows", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XDeleteRows::deleteRows"_ustr, *this );
 }
 
 bool OComponentResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)

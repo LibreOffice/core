@@ -28,7 +28,7 @@ rtl::Reference<OResultSet> OComponentStatement::createResultSet()
     return new connectivity::component::OComponentResultSet(this, m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OComponentStatement, "com.sun.star.sdbc.driver.component.Statement",
-                       "com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OComponentStatement, u"com.sun.star.sdbc.driver.component.Statement"_ustr,
+                       u"com.sun.star.sdbc.Statement"_ustr);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

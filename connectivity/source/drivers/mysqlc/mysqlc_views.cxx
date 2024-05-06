@@ -67,7 +67,7 @@ void connectivity::mysqlc::Views::dropObject(sal_Int32 _nPos, const OUString& /*
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew(xObject);
     if (!bIsNew)
     {
-        OUString aSql("DROP VIEW");
+        OUString aSql(u"DROP VIEW"_ustr);
 
         css::uno::Reference<css::beans::XPropertySet> xProp(xObject, css::uno::UNO_QUERY);
         aSql += ::dbtools::composeTableName(m_xMetaData, xProp,

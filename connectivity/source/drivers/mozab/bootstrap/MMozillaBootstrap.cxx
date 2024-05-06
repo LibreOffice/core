@@ -52,7 +52,7 @@ void MozillaBootstrap::disposing()
 
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
 {
-    return "com.sun.star.comp.mozilla.MozillaBootstrap";
+    return u"com.sun.star.comp.mozilla.MozillaBootstrap"_ustr;
 }
 
 sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
@@ -64,7 +64,7 @@ Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
-    return { "com.sun.star.mozilla.MozillaBootstrap" };
+    return { u"com.sun.star.mozilla.MozillaBootstrap"_ustr };
 }
 
 

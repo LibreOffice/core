@@ -53,7 +53,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    OUString aTable("TABLE");
+    OUString aTable(u"TABLE"_ustr);
 
     bool bTableFound = true;
     sal_Int32 nLength = types.getLength();

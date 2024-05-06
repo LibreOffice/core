@@ -37,7 +37,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     {
         OUString sUserWorkingFor;
         // we want all catalogues, all schemas, all tables
-        Sequence< OUString > sTableTypes {"VIEW", "TABLE", "%"}; // this last one is just to be sure to include anything else...
+        Sequence< OUString > sTableTypes {u"VIEW"_ustr, u"TABLE"_ustr, u"%"_ustr}; // this last one is just to be sure to include anything else...
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);
@@ -53,7 +53,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         ODatabaseMetaDataResultSet::ORow aRow(8);
         aRow[5] = new ORowSetValueDecorator(sUserWorkingFor);
         aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-        aRow[7] = new ORowSetValueDecorator(OUString("YES"));
+        aRow[7] = new ORowSetValueDecorator(u"YES"_ustr);
         aRows.push_back(aRow);
         aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();
         aRows.push_back(aRow);
@@ -69,7 +69,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         aRows.push_back(aRow);
         aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
         aRows.push_back(aRow);
-        aRow[6] = new ORowSetValueDecorator(OUString("REFERENCE"));
+        aRow[6] = new ORowSetValueDecorator(u"REFERENCE"_ustr);
         aRows.push_back(aRow);
 
         setRows(std::move(aRows));

@@ -205,7 +205,7 @@ uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 nPosition,
     ensureBlobIsOpened();
 
     if (nPosition > m_nBlobLength || nPosition < 1)
-        throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+        throw lang::IllegalArgumentException(u"nPosition out of range"_ustr, *this, 0);
     // We only have to read as many bytes as are available, i.e. nPosition+nBytes
     // can legally be greater than the total length, hence we don't bother to check.
 
@@ -234,13 +234,13 @@ uno::Reference< XInputStream > SAL_CALL  Blob::getBinaryStream()
 sal_Int64 SAL_CALL  Blob::position(const uno::Sequence< sal_Int8 >& /*rPattern*/,
                                    sal_Int64 /*nStart*/)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException("Blob::position", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException(u"Blob::position"_ustr, *this);
 }
 
 sal_Int64 SAL_CALL  Blob::positionOfBlob(const uno::Reference< XBlob >& /*rPattern*/,
                                          sal_Int64 /*aStart*/)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException("Blob::positionOfBlob", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException(u"Blob::positionOfBlob"_ustr, *this);
 }
 
 // ---- XInputStream ----------------------------------------------------------

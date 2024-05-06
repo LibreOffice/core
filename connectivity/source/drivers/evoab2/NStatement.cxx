@@ -640,7 +640,7 @@ Reference< XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  )
 // = OStatement
 
 
-IMPLEMENT_SERVICE_INFO( OStatement, "com.sun.star.comp.sdbcx.evoab.OStatement", "com.sun.star.sdbc.Statement" );
+IMPLEMENT_SERVICE_INFO( OStatement, u"com.sun.star.comp.sdbcx.evoab.OStatement"_ustr, u"com.sun.star.sdbc.Statement"_ustr );
 
 
 IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OCommonStatement, OStatement_IBase )
@@ -672,7 +672,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XStatement::executeUpdate"_ustr, *this );
     return 0;
 }
 

@@ -151,13 +151,13 @@ sal_Bool SAL_CALL OResultSet::next()
 
 sal_Bool SAL_CALL OResultSet::previous()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("previous not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"previous not supported in firebird"_ustr,
                                                   *this);
 }
 
 sal_Bool SAL_CALL OResultSet::isLast()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("isLast not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"isLast not supported in firebird"_ustr,
                                                   *this);
 }
 
@@ -191,7 +191,7 @@ void SAL_CALL OResultSet::beforeFirst()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if (m_currentRow != 0)
-        ::dbtools::throwFunctionNotSupportedSQLException("beforeFirst not supported in firebird",
+        ::dbtools::throwFunctionNotSupportedSQLException(u"beforeFirst not supported in firebird"_ustr,
                                                       *this);
 }
 
@@ -201,7 +201,7 @@ void SAL_CALL OResultSet::afterLast()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if (!m_bIsAfterLastRow)
-        ::dbtools::throwFunctionNotSupportedSQLException("afterLast not supported in firebird",
+        ::dbtools::throwFunctionNotSupportedSQLException(u"afterLast not supported in firebird"_ustr,
                                                       *this);
 }
 
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL OResultSet::first()
     }
     else
     {
-        ::dbtools::throwFunctionNotSupportedSQLException("first not supported in firebird",
+        ::dbtools::throwFunctionNotSupportedSQLException(u"first not supported in firebird"_ustr,
                                                       *this);
         return false;
     }
@@ -230,7 +230,7 @@ sal_Bool SAL_CALL OResultSet::last()
 {
     // We need to iterate past the last row to know when we've passed the last
     // row, hence we can't actually move to last.
-    ::dbtools::throwFunctionNotSupportedSQLException("last not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"last not supported in firebird"_ustr,
                                                   *this);
 }
 
@@ -246,7 +246,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow)
     }
     else
     {
-        ::dbtools::throwFunctionNotSupportedSQLException("absolute not supported in firebird",
+        ::dbtools::throwFunctionNotSupportedSQLException(u"absolute not supported in firebird"_ustr,
                                                       *this);
         return false;
     }
@@ -268,7 +268,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     }
     else
     {
-        ::dbtools::throwFunctionNotSupportedSQLException("relative not supported in firebird",
+        ::dbtools::throwFunctionNotSupportedSQLException(u"relative not supported in firebird"_ustr,
                                                       *this);
         return false;
     }
@@ -296,7 +296,7 @@ void OResultSet::checkRowIndex()
     if((m_currentRow < 1) || m_bIsAfterLastRow)
     {
         ::dbtools::throwSQLException(
-            "Invalid Row",
+            u"Invalid Row"_ustr,
             ::dbtools::StandardSQLState::INVALID_CURSOR_POSITION,
             *this);
     }
@@ -842,25 +842,25 @@ uno::Reference< XInterface > SAL_CALL OResultSet::getStatement()
 //----- XResultSet: unsupported change detection methods ---------------------
 sal_Bool SAL_CALL OResultSet::rowDeleted()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("rowDeleted not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"rowDeleted not supported in firebird"_ustr,
                                                   *this);
 }
 
 sal_Bool SAL_CALL OResultSet::rowInserted()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("rowInserted not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"rowInserted not supported in firebird"_ustr,
                                                   *this);
 }
 
 sal_Bool SAL_CALL OResultSet::rowUpdated()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("rowUpdated not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"rowUpdated not supported in firebird"_ustr,
                                                   *this);
 }
 
 void SAL_CALL OResultSet::refreshRow()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("refreshRow not supported in firebird",
+    ::dbtools::throwFunctionNotSupportedSQLException(u"refreshRow not supported in firebird"_ustr,
                                                   *this);
 }
 
@@ -902,12 +902,12 @@ uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertyS
 // ---- XServiceInfo -----------------------------------------------------------
 OUString SAL_CALL OResultSet::getImplementationName()
 {
-    return "com.sun.star.sdbcx.firebird.ResultSet";
+    return u"com.sun.star.sdbcx.firebird.ResultSet"_ustr;
 }
 
 Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
 {
-    return {"com.sun.star.sdbc.ResultSet","com.sun.star.sdbcx.ResultSet"};
+    return {u"com.sun.star.sdbc.ResultSet"_ustr,u"com.sun.star.sdbcx.ResultSet"_ustr};
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)

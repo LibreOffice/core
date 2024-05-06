@@ -67,7 +67,7 @@ static bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const 
     if (xProp.is())
     {
         bool bVisible;
-        Any aVisAny = xProp->getPropertyValue("IsVisible");
+        Any aVisAny = xProp->getPropertyValue(u"IsVisible"_ustr);
         if ( (aVisAny >>= bVisible) && !bVisible)
             return true;                // hidden
     }
@@ -108,7 +108,7 @@ static bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUSt
         {
             try
             {
-                Any aUserAny = xRangeProp->getPropertyValue("IsUserDefined");
+                Any aUserAny = xRangeProp->getPropertyValue(u"IsUserDefined"_ustr);
                 bool bUserDefined;
                 if ( aUserAny >>= bUserDefined )
                     bUnnamed = !bUserDefined;
@@ -183,7 +183,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
     if ( xDocProp.is() )
     {
-        Any aRangesAny = xDocProp->getPropertyValue("DatabaseRanges");
+        Any aRangesAny = xDocProp->getPropertyValue(u"DatabaseRanges"_ustr);
         Reference<XDatabaseRanges> xRanges;
         if ( aRangesAny >>= xRanges )
         {

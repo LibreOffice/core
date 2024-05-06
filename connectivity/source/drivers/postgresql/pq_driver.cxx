@@ -67,7 +67,7 @@ Reference< XConnection > Driver::connect(
     Sequence< Any > seq{ Any(url), Any(info) };
     return Reference< XConnection> (
         m_smgr->createInstanceWithArgumentsAndContext(
-            "org.openoffice.comp.connectivity.pq.Connection.noext",
+            u"org.openoffice.comp.connectivity.pq.Connection.noext"_ustr,
             seq, m_ctx ),
         UNO_QUERY );
 }
@@ -97,7 +97,7 @@ sal_Int32 Driver::getMinorVersion(  )
     // XServiceInfo
 OUString SAL_CALL Driver::getImplementationName()
 {
-    return "org.openoffice.comp.connectivity.pq.Driver.noext";
+    return u"org.openoffice.comp.connectivity.pq.Driver.noext"_ustr;
 }
 
 sal_Bool Driver::supportsService(const OUString& ServiceName)
@@ -107,7 +107,7 @@ sal_Bool Driver::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > Driver::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.Driver" };
+    return { u"com.sun.star.sdbc.Driver"_ustr };
 }
 
 // XComponent

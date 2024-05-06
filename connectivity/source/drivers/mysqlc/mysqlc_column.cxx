@@ -39,7 +39,7 @@ void connectivity::mysqlc::Column::construct()
 
 css::uno::Sequence<OUString> SAL_CALL connectivity::mysqlc::Column::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbcx.Column" };
+    return { u"com.sun.star.sdbcx.Column"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

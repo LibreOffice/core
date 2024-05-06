@@ -35,7 +35,7 @@ sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
         = new OWriterTable(this,
                            static_cast<OWriterConnection*>(
                                static_cast<file::OFileCatalog&>(m_rParent).getConnection()),
-                           rName, "TABLE");
+                           rName, u"TABLE"_ustr);
     pTable->construct();
     return pTable;
 }

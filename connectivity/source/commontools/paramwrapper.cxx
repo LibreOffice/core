@@ -160,7 +160,7 @@ namespace dbtools::param
                 sal_Int32 nProperties( aProperties.getLength() );
                 aProperties.realloc( nProperties + 1 );
                 aProperties.getArray()[ nProperties ] = Property(
-                    "Value",
+                    u"Value"_ustr,
                     PROPERTY_ID_VALUE,
                     ::cppu::UnoType< Any >::get(),
                     PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID
@@ -196,11 +196,11 @@ namespace dbtools::param
             {
                 // TODO : aParamType & nScale can be obtained within the constructor...
                 sal_Int32 nParamType = DataType::VARCHAR;
-                OSL_VERIFY( m_xDelegator->getPropertyValue("Type") >>= nParamType );
+                OSL_VERIFY( m_xDelegator->getPropertyValue(u"Type"_ustr) >>= nParamType );
 
                 sal_Int32 nScale = 0;
-                if ( m_xDelegatorPSI->hasPropertyByName("Scale") )
-                    OSL_VERIFY( m_xDelegator->getPropertyValue("Scale") >>= nScale );
+                if ( m_xDelegatorPSI->hasPropertyByName(u"Scale"_ustr) )
+                    OSL_VERIFY( m_xDelegator->getPropertyValue(u"Scale"_ustr) >>= nScale );
 
                 if ( m_xValueDestination.is() )
                 {

@@ -61,19 +61,19 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     ODatabaseMetaDataResultSet::ORow aRow
     {
         ODatabaseMetaDataResultSet::getEmptyValue(),
-        new ORowSetValueDecorator(OUString("VARCHAR")),
+        new ORowSetValueDecorator(u"VARCHAR"_ustr),
         new ORowSetValueDecorator(DataType::VARCHAR),
         new ORowSetValueDecorator(sal_Int32(254)),
         ODatabaseMetaDataResultSet::getQuoteValue(),
         ODatabaseMetaDataResultSet::getQuoteValue(),
-        new ORowSetValueDecorator(OUString("length")),
+        new ORowSetValueDecorator(u"length"_ustr),
         new ORowSetValueDecorator(sal_Int32(ColumnValue::NULLABLE)),
         ODatabaseMetaDataResultSet::get1Value(),
         new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)),
         ODatabaseMetaDataResultSet::get1Value(),
         ODatabaseMetaDataResultSet::get0Value(),
         ODatabaseMetaDataResultSet::get0Value(),
-        new ORowSetValueDecorator(OUString("C")),
+        new ORowSetValueDecorator(u"C"_ustr),
         ODatabaseMetaDataResultSet::get0Value(),
         ODatabaseMetaDataResultSet::get0Value(),
         ODatabaseMetaDataResultSet::getEmptyValue(),
@@ -83,62 +83,62 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("LONGVARCHAR"));
+    aRow[1] = new ORowSetValueDecorator(u"LONGVARCHAR"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647));
     aRow[6] = new ORowSetValueDecorator();
-    aRow[13] = new ORowSetValueDecorator(OUString("M"));
+    aRow[13] = new ORowSetValueDecorator(u"M"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
+    aRow[1] = new ORowSetValueDecorator(u"DATE"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DATE);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
-    aRow[13] = new ORowSetValueDecorator(OUString("D"));
+    aRow[13] = new ORowSetValueDecorator(u"D"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
+    aRow[1] = new ORowSetValueDecorator(u"BOOLEAN"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::BIT);
     aRow[3] = ODatabaseMetaDataResultSet::get1Value();
     aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[6] = new ORowSetValueDecorator(OUString());
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
-    aRow[13] = new ORowSetValueDecorator(OUString("L"));
+    aRow[13] = new ORowSetValueDecorator(u"L"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE"));
+    aRow[1] = new ORowSetValueDecorator(u"DOUBLE"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(8));
-    aRow[13] = new ORowSetValueDecorator(OUString("B"));
+    aRow[13] = new ORowSetValueDecorator(u"B"_ustr);
     aRows.push_back(aRow);
 
     aRow[11] = new ORowSetValueDecorator(ORowSetValue(true));
-    aRow[13] = new ORowSetValueDecorator(OUString("Y"));
+    aRow[13] = new ORowSetValueDecorator(u"Y"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+    aRow[1] = new ORowSetValueDecorator(u"TIMESTAMP"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
     aRow[11] = new ORowSetValueDecorator(ORowSetValue(false));
-    aRow[13] = new ORowSetValueDecorator(OUString("T"));
+    aRow[13] = new ORowSetValueDecorator(u"T"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
+    aRow[1] = new ORowSetValueDecorator(u"INTEGER"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
-    aRow[13] = new ORowSetValueDecorator(OUString("I"));
+    aRow[13] = new ORowSetValueDecorator(u"I"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
+    aRow[1] = new ORowSetValueDecorator(u"DECIMAL"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
-    aRow[6] = new ORowSetValueDecorator(OUString("length,scale"));
-    aRow[13] = new ORowSetValueDecorator(OUString("F"));
+    aRow[6] = new ORowSetValueDecorator(u"length,scale"_ustr);
+    aRow[13] = new ORowSetValueDecorator(u"F"_ustr);
     aRows.push_back(aRow);
 
-    aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
+    aRow[1] = new ORowSetValueDecorator(u"NUMERIC"_ustr);
     aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
     aRow[3] = new ORowSetValueDecorator(sal_Int32(16));
-    aRow[13] = new ORowSetValueDecorator(OUString("N"));
+    aRow[13] = new ORowSetValueDecorator(u"N"_ustr);
     aRow[15] = new ORowSetValueDecorator(sal_Int32(16));
     aRows.push_back(aRow);
 
@@ -211,10 +211,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
                         switch(aRow[11]->getValue().getInt32())
                         {
                         case ColumnValue::NO_NULLS:
-                            aRow[18] = new ORowSetValueDecorator(OUString("NO"));
+                            aRow[18] = new ORowSetValueDecorator(u"NO"_ustr);
                             break;
                         case ColumnValue::NULLABLE:
-                            aRow[18] = new ORowSetValueDecorator(OUString("YES"));
+                            aRow[18] = new ORowSetValueDecorator(u"YES"_ustr);
                             break;
                         default:
                             aRow[18] = new ORowSetValueDecorator(OUString());
@@ -256,7 +256,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     ODatabaseMetaDataResultSet::ORow aRow(14);
 
     aRow[5]     = new ORowSetValueDecorator(OUString());
-    aRow[10]    = new ORowSetValueDecorator(OUString("A"));
+    aRow[10]    = new ORowSetValueDecorator(u"A"_ustr);
 
     Reference< XIndexesSupplier> xTable(
         xNames->getByName(table), css::uno::UNO_QUERY);
@@ -349,7 +349,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  )
 
     bool bReadOnly = false;
     ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
-    aFile.getPropertyValue("IsReadOnly") >>= bReadOnly;
+    aFile.getPropertyValue(u"IsReadOnly"_ustr) >>= bReadOnly;
 
     return bReadOnly;
 }

@@ -103,31 +103,31 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
     static ::cppu::OPropertyArrayHelper arrayHelper(
         Sequence<Property>{
             Property(
-                "CursorName", 0,
+                u"CursorName"_ustr, 0,
                 ::cppu::UnoType<OUString>::get() , 0 ),
             Property(
-                "EscapeProcessing", 1,
+                u"EscapeProcessing"_ustr, 1,
                 cppu::UnoType<bool>::get() , 0 ),
             Property(
-                "FetchDirection", 2,
+                u"FetchDirection"_ustr, 2,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "FetchSize", 3,
+                u"FetchSize"_ustr, 3,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "MaxFieldSize", 4,
+                u"MaxFieldSize"_ustr, 4,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "MaxRows", 5,
+                u"MaxRows"_ustr, 5,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "QueryTimeOut", 6,
+                u"QueryTimeOut"_ustr, 6,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "ResultSetConcurrency", 7,
+                u"ResultSetConcurrency"_ustr, 7,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "ResultSetType", 8,
+                u"ResultSetType"_ustr, 8,
                 ::cppu::UnoType<sal_Int32>::get() , 0 )},
         true );
 
@@ -162,7 +162,7 @@ void Statement::checkClosed()
 {
     if( ! m_pSettings || ! m_pSettings->pConnection )
         throw SQLException(
-            "pq_driver: Statement or connection has already been closed !",
+            u"pq_driver: Statement or connection has already been closed !"_ustr,
             *this, OUString(),1,Any());
 }
 
@@ -531,12 +531,12 @@ static Sequence< OUString > getPrimaryKeyColumnNames(
 
     // retrieve the primary key ...
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
-            "SELECT conkey "              // 7
+            u"SELECT conkey "              // 7
             "FROM pg_constraint INNER JOIN pg_class ON conrelid = pg_class.oid "
                       "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                       "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
                       "LEFT JOIN pg_namespace AS nmsp2 ON class2.relnamespace=nmsp2.oid "
-            "WHERE pg_class.relname = ? AND pg_namespace.nspname = ? AND pg_constraint.contype='p'" );
+            "WHERE pg_class.relname = ? AND pg_namespace.nspname = ? AND pg_constraint.contype='p'"_ustr );
     DisposeGuard guard( stmt );
     Reference< XParameters > paras( stmt, UNO_QUERY );
     paras->setString( 1 , tableName );

@@ -88,23 +88,24 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
 
     // sdbcx::Descriptor
     const bool bNameChanged
-        = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
+        = xColumn->getPropertyValue(u"Name"_ustr) != rDescriptor->getPropertyValue(u"Name"_ustr);
     // sdbcx::ColumnDescriptor
     const bool bTypeChanged
-        = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
-    const bool bTypeNameChanged = !comphelper::getString(xColumn->getPropertyValue("TypeName"))
-                                       .equalsIgnoreAsciiCase(comphelper::getString(
-                                           rDescriptor->getPropertyValue("TypeName")));
-    const bool bPrecisionChanged
-        = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
+        = xColumn->getPropertyValue(u"Type"_ustr) != rDescriptor->getPropertyValue(u"Type"_ustr);
+    const bool bTypeNameChanged
+        = !comphelper::getString(xColumn->getPropertyValue(u"TypeName"_ustr))
+               .equalsIgnoreAsciiCase(
+                   comphelper::getString(rDescriptor->getPropertyValue(u"TypeName"_ustr)));
+    const bool bPrecisionChanged = xColumn->getPropertyValue(u"Precision"_ustr)
+                                   != rDescriptor->getPropertyValue(u"Precision"_ustr);
     const bool bScaleChanged
-        = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
+        = xColumn->getPropertyValue(u"Scale"_ustr) != rDescriptor->getPropertyValue(u"Scale"_ustr);
 
-    const bool bIsNullableChanged
-        = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
+    const bool bIsNullableChanged = xColumn->getPropertyValue(u"IsNullable"_ustr)
+                                    != rDescriptor->getPropertyValue(u"IsNullable"_ustr);
 
-    const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement")
-                                         != rDescriptor->getPropertyValue("IsAutoIncrement");
+    const bool bIsAutoIncrementChanged = xColumn->getPropertyValue(u"IsAutoIncrement"_ustr)
+                                         != rDescriptor->getPropertyValue(u"IsAutoIncrement"_ustr);
 
     // there's also DefaultValue but not related to database directly, it seems completely internal to LO
     // so no need to test it
@@ -119,13 +120,13 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
         sSql.append(getAlterTableColumnPart() + " MODIFY COLUMN `" + rColName + "` "
                     + ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
 
-        if (comphelper::getBOOL(rDescriptor->getPropertyValue("IsAutoIncrement")))
+        if (comphelper::getBOOL(rDescriptor->getPropertyValue(u"IsAutoIncrement"_ustr)))
             sSql.append(" auto_increment");
 
         // see ColumnValue: NO_NULLS = 0, NULLABLE = 1, NULLABLE_UNKNOWN
         // so entry required = yes corresponds to NO_NULLS = 0 and only in this case
         // NOT NULL
-        if (comphelper::getINT32(rDescriptor->getPropertyValue("IsNullable")) == 0)
+        if (comphelper::getINT32(rDescriptor->getPropertyValue(u"IsNullable"_ustr)) == 0)
             sSql.append(" NOT NULL");
 
         getConnection()->createStatement()->execute(sSql.makeStringAndClear());
@@ -134,7 +135,7 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
     if (bNameChanged)
     {
         OUString sNewColName;
-        rDescriptor->getPropertyValue("Name") >>= sNewColName;
+        rDescriptor->getPropertyValue(u"Name"_ustr) >>= sNewColName;
         OUString sSql(getAlterTableColumnPart() + " RENAME COLUMN `" + rColName + "` TO `"
                       + sNewColName + "`");
 
@@ -162,6 +163,6 @@ OUString connectivity::mysqlc::Table::getAlterTableColumnPart() const
                                          ::dbtools::EComposeRule::InTableDefinitions);
 }
 
-OUString connectivity::mysqlc::Table::getRenameStart() const { return "RENAME TABLE "; }
+OUString connectivity::mysqlc::Table::getRenameStart() const { return u"RENAME TABLE "_ustr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -132,7 +132,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const css::uno::Sequence< sal_Int8 >
 
 sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, sal_Int64 /*start*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XBlob::positionOfBlob"_ustr, *this );
     // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore
     // the pattern parameter. Since the effort for proper implementation is rather high - we would need
     // to translated pattern into a byte[] -, we defer this functionality for the moment (hey, it was

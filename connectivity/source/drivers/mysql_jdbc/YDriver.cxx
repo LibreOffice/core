@@ -50,7 +50,7 @@ namespace
 OUString getJavaDriverClass(css::uno::Sequence<css::beans::PropertyValue> const& info)
 {
     return comphelper::NamedValueCollection::getOrDefault(info, u"JavaDriverClass",
-                                                          OUString("com.mysql.jdbc.Driver"));
+                                                          u"com.mysql.jdbc.Driver"_ustr);
 }
 }
 
@@ -165,7 +165,7 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
     {
         if (!jdc)
         {
-            aProps.emplace_back("JavaDriverClass", 0, Any(OUString("com.mysql.jdbc.Driver")),
+            aProps.emplace_back("JavaDriverClass", 0, Any(u"com.mysql.jdbc.Driver"_ustr),
                                 PropertyState_DIRECT_VALUE);
         }
     }
@@ -174,7 +174,7 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
         aProps.emplace_back("PublicConnectionURL", 0, Any(_sUrl), PropertyState_DIRECT_VALUE);
     }
     aProps.emplace_back("IsAutoRetrievingEnabled", 0, Any(true), PropertyState_DIRECT_VALUE);
-    aProps.emplace_back("AutoRetrievingStatement", 0, Any(OUString("SELECT LAST_INSERT_ID()")),
+    aProps.emplace_back("AutoRetrievingStatement", 0, Any(u"SELECT LAST_INSERT_ID()"_ustr),
                         PropertyState_DIRECT_VALUE);
     aProps.emplace_back("ParameterNameSubstitution", 0, Any(true), PropertyState_DIRECT_VALUE);
     return Sequence<PropertyValue>(aProps.data(), aProps.size());
@@ -284,12 +284,12 @@ ODriverDelegator::getPropertyInfo(const OUString& url, const Sequence<PropertyVa
     if (!acceptsURL(url))
         return Sequence<DriverPropertyInfo>();
 
-    Sequence<OUString> aBoolean{ "0", "1" };
+    Sequence<OUString> aBoolean{ u"0"_ustr, u"1"_ustr };
 
     std::vector<DriverPropertyInfo> aDriverInfo{
-        { "CharSet", "CharSet of the database.", false, {}, {} },
-        { "SuppressVersionColumns", "Display version columns (when available).", false, "0",
-          aBoolean }
+        { u"CharSet"_ustr, u"CharSet of the database."_ustr, false, {}, {} },
+        { u"SuppressVersionColumns"_ustr, u"Display version columns (when available)."_ustr, false,
+          u"0"_ustr, aBoolean }
     };
     const T_DRIVERTYPE eType = lcl_getDriverType(url);
     if (eType == T_DRIVERTYPE::Jdbc)
@@ -377,7 +377,7 @@ ODriverDelegator::getDataDefinitionByURL(const OUString& url, const Sequence<Pro
 
 OUString SAL_CALL ODriverDelegator::getImplementationName()
 {
-    return "org.openoffice.comp.drivers.MySQL.Driver";
+    return u"org.openoffice.comp.drivers.MySQL.Driver"_ustr;
 }
 
 sal_Bool SAL_CALL ODriverDelegator::supportsService(const OUString& _rServiceName)
@@ -387,7 +387,7 @@ sal_Bool SAL_CALL ODriverDelegator::supportsService(const OUString& _rServiceNam
 
 Sequence<OUString> SAL_CALL ODriverDelegator::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
+    return { u"com.sun.star.sdbc.Driver"_ustr, u"com.sun.star.sdbcx.Driver"_ustr };
 }
 
 } // namespace connectivity

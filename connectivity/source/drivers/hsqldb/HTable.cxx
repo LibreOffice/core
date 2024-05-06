@@ -276,7 +276,7 @@ void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 
 OUString OHSQLTable::getAlterTableColumnPart() const
 {
-    OUString sSql(  "ALTER TABLE " );
+    OUString sSql(  u"ALTER TABLE "_ustr );
 
     OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::EComposeRule::InTableDefinitions ) );
     sSql += sComposedName;
@@ -338,7 +338,7 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName )
 
     if(!isNew())
     {
-        OUString sSql = "ALTER ";
+        OUString sSql = u"ALTER "_ustr;
         if ( m_Type == "VIEW" )
             sSql += " VIEW ";
         else

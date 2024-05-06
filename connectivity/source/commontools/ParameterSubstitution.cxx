@@ -37,13 +37,13 @@ namespace connectivity
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
         uno::Reference< sdbc::XConnection > xConnection;
-        xConnection = aArgs.getUnpackedValueOrDefault("ActiveConnection",xConnection);
+        xConnection = aArgs.getUnpackedValueOrDefault(u"ActiveConnection"_ustr,xConnection);
         m_xConnection = xConnection;
     }
 
     OUString SAL_CALL ParameterSubstitution::getImplementationName(  )
     {
-        return "org.openoffice.comp.helper.ParameterSubstitution";
+        return u"org.openoffice.comp.helper.ParameterSubstitution"_ustr;
     }
 
     sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
@@ -53,7 +53,7 @@ namespace connectivity
 
     Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.sdb.ParameterSubstitution" };
+        return { u"com.sun.star.sdb.ParameterSubstitution"_ustr };
     }
 
 

@@ -132,10 +132,10 @@ namespace connectivity
                 Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
                 if ( xFac.is() )
                 {
-                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"TableRenameServiceName")),UNO_QUERY);
-                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"TableAlterationServiceName")),UNO_QUERY);
-                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"KeyAlterationServiceName")),UNO_QUERY);
-                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"IndexAlterationServiceName")),UNO_QUERY);
+                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,u"TableRenameServiceName"_ustr)),UNO_QUERY);
+                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,u"TableAlterationServiceName"_ustr)),UNO_QUERY);
+                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,u"KeyAlterationServiceName"_ustr)),UNO_QUERY);
+                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,u"IndexAlterationServiceName"_ustr)),UNO_QUERY);
                 }
             }
             catch(const Exception&)
@@ -266,7 +266,7 @@ void OTableHelper::refreshColumns()
             aCatalog,
             m_SchemaName,
             m_Name,
-            "%"
+            u"%"_ustr
         ) );
 
         // collect the column names, together with their ordinal position
@@ -462,7 +462,7 @@ void OTableHelper::refreshIndexes()
 
 OUString OTableHelper::getRenameStart() const
 {
-    OUString sSql("RENAME ");
+    OUString sSql(u"RENAME "_ustr);
     if ( m_Type == "VIEW" )
         sSql += " VIEW ";
     else

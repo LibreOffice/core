@@ -264,7 +264,7 @@ void OOrderColumn::construct()
 
 css::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdb.OrderColumn" };
+    return { u"com.sun.star.sdb.OrderColumn"_ustr };
 }
 
 

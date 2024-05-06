@@ -55,7 +55,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
     return Sequence< sal_Int32 >();
 }
 
-IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OStatement,u"com.sun.star.sdbcx.OStatement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
 void SAL_CALL OStatement::acquire() noexcept
 {

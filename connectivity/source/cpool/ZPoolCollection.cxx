@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  )
 
 OUString SAL_CALL OPoolCollection::getImplementationName(  )
 {
-    return "com.sun.star.sdbc.OConnectionPool";
+    return u"com.sun.star.sdbc.OConnectionPool"_ustr;
 }
 
 sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName )
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceNam
 
 Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.ConnectionPool" };
+    return { u"com.sun.star.sdbc.ConnectionPool"_ustr };
 }
 
 Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL )
@@ -272,10 +272,10 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
                             const OUString& _rPath)
 {
     OSL_ASSERT(_rxConfProvider.is());
-    Sequence< Any > args{ Any(NamedValue( "nodepath", Any(_rPath))) };
+    Sequence< Any > args{ Any(NamedValue( u"nodepath"_ustr, Any(_rPath))) };
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess",
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr,
             args));
     OSL_ENSURE(
         xInterface.is(),

@@ -44,7 +44,7 @@ using namespace ::com::sun::star::container;
 sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
 {
     rtl::Reference<ODbaseTable> pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
-                                        _rName,"TABLE");
+                                        _rName,u"TABLE"_ustr);
 
     pRet->construct();
     return pRet;
@@ -79,7 +79,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
         catch(Exception& ex)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            throw SQLException( ex.Message, nullptr, "", 0, anyEx );
+            throw SQLException( ex.Message, nullptr, u""_ustr, 0, anyEx );
         }
     }
     return createObject( _rForName );

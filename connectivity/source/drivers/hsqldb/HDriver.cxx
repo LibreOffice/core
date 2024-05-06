@@ -121,7 +121,7 @@ namespace connectivity
         if ( !m_xDriver.is() )
         {
             Reference<XDriverManager2> xDriverAccess = DriverManager::create( m_xContext );
-            m_xDriver = xDriverAccess->getDriverByURL("jdbc:hsqldb:db");
+            m_xDriver = xDriverAccess->getDriverByURL(u"jdbc:hsqldb:db"_ustr);
         }
 
         return m_xDriver;
@@ -203,16 +203,15 @@ namespace connectivity
 
                 // properties for accessing the embedded storage
                 OUString sKey = StorageContainer::registerStorage( xStorage, sSystemPath );
-                aProperties.put( "storage_key", sKey );
-                aProperties.put( "storage_class_name",
-                    OUString(  "com.sun.star.sdbcx.comp.hsqldb.StorageAccess"  ) );
-                aProperties.put( "fileaccess_class_name",
-                    OUString(  "com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess"  ) );
+                aProperties.put( u"storage_key"_ustr, sKey );
+                aProperties.put( u"storage_class_name"_ustr,
+                    u"com.sun.star.sdbcx.comp.hsqldb.StorageAccess"_ustr );
+                aProperties.put( u"fileaccess_class_name"_ustr,
+                    u"com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess"_ustr );
 
                 // JDBC driver and driver's classpath
-                aProperties.put( "JavaDriverClass",
-                    OUString(  "org.hsqldb.jdbcDriver"  ) );
-                aProperties.put( "JavaDriverClassPath",
+                aProperties.put( u"JavaDriverClass"_ustr, u"org.hsqldb.jdbcDriver"_ustr );
+                aProperties.put( u"JavaDriverClassPath"_ustr,
 #ifdef SYSTEM_HSQLDB
                         u"" HSQLDB_JAR
 #else
@@ -221,21 +220,21 @@ namespace connectivity
                         " vnd.sun.star.expand:$LO_JAVA_DIR/sdbc_hsqldb.jar"_ustr );
 
                 // auto increment handling
-                aProperties.put( "IsAutoRetrievingEnabled", true );
-                aProperties.put( "AutoRetrievingStatement",
-                    OUString(  "CALL IDENTITY()" ) );
-                aProperties.put( "IgnoreDriverPrivileges", true );
+                aProperties.put( u"IsAutoRetrievingEnabled"_ustr, true );
+                aProperties.put( u"AutoRetrievingStatement"_ustr,
+                    u"CALL IDENTITY()"_ustr );
+                aProperties.put( u"IgnoreDriverPrivileges"_ustr, true );
 
                 // don't want to expose HSQLDB's schema capabilities which exist since 1.8.0RC10
-                aProperties.put( "default_schema",
-                    OUString(  "true"  ) );
+                aProperties.put( u"default_schema"_ustr,
+                    u"true"_ustr );
 
                 // security: permitted Java classes
                 NamedValue aPermittedClasses(
-                    "hsqldb.method_class_names",
+                    u"hsqldb.method_class_names"_ustr,
                     Any( lcl_getPermittedJavaMethods_nothrow( m_xContext ) )
                 );
-                aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
+                aProperties.put( u"SystemProperties"_ustr, Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 
                 OUString sMessage;
                 try
@@ -333,10 +332,10 @@ namespace connectivity
                 if ( xProp.is() )
                 {
                     sal_Int32 nMode = 0;
-                    xProp->getPropertyValue("OpenMode") >>= nMode;
+                    xProp->getPropertyValue(u"OpenMode"_ustr) >>= nMode;
                     if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
                     {
-                        aProperties.put( "readonly", OUString(  "true"  ) );
+                        aProperties.put( u"readonly"_ustr, u"true"_ustr );
                     }
                 }
 
@@ -424,24 +423,24 @@ namespace connectivity
         return
         {
             {
-                "Storage",
-                "Defines the storage where the database will be stored.",
+                u"Storage"_ustr,
+                u"Defines the storage where the database will be stored."_ustr,
                 true,
                 {},
                 {}
             },
             {
-                "URL",
-                "Defines the url of the data source.",
+                u"URL"_ustr,
+                u"Defines the url of the data source."_ustr,
                 true,
                 {},
                 {}
             },
             {
-                "AutoRetrievingStatement",
-                "Defines the statement which will be executed to retrieve auto increment values.",
+                u"AutoRetrievingStatement"_ustr,
+                u"Defines the statement which will be executed to retrieve auto increment values."_ustr,
                 false,
-                "CALL IDENTITY()",
+                u"CALL IDENTITY()"_ustr,
                 {}
             }
         };
@@ -510,12 +509,12 @@ namespace connectivity
 
     Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
+        return { u"com.sun.star.sdbc.Driver"_ustr, u"com.sun.star.sdbcx.Driver"_ustr };
     }
 
     void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ )
     {
-        ::dbtools::throwFeatureNotImplementedSQLException( "XCreateCatalog::createCatalog", *this );
+        ::dbtools::throwFeatureNotImplementedSQLException( u"XCreateCatalog::createCatalog"_ustr, *this );
     }
 
     void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
@@ -531,12 +530,12 @@ namespace connectivity
                 Reference<XStatement> xStmt = _xConnection->createStatement();
                 if ( xStmt.is() )
                 {
-                    Reference<XResultSet> xRes = xStmt->executeQuery("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'");
+                    Reference<XResultSet> xRes = xStmt->executeQuery(u"SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'"_ustr);
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
                     if ( bLastOne )
-                        xStmt->execute("SHUTDOWN");
+                        xStmt->execute(u"SHUTDOWN"_ustr);
                 }
             }
         }
@@ -643,7 +642,7 @@ namespace connectivity
                 Reference< XStatement> xStmt = xConnection->createStatement();
                 OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
                 if ( xStmt.is() )
-                    xStmt->execute( "SET WRITE_DELAY 0" );
+                    xStmt->execute( u"SET WRITE_DELAY 0"_ustr );
 
                 bool bPreviousAutoCommit = xConnection->getAutoCommit();
                 xConnection->setAutoCommit( false );
@@ -651,7 +650,7 @@ namespace connectivity
                 xConnection->setAutoCommit( bPreviousAutoCommit );
 
                 if ( xStmt.is() )
-                    xStmt->execute( "SET WRITE_DELAY 60" );
+                    xStmt->execute( u"SET WRITE_DELAY 60"_ustr );
             }
         }
         catch(Exception&)
@@ -812,7 +811,7 @@ namespace connectivity
 
         OUString lcl_getSystemLocale( const Reference< XComponentContext >& _rxContext )
         {
-            OUString sLocaleString = "en-US";
+            OUString sLocaleString = u"en-US"_ustr;
             try
             {
 
@@ -823,13 +822,13 @@ namespace connectivity
                 // arguments for creating the config access
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {"nodepath", Any(OUString("/org.openoffice.Setup/L10N" ))}, // the path to the node to open
+                    {"nodepath", Any(u"/org.openoffice.Setup/L10N"_ustr)}, // the path to the node to open
                     {"depth", Any(sal_Int32(-1))}, // the depth: -1 means unlimited
                 }));
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess",
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                         aArguments ),
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
@@ -837,7 +836,7 @@ namespace connectivity
 
                 // ask for the system locale setting
                 if ( xNode.is() )
-                    xNode->getPropertyValue("ooSetupSystemLocale") >>= sLocaleString;
+                    xNode->getPropertyValue(u"ooSetupSystemLocale"_ustr) >>= sLocaleString;
             }
             catch( const Exception& )
             {

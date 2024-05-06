@@ -36,7 +36,7 @@ using namespace ::com::sun::star::lang;
 
 OUString SAL_CALL ODriver::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.dbase.ODriver";
+    return u"com.sun.star.comp.sdbc.dbase.ODriver"_ustr;
 }
 
 
@@ -80,29 +80,29 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBoolean { "0", "1" };
+        Sequence< OUString > aBoolean { u"0"_ustr, u"1"_ustr };
 
         return
         {
             {
-                "CharSet"
-                ,"CharSet of the database."
+                u"CharSet"_ustr
+                ,u"CharSet of the database."_ustr
                 ,false
                 ,OUString()
                 ,Sequence< OUString >()
             },
             {
-                "ShowDeleted"
-                ,"Display inactive records."
+                u"ShowDeleted"_ustr
+                ,u"Display inactive records."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             },
             {
-                "EnableSQL92Check"
-                ,"Use SQL92 naming constraints."
+                u"EnableSQL92Check"_ustr
+                ,u"Use SQL92 naming constraints."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             }
         };

@@ -239,7 +239,7 @@ bool loadClass(
 }
 
 
-IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
+IMPLEMENT_SERVICE_INFO(java_sql_Connection,u"com.sun.star.sdbcx.JConnection"_ustr,u"com.sun.star.sdbc.Connection"_ustr);
 
 
 //************ Class: java.sql.Connection
@@ -406,7 +406,7 @@ void SAL_CALL java_sql_Connection::setTypeMap( const Reference< css::container::
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTypeMap"_ustr, *this );
 }
 
 
@@ -726,17 +726,17 @@ bool java_sql_Connection::construct(const OUString& url,
     Sequence< NamedValue > aSystemProperties;
 
     ::comphelper::NamedValueCollection aSettings( info );
-    sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
-    sDriverClassPath = aSettings.getOrDefault( "JavaDriverClassPath", sDriverClassPath);
+    sDriverClass = aSettings.getOrDefault( u"JavaDriverClass"_ustr, sDriverClass );
+    sDriverClassPath = aSettings.getOrDefault( u"JavaDriverClassPath"_ustr, sDriverClassPath);
     if ( sDriverClassPath.isEmpty() )
         sDriverClassPath = impl_getJavaDriverClassPath_nothrow(sDriverClass);
-    bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
-    sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );
-    m_bIgnoreDriverPrivileges = aSettings.getOrDefault( "IgnoreDriverPrivileges", m_bIgnoreDriverPrivileges );
-    m_bIgnoreCurrency = aSettings.getOrDefault( "IgnoreCurrency", m_bIgnoreCurrency );
-    aSystemProperties = aSettings.getOrDefault( "SystemProperties", aSystemProperties );
-    m_aCatalogRestriction = aSettings.getOrDefault( "ImplicitCatalogRestriction", Any() );
-    m_aSchemaRestriction = aSettings.getOrDefault( "ImplicitSchemaRestriction", Any() );
+    bAutoRetrievingEnabled = aSettings.getOrDefault( u"IsAutoRetrievingEnabled"_ustr, bAutoRetrievingEnabled );
+    sGeneratedValueStatement = aSettings.getOrDefault( u"AutoRetrievingStatement"_ustr, sGeneratedValueStatement );
+    m_bIgnoreDriverPrivileges = aSettings.getOrDefault( u"IgnoreDriverPrivileges"_ustr, m_bIgnoreDriverPrivileges );
+    m_bIgnoreCurrency = aSettings.getOrDefault( u"IgnoreCurrency"_ustr, m_bIgnoreCurrency );
+    aSystemProperties = aSettings.getOrDefault( u"SystemProperties"_ustr, aSystemProperties );
+    m_aCatalogRestriction = aSettings.getOrDefault( u"ImplicitCatalogRestriction"_ustr, Any() );
+    m_aSchemaRestriction = aSettings.getOrDefault( u"ImplicitSchemaRestriction"_ustr, Any() );
 
     loadDriverFromProperties( sDriverClass, sDriverClassPath, aSystemProperties );
 

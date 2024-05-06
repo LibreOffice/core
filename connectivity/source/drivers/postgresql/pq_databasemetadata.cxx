@@ -121,7 +121,7 @@ DatabaseMetaData::DatabaseMetaData(
   : m_xMutex(std::move( refMutex )),
     m_pSettings( pSettings ),
     m_origin(std::move( origin )),
-    m_getIntSetting_stmt ( m_origin->prepareStatement("SELECT setting FROM pg_catalog.pg_settings WHERE name=?") )
+    m_getIntSetting_stmt ( m_origin->prepareStatement(u"SELECT setting FROM pg_catalog.pg_settings WHERE name=?"_ustr) )
 {
     init_getReferences_stmt();
     init_getPrivs_stmt();
@@ -181,7 +181,7 @@ sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  )
 
 OUString DatabaseMetaData::getDatabaseProductName(  )
 {
-    return "PostgreSQL";
+    return u"PostgreSQL"_ustr;
 }
 
 OUString DatabaseMetaData::getDatabaseProductVersion(  )
@@ -190,7 +190,7 @@ OUString DatabaseMetaData::getDatabaseProductVersion(  )
 }
 OUString DatabaseMetaData::getDriverName(  )
 {
-    return "postgresql-sdbc";
+    return u"postgresql-sdbc"_ustr;
 }
 
 OUString DatabaseMetaData::getDriverVersion(  )
@@ -271,7 +271,7 @@ sal_Bool DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
 
 OUString DatabaseMetaData::getIdentifierQuoteString(  )
 {
-    return "\"";
+    return u"\""_ustr;
 }
 
 OUString DatabaseMetaData::getSQLKeywords(  )
@@ -282,7 +282,7 @@ OUString DatabaseMetaData::getSQLKeywords(  )
     // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
     // LEM TODO: consider using pg_get_keywords(), filter on catcode
     return
-        "ANALYSE,"
+        u"ANALYSE,"
         "ANALYZE,"
         "ARRAY," //SQL:1999
         "ASYMMETRIC," //SQL:2003
@@ -306,7 +306,7 @@ OUString DatabaseMetaData::getSQLKeywords(  )
         "SIMILAR," //SQL:2003
         "VARIADIC,"
         "VERBOSE,"
-        "WINDOW" //SQL:2003
+        "WINDOW"_ustr //SQL:2003
  ;
 }
 OUString DatabaseMetaData::getNumericFunctions(  )
@@ -318,7 +318,7 @@ OUString DatabaseMetaData::getNumericFunctions(  )
     //           And it is my job to map from Open Group CLI names/syntax to PostgreSQL names/syntax. Where? By parsing the SQL???
     //           Should look at what the JDBC driver is doing.
     return
-        "abs,"
+        u"abs,"
         "cbrt,"
         "ceil,"
         "ceiling,"
@@ -346,7 +346,7 @@ OUString DatabaseMetaData::getNumericFunctions(  )
         "cos,"
         "cot,"
         "sin,"
-        "tan"
+        "tan"_ustr
  ;
 }
 
@@ -354,7 +354,7 @@ OUString DatabaseMetaData::getStringFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-string.html
     return
-        "bit_length,"
+        u"bit_length,"
         "char_length,"
         "character_length,"
         "lower,"
@@ -400,7 +400,7 @@ OUString DatabaseMetaData::getStringFunctions(  )
         "substr,"
         "to_ascii,"
         "to_hex,"
-        "translate"
+        "translate"_ustr
  ;
 }
 
@@ -409,7 +409,7 @@ OUString DatabaseMetaData::getSystemFunctions(  )
     // See http://www.postgresql.org/docs/9.1/static/functions-info.html
     // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
     return
-        "current_catalog,"
+        u"current_catalog,"
         "current_database,"
         "current_query,"
         "current_schema,"
@@ -530,14 +530,14 @@ OUString DatabaseMetaData::getSystemFunctions(  )
         "pg_try_advisory_lock_shared,"
         "pg_try_advisory_xact_lock,"
         "pg_try_advisory_xact_lock_shared,"
-        "pg_sleep"
+        "pg_sleep"_ustr
  ;
 }
 OUString DatabaseMetaData::getTimeDateFunctions(  )
 {
     // TODO
     return
-        "age,"
+        u"age,"
         "age,"
         "clock_timestamp,"
         "current_date,"
@@ -559,16 +559,16 @@ OUString DatabaseMetaData::getTimeDateFunctions(  )
         "now,"
         "statement_timestamp,"
         "timeofday,"
-        "transaction_timestamp,"
+        "transaction_timestamp,"_ustr
  ;
 }
 OUString DatabaseMetaData::getSearchStringEscape(  )
 {
-    return "\\";
+    return u"\\"_ustr;
 }
 OUString DatabaseMetaData::getExtraNameCharacters(  )
 {
-    return "$";
+    return u"$"_ustr;
 }
 
 sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  )
@@ -723,17 +723,17 @@ sal_Bool DatabaseMetaData::supportsLimitedOuterJoins(  )
 
 OUString DatabaseMetaData::getSchemaTerm(  )
 {
-    return "SCHEMA";
+    return u"SCHEMA"_ustr;
 }
 
 OUString DatabaseMetaData::getProcedureTerm(  )
 {
-    return "function";
+    return u"function"_ustr;
 }
 
 OUString DatabaseMetaData::getCatalogTerm(  )
 {
-    return "DATABASE";
+    return u"DATABASE"_ustr;
 }
 
 sal_Bool DatabaseMetaData::isCatalogAtStart(  )
@@ -743,7 +743,7 @@ sal_Bool DatabaseMetaData::isCatalogAtStart(  )
 
 OUString DatabaseMetaData::getCatalogSeparator(  )
 {
-    return ".";
+    return u"."_ustr;
 }
 
 sal_Bool DatabaseMetaData::supportsSchemasInDataManipulation(  )
@@ -910,7 +910,7 @@ sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
 sal_Int32 DatabaseMetaData::getMaxNameLength()
 {
     if ( m_pSettings->maxNameLen == 0)
-        m_pSettings->maxNameLen = getIntSetting( "max_identifier_length" );
+        m_pSettings->maxNameLen = getIntSetting( u"max_identifier_length"_ustr );
     OSL_ENSURE(m_pSettings->maxNameLen, "postgresql-sdbc: maxNameLen is zero");
     return m_pSettings->maxNameLen;
 }
@@ -918,7 +918,7 @@ sal_Int32 DatabaseMetaData::getMaxNameLength()
 sal_Int32 DatabaseMetaData::getMaxIndexKeys()
 {
     if ( m_pSettings->maxIndexKeys == 0)
-        m_pSettings->maxIndexKeys = getIntSetting("max_index_keys");
+        m_pSettings->maxIndexKeys = getIntSetting(u"max_index_keys"_ustr);
     OSL_ENSURE(m_pSettings->maxIndexKeys, "postgresql-sdbc: maxIndexKeys is zero");
     return m_pSettings->maxIndexKeys;
 }
@@ -1124,14 +1124,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
     // Take "inspiration" from JDBC driver
     // Ah, this is used to create a XResultSet manually... Try to do it directly in SQL
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-            "SELECT "
+            u"SELECT "
             "DISTINCT ON (pg_namespace.nspname, relname ) " // avoid duplicates (pg_settings !)
             "pg_namespace.nspname, relname, relkind, pg_description.description "
             "FROM pg_namespace, pg_class LEFT JOIN pg_description ON pg_class.oid = pg_description.objoid "
             "WHERE relnamespace = pg_namespace.oid "
             "AND ( relkind = 'r' OR relkind = 'v') "
             "AND pg_namespace.nspname LIKE ? "
-            "AND relname LIKE ? "
+            "AND relname LIKE ? "_ustr
 //            "ORDER BY pg_namespace.nspname || relname"
             );
 
@@ -1245,7 +1245,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     // <b>TABLE_SCHEM</b> string =&amp;gt; schema name
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
-        "SELECT nspname from pg_namespace" );
+        u"SELECT nspname from pg_namespace"_ustr );
     // LEM TODO: look at JDBC driver and consider doing the same
     //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
 
@@ -1534,8 +1534,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     columnMetaData2DatabaseTypeDescription( domainMap, rs, domainTypeStmt );
 
     sal_uInt32 colNum(0);
-    OUString sSchema( "#invalid#" );
-    OUString sTable(  "#invalid#" );
+    OUString sSchema( u"#invalid#"_ustr );
+    OUString sTable(  u"#invalid#"_ustr );
 
     while( rs->next() )
     {
@@ -1685,14 +1685,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
         << schema << "." << table);
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-            "SELECT nmsp.nspname, "
+            u"SELECT nmsp.nspname, "
                     "cl.relname, "
                     "con.conkey, "
                     "con.conname, "
                     "con.conrelid "
             "FROM pg_constraint as con,pg_class as cl, pg_namespace as nmsp "
             "WHERE con.connamespace = nmsp.oid AND con.conrelid = cl.oid AND con.contype = 'p' "
-                "AND nmsp.nspname LIKE ? AND cl.relname LIKE ?" );
+                "AND nmsp.nspname LIKE ? AND cl.relname LIKE ?"_ustr );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schema );
@@ -1753,9 +1753,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
         row[4] >>= tableOid;
         row[3] >>= attnum;
         statement = m_origin->prepareStatement(
-                "SELECT att.attname FROM "
+                u"SELECT att.attname FROM "
                 "pg_attribute AS att, pg_class AS cl WHERE "
-                "att.attrelid = ? AND att.attnum = ?" );
+                "att.attrelid = ? AND att.attnum = ?"_ustr );
 
         parameters.set( statement, UNO_QUERY_THROW );
         parameters->setString( 1 , tableOid );
@@ -1826,100 +1826,100 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
 #define SQL_GET_REFERENCES_ORDER_NO_PTABLE   "ORDER BY pkn.nspname, pkc.relname, conkeyseq"
 
 #define SQL_GET_REFERENCES_NONE_NONE_NONE_NONE \
-    SQL_GET_REFERENCES \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    u"" SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_NONE_NONE_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_SOME_NONE_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_SOME_NONE_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_PTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_NONE_SOME_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_FSCHEMA \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_NONE_NONE_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_NONE_SOME_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_FSCHEMA \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_NONE_SOME_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_FSCHEMA \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_NONE_NONE_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_NONE_SOME_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_FSCHEMA \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_SOME_SOME_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FSCHEMA \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_SOME_NONE_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_NONE_SOME_SOME_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FSCHEMA \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_SOME_SOME_NONE \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FSCHEMA \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_SOME_NONE_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 #define SQL_GET_REFERENCES_SOME_SOME_SOME_SOME \
-    SQL_GET_REFERENCES \
+    u"" SQL_GET_REFERENCES \
     SQL_GET_REFERENCES_PSCHEMA \
     SQL_GET_REFERENCES_PTABLE \
     SQL_GET_REFERENCES_FSCHEMA \
     SQL_GET_REFERENCES_FTABLE \
-    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE ""_ustr
 
 void DatabaseMetaData::init_getReferences_stmt ()
 {
@@ -2226,12 +2226,12 @@ namespace
                 //      in postgresql the upper limit is optional, no limit means unlimited
                 //      length (=1GB).
                 precision = 0x40000000; // about 1 GB, see character type docs in postgresql
-                row[CREATE_PARAMS] <<= OUString("length");
+                row[CREATE_PARAMS] <<= u"length"_ustr;
             }
             else if( dataType == css::sdbc::DataType::NUMERIC )
             {
                 precision = 1000;
-                row[CREATE_PARAMS] <<= OUString("length, scale");
+                row[CREATE_PARAMS] <<= u"length, scale"_ustr;
             }
 
             row[TYPE_NAME] <<= construct_full_typename(xRow->getString(6), xRow->getString(1));
@@ -2243,15 +2243,15 @@ namespace
             row[NULLABLE] <<= OUString::number(nullable);
             row[CASE_SENSITIVE] <<= OUString::number(1);
             row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
-            row[UNSIGNED_ATTRIBUTE] <<= OUString("0");
+            row[UNSIGNED_ATTRIBUTE] <<= u"0"_ustr;
             if( css::sdbc::DataType::INTEGER == dataType ||
                 css::sdbc::DataType::BIGINT == dataType )
-                row[AUTO_INCREMENT] <<= OUString("1");     // TODO
+                row[AUTO_INCREMENT] <<= u"1"_ustr;     // TODO
             else
-                row[AUTO_INCREMENT] <<= OUString("0");     // TODO
-            row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
+                row[AUTO_INCREMENT] <<= u"0"_ustr;     // TODO
+            row[MINIMUM_SCALE] <<= u"0"_ustr;      // TODO: what is this ?
             row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
-            row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
+            row[NUM_PREC_RADIX] <<= u"10"_ustr;    // TODO: what is this ?
             vec.push_back( row );
         }
     }
@@ -2267,7 +2267,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
 
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
-          "SELECT pg_type.typname AS typname," //1
+          u"SELECT pg_type.typname AS typname," //1
           "pg_type.typtype AS typtype,"        //2
           "pg_type.typlen AS typlen,"          //3
           "pg_type.typnotnull AS typnotnull,"  //4
@@ -2275,7 +2275,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
           "pg_namespace.nspname as typns "     //6
           "FROM pg_type LEFT JOIN pg_namespace ON pg_type.typnamespace=pg_namespace.oid "
           "WHERE pg_type.typtype = 'b' "
-          "OR pg_type.typtype = 'p'"
+          "OR pg_type.typtype = 'p'"_ustr
             );
 
     std::vector< std::vector<Any> > vec;
@@ -2283,14 +2283,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
 
     // check for domain types
     rs = statement->executeQuery(
-        "SELECT t1.typname as typname,"
+        u"SELECT t1.typname as typname,"
         "t2.typtype AS typtype,"
         "t2.typlen AS typlen,"
         "t2.typnotnull AS typnotnull,"
         "t2.typname as realtypname, "
         "pg_namespace.nspname as typns "
         "FROM pg_type as t1 LEFT JOIN pg_type AS t2 ON t1.typbasetype=t2.oid LEFT JOIN pg_namespace ON t1.typnamespace=pg_namespace.oid "
-        "WHERE t1.typtype = 'd'" );
+        "WHERE t1.typtype = 'd'"_ustr );
     pgTypeInfo2ResultSet( vec, rs );
 
     std::sort( vec.begin(), vec.end(), TypeInfoByDataTypeSorter() );
@@ -2362,7 +2362,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     static const sal_Int32 R_COLUMN_NAME = 8;
 
     Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-            "SELECT nspname, "          // 1
+            u"SELECT nspname, "          // 1
                    "pg_class.relname, " // 2
                    "class2.relname, "   // 3
                    "indisclustered, "   // 4
@@ -2372,7 +2372,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
             "FROM pg_index INNER JOIN pg_class ON indrelid = pg_class.oid "
                           "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                           "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
-            "WHERE nspname = ? AND pg_class.relname = ?" );
+            "WHERE nspname = ? AND pg_class.relname = ?"_ustr );
 
     Reference< XParameters > param ( stmt, UNO_QUERY_THROW );
     param->setString( 1, schema );
@@ -2385,11 +2385,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     {
         std::vector< sal_Int32 > columns = parseIntArray( xRow->getString(C_COLUMNS) );
         Reference< XPreparedStatement > columnsStmt = m_origin->prepareStatement(
-                "SELECT attnum, attname "
+                u"SELECT attnum, attname "
                 "FROM pg_attribute "
                 "     INNER JOIN pg_class ON attrelid = pg_class.oid "
                 "     INNER JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid "
-                "     WHERE pg_namespace.nspname=?  AND pg_class.relname=?" );
+                "     WHERE pg_namespace.nspname=?  AND pg_class.relname=?"_ustr );
         Reference< XParameters > paramColumn ( columnsStmt, UNO_QUERY_THROW );
         OUString currentSchema = xRow->getString( C_SCHEMA );
         OUString currentTable = xRow->getString( C_TABLENAME );

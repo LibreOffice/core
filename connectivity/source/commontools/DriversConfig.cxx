@@ -76,9 +76,9 @@ namespace
         if ( !sDriverTypeDisplayName.isEmpty() )
             _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;
 
-        lcl_fillValues(aURLPatternNode,"Properties",_rInstalledDriver.aProperties);
-        lcl_fillValues(aURLPatternNode,"Features",_rInstalledDriver.aFeatures);
-        lcl_fillValues(aURLPatternNode,"MetaData",_rInstalledDriver.aMetaData);
+        lcl_fillValues(aURLPatternNode,u"Properties"_ustr,_rInstalledDriver.aProperties);
+        lcl_fillValues(aURLPatternNode,u"Features"_ustr,_rInstalledDriver.aFeatures);
+        lcl_fillValues(aURLPatternNode,u"MetaData"_ustr,_rInstalledDriver.aMetaData);
     }
 }
 
@@ -93,7 +93,7 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
         if ( !m_aInstalled.isValid() )
         {
             m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB,
-                             "org.openoffice.Office.DataAccess.Drivers/Installed", -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+                             u"org.openoffice.Office.DataAccess.Drivers/Installed"_ustr, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 
         if ( m_aInstalled.isValid() )

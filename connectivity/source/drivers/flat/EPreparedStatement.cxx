@@ -28,7 +28,8 @@ rtl::Reference<OResultSet> OFlatPreparedStatement::createResultSet()
     return new OFlatResultSet(this, m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement, "com.sun.star.sdbc.driver.flat.PreparedStatement",
-                       "com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement,
+                       u"com.sun.star.sdbc.driver.flat.PreparedStatement"_ustr,
+                       u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

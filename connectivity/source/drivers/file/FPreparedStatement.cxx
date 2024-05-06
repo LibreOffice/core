@@ -46,7 +46,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star;
 
-IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OPreparedStatement,u"com.sun.star.sdbc.driver.file.PreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
@@ -251,7 +251,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ )
 {
-    throwFeatureNotImplementedSQLException( "XParameters::setLong", *this );
+    throwFeatureNotImplementedSQLException( u"XParameters::setLong"_ustr, *this );
 }
 
 
@@ -269,25 +269,25 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
 
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ )
 {
-    throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
+    throwFeatureNotImplementedSQLException( u"XParameters::setClob"_ustr, *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ )
 {
-    throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
+    throwFeatureNotImplementedSQLException( u"XParameters::setBlob"_ustr, *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
 {
-    throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
+    throwFeatureNotImplementedSQLException( u"XParameters::setArray"_ustr, *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
 {
-    throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
+    throwFeatureNotImplementedSQLException( u"XParameters::setRef"_ustr, *this );
 }
 
 

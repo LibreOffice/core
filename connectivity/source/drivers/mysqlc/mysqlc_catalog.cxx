@@ -25,7 +25,7 @@ connectivity::mysqlc::Catalog::Catalog(
 void connectivity::mysqlc::Catalog::refreshTables()
 {
     css::uno::Reference<css::sdbc::XResultSet> xTables
-        = m_xMetaData->getTables(css::uno::Any(), "%", "%", {});
+        = m_xMetaData->getTables(css::uno::Any(), u"%"_ustr, u"%"_ustr, {});
 
     if (!xTables.is())
         return;
@@ -43,7 +43,7 @@ void connectivity::mysqlc::Catalog::refreshTables()
 void connectivity::mysqlc::Catalog::refreshViews()
 {
     css::uno::Reference<css::sdbc::XResultSet> xViews
-        = m_xMetaData->getTables(css::uno::Any(), "%", "%", { "VIEW" });
+        = m_xMetaData->getTables(css::uno::Any(), u"%"_ustr, u"%"_ustr, { u"VIEW"_ustr });
 
     if (!xViews.is())
         return;
@@ -69,7 +69,7 @@ void connectivity::mysqlc::Catalog::refreshUsers()
 {
     css::uno::Reference<css::sdbc::XStatement> statement = m_xConnection->createStatement();
     css::uno::Reference<css::sdbc::XResultSet> xUsers = statement->executeQuery(
-        "SELECT grantee FROM information_schema.user_privileges GROUP BY grantee");
+        u"SELECT grantee FROM information_schema.user_privileges GROUP BY grantee"_ustr);
 
     if (!xUsers.is())
         return;

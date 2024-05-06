@@ -48,7 +48,7 @@ namespace
 class OMySQLKeysHelper : public OKeysHelper
 {
 protected:
-    virtual OUString getDropForeignKey() const override { return " DROP FOREIGN KEY "; }
+    virtual OUString getDropForeignKey() const override { return u" DROP FOREIGN KEY "_ustr; }
 
 public:
     OMySQLKeysHelper(OTableHelper* _pTable, ::osl::Mutex& _rMutex,
@@ -262,7 +262,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType, const OUString& _rColName,
     executeStatement(sSql);
 }
 
-OUString OMySQLTable::getTypeCreatePattern() const { return "(M,D)"; }
+OUString OMySQLTable::getTypeCreatePattern() const { return u"(M,D)"_ustr; }
 
 void OMySQLTable::alterDefaultValue(std::u16string_view _sNewDefault, const OUString& _rColName)
 {
@@ -284,7 +284,7 @@ void OMySQLTable::dropDefaultValue(const OUString& _rColName)
 
 OUString OMySQLTable::getAlterTableColumnPart() const
 {
-    OUString sSql("ALTER TABLE ");
+    OUString sSql(u"ALTER TABLE "_ustr);
 
     OUString sComposedName(
         ::dbtools::composeTableName(getMetaData(), m_CatalogName, m_SchemaName, m_Name, true,
@@ -308,6 +308,6 @@ void OMySQLTable::executeStatement(const OUString& _rStatement)
     }
 }
 
-OUString OMySQLTable::getRenameStart() const { return "RENAME TABLE "; }
+OUString OMySQLTable::getRenameStart() const { return u"RENAME TABLE "_ustr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -205,7 +205,7 @@ OUString ReflectionBase::getName(  )
 void ReflectionBase::setName( const OUString& /* aName */ )
 {
     throw RuntimeException(
-        "pq_sdbc::ReflectionBase::setName not implemented",
+        u"pq_sdbc::ReflectionBase::setName not implemented"_ustr,
         *this );
     //setPropertyValue( getStatics().NAME , makeAny( aName ) );
 }

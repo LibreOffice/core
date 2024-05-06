@@ -120,7 +120,7 @@ Reference< XSpreadsheetDocument> const & OCalcConnection::acquireDoc()
     try
     {
         xComponent = xDesktop->loadComponentFromURL(
-            m_aFileName, "_blank", 0, aArgs );
+            m_aFileName, u"_blank"_ustr, 0, aArgs );
     }
     catch( const Exception& )
     {
@@ -190,7 +190,7 @@ void OCalcConnection::disposing()
 // XServiceInfo
 
 
-IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OCalcConnection, u"com.sun.star.sdbc.drivers.calc.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  )
@@ -253,7 +253,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

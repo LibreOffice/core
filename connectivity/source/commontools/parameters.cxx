@@ -210,15 +210,15 @@ namespace dbtools
         // <detail_column> = :<new_param_name>
         {
             OUString tblName;
-            xDetailField->getPropertyValue("TableName") >>= tblName;
+            xDetailField->getPropertyValue(u"TableName"_ustr) >>= tblName;
             if (!tblName.isEmpty())
                 sFilter = ::dbtools::quoteTableName( m_xConnectionMetadata, tblName, ::dbtools::EComposeRule::InDataManipulation ) + ".";
         }
         {
             OUString colName;
-            xDetailField->getPropertyValue("RealName") >>= colName;
+            xDetailField->getPropertyValue(u"RealName"_ustr) >>= colName;
             bool isFunction(false);
-            xDetailField->getPropertyValue("Function") >>= isFunction;
+            xDetailField->getPropertyValue(u"Function"_ustr) >>= isFunction;
             if (isFunction)
                 sFilter += colName;
             else

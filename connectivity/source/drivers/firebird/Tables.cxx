@@ -50,7 +50,7 @@ ObjectType Tables::createObject(const OUString& rName)
                                                                   uno::Sequence< OUString >());
 
     if (!xTables.is())
-        throw RuntimeException("Could not acquire table.");
+        throw RuntimeException(u"Could not acquire table."_ustr);
 
     uno::Reference< XRow > xRow(xTables,UNO_QUERY_THROW);
 
@@ -65,7 +65,7 @@ ObjectType Tables::createObject(const OUString& rName)
                               xRow->getString(5))); // Description / Remarks / Comments
 
     if (xTables->next())
-        throw RuntimeException("Found more tables than expected.");
+        throw RuntimeException(u"Found more tables than expected."_ustr);
 
     return xRet;
 }
@@ -193,7 +193,7 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
         return;
 
     OUString sType;
-    xTable->getPropertyValue("Type") >>= sType;
+    xTable->getPropertyValue(u"Type"_ustr) >>= sType;
 
     const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
 

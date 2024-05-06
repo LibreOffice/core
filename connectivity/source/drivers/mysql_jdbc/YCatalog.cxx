@@ -41,7 +41,8 @@ OMySQLCatalog::OMySQLCatalog(const Reference<XConnection>& _xConnection)
 void OMySQLCatalog::refreshObjects(const Sequence<OUString>& _sKindOfObject,
                                    ::std::vector<OUString>& _rNames)
 {
-    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), "%", "%", _sKindOfObject);
+    Reference<XResultSet> xResult
+        = m_xMetaData->getTables(Any(), u"%"_ustr, u"%"_ustr, _sKindOfObject);
     fillNames(xResult, _rNames);
 }
 
@@ -50,7 +51,7 @@ void OMySQLCatalog::refreshTables()
     ::std::vector<OUString> aVector;
 
     Sequence<OUString> sTableTypes{
-        "VIEW", "TABLE", "%"
+        u"VIEW"_ustr, u"TABLE"_ustr, u"%"_ustr
     }; // this last one just to be sure to include anything else...
 
     refreshObjects(sTableTypes, aVector);
@@ -63,7 +64,7 @@ void OMySQLCatalog::refreshTables()
 
 void OMySQLCatalog::refreshViews()
 {
-    Sequence<OUString> aTypes{ "VIEW" };
+    Sequence<OUString> aTypes{ u"VIEW"_ustr };
 
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so
@@ -85,7 +86,7 @@ void OMySQLCatalog::refreshUsers()
     ::std::vector<OUString> aVector;
     Reference<XStatement> xStmt = m_xConnection->createStatement();
     Reference<XResultSet> xResult = xStmt->executeQuery(
-        "SELECT grantee FROM information_schema.user_privileges GROUP BY grantee");
+        u"SELECT grantee FROM information_schema.user_privileges GROUP BY grantee"_ustr);
     if (xResult.is())
     {
         Reference<XRow> xRow(xResult, UNO_QUERY);

@@ -48,7 +48,7 @@ IniParser::IniParser(OUString const & rIniName)
         sal_uInt64 nSize = 0;
 
         osl_getFileSize(handle, &nSize);
-        OUString sectionName(  "no name section" );
+        OUString sectionName(  u"no name section"_ustr );
         while (true)
         {
             sal_uInt64 nPos;

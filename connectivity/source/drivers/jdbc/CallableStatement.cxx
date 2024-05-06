@@ -38,7 +38,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-IMPLEMENT_SERVICE_INFO(java_sql_CallableStatement,"com.sun.star.sdbcx.ACallableStatement","com.sun.star.sdbc.CallableStatement");
+IMPLEMENT_SERVICE_INFO(java_sql_CallableStatement,u"com.sun.star.sdbcx.ACallableStatement"_ustr,u"com.sun.star.sdbc.CallableStatement"_ustr);
 
 
 //************ Class: java.sql.CallableStatement

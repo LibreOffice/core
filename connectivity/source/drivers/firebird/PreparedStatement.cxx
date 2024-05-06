@@ -48,7 +48,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OPreparedStatement,u"com.sun.star.sdbcx.firebird.PreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 constexpr size_t MAX_SIZE_SEGMENT = 65535; // max value of a segment of CLOB, if we want more than 65535 bytes, we need more segments
 
@@ -234,7 +234,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
              (int32Value > std::numeric_limits<sal_Int16>::max()) )
         {
             ::dbtools::throwSQLException(
-                "Value out of range for SQL_SHORT type",
+                u"Value out of range for SQL_SHORT type"_ustr,
                 ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
                 *this);
         }
@@ -273,7 +273,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     }
     default:
         ::dbtools::throwSQLException(
-            "Incorrect type for setString",
+            u"Incorrect type for setString"_ustr,
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
@@ -418,7 +418,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT n
     if ((pVar->sqltype & ~1) != nType)
     {
        ::dbtools::throwSQLException(
-            "Incorrect type for setValue",
+            u"Incorrect type for setValue"_ustr,
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
@@ -466,7 +466,7 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     if(dSubType < 0 || dSubType > 2)
     {
         ::dbtools::throwSQLException(
-            "Incorrect number sub type",
+            u"Incorrect number sub type"_ustr,
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
@@ -958,7 +958,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     else if( dType == SQL_TEXT )
     {
             if (pVar->sqllen < xBytes.getLength())
-                dbtools::throwSQLException("Data too big for this field",
+                dbtools::throwSQLException(u"Data too big for this field"_ustr,
                                            dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE, *this);
             setParameterNull(nParameterIndex, false);
             memcpy(pVar->sqldata, xBytes.getConstArray(), xBytes.getLength() );
@@ -968,7 +968,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     else
     {
         ::dbtools::throwSQLException(
-            "Incorrect type for setBytes",
+            u"Incorrect type for setBytes"_ustr,
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }

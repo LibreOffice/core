@@ -103,14 +103,14 @@ namespace connectivity::hsqldb
         {
             css::uno::Environment env(css::uno::Environment::getCurrent());
             if (!(env.is() && storageEnvironment.is())) {
-                throw css::uno::RuntimeException("cannot get environments");
+                throw css::uno::RuntimeException(u"cannot get environments"_ustr);
             }
             if (env.get() == storageEnvironment.get()) {
                 return storage;
             } else {
                 css::uno::Mapping map(storageEnvironment, env);
                 if (!map.is()) {
-                    throw css::uno::RuntimeException("cannot get mapping");
+                    throw css::uno::RuntimeException(u"cannot get mapping"_ustr);
                 }
                 css::uno::Reference<css::embed::XStorage> mapped;
                 map.mapInterface(

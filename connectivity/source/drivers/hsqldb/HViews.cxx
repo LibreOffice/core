@@ -95,7 +95,7 @@ void HViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
-        OUString aSql(  "DROP VIEW" );
+        OUString aSql(  u"DROP VIEW"_ustr );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InTableDefinitions, true );

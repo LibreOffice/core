@@ -54,7 +54,7 @@ OFlatConnection::~OFlatConnection()
 
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OFlatConnection, u"com.sun.star.sdbc.drivers.flat.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
@@ -167,7 +167,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
 }
 
 

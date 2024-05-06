@@ -40,7 +40,7 @@ void OFlatCatalog::refreshTables()
 {
     ::std::vector<OUString> aVector;
     Sequence<OUString> aTypes;
-    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), "%", "%", aTypes);
+    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), u"%"_ustr, u"%"_ustr, aTypes);
 
     if (xResult.is())
     {

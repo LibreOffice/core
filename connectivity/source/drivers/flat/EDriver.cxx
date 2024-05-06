@@ -39,7 +39,7 @@ using namespace css::lang;
 
 OUString SAL_CALL ODriver::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.flat.ODriver";
+    return u"com.sun.star.comp.sdbc.flat.ODriver"_ustr;
 }
 
 
@@ -82,43 +82,43 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBoolean { "0", "1" };
+        Sequence< OUString > aBoolean { u"0"_ustr, u"1"_ustr };
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {
             {
-                "FieldDelimiter"
-                ,"Field separator."
+                u"FieldDelimiter"_ustr
+                ,u"Field separator."_ustr
                 ,false
                 ,{}
                 ,{}
             },
             {
-                "HeaderLine"
-                ,"Text contains headers."
+                u"HeaderLine"_ustr
+                ,u"Text contains headers."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             },
             {
-                "StringDelimiter"
-                ,"Text separator."
+                u"StringDelimiter"_ustr
+                ,u"Text separator."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             },
             {
-                "DecimalDelimiter"
-                ,"Decimal separator."
+                u"DecimalDelimiter"_ustr
+                ,u"Decimal separator."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             },
             {
-                "ThousandDelimiter"
-                ,"Thousands separator."
+                u"ThousandDelimiter"_ustr
+                ,u"Thousands separator."_ustr
                 ,false
-                ,"0"
+                ,u"0"_ustr
                 ,aBoolean
             }
         };

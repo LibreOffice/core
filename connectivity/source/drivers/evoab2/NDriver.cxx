@@ -89,7 +89,7 @@ Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    return { "com.sun.star.sdbc.Driver" };
+    return { u"com.sun.star.sdbc.Driver"_ustr };
 }
 
 

@@ -66,7 +66,7 @@ namespace
     }
 }
 
-IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
+IMPLEMENT_SERVICE_INFO(OResultSet,u"com.sun.star.sdbcx.drivers.file.ResultSet"_ustr,u"com.sun.star.sdbc.ResultSet"_ustr);
 
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
@@ -651,7 +651,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x )
 
 void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateLong", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XRowUpdate::updateLong"_ustr, *this );
 }
 
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x )

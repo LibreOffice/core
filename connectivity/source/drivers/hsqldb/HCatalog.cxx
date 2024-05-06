@@ -41,8 +41,8 @@ OHCatalog::OHCatalog(const Reference< XConnection >& _xConnection) : sdbcx::OCat
 void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-                                                            "%",
-                                                            "%",
+                                                            u"%"_ustr,
+                                                            u"%"_ustr,
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
@@ -51,7 +51,7 @@ void OHCatalog::refreshTables()
 {
     ::std::vector< OUString> aVector;
 
-    Sequence< OUString > sTableTypes {"VIEW", "TABLE"};
+    Sequence< OUString > sTableTypes {u"VIEW"_ustr, u"TABLE"_ustr};
 
     refreshObjects(sTableTypes,aVector);
 
@@ -63,7 +63,7 @@ void OHCatalog::refreshTables()
 
 void OHCatalog::refreshViews()
 {
-    Sequence< OUString > aTypes { "VIEW" };
+    Sequence< OUString > aTypes { u"VIEW"_ustr };
 
     bool bSupportsViews = false;
     try
@@ -100,7 +100,7 @@ void OHCatalog::refreshUsers()
 {
     ::std::vector< OUString> aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery("select User from hsqldb.user group by User");
+    Reference< XResultSet >  xResult = xStmt->executeQuery(u"select User from hsqldb.user group by User"_ustr);
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

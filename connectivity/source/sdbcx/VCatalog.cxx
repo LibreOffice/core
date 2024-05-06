@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
+IMPLEMENT_SERVICE_INFO(OCatalog,u"com.sun.star.comp.connectivity.OCatalog"_ustr,u"com.sun.star.sdbcx.DatabaseDefinition"_ustr)
 
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
 {

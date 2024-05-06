@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 
 //************ Class: java.sql.PreparedStatement
 
-IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,"com.sun.star.sdbcx.JPreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,u"com.sun.star.sdbcx.JPreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon, const OUString& sql )
     : OStatement_BASE2( pEnv, _rCon )
@@ -295,25 +295,25 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
 
 void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XClob >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setClob"_ustr, *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XBlob >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setBlob"_ustr, *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XArray >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setArray"_ustr, *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XRef >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setRef"_ustr, *this );
 }
 
 

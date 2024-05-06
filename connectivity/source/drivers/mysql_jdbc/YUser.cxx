@@ -117,7 +117,7 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
             Any aCatalog;
             if (!sCatalog.isEmpty())
                 aCatalog <<= sCatalog;
-            xRes = xMeta->getColumnPrivileges(aCatalog, sSchema, sTable, "%");
+            xRes = xMeta->getColumnPrivileges(aCatalog, sSchema, sTable, u"%"_ustr);
         }
         break;
     }

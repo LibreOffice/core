@@ -41,14 +41,14 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OTable::getImplementationName(  )
 {
     if(isNew())
-        return "com.sun.star.sdbcx.VTableDescriptor";
-    return "com.sun.star.sdbcx.Table";
+        return u"com.sun.star.sdbcx.VTableDescriptor"_ustr;
+    return u"com.sun.star.sdbcx.Table"_ustr;
 }
 
 
 css::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  )
 {
-    return { isNew()?OUString("com.sun.star.sdbcx.TableDescriptor"):OUString("com.sun.star.sdbcx.Table") };
+    return { isNew()?u"com.sun.star.sdbcx.TableDescriptor"_ustr:u"com.sun.star.sdbcx.Table"_ustr };
 }
 
 sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName )
@@ -264,12 +264,12 @@ Reference< XDatabaseMetaData> OTable::getMetaData() const
 // XAlterTable
 void SAL_CALL OTable::alterColumnByName( const OUString& /*colName*/, const Reference< XPropertySet >& /*descriptor*/ )
 {
-    throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByName", *this );
+    throwFeatureNotImplementedSQLException( u"XAlterTable::alterColumnByName"_ustr, *this );
 }
 
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ )
 {
-    throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByIndex", *this );
+    throwFeatureNotImplementedSQLException( u"XAlterTable::alterColumnByIndex"_ustr, *this );
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  )

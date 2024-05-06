@@ -66,7 +66,7 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
         = m_xMetaData->getTables(aCatalog, sSchema, sTable, css::uno::Sequence<OUString>());
 
     if (!xTables.is())
-        throw css::uno::RuntimeException("Could not acquire table.");
+        throw css::uno::RuntimeException(u"Could not acquire table."_ustr);
 
     css::uno::Reference<css::sdbc::XRow> xRow(xTables, css::uno::UNO_QUERY_THROW);
 
@@ -82,7 +82,7 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
                   xRow->getString(5))); // Description / Remarks / Comments
 
     if (xTables->next())
-        throw css::uno::RuntimeException("Found more tables than expected.");
+        throw css::uno::RuntimeException(u"Found more tables than expected."_ustr);
 
     return xRet;
 }
@@ -149,7 +149,7 @@ void connectivity::mysqlc::Tables::dropObject(sal_Int32 nPosition, const OUStrin
         return;
 
     OUString sType;
-    xTable->getPropertyValue("Type") >>= sType;
+    xTable->getPropertyValue(u"Type"_ustr) >>= sType;
 
     m_xMetaData->getConnection()->createStatement()->execute("DROP " + sType + " " + sName);
 }

@@ -181,7 +181,7 @@ jobject connectivity::convertTypeMapToJavaMap(const Reference< css::container::X
     {
         css::uno::Sequence< OUString > aNames = _rMap->getElementNames();
         if ( aNames.hasElements() )
-            ::dbtools::throwFeatureNotImplementedSQLException( "Type maps", nullptr );
+            ::dbtools::throwFeatureNotImplementedSQLException( u"Type maps"_ustr, nullptr );
     }
     return nullptr;
 }

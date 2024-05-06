@@ -85,7 +85,7 @@ void Views::refresh()
 
         Reference< XStatement > stmt = m_origin->createStatement();
 
-        Reference< XResultSet > rs = stmt->executeQuery("SELECT "
+        Reference< XResultSet > rs = stmt->executeQuery(u"SELECT "
                                                         "DISTINCT ON( pg_namespace.nspname, relname) " // needed because of duplicates
                                                         "pg_namespace.nspname,"    // 1
                                                         "relname,"                 // 2
@@ -93,7 +93,7 @@ void Views::refresh()
                                                         "FROM pg_namespace, pg_class, pg_rewrite "
                                                        "WHERE pg_namespace.oid = relnamespace "
                                                          "AND pg_class.oid = ev_class "
-                                                         "AND relkind=\'v\'" );
+                                                         "AND relkind=\'v\'"_ustr );
 
         Reference< XRow > xRow( rs , UNO_QUERY );
 

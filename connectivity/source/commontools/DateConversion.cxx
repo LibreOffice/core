@@ -203,7 +203,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -243,7 +243,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 if (xFormatProps.is())
                 {
                     css::lang::Locale loc;
-                    if (xFormatProps->getPropertyValue("Locale") >>= loc)
+                    if (xFormatProps->getPropertyValue(u"Locale"_ustr) >>= loc)
                         nStandardKey = xFormatTypes->getStandardIndex(loc);
                     else
                     {
@@ -469,7 +469,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                          {
                              Reference< XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
                              Reference< XPropertySet > xFormatterSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                             OSL_VERIFY( xFormatterSettings->getPropertyValue("NullDate") >>= aFormatterNullDate );
+                             OSL_VERIFY( xFormatterSettings->getPropertyValue(u"NullDate"_ustr) >>= aFormatterNullDate );
                          }
                          catch( const Exception& )
                          {

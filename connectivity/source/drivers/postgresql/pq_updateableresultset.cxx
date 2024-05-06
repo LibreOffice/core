@@ -187,7 +187,7 @@ void UpdateableResultSet::insertRow(  )
 
     if( ! m_insertRow )
         throw SQLException(
-            "pq_resultset.insertRow: moveToInsertRow has not been called !",
+            u"pq_resultset.insertRow: moveToInsertRow has not been called !"_ustr,
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
@@ -279,7 +279,7 @@ void UpdateableResultSet::updateRow(  )
 
     if( m_insertRow )
         throw SQLException(
-            "pq_resultset.updateRow: moveToCurrentRow has not been called !",
+            u"pq_resultset.updateRow: moveToCurrentRow has not been called !"_ustr,
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
@@ -326,7 +326,7 @@ void UpdateableResultSet::deleteRow(  )
 
     if( m_insertRow )
         throw SQLException(
-            "pq_resultset.deleteRow: deleteRow cannot be called when on insert row !",
+            u"pq_resultset.deleteRow: deleteRow cannot be called when on insert row !"_ustr,
             *this, OUString(), 1, Any() );
 
     if( m_row < 0 || m_row >= m_rowCount )
@@ -473,7 +473,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Se
     if( ! escapedString )
     {
         throw SQLException(
-            "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
+            u"pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string"_ustr,
             *this, OUString(), 1, Any() );
     }
 //     buf.append( (const char *)escapedString, len -1 );

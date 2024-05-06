@@ -120,7 +120,7 @@ namespace dbtools
                 _rData.m_xColumnUpdate.set( _rxColumn, UNO_QUERY );
 
                 // determine the field type, and whether it's a numeric field
-                OSL_VERIFY( _rxColumn->getPropertyValue("Type") >>= _rData.m_nFieldType );
+                OSL_VERIFY( _rxColumn->getPropertyValue(u"Type"_ustr) >>= _rData.m_nFieldType );
 
                 switch ( _rData.m_nFieldType )
                 {
@@ -165,7 +165,7 @@ namespace dbtools
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_SET_THROW );
-                OSL_VERIFY( xFormatSettings->getPropertyValue("NullDate") >>= _rData.m_aNullDate );
+                OSL_VERIFY( xFormatSettings->getPropertyValue(u"NullDate"_ustr) >>= _rData.m_aNullDate );
 
                 // remember the formatter
                 _rData.m_xFormatter = i_rNumberFormatter;

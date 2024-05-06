@@ -115,7 +115,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
     uno::Any aLoaderException;
     try
     {
-        xComponent = xDesktop->loadComponentFromURL(m_aFileName, "_blank", 0, aArgs);
+        xComponent = xDesktop->loadComponentFromURL(m_aFileName, u"_blank"_ustr, 0, aArgs);
     }
     catch (const uno::Exception&)
     {
@@ -177,8 +177,8 @@ void OWriterConnection::disposing()
 
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(OWriterConnection, "com.sun.star.sdbc.drivers.writer.Connection",
-                       "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OWriterConnection, u"com.sun.star.sdbc.drivers.writer.Connection"_ustr,
+                       u"com.sun.star.sdbc.Connection"_ustr)
 
 uno::Reference<sdbc::XDatabaseMetaData> SAL_CALL OWriterConnection::getMetaData()
 {
@@ -236,7 +236,7 @@ uno::Reference<sdbc::XPreparedStatement>
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedSQLException("XConnection::prepareCall", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException(u"XConnection::prepareCall"_ustr, *this);
 }
 
 } // namespace

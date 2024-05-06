@@ -47,7 +47,7 @@ ODbaseConnection::~ODbaseConnection()
 
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(ODbaseConnection, "com.sun.star.sdbc.drivers.dbase.Connection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(ODbaseConnection, u"com.sun.star.sdbc.drivers.dbase.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  )
@@ -102,7 +102,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

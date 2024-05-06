@@ -147,11 +147,11 @@ Reference<XResultSet> SAL_CALL OStatement::executeQuery(const OUString& sql)
     assert(isRS == m_xResultSet.is());
     if (!isRS)
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
-            "executeQuery called on SQL command that does not return a ResultSet", "02000", 0,
+            u"executeQuery called on SQL command that does not return a ResultSet"_ustr, "02000", 0,
             *this);
     if (!m_xResultSet.is())
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
-            "internal MySQL-SDBC error: executeQuery: no ResultSet after execute() returned true.",
+            u"internal MySQL-SDBC error: executeQuery: no ResultSet after execute() returned true."_ustr,
             "02000", 0, *this);
 
     return m_xResultSet;
@@ -236,8 +236,8 @@ bool OStatement::getResult()
     else
     {
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
-            "mysql_store_result indicated success and SQL command was supposed to return a "
-            "ResultSet, but did not.",
+            u"mysql_store_result indicated success and SQL command was supposed to return a "
+            "ResultSet, but did not."_ustr,
             "02000", 0, *this);
     }
     //unreachable
@@ -296,17 +296,18 @@ void SAL_CALL OCommonStatement::clearWarnings()
     // this properties are define by the service statement
     // they must in alphabetic order
     return new ::cppu::OPropertyArrayHelper{
-        { { "CursorName", PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0 },
-          { "EscapeProcessing", PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0 },
-          { "FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "MaxFieldSize", PROPERTY_ID_MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "MaxRows", PROPERTY_ID_MAXROWS, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "QueryTimeOut", PROPERTY_ID_QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "ResultSetConcurrency", PROPERTY_ID_RESULTSETCONCURRENCY,
+        { { u"CursorName"_ustr, PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0 },
+          { u"EscapeProcessing"_ustr, PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0 },
+          { u"FetchDirection"_ustr, PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(),
+            0 },
+          { u"FetchSize"_ustr, PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"MaxFieldSize"_ustr, PROPERTY_ID_MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"MaxRows"_ustr, PROPERTY_ID_MAXROWS, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"QueryTimeOut"_ustr, PROPERTY_ID_QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"ResultSetConcurrency"_ustr, PROPERTY_ID_RESULTSETCONCURRENCY,
             cppu::UnoType<sal_Int32>::get(), 0 },
-          { "ResultSetType", PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "UseBookmarks", PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0 } }
+          { u"ResultSetType"_ustr, PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"UseBookmarks"_ustr, PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0 } }
     };
 }
 
@@ -360,11 +361,11 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
     }
 }
 
-OUString OStatement::getImplementationName() { return "com.sun.star.sdbcx.OStatement"; }
+OUString OStatement::getImplementationName() { return u"com.sun.star.sdbcx.OStatement"_ustr; }
 
 css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.Statement" };
+    return { u"com.sun.star.sdbc.Statement"_ustr };
 }
 
 sal_Bool OStatement::supportsService(OUString const& ServiceName)

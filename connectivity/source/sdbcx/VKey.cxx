@@ -38,13 +38,13 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OKey::getImplementationName(  )
 {
     if(isNew())
-        return "com.sun.star.sdbcx.VKeyDescriptor";
-    return "com.sun.star.sdbcx.VKey";
+        return u"com.sun.star.sdbcx.VKeyDescriptor"_ustr;
+    return u"com.sun.star.sdbcx.VKey"_ustr;
 }
 
 css::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
 {
-    return { isNew()?OUString("com.sun.star.sdbcx.KeyDescriptor"):OUString("com.sun.star.sdbcx.Key") };
+    return { isNew()?u"com.sun.star.sdbcx.KeyDescriptor"_ustr:u"com.sun.star.sdbcx.Key"_ustr };
 }
 
 sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName )

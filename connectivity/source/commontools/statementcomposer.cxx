@@ -145,12 +145,12 @@ namespace dbtools
 
                         //  a native query ?
                         bool bQueryEscapeProcessing = false;
-                        xQuery->getPropertyValue("EscapeProcessing") >>= bQueryEscapeProcessing;
+                        xQuery->getPropertyValue(u"EscapeProcessing"_ustr) >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
 
                         // the command used by the query
-                        xQuery->getPropertyValue("Command") >>= sStatement;
+                        xQuery->getPropertyValue(u"Command"_ustr) >>= sStatement;
                         if ( sStatement.isEmpty() )
                             break;
 
@@ -158,7 +158,7 @@ namespace dbtools
                         Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
                         xComposer.set(
-                            xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
+                            xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
                             UNO_QUERY_THROW
                         );
 
@@ -185,9 +185,9 @@ namespace dbtools
                         if ( bApplyFilter )
                         {
                             OUString sFilter;
-                            OSL_VERIFY( xQuery->getPropertyValue("Filter") >>= sFilter );
+                            OSL_VERIFY( xQuery->getPropertyValue(u"Filter"_ustr) >>= sFilter );
                             xComposer->setFilter( sFilter );
-                            OSL_VERIFY( xQuery->getPropertyValue("HavingClause") >>= sFilter );
+                            OSL_VERIFY( xQuery->getPropertyValue(u"HavingClause"_ustr) >>= sFilter );
                             xComposer->setHavingClause( sFilter );
                         }
 
@@ -205,7 +205,7 @@ namespace dbtools
                 {
                     // create a composer
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
-                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
+                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
                         UNO_QUERY_THROW );
                     xComposer->setElementaryQuery( sStatement );
 

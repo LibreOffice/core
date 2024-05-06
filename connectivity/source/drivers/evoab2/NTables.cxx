@@ -33,9 +33,9 @@ using namespace ::com::sun::star::sdbc;
 
 ObjectType OEvoabTables::createObject(const OUString& aName)
 {
-    Sequence< OUString > aTypes { "TABLE" };
+    Sequence< OUString > aTypes { u"TABLE"_ustr };
 
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),"%",aName,aTypes);
+    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),u"%"_ustr,aName,aTypes);
 
     ObjectType xRet;
     if(xResult.is())
@@ -49,8 +49,8 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
-                    "",
-                    "");
+                    u""_ustr,
+                    u""_ustr);
         }
     }
 

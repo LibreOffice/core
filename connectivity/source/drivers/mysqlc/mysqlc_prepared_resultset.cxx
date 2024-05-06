@@ -163,12 +163,12 @@ bool OPreparedResultSet::fetchResult()
 
 OUString SAL_CALL OPreparedResultSet::getImplementationName()
 {
-    return "com.sun.star.sdbcx.mysqlc.ResultSet";
+    return u"com.sun.star.sdbcx.mysqlc.ResultSet"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL OPreparedResultSet::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::supportsService(const OUString& _rServiceName)
@@ -233,8 +233,8 @@ sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const OUString& columnName)
             return i + 1; // sdbc indexes from 1
     }
 
-    throw SQLException("The column name '" + columnName + "' is not valid.", *this, "42S22", 0,
-                       Any());
+    throw SQLException("The column name '" + columnName + "' is not valid.", *this, u"42S22"_ustr,
+                       0, Any());
 }
 
 template <typename T> T OPreparedResultSet::safelyRetrieveValue(sal_Int32 nColumnIndex)
@@ -388,13 +388,13 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_TINY_BLOB:
         case MYSQL_TYPE_MEDIUM_BLOB:
         case MYSQL_TYPE_LONG_BLOB:
-            throw SQLException("Column with type BLOB cannot be converted", *this, "22000", 1,
-                               Any());
+            throw SQLException(u"Column with type BLOB cannot be converted"_ustr, *this,
+                               u"22000"_ustr, 1, Any());
         default:
             SAL_WARN("connectivity.mysqlc", "OPreparedResultSet::getRowSetValue: unknown type: "
                                                 << m_aFields[nColumnIndex - 1].type);
-            throw SQLException("Unknown column type when fetching result", *this, "22000", 1,
-                               Any());
+            throw SQLException(u"Unknown column type when fetching result"_ustr, *this,
+                               u"22000"_ustr, 1, Any());
     }
 }
 
@@ -1028,13 +1028,14 @@ uno::Sequence<sal_Int32>
 IPropertyArrayHelper* OPreparedResultSet::createArrayHelper() const
 {
     return new OPropertyArrayHelper{
-        { { "FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "IsBookmarkable", PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(),
+        { { u"FetchDirection"_ustr, PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(),
+            0 },
+          { u"FetchSize"_ustr, PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"IsBookmarkable"_ustr, PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(),
             PropertyAttribute::READONLY },
-          { "ResultSetConcurrency", PROPERTY_ID_RESULTSETCONCURRENCY,
+          { u"ResultSetConcurrency"_ustr, PROPERTY_ID_RESULTSETCONCURRENCY,
             cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY },
-          { "ResultSetType", PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(),
+          { u"ResultSetType"_ustr, PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(),
             PropertyAttribute::READONLY } }
     };
 }
@@ -1115,11 +1116,11 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OPreparedResultSet::g
 void OPreparedResultSet::checkColumnIndex(sal_Int32 index)
 {
     if (!m_aData)
-        throw SQLException("Cursor out of range", *this, "HY109", 1, Any());
+        throw SQLException(u"Cursor out of range"_ustr, *this, u"HY109"_ustr, 1, Any());
     if (index < 1 || index > static_cast<int>(m_nColumnCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
-        throw SQLException("index out of range", *this, "42S22", 1, Any());
+        throw SQLException(u"index out of range"_ustr, *this, u"42S22"_ustr, 1, Any());
     }
 }
 

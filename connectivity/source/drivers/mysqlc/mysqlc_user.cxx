@@ -112,7 +112,7 @@ void User::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 o
             css::uno::Any aCatalog;
             if (!sCatalog.isEmpty())
                 aCatalog <<= sCatalog;
-            xRes = xMeta->getColumnPrivileges(aCatalog, sSchema, sTable, "%");
+            xRes = xMeta->getColumnPrivileges(aCatalog, sSchema, sTable, u"%"_ustr);
         }
         break;
     }

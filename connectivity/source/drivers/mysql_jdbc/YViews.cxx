@@ -80,7 +80,7 @@ void OViews::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
     if (bIsNew)
         return;
 
-    OUString aSql("DROP VIEW");
+    OUString aSql(u"DROP VIEW"_ustr);
 
     Reference<XPropertySet> xProp(xObject, UNO_QUERY);
     aSql += ::dbtools::composeTableName(m_xMetaData, xProp,
@@ -103,7 +103,7 @@ void OViews::createView(const Reference<XPropertySet>& descriptor)
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
-    OUString aSql("CREATE VIEW ");
+    OUString aSql(u"CREATE VIEW "_ustr);
     OUString sCommand;
 
     aSql += ::dbtools::composeTableName(m_xMetaData, descriptor,

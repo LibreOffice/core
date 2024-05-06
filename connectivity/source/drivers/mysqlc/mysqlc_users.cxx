@@ -48,14 +48,14 @@ uno::Reference<XPropertySet> Users::createDescriptor()
     // There is some internal magic so that the same class can be used as either
     // a descriptor or as a normal user. See VUser.cxx for the details. In our
     // case we just need to ensure we use the correct constructor.
-    return new OUserExtend(m_xMetaData->getConnection(), "");
+    return new OUserExtend(m_xMetaData->getConnection(), u""_ustr);
 }
 
 //----- XAppend ---------------------------------------------------------------
 ObjectType Users::appendObject(const OUString& rName,
                                const uno::Reference<XPropertySet>& descriptor)
 {
-    OUString aSql("GRANT USAGE ON * TO ");
+    OUString aSql(u"GRANT USAGE ON * TO "_ustr);
     OUString aQuote = m_xMetaData->getIdentifierQuoteString();
     aSql += ::dbtools::quoteName(aQuote, rName) + " @\"%\" ";
     OUString sPassword;

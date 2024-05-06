@@ -114,7 +114,7 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_In
                 Any aCatalog;
                 if ( !sCatalog.isEmpty() )
                     aCatalog <<= sCatalog;
-                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,"%");
+                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,u"%"_ustr);
             }
             break;
     }
@@ -267,7 +267,7 @@ void SAL_CALL OHSQLUser::changePassword( const OUString& /*oldPassword*/, const 
 
     if( m_Name != xMeta->getUserName() )
     {
-        ::dbtools::throwGenericSQLException("HSQLDB can only change password of the current user.", *this);
+        ::dbtools::throwGenericSQLException(u"HSQLDB can only change password of the current user."_ustr, *this);
     }
 
     OUString sAlterPwd = "SET PASSWORD " +

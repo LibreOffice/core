@@ -179,12 +179,12 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
 }
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getCharacterStream"_ustr, *this );
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
@@ -336,29 +336,29 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getArray"_ustr, *this );
 }
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getClob"_ustr, *this );
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBlob"_ustr, *this );
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getRef"_ustr, *this );
 }
 
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getObject"_ustr, *this );
 }
 
 

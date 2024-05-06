@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-IMPLEMENT_SERVICE_INFO(OUser,"com.sun.star.sdbcx.VUser","com.sun.star.sdbcx.User");
+IMPLEMENT_SERVICE_INFO(OUser,u"com.sun.star.sdbcx.VUser"_ustr,u"com.sun.star.sdbcx.User"_ustr);
 
 OUser::OUser(bool _bCase)  : OUser_BASE(m_aMutex)
                 , ODescriptor(OUser_BASE::rBHelper,_bCase,true)
@@ -86,7 +86,7 @@ void SAL_CALL OUser::changePassword( const OUString& /*objPassword*/, const OUSt
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XUser::changePassword", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XUser::changePassword"_ustr, *this );
 }
 
 // XGroupsSupplier
@@ -117,28 +117,28 @@ sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::changePassword", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::changePassword"_ustr, *this );
 }
 
 sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::getGrantablePrivileges", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::getGrantablePrivileges"_ustr, *this );
 }
 
 void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::grantPrivileges", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::grantPrivileges"_ustr, *this );
 }
 
 void SAL_CALL OUser::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::revokePrivileges", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OUser::getPropertySetInfo(  )

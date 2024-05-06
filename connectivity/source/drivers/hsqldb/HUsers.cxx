@@ -83,7 +83,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
 // XDrop
 void OUsers::dropObject(sal_Int32 /*nPos*/,const OUString& _sElementName)
 {
-    OUString aSql(  "REVOKE ALL ON * FROM " );
+    OUString aSql(  u"REVOKE ALL ON * FROM "_ustr );
     OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     aSql += ::dbtools::quoteName(aQuote,_sElementName);
 

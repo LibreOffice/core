@@ -95,7 +95,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
         Reference< XRow > xRow(xRet,UNO_QUERY);
         ::comphelper::SequenceAsHashMap aMap(m_aConnectionInfo);
         Sequence< Any > aTypeInfoSettings;
-        aTypeInfoSettings = aMap.getUnpackedValueOrDefault("TypeInfoSettings",aTypeInfoSettings);
+        aTypeInfoSettings = aMap.getUnpackedValueOrDefault(u"TypeInfoSettings"_ustr,aTypeInfoSettings);
 
         if ( xRow.is() )
         {

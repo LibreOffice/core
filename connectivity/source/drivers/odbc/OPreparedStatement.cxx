@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OPreparedStatement,u"com.sun.star.sdbcx.OPreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
 namespace
 {
@@ -544,13 +544,13 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setArray"_ustr, *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setRef"_ustr, *this );
 }
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale )
@@ -645,7 +645,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
 
 void SAL_CALL OPreparedStatement::clearBatch(  )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::clearBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XPreparedBatchExecution::clearBatch"_ustr, *this );
     //  clearParameters(  );
     //  m_aBatchVector.erase();
 }
@@ -653,12 +653,12 @@ void SAL_CALL OPreparedStatement::clearBatch(  )
 
 void SAL_CALL OPreparedStatement::addBatch( )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::addBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XPreparedBatchExecution::addBatch"_ustr, *this );
 }
 
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::executeBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XPreparedBatchExecution::executeBatch"_ustr, *this );
 }
 
 // methods

@@ -127,7 +127,7 @@ namespace dbtools
                 {
                     Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY_THROW );
                     Reference< XPropertySet > xDataSourceSettings(
-                        xDataSource->getPropertyValue("Settings"),
+                        xDataSource->getPropertyValue(u"Settings"_ustr),
                         UNO_QUERY_THROW );
 
                     _out_setting = xDataSourceSettings->getPropertyValue( _asciiName );
@@ -240,7 +240,7 @@ namespace dbtools
         try
         {
             Any setting;
-            if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
+            if  (   !( lcl_getConnectionSetting( u"PrimaryKeySupport"_ustr, *m_pImpl, setting ) )
                 ||  !( setting >>= bDoesSupportPrimaryKeys )
                 )
                 bDoesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar()
@@ -272,7 +272,7 @@ namespace dbtools
 
         bool restrict( false );
         Any setting;
-        if ( lcl_getConnectionSetting( "EnableSQL92Check", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"EnableSQL92Check"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= restrict) )
                 SAL_WARN("connectivity.commontools", "restrictIdentifiersToSQL92: unable to assign EnableSQL92Check");
         return restrict;
@@ -283,7 +283,7 @@ namespace dbtools
     {
         bool doGenerate( false );
         Any setting;
-        if ( lcl_getConnectionSetting( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"GenerateASBeforeCorrelationName"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= doGenerate) )
                 SAL_WARN("connectivity.commontools", "generateASBeforeCorrelationName: unable to assign GenerateASBeforeCorrelationName");
         return doGenerate;
@@ -293,7 +293,7 @@ namespace dbtools
     {
         bool doGenerate( true );
         Any setting;
-        if ( lcl_getConnectionSetting( "EscapeDateTime", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"EscapeDateTime"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= doGenerate) )
                 SAL_WARN("connectivity.commontools", "shouldEscapeDateTime: unable to assign EscapeDateTime");
         return doGenerate;
@@ -303,7 +303,7 @@ namespace dbtools
     {
         bool doSubstitute( true );
         Any setting;
-        if ( lcl_getConnectionSetting( "ParameterNameSubstitution", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"ParameterNameSubstitution"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= doSubstitute) )
                 SAL_WARN("connectivity.commontools", "shouldSubstituteParameterNames: unable to assign ParameterNameSubstitution");
         return doSubstitute;
@@ -313,7 +313,7 @@ namespace dbtools
     {
         bool is( true );
         Any setting;
-        if ( lcl_getDriverSetting( "AutoIncrementIsPrimaryKey", *m_pImpl, setting ) )
+        if ( lcl_getDriverSetting( u"AutoIncrementIsPrimaryKey"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= is) )
                 SAL_WARN("connectivity.commontools", "isAutoIncrementPrimaryKey: unable to assign AutoIncrementIsPrimaryKey");
         return is;
@@ -323,7 +323,7 @@ namespace dbtools
     {
         sal_Int32 mode( BooleanComparisonMode::EQUAL_INTEGER );
         Any setting;
-        if ( lcl_getConnectionSetting( "BooleanComparisonMode", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"BooleanComparisonMode"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= mode) )
                 SAL_WARN("connectivity.commontools", "getBooleanComparisonMode: unable to assign BooleanComparisonMode");
         return mode;
@@ -361,7 +361,7 @@ namespace dbtools
     {
         bool doGenerate( true );
         Any setting;
-        if ( lcl_getConnectionSetting( "ColumnAliasInOrderBy", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( u"ColumnAliasInOrderBy"_ustr, *m_pImpl, setting ) )
             if( ! (setting >>= doGenerate) )
                 SAL_WARN("connectivity.commontools", "supportsColumnAliasInOrderBy: unable to assign ColumnAliasInOrderBy");
         return doGenerate;

@@ -833,7 +833,7 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 }
 
 
-IMPLEMENT_SERVICE_INFO(java_sql_Statement,"com.sun.star.sdbcx.JStatement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(java_sql_Statement,u"com.sun.star.sdbcx.JStatement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
 void SAL_CALL java_sql_Statement_Base::acquire() noexcept
 {

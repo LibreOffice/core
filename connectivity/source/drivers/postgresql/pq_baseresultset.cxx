@@ -74,25 +74,25 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
     static ::cppu::OPropertyArrayHelper arrayHelper(
         Sequence<Property>{
             Property(
-                "CursorName", 0,
+                u"CursorName"_ustr, 0,
                 ::cppu::UnoType<OUString>::get() , 0 ),
             Property(
-                "EscapeProcessing", 1,
+                u"EscapeProcessing"_ustr, 1,
                 cppu::UnoType<bool>::get() , 0 ),
             Property(
-                "FetchDirection", 2,
+                u"FetchDirection"_ustr, 2,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "FetchSize", 3,
+                u"FetchSize"_ustr, 3,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "IsBookmarkable", 4,
+                u"IsBookmarkable"_ustr, 4,
                 cppu::UnoType<bool>::get() , 0 ),
             Property(
-                "ResultSetConcurrency", 5,
+                u"ResultSetConcurrency"_ustr, 5,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "ResultSetType", 6,
+                u"ResultSetType"_ustr, 6,
                 ::cppu::UnoType<sal_Int32>::get() , 0 )},
         true );
     return arrayHelper;

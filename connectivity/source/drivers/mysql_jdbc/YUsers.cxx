@@ -55,7 +55,7 @@ Reference<XPropertySet> OUsers::createDescriptor() { return new OUserExtend(m_xC
 sdbcx::ObjectType OUsers::appendObject(const OUString& _rForName,
                                        const Reference<XPropertySet>& descriptor)
 {
-    OUString aSql("GRANT USAGE ON * TO ");
+    OUString aSql(u"GRANT USAGE ON * TO "_ustr);
     OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
     aSql += ::dbtools::quoteName(aQuote, _rForName) + " @\"%\" ";
     OUString sPassword;
@@ -77,7 +77,7 @@ sdbcx::ObjectType OUsers::appendObject(const OUString& _rForName,
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/, const OUString& _sElementName)
 {
-    OUString aSql("DROP USER ");
+    OUString aSql(u"DROP USER "_ustr);
     OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
     aSql += ::dbtools::quoteName(aQuote, _sElementName);
 

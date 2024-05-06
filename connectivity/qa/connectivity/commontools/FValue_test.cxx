@@ -320,37 +320,37 @@ void FValueTest::test_bool_creation()
     ORowSetValue vFalse(false);
 
     {
-        ORowSetValue v(OUString("1"));
+        ORowSetValue v(u"1"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
-        ORowSetValue v(OUString("0"));
+        ORowSetValue v(u"0"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }
 
     {
-        ORowSetValue v(OUString("true"));
+        ORowSetValue v(u"true"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
-        ORowSetValue v(OUString("tRuE"));
+        ORowSetValue v(u"tRuE"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
-        ORowSetValue v(OUString("false"));
+        ORowSetValue v(u"false"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }
 
     {
-        ORowSetValue v(OUString("0"));
+        ORowSetValue v(u"0"_ustr);
         v.setTypeKind(DataType::BOOLEAN);
         CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }

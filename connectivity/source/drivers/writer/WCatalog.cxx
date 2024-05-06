@@ -41,7 +41,8 @@ void OWriterCatalog::refreshTables()
     ::std::vector<OUString> aVector;
     uno::Sequence<OUString> aTypes;
     OWriterConnection::ODocHolder aDocHolder(static_cast<OWriterConnection*>(m_pConnection));
-    uno::Reference<sdbc::XResultSet> xResult = m_xMetaData->getTables(uno::Any(), "%", "%", aTypes);
+    uno::Reference<sdbc::XResultSet> xResult
+        = m_xMetaData->getTables(uno::Any(), u"%"_ustr, u"%"_ustr, aTypes);
 
     if (xResult.is())
     {

@@ -91,31 +91,31 @@ static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
     static ::cppu::OPropertyArrayHelper arrayHelper(
         Sequence<Property>{
             Property(
-                "CursorName", 0,
+                u"CursorName"_ustr, 0,
                 ::cppu::UnoType<OUString>::get() , 0 ),
             Property(
-                "EscapeProcessing", 1,
+                u"EscapeProcessing"_ustr, 1,
                 cppu::UnoType<bool>::get() , 0 ),
             Property(
-                "FetchDirection", 2,
+                u"FetchDirection"_ustr, 2,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "FetchSize", 3,
+                u"FetchSize"_ustr, 3,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "MaxFieldSize", 4,
+                u"MaxFieldSize"_ustr, 4,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "MaxRows", 5,
+                u"MaxRows"_ustr, 5,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "QueryTimeOut", 6,
+                u"QueryTimeOut"_ustr, 6,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "ResultSetConcurrency", 7,
+                u"ResultSetConcurrency"_ustr, 7,
                 ::cppu::UnoType<sal_Int32>::get() , 0 ),
             Property(
-                "ResultSetType", 8,
+                u"ResultSetType"_ustr, 8,
                 ::cppu::UnoType<sal_Int32>::get() , 0 )},
         true );
     static ::cppu::IPropertyArrayHelper *pArrayHelper = &arrayHelper;
@@ -214,7 +214,7 @@ void PreparedStatement::checkClosed()
 {
     if( ! m_pSettings || ! m_pSettings->pConnection )
         throw SQLException(
-            "pq_driver: PreparedStatement or connection has already been closed !",
+            u"pq_driver: PreparedStatement or connection has already been closed !"_ustr,
             *this, OUString(),1,Any());
 }
 
@@ -486,7 +486,7 @@ void PreparedStatement::setBytes(
     if( ! escapedString )
     {
         throw SQLException(
-            "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
+            u"pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string"_ustr,
             *this, OUString(), 1, Any() );
     }
     m_vars[parameterIndex-1]
@@ -516,7 +516,7 @@ void PreparedStatement::setBinaryStream(
     sal_Int32 )
 {
     throw SQLException(
-        "pq_preparedstatement: setBinaryStream not implemented",
+        u"pq_preparedstatement: setBinaryStream not implemented"_ustr,
         *this, OUString(), 1, Any () );
 }
 
@@ -526,7 +526,7 @@ void PreparedStatement::setCharacterStream(
     sal_Int32 )
 {
     throw SQLException(
-        "pq_preparedstatement: setCharacterStream not implemented",
+        u"pq_preparedstatement: setCharacterStream not implemented"_ustr,
         *this, OUString(), 1, Any () );
 }
 
@@ -581,7 +581,7 @@ void PreparedStatement::setRef(
     const Reference< XRef >& )
 {
     throw SQLException(
-        "pq_preparedstatement: setRef not implemented",
+        u"pq_preparedstatement: setRef not implemented"_ustr,
         *this, OUString(), 1, Any () );
 }
 
@@ -590,7 +590,7 @@ void PreparedStatement::setBlob(
     const Reference< XBlob >& )
 {
     throw SQLException(
-        "pq_preparedstatement: setBlob not implemented",
+        u"pq_preparedstatement: setBlob not implemented"_ustr,
         *this, OUString(), 1, Any () );
 }
 
@@ -599,7 +599,7 @@ void PreparedStatement::setClob(
     const Reference< XClob >& )
 {
     throw SQLException(
-        "pq_preparedstatement: setClob not implemented",
+        u"pq_preparedstatement: setClob not implemented"_ustr,
         *this, OUString(), 1, Any () );
 }
 

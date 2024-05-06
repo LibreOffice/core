@@ -170,18 +170,18 @@ namespace
 
             // one argument for creating the node access: the path to the configuration node
             Sequence< Any > aCreationArgs{ Any(NamedValue(
-                "nodepath", Any( OUString("org.openoffice.Office.DataAccess/DriverManager") ) )) };
+                u"nodepath"_ustr, Any( u"org.openoffice.Office.DataAccess/DriverManager"_ustr ) )) };
 
             // create the node access
             Reference< XNameAccess > xDriverManagerNode(
-                xConfigurationProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aCreationArgs),
+                xConfigurationProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess"_ustr, aCreationArgs),
                 UNO_QUERY);
 
             OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
             if (xDriverManagerNode.is())
             {
                 // obtain the preference list
-                Any aPreferences = xDriverManagerNode->getByName("DriverPrecedence");
+                Any aPreferences = xDriverManagerNode->getByName(u"DriverPrecedence"_ustr);
                 bool bSuccess = aPreferences >>= _rPrecedence;
                 OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
             }
@@ -492,7 +492,7 @@ sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  )
 
 OUString SAL_CALL OSDBCDriverManager::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.OSDBCDriverManager";
+    return u"com.sun.star.comp.sdbc.OSDBCDriverManager"_ustr;
 }
 
 sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName )
@@ -503,7 +503,7 @@ sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rService
 
 Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.DriverManager" };
+    return { u"com.sun.star.sdbc.DriverManager"_ustr };
 }
 
 

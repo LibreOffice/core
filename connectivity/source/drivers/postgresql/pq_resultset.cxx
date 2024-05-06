@@ -64,13 +64,13 @@ void ResultSet::checkClosed()
 {
     if( ! m_result )
     {
-        throw SQLException( "pq_resultset: already closed",
+        throw SQLException( u"pq_resultset: already closed"_ustr,
                             *this,  OUString(), 1, Any() );
     }
 
     if( ! m_ppSettings || ! *m_ppSettings || ! (*m_ppSettings)->pConnection )
     {
-        throw SQLException( "pq_resultset: statement has been closed already",
+        throw SQLException( u"pq_resultset: statement has been closed already"_ustr,
                             *this, OUString(), 1, Any() );
     }
 

@@ -550,7 +550,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )
     {
-        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, "%",_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, u"%"_ustr,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
         if ( !xProp.is() )
             xProp = new connectivity::sdbcx::OColumn(_rName,
                                                 OUString(),OUString(),OUString(),
@@ -587,7 +587,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
         if ( xDataSourceProperties.is() )
         {
             Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue("Settings"),
+                xDataSourceProperties->getPropertyValue(u"Settings"_ustr),
                 UNO_QUERY_THROW
             );
             OSL_VERIFY( xSettings->getPropertyValue( rSettingName ) >>= bValue );
@@ -611,7 +611,7 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
             return false;
 
         const Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue("Settings"),
+                xDataSourceProperties->getPropertyValue(u"Settings"_ustr),
                 UNO_QUERY_THROW
             );
 
@@ -641,7 +641,7 @@ bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUSt
         if ( xProp.is() )
         {
             Sequence< PropertyValue > aInfo;
-            xProp->getPropertyValue("Info") >>= aInfo;
+            xProp->getPropertyValue(u"Info"_ustr) >>= aInfo;
             const PropertyValue* pValue =std::find_if(std::cbegin(aInfo),
                                                 std::cend(aInfo),
                                                 [&_sProperty](const PropertyValue& lhs)
@@ -745,7 +745,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         // Some drivers put a table privilege as soon as any column has the privilege,
         // some drivers only if all columns have the privilege.
         // To unify the situation, collect column privileges here, too.
-        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, "%");
+        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, u"%"_ustr);
         Reference< XRow > xColumnCurrentRow(xColumnPrivileges, UNO_QUERY);
         if ( xColumnCurrentRow.is() )
         {
@@ -904,7 +904,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
         throw SQLException(
             sMessage,
             nullptr,
-            "22018",
+            u"22018"_ustr,
             22018,
             Any()
         );
@@ -930,7 +930,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
         throw SQLException(
             sMessage,
             nullptr,
-            "22001",
+            u"22001"_ustr,
             22001,
             Any()
         );
@@ -942,7 +942,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
 {
     ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-        _rxORB, "org.openoffice.Office.DataAccess/ReportEngines", -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        _rxORB, u"org.openoffice.Office.DataAccess/ReportEngines"_ustr, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
 
     if ( aReportEngines.isValid() )
     {
@@ -963,17 +963,17 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
             }
         }
         else
-            return "org.libreoffice.report.pentaho.SOReportJobFactory";
+            return u"org.libreoffice.report.pentaho.SOReportJobFactory"_ustr;
     }
     else
-        return "org.libreoffice.report.pentaho.SOReportJobFactory";
+        return u"org.libreoffice.report.pentaho.SOReportJobFactory"_ustr;
     return OUString();
 }
 
 bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, const Reference< XPropertySet > &_xField)
 {
     OUString sName;
-    _xField->getPropertyValue("Name") >>= sName;
+    _xField->getPropertyValue(u"Name"_ustr) >>= sName;
     Reference< XColumnsSupplier > xColumnsSupplier(_xParser, UNO_QUERY);
     Reference< css::container::XNameAccess >  xCols;
     if (xColumnsSupplier.is())

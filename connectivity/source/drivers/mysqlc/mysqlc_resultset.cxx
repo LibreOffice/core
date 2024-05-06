@@ -73,7 +73,7 @@ void OResultSet::checkRowIndex()
 {
     if (m_nRowPosition < 0 || m_nRowPosition >= m_nRowCount)
     {
-        throw SQLException("Cursor position out of range", *this, OUString(), 1, Any());
+        throw SQLException(u"Cursor position out of range"_ustr, *this, OUString(), 1, Any());
     }
 }
 
@@ -90,12 +90,12 @@ bool OResultSet::checkNull(sal_Int32 column)
 
 OUString SAL_CALL OResultSet::getImplementationName()
 {
-    return "com.sun.star.sdbcx.mysqlc.ResultSet";
+    return u"com.sun.star.sdbcx.mysqlc.ResultSet"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL OResultSet::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
@@ -217,8 +217,8 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
             return static_cast<sal_Int32>(i) + 1; // sdbc indexes from 1
     }
 
-    throw SQLException("The column name '" + columnName + "' is not valid.", *this, "42S22", 0,
-                       Any());
+    throw SQLException("The column name '" + columnName + "' is not valid.", *this, u"42S22"_ustr,
+                       0, Any());
 }
 
 uno::Reference<XInputStream> SAL_CALL OResultSet::getBinaryStream(sal_Int32 column)
@@ -515,7 +515,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     auto timeParts = lcl_split(dateAndTime.at(1), ':');
 
     if (dateParts.size() < 2 || timeParts.size() < 2)
-        throw SQLException("Timestamp has a wrong format", *this, OUString(), 1, Any());
+        throw SQLException(u"Timestamp has a wrong format"_ustr, *this, OUString(), 1, Any());
 
     DateTime dt;
 
@@ -1010,13 +1010,14 @@ uno::Sequence<sal_Int32> SAL_CALL OResultSet::deleteRows(const uno::Sequence<Any
 IPropertyArrayHelper* OResultSet::createArrayHelper() const
 {
     return new OPropertyArrayHelper{
-        { { "FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
-          { "IsBookmarkable", PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(),
+        { { u"FetchDirection"_ustr, PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(),
+            0 },
+          { u"FetchSize"_ustr, PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0 },
+          { u"IsBookmarkable"_ustr, PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(),
             PropertyAttribute::READONLY },
-          { "ResultSetConcurrency", PROPERTY_ID_RESULTSETCONCURRENCY,
+          { u"ResultSetConcurrency"_ustr, PROPERTY_ID_RESULTSETCONCURRENCY,
             cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY },
-          { "ResultSetType", PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(),
+          { u"ResultSetType"_ustr, PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(),
             PropertyAttribute::READONLY } }
     };
 }
@@ -1097,7 +1098,7 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
     if (index < 1 || o3tl::make_unsigned(index) > m_aFields.size())
     {
         /* static object for efficiency or thread safety is a problem ? */
-        throw SQLException("index out of range", *this, OUString(), 1, Any());
+        throw SQLException(u"index out of range"_ustr, *this, OUString(), 1, Any());
     }
 }
 

@@ -226,7 +226,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementNam
             aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
 
-        OUString aSql( "DROP INDEX " );
+        OUString aSql( u"DROP INDEX "_ustr );
 
         OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::EComposeRule::InIndexDefinitions, true );
         OUString sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), OUString(), aSchema, aName, true, ::dbtools::EComposeRule::InIndexDefinitions );

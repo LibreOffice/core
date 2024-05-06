@@ -126,113 +126,113 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 bool LoadFunctions(oslModule pODBCso)
 {
 
-    if( ( pODBC3SQLAllocHandle  =   reinterpret_cast<T3SQLAllocHandle>(osl_getFunctionSymbol(pODBCso, OUString("SQLAllocHandle").pData ))) == nullptr )
+    if( ( pODBC3SQLAllocHandle  =   reinterpret_cast<T3SQLAllocHandle>(osl_getFunctionSymbol(pODBCso, u"SQLAllocHandle"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLConnect      =   reinterpret_cast<T3SQLConnect>(osl_getFunctionSymbol(pODBCso, OUString("SQLConnect").pData ))) == nullptr )
+    if( ( pODBC3SQLConnect      =   reinterpret_cast<T3SQLConnect>(osl_getFunctionSymbol(pODBCso, u"SQLConnect"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLDriverConnect =  reinterpret_cast<T3SQLDriverConnect>(osl_getFunctionSymbol(pODBCso, OUString("SQLDriverConnect").pData ))) == nullptr )
+    if( ( pODBC3SQLDriverConnect =  reinterpret_cast<T3SQLDriverConnect>(osl_getFunctionSymbol(pODBCso, u"SQLDriverConnect"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLBrowseConnect =  reinterpret_cast<T3SQLBrowseConnect>(osl_getFunctionSymbol(pODBCso, OUString("SQLBrowseConnect").pData ))) == nullptr )
+    if( ( pODBC3SQLBrowseConnect =  reinterpret_cast<T3SQLBrowseConnect>(osl_getFunctionSymbol(pODBCso, u"SQLBrowseConnect"_ustr.pData ))) == nullptr )
         return false;
-    if(( pODBC3SQLDataSources   =   reinterpret_cast<T3SQLDataSources>(osl_getFunctionSymbol(pODBCso, OUString("SQLDataSources").pData ))) == nullptr )
+    if(( pODBC3SQLDataSources   =   reinterpret_cast<T3SQLDataSources>(osl_getFunctionSymbol(pODBCso, u"SQLDataSources"_ustr.pData ))) == nullptr )
         return false;
-    if(( pODBC3SQLDrivers       =   reinterpret_cast<T3SQLDrivers>(osl_getFunctionSymbol(pODBCso, OUString("SQLDrivers").pData ))) == nullptr )
+    if(( pODBC3SQLDrivers       =   reinterpret_cast<T3SQLDrivers>(osl_getFunctionSymbol(pODBCso, u"SQLDrivers"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetInfo      =   reinterpret_cast<T3SQLGetInfo>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetInfo").pData ))) == nullptr )
+    if( ( pODBC3SQLGetInfo      =   reinterpret_cast<T3SQLGetInfo>(osl_getFunctionSymbol(pODBCso, u"SQLGetInfo"_ustr.pData ))) == nullptr )
         return false;
-    if(( pODBC3SQLGetFunctions  =   reinterpret_cast<T3SQLGetFunctions>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetFunctions").pData ))) == nullptr )
+    if(( pODBC3SQLGetFunctions  =   reinterpret_cast<T3SQLGetFunctions>(osl_getFunctionSymbol(pODBCso, u"SQLGetFunctions"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetTypeInfo  =   reinterpret_cast<T3SQLGetTypeInfo>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetTypeInfo").pData ))) == nullptr )
+    if( ( pODBC3SQLGetTypeInfo  =   reinterpret_cast<T3SQLGetTypeInfo>(osl_getFunctionSymbol(pODBCso, u"SQLGetTypeInfo"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSetConnectAttr = reinterpret_cast<T3SQLSetConnectAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLSetConnectAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLSetConnectAttr = reinterpret_cast<T3SQLSetConnectAttr>(osl_getFunctionSymbol(pODBCso, u"SQLSetConnectAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetConnectAttr = reinterpret_cast<T3SQLGetConnectAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetConnectAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLGetConnectAttr = reinterpret_cast<T3SQLGetConnectAttr>(osl_getFunctionSymbol(pODBCso, u"SQLGetConnectAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSetEnvAttr   =   reinterpret_cast<T3SQLSetEnvAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLSetEnvAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLSetEnvAttr   =   reinterpret_cast<T3SQLSetEnvAttr>(osl_getFunctionSymbol(pODBCso, u"SQLSetEnvAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetEnvAttr   =   reinterpret_cast<T3SQLGetEnvAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetEnvAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLGetEnvAttr   =   reinterpret_cast<T3SQLGetEnvAttr>(osl_getFunctionSymbol(pODBCso, u"SQLGetEnvAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSetStmtAttr  =   reinterpret_cast<T3SQLSetStmtAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLSetStmtAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLSetStmtAttr  =   reinterpret_cast<T3SQLSetStmtAttr>(osl_getFunctionSymbol(pODBCso, u"SQLSetStmtAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetStmtAttr  =   reinterpret_cast<T3SQLGetStmtAttr>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetStmtAttr").pData ))) == nullptr )
+    if( ( pODBC3SQLGetStmtAttr  =   reinterpret_cast<T3SQLGetStmtAttr>(osl_getFunctionSymbol(pODBCso, u"SQLGetStmtAttr"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLPrepare      =   reinterpret_cast<T3SQLPrepare>(osl_getFunctionSymbol(pODBCso, OUString("SQLPrepare").pData ))) == nullptr )
+    if( ( pODBC3SQLPrepare      =   reinterpret_cast<T3SQLPrepare>(osl_getFunctionSymbol(pODBCso, u"SQLPrepare"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLBindParameter =  reinterpret_cast<T3SQLBindParameter>(osl_getFunctionSymbol(pODBCso, OUString("SQLBindParameter").pData ))) == nullptr )
+    if( ( pODBC3SQLBindParameter =  reinterpret_cast<T3SQLBindParameter>(osl_getFunctionSymbol(pODBCso, u"SQLBindParameter"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSetCursorName =  reinterpret_cast<T3SQLSetCursorName>(osl_getFunctionSymbol(pODBCso, OUString("SQLSetCursorName").pData ))) == nullptr )
+    if( ( pODBC3SQLSetCursorName =  reinterpret_cast<T3SQLSetCursorName>(osl_getFunctionSymbol(pODBCso, u"SQLSetCursorName"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLExecute      =   reinterpret_cast<T3SQLExecute>(osl_getFunctionSymbol(pODBCso, OUString("SQLExecute").pData ))) == nullptr )
+    if( ( pODBC3SQLExecute      =   reinterpret_cast<T3SQLExecute>(osl_getFunctionSymbol(pODBCso, u"SQLExecute"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLExecDirect   =   reinterpret_cast<T3SQLExecDirect>(osl_getFunctionSymbol(pODBCso, OUString("SQLExecDirect").pData ))) == nullptr )
+    if( ( pODBC3SQLExecDirect   =   reinterpret_cast<T3SQLExecDirect>(osl_getFunctionSymbol(pODBCso, u"SQLExecDirect"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLDescribeParam =  reinterpret_cast<T3SQLDescribeParam>(osl_getFunctionSymbol(pODBCso, OUString("SQLDescribeParam").pData ))) == nullptr )
+    if( ( pODBC3SQLDescribeParam =  reinterpret_cast<T3SQLDescribeParam>(osl_getFunctionSymbol(pODBCso, u"SQLDescribeParam"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLNumParams    =   reinterpret_cast<T3SQLNumParams>(osl_getFunctionSymbol(pODBCso, OUString("SQLNumParams").pData ))) == nullptr )
+    if( ( pODBC3SQLNumParams    =   reinterpret_cast<T3SQLNumParams>(osl_getFunctionSymbol(pODBCso, u"SQLNumParams"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLParamData    =   reinterpret_cast<T3SQLParamData>(osl_getFunctionSymbol(pODBCso, OUString("SQLParamData").pData ))) == nullptr )
+    if( ( pODBC3SQLParamData    =   reinterpret_cast<T3SQLParamData>(osl_getFunctionSymbol(pODBCso, u"SQLParamData"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLPutData      =   reinterpret_cast<T3SQLPutData>(osl_getFunctionSymbol(pODBCso, OUString("SQLPutData").pData ))) == nullptr )
+    if( ( pODBC3SQLPutData      =   reinterpret_cast<T3SQLPutData>(osl_getFunctionSymbol(pODBCso, u"SQLPutData"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLRowCount     =   reinterpret_cast<T3SQLRowCount>(osl_getFunctionSymbol(pODBCso, OUString("SQLRowCount").pData ))) == nullptr )
+    if( ( pODBC3SQLRowCount     =   reinterpret_cast<T3SQLRowCount>(osl_getFunctionSymbol(pODBCso, u"SQLRowCount"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLNumResultCols =  reinterpret_cast<T3SQLNumResultCols>(osl_getFunctionSymbol(pODBCso, OUString("SQLNumResultCols").pData ))) == nullptr )
+    if( ( pODBC3SQLNumResultCols =  reinterpret_cast<T3SQLNumResultCols>(osl_getFunctionSymbol(pODBCso, u"SQLNumResultCols"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLDescribeCol  =   reinterpret_cast<T3SQLDescribeCol>(osl_getFunctionSymbol(pODBCso, OUString("SQLDescribeCol").pData ))) == nullptr )
+    if( ( pODBC3SQLDescribeCol  =   reinterpret_cast<T3SQLDescribeCol>(osl_getFunctionSymbol(pODBCso, u"SQLDescribeCol"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLColAttribute =   reinterpret_cast<T3SQLColAttribute>(osl_getFunctionSymbol(pODBCso, OUString("SQLColAttribute").pData ))) == nullptr )
+    if( ( pODBC3SQLColAttribute =   reinterpret_cast<T3SQLColAttribute>(osl_getFunctionSymbol(pODBCso, u"SQLColAttribute"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLBindCol      =   reinterpret_cast<T3SQLBindCol>(osl_getFunctionSymbol(pODBCso, OUString("SQLBindCol").pData ))) == nullptr )
+    if( ( pODBC3SQLBindCol      =   reinterpret_cast<T3SQLBindCol>(osl_getFunctionSymbol(pODBCso, u"SQLBindCol"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLFetch        =   reinterpret_cast<T3SQLFetch>(osl_getFunctionSymbol(pODBCso, OUString("SQLFetch").pData ))) == nullptr )
+    if( ( pODBC3SQLFetch        =   reinterpret_cast<T3SQLFetch>(osl_getFunctionSymbol(pODBCso, u"SQLFetch"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLFetchScroll  =   reinterpret_cast<T3SQLFetchScroll>(osl_getFunctionSymbol(pODBCso, OUString("SQLFetchScroll").pData ))) == nullptr )
+    if( ( pODBC3SQLFetchScroll  =   reinterpret_cast<T3SQLFetchScroll>(osl_getFunctionSymbol(pODBCso, u"SQLFetchScroll"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetData      =   reinterpret_cast<T3SQLGetData>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetData").pData ))) == nullptr )
+    if( ( pODBC3SQLGetData      =   reinterpret_cast<T3SQLGetData>(osl_getFunctionSymbol(pODBCso, u"SQLGetData"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSetPos       =   reinterpret_cast<T3SQLSetPos>(osl_getFunctionSymbol(pODBCso, OUString("SQLSetPos").pData ))) == nullptr )
+    if( ( pODBC3SQLSetPos       =   reinterpret_cast<T3SQLSetPos>(osl_getFunctionSymbol(pODBCso, u"SQLSetPos"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLBulkOperations = reinterpret_cast<T3SQLBulkOperations>(osl_getFunctionSymbol(pODBCso, OUString("SQLBulkOperations").pData ))) == nullptr )
+    if( ( pODBC3SQLBulkOperations = reinterpret_cast<T3SQLBulkOperations>(osl_getFunctionSymbol(pODBCso, u"SQLBulkOperations"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLMoreResults  =   reinterpret_cast<T3SQLMoreResults>(osl_getFunctionSymbol(pODBCso, OUString("SQLMoreResults").pData ))) == nullptr )
+    if( ( pODBC3SQLMoreResults  =   reinterpret_cast<T3SQLMoreResults>(osl_getFunctionSymbol(pODBCso, u"SQLMoreResults"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetDiagRec   =   reinterpret_cast<T3SQLGetDiagRec>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetDiagRec").pData ))) == nullptr )
+    if( ( pODBC3SQLGetDiagRec   =   reinterpret_cast<T3SQLGetDiagRec>(osl_getFunctionSymbol(pODBCso, u"SQLGetDiagRec"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLColumnPrivileges = reinterpret_cast<T3SQLColumnPrivileges>(osl_getFunctionSymbol(pODBCso, OUString("SQLColumnPrivileges").pData ))) == nullptr )
+    if( ( pODBC3SQLColumnPrivileges = reinterpret_cast<T3SQLColumnPrivileges>(osl_getFunctionSymbol(pODBCso, u"SQLColumnPrivileges"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLColumns      =   reinterpret_cast<T3SQLColumns>(osl_getFunctionSymbol(pODBCso, OUString("SQLColumns").pData ))) == nullptr )
+    if( ( pODBC3SQLColumns      =   reinterpret_cast<T3SQLColumns>(osl_getFunctionSymbol(pODBCso, u"SQLColumns"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLForeignKeys  =   reinterpret_cast<T3SQLForeignKeys>(osl_getFunctionSymbol(pODBCso, OUString("SQLForeignKeys").pData ))) == nullptr )
+    if( ( pODBC3SQLForeignKeys  =   reinterpret_cast<T3SQLForeignKeys>(osl_getFunctionSymbol(pODBCso, u"SQLForeignKeys"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLPrimaryKeys  =   reinterpret_cast<T3SQLPrimaryKeys>(osl_getFunctionSymbol(pODBCso, OUString("SQLPrimaryKeys").pData ))) == nullptr )
+    if( ( pODBC3SQLPrimaryKeys  =   reinterpret_cast<T3SQLPrimaryKeys>(osl_getFunctionSymbol(pODBCso, u"SQLPrimaryKeys"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLProcedureColumns = reinterpret_cast<T3SQLProcedureColumns>(osl_getFunctionSymbol(pODBCso, OUString("SQLProcedureColumns").pData ))) == nullptr )
+    if( ( pODBC3SQLProcedureColumns = reinterpret_cast<T3SQLProcedureColumns>(osl_getFunctionSymbol(pODBCso, u"SQLProcedureColumns"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLProcedures   =   reinterpret_cast<T3SQLProcedures>(osl_getFunctionSymbol(pODBCso, OUString("SQLProcedures").pData ))) == nullptr )
+    if( ( pODBC3SQLProcedures   =   reinterpret_cast<T3SQLProcedures>(osl_getFunctionSymbol(pODBCso, u"SQLProcedures"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLSpecialColumns = reinterpret_cast<T3SQLSpecialColumns>(osl_getFunctionSymbol(pODBCso, OUString("SQLSpecialColumns").pData ))) == nullptr )
+    if( ( pODBC3SQLSpecialColumns = reinterpret_cast<T3SQLSpecialColumns>(osl_getFunctionSymbol(pODBCso, u"SQLSpecialColumns"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLStatistics   =   reinterpret_cast<T3SQLStatistics>(osl_getFunctionSymbol(pODBCso, OUString("SQLStatistics").pData ))) == nullptr )
+    if( ( pODBC3SQLStatistics   =   reinterpret_cast<T3SQLStatistics>(osl_getFunctionSymbol(pODBCso, u"SQLStatistics"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLTablePrivileges = reinterpret_cast<T3SQLTablePrivileges>(osl_getFunctionSymbol(pODBCso, OUString("SQLTablePrivileges").pData ))) == nullptr )
+    if( ( pODBC3SQLTablePrivileges = reinterpret_cast<T3SQLTablePrivileges>(osl_getFunctionSymbol(pODBCso, u"SQLTablePrivileges"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLTables       =   reinterpret_cast<T3SQLTables>(osl_getFunctionSymbol(pODBCso, OUString("SQLTables").pData ))) == nullptr )
+    if( ( pODBC3SQLTables       =   reinterpret_cast<T3SQLTables>(osl_getFunctionSymbol(pODBCso, u"SQLTables"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLFreeStmt     =   reinterpret_cast<T3SQLFreeStmt>(osl_getFunctionSymbol(pODBCso, OUString("SQLFreeStmt").pData ))) == nullptr )
+    if( ( pODBC3SQLFreeStmt     =   reinterpret_cast<T3SQLFreeStmt>(osl_getFunctionSymbol(pODBCso, u"SQLFreeStmt"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLCloseCursor  =   reinterpret_cast<T3SQLCloseCursor>(osl_getFunctionSymbol(pODBCso, OUString("SQLCloseCursor").pData ))) == nullptr )
+    if( ( pODBC3SQLCloseCursor  =   reinterpret_cast<T3SQLCloseCursor>(osl_getFunctionSymbol(pODBCso, u"SQLCloseCursor"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLCancel       =   reinterpret_cast<T3SQLCancel>(osl_getFunctionSymbol(pODBCso, OUString("SQLCancel").pData ))) == nullptr )
+    if( ( pODBC3SQLCancel       =   reinterpret_cast<T3SQLCancel>(osl_getFunctionSymbol(pODBCso, u"SQLCancel"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLEndTran      =   reinterpret_cast<T3SQLEndTran>(osl_getFunctionSymbol(pODBCso, OUString("SQLEndTran").pData ))) == nullptr )
+    if( ( pODBC3SQLEndTran      =   reinterpret_cast<T3SQLEndTran>(osl_getFunctionSymbol(pODBCso, u"SQLEndTran"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLDisconnect   =   reinterpret_cast<T3SQLDisconnect>(osl_getFunctionSymbol(pODBCso, OUString("SQLDisconnect").pData ))) == nullptr )
+    if( ( pODBC3SQLDisconnect   =   reinterpret_cast<T3SQLDisconnect>(osl_getFunctionSymbol(pODBCso, u"SQLDisconnect"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLFreeHandle   =   reinterpret_cast<T3SQLFreeHandle>(osl_getFunctionSymbol(pODBCso, OUString("SQLFreeHandle").pData ))) == nullptr )
+    if( ( pODBC3SQLFreeHandle   =   reinterpret_cast<T3SQLFreeHandle>(osl_getFunctionSymbol(pODBCso, u"SQLFreeHandle"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLGetCursorName =  reinterpret_cast<T3SQLGetCursorName>(osl_getFunctionSymbol(pODBCso, OUString("SQLGetCursorName").pData ))) == nullptr )
+    if( ( pODBC3SQLGetCursorName =  reinterpret_cast<T3SQLGetCursorName>(osl_getFunctionSymbol(pODBCso, u"SQLGetCursorName"_ustr.pData ))) == nullptr )
         return false;
-    if( ( pODBC3SQLNativeSql    =   reinterpret_cast<T3SQLNativeSql>(osl_getFunctionSymbol(pODBCso, OUString("SQLNativeSql").pData ))) == nullptr )
+    if( ( pODBC3SQLNativeSql    =   reinterpret_cast<T3SQLNativeSql>(osl_getFunctionSymbol(pODBCso, u"SQLNativeSql"_ustr.pData ))) == nullptr )
         return false;
 
     return true;

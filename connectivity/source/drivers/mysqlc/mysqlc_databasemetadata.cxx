@@ -158,11 +158,11 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength() { return 256; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns() { return true; }
 
-OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return "n/a"; }
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return u"n/a"_ustr; }
 
-OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return "`"; }
+OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return u"`"_ustr; }
 
-OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return "#@"; }
+OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return u"#@"_ustr; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames() { return true; }
 
@@ -349,7 +349,7 @@ OUString SAL_CALL ODatabaseMetaData::getURL()
 OUString SAL_CALL ODatabaseMetaData::getUserName()
 {
     Reference<XStatement> statement = m_rConnection.createStatement();
-    Reference<XResultSet> rs = statement->executeQuery("select user()");
+    Reference<XResultSet> rs = statement->executeQuery(u"select user()"_ustr);
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
     (void)rs->next(); // the first and only result
     // e.g. root@localhost
@@ -363,9 +363,9 @@ OUString SAL_CALL ODatabaseMetaData::getUserName()
     return userWithConnection;
 }
 
-OUString SAL_CALL ODatabaseMetaData::getDriverName() { return "MySQL Connector/OO.org"; }
+OUString SAL_CALL ODatabaseMetaData::getDriverName() { return u"MySQL Connector/OO.org"_ustr; }
 
-OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return "0.9.2"; }
+OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return u"0.9.2"_ustr; }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
 {
@@ -373,11 +373,11 @@ OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
                              m_rConnection.getConnectionEncoding());
 }
 
-OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return "MySQL"; }
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return u"MySQL"_ustr; }
 
-OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return "procedure"; }
+OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return u"procedure"_ustr; }
 
-OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return "database"; }
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return u"database"_ustr; }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 {
@@ -400,7 +400,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
 
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
 {
-    return "ACCESSIBLE, ADD, ALL,"
+    return u"ACCESSIBLE, ADD, ALL,"
            "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"
            "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"
            "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"
@@ -442,43 +442,43 @@ OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
            "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"
            "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL"
            "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD,"
-           "MAXVALUE, RESIGNAL, SIGNAL, SLOW";
+           "MAXVALUE, RESIGNAL, SIGNAL, SLOW"_ustr;
 }
 
-OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return "\\"; }
+OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return u"\\"_ustr; }
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
 {
-    return "ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
+    return u"ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
            "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
            "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
            "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
            "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
            "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
-           "SUBSTRING_INDEX,TRIM,UCASE,UPPER";
+           "SUBSTRING_INDEX,TRIM,UCASE,UPPER"_ustr;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
 {
-    return "DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
+    return u"DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
            "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
            "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
            "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
            "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
-           "SEC_TO_TIME,TIME_TO_SEC";
+           "SEC_TO_TIME,TIME_TO_SEC"_ustr;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
 {
-    return "DATABASE,USER,SYSTEM_USER,"
-           "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION";
+    return u"DATABASE,USER,SYSTEM_USER,"
+           "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION"_ustr;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
 {
-    return "ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
+    return u"ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
            "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
-           "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE";
+           "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE"_ustr;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar() { return false; }
@@ -553,9 +553,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTableTypes()
     const char* const table_types[] = { "TABLE", "VIEW" };
     sal_Int32 const requiredVersion[] = { 0, 50000 };
 
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
 
@@ -573,9 +574,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTableTypes()
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTypeInfo()
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
 
     std::vector<std::vector<Any>> rRows;
 
@@ -605,17 +607,19 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTypeInfo()
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCatalogs()
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     return xResultSet;
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
 
     Reference<XStatement> statement = m_rConnection.createStatement();
@@ -649,12 +653,12 @@ Reference<XResultSet>
                                                     const OUString& table,
                                                     const OUString& columnNamePattern)
 {
-    OUString query("SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS "
+    OUString query(u"SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS "
                    "TABLE_SCHEM, TABLE_NAME, COLUMN_NAME, NULL AS GRANTOR, "
                    "GRANTEE, PRIVILEGE_TYPE AS PRIVILEGE, IS_GRANTABLE FROM "
                    "INFORMATION_SCHEMA.COLUMN_PRIVILEGES WHERE TABLE_SCHEMA LIKE "
                    "'?' AND TABLE_NAME='?' AND COLUMN_NAME LIKE '?' ORDER BY "
-                   "COLUMN_NAME, PRIVILEGE_TYPE");
+                   "COLUMN_NAME, PRIVILEGE_TYPE"_ustr);
 
     query = query.replaceFirst("?", schema);
     query = query.replaceFirst("?", table);
@@ -723,9 +727,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
     Reference<XResultSet> rs = statement->executeQuery(query);
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
 
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> aRows;
     while (rs->next())
     {
@@ -849,9 +854,10 @@ Reference<XResultSet>
                                               const OUString& /*schemaPattern*/,
                                               const OUString& /*procedureNamePattern*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO IMPL
     SAL_WARN("connectivity.mysqlc", "method not implemented");
@@ -863,9 +869,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getVersionColumns(const Any& /
                                                                     const OUString& /* schema */,
                                                                     const OUString& /* table */)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     lcl_setRows_throw(xResultSet, 16, rRows);
     return xResultSet;
@@ -875,9 +882,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getExportedKeys(const Any& /*c
                                                                   const OUString& /*schema */,
                                                                   const OUString& /*table */)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO implement
     SAL_WARN("connectivity.mysqlc", "method not implemented");
@@ -889,11 +897,12 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
                                                                   const OUString& schema,
                                                                   const OUString& table)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
 
-    OUString query("SELECT refi.CONSTRAINT_CATALOG," // 1: foreign catalog
+    OUString query(u"SELECT refi.CONSTRAINT_CATALOG," // 1: foreign catalog
                    " k.COLUMN_NAME," // 2: foreign column name
                    " refi.UNIQUE_CONSTRAINT_CATALOG," // 3: primary catalog FIXME
                    " k.REFERENCED_TABLE_SCHEMA," // 4: primary schema
@@ -908,7 +917,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
                    "refi.CONSTRAINT_NAME "
                    " and k.TABLE_NAME = refi.TABLE_NAME "
                    " WHERE k.REFERENCED_TABLE_SCHEMA LIKE "
-                   "'?' AND refi.TABLE_NAME='?'");
+                   "'?' AND refi.TABLE_NAME='?'"_ustr);
     query = query.replaceFirst("?", schema); // TODO what if schema is NULL?
     query = query.replaceFirst("?", table);
 
@@ -960,12 +969,12 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getPrimaryKeys(const Any& /*ca
                                                                  const OUString& schema,
                                                                  const OUString& table)
 {
-    OUString query("SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA "
+    OUString query(u"SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA "
                    "AS TABLE_SCHEM, TABLE_NAME, "
                    "COLUMN_NAME, SEQ_IN_INDEX AS KEY_SEQ,"
                    "INDEX_NAME AS PK_NAME FROM INFORMATION_SCHEMA.STATISTICS "
                    "WHERE TABLE_SCHEMA LIKE '?' AND TABLE_NAME LIKE '?' AND INDEX_NAME='PRIMARY' "
-                   "ORDER BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX");
+                   "ORDER BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX"_ustr);
 
     // TODO use prepared stmt instead
     // TODO escape schema, table name ?
@@ -983,9 +992,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getIndexInfo(const Any& /*cata
                                                                sal_Bool /*unique*/,
                                                                sal_Bool /*approximate*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
@@ -999,9 +1009,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any
                                                                        sal_Int32 /*scope*/,
                                                                        sal_Bool /*nullable*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
@@ -1012,7 +1023,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /* catalog */, const OUString& schemaPattern, const OUString& tableNamePattern)
 {
-    OUString query("SELECT TABLE_SCHEMA TABLE_CAT, "
+    OUString query(u"SELECT TABLE_SCHEMA TABLE_CAT, "
                    "NULL TABLE_SCHEM, "
                    "TABLE_NAME, "
                    "NULL GRANTOR,"
@@ -1021,7 +1032,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
                    "IS_GRANTABLE "
                    "FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES "
                    "WHERE TABLE_SCHEMA LIKE '?' "
-                   "AND TABLE_NAME='?'");
+                   "AND TABLE_NAME='?'"_ustr);
     query = query.replaceFirst("?", schemaPattern);
     query = query.replaceFirst("?", tableNamePattern);
     Reference<XStatement> statement = m_rConnection.createStatement();
@@ -1034,9 +1045,10 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
     const OUString& /*primaryTable_*/, const Any& /*foreignCatalog*/,
     const OUString& /*foreignSchema*/, const OUString& /*foreignTable*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
+    Reference<XResultSet> xResultSet(
+        getOwnConnection().getDriver().getFactory()->createInstance(
+            u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr),
+        UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");

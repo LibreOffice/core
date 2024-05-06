@@ -59,8 +59,8 @@ Table::Table(Tables* pTables,
                  rName,
                  rType,
                  rDescription,
-                 "",
-                 ""),
+                 u""_ustr,
+                 u""_ustr),
     m_rMutex(rMutex),
     m_nPrivileges(0)
 {
@@ -121,19 +121,19 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     uno::Reference< XPropertySet > xColumn(m_xColumns->getByName(rColName), UNO_QUERY);
 
     // sdbcx::Descriptor
-    const bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
+    const bool bNameChanged = xColumn->getPropertyValue(u"Name"_ustr) != rDescriptor->getPropertyValue(u"Name"_ustr);
     // sdbcx::ColumnDescriptor
-    const bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
-    const bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
-    const bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
-    const bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
-    const bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
-    const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+    const bool bTypeChanged = xColumn->getPropertyValue(u"Type"_ustr) != rDescriptor->getPropertyValue(u"Type"_ustr);
+    const bool bTypeNameChanged = xColumn->getPropertyValue(u"TypeName"_ustr) != rDescriptor->getPropertyValue(u"TypeName"_ustr);
+    const bool bPrecisionChanged = xColumn->getPropertyValue(u"Precision"_ustr) != rDescriptor->getPropertyValue(u"Precision"_ustr);
+    const bool bScaleChanged = xColumn->getPropertyValue(u"Scale"_ustr) != rDescriptor->getPropertyValue(u"Scale"_ustr);
+    const bool bIsNullableChanged = xColumn->getPropertyValue(u"IsNullable"_ustr) != rDescriptor->getPropertyValue(u"IsNullable"_ustr);
+    const bool bIsAutoIncrementChanged = xColumn->getPropertyValue(u"IsAutoIncrement"_ustr) != rDescriptor->getPropertyValue(u"IsAutoIncrement"_ustr);
 
     // TODO: remainder -- these are all "optional" so have to detect presence and change.
 
-    bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
-                                     != rDescriptor->getPropertyValue("DefaultValue");
+    bool bDefaultChanged = xColumn->getPropertyValue(u"DefaultValue"_ustr)
+                                     != rDescriptor->getPropertyValue(u"DefaultValue"_ustr);
 
     if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged)
     {
@@ -150,7 +150,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     if (bIsNullableChanged)
     {
         sal_Int32 nNullable = 0;
-        rDescriptor->getPropertyValue("IsNullable") >>= nNullable;
+        rDescriptor->getPropertyValue(u"IsNullable"_ustr) >>= nNullable;
 
         if (nNullable != ColumnValue::NULLABLE_UNKNOWN)
         {
@@ -175,7 +175,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     if (bIsAutoIncrementChanged)
     {
        ::dbtools::throwSQLException(
-            "Changing autoincrement property of existing column is not supported",
+            u"Changing autoincrement property of existing column is not supported"_ustr,
             ::dbtools::StandardSQLState::FUNCTION_NOT_SUPPORTED,
             *this);
 
@@ -184,7 +184,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     if (bDefaultChanged)
     {
         OUString sNewDefault;
-        rDescriptor->getPropertyValue("DefaultValue") >>= sNewDefault;
+        rDescriptor->getPropertyValue(u"DefaultValue"_ustr) >>= sNewDefault;
 
         OUString sSql;
         if (sNewDefault.isEmpty())
@@ -198,7 +198,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     if (bNameChanged)
     {
         OUString sNewColName;
-        rDescriptor->getPropertyValue("Name") >>= sNewColName;
+        rDescriptor->getPropertyValue(u"Name"_ustr) >>= sNewColName;
         OUString sSql(getAlterTableColumn(rColName)
                                             + " TO \"" + sNewColName + "\"");
 
@@ -212,7 +212,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 // ----- XRename --------------------------------------------------------------
 void SAL_CALL Table::rename(const OUString&)
 {
-    throw RuntimeException("Table renaming not supported by Firebird.");
+    throw RuntimeException(u"Table renaming not supported by Firebird."_ustr);
 }
 
 // ----- XInterface -----------------------------------------------------------

@@ -46,7 +46,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
+IMPLEMENT_SERVICE_INFO(ODbaseIndex,u"com.sun.star.sdbcx.driver.dbase.Index"_ustr,u"com.sun.star.sdbcx.Index"_ustr);
 
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     : OIndex(true/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)

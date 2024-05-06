@@ -176,7 +176,7 @@ SQLExceptionInfo::operator const css::sdb::SQLContext*() const
 
 void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
 {
-    SQLException aException(_rErrorMessage, {}, "S1000", 0, m_aContent);
+    SQLException aException(_rErrorMessage, {}, u"S1000"_ustr, 0, m_aContent);
     m_aContent <<= aException;
 
     m_eType = TYPE::SQLException;
@@ -464,17 +464,17 @@ OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
     {
-    case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return "07009";
-    case StandardSQLState::INVALID_CURSOR_STATE:      return "24000";
-    case StandardSQLState::COLUMN_NOT_FOUND:          return "42S22";
-    case StandardSQLState::GENERAL_ERROR:             return "HY000";
-    case StandardSQLState::INVALID_SQL_DATA_TYPE:     return "HY004";
-    case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return "HY010";
-    case StandardSQLState::INVALID_CURSOR_POSITION:   return "HY109";
-    case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return "HYC00";
-    case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return "IM001";
-    case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return "08003";
-    default:                                          return "HY001"; // General Error
+    case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return u"07009"_ustr;
+    case StandardSQLState::INVALID_CURSOR_STATE:      return u"24000"_ustr;
+    case StandardSQLState::COLUMN_NOT_FOUND:          return u"42S22"_ustr;
+    case StandardSQLState::GENERAL_ERROR:             return u"HY000"_ustr;
+    case StandardSQLState::INVALID_SQL_DATA_TYPE:     return u"HY004"_ustr;
+    case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return u"HY010"_ustr;
+    case StandardSQLState::INVALID_CURSOR_POSITION:   return u"HY109"_ustr;
+    case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return u"HYC00"_ustr;
+    case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return u"IM001"_ustr;
+    case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return u"08003"_ustr;
+    default:                                          return u"HY001"_ustr; // General Error
     }
 }
 

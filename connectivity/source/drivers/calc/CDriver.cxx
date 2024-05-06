@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 
 OUString SAL_CALL ODriver::getImplementationName(  )
 {
-    return "com.sun.star.comp.sdbc.calc.ODriver";
+    return u"com.sun.star.comp.sdbc.calc.ODriver"_ustr;
 }
 
 // service names from file::OFileDriver

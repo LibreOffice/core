@@ -31,7 +31,7 @@ namespace connectivity::writer
 {
 OUString SAL_CALL ODriver::getImplementationName()
 {
-    return "com.sun.star.comp.sdbc.writer.ODriver";
+    return u"com.sun.star.comp.sdbc.writer.ODriver"_ustr;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

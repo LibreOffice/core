@@ -340,8 +340,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 }
 
 //----- XServiceInfo ---------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connection",
-                                                    "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(Connection, u"com.sun.star.sdbc.drivers.firebird.Connection"_ustr,
+                                                    u"com.sun.star.sdbc.Connection"_ustr)
 
 Reference< XBlob> Connection::createBlob(ISC_QUAD const * pBlobId)
 {
@@ -574,7 +574,7 @@ isc_svc_handle Connection::attachServiceManager()
     *pSPB++ = isc_spb_version;
     *pSPB++ = isc_spb_current_version;
     *pSPB++ = isc_spb_user_name;
-    OUString sUserName("SYSDBA");
+    OUString sUserName(u"SYSDBA"_ustr);
     char aLength = static_cast<char>(sUserName.getLength());
     *pSPB++ = aLength;
     strncpy(pSPB,
@@ -740,12 +740,12 @@ sal_Bool SAL_CALL Connection::isReadOnly()
 
 void SAL_CALL Connection::setCatalog(const OUString& /*catalog*/)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setCatalog", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"setCatalog"_ustr, *this);
 }
 
 OUString SAL_CALL Connection::getCatalog()
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("getCatalog", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getCatalog"_ustr, *this);
 }
 
 void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level )
@@ -767,12 +767,12 @@ sal_Int32 SAL_CALL Connection::getTransactionIsolation(  )
 
 Reference< XNameAccess > SAL_CALL Connection::getTypeMap()
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::getTypeMap"_ustr, *this );
 }
 
 void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >&)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTypeMap"_ustr, *this );
 }
 
 //----- XCloseable -----------------------------------------------------------

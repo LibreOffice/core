@@ -46,12 +46,12 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
 
 OUString SAL_CALL OFlatResultSet::getImplementationName(  )
 {
-    return "com.sun.star.sdbcx.flat.ResultSet";
+    return u"com.sun.star.sdbcx.flat.ResultSet"_ustr;
 }
 
 Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName )

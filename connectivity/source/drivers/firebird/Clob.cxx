@@ -70,11 +70,11 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
                                                sal_Int32 nLength)
 {
     if (nPosition < 1) // XClob is indexed from 1
-        throw lang::IllegalArgumentException("nPosition < 1", *this, 0);
+        throw lang::IllegalArgumentException(u"nPosition < 1"_ustr, *this, 0);
     --nPosition; // make 0-based
 
     if (nLength < 0)
-        throw lang::IllegalArgumentException("nLength < 0", *this, 0);
+        throw lang::IllegalArgumentException(u"nLength < 0"_ustr, *this, 0);
 
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
@@ -94,7 +94,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
         if (sSegment.getLength() < nPosition)
         {
             if (bLastRead)
-                throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+                throw lang::IllegalArgumentException(u"nPosition out of range"_ustr, *this, 0);
             nPosition -= sSegment.getLength();
             continue;
         }
@@ -110,7 +110,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
         assert(sSegmentBuffer.getLength() < nLength);
 
         if (bLastRead)
-            throw lang::IllegalArgumentException("out of range", *this, 0);
+            throw lang::IllegalArgumentException(u"out of range"_ustr, *this, 0);
 
         nPosition = 0; // No offset after first append
     }
@@ -127,13 +127,13 @@ uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()
 sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
                                    sal_Int32 /*nStart*/)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException("Clob::position", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException(u"Clob::position"_ustr, *this);
 }
 
 sal_Int64 SAL_CALL Clob::positionOfClob(const Reference <XClob >& /*rPattern*/,
                                          sal_Int64 /*aStart*/)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException("Clob::positionOfClob", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException(u"Clob::positionOfClob"_ustr, *this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

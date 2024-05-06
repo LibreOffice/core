@@ -269,7 +269,7 @@ namespace
         static constexpr OUString s_sWildcard = u"%"_ustr ;
 
         // we want all catalogues, all schemas, all tables
-        Sequence< OUString > sTableTypes { "VIEW", "TABLE", s_sWildcard }; // this last one just to be sure to include anything else...
+        Sequence< OUString > sTableTypes { u"VIEW"_ustr, u"TABLE"_ustr, s_sWildcard }; // this last one just to be sure to include anything else...
 
         if ( _rxDBMeta.is() )
         {
@@ -853,7 +853,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
-        setSelectColumnName("*", "", "");
+        setSelectColumnName(u"*"_ustr, u""_ustr, u""_ustr);
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
@@ -873,7 +873,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 // All the table's columns
                 OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, nullptr, false, false );
-                setSelectColumnName("*", "", aTableRange);
+                setSelectColumnName(u"*"_ustr, u""_ustr, aTableRange);
                 continue;
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
@@ -1035,7 +1035,7 @@ namespace
 {
     OUString lcl_generateParameterName( const OSQLParseNode& _rParentNode, const OSQLParseNode& _rParamNode )
     {
-        OUString sColumnName(  "param"  );
+        OUString sColumnName(  u"param"_ustr  );
         const sal_Int32 nCount = static_cast<sal_Int32>(_rParentNode.count());
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -1313,7 +1313,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                         ?   _rColumnAlias
                         :   !_aColumnName.isEmpty()
                         ?   _aColumnName
-                        :   OUString("?");
+                        :   u"?"_ustr;
     }
     else if (SQL_ISPUNCTUATION(pMark,":"))
     {
@@ -1516,8 +1516,8 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
         nullptr,
         false,
         rTableName,
-        "Table",
-        "New Created Table",
+        u"Table"_ustr,
+        u"New Created Table"_ustr,
         rSchemaName,
         rCatalogName
     );
@@ -1620,7 +1620,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
                 // did not find a column with this name in any of the tables
                 rtl::Reference<OParseColumn> pColumn = new OParseColumn(
                     aNewColName,
-                    "VARCHAR",
+                    u"VARCHAR"_ustr,
                         // TODO: does this match with _nType?
                         // Or should be fill this from the getTypeInfo of the connection?
                     OUString(),

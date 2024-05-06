@@ -119,7 +119,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
 
 sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XClob::positionOfClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XClob::positionOfClob"_ustr, *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -173,7 +173,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+2);
-    OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
+    OUString aDSN(u"DSN="_ustr), aUID, aPWD, aSysDrvSettings;
     aDSN += url.subView(nLen+1);
 
     sal_Int32 nTimeout = 20;
@@ -266,7 +266,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
 }
 // XServiceInfo
 
-IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.odbc.OConnection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(OConnection, u"com.sun.star.sdbc.drivers.odbc.OConnection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
 Reference< XStatement > SAL_CALL OConnection::createStatement(  )
@@ -291,7 +291,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
 }
 
 OUString SAL_CALL OConnection::nativeSQL( const OUString& sql )
@@ -450,7 +450,7 @@ Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  )
 
 void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTypeMap"_ustr, *this );
 }
 
 // XCloseable

@@ -75,7 +75,7 @@ OUString OResultSetMetaData::getCharacterSet( sal_Int32 nIndex )
 void OResultSetMetaData::verifyValidColumn(sal_Int32 column)
 {
     if (column>getColumnCount() || column < 1)
-        throw SQLException("Invalid column specified", *this, OUString(), 0, Any());
+        throw SQLException(u"Invalid column specified"_ustr, *this, OUString(), 0, Any());
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()

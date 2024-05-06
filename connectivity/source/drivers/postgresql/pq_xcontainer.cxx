@@ -238,7 +238,7 @@ css::uno::Any ContainerEnumeration::nextElement()
     if( ! hasMoreElements() )
     {
         throw NoSuchElementException(
-            "NoSuchElementException during enumeration", *this );
+            u"NoSuchElementException during enumeration"_ustr, *this );
     }
     m_index ++;
     return m_vec[m_index];

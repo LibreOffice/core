@@ -83,7 +83,7 @@ void Users::refresh()
 
         Reference< XStatement > stmt = m_origin->createStatement();
 
-        Reference< XResultSet > rs = stmt->executeQuery( "SELECT usename FROM pg_shadow" );
+        Reference< XResultSet > rs = stmt->executeQuery( u"SELECT usename FROM pg_shadow"_ustr );
 
         Reference< XRow > xRow( rs , UNO_QUERY );
 

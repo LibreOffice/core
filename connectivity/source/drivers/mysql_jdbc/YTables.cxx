@@ -46,7 +46,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
                                        ::dbtools::EComposeRule::InDataManipulation);
 
     Sequence<OUString> sTableTypes{
-        "VIEW", "TABLE", "%"
+        u"VIEW"_ustr, u"TABLE"_ustr, u"%"_ustr
     }; // this last one just to be sure to include anything else...
 
     Any aCatalog;
@@ -110,7 +110,7 @@ void OTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     ::dbtools::qualifiedNameComponents(m_xMetaData, _sElementName, sCatalog, sSchema, sTable,
                                        ::dbtools::EComposeRule::InDataManipulation);
 
-    OUString aSql("DROP ");
+    OUString aSql(u"DROP "_ustr);
 
     Reference<XPropertySet> xProp(xObject, UNO_QUERY);
     bool bIsView = xProp.is()

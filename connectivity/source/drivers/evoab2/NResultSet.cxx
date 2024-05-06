@@ -58,12 +58,12 @@ namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
 {
-    return "com.sun.star.sdbcx.evoab.ResultSet";
+    return u"com.sun.star.sdbcx.evoab.ResultSet"_ustr;
 }
 
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdbc.ResultSet" };
+    return { u"com.sun.star.sdbc.ResultSet"_ustr };
 }
 
 sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName )
@@ -657,103 +657,103 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
 
 sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getLong", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getLong"_ustr, *this );
     return sal_Int64();
 }
 
 Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getArray"_ustr, *this );
     return nullptr;
 }
 
 Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getClob"_ustr, *this );
     return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBlob"_ustr, *this );
     return nullptr;
 }
 
 Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getRef"_ustr, *this );
     return nullptr;
 }
 
 Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getObject"_ustr, *this );
     return Any();
 }
 
 sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getShort", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getShort"_ustr, *this );
     return 0;
 }
 
 css::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getTime", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getTime"_ustr, *this );
     return css::util::Time();
 }
 
 util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getTimestamp", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getTimestamp"_ustr, *this );
     return css::util::DateTime();
 }
 
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
     return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getCharacterStream"_ustr, *this );
     return nullptr;
 }
 
 sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getByte", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getByte"_ustr, *this );
     return 0;
 }
 
 Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBytes", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBytes"_ustr, *this );
     return Sequence< sal_Int8 >();
 }
 
 css::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getDate", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getDate"_ustr, *this );
     return css::util::Date();
 }
 
 double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getDouble", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getDouble"_ustr, *this );
     return 0;
 }
 
 float SAL_CALL OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getFloat", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getFloat"_ustr, *this );
     return 0;
 }
 
 sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ )
 {
-    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getInt", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getInt"_ustr, *this );
     return 0;
 }
 // XRow Interface Ends

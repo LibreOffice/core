@@ -186,7 +186,7 @@ Statics & getStatics()
             // Table props set
             ImplementationStatics &ist = statics.refl.table;
             ist.implName = "org.openoffice.comp.pq.sdbcx.Table";
-            ist.serviceNames = { "com.sun.star.sdbcx.Table" };
+            ist.serviceNames = { u"com.sun.star.sdbcx.Table"_ustr };
             PropertyDef tableDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -201,7 +201,7 @@ Statics & getStatics()
 
             statics.refl.tableDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.TableDescriptor";
-            statics.refl.tableDescriptor.serviceNames = { "com.sun.star.sdbcx.TableDescriptor" };
+            statics.refl.tableDescriptor.serviceNames = { u"com.sun.star.sdbcx.TableDescriptor"_ustr };
             PropertyDef tableDescDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -215,7 +215,7 @@ Statics & getStatics()
 
             // Column props set
             statics.refl.column.implName = "org.openoffice.comp.pq.sdbcx.Column";
-            statics.refl.column.serviceNames = { "com.sun.star.sdbcx.Column" };
+            statics.refl.column.serviceNames = { u"com.sun.star.sdbcx.Column"_ustr };
             PropertyDefEx columnDef[] =
                 {
                     PropertyDefEx( statics.CATALOG_NAME , tString, READONLY ),
@@ -237,7 +237,7 @@ Statics & getStatics()
 
             statics.refl.columnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.ColumnDescriptor";
-            statics.refl.columnDescriptor.serviceNames = { "com.sun.star.sdbcx.ColumnDescriptor" };
+            statics.refl.columnDescriptor.serviceNames = { u"com.sun.star.sdbcx.ColumnDescriptor"_ustr };
             PropertyDef columnDescDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -260,7 +260,7 @@ Statics & getStatics()
 
             // Key properties
             statics.refl.key.implName = "org.openoffice.comp.pq.sdbcx.Key";
-            statics.refl.key.serviceNames = { "com.sun.star.sdbcx.Key" };
+            statics.refl.key.serviceNames = { u"com.sun.star.sdbcx.Key"_ustr };
             PropertyDef keyDef[] =
                 {
                     PropertyDef( statics.DELETE_RULE, tInt ),
@@ -278,7 +278,7 @@ Statics & getStatics()
             // Key properties
             statics.refl.keyDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.KeyDescriptor";
-            statics.refl.keyDescriptor.serviceNames = { "com.sun.star.sdbcx.KeyDescriptor" };
+            statics.refl.keyDescriptor.serviceNames = { u"com.sun.star.sdbcx.KeyDescriptor"_ustr };
             PropertyDef keyDescDef[] =
                 {
                     PropertyDef( statics.DELETE_RULE, tInt ),
@@ -293,7 +293,7 @@ Statics & getStatics()
 
             // KeyColumn props set
             statics.refl.keycolumn.implName = "org.openoffice.comp.pq.sdbcx.KeyColumn";
-            statics.refl.keycolumn.serviceNames = { "com.sun.star.sdbcx.KeyColumn" };
+            statics.refl.keycolumn.serviceNames = { u"com.sun.star.sdbcx.KeyColumn"_ustr };
             PropertyDef keycolumnDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -317,7 +317,7 @@ Statics & getStatics()
             statics.refl.keycolumnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.KeyColumnDescriptor";
             statics.refl.keycolumnDescriptor.serviceNames =
-                { "com.sun.star.sdbcx.KeyColumnDescriptor" };
+                { u"com.sun.star.sdbcx.KeyColumnDescriptor"_ustr };
             PropertyDef keycolumnDescDef[] =
                 {
                     PropertyDef( statics.NAME , tString ),
@@ -328,7 +328,7 @@ Statics & getStatics()
 
             // view props set
             statics.refl.view.implName = "org.openoffice.comp.pq.sdbcx.View";
-            statics.refl.view.serviceNames = { "com.sun.star.sdbcx.View" };
+            statics.refl.view.serviceNames = { u"com.sun.star.sdbcx.View"_ustr };
             PropertyDef viewDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -342,12 +342,12 @@ Statics & getStatics()
 
             // view props set
             statics.refl.viewDescriptor.implName = "org.openoffice.comp.pq.sdbcx.ViewDescriptor";
-            statics.refl.viewDescriptor.serviceNames = { "com.sun.star.sdbcx.ViewDescriptor" };
+            statics.refl.viewDescriptor.serviceNames = { u"com.sun.star.sdbcx.ViewDescriptor"_ustr };
             statics.refl.viewDescriptor.pProps = createPropertyArrayHelper(
                 viewDef, std::size(viewDef), 0 ); // reuse view, as it is identical
             // user props set
             statics.refl.user.implName = "org.openoffice.comp.pq.sdbcx.User";
-            statics.refl.user.serviceNames = { "com.sun.star.sdbcx.User" };
+            statics.refl.user.serviceNames = { u"com.sun.star.sdbcx.User"_ustr };
             PropertyDef userDefRO[] =
                 {
                     PropertyDef( statics.NAME , tString )
@@ -358,7 +358,7 @@ Statics & getStatics()
             // user props set
             statics.refl.userDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.UserDescriptor";
-            statics.refl.userDescriptor.serviceNames = { "com.sun.star.sdbcx.UserDescriptor" };
+            statics.refl.userDescriptor.serviceNames = { u"com.sun.star.sdbcx.UserDescriptor"_ustr };
             PropertyDef userDefWR[] =
                 {
                     PropertyDef( statics.NAME , tString ),
@@ -369,7 +369,7 @@ Statics & getStatics()
 
             // index props set
             statics.refl.index.implName = "org.openoffice.comp.pq.sdbcx.Index";
-            statics.refl.index.serviceNames = { "com.sun.star.sdbcx.Index" };
+            statics.refl.index.serviceNames = { u"com.sun.star.sdbcx.Index"_ustr };
             PropertyDef indexDef[] =
                 {
                     PropertyDef( statics.CATALOG , tString ),
@@ -385,13 +385,13 @@ Statics & getStatics()
             // index props set
             statics.refl.indexDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.IndexDescriptor";
-            statics.refl.indexDescriptor.serviceNames = { "com.sun.star.sdbcx.IndexDescriptor" };
+            statics.refl.indexDescriptor.serviceNames = { u"com.sun.star.sdbcx.IndexDescriptor"_ustr };
             statics.refl.indexDescriptor.pProps = createPropertyArrayHelper(
                 indexDef, std::size(indexDef), 0 );
 
             // indexColumn props set
             statics.refl.indexColumn.implName = "org.openoffice.comp.pq.sdbcx.IndexColumn";
-            statics.refl.indexColumn.serviceNames = { "com.sun.star.sdbcx.IndexColumn" };
+            statics.refl.indexColumn.serviceNames = { u"com.sun.star.sdbcx.IndexColumn"_ustr };
             PropertyDef indexColumnDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -415,7 +415,7 @@ Statics & getStatics()
             statics.refl.indexColumnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.IndexColumnDescriptor";
             statics.refl.indexColumnDescriptor.serviceNames =
-                { "com.sun.star.sdbcx.IndexColumnDescriptor" };
+                { u"com.sun.star.sdbcx.IndexColumnDescriptor"_ustr };
             PropertyDef indexColumnDescDef[] =
                 {
                     PropertyDef( statics.IS_ASCENDING, tBool ),
@@ -473,32 +473,32 @@ Statics & getStatics()
 
             statics.columnRowNames =
             {
-                "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME", "COLUMN_NAME",
-                "DATA_TYPE", "TYPE_NAME", "COLUMN_SIZE", "BUFFER_LENGTH",
-                "DECIMAL_DIGITS", "NUM_PREC_RADIX", "NULLABLE", "REMARKS",
-                "COLUMN_DEF", "SQL_DATA_TYPE", "SQL_DATETIME_SUB", "CHAR_OCTET_LENGTH",
-                "ORDINAL_POSITION", "IS_NULLABLE"
+                u"TABLE_CAT"_ustr, u"TABLE_SCHEM"_ustr, u"TABLE_NAME"_ustr, u"COLUMN_NAME"_ustr,
+                u"DATA_TYPE"_ustr, u"TYPE_NAME"_ustr, u"COLUMN_SIZE"_ustr, u"BUFFER_LENGTH"_ustr,
+                u"DECIMAL_DIGITS"_ustr, u"NUM_PREC_RADIX"_ustr, u"NULLABLE"_ustr, u"REMARKS"_ustr,
+                u"COLUMN_DEF"_ustr, u"SQL_DATA_TYPE"_ustr, u"SQL_DATETIME_SUB"_ustr, u"CHAR_OCTET_LENGTH"_ustr,
+                u"ORDINAL_POSITION"_ustr, u"IS_NULLABLE"_ustr
             };
 
             statics.typeinfoColumnNames =
                 {
-                    "TYPE_NAME", "DATA_TYPE", "PRECISION", "LITERAL_PREFIX",
-                    "LITERAL_SUFFIX",  "CREATE_PARAMS", "NULLABLE", "CASE_SENSITIVE",
-                    "SEARCHABLE", "UNSIGNED_ATTRIBUTE", "FIXED_PREC_SCALE",
-                    "AUTO_INCREMENT", "LOCAL_TYPE_NAME", "MINIMUM_SCALE",
-                    "MAXIMUM_SCALE", "SQL_DATA_TYPE", "SQL_DATETIME_SUB",
-                    "NUM_PREC_RADIX"
+                    u"TYPE_NAME"_ustr, u"DATA_TYPE"_ustr, u"PRECISION"_ustr, u"LITERAL_PREFIX"_ustr,
+                    u"LITERAL_SUFFIX"_ustr,  u"CREATE_PARAMS"_ustr, u"NULLABLE"_ustr, u"CASE_SENSITIVE"_ustr,
+                    u"SEARCHABLE"_ustr, u"UNSIGNED_ATTRIBUTE"_ustr, u"FIXED_PREC_SCALE"_ustr,
+                    u"AUTO_INCREMENT"_ustr, u"LOCAL_TYPE_NAME"_ustr, u"MINIMUM_SCALE"_ustr,
+                    u"MAXIMUM_SCALE"_ustr, u"SQL_DATA_TYPE"_ustr, u"SQL_DATETIME_SUB"_ustr,
+                    u"NUM_PREC_RADIX"_ustr
                 };
 
             statics.indexinfoColumnNames =
                 {
-                    "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME",
-                    "NON_UNIQUE", "INDEX_QUALIFIER", "INDEX_NAME",
-                    "TYPE", "ORDINAL_POSITION", "COLUMN_NAME",
-                    "ASC_OR_DESC", "CARDINALITY", "PAGES", "FILTER_CONDITION"
+                    u"TABLE_CAT"_ustr, u"TABLE_SCHEM"_ustr, u"TABLE_NAME"_ustr,
+                    u"NON_UNIQUE"_ustr, u"INDEX_QUALIFIER"_ustr, u"INDEX_NAME"_ustr,
+                    u"TYPE"_ustr, u"ORDINAL_POSITION"_ustr, u"COLUMN_NAME"_ustr,
+                    u"ASC_OR_DESC"_ustr, u"CARDINALITY"_ustr, u"PAGES"_ustr, u"FILTER_CONDITION"_ustr
                 };
 
-            statics.resultSetArrayColumnNames = { "INDEX" , "VALUE"  };
+            statics.resultSetArrayColumnNames = { u"INDEX"_ustr , u"VALUE"_ustr  };
 
             // LEM TODO see if a refresh is needed; obtain automatically from pg_catalog.pg_type?
             BaseTypeDef baseTypeDefs[] =

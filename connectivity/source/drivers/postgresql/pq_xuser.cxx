@@ -134,13 +134,13 @@ sal_Int32 User::getGrantablePrivileges( const OUString&, sal_Int32 )
 
 void User::grantPrivileges( const OUString&, sal_Int32, sal_Int32 )
 {
-    throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
+    throw css::sdbc::SQLException(u"pq_driver: privilege change not implemented yet"_ustr,
                                              *this, OUString(), 1, Any() );
 }
 
 void User::revokePrivileges( const OUString&, sal_Int32, sal_Int32 )
 {
-    throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
+    throw css::sdbc::SQLException(u"pq_driver: privilege change not implemented yet"_ustr,
                                              *this, OUString(), 1, Any() );
 }
 
