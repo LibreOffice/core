@@ -648,7 +648,7 @@ void UNO_proxy_dispatch(
                       typelib_TypeClass_INTERFACE)
                 {
                     throw BridgeRuntimeError(
-                        "queryInterface() call demands an INTERFACE type!" );
+                        u"queryInterface() call demands an INTERFACE type!"_ustr );
                 }
 
                 uno_Interface * pInterface = nullptr;
@@ -758,7 +758,7 @@ void UNO_proxy_dispatch(
         default:
         {
             throw BridgeRuntimeError(
-                "illegal member type description!" );
+                u"illegal member type description!"_ustr );
         }
         }
     }
@@ -788,7 +788,7 @@ void UNO_proxy_dispatch(
     {
         // binary identical struct
         css::uno::RuntimeException exc(
-            "[jni_uno bridge error] attaching current thread to java failed!",
+            u"[jni_uno bridge error] attaching current thread to java failed!"_ustr,
             css::uno::Reference<
               css::uno::XInterface >() );
         css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();

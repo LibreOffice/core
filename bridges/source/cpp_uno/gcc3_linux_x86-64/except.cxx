@@ -195,7 +195,7 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
     __cxxabiv1::__cxa_exception * header = __cxxabiv1::__cxa_get_globals()->caughtExceptions;
     if (! header)
     {
-        RuntimeException aRE( "no exception header!" );
+        RuntimeException aRE( u"no exception header!"_ustr );
         Type const & rType = cppu::UnoType<decltype(aRE)>::get();
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
         SAL_WARN("bridges", aRE.Message);

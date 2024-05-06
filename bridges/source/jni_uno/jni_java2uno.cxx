@@ -389,7 +389,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             if (info->m_td.get()->eTypeClass != typelib_TypeClass_INTERFACE)
             {
                 throw BridgeRuntimeError(
-                    "queryInterface() call demands an INTERFACE type!" );
+                    u"queryInterface() call demands an INTERFACE type!"_ustr );
             }
             JNI_interface_type_info const * iface_info =
                 static_cast< JNI_interface_type_info const * >( info );

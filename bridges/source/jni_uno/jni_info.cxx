@@ -742,7 +742,7 @@ JNI_info::JNI_info(
     assert( m_method_AsynchronousFinalizer_drain != nullptr );
 
     // get java env
-    OUString java_env_type_name( UNO_LB_JAVA );
+    OUString java_env_type_name( u"" UNO_LB_JAVA ""_ustr );
     JLocalAutoRef jo_java(
         jni, ustring_to_jstring( jni, java_env_type_name.pData ) );
     jvalue args[ 2 ];

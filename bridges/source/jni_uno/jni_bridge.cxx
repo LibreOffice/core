@@ -242,7 +242,7 @@ Bridge::Bridge(
     if (static_cast<jni_uno::JniUnoEnvironmentData *>(m_java_env->pContext)
         == nullptr)
     {
-        throw BridgeRuntimeError("error during JNI-UNO's uno_initEnvironment");
+        throw BridgeRuntimeError(u"error during JNI-UNO's uno_initEnvironment"_ustr);
     }
 
     (*m_uno_env->aBase.acquire)( &m_uno_env->aBase );
