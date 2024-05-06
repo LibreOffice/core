@@ -42,19 +42,16 @@
 using namespace ::com::sun::star;
 
 static void
-atk_wrapper_focus_tracker_notify(const uno::Reference<accessibility::XAccessible>& xAccessible)
+atk_wrapper_notify_focus_change(const uno::Reference<accessibility::XAccessible>& xAccessible)
 {
     AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
     // Gail does not notify focus changes to NULL, so do we ..
     if( atk_obj )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        atk_focus_tracker_notify(atk_obj);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        atk_object_notify_state_change(atk_obj, ATK_STATE_FOCUSED, true);
         // #i93269#
         // emit text_caret_moved event for <XAccessibleText> object,
         // if cursor is inside the <XAccessibleText> object.
-        // also emit state-changed:focused event under the same condition.
         {
             AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
             if( wrapper_obj && !wrapper_obj->mpText.is() )
@@ -73,7 +70,6 @@ atk_wrapper_focus_tracker_notify(const uno::Reference<accessibility::XAccessible
 
                     if ( caretPos != -1 )
                     {
-                        atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
                         g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
                     }
                 }
@@ -106,7 +102,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 aEvent.NewValue >>= nState;
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
-                    atk_wrapper_focus_tracker_notify(getAccessible(aEvent));
+                    atk_wrapper_notify_focus_change(getAccessible(aEvent));
 
                 break;
             }
@@ -200,7 +196,7 @@ void DocumentFocusListener::attachRecursive(
 )
 {
     if( nStateSet & accessibility::AccessibleStateType::FOCUSED )
-        atk_wrapper_focus_tracker_notify(xAccessible);
+        atk_wrapper_notify_focus_change(xAccessible);
 
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
 
@@ -296,7 +292,7 @@ static void handle_tabpage_activated(vcl::Window *pWindow)
         xAccessible->getAccessibleContext(), uno::UNO_QUERY);
 
     if( xSelection.is() )
-        atk_wrapper_focus_tracker_notify(xSelection->getSelectedAccessibleChild(0));
+        atk_wrapper_notify_focus_change(xSelection->getSelectedAccessibleChild(0));
 }
 
 /*****************************************************************************/
@@ -321,7 +317,7 @@ static void notify_toolbox_item_focus(ToolBox *pToolBox)
 
     ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
     if( nPos != ToolBox::ITEM_NOTFOUND )
-        atk_wrapper_focus_tracker_notify(xContext->getAccessibleChild(nPos));
+        atk_wrapper_notify_focus_change(xContext->getAccessibleChild(nPos));
 }
 
 static void handle_toolbox_highlight(vcl::Window *pWindow)
@@ -452,7 +448,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     if( (nStateSet & accessibility::AccessibleStateType::FOCUSED) &&
         ( pWindow->GetType() != WindowType::TREELISTBOX ) )
     {
-        atk_wrapper_focus_tracker_notify(xAccessible);
+        atk_wrapper_notify_focus_change(xAccessible);
     }
     else
     {
@@ -488,7 +484,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
                 uno::Reference< accessibility::XAccessibleContext > xContext ( xAccessible->getAccessibleContext() );
 
                 if( xContext.is() )
-                    atk_wrapper_focus_tracker_notify(xContext->getAccessibleChild(nPos));
+                    atk_wrapper_notify_focus_change(xContext->getAccessibleChild(nPos));
             }
         }
     }
