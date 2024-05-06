@@ -237,7 +237,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Legend::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.Legend";
+    return u"com.sun.star.comp.chart2.Legend"_ustr;
 }
 
 sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )
@@ -248,12 +248,12 @@ sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Legend::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.Legend",
-        "com.sun.star.beans.PropertySet",
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.drawing.LineProperties",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.layout.LayoutElement"
+        u"com.sun.star.chart2.Legend"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr,
+        u"com.sun.star.drawing.FillProperties"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr,
+        u"com.sun.star.layout.LayoutElement"_ustr
     };
 }
 

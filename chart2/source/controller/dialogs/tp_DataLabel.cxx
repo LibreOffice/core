@@ -23,7 +23,7 @@ namespace chart
 {
 
 DataLabelsTabPage::DataLabelsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_DataLabel.ui", "tp_DataLabel", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_DataLabel.ui"_ustr, u"tp_DataLabel"_ustr, &rInAttrs)
     , m_aDataLabelResources(m_xBuilder.get(), pController->getDialog(), rInAttrs)
 {
 }

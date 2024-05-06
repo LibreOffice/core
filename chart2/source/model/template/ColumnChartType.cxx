@@ -104,7 +104,7 @@ OUString SAL_CALL ColumnChartType::getChartType()
 
 uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -141,7 +141,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertyS
 
 OUString SAL_CALL ColumnChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ColumnChartType";
+    return u"com.sun.star.comp.chart.ColumnChartType"_ustr;
 }
 
 sal_Bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
@@ -153,7 +153,7 @@ css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceName
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_COLUMN,
-        "com.sun.star.chart2.ChartType" };
+        u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

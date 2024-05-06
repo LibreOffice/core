@@ -211,7 +211,7 @@ void VPolarGrid::create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xL
         rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
-        ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
+        ::chart::ShapeFactory::setShapeName( xShape, u"MarkHandles"_ustr );
     }
 }
 

@@ -98,7 +98,7 @@ AxisItemConverter::AxisItemConverter(
                                  xChartDoc,
                                  GraphicObjectType::LineProperties ));
     m_aConverters.emplace_back(
-        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, u"ReferencePageSize"_ustr));
 
     m_xAxis = dynamic_cast<::chart::Axis*>(rPropertySet.get());
     assert(m_xAxis);
@@ -335,7 +335,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_POSITION:
         {
             css::chart::ChartAxisPosition eAxisPos( css::chart::ChartAxisPosition_ZERO );
-            GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eAxisPos;
+            GetPropertySet()->getPropertyValue( u"CrossoverPosition"_ustr ) >>= eAxisPos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(eAxisPos) ) );
         }
         break;
@@ -343,7 +343,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_POSITION_VALUE:
         {
             double fValue = 0.0;
-            if( GetPropertySet()->getPropertyValue( "CrossoverValue" ) >>= fValue )
+            if( GetPropertySet()->getPropertyValue( u"CrossoverValue"_ustr ) >>= fValue )
                 rOutItemSet.Put( SvxDoubleItem( fValue, SCHATTR_AXIS_POSITION_VALUE ) );
         }
         break;
@@ -372,7 +372,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_LABEL_POSITION:
         {
             css::chart::ChartAxisLabelPosition ePos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
-            GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= ePos;
+            GetPropertySet()->getPropertyValue( u"LabelPosition"_ustr ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(ePos) ) );
         }
         break;
@@ -380,7 +380,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_MARK_POSITION:
         {
             css::chart::ChartAxisMarkPosition ePos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-            GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= ePos;
+            GetPropertySet()->getPropertyValue( u"MarkPosition"_ustr ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(ePos) ) );
         }
         break;
@@ -390,7 +390,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             // convert double to int (times 100)
             double fVal = 0;
 
-            if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
+            if( GetPropertySet()->getPropertyValue( u"TextRotation"_ustr ) >>= fVal )
             {
                 rOutItemSet.Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, Degree100(static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 )) ) ));
@@ -727,11 +727,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                 double fValue = 0.0;
                                 if( aValue >>= fValue )
                                 {
-                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::Any( css::chart::ChartAxisPosition_VALUE ));
-                                    xCrossingMainAxis->setPropertyValue( "CrossoverValue" , uno::Any( fValue ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( css::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverValue"_ustr , uno::Any( fValue ));
                                 }
                                 else
-                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::Any( css::chart::ChartAxisPosition_START ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( css::chart::ChartAxisPosition_START ));
                             }
                         }
                     }
@@ -746,11 +746,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast<css::chart::ChartAxisPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisPosition eOldAxisPos( css::chart::ChartAxisPosition_ZERO );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eOldAxisPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( u"CrossoverPosition"_ustr ) >>= eOldAxisPos );
 
             if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
             {
-                GetPropertySet()->setPropertyValue( "CrossoverPosition" , uno::Any( eAxisPos ));
+                GetPropertySet()->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( eAxisPos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -761,7 +761,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisPosition eOtherPos;
-                        if( xParallelAxis->getPropertyValue( "CrossoverPosition" ) >>= eOtherPos )
+                        if( xParallelAxis->getPropertyValue( u"CrossoverPosition"_ustr ) >>= eOtherPos )
                         {
                             if( eOtherPos == eAxisPos )
                             {
@@ -769,7 +769,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (eAxisPos==css::chart::ChartAxisPosition_START)
                                     ? css::chart::ChartAxisPosition_END
                                     : css::chart::ChartAxisPosition_START;
-                                xParallelAxis->setPropertyValue( "CrossoverPosition" , uno::Any( eOppositePos ));
+                                xParallelAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( eOppositePos ));
                             }
                         }
                     }
@@ -783,11 +783,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             double fValue = static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
 
             double fOldValue = 0.0;
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverValue" ) >>= fOldValue );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( u"CrossoverValue"_ustr ) >>= fOldValue );
 
             if( !bPropExisted || ( fOldValue != fValue ))
             {
-                GetPropertySet()->setPropertyValue( "CrossoverValue" , uno::Any( fValue ));
+                GetPropertySet()->setPropertyValue( u"CrossoverValue"_ustr , uno::Any( fValue ));
                 bChangedOtherwise = true;
 
                 //keep old and new settings for axis positioning in sync somehow
@@ -830,11 +830,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast<css::chart::ChartAxisLabelPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisLabelPosition eOldPos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= eOldPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( u"LabelPosition"_ustr ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( "LabelPosition" , uno::Any( ePos ));
+                GetPropertySet()->setPropertyValue( u"LabelPosition"_ustr , uno::Any( ePos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -845,7 +845,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisLabelPosition eOtherPos;
-                        if( xParallelAxis->getPropertyValue( "LabelPosition" ) >>= eOtherPos )
+                        if( xParallelAxis->getPropertyValue( u"LabelPosition"_ustr ) >>= eOtherPos )
                         {
                             if( eOtherPos == ePos )
                             {
@@ -853,7 +853,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START)
                                     ? css::chart::ChartAxisLabelPosition_OUTSIDE_END
                                     : css::chart::ChartAxisLabelPosition_OUTSIDE_START;
-                                xParallelAxis->setPropertyValue( "LabelPosition" , uno::Any( eOppositePos ));
+                                xParallelAxis->setPropertyValue( u"LabelPosition"_ustr , uno::Any( eOppositePos ));
                             }
                         }
                     }
@@ -868,11 +868,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast<css::chart::ChartAxisMarkPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisMarkPosition eOldPos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= eOldPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( u"MarkPosition"_ustr ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( "MarkPosition" , uno::Any( ePos ));
+                GetPropertySet()->setPropertyValue( u"MarkPosition"_ustr , uno::Any( ePos ));
                 bChangedOtherwise = true;
             }
         }
@@ -883,11 +883,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             double fVal = toDegrees(rItemSet.Get(SCHATTR_TEXT_DEGREES).GetValue());
             double fOldVal = 0.0;
             bool bPropExisted =
-                ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
+                ( GetPropertySet()->getPropertyValue( u"TextRotation"_ustr ) >>= fOldVal );
 
             if( ! bPropExisted || fOldVal != fVal )
             {
-                GetPropertySet()->setPropertyValue( "TextRotation" , uno::Any( fVal ));
+                GetPropertySet()->setPropertyValue( u"TextRotation"_ustr , uno::Any( fVal ));
                 bChangedOtherwise = true;
             }
         }

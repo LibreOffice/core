@@ -42,7 +42,7 @@ namespace
 class Chart2ImportTest : public ChartTest
 {
 public:
-    Chart2ImportTest() : ChartTest("/chart2/qa/extras/data/") {}
+    Chart2ImportTest() : ChartTest(u"/chart2/qa/extras/data/"_ustr) {}
 
 protected:
     void testTransparentBackground(std::u16string_view filename);
@@ -50,7 +50,7 @@ protected:
 
 OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
 {
-    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump("shapes");
+    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump(u"shapes"_ustr);
 }
 
 // error bar import
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo60083)
     {
         sal_Int32 nErrorBarStyle;
         CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("ErrorBarStyle")
+            xErrorBarYProps->getPropertyValue(u"ErrorBarStyle"_ustr)
             >>= nErrorBarStyle);
         CPPUNIT_ASSERT_EQUAL(
             chart::ErrorBarStyle::RELATIVE,
@@ -81,20 +81,20 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo60083)
 
         double nVal = 0.0;
         CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("PositiveError") >>= nVal);
+            xErrorBarYProps->getPropertyValue(u"PositiveError"_ustr) >>= nVal);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
 
         CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("NegativeError") >>= nVal);
+            xErrorBarYProps->getPropertyValue(u"NegativeError"_ustr) >>= nVal);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
 
         bool bVal;
         CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("ShowPositiveError") >>= bVal);
+            xErrorBarYProps->getPropertyValue(u"ShowPositiveError"_ustr) >>= bVal);
         CPPUNIT_ASSERT_EQUAL(true, bVal);
 
         CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("ShowNegativeError") >>= bVal);
+            xErrorBarYProps->getPropertyValue(u"ShowNegativeError"_ustr) >>= bVal);
         CPPUNIT_ASSERT_EQUAL(true, bVal);
     }
 
@@ -122,15 +122,15 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testErrorBarRange)
 
     sal_Int32 nErrorBarStyle;
     CPPUNIT_ASSERT(
-            xErrorBarYProps->getPropertyValue("ErrorBarStyle")
+            xErrorBarYProps->getPropertyValue(u"ErrorBarStyle"_ustr)
             >>= nErrorBarStyle);
     CPPUNIT_ASSERT_EQUAL(
             chart::ErrorBarStyle::FROM_DATA,
             nErrorBarStyle);
 
     OUString aRangePos;
-    CPPUNIT_ASSERT(xErrorBarYProps->getPropertyValue("ErrorBarRangePositive") >>= aRangePos);
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$2:$C$4"), aRangePos);
+    CPPUNIT_ASSERT(xErrorBarYProps->getPropertyValue(u"ErrorBarRangePositive"_ustr) >>= aRangePos);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$C$2:$C$4"_ustr, aRangePos);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testErrorBarFormatting)
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testErrorBarFormatting)
     CPPUNIT_ASSERT(xErrorBarYProps.is());
 
     util::Color aColor(0);
-    xErrorBarYProps->getPropertyValue("LineColor") >>= aColor;
+    xErrorBarYProps->getPropertyValue(u"LineColor"_ustr) >>= aColor;
     sal_uInt32 nColorValue = aColor;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xff3333), nColorValue);
 }
@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
         CPPUNIT_ASSERT(xPropSet.is());
 
         chart2::CurveStyle eCurveStyle;
-        xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+        xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
         CPPUNIT_ASSERT_EQUAL(eCurveStyle, curveStyle[nSheet]);
     }
 }
@@ -207,9 +207,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODSChartSeries)
     loadFromFile(u"ods/chart.ods");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions( xChart1Doc);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 33"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Col2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 33"_ustr, seriesList[2]);
 
 }
 
@@ -218,9 +218,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSXChartSeries)
     loadFromFile(u"xlsx/chart.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 33"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Col2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 33"_ustr, seriesList[2]);
 
 }
 
@@ -229,9 +229,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSChartSeries)
     loadFromFile(u"xls/chart.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Col 3"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Col 3"_ustr, seriesList[2]);
 
 }
 
@@ -239,9 +239,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODTChartSeries)
 {
     loadFromFile(u"odt/chart.odt");
     uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
 
 }
 
@@ -249,9 +249,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCChartSeries)
 {
     loadFromFile(u"doc/chart.doc");
     uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeries)
@@ -265,9 +265,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeries)
 
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), aLabels[0][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), aLabels[1][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Series 1"_ustr, aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Series 2"_ustr, aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Series 3"_ustr, aLabels[2][0].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartEmptySeries)
@@ -281,9 +281,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartEmptySeries)
 
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("1. dataseries"), aLabels[0][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("2. dataseries"), aLabels[1][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"1. dataseries"_ustr, aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"2. dataseries"_ustr, aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, aLabels[2][0].get<OUString>());
 
     //test chart series sparse data for docx
     std::vector<std::vector<double> > aValues = getDataSeriesYValuesFromChartType(xCT);
@@ -353,9 +353,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTChartSeries)
     loadFromFile(u"ppt/chart.ppt");
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(0, 0);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
 
 }
 
@@ -371,9 +371,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXChartSeries)
 
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), aLabels[0][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), aLabels[1][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, aLabels[2][0].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXSparseChartSeries)
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
     // "Automatic" chart background fill in pptx should be loaded as no fill.
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in pptx should be loaded as no fill (transparent).",
         drawing::FillStyle_NONE, eStyle);
 
@@ -422,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
     // There should be only one data series present.
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aLabels.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Series 3"_ustr, aLabels[0][0].get<OUString>());
 
     // Test the internal data.
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
@@ -436,10 +436,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
     // Get the category labels.
     Sequence<Sequence<OUString> > aCategories = xDescAccess->getComplexRowDescriptions();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("Category 1"), aCategories[0][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Category 2"), aCategories[1][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Category 3"), aCategories[2][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Category 4"), aCategories[3][0]);
+    CPPUNIT_ASSERT_EQUAL(u"Category 1"_ustr, aCategories[0][0]);
+    CPPUNIT_ASSERT_EQUAL(u"Category 2"_ustr, aCategories[1][0]);
+    CPPUNIT_ASSERT_EQUAL(u"Category 3"_ustr, aCategories[2][0]);
+    CPPUNIT_ASSERT_EQUAL(u"Category 4"_ustr, aCategories[3][0]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXPercentageNumberFormats)
@@ -455,35 +455,35 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXPercentageNumberFormats)
     uno::Reference<beans::XPropertySet> xPropertySet;
     chart2::DataPointLabel aLabel;
     sal_Int32 nNumberFormat;
-    const sal_Int32 nPercentFormatSimple = getNumberFormat(xChartDoc, "0%");
-    const sal_Int32 nPercentFormatDecimal = getNumberFormat(xChartDoc, "0.00%");
+    const sal_Int32 nPercentFormatSimple = getNumberFormat(xChartDoc, u"0%"_ustr);
+    const sal_Int32 nPercentFormatDecimal = getNumberFormat(xChartDoc, u"0.00%"_ustr);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
-    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
-    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
-    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
-    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
 
     // 2nd chart
@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXPercentageNumberFormats)
 
     // FIXME: This should be in fact "0.00%".
     // see TODO in oox/source/drawingml/chart/modelbase.cxx
-    const sal_Int32 nPercentFormatDecimalShort = getNumberFormat(xChartDoc, "0.0%");
+    const sal_Int32 nPercentFormatDecimalShort = getNumberFormat(xChartDoc, u"0.0%"_ustr);
     nNumberFormat = getNumberFormatFromAxis(xYAxis);
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimalShort, nNumberFormat);
     sal_Int16 nType = getNumberFormatType(xChartDoc, nNumberFormat);
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartLabelsNumFormat)
     // test data point labels format
     Reference<beans::XPropertySet> xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(0, 0), uno::UNO_SET_THROW);
     chart2::DataPointLabel aLabel;
-    xDataPointPropSet->getPropertyValue("Label") >>= aLabel;
+    xDataPointPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
 }
 
@@ -530,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
 
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     OUString aTitle = getTitleString(xTitled);
-    CPPUNIT_ASSERT_EQUAL(OUString("Stacked"), aTitle);
+    CPPUNIT_ASSERT_EQUAL(u"Stacked"_ustr, aTitle);
 
     // Get the Y-axis.
     Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
 
     xTitled.set(xChartDoc, uno::UNO_QUERY_THROW);
     aTitle = getTitleString(xTitled);
-    CPPUNIT_ASSERT_EQUAL(OUString("100% Stacked"), aTitle);
+    CPPUNIT_ASSERT_EQUAL(u"100% Stacked"_ustr, aTitle);
 
     // Get the Y-axis.
     xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
@@ -566,7 +566,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
 
     xTitled.set(xChartDoc, uno::UNO_QUERY_THROW);
     aTitle = getTitleString(xTitled);
-    CPPUNIT_ASSERT_EQUAL(OUString("Stacked column mixed with 100% stacked area"), aTitle);
+    CPPUNIT_ASSERT_EQUAL(u"Stacked column mixed with 100% stacked area"_ustr, aTitle);
 
     // Get the Y-axis.
     xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
@@ -584,9 +584,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODPChartSeries)
     //test chart series names for odp
     loadFromFile(u"odp/chart.odp");
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(0, 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
 
 }
 
@@ -618,10 +618,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
     CPPUNIT_ASSERT_EQUAL(nNumCategories, aDateSeq.getLength());
 
     const OUString aExpectedDateCategories[nNumCategories] = {
-        "Oct-12", "Nov-12", "Dec-12", "Jan-13",
-        "Feb-13", "Mar-13", "Apr-13", "May-13",
-        "Jun-13", "Jul-13", "Aug-13", "Sep-13",
-        "Oct-13", "Nov-13", "Dec-13", "Jan-14",
+        u"Oct-12"_ustr, u"Nov-12"_ustr, u"Dec-12"_ustr, u"Jan-13"_ustr,
+        u"Feb-13"_ustr, u"Mar-13"_ustr, u"Apr-13"_ustr, u"May-13"_ustr,
+        u"Jun-13"_ustr, u"Jul-13"_ustr, u"Aug-13"_ustr, u"Sep-13"_ustr,
+        u"Oct-13"_ustr, u"Nov-13"_ustr, u"Dec-13"_ustr, u"Jan-14"_ustr,
     };
 
     for (size_t nIdx = 0; nIdx < nNumCategories; ++nIdx)
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
     // MCGR: Use the whole completely imported transparency gradient to check for correctness
     uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(4), uno::UNO_QUERY_THROW);
     awt::Gradient2 aTransparence;
-    xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
+    xShapeProps->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransparence;
     const basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
@@ -656,7 +656,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc882383)
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     OUString sGradientName;
-    xPropertySet->getPropertyValue("GradientName") >>= sGradientName;
+    xPropertySet->getPropertyValue(u"GradientName"_ustr) >>= sGradientName;
     CPPUNIT_ASSERT(!sGradientName.isEmpty());
 }
 
@@ -670,13 +670,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     OUString sTranspGradientName;
-    xPropertySet->getPropertyValue("FillTransparenceGradientName") >>= sTranspGradientName;
+    xPropertySet->getPropertyValue(u"FillTransparenceGradientName"_ustr) >>= sTranspGradientName;
     CPPUNIT_ASSERT(!sTranspGradientName.isEmpty());
 
     awt::Gradient2 aTransparenceGradient;
     uno::Reference< lang::XMultiServiceFactory > xFact(xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFact.is());
-    uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
     uno::Any rTransparenceValue = xTransparenceGradient->getByName(sTranspGradientName);
     CPPUNIT_ASSERT(rTransparenceValue >>= aTransparenceGradient);
     const basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
@@ -709,7 +709,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDelayedCellImport)
         getDataSequenceFromDocByRole(xChartDoc, u"values-x");
 
     OUString aRange = xDataSeq->getSourceRangeRepresentation();
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$C$5:$C$9"), aRange);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$C$5:$C$9"_ustr, aRange);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFlatODSStackedColumnChart)
@@ -755,8 +755,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf127811)
     // Without the fix in place, this test would have failed with
     // - Expected: 1. first
     // - Actual  : 2. second
-    CPPUNIT_ASSERT_EQUAL(OUString("1. first"), aLabels[0][0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("2. second"), aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"1. first"_ustr, aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"2. second"_ustr, aLabels[1][0].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf86624)
@@ -787,14 +787,14 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
     CPPUNIT_ASSERT(xPropSet1.is());
 
     tools::Long lineColor;
-    xPropSet1->getPropertyValue("Color") >>= lineColor;
+    xPropSet1->getPropertyValue(u"Color"_ustr) >>= lineColor;
     // incorrect line color was 0x4a7ebb due to not handling themeOverride
     CPPUNIT_ASSERT_EQUAL(tools::Long(0xeaa700), lineColor);
 
     Reference<beans::XPropertySet> xPropSet2(xDSContainer->getDataSeries()[1], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPropSet2.is());
 
-    xPropSet2->getPropertyValue("Color") >>= lineColor;
+    xPropSet2->getPropertyValue(u"Color"_ustr) >>= lineColor;
     // incorrect line color was 0x98b855
     CPPUNIT_ASSERT_EQUAL(tools::Long(0x1e69a8), lineColor);
 }
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf106217)
     CPPUNIT_ASSERT(xCircle.is());
 
     uno::Reference<container::XNamed> xNamedShape(xCircle, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Oval 1"), xNamedShape->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Oval 1"_ustr, xNamedShape->getName());
 
     awt::Point aPosition = xCircle->getPosition();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6870), aPosition.X);
@@ -834,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf108021)
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
     CPPUNIT_ASSERT(xAxisXSupp.is());
     xAxisProp = xAxisXSupp->getXAxis();
-    xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
+    xAxisProp->getPropertyValue(u"TextBreak"_ustr) >>= bTextBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(bTextBreak);
 }
@@ -862,21 +862,21 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf124817)
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_0(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_0->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT((xPropSet_0->getPropertyValue(u"Symbol"_ustr) >>= aSymblProp));
     CPPUNIT_ASSERT_EQUAL(chart2::SymbolStyle_NONE, aSymblProp.Style);
 
     // Check the symbol of data series 2 (marker style square)
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_1(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_1->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT((xPropSet_1->getPropertyValue(u"Symbol"_ustr) >>= aSymblProp));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xED7D31), aSymblProp.FillColor);
 
     // Check the symbol of data series 3 (marker style diagonal cross)
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 2);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_2(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_2->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT((xPropSet_2->getPropertyValue(u"Symbol"_ustr) >>= aSymblProp));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFF0000), aSymblProp.BorderColor);
 }
 
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf126033)
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Symbol") >>= aSymblProp);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"Symbol"_ustr) >>= aSymblProp);
     CPPUNIT_ASSERT_EQUAL(chart2::SymbolStyle_NONE, aSymblProp.Style);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(176), aSymblProp.Size.Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(176), aSymblProp.Size.Height);
@@ -910,7 +910,7 @@ void Chart2ImportTest::testTransparentBackground(std::u16string_view filename)
     CPPUNIT_ASSERT_MESSAGE("failed to get Area", xPropSet.is());
 
     css::drawing::FillStyle aStyle;
-    xPropSet -> getPropertyValue("FillStyle") >>= aStyle;
+    xPropSet -> getPropertyValue(u"FillStyle"_ustr) >>= aStyle;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Background needs to be with solid fill style", css::drawing::FillStyle_SOLID, aStyle);
 }
@@ -934,8 +934,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoBackgroundXLSX)
     // "Automatic" chart background fill in xlsx should be loaded as solid white.
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
-    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid fill.",
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
@@ -951,9 +951,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoChartAreaBorderPropXLSX)
     // Test "Automatic" chartarea border style/color/width.
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::LineStyle eStyle = xPropSet->getPropertyValue("LineStyle").get<drawing::LineStyle>();
-    sal_Int32 nColor = xPropSet->getPropertyValue("LineColor").get<sal_Int32>();
-    sal_Int32 nWidth = xPropSet->getPropertyValue("LineWidth").get<sal_Int32>();
+    drawing::LineStyle eStyle = xPropSet->getPropertyValue(u"LineStyle"_ustr).get<drawing::LineStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue(u"LineColor"_ustr).get<sal_Int32>();
+    sal_Int32 nWidth = xPropSet->getPropertyValue(u"LineWidth"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border should be loaded as solid style.",
         drawing::LineStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border color should be loaded as light gray.",
@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoChartAreaBorderPropPPTX)
     // Test "Automatic" chartarea border style/color/width.
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::LineStyle eStyle = xPropSet->getPropertyValue("LineStyle").get<drawing::LineStyle>();
+    drawing::LineStyle eStyle = xPropSet->getPropertyValue(u"LineStyle"_ustr).get<drawing::LineStyle>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border should be loaded as none style for pptx.",
         drawing::LineStyle_NONE, eStyle);
 }
@@ -985,8 +985,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testChartAreaStyleBackgroundXLSX)
     // "Automatic" chart background fill in xlsx should be loaded as solid white.
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
-    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid fill.",
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
@@ -1002,18 +1002,18 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testChartHatchFillXLSX)
     // Check the chart background FillStyle is HATCH
     Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
     CPPUNIT_ASSERT(xPropSet.is());
-    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Chart background fill in this xlsx should be loaded as hatch fill.",
         drawing::FillStyle_HATCH, eStyle);
 
     // Check the FillBackground of chart background
     bool bBackgroundFill = false;
-    xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
+    xPropSet->getPropertyValue(u"FillBackground"_ustr) >>= bBackgroundFill;
     CPPUNIT_ASSERT(bBackgroundFill);
 
     Color nBackgroundColor;
-    xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
+    xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nBackgroundColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nBackgroundColor);
 
     // Check the datapoint has HatchName value
@@ -1022,16 +1022,16 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testChartHatchFillXLSX)
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     OUString sHatchName;
-    xPropertySet->getPropertyValue("HatchName") >>= sHatchName;
+    xPropertySet->getPropertyValue(u"HatchName"_ustr) >>= sHatchName;
     CPPUNIT_ASSERT(!sHatchName.isEmpty());
 
     // Check the FillBackground of datapoint
     bool bBackgroundFillofDatapoint = false;
-    xPropertySet->getPropertyValue("FillBackground") >>= bBackgroundFillofDatapoint;
+    xPropertySet->getPropertyValue(u"FillBackground"_ustr) >>= bBackgroundFillofDatapoint;
     CPPUNIT_ASSERT(bBackgroundFillofDatapoint);
 
     sal_Int32 nBackgroundColorofDatapoint;
-    xPropertySet->getPropertyValue("FillColor") >>= nBackgroundColorofDatapoint;
+    xPropertySet->getPropertyValue(u"FillColor"_ustr) >>= nBackgroundColorofDatapoint;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00B050), nBackgroundColorofDatapoint);
 }
 
@@ -1046,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTextRotationXLSX)
 
     Reference<beans::XPropertySet> xPS(xYAxis, uno::UNO_QUERY_THROW);
     double nRotation = 0;
-    bool bSuccess = xPS->getPropertyValue("TextRotation") >>= nRotation;
+    bool bSuccess = xPS->getPropertyValue(u"TextRotation"_ustr) >>= nRotation;
 
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(90, nRotation, 1e-10);
@@ -1065,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTextCanOverlapXLSX)
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
     CPPUNIT_ASSERT(xAxisXSupp.is());
     xAxisProp = xAxisXSupp->getXAxis();
-    xAxisProp->getPropertyValue("TextCanOverlap") >>= bTextCanOverlap;
+    xAxisProp->getPropertyValue(u"TextCanOverlap"_ustr) >>= bTextCanOverlap;
     CPPUNIT_ASSERT(!bTextCanOverlap);
 }
 
@@ -1083,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTextBreakXLSX)
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
     CPPUNIT_ASSERT(xAxisXSupp.is());
     xAxisProp = xAxisXSupp->getXAxis();
-    xAxisProp->getPropertyValue("TextBreak") >>= textBreak;
+    xAxisProp->getPropertyValue(u"TextBreak"_ustr) >>= textBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(textBreak);
 }
@@ -1101,39 +1101,39 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsXLSX)
     sal_Int32 nNumberFormat;
     bool bLinkNumberFormatToSource = false;
     const sal_Int32 nChartDataNumberFormat = getNumberFormat(
-            xChartDoc, "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)");
+            xChartDoc, u"_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)"_ustr);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
-    bool bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    bool bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
-    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
-    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
@@ -1154,7 +1154,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
 
         sal_Int32 nNumberFormat;
         bool bLinkNumberFormatToSource = true;
-        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, "0%");
+        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, u"0%"_ustr);
         xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
         CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
         xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
@@ -1175,7 +1175,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
 
         sal_Int32 nNumberFormat;
         bool bLinkNumberFormatToSource = true;
-        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, "0%");
+        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, u"0%"_ustr);
         xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
         CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
         xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
@@ -1198,7 +1198,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPercentageNumberFormatsDOCX)
 
     bool bLinkNumberFormatToSource = false;
     chart2::DataPointLabel aLabel;
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     bool bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
@@ -1240,7 +1240,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2007XLSX)
 
     Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
     CPPUNIT_ASSERT(xDiagram.is());
-    uno::Any aAny = xDiagram->getPropertyValue("MissingValueTreatment");
+    uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;
     CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::LEAVE_GAP, nMissingValueTreatment);
@@ -1254,7 +1254,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2013XLSX)
 
     Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
     CPPUNIT_ASSERT(xDiagram.is());
-    uno::Any aAny = xDiagram->getPropertyValue("MissingValueTreatment");
+    uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;
     CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::USE_ZERO, nMissingValueTreatment);
@@ -1274,7 +1274,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2007XLSX)
     CPPUNIT_ASSERT(xPropSet.is());
 
     chart2::CurveStyle eCurveStyle;
-    xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+    xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
     CPPUNIT_ASSERT_EQUAL(chart2::CurveStyle_LINES, eCurveStyle);
 }
 
@@ -1292,7 +1292,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2013XLSX)
     CPPUNIT_ASSERT(xPropSet.is());
 
     chart2::CurveStyle eCurveStyle;
-    xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+    xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
     CPPUNIT_ASSERT(eCurveStyle != chart2::CurveStyle_LINES);
 }
 
@@ -1311,12 +1311,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2007XLSX)
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
     Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
+    uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
     bool bShowEquation = true;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
     CPPUNIT_ASSERT(!bShowEquation);
 
-    aAny = xPropSet->getPropertyValue("ShowCorrelationCoefficient");
+    aAny = xPropSet->getPropertyValue(u"ShowCorrelationCoefficient"_ustr);
     bool bShowCorrelation = true;
     CPPUNIT_ASSERT(aAny >>= bShowCorrelation);
     CPPUNIT_ASSERT(!bShowCorrelation);
@@ -1337,12 +1337,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2013XLSX)
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
     Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
+    uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
     bool bShowEquation = false;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
     CPPUNIT_ASSERT(bShowEquation);
 
-    aAny = xPropSet->getPropertyValue("ShowCorrelationCoefficient");
+    aAny = xPropSet->getPropertyValue(u"ShowCorrelationCoefficient"_ustr);
     bool bShowCorrelation = false;
     CPPUNIT_ASSERT(aAny >>= bShowCorrelation);
     CPPUNIT_ASSERT(bShowCorrelation);
@@ -1357,7 +1357,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2007XLSX)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = true;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -1372,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2013XLSX)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = false;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -1383,7 +1383,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPlotVisOnlyDefaultValue2013XLSX)
     loadFromFile(u"xlsx/plotVisOnly.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("IncludeHiddenCells");
+    uno::Any aAny = xPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     bool bShowHiddenValues = true;
     CPPUNIT_ASSERT(aAny >>= bShowHiddenValues);
@@ -1395,7 +1395,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testRAngAxDefaultValue2013XLSX)
     loadFromFile(u"xlsx/rAngAx.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("RightAngledAxes");
+    uno::Any aAny = xPropSet->getPropertyValue(u"RightAngledAxes"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     bool bRightAngleAxes = false;
     CPPUNIT_ASSERT(aAny >>= bRightAngleAxes);
@@ -1410,7 +1410,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMajorTickMarksDefaultValue2013XLSX)
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("MajorTickmarks");
+    uno::Any aAny = xPropSet->getPropertyValue(u"MajorTickmarks"_ustr);
     sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
     CPPUNIT_ASSERT(aAny.hasValue());
     CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
@@ -1425,7 +1425,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMinorTickMarksDefaultValue2013XLSX)
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("MinorTickmarks");
+    uno::Any aAny = xPropSet->getPropertyValue(u"MinorTickmarks"_ustr);
     sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
     CPPUNIT_ASSERT(aAny.hasValue());
     CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
@@ -1443,7 +1443,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleDefaultRotationXLSX)
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+    uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = 0;
     CPPUNIT_ASSERT(aAny >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
@@ -1460,7 +1460,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSecondaryAxisTitleDefaultRotationXLSX
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+    uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = 0;
     CPPUNIT_ASSERT(aAny >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
@@ -1478,7 +1478,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleRotationXLSX)
         Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         CPPUNIT_ASSERT(xTitle.is());
         Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+        uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
         double nRotation = 0;
         CPPUNIT_ASSERT(aAny >>= nRotation);
         CPPUNIT_ASSERT_EQUAL(340.0, nRotation);
@@ -1490,7 +1490,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleRotationXLSX)
         Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         CPPUNIT_ASSERT(xTitle.is());
         Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+        uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
         double nRotation = 0;
         CPPUNIT_ASSERT(aAny >>= nRotation);
         CPPUNIT_ASSERT_EQUAL(270.0, nRotation);
@@ -1541,7 +1541,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testCombinedChartAttachedAxisXLSX)
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 nAxisIndex = -1;
     // First series (column chart) should be attached to secondary axis!
-    uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
 
@@ -1551,7 +1551,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testCombinedChartAttachedAxisXLSX)
 
     xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
     // Second series (line chart) should be attached to primary axis!
-    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 }
@@ -1566,7 +1566,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
 
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 nAxisIndex = -1;
-    uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 
@@ -1575,7 +1575,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
     CPPUNIT_ASSERT(xSeries.is());
 
     xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
-    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 
@@ -1584,7 +1584,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
     CPPUNIT_ASSERT(xSeries.is());
 
     xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
-    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
 }
@@ -1596,7 +1596,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
 
     // Parse 42 array
-    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;42;42;42}", "");
+    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;42;42;42}"_ustr, u""_ustr);
     Sequence<Any> xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1604,7 +1604,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse empty first and last
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}", "");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{\"\";42;42;\"\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[0].getValue())));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1612,7 +1612,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[3].getValue())));
 
     // Parse empty middle
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}", "");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"\";\"\";42}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[1].getValue())) );
@@ -1620,7 +1620,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"hello\";0;\"world\"}", "");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[1]);
@@ -1628,12 +1628,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[3]);
 
     // Parse mixed types, mixed role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}", "");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"categories"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 1 42")), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 2 hello")), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 3 0")), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 4 world")), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 1 42"_ustr), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 2 hello"_ustr), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 3 0"_ustr), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 4 world"_ustr), xSequence[3]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf90510)
@@ -1642,7 +1642,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf90510)
     loadFromFile(u"xls/piechart_outside.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
+    uno::Any aAny = xPropSet->getPropertyValue( u"LabelPlacement"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
@@ -1657,7 +1657,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf109858)
 
     // test data point labels position
     Reference<beans::XPropertySet> xDataPointPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
-    uno::Any aAny = xDataPointPropSet->getPropertyValue( "LabelPlacement" );
+    uno::Any aAny = xDataPointPropSet->getPropertyValue( u"LabelPlacement"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
@@ -1665,7 +1665,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf109858)
 
     // test data series label position
     Reference<beans::XPropertySet> xSeriesPropSet(xChart1Doc->getDiagram()->getDataRowProperties(0), uno::UNO_SET_THROW);
-    aAny = xSeriesPropSet->getPropertyValue( "LabelPlacement" );
+    aAny = xSeriesPropSet->getPropertyValue( u"LabelPlacement"_ustr );
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data series labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
 }
@@ -1679,7 +1679,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf130105)
     CPPUNIT_ASSERT(xDataSeries.is());
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropertySet->getPropertyValue("LabelPlacement");
+    uno::Any aAny = xPropertySet->getPropertyValue(u"LabelPlacement"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
@@ -1703,11 +1703,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf122226)
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
 
-    uno::Any aAny = xPropertySet->getPropertyValue( "LabelSeparator" );
+    uno::Any aAny = xPropertySet->getPropertyValue( u"LabelSeparator"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     OUString nLabelSeparator;
     CPPUNIT_ASSERT( aAny >>= nLabelSeparator );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be separated into new lines", OUString("\n"), nLabelSeparator );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be separated into new lines", u"\n"_ustr, nLabelSeparator );
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107)
@@ -1728,78 +1728,78 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107)
 
     // 1
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[0]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("90.0 = "), aFields[0]->getString());
-    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(u"90.0 = "_ustr, aFields[0]->getString());
+    aFields[0]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[0]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xed7d31), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[1]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("90"), aFields[1]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"90"_ustr, aFields[1]->getString());
 
     // 2
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[0]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), aFields[0]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, aFields[0]->getString());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString(" : "), aFields[1]->getString());
+    CPPUNIT_ASSERT_EQUAL(u" : "_ustr, aFields[1]->getString());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CATEGORYNAME, aFields[2]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), aFields[2]->getString());
-    aFields[2]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[2]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, aFields[2]->getString());
+    aFields[2]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[2]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(16), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xed7d31), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[3]->getFieldType());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[4]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("Multi"), aFields[4]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Multi"_ustr, aFields[4]->getString());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[5]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("line"), aFields[5]->getString());
-    aFields[5]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[5]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(u"line"_ustr, aFields[5]->getString());
+    aFields[5]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[5]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(11.97), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xbf9000), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[6]->getFieldType());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[7]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("Abc"), aFields[7]->getString());
-    aFields[7]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[7]->getPropertyValue("CharColor") >>= nFontColor;
-    aFields[7]->getPropertyValue("CharUnderline") >>= nCharUnderline;
+    CPPUNIT_ASSERT_EQUAL(u"Abc"_ustr, aFields[7]->getString());
+    aFields[7]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[7]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
+    aFields[7]->getPropertyValue(u"CharUnderline"_ustr) >>= nCharUnderline;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(12), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xa9d18e), nFontColor);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nCharUnderline);
 
     // 3
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[0]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("DATA"), aFields[0]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"DATA"_ustr, aFields[0]->getString());
 
     // 4
     xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLREF, aFields[0]->getFieldType());
     //CPPUNIT_ASSERT_EQUAL(OUString("70"), aFields[0]->getString()); TODO: Not implemented yet
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString(" <CELLREF"), aFields[1]->getString());
+    CPPUNIT_ASSERT_EQUAL(u" <CELLREF"_ustr, aFields[1]->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107_2)
@@ -1819,42 +1819,42 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107_2)
 
     // First series
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[0]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("4.3"), aFields[0]->getString());
-    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(u"4.3"_ustr, aFields[0]->getString());
+    aFields[0]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[0]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xc00000), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), aFields[1]->getString());
+    CPPUNIT_ASSERT_EQUAL(u" "_ustr, aFields[1]->getString());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("Bars"), aFields[2]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Bars"_ustr, aFields[2]->getString());
 
     // Second series
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[0]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), aFields[0]->getString());
-    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
-    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aFields[0]->getString());
+    aFields[0]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
+    aFields[0]->getPropertyValue(u"CharColor"_ustr) >>= nFontColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xffd966), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), aFields[1]->getString());
+    CPPUNIT_ASSERT_EQUAL(u" "_ustr, aFields[1]->getString());
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
-    CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Line"_ustr, aFields[2]->getString());
 
 }
 
@@ -1885,10 +1885,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf116163)
     ::std::copy(aTextData.begin(), aTextData.end(),
         ::std::back_inserter(aCategories));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaaa"), aCategories[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Bbbbbbb"), aCategories[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Ccc"), aCategories[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Ddddddddddddd"), aCategories[3]);
+    CPPUNIT_ASSERT_EQUAL(u"Aaaa"_ustr, aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Bbbbbbb"_ustr, aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Ccc"_ustr, aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Ddddddddddddd"_ustr, aCategories[3]);
 
     // Check visible text
 
@@ -1897,7 +1897,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf116163)
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=0,0",
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr,
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
@@ -1913,14 +1913,14 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf116163)
 
     // Check text
     uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaaa"), xLabel0->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Aaaa"_ustr, xLabel0->getString());
     uno::Reference<text::XTextRange> xLabel1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     // If there is space for 3 chars only then don't show "..."
-    CPPUNIT_ASSERT_EQUAL(OUString("Bbb"), xLabel1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, xLabel1->getString());
     uno::Reference<text::XTextRange> xLabel2(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Ccc"), xLabel2->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Ccc"_ustr, xLabel2->getString());
     uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dddd..."), xLabel3->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Dddd..."_ustr, xLabel3->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf48041)
@@ -1942,7 +1942,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf48041)
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=1,0", // Y Axis
+    uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr, // Y Axis
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
@@ -1960,17 +1960,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf48041)
 
     // Check text
     uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), xLabel0->getString());
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xLabel0->getString());
     uno::Reference<text::XTextRange> xLabel1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), xLabel1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xLabel1->getString());
     uno::Reference<text::XTextRange> xLabel2(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), xLabel2->getString());
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xLabel2->getString());
     uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), xLabel3->getString());
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xLabel3->getString());
     uno::Reference<text::XTextRange> xLabel4(xIndexAccess->getByIndex(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("4"), xLabel4->getString());
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xLabel4->getString());
     uno::Reference<text::XTextRange> xLabel5(xIndexAccess->getByIndex(5), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), xLabel5->getString());
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, xLabel5->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf121205)
@@ -1983,7 +1983,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf121205)
     OUString aTitle = getTitleString(xTitled);
 
     // We expect title split in 3 lines
-    CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
+    CPPUNIT_ASSERT_EQUAL(u"Firstline\nSecondline\nThirdline"_ustr, aTitle);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
@@ -2005,7 +2005,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
     OString aPath("//XShape[@text='Green;  $7,654,321 ']"_ostr);
     assertXPath(pXmlDoc, aPath, 1);
     // Expected - 1 line tall(371), not 4 lines(1481).
-    CPPUNIT_ASSERT_EQUAL(OUString("371"), getXPath(pXmlDoc, aPath, "sizeY"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"371"_ustr, getXPath(pXmlDoc, aPath, "sizeY"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146756)
@@ -2023,7 +2023,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146756)
     OString aPath("//XShape[@text='New service request and approval; 18%']"_ostr);
     assertXPath(pXmlDoc, aPath, 1);
     // Expected something like 4 lines tall(1697), not 11 lines(3817).
-    CPPUNIT_ASSERT_EQUAL(OUString("1697"), getXPath(pXmlDoc, aPath, "sizeY"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"1697"_ustr, getXPath(pXmlDoc, aPath, "sizeY"_ostr));
     // Expected some reasonable maximum text length for the label like 2350, not 881.
     sal_Int32 nTextLength = getXPath(pXmlDoc, aPath, "textMaximumFrameWidth"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2350), nTextLength);
@@ -2065,7 +2065,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
         ::std::back_inserter(aCategories));
 
     // Check that we have a very very long label text
-    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very very very very very very loooooooooooong label"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Very very very very very very very very very very very loooooooooooong label"_ustr, aCategories[0]);
 
     // Check visible text
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
@@ -2073,7 +2073,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=0,0",
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr,
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
@@ -2094,7 +2094,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
     CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(32), aLabelString.getLength());
     CPPUNIT_ASSERT(aLabelString.endsWith(u"..."));
 
-    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, u"CID/DiagramWall="_ustr);
     CPPUNIT_ASSERT(xChartWall.is());
 
     // The text shape width should be smaller than the chart wall
@@ -2136,7 +2136,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutomaticSizeBarChartVeryLongLabel)
         ::std::back_inserter(aCategories));
 
     // Check that we have a very very long label text
-    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very very very very very very loooooooooooong label"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Very very very very very very very very very very very loooooooooooong label"_ustr, aCategories[0]);
 
     // Check visible text
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
@@ -2144,7 +2144,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutomaticSizeBarChartVeryLongLabel)
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=0,0",
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr,
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
@@ -2160,9 +2160,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutomaticSizeBarChartVeryLongLabel)
 
     // Check text is unmodified
     uno::Reference<text::XTextRange> xLabel(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very very very very very very loooooooooooong label"), xLabel->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Very very very very very very very very very very very loooooooooooong label"_ustr, xLabel->getString());
 
-    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, u"CID/DiagramWall="_ustr);
     CPPUNIT_ASSERT(xChartWall.is());
 
     // The text shape width should be smaller than the chart wall
@@ -2206,7 +2206,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartPlotAreaMarginWithAutomaticLa
 
     loadFromFile(u"pptx/PieChartWithAutomaticLayout_SizeAndPosition.pptx");
 
-    OUString aCheckShapeName = "CID/D=0:CS=0:CT=0:Series=0";
+    OUString aCheckShapeName = u"CID/D=0:CS=0:CT=0:Series=0"_ustr;
     // Chart Wuse case Width == Height
     {
         // Load chart Chart_2_2 - 2cm x 2cm -

@@ -97,7 +97,7 @@ void ChartToolbarController::update()
 
 OUString ChartToolbarController::getImplementationName()
 {
-    return "org.libreoffice.chart2.Chart2ToolboxController";
+    return u"org.libreoffice.chart2.Chart2ToolboxController"_ustr;
 }
 
 sal_Bool ChartToolbarController::supportsService(OUString const & ServiceName)
@@ -107,7 +107,7 @@ sal_Bool ChartToolbarController::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 }

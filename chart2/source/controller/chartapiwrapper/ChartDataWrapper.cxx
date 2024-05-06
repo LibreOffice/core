@@ -627,9 +627,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
     if( xDiaProp.is())
     {
-        xDiaProp->getPropertyValue("Stacked") >>= bStacked;
-        xDiaProp->getPropertyValue("Percent") >>= bPercent;
-        xDiaProp->getPropertyValue("Deep") >>= bDeep;
+        xDiaProp->getPropertyValue(u"Stacked"_ustr) >>= bStacked;
+        xDiaProp->getPropertyValue(u"Percent"_ustr) >>= bPercent;
+        xDiaProp->getPropertyValue(u"Deep"_ustr) >>= bDeep;
     }
 
     //detect arguments for the new data source
@@ -687,7 +687,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 
 OUString SAL_CALL ChartDataWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ChartData";
+    return u"com.sun.star.comp.chart.ChartData"_ustr;
 }
 
 sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
@@ -698,8 +698,8 @@ sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartDataArray",
-        "com.sun.star.chart.ChartData"
+        u"com.sun.star.chart.ChartDataArray"_ustr,
+        u"com.sun.star.chart.ChartData"_ustr
     };
 }
 

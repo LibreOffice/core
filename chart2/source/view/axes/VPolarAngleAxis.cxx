@@ -193,7 +193,7 @@ void VPolarAngleAxis::createShapes()
     rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis
-    ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
+    ::chart::ShapeFactory::setShapeName( xShape, u"MarkHandles"_ustr );
 
     //create labels
     createLabels();

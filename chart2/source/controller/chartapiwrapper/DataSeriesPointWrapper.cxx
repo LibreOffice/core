@@ -279,7 +279,7 @@ protected:
 
 WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
                 const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
-                : WrappedProperty("Axis",OUString())
+                : WrappedProperty(u"Axis"_ustr,OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -310,7 +310,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
 
     sal_Int32 nChartAxisAssign = css::chart::ChartAxisAssign::PRIMARY_Y;
     if( ! (rOuterValue >>= nChartAxisAssign) )
-        throw lang::IllegalArgumentException("Property Axis requires value of type sal_Int32", nullptr, 0 );
+        throw lang::IllegalArgumentException(u"Property Axis requires value of type sal_Int32"_ustr, nullptr, 0 );
 
     bool bNewAttachedToMainAxis = nChartAxisAssign == css::chart::ChartAxisAssign::PRIMARY_Y;
     bool bOldAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
@@ -334,7 +334,7 @@ protected:
 };
 
 WrappedSegmentOffsetProperty::WrappedSegmentOffsetProperty() :
-        WrappedProperty("SegmentOffset","Offset")
+        WrappedProperty(u"SegmentOffset"_ustr,u"Offset"_ustr)
 {}
 
 Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
@@ -379,7 +379,7 @@ protected:
 
 WrappedLineColorProperty::WrappedLineColorProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
-                : WrappedSeriesAreaOrLineProperty("LineColor","BorderColor","Color", pDataSeriesPointWrapper )
+                : WrappedSeriesAreaOrLineProperty(u"LineColor"_ustr,u"BorderColor"_ustr,u"Color"_ustr, pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
                 , m_aDefaultValue(uno::Any(sal_Int32( 0x0099ccff )))  // blue 8
 {
@@ -420,7 +420,7 @@ protected:
 
 WrappedLineStyleProperty::WrappedLineStyleProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
-                : WrappedSeriesAreaOrLineProperty("LineStyle","BorderStyle", "LineStyle", pDataSeriesPointWrapper )
+                : WrappedSeriesAreaOrLineProperty(u"LineStyle"_ustr,u"BorderStyle"_ustr, u"LineStyle"_ustr, pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
 {
 }
@@ -475,7 +475,7 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
 
     if( !m_xDataSeries.is() )
         throw uno::Exception(
-            "DataSeries index invalid", static_cast< ::cppu::OWeakObject * >( this ));
+            u"DataSeries index invalid"_ustr, static_cast< ::cppu::OWeakObject * >( this ));
 
     //todo: check upper border of point index
 
@@ -576,8 +576,8 @@ void DataSeriesPointWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
-            xProp->setPropertyValue("ReferencePageSize", uno::Any(
+        if( xProp->getPropertyValue(u"ReferencePageSize"_ustr).hasValue() )
+            xProp->setPropertyValue(u"ReferencePageSize"_ustr, uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -586,7 +586,7 @@ Any DataSeriesPointWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
-        aRet = xProp->getPropertyValue("ReferencePageSize");
+        aRet = xProp->getPropertyValue(u"ReferencePageSize"_ustr);
     return aRet;
 }
 awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
@@ -604,7 +604,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
     {
         if (rPropertyName == "SymbolBitmap" || rPropertyName == "SymbolBitmapURL")
         {
-            uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
+            uno::Any aAny = WrappedPropertySet::getPropertyValue(u"SymbolType"_ustr);
             sal_Int32 nVal = css::chart::ChartSymbolType::NONE;
             if (aAny >>= nVal)
             {
@@ -735,38 +735,38 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
 
     //add unnamed line properties (different inner names here)
 
-    aWrappedProperties.emplace_back( new WrappedProperty("FillColor","Color") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillColor"_ustr,u"Color"_ustr) );
     aWrappedProperties.emplace_back( new WrappedLineStyleProperty( this ) );
     aWrappedProperties.emplace_back( new WrappedLineColorProperty( this ) );
-    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineDashName","BorderDashName","LineDashName", this ) );
-    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineTransparence","BorderTransparency","Transparency", this ) );
-    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineWidth","BorderWidth","LineWidth", this ) );
-    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineCap","LineCap","LineCap", this ) );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillStyle","FillStyle" ) );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillTransparence","Transparency") );
+    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty(u"LineDashName"_ustr,u"BorderDashName"_ustr,u"LineDashName"_ustr, this ) );
+    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty(u"LineTransparence"_ustr,u"BorderTransparency"_ustr,u"Transparency"_ustr, this ) );
+    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty(u"LineWidth"_ustr,u"BorderWidth"_ustr,u"LineWidth"_ustr, this ) );
+    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty(u"LineCap"_ustr,u"LineCap"_ustr,u"LineCap"_ustr, this ) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillStyle"_ustr,u"FillStyle"_ustr ) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillTransparence"_ustr,u"Transparency"_ustr) );
 
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty("LineJoint", uno::Any( drawing::LineJoint_ROUND ) ) );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillTransparenceGradientName","TransparencyGradientName") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillGradientName","GradientName") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillGradientStepCount","GradientStepCount") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillHatchName","HatchName") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapName","FillBitmapName") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBackground","FillBackground") );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"LineJoint"_ustr, uno::Any( drawing::LineJoint_ROUND ) ) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillTransparenceGradientName"_ustr,u"TransparencyGradientName"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillGradientName"_ustr,u"GradientName"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillGradientStepCount"_ustr,u"GradientStepCount"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillHatchName"_ustr,u"HatchName"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapName"_ustr,u"FillBitmapName"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBackground"_ustr,u"FillBackground"_ustr) );
 
     //bitmap properties
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapMode","FillBitmapMode") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapSizeX","FillBitmapSizeX") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapSizeY","FillBitmapSizeY") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapLogicalSize","FillBitmapLogicalSize") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapOffsetX","FillBitmapOffsetX") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapOffsetY","FillBitmapOffsetY") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapRectanglePoint","FillBitmapRectanglePoint") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapPositionOffsetX","FillBitmapPositionOffsetX") );
-    aWrappedProperties.emplace_back( new WrappedProperty("FillBitmapPositionOffsetY","FillBitmapPositionOffsetY") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapMode"_ustr,u"FillBitmapMode"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapSizeX"_ustr,u"FillBitmapSizeX"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapSizeY"_ustr,u"FillBitmapSizeY"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapLogicalSize"_ustr,u"FillBitmapLogicalSize"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapOffsetX"_ustr,u"FillBitmapOffsetX"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapOffsetY"_ustr,u"FillBitmapOffsetY"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapRectanglePoint"_ustr,u"FillBitmapRectanglePoint"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapPositionOffsetX"_ustr,u"FillBitmapPositionOffsetX"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapPositionOffsetY"_ustr,u"FillBitmapPositionOffsetY"_ustr) );
 
-    aWrappedProperties.emplace_back( new WrappedProperty("SolidType","Geometry3D") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"SolidType"_ustr,u"Geometry3D"_ustr) );
     aWrappedProperties.emplace_back( new WrappedSegmentOffsetProperty() );
-    aWrappedProperties.emplace_back( new WrappedProperty("D3DPercentDiagonal","PercentDiagonal") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"D3DPercentDiagonal"_ustr,u"PercentDiagonal"_ustr) );
 
     aWrappedProperties.emplace_back( new WrappedTextRotationProperty() );
 
@@ -778,11 +778,11 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
     if(rPropertyName == "Lines")
     {
         if( ! (rValue >>= m_bLinesAllowed) )
-            throw lang::IllegalArgumentException("Property Lines requires value of type sal_Bool", nullptr, 0 );
+            throw lang::IllegalArgumentException(u"Property Lines requires value of type sal_Bool"_ustr, nullptr, 0 );
     }
 
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-    static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName("ErrorCategory");
+    static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName(u"ErrorCategory"_ustr);
     if( nErrorCategoryHandle == nHandle )
     {
         css::chart::ChartErrorCategory aNewValue = css::chart::ChartErrorCategory_NONE;
@@ -792,16 +792,16 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
         switch(aNewValue)
         {
             case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                aHigh = getPropertyValue("ConstantErrorHigh");
-                aLow = getPropertyValue("ConstantErrorLow");
+                aHigh = getPropertyValue(u"ConstantErrorHigh"_ustr);
+                aLow = getPropertyValue(u"ConstantErrorLow"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_PERCENT:
-                aHigh = aLow = getPropertyValue("PercentageError");
+                aHigh = aLow = getPropertyValue(u"PercentageError"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                aHigh = aLow = getPropertyValue("ErrorMargin");
+                aHigh = aLow = getPropertyValue(u"ErrorMargin"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             default:
@@ -815,14 +815,14 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
             switch(aNewValue)
             {
                 case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                    setPropertyValue("ConstantErrorHigh",aHigh);
-                    setPropertyValue("ConstantErrorLow",aLow);
+                    setPropertyValue(u"ConstantErrorHigh"_ustr,aHigh);
+                    setPropertyValue(u"ConstantErrorLow"_ustr,aLow);
                     break;
                 case css::chart::ChartErrorCategory_PERCENT:
-                    setPropertyValue("PercentageError",aHigh);
+                    setPropertyValue(u"PercentageError"_ustr,aHigh);
                     break;
                 case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                    setPropertyValue("ErrorMargin",aHigh);
+                    setPropertyValue(u"ErrorMargin"_ustr,aHigh);
                     break;
                 default:
                     break;
@@ -846,7 +846,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
                 && bVaryColorsByPoint )
             {
                 uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
-                if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
+                if( xPointState.is() && xPointState->getPropertyState(u"Color"_ustr) == beans::PropertyState_DEFAULT_VALUE )
                 {
                     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
                     if( xDiagram.is() )
@@ -864,7 +864,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
 
 OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.DataSeries";
+    return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
 sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
@@ -875,13 +875,13 @@ sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServ
 css::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartDataRowProperties",
-        "com.sun.star.chart.ChartDataPointProperties",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.beans.PropertySet",
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.drawing.LineProperties",
-        "com.sun.star.style.CharacterProperties"
+        u"com.sun.star.chart.ChartDataRowProperties"_ustr,
+        u"com.sun.star.chart.ChartDataPointProperties"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr,
+        u"com.sun.star.drawing.FillProperties"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr
     };
 }
 

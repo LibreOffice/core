@@ -32,11 +32,12 @@ const sal_uInt16 CUBIC_SPLINE_POS = 0;
 const sal_uInt16 B_SPLINE_POS = 1;
 
 SplinePropertiesDialog::SplinePropertiesDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/schart/ui/smoothlinesdlg.ui", "SmoothLinesDialog")
-    , m_xLB_Spline_Type(m_xBuilder->weld_combo_box("SplineTypeComboBox"))
-    , m_xMF_SplineResolution(m_xBuilder->weld_spin_button("ResolutionSpinbutton"))
-    , m_xFT_SplineOrder(m_xBuilder->weld_label("PolynomialsLabel"))
-    , m_xMF_SplineOrder(m_xBuilder->weld_spin_button("PolynomialsSpinButton"))
+    : GenericDialogController(pParent, u"modules/schart/ui/smoothlinesdlg.ui"_ustr,
+                              u"SmoothLinesDialog"_ustr)
+    , m_xLB_Spline_Type(m_xBuilder->weld_combo_box(u"SplineTypeComboBox"_ustr))
+    , m_xMF_SplineResolution(m_xBuilder->weld_spin_button(u"ResolutionSpinbutton"_ustr))
+    , m_xFT_SplineOrder(m_xBuilder->weld_label(u"PolynomialsLabel"_ustr))
+    , m_xMF_SplineOrder(m_xBuilder->weld_spin_button(u"PolynomialsSpinButton"_ustr))
 {
     m_xDialog->set_title(SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES));
 
@@ -85,11 +86,12 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, weld::ComboBox&, v
 }
 
 SteppedPropertiesDialog::SteppedPropertiesDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/schart/ui/steppedlinesdlg.ui", "SteppedLinesDialog")
-    , m_xRB_Start(m_xBuilder->weld_radio_button("step_start_rb"))
-    , m_xRB_End(m_xBuilder->weld_radio_button("step_end_rb"))
-    , m_xRB_CenterX(m_xBuilder->weld_radio_button("step_center_x_rb"))
-    , m_xRB_CenterY(m_xBuilder->weld_radio_button("step_center_y_rb"))
+    : GenericDialogController(pParent, u"modules/schart/ui/steppedlinesdlg.ui"_ustr,
+                              u"SteppedLinesDialog"_ustr)
+    , m_xRB_Start(m_xBuilder->weld_radio_button(u"step_start_rb"_ustr))
+    , m_xRB_End(m_xBuilder->weld_radio_button(u"step_end_rb"_ustr))
+    , m_xRB_CenterX(m_xBuilder->weld_radio_button(u"step_center_x_rb"_ustr))
+    , m_xRB_CenterY(m_xBuilder->weld_radio_button(u"step_center_y_rb"_ustr))
 {
     m_xDialog->set_title(SchResId(STR_DLG_STEPPED_LINE_PROPERTIES));
 }

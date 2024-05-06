@@ -25,7 +25,7 @@ class Chart2TrendCalculators : public ChartTest
 {
 public:
     Chart2TrendCalculators()
-        : ChartTest("/chart2/qa/extras/data/")
+        : ChartTest(u"/chart2/qa/extras/data/"_ustr)
     {}
 
     void setUp() override;
@@ -117,7 +117,7 @@ void Chart2TrendCalculators::testPotentialRegression1()
         pxValues[i] = d;
         pyValues[i] = 2.0 * pow ( d, 3 );
     }
-    checkCalculator( xValues, yValues, "f(x) = 2 x^3");
+    checkCalculator( xValues, yValues, u"f(x) = 2 x^3"_ustr);
 }
 
 // test y = A x ^ B
@@ -189,7 +189,7 @@ void Chart2TrendCalculators::testExponentialRegression1()
         pxValues[i] = d;
         pyValues[i] = 2.0 * exp ( 0.3 * d );
     }
-    checkCalculator( xValues, yValues, "f(x) = 2 exp( 0.3 x )");
+    checkCalculator( xValues, yValues, u"f(x) = 2 exp( 0.3 x )"_ustr);
 }
 
 void Chart2TrendCalculators::testExponentialRegression2()

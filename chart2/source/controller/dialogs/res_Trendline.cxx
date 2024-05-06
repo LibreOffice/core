@@ -46,30 +46,30 @@ TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet
     , m_bTrendLineUnique(true)
     , m_pNumFormatter(nullptr)
     , m_nNbPoints(0)
-    , m_xRB_Linear(rBuilder.weld_radio_button("linear"))
-    , m_xRB_Logarithmic(rBuilder.weld_radio_button("logarithmic"))
-    , m_xRB_Exponential(rBuilder.weld_radio_button("exponential"))
-    , m_xRB_Power(rBuilder.weld_radio_button("power"))
-    , m_xRB_Polynomial(rBuilder.weld_radio_button("polynomial"))
-    , m_xRB_MovingAverage(rBuilder.weld_radio_button("movingAverage"))
-    , m_xFI_Linear(rBuilder.weld_image("imageLinear"))
-    , m_xFI_Logarithmic(rBuilder.weld_image("imageLogarithmic"))
-    , m_xFI_Exponential(rBuilder.weld_image("imageExponential"))
-    , m_xFI_Power(rBuilder.weld_image("imagePower"))
-    , m_xFI_Polynomial(rBuilder.weld_image("imagePolynomial"))
-    , m_xFI_MovingAverage(rBuilder.weld_image("imageMovingAverage"))
-    , m_xNF_Degree(rBuilder.weld_spin_button("degree"))
-    , m_xNF_Period(rBuilder.weld_spin_button("period"))
-    , m_xEE_Name(rBuilder.weld_entry("entry_name"))
-    , m_xFmtFld_ExtrapolateForward(rBuilder.weld_formatted_spin_button("extrapolateForward"))
-    , m_xFmtFld_ExtrapolateBackward(rBuilder.weld_formatted_spin_button("extrapolateBackward"))
-    , m_xCB_SetIntercept(rBuilder.weld_check_button("setIntercept"))
-    , m_xFmtFld_InterceptValue(rBuilder.weld_formatted_spin_button("interceptValue"))
-    , m_xCB_ShowEquation(rBuilder.weld_check_button("showEquation"))
-    , m_xEE_XName(rBuilder.weld_entry("entry_Xname"))
-    , m_xEE_YName(rBuilder.weld_entry("entry_Yname"))
-    , m_xCB_ShowCorrelationCoeff(rBuilder.weld_check_button("showCorrelationCoefficient"))
-    , m_xCB_RegressionMovingType(rBuilder.weld_combo_box("combo_moving_type"))
+    , m_xRB_Linear(rBuilder.weld_radio_button(u"linear"_ustr))
+    , m_xRB_Logarithmic(rBuilder.weld_radio_button(u"logarithmic"_ustr))
+    , m_xRB_Exponential(rBuilder.weld_radio_button(u"exponential"_ustr))
+    , m_xRB_Power(rBuilder.weld_radio_button(u"power"_ustr))
+    , m_xRB_Polynomial(rBuilder.weld_radio_button(u"polynomial"_ustr))
+    , m_xRB_MovingAverage(rBuilder.weld_radio_button(u"movingAverage"_ustr))
+    , m_xFI_Linear(rBuilder.weld_image(u"imageLinear"_ustr))
+    , m_xFI_Logarithmic(rBuilder.weld_image(u"imageLogarithmic"_ustr))
+    , m_xFI_Exponential(rBuilder.weld_image(u"imageExponential"_ustr))
+    , m_xFI_Power(rBuilder.weld_image(u"imagePower"_ustr))
+    , m_xFI_Polynomial(rBuilder.weld_image(u"imagePolynomial"_ustr))
+    , m_xFI_MovingAverage(rBuilder.weld_image(u"imageMovingAverage"_ustr))
+    , m_xNF_Degree(rBuilder.weld_spin_button(u"degree"_ustr))
+    , m_xNF_Period(rBuilder.weld_spin_button(u"period"_ustr))
+    , m_xEE_Name(rBuilder.weld_entry(u"entry_name"_ustr))
+    , m_xFmtFld_ExtrapolateForward(rBuilder.weld_formatted_spin_button(u"extrapolateForward"_ustr))
+    , m_xFmtFld_ExtrapolateBackward(rBuilder.weld_formatted_spin_button(u"extrapolateBackward"_ustr))
+    , m_xCB_SetIntercept(rBuilder.weld_check_button(u"setIntercept"_ustr))
+    , m_xFmtFld_InterceptValue(rBuilder.weld_formatted_spin_button(u"interceptValue"_ustr))
+    , m_xCB_ShowEquation(rBuilder.weld_check_button(u"showEquation"_ustr))
+    , m_xEE_XName(rBuilder.weld_entry(u"entry_Xname"_ustr))
+    , m_xEE_YName(rBuilder.weld_entry(u"entry_Yname"_ustr))
+    , m_xCB_ShowCorrelationCoeff(rBuilder.weld_check_button(u"showCorrelationCoefficient"_ustr))
+    , m_xCB_RegressionMovingType(rBuilder.weld_combo_box(u"combo_moving_type"_ustr))
 {
     FillValueSets();
 
@@ -133,7 +133,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
     else
     {
-        m_xEE_Name->set_text("");
+        m_xEE_Name->set_text(u""_ustr);
     }
     if( const SfxStringItem* pRegressionXNameItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_XNAME ) )
     {
@@ -142,7 +142,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
     else
     {
-        m_xEE_XName->set_text("x");
+        m_xEE_XName->set_text(u"x"_ustr);
     }
     if( const SfxStringItem* pRegressionYNameItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_YNAME ) )
     {
@@ -151,7 +151,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
     else
     {
-        m_xEE_YName->set_text("f(x)");
+        m_xEE_YName->set_text(u"f(x)"_ustr);
     }
 
     const SfxPoolItem* pPoolItem = nullptr;

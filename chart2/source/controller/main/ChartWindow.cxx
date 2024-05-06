@@ -53,7 +53,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         , m_bInPaint(false)
         , m_pViewShellWindow( nullptr )
 {
-    set_id("chart_window");
+    set_id(u"chart_window"_ustr);
     SetHelpId( HID_SCH_WIN_DOCUMENT );
     SetMapMode( MapMode(MapUnit::Map100thMM) );
     adjustHighContrastMode();

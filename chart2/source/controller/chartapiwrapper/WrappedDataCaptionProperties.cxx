@@ -127,7 +127,7 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
       const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
     , tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< sal_Int32 >( "DataCaption"
+        : WrappedSeriesOrDiagramProperty< sal_Int32 >( u"DataCaption"_ustr
             , uno::Any( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
 {
 }

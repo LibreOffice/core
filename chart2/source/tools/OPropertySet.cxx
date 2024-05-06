@@ -364,7 +364,7 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 {
     if( ! SetStyle( xStyle ))
         throw lang::IllegalArgumentException(
-            "Empty Style",
+            u"Empty Style"_ustr,
             static_cast< beans::XPropertySet * >( this ),
             0 );
 }

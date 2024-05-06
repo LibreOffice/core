@@ -17,7 +17,7 @@ class Chart2UiChartTest : public ChartTest
 {
 public:
     Chart2UiChartTest()
-        : ChartTest("/chart2/qa/extras/data/")
+        : ChartTest(u"/chart2/qa/extras/data/"_ustr)
     {
     }
 
@@ -43,16 +43,16 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToObject", aObjectName),
+        comphelper::makePropertyValue(u"ToObject"_ustr, aObjectName),
     };
-    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load("private:factory/scalc");
+    load(u"private:factory/scalc"_ustr);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc2.is());
@@ -123,15 +123,15 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
 
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
 
-    dispatchCommand(mxComponent, ".uno:GoToCell",
-                    { comphelper::makePropertyValue("ToPoint", uno::Any(OUString("C2:L25"))) });
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, uno::Any(u"C2:L25"_ustr)) });
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load("private:factory/scalc");
+    load(u"private:factory/scalc"_ustr);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc2.is());
@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
     // - Expected: 0
     // - Actual  : 3.33625955201419
     // - Incorrect value in Col: 2 Row: 51
-    testCopyPasteToNewSheet(xChartDoc, "Object 2", 4, 158);
+    testCopyPasteToNewSheet(xChartDoc, u"Object 2"_ustr, 4, 158);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
@@ -208,16 +208,16 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
         CPPUNIT_ASSERT_EQUAL(aExpected[i], aSeriesList[i]);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToObject", OUString("Object 1")),
+        comphelper::makePropertyValue(u"ToObject"_ustr, u"Object 1"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new writer document
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     aSeriesList = getWriterChartColumnDescriptions(mxComponent);
 
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
     loadFromFile(u"ods/tdf107097.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getPivotChartDocFromSheet(1, mxComponent),
                                                     uno::UNO_QUERY_THROW);
-    testCopyPasteToNewSheet(xChartDoc, "Object 1", 4, 12);
+    testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 4, 12);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
@@ -243,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
     loadFromFile(u"ods/tdf136011.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
-    testCopyPasteToNewSheet(xChartDoc, "Object 1", 3, 9);
+    testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 3, 9);
 
     loadFromFile(u"ods/tdf136011.ods");
     uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1, mxComponent),
@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
     // - Expected: Test 1 1
     // - Actual  : Test 1
     // - Incorrect description in row: 0
-    testCopyPasteToNewSheet(xChartDoc2, "Object 2", 3, 9);
+    testCopyPasteToNewSheet(xChartDoc2, u"Object 2"_ustr, 3, 9);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
     // - Expected: 2
     // - Actual  : 7
     // - Incorrect number of columns in destination file
-    testCopyPasteToNewSheet(xChartDoc, "Object 1", 2, 6);
+    testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 2, 6);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
@@ -281,16 +281,16 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeriesList.getLength());
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToObject", OUString("Chart 2")),
+        comphelper::makePropertyValue(u"ToObject"_ustr, u"Chart 2"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load("private:factory/scalc");
+    load(u"private:factory/scalc"_ustr);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 0, mxComponent),
                                                      uno::UNO_QUERY_THROW);
@@ -326,10 +326,10 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 
     // Create a copy of the sheet and move to the end
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "DocName", uno::Any(OUString("tdf101894")) },
+        comphelper::InitPropertySequence({ { "DocName", uno::Any(u"tdf101894"_ustr) },
                                            { "Index", uno::Any(sal_uInt16(32767)) },
                                            { "Copy", uno::Any(true) } }));
-    dispatchCommand(mxComponent, ".uno:Move", aArgs);
+    dispatchCommand(mxComponent, u".uno:Move"_ustr, aArgs);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
@@ -404,18 +404,18 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
 
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(OUString("NewTab")) }, { "Index", uno::Any(sal_uInt16(2)) } }));
-    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(sal_uInt16(2)) } }));
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xIA->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     for (sal_Int32 sheetIndex = 0; sheetIndex < 2; ++sheetIndex)
     {
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
     // Remove last sheet
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(3)) } }));
-    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+    dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xIA->getCount());
 
@@ -558,10 +558,10 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     // Without the fix, this would fail with
     // - Expected: values-x
     // - Actual  : values-y
-    CPPUNIT_ASSERT_EQUAL(u"values-x"_ustr, propX->getPropertyValue("Role").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"values-x"_ustr, propX->getPropertyValue(u"Role"_ustr).get<OUString>());
 
     auto propY(sequences[1]->getValues().queryThrow<beans::XPropertySet>());
-    CPPUNIT_ASSERT_EQUAL(u"values-y"_ustr, propY->getPropertyValue("Role").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"values-y"_ustr, propY->getPropertyValue(u"Role"_ustr).get<OUString>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -232,7 +232,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertyS
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataPoint::getImplementationName()
 {
-    return "com.sun.star.comp.chart.DataPoint" ;
+    return u"com.sun.star.comp.chart.DataPoint"_ustr ;
 }
 
 sal_Bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
@@ -243,10 +243,10 @@ sal_Bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.chart2.DataPoint",
-        "com.sun.star.chart2.DataPointProperties",
-        "com.sun.star.beans.PropertySet"
+        u"com.sun.star.drawing.FillProperties"_ustr,
+        u"com.sun.star.chart2.DataPoint"_ustr,
+        u"com.sun.star.chart2.DataPointProperties"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr
     };
 }
 

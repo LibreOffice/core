@@ -62,26 +62,26 @@ using ::com::sun::star::uno::Sequence;
 RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogController* pController, DialogModel & rDialogModel,
                                          ChartTypeTemplateProvider* pTemplateProvider,
                                          bool bHideDescription /* = false */)
-    : OWizardPage(pPage, pController, "modules/schart/ui/tp_RangeChooser.ui", "tp_RangeChooser")
+    : OWizardPage(pPage, pController, u"modules/schart/ui/tp_RangeChooser.ui"_ustr, u"tp_RangeChooser"_ustr)
     , m_nChangingControlCalls(0)
     , m_bIsDirty(false)
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel( rDialogModel )
     , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(pController))
-    , m_xFT_Caption(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
-    , m_xED_Range(m_xBuilder->weld_entry("ED_RANGE"))
-    , m_xIB_Range(m_xBuilder->weld_button("IB_RANGE"))
-    , m_xRB_Rows(m_xBuilder->weld_radio_button("RB_DATAROWS"))
-    , m_xRB_Columns(m_xBuilder->weld_radio_button("RB_DATACOLS"))
-    , m_xCB_FirstRowAsLabel(m_xBuilder->weld_check_button("CB_FIRST_ROW_ASLABELS"))
-    , m_xCB_FirstColumnAsLabel(m_xBuilder->weld_check_button("CB_FIRST_COLUMN_ASLABELS"))
-    , m_xFTTitle(m_xBuilder->weld_label("STR_PAGE_DATA_RANGE"))
-    , m_xFL_TimeBased(m_xBuilder->weld_widget("separator1"))
-    , m_xCB_TimeBased(m_xBuilder->weld_check_button("CB_TIME_BASED"))
-    , m_xFT_TimeStart(m_xBuilder->weld_label("label1"))
-    , m_xEd_TimeStart(m_xBuilder->weld_entry("ED_TIME_BASED_START"))
-    , m_xFT_TimeEnd(m_xBuilder->weld_label("label2"))
-    , m_xEd_TimeEnd(m_xBuilder->weld_entry("ED_TIME_BASED_END"))
+    , m_xFT_Caption(m_xBuilder->weld_label(u"FT_CAPTION_FOR_WIZARD"_ustr))
+    , m_xED_Range(m_xBuilder->weld_entry(u"ED_RANGE"_ustr))
+    , m_xIB_Range(m_xBuilder->weld_button(u"IB_RANGE"_ustr))
+    , m_xRB_Rows(m_xBuilder->weld_radio_button(u"RB_DATAROWS"_ustr))
+    , m_xRB_Columns(m_xBuilder->weld_radio_button(u"RB_DATACOLS"_ustr))
+    , m_xCB_FirstRowAsLabel(m_xBuilder->weld_check_button(u"CB_FIRST_ROW_ASLABELS"_ustr))
+    , m_xCB_FirstColumnAsLabel(m_xBuilder->weld_check_button(u"CB_FIRST_COLUMN_ASLABELS"_ustr))
+    , m_xFTTitle(m_xBuilder->weld_label(u"STR_PAGE_DATA_RANGE"_ustr))
+    , m_xFL_TimeBased(m_xBuilder->weld_widget(u"separator1"_ustr))
+    , m_xCB_TimeBased(m_xBuilder->weld_check_button(u"CB_TIME_BASED"_ustr))
+    , m_xFT_TimeStart(m_xBuilder->weld_label(u"label1"_ustr))
+    , m_xEd_TimeStart(m_xBuilder->weld_entry(u"ED_TIME_BASED_START"_ustr))
+    , m_xFT_TimeEnd(m_xBuilder->weld_label(u"label2"_ustr))
+    , m_xEd_TimeEnd(m_xBuilder->weld_entry(u"ED_TIME_BASED_END"_ustr))
 {
     m_xFT_Caption->set_visible(!bHideDescription);
 
@@ -216,7 +216,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments.getArray()[aArguments.getLength() - 1] =
-            beans::PropertyValue( "TimeBased", -1, uno::Any(bTimeBased),
+            beans::PropertyValue( u"TimeBased"_ustr, -1, uno::Any(bTimeBased),
                     beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -227,7 +227,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments.getArray()[aArguments.getLength() - 1] =
-        beans::PropertyValue( "CellRangeRepresentation" , -1,
+        beans::PropertyValue( u"CellRangeRepresentation"_ustr , -1,
                               uno::Any( m_aLastValidRangeString ),
                               beans::PropertyState_DIRECT_VALUE );
     m_rDialogModel.setData( aArguments );

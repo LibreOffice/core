@@ -73,7 +73,7 @@ namespace chart::wrapper
 UpDownBarWrapper::UpDownBarWrapper(
     bool bUp, std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : m_spChart2ModelContact(std::move( spChart2ModelContact ))
-        , m_aPropertySetName( bUp ? OUString( "WhiteDay" ) : OUString( "BlackDay" ))
+        , m_aPropertySetName( bUp ? u"WhiteDay"_ustr : u"BlackDay"_ustr)
 {
 }
 
@@ -292,7 +292,7 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 
 OUString SAL_CALL UpDownBarWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ChartArea";
+    return u"com.sun.star.comp.chart.ChartArea"_ustr;
 }
 
 sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
@@ -303,10 +303,10 @@ sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartArea",
-        "com.sun.star.drawing.LineProperties",
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.xml.UserDefinedAttributesSupplier"
+        u"com.sun.star.chart.ChartArea"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr,
+        u"com.sun.star.drawing.FillProperties"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr
     };
 }
 

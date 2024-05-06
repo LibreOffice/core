@@ -202,8 +202,8 @@ void BubbleChart::createShapes()
                     if(!pSeries)
                         continue;
 
-                    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
-                    bool bHasBorderColorMapping = pSeries->hasPropertyMapping("LineColor");
+                    bool bHasFillColorMapping = pSeries->hasPropertyMapping(u"FillColor"_ustr);
+                    bool bHasBorderColorMapping = pSeries->hasPropertyMapping(u"LineColor"_ustr);
 
                     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries.get(), xSeriesTarget);
 
@@ -276,22 +276,22 @@ void BubbleChart::createShapes()
 
                         if(bHasFillColorMapping)
                         {
-                            double nPropVal = pSeries->getValueByProperty(nIndex, "FillColor");
+                            double nPropVal = pSeries->getValueByProperty(nIndex, u"FillColor"_ustr);
                             if(!std::isnan(nPropVal))
                             {
-                                xShape->SvxShape::setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
                         if(bHasBorderColorMapping)
                         {
-                            double nPropVal = pSeries->getValueByProperty(nIndex, "LineColor");
+                            double nPropVal = pSeries->getValueByProperty(nIndex, u"LineColor"_ustr);
                             if(!std::isnan(nPropVal))
                             {
-                                xShape->SvxShape::setPropertyValue("LineColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue(u"LineColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
 
-                        ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
+                        ::chart::ShapeFactory::setShapeName( xShape, u"MarkHandles"_ustr );
 
                         //create data point label
                         if( pSeries->getDataPointLabelIfLabel(nIndex) )

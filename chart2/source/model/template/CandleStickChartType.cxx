@@ -215,7 +215,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
 
 OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return "values-last";
+    return u"values-last"_ustr;
 }
 
 // ____ OPropertySet ____
@@ -281,7 +281,7 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
 
 OUString SAL_CALL CandleStickChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.CandleStickChartType" ;
+    return u"com.sun.star.comp.chart.CandleStickChartType"_ustr ;
 }
 
 sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
@@ -293,8 +293,8 @@ css::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServic
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

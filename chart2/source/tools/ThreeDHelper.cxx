@@ -48,7 +48,7 @@ bool lcl_isRightAngledAxesSetAndSupported( const rtl::Reference< Diagram >& xDia
     if( xDiagram.is() )
     {
         bool bRightAngledAxes = false;
-        xDiagram->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
+        xDiagram->getPropertyValue( u"RightAngledAxes"_ustr) >>= bRightAngledAxes;
         if(bRightAngledAxes)
         {
             if( ChartTypeHelper::isSupportingRightAngledAxes(
@@ -665,8 +665,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
             xDiagram->getDataSeries();
         sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
 
-        OUString aPercentDiagonalPropertyName( "PercentDiagonal" );
-        OUString aBorderStylePropertyName( "BorderStyle" );
+        OUString aPercentDiagonalPropertyName( u"PercentDiagonal"_ustr );
+        OUString aBorderStylePropertyName( u"BorderStyle"_ustr );
 
         for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
         {
@@ -765,10 +765,10 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     for( auto const&  xSeries : aSeriesList)
     {
         if( nRoundedEdges>=0 && nRoundedEdges<=100 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "PercentDiagonal", aARoundedEdges );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"PercentDiagonal"_ustr, aARoundedEdges );
 
         if( nObjectLines==0 || nObjectLines==1 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", aALineStyle );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, aALineStyle );
     }
 }
 

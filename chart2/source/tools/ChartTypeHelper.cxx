@@ -680,7 +680,7 @@ bool ChartTypeHelper::isSeriesInFrontOfAxisLine( const rtl::Reference< ChartType
 
 OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const rtl::Reference< ChartType >& xChartType )
 {
-    OUString aRet( "values-y" );
+    OUString aRet( u"values-y"_ustr );
     if( !xChartType.is() )
         return aRet;
     OUString aChartTypeName = xChartType->getChartType();
@@ -691,7 +691,7 @@ OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const 
 
 OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::Reference< ChartType >& xChartType )
 {
-    OUString aRet( "values-y" );
+    OUString aRet( u"values-y"_ustr );
     if( !xChartType.is() )
         return aRet;
     OUString aChartTypeName = xChartType->getChartType();

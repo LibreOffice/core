@@ -99,13 +99,13 @@ CachedDataSequence::~CachedDataSequence()
 
 void CachedDataSequence::registerProperties()
 {
-    registerProperty( "NumberFormatKey",
+    registerProperty( u"NumberFormatKey"_ustr,
                       PROP_NUMBERFORMAT_KEY,
                       0,   // PropertyAttributes
                       & m_nNumberFormatKey,
                       cppu::UnoType<decltype(m_nNumberFormatKey)>::get() );
 
-    registerProperty( "Role",
+    registerProperty( u"Role"_ustr,
                       PROP_PROPOSED_ROLE,
                       0,   // PropertyAttributes
                       & m_sRole,
@@ -187,9 +187,9 @@ css::uno::Sequence< OUString > SAL_CALL CachedDataSequence::getSupportedServiceN
 {
     return {
         lcl_aServiceName,
-        "com.sun.star.chart2.data.DataSequence",
-        "com.sun.star.chart2.data.NumericalDataSequence",
-        "com.sun.star.chart2.data.TextualDataSequence"
+        u"com.sun.star.chart2.data.DataSequence"_ustr,
+        u"com.sun.star.chart2.data.NumericalDataSequence"_ustr,
+        u"com.sun.star.chart2.data.TextualDataSequence"_ustr
     };
 }
 
@@ -257,17 +257,17 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
 void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
-    m_aNumericalSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aNumericalSequence);
+    m_aNumericalSequence = aMap.getUnpackedValueOrDefault( u"DataSequence"_ustr ,m_aNumericalSequence);
     if ( m_aNumericalSequence.hasElements() )
         m_eCurrentDataType = NUMERICAL;
     else
     {
-        m_aTextualSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aTextualSequence);
+        m_aTextualSequence = aMap.getUnpackedValueOrDefault( u"DataSequence"_ustr ,m_aTextualSequence);
         if ( m_aTextualSequence.hasElements() )
             m_eCurrentDataType = TEXTUAL;
         else
         {
-            m_aMixedSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aMixedSequence);
+            m_aMixedSequence = aMap.getUnpackedValueOrDefault( u"DataSequence"_ustr ,m_aMixedSequence);
             if ( m_aMixedSequence.hasElements() )
                 m_eCurrentDataType = MIXED;
         }

@@ -121,8 +121,8 @@ void lcl_AddPropertiesToVector(
             ::chart::CharacterProperties::AddDefaultsToMap( aOutMap );
 
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SHOW, false );
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_XNAME, OUString("x") );
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_YNAME, OUString("f(x)") );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_XNAME, u"x"_ustr );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_YNAME, u"f(x)"_ustr );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_MAY_HAVE_CORRELATION_COEFF, true );
             //::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
@@ -268,7 +268,7 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
 
 OUString SAL_CALL RegressionEquation::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.RegressionEquation";
+    return u"com.sun.star.comp.chart2.RegressionEquation"_ustr;
 }
 
 sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
@@ -278,11 +278,11 @@ sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceN
 
 css::uno::Sequence< OUString > SAL_CALL RegressionEquation::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.RegressionEquation",
-             "com.sun.star.beans.PropertySet",
-             "com.sun.star.drawing.FillProperties",
-             "com.sun.star.drawing.LineProperties",
-             "com.sun.star.style.CharacterProperties" };
+    return { u"com.sun.star.chart2.RegressionEquation"_ustr,
+             u"com.sun.star.beans.PropertySet"_ustr,
+             u"com.sun.star.drawing.FillProperties"_ustr,
+             u"com.sun.star.drawing.LineProperties"_ustr,
+             u"com.sun.star.style.CharacterProperties"_ustr };
 }
 
 using impl::RegressionEquation_Base;

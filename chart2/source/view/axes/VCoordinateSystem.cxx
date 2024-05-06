@@ -547,7 +547,7 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     bool bSwapXAndY = false;
     if( m_xCooSysModel.is()) try
     {
-        m_xCooSysModel->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+        m_xCooSysModel->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXAndY;
     }
     catch( const uno::Exception& )
     {

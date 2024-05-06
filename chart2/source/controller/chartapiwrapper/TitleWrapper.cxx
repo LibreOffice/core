@@ -67,7 +67,7 @@ protected:
 }
 
 WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
-    : ::chart::WrappedProperty( "String", OUString() )
+    : ::chart::WrappedProperty( u"String"_ustr, OUString() )
     , m_xContext( xContext )
 {
 }
@@ -119,7 +119,7 @@ namespace {
 }
 
 WrappedTitleFormStringsProperty::WrappedTitleFormStringsProperty()
-    : ::chart::WrappedProperty( "FormattedStrings", OUString() )
+    : ::chart::WrappedProperty( u"FormattedStrings"_ustr, OUString() )
 {
 }
 
@@ -160,7 +160,7 @@ public:
 }
 
 WrappedStackedTextProperty::WrappedStackedTextProperty()
-    : ::chart::WrappedProperty( "StackedText", "StackCharacters" )
+    : ::chart::WrappedProperty( u"StackedText"_ustr, u"StackCharacters"_ustr )
 {
 }
 
@@ -269,7 +269,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
-        xPropertySet->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xPropertySet->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
     }
 }
 
@@ -286,7 +286,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL TitleWrapper::getShapeType()
 {
-    return "com.sun.star.chart.ChartTitle";
+    return u"com.sun.star.chart.ChartTitle"_ustr;
 }
 
 // ____ XComponent ____
@@ -481,8 +481,8 @@ void TitleWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp( getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
-            xProp->setPropertyValue( "ReferencePageSize", uno::Any(
+        if( xProp->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue() )
+            xProp->setPropertyValue( u"ReferencePageSize"_ustr, uno::Any(
                             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -491,7 +491,7 @@ Any TitleWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp( getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( "ReferencePageSize" );
+        aRet = xProp->getPropertyValue( u"ReferencePageSize"_ustr );
 
     return aRet;
 }
@@ -534,7 +534,7 @@ std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedPrope
 
 OUString SAL_CALL TitleWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Title";
+    return u"com.sun.star.comp.chart.Title"_ustr;
 }
 
 sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )
@@ -545,10 +545,10 @@ sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL TitleWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartTitle",
-        "com.sun.star.drawing.Shape",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-         "com.sun.star.style.CharacterProperties"
+        u"com.sun.star.chart.ChartTitle"_ustr,
+        u"com.sun.star.drawing.Shape"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+         u"com.sun.star.style.CharacterProperties"_ustr
     };
 }
 

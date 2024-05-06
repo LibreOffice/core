@@ -157,7 +157,7 @@ namespace
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
         css::uno::Reference<css::container::XNameAccess> xNameAccess(
-                xFact->createInstance("com.sun.star.drawing.DashTable"),
+                xFact->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
                 css::uno::UNO_QUERY );
         if(xNameAccess.is())
         {
@@ -184,12 +184,12 @@ void ChartLineStyleWrapper::updateData()
     aEvent.IsEnabled = true;
 
     aEvent.FeatureURL = aUrl;
-    aEvent.State = xPropSet->getPropertyValue("LineStyle");
+    aEvent.State = xPropSet->getPropertyValue(u"LineStyle"_ustr);
     mpControl->statusChanged(aEvent);
 
     aUrl.Complete = ".uno:LineDash";
 
-    auto aLineDashName = xPropSet->getPropertyValue("LineDashName");
+    auto aLineDashName = xPropSet->getPropertyValue(u"LineDashName"_ustr);
     OUString aDashName;
     aLineDashName >>= aDashName;
     css::uno::Any aLineDash = getLineDash(mxModel, aDashName);
@@ -213,7 +213,7 @@ bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::
 
     if (rCommand == u".uno:XLineStyle")
     {
-        xPropSet->setPropertyValue("LineStyle", rValue);
+        xPropSet->setPropertyValue(u"LineStyle"_ustr, rValue);
         return true;
     }
     else if (rCommand == u".uno:LineDash")
@@ -224,9 +224,9 @@ bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::
         aDashItem.QueryValue(aAny, MID_LINEDASH);
         OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
                 mxModel,
-                "");
-        xPropSet->setPropertyValue("LineDash", aAny);
-        xPropSet->setPropertyValue("LineDashName", css::uno::Any(aDashName));
+                u""_ustr);
+        xPropSet->setPropertyValue(u"LineDash"_ustr, aAny);
+        xPropSet->setPropertyValue(u"LineDashName"_ustr, css::uno::Any(aDashName));
         return true;
     }
     return false;

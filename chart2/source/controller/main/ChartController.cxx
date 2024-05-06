@@ -248,42 +248,42 @@ OUString ChartController::GetContextName()
 
     uno::Any aAny = getSelection();
     if (!aAny.hasValue())
-        return "Chart";
+        return u"Chart"_ustr;
 
     OUString aCID;
     aAny >>= aCID;
 
     if (aCID.isEmpty())
-        return "Chart";
+        return u"Chart"_ustr;
 
     ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
     switch (eObjectID)
     {
         case OBJECTTYPE_DATA_SERIES:
-            return "Series";
+            return u"Series"_ustr;
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
-            return "ErrorBar";
+            return u"ErrorBar"_ustr;
         case OBJECTTYPE_AXIS:
-            return "Axis";
+            return u"Axis"_ustr;
         case OBJECTTYPE_GRID:
-            return "Grid";
+            return u"Grid"_ustr;
         case OBJECTTYPE_DIAGRAM:
             {
                 rtl::Reference<ChartType> xChartType = getChartType(getChartModel());
                 if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
-                    return "ChartElements";
+                    return u"ChartElements"_ustr;
                 break;
             }
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-            return "Trendline";
+            return u"Trendline"_ustr;
         default:
         break;
     }
 
-    return "Chart";
+    return u"Chart"_ustr;
 }
 
 // private methods
@@ -401,23 +401,23 @@ void SAL_CALL ChartController::attachFrame(
             try
             {
                 uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
+                xPropSet->getPropertyValue( u"LayoutManager"_ustr ) >>= xLayoutManager;
                 if ( xLayoutManager.is() )
                 {
                     xLayoutManager->lock();
-                    xLayoutManager->requestElement( "private:resource/menubar/menubar" );
+                    xLayoutManager->requestElement( u"private:resource/menubar/menubar"_ustr );
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
-                    xLayoutManager->createElement( "private:resource/toolbar/standardbar" );
-                    xLayoutManager->requestElement( "private:resource/toolbar/standardbar" );
+                    xLayoutManager->createElement( u"private:resource/toolbar/standardbar"_ustr );
+                    xLayoutManager->requestElement( u"private:resource/toolbar/standardbar"_ustr );
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
-                    xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
-                    xLayoutManager->requestElement( "private:resource/toolbar/toolbar" );
+                    xLayoutManager->createElement( u"private:resource/toolbar/toolbar"_ustr );
+                    xLayoutManager->requestElement( u"private:resource/toolbar/toolbar"_ustr );
 
                     // #i12587# support for shapes in chart
-                    xLayoutManager->createElement( "private:resource/toolbar/drawbar" );
-                    xLayoutManager->requestElement( "private:resource/toolbar/drawbar" );
+                    xLayoutManager->createElement( u"private:resource/toolbar/drawbar"_ustr );
+                    xLayoutManager->requestElement( u"private:resource/toolbar/drawbar"_ustr );
 
-                    xLayoutManager->requestElement( "private:resource/statusbar/statusbar" );
+                    xLayoutManager->requestElement( u"private:resource/statusbar/statusbar"_ustr );
                     xLayoutManager->unlock();
 
                     // add as listener to get notified when
@@ -949,8 +949,8 @@ void SAL_CALL ChartController::layoutEvent(
         Reference< frame::XLayoutManager > xLM( aSource.Source, uno::UNO_QUERY );
         if( xLM.is())
         {
-            xLM->createElement(  "private:resource/statusbar/statusbar" );
-            xLM->requestElement( "private:resource/statusbar/statusbar" );
+            xLM->createElement(  u"private:resource/statusbar/statusbar"_ustr );
+            xLM->requestElement( u"private:resource/statusbar/statusbar"_ustr );
         }
     }
 }
@@ -1281,26 +1281,26 @@ void SAL_CALL ChartController::dispatch(
         if( xPropSet.is() )
         {
             uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
+            xPropSet->getPropertyValue( u"LayoutManager"_ustr ) >>= xLayoutManager;
             if ( xLayoutManager.is() )
             {
-                bool bIsVisible( xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ));
+                bool bIsVisible( xLayoutManager->isElementVisible( u"private:resource/statusbar/statusbar"_ustr ));
                 if( bIsVisible )
                 {
-                    xLayoutManager->hideElement( "private:resource/statusbar/statusbar" );
-                    xLayoutManager->destroyElement( "private:resource/statusbar/statusbar" );
+                    xLayoutManager->hideElement( u"private:resource/statusbar/statusbar"_ustr );
+                    xLayoutManager->destroyElement( u"private:resource/statusbar/statusbar"_ustr );
                 }
                 else
                 {
-                    xLayoutManager->createElement( "private:resource/statusbar/statusbar" );
-                    xLayoutManager->showElement( "private:resource/statusbar/statusbar" );
+                    xLayoutManager->createElement( u"private:resource/statusbar/statusbar"_ustr );
+                    xLayoutManager->showElement( u"private:resource/statusbar/statusbar"_ustr );
                 }
                 // @todo: update menu state (checkmark next to "Statusbar").
             }
         }
     }
     else if( aCommand == "ChangeTheme" )
-        comphelper::dispatchCommand(".uno:ChangeTheme", getFrame(), rArgs);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, getFrame(), rArgs);
 }
 
 void SAL_CALL ChartController::addStatusListener(
@@ -1580,69 +1580,69 @@ const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommand
 {
     static const o3tl::sorted_vector< OUString > s_AvailableCommands {
         // commands for container forward
-        "AddDirect",           "NewDoc",                "Open",
-        "Save",                "SaveAs",                "SendMail",
-        "EditDoc",             "ExportDirectToPDF",     "PrintDefault",
+        u"AddDirect"_ustr,           u"NewDoc"_ustr,                u"Open"_ustr,
+        u"Save"_ustr,                u"SaveAs"_ustr,                u"SendMail"_ustr,
+        u"EditDoc"_ustr,             u"ExportDirectToPDF"_ustr,     u"PrintDefault"_ustr,
 
         // own commands
-        "Cut",                "Copy",                 "Paste",
-        "DataRanges",         "DiagramData",
+        u"Cut"_ustr,                u"Copy"_ustr,                 u"Paste"_ustr,
+        u"DataRanges"_ustr,         u"DiagramData"_ustr,
         // insert objects
-        "InsertMenuTitles",   "InsertTitles",
-        "InsertMenuLegend",   "InsertLegend",         "DeleteLegend",
-        "InsertMenuDataLabels",
-        "InsertMenuAxes",     "InsertRemoveAxes",         "InsertMenuGrids",
-        "InsertSymbol",
-        "InsertTrendlineEquation",  "InsertTrendlineEquationAndR2",
-        "InsertR2Value",      "DeleteR2Value",
-        "InsertMenuTrendlines",  "InsertTrendline",
-        "InsertMenuMeanValues", "InsertMeanValue",
-        "InsertMenuXErrorBars",  "InsertXErrorBars",
-        "InsertMenuYErrorBars",   "InsertYErrorBars",
-        "InsertDataLabels",   "InsertDataLabel",
-        "DeleteTrendline",    "DeleteMeanValue",      "DeleteTrendlineEquation",
-        "DeleteXErrorBars",   "DeleteYErrorBars",
-        "DeleteDataLabels",   "DeleteDataLabel",
-        "InsertMenuDataTable",
-        "InsertDataTable", "DeleteDataTable",
+        u"InsertMenuTitles"_ustr,   u"InsertTitles"_ustr,
+        u"InsertMenuLegend"_ustr,   u"InsertLegend"_ustr,         u"DeleteLegend"_ustr,
+        u"InsertMenuDataLabels"_ustr,
+        u"InsertMenuAxes"_ustr,     u"InsertRemoveAxes"_ustr,         u"InsertMenuGrids"_ustr,
+        u"InsertSymbol"_ustr,
+        u"InsertTrendlineEquation"_ustr,  u"InsertTrendlineEquationAndR2"_ustr,
+        u"InsertR2Value"_ustr,      u"DeleteR2Value"_ustr,
+        u"InsertMenuTrendlines"_ustr,  u"InsertTrendline"_ustr,
+        u"InsertMenuMeanValues"_ustr, u"InsertMeanValue"_ustr,
+        u"InsertMenuXErrorBars"_ustr,  u"InsertXErrorBars"_ustr,
+        u"InsertMenuYErrorBars"_ustr,   u"InsertYErrorBars"_ustr,
+        u"InsertDataLabels"_ustr,   u"InsertDataLabel"_ustr,
+        u"DeleteTrendline"_ustr,    u"DeleteMeanValue"_ustr,      u"DeleteTrendlineEquation"_ustr,
+        u"DeleteXErrorBars"_ustr,   u"DeleteYErrorBars"_ustr,
+        u"DeleteDataLabels"_ustr,   u"DeleteDataLabel"_ustr,
+        u"InsertMenuDataTable"_ustr,
+        u"InsertDataTable"_ustr, u"DeleteDataTable"_ustr,
         //format objects
-        "FormatSelection",    "FontDialog",           "TransformDialog",
-        "DiagramType",        "View3D",
-        "Forward",            "Backward",
-        "MainTitle",          "SubTitle",
-        "XTitle",             "YTitle",               "ZTitle",
-        "SecondaryXTitle",    "SecondaryYTitle",
-        "AllTitles",          "Legend",
-        "DiagramAxisX",       "DiagramAxisY",         "DiagramAxisZ",
-        "DiagramAxisA",       "DiagramAxisB",         "DiagramAxisAll",
-        "DiagramGridXMain",   "DiagramGridYMain",     "DiagramGridZMain",
-        "DiagramGridXHelp",   "DiagramGridYHelp",     "DiagramGridZHelp",
-        "DiagramGridAll",
-        "DiagramWall",        "DiagramFloor",         "DiagramArea",
+        u"FormatSelection"_ustr,    u"FontDialog"_ustr,           u"TransformDialog"_ustr,
+        u"DiagramType"_ustr,        u"View3D"_ustr,
+        u"Forward"_ustr,            u"Backward"_ustr,
+        u"MainTitle"_ustr,          u"SubTitle"_ustr,
+        u"XTitle"_ustr,             u"YTitle"_ustr,               u"ZTitle"_ustr,
+        u"SecondaryXTitle"_ustr,    u"SecondaryYTitle"_ustr,
+        u"AllTitles"_ustr,          u"Legend"_ustr,
+        u"DiagramAxisX"_ustr,       u"DiagramAxisY"_ustr,         u"DiagramAxisZ"_ustr,
+        u"DiagramAxisA"_ustr,       u"DiagramAxisB"_ustr,         u"DiagramAxisAll"_ustr,
+        u"DiagramGridXMain"_ustr,   u"DiagramGridYMain"_ustr,     u"DiagramGridZMain"_ustr,
+        u"DiagramGridXHelp"_ustr,   u"DiagramGridYHelp"_ustr,     u"DiagramGridZHelp"_ustr,
+        u"DiagramGridAll"_ustr,
+        u"DiagramWall"_ustr,        u"DiagramFloor"_ustr,         u"DiagramArea"_ustr,
 
         //context menu - format objects entries
-        "FormatWall",        "FormatFloor",         "FormatChartArea",
-        "FormatLegend",
+        u"FormatWall"_ustr,        u"FormatFloor"_ustr,         u"FormatChartArea"_ustr,
+        u"FormatLegend"_ustr,
 
-        "FormatAxis",           "FormatTitle",
-        "FormatDataSeries",     "FormatDataPoint",
-        "ResetAllDataPoints",   "ResetDataPoint",
-        "FormatDataLabels",     "FormatDataLabel",
-        "FormatMeanValue",      "FormatTrendline",      "FormatTrendlineEquation",
-        "FormatXErrorBars",     "FormatYErrorBars",
-        "FormatStockLoss",      "FormatStockGain",
+        u"FormatAxis"_ustr,           u"FormatTitle"_ustr,
+        u"FormatDataSeries"_ustr,     u"FormatDataPoint"_ustr,
+        u"ResetAllDataPoints"_ustr,   u"ResetDataPoint"_ustr,
+        u"FormatDataLabels"_ustr,     u"FormatDataLabel"_ustr,
+        u"FormatMeanValue"_ustr,      u"FormatTrendline"_ustr,      u"FormatTrendlineEquation"_ustr,
+        u"FormatXErrorBars"_ustr,     u"FormatYErrorBars"_ustr,
+        u"FormatStockLoss"_ustr,      u"FormatStockGain"_ustr,
 
-        "FormatMajorGrid",      "InsertMajorGrid",      "DeleteMajorGrid",
-        "FormatMinorGrid",      "InsertMinorGrid",      "DeleteMinorGrid",
-        "InsertAxis",           "DeleteAxis",           "InsertAxisTitle",
+        u"FormatMajorGrid"_ustr,      u"InsertMajorGrid"_ustr,      u"DeleteMajorGrid"_ustr,
+        u"FormatMinorGrid"_ustr,      u"InsertMinorGrid"_ustr,      u"DeleteMinorGrid"_ustr,
+        u"InsertAxis"_ustr,           u"DeleteAxis"_ustr,           u"InsertAxisTitle"_ustr,
 
         // toolbar commands
-        "ToggleGridHorizontal", "ToggleGridVertical", "ToggleLegend",         "ScaleText",
-        "NewArrangement",     "Update",
-        "DefaultColors",      "BarWidth",             "NumberOfLines",
-        "ArrangeRow",
-        "StatusBarVisible",
-        "ChartElementSelector"};
+        u"ToggleGridHorizontal"_ustr, u"ToggleGridVertical"_ustr, u"ToggleLegend"_ustr,         u"ScaleText"_ustr,
+        u"NewArrangement"_ustr,     u"Update"_ustr,
+        u"DefaultColors"_ustr,      u"BarWidth"_ustr,             u"NumberOfLines"_ustr,
+        u"ArrangeRow"_ustr,
+        u"StatusBarVisible"_ustr,
+        u"ChartElementSelector"_ustr};
     return s_AvailableCommands;
 }
 

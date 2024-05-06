@@ -211,11 +211,11 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
     {
         if( AxisHelper::isAxisPositioningEnabled() )
         {
-            xAxisProp->getPropertyValue("CrossoverPosition") >>= m_eCrossoverType;
+            xAxisProp->getPropertyValue(u"CrossoverPosition"_ustr) >>= m_eCrossoverType;
             if( m_eCrossoverType == css::chart::ChartAxisPosition_VALUE )
             {
                 double fValue = 0.0;
-                xAxisProp->getPropertyValue("CrossoverValue") >>= fValue;
+                xAxisProp->getPropertyValue(u"CrossoverValue"_ustr) >>= fValue;
 
                 if( m_bCrossingAxisIsCategoryAxes )
                     fValue = ::rtl::math::round(fValue);
@@ -224,8 +224,8 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
             else if( m_eCrossoverType == css::chart::ChartAxisPosition_ZERO )
                 m_pfMainLinePositionAtOtherAxis = 0.0;
 
-            xAxisProp->getPropertyValue("LabelPosition") >>= m_eLabelPos;
-            xAxisProp->getPropertyValue("MarkPosition") >>= m_eTickmarkPos;
+            xAxisProp->getPropertyValue(u"LabelPosition"_ustr) >>= m_eLabelPos;
+            xAxisProp->getPropertyValue(u"MarkPosition"_ustr) >>= m_eTickmarkPos;
         }
         else
         {
@@ -304,16 +304,16 @@ void AxisProperties::init( bool bCartesian )
         m_aLineProperties.initFromPropertySet( m_xAxisModel );
 
         //init display labels
-        m_xAxisModel->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
+        m_xAxisModel->getPropertyValue( u"DisplayLabels"_ustr ) >>= m_bDisplayLabels;
 
         // Init layout strategy hint for axis labels.
         // Compatibility option: starting from LibreOffice 5.1 the rotated
         // layout is preferred to staggering for axis labels.
-        m_xAxisModel->getPropertyValue( "TryStaggeringFirst" ) >>= m_bTryStaggeringFirst;
+        m_xAxisModel->getPropertyValue( u"TryStaggeringFirst"_ustr ) >>= m_bTryStaggeringFirst;
 
         //init TickmarkProperties
-        m_xAxisModel->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;
-        m_xAxisModel->getPropertyValue( "MinorTickmarks" ) >>= m_nMinorTickmarks;
+        m_xAxisModel->getPropertyValue( u"MajorTickmarks"_ustr ) >>= m_nMajorTickmarks;
+        m_xAxisModel->getPropertyValue( u"MinorTickmarks"_ustr ) >>= m_nMinorTickmarks;
 
         sal_Int32 nMaxDepth = 0;
         if(m_nMinorTickmarks!=0)
@@ -366,13 +366,13 @@ void AxisLabelProperties::init( const rtl::Reference< Axis >& xAxisModel )
 
     try
     {
-        xAxisModel->getPropertyValue( "TextBreak" ) >>= m_bLineBreakAllowed;
-        xAxisModel->getPropertyValue( "TextOverlap" ) >>= m_bOverlapAllowed;
-        xAxisModel->getPropertyValue( "StackCharacters" ) >>= m_bStackCharacters;
-        xAxisModel->getPropertyValue( "TextRotation" ) >>= m_fRotationAngleDegree;
+        xAxisModel->getPropertyValue( u"TextBreak"_ustr ) >>= m_bLineBreakAllowed;
+        xAxisModel->getPropertyValue( u"TextOverlap"_ustr ) >>= m_bOverlapAllowed;
+        xAxisModel->getPropertyValue( u"StackCharacters"_ustr ) >>= m_bStackCharacters;
+        xAxisModel->getPropertyValue( u"TextRotation"_ustr ) >>= m_fRotationAngleDegree;
 
         css::chart::ChartAxisArrangeOrderType eArrangeOrder;
-        xAxisModel->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
+        xAxisModel->getPropertyValue( u"ArrangeOrder"_ustr ) >>= eArrangeOrder;
         switch(eArrangeOrder)
         {
             case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:

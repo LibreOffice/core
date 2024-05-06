@@ -556,7 +556,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
     if( xEnumAcc.is())
     {
         uno::Reference< container::XEnumeration > xEnum(
-            xEnumAcc->createContentEnumeration( "com.sun.star.chart2.ChartTypeTemplate" ));
+            xEnumAcc->createContentEnumeration( u"com.sun.star.chart2.ChartTypeTemplate"_ustr ));
         if( xEnum.is())
         {
             uno::Reference< uno::XInterface > xFactIntf;
@@ -579,7 +579,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 // ____ XServiceInfo ____
 OUString SAL_CALL ChartTypeManager::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ChartTypeManager";
+    return u"com.sun.star.comp.chart.ChartTypeManager"_ustr;
 }
 
 sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )
@@ -590,8 +590,8 @@ sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.ChartTypeManager",
-        "com.sun.star.lang.MultiServiceFactory" };
+        u"com.sun.star.chart2.ChartTypeManager"_ustr,
+        u"com.sun.star.lang.MultiServiceFactory"_ustr };
 }
 
 } //  namespace chart

@@ -169,84 +169,84 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_DEGREE:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "PolynomialDegree");
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, u"PolynomialDegree"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_PERIOD:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "MovingAveragePeriod");
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, u"MovingAveragePeriod"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "ExtrapolateForward");
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, u"ExtrapolateForward"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "ExtrapolateBackward");
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, u"ExtrapolateBackward"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "ForceIntercept");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, u"ForceIntercept"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "InterceptValue");
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, u"InterceptValue"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_CURVE_NAME:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xProperties, "CurveName");
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xProperties, u"CurveName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_MOVING_TYPE:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "MovingAverageType");
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, u"MovingAverageType"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowEquation");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, u"ShowEquation"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_XNAME:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, "XName");
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, u"XName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_YNAME:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, "YName");
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, u"YName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, u"ShowCorrelationCoefficient"_ustr);
         }
         break;
 
@@ -274,73 +274,73 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
 
         case SCHATTR_REGRESSION_DEGREE:
         {
-            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "PolynomialDegree");
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, u"PolynomialDegree"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_PERIOD:
         {
-            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAveragePeriod");
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, u"MovingAveragePeriod"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
-            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, xProperties, "ExtrapolateForward");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, xProperties, u"ExtrapolateForward"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
-            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, xProperties, "ExtrapolateBackward");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, xProperties, u"ExtrapolateBackward"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
-            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, "ForceIntercept");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, u"ForceIntercept"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
-            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_INTERCEPT_VALUE, xProperties, "InterceptValue");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_INTERCEPT_VALUE, xProperties, u"InterceptValue"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_CURVE_NAME:
         {
-            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, "CurveName");
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, u"CurveName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_MOVING_TYPE:
         {
-            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAverageType");
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, u"MovingAverageType"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
-            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowEquation");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), u"ShowEquation"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_XNAME:
         {
-            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "XName");
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), u"XName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_YNAME:
         {
-            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "YName");
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), u"YName"_ustr);
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
-            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowCorrelationCoefficient");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), u"ShowCorrelationCoefficient"_ustr);
         }
         break;
     }

@@ -463,20 +463,20 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
         if( aName.find( u"Area" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.AreaDiagram";
+            return u"com.sun.star.chart.AreaDiagram"_ustr;
 
         // Handle bar-of-pie and pie-of-pie before simple pie
         // "BarOfPie"
         if( aName.find( u"BarOfPie" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.BarOfPieDiagram";
+            return u"com.sun.star.chart.BarOfPieDiagram"_ustr;
 
         // "PieOfPie"
         if( aName.find( u"PieOfPie" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.PieOfPieDiagram";
+            return u"com.sun.star.chart.PieOfPieDiagram"_ustr;
 
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
         if( aName.find( u"Pie" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.PieDiagram";
+            return u"com.sun.star.chart.PieDiagram"_ustr;
 
         // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
         // "ThreeDColumnFlat" "StackedThreeDColumnFlat"
@@ -485,33 +485,33 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
         // "StackedColumnWithLine"
         if( aName.find( u"Column" ) != std::u16string_view::npos || aName.find( u"Bar" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.BarDiagram";
+            return u"com.sun.star.chart.BarDiagram"_ustr;
 
         // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
         if( aName.find( u"Donut" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.DonutDiagram";
+            return u"com.sun.star.chart.DonutDiagram"_ustr;
 
         // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
         if( aName.find( u"Scatter" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.XYDiagram";
+            return u"com.sun.star.chart.XYDiagram"_ustr;
 
         // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
         if( aName.find( u"FilledNet" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.FilledNetDiagram";
+            return u"com.sun.star.chart.FilledNetDiagram"_ustr;
 
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
         if( aName.find( u"Net" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.NetDiagram";
+            return u"com.sun.star.chart.NetDiagram"_ustr;
 
         // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
         // "StockVolumeOpenLowHighClose"
         if( aName.find( u"Stock" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.StockDiagram";
+            return u"com.sun.star.chart.StockDiagram"_ustr;
 
         if( aName.find( u"Bubble" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.BubbleDiagram";
+            return u"com.sun.star.chart.BubbleDiagram"_ustr;
 
         // Note: this must be checked after Bar, Net and Scatter
 
@@ -520,7 +520,7 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
         if( aName.find( u"Line" ) != std::u16string_view::npos || aName.find( u"Symbol" ) != std::u16string_view::npos )
-            return "com.sun.star.chart.LineDiagram";
+            return u"com.sun.star.chart.LineDiagram"_ustr;
 
         OSL_FAIL( "unknown template" );
     }
@@ -586,7 +586,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         if( xChartDocProp.is() )
         {
             uno::Reference< util::XRefreshable > xAddIn;
-            if( xChartDocProp->getPropertyValue( "AddIn" ) >>= xAddIn )
+            if( xChartDocProp->getPropertyValue( u"AddIn"_ustr ) >>= xAddIn )
             {
                 uno::Reference< lang::XServiceName > xServiceName( xAddIn, uno::UNO_QUERY );
                 if( xServiceName.is())
@@ -626,12 +626,12 @@ Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataRowProperties( sal_Int32 nRow )
 {
     if( nRow < 0 )
-        throw lang::IndexOutOfBoundsException("DataSeries index invalid",
+        throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
     sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getDiagram() );
     if( nNewAPIIndex < 0 )
-        throw lang::IndexOutOfBoundsException("DataSeries index invalid",
+        throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
     Reference< beans::XPropertySet > xRet( new DataSeriesPointWrapper(
@@ -643,12 +643,12 @@ Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
 {
     if( nCol < 0 || nRow < 0 )
-        throw lang::IndexOutOfBoundsException("DataSeries index invalid",
+        throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
     sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getDiagram() );
     if( nNewAPIIndex < 0 )
-        throw lang::IndexOutOfBoundsException("DataSeries index invalid",
+        throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
     //todo: check borders of point index
@@ -683,11 +683,11 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     {
         OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
         uno::Any aEmpty;
-        xProp->setPropertyValue( "RelativePosition", aEmpty );
+        xProp->setPropertyValue( u"RelativePosition"_ustr, aEmpty );
         return;
     }
-    xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
-    xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
+    xProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
@@ -713,18 +713,18 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     {
         OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
         uno::Any aEmpty;
-        xProp->setPropertyValue( "RelativeSize", aEmpty );
+        xProp->setPropertyValue( u"RelativeSize"_ustr, aEmpty );
         return;
     }
 
-    xProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
-    xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
+    xProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
+    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL DiagramWrapper::getShapeType()
 {
-    return "com.sun.star.chart.Diagram";
+    return u"com.sun.star.chart.Diagram"_ustr;
 }
 
 // ____ XDiagramPositioning ____
@@ -735,8 +735,8 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
-        xDiaProps->setPropertyValue( "RelativeSize", Any() );
-        xDiaProps->setPropertyValue( "RelativePosition", Any() );
+        xDiaProps->setPropertyValue( u"RelativeSize"_ustr, Any() );
+        xDiaProps->setPropertyValue( u"RelativePosition"_ustr, Any() );
     }
 }
 sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
@@ -744,8 +744,8 @@ sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
-        Any aRelativeSize( xDiaProps->getPropertyValue( "RelativeSize" ) );
-        Any aRelativePosition( xDiaProps->getPropertyValue( "RelativePosition" ) );
+        Any aRelativeSize( xDiaProps->getPropertyValue( u"RelativeSize"_ustr ) );
+        Any aRelativePosition( xDiaProps->getPropertyValue( u"RelativePosition"_ustr ) );
         if( aRelativeSize.hasValue() && aRelativePosition.hasValue() )
             return false;
     }
@@ -757,19 +757,19 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(true) );
+        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(true) );
 }
 sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
-        Any aRelativeSize( xDiaProps->getPropertyValue( "RelativeSize" ) );
-        Any aRelativePosition( xDiaProps->getPropertyValue( "RelativePosition" ) );
+        Any aRelativeSize( xDiaProps->getPropertyValue( u"RelativeSize"_ustr ) );
+        Any aRelativePosition( xDiaProps->getPropertyValue( u"RelativePosition"_ustr ) );
         if( aRelativeSize.hasValue() && aRelativePosition.hasValue() )
         {
             bool bPosSizeExcludeAxes = false;
-            xDiaProps->getPropertyValue( "PosSizeExcludeAxes" ) >>= bPosSizeExcludeAxes;
+            xDiaProps->getPropertyValue( u"PosSizeExcludeAxes"_ustr ) >>= bPosSizeExcludeAxes;
             return bPosSizeExcludeAxes;
         }
     }
@@ -785,7 +785,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(false) );
+        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
 }
 awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
 {
@@ -1114,7 +1114,7 @@ private: //member
 }
 
 WrappedDataRowSourceProperty::WrappedDataRowSourceProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("DataRowSource",OUString())
+            : WrappedProperty(u"DataRowSource"_ustr,OUString())
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedDataRowSourceProperty::getPropertyDefault( nullptr );
@@ -1127,7 +1127,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     {
         sal_Int32 nNew = sal_Int32(css::chart::ChartDataRowSource_ROWS);
         if( !(rOuterValue >>= nNew) )
-            throw lang::IllegalArgumentException( "Property DataRowSource requires css::chart::ChartDataRowSource value", nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property DataRowSource requires css::chart::ChartDataRowSource value"_ustr, nullptr, 0 );
         eChartDataRowSource = css::chart::ChartDataRowSource(nNew);
     }
 
@@ -1245,7 +1245,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Stacking Properties require boolean values", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Stacking Properties require boolean values"_ustr, nullptr, 0 );
 
     StackMode eInnerStackMode;
     bool bHasDetectableInnerValue = detectInnerValue( eInnerStackMode );
@@ -1309,7 +1309,7 @@ private: //member
 }
 
 WrappedDim3DProperty::WrappedDim3DProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("Dim3D",OUString())
+            : WrappedProperty(u"Dim3D"_ustr,OUString())
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedDim3DProperty::getPropertyDefault( nullptr );
@@ -1319,7 +1319,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
 {
     bool bNew3D = false;
     if( ! (rOuterValue >>= bNew3D) )
-        throw lang::IllegalArgumentException( "Property Dim3D requires boolean value", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property Dim3D requires boolean value"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1372,7 +1372,7 @@ private: //member
 }
 
 WrappedVerticalProperty::WrappedVerticalProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("Vertical",OUString())
+            : WrappedProperty(u"Vertical"_ustr,OUString())
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedVerticalProperty::getPropertyDefault( nullptr );
@@ -1382,7 +1382,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 {
     bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
-        throw lang::IllegalArgumentException( "Property Vertical requires boolean value", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property Vertical requires boolean value"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1443,7 +1443,7 @@ private: //member
 }
 
 WrappedNumberOfLinesProperty::WrappedNumberOfLinesProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("NumberOfLines",OUString())
+            : WrappedProperty(u"NumberOfLines"_ustr,OUString())
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_aOuterValue( getPropertyDefault(nullptr) )
 {
@@ -1488,7 +1488,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 {
     sal_Int32 nNewValue;
     if( ! (rOuterValue >>= nNewValue) )
-        throw lang::IllegalArgumentException( "property NumberOfLines requires sal_Int32 value", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"property NumberOfLines requires sal_Int32 value"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1525,14 +1525,14 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         }
         else
         {
-            xTemplate = xChartTypeManager->createTemplate("com.sun.star.chart2.template.Column");
+            xTemplate = xChartTypeManager->createTemplate(u"com.sun.star.chart2.template.Column"_ustr);
         }
     }
     else if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.Column" )
     {
         if( nNewValue == 0 )
             return;
-        xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.ColumnWithLine" );
+        xTemplate = xChartTypeManager->createTemplate( u"com.sun.star.chart2.template.ColumnWithLine"_ustr );
     }
 
     if(!xTemplate.is())
@@ -1543,7 +1543,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         // locked controllers
         ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
         uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
-        xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
+        xProp->setPropertyValue( u"NumberOfLines"_ustr, uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
     }
     catch( const uno::Exception & )
@@ -1589,7 +1589,7 @@ private: //member
 }
 
 WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("AttributedDataPoints",OUString())
+            : WrappedProperty(u"AttributedDataPoints"_ustr,OUString())
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedAttributedDataPointsProperty::getPropertyDefault( nullptr );
@@ -1599,7 +1599,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 {
     uno::Sequence< uno::Sequence< sal_Int32 > > aNewValue;
     if( ! (rOuterValue >>= aNewValue) )
-        throw lang::IllegalArgumentException( "Property AttributedDataPoints requires value of type uno::Sequence< uno::Sequence< sal_Int32 > >", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property AttributedDataPoints requires value of type uno::Sequence< uno::Sequence< sal_Int32 > >"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1683,7 +1683,7 @@ private: //member
 }
 
 WrappedSolidTypeProperty::WrappedSolidTypeProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty( "SolidType", OUString() )
+            : WrappedProperty( u"SolidType"_ustr, OUString() )
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedSolidTypeProperty::getPropertyDefault( nullptr );
@@ -1693,7 +1693,7 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 {
     sal_Int32 nNewSolidType = css::chart::ChartSolidType::RECTANGULAR_SOLID;
     if( ! (rOuterValue >>= nNewSolidType) )
-        throw lang::IllegalArgumentException( "Property SolidType requires integer value", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property SolidType requires integer value"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1744,7 +1744,7 @@ public:
 }
 
 WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
-            : WrappedProperty( "AutomaticSize", OUString() )
+            : WrappedProperty( u"AutomaticSize"_ustr, OUString() )
 {
 }
 
@@ -1755,15 +1755,15 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
 
     bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Property AutomaticSize requires value of type boolean", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property AutomaticSize requires value of type boolean"_ustr, nullptr, 0 );
 
     try
     {
         if( bNewValue )
         {
-            Any aRelativeSize( xInnerPropertySet->getPropertyValue( "RelativeSize" ) );
+            Any aRelativeSize( xInnerPropertySet->getPropertyValue( u"RelativeSize"_ustr ) );
             if( aRelativeSize.hasValue() )
-                xInnerPropertySet->setPropertyValue( "RelativeSize", Any() );
+                xInnerPropertySet->setPropertyValue( u"RelativeSize"_ustr, Any() );
         }
     }
     catch( const uno::Exception & )
@@ -1777,7 +1777,7 @@ Any WrappedAutomaticSizeProperty::getPropertyValue( const Reference< beans::XPro
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {
-        Any aRelativeSize( xInnerPropertySet->getPropertyValue( "RelativeSize" ) );
+        Any aRelativeSize( xInnerPropertySet->getPropertyValue( u"RelativeSize"_ustr ) );
         if( !aRelativeSize.hasValue() )
             aRet <<= true;
     }
@@ -1809,7 +1809,7 @@ private: //member
 }
 
 WrappedIncludeHiddenCellsProperty::WrappedIncludeHiddenCellsProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-            : WrappedProperty("IncludeHiddenCells","IncludeHiddenCells")
+            : WrappedProperty(u"IncludeHiddenCells"_ustr,u"IncludeHiddenCells"_ustr)
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
@@ -1818,7 +1818,7 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Property IncludeHiddenCells requires boolean value", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property IncludeHiddenCells requires boolean value"_ustr, nullptr, 0 );
 
     ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getDocumentModel() );
 }
@@ -1877,7 +1877,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
     aWrappedProperties.emplace_back( new WrappedVerticalProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedNumberOfLinesProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedAttributedDataPointsProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.emplace_back( new WrappedProperty( "StackedBarsConnected", "ConnectBars" ) );
+    aWrappedProperties.emplace_back( new WrappedProperty( u"StackedBarsConnected"_ustr, u"ConnectBars"_ustr ) );
     aWrappedProperties.emplace_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedAutomaticSizeProperty() );
     aWrappedProperties.emplace_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
@@ -1887,7 +1887,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
 
 OUString SAL_CALL DiagramWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Diagram";
+    return u"com.sun.star.comp.chart.Diagram"_ustr;
 }
 
 sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
@@ -1898,14 +1898,14 @@ sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.Diagram",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.chart.StackableDiagram",
-        "com.sun.star.chart.ChartAxisXSupplier",
-        "com.sun.star.chart.ChartAxisYSupplier",
-        "com.sun.star.chart.ChartAxisZSupplier",
-        "com.sun.star.chart.ChartTwoAxisXSupplier",
-        "com.sun.star.chart.ChartTwoAxisYSupplier"
+        u"com.sun.star.chart.Diagram"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.chart.StackableDiagram"_ustr,
+        u"com.sun.star.chart.ChartAxisXSupplier"_ustr,
+        u"com.sun.star.chart.ChartAxisYSupplier"_ustr,
+        u"com.sun.star.chart.ChartAxisZSupplier"_ustr,
+        u"com.sun.star.chart.ChartTwoAxisXSupplier"_ustr,
+        u"com.sun.star.chart.ChartTwoAxisYSupplier"_ustr
     };
 }
 

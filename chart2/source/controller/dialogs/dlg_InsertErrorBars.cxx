@@ -40,7 +40,7 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
     weld::Window* pParent, const SfxItemSet& rMyAttrs,
     const rtl::Reference<::chart::ChartModel> & xChartDocument,
     ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ )
-        : GenericDialogController(pParent, "modules/schart/ui/dlg_InsertErrorBars.ui", "dlg_InsertErrorBars")
+        : GenericDialogController(pParent, u"modules/schart/ui/dlg_InsertErrorBars.ui"_ustr, u"dlg_InsertErrorBars"_ustr)
         , m_apErrorBarResources( new ErrorBarResources(
                                    m_xBuilder.get(), this, rMyAttrs,
                                    /* bNoneAvailable = */ true, eType ))

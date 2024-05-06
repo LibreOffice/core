@@ -774,19 +774,19 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 {
     Sequence< beans::PropertyValue > aArguments{
         beans::PropertyValue(
-            "CellRangeRepresentation", -1, uno::Any( lcl_aCompleteRange ),
+            u"CellRangeRepresentation"_ustr, -1, uno::Any( lcl_aCompleteRange ),
             beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
-            "DataRowSource", -1, uno::Any(
+            u"DataRowSource"_ustr, -1, uno::Any(
                 m_bDataInColumns
                 ? css::chart::ChartDataRowSource_COLUMNS
                 : css::chart::ChartDataRowSource_ROWS ),
             beans::PropertyState_DIRECT_VALUE ),
         // internal data always contains labels and categories
         beans::PropertyValue(
-            "FirstCellAsLabel", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE ),
+            u"FirstCellAsLabel"_ustr, -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
-            "HasCategories", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE )
+            u"HasCategories"_ustr, -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE )
     };
     // #i85913# Sequence Mapping is not needed for internal data, as it is
     // applied to the data when the data source is created.
@@ -1081,7 +1081,7 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
     }
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( u"0"_ustr));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     std::for_each( aBegin, aEnd, lcl_setModified());
 
@@ -1104,7 +1104,7 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
     }
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( u"0"_ustr));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     std::for_each( aBegin, aEnd, lcl_setModified());
 
@@ -1123,7 +1123,7 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
                          : m_aInternalData.getRowCount());
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( u"0"_ustr));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     std::for_each( aBegin, aEnd, lcl_setModified());
 
@@ -1220,7 +1220,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
     // <https://bugs.documentfoundation.org/show_bug.cgi?id=112783> "PIVOT CHARTS: Save produces
     // invalid file because of invalid cell address":
     if (aXMLRange == "PivotChart") {
-        return "";
+        return u""_ustr;
     }
 
     static constexpr OUString aPivotTableID(u"PT@"_ustr);
@@ -1468,7 +1468,7 @@ sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
 void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData", false ) )
+    if ( aArgs.getUnpackedValueOrDefault( u"CreateDefaultData"_ustr, false ) )
             m_aInternalData.createDefaultData();
 }
 
@@ -1481,7 +1481,7 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
 OUString SAL_CALL InternalDataProvider::getImplementationName()
 {
     // note: in xmloff this name is used to indicate usage of own data
-    return "com.sun.star.comp.chart.InternalDataProvider";
+    return u"com.sun.star.comp.chart.InternalDataProvider"_ustr;
 }
 
 sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )
@@ -1491,7 +1491,7 @@ sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServic
 
 css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.data.DataProvider" };
+    return { u"com.sun.star.chart2.data.DataProvider"_ustr };
 }
 
 } //  namespace chart

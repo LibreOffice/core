@@ -41,10 +41,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder)
-    : m_xRbtLeft(rBuilder.weld_radio_button("left"))
-    , m_xRbtRight(rBuilder.weld_radio_button("right"))
-    , m_xRbtTop(rBuilder.weld_radio_button("top"))
-    , m_xRbtBottom(rBuilder.weld_radio_button("bottom"))
+    : m_xRbtLeft(rBuilder.weld_radio_button(u"left"_ustr))
+    , m_xRbtRight(rBuilder.weld_radio_button(u"right"_ustr))
+    , m_xRbtTop(rBuilder.weld_radio_button(u"top"_ustr))
+    , m_xRbtBottom(rBuilder.weld_radio_button(u"bottom"_ustr))
 {
     impl_setRadioButtonToggleHdl();
 }
@@ -52,11 +52,11 @@ LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder)
 LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder,
     uno::Reference< uno::XComponentContext > xCC)
     : m_xCC(std::move(xCC))
-    , m_xCbxShow(rBuilder.weld_check_button("show"))
-    , m_xRbtLeft(rBuilder.weld_radio_button("left"))
-    , m_xRbtRight(rBuilder.weld_radio_button("right"))
-    , m_xRbtTop(rBuilder.weld_radio_button("top"))
-    , m_xRbtBottom(rBuilder.weld_radio_button("bottom"))
+    , m_xCbxShow(rBuilder.weld_check_button(u"show"_ustr))
+    , m_xRbtLeft(rBuilder.weld_radio_button(u"left"_ustr))
+    , m_xRbtRight(rBuilder.weld_radio_button(u"right"_ustr))
+    , m_xRbtTop(rBuilder.weld_radio_button(u"top"_ustr))
+    , m_xRbtBottom(rBuilder.weld_radio_button(u"bottom"_ustr))
 {
     m_xCbxShow->connect_toggled( LINK( this, LegendPositionResources, PositionEnableHdl ) );
     impl_setRadioButtonToggleHdl();
@@ -84,14 +84,14 @@ void LegendPositionResources::writeToResources( const rtl::Reference<::chart::Ch
         {
             //show
             bool bShowLegend = false;
-            xLegend->getPropertyValue( "Show" ) >>= bShowLegend;
+            xLegend->getPropertyValue( u"Show"_ustr ) >>= bShowLegend;
             if (m_xCbxShow)
                 m_xCbxShow->set_active( bShowLegend );
             PositionEnable();
 
             //position
             chart2::LegendPosition ePos;
-            xLegend->getPropertyValue( "AnchorPosition" )  >>= ePos;
+            xLegend->getPropertyValue( u"AnchorPosition"_ustr )  >>= ePos;
             switch( ePos )
             {
                 case chart2::LegendPosition_LINE_START:
@@ -126,7 +126,7 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
         if( xProp.is() )
         {
             //show
-            xProp->setPropertyValue( "Show" , uno::Any( bShowLegend ));
+            xProp->setPropertyValue( u"Show"_ustr , uno::Any( bShowLegend ));
 
             //position
             chart2::LegendPosition eNewPos;
@@ -149,9 +149,9 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
                 eExp = css::chart::ChartLegendExpansion_WIDE;
             }
 
-            xProp->setPropertyValue( "AnchorPosition" , uno::Any( eNewPos ));
-            xProp->setPropertyValue( "Expansion" , uno::Any( eExp ));
-            xProp->setPropertyValue( "RelativePosition" , uno::Any());
+            xProp->setPropertyValue( u"AnchorPosition"_ustr , uno::Any( eNewPos ));
+            xProp->setPropertyValue( u"Expansion"_ustr , uno::Any( eExp ));
+            xProp->setPropertyValue( u"RelativePosition"_ustr , uno::Any());
         }
     }
     catch( const uno::Exception & )

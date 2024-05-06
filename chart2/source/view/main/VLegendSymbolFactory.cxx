@@ -128,7 +128,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
                     // take series color as fill color
-                    xLegendEntryProperties->getPropertyValue( "Color") >>= aSymbol.FillColor;
+                    xLegendEntryProperties->getPropertyValue( u"Color"_ustr) >>= aSymbol.FillColor;
                     // border of symbols always same as fill color
                     aSymbol.BorderColor = aSymbol.FillColor;
 

@@ -23,7 +23,7 @@ namespace chart
 {
 
 TrendlineTabPage::TrendlineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_Trendline.ui", "TP_TRENDLINE", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_Trendline.ui"_ustr, u"TP_TRENDLINE"_ustr, &rInAttrs)
     , m_aTrendlineResources(*m_xBuilder, rInAttrs)
 {
 }

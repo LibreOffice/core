@@ -83,14 +83,14 @@ InterpretedData DataInterpreter::interpretDataSource(
             {
                 xCategories = labeledData;
                 if( xCategories.is())
-                    SetRole( xCategories->getValues(), "categories");
+                    SetRole( xCategories->getValues(), u"categories"_ustr);
                 bCategoriesUsed = true;
             }
             else
             {
                 aSequencesVec.push_back( labeledData );
                 if( labeledData.is())
-                    SetRole( labeledData->getValues(), "values-y");
+                    SetRole( labeledData->getValues(), u"values-y"_ustr);
             }
         }
         catch( const uno::Exception & )
@@ -138,14 +138,14 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
 
             // values-y
             uno::Reference< data::XLabeledDataSequence > xValuesY =
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-y" );
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-y"_ustr );
             // re-use values-... as values-y
             if( ! xValuesY.is())
             {
                 xValuesY =
-                    DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values", true );
+                    DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values"_ustr, true );
                 if( xValuesY.is())
-                    SetRole( xValuesY->getValues(), "values-y");
+                    SetRole( xValuesY->getValues(), u"values-y"_ustr);
             }
             if( xValuesY.is())
             {
@@ -301,7 +301,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->getPropertyValue( "Role") >>= aResult;
+        xProp->getPropertyValue( u"Role"_ustr) >>= aResult;
     }
     catch( const uno::Exception & )
     {
@@ -317,7 +317,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue( "Role", uno::Any( rRole ));
+        xProp->setPropertyValue( u"Role"_ustr, uno::Any( rRole ));
     }
     catch( const uno::Exception & )
     {
@@ -362,7 +362,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 
 OUString SAL_CALL DataInterpreter::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.DataInterpreter";
+    return u"com.sun.star.comp.chart2.DataInterpreter"_ustr;
 }
 
 sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
@@ -372,7 +372,7 @@ sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName
 
 css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.DataInterpreter" };
+    return { u"com.sun.star.chart2.DataInterpreter"_ustr };
 }
 
 std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > DataInterpreter::getDataSequences(

@@ -28,14 +28,14 @@ namespace chart
 {
 
 PolarOptionsTabPage::PolarOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
-    , m_xCB_Clockwise(m_xBuilder->weld_check_button("CB_CLOCKWISE"))
-    , m_xFL_StartingAngle(m_xBuilder->weld_frame("frameANGLE"))
-    , m_xNF_StartingAngle(m_xBuilder->weld_metric_spin_button("NF_STARTING_ANGLE", FieldUnit::DEGREE))
-    , m_xFL_PlotOptions(m_xBuilder->weld_frame("framePLOT_OPTIONS"))
-    , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS_POLAR"))
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_PolarOptions.ui"_ustr, u"tp_PolarOptions"_ustr, &rInAttrs)
+    , m_xCB_Clockwise(m_xBuilder->weld_check_button(u"CB_CLOCKWISE"_ustr))
+    , m_xFL_StartingAngle(m_xBuilder->weld_frame(u"frameANGLE"_ustr))
+    , m_xNF_StartingAngle(m_xBuilder->weld_metric_spin_button(u"NF_STARTING_ANGLE"_ustr, FieldUnit::DEGREE))
+    , m_xFL_PlotOptions(m_xBuilder->weld_frame(u"framePLOT_OPTIONS"_ustr))
+    , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button(u"CB_INCLUDE_HIDDEN_CELLS_POLAR"_ustr))
     , m_xAngleDial(new svx::DialControl)
-    , m_xAngleDialWin(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", *m_xAngleDial))
+    , m_xAngleDialWin(new weld::CustomWeld(*m_xBuilder, u"CT_ANGLE_DIAL"_ustr, *m_xAngleDial))
 {
     m_xAngleDial->SetLinkedField(m_xNF_StartingAngle.get());
 }

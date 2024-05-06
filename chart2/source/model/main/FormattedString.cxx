@@ -248,7 +248,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL FormattedString::getImplementationName()
 {
-    return "com.sun.star.comp.chart.FormattedString";
+    return u"com.sun.star.comp.chart.FormattedString"_ustr;
 }
 
 sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
@@ -259,9 +259,9 @@ sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName
 css::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.DataPointCustomLabelField",
-        "com.sun.star.chart2.FormattedString",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.DataPointCustomLabelField"_ustr,
+        u"com.sun.star.chart2.FormattedString"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

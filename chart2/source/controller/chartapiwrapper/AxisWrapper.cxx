@@ -473,7 +473,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL AxisWrapper::getShapeType()
 {
-    return "com.sun.star.chart.ChartAxis";
+    return u"com.sun.star.chart.ChartAxis"_ustr;
 }
 
 // ____ XNumberFormatsSupplier ____
@@ -546,8 +546,8 @@ void AxisWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
-            xProp->setPropertyValue("ReferencePageSize", uno::Any(
+        if( xProp->getPropertyValue(u"ReferencePageSize"_ustr).hasValue() )
+            xProp->setPropertyValue(u"ReferencePageSize"_ustr, uno::Any(
             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -556,7 +556,7 @@ Any AxisWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue("ReferencePageSize");
+        aRet = xProp->getPropertyValue(u"ReferencePageSize"_ustr);
     return aRet;
 }
 awt::Size AxisWrapper::getCurrentSizeForReference()
@@ -579,7 +579,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
         {
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
             if( xAxis.is() )
-                xAxis->setPropertyValue("Show", uno::Any( false ) );
+                xAxis->setPropertyValue(u"Show"_ustr, uno::Any( false ) );
         }
     }
     catch( const uno::Exception & )
@@ -605,19 +605,19 @@ std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProper
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedTextRotationProperty() );
-    aWrappedProperties.emplace_back( new WrappedProperty("Marks","MajorTickmarks") );
-    aWrappedProperties.emplace_back( new WrappedProperty("HelpMarks","MinorTickmarks") );
-    aWrappedProperties.emplace_back( new WrappedProperty("TextCanOverlap","TextOverlap") );
-    aWrappedProperties.emplace_back( new WrappedProperty("ArrangeOrder","ArrangeOrder") );
-    aWrappedProperties.emplace_back( new WrappedProperty("Visible","Show") );
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("DisplayLabels","DisplayLabels") );
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("TryStaggeringFirst","TryStaggeringFirst") );
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"Marks"_ustr,u"MajorTickmarks"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"HelpMarks"_ustr,u"MinorTickmarks"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"TextCanOverlap"_ustr,u"TextOverlap"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"ArrangeOrder"_ustr,u"ArrangeOrder"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"Visible"_ustr,u"Show"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"DisplayLabels"_ustr,u"DisplayLabels"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"TryStaggeringFirst"_ustr,u"TryStaggeringFirst"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"TextBreak"_ustr,u"TextBreak"_ustr) );
     aWrappedProperties.emplace_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
     aWrappedProperties.emplace_back( new WrappedLinkNumberFormatProperty );
-    aWrappedProperties.emplace_back( new WrappedProperty("StackedText","StackCharacters") );
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("CrossoverPosition","CrossoverPosition") );
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("MajorOrigin","MajorOrigin") );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"StackedText"_ustr,u"StackCharacters"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"CrossoverPosition"_ustr,u"CrossoverPosition"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"MajorOrigin"_ustr,u"MajorOrigin"_ustr) );
     {
         WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
         WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );
@@ -643,7 +643,7 @@ std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProper
 
 OUString SAL_CALL AxisWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Axis";
+    return u"com.sun.star.comp.chart.Axis"_ustr;
 }
 
 sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
@@ -654,9 +654,9 @@ sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL AxisWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartAxis",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.style.CharacterProperties"
+        u"com.sun.star.chart.ChartAxis"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr
     };
 }
 

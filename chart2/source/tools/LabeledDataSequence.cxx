@@ -152,7 +152,7 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 
 OUString SAL_CALL LabeledDataSequence::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.LabeledDataSequence";
+    return u"com.sun.star.comp.chart2.LabeledDataSequence"_ustr;
 }
 
 sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
@@ -162,7 +162,7 @@ sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rService
 
 css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.data.LabeledDataSequence" };
+    return { u"com.sun.star.chart2.data.LabeledDataSequence"_ustr };
 }
 
 } //  namespace chart

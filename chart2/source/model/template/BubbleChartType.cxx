@@ -114,17 +114,17 @@ OUString SAL_CALL BubbleChartType::getChartType()
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
 {
-    return { "label", "values-x", "values-y", "values-size" };
+    return { u"label"_ustr, u"values-x"_ustr, u"values-y"_ustr, u"values-size"_ustr };
 }
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return "values-size";
+    return u"values-size"_ustr;
 }
 
 // ____ OPropertySet ____
@@ -154,7 +154,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartType::getPropertyS
 
 OUString SAL_CALL BubbleChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.BubbleChartType";
+    return u"com.sun.star.comp.chart.BubbleChartType"_ustr;
 }
 
 sal_Bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
@@ -166,8 +166,8 @@ css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceName
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

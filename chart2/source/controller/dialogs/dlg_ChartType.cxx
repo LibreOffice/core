@@ -28,9 +28,10 @@ using namespace ::com::sun::star;
 
 ChartTypeDialog::ChartTypeDialog(weld::Window* pParent,
                                  rtl::Reference<::chart::ChartModel> xChartModel)
-    : GenericDialogController(pParent, "modules/schart/ui/charttypedialog.ui", "ChartTypeDialog")
+    : GenericDialogController(pParent, u"modules/schart/ui/charttypedialog.ui"_ustr,
+                              u"ChartTypeDialog"_ustr)
     , m_xChartModel(std::move(xChartModel))
-    , m_xContentArea(m_xBuilder->weld_container("content"))
+    , m_xContentArea(m_xBuilder->weld_container(u"content"_ustr))
 {
     m_xChartTypeTabPage = std::make_unique<ChartTypeTabPage>(
         m_xContentArea.get(), this, m_xChartModel, false /*don't show title description*/);

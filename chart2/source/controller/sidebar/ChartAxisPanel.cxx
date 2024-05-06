@@ -43,7 +43,7 @@ bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return false;
 
-    uno::Any aAny = xAxis->getPropertyValue("DisplayLabels");
+    uno::Any aAny = xAxis->getPropertyValue(u"DisplayLabels"_ustr);
     if (!aAny.hasValue())
         return false;
 
@@ -60,7 +60,7 @@ void setLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue("DisplayLabels", css::uno::Any(bVisible));
+    xAxis->setPropertyValue(u"DisplayLabels"_ustr, css::uno::Any(bVisible));
 }
 
 struct AxisLabelPosMap
@@ -84,7 +84,7 @@ sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return 0;
 
-    uno::Any aAny = xAxis->getPropertyValue("LabelPosition");
+    uno::Any aAny = xAxis->getPropertyValue(u"LabelPosition"_ustr);
     if (!aAny.hasValue())
         return 0;
 
@@ -114,7 +114,7 @@ void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
             ePos = i.ePos;
     }
 
-    xAxis->setPropertyValue("LabelPosition", css::uno::Any(ePos));
+    xAxis->setPropertyValue(u"LabelPosition"_ustr, css::uno::Any(ePos));
 }
 
 bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -178,7 +178,7 @@ void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue("TextRotation", css::uno::Any(nVal));
+    xAxis->setPropertyValue(u"TextRotation"_ustr, css::uno::Any(nVal));
 }
 
 double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -190,7 +190,7 @@ double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return 0;
 
-    css::uno::Any aAny = xAxis->getPropertyValue("TextRotation");
+    css::uno::Any aAny = xAxis->getPropertyValue(u"TextRotation"_ustr);
     double nVal = 0;
     aAny >>= nVal;
     return nVal;
@@ -201,12 +201,12 @@ double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
 ChartAxisPanel::ChartAxisPanel(
     weld::Widget* pParent,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui")
-    , mxCBShowLabel(m_xBuilder->weld_check_button("checkbutton_show_label"))
-    , mxCBReverse(m_xBuilder->weld_check_button("checkbutton_reverse"))
-    , mxLBLabelPos(m_xBuilder->weld_combo_box("comboboxtext_label_position"))
-    , mxGridLabel(m_xBuilder->weld_widget("label_props"))
-    , mxNFRotation(m_xBuilder->weld_metric_spin_button("spinbutton1", FieldUnit::DEGREE))
+    : PanelLayout(pParent, u"ChartAxisPanel"_ustr, u"modules/schart/ui/sidebaraxis.ui"_ustr)
+    , mxCBShowLabel(m_xBuilder->weld_check_button(u"checkbutton_show_label"_ustr))
+    , mxCBReverse(m_xBuilder->weld_check_button(u"checkbutton_reverse"_ustr))
+    , mxLBLabelPos(m_xBuilder->weld_combo_box(u"comboboxtext_label_position"_ustr))
+    , mxGridLabel(m_xBuilder->weld_widget(u"label_props"_ustr))
+    , mxNFRotation(m_xBuilder->weld_metric_spin_button(u"spinbutton1"_ustr, FieldUnit::DEGREE))
     , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
@@ -272,7 +272,7 @@ std::unique_ptr<PanelLayout> ChartAxisPanel::Create (
     ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to ChartAxisPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<ChartAxisPanel>(pParent, pController);
 }
 

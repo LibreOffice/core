@@ -42,16 +42,17 @@ namespace
 {
 void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
-    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
-    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
+    xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
+    xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
+                                   uno::Any(drawing::TextVerticalAdjust_TOP));
+    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(style::ParagraphAdjust_CENTER));
 
     table::BorderLine2 aBorderLine;
     aBorderLine.LineWidth = 0;
     aBorderLine.Color = 0x000000;
 
-    xPropertySet->setPropertyValue("TopBorder", uno::Any(aBorderLine));
-    xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
+    xPropertySet->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorderLine));
+    xPropertySet->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderLine));
 }
 
 void copyProperty(uno::Reference<beans::XPropertySet>& xOut,
@@ -103,77 +104,78 @@ void DataTableView::setCellCharAndParagraphProperties(
 {
     uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
 
-    copyProperty(xPropertySet, xDataTableProperties, "CharColor");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamily");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamilyAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamilyComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSet");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSetAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSetComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontName");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontNameAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontNameComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitch");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitchAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitchComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleName");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleNameAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleNameComplex");
+    copyProperty(xPropertySet, xDataTableProperties, u"CharColor"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontFamily"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontFamilyAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontFamilyComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontCharSet"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontCharSetAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontCharSetComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontName"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontNameAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontNameComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontPitch"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontPitchAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontPitchComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontStyleName"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontStyleNameAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharFontStyleNameComplex"_ustr);
 
-    copyProperty(xPropertySet, xDataTableProperties, "CharHeight");
-    copyProperty(xPropertySet, xDataTableProperties, "CharHeightAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharHeightComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharKerning");
-    copyProperty(xPropertySet, xDataTableProperties, "CharLocale");
-    copyProperty(xPropertySet, xDataTableProperties, "CharLocaleAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharLocaleComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharPosture");
-    copyProperty(xPropertySet, xDataTableProperties, "CharPostureAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharPostureComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharRelief");
-    copyProperty(xPropertySet, xDataTableProperties, "CharShadowed");
-    copyProperty(xPropertySet, xDataTableProperties, "CharStrikeout");
-    copyProperty(xPropertySet, xDataTableProperties, "CharUnderline");
-    copyProperty(xPropertySet, xDataTableProperties, "CharUnderlineColor");
-    copyProperty(xPropertySet, xDataTableProperties, "CharUnderlineHasColor");
-    copyProperty(xPropertySet, xDataTableProperties, "CharOverline");
-    copyProperty(xPropertySet, xDataTableProperties, "CharOverlineColor");
-    copyProperty(xPropertySet, xDataTableProperties, "CharOverlineHasColor");
-    copyProperty(xPropertySet, xDataTableProperties, "CharWeight");
-    copyProperty(xPropertySet, xDataTableProperties, "CharWeightAsian");
-    copyProperty(xPropertySet, xDataTableProperties, "CharWeightComplex");
-    copyProperty(xPropertySet, xDataTableProperties, "CharWordMode");
+    copyProperty(xPropertySet, xDataTableProperties, u"CharHeight"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharHeightAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharHeightComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharKerning"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharLocale"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharLocaleAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharLocaleComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharPosture"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharPostureAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharPostureComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharRelief"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharShadowed"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharStrikeout"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharUnderline"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharUnderlineColor"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharUnderlineHasColor"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharOverline"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharOverlineColor"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharOverlineHasColor"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharWeight"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharWeightAsian"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharWeightComplex"_ustr);
+    copyProperty(xPropertySet, xDataTableProperties, u"CharWordMode"_ustr);
 
     drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
-    xDataTableProperties->getPropertyValue("FillStyle") >>= eFillStyle;
+    xDataTableProperties->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
     if (eFillStyle == drawing::FillStyle_SOLID)
     {
         sal_Int32 aColor = 0;
-        if (xDataTableProperties->getPropertyValue("FillColor") >>= aColor)
-            xPropertySet->setPropertyValue("CharBackColor", uno::Any(aColor));
+        if (xDataTableProperties->getPropertyValue(u"FillColor"_ustr) >>= aColor)
+            xPropertySet->setPropertyValue(u"CharBackColor"_ustr, uno::Any(aColor));
     }
 
-    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
+    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(style::ParagraphAdjust_CENTER));
 }
 
 void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& xPropertySet,
                                       bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
-    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
+    xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
 
     uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
     float fFontHeight = 0.0;
-    xDataTableProperties->getPropertyValue("CharHeight") >>= fFontHeight;
+    xDataTableProperties->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
     fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
     sal_Int32 nXDistance = std::round(fFontHeight * 0.18f);
     sal_Int32 nYDistance = std::round(fFontHeight * 0.30f);
 
-    xPropertySet->setPropertyValue("TextLeftDistance", uno::Any(nXDistance));
-    xPropertySet->setPropertyValue("TextRightDistance", uno::Any(nXDistance));
-    xPropertySet->setPropertyValue("TextUpperDistance", uno::Any(nYDistance));
-    xPropertySet->setPropertyValue("TextLowerDistance", uno::Any(nYDistance));
+    xPropertySet->setPropertyValue(u"TextLeftDistance"_ustr, uno::Any(nXDistance));
+    xPropertySet->setPropertyValue(u"TextRightDistance"_ustr, uno::Any(nXDistance));
+    xPropertySet->setPropertyValue(u"TextUpperDistance"_ustr, uno::Any(nYDistance));
+    xPropertySet->setPropertyValue(u"TextLowerDistance"_ustr, uno::Any(nYDistance));
 
-    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
+    xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
+                                   uno::Any(drawing::TextVerticalAdjust_TOP));
 
     drawing::LineStyle eStyle = drawing::LineStyle_NONE;
     m_aLineProperties.LineStyle >>= eStyle;
@@ -199,7 +201,7 @@ void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& 
             if (!aDashName.isEmpty() && m_xChartModel.is())
             {
                 uno::Reference<container::XNameContainer> xDashTable(
-                    m_xChartModel->createInstance("com.sun.star.drawing.DashTable"),
+                    m_xChartModel->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
                     uno::UNO_QUERY);
                 if (xDashTable.is() && xDashTable->hasByName(aDashName))
                 {
@@ -223,13 +225,13 @@ void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& 
         }
 
         if (bLeft)
-            xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
+            xPropertySet->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderLine));
         if (bTop)
-            xPropertySet->setPropertyValue("TopBorder", uno::Any(aBorderLine));
+            xPropertySet->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorderLine));
         if (bRight)
-            xPropertySet->setPropertyValue("RightBorder", uno::Any(aBorderLine));
+            xPropertySet->setPropertyValue(u"RightBorder"_ustr, uno::Any(aBorderLine));
         if (bBottom)
-            xPropertySet->setPropertyValue("BottomBorder", uno::Any(aBorderLine));
+            xPropertySet->setPropertyValue(u"BottomBorder"_ustr, uno::Any(aBorderLine));
     }
 }
 
@@ -252,7 +254,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     try
     {
-        m_xTableShape->getPropertyValue("Model") >>= m_xTable;
+        m_xTableShape->getPropertyValue(u"Model"_ustr) >>= m_xTable;
     }
     catch (const uno::Exception&)
     {
@@ -279,10 +281,10 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     std::vector<ViewLegendSymbol> aSymbols;
 
-    m_xDataTableModel->getPropertyValue("HBorder") >>= bHBorder;
-    m_xDataTableModel->getPropertyValue("VBorder") >>= bVBorder;
-    m_xDataTableModel->getPropertyValue("Outline") >>= bOutline;
-    m_xDataTableModel->getPropertyValue("Keys") >>= bKeys;
+    m_xDataTableModel->getPropertyValue(u"HBorder"_ustr) >>= bHBorder;
+    m_xDataTableModel->getPropertyValue(u"VBorder"_ustr) >>= bVBorder;
+    m_xDataTableModel->getPropertyValue(u"Outline"_ustr) >>= bOutline;
+    m_xDataTableModel->getPropertyValue(u"Keys"_ustr) >>= bKeys;
 
     // set the data table row and column size
     sal_Int32 nColumnCount = m_aXValues.size();
@@ -349,7 +351,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     {
         uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
         float fFontHeight = 0.0;
-        xDataTableProperties->getPropertyValue("CharHeight") >>= fFontHeight;
+        xDataTableProperties->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
         fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
 
         sal_Int32 nSymbolHeight = sal_Int32(fFontHeight * 0.6);
@@ -402,11 +404,13 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             setCellCharAndParagraphProperties(xTextPropertySet);
             setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
 
-            xCellPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_LEFT));
+            xCellPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
+                                               uno::Any(style::ParagraphAdjust_LEFT));
             if (bKeys)
             {
                 xCellPropertySet->setPropertyValue(
-                    "ParaLeftMargin", uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
+                    u"ParaLeftMargin"_ustr,
+                    uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
             }
         }
         nRow++;
@@ -472,7 +476,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     for (sal_Int32 i = 1; i < xTableColumns->getCount(); ++i)
     {
         xPropertySet.set(xTableColumns->getByIndex(i), uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("Width", uno::Any(nColumnWidth));
+        xPropertySet->setPropertyValue(u"Width"_ustr, uno::Any(nColumnWidth));
     }
 
     // force recalculation of row heights in the table shape
@@ -489,7 +493,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             {
                 xPropertySet.set(xTableRows->getByIndex(i), uno::UNO_QUERY);
                 sal_Int32 nHeight = 0;
-                xPropertySet->getPropertyValue("Height") >>= nHeight;
+                xPropertySet->getPropertyValue(u"Height"_ustr) >>= nHeight;
                 if (i > 0)
                 {
                     auto& rSymbol = aSymbols[nSymbolIndex].xSymbol;
@@ -514,7 +518,7 @@ void DataTableView::changePosition(sal_Int32 x, sal_Int32 y)
     uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
 
     sal_Int32 nWidth = 0;
-    xPropertySet->getPropertyValue("Width") >>= nWidth;
+    xPropertySet->getPropertyValue(u"Width"_ustr) >>= nWidth;
 
     m_xTarget->setPosition({ x - nWidth, y });
 }

@@ -37,7 +37,7 @@ void WrappedSceneProperty::addWrappedProperties( std::vector< std::unique_ptr<Wr
 
 WrappedD3DTransformMatrixProperty::WrappedD3DTransformMatrixProperty(
             std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
-            : WrappedProperty("D3DTransformMatrix","D3DTransformMatrix")
+            : WrappedProperty(u"D3DTransformMatrix"_ustr,u"D3DTransformMatrix"_ustr)
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }

@@ -12,10 +12,10 @@
 namespace chart
 {
 InsertDataTableDialog::InsertDataTableDialog(weld::Window* pWindow)
-    : GenericDialogController(pWindow, "modules/schart/ui/dlg_InsertDataTable.ui",
-                              "InsertDataTableDialog")
+    : GenericDialogController(pWindow, u"modules/schart/ui/dlg_InsertDataTable.ui"_ustr,
+                              u"InsertDataTableDialog"_ustr)
     , m_aDataTablePropertiesResources(*m_xBuilder)
-    , m_xCbShowDataTable(m_xBuilder->weld_check_button("showDataTable"))
+    , m_xCbShowDataTable(m_xBuilder->weld_check_button(u"showDataTable"_ustr))
 {
     m_xCbShowDataTable->connect_toggled(LINK(this, InsertDataTableDialog, ShowDataTableToggle));
     init(m_aData);

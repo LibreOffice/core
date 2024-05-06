@@ -68,7 +68,7 @@ enum
         []()
         {
             std::vector< css::beans::Property > aProperties {
-                { "NumberOfLines",
+                { u"NumberOfLines"_ustr,
                   PROP_COL_LINE_NUMBER_OF_LINES,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -211,7 +211,7 @@ void ColumnLineChartTypeTemplate::applyStyle2(
 
     if( nChartTypeIndex==0 ) // columns
     {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
     }
     else if( nChartTypeIndex==1 ) // lines
     {

@@ -443,7 +443,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
         {
             uno::Reference< beans::XPropertySet > xProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if( xProps.is() )
-                xProps->getPropertyValue( "CharHeight") >>= fViewFontSize;
+                xProps->getPropertyValue( u"CharHeight"_ustr) >>= fViewFontSize;
             fViewFontSize = convertPointToMm100(fViewFontSize);
         }
 
@@ -469,18 +469,18 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 
         //prepare text
         bool bTextWrap = false;
-        OUString aSeparator(" ");
+        OUString aSeparator(u" "_ustr);
         double fRotationDegrees = 0.0;
         try
         {
             uno::Reference< beans::XPropertySet > xPointProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if(xPointProps.is())
             {
-                xPointProps->getPropertyValue( "TextWordWrap" ) >>= bTextWrap;
-                xPointProps->getPropertyValue( "LabelSeparator" ) >>= aSeparator;
+                xPointProps->getPropertyValue( u"TextWordWrap"_ustr ) >>= bTextWrap;
+                xPointProps->getPropertyValue( u"LabelSeparator"_ustr ) >>= aSeparator;
                 // Extract the optional text rotation through the
                 // "TextRotation" property attached to the passed data point.
-                xPointProps->getPropertyValue( "TextRotation" ) >>= fRotationDegrees;
+                xPointProps->getPropertyValue( u"TextRotation"_ustr ) >>= fRotationDegrees;
             }
         }
         catch( const uno::Exception& )
@@ -680,7 +680,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 
             // set maximum text width
             uno::Any aTextMaximumFrameWidth( nTextWidth );
-            xTextShape->SvxShape::setPropertyValue( "TextMaximumFrameWidth", aTextMaximumFrameWidth );
+            xTextShape->SvxShape::setPropertyValue( u"TextMaximumFrameWidth"_ustr, aTextMaximumFrameWidth );
 
             // compute the total lines of text
             aTextSize = xTextShape->getSize();
@@ -692,7 +692,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
         if( fRotationDegrees != 0.0 )
         {
             const double fDegreesPi( -basegfx::deg2rad(fRotationDegrees) );
-            xTextShape->SvxShape::setPropertyValue( "Transformation", ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
+            xTextShape->SvxShape::setPropertyValue( u"Transformation"_ustr, ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
@@ -803,8 +803,8 @@ double lcl_getErrorBarLogicLength(
             {
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
-                                             ? OUString("PositiveError")
-                                             : OUString("NegativeError") ) >>= fPercent )
+                                             ? u"PositiveError"_ustr
+                                             : u"NegativeError"_ustr ) >>= fPercent )
                 {
                     if( nIndex >=0 && nIndex < rData.getLength() &&
                         ! std::isnan( rData[nIndex] ) &&
@@ -817,16 +817,16 @@ double lcl_getErrorBarLogicLength(
             break;
             case css::chart::ErrorBarStyle::ABSOLUTE:
                 xProp->getPropertyValue( bPositive
-                                         ? OUString("PositiveError")
-                                         : OUString("NegativeError") ) >>= fResult;
+                                         ? u"PositiveError"_ustr
+                                         : u"NegativeError"_ustr ) >>= fResult;
                 break;
             case css::chart::ErrorBarStyle::ERROR_MARGIN:
             {
                 // todo: check if this is really what's called error-margin
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
-                                             ? OUString("PositiveError")
-                                             : OUString("NegativeError") ) >>= fPercent )
+                                             ? u"PositiveError"_ustr
+                                             : u"NegativeError"_ustr ) >>= fPercent )
                 {
                     double fMaxValue = -std::numeric_limits<double>::infinity();
                     for(double d : rData)
@@ -958,9 +958,9 @@ void VSeriesPlotter::createErrorBar(
         bool bShowNegative = false;
         sal_Int32 nErrorBarStyle = css::chart::ErrorBarStyle::VARIANCE;
 
-        xErrorBarProperties->getPropertyValue( "ShowPositiveError") >>= bShowPositive;
-        xErrorBarProperties->getPropertyValue( "ShowNegativeError") >>= bShowNegative;
-        xErrorBarProperties->getPropertyValue( "ErrorBarStyle") >>= nErrorBarStyle;
+        xErrorBarProperties->getPropertyValue( u"ShowPositiveError"_ustr) >>= bShowPositive;
+        xErrorBarProperties->getPropertyValue( u"ShowNegativeError"_ustr) >>= bShowNegative;
+        xErrorBarProperties->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nErrorBarStyle;
 
         if(!bShowPositive && !bShowNegative)
             return;
@@ -1153,15 +1153,15 @@ void VSeriesPlotter::createErrorRectangle(
 
         if ( bUseXErrorData )
         {
-            xErrorBorderPropX->getPropertyValue( "ErrorBarStyle" ) >>= nErrorBorderStyleX;
-            xErrorBorderPropX->getPropertyValue( "ShowPositiveError") >>= bShowXPositive;
-            xErrorBorderPropX->getPropertyValue( "ShowNegativeError") >>= bShowXNegative;
+            xErrorBorderPropX->getPropertyValue( u"ErrorBarStyle"_ustr ) >>= nErrorBorderStyleX;
+            xErrorBorderPropX->getPropertyValue( u"ShowPositiveError"_ustr) >>= bShowXPositive;
+            xErrorBorderPropX->getPropertyValue( u"ShowNegativeError"_ustr) >>= bShowXNegative;
         }
         if ( bUseYErrorData )
         {
-            xErrorBorderPropY->getPropertyValue( "ErrorBarStyle" ) >>= nErrorBorderStyleY;
-            xErrorBorderPropY->getPropertyValue( "ShowPositiveError") >>= bShowYPositive;
-            xErrorBorderPropY->getPropertyValue( "ShowNegativeError") >>= bShowYNegative;
+            xErrorBorderPropY->getPropertyValue( u"ErrorBarStyle"_ustr ) >>= nErrorBorderStyleY;
+            xErrorBorderPropY->getPropertyValue( u"ShowPositiveError"_ustr) >>= bShowYPositive;
+            xErrorBorderPropY->getPropertyValue( u"ShowNegativeError"_ustr) >>= bShowYNegative;
         }
 
         if ( bUseXErrorData && nErrorBorderStyleX == css::chart::ErrorBarStyle::NONE )
@@ -1330,14 +1330,14 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
         if ( !bAverageLine )
         {
-            rCurve->getPropertyValue( "PolynomialDegree") >>= aDegree;
-            rCurve->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
-            rCurve->getPropertyValue( "MovingAverageType") >>= aMovingAverageType;
-            rCurve->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
-            rCurve->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
-            rCurve->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
+            rCurve->getPropertyValue( u"PolynomialDegree"_ustr) >>= aDegree;
+            rCurve->getPropertyValue( u"MovingAveragePeriod"_ustr) >>= aPeriod;
+            rCurve->getPropertyValue( u"MovingAverageType"_ustr) >>= aMovingAverageType;
+            rCurve->getPropertyValue( u"ExtrapolateForward"_ustr) >>= aExtrapolateForward;
+            rCurve->getPropertyValue( u"ExtrapolateBackward"_ustr) >>= aExtrapolateBackward;
+            rCurve->getPropertyValue( u"ForceIntercept"_ustr) >>= bForceIntercept;
             if (bForceIntercept)
-                rCurve->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                rCurve->getPropertyValue( u"InterceptValue"_ustr) >>= aInterceptValue;
         }
 
         double fChartMinX = m_pPosHelper->getLogicMinX();
@@ -1436,7 +1436,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
                 createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
             rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
-            ShapeFactory::setShapeName( xShape, "MarkHandles" );
+            ShapeFactory::setShapeName( xShape, u"MarkHandles"_ustr );
             aDefaultPos = xShape->getPosition();
         }
 
@@ -1484,8 +1484,8 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
     bool bShowEquation = false;
     bool bShowCorrCoeff = false;
-    if(!(( xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation ) &&
-       ( xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowCorrCoeff )))
+    if(!(( xEquationProperties->getPropertyValue( u"ShowEquation"_ustr) >>= bShowEquation ) &&
+       ( xEquationProperties->getPropertyValue( u"ShowCorrelationCoefficient"_ustr) >>= bShowCorrCoeff )))
         return;
 
     if( ! (bShowEquation || bShowCorrCoeff))
@@ -1500,10 +1500,10 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
     if ( bShowEquation )
     {
         OUString aXName, aYName;
-        if ( !(xEquationProperties->getPropertyValue( "XName" ) >>= aXName) )
-            aXName = OUString( "x" );
-        if ( !(xEquationProperties->getPropertyValue( "YName" ) >>= aYName) )
-            aYName = OUString( "f(x)" );
+        if ( !(xEquationProperties->getPropertyValue( u"XName"_ustr ) >>= aXName) )
+            aXName = u"x"_ustr;
+        if ( !(xEquationProperties->getPropertyValue( u"YName"_ustr ) >>= aYName) )
+            aYName = u"f(x)"_ustr;
         xRegressionCurveCalculator->setXYNames( aXName, aYName );
     }
 
@@ -1555,7 +1555,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
         awt::Point aScreenPosition2D;
         chart2::RelativePosition aRelativePosition;
-        if( xEquationProperties->getPropertyValue( "RelativePosition") >>= aRelativePosition )
+        if( xEquationProperties->getPropertyValue( u"RelativePosition"_ustr) >>= aRelativePosition )
         {
             //@todo decide whether x is primary or secondary
             double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
@@ -2466,7 +2466,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
 
         try
         {
-            xCooSys->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+            xCooSys->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXAndY;
         }
         catch( const uno::Exception& )
         {
@@ -2581,7 +2581,7 @@ bool lcl_HasVisibleLine( const uno::Reference< beans::XPropertySet >& xProps, bo
     bool bHasVisibleLine = false;
     rbHasDashedLine = false;
     drawing::LineStyle aLineStyle = drawing::LineStyle_NONE;
-    if( xProps.is() && ( xProps->getPropertyValue( "LineStyle") >>= aLineStyle ) )
+    if( xProps.is() && ( xProps->getPropertyValue( u"LineStyle"_ustr) >>= aLineStyle ) )
     {
         if( aLineStyle != drawing::LineStyle_NONE )
             bHasVisibleLine = true;
@@ -2732,7 +2732,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
 
             OSL_ASSERT( xPointSet.is());
             xPointSet->setPropertyValue(
-                "Color", uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
+                u"Color"_ustr, uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
         }
     }
 
@@ -2851,7 +2851,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             }
 
             // label
-            aLabelText = rSeries.getModel()->getLabelForRole( m_xChartTypeModel.is() ? m_xChartTypeModel->getRoleOfSequenceForSeriesLabel() : "values-y");
+            aLabelText = rSeries.getModel()->getLabelForRole( m_xChartTypeModel.is() ? m_xChartTypeModel->getRoleOfSequenceForSeriesLabel() : u"values-y"_ustr);
             aEntry.xLabel = FormattedStringHelper::createFormattedString( aLabelText, xTextProperties );
 
             aResult.push_back(aEntry);

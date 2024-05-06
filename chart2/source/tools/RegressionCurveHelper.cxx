@@ -193,7 +193,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
             Reference< data::XDataSequence > xSeq( aDataSeqs[i]->getValues());
             Reference< XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
             OUString aRole;
-            if( xProp->getPropertyValue( "Role" ) >>= aRole )
+            if( xProp->getPropertyValue( u"Role"_ustr ) >>= aRole )
             {
                 if( bUseXValuesIfAvailable && !bXValuesFound && aRole == "values-x" )
                 {
@@ -372,8 +372,8 @@ void RegressionCurveHelper::addMeanValueLine(
         uno::Reference< XPropertySet > xProp( xCurve, uno::UNO_QUERY );
         if( xProp.is())
         {
-            xProp->setPropertyValue( "LineColor",
-                                     xSeriesProp->getPropertyValue( "Color"));
+            xProp->setPropertyValue( u"LineColor"_ustr,
+                                     xSeriesProp->getPropertyValue( u"Color"_ustr));
         }
     }
 }
@@ -392,8 +392,8 @@ void RegressionCurveHelper::addMeanValueLine(
 
     if( xSeriesProp.is())
     {
-        xCurve->setPropertyValue( "LineColor",
-                                 xSeriesProp->getPropertyValue( "Color"));
+        xCurve->setPropertyValue( u"LineColor"_ustr,
+                                 xSeriesProp->getPropertyValue( u"Color"_ustr));
     }
 }
 
@@ -486,8 +486,8 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve
             uno::Reference< XPropertySet > xSeriesProp( xRegressionCurveContainer, uno::UNO_QUERY );
             if( xSeriesProp.is())
             {
-                xCurve->setPropertyValue( "LineColor",
-                                         xSeriesProp->getPropertyValue( "Color"));
+                xCurve->setPropertyValue( u"LineColor"_ustr,
+                                         xSeriesProp->getPropertyValue( u"Color"_ustr));
             }
         }
     }
@@ -526,8 +526,8 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve
             comphelper::copyProperties( xPropertySource, xCurve );
         else
         {
-            xCurve->setPropertyValue( "LineColor",
-                                     xRegressionCurveContainer->getPropertyValue( "Color"));
+            xCurve->setPropertyValue( u"LineColor"_ustr,
+                                     xRegressionCurveContainer->getPropertyValue( u"Color"_ustr));
         }
     }
     xRegressionCurveContainer->addRegressionCurve( xCurve );
@@ -584,10 +584,10 @@ void RegressionCurveHelper::removeEquations(
                 uno::Reference< beans::XPropertySet > xEqProp( curve->getEquationProperties() ) ;
                 if( xEqProp.is())
                 {
-                    xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
-                    xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-                    xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
-                    xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
+                    xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( false ));
+                    xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
+                    xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x) "_ustr ));
+                    xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
                 }
             }
         }
@@ -827,7 +827,7 @@ OUString RegressionCurveHelper::getRegressionCurveSpecificName(const Reference< 
     if(!xProperties.is())
         return aResult;
 
-    xProperties->getPropertyValue("CurveName") >>= aResult;
+    xProperties->getPropertyValue(u"CurveName"_ustr) >>= aResult;
 
     return aResult;
 }
@@ -887,8 +887,8 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
         {
             bool bShowEquation = false;
             bool bShowCoefficient = false;
-            xEquationProp->getPropertyValue( "ShowEquation") >>= bShowEquation;
-            xEquationProp->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowCoefficient;
+            xEquationProp->getPropertyValue( u"ShowEquation"_ustr) >>= bShowEquation;
+            xEquationProp->getPropertyValue( u"ShowCorrelationCoefficient"_ustr) >>= bShowCoefficient;
             bHasEquation = bShowEquation || bShowCoefficient;
         }
     }
@@ -903,7 +903,7 @@ bool RegressionCurveHelper::MayHaveCorrelationCoefficient( const Reference< char
         uno::Reference< beans::XPropertySet > xEquationProp( xCurve->getEquationProperties() );
         if( xEquationProp.is() )
         {
-            xEquationProp->getPropertyValue( "MayHaveCorrelationCoefficient") >>= bMayHaveCorrelationCoefficient;
+            xEquationProp->getPropertyValue( u"MayHaveCorrelationCoefficient"_ustr) >>= bMayHaveCorrelationCoefficient;
         }
     }
     return bMayHaveCorrelationCoefficient;

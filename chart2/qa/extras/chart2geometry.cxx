@@ -25,7 +25,7 @@ class Chart2GeometryTest : public ChartTest
 {
 public:
     Chart2GeometryTest()
-        : ChartTest("/chart2/qa/extras/data/")
+        : ChartTest(u"/chart2/qa/extras/data/"_ustr)
     {
     }
     // Mostly tests for line and fill properties
@@ -74,8 +74,8 @@ void Chart2GeometryTest::testTdf135184RoundLineCap()
 {
     // It tests chart area, data series line and regression-curve line.
     loadFromFile(u"xlsx/tdf135184RoundLineCap.xlsx");
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     static constexpr OString sStyleStart("/office:document-content/office:automatic-styles"_ostr);
@@ -103,8 +103,8 @@ void Chart2GeometryTest::testTdf135184RoundLineCap2()
 {
     // It tests legend, data series sector and title.
     loadFromFile(u"xlsx/tdf135184RoundLineCap2.xlsx");
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     static constexpr OString sStyleStart("/office:document-content/office:automatic-styles"_ostr);
@@ -134,34 +134,34 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
 {
     // It tests chart area, data series line and regression-curve line.
     loadFromFile(u"xlsx/tdf135184RoundLineCap.xlsx");
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     static constexpr OString sDash("/c:spPr/a:ln/a:prstDash"_ostr);
     // chart area
-    assertXPath(pXmlDoc, "/c:chartSpace" + sDash, "val"_ostr, "dashDot");
+    assertXPath(pXmlDoc, "/c:chartSpace" + sDash, "val"_ostr, u"dashDot"_ustr);
     // data series line
     static constexpr OString sStart("/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser"_ostr);
-    assertXPath(pXmlDoc, sStart + sDash, "val"_ostr, "dash");
+    assertXPath(pXmlDoc, sStart + sDash, "val"_ostr, u"dash"_ustr);
     // regression-curve (trendline)
-    assertXPath(pXmlDoc, sStart + "/c:trendline" + sDash, "val"_ostr, "sysDot");
+    assertXPath(pXmlDoc, sStart + "/c:trendline" + sDash, "val"_ostr, u"sysDot"_ustr);
 }
 
 void Chart2GeometryTest::testTdf135184RoundLineCap4()
 {
     // It tests legend, data series sector and title.
     loadFromFile(u"xlsx/tdf135184RoundLineCap2.xlsx");
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     static constexpr OString sChartStart("/c:chartSpace/c:chart"_ostr);
     static constexpr OString sDash("/c:spPr/a:ln/a:prstDash"_ostr);
-    assertXPath(pXmlDoc, sChartStart + "/c:legend" + sDash, "val"_ostr, "sysDot");
+    assertXPath(pXmlDoc, sChartStart + "/c:legend" + sDash, "val"_ostr, u"sysDot"_ustr);
     const OString sSeries(sChartStart + "/c:plotArea/c:pieChart/c:ser/c:dPt[3]");
-    assertXPath(pXmlDoc, sSeries + sDash, "val"_ostr, "dash");
-    assertXPath(pXmlDoc, sChartStart + "/c:title" + sDash, "val"_ostr, "dashDot");
+    assertXPath(pXmlDoc, sSeries + sDash, "val"_ostr, u"dash"_ustr);
+    assertXPath(pXmlDoc, sChartStart + "/c:title" + sDash, "val"_ostr, u"dashDot"_ustr);
 }
 
 void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
@@ -177,14 +177,16 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
     // ODF im/export for MCGR is integrated
 
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
-    save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
+    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "30000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "30000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr,
+                u"30000"_ustr);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr,
+                u"30000"_ustr);
 }
 
 void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
@@ -203,8 +205,8 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     loadFromFile(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
 
     // Find transparency gradient name
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName = getXPathContent(
         pXmlDoc,
@@ -218,8 +220,8 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify the content of the opacity definition
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
     const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
@@ -238,14 +240,14 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
     loadFromFile(u"odp/tdf128345_ChartWall_CS_TG.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
+    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2); //linear
     // MS Office has opacity, so 100% transparency is val="0"
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, u"0"_ustr);
     // no element for 0% transparent
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", 0);
 }
@@ -257,8 +259,8 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
     loadFromFile(u"pptx/tdf128345_ChartWall_CS_TG.pptx");
 
     // Find transparency gradient name
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
         = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
@@ -272,8 +274,8 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
     const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
@@ -290,8 +292,8 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     loadFromFile(u"odp/tdf128345_Legend_CS_TG_axial.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
+    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill"_ostr);
@@ -301,15 +303,15 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
 
     // MCGR: start entry, no transparence, pos zero
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos"_ostr, u"0"_ustr);
 
     // MCGR: middle entry, 100% transparence, pos 0.5
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "0");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos"_ostr, "50000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos"_ostr, u"50000"_ustr);
 
     // MCGR: end entry, no transparence, pos 1.0
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]", "pos"_ostr, u"100000"_ustr);
 }
 
 void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
@@ -319,8 +321,8 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     loadFromFile(u"pptx/tdf128345_Legend_CS_TG_axial.pptx");
 
     // Find transparency gradient name
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
         = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
@@ -334,8 +336,8 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
     const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
@@ -357,29 +359,29 @@ void Chart2GeometryTest::testTdf135366LabelOnSeries()
     Reference<beans::XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
     uno::Any aAny;
 
-    aAny = xPropSet->getPropertyValue("LabelBorderStyle");
+    aAny = xPropSet->getPropertyValue(u"LabelBorderStyle"_ustr);
     drawing::LineStyle eLineStyle;
     CPPUNIT_ASSERT_MESSAGE("No LabelBorderStyle set.", aAny >>= eLineStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("solid line expected", drawing::LineStyle_SOLID, eLineStyle);
 
     sal_Int32 nBorderWidth;
     sal_Int32 nExpectedWidth = 95;
-    xPropSet->getPropertyValue("LabelBorderWidth") >>= nBorderWidth;
+    xPropSet->getPropertyValue(u"LabelBorderWidth"_ustr) >>= nBorderWidth;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("LabelBorderWidth", nExpectedWidth, nBorderWidth);
 
     sal_Int32 nLineColor;
     sal_Int32 nExpectedLineColor = 255;
-    xPropSet->getPropertyValue("LabelBorderColor") >>= nLineColor;
+    xPropSet->getPropertyValue(u"LabelBorderColor"_ustr) >>= nLineColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("line color blue, 255=#0000FF", nExpectedLineColor, nLineColor);
 
-    aAny = xPropSet->getPropertyValue("LabelFillStyle");
+    aAny = xPropSet->getPropertyValue(u"LabelFillStyle"_ustr);
     drawing::FillStyle eFillStyle;
     CPPUNIT_ASSERT_MESSAGE("No LabelFillStyle set", aAny >>= eFillStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("solid fill expected", drawing::FillStyle_SOLID, eFillStyle);
 
     sal_Int32 nFillColor;
     sal_Int32 nExpectedFillColor = 65280;
-    xPropSet->getPropertyValue("LabelFillColor") >>= nFillColor;
+    xPropSet->getPropertyValue(u"LabelFillColor"_ustr) >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fill color green, 65280=#00FF00", nExpectedFillColor, nFillColor);
 }
 
@@ -396,35 +398,35 @@ void Chart2GeometryTest::testTdf135366LabelOnPoint()
                                             uno::UNO_SET_THROW);
     uno::Any aAny;
 
-    aAny = xPropSet->getPropertyValue("LabelBorderStyle");
+    aAny = xPropSet->getPropertyValue(u"LabelBorderStyle"_ustr);
     drawing::LineStyle eLineStyle;
     CPPUNIT_ASSERT_MESSAGE("No LabelBorderStyle set.", aAny >>= eLineStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("solid line expected", drawing::LineStyle_SOLID, eLineStyle);
 
     sal_Int32 nBorderWidth;
     sal_Int32 nExpectedWidth = 381;
-    xPropSet->getPropertyValue("LabelBorderWidth") >>= nBorderWidth;
+    xPropSet->getPropertyValue(u"LabelBorderWidth"_ustr) >>= nBorderWidth;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("LabelBorderWidth", nExpectedWidth, nBorderWidth);
 
     sal_Int32 nLineTransparency;
     sal_Int32 nExpectedTransparency = 30;
-    xPropSet->getPropertyValue("LabelBorderTransparency") >>= nLineTransparency;
+    xPropSet->getPropertyValue(u"LabelBorderTransparency"_ustr) >>= nLineTransparency;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("line transparency", nExpectedTransparency, nLineTransparency);
 
     sal_Int32 nLineColor;
     sal_Int32 nExpectedLineColor = 10206041;
-    xPropSet->getPropertyValue("LabelBorderColor") >>= nLineColor;
+    xPropSet->getPropertyValue(u"LabelBorderColor"_ustr) >>= nLineColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("line color greenish, 10206041=#9BBB59", nExpectedLineColor,
                                  nLineColor);
 
-    aAny = xPropSet->getPropertyValue("LabelFillStyle");
+    aAny = xPropSet->getPropertyValue(u"LabelFillStyle"_ustr);
     drawing::FillStyle eFillStyle;
     CPPUNIT_ASSERT_MESSAGE("No LabelFillStyle set", aAny >>= eFillStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("solid fill expected", drawing::FillStyle_SOLID, eFillStyle);
 
     sal_Int32 nFillColor;
     sal_Int32 nExpectedFillColor = 14277081;
-    xPropSet->getPropertyValue("LabelFillColor") >>= nFillColor;
+    xPropSet->getPropertyValue(u"LabelFillColor"_ustr) >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fill color gray, 14277081=#d9d9d9", nExpectedFillColor,
                                  nFillColor);
 }
@@ -439,8 +441,8 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     // FIXME: Error: unexpected attribute "loext:label-stroke-color"
     skipValidation();
 
-    save("writer8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"writer8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Find label style
@@ -467,8 +469,8 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_012);
     loadFromFile(u"pptx/tdf135366_CustomLabelText.pptx");
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Find custom text. As of version 7.0 it is in a <text:span> element.
@@ -479,7 +481,7 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
 
     // Verify text content
     const OUString sOUTextContent = getXPathContent(pXmlDoc, sCustomTextPath);
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), sOUTextContent);
+    CPPUNIT_ASSERT_EQUAL(u"Custom"_ustr, sOUTextContent);
 
     SetODFDefaultVersion(nCurrentODFVersion);
 }

@@ -112,7 +112,7 @@ void lcl_setRole(
 {
     Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue( "Role", uno::Any( rRole ));
+        xSeqProp->setPropertyValue( u"Role"_ustr, uno::Any( rRole ));
 }
 
 void lcl_addSequenceToDataSource(
@@ -299,7 +299,7 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     OSL_ASSERT( xErrorBar.is());
     if( xErrorBar.is())
     {
-        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any( nStyle ));
+        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, uno::Any( nStyle ));
     }
 
     xDataSeries->setPropertyValue( aPropName, uno::Any( xErrorBar ));
@@ -329,7 +329,7 @@ bool StatisticsHelper::hasErrorBars(
     sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
 
     return ( xErrorBar.is() &&
-             ( xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+             ( xErrorBar->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle ) &&
              nStyle != css::chart::ErrorBarStyle::NONE );
 }
 
@@ -339,7 +339,7 @@ void StatisticsHelper::removeErrorBars(
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));
     if ( xErrorBar.is())
-        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any(
+        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, uno::Any(
                                          css::chart::ErrorBarStyle::NONE ));
 }
 
@@ -351,7 +351,7 @@ bool StatisticsHelper::usesErrorBarRanges(
     sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
 
     return ( xErrorBar.is() &&
-             ( xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+             ( xErrorBar->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle ) &&
              nStyle == css::chart::ErrorBarStyle::FROM_DATA );
 }
 

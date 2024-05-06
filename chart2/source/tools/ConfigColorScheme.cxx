@@ -61,7 +61,7 @@ private:
 };
 
 ChartConfigItem::ChartConfigItem( ConfigColorScheme & rListener ) :
-        ::utl::ConfigItem( "Office.Chart/DefaultColor" ),
+        ::utl::ConfigItem( u"Office.Chart/DefaultColor"_ustr ),
     m_rListener( rListener )
 {
     EnableNotification( { aSeriesPropName } );
@@ -151,7 +151,7 @@ void ConfigColorScheme::notify()
 
 OUString SAL_CALL ConfigColorScheme::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.ConfigDefaultColorScheme" ;
+    return u"com.sun.star.comp.chart2.ConfigDefaultColorScheme"_ustr ;
 }
 
 sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceName )
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceNa
 
 css::uno::Sequence< OUString > SAL_CALL ConfigColorScheme::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.ColorScheme" };
+    return { u"com.sun.star.chart2.ColorScheme"_ustr };
 }
 
 } //  namespace chart

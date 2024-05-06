@@ -235,7 +235,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
                 Reference< data::XDataSequence > xSeq( aDataSeqs[i]->getValues());
                 Reference< XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
                 OUString aRole;
-                if( xProp->getPropertyValue( "Role" ) >>= aRole )
+                if( xProp->getPropertyValue( u"Role"_ustr ) >>= aRole )
                 {
                     if( !bXValuesFound && aRole == "values-x" )
                     {
@@ -334,7 +334,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
                                  const ViewElementListProvider* pViewElementListProvider,
                                  const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier)
-    : SfxTabDialogController(pParent, "modules/schart/ui/attributedialog.ui", "AttributeDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/schart/ui/attributedialog.ui"_ustr, u"AttributeDialog"_ustr, pAttr)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
     , m_pNumberFormatter(nullptr)
@@ -349,55 +349,55 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
     switch (pDialogParameter->getObjectType())
     {
         case OBJECTTYPE_TITLE:
-            AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-            AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
-            AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
+            AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+            AddTabPage(u"alignment"_ustr, SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
+                AddTabPage(u"asian"_ustr, SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
             break;
 
         case OBJECTTYPE_LEGEND:
-            AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-            AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
-            AddTabPage("legendpos", SchResId(STR_PAGE_POSITION), SchLegendPosTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
+            AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+            AddTabPage(u"legendpos"_ustr, SchResId(STR_PAGE_POSITION), SchLegendPosTabPage::Create);
             if (SvtCJKOptions::IsAsianTypographyEnabled())
-                AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
+                AddTabPage(u"asian"_ustr, SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
             break;
 
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
             if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
-                AddTabPage("options", SchResId(STR_PAGE_OPTIONS),SchOptionTabPage::Create);
+                AddTabPage(u"options"_ustr, SchResId(STR_PAGE_OPTIONS),SchOptionTabPage::Create);
             if( m_pParameter->ProvidesStartingAngle())
-                AddTabPage("polaroptions", SchResId(STR_PAGE_OPTIONS), PolarOptionsTabPage::Create);
+                AddTabPage(u"polaroptions"_ustr, SchResId(STR_PAGE_OPTIONS), PolarOptionsTabPage::Create);
             if (m_pParameter->IsPieChartDataPoint())
-                AddTabPage("datapointoption", SchResId(STR_PAGE_OPTIONS), DataPointOptionTabPage::Create);
+                AddTabPage(u"datapointoption"_ustr, SchResId(STR_PAGE_OPTIONS), DataPointOptionTabPage::Create);
 
             if( m_pParameter->HasGeometryProperties() )
-                AddTabPage("layout", SchResId(STR_PAGE_LAYOUT), SchLayoutTabPage::Create);
+                AddTabPage(u"layout"_ustr, SchResId(STR_PAGE_LAYOUT), SchLayoutTabPage::Create);
 
             if(m_pParameter->HasAreaProperties())
             {
-                AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-                AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
+                AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+                AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             }
-            AddTabPage("border", SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE ), RID_SVXPAGE_LINE);
+            AddTabPage(u"border"_ustr, SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE ), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
-            AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("datalabels", SchResId(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
+            AddTabPage(u"datalabels"_ustr, SchResId(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
+                AddTabPage(u"asian"_ustr, SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
 
             break;
 
@@ -405,29 +405,29 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         {
             if( m_pParameter->HasScaleProperties() )
             {
-                AddTabPage("scale", SchResId(STR_PAGE_SCALE), ScaleTabPage::Create);
+                AddTabPage(u"scale"_ustr, SchResId(STR_PAGE_SCALE), ScaleTabPage::Create);
                 //no positioning page for z axes so far as the tickmarks are not shown so far
-                AddTabPage("axispos", SchResId(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create);
+                AddTabPage(u"axispos"_ustr, SchResId(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create);
             }
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
-            AddTabPage("axislabel", SchResId(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"axislabel"_ustr, SchResId(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create);
             if( m_pParameter->HasNumberProperties() )
-                AddTabPage("numberformat", SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+                AddTabPage(u"numberformat"_ustr, SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage("asian", SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
+                AddTabPage(u"asian"_ustr, SchResId(STR_PAGE_ASIAN), RID_SVXPAGE_PARA_ASIAN);
             break;
         }
 
         case OBJECTTYPE_DATA_ERRORS_X:
-            AddTabPage("xerrorbar", SchResId(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create);
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"xerrorbar"_ustr, SchResId(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Y:
-            AddTabPage("yerrorbar", SchResId(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create);
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"yerrorbar"_ustr, SchResId(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Z:
@@ -437,12 +437,12 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
         case OBJECTTYPE_DATA_STOCK_RANGE:
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_CURVE:
-            AddTabPage("trendline", SchResId(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create);
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"trendline"_ustr, SchResId(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS:
@@ -451,9 +451,9 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_DIAGRAM_FLOOR:
         case OBJECTTYPE_DIAGRAM_WALL:
         case OBJECTTYPE_DIAGRAM:
-            AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-            AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
+            AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             break;
 
         case OBJECTTYPE_LEGEND_ENTRY:
@@ -462,25 +462,25 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             // nothing
             break;
         case OBJECTTYPE_DATA_TABLE:
-            AddTabPage("datatable", SchResId(STR_DATA_TABLE), DataTableTabPage::Create);
-            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
-            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+            AddTabPage(u"datatable"_ustr, SchResId(STR_DATA_TABLE), DataTableTabPage::Create);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
-            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
-            AddTabPage("transparent", SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
-            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
-            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
-            AddTabPage("numberformat", SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
+            AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
+            AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
+            AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
+            AddTabPage(u"numberformat"_ustr, SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
             if (SvtCTLOptions::IsCTLFontEnabled())
             {
                 /*  When rotation is supported for equation text boxes, use
                     SchAlignmentTabPage::Create here. The special
                     SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
-                AddTabPage("alignment", SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation);
+                AddTabPage(u"alignment"_ustr, SchResId(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation);
             }
             break;
         default:

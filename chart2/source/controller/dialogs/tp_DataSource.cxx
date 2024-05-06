@@ -105,7 +105,7 @@ OUString lcl_GetSelectedRolesRange( const weld::TreeView& rRoleListBox )
 
 OUString lcl_GetSequenceNameForLabel(const ::chart::SeriesEntry* pEntry)
 {
-    OUString aResult("values-y");
+    OUString aResult(u"values-y"_ustr);
     if (pEntry && pEntry->m_xChartType.is())
         aResult = pEntry->m_xChartType->getRoleOfSequenceForSeriesLabel();
     return aResult;
@@ -160,28 +160,28 @@ DataSourceTabPage::DataSourceTabPage(weld::Container* pPage, weld::DialogControl
                                      DialogModel & rDialogModel,
                                      ChartTypeTemplateProvider* pTemplateProvider,
                                      bool bHideDescription /* = false */)
-    : ::vcl::OWizardPage(pPage, pController, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
+    : ::vcl::OWizardPage(pPage, pController, u"modules/schart/ui/tp_DataSource.ui"_ustr, u"tp_DataSource"_ustr)
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel(rDialogModel)
     , m_pCurrentRangeChoosingField( nullptr )
     , m_bIsDirty( false )
     , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(pController))
-    , m_xFT_CAPTION(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
-    , m_xFT_SERIES(m_xBuilder->weld_label("FT_SERIES"))
-    , m_xLB_SERIES(m_xBuilder->weld_tree_view("LB_SERIES"))
-    , m_xBTN_ADD(m_xBuilder->weld_button("BTN_ADD"))
-    , m_xBTN_REMOVE(m_xBuilder->weld_button("BTN_REMOVE"))
-    , m_xBTN_UP(m_xBuilder->weld_button("BTN_UP"))
-    , m_xBTN_DOWN(m_xBuilder->weld_button("BTN_DOWN"))
-    , m_xFT_ROLE(m_xBuilder->weld_label("FT_ROLE"))
-    , m_xLB_ROLE(m_xBuilder->weld_tree_view("LB_ROLE"))
-    , m_xFT_RANGE(m_xBuilder->weld_label("FT_RANGE"))
-    , m_xEDT_RANGE(m_xBuilder->weld_entry("EDT_RANGE"))
-    , m_xIMB_RANGE_MAIN(m_xBuilder->weld_button("IMB_RANGE_MAIN"))
-    , m_xFT_CATEGORIES(m_xBuilder->weld_label("FT_CATEGORIES"))
-    , m_xFT_DATALABELS(m_xBuilder->weld_label("FT_DATALABELS"))
-    , m_xEDT_CATEGORIES(m_xBuilder->weld_entry("EDT_CATEGORIES"))
-    , m_xIMB_RANGE_CAT(m_xBuilder->weld_button("IMB_RANGE_CAT"))
+    , m_xFT_CAPTION(m_xBuilder->weld_label(u"FT_CAPTION_FOR_WIZARD"_ustr))
+    , m_xFT_SERIES(m_xBuilder->weld_label(u"FT_SERIES"_ustr))
+    , m_xLB_SERIES(m_xBuilder->weld_tree_view(u"LB_SERIES"_ustr))
+    , m_xBTN_ADD(m_xBuilder->weld_button(u"BTN_ADD"_ustr))
+    , m_xBTN_REMOVE(m_xBuilder->weld_button(u"BTN_REMOVE"_ustr))
+    , m_xBTN_UP(m_xBuilder->weld_button(u"BTN_UP"_ustr))
+    , m_xBTN_DOWN(m_xBuilder->weld_button(u"BTN_DOWN"_ustr))
+    , m_xFT_ROLE(m_xBuilder->weld_label(u"FT_ROLE"_ustr))
+    , m_xLB_ROLE(m_xBuilder->weld_tree_view(u"LB_ROLE"_ustr))
+    , m_xFT_RANGE(m_xBuilder->weld_label(u"FT_RANGE"_ustr))
+    , m_xEDT_RANGE(m_xBuilder->weld_entry(u"EDT_RANGE"_ustr))
+    , m_xIMB_RANGE_MAIN(m_xBuilder->weld_button(u"IMB_RANGE_MAIN"_ustr))
+    , m_xFT_CATEGORIES(m_xBuilder->weld_label(u"FT_CATEGORIES"_ustr))
+    , m_xFT_DATALABELS(m_xBuilder->weld_label(u"FT_DATALABELS"_ustr))
+    , m_xEDT_CATEGORIES(m_xBuilder->weld_entry(u"EDT_CATEGORIES"_ustr))
+    , m_xIMB_RANGE_CAT(m_xBuilder->weld_button(u"IMB_RANGE_CAT"_ustr))
 {
     m_xLB_SERIES->set_size_request(m_xLB_SERIES->get_approximate_digit_width() * 25,
                                    m_xLB_SERIES->get_height_rows(10));
@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, voi
         OUString aUIStr(SchResId(STR_DATA_SELECT_RANGE_FOR_SERIES));
 
         // replace role
-        OUString aReplacement( "%VALUETYPE" );
+        OUString aReplacement( u"%VALUETYPE"_ustr );
         sal_Int32 nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
         {
@@ -833,10 +833,10 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( "Role" , uno::Any( lcl_aLabelRole ));
+                                    xProp->setPropertyValue( u"Role"_ustr , uno::Any( lcl_aLabelRole ));
 
                                     //Labels should always include hidden cells, regardless of the setting chosen
-                                    xProp->setPropertyValue( "IncludeHiddenCells", uno::Any(true));
+                                    xProp->setPropertyValue( u"IncludeHiddenCells"_ustr, uno::Any(true));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }
@@ -868,7 +868,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                 aRange = xNewSeq->getSourceRangeRepresentation();
 
                                 Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                xProp->setPropertyValue( "Role" , uno::Any( aSelectedRole ));
+                                xProp->setPropertyValue( u"Role"_ustr , uno::Any( aSelectedRole ));
                                 if( !xLabeledSeq.is())
                                 {
                                     if( aSelectedRole == aSequenceNameForLabel )

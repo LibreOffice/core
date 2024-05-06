@@ -29,7 +29,7 @@ namespace chart
 {
 
 SchLayoutTabPage::SchLayoutTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType", &rInAttrs)
+     : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_ChartType.ui"_ustr, u"tp_ChartType"_ustr, &rInAttrs)
 {
     m_pGeometryResources.reset(new BarGeometryResources(m_xBuilder.get()));
 }

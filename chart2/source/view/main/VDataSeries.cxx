@@ -176,7 +176,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
         {
             try
             {
-                uno::Any aARole = xProp->getPropertyValue("Role");
+                uno::Any aARole = xProp->getPropertyValue(u"Role"_ustr);
                 OUString aRole;
                 aARole >>= aRole;
 
@@ -527,7 +527,7 @@ double VDataSeries::getBubble_Size( sal_Int32 index ) const
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : CHART_UNONAME_NUMFMT;
+    OUString aPropName = bForPercentage ? u"PercentageNumberFormat"_ustr : CHART_UNONAME_NUMFMT;
     bool bHasNumberFormat = false;
     bool bLinkToSource = true;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
@@ -541,7 +541,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : CHART_UNONAME_NUMFMT;
+    OUString aPropName = bForPercentage ? u"PercentageNumberFormat"_ustr : CHART_UNONAME_NUMFMT;
     sal_Int32 nNumberFormat = -1;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )
@@ -580,7 +580,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Refe
     {
         uno::Reference< beans::XPropertySet > xPointProps( getPropertiesOfPoint( nPointIndex ) );
         if( xPointProps.is() )
-            xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
+            xPointProps->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement;
 
         const uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
@@ -594,7 +594,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Refe
         {
             nLabelPlacement = aAvailablePlacements[0];
             if( xPointProps.is() )
-                xPointProps->setPropertyValue("LabelPlacement", uno::Any(nLabelPlacement));
+                xPointProps->setPropertyValue(u"LabelPlacement"_ustr, uno::Any(nLabelPlacement));
             return nLabelPlacement;
         }
 
@@ -614,7 +614,7 @@ awt::Point VDataSeries::getLabelPosition( awt::Point aTextShapePos, sal_Int32 nP
     {
         RelativePosition aCustomLabelPosition;
         uno::Reference< beans::XPropertySet > xPointProps(getPropertiesOfPoint(nPointIndex));
-        if( xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
+        if( xPointProps.is() && (xPointProps->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition))
         {
             aPos.X = static_cast<sal_Int32>(aCustomLabelPosition.Primary * m_aReferenceSize.Width) + aTextShapePos.X;
             aPos.Y = static_cast<sal_Int32>(aCustomLabelPosition.Secondary * m_aReferenceSize.Height) + aTextShapePos.Y;
@@ -636,7 +636,7 @@ bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
         {
             uno::Reference< beans::XPropertySet > xPointProps(m_xDataSeries->getDataPointByIndex(nPointIndex));
             RelativePosition aCustomLabelPosition;
-            if( xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition) )
+            if( xPointProps.is() && (xPointProps->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition) )
                 bCustom = true;
         }
     }
@@ -654,7 +654,7 @@ awt::Size VDataSeries::getLabelCustomSize(sal_Int32 nPointIndex) const
     {
         RelativeSize aCustomLabelSize;
         const uno::Reference<beans::XPropertySet> xPointProps(getPropertiesOfPoint(nPointIndex));
-        if (xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelSize") >>= aCustomLabelSize))
+        if (xPointProps.is() && (xPointProps->getPropertyValue(u"CustomLabelSize"_ustr) >>= aCustomLabelSize))
         {
             aSize.Width = static_cast<sal_Int32>(aCustomLabelSize.Primary * m_aReferenceSize.Width);
             aSize.Height = static_cast<sal_Int32>(aCustomLabelSize.Secondary * m_aReferenceSize.Height);
@@ -795,10 +795,10 @@ static std::optional<Symbol> getSymbolPropertiesFromPropertySet( const uno::Refe
     Symbol aSymbolProps;
     try
     {
-        if( xProp->getPropertyValue("Symbol") >>= aSymbolProps )
+        if( xProp->getPropertyValue(u"Symbol"_ustr) >>= aSymbolProps )
         {
             //use main color to fill symbols
-            xProp->getPropertyValue("Color") >>= aSymbolProps.FillColor;
+            xProp->getPropertyValue(u"Color"_ustr) >>= aSymbolProps.FillColor;
             // border of symbols always same as fill color
             aSymbolProps.BorderColor = aSymbolProps.FillColor;
         }
@@ -893,7 +893,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
     try
     {
         uno::Reference< beans::XPropertyState > xPointState( getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
-        return (xPointState->getPropertyState("Color") != beans::PropertyState_DEFAULT_VALUE );
+        return (xPointState->getPropertyState(u"Color"_ustr) != beans::PropertyState_DEFAULT_VALUE );
     }
     catch(const uno::Exception&)
     {

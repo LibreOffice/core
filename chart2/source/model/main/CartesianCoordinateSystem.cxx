@@ -72,7 +72,7 @@ uno::Reference< util::XCloneable > SAL_CALL CartesianCoordinateSystem::createClo
 // ____ XServiceInfo ____
 OUString SAL_CALL CartesianCoordinateSystem::getImplementationName()
 {
-    return "com.sun.star.comp.chart.CartesianCoordinateSystem";
+    return u"com.sun.star.comp.chart.CartesianCoordinateSystem"_ustr;
 }
 
 sal_Bool SAL_CALL CartesianCoordinateSystem::supportsService( const OUString& rServiceName )
@@ -97,7 +97,7 @@ CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d()
 // ____ XServiceInfo ____
 OUString SAL_CALL CartesianCoordinateSystem2d::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.CartesianCoordinateSystem2d";
+    return u"com.sun.star.comp.chart2.CartesianCoordinateSystem2d"_ustr;
 }
 
 sal_Bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
@@ -109,7 +109,7 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem2d::getSupporte
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,
-        "com.sun.star.chart2.CartesianCoordinateSystem2d"
+        u"com.sun.star.chart2.CartesianCoordinateSystem2d"_ustr
     };
 }
 
@@ -125,7 +125,7 @@ CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d()
 // ____ XServiceInfo ____
 OUString SAL_CALL CartesianCoordinateSystem3d::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.CartesianCoordinateSystem3d";
+    return u"com.sun.star.comp.chart2.CartesianCoordinateSystem3d"_ustr;
 }
 
 sal_Bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )
@@ -137,7 +137,7 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupporte
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,
-        "com.sun.star.chart2.CartesianCoordinateSystem3d"
+        u"com.sun.star.chart2.CartesianCoordinateSystem3d"_ustr
     };
 }
 

@@ -100,7 +100,7 @@ public:
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
-            throw css::lang::IllegalArgumentException( "spline property requires different type", nullptr, 0 );
+            throw css::lang::IllegalArgumentException( u"spline property requires different type"_ustr, nullptr, 0 );
 
         m_aOuterValue = rOuterValue;
 

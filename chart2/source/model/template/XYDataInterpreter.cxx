@@ -76,7 +76,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
                 xCategories = labelData;
                 if( xCategories.is())
                 {
-                    SetRole( xCategories->getValues(), "categories");
+                    SetRole( xCategories->getValues(), u"categories"_ustr);
                     if( bUseCategoriesAsX )
                         bSetXValues = false;
                 }
@@ -86,13 +86,13 @@ InterpretedData XYDataInterpreter::interpretDataSource(
             {
                 xValuesX = labelData;
                 if( xValuesX.is())
-                    SetRole( xValuesX->getValues(), "values-x");
+                    SetRole( xValuesX->getValues(), u"values-x"_ustr);
             }
             else
             {
                 aSequencesVec.push_back( labelData );
                 if( labelData.is())
-                    SetRole( labelData->getValues(), "values-y");
+                    SetRole( labelData->getValues(), u"values-y"_ustr);
             }
         }
         catch( const uno::Exception & )
@@ -151,16 +151,16 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
 
             // values-y
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-y" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-y"_ustr ));
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-x" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-x"_ustr ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
                 std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
-                        aSeries[i]->getDataSequences2(), "values" ));
+                        aSeries[i]->getDataSequences2(), u"values"_ustr ));
                 if( xValuesX.is())
                     aValueSeqVec.erase( find( aValueSeqVec.begin(), aValueSeqVec.end(), xValuesX ));
                 if( xValuesY.is())
@@ -172,7 +172,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesY = aValueSeqVec[nIndex++];
                     if( xValuesY.is())
-                        SetRole( xValuesY->getValues(), "values-y");
+                        SetRole( xValuesY->getValues(), u"values-y"_ustr);
                 }
 
                 if( ! xValuesX.is() &&
@@ -180,7 +180,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesX = aValueSeqVec[nIndex++];
                     if( xValuesX.is())
-                        SetRole( xValuesY->getValues(), "values-x");
+                        SetRole( xValuesY->getValues(), u"values-x"_ustr);
                 }
             }
             if( xValuesY.is())

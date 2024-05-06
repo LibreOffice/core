@@ -311,7 +311,7 @@ void Title::fireModifyEvent()
 
 OUString SAL_CALL Title::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.Title";
+    return u"com.sun.star.comp.chart2.Title"_ustr;
 }
 
 sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )
@@ -322,10 +322,10 @@ sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Title::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.Title",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.beans.PropertySet",
-        "com.sun.star.layout.LayoutElement" };
+        u"com.sun.star.chart2.Title"_ustr,
+        u"com.sun.star.style.ParagraphProperties"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr,
+        u"com.sun.star.layout.LayoutElement"_ustr };
 }
 
 // needed by MSC compiler

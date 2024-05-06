@@ -67,7 +67,7 @@ OUString lcl_getRole(
     {
         try
         {
-            xProp->getPropertyValue( "Role" ) >>= aResult;
+            xProp->getPropertyValue( u"Role"_ustr ) >>= aResult;
         }
         catch( const uno::Exception & )
         {
@@ -859,7 +859,7 @@ void DataBrowserModel::updateFromModel()
                     bool bSwapXAndYAxis = false;
                     try
                     {
-                        coords->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
+                        coords->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXAndYAxis;
                     }
                     catch( const beans::UnknownPropertyException & ) {}
 

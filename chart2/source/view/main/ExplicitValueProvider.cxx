@@ -52,7 +52,7 @@ bool lcl_getPropertySwapXAndYAxis(const rtl::Reference<Diagram>& xDiagram)
         {
             try
             {
-                aCooSysList[0]->getPropertyValue("SwapXAndYAxis") >>= bSwapXAndY;
+                aCooSysList[0]->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bSwapXAndY;
             }
             catch (const uno::Exception&)
             {
@@ -102,7 +102,7 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
     sal_Int32 nFormat = 0;
     if (!xSeriesOrPointProp.is())
         return nFormat;
-    if (!(xSeriesOrPointProp->getPropertyValue("PercentageNumberFormat") >>= nFormat))
+    if (!(xSeriesOrPointProp->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nFormat))
     {
         nFormat = DiagramHelper::getPercentNumberFormat(xNumberFormatsSupplier);
     }

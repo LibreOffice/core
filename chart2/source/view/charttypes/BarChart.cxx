@@ -54,8 +54,8 @@ BarChart::BarChart( const rtl::Reference<ChartType>& xChartTypeModel
     {
         if( m_xChartTypeModel.is() )
         {
-            m_xChartTypeModel->getPropertyValue( "OverlapSequence" ) >>= m_aOverlapSequence;
-            m_xChartTypeModel->getPropertyValue( "GapwidthSequence" ) >>= m_aGapwidthSequence;
+            m_xChartTypeModel->getPropertyValue( u"OverlapSequence"_ustr ) >>= m_aOverlapSequence;
+            m_xChartTypeModel->getPropertyValue( u"GapwidthSequence"_ustr ) >>= m_aGapwidthSequence;
         }
     }
     catch( const uno::Exception& )
@@ -303,7 +303,7 @@ rtl::Reference< SvxShape > BarChart::createDataPoint3D_Bar(
         if( xObjectProperties.is() )
         {
             sal_Int16 nPercentDiagonal = 0;
-            xObjectProperties->getPropertyValue( "PercentDiagonal" ) >>= nPercentDiagonal;
+            xObjectProperties->getPropertyValue( u"PercentDiagonal"_ustr ) >>= nPercentDiagonal;
             if( nPercentDiagonal < 5 )
                 bRoundedEdges = false;
         }
@@ -654,7 +654,7 @@ void BarChart::doXSlot(
         if(!pSeries)
             continue;
 
-        bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+        bool bHasFillColorMapping = pSeries->hasPropertyMapping(u"FillColor"_ustr);
 
         bool bOnlyConnectionLinesForThisPoint = false;
 
@@ -750,7 +750,7 @@ void BarChart::doXSlot(
         sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
         if(m_nDimension==3) try
         {
-            xDataPointProperties->getPropertyValue( "Geometry3D") >>= nGeometry3D;
+            xDataPointProperties->getPropertyValue( u"Geometry3D"_ustr) >>= nGeometry3D;
         }
         catch( const uno::Exception& )
         {
@@ -911,10 +911,10 @@ void BarChart::doXSlot(
 
                 if(bHasFillColorMapping)
                 {
-                    double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                    double nPropVal = pSeries->getValueByProperty(nPointIndex, u"FillColor"_ustr);
                     if(!std::isnan(nPropVal))
                     {
-                        xShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                        xShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
                     }
                 }
                 //set name/classified ObjectID (CID)

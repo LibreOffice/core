@@ -112,7 +112,7 @@ OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
     {
         *pFormulaLength -= aBuf.getLength();
         if ( *pFormulaLength <= 0 )
-            return "###";
+            return u"###"_ustr;
     }
     return ( aBuf + getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue, pFormulaLength ) );
 }

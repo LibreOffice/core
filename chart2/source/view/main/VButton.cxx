@@ -69,11 +69,11 @@ rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceY[2] = 0.0;
     pInnerSequenceZ[2] = 0.0;
 
-    xShape->SvxShape::setPropertyValue("Name", uno::Any(m_sCID));
+    xShape->SvxShape::setPropertyValue(u"Name"_ustr, uno::Any(m_sCID));
     xShape->SvxShape::setPropertyValue(UNO_NAME_POLYPOLYGON,
                                        uno::Any(PolyToPointSequence(aPolyPolygon)));
-    xShape->SvxShape::setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_NONE));
-    xShape->SvxShape::setPropertyValue("FillColor", uno::Any(m_nArrowColor));
+    xShape->SvxShape::setPropertyValue(u"LineStyle"_ustr, uno::Any(drawing::LineStyle_NONE));
+    xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, uno::Any(m_nArrowColor));
 
     return xShape;
 }
@@ -92,20 +92,20 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
     rtl::Reference<SvxShapeGroupAnyD> xContainer = m_xShape;
 
     tPropertyNameValueMap aTextValueMap;
-    aTextValueMap["CharHeight"] <<= 10.0f;
-    aTextValueMap["CharHeightAsian"] <<= 10.0f;
-    aTextValueMap["CharHeightComplex"] <<= 10.0f;
-    aTextValueMap["FillColor"] <<= m_nBGColor;
-    aTextValueMap["FillStyle"] <<= drawing::FillStyle_SOLID;
-    aTextValueMap["LineColor"] <<= sal_Int32(0xcccccc);
-    aTextValueMap["LineStyle"] <<= drawing::LineStyle_SOLID;
-    aTextValueMap["ParaAdjust"] <<= style::ParagraphAdjust_CENTER;
-    aTextValueMap["TextHorizontalAdjust"] <<= drawing::TextHorizontalAdjust_LEFT;
-    aTextValueMap["TextVerticalAdjust"] <<= drawing::TextVerticalAdjust_CENTER;
-    aTextValueMap["ParaLeftMargin"] <<= sal_Int32(100);
-    aTextValueMap["ParaRightMargin"] <<= sal_Int32(600);
+    aTextValueMap[u"CharHeight"_ustr] <<= 10.0f;
+    aTextValueMap[u"CharHeightAsian"_ustr] <<= 10.0f;
+    aTextValueMap[u"CharHeightComplex"_ustr] <<= 10.0f;
+    aTextValueMap[u"FillColor"_ustr] <<= m_nBGColor;
+    aTextValueMap[u"FillStyle"_ustr] <<= drawing::FillStyle_SOLID;
+    aTextValueMap[u"LineColor"_ustr] <<= sal_Int32(0xcccccc);
+    aTextValueMap[u"LineStyle"_ustr] <<= drawing::LineStyle_SOLID;
+    aTextValueMap[u"ParaAdjust"_ustr] <<= style::ParagraphAdjust_CENTER;
+    aTextValueMap[u"TextHorizontalAdjust"_ustr] <<= drawing::TextHorizontalAdjust_LEFT;
+    aTextValueMap[u"TextVerticalAdjust"_ustr] <<= drawing::TextVerticalAdjust_CENTER;
+    aTextValueMap[u"ParaLeftMargin"_ustr] <<= sal_Int32(100);
+    aTextValueMap[u"ParaRightMargin"_ustr] <<= sal_Int32(600);
 
-    aTextValueMap["Name"] <<= m_sCID; //CID OUString
+    aTextValueMap[u"Name"_ustr] <<= m_sCID; //CID OUString
 
     PropertyMapper::getMultiPropertyListsFromValueMap(aPropNames, aPropValues, aTextValueMap);
 

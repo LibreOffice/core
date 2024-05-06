@@ -155,7 +155,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySet
 
 OUString SAL_CALL LineChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.LineChartType";
+    return u"com.sun.star.comp.chart.LineChartType"_ustr;
 }
 
 sal_Bool SAL_CALL LineChartType::supportsService( const OUString& rServiceName )
@@ -167,8 +167,8 @@ css::uno::Sequence< OUString > SAL_CALL LineChartType::getSupportedServiceNames(
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_LINE,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

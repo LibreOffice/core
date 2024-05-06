@@ -82,7 +82,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 
     if( ChartTypeHelper::isSupportingRightAngledAxes(
         xDiagram->getChartTypeByIndex( 0 ) ) )
-        xDiagram->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+        xDiagram->getPropertyValue(u"RightAngledAxes"_ustr) >>= m_bRightAngledAxes;
     if(m_bRightAngledAxes)
     {
         if( m_eRotationDirection==ROTATIONDIRECTION_Z )

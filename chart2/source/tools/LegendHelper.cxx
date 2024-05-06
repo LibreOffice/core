@@ -39,24 +39,24 @@ rtl::Reference< Legend > LegendHelper::showLegend( ChartModel& rModel
     rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, xContext, true );
     if( xLegend.is())
     {
-        xLegend->setPropertyValue( "Show", uno::Any(true) );
+        xLegend->setPropertyValue( u"Show"_ustr, uno::Any(true) );
 
         chart2::RelativePosition aRelativePosition;
-        if( !(xLegend->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
+        if( !(xLegend->getPropertyValue( u"RelativePosition"_ustr) >>=  aRelativePosition) )
         {
             chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
-            if( !(xLegend->getPropertyValue( "AnchorPosition") >>= ePos ) )
-                xLegend->setPropertyValue( "AnchorPosition", uno::Any( ePos ));
+            if( !(xLegend->getPropertyValue( u"AnchorPosition"_ustr) >>= ePos ) )
+                xLegend->setPropertyValue( u"AnchorPosition"_ustr, uno::Any( ePos ));
 
             css::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
                     ? css::chart::ChartLegendExpansion_HIGH
                     : css::chart::ChartLegendExpansion_WIDE;
-            if( !(xLegend->getPropertyValue( "Expansion") >>= eExpansion ) )
-                xLegend->setPropertyValue( "Expansion", uno::Any( eExpansion ));
+            if( !(xLegend->getPropertyValue( u"Expansion"_ustr) >>= eExpansion ) )
+                xLegend->setPropertyValue( u"Expansion"_ustr, uno::Any( eExpansion ));
 
-            xLegend->setPropertyValue( "RelativePosition", uno::Any());
+            xLegend->setPropertyValue( u"RelativePosition"_ustr, uno::Any());
         }
 
     }
@@ -68,7 +68,7 @@ void LegendHelper::hideLegend( ChartModel& rModel )
     rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, nullptr );
     if( xLegend.is())
     {
-        xLegend->setPropertyValue( "Show", uno::Any(false) );
+        xLegend->setPropertyValue( u"Show"_ustr, uno::Any(false) );
     }
 }
 
@@ -111,7 +111,7 @@ bool LegendHelper::hasLegend( const rtl::Reference< Diagram > & xDiagram )
     {
         uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
         if( xLegendProp.is())
-            xLegendProp->getPropertyValue( "Show") >>= bReturn;
+            xLegendProp->getPropertyValue( u"Show"_ustr) >>= bReturn;
     }
 
     return bReturn;

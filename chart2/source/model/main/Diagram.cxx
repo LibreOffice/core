@@ -425,7 +425,7 @@ void SAL_CALL Diagram::setDiagramData(
     Diagram::tTemplateWithServiceName aTemplateAndService = getTemplate( xChartTypeManager );
     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( aTemplateAndService.xChartTypeTemplate );
     if( !xTemplate.is() )
-        xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.Column" );
+        xTemplate = xChartTypeManager->createTemplate( u"com.sun.star.chart2.template.Column"_ustr );
     if(!xTemplate.is())
         return;
     xTemplate->changeDiagramData( rtl::Reference< ::chart::Diagram >(this), xDataSource, aArguments );
@@ -458,8 +458,8 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
 // ____ X3DDefaultSetter ____
 void SAL_CALL Diagram::set3DSettingsToDefault()
 {
-    setPropertyToDefault( "D3DSceneDistance");
-    setPropertyToDefault( "D3DSceneFocalLength");
+    setPropertyToDefault( u"D3DSceneDistance"_ustr);
+    setPropertyToDefault( u"D3DSceneFocalLength"_ustr);
     setDefaultRotation();
     setDefaultIllumination();
 }
@@ -582,7 +582,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
         MutexGuard aGuard( m_aMutex );
         if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), pCoordSys )
             != m_aCoordSystems.end())
-            throw lang::IllegalArgumentException("coordsys not found", static_cast<cppu::OWeakObject*>(this), 1);
+            throw lang::IllegalArgumentException(u"coordsys not found"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
 
         if( !m_aCoordSystems.empty() )
         {
@@ -605,7 +605,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
         auto aIt =  std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), pCoordSys );
         if( aIt == m_aCoordSystems.end())
             throw container::NoSuchElementException(
-                "The given coordinate-system is no element of the container",
+                u"The given coordinate-system is no element of the container"_ustr,
                 static_cast< uno::XWeak * >( this ));
         m_aCoordSystems.erase( aIt );
     }
@@ -833,7 +833,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySe
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Diagram::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.Diagram";
+    return u"com.sun.star.comp.chart2.Diagram"_ustr;
 }
 
 sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
@@ -844,9 +844,9 @@ sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.Diagram",
-        "com.sun.star.layout.LayoutElement",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.Diagram"_ustr,
+        u"com.sun.star.layout.LayoutElement"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 DiagramPositioningMode Diagram::getDiagramPositioningMode()
@@ -901,7 +901,7 @@ void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
     for (auto const& series : aSeriesVec)
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            series, "Geometry3D", uno::Any( nNewGeometry ));
+            series, u"Geometry3D"_ustr, uno::Any( nNewGeometry ));
     }
 }
 
@@ -921,7 +921,7 @@ sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
         try
         {
             sal_Int32 nGeom = 0;
-            if( series->getPropertyValue( "Geometry3D") >>= nGeom )
+            if( series->getPropertyValue( u"Geometry3D"_ustr) >>= nGeom )
             {
                 if( ! rbFound )
                 {
@@ -1273,7 +1273,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
         {
             try
             {
-                xProp->setPropertyValue( "Role", uno::Any( OUString("categories") ) );
+                xProp->setPropertyValue( u"Role"_ustr, uno::Any( u"categories"_ustr ) );
             }
             catch( const uno::Exception & )
             {
@@ -1437,7 +1437,7 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
     {
         try
         {
-            xDataSeries->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
+            xDataSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
         catch( const uno::Exception & )
@@ -1612,7 +1612,7 @@ void Diagram::setStackMode( StackMode eStackMode )
             //iterate through all series in this chart type
             for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
             {
-                dataSeries->setPropertyValue( "StackingDirection", aNewDirection );
+                dataSeries->setPropertyValue( u"StackingDirection"_ustr, aNewDirection );
             }
         }
     }
@@ -1664,12 +1664,12 @@ void Diagram::setVertical( bool bVertical /* = true */ )
         {
             bool bChanged = false;
             bool bOldSwap = false;
-            if( !(xCooSys->getPropertyValue("SwapXAndYAxis") >>= bOldSwap)
+            if( !(xCooSys->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bOldSwap)
                 || bVertical != bOldSwap )
                 bChanged = true;
 
             if( bChanged )
-                xCooSys->setPropertyValue("SwapXAndYAxis", aValue);
+                xCooSys->setPropertyValue(u"SwapXAndYAxis"_ustr, aValue);
 
             const sal_Int32 nDimensionCount = xCooSys->getDimension();
             sal_Int32 nDimIndex = 0;
@@ -1691,7 +1691,7 @@ void Diagram::setVertical( bool bVertical /* = true */ )
                         continue;
 
                     double fAngleDegree = 0.0;
-                    xTitleProps->getPropertyValue("TextRotation") >>= fAngleDegree;
+                    xTitleProps->getPropertyValue(u"TextRotation"_ustr) >>= fAngleDegree;
                     if (fAngleDegree != 0.0 &&
                         !rtl::math::approxEqual(fAngleDegree, 90.0))
                         continue;
@@ -1702,7 +1702,7 @@ void Diagram::setVertical( bool bVertical /* = true */ )
                     else if( bVertical && nDimIndex == 0 )
                         fNewAngleDegree = 90.0;
 
-                    xTitleProps->setPropertyValue("TextRotation", uno::Any(fNewAngleDegree));
+                    xTitleProps->setPropertyValue(u"TextRotation"_ustr, uno::Any(fNewAngleDegree));
                 }
             }
         }
@@ -1722,7 +1722,7 @@ bool Diagram::getVertical( bool& rbFound, bool& rbAmbiguous )
     for (rtl::Reference<BaseCoordinateSystem> const & coords : getBaseCoordinateSystems())
     {
         bool bCurrent = false;
-        if (coords->getPropertyValue("SwapXAndYAxis") >>= bCurrent)
+        if (coords->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bCurrent)
         {
             if (!rbFound)
             {

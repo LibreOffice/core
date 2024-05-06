@@ -94,12 +94,12 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             uno::Sequence< sal_Int32 > aBarPositionSequence;
             if( xChartType.is() )
             {
-                if( xChartType->getPropertyValue( "OverlapSequence" ) >>= aBarPositionSequence )
+                if( xChartType->getPropertyValue( u"OverlapSequence"_ustr ) >>= aBarPositionSequence )
                 {
                     if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                         m_nBarOverlap = aBarPositionSequence[nAxisIndex];
                 }
-                if( xChartType->getPropertyValue( "GapwidthSequence" ) >>= aBarPositionSequence )
+                if( xChartType->getPropertyValue( u"GapwidthSequence"_ustr ) >>= aBarPositionSequence )
                 {
                     if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                         m_nGapWidth = aBarPositionSequence[nAxisIndex];
@@ -110,19 +110,19 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_bSupportingBarConnectors = ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
         if( m_bSupportingBarConnectors && xDiagram.is() )
         {
-            xDiagram->getPropertyValue( "ConnectBars" ) >>= m_bConnectBars;
+            xDiagram->getPropertyValue( u"ConnectBars"_ustr ) >>= m_bConnectBars;
         }
 
         m_bSupportingAxisSideBySide = ChartTypeHelper::isSupportingAxisSideBySide( xChartType, nDimensionCount );
         if( m_bSupportingAxisSideBySide && xDiagram.is() )
         {
-            xDiagram->getPropertyValue( "GroupBarsPerAxis" ) >>= m_bGroupBarsPerAxis;
+            xDiagram->getPropertyValue( u"GroupBarsPerAxis"_ustr ) >>= m_bGroupBarsPerAxis;
         }
 
         m_bSupportingStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
         if( m_bSupportingStartingAngle )
         {
-            xDiagram->getPropertyValue( "StartingAngle" ) >>= m_nStartingAngle;
+            xDiagram->getPropertyValue( u"StartingAngle"_ustr ) >>= m_nStartingAngle;
         }
 
         m_aSupportedMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType );
@@ -134,17 +134,17 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             try
             {
                 //test whether the data provider offers this property
-                xProp->getPropertyValue( "IncludeHiddenCells" );
+                xProp->getPropertyValue( u"IncludeHiddenCells"_ustr );
                 //if not exception is thrown the property is offered
                 m_bSupportingPlottingOfHiddenCells = true;
-                xDiagram->getPropertyValue( "IncludeHiddenCells" ) >>= m_bIncludeHiddenCells;
+                xDiagram->getPropertyValue( u"IncludeHiddenCells"_ustr ) >>= m_bIncludeHiddenCells;
             }
             catch( const beans::UnknownPropertyException& )
             {
             }
         }
 
-        m_bHideLegendEntry = !xDataSeries->getPropertyValue("ShowLegendEntry").get<bool>();
+        m_bHideLegendEntry = !xDataSeries->getPropertyValue(u"ShowLegendEntry"_ustr).get<bool>();
     }
     catch( const uno::Exception & )
     {
@@ -198,7 +198,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 sal_Int32& rBarPosition = ( nWhichId == SCHATTR_BAR_OVERLAP ) ? m_nBarOverlap : m_nGapWidth;
                 rBarPosition = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
-                OUString aPropName("GapwidthSequence" );
+                OUString aPropName(u"GapwidthSequence"_ustr );
                 if( nWhichId == SCHATTR_BAR_OVERLAP )
                     aPropName = "OverlapSequence";
 
@@ -238,10 +238,10 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 bool bOldConnectBars = false;
                 rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() &&
-                    (xDiagramProperties->getPropertyValue( "ConnectBars" ) >>= bOldConnectBars) &&
+                    (xDiagramProperties->getPropertyValue( u"ConnectBars"_ustr ) >>= bOldConnectBars) &&
                     bOldConnectBars != m_bConnectBars )
                 {
-                    xDiagramProperties->setPropertyValue( "ConnectBars" , uno::Any(m_bConnectBars) );
+                    xDiagramProperties->setPropertyValue( u"ConnectBars"_ustr , uno::Any(m_bConnectBars) );
                     bChanged = true;
                 }
             }
@@ -257,10 +257,10 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 bool bOldGroupBarsPerAxis = true;
                 rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() &&
-                    (xDiagramProperties->getPropertyValue( "GroupBarsPerAxis" ) >>= bOldGroupBarsPerAxis) &&
+                    (xDiagramProperties->getPropertyValue( u"GroupBarsPerAxis"_ustr ) >>= bOldGroupBarsPerAxis) &&
                     bOldGroupBarsPerAxis != m_bGroupBarsPerAxis )
                 {
-                    xDiagramProperties->setPropertyValue( "GroupBarsPerAxis" , uno::Any(m_bGroupBarsPerAxis) );
+                    xDiagramProperties->setPropertyValue( u"GroupBarsPerAxis"_ustr , uno::Any(m_bGroupBarsPerAxis) );
                     bChanged = true;
                 }
             }
@@ -275,7 +275,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() )
                 {
-                    xDiagramProperties->setPropertyValue( "StartingAngle" , uno::Any(m_nStartingAngle) );
+                    xDiagramProperties->setPropertyValue( u"StartingAngle"_ustr , uno::Any(m_nStartingAngle) );
                     bChanged = true;
                 }
             }
@@ -312,7 +312,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                         rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                         if( xDiagramProperties.is() )
                         {
-                            xDiagramProperties->setPropertyValue( "MissingValueTreatment" , uno::Any( nNew ));
+                            xDiagramProperties->setPropertyValue( u"MissingValueTreatment"_ustr , uno::Any( nNew ));
                             bChanged = true;
                         }
                     }
@@ -342,7 +342,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
-                GetPropertySet()->setPropertyValue("ShowLegendEntry", css::uno::Any(!bHideLegendEntry));
+                GetPropertySet()->setPropertyValue(u"ShowLegendEntry"_ustr, css::uno::Any(!bHideLegendEntry));
             }
         }
         break;

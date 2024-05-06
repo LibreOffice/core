@@ -76,20 +76,20 @@ sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(weld::Window * pParent,
     const rtl::Reference<::chart::ChartModel> & xChartDocument)
-    : GenericDialogController(pParent, "modules/schart/ui/datarangedialog.ui",
-                              "DataRangeDialog")
+    : GenericDialogController(pParent, u"modules/schart/ui/datarangedialog.ui"_ustr,
+                              u"DataRangeDialog"_ustr)
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument))
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
     , m_bTogglingEnabled(true)
-    , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xBtnOK(m_xBuilder->weld_button("ok"))
+    , m_xTabControl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xBtnOK(m_xBuilder->weld_button(u"ok"_ustr))
 {
-    m_xRangeChooserTabPage = std::make_unique<RangeChooserTabPage>(m_xTabControl->get_page("range"), this,
+    m_xRangeChooserTabPage = std::make_unique<RangeChooserTabPage>(m_xTabControl->get_page(u"range"_ustr), this,
                                      *m_apDialogModel,
                                      m_apDocTemplateProvider.get(), true /* bHideDescription */ );
-    m_xDataSourceTabPage = std::make_unique<DataSourceTabPage>(m_xTabControl->get_page("series"), this,
+    m_xDataSourceTabPage = std::make_unique<DataSourceTabPage>(m_xTabControl->get_page(u"series"_ustr), this,
                                     *m_apDialogModel,
                                     m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     m_xTabControl->connect_enter_page(LINK(this, DataSourceDialog, ActivatePageHdl));

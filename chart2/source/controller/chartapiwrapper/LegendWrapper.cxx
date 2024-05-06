@@ -66,7 +66,7 @@ protected:
 }
 
 WrappedLegendAlignmentProperty::WrappedLegendAlignmentProperty()
-    : ::chart::WrappedProperty( "Alignment", "AnchorPosition" )
+    : ::chart::WrappedProperty( u"Alignment"_ustr, u"AnchorPosition"_ustr )
 {
 }
 
@@ -76,7 +76,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
     if( xInnerPropertySet.is() )
     {
         bool bShowLegend = true;
-        xInnerPropertySet->getPropertyValue( "Show" ) >>= bShowLegend;
+        xInnerPropertySet->getPropertyValue( u"Show"_ustr ) >>= bShowLegend;
         if(!bShowLegend)
         {
             aRet <<= css::chart::ChartLegendPosition_NONE;
@@ -101,11 +101,11 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         css::chart::ChartLegendPosition eOuterPos(css::chart::ChartLegendPosition_NONE);
         if( (rOuterValue >>= eOuterPos)  && eOuterPos == css::chart::ChartLegendPosition_NONE )
             bNewShowLegend = false;
-        xInnerPropertySet->getPropertyValue( "Show" ) >>= bOldShowLegend;
+        xInnerPropertySet->getPropertyValue( u"Show"_ustr ) >>= bOldShowLegend;
     }
     if(bNewShowLegend!=bOldShowLegend)
     {
-        xInnerPropertySet->setPropertyValue( "Show", uno::Any(bNewShowLegend) );
+        xInnerPropertySet->setPropertyValue( u"Show"_ustr, uno::Any(bNewShowLegend) );
     }
     if(!bNewShowLegend)
         return;
@@ -126,17 +126,17 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
 
         css::chart::ChartLegendExpansion eOldExpansion( css::chart::ChartLegendExpansion_HIGH );
         bool bExpansionWasSet(
-            xInnerPropertySet->getPropertyValue( "Expansion" ) >>= eOldExpansion );
+            xInnerPropertySet->getPropertyValue( u"Expansion"_ustr ) >>= eOldExpansion );
 
         if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
-            xInnerPropertySet->setPropertyValue( "Expansion", uno::Any( eNewExpansion ));
+            xInnerPropertySet->setPropertyValue( u"Expansion"_ustr, uno::Any( eNewExpansion ));
     }
 
     //correct RelativePosition
-    Any aRelativePosition( xInnerPropertySet->getPropertyValue("RelativePosition") );
+    Any aRelativePosition( xInnerPropertySet->getPropertyValue(u"RelativePosition"_ustr) );
     if(aRelativePosition.hasValue())
     {
-        xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
+        xInnerPropertySet->setPropertyValue( u"RelativePosition"_ustr, Any() );
     }
 }
 
@@ -276,7 +276,7 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = aPageSize.Width == 0 ? 0 : double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = aPageSize.Height == 0 ? 0 : double(aPosition.Y)/double(aPageSize.Height);
-        xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
     }
 }
 
@@ -304,7 +304,7 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL LegendWrapper::getShapeType()
 {
-    return "com.sun.star.chart.ChartLegend";
+    return u"com.sun.star.chart.ChartLegend"_ustr;
 }
 
 // ____ XComponent ____
@@ -337,8 +337,8 @@ void LegendWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
-            xProp->setPropertyValue( "ReferencePageSize", uno::Any(
+        if( xProp->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue() )
+            xProp->setPropertyValue( u"ReferencePageSize"_ustr, uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -347,7 +347,7 @@ Any LegendWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( "ReferencePageSize" );
+        aRet = xProp->getPropertyValue( u"ReferencePageSize"_ustr );
 
     return aRet;
 }
@@ -377,11 +377,11 @@ std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProp
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedLegendAlignmentProperty() );
-    aWrappedProperties.emplace_back( new WrappedProperty( "Expansion", "Expansion"));
+    aWrappedProperties.emplace_back( new WrappedProperty( u"Expansion"_ustr, u"Expansion"_ustr));
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     //same problem as for wall: the defaults in the old chart are different for different charttypes, so we need to export explicitly
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("FillStyle", "FillStyle"));
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("FillColor", "FillColor"));
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"FillStyle"_ustr, u"FillStyle"_ustr));
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"FillColor"_ustr, u"FillColor"_ustr));
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
@@ -390,7 +390,7 @@ std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProp
 
 OUString SAL_CALL LegendWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Legend";
+    return u"com.sun.star.comp.chart.Legend"_ustr;
 }
 
 sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
@@ -401,10 +401,10 @@ sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartLegend",
-        "com.sun.star.drawing.Shape",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.style.CharacterProperties"
+        u"com.sun.star.chart.ChartLegend"_ustr,
+        u"com.sun.star.drawing.Shape"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr
     };
 }
 

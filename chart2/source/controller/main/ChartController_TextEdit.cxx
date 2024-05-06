@@ -78,7 +78,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     //#i77362 change notification for changes on additional shapes are missing
     if( m_xChartView.is() )
-        m_xChartView->setPropertyValue( "SdrViewIsInEditMode", uno::Any(true) );
+        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, uno::Any(true) );
 
     auto pChartWindow(GetChartWindow());
 
@@ -122,7 +122,7 @@ bool ChartController::EndTextEdit()
 
     //#i77362 change notification for changes on additional shapes are missing
     if( m_xChartView.is() )
-        m_xChartView->setPropertyValue( "SdrViewIsInEditMode", uno::Any(false) );
+        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, uno::Any(false) );
 
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)

@@ -79,7 +79,7 @@ bool isLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel)
         try
         {
             bool bShow = false;
-            if( xLegendProp->getPropertyValue( "Show") >>= bShow )
+            if( xLegendProp->getPropertyValue( u"Show"_ustr) >>= bShow )
             {
                 return bShow;
             }
@@ -116,7 +116,7 @@ bool isLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel)
         try
         {
             bool bOverlay = false;
-            if(xLegendProp->getPropertyValue("Overlay") >>= bOverlay)
+            if(xLegendProp->getPropertyValue(u"Overlay"_ustr) >>= bOverlay)
             {
                 return bOverlay;
             }
@@ -139,7 +139,7 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
     if (!xLegendProp.is())
         return;
 
-    xLegendProp->setPropertyValue("Overlay", css::uno::Any(bOverlay));
+    xLegendProp->setPropertyValue(u"Overlay"_ustr, css::uno::Any(bOverlay));
 }
 
 bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelper::eTitleType eTitle)
@@ -148,7 +148,7 @@ bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelp
     if (!xTitle.is())
         return false;
 
-    css::uno::Any aAny = xTitle->getPropertyValue("Visible");
+    css::uno::Any aAny = xTitle->getPropertyValue(u"Visible"_ustr);
     bool bVisible = aAny.get<bool>();
     return bVisible;
 }
@@ -240,7 +240,7 @@ sal_Int32 getLegendPos(const css::uno::Reference<css::frame::XModel>& xModel)
         return -1;
 
     chart2::LegendPosition eLegendPos = chart2::LegendPosition_LINE_END;
-    xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPos;
+    xLegendProp->getPropertyValue(u"AnchorPosition"_ustr) >>= eLegendPos;
     switch(eLegendPos)
     {
         case chart2::LegendPosition_LINE_START:
@@ -288,42 +288,42 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
             assert(false);
     }
 
-    xLegendProp->setPropertyValue("AnchorPosition", css::uno::Any(eLegendPos));
-    xLegendProp->setPropertyValue("Expansion", css::uno::Any(eExpansion));
-    xLegendProp->setPropertyValue("RelativePosition", uno::Any());
+    xLegendProp->setPropertyValue(u"AnchorPosition"_ustr, css::uno::Any(eLegendPos));
+    xLegendProp->setPropertyValue(u"Expansion"_ustr, css::uno::Any(eExpansion));
+    xLegendProp->setPropertyValue(u"RelativePosition"_ustr, uno::Any());
 }
 
 }
 
 ChartElementsPanel::ChartElementsPanel(
     weld::Widget* pParent, ChartController* pController)
-    : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui")
-    , mxCBTitle(m_xBuilder->weld_check_button("checkbutton_title"))
-    , mxEditTitle(m_xBuilder->weld_entry("edit_title"))
-    , mxCBSubtitle(m_xBuilder->weld_check_button("checkbutton_subtitle"))
-    , mxEditSubtitle(m_xBuilder->weld_entry("edit_subtitle"))
-    , mxCBXAxis(m_xBuilder->weld_check_button("checkbutton_x_axis"))
-    , mxCBXAxisTitle(m_xBuilder->weld_check_button("checkbutton_x_axis_title"))
-    , mxCBYAxis(m_xBuilder->weld_check_button("checkbutton_y_axis"))
-    , mxCBYAxisTitle(m_xBuilder->weld_check_button("checkbutton_y_axis_title"))
-    , mxCBZAxis(m_xBuilder->weld_check_button("checkbutton_z_axis"))
-    , mxCBZAxisTitle(m_xBuilder->weld_check_button("checkbutton_z_axis_title"))
-    , mxCB2ndXAxis(m_xBuilder->weld_check_button("checkbutton_2nd_x_axis"))
-    , mxCB2ndXAxisTitle(m_xBuilder->weld_check_button("checkbutton_2nd_x_axis_title"))
-    , mxCB2ndYAxis(m_xBuilder->weld_check_button("checkbutton_2nd_y_axis"))
-    , mxCB2ndYAxisTitle(m_xBuilder->weld_check_button("checkbutton_2nd_y_axis_title"))
-    , mxCBLegend(m_xBuilder->weld_check_button("checkbutton_legend"))
-    , mxCBLegendNoOverlay(m_xBuilder->weld_check_button("checkbutton_no_overlay"))
-    , mxCBGridVerticalMajor(m_xBuilder->weld_check_button("checkbutton_gridline_vertical_major"))
-    , mxCBGridHorizontalMajor(m_xBuilder->weld_check_button("checkbutton_gridline_horizontal_major"))
-    , mxCBGridVerticalMinor(m_xBuilder->weld_check_button("checkbutton_gridline_vertical_minor"))
-    , mxCBGridHorizontalMinor(m_xBuilder->weld_check_button("checkbutton_gridline_horizontal_minor"))
-    , mxTextTitle(m_xBuilder->weld_label("text_title"))
-    , mxTextSubTitle(m_xBuilder->weld_label("text_subtitle"))
-    , mxLBAxis(m_xBuilder->weld_label("label_axes"))
-    , mxLBGrid(m_xBuilder->weld_label("label_gri"))
-    , mxLBLegendPosition(m_xBuilder->weld_combo_box("comboboxtext_legend"))
-    , mxBoxLegend(m_xBuilder->weld_widget("box_legend"))
+    : PanelLayout(pParent, u"ChartElementsPanel"_ustr, u"modules/schart/ui/sidebarelements.ui"_ustr)
+    , mxCBTitle(m_xBuilder->weld_check_button(u"checkbutton_title"_ustr))
+    , mxEditTitle(m_xBuilder->weld_entry(u"edit_title"_ustr))
+    , mxCBSubtitle(m_xBuilder->weld_check_button(u"checkbutton_subtitle"_ustr))
+    , mxEditSubtitle(m_xBuilder->weld_entry(u"edit_subtitle"_ustr))
+    , mxCBXAxis(m_xBuilder->weld_check_button(u"checkbutton_x_axis"_ustr))
+    , mxCBXAxisTitle(m_xBuilder->weld_check_button(u"checkbutton_x_axis_title"_ustr))
+    , mxCBYAxis(m_xBuilder->weld_check_button(u"checkbutton_y_axis"_ustr))
+    , mxCBYAxisTitle(m_xBuilder->weld_check_button(u"checkbutton_y_axis_title"_ustr))
+    , mxCBZAxis(m_xBuilder->weld_check_button(u"checkbutton_z_axis"_ustr))
+    , mxCBZAxisTitle(m_xBuilder->weld_check_button(u"checkbutton_z_axis_title"_ustr))
+    , mxCB2ndXAxis(m_xBuilder->weld_check_button(u"checkbutton_2nd_x_axis"_ustr))
+    , mxCB2ndXAxisTitle(m_xBuilder->weld_check_button(u"checkbutton_2nd_x_axis_title"_ustr))
+    , mxCB2ndYAxis(m_xBuilder->weld_check_button(u"checkbutton_2nd_y_axis"_ustr))
+    , mxCB2ndYAxisTitle(m_xBuilder->weld_check_button(u"checkbutton_2nd_y_axis_title"_ustr))
+    , mxCBLegend(m_xBuilder->weld_check_button(u"checkbutton_legend"_ustr))
+    , mxCBLegendNoOverlay(m_xBuilder->weld_check_button(u"checkbutton_no_overlay"_ustr))
+    , mxCBGridVerticalMajor(m_xBuilder->weld_check_button(u"checkbutton_gridline_vertical_major"_ustr))
+    , mxCBGridHorizontalMajor(m_xBuilder->weld_check_button(u"checkbutton_gridline_horizontal_major"_ustr))
+    , mxCBGridVerticalMinor(m_xBuilder->weld_check_button(u"checkbutton_gridline_vertical_minor"_ustr))
+    , mxCBGridHorizontalMinor(m_xBuilder->weld_check_button(u"checkbutton_gridline_horizontal_minor"_ustr))
+    , mxTextTitle(m_xBuilder->weld_label(u"text_title"_ustr))
+    , mxTextSubTitle(m_xBuilder->weld_label(u"text_subtitle"_ustr))
+    , mxLBAxis(m_xBuilder->weld_label(u"label_axes"_ustr))
+    , mxLBGrid(m_xBuilder->weld_label(u"label_gri"_ustr))
+    , mxLBLegendPosition(m_xBuilder->weld_combo_box(u"comboboxtext_legend"_ustr))
+    , mxBoxLegend(m_xBuilder->weld_widget(u"box_legend"_ustr))
     , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
@@ -527,7 +527,7 @@ std::unique_ptr<PanelLayout> ChartElementsPanel::Create (
     ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartElementsPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to ChartElementsPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<ChartElementsPanel>(pParent, pController);
 }
 

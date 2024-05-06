@@ -303,7 +303,7 @@ Reference< beans::XPropertySet >
     }
 
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
-        DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values" ) );
+        DataSeriesHelper::getAllDataSequencesByRole( aSequences , u"values"_ustr ) );
 
     if (aValuesSeries.empty())
         throw lang::IndexOutOfBoundsException();
@@ -435,7 +435,7 @@ void SAL_CALL DataSeries::addRegressionCurve(
         xModifyEventForwarder = m_xModifyEventForwarder;
         if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), pRegressionCurve )
             != m_aRegressionCurves.end())
-            throw lang::IllegalArgumentException("curve not found", static_cast<cppu::OWeakObject*>(this), 1);
+            throw lang::IllegalArgumentException(u"curve not found"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
         m_aRegressionCurves.push_back( pRegressionCurve );
     }
     ModifyListenerHelper::addListener( rtl::Reference<RegressionCurveModel>(pRegressionCurve), xModifyEventForwarder );
@@ -458,7 +458,7 @@ void SAL_CALL DataSeries::removeRegressionCurve(
             std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), pRegressionCurve ) );
         if( aIt == m_aRegressionCurves.end())
             throw container::NoSuchElementException(
-                "The given regression curve is no element of this series",
+                u"The given regression curve is no element of this series"_ustr,
                 static_cast< uno::XWeak * >( this ));
         m_aRegressionCurves.erase( aIt );
     }
@@ -538,7 +538,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataSeries::getImplementationName()
 {
-    return "com.sun.star.comp.chart.DataSeries";
+    return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
 sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
@@ -549,9 +549,9 @@ sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.DataSeries",
-        "com.sun.star.chart2.DataPointProperties",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.DataSeries"_ustr,
+        u"com.sun.star.chart2.DataPointProperties"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 static Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
@@ -694,7 +694,7 @@ static bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDa
         uno::Sequence< sal_Int32 > aHiddenValues;
         try
         {
-            xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenValues;
+            xProp->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenValues;
             if( !aHiddenValues.hasElements() )
                 return true;
         }

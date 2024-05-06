@@ -89,7 +89,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             rbFound = true;
             chart2::StackingDirection eCurrentDirection = eCommonDirection;
             // property is not MAYBEVOID
-            bool bSuccess = ( aSeries[i]->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
+            bool bSuccess = ( aSeries[i]->getPropertyValue( u"StackingDirection"_ustr ) >>= eCurrentDirection );
             OSL_ASSERT( bSuccess );
             if( ! bDirectionInitialized )
             {
@@ -257,7 +257,7 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
                 }
                 sal_Int32 nType = util::NumberFormat::UNDEFINED;
                 if( xKeyProps.is() )
-                    xKeyProps->getPropertyValue( "Type" ) >>= nType;
+                    xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
                 if( !( nType & util::NumberFormat::DATE ) )
                 {
                     //set a date format to the axis
@@ -334,7 +334,7 @@ bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference
     if( xKeyProps.is() )
     {
         sal_Int32 nType = util::NumberFormat::UNDEFINED;
-        xKeyProps->getPropertyValue( "Type" ) >>= nType;
+        xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
         bIsDate = nType & util::NumberFormat::DATE;
     }
     return bIsDate;
@@ -452,8 +452,8 @@ bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartMo
 
     RelativePosition aOldPos;
     RelativeSize aOldSize;
-    xDiagram->getPropertyValue("RelativePosition" ) >>= aOldPos;
-    xDiagram->getPropertyValue("RelativeSize" ) >>= aOldSize;
+    xDiagram->getPropertyValue(u"RelativePosition"_ustr ) >>= aOldPos;
+    xDiagram->getPropertyValue(u"RelativeSize"_ustr ) >>= aOldSize;
 
     RelativePosition aNewPos;
     aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
@@ -473,8 +473,8 @@ bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartMo
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
 
-    xDiagram->setPropertyValue( "RelativePosition", uno::Any(aNewPos) );
-    xDiagram->setPropertyValue( "RelativeSize", uno::Any(aNewSize) );
+    xDiagram->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aNewPos) );
+    xDiagram->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aNewSize) );
 
     bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
         (aOldPos.Primary!=aNewPos.Primary) ||
@@ -496,8 +496,8 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const rtl::Reference
 
     RelativePosition aRelPos;
     RelativeSize aRelSize;
-    xDiagram->getPropertyValue("RelativePosition" ) >>= aRelPos;
-    xDiagram->getPropertyValue("RelativeSize" ) >>= aRelSize;
+    xDiagram->getPropertyValue(u"RelativePosition"_ustr ) >>= aRelPos;
+    xDiagram->getPropertyValue(u"RelativeSize"_ustr ) >>= aRelSize;
 
     awt::Size aAbsSize(
         static_cast< sal_Int32 >( aRelSize.Primary * aPageSize.Width ),

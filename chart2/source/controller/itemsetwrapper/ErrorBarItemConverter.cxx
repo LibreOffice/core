@@ -46,8 +46,8 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
 
     try
     {
-        xErrorBarProp->getPropertyValue( "PositiveError" ) >>= rOutPosError;
-        xErrorBarProp->getPropertyValue( "NegativeError" ) >>= rOutNegError;
+        xErrorBarProp->getPropertyValue( u"PositiveError"_ustr ) >>= rOutPosError;
+        xErrorBarProp->getPropertyValue( u"NegativeError"_ustr ) >>= rOutNegError;
     }
     catch( const uno::Exception & )
     {
@@ -64,8 +64,8 @@ void lcl_getErrorIndicatorValues(
 
     try
     {
-        xErrorBarProp->getPropertyValue( "ShowPositiveError" ) >>= rOutShowPosError;
-        xErrorBarProp->getPropertyValue( "ShowNegativeError" ) >>= rOutShowNegError;
+        xErrorBarProp->getPropertyValue( u"ShowPositiveError"_ustr ) >>= rOutShowPosError;
+        xErrorBarProp->getPropertyValue( u"ShowNegativeError"_ustr ) >>= rOutShowNegError;
     }
     catch( const uno::Exception & )
     {
@@ -170,7 +170,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                         nStyle = css::chart::ErrorBarStyle::FROM_DATA; break;
                 }
 
-                xErrorBarProp->setPropertyValue( "ErrorBarStyle" , uno::Any( nStyle ));
+                xErrorBarProp->setPropertyValue( u"ErrorBarStyle"_ustr , uno::Any( nStyle ));
                 bChanged = true;
             }
         }
@@ -191,8 +191,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             if( ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
                     ::rtl::math::approxEqual( fNeg, fValue )))
             {
-                xErrorBarProp->setPropertyValue( "PositiveError" , uno::Any( fValue ));
-                xErrorBarProp->setPropertyValue( "NegativeError" , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -208,7 +208,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
             if( ! ::rtl::math::approxEqual( fPos, fValue ))
             {
-                GetPropertySet()->setPropertyValue( "PositiveError" , uno::Any( fValue ));
+                GetPropertySet()->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -226,7 +226,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
             if( ! ::rtl::math::approxEqual( fNeg, fValue ))
             {
-                xErrorBarProp->setPropertyValue( "NegativeError" , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -249,8 +249,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             if( bShowPos != bNewIndPos ||
                 bShowNeg != bNewIndNeg )
             {
-                xErrorBarProp->setPropertyValue( "ShowPositiveError" , uno::Any( bNewIndPos ));
-                xErrorBarProp->setPropertyValue( "ShowNegativeError" , uno::Any( bNewIndNeg ));
+                xErrorBarProp->setPropertyValue( u"ShowPositiveError"_ustr , uno::Any( bNewIndPos ));
+                xErrorBarProp->setPropertyValue( u"ShowNegativeError"_ustr , uno::Any( bNewIndNeg ));
                 bChanged = true;
             }
         }
@@ -327,7 +327,7 @@ void ErrorBarItemConverter::FillSpecialItem(
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
 
             sal_Int32 nStyle = 0;
-            if( xErrorBarProp->getPropertyValue( "ErrorBarStyle" ) >>= nStyle )
+            if( xErrorBarProp->getPropertyValue( u"ErrorBarStyle"_ustr ) >>= nStyle )
             {
                 switch( nStyle )
                 {

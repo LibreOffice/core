@@ -55,7 +55,7 @@ bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return false;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue("ShowPositiveError");
+    css::uno::Any aAny = xPropSet->getPropertyValue(u"ShowPositiveError"_ustr);
 
     if (!aAny.hasValue())
         return false;
@@ -74,7 +74,7 @@ bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return false;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue("ShowNegativeError");
+    css::uno::Any aAny = xPropSet->getPropertyValue(u"ShowNegativeError"_ustr);
 
     if (!aAny.hasValue())
         return false;
@@ -93,7 +93,7 @@ void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("ShowPositiveError", css::uno::Any(bShow));
+    xPropSet->setPropertyValue(u"ShowPositiveError"_ustr, css::uno::Any(bShow));
 }
 
 void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -105,7 +105,7 @@ void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("ShowNegativeError", css::uno::Any(bShow));
+    xPropSet->setPropertyValue(u"ShowNegativeError"_ustr, css::uno::Any(bShow));
 }
 
 struct ErrorBarTypeMap
@@ -133,7 +133,7 @@ sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return 0;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue("ErrorBarStyle");
+    css::uno::Any aAny = xPropSet->getPropertyValue(u"ErrorBarStyle"_ustr);
 
     if (!aAny.hasValue())
         return 0;
@@ -166,7 +166,7 @@ void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
             nApi = i.nApi;
     }
 
-    xPropSet->setPropertyValue("ErrorBarStyle", css::uno::Any(nApi));
+    xPropSet->setPropertyValue(u"ErrorBarStyle"_ustr, css::uno::Any(nApi));
 }
 
 double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -178,7 +178,7 @@ double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return 0;
 
-    OUString aName = "PositiveError";
+    OUString aName = u"PositiveError"_ustr;
     if (eDir == ErrorBarDirection::NEGATIVE)
         aName = "NegativeError";
 
@@ -202,7 +202,7 @@ void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    OUString aName = "PositiveError";
+    OUString aName = u"PositiveError"_ustr;
     if (eDir == ErrorBarDirection::NEGATIVE)
         aName = "NegativeError";
 
@@ -235,13 +235,13 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 }
 
 ChartErrorBarPanel::ChartErrorBarPanel(weld::Widget* pParent, ChartController* pController)
-    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui")
-    , mxRBPosAndNeg(m_xBuilder->weld_radio_button("radiobutton_positive_negative"))
-    , mxRBPos(m_xBuilder->weld_radio_button("radiobutton_positive"))
-    , mxRBNeg(m_xBuilder->weld_radio_button("radiobutton_negative"))
-    , mxLBType(m_xBuilder->weld_combo_box("comboboxtext_type"))
-    , mxMFPos(m_xBuilder->weld_spin_button("spinbutton_pos"))
-    , mxMFNeg(m_xBuilder->weld_spin_button("spinbutton_neg"))
+    : PanelLayout(pParent, u"ChartErrorBarPanel"_ustr, u"modules/schart/ui/sidebarerrorbar.ui"_ustr)
+    , mxRBPosAndNeg(m_xBuilder->weld_radio_button(u"radiobutton_positive_negative"_ustr))
+    , mxRBPos(m_xBuilder->weld_radio_button(u"radiobutton_positive"_ustr))
+    , mxRBNeg(m_xBuilder->weld_radio_button(u"radiobutton_negative"_ustr))
+    , mxLBType(m_xBuilder->weld_combo_box(u"comboboxtext_type"_ustr))
+    , mxMFPos(m_xBuilder->weld_spin_button(u"spinbutton_pos"_ustr))
+    , mxMFNeg(m_xBuilder->weld_spin_button(u"spinbutton_neg"_ustr))
     , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
@@ -341,7 +341,7 @@ std::unique_ptr<PanelLayout> ChartErrorBarPanel::Create (
     ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartErrorBarPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to ChartErrorBarPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<ChartErrorBarPanel>(pParent, pController);
 }
 

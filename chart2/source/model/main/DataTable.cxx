@@ -179,7 +179,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL DataTable::getPropertySetInfo()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataTable::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.DataTable";
+    return u"com.sun.star.comp.chart2.DataTable"_ustr;
 }
 
 sal_Bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
@@ -189,9 +189,10 @@ sal_Bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> SAL_CALL DataTable::getSupportedServiceNames()
 {
-    return { "com.sun.star.chart2.DataTable", "com.sun.star.beans.PropertySet",
-             "com.sun.star.drawing.FillProperties", "com.sun.star.drawing.LineProperties",
-             "com.sun.star.style.CharacterProperties" };
+    return { u"com.sun.star.chart2.DataTable"_ustr, u"com.sun.star.beans.PropertySet"_ustr,
+             u"com.sun.star.drawing.FillProperties"_ustr,
+             u"com.sun.star.drawing.LineProperties"_ustr,
+             u"com.sun.star.style.CharacterProperties"_ustr };
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(DataTable, DataTable_Base, ::property::OPropertySet)

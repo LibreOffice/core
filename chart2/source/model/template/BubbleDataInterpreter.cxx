@@ -80,7 +80,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
                 xCategories = aData[nDataIdx];
                 if( xCategories.is())
                 {
-                    SetRole( xCategories->getValues(), "categories");
+                    SetRole( xCategories->getValues(), u"categories"_ustr);
                     if( bUseCategoriesAsX )
                     {
                         bSetXValues = false;
@@ -93,20 +93,20 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
             {
                 xValuesX = aData[nDataIdx];
                 if( xValuesX.is())
-                    SetRole( xValuesX->getValues(), "values-x");
+                    SetRole( xValuesX->getValues(), u"values-x"_ustr);
             }
             else if( bNextIsYValues )
             {
                 aYValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), "values-y");
+                    SetRole( aData[nDataIdx]->getValues(), u"values-y"_ustr);
                 bNextIsYValues = false;
             }
             else if( !bNextIsYValues )
             {
                 aSizeValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), "values-size");
+                    SetRole( aData[nDataIdx]->getValues(), u"values-size"_ustr);
                 bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
             }
         }
@@ -166,11 +166,11 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
             std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSequences;
 
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesSize(
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-size" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-size"_ustr ));
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-y" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-y"_ustr ));
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-x" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], u"values-x"_ustr ));
 
             if( ! xValuesX.is() ||
                 ! xValuesY.is() ||
@@ -178,7 +178,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
             {
                 std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
-                        aSeries[i]->getDataSequences2(), "values" ));
+                        aSeries[i]->getDataSequences2(), u"values"_ustr ));
                 if( xValuesX.is())
                     aValueSeqVec.erase( find( aValueSeqVec.begin(), aValueSeqVec.end(), xValuesX ));
                 if( xValuesY.is())
@@ -193,7 +193,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesSize = aValueSeqVec[nIndex++];
                     if( xValuesSize.is())
-                        SetRole( xValuesSize->getValues(), "values-size");
+                        SetRole( xValuesSize->getValues(), u"values-size"_ustr);
                 }
 
                 if( ! xValuesY.is() &&
@@ -201,7 +201,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesY = aValueSeqVec[nIndex++];
                     if( xValuesY.is())
-                        SetRole( xValuesY->getValues(), "values-y");
+                        SetRole( xValuesY->getValues(), u"values-y"_ustr);
                 }
 
                 if( ! xValuesX.is() &&
@@ -209,7 +209,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesX = aValueSeqVec[nIndex++];
                     if( xValuesX.is())
-                        SetRole( xValuesY->getValues(), "values-x");
+                        SetRole( xValuesY->getValues(), u"values-x"_ustr);
                 }
             }
             if( xValuesSize.is())

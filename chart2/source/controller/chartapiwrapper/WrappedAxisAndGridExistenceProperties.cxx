@@ -149,7 +149,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Has axis or grid properties require boolean values"_ustr, nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -264,7 +264,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Has axis or grid properties require boolean values"_ustr, nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -362,7 +362,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Has axis or grid properties require boolean values"_ustr, nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -377,10 +377,10 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
         //create axis if needed
         xProp = AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext );
         if( xProp.is() )
-            xProp->setPropertyValue( "Show", uno::Any( false ) );
+            xProp->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
     }
     if( xProp.is() )
-        xProp->setPropertyValue( "DisplayLabels", rOuterValue );
+        xProp->setPropertyValue( u"DisplayLabels"_ustr, rOuterValue );
 }
 
 Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -389,7 +389,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans:
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     rtl::Reference< Axis > xProp = AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( "DisplayLabels" );
+        aRet = xProp->getPropertyValue( u"DisplayLabels"_ustr );
     else
         aRet <<= false;
     return aRet;

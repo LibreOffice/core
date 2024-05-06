@@ -78,7 +78,7 @@ namespace chart::wrapper
 
 MinMaxLineWrapper::MinMaxLineWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : m_spChart2ModelContact(std::move( spChart2ModelContact ))
-        , m_aWrappedLineJointProperty( "LineJoint", uno::Any( drawing::LineJoint_NONE ))
+        , m_aWrappedLineJointProperty( u"LineJoint"_ustr, uno::Any( drawing::LineJoint_NONE ))
 {
 }
 
@@ -128,9 +128,9 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
                 if(aSeriesSeq[0].is())
                 {
                     if( rPropertyName == "LineColor" )
-                        aSeriesSeq[0]->setPropertyValue( "Color", rValue );
+                        aSeriesSeq[0]->setPropertyValue( u"Color"_ustr, rValue );
                     else if( rPropertyName == "LineTransparence" )
-                        aSeriesSeq[0]->setPropertyValue( "Transparency", rValue );
+                        aSeriesSeq[0]->setPropertyValue( u"Transparency"_ustr, rValue );
                     else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
                         m_aWrappedLineJointProperty.setPropertyValue( rValue, aSeriesSeq[0] );
                     else
@@ -164,9 +164,9 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     if(xPropSet.is())
     {
         if( rPropertyName == "LineColor" )
-            aRet = xPropSet->getPropertyValue( "Color" );
+            aRet = xPropSet->getPropertyValue( u"Color"_ustr );
         else if( rPropertyName == "LineTransparence" )
-            aRet = xPropSet->getPropertyValue( "Transparency" );
+            aRet = xPropSet->getPropertyValue( u"Transparency"_ustr );
         else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
             aRet = m_aWrappedLineJointProperty.getPropertyValue( xPropSet );
         else
@@ -328,7 +328,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
 
 OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ChartLine";
+    return u"com.sun.star.comp.chart.ChartLine"_ustr;
 }
 
 sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )
@@ -339,9 +339,9 @@ sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceNa
 css::uno::Sequence< OUString > SAL_CALL MinMaxLineWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartLine",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.drawing.LineProperties"
+        u"com.sun.star.chart.ChartLine"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr
     };
 }
 

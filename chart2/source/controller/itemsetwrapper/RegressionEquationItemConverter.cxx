@@ -58,7 +58,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
                                  GraphicObjectType::LineAndFillProperties ));
 
     m_aConverters.emplace_back(
-        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, u"ReferencePageSize"_ustr));
 }
 
 RegressionEquationItemConverter::~RegressionEquationItemConverter()

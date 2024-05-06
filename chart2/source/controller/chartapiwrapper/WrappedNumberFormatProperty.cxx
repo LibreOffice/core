@@ -46,7 +46,7 @@ void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, cons
 {
     sal_Int32 nFormat = 0;
     if( ! (rOuterValue >>= nFormat) )
-        throw lang::IllegalArgumentException( "Property 'NumberFormat' requires value of type sal_Int32", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property 'NumberFormat' requires value of type sal_Int32"_ustr, nullptr, 0 );
 
     if(xInnerPropertySet.is())
         xInnerPropertySet->setPropertyValue(getInnerName(), convertOuterToInnerValue(rOuterValue));

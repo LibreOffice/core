@@ -28,10 +28,10 @@ namespace chart
 {
 
 SchLegendPosTabPage::SchLegendPosTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_LegendPosition.ui", "tp_LegendPosition", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_LegendPosition.ui"_ustr, u"tp_LegendPosition"_ustr, &rInAttrs)
     , m_aLegendPositionResources(*m_xBuilder)
-    , m_aLbTextDirection(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR"))
-    , m_xCBLegendNoOverlay(m_xBuilder->weld_check_button("CB_NO_OVERLAY"))
+    , m_aLbTextDirection(m_xBuilder->weld_combo_box(u"LB_LEGEND_TEXTDIR"_ustr))
+    , m_xCBLegendNoOverlay(m_xBuilder->weld_check_button(u"CB_NO_OVERLAY"_ustr))
 {
 }
 

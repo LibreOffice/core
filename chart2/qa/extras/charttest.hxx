@@ -279,7 +279,7 @@ Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
         if(!xProps.is())
             continue;
 
-        OUString aRoleName = xProps->getPropertyValue("Role").get<OUString>();
+        OUString aRoleName = xProps->getPropertyValue(u"Role"_ustr).get<OUString>();
 
         if(aRoleName == rRole)
             return xLabelSeq;
@@ -296,7 +296,7 @@ uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XC
     CPPUNIT_ASSERT( xShape.is() );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     uno::Reference< chart2::XChartDocument > xChartDoc;
-    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    xChartDoc.set( xPropertySet->getPropertyValue( u"Model"_ustr ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xChartDoc.is() );
     CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
     uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
@@ -325,7 +325,7 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
                 continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue("Role") >>= aRoleName;
+            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
                 const uno::Sequence<uno::Any> aData = xValues->getData();
@@ -370,7 +370,7 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
                 continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue("Role") >>= aRoleName;
+            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == aLabelRole)
             {
                 Reference<chart2::data::XLabeledDataSequence> xLabel = lds;
@@ -403,7 +403,7 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
         return xEmpty;
 
     uno::Reference<frame::XModel> xDocModel;
-    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
     if (!xDocModel.is())
         return xEmpty;
 
@@ -437,7 +437,7 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpressNamed
             continue;
 
         uno::Reference<frame::XModel> xDocModel;
-        xShapeProps->getPropertyValue("Model") >>= xDocModel;
+        xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
         if (!xDocModel.is())
             continue;
 
@@ -460,7 +460,7 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int3
     CPPUNIT_ASSERT(xShapeProps.is());
 
     Reference<frame::XModel> xDocModel;
-    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
     CPPUNIT_ASSERT(xDocModel.is());
 
     uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
@@ -517,7 +517,7 @@ sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDo
     CPPUNIT_ASSERT(xNumPS.is());
 
     sal_Int16 nType = util::NumberFormat::UNDEFINED;
-    xNumPS->getPropertyValue("Type") >>= nType;
+    xNumPS->getPropertyValue(u"Type"_ustr) >>= nType;
 
     return nType;
 }
@@ -568,7 +568,7 @@ awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, con
 {
     Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
     chart2::RelativeSize aRelativeSize;
-    xProp->getPropertyValue( "RelativeSize" ) >>= aRelativeSize;
+    xProp->getPropertyValue( u"RelativeSize"_ustr ) >>= aRelativeSize;
     double fX = aRelativeSize.Primary * rPageSize.Width;
     double fY = aRelativeSize.Secondary * rPageSize.Height;
     awt::Size aSize;

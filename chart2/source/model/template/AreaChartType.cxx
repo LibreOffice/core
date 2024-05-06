@@ -57,7 +57,7 @@ OUString SAL_CALL AreaChartType::getChartType()
 
 OUString SAL_CALL AreaChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.AreaChartType";
+    return u"com.sun.star.comp.chart.AreaChartType"_ustr;
 }
 
 sal_Bool SAL_CALL AreaChartType::supportsService( const OUString& rServiceName )
@@ -69,7 +69,7 @@ css::uno::Sequence< OUString > SAL_CALL AreaChartType::getSupportedServiceNames(
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_AREA,
-        "com.sun.star.chart2.ChartType" };
+        u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

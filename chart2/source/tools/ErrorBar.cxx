@@ -161,7 +161,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
     else if(rPropName == "ShowNegativeError")
         rAny >>= mbShowNegativeError;
     else if(rPropName == "ErrorBarRangePositive" || rPropName == "ErrorBarRangeNegative")
-        throw beans::UnknownPropertyException("read-only property", static_cast< uno::XWeak*>(this));
+        throw beans::UnknownPropertyException(u"read-only property"_ustr, static_cast< uno::XWeak*>(this));
     else if(rPropName == "LineDashName")
         rAny >>= maDashName;
     else if(rPropName == "LineDash")
@@ -199,7 +199,7 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
                 uno::Reference< chart2::data::XDataSequence > xSequence( labeledData->getValues());
                 uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
-                if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
+                if( ( xSeqProp->getPropertyValue( u"Role"_ustr ) >>= aRole ) &&
                         aRole.match( "error-bars" ) && aRole.indexOf(aDirection) >= 0 )
                 {
                     return xSequence->getSourceRangeRepresentation();
@@ -450,7 +450,7 @@ css::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,
-        "com.sun.star.chart2.ErrorBar"
+        u"com.sun.star.chart2.ErrorBar"_ustr
     };
 }
 

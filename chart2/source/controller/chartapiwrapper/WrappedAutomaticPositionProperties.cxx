@@ -48,7 +48,7 @@ public:
 }
 
 WrappedAutomaticPositionProperty::WrappedAutomaticPositionProperty()
-    : ::chart::WrappedProperty( "AutomaticPosition" , OUString() )
+    : ::chart::WrappedProperty( u"AutomaticPosition"_ustr , OUString() )
 {
 }
 
@@ -59,15 +59,15 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
 
     bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property AutomaticPosition requires value of type boolean"_ustr, nullptr, 0 );
 
     try
     {
         if( bNewValue )
         {
-            Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
+            Any aRelativePosition( xInnerPropertySet->getPropertyValue( u"RelativePosition"_ustr ) );
             if( aRelativePosition.hasValue() )
-                xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
+                xInnerPropertySet->setPropertyValue( u"RelativePosition"_ustr, Any() );
         }
     }
     catch( const uno::Exception & )
@@ -81,7 +81,7 @@ Any WrappedAutomaticPositionProperty::getPropertyValue( const Reference< beans::
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {
-        Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
+        Any aRelativePosition( xInnerPropertySet->getPropertyValue( u"RelativePosition"_ustr ) );
         if( !aRelativePosition.hasValue() )
             aRet <<= true;
     }

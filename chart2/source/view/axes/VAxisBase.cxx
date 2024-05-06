@@ -138,7 +138,7 @@ bool VAxisBase::isAnythingToDraw()
     if( m_aAxisProperties.m_xAxisModel.is() )
     {
         bool bShow = false;
-        m_aAxisProperties.m_xAxisModel->getPropertyValue( "Show" ) >>= bShow;
+        m_aAxisProperties.m_xAxisModel->getPropertyValue( u"Show"_ustr ) >>= bShow;
         if( !bShow )
             return false;
     }
@@ -182,7 +182,7 @@ bool VAxisBase::prepareShapeCreation()
         return true;
 
     //create named group shape
-    m_xGroupShape_Shapes = createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
+    m_xGroupShape_Shapes = createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : u""_ustr);
 
     if (m_aAxisProperties.m_bDisplayLabels)
         m_xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget, m_aCID );

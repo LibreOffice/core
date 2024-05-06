@@ -141,14 +141,14 @@ std::vector< std::unique_ptr<WrappedProperty> > GridWrapper::createWrappedProper
 {
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.emplace_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::Any( sal_Int32( 0x000000) ) ) ); // black
+    aWrappedProperties.emplace_back( new WrappedDefaultProperty( u"LineColor"_ustr, u"LineColor"_ustr, uno::Any( sal_Int32( 0x000000) ) ) ); // black
 
     return aWrappedProperties;
 }
 
 OUString SAL_CALL GridWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Grid";
+    return u"com.sun.star.comp.chart.Grid"_ustr;
 }
 
 sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
@@ -159,10 +159,10 @@ sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart.ChartGrid",
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.drawing.LineProperties",
-        "com.sun.star.beans.PropertySet"
+        u"com.sun.star.chart.ChartGrid"_ustr,
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr
     };
 }
 

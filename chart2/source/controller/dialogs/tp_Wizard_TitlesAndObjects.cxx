@@ -34,16 +34,16 @@ using namespace ::com::sun::star::chart2;
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                  rtl::Reference<::chart::ChartModel> xChartModel,
                                                  const uno::Reference< uno::XComponentContext >& xContext )
-    : OWizardPage(pPage, pController, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
+    : OWizardPage(pPage, pController, u"modules/schart/ui/wizelementspage.ui"_ustr, u"WizElementsPage"_ustr)
     , m_xTitleResources(new TitleResources(*m_xBuilder, false))
     , m_xLegendPositionResources(new LegendPositionResources(*m_xBuilder, xContext))
     , m_xChartModel(std::move(xChartModel))
     , m_xCC(xContext)
     , m_bCommitToModel(true)
     , m_aTimerTriggeredControllerLock( m_xChartModel )
-    , m_xCB_Grid_X(m_xBuilder->weld_check_button("x"))
-    , m_xCB_Grid_Y(m_xBuilder->weld_check_button("y"))
-    , m_xCB_Grid_Z(m_xBuilder->weld_check_button("z"))
+    , m_xCB_Grid_X(m_xBuilder->weld_check_button(u"x"_ustr))
+    , m_xCB_Grid_Y(m_xBuilder->weld_check_button(u"y"_ustr))
+    , m_xCB_Grid_Z(m_xBuilder->weld_check_button(u"z"_ustr))
 {
     m_xTitleResources->connect_changed( LINK( this, TitlesAndObjectsTabPage, ChangeEditHdl ));
     m_xLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));

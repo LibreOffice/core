@@ -49,7 +49,7 @@ LegendItemConverter::LegendItemConverter(
                                  GraphicObjectType::LineAndFillProperties ));
     m_aConverters.emplace_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize,
-                                 "ReferencePageSize" ));
+                                 u"ReferencePageSize"_ustr ));
 }
 
 LegendItemConverter::~LegendItemConverter()
@@ -100,10 +100,10 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             {
                 bool bShow = pShowItem->GetValue();
                 bool bWasShown = true;
-                if( ! (GetPropertySet()->getPropertyValue( "Show" ) >>= bWasShown) ||
+                if( ! (GetPropertySet()->getPropertyValue( u"Show"_ustr ) >>= bWasShown) ||
                     ( bWasShown != bShow ))
                 {
-                    GetPropertySet()->setPropertyValue( "Show" , uno::Any( bShow ));
+                    GetPropertySet()->setPropertyValue( u"Show"_ustr , uno::Any( bShow ));
                     bChanged = true;
                 }
             }
@@ -134,12 +134,12 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                 try
                 {
                     chart2::LegendPosition eOldPos;
-                    if( ! ( GetPropertySet()->getPropertyValue( "AnchorPosition" ) >>= eOldPos ) ||
+                    if( ! ( GetPropertySet()->getPropertyValue( u"AnchorPosition"_ustr ) >>= eOldPos ) ||
                         ( eOldPos != eNewPos ))
                     {
-                        GetPropertySet()->setPropertyValue( "AnchorPosition" , uno::Any( eNewPos ));
-                        GetPropertySet()->setPropertyValue( "Expansion" , uno::Any( eExpansion ));
-                        GetPropertySet()->setPropertyValue( "RelativePosition" , uno::Any());
+                        GetPropertySet()->setPropertyValue( u"AnchorPosition"_ustr , uno::Any( eNewPos ));
+                        GetPropertySet()->setPropertyValue( u"Expansion"_ustr , uno::Any( eExpansion ));
+                        GetPropertySet()->setPropertyValue( u"RelativePosition"_ustr , uno::Any());
                         bChanged = true;
                     }
                 }
@@ -156,10 +156,10 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             {
                 bool bOverlay = !pNoOverlayItem->GetValue();
                 bool bOldOverlay = false;
-                if(!(GetPropertySet()->getPropertyValue("Overlay") >>= bOldOverlay) ||
+                if(!(GetPropertySet()->getPropertyValue(u"Overlay"_ustr) >>= bOldOverlay) ||
                     (bOldOverlay != bOverlay))
                 {
-                    GetPropertySet()->setPropertyValue("Overlay", uno::Any(bOverlay));
+                    GetPropertySet()->setPropertyValue(u"Overlay"_ustr, uno::Any(bOverlay));
                     bChanged = true;
                 }
             }
@@ -179,21 +179,21 @@ void LegendItemConverter::FillSpecialItem(
         case SCHATTR_LEGEND_SHOW:
         {
             bool bShow = true;
-            GetPropertySet()->getPropertyValue( "Show" ) >>= bShow;
+            GetPropertySet()->getPropertyValue( u"Show"_ustr ) >>= bShow;
             rOutItemSet.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, bShow) );
         }
         break;
         case SCHATTR_LEGEND_POS:
         {
             chart2::LegendPosition eLegendPos( chart2::LegendPosition_LINE_END );
-            GetPropertySet()->getPropertyValue( "AnchorPosition" ) >>= eLegendPos;
+            GetPropertySet()->getPropertyValue( u"AnchorPosition"_ustr ) >>= eLegendPos;
             rOutItemSet.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(eLegendPos) ) );
         }
         break;
         case SCHATTR_LEGEND_NO_OVERLAY:
         {
             bool bOverlay = false;
-            GetPropertySet()->getPropertyValue("Overlay") >>= bOverlay;
+            GetPropertySet()->getPropertyValue(u"Overlay"_ustr) >>= bOverlay;
             rOutItemSet.Put(SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, !bOverlay));
         }
         break;

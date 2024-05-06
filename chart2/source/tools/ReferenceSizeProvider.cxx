@@ -67,7 +67,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
         Reference< beans::XPropertySet > xTitleProp( xTitle, uno::UNO_QUERY_THROW );
         awt::Size aOldRefSize;
         bool bHasOldRefSize(
-            xTitleProp->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
+            xTitleProp->getPropertyValue( u"ReferencePageSize"_ustr) >>= aOldRefSize );
 
         // set from auto-resize on to off -> adapt font sizes at XFormattedStrings
         if( bHasOldRefSize && ! useAutoScale())
@@ -172,7 +172,7 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
     {
         try
         {
-            if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue())
+            if( xProp->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue())
                 eSingleState = AUTO_RESIZE_YES;
             else
                 eSingleState = AUTO_RESIZE_NO;

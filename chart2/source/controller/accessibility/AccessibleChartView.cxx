@@ -266,7 +266,7 @@ void AccessibleChartView::initialize( ChartController& rNewChartController,
 
     {
         AccessibleElementInfo aAccInfo;
-        aAccInfo.m_aOID = ObjectIdentifier("ROOT");
+        aAccInfo.m_aOID = ObjectIdentifier(u"ROOT"_ustr);
         aAccInfo.m_xChartDocument = m_xChartModel;
         aAccInfo.m_xChartController = m_xChartController;
         aAccInfo.m_xView = m_xChartView;
@@ -361,7 +361,7 @@ void AccessibleChartView::initialize()
 
     {
         AccessibleElementInfo aAccInfo;
-        aAccInfo.m_aOID = ObjectIdentifier("ROOT");
+        aAccInfo.m_aOID = ObjectIdentifier(u"ROOT"_ustr);
         aAccInfo.m_xChartDocument = m_xChartModel;
         aAccInfo.m_xChartController = m_xChartController;
         aAccInfo.m_xView = m_xChartView;

@@ -159,7 +159,7 @@ OUString MovingAverageRegressionCurveCalculator::ImplGetRepresentation(
 {
     OUString aRet = SchResId( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
     // change text for Moving Average
-    OUString aWildcard( "%PERIOD" );
+    OUString aWildcard( u"%PERIOD"_ustr );
     sal_Int32 nIndex = aRet.indexOf( aWildcard );
     if( nIndex != -1 )
     {  // replace period

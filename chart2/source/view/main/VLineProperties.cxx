@@ -45,12 +45,12 @@ void VLineProperties::initFromPropertySet(const uno::Reference<beans::XPropertyS
     {
         try
         {
-            Color = xProp->getPropertyValue("LineColor");
-            LineStyle = xProp->getPropertyValue("LineStyle");
-            Transparence = xProp->getPropertyValue("LineTransparence");
-            Width = xProp->getPropertyValue("LineWidth");
-            DashName = xProp->getPropertyValue("LineDashName");
-            LineCap = xProp->getPropertyValue("LineCap");
+            Color = xProp->getPropertyValue(u"LineColor"_ustr);
+            LineStyle = xProp->getPropertyValue(u"LineStyle"_ustr);
+            Transparence = xProp->getPropertyValue(u"LineTransparence"_ustr);
+            Width = xProp->getPropertyValue(u"LineWidth"_ustr);
+            DashName = xProp->getPropertyValue(u"LineDashName"_ustr);
+            LineCap = xProp->getPropertyValue(u"LineCap"_ustr);
         }
         catch (const uno::Exception&)
         {

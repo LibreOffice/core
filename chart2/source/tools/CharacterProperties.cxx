@@ -424,17 +424,17 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     awt::FontDescriptor aResult;
     // Note: keep this sorted!
     uno::Sequence< OUString > aPropNameSeq{
-        "CharFontCharSet",   // CharSet
-        "CharFontFamily",    // Family
-        "CharFontName",      // Name
-        "CharFontPitch",     // Pitch
-        "CharFontStyleName", // StyleName
-        "CharHeight",        // Height
-        "CharPosture",       // Slant
-        "CharStrikeout",     // Strikeout
-        "CharUnderline",     // Underline
-        "CharWeight",        // Weight
-        "CharWordMode"};     // WordLineMode
+        u"CharFontCharSet"_ustr,   // CharSet
+        u"CharFontFamily"_ustr,    // Family
+        u"CharFontName"_ustr,      // Name
+        u"CharFontPitch"_ustr,     // Pitch
+        u"CharFontStyleName"_ustr, // StyleName
+        u"CharHeight"_ustr,        // Height
+        u"CharPosture"_ustr,       // Slant
+        u"CharStrikeout"_ustr,     // Strikeout
+        u"CharUnderline"_ustr,     // Underline
+        u"CharWeight"_ustr,        // Weight
+        u"CharWordMode"_ustr};     // WordLineMode
     uno::Sequence< uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
 
     sal_Int32 i=0;

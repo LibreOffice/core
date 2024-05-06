@@ -50,13 +50,13 @@ void CommonFunctorsTest::testAnyToString()
     std::transform(aInput.begin(), aInput.end(),
             std::back_inserter(aOutput), chart::CommonFunctors::ToString());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("12"), aOutput[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
-    CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
-    CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
-    CPPUNIT_ASSERT_EQUAL(OUString("0.12345"), aOutput[6]);
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aOutput[0]);
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, aOutput[1]);
+    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, aOutput[2]);
+    CPPUNIT_ASSERT_EQUAL(u"15"_ustr, aOutput[3]);
+    CPPUNIT_ASSERT_EQUAL(u"25.234"_ustr, aOutput[4]);
+    CPPUNIT_ASSERT_EQUAL(u"123.456"_ustr, aOutput[5]);
+    CPPUNIT_ASSERT_EQUAL(u"0.12345"_ustr, aOutput[6]);
 }
 
 void CommonFunctorsTest::testDoubleToString()
@@ -67,13 +67,13 @@ void CommonFunctorsTest::testDoubleToString()
     std::transform(aInput.begin(), aInput.end(),
             std::back_inserter(aOutput), chart::CommonFunctors::ToString());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("12"), aOutput[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
-    CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
-    CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
-    CPPUNIT_ASSERT_EQUAL(OUString("0.12345"), aOutput[6]);
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aOutput[0]);
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, aOutput[1]);
+    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, aOutput[2]);
+    CPPUNIT_ASSERT_EQUAL(u"15"_ustr, aOutput[3]);
+    CPPUNIT_ASSERT_EQUAL(u"25.234"_ustr, aOutput[4]);
+    CPPUNIT_ASSERT_EQUAL(u"123.456"_ustr, aOutput[5]);
+    CPPUNIT_ASSERT_EQUAL(u"0.12345"_ustr, aOutput[6]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CommonFunctorsTest);

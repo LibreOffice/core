@@ -42,8 +42,8 @@ RegressionCurveCalculator::RegressionCurveCalculator()
     , mForceIntercept(false)
     , mInterceptValue(std::numeric_limits<double>::quiet_NaN())
     , mPeriod(2)
-    , mXName("x")
-    , mYName("f(x)")
+    , mXName(u"x"_ustr)
+    , mYName(u"f(x)"_ustr)
     , mnMovingType(0)
 {
 }
@@ -76,7 +76,7 @@ void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   nMovingType )
 {
     if( aPeriod < 0 )
-        throw lang::IllegalArgumentException("aPeriod may not be < 0", static_cast<cppu::OWeakObject*>(this), 3);
+        throw lang::IllegalArgumentException(u"aPeriod may not be < 0"_ustr, static_cast<cppu::OWeakObject*>(this), 3);
     mDegree = aDegree;
     mForceIntercept = aForceIntercept;
     mInterceptValue = aInterceptValue;
@@ -90,12 +90,12 @@ OUString RegressionCurveCalculator::getFormattedString(
     double fNumber, const sal_Int32* pStringLength /* = nullptr */ )
 {
     if ( pStringLength && *pStringLength <= 0 )
-        return "###";
+        return u"###"_ustr;
     OUString aResult;
 
     if( xNumFormatter.is() )
     {
-        bool bStandard = ::cppu::any2bool( ::comphelper::getNumberFormatProperty( xNumFormatter, nNumberFormatKey, "StandardFormat" ) );
+        bool bStandard = ::cppu::any2bool( ::comphelper::getNumberFormatProperty( xNumFormatter, nNumberFormatKey, u"StandardFormat"_ustr ) );
         if( pStringLength && bStandard )
         {   // round fNumber to *pStringLength characters
             const sal_Int32 nMinDigit = 6; // minimum significant digits for General format
@@ -131,7 +131,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     sal_Bool /* bMaySkipPointsInCalculation */ )
 {
     if( nPointCount < 2 )
-        throw lang::IllegalArgumentException("too few points", static_cast<cppu::OWeakObject*>(this), 2);
+        throw lang::IllegalArgumentException(u"too few points"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
 
     // determine if scaling and inverse scaling for x-values work
     bool bDoXScaling( xScalingX.is());
@@ -205,11 +205,11 @@ void RegressionCurveCalculator::addStringToEquation(
 void SAL_CALL RegressionCurveCalculator::setXYNames( const OUString& aXName, const OUString& aYName )
 {
     if ( aXName.isEmpty() )
-        mXName = OUString ("x");
+        mXName = u"x"_ustr;
     else
         mXName = aXName;
     if ( aYName.isEmpty() )
-        mYName = OUString ("f(x)");
+        mYName = u"f(x)"_ustr;
     else
         mYName = aYName;
 }

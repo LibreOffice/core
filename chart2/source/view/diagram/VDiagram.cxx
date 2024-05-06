@@ -59,7 +59,7 @@ VDiagram::VDiagram(
             m_xDiagram->getChartTypeByIndex( 0 ) ) )
     {
         if(xDiagram.is())
-            xDiagram->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+            xDiagram->getPropertyValue(u"RightAngledAxes"_ustr) >>= m_bRightAngledAxes;
         if( m_bRightAngledAxes )
         {
             ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
@@ -138,10 +138,10 @@ void VDiagram::createShapes_2d()
     rtl::Reference<SvxShapeGroupAnyD> xOuterGroup_Shapes = ShapeFactory::createGroup2D(m_xTarget);
     m_xOuterGroupShape = xOuterGroup_Shapes;
 
-    rtl::Reference<SvxShapeGroupAnyD> xGroupForWall( ShapeFactory::createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
+    rtl::Reference<SvxShapeGroupAnyD> xGroupForWall( ShapeFactory::createGroup2D(xOuterGroup_Shapes,u"PlotAreaExcludingAxes"_ustr) );
 
     //create independent group shape as container for datapoints and such things
-    m_xCoordinateRegionShape = ShapeFactory::createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
+    m_xCoordinateRegionShape = ShapeFactory::createGroup2D(xOuterGroup_Shapes,u"testonly;CooContainer=XXX_CID"_ustr);
 
     bool bAddFloorAndWall = m_xDiagram->isSupportingFloorAndWall();
 
@@ -432,7 +432,7 @@ void VDiagram::createShapes_3d()
         return;
 
     //create shape
-    rtl::Reference<Svx3DSceneObject> xShapes = ShapeFactory::createGroup3D( m_xTarget, "PlotAreaExcludingAxes" );
+    rtl::Reference<Svx3DSceneObject> xShapes = ShapeFactory::createGroup3D( m_xTarget, u"PlotAreaExcludingAxes"_ustr );
     m_xOuterGroupShape = xShapes;
 
     rtl::Reference<SvxShapeGroupAnyD> xOuterGroup_Shapes = m_xOuterGroupShape;
@@ -598,7 +598,7 @@ void VDiagram::createShapes_3d()
 
     //create an additional scene for the smaller inner coordinate region:
     {
-        rtl::Reference<Svx3DSceneObject> xShapes2 = ShapeFactory::createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
+        rtl::Reference<Svx3DSceneObject> xShapes2 = ShapeFactory::createGroup3D( xOuterGroup_Shapes,u"testonly;CooContainer=XXX_CID"_ustr );
         m_xCoordinateRegionShape = xShapes2;
 
         try

@@ -240,21 +240,21 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
 
     uno::Sequence< beans::PropertyValue > aFilterData{
-        comphelper::makePropertyValue("ExportOnlyBackground", false),
-        comphelper::makePropertyValue("HighContrast", bUseHighContrast),
-        comphelper::makePropertyValue("Version", sal_Int32(SOFFICE_FILEFORMAT_50)),
-        comphelper::makePropertyValue("CurrentPage", uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY )),
+        comphelper::makePropertyValue(u"ExportOnlyBackground"_ustr, false),
+        comphelper::makePropertyValue(u"HighContrast"_ustr, bUseHighContrast),
+        comphelper::makePropertyValue(u"Version"_ustr, sal_Int32(SOFFICE_FILEFORMAT_50)),
+        comphelper::makePropertyValue(u"CurrentPage"_ustr, uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY )),
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-        comphelper::makePropertyValue("ScaleXNumerator", m_nScaleXNumerator),
-        comphelper::makePropertyValue("ScaleXDenominator", m_nScaleXDenominator),
-        comphelper::makePropertyValue("ScaleYNumerator", m_nScaleYNumerator),
-        comphelper::makePropertyValue("ScaleYDenominator", m_nScaleYDenominator)
+        comphelper::makePropertyValue(u"ScaleXNumerator"_ustr, m_nScaleXNumerator),
+        comphelper::makePropertyValue(u"ScaleXDenominator"_ustr, m_nScaleXDenominator),
+        comphelper::makePropertyValue(u"ScaleYNumerator"_ustr, m_nScaleYNumerator),
+        comphelper::makePropertyValue(u"ScaleYDenominator"_ustr, m_nScaleYDenominator)
     };
 
     uno::Sequence< beans::PropertyValue > aProps{
-        comphelper::makePropertyValue("FilterName", OUString("SVM")),
-        comphelper::makePropertyValue("OutputStream", xOutStream),
-        comphelper::makePropertyValue("FilterData", aFilterData)
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"SVM"_ustr),
+        comphelper::makePropertyValue(u"OutputStream"_ustr, xOutStream),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
     };
 
     xExporter->setSourceDocument( m_xDrawPage );
@@ -295,8 +295,8 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 {
     return
     {
-        { lcl_aGDIMetaFileMIMEType, "GDIMetaFile", cppu::UnoType<uno::Sequence< sal_Int8 >>::get() },
-        { lcl_aGDIMetaFileMIMETypeHighContrast, "GDIMetaFile", cppu::UnoType<uno::Sequence< sal_Int8 >>::get() }
+        { lcl_aGDIMetaFileMIMEType, u"GDIMetaFile"_ustr, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() },
+        { lcl_aGDIMetaFileMIMETypeHighContrast, u"GDIMetaFile"_ustr, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() }
     };
 }
 sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
@@ -361,20 +361,20 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
             uno::Reference< container::XNameAccess > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
             if( xStylesFamilies.is() )
             {
-                if( !xStylesFamilies->hasByName( "PageStyles" ) )
+                if( !xStylesFamilies->hasByName( u"PageStyles"_ustr ) )
                 {
                     //draw/impress is parent document
                     uno::Reference< lang::XMultiServiceFactory > xFatcory( xParentProps, uno::UNO_QUERY );
                     if( xFatcory.is() )
                     {
-                        uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
+                        uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( u"com.sun.star.drawing.Defaults"_ustr ), uno::UNO_QUERY );
                         if( xDrawDefaults.is() )
-                            xDrawDefaults->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                            xDrawDefaults->getPropertyValue( u"WritingMode"_ustr ) >>= nWritingMode;
                     }
                 }
                 else
                 {
-                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( "PageStyles" ), uno::UNO_QUERY );
+                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( u"PageStyles"_ustr ), uno::UNO_QUERY );
                     if( xPageStyles.is() )
                     {
                         OUString aPageStyle;
@@ -401,7 +401,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                         {
                                             static OUString aChartCLSID = SvGlobalName( SO3_SCH_CLASSID ).GetHexName();
                                             OUString aCLSID;
-                                            xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
+                                            xEmbeddedProps->getPropertyValue( u"CLSID"_ustr ) >>= aCLSID;
                                             if( aCLSID == aChartCLSID )
                                             {
                                                 uno::Reference< text::XTextContent > xEmbeddedObject( xEmbeddedProps, uno::UNO_QUERY );
@@ -413,14 +413,14 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                                         uno::Reference< beans::XPropertySet > xAnchorProps( xAnchor, uno::UNO_QUERY );
                                                         if( xAnchorProps.is() )
                                                         {
-                                                            xAnchorProps->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                                                            xAnchorProps->getPropertyValue( u"WritingMode"_ustr ) >>= nWritingMode;
                                                         }
                                                         uno::Reference< text::XText > xText( xAnchor->getText() );
                                                         if( xText.is() )
                                                         {
                                                             uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
                                                             if( xTextCursorProps.is() )
-                                                                xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
+                                                                xTextCursorProps->getPropertyValue( u"PageStyleName"_ustr ) >>= aPageStyle;
                                                         }
                                                     }
                                                 }
@@ -437,7 +437,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                 {
                                     uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
                                     if( xTextCursorProps.is() )
-                                        xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
+                                        xTextCursorProps->getPropertyValue( u"PageStyleName"_ustr ) >>= aPageStyle;
                                 }
                             }
                             if(aPageStyle.isEmpty())
@@ -447,9 +447,9 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                         {
                             //Calc is parent document
                             Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
-                            if (xInfo->hasPropertyByName("PageStyle"))
+                            if (xInfo->hasPropertyByName(u"PageStyle"_ustr))
                             {
-                                xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
+                                xParentProps->getPropertyValue( u"PageStyle"_ustr ) >>= aPageStyle;
                             }
                             if(aPageStyle.isEmpty())
                                 aPageStyle = "Default";
@@ -458,10 +458,10 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                         {
                             uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
                             Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
-                            if (xInfo->hasPropertyByName("WritingMode"))
+                            if (xInfo->hasPropertyByName(u"WritingMode"_ustr))
                             {
                                 if( xPageStyle.is() )
-                                    xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                                    xPageStyle->getPropertyValue( u"WritingMode"_ustr ) >>= nWritingMode;
                             }
                         }
                     }
@@ -740,7 +740,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     if(bSnapRectToUsedArea)
     {
         if (rParam.mbUseFixedInnerSize)
-            m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( "PlotAreaExcludingAxes" );
+            m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( u"PlotAreaExcludingAxes"_ustr );
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
@@ -764,7 +764,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         awt::Size  aSize(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height);
 
         bool bPosSizeExcludeAxesProperty = true;
-        xDiagram->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxesProperty;
+        xDiagram->getPropertyValue(u"PosSizeExcludeAxes"_ustr) >>= bPosSizeExcludeAxesProperty;
         if (rParam.mbUseFixedInnerSize || bPosSizeExcludeAxesProperty)
         {
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
@@ -877,7 +877,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
                 SdrObjList* pRootList = pRootSdrObject->GetSubList();
                 if( pRootList )
                 {
-                    OUString aShapeName = "MarkHandles";
+                    OUString aShapeName = u"MarkHandles"_ustr;
                     if( eObjectType == OBJECTTYPE_DIAGRAM )
                         aShapeName = "PlotAreaIncludingAxes";
                     SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
@@ -946,11 +946,11 @@ bool getAvailablePosAndSizeForDiagram(
 
     bool bPosSizeExcludeAxes = false;
     if( xProp.is() )
-        xProp->getPropertyValue( "PosSizeExcludeAxes" ) >>= bPosSizeExcludeAxes;
+        xProp->getPropertyValue( u"PosSizeExcludeAxes"_ustr ) >>= bPosSizeExcludeAxes;
 
     //size:
     css::chart2::RelativeSize aRelativeSize;
-    if( xProp.is() && (xProp->getPropertyValue( "RelativeSize" )>>=aRelativeSize) )
+    if( xProp.is() && (xProp->getPropertyValue( u"RelativeSize"_ustr )>>=aRelativeSize) )
     {
         rParam.maRemainingSpace.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
         rParam.maRemainingSpace.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
@@ -962,7 +962,7 @@ bool getAvailablePosAndSizeForDiagram(
 
     //position:
     chart2::RelativePosition aRelativePosition;
-    if( xProp.is() && (xProp->getPropertyValue( "RelativePosition" )>>=aRelativePosition) )
+    if( xProp.is() && (xProp->getPropertyValue( u"RelativePosition"_ustr )>>=aRelativePosition) )
     {
         //@todo decide whether x is primary or secondary
 
@@ -1107,7 +1107,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     rbAutoPosition = true;
     awt::Point aNewPosition(0,0);
     chart2::RelativePosition aRelativePosition;
-    if (xTitle.is() && (xTitle->getPropertyValue("RelativePosition") >>= aRelativePosition))
+    if (xTitle.is() && (xTitle->getPropertyValue(u"RelativePosition"_ustr) >>= aRelativePosition))
     {
         rbAutoPosition = false;
 
@@ -1336,11 +1336,11 @@ void ChartView::impl_refreshAddIn()
     try
     {
         uno::Reference< util::XRefreshable > xAddIn;
-        xProp->getPropertyValue( "AddIn" ) >>= xAddIn;
+        xProp->getPropertyValue( u"AddIn"_ustr ) >>= xAddIn;
         if( xAddIn.is() )
         {
             bool bRefreshAddInAllowed = true;
-            xProp->getPropertyValue( "RefreshAddInAllowed" ) >>= bRefreshAddInAllowed;
+            xProp->getPropertyValue( u"RefreshAddInAllowed"_ustr ) >>= bRefreshAddInAllowed;
             if( bRefreshAddInAllowed )
                 xAddIn->refresh();
         }
@@ -1462,7 +1462,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
     //m_bRefreshAddIn = false;
     try
     {
-        impl_notifyModeChangeListener("invalid");
+        impl_notifyModeChangeListener(u"invalid"_ustr);
 
         //prepare draw model
         {
@@ -1508,7 +1508,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
         m_pDrawModelWrapper->unlockControllers();
     }
 
-    impl_notifyModeChangeListener("valid");
+    impl_notifyModeChangeListener(u"valid"_ustr);
 
     //m_bRefreshAddIn = bOldRefreshAddIn;
 }
@@ -1520,7 +1520,7 @@ void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
     if( m_bInViewUpdate )
         m_bViewUpdatePending = true;
 
-    impl_notifyModeChangeListener("dirty");
+    impl_notifyModeChangeListener(u"dirty"_ustr);
 }
 
 //SfxListener
@@ -1661,7 +1661,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     {
         awt::Size aNewResolution;
         if( ! (rValue >>= aNewResolution) )
-            throw lang::IllegalArgumentException( "Property 'Resolution' requires value of type awt::Size", nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property 'Resolution' requires value of type awt::Size"_ustr, nullptr, 0 );
 
         if( m_aPageResolution.Width!=aNewResolution.Width || m_aPageResolution.Height!=aNewResolution.Height )
         {
@@ -1679,7 +1679,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         uno::Sequence< beans::PropertyValue > aZoomFactors;
         if( ! (rValue >>= aZoomFactors) )
-            throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property 'ZoomFactors' requires value of type Sequence< PropertyValue >"_ustr, nullptr, 0 );
 
         for (auto& propval : aZoomFactors)
         {
@@ -1697,7 +1697,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     {
         //#i77362 change notification for changes on additional shapes are missing
         if( ! (rValue >>= m_bSdrViewIsInEditMode) )
-            throw lang::IllegalArgumentException( "Property 'SdrViewIsInEditMode' requires value of type sal_Bool", nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property 'SdrViewIsInEditMode' requires value of type sal_Bool"_ustr, nullptr, 0 );
     }
     else
         throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard " + rPropertyName, nullptr );
@@ -1802,12 +1802,12 @@ Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUStr
 
 uno::Sequence< OUString > ChartView::getAvailableServiceNames()
 {
-    uno::Sequence< OUString > aServiceNames{ "com.sun.star.drawing.DashTable",
-                                             "com.sun.star.drawing.GradientTable",
-                                             "com.sun.star.drawing.HatchTable",
-                                             "com.sun.star.drawing.BitmapTable",
-                                             "com.sun.star.drawing.TransparencyGradientTable",
-                                             "com.sun.star.drawing.MarkerTable" };
+    uno::Sequence< OUString > aServiceNames{ u"com.sun.star.drawing.DashTable"_ustr,
+                                             u"com.sun.star.drawing.GradientTable"_ustr,
+                                             u"com.sun.star.drawing.HatchTable"_ustr,
+                                             u"com.sun.star.drawing.BitmapTable"_ustr,
+                                             u"com.sun.star.drawing.TransparencyGradientTable"_ustr,
+                                             u"com.sun.star.drawing.MarkerTable"_ustr };
 
     return aServiceNames;
 }
@@ -1890,7 +1890,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     //create the group shape for diagram and axes first to have title and legends on top of it
     rtl::Reference< Diagram > xDiagram( mrChartModel.getFirstChartDiagram() );
     bool bHasRelativeSize = false;
-    if( xDiagram.is() && xDiagram->getPropertyValue("RelativeSize").hasValue() )
+    if( xDiagram.is() && xDiagram->getPropertyValue(u"RelativeSize"_ustr).hasValue() )
         bHasRelativeSize = true;
 
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
@@ -1899,11 +1899,11 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     aParam.mxMarkHandles = ShapeFactory::createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
-    ShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
+    ShapeFactory::setShapeName(aParam.mxMarkHandles, u"MarkHandles"_ustr);
 
     aParam.mxPlotAreaWithAxes = ShapeFactory::createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0, 0));
-    ShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
+    ShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, u"PlotAreaIncludingAxes"_ustr);
 
     aParam.mxDiagramWithAxesShapes = ShapeFactory::createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes);
 

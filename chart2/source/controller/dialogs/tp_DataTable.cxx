@@ -13,8 +13,8 @@ namespace chart
 {
 DataTableTabPage::DataTableTabPage(weld::Container* pPage, weld::DialogController* pController,
                                    const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_DataTable.ui", "DataTableTabPage",
-                 &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_DataTable.ui"_ustr,
+                 u"DataTableTabPage"_ustr, &rInAttrs)
     , m_aDataTablePropertiesResources(*m_xBuilder)
 {
 }

@@ -64,11 +64,11 @@ void Chart2ModelContact::setDocumentModel( ChartModel* pChartModel )
     if( !pChartModel )
         return;
 
-    m_aTableMap["LineDashName"].set(pChartModel->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY);
-    m_aTableMap["FillGradientName"].set(pChartModel->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY);
-    m_aTableMap["FillHatchName"].set(pChartModel->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY);
-    m_aTableMap["FillBitmapName"].set(pChartModel->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
-    m_aTableMap["FillTransparenceGradientName"].set(pChartModel->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+    m_aTableMap[u"LineDashName"_ustr].set(pChartModel->createInstance(u"com.sun.star.drawing.DashTable"_ustr), uno::UNO_QUERY);
+    m_aTableMap[u"FillGradientName"_ustr].set(pChartModel->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), uno::UNO_QUERY);
+    m_aTableMap[u"FillHatchName"_ustr].set(pChartModel->createInstance(u"com.sun.star.drawing.HatchTable"_ustr), uno::UNO_QUERY);
+    m_aTableMap[u"FillBitmapName"_ustr].set(pChartModel->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
+    m_aTableMap[u"FillTransparenceGradientName"_ustr].set(pChartModel->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
 }
 
 void Chart2ModelContact::clear()
@@ -198,7 +198,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
     {
         ExplicitValueProvider* pProvider( getExplicitValueProvider() );
         if( pProvider )
-            aRect = pProvider->getRectangleOfObject("PlotAreaIncludingAxes");
+            aRect = pProvider->getRectangleOfObject(u"PlotAreaIncludingAxes"_ustr);
     }
     return aRect;
 }

@@ -198,11 +198,11 @@ OUString addLineDashUniqueNameToTable(
     if( xFact.is())
     {
         Reference< container::XNameContainer > xNameCnt(
-            xFact->createInstance( "com.sun.star.drawing.DashTable"),
+            xFact->createInstance( u"com.sun.star.drawing.DashTable"_ustr),
             uno::UNO_QUERY );
         if( xNameCnt.is())
             return lcl_addNamedPropertyUniqueNameToTable(
-                rValue, xNameCnt, "ChartDash ", rPreferredName );
+                rValue, xNameCnt, u"ChartDash "_ustr, rPreferredName );
     }
     return OUString();
 }
@@ -215,11 +215,11 @@ OUString addGradientUniqueNameToTable(
     if( xFact.is())
     {
         Reference< container::XNameContainer > xNameCnt(
-            xFact->createInstance( "com.sun.star.drawing.GradientTable"),
+            xFact->createInstance( u"com.sun.star.drawing.GradientTable"_ustr),
             uno::UNO_QUERY );
         if( xNameCnt.is())
             return lcl_addNamedPropertyUniqueNameToTable(
-                rValue, xNameCnt, "ChartGradient ", rPreferredName );
+                rValue, xNameCnt, u"ChartGradient "_ustr, rPreferredName );
     }
     return OUString();
 }
@@ -232,11 +232,11 @@ OUString addTransparencyGradientUniqueNameToTable(
     if( xFact.is())
     {
         Reference< container::XNameContainer > xNameCnt(
-            xFact->createInstance( "com.sun.star.drawing.TransparencyGradientTable"),
+            xFact->createInstance( u"com.sun.star.drawing.TransparencyGradientTable"_ustr),
             uno::UNO_QUERY );
         if( xNameCnt.is())
             return lcl_addNamedPropertyUniqueNameToTable(
-                rValue, xNameCnt, "ChartTransparencyGradient ", rPreferredName );
+                rValue, xNameCnt, u"ChartTransparencyGradient "_ustr, rPreferredName );
     }
     return OUString();
 }
@@ -249,11 +249,11 @@ OUString addHatchUniqueNameToTable(
     if( xFact.is())
     {
         Reference< container::XNameContainer > xNameCnt(
-            xFact->createInstance( "com.sun.star.drawing.HatchTable"),
+            xFact->createInstance( u"com.sun.star.drawing.HatchTable"_ustr),
             uno::UNO_QUERY );
         if( xNameCnt.is())
             return lcl_addNamedPropertyUniqueNameToTable(
-                rValue, xNameCnt, "ChartHatch ", rPreferredName );
+                rValue, xNameCnt, u"ChartHatch "_ustr, rPreferredName );
     }
     return OUString();
 }
@@ -266,11 +266,11 @@ OUString addBitmapUniqueNameToTable(
     if( xFact.is())
     {
         Reference< container::XNameContainer > xNameCnt(
-            xFact->createInstance( "com.sun.star.drawing.BitmapTable"),
+            xFact->createInstance( u"com.sun.star.drawing.BitmapTable"_ustr),
             uno::UNO_QUERY );
         if( xNameCnt.is())
             return lcl_addNamedPropertyUniqueNameToTable(
-                rValue, xNameCnt, "ChartBitmap ", rPreferredName );
+                rValue, xNameCnt, u"ChartBitmap "_ustr, rPreferredName );
     }
     return OUString();
 }

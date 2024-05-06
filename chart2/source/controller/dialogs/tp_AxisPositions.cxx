@@ -33,26 +33,26 @@ namespace chart
 {
 
 AxisPositionsTabPage::AxisPositionsTabPage(weld::Container* pPage, weld::DialogController* pController,const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_AxisPositions.ui", "tp_AxisPositions", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_AxisPositions.ui"_ustr, u"tp_AxisPositions"_ustr, &rInAttrs)
     , m_pNumFormatter(nullptr)
     , m_bCrossingAxisIsCategoryAxis(false)
     , m_bSupportAxisPositioning(false)
     , m_bSupportCategoryPositioning(false)
-    , m_xFL_AxisLine(m_xBuilder->weld_frame("FL_AXIS_LINE"))
-    , m_xLB_CrossesAt(m_xBuilder->weld_combo_box("LB_CROSSES_OTHER_AXIS_AT"))
-    , m_xED_CrossesAt(m_xBuilder->weld_formatted_spin_button("EDT_CROSSES_OTHER_AXIS_AT"))
-    , m_xED_CrossesAtCategory(m_xBuilder->weld_combo_box( "EDT_CROSSES_OTHER_AXIS_AT_CATEGORY"))
-    , m_xFL_Position(m_xBuilder->weld_frame("FL_POSITION"))
-    , m_xRB_On(m_xBuilder->weld_radio_button("RB_ON"))
-    , m_xRB_Between(m_xBuilder->weld_radio_button("RB_BETWEEN"))
-    , m_xFL_Labels(m_xBuilder->weld_frame("FL_LABELS"))
-    , m_xLB_PlaceLabels(m_xBuilder->weld_combo_box("LB_PLACE_LABELS"))
-    , m_xCB_TicksInner(m_xBuilder->weld_check_button("CB_TICKS_INNER"))
-    , m_xCB_TicksOuter(m_xBuilder->weld_check_button("CB_TICKS_OUTER"))
-    , m_xCB_MinorInner(m_xBuilder->weld_check_button("CB_MINOR_INNER"))
-    , m_xCB_MinorOuter(m_xBuilder->weld_check_button("CB_MINOR_OUTER"))
-    , m_xBxPlaceTicks(m_xBuilder->weld_widget("boxPLACE_TICKS"))
-    , m_xLB_PlaceTicks(m_xBuilder->weld_combo_box("LB_PLACE_TICKS"))
+    , m_xFL_AxisLine(m_xBuilder->weld_frame(u"FL_AXIS_LINE"_ustr))
+    , m_xLB_CrossesAt(m_xBuilder->weld_combo_box(u"LB_CROSSES_OTHER_AXIS_AT"_ustr))
+    , m_xED_CrossesAt(m_xBuilder->weld_formatted_spin_button(u"EDT_CROSSES_OTHER_AXIS_AT"_ustr))
+    , m_xED_CrossesAtCategory(m_xBuilder->weld_combo_box( u"EDT_CROSSES_OTHER_AXIS_AT_CATEGORY"_ustr))
+    , m_xFL_Position(m_xBuilder->weld_frame(u"FL_POSITION"_ustr))
+    , m_xRB_On(m_xBuilder->weld_radio_button(u"RB_ON"_ustr))
+    , m_xRB_Between(m_xBuilder->weld_radio_button(u"RB_BETWEEN"_ustr))
+    , m_xFL_Labels(m_xBuilder->weld_frame(u"FL_LABELS"_ustr))
+    , m_xLB_PlaceLabels(m_xBuilder->weld_combo_box(u"LB_PLACE_LABELS"_ustr))
+    , m_xCB_TicksInner(m_xBuilder->weld_check_button(u"CB_TICKS_INNER"_ustr))
+    , m_xCB_TicksOuter(m_xBuilder->weld_check_button(u"CB_TICKS_OUTER"_ustr))
+    , m_xCB_MinorInner(m_xBuilder->weld_check_button(u"CB_MINOR_INNER"_ustr))
+    , m_xCB_MinorOuter(m_xBuilder->weld_check_button(u"CB_MINOR_OUTER"_ustr))
+    , m_xBxPlaceTicks(m_xBuilder->weld_widget(u"boxPLACE_TICKS"_ustr))
+    , m_xLB_PlaceTicks(m_xBuilder->weld_combo_box(u"LB_PLACE_TICKS"_ustr))
 {
     m_xLB_CrossesAt->connect_changed(LINK(this, AxisPositionsTabPage, CrossesAtSelectHdl));
     m_xLB_PlaceLabels->connect_changed(LINK(this, AxisPositionsTabPage, PlaceLabelsSelectHdl));
@@ -176,7 +176,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
         else
         {
             m_xED_CrossesAtCategory->set_active(-1);
-            m_xED_CrossesAt->set_text("");
+            m_xED_CrossesAt->set_text(u""_ustr);
         }
     }
     else

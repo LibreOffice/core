@@ -50,7 +50,7 @@ bool ColorPerPointHelper::hasPointOwnColor(
         if( !xPointState.is() )
             return false;
 
-        return (xPointState->getPropertyState( "Color") != beans::PropertyState_DEFAULT_VALUE );
+        return (xPointState->getPropertyState( u"Color"_ustr) != beans::PropertyState_DEFAULT_VALUE );
     }
 
     return false;

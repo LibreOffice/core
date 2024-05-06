@@ -57,15 +57,15 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
     , m_bAngleChangePending( false )
     , m_bPerspectiveChangePending( false )
     , m_rControllerLockHelper( rControllerLockHelper )
-    , m_xBuilder(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneGeometry.ui"))
-    , m_xContainer(m_xBuilder->weld_container("tp_3DSceneGeometry"))
-    , m_xCbxRightAngledAxes(m_xBuilder->weld_check_button("CBX_RIGHT_ANGLED_AXES"))
-    , m_xMFXRotation(m_xBuilder->weld_metric_spin_button("MTR_FLD_X_ROTATION", FieldUnit::DEGREE))
-    , m_xMFYRotation(m_xBuilder->weld_metric_spin_button("MTR_FLD_Y_ROTATION", FieldUnit::DEGREE))
-    , m_xFtZRotation(m_xBuilder->weld_label("FT_Z_ROTATION"))
-    , m_xMFZRotation(m_xBuilder->weld_metric_spin_button("MTR_FLD_Z_ROTATION", FieldUnit::DEGREE))
-    , m_xCbxPerspective(m_xBuilder->weld_check_button("CBX_PERSPECTIVE"))
-    , m_xMFPerspective(m_xBuilder->weld_metric_spin_button("MTR_FLD_PERSPECTIVE", FieldUnit::PERCENT))
+    , m_xBuilder(Application::CreateBuilder(pParent, u"modules/schart/ui/tp_3D_SceneGeometry.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"tp_3DSceneGeometry"_ustr))
+    , m_xCbxRightAngledAxes(m_xBuilder->weld_check_button(u"CBX_RIGHT_ANGLED_AXES"_ustr))
+    , m_xMFXRotation(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_X_ROTATION"_ustr, FieldUnit::DEGREE))
+    , m_xMFYRotation(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_Y_ROTATION"_ustr, FieldUnit::DEGREE))
+    , m_xFtZRotation(m_xBuilder->weld_label(u"FT_Z_ROTATION"_ustr))
+    , m_xMFZRotation(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_Z_ROTATION"_ustr, FieldUnit::DEGREE))
+    , m_xCbxPerspective(m_xBuilder->weld_check_button(u"CBX_PERSPECTIVE"_ustr))
+    , m_xMFPerspective(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_PERSPECTIVE"_ustr, FieldUnit::PERCENT))
 {
     double fXAngle, fYAngle, fZAngle;
     m_xDiagram->getRotationAngle( fXAngle, fYAngle, fZAngle );
@@ -99,12 +99,12 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
     m_xMFZRotation->connect_value_changed( aAngleEditedLink );
 
     drawing::ProjectionMode aProjectionMode = drawing::ProjectionMode_PERSPECTIVE;
-    m_xDiagram->getPropertyValue( "D3DScenePerspective" ) >>= aProjectionMode;
+    m_xDiagram->getPropertyValue( u"D3DScenePerspective"_ustr ) >>= aProjectionMode;
     m_xCbxPerspective->set_active( aProjectionMode == drawing::ProjectionMode_PERSPECTIVE );
     m_xCbxPerspective->connect_toggled( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveToggled ));
 
     sal_Int32 nPerspectivePercentage = 20;
-    m_xDiagram->getPropertyValue( "Perspective" ) >>= nPerspectivePercentage;
+    m_xDiagram->getPropertyValue( u"Perspective"_ustr ) >>= nPerspectivePercentage;
     m_xMFPerspective->set_value(nPerspectivePercentage, FieldUnit::PERCENT);
 
     m_aPerspectiveTimer.SetTimeout(nTimeout);
@@ -116,7 +116,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
     if (ChartTypeHelper::isSupportingRightAngledAxes(m_xDiagram->getChartTypeByIndex(0)))
     {
         bool bRightAngledAxes = false;
-        m_xDiagram->getPropertyValue( "RightAngledAxes" ) >>= bRightAngledAxes;
+        m_xDiagram->getPropertyValue( u"RightAngledAxes"_ustr ) >>= bRightAngledAxes;
         m_xCbxRightAngledAxes->connect_toggled( LINK( this, ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled ));
         m_xCbxRightAngledAxes->set_active( bRightAngledAxes );
         RightAngledAxesToggled(*m_xCbxRightAngledAxes);
@@ -189,8 +189,8 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
 
     try
     {
-        m_xDiagram->setPropertyValue( "D3DScenePerspective" , uno::Any( aMode ));
-        m_xDiagram->setPropertyValue( "Perspective" , uno::Any( static_cast<sal_Int32>(m_xMFPerspective->get_value(FieldUnit::PERCENT)) ));
+        m_xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr , uno::Any( aMode ));
+        m_xDiagram->setPropertyValue( u"Perspective"_ustr , uno::Any( static_cast<sal_Int32>(m_xMFPerspective->get_value(FieldUnit::PERCENT)) ));
     }
     catch( const uno::Exception & )
     {
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, weld::Togg
 
         m_xMFXRotation->set_value(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nXRotation), ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes())), FieldUnit::DEGREE);
         m_xMFYRotation->set_value(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nYRotation), ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes())), FieldUnit::DEGREE);
-        m_xMFZRotation->set_text("");
+        m_xMFZRotation->set_text(u""_ustr);
 
         lcl_SetMetricFieldLimits( *m_xMFXRotation, static_cast<sal_Int64>(ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()));
         lcl_SetMetricFieldLimits( *m_xMFYRotation, static_cast<sal_Int64>(ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()));

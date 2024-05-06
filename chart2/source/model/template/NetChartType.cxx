@@ -53,7 +53,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
 {
     if( DimensionCount != 2 )
         throw lang::IllegalArgumentException(
-            "NetChart must be two-dimensional",
+            u"NetChart must be two-dimensional"_ustr,
             static_cast< ::cppu::OWeakObject* >( this ), 0 );
 
     rtl::Reference< PolarCoordinateSystem > xResult =
@@ -147,7 +147,7 @@ OUString SAL_CALL NetChartType::getChartType()
 
 OUString SAL_CALL NetChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.NetChartType";
+    return u"com.sun.star.comp.chart.NetChartType"_ustr;
 }
 
 sal_Bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )
@@ -159,8 +159,8 @@ css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_NET,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

@@ -69,14 +69,14 @@ void StatusBarCommandDispatch::fireStatusEvent(
     {
         uno::Any aArg;
         aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), m_xChartModel );
-        fireStatusEventForURL( ".uno:Context", aArg, true, xSingleListener );
+        fireStatusEventForURL( u".uno:Context"_ustr, aArg, true, xSingleListener );
     }
     if( bFireModified )
     {
         uno::Any aArg;
         if( m_bIsModified )
-            aArg <<= OUString("*");
-        fireStatusEventForURL( ".uno:ModifiedStatus", aArg, true, xSingleListener );
+            aArg <<= u"*"_ustr;
+        fireStatusEventForURL( u".uno:ModifiedStatus"_ustr, aArg, true, xSingleListener );
     }
 }
 

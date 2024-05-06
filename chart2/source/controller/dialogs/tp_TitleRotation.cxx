@@ -31,14 +31,14 @@ namespace chart
 
 SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogController* pController,
                                          const SfxItemSet& rInAttrs, bool bWithRotation)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/titlerotationtabpage.ui", "TitleRotationTabPage", &rInAttrs)
-    , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
-    , m_xNfRotate(m_xBuilder->weld_metric_spin_button("OrientDegree", FieldUnit::DEGREE))
-    , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
-    , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
-    , m_aLbTextDirection(m_xBuilder->weld_combo_box("textdirLB"))
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/titlerotationtabpage.ui"_ustr, u"TitleRotationTabPage"_ustr, &rInAttrs)
+    , m_xFtRotate(m_xBuilder->weld_label(u"degreeL"_ustr))
+    , m_xNfRotate(m_xBuilder->weld_metric_spin_button(u"OrientDegree"_ustr, FieldUnit::DEGREE))
+    , m_xCbStacked(m_xBuilder->weld_check_button(u"stackedCB"_ustr))
+    , m_xFtABCD(m_xBuilder->weld_label(u"labelABCD"_ustr))
+    , m_aLbTextDirection(m_xBuilder->weld_combo_box(u"textdirLB"_ustr))
     , m_xCtrlDial(new svx::DialControl)
-    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialCtrl", *m_xCtrlDial))
+    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, u"dialCtrl"_ustr, *m_xCtrlDial))
 {
     m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
     m_xCtrlDial->SetText(m_xFtABCD->get_label());

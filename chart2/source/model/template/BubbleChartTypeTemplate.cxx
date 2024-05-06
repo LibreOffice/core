@@ -107,7 +107,7 @@ void BubbleChartTypeTemplate::applyStyle2(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
 }
 
 // ____ XChartTypeTemplate ____

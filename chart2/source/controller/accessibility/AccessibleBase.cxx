@@ -94,7 +94,7 @@ bool AccessibleBase::CheckDisposeState( bool bThrowException /* default: true */
     if( bThrowException &&
         m_bIsDisposed )
     {
-        throw lang::DisposedException("component has state DEFUNC",
+        throw lang::DisposedException(u"component has state DEFUNC"_ustr,
             static_cast< uno::XWeak * >( const_cast< AccessibleBase * >( this )));
     }
     return m_bIsDisposed;
@@ -789,7 +789,7 @@ Color AccessibleBase::getColor( eColorType eColType )
 // ________ AccessibleBase::XServiceInfo ________
 OUString SAL_CALL AccessibleBase::getImplementationName()
 {
-    return "AccessibleBase";
+    return u"AccessibleBase"_ustr;
 }
 
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
@@ -800,8 +800,8 @@ sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.accessibility.Accessible",
-        "com.sun.star.accessibility.AccessibleContext"
+        u"com.sun.star.accessibility.Accessible"_ustr,
+        u"com.sun.star.accessibility.AccessibleContext"_ustr
     };
 }
 

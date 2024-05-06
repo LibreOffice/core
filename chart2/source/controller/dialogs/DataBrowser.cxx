@@ -233,15 +233,15 @@ private:
 
 SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent)
     : m_aUpdateDataTimer( "SeriesHeader UpdateDataTimer" )
-    , m_xBuilder1(Application::CreateBuilder(pParent, "modules/schart/ui/columnfragment.ui"))
-    , m_xBuilder2(Application::CreateBuilder(pColorParent, "modules/schart/ui/imagefragment.ui"))
+    , m_xBuilder1(Application::CreateBuilder(pParent, u"modules/schart/ui/columnfragment.ui"_ustr))
+    , m_xBuilder2(Application::CreateBuilder(pColorParent, u"modules/schart/ui/imagefragment.ui"_ustr))
     , m_pParent(pParent)
     , m_pColorParent(pColorParent)
-    , m_xContainer1(m_xBuilder1->weld_container("container"))
-    , m_xContainer2(m_xBuilder2->weld_container("container"))
-    , m_spSymbol(m_xBuilder1->weld_image("image"))
-    , m_spSeriesName(new SeriesHeaderEdit(m_xBuilder1->weld_entry("entry")))
-    , m_spColorBar(m_xBuilder2->weld_image("image"))
+    , m_xContainer1(m_xBuilder1->weld_container(u"container"_ustr))
+    , m_xContainer2(m_xBuilder2->weld_container(u"container"_ustr))
+    , m_spSymbol(m_xBuilder1->weld_image(u"image"_ustr))
+    , m_spSeriesName(new SeriesHeaderEdit(m_xBuilder1->weld_entry(u"entry"_ustr)))
+    , m_spColorBar(m_xBuilder2->weld_image(u"image"_ustr))
     , m_xDevice(Application::GetDefaultDevice())
     , m_nStartCol( 0 )
     , m_nEndCol( 0 )
@@ -642,14 +642,14 @@ void DataBrowser::RenewTable()
         Color nColor;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
         if( elemHeader.m_xDataSeries.is() &&
-            ( elemHeader.m_xDataSeries->getPropertyValue( "Color" ) >>= nColor ))
+            ( elemHeader.m_xDataSeries->getPropertyValue( u"Color"_ustr ) >>= nColor ))
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             elemHeader.m_xDataSeries->getLabelForRole(
                         elemHeader.m_xChartType.is() ?
                          elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString("values-y")));
+                         u"values-y"_ustr));
         // index is 1-based, as 0 is for the column that contains the row-numbers
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
@@ -1266,14 +1266,14 @@ void DataBrowser::RenewSeriesHeaders()
         auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
         Color nColor;
         if( elemHeader.m_xDataSeries.is() &&
-            ( elemHeader.m_xDataSeries->getPropertyValue( "Color" ) >>= nColor ))
+            ( elemHeader.m_xDataSeries->getPropertyValue( u"Color"_ustr ) >>= nColor ))
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             elemHeader.m_xDataSeries->getLabelForRole(
                         elemHeader.m_xChartType.is() ?
                          elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString( "values-y")));
+                         u"values-y"_ustr));
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );

@@ -689,7 +689,7 @@ void PieChart::createTextLabelShape(
                     if (aPieLabelInfo.xTextShape.is())
                     {
                         sal_Int32 nColor = 0;
-                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
+                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue(u"CharColor"_ustr) >>= nColor;
                         //automatic font color does not work for lines -> fallback to black
                         if (nColor != -1)
                             aVLineProperties.Color <<= nColor;
@@ -740,7 +740,7 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     double fExplodePercentage=0.0;
-    xSeries->getPropertyValue( "Offset") >>= fExplodePercentage;
+    xSeries->getPropertyValue( u"Offset"_ustr) >>= fExplodePercentage;
     if(fExplodePercentage>m_fMaxOffset)
         m_fMaxOffset=fExplodePercentage;
 
@@ -756,7 +756,7 @@ double PieChart::getMaxOffset()
                 if(xPointProp.is())
                 {
                     fExplodePercentage=0.0;
-                    xPointProp->getPropertyValue( "Offset") >>= fExplodePercentage;
+                    xPointProp->getPropertyValue( u"Offset"_ustr) >>= fExplodePercentage;
                     if(fExplodePercentage>m_fMaxOffset)
                         m_fMaxOffset=fExplodePercentage;
                 }
@@ -1108,7 +1108,7 @@ void PieChart::createOneRing(
         const PieDataSrcBase *pDataSrc,
         sal_Int32 n3DRelativeHeight)
 {
-    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+    bool bHasFillColorMapping = pSeries->hasPropertyMapping(u"FillColor"_ustr);
 
     sal_Int32 nRingPtCnt = pDataSrc->getNPoints(pSeries, eType);
 
@@ -1193,7 +1193,7 @@ void PieChart::createOneRing(
             bool bDoExplode = ( nExplodeableSlot == static_cast< std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
             if(bDoExplode) try
             {
-                xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
+                xPointProperties->getPropertyValue( u"Offset"_ustr) >>= aParam.mfExplodePercentage;
             }
             catch( const uno::Exception& )
             {
@@ -1224,17 +1224,17 @@ void PieChart::createOneRing(
             ///point color:
             if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
             {
-                xPointShape->setPropertyValue("FillColor",
+                xPointShape->setPropertyValue(u"FillColor"_ustr,
                     uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
             }
 
 
             if(bHasFillColorMapping)
             {
-                double nPropVal = pSeries->getValueByProperty(nPropIdx, "FillColor");
+                double nPropVal = pSeries->getValueByProperty(nPropIdx, u"FillColor"_ustr);
                 if(!std::isnan(nPropVal))
                 {
-                    xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+                    xPointShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>( nPropVal)));
                 }
             }
 
@@ -1292,7 +1292,7 @@ void PieChart::createOneBar(
         const PieDataSrcBase *pDataSrc,
         sal_Int32 n3DRelativeHeight)
 {
-    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+    bool bHasFillColorMapping = pSeries->hasPropertyMapping(u"FillColor"_ustr);
 
     sal_Int32 nBarPtCnt = pDataSrc->getNPoints(pSeries, eType);
 
@@ -1337,17 +1337,17 @@ void PieChart::createOneBar(
         ///point color:
         if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
         {
-            xPointShape->setPropertyValue("FillColor",
+            xPointShape->setPropertyValue(u"FillColor"_ustr,
                 uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
         }
 
 
         if(bHasFillColorMapping)
         {
-            double nPropVal = pSeries->getValueByProperty(nPropIdx, "FillColor");
+            double nPropVal = pSeries->getValueByProperty(nPropIdx, u"FillColor"_ustr);
             if(!std::isnan(nPropVal))
             {
-                xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+                xPointShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>( nPropVal)));
             }
         }
 
@@ -1763,7 +1763,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
             if( labelInfo.xTextShape.is() )
             {
                 sal_Int32 nColor = 0;
-                labelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
+                labelInfo.xTextShape->SvxShape::getPropertyValue(u"CharColor"_ustr) >>= nColor;
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color <<= nColor;
             }

@@ -84,7 +84,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( basegfx::deg2rad(-m_fRotationAngleDegree) );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
-        m_xShape->SvxShape::setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        m_xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& )
     {
@@ -98,7 +98,7 @@ bool VTitle::isVisible(const rtl::Reference< Title >& xTitle) {
     }
     bool bShow = true;
     try {
-        xTitle->getPropertyValue("Visible") >>= bShow;
+        xTitle->getPropertyValue(u"Visible"_ustr) >>= bShow;
     } catch (const uno::Exception &) {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -127,7 +127,7 @@ void VTitle::createShapes(
     try
     {
         double fAngleDegree = 0;
-        xTitleProperties->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
+        xTitleProperties->getPropertyValue( u"TextRotation"_ustr ) >>= fAngleDegree;
         m_fRotationAngleDegree += fAngleDegree;
     }
     catch( const uno::Exception& )

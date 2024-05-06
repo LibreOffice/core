@@ -33,14 +33,14 @@ namespace {
 
 SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
+    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
     SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
     return pToolBoxLineStyleControl;
 }
 
 SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rToolBoxLineStyle)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(".uno:XLineColor");
+    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(u".uno:XLineColor"_ustr);
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
@@ -109,9 +109,9 @@ std::unique_ptr<PanelLayout> ChartLinePanel::Create(
         ChartController* pController)
 {
     if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent Window given to ChartAxisPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
+        throw css::lang::IllegalArgumentException(u"no XFrame given to ChartAxisPanel::Create"_ustr, nullptr, 1);
 
     return std::make_unique<ChartLinePanel>(pParent, rxFrame, pController);
 }
@@ -125,7 +125,7 @@ ChartLinePanel::ChartLinePanel(weld::Widget* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
     mbModelValid(true),
-    maLineColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), "LineColor"),
+    maLineColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), u"LineColor"_ustr),
     maLineStyleWrapper(mxModel, getLineStyleToolBoxControl(*mxLineStyleDispatch))
 {
     disableArrowHead();
@@ -171,12 +171,12 @@ void ChartLinePanel::updateData()
         return;
 
     sal_uInt16 nLineTransparence = 0;
-    xPropSet->getPropertyValue("LineTransparence") >>= nLineTransparence;
+    xPropSet->getPropertyValue(u"LineTransparence"_ustr) >>= nLineTransparence;
     XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
     updateLineTransparence(false, true, &aLineTransparenceItem);
 
     sal_uInt32 nWidth = 0;
-    xPropSet->getPropertyValue("LineWidth") >>= nWidth;
+    xPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nWidth;
     XLineWidthItem aWidthItem(nWidth);
     updateLineWidth(false, true, &aWidthItem);
 
@@ -240,7 +240,7 @@ void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
         return;
 
     PreventUpdate aPreventUpdate(mbUpdate);
-    xPropSet->setPropertyValue("LineTransparence", css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"LineTransparence"_ustr, css::uno::Any(rItem.GetValue()));
 }
 
 void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
@@ -252,7 +252,7 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
         return;
 
     PreventUpdate aPreventUpdate(mbUpdate);
-    xPropSet->setPropertyValue("LineWidth", css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"LineWidth"_ustr, css::uno::Any(rItem.GetValue()));
 }
 
 void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)

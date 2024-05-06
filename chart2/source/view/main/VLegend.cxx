@@ -70,13 +70,13 @@ double lcl_CalcViewFontSize(
     double fResult = 10.0;
 
     float fFontHeight( 0.0 );
-    if( xProp.is() && ( xProp->getPropertyValue( "CharHeight") >>= fFontHeight ))
+    if( xProp.is() && ( xProp->getPropertyValue( u"CharHeight"_ustr) >>= fFontHeight ))
     {
         fResult = fFontHeight;
         try
         {
             awt::Size aPropRefSize;
-            if( (xProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
+            if( (xProp->getPropertyValue( u"ReferencePageSize"_ustr) >>= aPropRefSize) &&
                 (aPropRefSize.Height > 0))
             {
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
@@ -105,7 +105,7 @@ void lcl_getProperties(
     ::chart::tPropertyNameValueMap aLineFillValueMap;
     ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
 
-    aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
+    aLineFillValueMap[ u"LineJoint"_ustr ] <<= drawing::LineJoint_ROUND;
 
     ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
         rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
@@ -114,31 +114,31 @@ void lcl_getProperties(
     ::chart::tPropertyNameValueMap aTextValueMap;
     ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
-    aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
-    aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
-    aTextValueMap[ "TextHorizontalAdjust" ] <<= drawing::TextHorizontalAdjust_LEFT;
-    aTextValueMap[ "TextMaximumFrameWidth" ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
+    aTextValueMap[ u"TextAutoGrowHeight"_ustr ] <<= true;
+    aTextValueMap[ u"TextAutoGrowWidth"_ustr ] <<= true;
+    aTextValueMap[ u"TextHorizontalAdjust"_ustr ] <<= drawing::TextHorizontalAdjust_LEFT;
+    aTextValueMap[ u"TextMaximumFrameWidth"_ustr ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
 
     // recalculate font size
     awt::Size aPropRefSize;
     float fFontHeight( 0.0 );
-    if( (xLegendProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
+    if( (xLegendProp->getPropertyValue( u"ReferencePageSize"_ustr) >>= aPropRefSize) &&
         (aPropRefSize.Height > 0) &&
-        (aTextValueMap[ "CharHeight" ] >>= fFontHeight) )
+        (aTextValueMap[ u"CharHeight"_ustr ] >>= fFontHeight) )
     {
-        aTextValueMap[ "CharHeight" ] <<=
+        aTextValueMap[ u"CharHeight"_ustr ] <<=
             static_cast< float >(
                 ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
 
-        if( aTextValueMap[ "CharHeightAsian" ] >>= fFontHeight )
+        if( aTextValueMap[ u"CharHeightAsian"_ustr ] >>= fFontHeight )
         {
-            aTextValueMap[ "CharHeightAsian" ] <<=
+            aTextValueMap[ u"CharHeightAsian"_ustr ] <<=
                 static_cast< float >(
                     ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
         }
-        if( aTextValueMap[ "CharHeightComplex" ] >>= fFontHeight )
+        if( aTextValueMap[ u"CharHeightComplex"_ustr ] >>= fFontHeight )
         {
-            aTextValueMap[ "CharHeightComplex" ] <<=
+            aTextValueMap[ u"CharHeightComplex"_ustr ] <<=
                 static_cast< float >(
                     ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
         }
@@ -812,7 +812,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             if(xLegendProp.is())
             {
                 sal_Int16 nWritingMode=-1;
-                if( xLegendProp->getPropertyValue( "WritingMode" ) >>= nWritingMode )
+                if( xLegendProp->getPropertyValue( u"WritingMode"_ustr ) >>= nWritingMode )
                 {
                     if( nWritingMode == text::WritingMode2::PAGE )
                         nWritingMode = nDefaultWritingMode;
@@ -908,7 +908,7 @@ bool VLegend::isVisible( const rtl::Reference< Legend > & xLegend )
     bool bShow = false;
     try
     {
-        xLegend->getPropertyValue( "Show") >>= bShow;
+        xLegend->getPropertyValue( u"Show"_ustr) >>= bShow;
     }
     catch( const uno::Exception & )
     {
@@ -947,11 +947,11 @@ void VLegend::createShapes(
             bool bCustom = false;
             LegendPosition eLegendPosition = LegendPosition_LINE_END;
             // get Expansion property
-            m_xLegend->getPropertyValue("Expansion") >>= eExpansion;
+            m_xLegend->getPropertyValue(u"Expansion"_ustr) >>= eExpansion;
             if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
             {
                 RelativeSize aRelativeSize;
-                if (m_xLegend->getPropertyValue("RelativeSize") >>= aRelativeSize)
+                if (m_xLegend->getPropertyValue(u"RelativeSize"_ustr) >>= aRelativeSize)
                 {
                     aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
                     aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
@@ -962,7 +962,7 @@ void VLegend::createShapes(
                     eExpansion = css::chart::ChartLegendExpansion_HIGH;
                 }
             }
-            m_xLegend->getPropertyValue("AnchorPosition") >>= eLegendPosition;
+            m_xLegend->getPropertyValue(u"AnchorPosition"_ustr) >>= eLegendPosition;
             lcl_getProperties( m_xLegend, aLineFillProperties, aTextProperties, rPageSize );
 
             // create entries
@@ -1040,7 +1040,7 @@ void VLegend::createShapes(
                     aLineFillProperties.second, ShapeFactory::StackPosition::Bottom);
 
                 //because of this name this border will be used for marking the legend
-                ShapeFactory::setShapeName(xBorder, "MarkHandles");
+                ShapeFactory::setShapeName(xBorder, u"MarkHandles"_ustr);
             }
         }
     }
@@ -1066,13 +1066,13 @@ void VLegend::changePosition(
 
         bool bDefaultLegendSize = rDefaultLegendSize.Width != 0 || rDefaultLegendSize.Height != 0;
         bool bAutoPosition =
-            ! (m_xLegend->getPropertyValue( "RelativePosition") >>= aRelativePosition);
+            ! (m_xLegend->getPropertyValue( u"RelativePosition"_ustr) >>= aRelativePosition);
 
         LegendPosition ePos = LegendPosition_LINE_END;
-        m_xLegend->getPropertyValue( "AnchorPosition") >>= ePos;
+        m_xLegend->getPropertyValue( u"AnchorPosition"_ustr) >>= ePos;
 
         bool bOverlay = false;
-        m_xLegend->getPropertyValue("Overlay") >>= bOverlay;
+        m_xLegend->getPropertyValue(u"Overlay"_ustr) >>= bOverlay;
         //calculate position
         if( bAutoPosition )
         {

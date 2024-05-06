@@ -58,12 +58,12 @@ OUString SAL_CALL BarChartType::getChartType()
 
 uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL BarChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.BarChartType";
+    return u"com.sun.star.comp.chart.BarChartType"_ustr;
 }
 
 sal_Bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
@@ -75,7 +75,7 @@ css::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BAR,
-        "com.sun.star.chart2.ChartType" };
+        u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

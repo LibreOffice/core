@@ -105,13 +105,13 @@ void CandleStickChart::createShapes()
     {
         if( m_xChartTypeModel.is() )
         {
-            m_xChartTypeModel->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
+            m_xChartTypeModel->getPropertyValue( u"ShowFirst"_ustr ) >>= bShowFirst;
 
             uno::Reference< beans::XPropertySet > xWhiteDayProps;
             uno::Reference< beans::XPropertySet > xBlackDayProps;
-            m_xChartTypeModel->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
-            m_xChartTypeModel->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
-            m_xChartTypeModel->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
+            m_xChartTypeModel->getPropertyValue( u"Japanese"_ustr ) >>= bJapaneseStyle;
+            m_xChartTypeModel->getPropertyValue( u"WhiteDay"_ustr ) >>= xWhiteDayProps;
+            m_xChartTypeModel->getPropertyValue( u"BlackDay"_ustr ) >>= xBlackDayProps;
 
             tPropertyNameValueMap aWhiteBox_Map;
             PropertyMapper::getValueMap( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );

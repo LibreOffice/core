@@ -30,8 +30,8 @@ namespace chart
 using namespace ::com::sun::star;
 
 NumberFormatDialog::NumberFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/formatnumberdialog.ui", "FormatNumberDialog")
-    , m_xContent( m_xBuilder->weld_container("content") )
+    : SfxSingleTabDialogController(pParent, &rSet, u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr)
+    , m_xContent( m_xBuilder->weld_container(u"content"_ustr) )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );

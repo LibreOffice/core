@@ -99,21 +99,21 @@ lcl_tRoleIndexMap lcl_createRoleIndexMap()
     lcl_tRoleIndexMap aMap;
     sal_Int32 nIndex = 0;
 
-    aMap[ "label" ] =                 ++nIndex;
-    aMap[ "categories" ] =            ++nIndex;
-    aMap[ "values-x" ] =              ++nIndex;
-    aMap[ "values-y" ] =              ++nIndex;
-    aMap[ "error-bars-x" ] =          ++nIndex;
-    aMap[ "error-bars-x-positive" ] = ++nIndex;
-    aMap[ "error-bars-x-negative" ] = ++nIndex;
-    aMap[ "error-bars-y" ] =          ++nIndex;
-    aMap[ "error-bars-y-positive" ] = ++nIndex;
-    aMap[ "error-bars-y-negative" ] = ++nIndex;
-    aMap[ "values-first" ] =          ++nIndex;
-    aMap[ "values-min" ] =            ++nIndex;
-    aMap[ "values-max" ] =            ++nIndex;
-    aMap[ "values-last" ] =           ++nIndex;
-    aMap[ "values-size" ] =           ++nIndex;
+    aMap[ u"label"_ustr ] =                 ++nIndex;
+    aMap[ u"categories"_ustr ] =            ++nIndex;
+    aMap[ u"values-x"_ustr ] =              ++nIndex;
+    aMap[ u"values-y"_ustr ] =              ++nIndex;
+    aMap[ u"error-bars-x"_ustr ] =          ++nIndex;
+    aMap[ u"error-bars-x-positive"_ustr ] = ++nIndex;
+    aMap[ u"error-bars-x-negative"_ustr ] = ++nIndex;
+    aMap[ u"error-bars-y"_ustr ] =          ++nIndex;
+    aMap[ u"error-bars-y-positive"_ustr ] = ++nIndex;
+    aMap[ u"error-bars-y-negative"_ustr ] = ++nIndex;
+    aMap[ u"values-first"_ustr ] =          ++nIndex;
+    aMap[ u"values-min"_ustr ] =            ++nIndex;
+    aMap[ u"values-max"_ustr ] =            ++nIndex;
+    aMap[ u"values-last"_ustr ] =           ++nIndex;
+    aMap[ u"values-size"_ustr ] =           ++nIndex;
 
     return aMap;
 }
@@ -142,7 +142,7 @@ struct lcl_RolesWithRangeAppend
                 {
                     OUString aRole;
                     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-                    if( xProp->getPropertyValue( "Role" ) >>= aRole )
+                    if( xProp->getPropertyValue( u"Role"_ustr ) >>= aRole )
                     {
                         m_rDestCnt->emplace(aRole, xSeq->getSourceRangeRepresentation());
                         // label
@@ -199,7 +199,7 @@ void lcl_SetSequenceRole(
 {
     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
     if( xProp.is())
-        xProp->setPropertyValue( "Role" , uno::Any( rRole ));
+        xProp->setPropertyValue( u"Role"_ustr , uno::Any( rRole ));
 }
 
 Sequence< OUString > lcl_CopyExcludingValuesFirst(
@@ -240,7 +240,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         // without setting it as hard attribute
         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
         if( xColorScheme.is())
-            xResult->setPropertyValue( "Color" , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
+            xResult->setPropertyValue( u"Color"_ustr , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
         std::size_t nGroupIndex=0;
         if( xChartType.is())
         {
@@ -273,7 +273,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
                 if( xInterpreter.is())
                 {
                     sal_Int32 nStockVariant;
-                    if( xInterpreter->getChartTypeSpecificData("stock variant") >>= nStockVariant )
+                    if( xInterpreter->getChartTypeSpecificData(u"stock variant"_ustr) >>= nStockVariant )
                     {
                         if( nStockVariant == 0 || nStockVariant == 2) {
                             //delete "values-first" role
@@ -799,7 +799,7 @@ void DialogModel::applyInterpretedData(
                         // without setting it as hard attribute
                         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                         if( xColorScheme.is())
-                            aSeries[nSeries]->setPropertyValue( "Color" ,
+                            aSeries[nSeries]->setPropertyValue( u"Color"_ustr ,
                                 uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                     }
                     m_xTemplate->applyStyle2( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );

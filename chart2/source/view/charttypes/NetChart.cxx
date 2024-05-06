@@ -158,7 +158,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
-        ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
+        ::chart::ShapeFactory::setShapeName(xShape, u"MarkHandles"_ustr);
     }
     return true;
 }
@@ -229,7 +229,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking
-    ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
+    ::chart::ShapeFactory::setShapeName(xShape, u"MarkHandles"_ustr);
     return true;
 }
 

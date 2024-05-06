@@ -529,7 +529,7 @@ void DataPointProperties::AddDefaultsToMap(
             ));
 
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, OUString(" ") );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, u" "_ustr );
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, drawing::LineStyle_NONE);
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_STYLE);

@@ -33,12 +33,12 @@ namespace chart
 
 ShapeFontDialog::ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
     const ViewElementListProvider* pViewElementListProvider)
-    : SfxTabDialogController(pParent, "modules/schart/ui/chardialog.ui", "CharDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/schart/ui/chardialog.ui"_ustr, u"CharDialog"_ustr, pAttr)
     , m_pViewElementListProvider(pViewElementListProvider)
 {
-    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage("position", RID_SVXPAGE_CHAR_POSITION );
+    AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
+    AddTabPage(u"fonteffects"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage(u"position"_ustr, RID_SVXPAGE_CHAR_POSITION );
 }
 
 void ShapeFontDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)

@@ -58,16 +58,16 @@ namespace
         []()
         {
             std::vector< css::beans::Property > aProperties {
-                { "UseRings",
+                { u"UseRings"_ustr,
                   ::chart::PROP_PIECHARTTYPE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
-                { "3DRelativeHeight",
+                { u"3DRelativeHeight"_ustr,
                   ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID },
-                { "SubPieType",
+                { u"SubPieType"_ustr,
                   ::chart::PROP_PIECHARTTYPE_SUBTYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT }
@@ -158,7 +158,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
 
 uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -186,7 +186,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetI
 
 OUString SAL_CALL PieChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.PieChartType";
+    return u"com.sun.star.comp.chart.PieChartType"_ustr;
 }
 
 sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
@@ -198,8 +198,8 @@ css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_PIE,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

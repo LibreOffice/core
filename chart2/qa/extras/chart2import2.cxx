@@ -23,7 +23,7 @@ class Chart2ImportTest2 : public ChartTest
 {
 public:
     Chart2ImportTest2()
-        : ChartTest("/chart2/qa/extras/data/")
+        : ChartTest(u"/chart2/qa/extras/data/"_ustr)
     {
     }
 };
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf124243)
     Reference<beans::XPropertySet> xPS(xAxis, uno::UNO_QUERY_THROW);
     bool bShow = true;
     // test X Axis is not visible.
-    bool bSuccess = xPS->getPropertyValue("Show") >>= bShow;
+    bool bSuccess = xPS->getPropertyValue(u"Show"_ustr) >>= bShow;
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(!bShow);
 }
@@ -169,7 +169,7 @@ void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries,
     uno::Reference<beans::XPropertySet> xPropertySet(
         xDataSeries->getDataPointByIndex(nDataPointIndex), uno::UNO_SET_THROW);
     chart2::DataPointLabel aLabel;
-    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(bValueVisible, static_cast<bool>(aLabel.ShowNumber));
     CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aLabel.ShowNumberInPercent));
 }
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointInheritedColorDOCX)
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0),
                                                      uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
-    sal_Int32 nColor = xPropertySet->getPropertyValue("FillColor").get<sal_Int32>();
+    sal_Int32 nColor = xPropertySet->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), nColor);
 }
 
@@ -217,8 +217,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     css::uno::Sequence<css::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), aValues[0].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), aValues[1].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, aValues[0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"test2"_ustr, aValues[1].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testSourceNumberFormatComplexCategoriesXLS)
@@ -281,14 +281,14 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testMultilevelCategoryAxis)
     // Get the complex category labels.
     Sequence<Sequence<OUString>> aCategories = xDescAccess->getComplexRowDescriptions();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("2011"), aCategories[0][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), aCategories[1][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("2012"), aCategories[2][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), aCategories[3][0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 1"), aCategories[0][1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 2"), aCategories[1][1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 3"), aCategories[2][1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 4"), aCategories[3][1]);
+    CPPUNIT_ASSERT_EQUAL(u"2011"_ustr, aCategories[0][0]);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aCategories[1][0]);
+    CPPUNIT_ASSERT_EQUAL(u"2012"_ustr, aCategories[2][0]);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aCategories[3][0]);
+    CPPUNIT_ASSERT_EQUAL(u"Categoria 1"_ustr, aCategories[0][1]);
+    CPPUNIT_ASSERT_EQUAL(u"Categoria 2"_ustr, aCategories[1][1]);
+    CPPUNIT_ASSERT_EQUAL(u"Categoria 3"_ustr, aCategories[2][1]);
+    CPPUNIT_ASSERT_EQUAL(u"Categoria 4"_ustr, aCategories[3][1]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testXaxisValues)
@@ -322,8 +322,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123504)
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-    Reference<drawing::XShape> xSeriesSlices(getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=0"),
-                                             UNO_SET_THROW);
+    Reference<drawing::XShape> xSeriesSlices(
+        getShapeByName(xShapes, u"CID/D=0:CS=0:CT=0:Series=0"_ustr), UNO_SET_THROW);
 
     Reference<container::XIndexAccess> xIndexAccess(xSeriesSlices, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -347,8 +347,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf122765)
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-    Reference<drawing::XShape> xSeriesSlices(getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=0"),
-                                             UNO_SET_THROW);
+    Reference<drawing::XShape> xSeriesSlices(
+        getShapeByName(xShapes, u"CID/D=0:CS=0:CT=0:Series=0"_ustr), UNO_SET_THROW);
 
     Reference<container::XIndexAccess> xIndexAccess(xSeriesSlices, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xIndexAccess->getCount());
@@ -374,9 +374,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123206CustomLabelField)
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xDp = xDataSeries->getDataPointByIndex(1);
     Sequence<Reference<chart2::XDataPointCustomLabelField>> aLabelFields;
-    CPPUNIT_ASSERT(xDp->getPropertyValue("CustomLabelFields") >>= aLabelFields);
+    CPPUNIT_ASSERT(xDp->getPropertyValue(u"CustomLabelFields"_ustr) >>= aLabelFields);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aLabelFields.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("Kiskacsa"), aLabelFields[0]->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Kiskacsa"_ustr, aLabelFields[0]->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf125444PercentageCustomLabel)
@@ -391,7 +391,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf125444PercentageCustomLabel)
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xDp = xDataSeries->getDataPointByIndex(1);
     Sequence<Reference<chart2::XDataPointCustomLabelField>> aLabelFields;
-    CPPUNIT_ASSERT(xDp->getPropertyValue("CustomLabelFields") >>= aLabelFields);
+    CPPUNIT_ASSERT(xDp->getPropertyValue(u"CustomLabelFields"_ustr) >>= aLabelFields);
     // There are three label field: a value label, a newline and a percentage label. We want
     // to assert the latter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aLabelFields.getLength());
@@ -413,12 +413,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointLabelCustomPos)
     CPPUNIT_ASSERT(xPropertySet.is());
 
     chart2::RelativePosition aCustomLabelPosition;
-    xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
+    xPropertySet->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.14621409921671025, aCustomLabelPosition.Primary, 1e-7);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-5.2887961029923464E-2, aCustomLabelPosition.Secondary, 1e-7);
 
     sal_Int32 aPlacement;
-    xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
+    xPropertySet->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, aPlacement);
 }
 
@@ -436,12 +436,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130032)
     CPPUNIT_ASSERT(xPropertySet.is());
 
     chart2::RelativePosition aCustomLabelPosition;
-    xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
+    xPropertySet->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0438333333333334, aCustomLabelPosition.Primary, 1e-7);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.086794050743657, aCustomLabelPosition.Secondary, 1e-7);
 
     sal_Int32 aPlacement;
-    xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
+    xPropertySet->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::RIGHT, aPlacement);
 }
 
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134978)
     CPPUNIT_ASSERT(xPropertySet.is());
 
     chart2::RelativePosition aCustomLabelPosition;
-    xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
+    xPropertySet->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.040273622047244093, aCustomLabelPosition.Primary, 1e-7);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.25635352872557599, aCustomLabelPosition.Secondary, 1e-7);
 }
@@ -507,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
     Reference<drawing::XShape> xDataPointLabel(
         getShapeByName(xShapes,
-                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=2"),
+                       u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=2"_ustr),
         UNO_SET_THROW);
 
     CPPUNIT_ASSERT(xDataPointLabel.is());
@@ -528,13 +528,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134225)
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
     Reference<drawing::XShape> xDataPointLabel1(
         getShapeByName(xShapes,
-                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+                       u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"_ustr),
         UNO_SET_THROW);
     CPPUNIT_ASSERT(xDataPointLabel1.is());
 
     Reference<drawing::XShape> xDataPointLabel2(
         getShapeByName(xShapes,
-                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1"),
+                       u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1"_ustr),
         UNO_SET_THROW);
     CPPUNIT_ASSERT(xDataPointLabel2.is());
 
@@ -566,8 +566,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136105)
         Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
         Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
         Reference<drawing::XShape> xDataPointLabel(
-            getShapeByName(xShapes,
-                           "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+            getShapeByName(
+                xShapes, u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"_ustr),
             UNO_SET_THROW);
 
         CPPUNIT_ASSERT(xDataPointLabel.is());
@@ -585,8 +585,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136105)
         Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
         Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
         Reference<drawing::XShape> xDataPointLabel(
-            getShapeByName(xShapes,
-                           "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+            getShapeByName(
+                xShapes, u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"_ustr),
             UNO_SET_THROW);
 
         CPPUNIT_ASSERT(xDataPointLabel.is());
@@ -612,10 +612,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf91250)
     // Get the category labels.
     Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("12.3254"), aCategories[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("11.62315"), aCategories[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("9.26"), aCategories[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("8.657"), aCategories[3]);
+    CPPUNIT_ASSERT_EQUAL(u"12.3254"_ustr, aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(u"11.62315"_ustr, aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(u"9.26"_ustr, aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(u"8.657"_ustr, aCategories[3]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134111)
@@ -630,7 +630,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134111)
     CPPUNIT_ASSERT(xAxisXSupp.is());
     uno::Reference<beans::XPropertySet> xAxisProp(xAxisXSupp->getXAxis());
     bool bTextBreak = false;
-    xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
+    xAxisProp->getPropertyValue(u"TextBreak"_ustr) >>= bTextBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(bTextBreak);
 }
@@ -646,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136752)
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
     Reference<drawing::XShape> xDataPointLabel(
         getShapeByName(xShapes,
-                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+                       u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"_ustr),
         UNO_SET_THROW);
 
     CPPUNIT_ASSERT(xDataPointLabel.is());
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137505)
     Reference<text::XTextCursor> xAt = xRange->createTextCursor();
     Reference<beans::XPropertySet> xProps(xAt, UNO_QUERY);
     // check the text size of custom shape, inside the chart.
-    CPPUNIT_ASSERT(xProps->getPropertyValue("CharHeight") >>= nFontSize);
+    CPPUNIT_ASSERT(xProps->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize);
     CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
 }
 
@@ -685,7 +685,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = true;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xTitlePropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny2 = xTitlePropSet->getPropertyValue("TextRotation");
+    uno::Any aAny2 = xTitlePropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = -1;
     CPPUNIT_ASSERT(aAny2 >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(0.0, nRotation);
@@ -712,8 +712,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137874)
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
     Reference<drawing::XShape> xLegendEntry;
-    xLegendEntry
-        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
+    xLegendEntry = getShapeByName(
+        xShapes, u"CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0"_ustr);
     CPPUNIT_ASSERT(xLegendEntry.is());
 }
 
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf121281)
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
     Reference<drawing::XShape> xDataPointLabel(
         getShapeByName(xShapes,
-                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+                       u"CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"_ustr),
         UNO_SET_THROW);
 
     CPPUNIT_ASSERT(xDataPointLabel.is());
@@ -806,9 +806,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf139658)
     // Get the category labels.
     Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aCategories.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("category1"), aCategories[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("\"category2\""), aCategories[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("category\"3"), aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(u"category1"_ustr, aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(u"\"category2\""_ustr, aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(u"category\"3"_ustr, aCategories[2]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
     CPPUNIT_ASSERT(xShapes.is());
 
     uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(
-        xShapes, "CID/D=0:CS=0:Axis=1,0", // Y Axis
+        xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr, // Y Axis
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool {
             uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
@@ -840,21 +840,21 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
 
     // Check text
     uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), xLabel0->getString());
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xLabel0->getString());
     uno::Reference<text::XTextRange> xLabel1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), xLabel1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, xLabel1->getString());
     uno::Reference<text::XTextRange> xLabel2(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("10"), xLabel2->getString());
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, xLabel2->getString());
     uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("15"), xLabel3->getString());
+    CPPUNIT_ASSERT_EQUAL(u"15"_ustr, xLabel3->getString());
     uno::Reference<text::XTextRange> xLabel4(xIndexAccess->getByIndex(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("20"), xLabel4->getString());
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr, xLabel4->getString());
     uno::Reference<text::XTextRange> xLabel5(xIndexAccess->getByIndex(5), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("25"), xLabel5->getString());
+    CPPUNIT_ASSERT_EQUAL(u"25"_ustr, xLabel5->getString());
     uno::Reference<text::XTextRange> xLabel6(xIndexAccess->getByIndex(6), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("30"), xLabel6->getString());
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, xLabel6->getString());
     uno::Reference<text::XTextRange> xLabel7(xIndexAccess->getByIndex(7), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("35"), xLabel7->getString());
+    CPPUNIT_ASSERT_EQUAL(u"35"_ustr, xLabel7->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf150434)
@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf150434)
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-    Reference<drawing::XShape> xLegend = getShapeByName(xShapes, "CID/D=0:Legend=");
+    Reference<drawing::XShape> xLegend = getShapeByName(xShapes, u"CID/D=0:Legend="_ustr);
     CPPUNIT_ASSERT(xLegend.is());
     awt::Point aPosition = xLegend->getPosition();
 
@@ -883,7 +883,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testChartDataTableWithMultipleLegendEntr
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-    Reference<drawing::XShape> xDataTableShape = getShapeByName(xShapes, "CID/D=0:DataTable=");
+    Reference<drawing::XShape> xDataTableShape
+        = getShapeByName(xShapes, u"CID/D=0:DataTable="_ustr);
     CPPUNIT_ASSERT(xDataTableShape.is());
 }
 

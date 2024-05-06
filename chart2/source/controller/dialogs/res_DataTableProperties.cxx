@@ -17,10 +17,10 @@ using namespace css;
 namespace chart
 {
 DataTablePropertiesResources::DataTablePropertiesResources(weld::Builder& rBuilder)
-    : m_xCbHorizontalBorder(rBuilder.weld_check_button("horizontalBorderCB"))
-    , m_xCbVerticalBorder(rBuilder.weld_check_button("verticalBorderCB"))
-    , m_xCbOutilne(rBuilder.weld_check_button("outlineCB"))
-    , m_xCbKeys(rBuilder.weld_check_button("keysCB"))
+    : m_xCbHorizontalBorder(rBuilder.weld_check_button(u"horizontalBorderCB"_ustr))
+    , m_xCbVerticalBorder(rBuilder.weld_check_button(u"verticalBorderCB"_ustr))
+    , m_xCbOutilne(rBuilder.weld_check_button(u"outlineCB"_ustr))
+    , m_xCbKeys(rBuilder.weld_check_button(u"keysCB"_ustr))
 {
 }
 

@@ -178,19 +178,19 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
         {
             uno::Reference<beans::XPropertySet> xProperties(xDataTable, uno::UNO_QUERY);
 
-            uno::Any aAny = xProperties->getPropertyValue("HBorder");
+            uno::Any aAny = xProperties->getPropertyValue(u"HBorder"_ustr);
             if (aAny.has<bool>())
                 aData.mbHorizontalBorders = aAny.get<bool>();
 
-            aAny = xProperties->getPropertyValue("VBorder");
+            aAny = xProperties->getPropertyValue(u"VBorder"_ustr);
             if (aAny.has<bool>())
                 aData.mbVerticalBorders = aAny.get<bool>();
 
-            aAny = xProperties->getPropertyValue("Outline");
+            aAny = xProperties->getPropertyValue(u"Outline"_ustr);
             if (aAny.has<bool>())
                 aData.mbOutline = aAny.get<bool>();
 
-            aAny = xProperties->getPropertyValue("Keys");
+            aAny = xProperties->getPropertyValue(u"Keys"_ustr);
             if (aAny.has<bool>())
                 aData.mbKeys = aAny.get<bool>();
         }
@@ -224,10 +224,10 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
         if (rDialogData.mbShow && xDataTable.is())
         {
             uno::Reference<beans::XPropertySet> xProperties(xDataTable, uno::UNO_QUERY);
-            xProperties->setPropertyValue("HBorder" , uno::Any(rDialogData.mbHorizontalBorders));
-            xProperties->setPropertyValue("VBorder" , uno::Any(rDialogData.mbVerticalBorders));
-            xProperties->setPropertyValue("Outline" , uno::Any(rDialogData.mbOutline));
-            xProperties->setPropertyValue("Keys" , uno::Any(rDialogData.mbKeys));
+            xProperties->setPropertyValue(u"HBorder"_ustr , uno::Any(rDialogData.mbHorizontalBorders));
+            xProperties->setPropertyValue(u"VBorder"_ustr , uno::Any(rDialogData.mbVerticalBorders));
+            xProperties->setPropertyValue(u"Outline"_ustr , uno::Any(rDialogData.mbOutline));
+            xProperties->setPropertyValue(u"Keys"_ustr , uno::Any(rDialogData.mbKeys));
             bChanged = true;
         }
 
@@ -644,10 +644,10 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
-        xEqProp->setPropertyValue( "ShowEquation", uno::Any( true ));
-        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
-        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bInsertR2 ));
+        xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( true ));
+        xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
+        xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x)"_ustr ));
+        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( bInsertR2 ));
         aUndoGuard.commit();
     }
 }
@@ -662,7 +662,7 @@ void ChartController::executeDispatch_InsertR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
-        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( true ));
+        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( true ));
         aUndoGuard.commit();
     }
 }
@@ -677,7 +677,7 @@ void ChartController::executeDispatch_DeleteR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
-        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
+        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
         aUndoGuard.commit();
     }
 }

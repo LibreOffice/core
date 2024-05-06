@@ -75,13 +75,13 @@ void UndoCommandDispatch::fireStatusEvent(
     aRedoStrings <<= m_xUndoManager->getAllRedoActionTitles();
 
     if( bFireAll || rURL == ".uno:Undo" )
-        fireStatusEventForURL( ".uno:Undo", aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );
+        fireStatusEventForURL( u".uno:Undo"_ustr, aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );
     if( bFireAll || rURL == ".uno:Redo" )
-        fireStatusEventForURL( ".uno:Redo", aRedoState, m_xUndoManager->isRedoPossible(), xSingleListener );
+        fireStatusEventForURL( u".uno:Redo"_ustr, aRedoState, m_xUndoManager->isRedoPossible(), xSingleListener );
     if( bFireAll || rURL == ".uno:GetUndoStrings" )
-        fireStatusEventForURL( ".uno:GetUndoStrings", aUndoStrings, true, xSingleListener );
+        fireStatusEventForURL( u".uno:GetUndoStrings"_ustr, aUndoStrings, true, xSingleListener );
     if( bFireAll || rURL == ".uno:GetRedoStrings" )
-        fireStatusEventForURL( ".uno:GetRedoStrings", aRedoStrings, true, xSingleListener );
+        fireStatusEventForURL( u".uno:GetRedoStrings"_ustr, aRedoStrings, true, xSingleListener );
 }
 
 // ____ XDispatch ____

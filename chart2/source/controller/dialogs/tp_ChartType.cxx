@@ -41,7 +41,7 @@ using namespace ::com::sun::star::chart2;
 
 ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, rtl::Reference<::chart::ChartModel> xChartModel,
                                    bool bShowDescription)
-    : OWizardPage(pPage, pController, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType")
+    : OWizardPage(pPage, pController, u"modules/schart/ui/tp_ChartType.ui"_ustr, u"tp_ChartType"_ustr)
     , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(m_xBuilder.get()) )
     , m_pStackingResourceGroup( new StackingResourceGroup(m_xBuilder.get()) )
     , m_pSplineResourceGroup( new SplineResourceGroup(m_xBuilder.get(), pController->getDialog()) )
@@ -52,10 +52,10 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     , m_pCurrentMainType(nullptr)
     , m_nChangingCalls(0)
     , m_aTimerTriggeredControllerLock( m_xChartModel )
-    , m_xFT_ChooseType(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
-    , m_xMainTypeList(m_xBuilder->weld_tree_view("charttype"))
-    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window("subtypewin", true)))
-    , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, "subtype", *m_xSubTypeList))
+    , m_xFT_ChooseType(m_xBuilder->weld_label(u"FT_CAPTION_FOR_WIZARD"_ustr))
+    , m_xMainTypeList(m_xBuilder->weld_tree_view(u"charttype"_ustr))
+    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window(u"subtypewin"_ustr, true)))
+    , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, u"subtype"_ustr, *m_xSubTypeList))
 {
     Size aSize(m_xSubTypeList->GetDrawingArea()->get_ref_device().LogicToPixel(Size(150, 50), MapMode(MapUnit::MapAppFont)));
     m_xSubTypeListWin->set_size_request(aSize.Width(), aSize.Height());
@@ -85,7 +85,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     {
         try
         {
-            xProps->getPropertyValue("EnableComplexChartTypes") >>= bEnableComplexChartTypes;
+            xProps->getPropertyValue(u"EnableComplexChartTypes"_ustr) >>= bEnableComplexChartTypes;
         }
         catch( const uno::Exception& )
         {
@@ -114,7 +114,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {
-        m_xMainTypeList->append("", elem->getName(), elem->getImage());
+        m_xMainTypeList->append(u""_ustr, elem->getName(), elem->getImage());
         elem->setChangeListener( this );
     }
 

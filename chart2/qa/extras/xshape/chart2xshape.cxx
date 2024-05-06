@@ -22,7 +22,7 @@ class Chart2XShapeTest : public ChartTest
 {
 public:
     Chart2XShapeTest()
-        : ChartTest("/chart2/qa/extras/xshape/data/")
+        : ChartTest(u"/chart2/qa/extras/xshape/data/"_ustr)
     {
     }
 
@@ -65,7 +65,8 @@ namespace
 {
 OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
 {
-    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump("shapes");
+    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)
+        ->dump(u"shapes"_ustr);
 }
 
 bool checkDumpAgainstFile(std::u16string_view rDump, std::u16string_view aFilePath,

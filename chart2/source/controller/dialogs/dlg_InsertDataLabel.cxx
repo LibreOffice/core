@@ -24,7 +24,7 @@ namespace chart
 {
 
 DataLabelsDialog::DataLabelsDialog(weld::Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter)
-    : GenericDialogController(pWindow, "modules/schart/ui/dlg_DataLabel.ui", "dlg_DataLabels")
+    : GenericDialogController(pWindow, u"modules/schart/ui/dlg_DataLabel.ui"_ustr, u"dlg_DataLabels"_ustr)
     , m_apDataLabelResources(new DataLabelResources(m_xBuilder.get(), pWindow, rInAttrs))
 {
     m_apDataLabelResources->SetNumberFormatter( pFormatter );

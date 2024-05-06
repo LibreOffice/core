@@ -185,7 +185,7 @@ rtl::Reference< Title > TitleHelper::createOrShowTitle(
     rtl::Reference< Title > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
     if( xTitled.is())
     {
-        xTitled->setPropertyValue("Visible",css::uno::Any(true));
+        xTitled->setPropertyValue(u"Visible"_ustr,css::uno::Any(true));
         return xTitled;
     }
     else
@@ -221,7 +221,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
         }
         if( xAxis.is() )
         {
-            xAxis->setPropertyValue( "Show", uno::Any( false ) );
+            xAxis->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }
@@ -279,7 +279,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
                     || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
                     || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                 {
-                    xTitle->setPropertyValue( "TextRotation", uno::Any( 90.0 ));
+                    xTitle->setPropertyValue( u"TextRotation"_ustr, uno::Any( 90.0 ));
                 }
             }
             catch( const uno::Exception & )
@@ -334,7 +334,7 @@ void TitleHelper::setFormattedString( const rtl::Reference< Title >& xTitle,
         return;
 
     bool bStacked = false;
-    xTitle->getPropertyValue("StackCharacters") >>= bStacked;
+    xTitle->getPropertyValue(u"StackCharacters"_ustr) >>= bStacked;
 
     if (bStacked)
     {
@@ -358,7 +358,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 
     bool bStacked = false;
     if( xTitle.is() )
-        xTitle->getPropertyValue( "StackCharacters" ) >>= bStacked;
+        xTitle->getPropertyValue( u"StackCharacters"_ustr ) >>= bStacked;
 
     OUString aNewText = rNewText;
     if( bStacked )
@@ -399,9 +399,9 @@ void TitleHelper::setCompleteString( const OUString& rNewText
             try
             {
                 uno::Any aFontSize( *pDefaultCharHeight );
-                xFormattedString->setPropertyValue( "CharHeight", aFontSize );
-                xFormattedString->setPropertyValue( "CharHeightAsian", aFontSize );
-                xFormattedString->setPropertyValue( "CharHeightComplex", aFontSize );
+                xFormattedString->setPropertyValue( u"CharHeight"_ustr, aFontSize );
+                xFormattedString->setPropertyValue( u"CharHeightAsian"_ustr, aFontSize );
+                xFormattedString->setPropertyValue( u"CharHeightComplex"_ustr, aFontSize );
             }
             catch( const uno::Exception & )
             {
@@ -450,7 +450,7 @@ void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
     if( xTitled.is())
     {
         css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::Any(false));
+        xProps->setPropertyValue(u"Visible"_ustr,css::uno::Any(false));
     }
 }
 

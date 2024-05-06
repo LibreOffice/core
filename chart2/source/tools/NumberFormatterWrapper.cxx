@@ -53,7 +53,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
 
 {
     uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
-    OUString sNullDate( "NullDate" );
+    OUString sNullDate( u"NullDate"_ustr );
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
         m_aNullDate = xProp->getPropertyValue(sNullDate);
     SvNumberFormatsSupplierObj* pSupplierObj = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( xSupplier );

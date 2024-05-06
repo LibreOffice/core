@@ -258,7 +258,7 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
                          , bool bLimitedHeight)
 {
     return PropertyMapper::getValuePointer( rPropValues, rPropNames
-        , bLimitedHeight ? OUString("TextMaximumFrameHeight") : OUString("TextMaximumFrameWidth") );
+        , bLimitedHeight ? u"TextMaximumFrameHeight"_ustr : u"TextMaximumFrameWidth"_ustr );
 }
 
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
@@ -552,7 +552,7 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.
-    aValueMap["LineJoint"] <<= drawing::LineJoint_ROUND;
+    aValueMap[u"LineJoint"_ustr] <<= drawing::LineJoint_ROUND;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }

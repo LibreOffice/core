@@ -74,8 +74,8 @@ void lcl_getChildOIDs(
             Reference< beans::XPropertySetInfo > xInfo( xShapeProp->getPropertySetInfo());
             OUString aName;
             if( xInfo.is() &&
-                xInfo->hasPropertyByName( "Name") &&
-                (xShapeProp->getPropertyValue( "Name") >>= aName ) &&
+                xInfo->hasPropertyByName( u"Name"_ustr) &&
+                (xShapeProp->getPropertyValue( u"Name"_ustr) >>= aName ) &&
                 !aName.isEmpty() &&
                 ::chart::ObjectIdentifier::isCID( aName ))
             {
@@ -369,7 +369,7 @@ void ObjectHierarchy::createDataSeriesTree(
                             xErrorBarProp.is())
                         {
                             sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
-                            if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+                            if( ( xErrorBarProp->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle ) &&
                                 ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                             {
                                 aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
@@ -381,7 +381,7 @@ void ObjectHierarchy::createDataSeriesTree(
                             xErrorBarProp.is())
                         {
                             sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
-                            if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+                            if( ( xErrorBarProp->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle ) &&
                                 ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                             {
                                 aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
@@ -531,7 +531,7 @@ ObjectHierarchy::~ObjectHierarchy()
 
 ObjectIdentifier ObjectHierarchy::getRootNodeOID()
 {
-    return ObjectIdentifier( "ROOT" );
+    return ObjectIdentifier( u"ROOT"_ustr );
 }
 
 bool ObjectHierarchy::isRootNode( const ObjectIdentifier& rOID )

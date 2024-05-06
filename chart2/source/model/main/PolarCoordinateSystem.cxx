@@ -72,7 +72,7 @@ uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem::getImplementationName()
 {
-    return "com.sun.star.comp.chart.PolarCoordinateSystem";
+    return u"com.sun.star.comp.chart.PolarCoordinateSystem"_ustr;
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
@@ -97,7 +97,7 @@ PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.PolarCoordinateSystem2d" ;
+    return u"com.sun.star.comp.chart2.PolarCoordinateSystem2d"_ustr ;
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
@@ -109,7 +109,7 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedSer
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
-        "com.sun.star.chart2.PolarCoordinateSystem2d" };
+        u"com.sun.star.chart2.PolarCoordinateSystem2d"_ustr };
 }
 
 // ==== PolarCoordinateSystem3d ====
@@ -124,7 +124,7 @@ PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.PolarCoordinateSystem3d";
+    return u"com.sun.star.comp.chart2.PolarCoordinateSystem3d"_ustr;
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
@@ -136,7 +136,7 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedSer
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
-        "com.sun.star.chart2.PolarCoordinateSystem3d" };
+        u"com.sun.star.chart2.PolarCoordinateSystem3d"_ustr };
 }
 
 }  // namespace chart

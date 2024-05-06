@@ -191,9 +191,9 @@ void ChartController::executeDispatch_NewArrangement()
             ControllerLockGuardUNO aCtlLockGuard( xModel );
 
             // diagram
-            xDiagram->setPropertyToDefault( "RelativeSize");
-            xDiagram->setPropertyToDefault( "RelativePosition");
-            xDiagram->setPropertyToDefault( "PosSizeExcludeAxes");
+            xDiagram->setPropertyToDefault( u"RelativeSize"_ustr);
+            xDiagram->setPropertyToDefault( u"RelativePosition"_ustr);
+            xDiagram->setPropertyToDefault( u"PosSizeExcludeAxes"_ustr);
 
             // 3d rotation
             xDiagram->set3DSettingsToDefault();
@@ -202,9 +202,9 @@ void ChartController::executeDispatch_NewArrangement()
             rtl::Reference< Legend > xLegend = xDiagram->getLegend2();
             if( xLegend.is())
             {
-                xLegend->setPropertyToDefault( "RelativePosition");
-                xLegend->setPropertyToDefault( "RelativeSize");
-                xLegend->setPropertyToDefault( "AnchorPosition");
+                xLegend->setPropertyToDefault( u"RelativePosition"_ustr);
+                xLegend->setPropertyToDefault( u"RelativeSize"_ustr);
+                xLegend->setPropertyToDefault( u"AnchorPosition"_ustr);
             }
 
             // titles
@@ -216,7 +216,7 @@ void ChartController::executeDispatch_NewArrangement()
                     TitleHelper::getTitle(
                         static_cast< TitleHelper::eTitleType >( eType ), xModel );
                 if( xTitleState.is())
-                    xTitleState->setPropertyToDefault( "RelativePosition");
+                    xTitleState->setPropertyToDefault( u"RelativePosition"_ustr);
             }
 
             // regression curve equations
@@ -356,13 +356,13 @@ void ChartController::impl_PasteGraphic(
         m_aSelection.setSelection( xGraphicShape );
         m_aSelection.applySelection( m_pDrawViewWrapper.get() );
     }
-    xGraphicShape->SvxShape::setPropertyValue( "Graphic", uno::Any( xGraphic ));
+    xGraphicShape->SvxShape::setPropertyValue( u"Graphic"_ustr, uno::Any( xGraphic ));
 
     awt::Size aGraphicSize( 1000, 1000 );
     bool bGotGraphicSize = false;
     try
     {
-        bGotGraphicSize = xGraphicShape->SvxShape::getPropertyValue( "Size100thMM") >>= aGraphicSize;
+        bGotGraphicSize = xGraphicShape->SvxShape::getPropertyValue( u"Size100thMM"_ustr) >>= aGraphicSize;
     }
     catch (css::beans::UnknownPropertyException& )
     {}
@@ -373,7 +373,7 @@ void ChartController::impl_PasteGraphic(
         bool bGotSizePixel = false;
         try
         {
-            bGotSizePixel = xGraphicShape->SvxShape::getPropertyValue( "SizePixel") >>= aGraphicSize;
+            bGotSizePixel = xGraphicShape->SvxShape::getPropertyValue( u"SizePixel"_ustr) >>= aGraphicSize;
         }
         catch (css::beans::UnknownPropertyException& )
         {}
@@ -466,14 +466,14 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
         xTextShape->setString( rString );
 
         float fCharHeight = 10.0;
-        xTextShape->SvxShape::setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
-        xTextShape->SvxShape::setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
-        xTextShape->SvxShape::setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
-        xTextShape->SvxShape::setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
-        xTextShape->SvxShape::setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowWidth"_ustr, uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeight"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightAsian"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightComplex"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextVerticalAdjust"_ustr, uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextHorizontalAdjust"_ustr, uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharFontName"_ustr, uno::Any( u"Albany"_ustr ) );
 
         xTextShape->setPosition( rPosition );
 
@@ -639,7 +639,7 @@ bool ChartController::executeDispatch_Delete()
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
                             m_xUndoManager );
-                        xLegend->setPropertyValue( "Show", uno::Any( false ));
+                        xLegend->setPropertyValue( u"Show"_ustr, uno::Any( false ));
                         bReturn = true;
                         aUndoGuard.commit();
                     }
@@ -712,10 +712,10 @@ bool ChartController::executeDispatch_Delete()
                         m_xUndoManager );
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
-                        xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
-                        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-                        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
-                        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
+                        xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( false ));
+                        xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
+                        xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x)"_ustr ));
+                        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -748,7 +748,7 @@ bool ChartController::executeDispatch_Delete()
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(
-                            "ErrorBarStyle",
+                            u"ErrorBarStyle"_ustr,
                             uno::Any( css::chart::ErrorBarStyle::NONE ));
                     }
                     bReturn = true;
@@ -846,9 +846,9 @@ void ChartController::executeDispatch_ToggleLegend()
         try
         {
             bool bShow = false;
-            if( xLegendProp->getPropertyValue( "Show") >>= bShow )
+            if( xLegendProp->getPropertyValue( u"Show"_ustr) >>= bShow )
             {
-                xLegendProp->setPropertyValue( "Show", uno::Any( ! bShow ));
+                xLegendProp->setPropertyValue( u"Show"_ustr, uno::Any( ! bShow ));
                 bChanged = true;
             }
         }
@@ -945,7 +945,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
             Reference< beans::XPropertySet > xPointProperties(
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
-                xPointProperties->setPropertyValue( "FillColor", uno::Any( nColor ) );
+                xPointProperties->setPropertyValue( u"FillColor"_ustr, uno::Any( nColor ) );
         }
     }
     catch( const uno::Exception& )
@@ -980,7 +980,7 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
                                         xChartModel,
                                         aPrefferedName);
 
-                xPropSet->setPropertyValue("FillGradientName", css::uno::Any(aNewName));
+                xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
             }
         }
     }
@@ -1011,7 +1011,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineColor", css::uno::Any( Color(ColorTransparency, nColor) ) );
+                xPropSet->setPropertyValue( u"LineColor"_ustr, css::uno::Any( Color(ColorTransparency, nColor) ) );
         }
     }
     catch( const uno::Exception& )
@@ -1041,7 +1041,7 @@ void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineWidth", css::uno::Any( nWidth ) );
+                xPropSet->setPropertyValue( u"LineWidth"_ustr, css::uno::Any( nWidth ) );
         }
     }
     catch( const uno::Exception& )
@@ -1092,7 +1092,7 @@ void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
             Reference< beans::XPropertySet > xPointProperties(
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
-                xPointProperties->setPropertyValue( "Offset", uno::Any( nOffset / 100.0 ) );
+                xPointProperties->setPropertyValue( u"Offset"_ustr, uno::Any( nOffset / 100.0 ) );
         }
     }
     catch( const uno::Exception & )

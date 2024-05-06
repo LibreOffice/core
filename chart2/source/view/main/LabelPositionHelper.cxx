@@ -97,7 +97,7 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
 {
     //handle dynamic font resize:
     awt::Size aOldReferenceSize;
-    if( xAxisModelProps->getPropertyValue( "ReferencePageSize") >>= aOldReferenceSize )
+    if( xAxisModelProps->getPropertyValue( u"ReferencePageSize"_ustr) >>= aOldReferenceSize )
     {
         uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, u"CharHeight" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );

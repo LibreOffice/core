@@ -105,7 +105,7 @@ rtl::Reference< BaseCoordinateSystem >
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
 {
-    return { "label", "values-y" };
+    return { u"label"_ustr, u"values-y"_ustr };
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
@@ -120,7 +120,7 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedPropertyRoles()
 
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return "values-y";
+    return u"values-y"_ustr;
 }
 
 void ChartType::impl_addDataSeriesWithoutNotification(
@@ -128,7 +128,7 @@ void ChartType::impl_addDataSeriesWithoutNotification(
 {
     if( std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
         != m_aDataSeries.end())
-        throw lang::IllegalArgumentException("dataseries not found", static_cast<cppu::OWeakObject*>(this), 1);
+        throw lang::IllegalArgumentException(u"dataseries not found"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
 
     m_aDataSeries.push_back( xDataSeries );
     ModifyListenerHelper::addListener( xDataSeries, m_xModifyEventForwarder );
@@ -168,7 +168,7 @@ void ChartType::removeDataSeries( const rtl::Reference< DataSeries >& xDataSerie
 
     if( aIt == m_aDataSeries.end())
         throw container::NoSuchElementException(
-            "The given series is no element of this charttype",
+            u"The given series is no element of this charttype"_ustr,
             static_cast< uno::XWeak * >( this ));
 
     ModifyListenerHelper::removeListener( xDataSeries, m_xModifyEventForwarder );

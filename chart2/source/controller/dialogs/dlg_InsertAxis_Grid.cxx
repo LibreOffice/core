@@ -34,17 +34,17 @@ SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
     : GenericDialogController(pWindow,
           bAxisDlg ?
-              OUString("modules/schart/ui/insertaxisdlg.ui") :
-              OUString("modules/schart/ui/insertgriddlg.ui"),
+              u"modules/schart/ui/insertaxisdlg.ui"_ustr :
+              u"modules/schart/ui/insertgriddlg.ui"_ustr,
           bAxisDlg ?
-              OUString("InsertAxisDialog") :
-              OUString("InsertGridDialog"))
-    , m_xCbPrimaryX(m_xBuilder->weld_check_button("primaryX"))
-    , m_xCbPrimaryY(m_xBuilder->weld_check_button("primaryY"))
-    , m_xCbPrimaryZ(m_xBuilder->weld_check_button("primaryZ"))
-    , m_xCbSecondaryX(m_xBuilder->weld_check_button("secondaryX"))
-    , m_xCbSecondaryY(m_xBuilder->weld_check_button("secondaryY"))
-    , m_xCbSecondaryZ(m_xBuilder->weld_check_button("secondaryZ"))
+              u"InsertAxisDialog"_ustr :
+              u"InsertGridDialog"_ustr)
+    , m_xCbPrimaryX(m_xBuilder->weld_check_button(u"primaryX"_ustr))
+    , m_xCbPrimaryY(m_xBuilder->weld_check_button(u"primaryY"_ustr))
+    , m_xCbPrimaryZ(m_xBuilder->weld_check_button(u"primaryZ"_ustr))
+    , m_xCbSecondaryX(m_xBuilder->weld_check_button(u"secondaryX"_ustr))
+    , m_xCbSecondaryY(m_xBuilder->weld_check_button(u"secondaryY"_ustr))
+    , m_xCbSecondaryZ(m_xBuilder->weld_check_button(u"secondaryZ"_ustr))
 {
     if (bAxisDlg)
     {

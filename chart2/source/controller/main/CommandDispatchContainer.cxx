@@ -72,9 +72,9 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
     static const o3tl::sorted_vector< OUString >  s_aContainerDocumentCommands {
-        "AddDirect",    "NewDoc",             "Open",
-        "Save",         "SaveAs",             "SendMail",
-        "EditDoc",      "ExportDirectToPDF",  "PrintDefault"};
+        u"AddDirect"_ustr,    u"NewDoc"_ustr,             u"Open"_ustr,
+        u"Save"_ustr,         u"SaveAs"_ustr,             u"SendMail"_ustr,
+        u"EditDoc"_ustr,      u"ExportDirectToPDF"_ustr,  u"PrintDefault"_ustr};
 
     Reference< frame::XDispatch > xResult;
     tDispatchMap::const_iterator aIt( m_aCachedDispatches.find( rURL.Complete ));
@@ -92,10 +92,10 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             rtl::Reference<CommandDispatch> pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
-            m_aCachedDispatches[ ".uno:Undo" ].set( xResult );
-            m_aCachedDispatches[ ".uno:Redo" ].set( xResult );
-            m_aCachedDispatches[ ".uno:GetUndoStrings" ].set( xResult );
-            m_aCachedDispatches[ ".uno:GetRedoStrings" ].set( xResult );
+            m_aCachedDispatches[ u".uno:Undo"_ustr ].set( xResult );
+            m_aCachedDispatches[ u".uno:Redo"_ustr ].set( xResult );
+            m_aCachedDispatches[ u".uno:GetUndoStrings"_ustr ].set( xResult );
+            m_aCachedDispatches[ u".uno:GetRedoStrings"_ustr ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() && ( rURL.Path == "Context" || rURL.Path == "ModifiedStatus" ) )
@@ -104,8 +104,8 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             rtl::Reference<CommandDispatch> pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );
             xResult.set( pDispatch );
             pDispatch->initialize();
-            m_aCachedDispatches[ ".uno:Context" ].set( xResult );
-            m_aCachedDispatches[ ".uno:ModifiedStatus" ].set( xResult );
+            m_aCachedDispatches[ u".uno:Context"_ustr ].set( xResult );
+            m_aCachedDispatches[ u".uno:ModifiedStatus"_ustr ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() &&
@@ -178,7 +178,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForU
         {
             Reference< frame::XDispatchProvider > xDispProv( xFrame->getCreator(), uno::UNO_QUERY );
             if( xDispProv.is())
-                xResult.set( xDispProv->queryDispatch( rURL, "_self", 0 ));
+                xResult.set( xDispProv->queryDispatch( rURL, u"_self"_ustr, 0 ));
         }
     }
     return xResult;

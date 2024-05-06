@@ -459,7 +459,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 OUString ObjectIdentifier::createParticleForDiagram()
 {
     //TODO: if more than one diagram is implemented, add the correct diagram index here
-    return "D=0";
+    return u"D=0"_ustr;
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
@@ -1238,14 +1238,14 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     {
                         rtl::Reference<ChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
                         if(xChartType.is())
-                            xChartType->getPropertyValue( "BlackDay" ) >>= xObjectProperties;
+                            xChartType->getPropertyValue( u"BlackDay"_ustr ) >>= xObjectProperties;
                     }
                     break;
             case OBJECTTYPE_DATA_STOCK_GAIN:
                     {
                         rtl::Reference<ChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
                         if(xChartType.is())
-                            xChartType->getPropertyValue( "WhiteDay" ) >>= xObjectProperties;
+                            xChartType->getPropertyValue( u"WhiteDay"_ustr ) >>= xObjectProperties;
                     }
                     break;
             case OBJECTTYPE_DATA_TABLE:

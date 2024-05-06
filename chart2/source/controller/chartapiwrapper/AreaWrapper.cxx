@@ -70,7 +70,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL AreaWrapper::getShapeType()
 {
-    return "com.sun.star.chart.ChartArea";
+    return u"com.sun.star.chart.ChartArea"_ustr;
 }
 
 // ____ XComponent ____
@@ -128,14 +128,14 @@ std::vector< std::unique_ptr<WrappedProperty> > AreaWrapper::createWrappedProper
 {
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("LineStyle","LineStyle") );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty(u"LineStyle"_ustr,u"LineStyle"_ustr) );
 
     return aWrappedProperties;
 }
 
 OUString SAL_CALL AreaWrapper::getImplementationName()
 {
-    return "com.sun.star.comp.chart.Area";
+    return u"com.sun.star.comp.chart.Area"_ustr;
 }
 
 sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
@@ -146,10 +146,10 @@ sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.xml.UserDefinedAttributesSupplier",
-        "com.sun.star.beans.PropertySet",
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.drawing.LineProperties" };
+        u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr,
+        u"com.sun.star.drawing.FillProperties"_ustr,
+        u"com.sun.star.drawing.LineProperties"_ustr };
 }
 
 } //  namespace chart::wrapper

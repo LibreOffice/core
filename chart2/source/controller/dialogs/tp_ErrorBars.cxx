@@ -25,7 +25,7 @@ namespace chart
 {
 
 ErrorBarsTabPage::ErrorBarsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ErrorBars.ui", "tp_ErrorBars", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_ErrorBars.ui"_ustr, u"tp_ErrorBars"_ustr, &rInAttrs)
     , m_aErrorBarResources(m_xBuilder.get(), pController, rInAttrs, /* bNoneAvailable = */ false)
 {
 }

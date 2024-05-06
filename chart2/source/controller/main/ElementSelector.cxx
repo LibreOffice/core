@@ -51,8 +51,8 @@ constexpr OUStringLiteral lcl_aServiceName
 }
 
 SelectorListBox::SelectorListBox(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/schart/ui/combobox.ui", "ComboBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+    : InterimItemWindow(pParent, u"modules/schart/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_combo_box(u"combobox"_ustr))
     , m_bReleaseFocus(true)
 {
     InitControlBase(m_xWidget.get());
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUStr
 
 css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 ElementSelectorToolbarController::ElementSelectorToolbarController()
 {

@@ -191,7 +191,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     if( xSource.is() )
                     {
                         std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aXValues(
-                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x" ) );
+                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), u"values-x"_ustr ) );
                         if( aXValues.empty() )
                         {
                             uno::Reference< chart2::data::XLabeledDataSequence > xCategories( xDiagram->getCategories() );
@@ -348,12 +348,12 @@ rtl::Reference< Axis > AxisHelper::createAxis(
 
             //ensure that the second axis is not placed on the main axis
             css::chart::ChartAxisPosition eMainAxisPos( css::chart::ChartAxisPosition_ZERO );
-            xMainAxis->getPropertyValue("CrossoverPosition") >>= eMainAxisPos;
+            xMainAxis->getPropertyValue(u"CrossoverPosition"_ustr) >>= eMainAxisPos;
             if( eMainAxisPos == css::chart::ChartAxisPosition_END )
                 eNewAxisPos = css::chart::ChartAxisPosition_START;
         }
 
-        xAxis->setPropertyValue("CrossoverPosition", uno::Any(eNewAxisPos) );
+        xAxis->setPropertyValue(u"CrossoverPosition"_ustr, uno::Any(eNewAxisPos) );
     }
 
     try
@@ -440,9 +440,9 @@ void AxisHelper::makeAxisVisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
     {
-        xAxis->setPropertyValue( "Show", uno::Any( true ) );
+        xAxis->setPropertyValue( u"Show"_ustr, uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xAxis );
-        xAxis->setPropertyValue( "DisplayLabels", uno::Any( true ) );
+        xAxis->setPropertyValue( u"DisplayLabels"_ustr, uno::Any( true ) );
     }
 }
 
@@ -450,7 +450,7 @@ void AxisHelper::makeGridVisible( const rtl::Reference< GridProperties >& xGridP
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( "Show", uno::Any( true ) );
+        xGridProperties->setPropertyValue( u"Show"_ustr, uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xGridProperties );
     }
 }
@@ -465,7 +465,7 @@ void AxisHelper::makeAxisInvisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
     {
-        xAxis->setPropertyValue( "Show", uno::Any( false ) );
+        xAxis->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
     }
 }
 
@@ -515,7 +515,7 @@ void AxisHelper::makeGridInvisible( const rtl::Reference< ::chart::GridPropertie
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( "Show", uno::Any( false ) );
+        xGridProperties->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
     }
 }
 
@@ -599,7 +599,7 @@ rtl::Reference< Axis > AxisHelper::getCrossingMainAxis( const rtl::Reference< Ax
     {
         nDimensionIndex=1;
         bool bSwapXY = false;
-        if( (xCooSys->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXY) && bSwapXY )
+        if( (xCooSys->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXY) && bSwapXY )
             nDimensionIndex=0;
     }
     else if( nDimensionIndex==1 )
@@ -641,7 +641,7 @@ bool AxisHelper::isAxisVisible( const rtl::Reference< Axis >& xAxis )
 
     if( xAxis.is() )
     {
-        xAxis->getPropertyValue( "Show" ) >>= bRet;
+        xAxis->getPropertyValue( u"Show"_ustr ) >>= bRet;
         bRet = bRet && ( LinePropertiesHelper::IsLineVisible( xAxis )
             || areAxisLabelsVisible( xAxis ) );
     }
@@ -654,7 +654,7 @@ bool AxisHelper::areAxisLabelsVisible( const rtl::Reference< Axis >& xAxis )
     bool bRet = false;
     if( xAxis.is() )
     {
-        xAxis->getPropertyValue( "DisplayLabels" ) >>= bRet;
+        xAxis->getPropertyValue( u"DisplayLabels"_ustr ) >>= bRet;
     }
     return bRet;
 }
@@ -665,7 +665,7 @@ bool AxisHelper::isGridVisible( const rtl::Reference< ::chart::GridProperties >&
 
     if( xGridproperties.is() )
     {
-        xGridproperties->getPropertyValue( "Show" ) >>= bRet;
+        xGridproperties->getPropertyValue( u"Show"_ustr ) >>= bRet;
         bRet = bRet && LinePropertiesHelper::IsLineVisible( xGridproperties );
     }
 
@@ -784,7 +784,7 @@ std::vector< rtl::Reference< Axis > > AxisHelper::getAllAxesOfCoordinateSystem(
                             bool bAddAxis = true;
                             if( bOnlyVisible )
                             {
-                                if( !(xAxis->getPropertyValue( "Show") >>= bAddAxis) )
+                                if( !(xAxis->getPropertyValue( u"Show"_ustr) >>= bAddAxis) )
                                     bAddAxis = false;
                             }
                             if( bAddAxis )
@@ -876,7 +876,7 @@ bool AxisHelper::isSecondaryYAxisNeeded( const rtl::Reference< BaseCoordinateSys
         for( sal_Int32 nS = aSeriesList.size(); nS-- ; )
         {
             sal_Int32 nAttachedAxisIndex = 0;
-            if( ( aSeriesList[nS]->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) &&
+            if( ( aSeriesList[nS]->getPropertyValue( u"AttachedAxisIndex"_ustr ) >>= nAttachedAxisIndex ) &&
                     nAttachedAxisIndex>0 )
                 return true;
         }
@@ -1022,7 +1022,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
         return;
 
     bool bVertical = false;
-    xCooSys->getPropertyValue( "SwapXAndYAxis" ) >>= bVertical;
+    xCooSys->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bVertical;
 
     sal_Int32 nHorizontalAxisDimension = bVertical ? 1 : 0;
     sal_Int32 nVerticalAxisDimension = bVertical ? 0 : 1;

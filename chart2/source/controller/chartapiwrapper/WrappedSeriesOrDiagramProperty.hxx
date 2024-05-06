@@ -104,7 +104,7 @@ public:
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
-            throw css::lang::IllegalArgumentException( "statistic property requires different type", nullptr, 0 );
+            throw css::lang::IllegalArgumentException( u"statistic property requires different type"_ustr, nullptr, 0 );
 
         if( m_ePropertyType == DIAGRAM )
         {

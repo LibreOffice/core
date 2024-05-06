@@ -88,7 +88,7 @@ class Chart2DumpTest : public ChartTest
 {
 protected:
     Chart2DumpTest(bool bDumpMode)
-        : ChartTest("/chart2/qa/extras/chart2dump/data/")
+        : ChartTest(u"/chart2/qa/extras/chart2dump/data/"_ustr)
     {
         m_bDumpMode = bDumpMode;
     }
@@ -262,8 +262,8 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "simple_chart.ods",
-        "multiple_categories.ods"
+        u"simple_chart.ods"_ustr,
+        u"multiple_categories.ods"_ustr
     };
 
     for (const OUString& aTestFile : aTestFiles)
@@ -369,14 +369,14 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "legend_on_right_side.odp",
-        "legend_on_bottom.odp",
-        "legend_on_left_side.odp",
-        "legend_on_top.odp",
-        "many_legend_entries.odp",
-        "custom_legend_position.odp",
-        "multiple_categories.odp",
-        "minimal_legend_test.odp"
+        u"legend_on_right_side.odp"_ustr,
+        u"legend_on_bottom.odp"_ustr,
+        u"legend_on_left_side.odp"_ustr,
+        u"legend_on_top.odp"_ustr,
+        u"many_legend_entries.odp"_ustr,
+        u"custom_legend_position.odp"_ustr,
+        u"multiple_categories.odp"_ustr,
+        u"minimal_legend_test.odp"_ustr
     };
 
     for (const OUString& aTestFile : aTestFiles)
@@ -390,7 +390,7 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
         CPPUNIT_ASSERT(xShapes.is());
 
         // Get legend shape
-        uno::Reference<drawing::XShape> xLegend = getShapeByName(xShapes, "CID/D=0:Legend=");
+        uno::Reference<drawing::XShape> xLegend = getShapeByName(xShapes, u"CID/D=0:Legend="_ustr);
         CPPUNIT_ASSERT(xLegend.is());
 
         /* Check legend position and size
@@ -467,10 +467,10 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "vertical_grid.ods",
-        "horizontal_grid.ods",
-        "minor_grid.ods",
-        "formated_grid_line.ods"
+        u"vertical_grid.ods"_ustr,
+        u"horizontal_grid.ods"_ustr,
+        u"minor_grid.ods"_ustr,
+        u"formated_grid_line.ods"_ustr
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -485,10 +485,10 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
 
         const std::vector<OUString> aGridShapeNames =
         {
-            "CID/D=0:CS=0:Axis=1,0:Grid=0", // Major vertical grid
-            "CID/D=0:CS=0:Axis=0,0:Grid=0", // Major horizontal grid
-            "CID/D=0:CS=0:Axis=1,0:Grid=0:SubGrid=0", // Minor vertical grid
-            "CID/D=0:CS=0:Axis=0,0:Grid=0:SubGrid=0"  // Minor horizontal grid
+            u"CID/D=0:CS=0:Axis=1,0:Grid=0"_ustr, // Major vertical grid
+            u"CID/D=0:CS=0:Axis=0,0:Grid=0"_ustr, // Major horizontal grid
+            u"CID/D=0:CS=0:Axis=1,0:Grid=0:SubGrid=0"_ustr, // Minor vertical grid
+            u"CID/D=0:CS=0:Axis=0,0:Grid=0:SubGrid=0"_ustr  // Minor horizontal grid
         };
 
         for (const OUString& sGridShapeName : aGridShapeNames)
@@ -508,7 +508,7 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xGrid, UNO_QUERY_THROW);
                 drawing::HomogenMatrix3 aGridTransformation;
-                xPropSet->getPropertyValue("Transformation") >>= aGridTransformation;
+                xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aGridTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aGridTransformation, INT_EPS);
 
                 // Check line properties
@@ -517,18 +517,18 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
                 Reference< beans::XPropertySet > xGridLinePropSet(xGridLine, UNO_QUERY_THROW);
                 // Line type
                 drawing::LineDash aLineDash;
-                xGridLinePropSet->getPropertyValue("LineDash") >>= aLineDash;
+                xGridLinePropSet->getPropertyValue(u"LineDash"_ustr) >>= aLineDash;
                 OUString sGridLineDash =
                     OUString::number(static_cast<sal_Int32>(aLineDash.Style)) + ";" + OUString::number(aLineDash.Dots) + ";" + OUString::number(aLineDash.DotLen) +
                     OUString::number(aLineDash.Dashes) + ";" + OUString::number(aLineDash.DashLen) + ";" + OUString::number(aLineDash.Distance);
                 CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sGridLineDash);
                 // Line color
                 util::Color aLineColor = 0;
-                xGridLinePropSet->getPropertyValue("LineColor") >>= aLineColor;
+                xGridLinePropSet->getPropertyValue(u"LineColor"_ustr) >>= aLineColor;
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aLineColor));
                 // Line width
                 sal_Int32 nLineWidth = 0;
-                xGridLinePropSet->getPropertyValue("LineWidth") >>= nLineWidth;
+                xGridLinePropSet->getPropertyValue(u"LineWidth"_ustr) >>= nLineWidth;
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nLineWidth);
             }
         }
@@ -539,10 +539,10 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "default_formated_axis.odp",
-        "axis_special_positioning.odp",
-        "formated_axis_lines.odp",
-        "rotated_axis_labels.odp"
+        u"default_formated_axis.odp"_ustr,
+        u"axis_special_positioning.odp"_ustr,
+        u"formated_axis_lines.odp"_ustr,
+        u"rotated_axis_labels.odp"_ustr
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -557,8 +557,8 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
         const std::vector<OUString> aAxisShapeNames =
         {
-            "CID/D=0:CS=0:Axis=0,0", // X Axis
-            "CID/D=0:CS=0:Axis=1,0", // Y Axis
+            u"CID/D=0:CS=0:Axis=0,0"_ustr, // X Axis
+            u"CID/D=0:CS=0:Axis=1,0"_ustr, // Y Axis
         };
 
         for (const OUString& sAxisShapeName : aAxisShapeNames)
@@ -578,7 +578,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             // Check transformation
             Reference< beans::XPropertySet > xPropSet(xXAxis, UNO_QUERY_THROW);
             drawing::HomogenMatrix3 aAxisTransformation;
-            xPropSet->getPropertyValue("Transformation") >>= aAxisTransformation;
+            xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aAxisTransformation;
             CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAxisTransformation, INT_EPS);
 
             // Check line properties
@@ -589,18 +589,18 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             Reference< beans::XPropertySet > xAxisLinePropSet(xAxisLine, UNO_QUERY_THROW);
             // Line type
             drawing::LineDash aLineDash;
-            xAxisLinePropSet->getPropertyValue("LineDash") >>= aLineDash;
+            xAxisLinePropSet->getPropertyValue(u"LineDash"_ustr) >>= aLineDash;
             OUString sAxisLineDash =
                 OUString::number(static_cast<sal_Int32>(aLineDash.Style)) + ";" + OUString::number(aLineDash.Dots) + ";" + OUString::number(aLineDash.DotLen) +
                 OUString::number(aLineDash.Dashes) + ";" + OUString::number(aLineDash.DashLen) + ";" + OUString::number(aLineDash.Distance);
             CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sAxisLineDash);
             // Line color
             util::Color aAxisLineColor = 0;
-            xAxisLinePropSet->getPropertyValue("LineColor") >>= aAxisLineColor;
+            xAxisLinePropSet->getPropertyValue(u"LineColor"_ustr) >>= aAxisLineColor;
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aAxisLineColor));
             // Line width
             sal_Int32 nAxisLineWidth = 0;
-            xAxisLinePropSet->getPropertyValue("LineWidth") >>= nAxisLineWidth;
+            xAxisLinePropSet->getPropertyValue(u"LineWidth"_ustr) >>= nAxisLineWidth;
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nAxisLineWidth);
         }
     }
@@ -610,12 +610,12 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "default_formated_axis.odp",
-        "rotated_axis_labels.odp",
-        "formated_axis_labels.odp",
-        "percent_stacked_column_chart.odp",
-        "tdf118150.xlsx",
-        "date-categories.pptx",
+        u"default_formated_axis.odp"_ustr,
+        u"rotated_axis_labels.odp"_ustr,
+        u"formated_axis_labels.odp"_ustr,
+        u"percent_stacked_column_chart.odp"_ustr,
+        u"tdf118150.xlsx"_ustr,
+        u"date-categories.pptx"_ustr,
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -630,8 +630,8 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 
         const std::vector<OUString> aAxisShapeNames =
         {
-            "CID/D=0:CS=0:Axis=0,0", // X Axis
-            "CID/D=0:CS=0:Axis=1,0", // Y Axis
+            u"CID/D=0:CS=0:Axis=0,0"_ustr, // X Axis
+            u"CID/D=0:CS=0:Axis=1,0"_ustr, // Y Axis
         };
 
         for (const OUString& sAxisShapeName : aAxisShapeNames)
@@ -678,10 +678,10 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 
                 // Check font color and height
                 util::Color aLabelFontColor = 0;
-                xPropSet->getPropertyValue("CharColor") >>= aLabelFontColor;
+                xPropSet->getPropertyValue(u"CharColor"_ustr) >>= aLabelFontColor;
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aLabelFontColor));
                 float fLabelFontHeight = 0.0f;
-                xPropSet->getPropertyValue("CharHeight") >>= fLabelFontHeight;
+                xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fLabelFontHeight;
                 CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(fLabelFontHeight, 1E-12);
             }
         }
@@ -692,13 +692,13 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "normal_column_chart.ods",
-        "stacked_column_chart.ods",
-        "percent_stacked_column_chart.ods",
-        "column_chart_small_spacing.ods",
-        "normal_bar_chart.ods",
-        "stacked_bar_chart.ods",
-        "percent_stacked_bar_chart.ods",
+        u"normal_column_chart.ods"_ustr,
+        u"stacked_column_chart.ods"_ustr,
+        u"percent_stacked_column_chart.ods"_ustr,
+        u"column_chart_small_spacing.ods"_ustr,
+        u"normal_bar_chart.ods"_ustr,
+        u"stacked_bar_chart.ods"_ustr,
+        u"percent_stacked_bar_chart.ods"_ustr,
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -755,7 +755,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xColumnOrBar, UNO_QUERY_THROW);
                 drawing::HomogenMatrix3 aColumnOrBarTransformation;
-                xPropSet->getPropertyValue("Transformation") >>= aColumnOrBarTransformation;
+                xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aColumnOrBarTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnOrBarTransformation, INT_EPS);
             }
         }
@@ -766,9 +766,9 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "chartwall_auto_adjust_with_titles.ods",
-        "chartwall_auto_adjust_without_titles.ods",
-        "chartwall_custom_positioning.ods"
+        u"chartwall_auto_adjust_with_titles.ods"_ustr,
+        u"chartwall_auto_adjust_without_titles.ods"_ustr,
+        u"chartwall_custom_positioning.ods"_ustr
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -781,7 +781,7 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xShapes.is());
 
-        uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+        uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, u"CID/DiagramWall="_ustr);
         CPPUNIT_ASSERT(xChartWall.is());
 
         // Check position and size
@@ -809,18 +809,18 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
         // Check line properties
         // Line type
         drawing::LineDash aLineDash;
-        xPropSet->getPropertyValue("LineDash") >>= aLineDash;
+        xPropSet->getPropertyValue(u"LineDash"_ustr) >>= aLineDash;
         OUString sChartWallLineDash =
             OUString::number(static_cast<sal_Int32>(aLineDash.Style)) + ";" + OUString::number(aLineDash.Dots) + ";" + OUString::number(aLineDash.DotLen) +
             OUString::number(aLineDash.Dashes) + ";" + OUString::number(aLineDash.DashLen) + ";" + OUString::number(aLineDash.Distance);
         CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sChartWallLineDash);
         // Line color
         util::Color aChartWallLineColor = 0;
-        xPropSet->getPropertyValue("LineColor") >>= aChartWallLineColor;
+        xPropSet->getPropertyValue(u"LineColor"_ustr) >>= aChartWallLineColor;
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aChartWallLineColor));
         // Line width
         sal_Int32 nChartWallLineWidth = 0;
-        xPropSet->getPropertyValue("LineWidth") >>= nChartWallLineWidth;
+        xPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nChartWallLineWidth;
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nChartWallLineWidth);
     }
 }
@@ -829,11 +829,11 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "normal_pie_chart.ods",
-        "rotated_pie_chart.ods",
-        "exploded_pie_chart.ods",
-        "donut_chart.ods",
-        "pie_chart_many_slices.ods",
+        u"normal_pie_chart.ods"_ustr,
+        u"rotated_pie_chart.ods"_ustr,
+        u"exploded_pie_chart.ods"_ustr,
+        u"donut_chart.ods"_ustr,
+        u"pie_chart_many_slices.ods"_ustr,
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -885,7 +885,7 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xSlice, UNO_QUERY_THROW);
                 drawing::HomogenMatrix3 aSliceTransformation;
-                xPropSet->getPropertyValue("Transformation") >>= aSliceTransformation;
+                xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aSliceTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aSliceTransformation, INT_EPS);
 
                 // Check slice fill style and color
@@ -904,9 +904,9 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "normal_area_chart.ods",
-        "stacked_area_chart.ods",
-        "percent_stacked_area_chart.ods"
+        u"normal_area_chart.ods"_ustr,
+        u"stacked_area_chart.ods"_ustr,
+        u"percent_stacked_area_chart.ods"_ustr
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -949,7 +949,7 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
             // Check transformation
             Reference< beans::XPropertySet > xPropSet(xArea, UNO_QUERY_THROW);
             drawing::HomogenMatrix3 aAreaTransformation;
-            xPropSet->getPropertyValue("Transformation") >>= aAreaTransformation;
+            xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aAreaTransformation;
             CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAreaTransformation, INT_EPS);
 
             // Check area fill style and color
@@ -968,18 +968,18 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "normal_line_chart_lines_only.ods",
-        "normal_line_chart_points_only.ods",
-        "normal_line_chart_lines_and_points.ods",
-        "stacked_line_chart_lines_only.ods",
-        "stacked_line_chart_points_only.ods",
-        "stacked_line_chart_lines_and_points.ods",
-        "percent_stacked_line_chart_lines_only.ods",
-        "percent_stacked_line_chart_points_only.ods",
-        "percent_stacked_line_chart_lines_and_points.ods",
-        "scatter_chart_points_only.ods",
-        "scatter_chart_lines_only.ods",
-        "scatter_chart_lines_and_points.ods",
+        u"normal_line_chart_lines_only.ods"_ustr,
+        u"normal_line_chart_points_only.ods"_ustr,
+        u"normal_line_chart_lines_and_points.ods"_ustr,
+        u"stacked_line_chart_lines_only.ods"_ustr,
+        u"stacked_line_chart_points_only.ods"_ustr,
+        u"stacked_line_chart_lines_and_points.ods"_ustr,
+        u"percent_stacked_line_chart_lines_only.ods"_ustr,
+        u"percent_stacked_line_chart_points_only.ods"_ustr,
+        u"percent_stacked_line_chart_lines_and_points.ods"_ustr,
+        u"scatter_chart_points_only.ods"_ustr,
+        u"scatter_chart_lines_only.ods"_ustr,
+        u"scatter_chart_lines_and_points.ods"_ustr,
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -1016,7 +1016,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
             xPropSet->getPropertyValue(UNO_NAME_LINESTYLE) >>= aSeriesLineStyle;
             if (aSeriesLineStyle != drawing::LineStyle_NONE)
             {
-                CPPUNIT_DUMP_ASSERT_NOTE("Lines are displayed");
+                CPPUNIT_DUMP_ASSERT_NOTE(u"Lines are displayed"_ustr);
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesLineStyle));
 
                 // Check line shape geometry
@@ -1028,14 +1028,14 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
                 CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLineSize.Width, INT_EPS);
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aLineTransformation;
-                xPropSet->getPropertyValue("Transformation") >>= aLineTransformation;
+                xPropSet->getPropertyValue(u"Transformation"_ustr) >>= aLineTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLineTransformation, INT_EPS);
             }
 
             // Check points of series
             if (xIndexAccess->getCount() >= 2)
             {
-                CPPUNIT_DUMP_ASSERT_NOTE("Points are displayed");
+                CPPUNIT_DUMP_ASSERT_NOTE(u"Points are displayed"_ustr);
                 uno::Reference<container::XIndexAccess> xPointsOfSeries(xIndexAccess->getByIndex(1), UNO_QUERY_THROW);
                 sal_Int32 nPointCountInSeries = xPointsOfSeries->getCount();
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nPointCountInSeries);
@@ -1058,7 +1058,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
                     // Check transformation
                     Reference< beans::XPropertySet > xPointPropSet(XPoint, UNO_QUERY_THROW);
                     drawing::HomogenMatrix3 aPointTransformation;
-                    xPointPropSet->getPropertyValue("Transformation") >>= aPointTransformation;
+                    xPointPropSet->getPropertyValue(u"Transformation"_ustr) >>= aPointTransformation;
                     CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aPointTransformation, INT_EPS);
 
                     // Check fill style and color
@@ -1076,7 +1076,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
 {
-    setTestFileName( "pivotchart_data_button.ods" );
+    setTestFileName( u"pivotchart_data_button.ods"_ustr );
     loadFromFile(getTestFileName());
 
     // Check that we have pivot chart in the document
@@ -1095,7 +1095,7 @@ DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
     CPPUNIT_ASSERT( xShapes.is() );
 
     // Get the shape that represents the "Data" button.
-    uno::Reference<drawing::XShape> xButton = getShapeByName( xShapes, "FieldButton.Row.8",
+    uno::Reference<drawing::XShape> xButton = getShapeByName( xShapes, u"FieldButton.Row.8"_ustr,
                                                               []( const uno::Reference<drawing::XShape>& xShapeNode )
                                                               {
                                                                   return xShapeNode->getShapeType() == "com.sun.star.drawing.TextShape";
@@ -1103,7 +1103,7 @@ DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
     CPPUNIT_ASSERT_MESSAGE( "Cannot find Data button shape", xButton.is() );
 
     // Make sure that there is no arrow shape with the Data button
-    uno::Reference<drawing::XShape> xArrow = getShapeByName( xShapes, "FieldButton.Row.8",
+    uno::Reference<drawing::XShape> xArrow = getShapeByName( xShapes, u"FieldButton.Row.8"_ustr,
                                                              []( const uno::Reference<drawing::XShape>& xShapeNode )
                                                              {
                                                                  return xShapeNode->getShapeType() == "com.sun.star.drawing.PolyPolygonShape";

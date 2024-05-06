@@ -157,16 +157,16 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     try
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
-        xDiagram->getPropertyValue("ConnectBars") >>= bConnectBars;
-        xDiagram->getPropertyValue("GroupBarsPerAxis") >>= bGroupBarsPerAxis;
-        xDiagram->getPropertyValue("IncludeHiddenCells") >>= bIncludeHiddenCells;
-        xDiagram->getPropertyValue("StartingAngle") >>= nStartingAngle;
+        xDiagram->getPropertyValue(u"ConnectBars"_ustr) >>= bConnectBars;
+        xDiagram->getPropertyValue(u"GroupBarsPerAxis"_ustr) >>= bGroupBarsPerAxis;
+        xDiagram->getPropertyValue(u"IncludeHiddenCells"_ustr) >>= bIncludeHiddenCells;
+        xDiagram->getPropertyValue(u"StartingAngle"_ustr) >>= nStartingAngle;
 
         if (nDimensionCount == 3)
         {
-            xDiagram->getPropertyValue("3DRelativeHeight") >>= n3DRelativeHeight;
+            xDiagram->getPropertyValue(u"3DRelativeHeight"_ustr) >>= n3DRelativeHeight;
         }
-        xDiagram->getPropertyValue("SubPieType") >>= ePieChartSubType;
+        xDiagram->getPropertyValue(u"SubPieType"_ustr) >>= ePieChartSubType;
     }
     catch (const uno::Exception&)
     {
@@ -196,7 +196,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             if (xCooSys->getMaximumAxisIndexByDimension(1) > 0)
             {
                 rtl::Reference<Axis> xAxisProp = xCooSys->getAxisByDimension2(1, 1);
-                xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
+                xAxisProp->getPropertyValue(u"Show"_ustr) >>= bSecondaryYaxisVisible;
             }
         }
         catch (const lang::IndexOutOfBoundsException&)
@@ -692,11 +692,12 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries(ChartModel& 
             {
                 css::chart::ChartAxisPosition eCrossingMainAxisPos(
                     css::chart::ChartAxisPosition_ZERO);
-                xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
+                xCrossingMainAxis->getPropertyValue(u"CrossoverPosition"_ustr)
+                    >>= eCrossingMainAxisPos;
                 if (eCrossingMainAxisPos == css::chart::ChartAxisPosition_VALUE)
                 {
                     double fValue = 0.0;
-                    xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
+                    xCrossingMainAxis->getPropertyValue(u"CrossoverValue"_ustr) >>= fValue;
                     aExplicitScale.Origin = fValue;
                 }
                 else if (eCrossingMainAxisPos == css::chart::ChartAxisPosition_ZERO)

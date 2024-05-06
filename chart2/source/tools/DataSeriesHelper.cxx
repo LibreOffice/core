@@ -72,11 +72,11 @@ public:
 
         if( m_bMatchPrefix )
             return ( xProp.is() &&
-                     (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
+                     (xProp->getPropertyValue( u"Role"_ustr ) >>= aRole ) &&
                      aRole.match( m_aRole ));
 
         return ( xProp.is() &&
-                 (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
+                 (xProp->getPropertyValue( u"Role"_ustr ) >>= aRole ) &&
                  m_aRole == aRole );
     }
 
@@ -170,7 +170,7 @@ OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
     {
         Reference< beans::XPropertySet > xProp( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
         if( xProp.is() )
-            xProp->getPropertyValue( "Role" ) >>= aRet;
+            xProp->getPropertyValue( u"Role"_ustr ) >>= aRet;
     }
     return aRet;
 }
@@ -265,10 +265,10 @@ void setStackModeAtSeries(
         {
             if( dataSeries.is() )
             {
-                dataSeries->setPropertyValue( "StackingDirection", aPropValue );
+                dataSeries->setPropertyValue( u"StackingDirection"_ustr, aPropValue );
 
                 sal_Int32 nAxisIndex = 0;
-                dataSeries->getPropertyValue( "AttachedAxisIndex" ) >>= nAxisIndex;
+                dataSeries->getPropertyValue( u"AttachedAxisIndex"_ustr ) >>= nAxisIndex;
                 aAxisIndexSet.insert(nAxisIndex);
             }
         }
@@ -398,7 +398,7 @@ void switchSymbolsOnOrOff( const rtl::Reference< DataSeries > & xSeries,
         return;
 
     chart2::Symbol aSymbProp;
-    if( xSeries->getPropertyValue( "Symbol") >>= aSymbProp )
+    if( xSeries->getPropertyValue( u"Symbol"_ustr) >>= aSymbProp )
     {
         if( !bSymbolsOn )
             aSymbProp.Style = chart2::SymbolStyle_NONE;
@@ -407,7 +407,7 @@ void switchSymbolsOnOrOff( const rtl::Reference< DataSeries > & xSeries,
             aSymbProp.Style = chart2::SymbolStyle_STANDARD;
             aSymbProp.StandardSymbol = nSeriesIndex;
         }
-        xSeries->setPropertyValue( "Symbol", uno::Any( aSymbProp ));
+        xSeries->setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbProp ));
     }
     //todo: check attributed data points
 }
@@ -421,14 +421,14 @@ void switchLinesOnOrOff( const rtl::Reference< DataSeries > & xSeries, bool bLin
     {
         // keep line-styles that are not NONE
         drawing::LineStyle eLineStyle;
-        if( (xSeries->getPropertyValue( "LineStyle") >>= eLineStyle ) &&
+        if( (xSeries->getPropertyValue( u"LineStyle"_ustr) >>= eLineStyle ) &&
             eLineStyle == drawing::LineStyle_NONE )
         {
-            xSeries->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
+            xSeries->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
         }
     }
     else
-        xSeries->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
+        xSeries->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries, bool bThick )
@@ -438,11 +438,11 @@ void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries
 
     sal_Int32 nNewValue = bThick ? 80 : 0;
     sal_Int32 nOldValue = 0;
-    if( (xSeries->getPropertyValue( "LineWidth") >>= nOldValue ) &&
+    if( (xSeries->getPropertyValue( u"LineWidth"_ustr) >>= nOldValue ) &&
         nOldValue != nNewValue )
     {
         if( !(bThick && nOldValue>0))
-            xSeries->setPropertyValue( "LineWidth", uno::Any( nNewValue ) );
+            xSeries->setPropertyValue( u"LineWidth"_ustr, uno::Any( nNewValue ) );
     }
 }
 
@@ -465,8 +465,8 @@ void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::Da
             xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
             if( rPropertyName == "LabelPlacement" )
             {
-                xPointProp->setPropertyValue("CustomLabelPosition", uno::Any());
-                xPointProp->setPropertyValue("CustomLabelSize", uno::Any());
+                xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any());
+                xPointProp->setPropertyValue(u"CustomLabelSize"_ustr, uno::Any());
             }
         }
     }
@@ -511,7 +511,7 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
         if( xProp.is())
         {
             Sequence<sal_Int32> aHiddenIndicesSeq;
-            xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenIndicesSeq;
+            xProp->getPropertyValue( u"HiddenValues"_ustr ) >>= aHiddenIndicesSeq;
             if( aHiddenIndicesSeq.hasElements() )
             {
                 auto aHiddenIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aHiddenIndicesSeq ) );

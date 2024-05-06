@@ -168,7 +168,7 @@ void GridProperties::firePropertyChangeEvent()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL GridProperties::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.GridProperties";
+    return u"com.sun.star.comp.chart2.GridProperties"_ustr;
 }
 
 sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )
@@ -179,8 +179,8 @@ sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL GridProperties::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.GridProperties",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.GridProperties"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 // needed by MSC compiler

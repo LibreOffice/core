@@ -66,7 +66,7 @@ void lcl_applyDefaultStyle(
         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
         if( xColorScheme.is() )
             xSeries->setPropertyValue(
-                "Color",
+                u"Color"_ustr,
                 uno::Any( xColorScheme->getColorByIndex( nIndex )));
     }
 }
@@ -74,7 +74,7 @@ void lcl_applyDefaultStyle(
 void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
 {
     sal_Int32 nLabelPlacement=0;
-    if( !(xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement)) )
+    if( !(xProp.is() && (xProp->getPropertyValue( u"LabelPlacement"_ustr ) >>= nLabelPlacement)) )
         return;
 
     bool bValid = false;
@@ -92,7 +92,7 @@ void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xP
         //otherwise use the first supported one
         if( rAvailablePlacements.hasElements() )
             aNewValue <<=rAvailablePlacements[0];
-        xProp->setPropertyValue( "LabelPlacement", aNewValue );
+        xProp->setPropertyValue( u"LabelPlacement"_ustr, aNewValue );
     }
 }
 
@@ -100,10 +100,10 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
 {
 
     sal_Int32 nLabelPlacement=0;
-    if( xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement) )
+    if( xProp.is() && (xProp->getPropertyValue( u"LabelPlacement"_ustr ) >>= nLabelPlacement) )
     {
         if( nDefaultPlacement == nLabelPlacement )
-            xProp->setPropertyValue( "LabelPlacement", uno::Any() );
+            xProp->setPropertyValue( u"LabelPlacement"_ustr, uno::Any() );
     }
 }
 
@@ -115,9 +115,9 @@ void lcl_ensureCorrectMissingValueTreatment( const rtl::Reference< ::chart::Diag
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.hasElements() )
-            xDiagram->setPropertyValue( "MissingValueTreatment", uno::Any( aAvailableMissingValueTreatment[0] ) );
+            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, uno::Any( aAvailableMissingValueTreatment[0] ) );
         else
-            xDiagram->setPropertyValue( "MissingValueTreatment", uno::Any() );
+            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, uno::Any() );
     }
 }
 
@@ -208,7 +208,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
             Sequence< beans::PropertyValue > aParam;
             if( aData.Categories.is())
             {
-                aParam = { beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
+                aParam = { beans::PropertyValue( u"HasCategories"_ustr, -1, uno::Any( true ),
                                                  beans::PropertyState_DIRECT_VALUE ) };
             }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
@@ -371,7 +371,7 @@ void ChartTypeTemplate::applyStyle2(
             : (eStackMode == StackMode::ZStacked )
             ? chart2::StackingDirection_Z_STACKING
             : chart2::StackingDirection_NO_STACKING );
-        xSeries->setPropertyValue( "StackingDirection", aPropValue );
+        xSeries->setPropertyValue( u"StackingDirection"_ustr, aPropValue );
 
         //ensure valid label placement
         {

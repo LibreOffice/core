@@ -189,7 +189,7 @@ bool LineChartTypeTemplate::matchesTemplate2(
                 chart2::Symbol aSymbProp;
                 drawing::LineStyle eLineStyle;
 
-                bool bCurrentHasSymbol = (series->getPropertyValue( "Symbol") >>= aSymbProp) &&
+                bool bCurrentHasSymbol = (series->getPropertyValue( u"Symbol"_ustr) >>= aSymbProp) &&
                     (aSymbProp.Style != chart2::SymbolStyle_NONE);
 
                 if( bCurrentHasSymbol )
@@ -201,7 +201,7 @@ bool LineChartTypeTemplate::matchesTemplate2(
                     break;
                 }
 
-                bool bCurrentHasLine = (series->getPropertyValue( "LineStyle") >>= eLineStyle) &&
+                bool bCurrentHasLine = (series->getPropertyValue( u"LineStyle"_ustr) >>= eLineStyle) &&
                     ( eLineStyle != drawing::LineStyle_NONE );
 
                 if( bCurrentHasLine )

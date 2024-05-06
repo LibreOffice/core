@@ -27,9 +27,9 @@ namespace chart
 DataPointOptionTabPage::DataPointOptionTabPage(weld::Container* pPage,
                                                weld::DialogController* pController,
                                                const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_DataPointOption.ui",
-                 "tp_DataPointOption", &rInAttrs)
-    , m_xCBHideLegendEntry(m_xBuilder->weld_check_button("CB_LEGEND_ENTRY_HIDDEN"))
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_DataPointOption.ui"_ustr,
+                 u"tp_DataPointOption"_ustr, &rInAttrs)
+    , m_xCBHideLegendEntry(m_xBuilder->weld_check_button(u"CB_LEGEND_ENTRY_HIDDEN"_ustr))
 {
 }
 

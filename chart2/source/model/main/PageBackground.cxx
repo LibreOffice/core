@@ -172,7 +172,7 @@ void PageBackground::firePropertyChangeEvent()
 
 OUString SAL_CALL PageBackground::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.PageBackground";
+    return u"com.sun.star.comp.chart2.PageBackground"_ustr;
 }
 
 sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
@@ -183,8 +183,8 @@ sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.chart2.PageBackground",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.PageBackground"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 using impl::PageBackground_Base;

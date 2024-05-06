@@ -128,7 +128,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
             pBarGroup[nLabeledSeqIdx].resize( 1 );
             pBarGroup[nLabeledSeqIdx][0] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), "values-y");
+                SetRole( aData[nSourceIndex]->getValues(), u"values-y"_ustr);
             ++nSourceIndex;
         }
 
@@ -138,7 +138,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
             pCandleStickGroup[nLabeledSeqIdx].resize( 4 );
             pCandleStickGroup[nLabeledSeqIdx][nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), "values-first");
+                SetRole( aData[nSourceIndex]->getValues(), u"values-first"_ustr);
             ++nSourceIndex;
             ++nSeqIdx;
         }
@@ -148,19 +148,19 @@ InterpretedData StockDataInterpreter::interpretDataSource(
 
         pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), "values-min");
+            SetRole( aData[nSourceIndex]->getValues(), u"values-min"_ustr);
         ++nSourceIndex;
         ++nSeqIdx;
 
         pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), "values-max");
+            SetRole( aData[nSourceIndex]->getValues(), u"values-max"_ustr);
         ++nSourceIndex;
         ++nSeqIdx;
 
         pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), "values-last");
+            SetRole( aData[nSourceIndex]->getValues(), u"values-last"_ustr);
         ++nSourceIndex;
         ++nSeqIdx;
     }
@@ -172,7 +172,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         pBarGroup[nVolumeSeries - 1].resize( 1 );
         OSL_ASSERT( nDataCount > nSourceIndex );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), "values-y");
+            SetRole( aData[nSourceIndex]->getValues(), u"values-y"_ustr);
         pBarGroup[nVolumeSeries - 1][0] = aData[nSourceIndex];
         ++nSourceIndex;
         --nRemaining;
@@ -192,7 +192,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         sal_Int32 nSeqIdx( 0 );
         pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), "values-min");
+            SetRole( aData[nSourceIndex]->getValues(), u"values-min"_ustr);
         ++nSourceIndex;
         ++nSeqIdx;
 
@@ -201,7 +201,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         {
             pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), "values-max");
+                SetRole( aData[nSourceIndex]->getValues(), u"values-max"_ustr);
             ++nSourceIndex;
             ++nSeqIdx;
         }
@@ -212,7 +212,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         {
             pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), "values-last");
+                SetRole( aData[nSourceIndex]->getValues(), u"values-last"_ustr);
             ++nSourceIndex;
             ++nSeqIdx;
         }

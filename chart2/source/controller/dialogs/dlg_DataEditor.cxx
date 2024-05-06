@@ -33,15 +33,15 @@ namespace chart
 DataEditor::DataEditor(weld::Window* pParent,
     rtl::Reference<::chart::ChartModel> xChartDoc,
     const Reference< uno::XComponentContext > & xContext)
-    : GenericDialogController(pParent, "modules/schart/ui/chartdatadialog.ui", "ChartDataDialog")
+    : GenericDialogController(pParent, u"modules/schart/ui/chartdatadialog.ui"_ustr, u"ChartDataDialog"_ustr)
     , m_bReadOnly(false)
     , m_xChartDoc(std::move(xChartDoc))
     , m_xContext(xContext)
-    , m_xTbxData(m_xBuilder->weld_toolbar("toolbar"))
-    , m_xCloseBtn(m_xBuilder->weld_button("close"))
-    , m_xTable(m_xBuilder->weld_container("datawindow"))
-    , m_xColumns(m_xBuilder->weld_container("columns"))
-    , m_xColors(m_xBuilder->weld_container("colorcolumns"))
+    , m_xTbxData(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xTable(m_xBuilder->weld_container(u"datawindow"_ustr))
+    , m_xColumns(m_xBuilder->weld_container(u"columns"_ustr))
+    , m_xColors(m_xBuilder->weld_container(u"colorcolumns"_ustr))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
     , m_xBrwData(VclPtr<DataBrowser>::Create(m_xTableCtrlParent, m_xColumns.get(), m_xColors.get()))
 {
@@ -103,16 +103,16 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl, DataBrowser*, void)
 
     bool bIsDataValid = m_xBrwData->IsEnableItem();
 
-    m_xTbxData->set_item_sensitive("InsertRow", bIsDataValid && m_xBrwData->MayInsertRow() );
-    m_xTbxData->set_item_sensitive("InsertColumn", bIsDataValid && m_xBrwData->MayInsertColumn() );
-    m_xTbxData->set_item_sensitive("InsertTextColumn", bIsDataValid && m_xBrwData->MayInsertColumn() );
-    m_xTbxData->set_item_sensitive("RemoveRow", m_xBrwData->MayDeleteRow() );
-    m_xTbxData->set_item_sensitive("RemoveColumn", m_xBrwData->MayDeleteColumn() );
+    m_xTbxData->set_item_sensitive(u"InsertRow"_ustr, bIsDataValid && m_xBrwData->MayInsertRow() );
+    m_xTbxData->set_item_sensitive(u"InsertColumn"_ustr, bIsDataValid && m_xBrwData->MayInsertColumn() );
+    m_xTbxData->set_item_sensitive(u"InsertTextColumn"_ustr, bIsDataValid && m_xBrwData->MayInsertColumn() );
+    m_xTbxData->set_item_sensitive(u"RemoveRow"_ustr, m_xBrwData->MayDeleteRow() );
+    m_xTbxData->set_item_sensitive(u"RemoveColumn"_ustr, m_xBrwData->MayDeleteColumn() );
 
-    m_xTbxData->set_item_sensitive("MoveLeftColumn", bIsDataValid && m_xBrwData->MayMoveLeftColumns() );
-    m_xTbxData->set_item_sensitive("MoveRightColumn", bIsDataValid && m_xBrwData->MayMoveRightColumns() );
-    m_xTbxData->set_item_sensitive("MoveDownRow", bIsDataValid && m_xBrwData->MayMoveDownRows() );
-    m_xTbxData->set_item_sensitive("MoveUpRow", bIsDataValid && m_xBrwData->MayMoveUpRows() );
+    m_xTbxData->set_item_sensitive(u"MoveLeftColumn"_ustr, bIsDataValid && m_xBrwData->MayMoveLeftColumns() );
+    m_xTbxData->set_item_sensitive(u"MoveRightColumn"_ustr, bIsDataValid && m_xBrwData->MayMoveRightColumns() );
+    m_xTbxData->set_item_sensitive(u"MoveDownRow"_ustr, bIsDataValid && m_xBrwData->MayMoveDownRows() );
+    m_xTbxData->set_item_sensitive(u"MoveUpRow"_ustr, bIsDataValid && m_xBrwData->MayMoveUpRows() );
 }
 
 // disable all modifying controls
@@ -121,15 +121,15 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_bReadOnly = bReadOnly;
     if( m_bReadOnly )
     {
-        m_xTbxData->set_item_sensitive("InsertRow", false);
-        m_xTbxData->set_item_sensitive("InsertColumn", false);
-        m_xTbxData->set_item_sensitive("InsertTextColumn", false);
-        m_xTbxData->set_item_sensitive("RemoveRow", false);
-        m_xTbxData->set_item_sensitive("RemoveColumn", false);
-        m_xTbxData->set_item_sensitive("MoveLeftColumn", false);
-        m_xTbxData->set_item_sensitive("MoveRightColumn", false);
-        m_xTbxData->set_item_sensitive("MoveUpRow", false);
-        m_xTbxData->set_item_sensitive("MoveDownRow", false);
+        m_xTbxData->set_item_sensitive(u"InsertRow"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"InsertColumn"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"InsertTextColumn"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"RemoveRow"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"RemoveColumn"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"MoveLeftColumn"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"MoveRightColumn"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"MoveUpRow"_ustr, false);
+        m_xTbxData->set_item_sensitive(u"MoveDownRow"_ustr, false);
     }
 
     m_xBrwData->SetReadOnly( m_bReadOnly );

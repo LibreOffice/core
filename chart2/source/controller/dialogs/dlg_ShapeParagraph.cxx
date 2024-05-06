@@ -32,19 +32,19 @@ namespace chart
 
 ShapeParagraphDialog::ShapeParagraphDialog(weld::Window* pParent,
     const SfxItemSet* pAttr)
-    : SfxTabDialogController(pParent, "modules/schart/ui/paradialog.ui", "ParagraphDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/schart/ui/paradialog.ui"_ustr, u"ParagraphDialog"_ustr, pAttr)
 {
-    AddTabPage("labelTP_PARA_STD",  RID_SVXPAGE_STD_PARAGRAPH);
-    AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH );
+    AddTabPage(u"labelTP_PARA_STD"_ustr,  RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH );
     if (SvtCJKOptions::IsAsianTypographyEnabled())
     {
-        AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage(u"labelTP_PARA_ASIAN"_ustr, RID_SVXPAGE_PARA_ASIAN);
     }
     else
     {
-        RemoveTabPage("labelTP_PARA_ASIAN");
+        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
     }
-    AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+    AddTabPage(u"labelTP_TABULATOR"_ustr, RID_SVXPAGE_TABULATOR);
 }
 
 void ShapeParagraphDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)

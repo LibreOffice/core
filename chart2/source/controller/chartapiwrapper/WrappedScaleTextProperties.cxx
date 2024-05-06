@@ -54,7 +54,7 @@ private:
 }
 
 WrappedScaleTextProperty::WrappedScaleTextProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
-    : ::chart::WrappedProperty( "ScaleText" , OUString() )
+    : ::chart::WrappedProperty( u"ScaleText"_ustr , OUString() )
     , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
@@ -70,7 +70,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
     if( ! (rOuterValue >>= bNewValue) )
     {
         if( rOuterValue.hasValue() )
-            throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property ScaleText requires value of type boolean"_ustr, nullptr, 0 );
     }
 
     try
@@ -94,7 +94,7 @@ Any WrappedScaleTextProperty::getPropertyValue( const Reference< beans::XPropert
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {
-        if( xInnerPropertySet->getPropertyValue( "ReferencePageSize" ).hasValue() )
+        if( xInnerPropertySet->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue() )
             aRet <<= true;
         else
             aRet <<= false;

@@ -147,7 +147,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
 
         try
         {
-            xTemplateProps->getPropertyValue( "Geometry3D" ) >>= aRet.nGeometry3D;
+            xTemplateProps->getPropertyValue( u"Geometry3D"_ustr ) >>= aRet.nGeometry3D;
         }
         catch( uno::Exception& ex )
         {
@@ -281,7 +281,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
                 }
                 try
                 {
-                    xTemplateProps->setPropertyValue( "Geometry3D" , uno::Any(rParameter.nGeometry3D) );
+                    xTemplateProps->setPropertyValue( u"Geometry3D"_ustr , uno::Any(rParameter.nGeometry3D) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -1130,11 +1130,11 @@ void CombiColumnLineChartDialogController::showExtraControls(weld::Builder* pBui
 {
     if (!m_xFT_NumberOfLines)
     {
-        m_xFT_NumberOfLines = pBuilder->weld_label("nolinesft");
+        m_xFT_NumberOfLines = pBuilder->weld_label(u"nolinesft"_ustr);
     }
     if (!m_xMF_NumberOfLines)
     {
-        m_xMF_NumberOfLines = pBuilder->weld_spin_button("nolines");
+        m_xMF_NumberOfLines = pBuilder->weld_spin_button(u"nolines"_ustr);
 
         m_xMF_NumberOfLines->set_increments(1, 10);
         m_xMF_NumberOfLines->set_range(1, 100);
@@ -1171,7 +1171,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
     {
         try
         {
-            xTemplateProps->getPropertyValue( "NumberOfLines" ) >>= nNumLines;
+            xTemplateProps->getPropertyValue( u"NumberOfLines"_ustr ) >>= nNumLines;
         }
         catch( const uno::Exception & )
         {
@@ -1192,7 +1192,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     if( xTemplateProps.is() )
     {
         sal_Int32 nNumLines = m_xMF_NumberOfLines->get_value();
-        xTemplateProps->setPropertyValue( "NumberOfLines" , uno::Any(nNumLines) );
+        xTemplateProps->setPropertyValue( u"NumberOfLines"_ustr , uno::Any(nNumLines) );
     }
 }
 

@@ -200,7 +200,7 @@ void BarChartTypeTemplate::applyStyle2(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
     if( getDimension() != 3 )
         return;
 
@@ -209,7 +209,7 @@ void BarChartTypeTemplate::applyStyle2(
         //apply Geometry3D
         uno::Any aAGeometry3D;
         getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Geometry3D", aAGeometry3D );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"Geometry3D"_ustr, aAGeometry3D );
     }
     catch( const uno::Exception & )
     {
@@ -227,10 +227,10 @@ void BarChartTypeTemplate::resetStyles2(
     for (auto const& series : aSeriesVec)
     {
         if( getDimension() == 3 )
-            series->setPropertyToDefault( "Geometry3D");
-        if( series->getPropertyValue( "BorderStyle") == aLineStyleAny )
+            series->setPropertyToDefault( u"Geometry3D"_ustr);
+        if( series->getPropertyValue( u"BorderStyle"_ustr) == aLineStyleAny )
         {
-            series->setPropertyToDefault( "BorderStyle");
+            series->setPropertyToDefault( u"BorderStyle"_ustr);
         }
     }
 

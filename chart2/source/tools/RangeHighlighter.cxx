@@ -229,7 +229,7 @@ void RangeHighlighter::fillRangesForErrorBars(
         sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
         bUsesRangesAsErrorBars =
             ( xErrorBar.is() &&
-              (xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle) &&
+              (xErrorBar->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle) &&
               nStyle == css::chart::ErrorBarStyle::FROM_DATA );
     }
     catch( const uno::Exception & )

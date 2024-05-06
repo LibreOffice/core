@@ -53,7 +53,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( rtl::Reference<::chart::ChartMod
     try
     {
         rtl::Reference< ::chart::Diagram > xDiagram( xModel->getFirstChartDiagram() );
-        xDiagram->getPropertyValue( "D3DSceneShadeMode" ) >>= aProps.m_aShadeMode;
+        xDiagram->getPropertyValue( u"D3DSceneShadeMode"_ustr ) >>= aProps.m_aShadeMode;
         ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
         aProps.m_eScheme = xDiagram->detectScheme();
     }
@@ -69,7 +69,7 @@ void lcl_setShadeModeAtModel( rtl::Reference<::chart::ChartModel> const & xModel
     try
     {
         rtl::Reference< ::chart::Diagram > xDiaProp = xModel->getFirstChartDiagram();
-        xDiaProp->setPropertyValue( "D3DSceneShadeMode" , uno::Any( aShadeMode ));
+        xDiaProp->setPropertyValue( u"D3DSceneShadeMode"_ustr , uno::Any( aShadeMode ));
     }
     catch( const uno::Exception & )
     {
@@ -93,12 +93,12 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(weld::Container* 
     , m_bUpdateOtherControls(true)
     , m_bCommitToModel(true)
     , m_rControllerLockHelper(rControllerLockHelper)
-    , m_xBuilder(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneAppearance.ui"))
-    , m_xContainer(m_xBuilder->weld_container("tp_3D_SceneAppearance"))
-    , m_xLB_Scheme(m_xBuilder->weld_combo_box("LB_SCHEME"))
-    , m_xCB_Shading(m_xBuilder->weld_check_button("CB_SHADING"))
-    , m_xCB_ObjectLines(m_xBuilder->weld_check_button("CB_OBJECTLINES"))
-    , m_xCB_RoundedEdge(m_xBuilder->weld_check_button("CB_ROUNDEDEDGE"))
+    , m_xBuilder(Application::CreateBuilder(pParent, u"modules/schart/ui/tp_3D_SceneAppearance.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"tp_3D_SceneAppearance"_ustr))
+    , m_xLB_Scheme(m_xBuilder->weld_combo_box(u"LB_SCHEME"_ustr))
+    , m_xCB_Shading(m_xBuilder->weld_check_button(u"CB_SHADING"_ustr))
+    , m_xCB_ObjectLines(m_xBuilder->weld_check_button(u"CB_OBJECTLINES"_ustr))
+    , m_xCB_RoundedEdge(m_xBuilder->weld_check_button(u"CB_ROUNDEDEDGE"_ustr))
 {
     m_aCustom = m_xLB_Scheme->get_text(POS_3DSCHEME_CUSTOM);
     m_xLB_Scheme->remove(POS_3DSCHEME_CUSTOM);

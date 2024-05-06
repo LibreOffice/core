@@ -79,27 +79,27 @@ enum
         []()
         {
             std::vector< css::beans::Property > aProperties {
-                { "OffsetMode",
+                { u"OffsetMode"_ustr,
                   PROP_PIE_TEMPLATE_OFFSET_MODE,
                   cppu::UnoType<chart2::PieChartOffsetMode>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
-                { "DefaultOffset",
+                { u"DefaultOffset"_ustr,
                   PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
-                { "Dimension",
+                { u"Dimension"_ustr,
                   PROP_PIE_TEMPLATE_DIMENSION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
-                { "UseRings",
+                { u"UseRings"_ustr,
                   PROP_PIE_TEMPLATE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
-                { "SubPieType",
+                { u"SubPieType"_ustr,
                   PROP_PIE_TEMPLATE_SUB_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::BOUND
@@ -317,7 +317,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
             {
                 //@todo in future this will depend on Orientation of the radius axis scale
                 rtl::Reference< DataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
-                xSeries->getPropertyValue( "Offset") >>= fOffset;
+                xSeries->getPropertyValue( u"Offset"_ustr) >>= fOffset;
 
                 // "AttributedDataPoints"
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
@@ -329,7 +329,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
                         if(xPointProp.is())
                         {
                             double fPointOffset=0.0;
-                            if( xSeries->getPropertyValue( "Offset") >>= fPointOffset )
+                            if( xSeries->getPropertyValue( u"Offset"_ustr) >>= fPointOffset )
                             {
                                 if( ! ::rtl::math::approxEqual( fPointOffset, fOffset ) )
                                 {
@@ -507,7 +507,7 @@ void PieChartTypeTemplate::applyStyle2(
         }
 
         // line style
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
 
         // vary colors by point
         xSeries->setFastPropertyValue( PROP_DATASERIES_VARY_COLORS_BY_POINT, uno::Any( true )); // "VaryColorsByPoint"
@@ -564,10 +564,10 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {
-        series->setPropertyToDefault( "VaryColorsByPoint");
-        if( series->getPropertyValue( "BorderStyle") == aLineStyleAny )
+        series->setPropertyToDefault( u"VaryColorsByPoint"_ustr);
+        if( series->getPropertyValue( u"BorderStyle"_ustr) == aLineStyleAny )
         {
-            series->setPropertyToDefault( "BorderStyle");
+            series->setPropertyToDefault( u"BorderStyle"_ustr);
         }
     }
 

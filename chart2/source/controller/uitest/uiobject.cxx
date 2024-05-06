@@ -33,7 +33,7 @@ ChartUIObject::ChartUIObject(const VclPtr<chart::ChartWindow>& xChartWindow,
 StringMap ChartUIObject::get_state()
 {
     StringMap aMap;
-    aMap["CID"] = maCID;
+    aMap[u"CID"_ustr] = maCID;
 
     return aMap;
 }
@@ -46,7 +46,7 @@ void ChartUIObject::execute(const OUString& rAction,
         std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
 
         StringMap aParams;
-        aParams["NAME"] = maCID;
+        aParams[u"NAME"_ustr] = maCID;
         pWindow->execute(rAction, aParams);
     }
     else if (rAction == "COMMAND")
@@ -55,12 +55,12 @@ void ChartUIObject::execute(const OUString& rAction,
         std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
 
         StringMap aParams;
-        aParams["NAME"] = maCID;
-        pWindow->execute("SELECT", aParams);
+        aParams[u"NAME"_ustr] = maCID;
+        pWindow->execute(u"SELECT"_ustr, aParams);
 
-        auto itr = rParameters.find("COMMAND");
+        auto itr = rParameters.find(u"COMMAND"_ustr);
         if (itr == rParameters.end())
-            throw css::uno::RuntimeException("missing COMMAND parameter");
+            throw css::uno::RuntimeException(u"missing COMMAND parameter"_ustr);
 
         maCommands.emplace_back(new OUString(itr->second));
         OUString* pCommand = maCommands.rbegin()->get();
@@ -92,7 +92,7 @@ std::set<OUString> ChartUIObject::get_children() const
 
 OUString ChartUIObject::get_type() const
 {
-    return "ChartUIObject for type: ";
+    return u"ChartUIObject for type: "_ustr;
 }
 
 bool ChartUIObject::equals(const UIObject& rOther) const
@@ -119,7 +119,7 @@ StringMap ChartWindowUIObject::get_state()
         css::uno::Any aAny = pController->getSelection();
         OUString aSelectedObject;
         aAny >>= aSelectedObject;
-        aMap["SelectedObject"] = aSelectedObject;
+        aMap[u"SelectedObject"_ustr] = aSelectedObject;
     }
 
     return aMap;
@@ -130,9 +130,9 @@ void ChartWindowUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        auto itr = rParameters.find("NAME");
+        auto itr = rParameters.find(u"NAME"_ustr);
         if (itr == rParameters.end())
-            throw css::uno::RuntimeException("Missing Parameter 'NAME' for action 'SELECT'");
+            throw css::uno::RuntimeException(u"Missing Parameter 'NAME' for action 'SELECT'"_ustr);
 
 
         const OUString& rName = itr->second;
@@ -151,7 +151,7 @@ std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
     if (chart::ObjectIdentifier::isCID(rID))
         return std::unique_ptr<UIObject>(new ChartUIObject(mxChartWindow, rID));
 
-    throw css::uno::RuntimeException("unknown child");
+    throw css::uno::RuntimeException(u"unknown child"_ustr);
 }
 
 namespace {
@@ -202,7 +202,7 @@ std::unique_ptr<UIObject> ChartWindowUIObject::create(vcl::Window* pWindow)
 
 OUString ChartWindowUIObject::get_name() const
 {
-    return "ChartWindowUIObject";
+    return u"ChartWindowUIObject"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

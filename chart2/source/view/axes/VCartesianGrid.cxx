@@ -262,7 +262,7 @@ void VCartesianGrid::createShapes()
             aHandleLineProperties.LineStyle    <<= drawing::LineStyle_NONE;
             rtl::Reference<SvxShapePolyPolygon> xHandleShape =
                 ShapeFactory::createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
-            ::chart::ShapeFactory::setShapeName( xHandleShape, "HandlesOnly" );
+            ::chart::ShapeFactory::setShapeName( xHandleShape, u"HandlesOnly"_ustr );
         }
         else //if(2!=m_nDimension)
         {

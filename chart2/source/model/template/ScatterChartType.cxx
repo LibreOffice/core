@@ -165,7 +165,7 @@ OUString SAL_CALL ScatterChartType::getChartType()
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
 {
-    return { "label", "values-x", "values-y" };
+    return { u"label"_ustr, u"values-x"_ustr, u"values-y"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -193,7 +193,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getProperty
 
 OUString SAL_CALL ScatterChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ScatterChartType";
+    return u"com.sun.star.comp.chart.ScatterChartType"_ustr;
 }
 
 sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
@@ -205,8 +205,8 @@ css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNam
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_SCATTER,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

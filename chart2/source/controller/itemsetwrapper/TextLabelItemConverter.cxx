@@ -101,7 +101,7 @@ bool numberFormatFromItemToPropertySet(
     if (!xPropertySet.is())
         return bChanged;
 
-    OUString aPropertyName = (nWhichId == SID_ATTR_NUMBERFORMAT_VALUE) ? CHART_UNONAME_NUMFMT : OUString("PercentageNumberFormat");
+    OUString aPropertyName = (nWhichId == SID_ATTR_NUMBERFORMAT_VALUE) ? CHART_UNONAME_NUMFMT : u"PercentageNumberFormat"_ustr;
     sal_uInt16 nSourceWhich = (nWhichId == SID_ATTR_NUMBERFORMAT_VALUE) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
     if (rItemSet.GetItemState(nSourceWhich) != SfxItemState::SET)
@@ -149,7 +149,7 @@ bool useSourceFormatFromItemToPropertySet(
     bool bChanged = false;
     if (!xPropertySet.is())
         return bChanged;
-    OUString aPropertyName = (nWhichId == SID_ATTR_NUMBERFORMAT_SOURCE) ? CHART_UNONAME_NUMFMT : OUString("PercentageNumberFormat");
+    OUString aPropertyName = (nWhichId == SID_ATTR_NUMBERFORMAT_SOURCE) ? CHART_UNONAME_NUMFMT : u"PercentageNumberFormat"_ustr;
     sal_uInt16 nFormatWhich = (nWhichId == SID_ATTR_NUMBERFORMAT_SOURCE) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
     if (rItemSet.GetItemState(nWhichId) != SfxItemState::SET)
@@ -208,7 +208,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     mbForbidPercentValue(true),
     m_xSeries(xSeries)
 {
-    maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, u"ReferencePageSize"_ustr));
 
     rtl::Reference< Diagram > xDiagram(xChartModel->getFirstChartDiagram());
     rtl::Reference< ChartType > xChartType(xDiagram->getChartTypeOfSeries(xSeries));
@@ -323,20 +323,20 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             try
             {
                 OUString aOldValue;
-                GetPropertySet()->getPropertyValue("LabelSeparator") >>= aOldValue;
+                GetPropertySet()->getPropertyValue(u"LabelSeparator"_ustr) >>= aOldValue;
                 if (mbDataSeries)
                 {
                     rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (aOldValue != aNewValue ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, "LabelSeparator", uno::Any(aOldValue)))
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, u"LabelSeparator"_ustr, uno::Any(aOldValue)))
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, "LabelSeparator", uno::Any(aNewValue));
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, u"LabelSeparator"_ustr, uno::Any(aNewValue));
                         bChanged = true;
                     }
                 }
                 else if (aOldValue != aNewValue)
                 {
-                    GetPropertySet()->setPropertyValue("LabelSeparator", uno::Any(aNewValue));
+                    GetPropertySet()->setPropertyValue(u"LabelSeparator"_ustr, uno::Any(aNewValue));
                     bChanged = true;
                 }
             }
@@ -353,20 +353,20 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             {
                 bool bNew = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
                 bool bOld = false;
-                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
+                GetPropertySet()->getPropertyValue( u"TextWordWrap"_ustr ) >>= bOld;
                 if( mbDataSeries )
                 {
                     rtl::Reference< DataSeries > xSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
                     if( bOld!=bNew ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "TextWordWrap", uno::Any( bOld ) ) )
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, u"TextWordWrap"_ustr, uno::Any( bOld ) ) )
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "TextWordWrap", uno::Any( bNew ) );
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"TextWordWrap"_ustr, uno::Any( bNew ) );
                         bChanged = true;
                     }
                 }
                 else if( bOld!=bNew )
                 {
-                    GetPropertySet()->setPropertyValue( "TextWordWrap", uno::Any( bNew ));
+                    GetPropertySet()->setPropertyValue( u"TextWordWrap"_ustr, uno::Any( bNew ));
                     bChanged = true;
                 }
             }
@@ -383,22 +383,22 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 sal_Int32 nNew = static_cast<const SfxInt32Item&>(rItemSet.Get(nWhichId)).GetValue();
                 sal_Int32 nOld = -1;
                 RelativePosition aCustomLabelPosition;
-                GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld;
+                GetPropertySet()->getPropertyValue(u"LabelPlacement"_ustr) >>= nOld;
                 if (mbDataSeries)
                 {
                     rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (nOld != nNew ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, "LabelPlacement", uno::Any(nOld)))
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, u"LabelPlacement"_ustr, uno::Any(nOld)))
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, "LabelPlacement", uno::Any(nNew));
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, u"LabelPlacement"_ustr, uno::Any(nNew));
                         bChanged = true;
                     }
                 }
-                else if (nOld != nNew || (GetPropertySet()->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
+                else if (nOld != nNew || (GetPropertySet()->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition))
                 {
-                    GetPropertySet()->setPropertyValue("LabelPlacement", uno::Any(nNew));
-                    GetPropertySet()->setPropertyValue("CustomLabelPosition", uno::Any());
-                    GetPropertySet()->setPropertyValue("CustomLabelSize", uno::Any());
+                    GetPropertySet()->setPropertyValue(u"LabelPlacement"_ustr, uno::Any(nNew));
+                    GetPropertySet()->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any());
+                    GetPropertySet()->setPropertyValue(u"CustomLabelSize"_ustr, uno::Any());
                     bChanged = true;
                 }
             }
@@ -415,7 +415,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 rItemSet.Get(nWhichId)).GetValue();
             chart2::Symbol aSymbol;
 
-            GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol;
+            GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol;
             sal_Int32 nOldStyle = getSymbolStyleForSymbol(aSymbol);
 
             if (nStyle != nOldStyle)
@@ -442,9 +442,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 }
 
                 if (bDeleteSymbol)
-                    GetPropertySet()->setPropertyValue("Symbol", uno::Any());
+                    GetPropertySet()->setPropertyValue(u"Symbol"_ustr, uno::Any());
                 else
-                    GetPropertySet()->setPropertyValue("Symbol", uno::Any(aSymbol));
+                    GetPropertySet()->setPropertyValue(u"Symbol"_ustr, uno::Any(aSymbol));
                 bChanged = true;
             }
         }
@@ -455,14 +455,14 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 rItemSet.Get(nWhichId)).GetSize();
             chart2::Symbol aSymbol;
 
-            GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol;
+            GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol;
             if (aSize.getWidth() != aSymbol.Size.Width ||
                 aSize.getHeight() != aSymbol.Size.Height)
             {
                 aSymbol.Size.Width = aSize.getWidth();
                 aSymbol.Size.Height = aSize.getHeight();
 
-                GetPropertySet()->setPropertyValue("Symbol", uno::Any(aSymbol));
+                GetPropertySet()->setPropertyValue(u"Symbol"_ustr, uno::Any(aSymbol));
                 bChanged = true;
             }
         }
@@ -480,11 +480,11 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     aXGraphicAny <<= xGraphic;
                     chart2::Symbol aSymbol;
-                    GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol;
+                    GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol;
                     if (aSymbol.Graphic != xGraphic)
                     {
                         aSymbol.Graphic = xGraphic;
-                        GetPropertySet()->setPropertyValue("Symbol", uno::Any(aSymbol));
+                        GetPropertySet()->setPropertyValue(u"Symbol"_ustr, uno::Any(aSymbol));
                         bChanged = true;
                     }
                 }
@@ -498,11 +498,11 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                     rItemSet.Get(nWhichId)).GetValue().get()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
-                (GetPropertySet()->getPropertyValue("TextRotation") >>= fOldValue);
+                (GetPropertySet()->getPropertyValue(u"TextRotation"_ustr) >>= fOldValue);
 
             if (!bPropExisted || fOldValue != fValue)
             {
-                GetPropertySet()->setPropertyValue("TextRotation", uno::Any(fValue));
+                GetPropertySet()->setPropertyValue(u"TextRotation"_ustr, uno::Any(fValue));
                 bChanged = true;
             }
         }
@@ -572,7 +572,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:
         {
             sal_Int32 nKey = 0;
-            if (!(GetPropertySet()->getPropertyValue("PercentageNumberFormat") >>= nKey))
+            if (!(GetPropertySet()->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nKey))
                 nKey = mnPercentNumberFormat;
             rOutItemSet.Put(SfxUInt32Item(nWhichId, nKey));
         }
@@ -603,7 +603,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }
-            bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue("PercentageNumberFormat").hasValue() && !bUseSourceFormat;
+            bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(u"PercentageNumberFormat"_ustr).hasValue() && !bUseSourceFormat;
             rOutItemSet.Put(SfxBoolItem(nWhichId, !bNumberFormatIsSet));
         }
         break;
@@ -612,7 +612,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             try
             {
                 OUString aValue;
-                GetPropertySet()->getPropertyValue("LabelSeparator") >>= aValue;
+                GetPropertySet()->getPropertyValue(u"LabelSeparator"_ustr) >>= aValue;
                 rOutItemSet.Put(SfxStringItem(nWhichId, aValue));
             }
             catch (const uno::Exception&)
@@ -626,7 +626,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             try
             {
                 bool bValue = false;
-                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bValue;
+                GetPropertySet()->getPropertyValue( u"TextWordWrap"_ustr ) >>= bValue;
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
             catch( const uno::Exception& )
@@ -641,9 +641,9 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             {
                 sal_Int32 nPlacement = 0;
                 RelativePosition aCustomLabelPosition;
-                if (!mbDataSeries && (GetPropertySet()->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
+                if (!mbDataSeries && (GetPropertySet()->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition))
                     rOutItemSet.Put(SfxInt32Item(nWhichId, css::chart::DataLabelPlacement::CUSTOM));
-                else if (GetPropertySet()->getPropertyValue("LabelPlacement") >>= nPlacement)
+                else if (GetPropertySet()->getPropertyValue(u"LabelPlacement"_ustr) >>= nPlacement)
                     rOutItemSet.Put(SfxInt32Item(nWhichId, nPlacement));
                 else if (maAvailableLabelPlacements.hasElements())
                     rOutItemSet.Put(SfxInt32Item(nWhichId, maAvailableLabelPlacements[0]));
@@ -681,14 +681,14 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         case SCHATTR_STYLE_SYMBOL:
         {
             chart2::Symbol aSymbol;
-            if (GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol)
+            if (GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol)
                 rOutItemSet.Put(SfxInt32Item(nWhichId, getSymbolStyleForSymbol(aSymbol)));
         }
         break;
         case SCHATTR_SYMBOL_SIZE:
         {
             chart2::Symbol aSymbol;
-            if (GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol)
+            if (GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol)
                 rOutItemSet.Put(
                     SvxSizeItem(nWhichId, Size(aSymbol.Size.Width, aSymbol.Size.Height)));
         }
@@ -696,7 +696,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         case SCHATTR_SYMBOL_BRUSH:
         {
             chart2::Symbol aSymbol;
-            if ((GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol)
+            if ((GetPropertySet()->getPropertyValue(u"Symbol"_ustr) >>= aSymbol)
                 && aSymbol.Graphic.is())
             {
                 rOutItemSet.Put(
@@ -708,7 +708,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         {
             double fValue = 0;
 
-            if (GetPropertySet()->getPropertyValue("TextRotation") >>= fValue)
+            if (GetPropertySet()->getPropertyValue(u"TextRotation"_ustr) >>= fValue)
             {
                 rOutItemSet.Put(
                     SdrAngleItem(SCHATTR_TEXT_DEGREES, Degree100(static_cast<sal_Int32>(rtl::math::round(fValue * 100.0)))));

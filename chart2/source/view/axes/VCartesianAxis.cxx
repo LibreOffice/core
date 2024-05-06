@@ -1855,7 +1855,7 @@ void VCartesianAxis::updatePositions()
                 //set new position
                 try
                 {
-                    xShape2DText->SvxShape::setPropertyValue( "Transformation", aATransformation );
+                    xShape2DText->SvxShape::setPropertyValue( u"Transformation"_ustr, aATransformation );
                 }
                 catch( const uno::Exception& )
                 {
@@ -1992,7 +1992,7 @@ void VCartesianAxis::createShapes()
                     m_xGroupShape_Shapes, aPoints
                     , &m_aAxisProperties.m_aLineProperties );
             //because of this name this line will be used for marking the axis
-            ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
+            ::chart::ShapeFactory::setShapeName( xShape, u"MarkHandles"_ustr );
         }
         //create an additional line at NULL
         if( !AxisHelper::isAxisPositioningEnabled() )

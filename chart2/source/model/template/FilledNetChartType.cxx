@@ -60,7 +60,7 @@ OUString SAL_CALL FilledNetChartType::getChartType()
 
 OUString SAL_CALL FilledNetChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.FilledNetChartType";
+    return u"com.sun.star.comp.chart.FilledNetChartType"_ustr;
 }
 
 sal_Bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
@@ -72,8 +72,8 @@ css::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceN
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET,
-        "com.sun.star.chart2.ChartType",
-        "com.sun.star.beans.PropertySet" };
+        u"com.sun.star.chart2.ChartType"_ustr,
+        u"com.sun.star.beans.PropertySet"_ustr };
 }
 
 } //  namespace chart

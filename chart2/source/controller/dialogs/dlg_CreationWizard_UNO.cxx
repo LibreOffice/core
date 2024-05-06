@@ -285,10 +285,10 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyNa
     else if( rPropertyName == "UnlockControllersOnExecute" )
     {
         if( ! (rValue >>= m_bUnlockControllersOnExecute) )
-            throw lang::IllegalArgumentException( "Property 'UnlockControllers' requires value of type boolean" , nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property 'UnlockControllers' requires value of type boolean"_ustr , nullptr, 0 );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard" , nullptr );
+        throw beans::UnknownPropertyException( u"unknown property was tried to set to chart wizard"_ustr , nullptr );
 }
 
 uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
@@ -325,7 +325,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         aRet <<= m_bUnlockControllersOnExecute;
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard" , nullptr );
+        throw beans::UnknownPropertyException( u"unknown property was tried to get from chart wizard"_ustr , nullptr );
     return aRet;
 }
 

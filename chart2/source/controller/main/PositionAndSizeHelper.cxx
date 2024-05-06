@@ -57,7 +57,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getOpenWidth())/2.0)/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getOpenHeight())/2.0)/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
     }
     else if( eObjectType == OBJECTTYPE_DATA_LABEL )
     {
@@ -66,7 +66,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aAbsolutePosition.Primary = double(rOldPositionAndSize.X) / double(aPageRect.getOpenWidth());
         aAbsolutePosition.Secondary = double(rOldPositionAndSize.Y) / double(aPageRect.getOpenHeight());
 
-        if( xObjectProp->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition )
+        if( xObjectProp->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition )
         {
             aAbsolutePosition.Primary -= aCustomLabelPosition.Primary;
             aAbsolutePosition.Secondary -= aCustomLabelPosition.Secondary;
@@ -75,7 +75,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         //the anchor point at the data label object is top/left
         Point aPos = aObjectRect.TopLeft();
         double fRotation = 0.0;
-        xObjectProp->getPropertyValue("TextRotation") >>= fRotation;
+        xObjectProp->getPropertyValue(u"TextRotation"_ustr) >>= fRotation;
         if( fRotation == 90.0 )
             aPos = aObjectRect.BottomLeft();
         else if( fRotation == 270.0 )
@@ -83,7 +83,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
         aCustomLabelPosition.Primary = double(aPos.X()) / double(aPageRect.getOpenWidth()) - aAbsolutePosition.Primary;
         aCustomLabelPosition.Secondary = double(aPos.Y()) / double(aPageRect.getOpenHeight()) - aAbsolutePosition.Secondary;
-        xObjectProp->setPropertyValue("CustomLabelPosition", uno::Any(aCustomLabelPosition));
+        xObjectProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any(aCustomLabelPosition));
     }
     else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )
     {
@@ -94,11 +94,11 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
     }
     else if(eObjectType==OBJECTTYPE_LEGEND)
     {
-        xObjectProp->setPropertyValue( "Expansion", uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
+        xObjectProp->setPropertyValue( u"Expansion"_ustr, uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
         chart2::RelativeSize aRelativeSize;
         Point aAnchor = aObjectRect.TopLeft();
@@ -110,7 +110,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
             static_cast< double >( aAnchor.Y()) /
             static_cast< double >( aPageRect.getOpenHeight());
 
-        xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
 
         aRelativeSize.Primary =
             static_cast< double >( aObjectRect.getOpenWidth()) /
@@ -123,7 +123,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         if (aRelativeSize.Secondary > 1.0)
             aRelativeSize.Secondary = 1.0;
 
-        xObjectProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
+        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
     }
     else if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
@@ -136,7 +136,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.Center();
         aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
 
         //set size:
         RelativeSize aRelativeSize;
@@ -144,7 +144,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         //and in the middle of the page
         aRelativeSize.Primary = double(aObjectRect.getOpenWidth())/double(aPageRect.getOpenWidth());
         aRelativeSize.Secondary = double(aObjectRect.getOpenHeight())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
+        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
     }
     else
         return false;
