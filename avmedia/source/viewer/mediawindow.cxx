@@ -257,7 +257,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     }
 
     // add filter for all types
-    aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_FILES ), "*.*" );
+    aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_FILES ), u"*.*"_ustr );
 
     uno::Reference<ui::dialogs::XFilePicker3> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
@@ -450,7 +450,7 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
     css::uno::Reference<css::util::XURLTransformer> xTrans(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aDispatchURL);
 
-    css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, "", 0);
+    css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, u""_ustr, 0);
     css::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
         { "URL", css::uno::Any(rURL) },
         { "Size.Width", uno::Any(rSize.Width)},

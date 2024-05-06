@@ -106,11 +106,11 @@ void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
 
 void MediaControlBase::InitializeWidgets()
 {
-    mxPlayToolBox->set_item_help_id("play", HID_AVMEDIA_TOOLBOXITEM_PLAY);
-    mxPlayToolBox->set_item_help_id("pause", HID_AVMEDIA_TOOLBOXITEM_PAUSE);
-    mxPlayToolBox->set_item_help_id("stop", HID_AVMEDIA_TOOLBOXITEM_STOP);
-    mxPlayToolBox->set_item_help_id("loop", HID_AVMEDIA_TOOLBOXITEM_LOOP);
-    mxMuteToolBox->set_item_help_id("mute", HID_AVMEDIA_TOOLBOXITEM_MUTE);
+    mxPlayToolBox->set_item_help_id(u"play"_ustr, HID_AVMEDIA_TOOLBOXITEM_PLAY);
+    mxPlayToolBox->set_item_help_id(u"pause"_ustr, HID_AVMEDIA_TOOLBOXITEM_PAUSE);
+    mxPlayToolBox->set_item_help_id(u"stop"_ustr, HID_AVMEDIA_TOOLBOXITEM_STOP);
+    mxPlayToolBox->set_item_help_id(u"loop"_ustr, HID_AVMEDIA_TOOLBOXITEM_LOOP);
+    mxMuteToolBox->set_item_help_id(u"mute"_ustr, HID_AVMEDIA_TOOLBOXITEM_MUTE);
 
     mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_50), AvmResId( AVMEDIA_STR_ZOOM_50 ));
     mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_100), AvmResId( AVMEDIA_STR_ZOOM_100 ));
@@ -119,7 +119,7 @@ void MediaControlBase::InitializeWidgets()
     mxZoomListBox->set_help_id( HID_AVMEDIA_ZOOMLISTBOX );
     mxZoomListBox->set_tooltip_text(AvmResId( AVMEDIA_STR_ZOOM_TOOLTIP ));
 
-    mxTimeEdit->set_text( " 00:00:00/00:00:00 " );
+    mxTimeEdit->set_text( u" 00:00:00/00:00:00 "_ustr );
     mxTimeEdit->set_help_id( HID_AVMEDIA_TIMEEDIT );
     mxTimeEdit->set_sensitive(false);
 
@@ -135,32 +135,32 @@ void MediaControlBase::UpdatePlayState(const MediaItem& rMediaItem)
 {
     if (rMediaItem.getState() == MediaState::Play)
     {
-        mxPlayToolBox->set_item_active("play", true);
-        mxPlayToolBox->set_item_active("pause", false);
-        mxPlayToolBox->set_item_active("stop", false);
+        mxPlayToolBox->set_item_active(u"play"_ustr, true);
+        mxPlayToolBox->set_item_active(u"pause"_ustr, false);
+        mxPlayToolBox->set_item_active(u"stop"_ustr, false);
     }
     else if( rMediaItem.getState() == MediaState::Pause )
     {
-        mxPlayToolBox->set_item_active("play", false);
-        mxPlayToolBox->set_item_active("pause", true);
-        mxPlayToolBox->set_item_active("stop", false);
+        mxPlayToolBox->set_item_active(u"play"_ustr, false);
+        mxPlayToolBox->set_item_active(u"pause"_ustr, true);
+        mxPlayToolBox->set_item_active(u"stop"_ustr, false);
     }
     else
     {
-        mxPlayToolBox->set_item_active("play", false);
-        mxPlayToolBox->set_item_active("pause", false);
-        mxPlayToolBox->set_item_active("stop", true);
+        mxPlayToolBox->set_item_active(u"play"_ustr, false);
+        mxPlayToolBox->set_item_active(u"pause"_ustr, false);
+        mxPlayToolBox->set_item_active(u"stop"_ustr, true);
     }
 }
 
 void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
 {
     const bool bValidURL = !rMediaItem.getURL().isEmpty();
-    mxPlayToolBox->set_item_sensitive("play", bValidURL);
-    mxPlayToolBox->set_item_sensitive("pause", bValidURL);
-    mxPlayToolBox->set_item_sensitive("stop", bValidURL);
-    mxPlayToolBox->set_item_sensitive("loop", bValidURL);
-    mxMuteToolBox->set_item_sensitive("mute", bValidURL);
+    mxPlayToolBox->set_item_sensitive(u"play"_ustr, bValidURL);
+    mxPlayToolBox->set_item_sensitive(u"pause"_ustr, bValidURL);
+    mxPlayToolBox->set_item_sensitive(u"stop"_ustr, bValidURL);
+    mxPlayToolBox->set_item_sensitive(u"loop"_ustr, bValidURL);
+    mxMuteToolBox->set_item_sensitive(u"mute"_ustr, bValidURL);
     if( !bValidURL )
     {
         mxZoomListBox->set_sensitive(false);
@@ -171,8 +171,8 @@ void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
         mxPlayToolBox->set_sensitive(true);
         mxMuteToolBox->set_sensitive(true);
         UpdatePlayState(rMediaItem);
-        mxPlayToolBox->set_item_active("loop", rMediaItem.isLoop());
-        mxMuteToolBox->set_item_active("mute", rMediaItem.isMute());
+        mxPlayToolBox->set_item_active(u"loop"_ustr, rMediaItem.isLoop());
+        mxMuteToolBox->set_item_active(u"mute"_ustr, rMediaItem.isMute());
         if (!mbCurrentlySettingZoom)
         {
             sal_uInt16 nSelectEntryPos ;
@@ -247,11 +247,11 @@ void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem co
     }
     else if (rId == u"mute")
     {
-        aExecItem.setMute( mxMuteToolBox->get_item_active("mute") );
+        aExecItem.setMute( mxMuteToolBox->get_item_active(u"mute"_ustr) );
     }
     else if (rId == u"loop")
     {
-        aExecItem.setLoop( mxPlayToolBox->get_item_active("loop") );
+        aExecItem.setLoop( mxPlayToolBox->get_item_active(u"loop"_ustr) );
     }
 }
 

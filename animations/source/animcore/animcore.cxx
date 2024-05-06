@@ -1893,7 +1893,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !refChild.is() )
-        throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1918,7 +1918,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !refChild.is() )
-        throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1947,7 +1947,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !oldChild.is() )
-        throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1973,7 +1973,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     std::unique_lock l( m_aMutex );
 
     if( !oldChild.is() )
-        throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
 
     auto old = std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( old == maChildren.end() )
@@ -1996,13 +1996,13 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
         std::unique_lock aGuard( m_aMutex );
 
         if( !newChild.is() )
-            throw IllegalArgumentException("no child", xThis, 1);
+            throw IllegalArgumentException(u"no child"_ustr, xThis, 1);
 
         if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
             throw ElementExistException({}, xThis);
 
         if( xThis == newChild )
-            throw IllegalArgumentException("cannot append self", xThis, -1);
+            throw IllegalArgumentException(u"cannot append self"_ustr, xThis, -1);
 
         maChildren.push_back( newChild );
     }

@@ -185,9 +185,9 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     {
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
         if (Application::GetToolkitName() == "gtk4")
-            xPlayer = createPlayer(rURL, "com.sun.star.comp.avmedia.Manager_Gtk", xContext);
+            xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Gtk"_ustr, xContext);
         else
-            xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME, xContext);
+            xPlayer = createPlayer(rURL, u"" AVMEDIA_MANAGER_SERVICE_NAME ""_ustr, xContext);
     }
 
     return xPlayer;

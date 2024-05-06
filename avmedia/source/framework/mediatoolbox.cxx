@@ -112,7 +112,7 @@ VclPtr<InterimItemWindow> MediaToolBoxControl::CreateItemWindow( vcl::Window *pP
 
 void MediaToolBoxControl::implUpdateMediaControl()
 {
-    updateStatus( ".uno:AVMediaToolBox" );
+    updateStatus( u".uno:AVMediaToolBox"_ustr );
 }
 
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
@@ -126,7 +126,7 @@ void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
         { "AVMediaToolBox", aAny }
     }));
 
-    Dispatch( ".uno:AVMediaToolBox" , aArgs );
+    Dispatch( u".uno:AVMediaToolBox"_ustr , aArgs );
 }
 
 } // namespace avmedia

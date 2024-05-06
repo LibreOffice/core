@@ -32,22 +32,22 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     // MediaControlStyle::MultiLine is the normal docking windows of tools->media player
     // MediaControlStyle::SingleLine is the toolbar of view->toolbar->media playback
     InterimItemWindow(pParent, eControlStyle == MediaControlStyle::MultiLine ?
-                                   OUString("svx/ui/mediawindow.ui") :
-                                   OUString("svx/ui/medialine.ui"),
-                               "MediaWindow"),
+                                   u"svx/ui/mediawindow.ui"_ustr :
+                                   u"svx/ui/medialine.ui"_ustr,
+                               u"MediaWindow"_ustr),
     maIdle( "avmedia MediaControl Idle" ),
     maChangeTimeIdle( "avmedia MediaControl Change Time Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),
     mbLocked( false ),
     meControlStyle( eControlStyle )
 {
-    mxPlayToolBox = m_xBuilder->weld_toolbar("playtoolbox");
-    mxTimeSlider = m_xBuilder->weld_scale("timeslider");
-    mxMuteToolBox = m_xBuilder->weld_toolbar("mutetoolbox");
-    mxVolumeSlider = m_xBuilder->weld_scale("volumeslider");
-    mxZoomListBox = m_xBuilder->weld_combo_box("zoombox");
-    mxTimeEdit = m_xBuilder->weld_entry("timeedit");
-    mxMediaPath = m_xBuilder->weld_label("url");
+    mxPlayToolBox = m_xBuilder->weld_toolbar(u"playtoolbox"_ustr);
+    mxTimeSlider = m_xBuilder->weld_scale(u"timeslider"_ustr);
+    mxMuteToolBox = m_xBuilder->weld_toolbar(u"mutetoolbox"_ustr);
+    mxVolumeSlider = m_xBuilder->weld_scale(u"volumeslider"_ustr);
+    mxZoomListBox = m_xBuilder->weld_combo_box(u"zoombox"_ustr);
+    mxTimeEdit = m_xBuilder->weld_entry(u"timeedit"_ustr);
+    mxMediaPath = m_xBuilder->weld_label(u"url"_ustr);
 
     InitializeWidgets();
 
@@ -59,7 +59,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maChangeTimeIdle.SetPriority( TaskPriority::LOWEST );
     maChangeTimeIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeEndHdl ) );
 
-    mxTimeEdit->set_text(" 00:00:00/00:00:00 ");
+    mxTimeEdit->set_text(u" 00:00:00/00:00:00 "_ustr);
     Size aTextSize = mxTimeEdit->get_preferred_size();
     mxTimeEdit->set_size_request(aTextSize.Width(), aTextSize.Height());
     mxTimeEdit->set_text(OUString());
@@ -85,8 +85,8 @@ void MediaControl::InitializeWidgets()
 {
     if( meControlStyle != MediaControlStyle::SingleLine )
     {
-        mxPlayToolBox->set_item_help_id("open", HID_AVMEDIA_TOOLBOXITEM_OPEN);
-        mxPlayToolBox->set_item_help_id("apply", HID_AVMEDIA_TOOLBOXITEM_INSERT);
+        mxPlayToolBox->set_item_help_id(u"open"_ustr, HID_AVMEDIA_TOOLBOXITEM_OPEN);
+        mxPlayToolBox->set_item_help_id(u"apply"_ustr, HID_AVMEDIA_TOOLBOXITEM_INSERT);
     }
     avmedia::MediaControlBase::InitializeWidgets();
 }
@@ -164,11 +164,11 @@ IMPL_LINK( MediaControl, implSelectHdl, const OUString&, rIdent, void )
         OUString aURL;
         if (MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr))
         {
-            if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
+            if( !MediaWindow::isMediaURL( aURL, u""_ustr/*TODO?*/, true ) )
                 MediaWindow::executeFormatErrorBox(GetFrameWeld());
             else
             {
-                aExecItem.setURL( aURL, "", ""/*TODO?*/ );
+                aExecItem.setURL( aURL, u""_ustr, u""_ustr/*TODO?*/ );
                 aExecItem.setState( MediaState::Play );
             }
         }

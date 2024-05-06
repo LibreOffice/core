@@ -450,10 +450,10 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         OUString const guessed(::comphelper::GuessMediaMimeType(filename));
-        xStreamProps->setPropertyValue("MediaType",
+        xStreamProps->setPropertyValue(u"MediaType"_ustr,
             uno::Any(guessed.isEmpty() ? AVMEDIA_MIMETYPE_COMMON : guessed));
         xStreamProps->setPropertyValue( // turn off compression
-            "Compressed", uno::Any(false));
+            u"Compressed"_ustr, uno::Any(false));
     }
     return xStream;
 }
