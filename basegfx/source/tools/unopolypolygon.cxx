@@ -95,8 +95,8 @@ namespace basegfx::unotools
                 // found - contract violation.
                 if( !xLinePoly.is() )
                     throw lang::IllegalArgumentException(
-                        "UnoPolyPolygon::addPolyPolygon(): Invalid input "
-                        "poly-polygon, cannot retrieve vertex data",
+                        u"UnoPolyPolygon::addPolyPolygon(): Invalid input "
+                        "poly-polygon, cannot retrieve vertex data"_ustr,
                         getXWeak(), 1);
 
                 aSrcPoly = unotools::polyPolygonFromPoint2DSequenceSequence(

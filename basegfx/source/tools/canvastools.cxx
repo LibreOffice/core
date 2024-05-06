@@ -287,8 +287,8 @@ namespace basegfx::unotools
                     if( !xLinePoly.is() )
                     {
                         throw lang::IllegalArgumentException(
-                            "basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
-                            "poly-polygon, cannot retrieve vertex data",
+                            u"basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
+                            "poly-polygon, cannot retrieve vertex data"_ustr,
                             uno::Reference< uno::XInterface >(),
                             0 );
                     }

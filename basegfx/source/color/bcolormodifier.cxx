@@ -47,7 +47,7 @@ namespace basegfx
 
     OUString BColorModifier_gray::getModifierName() const
     {
-        return "gray";
+        return u"gray"_ustr;
     }
 
     BColorModifier_invert::~BColorModifier_invert()
@@ -66,7 +66,7 @@ namespace basegfx
 
     OUString BColorModifier_invert::getModifierName() const
     {
-        return "invert";
+        return u"invert"_ustr;
     }
 
     BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha()
@@ -87,7 +87,7 @@ namespace basegfx
 
     OUString BColorModifier_luminance_to_alpha::getModifierName() const
     {
-        return "luminance_to_alpha";
+        return u"luminance_to_alpha"_ustr;
     }
 
     BColorModifier_replace::~BColorModifier_replace()
@@ -113,7 +113,7 @@ namespace basegfx
 
     OUString BColorModifier_replace::getModifierName() const
     {
-        return "replace";
+        return u"replace"_ustr;
     }
 
     BColorModifier_interpolate::~BColorModifier_interpolate()
@@ -139,7 +139,7 @@ namespace basegfx
 
     OUString BColorModifier_interpolate::getModifierName() const
     {
-        return "interpolate";
+        return u"interpolate"_ustr;
     }
 
     BColorModifier_matrix::~BColorModifier_matrix()
@@ -194,7 +194,7 @@ namespace basegfx
 
     OUString BColorModifier_matrix::getModifierName() const
     {
-        return "matrix";
+        return u"matrix"_ustr;
     }
 
     BColorModifier_saturate::BColorModifier_saturate(double fValue)
@@ -239,7 +239,7 @@ namespace basegfx
 
     OUString BColorModifier_saturate::getModifierName() const
     {
-        return "saturate";
+        return u"saturate"_ustr;
     }
 
     BColorModifier_hueRotate::BColorModifier_hueRotate(double fRad)
@@ -290,7 +290,7 @@ namespace basegfx
 
     OUString BColorModifier_hueRotate::getModifierName() const
     {
-        return "hueRotate";
+        return u"hueRotate"_ustr;
     }
 
     BColorModifier_black_and_white::~BColorModifier_black_and_white()
@@ -325,7 +325,7 @@ namespace basegfx
 
     OUString BColorModifier_black_and_white::getModifierName() const
     {
-        return "black_and_white";
+        return u"black_and_white"_ustr;
     }
 
     BColorModifier_gamma::BColorModifier_gamma(double fValue)
@@ -376,7 +376,7 @@ namespace basegfx
 
     OUString BColorModifier_gamma::getModifierName() const
     {
-        return "gamma";
+        return u"gamma"_ustr;
     }
 
     BColorModifier_RGBLuminanceContrast::BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast)
@@ -458,7 +458,7 @@ namespace basegfx
 
     OUString BColorModifier_RGBLuminanceContrast::getModifierName() const
     {
-        return "RGBLuminanceContrast";
+        return u"RGBLuminanceContrast"_ustr;
     }
 
     BColorModifier_randomize::BColorModifier_randomize(double fRandomPart)
@@ -514,7 +514,7 @@ namespace basegfx
 
     OUString BColorModifier_randomize::getModifierName() const
     {
-        return "randomize";
+        return u"randomize"_ustr;
     }
 
     ::basegfx::BColor BColorModifierStack::getModifiedColor(const ::basegfx::BColor& rSource) const

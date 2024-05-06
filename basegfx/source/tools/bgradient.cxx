@@ -55,12 +55,12 @@ StringMap lcl_jsonToStringMap(std::u16string_view rJSON)
 
 basegfx::BGradient lcl_buildGradientFromStringMap(StringMap& rMap)
 {
-    basegfx::BGradient aGradient(
-        basegfx::BColorStops(ColorToBColorConverter(rMap["startcolor"].toInt32(16)).getBColor(),
-                             ColorToBColorConverter(rMap["endcolor"].toInt32(16)).getBColor()));
+    basegfx::BGradient aGradient(basegfx::BColorStops(
+        ColorToBColorConverter(rMap[u"startcolor"_ustr].toInt32(16)).getBColor(),
+        ColorToBColorConverter(rMap[u"endcolor"_ustr].toInt32(16)).getBColor()));
 
-    aGradient.SetGradientStyle(lcl_getStyleFromString(rMap["style"]));
-    aGradient.SetAngle(Degree10(rMap["angle"].toInt32()));
+    aGradient.SetGradientStyle(lcl_getStyleFromString(rMap[u"style"_ustr]));
+    aGradient.SetAngle(Degree10(rMap[u"angle"_ustr].toInt32()));
 
     return aGradient;
 }
