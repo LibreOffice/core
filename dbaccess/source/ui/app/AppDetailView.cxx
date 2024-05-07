@@ -48,8 +48,8 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::util::URL;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, TranslateId _pHelpID, TranslateId pTitleResourceID, bool _bHideWhenDisabled )
-    :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
+TaskEntry::TaskEntry( const OUString& _rAsciiUNOCommand, TranslateId _pHelpID, TranslateId pTitleResourceID, bool _bHideWhenDisabled )
+    :sUNOCommand( _rAsciiUNOCommand )
     ,pHelpID( _pHelpID )
     ,sTitle( DBA_RES(pTitleResourceID) )
     ,bHideWhenDisabled( _bHideWhenDisabled )
@@ -259,28 +259,28 @@ void OApplicationDetailView::impl_fillTaskPaneData(ElementType _eType, TaskPaneD
     switch ( _eType )
     {
     case E_TABLE:
-        rList.emplace_back( ".uno:DBNewTable", RID_STR_TABLES_HELP_TEXT_DESIGN, RID_STR_NEW_TABLE );
-        rList.emplace_back( ".uno:DBNewTableAutoPilot", RID_STR_TABLES_HELP_TEXT_WIZARD, RID_STR_NEW_TABLE_AUTO );
-        rList.emplace_back( ".uno:DBNewView", RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW, true );
+        rList.emplace_back( u".uno:DBNewTable"_ustr, RID_STR_TABLES_HELP_TEXT_DESIGN, RID_STR_NEW_TABLE );
+        rList.emplace_back( u".uno:DBNewTableAutoPilot"_ustr, RID_STR_TABLES_HELP_TEXT_WIZARD, RID_STR_NEW_TABLE_AUTO );
+        rList.emplace_back( u".uno:DBNewView"_ustr, RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW, true );
         _rData.pTitleId = RID_STR_TABLES_CONTAINER;
         break;
 
     case E_FORM:
-        rList.emplace_back( ".uno:DBNewForm", RID_STR_FORMS_HELP_TEXT, RID_STR_NEW_FORM );
-        rList.emplace_back( ".uno:DBNewFormAutoPilot", RID_STR_FORMS_HELP_TEXT_WIZARD, RID_STR_NEW_FORM_AUTO );
+        rList.emplace_back( u".uno:DBNewForm"_ustr, RID_STR_FORMS_HELP_TEXT, RID_STR_NEW_FORM );
+        rList.emplace_back( u".uno:DBNewFormAutoPilot"_ustr, RID_STR_FORMS_HELP_TEXT_WIZARD, RID_STR_NEW_FORM_AUTO );
         _rData.pTitleId = RID_STR_FORMS_CONTAINER;
         break;
 
     case E_REPORT:
-        rList.emplace_back( ".uno:DBNewReport", RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT, true );
-        rList.emplace_back( ".uno:DBNewReportAutoPilot", RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO );
+        rList.emplace_back( u".uno:DBNewReport"_ustr, RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT, true );
+        rList.emplace_back( u".uno:DBNewReportAutoPilot"_ustr, RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO );
         _rData.pTitleId = RID_STR_REPORTS_CONTAINER;
         break;
 
     case E_QUERY:
-        rList.emplace_back( ".uno:DBNewQuery", RID_STR_QUERIES_HELP_TEXT, RID_STR_NEW_QUERY );
-        rList.emplace_back( ".uno:DBNewQueryAutoPilot", RID_STR_QUERIES_HELP_TEXT_WIZARD, RID_STR_NEW_QUERY_AUTO );
-        rList.emplace_back( ".uno:DBNewQuerySql", RID_STR_QUERIES_HELP_TEXT_SQL, RID_STR_NEW_QUERY_SQL );
+        rList.emplace_back( u".uno:DBNewQuery"_ustr, RID_STR_QUERIES_HELP_TEXT, RID_STR_NEW_QUERY );
+        rList.emplace_back( u".uno:DBNewQueryAutoPilot"_ustr, RID_STR_QUERIES_HELP_TEXT_WIZARD, RID_STR_NEW_QUERY_AUTO );
+        rList.emplace_back( u".uno:DBNewQuerySql"_ustr, RID_STR_QUERIES_HELP_TEXT_SQL, RID_STR_NEW_QUERY_SQL );
         _rData.pTitleId = RID_STR_QUERIES_CONTAINER;
         break;
 

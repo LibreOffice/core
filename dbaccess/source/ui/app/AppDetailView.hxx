@@ -47,7 +47,7 @@ namespace dbaui
             // If an entry is disabled in the latter, it should also be disabled in the former.
             // If an entry is *hidden* in the former, it should also be hidden in the latter.
 
-        TaskEntry( const char* _pAsciiUNOCommand, TranslateId pHelpID, TranslateId pTitleResourceID, bool _bHideWhenDisabled = false );
+        TaskEntry( const OUString& _rAsciiUNOCommand, TranslateId pHelpID, TranslateId pTitleResourceID, bool _bHideWhenDisabled = false );
     };
     typedef std::vector< TaskEntry >  TaskEntryList;
 
