@@ -125,12 +125,11 @@ static ErrCode ReadThroughComponent(
 static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
-    const char* pStreamName,
+    const OUString& sStreamName,
     const uno::Reference<XComponentContext> & rxContext,
     ODBFilter& _rFilter)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
-    OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
     if ( !xStorage )
         // TODO/LATER: better error handling
@@ -141,7 +140,6 @@ static ErrCode ReadThroughComponent(
     try
     {
         // open stream (and set parser input)
-        OUString sStreamName = OUString::createFromAscii(pStreamName);
         if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
         {
             // stream name not found! return immediately with OK signal
@@ -323,7 +321,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<XComponent> xModel(GetModel());
         ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
-                                    ,"settings.xml"
+                                    ,u"settings.xml"_ustr
                                     ,GetComponentContext()
                                     ,*this
                                     );
@@ -331,7 +329,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         if ( nRet == ERRCODE_NONE )
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
-                                    ,"content.xml"
+                                    ,u"content.xml"_ustr
                                     ,GetComponentContext()
                                     ,*this
                                     );
