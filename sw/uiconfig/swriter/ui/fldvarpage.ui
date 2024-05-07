@@ -59,6 +59,8 @@
       <object class="GtkGrid" id="gdNameValue">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">False</property>
+        <property name="vexpand">True</property>
         <property name="row-spacing">6</property>
         <property name="column-spacing">6</property>
         <child>
@@ -195,9 +197,9 @@
         </child>
       </object>
       <packing>
-        <property name="left-attach">1</property>
+        <property name="left-attach">0</property>
         <property name="top-attach">1</property>
-        <property name="width">2</property>
+        <property name="width">3</property>
       </packing>
     </child>
     <child>
@@ -205,7 +207,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -227,6 +228,9 @@
                 <property name="headers-clickable">False</property>
                 <property name="search-column">0</property>
                 <property name="show-expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <child>
@@ -262,7 +266,6 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
-        <property name="height">2</property>
       </packing>
     </child>
     <child>
@@ -270,7 +273,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -292,6 +294,9 @@
                 <property name="headers-clickable">False</property>
                 <property name="search-column">0</property>
                 <property name="show-expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                     <child>
@@ -334,7 +339,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -364,6 +368,9 @@
                     <property name="headers-clickable">False</property>
                     <property name="search-column">0</property>
                     <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                         <child>
@@ -406,6 +413,9 @@
                     <property name="headers-clickable">False</property>
                     <property name="search-column">0</property>
                     <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                         <child>
