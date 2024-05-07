@@ -78,7 +78,7 @@ class MyService2Impl : public ::cppu::WeakImplHelper3<
     // other UNO API's in your implementation
     Reference< XComponentContext > m_xContext;
 public:
-    inline MyService2Impl(Reference< XComponentContext > const & xContext) throw ()
+    inline MyService2Impl(Reference< XComponentContext > const & xContext) SAL_NOEXCEPT
         : m_xContext(xContext)
         {}
 

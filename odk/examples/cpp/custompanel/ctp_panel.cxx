@@ -122,7 +122,7 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    Reference< XWindow > SAL_CALL SingleColorPanel::getWindow() throw (RuntimeException)
+    Reference< XWindow > SAL_CALL SingleColorPanel::getWindow()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
@@ -131,7 +131,7 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
@@ -144,7 +144,7 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
+    void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent )
     {
         try
         {
@@ -163,7 +163,7 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
+    void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource )
     {
         (void)i_rSource;
     }
@@ -201,26 +201,26 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    Reference< XFrame > SAL_CALL PanelUIElement::getFrame() throw (RuntimeException)
+    Reference< XFrame > SAL_CALL PanelUIElement::getFrame()
     {
         // TODO
         return NULL;
     }
 
 
-    OUString SAL_CALL PanelUIElement::getResourceURL() throw (RuntimeException)
+    OUString SAL_CALL PanelUIElement::getResourceURL()
     {
         return m_sResourceURL;
     }
 
 
-    ::sal_Int16 SAL_CALL PanelUIElement::getType() throw (RuntimeException)
+    ::sal_Int16 SAL_CALL PanelUIElement::getType()
     {
         return UIElementType::TOOLPANEL;
     }
 
 
-    Reference< XInterface > SAL_CALL PanelUIElement::getRealInterface(  ) throw (RuntimeException)
+    Reference< XInterface > SAL_CALL PanelUIElement::getRealInterface(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xToolPanel.is() )

@@ -848,12 +848,12 @@ void OResultSet::getFastPropertyValue(
     }
 }
 
-void SAL_CALL OResultSet::acquire() throw()
+void SAL_CALL OResultSet::acquire() SAL_NOEXCEPT
 {
     OResultSet_BASE::acquire();
 }
 
-void SAL_CALL OResultSet::release() throw()
+void SAL_CALL OResultSet::release() SAL_NOEXCEPT
 {
     OResultSet_BASE::release();
 }

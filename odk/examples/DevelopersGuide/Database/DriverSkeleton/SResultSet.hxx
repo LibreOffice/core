@@ -120,8 +120,8 @@ namespace connectivity
             virtual void SAL_CALL disposing();
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType );
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() SAL_NOEXCEPT;
+            virtual void SAL_CALL release() SAL_NOEXCEPT;
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  );
             // XPropertySet

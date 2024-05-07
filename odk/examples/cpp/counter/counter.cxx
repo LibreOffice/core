@@ -82,9 +82,9 @@ public:
         { std::cout << "< MyCounterImpl dtor called >" << std::endl; }
 
     // XInterface implementation
-    virtual void SAL_CALL acquire() throw ()
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT
         { ++m_nRefCount; }
-    virtual void SAL_CALL release() throw ()
+    virtual void SAL_CALL release() SAL_NOEXCEPT
         { if (! --m_nRefCount) delete this; }
     virtual Any SAL_CALL queryInterface( const Type & rType )
         { return cppu::queryInterface(rType,

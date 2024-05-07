@@ -104,8 +104,8 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(){OStatement_BASE::disposing();}
             // XInterface
-            virtual void SAL_CALL release() throw();
-            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() SAL_NOEXCEPT;
+            virtual void SAL_CALL acquire() SAL_NOEXCEPT;
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType );
             //XTypeProvider
@@ -145,7 +145,7 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing();
             // XInterface
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL release() SAL_NOEXCEPT;
         };
 
         class OStatement :  public OStatement_BASE2,
@@ -160,8 +160,8 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType );
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() SAL_NOEXCEPT;
+            virtual void SAL_CALL release() SAL_NOEXCEPT;
             // XBatchExecution
             virtual void SAL_CALL addBatch( const ::rtl::OUString& sql );
             virtual void SAL_CALL clearBatch(  );

@@ -74,7 +74,7 @@ class MyService1Impl
     // other UNO API's in your implementation
     Reference< XComponentContext > m_xContext;
 public:
-    inline MyService1Impl(Reference< XComponentContext > const & xContext) throw ()
+    inline MyService1Impl(Reference< XComponentContext > const & xContext) SAL_NOEXCEPT
         : m_refcount( 0 ),
           m_xContext(xContext)
         {}
@@ -83,10 +83,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type );
-    virtual void SAL_CALL acquire()
-        throw ();
-    virtual void SAL_CALL release()
-        throw ();
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT;
+    virtual void SAL_CALL release() SAL_NOEXCEPT;
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes();
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId();
@@ -135,15 +133,13 @@ Any MyService1Impl::queryInterface( Type const & type )
     return Any();
 }
 
-void MyService1Impl::acquire()
-    throw ()
+void MyService1Impl::acquire() SAL_NOEXCEPT
 {
     // thread-safe incrementation of reference count
     ::osl_atomic_increment( &m_refcount );
 }
 
-void MyService1Impl::release()
-    throw ()
+void MyService1Impl::release() SAL_NOEXCEPT
 {
     // thread-safe decrementation of reference count
     if (0 == ::osl_atomic_decrement( &m_refcount ))

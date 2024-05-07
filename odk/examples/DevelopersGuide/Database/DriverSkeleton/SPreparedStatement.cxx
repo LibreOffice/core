@@ -66,12 +66,12 @@ OPreparedStatement::~OPreparedStatement()
 {
 }
 
-void SAL_CALL OPreparedStatement::acquire() throw()
+void SAL_CALL OPreparedStatement::acquire() SAL_NOEXCEPT
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OPreparedStatement::release() throw()
+void SAL_CALL OPreparedStatement::release() SAL_NOEXCEPT
 {
     OStatement_BASE2::release();
 }

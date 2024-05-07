@@ -58,7 +58,7 @@ namespace connectivity
             OResultSetMetaData(OConnection* _pConnection) : m_pConnection(_pConnection){}
 
             /// Avoid ambiguous cast error from the compiler.
-            inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
+            inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () SAL_NOEXCEPT
             { return this; }
 
             virtual sal_Int32 SAL_CALL getColumnCount(  );

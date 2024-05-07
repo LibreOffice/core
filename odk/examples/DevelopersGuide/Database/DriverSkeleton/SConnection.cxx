@@ -72,7 +72,7 @@ OConnection::~OConnection()
     m_pDriver = NULL;
 }
 
-void SAL_CALL OConnection::release() throw()
+void SAL_CALL OConnection::release() SAL_NOEXCEPT
 {
     release_ChildImpl();
 }
