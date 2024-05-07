@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,skia))
 
 $(eval $(call gb_Module_add_targets,skia,\
 	UnpackedTarball_skia \
-	StaticLibrary_skia \
+	Library_skia \
 ))
 
 
