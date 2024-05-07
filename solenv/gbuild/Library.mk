@@ -237,6 +237,7 @@ gb_Library_add_asmobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(
 gb_Library_add_asmobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_exception_objects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_x64_generated_exception_objects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Library_add_generated_asmobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_generated_cobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_generated_exception_objects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_generated_objcobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
