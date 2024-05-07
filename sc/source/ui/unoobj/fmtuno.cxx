@@ -52,6 +52,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetValidatePropertyMap()
         { SC_UNONAME_ERRMESS,  0,  cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNONAME_ERRTITLE, 0,  cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNONAME_IGNOREBL, 0,  cppu::UnoType<bool>::get(),                          0, 0},
+        { SC_UNONAME_ISCASE,   0,  cppu::UnoType<bool>::get(),                          0, 0},
         { SC_UNONAME_INPMESS,  0,  cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNONAME_INPTITLE, 0,  cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNONAME_SHOWERR,  0,  cppu::UnoType<bool>::get(),                          0, 0},
@@ -559,6 +560,7 @@ ScTableValidationObj::ScTableValidationObj(const ScDocument& rDoc, sal_uInt32 nK
             meGrammar1 = meGrammar2 = eGrammar;
             nValMode = sal::static_int_cast<sal_uInt16>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
+            bCaseSensitive = pData->IsCaseSensitive();
             nShowList = pData->GetListType();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
             ScValidErrorStyle eStyle;
@@ -593,6 +595,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument& rDoc,
                                                    maExprNmsp1, maExprNmsp2,
                                                    eGrammar1, eGrammar2 );
     pRet->SetIgnoreBlank(bIgnoreBlank);
+    pRet->SetCaseSensitive(bCaseSensitive);
     pRet->SetListType(nShowList);
 
     if ( aTokens1.hasElements() )
@@ -628,6 +631,7 @@ void ScTableValidationObj::ClearData_Impl()
     nMode        = ScConditionMode::NONE;
     nValMode     = SC_VALID_ANY;
     bIgnoreBlank = true;
+    bCaseSensitive = false;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
     bShowInput   = false;
     bShowError   = false;
@@ -762,6 +766,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     if ( aPropertyName == SC_UNONAME_SHOWINP )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aPropertyName == SC_UNONAME_SHOWERR )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aPropertyName == SC_UNONAME_IGNOREBL ) bIgnoreBlank = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if ( aPropertyName == SC_UNONAME_ISCASE )   bCaseSensitive = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aPropertyName == SC_UNONAME_SHOWLIST ) aValue >>= nShowList;
     else if ( aPropertyName == SC_UNONAME_INPTITLE )
     {
@@ -871,6 +876,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
     if ( aPropertyName == SC_UNONAME_SHOWINP )       aRet <<= bShowInput;
     else if ( aPropertyName == SC_UNONAME_SHOWERR )  aRet <<= bShowError;
     else if ( aPropertyName == SC_UNONAME_IGNOREBL ) aRet <<= bIgnoreBlank;
+    else if ( aPropertyName == SC_UNONAME_ISCASE )   aRet <<= bCaseSensitive;
     else if ( aPropertyName == SC_UNONAME_SHOWLIST ) aRet <<= nShowList;
     else if ( aPropertyName == SC_UNONAME_INPTITLE ) aRet <<= aInputTitle;
     else if ( aPropertyName == SC_UNONAME_INPMESS )  aRet <<= aInputMessage;

@@ -46,6 +46,7 @@ class ScXMLContentValidationContext : public ScXMLImportContext
     OUString      sCondition;
     sal_Int16          nShowList;
     bool           bAllowEmptyCell;
+    bool           bIsCaseSensitive;
     bool           bDisplayHelp;
     bool           bDisplayError;
 
@@ -167,6 +168,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     ScXMLImportContext( rImport ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
     bAllowEmptyCell(true),
+    bIsCaseSensitive(false),
     bDisplayHelp(false),
     bDisplayError(false)
 {
@@ -189,6 +191,10 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
         case XML_ELEMENT( TABLE, XML_ALLOW_EMPTY_CELL ):
             if (IsXMLToken(aIter, XML_FALSE))
                 bAllowEmptyCell = false;
+            break;
+        case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+            if (IsXMLToken(aIter, XML_TRUE))
+                bIsCaseSensitive = true;
             break;
         case XML_ELEMENT( TABLE, XML_DISPLAY_LIST ):
             if (IsXMLToken(aIter, XML_NO))
@@ -380,6 +386,7 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowInputMessage = bDisplayHelp;
     aValidation.bIgnoreBlanks = bAllowEmptyCell;
+    aValidation.bCaseSensitive = bIsCaseSensitive;
     aValidation.nShowList = nShowList;
     GetScImport().AddValidation(aValidation);
 }

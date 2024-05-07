@@ -168,6 +168,7 @@ private:
     OUString            aPosString;     // formula position as text
     sal_uInt16          nValMode;       // enum ScValidationMode
     bool                bIgnoreBlank;
+    bool                bCaseSensitive;
     sal_Int16           nShowList;
     bool                bShowInput;
     OUString            aInputTitle;

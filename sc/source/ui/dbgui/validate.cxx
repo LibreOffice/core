@@ -364,6 +364,7 @@ ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogCon
     , m_pRefEdit(nullptr)
     , m_xLbAllow(m_xBuilder->weld_combo_box("allow"))
     , m_xCbAllow(m_xBuilder->weld_check_button("allowempty"))
+    , m_xCbCaseSens(m_xBuilder->weld_check_button("casesens"))
     , m_xCbShow(m_xBuilder->weld_check_button("showlist"))
     , m_xCbSort(m_xBuilder->weld_check_button("sortascend"))
     , m_xFtValue(m_xBuilder->weld_label("valueft"))
@@ -452,6 +453,11 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
         bCheck = pItem->GetValue();
     m_xCbAllow->set_active( bCheck );
 
+    bool bCaseSensetive = false;
+    if (const SfxBoolItem* pItem = rArgSet->GetItemIfSet( FID_VALID_CASESENS ) )
+        bCaseSensetive = pItem->GetValue();
+    m_xCbCaseSens->set_active( bCaseSensetive );
+
     sal_Int32 nListType = ValidListType::UNSORTED;
     if( const SfxInt16Item* pItem = rArgSet->GetItemIfSet( FID_VALID_LISTTYPE ) )
         nListType = pItem->GetValue();
@@ -490,6 +496,7 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_xCbAllow->get_active() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_CASESENS, m_xCbCaseSens->get_active() ) );
     rArgSet->Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
     return true;
 }
@@ -644,6 +651,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
     bool bCustom = (nLbPos == SC_VALIDDLG_ALLOW_CUSTOM);
 
     m_xCbAllow->set_sensitive( bEnable );   // Empty cell
+    m_xCbCaseSens->set_sensitive( bEnable &&
+        (bRange || bList || bCustom) ); // Case Sensitive
     m_xFtValue->set_sensitive( bEnable );
     m_xLbValue->set_sensitive( bEnable );
     m_xFtMin->set_sensitive( bEnable );
@@ -681,6 +690,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
         }
     }
 
+    m_xCbCaseSens->set_visible( bRange || bList || bCustom ); // Case Sensitive
     m_xCbShow->set_visible( bRange || bList );
     m_xCbSort->set_visible( bRange || bList );
     m_xFtValue->set_visible( !bRange && !bList && !bCustom);

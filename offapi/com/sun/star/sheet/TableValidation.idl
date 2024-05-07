@@ -99,6 +99,13 @@ published service TableValidation
      */
     [optional,property] short ShowList;
 
+
+    /** specifies if validation is case sensitive.
+
+       @since LibreOffice 24.8
+     */
+    [optional, property] boolean IsCaseSensitive;
+
 };
 
 

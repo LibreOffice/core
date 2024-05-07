@@ -849,6 +849,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScConditionMode eOper = ScConditionMode::Equal;
                     OUString aExpr1, aExpr2;
                     bool bBlank = true;
+                    bool bCaseSensitive = false;
                     sal_Int16 nListType = css::sheet::TableValidationVisibility::UNSORTED;
                     bool bShowHelp = false;
                     OUString aHelpTitle, aHelpText;
@@ -881,6 +882,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aExpr1 = pOldData->GetExpression( aCursorPos, 0, nNumFmt );
                             aExpr2 = pOldData->GetExpression( aCursorPos, 1, nNumFmt );
                             bBlank = pOldData->IsIgnoreBlank();
+                            bCaseSensitive = pOldData->IsCaseSensitive();
                             nListType = pOldData->GetListType();
 
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
@@ -891,6 +893,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE1,      aExpr1 ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE2,      aExpr2 ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_BLANK,       bBlank ) );
+                            aArgSet.Put( SfxBoolItem(    FID_VALID_CASESENS,    bCaseSensitive ) );
                             aArgSet.Put( SfxInt16Item(   FID_VALID_LISTTYPE,    nListType ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_SHOWHELP,    bShowHelp ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTITLE,   aHelpTitle ) );
@@ -966,6 +969,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
                         if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_BLANK ) )
                             bBlank = pItem->GetValue();
+                        if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_CASESENS ) )
+                            bCaseSensitive = pItem->GetValue();
                         if ( const SfxInt16Item* pItem = pOutSet->GetItemIfSet( FID_VALID_LISTTYPE ) )
                             nListType = pItem->GetValue();
 
@@ -987,6 +992,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, rDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
+                        aData.SetCaseSensitive( bCaseSensitive );
                         aData.SetListType( nListType );
 
                         aData.SetInput(aHelpTitle, aHelpText);          // sets bShowInput to TRUE

@@ -38,6 +38,7 @@ interface XValidation
     [attribute, readonly] string Formula1;
     [attribute, readonly] string Formula2;
     [attribute, readonly] long Type;
+    [attribute] boolean CaseSensitive;
     void Delete();
     void Add( [in] any Type, [in] any AlertStyle, [in] any Operator, [in] any Formula1, [in] any Formula2);
 };

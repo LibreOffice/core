@@ -780,6 +780,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
     );
 
     aScValidationData.SetIgnoreBlank( aValidation.bIgnoreBlanks );
+    aScValidationData.SetCaseSensitive( aValidation.bCaseSensitive );
     aScValidationData.SetListType( aValidation.nShowList );
 
     // set strings for error / input even if disabled (and disable afterwards)

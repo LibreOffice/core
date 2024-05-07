@@ -124,6 +124,16 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aIgnoreBlankCells);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value IgnoreBlankCells", !aIgnoreBlankCells);
 
+    propName = "IsCaseSensitive";
+    bool bCaseSensitive = false;
+    CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= bCaseSensitive);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IsCaseSensitive", !bCaseSensitive);
+
+    aNewValue <<= true;
+    xTableValidation->setPropertyValue(propName, aNewValue);
+    CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= bCaseSensitive);
+    CPPUNIT_ASSERT_MESSAGE("Unable to set property value IsCaseSensitive", bCaseSensitive);
+
     propName = "ErrorAlertStyle";
     aValue = xTableValidation->getPropertyValue(propName);
     sheet::ValidationAlertStyle aValidationAlertStyle;

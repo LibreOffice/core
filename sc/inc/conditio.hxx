@@ -56,6 +56,7 @@ struct RefUpdateMoveTabContext;
 
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
+#define SC_COND_CASESENS    2
 
 enum class ScConditionMode
 {
@@ -369,8 +370,13 @@ public:
 
     ScConditionMode GetOperation() const        { return eOp; }
     void SetOperation(ScConditionMode eMode);
+
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
     SC_DLLPUBLIC void SetIgnoreBlank(bool bSet);
+
+    bool            IsCaseSensitive() const     { return ( nOptions & SC_COND_CASESENS ) != 0; }
+    SC_DLLPUBLIC void SetCaseSensitive(bool bSet);
+
     const OUString& GetSrcString() const         { return aSrcString; }
     const ScAddress& GetSrcPos() const           { return aSrcPos; }
 

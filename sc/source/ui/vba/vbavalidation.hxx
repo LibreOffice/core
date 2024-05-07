@@ -36,6 +36,8 @@ public:
     // Attributes
     virtual sal_Bool SAL_CALL getIgnoreBlank() override;
     virtual void SAL_CALL setIgnoreBlank( sal_Bool _ignoreblank ) override;
+    virtual sal_Bool SAL_CALL getCaseSensitive() override;
+    virtual void SAL_CALL setCaseSensitive( sal_Bool _bCase ) override;
     virtual sal_Bool SAL_CALL getInCellDropdown() override;
     virtual void SAL_CALL setInCellDropdown( sal_Bool _incelldropdown ) override;
     virtual sal_Bool SAL_CALL getShowInput() override;

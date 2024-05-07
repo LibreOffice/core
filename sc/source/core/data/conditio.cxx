@@ -434,6 +434,16 @@ void ScConditionEntry::SetIgnoreBlank(bool bSet)
         nOptions |= SC_COND_NOBLANKS;
 }
 
+void ScConditionEntry::SetCaseSensitive(bool bSet)
+{
+    // The bit SC_COND_CASESENS is set if validation compare is case sensitive
+    // (only of valid)
+    if (bSet)
+        nOptions |= SC_COND_CASESENS;
+    else
+        nOptions &= ~SC_COND_CASESENS;
+}
+
 /**
  * Delete formula cells, so we re-compile at the next IsValid
  */
@@ -1172,10 +1182,10 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     switch ( eOp )
     {
         case ScConditionMode::Equal:
-            bValid = ScGlobal::GetTransliteration().isEqual(aUpVal1, rArg);
+            bValid = ScGlobal::GetTransliteration(IsCaseSensitive()).isEqual(aUpVal1, rArg);
         break;
         case ScConditionMode::NotEqual:
-            bValid = !ScGlobal::GetTransliteration().isEqual(aUpVal1, rArg);
+            bValid = !ScGlobal::GetTransliteration(IsCaseSensitive()).isEqual(aUpVal1, rArg);
         break;
         case ScConditionMode::TopPercent:
         case ScConditionMode::BottomPercent:
@@ -1185,7 +1195,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         case ScConditionMode::BelowAverage:
             return false;
         case ScConditionMode::BeginsWith:
-            bValid = ScGlobal::GetTransliteration().isMatch(aUpVal1, rArg);
+            bValid = ScGlobal::GetTransliteration(IsCaseSensitive()).isMatch(aUpVal1, rArg);
         break;
         case ScConditionMode::EndsWith:
         {
@@ -1197,7 +1207,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
             {
                 nStart = nStart - nLen;
                 sal_Int32 nMatch1(0), nMatch2(0);
-                bValid = ScGlobal::GetTransliteration().equals(rArg, nStart, nLen, nMatch1,
+                bValid = ScGlobal::GetTransliteration(IsCaseSensitive()).equals(rArg, nStart, nLen, nMatch1,
                                                                aUpVal1, 0, nLen, nMatch2);
             }
         }
@@ -1205,8 +1215,8 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         case ScConditionMode::ContainsText:
         case ScConditionMode::NotContainsText:
         {
-            const OUString aArgStr(ScGlobal::getCharClass().lowercase(rArg));
-            const OUString aValStr(ScGlobal::getCharClass().lowercase(aUpVal1));
+            const OUString aArgStr(!IsCaseSensitive() ? ScGlobal::getCharClass().lowercase(rArg) : rArg);
+            const OUString aValStr(!IsCaseSensitive() ? ScGlobal::getCharClass().lowercase(aUpVal1) : aUpVal1);
             bValid = aArgStr.indexOf(aValStr) != -1;
 
             if(eOp == ScConditionMode::NotContainsText)
@@ -1215,7 +1225,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         break;
         default:
         {
-            sal_Int32 nCompare = ScGlobal::GetCollator().compareString(
+            sal_Int32 nCompare = ScGlobal::GetCollator(IsCaseSensitive()).compareString(
                 rArg, aUpVal1 );
             switch ( eOp )
             {
@@ -1234,7 +1244,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 case ScConditionMode::Between:
                 case ScConditionMode::NotBetween:
                 {
-                    const sal_Int32 nCompare2 = ScGlobal::GetCollator().compareString(rArg, aUpVal2);
+                    const sal_Int32 nCompare2 = ScGlobal::GetCollator(IsCaseSensitive()).compareString(rArg, aUpVal2);
                     //  Test for NOTBETWEEN:
                     bValid = (nCompare > 0 && nCompare2 > 0) || (nCompare < 0 && nCompare2 < 0);
                     if ( eOp == ScConditionMode::Between )

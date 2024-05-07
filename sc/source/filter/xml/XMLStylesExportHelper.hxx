@@ -51,6 +51,7 @@ struct ScMyValidation
     bool                        bShowErrorMessage;
     bool                        bShowInputMessage;
     bool                        bIgnoreBlanks;
+    bool                        bCaseSensitive;
 
                                 ScMyValidation();
 

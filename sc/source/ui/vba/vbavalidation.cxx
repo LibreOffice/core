@@ -69,6 +69,23 @@ ScVbaValidation::setIgnoreBlank( sal_Bool _ignoreblank )
 }
 
 sal_Bool SAL_CALL
+ScVbaValidation::getCaseSensitive()
+{
+    uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
+    bool bCase = false;
+    xProps->getPropertyValue( SC_UNONAME_ISCASE )  >>= bCase;
+    return bCase;
+}
+
+void SAL_CALL
+ScVbaValidation::setCaseSensitive( sal_Bool _bCase )
+{
+    uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
+    xProps->setPropertyValue( SC_UNONAME_ISCASE, uno::Any( _bCase ) );
+    lcl_setValidationProps( m_xRange, xProps );
+}
+
+sal_Bool SAL_CALL
 ScVbaValidation::getInCellDropdown()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -197,6 +214,7 @@ ScVbaValidation::Delete(  )
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( true ) );
+    xProps->setPropertyValue( SC_UNONAME_ISCASE, uno::Any( false ) );
     xProps->setPropertyValue( SC_UNONAME_SHOWINP, uno::Any( true ) );
     xProps->setPropertyValue( SC_UNONAME_SHOWERR, uno::Any( true ) );
     xProps->setPropertyValue( SC_UNONAME_ERRTITLE, uno::Any( sBlank ) );

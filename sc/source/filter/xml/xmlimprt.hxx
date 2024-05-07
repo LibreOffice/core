@@ -106,6 +106,7 @@ struct ScMyImportValidation
     bool                                       bShowErrorMessage;
     bool                                       bShowInputMessage;
     bool                                       bIgnoreBlanks;
+    bool                                       bCaseSensitive;
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;

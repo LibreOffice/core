@@ -1036,6 +1036,8 @@ bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddre
 {
     // create a condition entry that tests on equality and set the passed token array
     ScConditionEntry aCondEntry( ScConditionMode::Equal, &rTokArr, nullptr, *GetDocument(), rPos );
+    aCondEntry.SetCaseSensitive(IsCaseSensitive());
+
     return aCondEntry.IsCellValid(rCell, rPos);
 }
 

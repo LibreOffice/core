@@ -48,13 +48,15 @@ ScMyValidation::ScMyValidation()
     nShowList(0),
     bShowErrorMessage(false),
     bShowInputMessage(false),
-    bIgnoreBlanks(false)
+    bIgnoreBlanks(false),
+    bCaseSensitive(false)
 {
 }
 
 bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 {
     return aVal.bIgnoreBlanks == bIgnoreBlanks &&
+        aVal.bCaseSensitive == bCaseSensitive &&
         aVal.bShowInputMessage == bShowInputMessage &&
         aVal.bShowErrorMessage == bShowErrorMessage &&
         aVal.aBaseCell == aBaseCell &&
@@ -109,6 +111,7 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     aValidation.bShowInputMessage = bShowInputMessage;
     aValidation.aValidationType = aValidationType;
     aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(SC_UNONAME_IGNOREBL));
+    aValidation.bCaseSensitive = ::cppu::any2bool(xPropertySet->getPropertyValue(SC_UNONAME_ISCASE));
     xPropertySet->getPropertyValue(SC_UNONAME_SHOWLIST) >>= aValidation.nShowList;
     xPropertySet->getPropertyValue(SC_UNONAME_ERRALSTY) >>= aValidation.aAlertStyle;
     uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
@@ -322,6 +325,10 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
             else
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
+            // Validation Case Sensitive
+            if (rValidation.bCaseSensitive)
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
             if (rValidation.aValidationType == sheet::ValidationType_LIST)
             {
                 switch (rValidation.nShowList)

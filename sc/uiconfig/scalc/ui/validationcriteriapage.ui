@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
-  <!-- n-columns=2 n-rows=8 -->
+  <!-- n-columns=2 n-rows=9 -->
   <object class="GtkGrid" id="ValidationCriteriaPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -36,7 +36,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">4</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
@@ -87,7 +87,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">4</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
@@ -101,7 +101,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">5</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
@@ -183,7 +183,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">5</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
@@ -197,7 +197,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">7</property>
+        <property name="top-attach">8</property>
       </packing>
     </child>
     <child>
@@ -235,7 +235,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
@@ -256,7 +256,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
@@ -274,7 +274,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">6</property>
+        <property name="top-attach">7</property>
       </packing>
     </child>
     <child>
@@ -292,8 +292,30 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">7</property>
+        <property name="top-attach">8</property>
       </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="casesens">
+        <property name="label" translatable="yes" context="validationcriteriapage|allowempty">Case _sensitive</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="casesens-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="validationcriteriapage|extended_tip|allowempty">In conjunction with Tools - Detective - Mark invalid Data, this defines that blank cells are shown as invalid data (disabled) or not (enabled).</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
     </child>
     <child>
       <placeholder/>
