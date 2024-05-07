@@ -174,7 +174,10 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_SNAP_POINTS:
         {
-            pOptions->SetSnapPoints( !mpDrawView->IsOPntSnap() );
+            if ( GetDoc()->GetDocumentType() == DocumentType::Impress )
+                officecfg::Office::Impress::Snap::Object::ObjectPoint::set( !mpDrawView->IsOPntSnap(), batch );
+            else
+                officecfg::Office::Draw::Snap::Object::ObjectPoint::set( !mpDrawView->IsOPntSnap(), batch );
         }
         break;
 
