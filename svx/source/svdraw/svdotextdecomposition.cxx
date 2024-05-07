@@ -829,14 +829,51 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
-    // decompose matrix to have position and size of text
-    basegfx::B2DVector aScale, aTranslate;
-    double fRotate, fShearX;
-    rSdrContourTextPrimitive.getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-    // prepare contour polygon, force to non-mirrored for laying out
+    basegfx::B2DHomMatrix aObjectMatrix = rSdrContourTextPrimitive.getObjectTransform();
     basegfx::B2DPolyPolygon aPolyPolygon(rSdrContourTextPrimitive.getUnitPolyPolygon());
-    aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
+
+    // decompose aObjectMatrix
+    basegfx::B2DTuple aScale, aTranslate;
+    double fRotate, fShearX;
+    aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // tdf#84507 The aPolyPolygon is not suitable for the text in case of rotate or shear.
+    if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX))
+    {
+        // unitPolyPolygon was build by inverse(aObjectMatrix) * PolyPolygon.
+        // Restore to PolyPolygon.
+        aPolyPolygon.transform(aObjectMatrix);
+
+        // outliner expects an unrotated, unsheared polypolygon with top-left in origin.
+        // Remember top-left of aPolyPolygon.
+        basegfx::B2DTuple aTargetLeftTop = aPolyPolygon.getB2DRange().getMinimum();
+        // Remove rotation if any
+        basegfx::B2DHomMatrix aRemoveRotShear;
+        if (!basegfx::fTools::equalZero(fRotate))
+            aRemoveRotShear *= basegfx::utils::createRotateB2DHomMatrix(-fRotate);
+        // Remove shear if any
+        if (!basegfx::fTools::equalZero(fShearX))
+            aRemoveRotShear *= basegfx::utils::createShearXB2DHomMatrix(-fShearX);
+        aPolyPolygon.transform(aRemoveRotShear);
+        // Move Top/Left to origin
+        basegfx::B2DRange aBoundRange = aPolyPolygon.getB2DRange();
+        aPolyPolygon.transform(
+            basegfx::utils::createTranslateB2DHomMatrix(-aBoundRange.getMinimum()));
+
+        // Calculate the translation needed to bring the text to the original position of
+        // aPolyPolygon.
+        basegfx::B2DPolyPolygon aTemp(aPolyPolygon);
+        aTemp.transform(
+            basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, 0.0, 0.0));
+        basegfx::B2DTuple aTempLeftTop = aTemp.getB2DRange().getMinimum();
+        aTranslate = aTargetLeftTop - aTempLeftTop;
+    }
+    else
+    {
+        // scale up to original size
+        aPolyPolygon.transform(
+            basegfx::utils::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
+    }
 
     // prepare outliner
     SolarMutexGuard aSolarGuard;
@@ -852,6 +889,16 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
+    // East Asian vertical writing mode needs text start at TopRight.
+    const OutlinerParaObject& rOutlinerParaObject
+        = rSdrContourTextPrimitive.getOutlinerParaObject();
+    const bool bVerticalWriting(rOutlinerParaObject.IsEffectivelyVertical());
+    const bool bTopToBottom(rOutlinerParaObject.IsTopToBottom());
+    if (bVerticalWriting && bTopToBottom)
+    {
+        const double fStartInX = aPolyPolygon.getB2DRange().getMaximum().getX();
+        aNewTransformA *= basegfx::utils::createTranslateB2DHomMatrix(fStartInX, 0.0);
+    }
 
     // mirroring. We are now in the polygon sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -864,9 +911,12 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
-    // now break up text primitives.
+    // now break up text primitives. If it has a fat stroke, createTextPrimitive() has created a
+    // ScaledUnitPolyPolygon. Thus aPolyPolygon might be smaller than aScale from aObjectMatrix. We
+    // use this smaller size for the text area, otherwise the text will reach into the stroke.
     impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeContourTextPrimitive(aNewTransformA, aNewTransformB, aScale);
+    aConverter.decomposeContourTextPrimitive(aNewTransformA, aNewTransformB,
+                                             aPolyPolygon.getB2DRange().getRange());
 
     // cleanup outliner
     rOutliner.Clear();

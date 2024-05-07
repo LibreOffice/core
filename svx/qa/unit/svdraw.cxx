@@ -756,6 +756,39 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]"_ostr, "x"_ostr,
                 u"23893"_ustr);
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
+{
+    loadFromFile(u"tdf84507_polygoncontourtext.fodg");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The shape is rotated by 180°. The rotated shape has position (10000|12000) and size 6000x4000.
+    // Text should be inside the shape and start at the bottom-right of the shape because of 180°
+    // rotation. Without fix the text was rotated but positioned left-top of the shape. The first
+    // line of text has started at (10000|7353), last line at (10000|5007).
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "x"_ostr, "15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "y"_ostr, "11424");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]"_ostr, "x"_ostr, "15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]"_ostr, "y"_ostr, "9291");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
+{
+    loadFromFile(u"tdf128433_rectanglecontourtext_CJK.fodg");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The rectangle has position (10000|4000) and size 4000x6000. The text in the rectangle is set
+    // to tb-rl writing mode. Without fix the text was positioned left from the shape. The first line
+    // of text has started at (9327|4000), the last line at (8489|4000).
+    // The expected values are for font "Microsoft Yahei". Substitute fonts can have a different
+    // metric despite having the same font size. Thus test with tolerance.
+    // First line
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "x"_ostr, 13327.0, 150.0);
+    // Second line
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]"_ostr, "x"_ostr, 12489.0, 300.0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
