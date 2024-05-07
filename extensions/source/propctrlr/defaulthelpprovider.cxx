@@ -62,12 +62,12 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL DefaultHelpProvider::getSupportedServiceNames()
     {
-        return { "com.sun.star.inspection.DefaultHelpProvider" };
+        return { u"com.sun.star.inspection.DefaultHelpProvider"_ustr };
     }
 
     OUString SAL_CALL DefaultHelpProvider::getImplementationName()
     {
-        return "org.openoffice.comp.extensions.DefaultHelpProvider";
+        return u"org.openoffice.comp.extensions.DefaultHelpProvider"_ustr;
     }
 
     sal_Bool SAL_CALL DefaultHelpProvider::supportsService(const OUString& aServiceName)

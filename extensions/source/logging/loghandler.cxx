@@ -58,14 +58,14 @@ namespace logging
     void LogHandlerHelper::initFromSettings( const ::comphelper::NamedValueCollection& _rSettings )
     {
         OUString sEncoding;
-        if ( _rSettings.get_ensureType( "Encoding", sEncoding ) )
+        if ( _rSettings.get_ensureType( u"Encoding"_ustr, sEncoding ) )
         {
             if ( !setEncoding( sEncoding ) )
                 throw IllegalArgumentException();
         }
 
-        _rSettings.get_ensureType( "Formatter", m_xFormatter );
-        _rSettings.get_ensureType( "Level", m_nLevel );
+        _rSettings.get_ensureType( u"Formatter"_ustr, m_xFormatter );
+        _rSettings.get_ensureType( u"Level"_ustr, m_nLevel );
     }
 
 
@@ -74,10 +74,10 @@ namespace logging
         m_rMutex.acquire();
 
         if ( !m_bInitialized )
-            throw DisposedException("component not initialized" );
+            throw DisposedException(u"component not initialized"_ustr );
 
         if ( m_rBHelper.bDisposed )
-            throw DisposedException("component already disposed" );
+            throw DisposedException(u"component already disposed"_ustr );
 
         // fallback settings, in case they weren't passed at construction time
         if ( !getFormatter().is() )

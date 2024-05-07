@@ -23,8 +23,8 @@ namespace pcr
 {
     //= InspectorHelpWindow
     InspectorHelpWindow::InspectorHelpWindow(weld::Builder& rBuilder)
-        : m_xHelpFrame(rBuilder.weld_widget("helpframe"))
-        , m_xHelpText(rBuilder.weld_text_view("helptext"))
+        : m_xHelpFrame(rBuilder.weld_widget(u"helpframe"_ustr))
+        , m_xHelpText(rBuilder.weld_text_view(u"helptext"_ustr))
     {
     }
 

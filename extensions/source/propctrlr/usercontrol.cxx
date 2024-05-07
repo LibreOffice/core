@@ -46,8 +46,8 @@ namespace pcr
         sal_uInt16 nKey = rKeyEvent.GetKeyCode().GetCode();
         if ((KEY_DELETE == nKey) || (KEY_BACKSPACE == nKey))
         {
-            m_xSpinButton->set_text("");
-            m_xEntry->set_text("");
+            m_xSpinButton->set_text(u""_ustr);
+            m_xEntry->set_text(u""_ustr);
             setModified();
         }
 
@@ -69,7 +69,7 @@ namespace pcr
         {
             rFieldFormatter.TreatAsNumber(false);
             rFieldFormatter.SetFormatter(nullptr);
-            m_xSpinButton->set_text( "" );
+            m_xSpinButton->set_text( u""_ustr );
         }
 
         m_xEntry->set_text(m_xSpinButton->get_text());
@@ -77,8 +77,8 @@ namespace pcr
 
     OFormatSampleControl::OFormatSampleControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OFormatSampleControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
-        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("sample"))
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button(u"sample"_ustr))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
         rFieldFormatter.TreatAsNumber(true);
@@ -107,7 +107,7 @@ namespace pcr
                 rFieldFormatter.SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
         else
-            m_xSpinButton->set_text( "" );
+            m_xSpinButton->set_text( u""_ustr );
 
         m_xEntry->set_text(m_xSpinButton->get_text());
     }
@@ -183,7 +183,7 @@ namespace pcr
         if ( _rValue >>= nValue )
             getTypedControlWindow()->GetFormatter().SetValue(nValue);
         else
-            getTypedControlWindow()->set_text("");
+            getTypedControlWindow()->set_text(u""_ustr);
     }
 
     Any SAL_CALL OFormattedNumericControl::getValue()
@@ -226,7 +226,7 @@ namespace pcr
         {
             rFieldFormatter.TreatAsNumber(false);
             rFieldFormatter.SetFormatter(nullptr);
-            getTypedControlWindow()->set_text("");
+            getTypedControlWindow()->set_text(u""_ustr);
         }
     }
 

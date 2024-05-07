@@ -52,13 +52,13 @@ namespace pcr
 
     OUString CellBindingPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.CellBindingPropertyHandler";
+        return u"com.sun.star.comp.extensions.CellBindingPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > CellBindingPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.CellBindingPropertyHandler" };
+        return { u"com.sun.star.form.inspection.CellBindingPropertyHandler"_ustr };
     }
 
 

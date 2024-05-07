@@ -66,7 +66,7 @@ namespace pcr
         util::Time aUNOTime;
         if ( !( _rValue >>= aUNOTime ) )
         {
-            getTypedControlWindow()->set_text("");
+            getTypedControlWindow()->set_text(u""_ustr);
             m_xFormatter->SetTime(tools::Time(tools::Time::EMPTY));
         }
         else
@@ -93,8 +93,8 @@ namespace pcr
     //= ODateControl
     ODateControl::ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : ODateControl_Base(PropertyControlType::DateField, std::move(xBuilder), std::move(xWidget), bReadOnly)
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xCalendarBox(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button("button"), false))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
+        , m_xCalendarBox(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button(u"button"_ustr), false))
     {
         m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
 
@@ -249,8 +249,8 @@ namespace pcr
 
     ODateTimeControl::ODateTimeControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : ODateTimeControl_Base(PropertyControlType::DateTimeField, std::move(xBuilder), std::move(xWidget), bReadOnly)
-        , m_xDate(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button("datefield")))
-        , m_xTime(m_xBuilder->weld_formatted_spin_button("timefield"))
+        , m_xDate(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button(u"datefield"_ustr)))
+        , m_xTime(m_xBuilder->weld_formatted_spin_button(u"timefield"_ustr))
         , m_xFormatter(new weld::TimeFormatter(*m_xTime))
     {
         m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
@@ -261,7 +261,7 @@ namespace pcr
         if ( !_rValue.hasValue() )
         {
             m_xDate->set_date(::Date(::Date::SYSTEM));
-            m_xTime->set_text("");
+            m_xTime->set_text(u""_ustr);
             m_xFormatter->SetTime(tools::Time(tools::Time::EMPTY));
         }
         else
@@ -300,8 +300,8 @@ namespace pcr
     //= OHyperlinkControl
     OHyperlinkControl::OHyperlinkControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OHyperlinkControl_Base(PropertyControlType::HyperlinkField, std::move(xBuilder), std::move(xWidget), bReadOnly)
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xButton(m_xBuilder->weld_button("button"))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
+        , m_xButton(m_xBuilder->weld_button(u"button"_ustr))
         , m_aActionListeners(m_aMutex)
     {
         auto pWidget = getTypedControlWindow();
@@ -352,7 +352,7 @@ namespace pcr
 
     IMPL_LINK_NOARG( OHyperlinkControl, OnHyperlinkClicked, weld::Button&, void )
     {
-        ActionEvent aEvent( *this, "clicked" );
+        ActionEvent aEvent( *this, u"clicked"_ustr );
         m_aActionListeners.forEach< XActionListener >(
             [&aEvent] (uno::Reference<awt::XActionListener> const& xListener)
                 { return xListener->actionPerformed(aEvent); });
@@ -468,7 +468,7 @@ namespace pcr
     {
         if ( !_rValue.hasValue() )
         {
-            getTypedControlWindow()->set_text( "" );
+            getTypedControlWindow()->set_text( u""_ustr );
         }
         else
         {
@@ -770,11 +770,11 @@ namespace pcr
         : OMultilineEditControl_Base(eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField,
                                     std::move(xBuilder), std::move(xWidget), bReadOnly)
         , m_nOperationMode(eMode)
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xButton(m_xBuilder->weld_menu_button("button"))
-        , m_xPopover(m_xBuilder->weld_widget("popover"))
-        , m_xTextView(m_xBuilder->weld_text_view("textview"))
-        , m_xOk(m_xBuilder->weld_button("ok"))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
+        , m_xButton(m_xBuilder->weld_menu_button(u"button"_ustr))
+        , m_xPopover(m_xBuilder->weld_widget(u"popover"_ustr))
+        , m_xTextView(m_xBuilder->weld_text_view(u"textview"_ustr))
+        , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xButton->set_popover(m_xPopover.get());
         m_xTextView->set_size_request(m_xTextView->get_approximate_digit_width() * 30, m_xTextView->get_height_rows(8));

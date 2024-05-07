@@ -56,7 +56,7 @@ getBootstrapData(
     if ( rInstallSetID.isEmpty() )
         return false;
 
-    OUString aValue( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateURL}" );
+    OUString aValue( u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateURL}"_ustr );
     rtl::Bootstrap::expandMacros( aValue );
 
     if( !aValue.isEmpty() )
@@ -79,8 +79,8 @@ checkForUpdates(
     OUString myArch;
     OUString myOS;
 
-    rtl::Bootstrap::get("_OS", myOS);
-    rtl::Bootstrap::get("_ARCH", myArch);
+    rtl::Bootstrap::get(u"_OS"_ustr, myOS);
+    rtl::Bootstrap::get(u"_ARCH"_ustr, myArch);
 
     uno::Sequence< OUString > aRepositoryList;
     OUString aGitID;
@@ -107,14 +107,14 @@ checkForUpdates(
     const OUString &rInstallSetID )
 {
     if( !rxContext.is() )
-        throw uno::RuntimeException( "checkForUpdates: empty component context" );
+        throw uno::RuntimeException( u"checkForUpdates: empty component context"_ustr );
 
     OSL_ASSERT( rxContext->getServiceManager().is() );
 
     // XPath implementation
     uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create(rxContext);
 
-    xXPath->registerNS( "inst", "http://update.libreoffice.org/description" );
+    xXPath->registerNS( u"inst"_ustr, u"http://update.libreoffice.org/description"_ustr );
 
     if( rxInteractionHandler.is() )
         rUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
@@ -160,7 +160,7 @@ checkForUpdates(
                     if( xNode2.is() )
                     {
                         uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
-                        OUString aType = xParent->getAttribute("type");
+                        OUString aType = xParent->getAttribute(u"type"_ustr);
                         bool bIsDirect = !aType.equalsIgnoreAsciiCase("text/html");
 
                         o_rUpdateInfo.Sources.emplace_back(bIsDirect, xNode2->getNodeValue());
@@ -203,15 +203,15 @@ checkForUpdates(
                     uno::Reference< xml::dom::XElement > xRelNote(xNodeList->item(i), uno::UNO_QUERY);
                     if( xRelNote.is() )
                     {
-                        sal_Int32 pos = xRelNote->getAttribute("pos").toInt32();
+                        sal_Int32 pos = xRelNote->getAttribute(u"pos"_ustr).toInt32();
 
-                        ReleaseNote aRelNote(static_cast<sal_uInt8>(pos), xRelNote->getAttribute("src"));
+                        ReleaseNote aRelNote(static_cast<sal_uInt8>(pos), xRelNote->getAttribute(u"src"_ustr));
 
-                        if( xRelNote->hasAttribute("src2") )
+                        if( xRelNote->hasAttribute(u"src2"_ustr) )
                         {
-                            pos = xRelNote->getAttribute("pos2").toInt32();
+                            pos = xRelNote->getAttribute(u"pos2"_ustr).toInt32();
                             aRelNote.Pos2 = static_cast<sal_Int8>(pos);
-                            aRelNote.URL2 = xRelNote->getAttribute("src2");
+                            aRelNote.URL2 = xRelNote->getAttribute(u"src2"_ustr);
                         }
 
                         o_rUpdateInfo.ReleaseNotes.push_back(aRelNote);
@@ -260,7 +260,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     try
     {
         uno::Any aValue( rxContext->getValueByName(
-                "/singletons/com.sun.star.deployment.PackageInformationProvider" ) );
+                u"/singletons/com.sun.star.deployment.PackageInformationProvider"_ustr ) );
         OSL_VERIFY( aValue >>= xInfoProvider );
     }
     catch( const uno::Exception& )
@@ -286,7 +286,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     try
     {
         uno::Any aValue( rxContext->getValueByName(
-                "/singletons/com.sun.star.deployment.PackageInformationProvider" ) );
+                u"/singletons/com.sun.star.deployment.PackageInformationProvider"_ustr ) );
         OSL_VERIFY( aValue >>= xInfoProvider );
     }
     catch( const uno::Exception& )

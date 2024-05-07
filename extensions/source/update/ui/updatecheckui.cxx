@@ -109,13 +109,13 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
 OUString SAL_CALL
 UpdateCheckUI::getImplementationName()
 {
-    return "vnd.sun.UpdateCheckUI";
+    return u"vnd.sun.UpdateCheckUI"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckUI::getSupportedServiceNames()
 {
-    return { "com.sun.star.setup.UpdateCheckUI" };
+    return { u"com.sun.star.setup.UpdateCheckUI"_ustr };
 }
 
 sal_Bool SAL_CALL
@@ -134,12 +134,12 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
 
         if( !xContext.is() )
             throw uno::RuntimeException(
-                "UpdateCheckUI: unable to obtain service manager from component context" );
+                u"UpdateCheckUI: unable to obtain service manager from component context"_ustr );
 
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
-            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL",
+            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr,
                                                                                              rURL) };
             uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
@@ -153,7 +153,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
     }
 
     if ( aImage.GetSizePixel().Width() == 0 )
-        aImage = Image(StockImage::Yes, SV_RESID_BITMAP_INFOBOX);
+        aImage = Image(StockImage::Yes, u"" SV_RESID_BITMAP_INFOBOX ""_ustr);
 
     return aImage;
 }

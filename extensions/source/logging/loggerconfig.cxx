@@ -218,9 +218,9 @@ namespace logging
 
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence<Any> aArguments{ Any(NamedValue(
-                "nodepath", Any(OUString("/org.openoffice.Office.Logging/Settings")))) };
+                u"nodepath"_ustr, Any(u"/org.openoffice.Office.Logging/Settings"_ustr))) };
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess",
+                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                 aArguments
             ), UNO_QUERY_THROW );
 
@@ -240,7 +240,7 @@ namespace logging
 
             // the log level
             sal_Int32 nLogLevel( LogLevel::OFF );
-            OSL_VERIFY( xLoggerSettings->getByName("LogLevel") >>= nLogLevel );
+            OSL_VERIFY( xLoggerSettings->getByName(u"LogLevel"_ustr) >>= nLogLevel );
             _rxLogger->setLevel( nLogLevel );
 
             // the default handler, if any

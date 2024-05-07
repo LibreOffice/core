@@ -95,13 +95,13 @@ namespace pcr
 
     OUString SubmissionPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.SubmissionPropertyHandler";
+        return u"com.sun.star.comp.extensions.SubmissionPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > SubmissionPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.SubmissionPropertyHandler" };
+        return { u"com.sun.star.form.inspection.SubmissionPropertyHandler"_ustr };
     }
 
 

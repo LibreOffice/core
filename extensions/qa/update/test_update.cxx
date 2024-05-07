@@ -54,7 +54,7 @@ protected:
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
             m_xProvider->getUpdateInformationEnumeration(
                 m_aRepositoryList,
-                "TODO" ); // unused when we do not have a 'feed'
+                u"TODO"_ustr ); // unused when we do not have a 'feed'
 
         if ( !aUpdateInfoEnumeration.is() )
             CPPUNIT_FAIL( "Calling getUpdateInformationEnumeration() with TODO failed." );
@@ -65,7 +65,7 @@ protected:
         deployment::UpdateInformationEntry aEntry;
         if ( aUpdateInfoEnumeration->nextElement() >>= aEntry )
         {
-            CPPUNIT_ASSERT_EQUAL( OUString("description"), aEntry.UpdateDocument->getNodeName() );
+            CPPUNIT_ASSERT_EQUAL( u"description"_ustr, aEntry.UpdateDocument->getNodeName() );
 
             uno::Reference< dom::XNodeList> xChildNodes = aEntry.UpdateDocument->getChildNodes();
             CPPUNIT_ASSERT( xChildNodes.is() );
@@ -105,10 +105,10 @@ protected:
                     u"x86",
                     m_aRepositoryList,
                     u"111111-222222-333333-444444",
-                    "InstallSetID" ) )
+                    u"InstallSetID"_ustr ) )
         {
             CPPUNIT_ASSERT_EQUAL( std::size_t(1), aInfo.Sources.size() );
-            CPPUNIT_ASSERT_EQUAL( OUString("http://www.libreoffice.org/download/"), aInfo.Sources[0].URL );
+            CPPUNIT_ASSERT_EQUAL( u"http://www.libreoffice.org/download/"_ustr, aInfo.Sources[0].URL );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
@@ -125,7 +125,7 @@ protected:
                     u"x86",
                     m_aRepositoryList,
                     u"123456-abcdef-1a2b3c-4d5e6f",
-                    "InstallSetID" ) )
+                    u"InstallSetID"_ustr ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.empty() );
         }

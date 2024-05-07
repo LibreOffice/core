@@ -243,7 +243,7 @@ public:
         {
             // action has been aborted
             css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetException( "Command aborted", *this, anyEx );
+            throw lang::WrappedTargetException( u"Command aborted"_ustr, *this, anyEx );
         }
         catch( uno::RuntimeException const & )
         {
@@ -254,7 +254,7 @@ public:
         {
             // document not accessible
             css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetException( "Document not accessible", *this, anyEx );
+            throw lang::WrappedTargetException( u"Document not accessible"_ustr, *this, anyEx );
         }
     }
 
@@ -305,7 +305,7 @@ UpdateInformationProvider::UpdateInformationProvider(
 
     auto pRequestHeaderList = m_aRequestHeaderList.getArray();
     pRequestHeaderList[0].First = "Accept-Language";
-    pRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
+    pRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, u"org.openoffice.Setup/L10N"_ustr, u"ooLocale"_ustr );
 }
 
 bool
@@ -318,8 +318,8 @@ UpdateInformationProvider::isUserAgentExtended() const
 
         uno::Any aExtended = getConfigurationItemAny(
             xConfigurationProvider,
-            "org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments",
-            "ExtendedUserAgent");
+            u"org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments"_ustr,
+            u"ExtendedUserAgent"_ustr);
         aExtended >>= bExtendedUserAgent;
     } catch (const uno::RuntimeException &) {
         SAL_WARN("extensions.update", "Online update disabled");
@@ -336,26 +336,26 @@ OUString UpdateInformationProvider::getUserAgent(bool bExtended)
     buf.append(
         getConfigurationItem(
             xConfigurationProvider,
-            "org.openoffice.Setup/Product",
-            "ooName"));
+            u"org.openoffice.Setup/Product"_ustr,
+            u"ooName"_ustr));
     buf.append(' ');
     buf.append(
         getConfigurationItem(
             xConfigurationProvider,
-            "org.openoffice.Setup/Product",
-            "ooSetupVersion"));
+            u"org.openoffice.Setup/Product"_ustr,
+            u"ooSetupVersion"_ustr));
 
     OUString extension(
         getConfigurationItem(
             xConfigurationProvider,
-            "org.openoffice.Setup/Product",
-            "ooSetupExtension"));
+            u"org.openoffice.Setup/Product"_ustr,
+            u"ooSetupExtension"_ustr));
     if (!extension.isEmpty())
         buf.append(extension);
 
     OUString product(buf.makeStringAndClear());
 
-    OUString aUserAgent( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
+    OUString aUserAgent( u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateUserAgent}"_ustr );
     OUString aExtended;
     if( bExtended )
     {
@@ -411,7 +411,7 @@ UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiSe
     uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
     uno::Reference< container::XNameAccess > xNameAccess(
         configurationProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess",
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr,
             aArgumentList ),
         uno::UNO_QUERY_THROW);
 
@@ -444,7 +444,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 
     if( !xId.is() )
         throw uno::RuntimeException(
-            "unable to obtain universal content id", *this);
+            u"unable to obtain universal content id"_ustr, *this);
 
     uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xUniversalContentBroker->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
@@ -455,7 +455,7 @@ UpdateInformationProvider::load(const OUString& rURL)
     aOpenArgument.Sink = *aSink;
     // Disable KeepAlive in webdav - don't want millions of office
     // instances phone home & clog up servers
-    aOpenArgument.OpeningFlags = { { "KeepAlive", uno::Any(false) } };
+    aOpenArgument.OpeningFlags = { { u"KeepAlive"_ustr, uno::Any(false) } };
 
     ucb::Command aCommand;
     aCommand.Name = "open";
@@ -499,10 +499,10 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
     uno::Reference< xml::dom::XElement > xElement(rxNode, uno::UNO_QUERY_THROW);
 
     // load the document referenced in 'src' attribute ..
-    if( xElement->hasAttribute( "src" ) )
+    if( xElement->hasAttribute( u"src"_ustr ) )
     {
         uno::Reference< xml::dom::XDocument > xUpdateXML =
-            m_xDocumentBuilder->parse(load(xElement->getAttribute( "src" )));
+            m_xDocumentBuilder->parse(load(xElement->getAttribute( u"src"_ustr )));
 
         OSL_ASSERT( xUpdateXML.is() );
 
@@ -716,14 +716,14 @@ UpdateInformationProvider::getInteractionHandler()
 OUString SAL_CALL
 UpdateInformationProvider::getImplementationName()
 {
-    return "vnd.sun.UpdateInformationProvider";
+    return u"vnd.sun.UpdateInformationProvider"_ustr;
 }
 
 
 uno::Sequence< OUString > SAL_CALL
 UpdateInformationProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.deployment.UpdateInformationProvider" };
+    return { u"com.sun.star.deployment.UpdateInformationProvider"_ustr };
 }
 
 sal_Bool SAL_CALL
@@ -746,7 +746,7 @@ extensions_update_UpdateInformationProvider_get_implementation(
 
     uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create( xContext );
 
-    xXPath->registerNS( "atom", "http://www.w3.org/2005/Atom" );
+    xXPath->registerNS( u"atom"_ustr, u"http://www.w3.org/2005/Atom"_ustr );
 
     return cppu::acquire(
         new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath));

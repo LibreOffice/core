@@ -93,7 +93,7 @@ namespace pcr
             if ( _rxContext.is() )
             {
                 Reference< XHierarchicalNameAccess > xTypeDescProv(
-                    _rxContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+                    _rxContext->getValueByName(u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                     UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );
@@ -250,7 +250,7 @@ namespace pcr
         Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_SET_THROW );
 
-        Sequence aDispatchArgs{ comphelper::makePropertyValue("URL", _rURL) };
+        Sequence aDispatchArgs{ comphelper::makePropertyValue(u"URL"_ustr, _rURL) };
 
         xDispatch->dispatch( aURL, aDispatchArgs );
     }
@@ -271,7 +271,7 @@ namespace pcr
 
     OUString SAL_CALL GenericPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.GenericPropertyHandler";
+        return u"com.sun.star.comp.extensions.GenericPropertyHandler"_ustr;
     }
 
     sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName )
@@ -281,7 +281,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.inspection.GenericPropertyHandler" };
+        return { u"com.sun.star.inspection.GenericPropertyHandler"_ustr };
     }
 
     void SAL_CALL GenericPropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
@@ -306,7 +306,7 @@ namespace pcr
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( Any( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )
-            throw RuntimeException("The introspection service could not handle the given component.", *this );
+            throw RuntimeException(u"The introspection service could not handle the given component."_ustr, *this );
 
         m_xComponent.set( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess

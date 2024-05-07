@@ -66,13 +66,13 @@ namespace pcr
 
     OUString SAL_CALL OControlFontDialog::getImplementationName()
     {
-        return "org.openoffice.comp.form.ui.OControlFontDialog";
+        return u"org.openoffice.comp.form.ui.OControlFontDialog"_ustr;
     }
 
 
     css::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.form.ControlFontDialog" };
+        return { u"com.sun.star.form.ControlFontDialog"_ustr };
     }
 
     void OControlFontDialog::initialize( const Sequence< Any >& aArguments )
@@ -80,7 +80,7 @@ namespace pcr
         Reference<XPropertySet> xGridModel;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xGridModel))
         {
-            Sequence aNewArguments{ Any(comphelper::makePropertyValue("IntrospectedObject",
+            Sequence aNewArguments{ Any(comphelper::makePropertyValue(u"IntrospectedObject"_ustr,
                                                                       xGridModel)) };
             OControlFontDialog_DBase::initialize(aNewArguments);
         }

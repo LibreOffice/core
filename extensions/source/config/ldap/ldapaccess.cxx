@@ -149,7 +149,7 @@ void LdapConnection::initConnection()
 {
     if (mLdapDefinition.mServer.isEmpty())
     {
-        throw ldap::LdapConnectionException("Cannot initialise connection to LDAP: No server specified.");
+        throw ldap::LdapConnectionException(u"Cannot initialise connection to LDAP: No server specified."_ustr);
     }
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
@@ -231,7 +231,7 @@ void LdapConnection::initConnection()
     if (aUser.isEmpty())
     {
         throw lang::IllegalArgumentException(
-            "LdapConnection::findUserDn -User id is empty",
+            u"LdapConnection::findUserDn -User id is empty"_ustr,
                 nullptr, 0) ;
     }
 

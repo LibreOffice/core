@@ -24,9 +24,9 @@
 namespace abp
 {
     AdminDialogInvokationPage::AdminDialogInvokationPage(weld::Container* pPage, OAddressBookSourcePilot* pController)
-        : AddressBookSourcePage(pPage, pController, "modules/sabpilot/ui/invokeadminpage.ui", "InvokeAdminPage")
-        , m_xInvokeAdminDialog(m_xBuilder->weld_button("settings"))
-        , m_xErrorMessage(m_xBuilder->weld_label("warning"))
+        : AddressBookSourcePage(pPage, pController, u"modules/sabpilot/ui/invokeadminpage.ui"_ustr, u"InvokeAdminPage"_ustr)
+        , m_xInvokeAdminDialog(m_xBuilder->weld_button(u"settings"_ustr))
+        , m_xErrorMessage(m_xBuilder->weld_label(u"warning"_ustr))
     {
         m_xInvokeAdminDialog->connect_clicked(LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog));
     }

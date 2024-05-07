@@ -205,11 +205,11 @@ void GridWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 }
 
 GridDialog::GridDialog(weld::Window* pParent, double* pXValues, double* pYValues, int nValues)
-    : GenericDialogController(pParent, "modules/scanner/ui/griddialog.ui", "GridDialog")
-    , m_xResetTypeBox(m_xBuilder->weld_combo_box("resetTypeCombobox"))
-    , m_xResetButton(m_xBuilder->weld_button("resetButton"))
+    : GenericDialogController(pParent, u"modules/scanner/ui/griddialog.ui"_ustr, u"GridDialog"_ustr)
+    , m_xResetTypeBox(m_xBuilder->weld_combo_box(u"resetTypeCombobox"_ustr))
+    , m_xResetButton(m_xBuilder->weld_button(u"resetButton"_ustr))
     , m_xGridWindow(new GridWindow)
-    , m_xGridWindowWND(new weld::CustomWeld(*m_xBuilder, "gridwindow", *m_xGridWindow))
+    , m_xGridWindowWND(new weld::CustomWeld(*m_xBuilder, u"gridwindow"_ustr, *m_xGridWindow))
 {
     m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, BitmapEx(RID_SCANNER_HANDLE));
     m_xResetTypeBox->set_active(0);

@@ -413,7 +413,7 @@ namespace pcr
 
         if (_nId == PROPERTY_ID_SUBMIT_METHOD)
         {
-            return { "Get", "Post" };
+            return { u"Get"_ustr, u"Post"_ustr };
         }
         const TranslateId* pStringItemsResId = nullptr;
         std::size_t nElements = 0;
@@ -569,7 +569,7 @@ namespace pcr
         // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), 0, u""_ustr, 0);
 
         const OPropertyInfoImpl* pInfo = std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );

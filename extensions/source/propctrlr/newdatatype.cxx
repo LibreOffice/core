@@ -27,10 +27,10 @@ namespace pcr
 
 
     NewDataTypeDialog::NewDataTypeDialog(weld::Window* pParent, std::u16string_view _rNameBase, const std::vector< OUString >& _rProhibitedNames)
-        : GenericDialogController(pParent, "modules/spropctrlr/ui/datatypedialog.ui", "DataTypeDialog")
+        : GenericDialogController(pParent, u"modules/spropctrlr/ui/datatypedialog.ui"_ustr, u"DataTypeDialog"_ustr)
         , m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
-        , m_xName(m_xBuilder->weld_entry("entry"))
-        , m_xOK(m_xBuilder->weld_button("ok"))
+        , m_xName(m_xBuilder->weld_entry(u"entry"_ustr))
+        , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xName->connect_changed(LINK(this, NewDataTypeDialog, OnNameModified));
 

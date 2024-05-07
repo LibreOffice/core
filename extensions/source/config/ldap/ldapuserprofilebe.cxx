@@ -93,34 +93,34 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath("nodepath", uno::Any(OUString("org.openoffice.LDAP/UserDirectory")) );
+        css::beans::NamedValue aPath(u"nodepath"_ustr, uno::Any(u"org.openoffice.LDAP/UserDirectory"_ustr) );
 
         uno::Sequence< uno::Any > aArgs{ uno::Any(aPath) };
 
-        xIface = xCfgProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aArgs);
+        xIface = xCfgProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs);
 
         uno::Reference<container::XNameAccess > xAccess(xIface, uno::UNO_QUERY_THROW);
-        xAccess->getByName("ServerDefinition") >>= xIface;
+        xAccess->getByName(u"ServerDefinition"_ustr) >>= xIface;
 
         uno::Reference<container::XNameAccess > xChildAccess(xIface, uno::UNO_QUERY_THROW);
 
-        if (!getLdapStringParam(xChildAccess, "Server", definition->mServer))
+        if (!getLdapStringParam(xChildAccess, u"Server"_ustr, definition->mServer))
             return false;
-        if (!getLdapStringParam(xChildAccess, "BaseDN", definition->mBaseDN))
+        if (!getLdapStringParam(xChildAccess, u"BaseDN"_ustr, definition->mBaseDN))
             return false;
 
         definition->mPort=0;
-        xChildAccess->getByName("Port") >>= definition->mPort ;
+        xChildAccess->getByName(u"Port"_ustr) >>= definition->mPort ;
         if (definition->mPort == 0)
             return false;
 
-        if (!getLdapStringParam(xAccess, "UserObjectClass", definition->mUserObjectClass))
+        if (!getLdapStringParam(xAccess, u"UserObjectClass"_ustr, definition->mUserObjectClass))
             return false;
-        if (!getLdapStringParam(xAccess, "UserUniqueAttribute", definition->mUserUniqueAttr))
+        if (!getLdapStringParam(xAccess, u"UserUniqueAttribute"_ustr, definition->mUserUniqueAttr))
             return false;
 
-        getLdapStringParam(xAccess, "SearchUser", definition->mAnonUser);
-        getLdapStringParam(xAccess, "SearchPassword", definition->mAnonCredentials);
+        getLdapStringParam(xAccess, u"SearchUser"_ustr, definition->mAnonUser);
+        getLdapStringParam(xAccess, u"SearchPassword"_ustr, definition->mAnonCredentials);
     }
     catch (const uno::Exception&)
     {
@@ -154,7 +154,7 @@ void LdapUserProfileBe::setPropertyValue(
     OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        "setPropertyValue not supported",
+        u"setPropertyValue not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -187,7 +187,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 
 OUString SAL_CALL LdapUserProfileBe::getImplementationName()
 {
-    return "com.sun.star.comp.configuration.backend.LdapUserProfileBe";
+    return u"com.sun.star.comp.configuration.backend.LdapUserProfileBe"_ustr;
 }
 
 sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceName)
@@ -198,7 +198,7 @@ sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceNam
 uno::Sequence<OUString>
 SAL_CALL LdapUserProfileBe::getSupportedServiceNames()
 {
-    return { "com.sun.star.configuration.backend.LdapUserProfileBe" };
+    return { u"com.sun.star.configuration.backend.LdapUserProfileBe"_ustr };
 }
 
 }

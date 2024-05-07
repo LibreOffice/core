@@ -199,11 +199,11 @@ namespace pcr
 
     //= ControlCharacterDialog
     ControlCharacterDialog::ControlCharacterDialog(weld::Window* pParent, const SfxItemSet& _rCoreSet)
-        : SfxTabDialogController(pParent, "modules/spropctrlr/ui/controlfontdialog.ui", "ControlFontDialog", &_rCoreSet)
+        : SfxTabDialogController(pParent, u"modules/spropctrlr/ui/controlfontdialog.ui"_ustr, u"ControlFontDialog"_ustr, &_rCoreSet)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
-        AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr );
+        AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
+        AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr );
     }
 
     ControlCharacterDialog::~ControlCharacterDialog()
@@ -545,7 +545,7 @@ namespace pcr
         // just to be sure...
         _rpSet = nullptr;
         _rpPool = nullptr;
-        _rpPool = new SfxItemPool("PCRControlFontItemPool");
+        _rpPool = new SfxItemPool(u"PCRControlFontItemPool"_ustr);
         _rpPool->registerItemInfoPackage(
             getItemInfoPackageCntChrDlg(),
             [&rFontList](sal_uInt16 nWhich)

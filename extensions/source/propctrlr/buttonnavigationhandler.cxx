@@ -47,13 +47,13 @@ namespace pcr
 
     OUString ButtonNavigationHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.ButtonNavigationHandler";
+        return u"com.sun.star.comp.extensions.ButtonNavigationHandler"_ustr;
     }
 
 
     Sequence< OUString > ButtonNavigationHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.ButtonNavigationHandler" };
+        return { u"com.sun.star.form.inspection.ButtonNavigationHandler"_ustr };
     }
 
 

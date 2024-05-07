@@ -43,8 +43,8 @@ namespace
         std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
     public:
         MessageWithCheck(weld::Window *pParent)
-            : MessageDialogController(pParent, "modules/sbibliography/ui/querydialog.ui", "QueryDialog", "ask")
-            , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+            : MessageDialogController(pParent, u"modules/sbibliography/ui/querydialog.ui"_ustr, u"QueryDialog"_ustr, u"ask"_ustr)
+            , m_xWarningOnBox(m_xBuilder->weld_check_button(u"ask"_ustr))
         {
         }
         bool get_active() const { return m_xWarningOnBox->get_active(); }

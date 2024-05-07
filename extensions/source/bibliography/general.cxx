@@ -69,7 +69,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
         return false;
     }
 
-    OUString aPagePrefix("page=");
+    OUString aPagePrefix(u"page="_ustr);
     if (!xUriRef->getFragment().startsWith(aPagePrefix))
     {
         return false;
@@ -126,77 +126,77 @@ static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos
 }
 
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
-    : InterimItemWindow(pParent, "modules/sbibliography/ui/generalpage.ui", "GeneralPage")
+    : InterimItemWindow(pParent, u"modules/sbibliography/ui/generalpage.ui"_ustr, u"GeneralPage"_ustr)
     , BibShortCutHandler(this)
-    , xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
-    , xGrid(m_xBuilder->weld_widget("grid"))
-    , xIdentifierFT(m_xBuilder->weld_label("shortname"))
-    , xIdentifierED(m_xBuilder->weld_entry("shortnamecontrol"))
-    , xAuthTypeFT(m_xBuilder->weld_label("authtype"))
-    , xAuthTypeLB(m_xBuilder->weld_combo_box("authtypecontrol"))
-    , xYearFT(m_xBuilder->weld_label("year"))
-    , xYearED(m_xBuilder->weld_entry("yearcontrol"))
-    , xAuthorFT(m_xBuilder->weld_label("authors"))
-    , xAuthorED(m_xBuilder->weld_entry("authorscontrol"))
-    , xTitleFT(m_xBuilder->weld_label("title"))
-    , xTitleED(m_xBuilder->weld_entry("titlecontrol"))
-    , xPublisherFT(m_xBuilder->weld_label("publisher"))
-    , xPublisherED(m_xBuilder->weld_entry("publishercontrol"))
-    , xAddressFT(m_xBuilder->weld_label("address"))
-    , xAddressED(m_xBuilder->weld_entry("addresscontrol"))
-    , xISBNFT(m_xBuilder->weld_label("isbn"))
-    , xISBNED(m_xBuilder->weld_entry("isbncontrol"))
-    , xChapterFT(m_xBuilder->weld_label("chapter"))
-    , xChapterED(m_xBuilder->weld_entry("chaptercontrol"))
-    , xPagesFT(m_xBuilder->weld_label("pages"))
-    , xPagesED(m_xBuilder->weld_entry("pagescontrol"))
-    , xEditorFT(m_xBuilder->weld_label("editor"))
-    , xEditorED(m_xBuilder->weld_entry("editorcontrol"))
-    , xEditionFT(m_xBuilder->weld_label("edition"))
-    , xEditionED(m_xBuilder->weld_entry("editioncontrol"))
-    , xBooktitleFT(m_xBuilder->weld_label("booktitle"))
-    , xBooktitleED(m_xBuilder->weld_entry("booktitlecontrol"))
-    , xVolumeFT(m_xBuilder->weld_label("volume"))
-    , xVolumeED(m_xBuilder->weld_entry("volumecontrol"))
-    , xHowpublishedFT(m_xBuilder->weld_label("publicationtype"))
-    , xHowpublishedED(m_xBuilder->weld_entry("publicationtypecontrol"))
-    , xOrganizationsFT(m_xBuilder->weld_label("organization"))
-    , xOrganizationsED(m_xBuilder->weld_entry("organizationcontrol"))
-    , xInstitutionFT(m_xBuilder->weld_label("institution"))
-    , xInstitutionED(m_xBuilder->weld_entry("institutioncontrol"))
-    , xSchoolFT(m_xBuilder->weld_label("university"))
-    , xSchoolED(m_xBuilder->weld_entry("universitycontrol"))
-    , xReportTypeFT(m_xBuilder->weld_label("reporttype"))
-    , xReportTypeED(m_xBuilder->weld_entry("reporttypecontrol"))
-    , xMonthFT(m_xBuilder->weld_label("month"))
-    , xMonthED(m_xBuilder->weld_entry("monthcontrol"))
-    , xJournalFT(m_xBuilder->weld_label("journal"))
-    , xJournalED(m_xBuilder->weld_entry("journalcontrol"))
-    , xNumberFT(m_xBuilder->weld_label("number"))
-    , xNumberED(m_xBuilder->weld_entry("numbercontrol"))
-    , xSeriesFT(m_xBuilder->weld_label("series"))
-    , xSeriesED(m_xBuilder->weld_entry("seriescontrol"))
-    , xAnnoteFT(m_xBuilder->weld_label("annotation"))
-    , xAnnoteED(m_xBuilder->weld_entry("annotationcontrol"))
-    , xNoteFT(m_xBuilder->weld_label("note"))
-    , xNoteED(m_xBuilder->weld_entry("notecontrol"))
-    , xURLFT(m_xBuilder->weld_label("url"))
-    , xURLED(m_xBuilder->weld_entry("urlcontrol"))
-    , xCustom1FT(m_xBuilder->weld_label("custom1"))
-    , xCustom1ED(m_xBuilder->weld_entry("custom1control"))
-    , xCustom2FT(m_xBuilder->weld_label("custom2"))
-    , xCustom2ED(m_xBuilder->weld_entry("custom2control"))
-    , xCustom3FT(m_xBuilder->weld_label("custom3"))
-    , xCustom3ED(m_xBuilder->weld_entry("custom3control"))
-    , xCustom4FT(m_xBuilder->weld_label("custom4"))
-    , xCustom4ED(m_xBuilder->weld_entry("custom4control"))
-    , xCustom5FT(m_xBuilder->weld_label("custom5"))
-    , xCustom5ED(m_xBuilder->weld_entry("custom5control"))
-    , m_xLocalURLFT(m_xBuilder->weld_label("localurl"))
-    , m_xLocalURLED(m_xBuilder->weld_entry("localurlcontrol"))
-    , m_xLocalBrowseButton(m_xBuilder->weld_button("localbrowse"))
-    , m_xLocalPageCB(m_xBuilder->weld_check_button("localpagecb"))
-    , m_xLocalPageSB(m_xBuilder->weld_spin_button("localpagesb"))
+    , xScrolledWindow(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr))
+    , xGrid(m_xBuilder->weld_widget(u"grid"_ustr))
+    , xIdentifierFT(m_xBuilder->weld_label(u"shortname"_ustr))
+    , xIdentifierED(m_xBuilder->weld_entry(u"shortnamecontrol"_ustr))
+    , xAuthTypeFT(m_xBuilder->weld_label(u"authtype"_ustr))
+    , xAuthTypeLB(m_xBuilder->weld_combo_box(u"authtypecontrol"_ustr))
+    , xYearFT(m_xBuilder->weld_label(u"year"_ustr))
+    , xYearED(m_xBuilder->weld_entry(u"yearcontrol"_ustr))
+    , xAuthorFT(m_xBuilder->weld_label(u"authors"_ustr))
+    , xAuthorED(m_xBuilder->weld_entry(u"authorscontrol"_ustr))
+    , xTitleFT(m_xBuilder->weld_label(u"title"_ustr))
+    , xTitleED(m_xBuilder->weld_entry(u"titlecontrol"_ustr))
+    , xPublisherFT(m_xBuilder->weld_label(u"publisher"_ustr))
+    , xPublisherED(m_xBuilder->weld_entry(u"publishercontrol"_ustr))
+    , xAddressFT(m_xBuilder->weld_label(u"address"_ustr))
+    , xAddressED(m_xBuilder->weld_entry(u"addresscontrol"_ustr))
+    , xISBNFT(m_xBuilder->weld_label(u"isbn"_ustr))
+    , xISBNED(m_xBuilder->weld_entry(u"isbncontrol"_ustr))
+    , xChapterFT(m_xBuilder->weld_label(u"chapter"_ustr))
+    , xChapterED(m_xBuilder->weld_entry(u"chaptercontrol"_ustr))
+    , xPagesFT(m_xBuilder->weld_label(u"pages"_ustr))
+    , xPagesED(m_xBuilder->weld_entry(u"pagescontrol"_ustr))
+    , xEditorFT(m_xBuilder->weld_label(u"editor"_ustr))
+    , xEditorED(m_xBuilder->weld_entry(u"editorcontrol"_ustr))
+    , xEditionFT(m_xBuilder->weld_label(u"edition"_ustr))
+    , xEditionED(m_xBuilder->weld_entry(u"editioncontrol"_ustr))
+    , xBooktitleFT(m_xBuilder->weld_label(u"booktitle"_ustr))
+    , xBooktitleED(m_xBuilder->weld_entry(u"booktitlecontrol"_ustr))
+    , xVolumeFT(m_xBuilder->weld_label(u"volume"_ustr))
+    , xVolumeED(m_xBuilder->weld_entry(u"volumecontrol"_ustr))
+    , xHowpublishedFT(m_xBuilder->weld_label(u"publicationtype"_ustr))
+    , xHowpublishedED(m_xBuilder->weld_entry(u"publicationtypecontrol"_ustr))
+    , xOrganizationsFT(m_xBuilder->weld_label(u"organization"_ustr))
+    , xOrganizationsED(m_xBuilder->weld_entry(u"organizationcontrol"_ustr))
+    , xInstitutionFT(m_xBuilder->weld_label(u"institution"_ustr))
+    , xInstitutionED(m_xBuilder->weld_entry(u"institutioncontrol"_ustr))
+    , xSchoolFT(m_xBuilder->weld_label(u"university"_ustr))
+    , xSchoolED(m_xBuilder->weld_entry(u"universitycontrol"_ustr))
+    , xReportTypeFT(m_xBuilder->weld_label(u"reporttype"_ustr))
+    , xReportTypeED(m_xBuilder->weld_entry(u"reporttypecontrol"_ustr))
+    , xMonthFT(m_xBuilder->weld_label(u"month"_ustr))
+    , xMonthED(m_xBuilder->weld_entry(u"monthcontrol"_ustr))
+    , xJournalFT(m_xBuilder->weld_label(u"journal"_ustr))
+    , xJournalED(m_xBuilder->weld_entry(u"journalcontrol"_ustr))
+    , xNumberFT(m_xBuilder->weld_label(u"number"_ustr))
+    , xNumberED(m_xBuilder->weld_entry(u"numbercontrol"_ustr))
+    , xSeriesFT(m_xBuilder->weld_label(u"series"_ustr))
+    , xSeriesED(m_xBuilder->weld_entry(u"seriescontrol"_ustr))
+    , xAnnoteFT(m_xBuilder->weld_label(u"annotation"_ustr))
+    , xAnnoteED(m_xBuilder->weld_entry(u"annotationcontrol"_ustr))
+    , xNoteFT(m_xBuilder->weld_label(u"note"_ustr))
+    , xNoteED(m_xBuilder->weld_entry(u"notecontrol"_ustr))
+    , xURLFT(m_xBuilder->weld_label(u"url"_ustr))
+    , xURLED(m_xBuilder->weld_entry(u"urlcontrol"_ustr))
+    , xCustom1FT(m_xBuilder->weld_label(u"custom1"_ustr))
+    , xCustom1ED(m_xBuilder->weld_entry(u"custom1control"_ustr))
+    , xCustom2FT(m_xBuilder->weld_label(u"custom2"_ustr))
+    , xCustom2ED(m_xBuilder->weld_entry(u"custom2control"_ustr))
+    , xCustom3FT(m_xBuilder->weld_label(u"custom3"_ustr))
+    , xCustom3ED(m_xBuilder->weld_entry(u"custom3control"_ustr))
+    , xCustom4FT(m_xBuilder->weld_label(u"custom4"_ustr))
+    , xCustom4ED(m_xBuilder->weld_entry(u"custom4control"_ustr))
+    , xCustom5FT(m_xBuilder->weld_label(u"custom5"_ustr))
+    , xCustom5ED(m_xBuilder->weld_entry(u"custom5control"_ustr))
+    , m_xLocalURLFT(m_xBuilder->weld_label(u"localurl"_ustr))
+    , m_xLocalURLED(m_xBuilder->weld_entry(u"localurlcontrol"_ustr))
+    , m_xLocalBrowseButton(m_xBuilder->weld_button(u"localbrowse"_ustr))
+    , m_xLocalPageCB(m_xBuilder->weld_check_button(u"localpagecb"_ustr))
+    , m_xLocalPageSB(m_xBuilder->weld_spin_button(u"localpagesb"_ustr))
     , pDatMan(pMan)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
@@ -425,14 +425,14 @@ void BibGeneralPage::SaveChanges()
     if (!xResUpd.is() )
         return;
 
-    Any aModified = xProps->getPropertyValue( "IsModified" );
+    Any aModified = xProps->getPropertyValue( u"IsModified"_ustr );
     bool bFlag = false;
     if ( !( aModified >>= bFlag ) || !bFlag )
         return;
 
     try
     {
-        Any aNew = xProps->getPropertyValue( "IsNew" );
+        Any aNew = xProps->getPropertyValue( u"IsNew"_ustr );
         aNew >>= bFlag;
         if ( bFlag )
             xResUpd->insertRow();
@@ -512,7 +512,7 @@ namespace
             , m_rPage(rPage)
         {
             rEntry.connect_focus_out(LINK(this, EntryChangeListener, LoseFocusHdl));
-            setValue(rPropSet->getPropertyValue("Text"));
+            setValue(rPropSet->getPropertyValue(u"Text"_ustr));
         }
 
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override
@@ -524,12 +524,12 @@ namespace
 
         virtual void start() override
         {
-            m_xPropSet->addPropertyChangeListener("Text", this);
+            m_xPropSet->addPropertyChangeListener(u"Text"_ustr, this);
         }
 
         virtual void stop() override
         {
-            m_xPropSet->removePropertyChangeListener("Text", this);
+            m_xPropSet->removePropertyChangeListener(u"Text"_ustr, this);
             ChangeListener::stop();
         }
 
@@ -594,7 +594,7 @@ namespace
             {
                 aText = m_rEntry.get_text();
             }
-            m_xPropSet->setPropertyValue("Text", Any(aText));
+            m_xPropSet->setPropertyValue(u"Text"_ustr, Any(aText));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
             if (xBound.is())
@@ -623,7 +623,7 @@ namespace
             , m_rComboBox(rComboBox)
         {
             rComboBox.connect_changed(LINK(this, ComboBoxChangeListener, ChangeHdl));
-            setValue(rPropSet->getPropertyValue("SelectedItems"));
+            setValue(rPropSet->getPropertyValue(u"SelectedItems"_ustr));
         }
 
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override
@@ -635,12 +635,12 @@ namespace
 
         virtual void start() override
         {
-            m_xPropSet->addPropertyChangeListener("SelectedItems", this);
+            m_xPropSet->addPropertyChangeListener(u"SelectedItems"_ustr, this);
         }
 
         virtual void stop() override
         {
-            m_xPropSet->removePropertyChangeListener("SelectedItems", this);
+            m_xPropSet->removePropertyChangeListener(u"SelectedItems"_ustr, this);
             ChangeListener::stop();
         }
 
@@ -668,7 +668,7 @@ namespace
             m_bSelfChanging = true;
 
             Sequence<sal_Int16> aSelection{ o3tl::narrowing<sal_Int16>(m_rComboBox.get_active()) };
-            m_xPropSet->setPropertyValue("SelectedItems", Any(aSelection));
+            m_xPropSet->setPropertyValue(u"SelectedItems"_ustr, Any(aSelection));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
             if (xBound.is())
@@ -850,13 +850,13 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::ComboBox& rList)
             if( xPropSet.is())
             {
                 css::uno::Sequence<OUString> aEntries;
-                xPropSet->getPropertyValue("StringItemList") >>= aEntries;
+                xPropSet->getPropertyValue(u"StringItemList"_ustr) >>= aEntries;
                 for (const OUString& rString : aEntries)
                      rList.append_text(rString);
 
                 sal_Int16 nSelection = -1;
                 Sequence<sal_Int16> aSelection;
-                xPropSet->getPropertyValue("SelectedItems") >>= aSelection;
+                xPropSet->getPropertyValue(u"SelectedItems"_ustr) >>= aSelection;
                 if (aSelection.hasElements())
                     nSelection = aSelection[0];
 

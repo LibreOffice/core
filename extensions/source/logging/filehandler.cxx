@@ -149,7 +149,7 @@ namespace logging
             ::comphelper::NamedValueCollection aTypedSettings( aSettings );
             m_aHandlerHelper.initFromSettings( aTypedSettings );
 
-            if ( aTypedSettings.get_ensureType( "FileURL", m_sFileURL ) )
+            if ( aTypedSettings.get_ensureType( u"FileURL"_ustr, m_sFileURL ) )
                 impl_doStringsubstitution_nothrow( m_sFileURL );
         }
         else
@@ -333,7 +333,7 @@ namespace logging
 
     OUString SAL_CALL FileHandler::getImplementationName()
     {
-        return "com.sun.star.comp.extensions.FileHandler";
+        return u"com.sun.star.comp.extensions.FileHandler"_ustr;
     }
 
     sal_Bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName )
@@ -343,7 +343,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames()
     {
-        return { "com.sun.star.logging.FileHandler" };
+        return { u"com.sun.star.logging.FileHandler"_ustr };
     }
 
 } // namespace logging

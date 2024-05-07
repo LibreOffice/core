@@ -51,14 +51,14 @@ namespace pcr
 
     // OSelectLabelDialog
     OSelectLabelDialog::OSelectLabelDialog(weld::Window* pParent, Reference< XPropertySet > const & _xControlModel)
-        : GenericDialogController(pParent, "modules/spropctrlr/ui/labelselectiondialog.ui", "LabelSelectionDialog")
+        : GenericDialogController(pParent, u"modules/spropctrlr/ui/labelselectiondialog.ui"_ustr, u"LabelSelectionDialog"_ustr)
         , m_xControlModel(_xControlModel)
         , m_bLastSelected(false)
         , m_bHaveAssignableControl(false)
-        , m_xMainDesc(m_xBuilder->weld_label("label"))
-        , m_xControlTree(m_xBuilder->weld_tree_view("control"))
+        , m_xMainDesc(m_xBuilder->weld_label(u"label"_ustr))
+        , m_xControlTree(m_xBuilder->weld_tree_view(u"control"_ustr))
         , m_xScratchIter(m_xControlTree->make_iterator())
-        , m_xNoAssignment(m_xBuilder->weld_check_button("noassignment"))
+        , m_xNoAssignment(m_xBuilder->weld_check_button(u"noassignment"_ustr))
     {
         m_xControlTree->connect_changed(LINK(this, OSelectLabelDialog, OnEntrySelected));
         m_xControlTree->set_size_request(-1, m_xControlTree->get_height_rows(8));

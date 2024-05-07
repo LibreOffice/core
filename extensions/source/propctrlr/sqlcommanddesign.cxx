@@ -231,12 +231,12 @@ namespace pcr
                 comphelper::makePropertyValue(PROPERTY_COMMAND, m_xObjectAdapter->getSQLCommand()),
                 comphelper::makePropertyValue(PROPERTY_COMMANDTYPE, CommandType::COMMAND),
                 comphelper::makePropertyValue(PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing),
-                comphelper::makePropertyValue("GraphicalDesign", bEscapeProcessing)
+                comphelper::makePropertyValue(u"GraphicalDesign"_ustr, bEscapeProcessing)
             };
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(
-                ".component:DB/QueryDesign",
-                "_self",
+                u".component:DB/QueryDesign"_ustr,
+                u"_self"_ustr,
                 FrameSearchFlag::TASKS | FrameSearchFlag::CREATE,
                 aArgs
             );
@@ -282,7 +282,7 @@ namespace pcr
             Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
             Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), css::uno::UNO_SET_THROW );
-            xFrame = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
+            xFrame = xDesktop->findFrame( u"_blank"_ustr, FrameSearchFlag::CREATE );
             OSL_ENSURE( xFrame.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: could not create an empty frame!" );
             xDesktopFramesCollection->remove( xFrame );
         }
@@ -309,11 +309,11 @@ namespace pcr
             // instead of calling XCloseable::close directly. The latter method would also close
             // the frame, but not care for things like shutting down the office when the last
             // frame is gone ...
-            const UnoURL aCloseURL( ".uno:CloseDoc",
+            const UnoURL aCloseURL( u".uno:CloseDoc"_ustr,
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
             Reference< XDispatchProvider > xProvider( m_xDesigner->getFrame(), UNO_QUERY_THROW );
-            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, "_top", FrameSearchFlag::SELF ) );
+            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, u"_top"_ustr, FrameSearchFlag::SELF ) );
             OSL_ENSURE( xDispatch.is(), "SQLCommandDesigner::impl_closeDesigner_nothrow: no dispatcher for the CloseDoc command!" );
             if ( xDispatch.is() )
             {

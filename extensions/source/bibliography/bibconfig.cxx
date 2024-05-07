@@ -39,20 +39,20 @@ Sequence<OUString> const & BibConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames =
     {
-        "CurrentDataSource/DataSourceName",
-        "CurrentDataSource/Command",
-        "CurrentDataSource/CommandType",
-        "BeamerHeight",
-        "ViewHeight",
-        "QueryText",
-        "QueryField",
-        "ShowColumnAssignmentWarning"
+        u"CurrentDataSource/DataSourceName"_ustr,
+        u"CurrentDataSource/Command"_ustr,
+        u"CurrentDataSource/CommandType"_ustr,
+        u"BeamerHeight"_ustr,
+        u"ViewHeight"_ustr,
+        u"QueryText"_ustr,
+        u"QueryField"_ustr,
+        u"ShowColumnAssignmentWarning"_ustr
     };
     return aNames;
 }
 
 BibConfig::BibConfig()
-    : ConfigItem("Office.DataAccess/Bibliography", ConfigItemMode::NONE)
+    : ConfigItem(u"Office.DataAccess/Bibliography"_ustr, ConfigItemMode::NONE)
     , nTblOrQuery(0)
     , nBeamerSize(0)
     , nViewSize(0)
@@ -224,8 +224,8 @@ void    BibConfig::ImplCommit()
 
         sPrefix += "Fields";
         sal_Int32 nFieldAssignment = 0;
-        OUString sFieldName = "/ProgrammaticFieldName";
-        OUString sDatabaseFieldName = "/AssignedFieldName";
+        OUString sFieldName = u"/ProgrammaticFieldName"_ustr;
+        OUString sDatabaseFieldName = u"/AssignedFieldName"_ustr;
         ClearNodeSet( sPrefix );
 
         while(nFieldAssignment < COLUMN_COUNT &&

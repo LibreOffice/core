@@ -219,7 +219,7 @@ namespace logging
 
     OUString SAL_CALL LoggerPool::getImplementationName()
     {
-        return "com.sun.star.comp.extensions.LoggerPool";
+        return u"com.sun.star.comp.extensions.LoggerPool"_ustr;
     }
 
     sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName )
@@ -229,7 +229,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames()
     {
-        return { "com.sun.star.logging.LoggerPool" };
+        return { u"com.sun.star.logging.LoggerPool"_ustr };
     }
 
     Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const OUString& _rName )
@@ -250,7 +250,7 @@ namespace logging
 
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  )
     {
-        return getNamedLogger( "org.openoffice.logging.DefaultLogger" );
+        return getNamedLogger( u"org.openoffice.logging.DefaultLogger"_ustr );
     }
 
 } // namespace logging

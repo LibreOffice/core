@@ -32,14 +32,14 @@ namespace abp
 
     // TypeSelectionPage
     TypeSelectionPage::TypeSelectionPage(weld::Container* pPage, OAddressBookSourcePilot* pDialog)
-      : AddressBookSourcePage(pPage, pDialog, "modules/sabpilot/ui/selecttypepage.ui", "SelectTypePage")
-      , m_xEvolution(m_xBuilder->weld_radio_button("evolution"))
-      , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button("groupwise"))
-      , m_xEvolutionLdap(m_xBuilder->weld_radio_button("evoldap"))
-      , m_xThunderbird(m_xBuilder->weld_radio_button("thunderbird"))
-      , m_xKab(m_xBuilder->weld_radio_button("kde"))
-      , m_xMacab(m_xBuilder->weld_radio_button("macosx"))
-      , m_xOther(m_xBuilder->weld_radio_button("other"))
+      : AddressBookSourcePage(pPage, pDialog, u"modules/sabpilot/ui/selecttypepage.ui"_ustr, u"SelectTypePage"_ustr)
+      , m_xEvolution(m_xBuilder->weld_radio_button(u"evolution"_ustr))
+      , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button(u"groupwise"_ustr))
+      , m_xEvolutionLdap(m_xBuilder->weld_radio_button(u"evoldap"_ustr))
+      , m_xThunderbird(m_xBuilder->weld_radio_button(u"thunderbird"_ustr))
+      , m_xKab(m_xBuilder->weld_radio_button(u"kde"_ustr))
+      , m_xMacab(m_xBuilder->weld_radio_button(u"macosx"_ustr))
+      , m_xOther(m_xBuilder->weld_radio_button(u"other"_ustr))
     {
         //TODO:  For now, try to keep offering the same choices like before the
         // Mozilla cleanup, even if the status of what driver actually
@@ -71,7 +71,7 @@ namespace abp
         try
         {
             // check whether Evolution is available
-            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:evolution:local") );
+            Reference< XDriver > xDriver( xManager->getDriverByURL(u"sdbc:address:evolution:local"_ustr) );
             if ( xDriver.is() )
                 bHaveEvolution = true;
         }
@@ -82,7 +82,7 @@ namespace abp
         // check whether KDE address book is available
         try
         {
-            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:kab") );
+            Reference< XDriver > xDriver( xManager->getDriverByURL(u"sdbc:address:kab"_ustr) );
             if ( xDriver.is() )
                 bHaveKab = true;
         }
@@ -93,7 +93,7 @@ namespace abp
         try
         {
             // check whether macOS address book is available
-            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:macab") );
+            Reference< XDriver > xDriver( xManager->getDriverByURL(u"sdbc:address:macab"_ustr) );
             if ( xDriver.is() )
                 bHaveMacab = true;
         }

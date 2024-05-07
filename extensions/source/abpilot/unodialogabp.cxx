@@ -37,7 +37,7 @@ namespace abp
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty( "DataSourceName", PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
+        registerProperty( u"DataSourceName"_ustr, PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
             &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
     }
 
@@ -72,12 +72,12 @@ namespace abp
 
     OUString SAL_CALL OABSPilotUno::getImplementationName()
     {
-        return "org.openoffice.comp.abp.OAddressBookSourcePilot";
+        return u"org.openoffice.comp.abp.OAddressBookSourcePilot"_ustr;
     }
 
     css::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames()
     {
-        return { "com.sun.star.ui.dialogs.AddressBookSourcePilot" };
+        return { u"com.sun.star.ui.dialogs.AddressBookSourcePilot"_ustr };
     }
 
     Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo()
@@ -105,7 +105,7 @@ namespace abp
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
             Sequence< Any > aNewArgs{ Any(PropertyValue(
-                "ParentWindow", 0, Any(xParentWindow), PropertyState_DIRECT_VALUE )) };
+                u"ParentWindow"_ustr, 0, Any(xParentWindow), PropertyState_DIRECT_VALUE )) };
             OGenericUnoDialog::initialize(aNewArgs);
         } else {
             OGenericUnoDialog::initialize(aArguments);
@@ -128,7 +128,7 @@ namespace abp
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
-        css::uno::Sequence< css::beans::NamedValue > lProtocol { { "Deactivate", css::uno::Any( true ) } };
+        css::uno::Sequence< css::beans::NamedValue > lProtocol { { u"Deactivate"_ustr, css::uno::Any( true ) } };
         return Any( lProtocol );
     }
 

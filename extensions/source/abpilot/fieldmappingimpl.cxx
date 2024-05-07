@@ -86,7 +86,7 @@ namespace abp
 
                     Sequence< AliasProgrammaticPair > aMapping;
                     bool bSuccess =
-                        xDialogProps->getPropertyValue("FieldMapping") >>= aMapping;
+                        xDialogProps->getPropertyValue(u"FieldMapping"_ustr) >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map
@@ -209,7 +209,7 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName);
 
-            OConfigurationNode aFields = aAddressBookSettings.openNode( OUString( "Fields" ) );
+            OConfigurationNode aFields = aAddressBookSettings.openNode( u"Fields"_ustr );
 
             // loop through all existent fields
             static constexpr OUString sProgrammaticNodeName( u"ProgrammaticFieldName"_ustr );
@@ -276,9 +276,9 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName);
 
-            aAddressBookSettings.setNodeValue( OUString( "DataSourceName" ), Any( _rDataSourceName ) );
-            aAddressBookSettings.setNodeValue( OUString( "Command" ), Any( _rTableName ) );
-            aAddressBookSettings.setNodeValue( OUString( "CommandType" ), Any( sal_Int16(CommandType::TABLE) ) );
+            aAddressBookSettings.setNodeValue( u"DataSourceName"_ustr, Any( _rDataSourceName ) );
+            aAddressBookSettings.setNodeValue( u"Command"_ustr, Any( _rTableName ) );
+            aAddressBookSettings.setNodeValue( u"CommandType"_ustr, Any( sal_Int16(CommandType::TABLE) ) );
 
             // commit the changes done
             aAddressBookSettings.commit();
@@ -294,7 +294,7 @@ namespace abp
                 _rxContext, sAddressBookNodeName);
 
             // set the flag
-            aAddressBookSettings.setNodeValue( OUString( "AutoPilotCompleted" ), Any( true ) );
+            aAddressBookSettings.setNodeValue( u"AutoPilotCompleted"_ustr, Any( true ) );
 
             // commit the changes done
             aAddressBookSettings.commit();

@@ -64,13 +64,13 @@ namespace pcr
 
     OUString EFormsPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.EFormsPropertyHandler";
+        return u"com.sun.star.comp.extensions.EFormsPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > EFormsPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.XMLFormsPropertyHandler" };
+        return { u"com.sun.star.form.inspection.XMLFormsPropertyHandler"_ustr };
     }
 
 
@@ -483,7 +483,7 @@ namespace pcr
         try
         {
             Reference< XExecutableDialog > xDialog;
-            xDialog.set( m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.xforms.ui.dialogs.AddCondition", m_xContext ), UNO_QUERY );
+            xDialog.set( m_xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.xforms.ui.dialogs.AddCondition"_ustr, m_xContext ), UNO_QUERY );
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
 
             // the model for the dialog to work with
@@ -498,15 +498,15 @@ namespace pcr
             if ( !xModel.is() || !xBinding.is() || sFacetName.isEmpty() )
                 return InteractiveSelectionResult_Cancelled;
 
-            xDialogProps->setPropertyValue("FormModel", Any( xModel ) );
-            xDialogProps->setPropertyValue("Binding", Any( xBinding ) );
-            xDialogProps->setPropertyValue("FacetName", Any( sFacetName ) );
+            xDialogProps->setPropertyValue(u"FormModel"_ustr, Any( xModel ) );
+            xDialogProps->setPropertyValue(u"Binding"_ustr, Any( xBinding ) );
+            xDialogProps->setPropertyValue(u"FacetName"_ustr, Any( sFacetName ) );
 
             if ( !xDialog->execute() )
                 // cancelled
                 return InteractiveSelectionResult_Cancelled;
 
-            _rData = xDialogProps->getPropertyValue("ConditionValue");
+            _rData = xDialogProps->getPropertyValue(u"ConditionValue"_ustr);
             return InteractiveSelectionResult_ObtainedValue;
         }
         catch( const Exception& )

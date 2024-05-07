@@ -220,22 +220,22 @@ UpdateCheckConfig::get(
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value <<= OUString("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments");
+    aProperty.Value <<= u"org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments"_ustr;
 
     uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     uno::Reference< container::XNameContainer > xContainer(
         xConfigProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ),
+            u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates");
+    aProperty.Value <<= u"/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates"_ustr;
     aArgumentList = { uno::Any(aProperty) };
-    uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArgumentList ), uno::UNO_QUERY_THROW );
 
-    aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates");
+    aProperty.Value <<= u"/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates"_ustr;
     aArgumentList = { uno::Any(aProperty) };
-    uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArgumentList ), uno::UNO_QUERY_THROW );
 
     return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );
 }
@@ -244,7 +244,7 @@ bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
     bool nValue = false;
-    const_cast < UpdateCheckConfig *> (this)->getByName( AUTOCHECK_ENABLED ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( u"" AUTOCHECK_ENABLED ""_ustr ) >>= nValue;
     return nValue;
 }
 
@@ -252,7 +252,7 @@ bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
     bool nValue = false;
-    const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( u"" AUTODOWNLOAD_ENABLED ""_ustr ) >>= nValue;
     return nValue;
 }
 
@@ -262,7 +262,7 @@ UpdateCheckConfig::getUpdateEntryVersion() const
     OUString aValue;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( OLD_VERSION ) >>= aValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( u"" OLD_VERSION ""_ustr ) >>= aValue;
 
     return aValue;
 }
@@ -273,7 +273,7 @@ UpdateCheckConfig::getLastChecked() const
     sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( LAST_CHECK ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( u"" LAST_CHECK ""_ustr ) >>= nValue;
 
     return nValue;
 }
@@ -284,7 +284,7 @@ UpdateCheckConfig::getCheckInterval() const
     sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( CHECK_INTERVAL ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( u"" CHECK_INTERVAL ""_ustr ) >>= nValue;
 
     return nValue;
 }
@@ -292,7 +292,7 @@ UpdateCheckConfig::getCheckInterval() const
 OUString
 UpdateCheckConfig::getLocalFileName() const
 {
-    OUString aName = LOCAL_FILE;
+    OUString aName = u"" LOCAL_FILE ""_ustr;
     OUString aRet;
 
     if( m_xContainer->hasByName(aName) )
@@ -306,7 +306,7 @@ UpdateCheckConfig::getDownloadDestination() const
 {
     OUString aRet;
 
-    const_cast <UpdateCheckConfig *> (this)->getByName(DOWNLOAD_DESTINATION) >>= aRet;
+    const_cast <UpdateCheckConfig *> (this)->getByName(u"" DOWNLOAD_DESTINATION ""_ustr) >>= aRet;
 
     return aRet;
 }
@@ -315,7 +315,7 @@ void
 UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
+    const OUString aNameList[nItems] = { u"" LOCAL_FILE ""_ustr, u"" DOWNLOAD_SIZE ""_ustr };
     const uno::Any aValueList[nItems] = { uno::Any(rLocalFileName), uno::Any(nFileSize) };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
@@ -333,7 +333,7 @@ void
 UpdateCheckConfig::clearLocalFileName()
 {
     const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
+    const OUString aNameList[nItems] = { u"" LOCAL_FILE ""_ustr, u"" DOWNLOAD_SIZE ""_ustr };
 
     for(const auto & i : aNameList)
     {
@@ -347,7 +347,7 @@ UpdateCheckConfig::clearLocalFileName()
 void
 UpdateCheckConfig::storeDownloadPaused(bool paused)
 {
-    replaceByName(DOWNLOAD_PAUSED , uno::Any(paused));
+    replaceByName(u"" DOWNLOAD_PAUSED ""_ustr , uno::Any(paused));
     commitChanges();
 }
 
@@ -359,7 +359,7 @@ UpdateCheckConfig::updateLastChecked()
 
     sal_Int64 lastCheck = systime.Seconds;
 
-    replaceByName(LAST_CHECK, uno::Any(lastCheck));
+    replaceByName(u"" LAST_CHECK ""_ustr, uno::Any(lastCheck));
 }
 
 void
@@ -542,18 +542,18 @@ bool UpdateCheckConfig::storeExtensionVersion( const OUString& rExtensionName,
     bool bNotify = true;
 
     if ( m_xAvailableUpdates->hasByName( rExtensionName ) )
-        uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->setPropertyValue( PROPERTY_VERSION, uno::Any( rVersion ) );
+        uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->setPropertyValue( u"" PROPERTY_VERSION ""_ustr, uno::Any( rVersion ) );
     else
     {
         uno::Reference< beans::XPropertySet > elem( uno::Reference< lang::XSingleServiceFactory >( m_xAvailableUpdates, uno::UNO_QUERY_THROW )->createInstance(), uno::UNO_QUERY_THROW );
-        elem->setPropertyValue( PROPERTY_VERSION, uno::Any( rVersion ) );
+        elem->setPropertyValue( u"" PROPERTY_VERSION ""_ustr, uno::Any( rVersion ) );
         m_xAvailableUpdates->insertByName( rExtensionName, uno::Any( elem ) );
     }
 
     if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
     {
         OUString aIgnoredVersion;
-        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( u"" PROPERTY_VERSION ""_ustr ) );
         aValue >>= aIgnoredVersion;
         if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
             bNotify = false;
@@ -572,13 +572,13 @@ bool UpdateCheckConfig::checkExtensionVersion( const OUString& rExtensionName,
     if ( m_xAvailableUpdates->hasByName( rExtensionName ) )
     {
         OUString aStoredVersion;
-        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( u"" PROPERTY_VERSION ""_ustr ) );
         aValue >>= aStoredVersion;
 
         if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
         {
             OUString aIgnoredVersion;
-            uno::Any aValue2( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+            uno::Any aValue2( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( u"" PROPERTY_VERSION ""_ustr ) );
             aValue2 >>= aIgnoredVersion;
             if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
                 return false;
@@ -634,7 +634,7 @@ bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
 OUString SAL_CALL
 UpdateCheckConfig::getImplementationName()
 {
-    return "vnd.sun.UpdateCheckConfig";
+    return u"vnd.sun.UpdateCheckConfig"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -646,7 +646,7 @@ UpdateCheckConfig::supportsService(OUString const & serviceName)
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckConfig::getSupportedServiceNames()
 {
-    return { "com.sun.star.setup.UpdateCheckConfig" };
+    return { u"com.sun.star.setup.UpdateCheckConfig"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

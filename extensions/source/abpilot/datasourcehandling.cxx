@@ -140,7 +140,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    "URL",
+                    u"URL"_ustr,
                     Any( OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }
@@ -345,7 +345,7 @@ namespace abp
                 else
                 {
                     // Embed.
-                    OUString aStreamRelPath = "EmbeddedDatabase";
+                    OUString aStreamRelPath = u"EmbeddedDatabase"_ustr;
                     auto xContext(comphelper::getProcessComponentContext());
                     auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(aOwnURL);
                     assert(xUri.is());
@@ -366,8 +366,8 @@ namespace abp
                     // Refer to the sub-storage name in the document settings, so
                     // we can load it again next time the file is imported.
                     uno::Reference<lang::XMultiServiceFactory> xFactory(pObjectShell->GetModel(), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::Any(aStreamRelPath));
+                    uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, uno::Any(aStreamRelPath));
                 }
             }
         }

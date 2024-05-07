@@ -24,8 +24,8 @@ namespace pcr
 {
     OBrowserPage::OBrowserPage(weld::Container* pParent, weld::Container* pInitialControlContainer)
         : m_pParent(pParent)
-        , m_xBuilder(Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui"))
-        , m_xContainer(m_xBuilder->weld_container("BrowserPage"))
+        , m_xBuilder(Application::CreateBuilder(pParent, u"modules/spropctrlr/ui/browserpage.ui"_ustr))
+        , m_xContainer(m_xBuilder->weld_container(u"BrowserPage"_ustr))
         , m_xListBox(new OBrowserListBox(*m_xBuilder, pInitialControlContainer))
     {
     }

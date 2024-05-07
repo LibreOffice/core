@@ -178,30 +178,30 @@ Download::getProxyForURL(std::u16string_view rURL, OString& rHost, sal_Int32& rP
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value <<= OUString("org.openoffice.Inet/Settings");
+    aProperty.Value <<= u"org.openoffice.Inet/Settings"_ustr;
 
     uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     uno::Reference< container::XNameAccess > xNameAccess(
         xConfigProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    OSL_ASSERT(xNameAccess->hasByName("ooInetProxyType"));
-    uno::Any aValue = xNameAccess->getByName("ooInetProxyType");
+    OSL_ASSERT(xNameAccess->hasByName(u"ooInetProxyType"_ustr));
+    uno::Any aValue = xNameAccess->getByName(u"ooInetProxyType"_ustr);
 
     sal_Int32 nProxyType = aValue.get< sal_Int32 >();
     if( 0 != nProxyType ) // type 0 means "direct connection to the internet
     {
         if( o3tl::starts_with(rURL, u"http:") )
         {
-            rHost = getStringValue(xNameAccess, "ooInetHTTPProxyName");
-            rPort = getInt32Value(xNameAccess, "ooInetHTTPProxyPort");
+            rHost = getStringValue(xNameAccess, u"ooInetHTTPProxyName"_ustr);
+            rPort = getInt32Value(xNameAccess, u"ooInetHTTPProxyPort"_ustr);
         }
         else if( o3tl::starts_with(rURL, u"https:") )
         {
-            rHost = getStringValue(xNameAccess, "ooInetHTTPSProxyName");
-            rPort = getInt32Value(xNameAccess, "ooInetHTTPSProxyPort");
+            rHost = getStringValue(xNameAccess, u"ooInetHTTPSProxyName"_ustr);
+            rPort = getInt32Value(xNameAccess, u"ooInetHTTPSProxyPort"_ustr);
         }
     }
 }

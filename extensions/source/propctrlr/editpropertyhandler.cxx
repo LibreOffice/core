@@ -60,13 +60,13 @@ namespace pcr
 
     OUString EditPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.EditPropertyHandler";
+        return u"com.sun.star.comp.extensions.EditPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > EditPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.EditPropertyHandler" };
+        return { u"com.sun.star.form.inspection.EditPropertyHandler"_ustr };
     }
 
 
@@ -279,7 +279,7 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TextType::SINGLELINE );
             _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TextType::SINGLELINE );
 
-            _rxInspectorUI->showCategory( "Data", nTextType != TextType::RICHTEXT );
+            _rxInspectorUI->showCategory( u"Data"_ustr, nTextType != TextType::RICHTEXT );
         }
         break;
 

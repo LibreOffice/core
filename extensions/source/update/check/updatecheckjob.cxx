@@ -259,14 +259,14 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
 OUString SAL_CALL
 UpdateCheckJob::getImplementationName()
 {
-    return "vnd.sun.UpdateCheck";
+    return u"vnd.sun.UpdateCheck"_ustr;
 }
 
 
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckJob::getSupportedServiceNames()
 {
-    return { "com.sun.star.setup.UpdateCheck" };
+    return { u"com.sun.star.setup.UpdateCheck"_ustr };
 }
 
 sal_Bool SAL_CALL

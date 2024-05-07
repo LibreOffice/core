@@ -169,9 +169,9 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 }
 
 ComboBoxControl::ComboBoxControl(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/sbibliography/ui/combobox.ui", "ComboBox")
-    , m_xFtSource(m_xBuilder->weld_label("label"))
-    , m_xLBSource(m_xBuilder->weld_combo_box("combobox"))
+    : InterimItemWindow(pParent, u"modules/sbibliography/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
+    , m_xFtSource(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xLBSource(m_xBuilder->weld_combo_box(u"combobox"_ustr))
 {
     m_xFtSource->set_toolbar_background();
     m_xLBSource->set_toolbar_background();
@@ -192,9 +192,9 @@ ComboBoxControl::~ComboBoxControl()
 }
 
 EditControl::EditControl(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/sbibliography/ui/editbox.ui", "EditBox")
-    , m_xFtQuery(m_xBuilder->weld_label("label"))
-    , m_xEdQuery(m_xBuilder->weld_entry("entry"))
+    : InterimItemWindow(pParent, u"modules/sbibliography/ui/editbox.ui"_ustr, u"EditBox"_ustr)
+    , m_xFtQuery(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xEdQuery(m_xBuilder->weld_entry(u"entry"_ustr))
 {
     m_xFtQuery->set_toolbar_background();
     m_xEdQuery->set_toolbar_background();
@@ -215,14 +215,14 @@ EditControl::~EditControl()
 }
 
 BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
-    : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
+    : ToolBox(pParent, u"toolbar"_ustr, u"modules/sbibliography/ui/toolbar.ui"_ustr)
     , aIdle("BibToolBar")
     , xSource(VclPtr<ComboBoxControl>::Create(this))
     , pLbSource(xSource->get_widget())
     , xQuery(VclPtr<EditControl>::Create(this))
     , pEdQuery(xQuery->get_widget())
-    , xBuilder(Application::CreateBuilder(nullptr, "modules/sbibliography/ui/autofiltermenu.ui"))
-    , xPopupMenu(xBuilder->weld_menu("menu"))
+    , xBuilder(Application::CreateBuilder(nullptr, u"modules/sbibliography/ui/autofiltermenu.ui"_ustr))
+    , xPopupMenu(xBuilder->weld_menu(u"menu"_ustr))
     , nMenuId(0)
     , aLayoutManager(aLink)
     , nSymbolsSize(SFX_SYMBOLS_SIZE_SMALL)
@@ -242,13 +242,13 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
 
     xQuery->Show();
 
-    nTBC_SOURCE = GetItemId(".uno:Bib/source");
-    nTBC_QUERY = GetItemId(".uno:Bib/query");
-    nTBC_BT_AUTOFILTER = GetItemId(".uno:Bib/autoFilter");
-    nTBC_BT_COL_ASSIGN = GetItemId("TBC_BT_COL_ASSIGN");
-    nTBC_BT_CHANGESOURCE = GetItemId(".uno:Bib/sdbsource");
-    nTBC_BT_FILTERCRIT = GetItemId(".uno:Bib/standardFilter");
-    nTBC_BT_REMOVEFILTER = GetItemId(".uno:Bib/removeFilter");
+    nTBC_SOURCE = GetItemId(u".uno:Bib/source"_ustr);
+    nTBC_QUERY = GetItemId(u".uno:Bib/query"_ustr);
+    nTBC_BT_AUTOFILTER = GetItemId(u".uno:Bib/autoFilter"_ustr);
+    nTBC_BT_COL_ASSIGN = GetItemId(u"TBC_BT_COL_ASSIGN"_ustr);
+    nTBC_BT_CHANGESOURCE = GetItemId(u".uno:Bib/sdbsource"_ustr);
+    nTBC_BT_FILTERCRIT = GetItemId(u".uno:Bib/standardFilter"_ustr);
+    nTBC_BT_REMOVEFILTER = GetItemId(u".uno:Bib/removeFilter"_ustr);
 
     SetItemWindow(nTBC_SOURCE, xSource.get());
     SetItemWindow(nTBC_QUERY , xQuery.get());
@@ -343,8 +343,8 @@ void BibToolBar::Select()
     {
         Sequence<PropertyValue> aPropVal
         {
-            comphelper::makePropertyValue("QueryText", pEdQuery->get_text()),
-            comphelper::makePropertyValue("QueryField", aQueryField)
+            comphelper::makePropertyValue(u"QueryText"_ustr, pEdQuery->get_text()),
+            comphelper::makePropertyValue(u"QueryField"_ustr, aQueryField)
         };
         SendDispatch(nId,aPropVal);
     }
@@ -472,8 +472,8 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
         {
             Sequence<PropertyValue> aPropVal
             {
-                comphelper::makePropertyValue("QueryText", pEdQuery->get_text()),
-                comphelper::makePropertyValue("QueryField", aQueryField)
+                comphelper::makePropertyValue(u"QueryText"_ustr, pEdQuery->get_text()),
+                comphelper::makePropertyValue(u"QueryField"_ustr, aQueryField)
             };
             SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
             return bResult;
@@ -495,7 +495,7 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
 {
     Sequence<PropertyValue> aPropVal
     {
-        comphelper::makePropertyValue("DataSourceName", MnemonicGenerator::EraseAllMnemonicChars( pLbSource->get_active_text() ))
+        comphelper::makePropertyValue(u"DataSourceName"_ustr, MnemonicGenerator::EraseAllMnemonicChars( pLbSource->get_active_text() ))
     };
     SendDispatch(nTBC_SOURCE, aPropVal);
 }
@@ -522,8 +522,8 @@ IMPL_LINK_NOARG(BibToolBar, MenuHdl, ToolBox*, void)
         aQueryField = MnemonicGenerator::EraseAllMnemonicChars(xPopupMenu->get_label(sId));
         Sequence<PropertyValue> aPropVal
         {
-            comphelper::makePropertyValue("QueryText", pEdQuery->get_text()),
-            comphelper::makePropertyValue("QueryField", aQueryField)
+            comphelper::makePropertyValue(u"QueryText"_ustr, pEdQuery->get_text()),
+            comphelper::makePropertyValue(u"QueryField"_ustr, aQueryField)
         };
         SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
     }

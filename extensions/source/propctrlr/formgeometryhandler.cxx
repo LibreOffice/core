@@ -304,7 +304,7 @@ namespace pcr
                 if ( !xCheckGrid.is() )
                 {
                     Reference< XMap > xControlMap;
-                    Any any = m_xContext->getValueByName( "ControlShapeAccess" );
+                    Any any = m_xContext->getValueByName( u"ControlShapeAccess"_ustr );
                     any >>= xControlMap;
                     m_xAssociatedShape.set( xControlMap->get( Any( xControlModel ) ), UNO_QUERY_THROW );
                     m_xShapeProperties.set( m_xAssociatedShape, UNO_QUERY_THROW );
@@ -323,13 +323,13 @@ namespace pcr
 
     OUString FormGeometryHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.FormGeometryHandler";
+        return u"com.sun.star.comp.extensions.FormGeometryHandler"_ustr;
     }
 
 
     Sequence< OUString > FormGeometryHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.FormGeometryHandler" };
+        return { u"com.sun.star.form.inspection.FormGeometryHandler"_ustr };
     }
 
 
@@ -608,7 +608,7 @@ namespace pcr
             if ( !xPSI->hasPropertyByName( PROPERTY_ANCHOR ) )
                 return false;
             Reference< XServiceInfo > xSI( m_xAssociatedShape, UNO_QUERY_THROW );
-            if ( xSI->supportsService("com.sun.star.sheet.Shape") )
+            if ( xSI->supportsService(u"com.sun.star.sheet.Shape"_ustr) )
                 return true;
         }
         catch( const Exception& )

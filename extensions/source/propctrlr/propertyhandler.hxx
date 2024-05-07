@@ -275,7 +275,7 @@ namespace pcr
                     impl_getContextDocument_nothrow() const
         {
             return css::uno::Reference< css::frame::XModel >(
-                m_xContext->getValueByName( "ContextDocument" ), css::uno::UNO_QUERY );
+                m_xContext->getValueByName( u"ContextDocument"_ustr ), css::uno::UNO_QUERY );
         }
 
         /** marks the context document as modified

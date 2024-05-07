@@ -50,7 +50,7 @@ Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB()
 
 OUString ScannerManager::getImplementationName()
 {
-    return "com.sun.star.scanner.ScannerManager";
+    return u"com.sun.star.scanner.ScannerManager"_ustr;
 }
 
 
@@ -62,7 +62,7 @@ sal_Bool ScannerManager::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.scanner.ScannerManager" };
+    return { u"com.sun.star.scanner.ScannerManager"_ustr };
 }
 
 
@@ -74,8 +74,8 @@ sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
 void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
-    if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= mxDialogParent;
+    if (aProperties.has(u"ParentWindow"_ustr))
+        aProperties.get(u"ParentWindow"_ustr) >>= mxDialogParent;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

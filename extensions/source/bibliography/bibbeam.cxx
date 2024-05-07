@@ -134,7 +134,7 @@ namespace bib
 
         if ( xPropSet.is() && m_xGridModel.is() )
         {
-            uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
+            uno::Any aAny = xPropSet->getPropertyValue( u"DefaultControl"_ustr );
             OUString aControlName;
             aAny >>= aControlName;
 
@@ -146,7 +146,7 @@ namespace bib
             return;
 
         // Peer as Child to the FrameWindow
-        m_xControlContainer->addControl("GridControl", m_xControl);
+        m_xControlContainer->addControl(u"GridControl"_ustr, m_xControl);
         m_xGridWin.set(m_xControl, UNO_QUERY );
         m_xDispatchProviderInterception.set(m_xControl, UNO_QUERY );
         m_xGridWin->setVisible( true );

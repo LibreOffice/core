@@ -57,13 +57,13 @@ namespace pcr
 
     OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  )
     {
-        return "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel";
+        return u"org.openoffice.comp.extensions.DefaultFormComponentInspectorModel"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" };
+        return { u"com.sun.star.form.inspection.DefaultFormComponentInspectorModel"_ustr };
     }
 
 

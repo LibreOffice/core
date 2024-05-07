@@ -230,8 +230,8 @@ extensions_propctrlr_FormController_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
-                "org.openoffice.comp.extensions.FormController",
-                { "com.sun.star.form.PropertyBrowserController" },
+                u"org.openoffice.comp.extensions.FormController"_ustr,
+                { u"com.sun.star.form.PropertyBrowserController"_ustr },
                 true ) );
 }
 
@@ -240,8 +240,8 @@ extensions_propctrlr_DialogController_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
-            "org.openoffice.comp.extensions.DialogController",
-            { "com.sun.star.awt.PropertyBrowserController" },
+            u"org.openoffice.comp.extensions.DialogController"_ustr,
+            { u"com.sun.star.awt.PropertyBrowserController"_ustr },
             false ) );
 }
 

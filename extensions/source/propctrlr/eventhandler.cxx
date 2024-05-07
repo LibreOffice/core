@@ -362,8 +362,8 @@ namespace pcr
 
         ::comphelper::NamedValueCollection aExtractor( aScriptDescriptor );
 
-        pos->second.ScriptType = aExtractor.getOrDefault( "EventType", OUString() );
-        pos->second.ScriptCode = aExtractor.getOrDefault( "Script", OUString() );
+        pos->second.ScriptType = aExtractor.getOrDefault( u"EventType"_ustr, OUString() );
+        pos->second.ScriptCode = aExtractor.getOrDefault( u"Script"_ustr, OUString() );
     }
 
     Any SAL_CALL EventHolder::getByName( const OUString& _rName )
@@ -371,8 +371,8 @@ namespace pcr
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
         Sequence< PropertyValue > aScriptDescriptor{
-            comphelper::makePropertyValue("EventType", aDescriptor.ScriptType),
-            comphelper::makePropertyValue("Script", aDescriptor.ScriptCode)
+            comphelper::makePropertyValue(u"EventType"_ustr, aDescriptor.ScriptType),
+            comphelper::makePropertyValue(u"Script"_ustr, aDescriptor.ScriptCode)
         };
 
         return Any( aScriptDescriptor );
@@ -433,7 +433,7 @@ namespace pcr
 
     OUString SAL_CALL EventHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.EventHandler";
+        return u"com.sun.star.comp.extensions.EventHandler"_ustr;
     }
 
     sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName )
@@ -443,7 +443,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.EventHandler" };
+        return { u"com.sun.star.form.inspection.EventHandler"_ustr };
     }
 
     void SAL_CALL EventHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
@@ -591,8 +591,8 @@ namespace pcr
                 aComposeBuffer.append( xScriptUri->getName() );
 
                 // location
-                const OUString sLocation = xScriptUri->getParameter( "location" );
-                const OUString sLanguage = xScriptUri->getParameter( "language" );
+                const OUString sLocation = xScriptUri->getParameter( u"location"_ustr );
+                const OUString sLanguage = xScriptUri->getParameter( u"language"_ustr );
 
                 if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
                 {

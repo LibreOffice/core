@@ -121,7 +121,7 @@ namespace logging
         ::comphelper::NamedValueCollection aTypedSettings( aSettings );
         m_aHandlerHelper.initFromSettings( aTypedSettings );
 
-        aTypedSettings.get_ensureType( "Threshold", m_nThreshold );
+        aTypedSettings.get_ensureType( u"Threshold"_ustr, m_nThreshold );
 
         m_aHandlerHelper.setIsInitialized();
     }
@@ -238,7 +238,7 @@ namespace logging
 
     OUString SAL_CALL ConsoleHandler::getImplementationName()
     {
-        return "com.sun.star.comp.extensions.ConsoleHandler";
+        return u"com.sun.star.comp.extensions.ConsoleHandler"_ustr;
     }
 
     sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName )
@@ -248,7 +248,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames()
     {
-        return { "com.sun.star.logging.ConsoleHandler" };
+        return { u"com.sun.star.logging.ConsoleHandler"_ustr };
     }
 
 } // namespace logging

@@ -107,15 +107,15 @@ namespace pcr
     //= TabOrderDialog
     TabOrderDialog::TabOrderDialog(weld::Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB)
-        : GenericDialogController( _pParent, "modules/spropctrlr/ui/taborder.ui", "TabOrderDialog")
+        : GenericDialogController( _pParent, u"modules/spropctrlr/ui/taborder.ui"_ustr, u"TabOrderDialog"_ustr)
         , m_xModel( _rxTabModel )
         , m_xControlContainer( _rxControlCont )
         , m_xORB( _rxORB )
-        , m_xLB_Controls(m_xBuilder->weld_tree_view("CTRLtree"))
-        , m_xPB_OK(m_xBuilder->weld_button("ok"))
-        , m_xPB_MoveUp(m_xBuilder->weld_button("upB"))
-        , m_xPB_MoveDown(m_xBuilder->weld_button("downB"))
-        , m_xPB_AutoOrder(m_xBuilder->weld_button("autoB"))
+        , m_xLB_Controls(m_xBuilder->weld_tree_view(u"CTRLtree"_ustr))
+        , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xPB_MoveUp(m_xBuilder->weld_button(u"upB"_ustr))
+        , m_xPB_MoveDown(m_xBuilder->weld_button(u"downB"_ustr))
+        , m_xPB_AutoOrder(m_xBuilder->weld_button(u"autoB"_ustr))
     {
         m_xLB_Controls->set_size_request(m_xLB_Controls->get_approximate_digit_width() * 60,
                                          m_xLB_Controls->get_height_rows(10));

@@ -126,7 +126,7 @@ static Reference< XConnection >    getConnection(const Reference< XInterface > &
         if (!xFormProps.is())
             return xConn;
 
-        xConn.set(xFormProps->getPropertyValue("ActiveConnection"), UNO_QUERY);
+        xConn.set(xFormProps->getPropertyValue(u"ActiveConnection"_ustr), UNO_QUERY);
         if (!xConn.is())
         {
             SAL_INFO("extensions.biblio", "no active connection");
@@ -158,10 +158,10 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         {
             try
             {
-                DBG_ASSERT(*o3tl::forceAccess<sal_Int32>(xFormProps->getPropertyValue("CommandType")) == CommandType::TABLE,
+                DBG_ASSERT(*o3tl::forceAccess<sal_Int32>(xFormProps->getPropertyValue(u"CommandType"_ustr)) == CommandType::TABLE,
                     "::getColumns : invalid form (has no table as data source) !");
                 OUString sTable;
-                xFormProps->getPropertyValue("Command") >>= sTable;
+                xFormProps->getPropertyValue(u"Command"_ustr) >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
                     xSupplyCols.set(xTables->getByName(sTable), UNO_QUERY);
@@ -243,43 +243,43 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
 }
 
 MappingDialog_Impl::MappingDialog_Impl(weld::Window* pParent, BibDataManager* pMan)
-    : GenericDialogController(pParent, "modules/sbibliography/ui/mappingdialog.ui", "MappingDialog")
+    : GenericDialogController(pParent, u"modules/sbibliography/ui/mappingdialog.ui"_ustr, u"MappingDialog"_ustr)
     , pDatMan(pMan)
     , sNone(BibResId(RID_BIB_STR_NONE))
     , bModified(false)
-    , m_xOKBT(m_xBuilder->weld_button("ok"))
-    , m_xIdentifierLB(m_xBuilder->weld_combo_box("identifierCombobox"))
-    , m_xAuthorityTypeLB(m_xBuilder->weld_combo_box("authorityTypeCombobox"))
-    , m_xAuthorLB(m_xBuilder->weld_combo_box("authorCombobox"))
-    , m_xTitleLB(m_xBuilder->weld_combo_box("titleCombobox"))
-    , m_xMonthLB(m_xBuilder->weld_combo_box("monthCombobox"))
-    , m_xYearLB(m_xBuilder->weld_combo_box("yearCombobox"))
-    , m_xISBNLB(m_xBuilder->weld_combo_box("ISBNCombobox"))
-    , m_xBooktitleLB(m_xBuilder->weld_combo_box("bookTitleCombobox"))
-    , m_xChapterLB(m_xBuilder->weld_combo_box("chapterCombobox"))
-    , m_xEditionLB(m_xBuilder->weld_combo_box("editionCombobox"))
-    , m_xEditorLB(m_xBuilder->weld_combo_box("editorCombobox"))
-    , m_xHowpublishedLB(m_xBuilder->weld_combo_box("howPublishedCombobox"))
-    , m_xInstitutionLB(m_xBuilder->weld_combo_box("institutionCombobox"))
-    , m_xJournalLB(m_xBuilder->weld_combo_box("journalCombobox"))
-    , m_xNoteLB(m_xBuilder->weld_combo_box("noteCombobox"))
-    , m_xAnnoteLB(m_xBuilder->weld_combo_box("annoteCombobox"))
-    , m_xNumberLB(m_xBuilder->weld_combo_box("numberCombobox"))
-    , m_xOrganizationsLB(m_xBuilder->weld_combo_box("organizationCombobox"))
-    , m_xPagesLB(m_xBuilder->weld_combo_box("pagesCombobox"))
-    , m_xPublisherLB(m_xBuilder->weld_combo_box("publisherCombobox"))
-    , m_xAddressLB(m_xBuilder->weld_combo_box("addressCombobox"))
-    , m_xSchoolLB(m_xBuilder->weld_combo_box("schoolCombobox"))
-    , m_xSeriesLB(m_xBuilder->weld_combo_box("seriesCombobox"))
-    , m_xReportTypeLB(m_xBuilder->weld_combo_box("reportTypeCombobox"))
-    , m_xVolumeLB(m_xBuilder->weld_combo_box("volumeCombobox"))
-    , m_xURLLB(m_xBuilder->weld_combo_box("URLCombobox"))
-    , m_xCustom1LB(m_xBuilder->weld_combo_box("custom1Combobox"))
-    , m_xCustom2LB(m_xBuilder->weld_combo_box("custom2Combobox"))
-    , m_xCustom3LB(m_xBuilder->weld_combo_box("custom3Combobox"))
-    , m_xCustom4LB(m_xBuilder->weld_combo_box("custom4Combobox"))
-    , m_xCustom5LB(m_xBuilder->weld_combo_box("custom5Combobox"))
-    , m_xLocalURLLB(m_xBuilder->weld_combo_box("LocalURLCombobox"))
+    , m_xOKBT(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xIdentifierLB(m_xBuilder->weld_combo_box(u"identifierCombobox"_ustr))
+    , m_xAuthorityTypeLB(m_xBuilder->weld_combo_box(u"authorityTypeCombobox"_ustr))
+    , m_xAuthorLB(m_xBuilder->weld_combo_box(u"authorCombobox"_ustr))
+    , m_xTitleLB(m_xBuilder->weld_combo_box(u"titleCombobox"_ustr))
+    , m_xMonthLB(m_xBuilder->weld_combo_box(u"monthCombobox"_ustr))
+    , m_xYearLB(m_xBuilder->weld_combo_box(u"yearCombobox"_ustr))
+    , m_xISBNLB(m_xBuilder->weld_combo_box(u"ISBNCombobox"_ustr))
+    , m_xBooktitleLB(m_xBuilder->weld_combo_box(u"bookTitleCombobox"_ustr))
+    , m_xChapterLB(m_xBuilder->weld_combo_box(u"chapterCombobox"_ustr))
+    , m_xEditionLB(m_xBuilder->weld_combo_box(u"editionCombobox"_ustr))
+    , m_xEditorLB(m_xBuilder->weld_combo_box(u"editorCombobox"_ustr))
+    , m_xHowpublishedLB(m_xBuilder->weld_combo_box(u"howPublishedCombobox"_ustr))
+    , m_xInstitutionLB(m_xBuilder->weld_combo_box(u"institutionCombobox"_ustr))
+    , m_xJournalLB(m_xBuilder->weld_combo_box(u"journalCombobox"_ustr))
+    , m_xNoteLB(m_xBuilder->weld_combo_box(u"noteCombobox"_ustr))
+    , m_xAnnoteLB(m_xBuilder->weld_combo_box(u"annoteCombobox"_ustr))
+    , m_xNumberLB(m_xBuilder->weld_combo_box(u"numberCombobox"_ustr))
+    , m_xOrganizationsLB(m_xBuilder->weld_combo_box(u"organizationCombobox"_ustr))
+    , m_xPagesLB(m_xBuilder->weld_combo_box(u"pagesCombobox"_ustr))
+    , m_xPublisherLB(m_xBuilder->weld_combo_box(u"publisherCombobox"_ustr))
+    , m_xAddressLB(m_xBuilder->weld_combo_box(u"addressCombobox"_ustr))
+    , m_xSchoolLB(m_xBuilder->weld_combo_box(u"schoolCombobox"_ustr))
+    , m_xSeriesLB(m_xBuilder->weld_combo_box(u"seriesCombobox"_ustr))
+    , m_xReportTypeLB(m_xBuilder->weld_combo_box(u"reportTypeCombobox"_ustr))
+    , m_xVolumeLB(m_xBuilder->weld_combo_box(u"volumeCombobox"_ustr))
+    , m_xURLLB(m_xBuilder->weld_combo_box(u"URLCombobox"_ustr))
+    , m_xCustom1LB(m_xBuilder->weld_combo_box(u"custom1Combobox"_ustr))
+    , m_xCustom2LB(m_xBuilder->weld_combo_box(u"custom2Combobox"_ustr))
+    , m_xCustom3LB(m_xBuilder->weld_combo_box(u"custom3Combobox"_ustr))
+    , m_xCustom4LB(m_xBuilder->weld_combo_box(u"custom4Combobox"_ustr))
+    , m_xCustom5LB(m_xBuilder->weld_combo_box(u"custom5Combobox"_ustr))
+    , m_xLocalURLLB(m_xBuilder->weld_combo_box(u"LocalURLCombobox"_ustr))
 {
     m_xOKBT->connect_clicked(LINK(this, MappingDialog_Impl, OkHdl));
     OUString sTitle = m_xDialog->get_title();
@@ -421,8 +421,8 @@ public:
 }
 
 DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, const BibDataManager* pDatMan )
-    : GenericDialogController(pParent, "modules/sbibliography/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
-    , m_xSelectionLB(m_xBuilder->weld_tree_view("treeview"))
+    : GenericDialogController(pParent, u"modules/sbibliography/ui/choosedatasourcedialog.ui"_ustr, u"ChooseDataSourceDialog"_ustr)
+    , m_xSelectionLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xSelectionLB->set_size_request(-1, m_xSelectionLB->get_height_rows(6));
     m_xSelectionLB->connect_row_activated(LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
@@ -544,7 +544,7 @@ BibDataManager::~BibDataManager()
     if ( m_xForm.is() )
     {
         Reference< XComponent >  xConnection;
-        xPrSet->getPropertyValue("ActiveConnection") >>= xConnection;
+        xPrSet->getPropertyValue(u"ActiveConnection"_ustr) >>= xConnection;
         if (xLoad.is())
             xLoad->unload();
         if (xComp.is())
@@ -593,7 +593,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             sal_Int32 nType = 0;
             bool bIsFormatted           = false;
             bool bFormattedIsNumeric    = true;
-            xField->getPropertyValue("Type") >>= nType;
+            xField->getPropertyValue(u"Type"_ustr) >>= nType;
             switch(nType)
             {
                 case DataType::BIT:
@@ -623,10 +623,10 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(sCurrentModelType);
             if (bIsFormatted)
             {
-                OUString sFormatKey("FormatKey");
+                OUString sFormatKey(u"FormatKey"_ustr);
                 xCurrentCol->setPropertyValue(sFormatKey, xField->getPropertyValue(sFormatKey));
                 Any aFormatted(bFormattedIsNumeric);
-                xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
+                xCurrentCol->setPropertyValue(u"TreatAsNumber"_ustr, aFormatted);
             }
             Any aColName( rField );
             xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
@@ -652,7 +652,7 @@ Reference< awt::XControlModel > const & BibDataManager::updateGridModel(const Re
     {
         Reference< XPropertySet >  aFormPropSet( xDbForm, UNO_QUERY );
         OUString sName;
-        aFormPropSet->getPropertyValue("Command") >>= sName;
+        aFormPropSet->getPropertyValue(u"Command"_ustr) >>= sName;
 
         if ( !m_xGridModel.is() )
         {
@@ -680,7 +680,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     try
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        m_xForm.set( xMgr->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY );
+        m_xForm.set( xMgr->createInstance( u"com.sun.star.form.component.Form"_ustr ), UNO_QUERY );
 
         Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
 
@@ -689,17 +689,17 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
         {
             Any aVal;
             aVal <<= sal_Int32(ResultSetType::SCROLL_INSENSITIVE);
-            aPropertySet->setPropertyValue("ResultSetType",aVal );
+            aPropertySet->setPropertyValue(u"ResultSetType"_ustr,aVal );
             aVal <<= sal_Int32(ResultSetConcurrency::READ_ONLY);
-            aPropertySet->setPropertyValue("ResultSetConcurrency", aVal);
+            aPropertySet->setPropertyValue(u"ResultSetConcurrency"_ustr, aVal);
 
             //Caching for Performance
             aVal <<= sal_Int32(50);
-            aPropertySet->setPropertyValue("FetchSize", aVal);
+            aPropertySet->setPropertyValue(u"FetchSize"_ustr, aVal);
 
             Reference< XConnection >    xConnection = getConnection(rDesc.sDataSource);
             aVal <<= xConnection;
-            aPropertySet->setPropertyValue("ActiveConnection", aVal);
+            aPropertySet->setPropertyValue(u"ActiveConnection"_ustr, aVal);
 
             Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess >  xTables = xSupplyTables.is() ?
@@ -720,9 +720,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 }
 
                 aVal <<= aActiveDataTable;
-                aPropertySet->setPropertyValue("Command", aVal);
+                aPropertySet->setPropertyValue(u"Command"_ustr, aVal);
                 aVal <<= rDesc.nCommandType;
-                aPropertySet->setPropertyValue("CommandType", aVal);
+                aPropertySet->setPropertyValue(u"CommandType"_ustr, aVal);
 
 
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
@@ -730,9 +730,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr), UNO_QUERY );
 
-                OUString aString("SELECT * FROM ");
+                OUString aString(u"SELECT * FROM "_ustr);
 
                 OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
@@ -786,8 +786,8 @@ void BibDataManager::setFilter(const OUString& rQuery)
         m_xParser->setFilter( rQuery );
         OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
-        xFormProps->setPropertyValue( "Filter", Any( aQuery ) );
-        xFormProps->setPropertyValue( "ApplyFilter", Any( true ) );
+        xFormProps->setPropertyValue( u"Filter"_ustr, Any( aQuery ) );
+        xFormProps->setPropertyValue( u"ApplyFilter"_ustr, Any( true ) );
         reload();
     }
     catch (const Exception&)
@@ -805,7 +805,7 @@ OUString BibDataManager::getFilter() const
     try
     {
         Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
-        OSL_VERIFY( xFormProps->getPropertyValue( "Filter"  ) >>= aQueryString );
+        OSL_VERIFY( xFormProps->getPropertyValue( u"Filter"_ustr  ) >>= aQueryString );
     }
     catch (const Exception&)
     {
@@ -868,7 +868,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
     unload();
 
     Reference< XComponent >  xOldConnection;
-    aPropertySet->getPropertyValue("ActiveConnection") >>= xOldConnection;
+    aPropertySet->getPropertyValue(u"ActiveConnection"_ustr) >>= xOldConnection;
 
     Reference< XConnection >    xConnection = getConnection(rURL);
     if(!xConnection.is())
@@ -877,10 +877,10 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         return;
     }
     Any aVal; aVal <<= xConnection;
-    aPropertySet->setPropertyValue("ActiveConnection", aVal);
+    aPropertySet->setPropertyValue(u"ActiveConnection"_ustr, aVal);
     Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
     if ( xFactory.is() )
-        m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
+        m_xParser.set( xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr), UNO_QUERY );
 
     if(xOldConnection.is())
         xOldConnection->dispose();
@@ -896,12 +896,12 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
     {
         aActiveDataTable = aTableNameSeq[0];
         aVal <<= aActiveDataTable;
-        aPropertySet->setPropertyValue("Command", aVal);
-        aPropertySet->setPropertyValue("CommandType", Any(CommandType::TABLE));
+        aPropertySet->setPropertyValue(u"Command"_ustr, aVal);
+        aPropertySet->setPropertyValue(u"CommandType"_ustr, Any(CommandType::TABLE));
         //Caching for Performance
         aVal <<= sal_Int32(50);
-        aPropertySet->setPropertyValue("FetchSize", aVal);
-        OUString aString("SELECT * FROM ");
+        aPropertySet->setPropertyValue(u"FetchSize"_ustr, aVal);
+        OUString aString(u"SELECT * FROM "_ustr);
         // quote the table name which may contain catalog.schema.table
         Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
         aQuoteChar = xMetaData->getIdentifierQuoteString();
@@ -955,16 +955,16 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
                 {
                     aActiveDataTable = rTable;
                     Any aVal; aVal <<= rTable;
-                    aPropertySet->setPropertyValue( "Command", aVal );
+                    aPropertySet->setPropertyValue( u"Command"_ustr, aVal );
 
                     Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
                     aQuoteChar = xMetaData->getIdentifierQuoteString();
 
                     Reference<XMultiServiceFactory> xFactory(xConnection, UNO_QUERY);
                     if (xFactory.is())
-                        m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
+                        m_xParser.set( xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr), UNO_QUERY );
 
-                    OUString aString("SELECT * FROM ");
+                    OUString aString(u"SELECT * FROM "_ustr);
 
                     OUString sCatalog, sSchema, sName;
                     ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
@@ -1101,19 +1101,19 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
     {
         // create the control model
         Reference< XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
-        Reference< XInterface >  xObject = xMgr->createInstance("com.sun.star.form.component.GridControl");
+        Reference< XInterface >  xObject = xMgr->createInstance(u"com.sun.star.form.component.GridControl"_ustr);
         xModel.set( xObject, UNO_QUERY );
 
         // set the
         Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
-        xPropSet->setPropertyValue( "Name", Any( rName ) );
+        xPropSet->setPropertyValue( u"Name"_ustr, Any( rName ) );
 
         // set the name of the to-be-created control
-        Any aAny(OUString("com.sun.star.form.control.InteractionGridControl"));
-        xPropSet->setPropertyValue( "DefaultControl",aAny );
+        Any aAny(u"com.sun.star.form.control.InteractionGridControl"_ustr);
+        xPropSet->setPropertyValue( u"DefaultControl"_ustr,aAny );
 
         // the helpURL
-        OUString uProp("HelpURL");
+        OUString uProp(u"HelpURL"_ustr);
         Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
         if (xPropInfo->hasPropertyByName(uProp))
         {
@@ -1189,9 +1189,9 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             aElement >>= xField;
 
             sal_Int32 nFormatKey = 0;
-            xField->getPropertyValue("Type") >>= nFormatKey;
+            xField->getPropertyValue(u"Type"_ustr) >>= nFormatKey;
 
-            OUString aInstanceName("com.sun.star.form.component.");
+            OUString aInstanceName(u"com.sun.star.form.component."_ustr);
 
             if (bForceListBox)
                 aInstanceName += "ListBox";
@@ -1206,7 +1206,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, Any( rName ) );
-            xPropSet->setPropertyValue("NativeWidgetLook", Any( true ) );
+            xPropSet->setPropertyValue(u"NativeWidgetLook"_ustr, Any( true ) );
 
             if (bForceListBox)
             {
@@ -1214,9 +1214,9 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
                 aAny <<= sal_Int16(1);
-                xPropSet->setPropertyValue("BoundColumn", aAny);
+                xPropSet->setPropertyValue(u"BoundColumn"_ustr, aAny);
                 aAny <<= ListSourceType_VALUELIST;
-                xPropSet->setPropertyValue("ListSourceType", aAny);
+                xPropSet->setPropertyValue(u"ListSourceType"_ustr, aAny);
 
                 uno::Sequence<OUString> aListSource(TYPE_COUNT);
                 OUString* pListSourceArr = aListSource.getArray();
@@ -1225,7 +1225,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     pListSourceArr[i] = OUString::number(i);
                 aAny <<= aListSource;
 
-                xPropSet->setPropertyValue("ListSource", aAny);
+                xPropSet->setPropertyValue(u"ListSource"_ustr, aAny);
 
                 uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
                 OUString* pValuesArr = aValues.getArray();
@@ -1256,9 +1256,9 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 aAny <<= aValues;
 
-                xPropSet->setPropertyValue("StringItemList", aAny);
+                xPropSet->setPropertyValue(u"StringItemList"_ustr, aAny);
 
-                xPropSet->setPropertyValue( "Dropdown", Any(true) );
+                xPropSet->setPropertyValue( u"Dropdown"_ustr, Any(true) );
             }
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );

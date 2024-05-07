@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBibliographyLoader)
     uno::Sequence<beans::PropertyValue> aSeq;
 
     // When getting the column names:
-    xPropSet->getPropertyValue("BibliographyDataFieldNames") >>= aSeq;
+    xPropSet->getPropertyValue(u"BibliographyDataFieldNames"_ustr) >>= aSeq;
 
     // Then make sure we have columns and all have non-empty names:
     CPPUNIT_ASSERT(aSeq.hasElements());

@@ -170,7 +170,7 @@ Sane::~Sane()
 void Sane::Init()
 {
 #ifndef DISABLE_DYNLOADING
-    OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
+    OUString sSaneLibName( u"libsane" SAL_DLLEXTENSION ""_ustr  );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
@@ -180,7 +180,7 @@ void Sane::Init()
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
     {
-        OUString sSaneLibSystemPath( "/usr/local/lib/libsane" SAL_DLLEXTENSION  );
+        OUString sSaneLibSystemPath( u"/usr/local/lib/libsane" SAL_DLLEXTENSION ""_ustr  );
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }

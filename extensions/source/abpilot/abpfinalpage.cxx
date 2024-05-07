@@ -33,22 +33,22 @@ namespace abp
 {
     static std::shared_ptr<const SfxFilter> lcl_getBaseFilter()
     {
-        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         return pFilter;
     }
 
     FinalPage::FinalPage(weld::Container* pPage, OAddressBookSourcePilot* pWizard)
-        : AddressBookSourcePage(pPage, pWizard, "modules/sabpilot/ui/datasourcepage.ui",
-                                "DataSourcePage")
-        , m_xLocation(new SvtURLBox(m_xBuilder->weld_combo_box("location")))
-        , m_xBrowse(m_xBuilder->weld_button("browse"))
-        , m_xRegisterName(m_xBuilder->weld_check_button("available"))
-        , m_xEmbed(m_xBuilder->weld_check_button("embed"))
-        , m_xNameLabel(m_xBuilder->weld_label("nameft"))
-        , m_xLocationLabel(m_xBuilder->weld_label("locationft"))
-        , m_xName(m_xBuilder->weld_entry("name"))
-        , m_xDuplicateNameError(m_xBuilder->weld_label("warning"))
+        : AddressBookSourcePage(pPage, pWizard, u"modules/sabpilot/ui/datasourcepage.ui"_ustr,
+                                u"DataSourcePage"_ustr)
+        , m_xLocation(new SvtURLBox(m_xBuilder->weld_combo_box(u"location"_ustr)))
+        , m_xBrowse(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xRegisterName(m_xBuilder->weld_check_button(u"available"_ustr))
+        , m_xEmbed(m_xBuilder->weld_check_button(u"embed"_ustr))
+        , m_xNameLabel(m_xBuilder->weld_label(u"nameft"_ustr))
+        , m_xLocationLabel(m_xBuilder->weld_label(u"locationft"_ustr))
+        , m_xName(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xDuplicateNameError(m_xBuilder->weld_label(u"warning"_ustr))
     {
         m_xLocation->SetSmartProtocol(INetProtocol::File);
         m_xLocation->DisableHistory();

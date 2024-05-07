@@ -136,7 +136,7 @@ StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContex
 // com.sun.star.uno.XServiceInfo:
 OUString  SAL_CALL StringRepresentation::getImplementationName()
 {
-    return "StringRepresentation";
+    return u"StringRepresentation"_ustr;
 }
 
 sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
@@ -146,7 +146,7 @@ sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & service
 
 uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
 {
-    return { "com.sun.star.inspection.StringRepresentation" };
+    return { u"com.sun.star.inspection.StringRepresentation"_ustr };
 }
 
 // inspection::XStringRepresentation:
@@ -250,7 +250,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
         return;
 
     uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
-        m_xContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+        m_xContext->getValueByName(u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
         uno::UNO_QUERY_THROW );
 
     m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );

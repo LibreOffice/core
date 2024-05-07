@@ -77,13 +77,13 @@ namespace pcr
 
     OUString XSDValidationPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.XSDValidationPropertyHandler";
+        return u"com.sun.star.comp.extensions.XSDValidationPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > XSDValidationPropertyHandler::getSupportedServiceNames(  )
     {
-        return{ "com.sun.star.form.inspection.XSDValidationPropertyHandler" };
+        return{ u"com.sun.star.form.inspection.XSDValidationPropertyHandler"_ustr };
     }
 
 

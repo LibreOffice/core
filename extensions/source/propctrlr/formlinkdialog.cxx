@@ -138,25 +138,25 @@ namespace pcr
             const OUString& _sExplanation,
             OUString _sDetailLabel,
             OUString _sMasterLabel)
-        : GenericDialogController(_pParent, "modules/spropctrlr/ui/formlinksdialog.ui", "FormLinks")
+        : GenericDialogController(_pParent, u"modules/spropctrlr/ui/formlinksdialog.ui"_ustr, u"FormLinks"_ustr)
         , m_xContext    ( _rxContext )
         , m_xDetailForm( _rxDetailForm )
         , m_xMasterForm( _rxMasterForm )
         , m_sDetailLabel(std::move(_sDetailLabel))
         , m_sMasterLabel(std::move(_sMasterLabel))
-        , m_xExplanation(m_xBuilder->weld_label("explanationLabel"))
-        , m_xDetailLabel(m_xBuilder->weld_label("detailLabel"))
-        , m_xMasterLabel(m_xBuilder->weld_label("masterLabel"))
-        , m_xRow1(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box("detailCombobox1"),
-                                                 m_xBuilder->weld_combo_box("masterCombobox1")))
-        , m_xRow2(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box("detailCombobox2"),
-                                                 m_xBuilder->weld_combo_box("masterCombobox2")))
-        , m_xRow3(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box("detailCombobox3"),
-                                                 m_xBuilder->weld_combo_box("masterCombobox3")))
-        , m_xRow4(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box("detailCombobox4"),
-                                                 m_xBuilder->weld_combo_box("masterCombobox4")))
-        , m_xOK(m_xBuilder->weld_button("ok"))
-        , m_xSuggest(m_xBuilder->weld_button("suggestButton"))
+        , m_xExplanation(m_xBuilder->weld_label(u"explanationLabel"_ustr))
+        , m_xDetailLabel(m_xBuilder->weld_label(u"detailLabel"_ustr))
+        , m_xMasterLabel(m_xBuilder->weld_label(u"masterLabel"_ustr))
+        , m_xRow1(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box(u"detailCombobox1"_ustr),
+                                                 m_xBuilder->weld_combo_box(u"masterCombobox1"_ustr)))
+        , m_xRow2(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box(u"detailCombobox2"_ustr),
+                                                 m_xBuilder->weld_combo_box(u"masterCombobox2"_ustr)))
+        , m_xRow3(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box(u"detailCombobox3"_ustr),
+                                                 m_xBuilder->weld_combo_box(u"masterCombobox3"_ustr)))
+        , m_xRow4(std::make_unique<FieldLinkRow>(m_xBuilder->weld_combo_box(u"detailCombobox4"_ustr),
+                                                 m_xBuilder->weld_combo_box(u"masterCombobox4"_ustr)))
+        , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xSuggest(m_xBuilder->weld_button(u"suggestButton"_ustr))
     {
         m_xRow1->Show();
         m_xRow2->Show();
@@ -494,7 +494,7 @@ namespace pcr
                 {
                     xKeys->getByIndex( key ) >>= xKey;
                     sal_Int32 nKeyType = 0;
-                    xKey->getPropertyValue("Type") >>= nKeyType;
+                    xKey->getPropertyValue(u"Type"_ustr) >>= nKeyType;
                     if ( nKeyType != KeyType::FOREIGN )
                         continue;
 
@@ -518,7 +518,7 @@ namespace pcr
                         if ( xKeyColumn.is() )
                         {
                             xKeyColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
-                            xKeyColumn->getPropertyValue("RelatedColumn") >>= sRelatedColumnName;
+                            xKeyColumn->getPropertyValue(u"RelatedColumn"_ustr) >>= sRelatedColumnName;
 
                             _rLeftFields[ column ]  = sColumnName;
                             _rRightFields[ column ] = sRelatedColumnName;

@@ -78,12 +78,12 @@ sal_Bool SAL_CALL SimpleTextFormatter::supportsService(const OUString& _rService
 
 OUString SAL_CALL SimpleTextFormatter::getImplementationName()
 {
-    return "com.sun.star.comp.extensions.SimpleTextFormatter";
+    return u"com.sun.star.comp.extensions.SimpleTextFormatter"_ustr;
 }
 
 Sequence<OUString> SAL_CALL SimpleTextFormatter::getSupportedServiceNames()
 {
-    return { "com.sun.star.logging.SimpleTextFormatter" };
+    return { u"com.sun.star.logging.SimpleTextFormatter"_ustr };
 }
 
 } // namespace logging

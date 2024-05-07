@@ -139,19 +139,19 @@ namespace pcr
 
     OUString SAL_CALL ObjectInspectorModel::getImplementationName(  )
     {
-        return "org.openoffice.comp.extensions.ObjectInspectorModel";
+        return u"org.openoffice.comp.extensions.ObjectInspectorModel"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.inspection.ObjectInspectorModel" };
+        return { u"com.sun.star.inspection.ObjectInspectorModel"_ustr };
     }
 
 
     void ObjectInspectorModel::createDefault()
     {
-        m_aFactories = { Any(OUString( "com.sun.star.inspection.GenericPropertyHandler" )) };
+        m_aFactories = { Any(u"com.sun.star.inspection.GenericPropertyHandler"_ustr) };
     }
 
 

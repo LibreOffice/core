@@ -268,7 +268,7 @@ namespace pcr
     Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & rContext )
     {
         Reference< XInterface > xI;
-        Any aReturn = rContext->getValueByName( "ContextDocument" );
+        Any aReturn = rContext->getValueByName( u"ContextDocument"_ustr );
         aReturn >>= xI;
         return xI;
     }
@@ -278,7 +278,7 @@ namespace pcr
         weld::Window* pInspectorWindow = nullptr;
         try
         {
-            Reference< XWindow > xInspectorWindow(rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW);
+            Reference< XWindow > xInspectorWindow(rContext->getValueByName( u"DialogParentWindow"_ustr ), UNO_QUERY_THROW);
             pInspectorWindow = Application::GetFrameWeld(xInspectorWindow);
         }
         catch( const Exception& )
@@ -290,7 +290,7 @@ namespace pcr
 
     std::unique_ptr<weld::Builder> PropertyHandlerHelper::makeBuilder(const OUString& rUIFile, const Reference<XComponentContext>& rContext)
     {
-        Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
+        Reference<XWindow> xWindow(rContext->getValueByName(u"BuilderParent"_ustr), UNO_QUERY_THROW);
         weld::TransportAsXWindow& rTunnel = dynamic_cast<weld::TransportAsXWindow&>(*xWindow);
         return Application::CreateBuilder(rTunnel.getWidget(), rUIFile);
     }
@@ -299,13 +299,13 @@ namespace pcr
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
-        xName->insertByName("BuilderParent", Any(xWindow));
+        xName->insertByName(u"BuilderParent"_ustr, Any(xWindow));
     }
 
     void PropertyHandlerHelper::clearBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
-        xName->removeByName("BuilderParent");
+        xName->removeByName(u"BuilderParent"_ustr);
     }
 
 } // namespace pcr

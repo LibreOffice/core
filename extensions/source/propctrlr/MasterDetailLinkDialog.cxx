@@ -43,13 +43,13 @@ namespace pcr
 
     OUString SAL_CALL MasterDetailLinkDialog::getImplementationName()
     {
-        return "org.openoffice.comp.form.ui.MasterDetailLinkDialog";
+        return u"org.openoffice.comp.form.ui.MasterDetailLinkDialog"_ustr;
     }
 
 
     css::uno::Sequence<OUString> SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.form.MasterDetailLinkDialog" };
+        return { u"com.sun.star.form.MasterDetailLinkDialog"_ustr };
     }
 
 

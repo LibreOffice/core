@@ -70,13 +70,13 @@ namespace pcr
 
     OUString SAL_CALL OTabOrderDialog::getImplementationName()
     {
-        return "org.openoffice.comp.form.ui.OTabOrderDialog";
+        return u"org.openoffice.comp.form.ui.OTabOrderDialog"_ustr;
     }
 
 
     css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.form.ui.TabOrderDialog", "com.sun.star.form.TabOrderDialog" };
+        return { u"com.sun.star.form.ui.TabOrderDialog"_ustr, u"com.sun.star.form.TabOrderDialog"_ustr };
     }
 
 
@@ -112,15 +112,15 @@ namespace pcr
         {
             Sequence< Any > aNewArguments{
                 Any(NamedValue(
-                    "TabbingModel",
+                    u"TabbingModel"_ustr,
                     Any( xTabbingModel )
                 )),
                 Any(NamedValue(
-                    "ControlContext",
+                    u"ControlContext"_ustr,
                     Any( xControlContext )
                 )),
                 Any(NamedValue(
-                    "ParentWindow",
+                    u"ParentWindow"_ustr,
                     Any( xParentWindow )
                 ))
             };

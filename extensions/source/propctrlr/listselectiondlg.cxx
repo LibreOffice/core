@@ -31,11 +31,11 @@ namespace pcr
 
     ListSelectionDialog::ListSelectionDialog(weld::Window* pParent, const Reference< XPropertySet >& _rxListBox,
             OUString _sPropertyName, const OUString& _rPropertyUIName)
-        : GenericDialogController(pParent, "modules/spropctrlr/ui/listselectdialog.ui", "ListSelectDialog")
+        : GenericDialogController(pParent, u"modules/spropctrlr/ui/listselectdialog.ui"_ustr, u"ListSelectDialog"_ustr)
         , m_xListBox     ( _rxListBox     )
         , m_sPropertyName(std::move( _sPropertyName ))
-        , m_xFrame(m_xBuilder->weld_frame("frame"))
-        , m_xEntries(m_xBuilder->weld_tree_view("treeview"))
+        , m_xFrame(m_xBuilder->weld_frame(u"frame"_ustr))
+        , m_xEntries(m_xBuilder->weld_tree_view(u"treeview"_ustr))
     {
         OSL_PRECOND( m_xListBox.is(), "ListSelectionDialog::ListSelectionDialog: invalid list box!" );
 

@@ -33,8 +33,8 @@ extensions_dbp_OGroupBoxWizard_get_implementation(
     return cppu::acquire(
         new ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard>(
             context,
-            "org.openoffice.comp.dbp.OGroupBoxWizard",
-            { "com.sun.star.sdb.GroupBoxAutoPilot" }
+            u"org.openoffice.comp.dbp.OGroupBoxWizard"_ustr,
+            { u"com.sun.star.sdb.GroupBoxAutoPilot"_ustr }
             ));
 }
 
@@ -45,8 +45,8 @@ extensions_dbp_OListComboWizard_get_implementation(
     return cppu::acquire(
         new ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard>(
             context,
-            "org.openoffice.comp.dbp.OListComboWizard",
-            { "com.sun.star.sdb.ListComboBoxAutoPilot" }
+            u"org.openoffice.comp.dbp.OListComboWizard"_ustr,
+            { u"com.sun.star.sdb.ListComboBoxAutoPilot"_ustr }
             ));
 }
 
@@ -57,8 +57,8 @@ extensions_dbp_OGridWizard_get_implementation(
     return cppu::acquire(
         new ::dbp::OUnoAutoPilot< ::dbp::OGridWizard>(
             context,
-            "org.openoffice.comp.dbp.OGridWizard",
-            { "com.sun.star.sdb.GridControlAutoPilot" }
+            u"org.openoffice.comp.dbp.OGridWizard"_ustr,
+            { u"com.sun.star.sdb.GridControlAutoPilot"_ustr }
             ));
 }
 

@@ -54,11 +54,11 @@ namespace dbp
     using namespace ::comphelper;
 
     OTableSelectionPage::OTableSelectionPage(weld::Container* pPage, OControlWizard* pWizard)
-        : OControlWizardPage(pPage, pWizard, "modules/sabpilot/ui/tableselectionpage.ui", "TableSelectionPage")
-        , m_xTable(m_xBuilder->weld_tree_view("table"))
-        , m_xDatasource(m_xBuilder->weld_tree_view("datasource"))
-        , m_xSearchDatabase(m_xBuilder->weld_button("search"))
-        , m_xSourceBox(m_xBuilder->weld_container("sourcebox"))
+        : OControlWizardPage(pPage, pWizard, u"modules/sabpilot/ui/tableselectionpage.ui"_ustr, u"TableSelectionPage"_ustr)
+        , m_xTable(m_xBuilder->weld_tree_view(u"table"_ustr))
+        , m_xDatasource(m_xBuilder->weld_tree_view(u"datasource"_ustr))
+        , m_xSearchDatabase(m_xBuilder->weld_button(u"search"_ustr))
+        , m_xSourceBox(m_xBuilder->weld_container(u"sourcebox"_ustr))
     {
         try
         {
@@ -109,7 +109,7 @@ namespace dbp
         try
         {
             OUString sDataSourceName;
-            rContext.xForm->getPropertyValue("DataSourceName") >>= sDataSourceName;
+            rContext.xForm->getPropertyValue(u"DataSourceName"_ustr) >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -123,9 +123,9 @@ namespace dbp
             implFillTables(xConnection);
 
             OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue("Command") >>= sCommand );
+            OSL_VERIFY( rContext.xForm->getPropertyValue(u"Command"_ustr) >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue("CommandType") >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue(u"CommandType"_ustr) >>= nCommandType );
 
             // search the entry of the given type with the given name
             for (sal_Int32 nLookup = 0; nLookup < m_xTable->n_children(); ++nLookup)
@@ -160,13 +160,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 OUString sDataSource = m_xDatasource->get_selected_text();
-                rContext.xForm->setPropertyValue("DataSourceName", Any( sDataSource ) );
+                rContext.xForm->setPropertyValue(u"DataSourceName"_ustr, Any( sDataSource ) );
             }
             OUString sCommand = m_xTable->get_selected_text();
             sal_Int32 nCommandType = m_xTable->get_selected_id().toInt32();
 
-            rContext.xForm->setPropertyValue("Command", Any( sCommand ) );
-            rContext.xForm->setPropertyValue("CommandType", Any( nCommandType ) );
+            rContext.xForm->setPropertyValue(u"Command"_ustr, Any( sCommand ) );
+            rContext.xForm->setPropertyValue(u"CommandType"_ustr, Any( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, false );
@@ -189,7 +189,7 @@ namespace dbp
                 FileDialogFlags::NONE, getDialog()->getDialog());
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {
@@ -405,11 +405,11 @@ namespace dbp
     }
 
     ODBFieldPage::ODBFieldPage(weld::Container* pPage, OControlWizard* pWizard)
-        : OMaybeListSelectionPage(pPage, pWizard, "modules/sabpilot/ui/optiondbfieldpage.ui", "OptionDBField")
-        , m_xDescription(m_xBuilder->weld_label("explLabel"))
-        , m_xStoreYes(m_xBuilder->weld_radio_button("yesRadiobutton"))
-        , m_xStoreNo(m_xBuilder->weld_radio_button("noRadiobutton"))
-        , m_xStoreWhere(m_xBuilder->weld_combo_box("storeInFieldCombobox"))
+        : OMaybeListSelectionPage(pPage, pWizard, u"modules/sabpilot/ui/optiondbfieldpage.ui"_ustr, u"OptionDBField"_ustr)
+        , m_xDescription(m_xBuilder->weld_label(u"explLabel"_ustr))
+        , m_xStoreYes(m_xBuilder->weld_radio_button(u"yesRadiobutton"_ustr))
+        , m_xStoreNo(m_xBuilder->weld_radio_button(u"noRadiobutton"_ustr))
+        , m_xStoreWhere(m_xBuilder->weld_combo_box(u"storeInFieldCombobox"_ustr))
     {
         SetPageTitle(compmodule::ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
 

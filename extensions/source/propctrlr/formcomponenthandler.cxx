@@ -159,13 +159,13 @@ namespace pcr
 
     OUString FormComponentPropertyHandler::getImplementationName(  )
     {
-        return "com.sun.star.comp.extensions.FormComponentPropertyHandler";
+        return u"com.sun.star.comp.extensions.FormComponentPropertyHandler"_ustr;
     }
 
 
     Sequence< OUString > FormComponentPropertyHandler::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.inspection.FormComponentPropertyHandler" };
+        return { u"com.sun.star.form.inspection.FormComponentPropertyHandler"_ustr };
     }
 
     namespace {
@@ -221,7 +221,7 @@ namespace pcr
                 Reference< resource::XStringResourceResolver > xStringResourceResolver;
                 try
                 {
-                    xStringResourceResolver.set( _xComponent->getPropertyValue( "ResourceResolver" ),UNO_QUERY);
+                    xStringResourceResolver.set( _xComponent->getPropertyValue( u"ResourceResolver"_ustr ),UNO_QUERY);
                     if( xStringResourceResolver.is() &&
                         xStringResourceResolver->getLocales().hasElements() )
                     {
@@ -993,8 +993,8 @@ namespace pcr
         case PROPERTY_ID_TARGET_URL:
         case PROPERTY_ID_IMAGE_URL:
         {
-            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/urlcontrol.ui", m_xContext));
-            auto pURLBox = std::make_unique<SvtURLBox>(xBuilder->weld_combo_box("urlcontrol"));
+            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder(u"modules/spropctrlr/ui/urlcontrol.ui"_ustr, m_xContext));
+            auto pURLBox = std::make_unique<SvtURLBox>(xBuilder->weld_combo_box(u"urlcontrol"_ustr));
             rtl::Reference<OFileUrlControl> pControl = new OFileUrlControl(std::move(pURLBox), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
@@ -1094,8 +1094,8 @@ namespace pcr
 
                     if ( bIsFormatKey )
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedsample.ui", m_xContext));
-                        auto pContainer = xBuilder->weld_container("formattedsample");
+                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder(u"modules/spropctrlr/ui/formattedsample.ui"_ustr, m_xContext));
+                        auto pContainer = xBuilder->weld_container(u"formattedsample"_ustr);
                         rtl::Reference<OFormatSampleControl> pControl = new OFormatSampleControl(std::move(pContainer), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
@@ -1107,8 +1107,8 @@ namespace pcr
                     }
                     else
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
-                        auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
+                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder(u"modules/spropctrlr/ui/formattedcontrol.ui"_ustr, m_xContext));
+                        auto pSpinButton = xBuilder->weld_formatted_spin_button(u"formattedcontrol"_ustr);
                         rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
@@ -1146,8 +1146,8 @@ namespace pcr
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_VALUE:
         {
-            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
-            auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
+            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder(u"modules/spropctrlr/ui/formattedcontrol.ui"_ustr, m_xContext));
+            auto pSpinButton = xBuilder->weld_formatted_spin_button(u"formattedcontrol"_ustr);
             rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
@@ -1279,8 +1279,8 @@ namespace pcr
         {
             case PROPERTY_ID_REPEAT_DELAY:
             {
-                std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/numericfield.ui", m_xContext));
-                auto pSpinButton = xBuilder->weld_metric_spin_button("numericfield", FieldUnit::MILLISECOND);
+                std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder(u"modules/spropctrlr/ui/numericfield.ui"_ustr, m_xContext));
+                auto pSpinButton = xBuilder->weld_metric_spin_button(u"numericfield"_ustr, FieldUnit::MILLISECOND);
                 rtl::Reference<ONumericControl> pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bReadOnly);
                 pControl->SetModifyHandler();
                 pControl->setMinValue( Optional< double >( true, 0 ) );
@@ -2381,7 +2381,7 @@ namespace pcr
         if ( !m_xRowSetConnection.is() )
         {
             uno::Reference<sdbc::XConnection> xConnection;
-            Any any = m_xContext->getValueByName( "ActiveConnection" );
+            Any any = m_xContext->getValueByName( u"ActiveConnection"_ustr );
             any >>= xConnection;
             m_xRowSetConnection.reset(xConnection,::dbtools::SharedConnection::NoTakeOwnership);
         }
@@ -2627,11 +2627,11 @@ namespace pcr
 
             // initialize the dialog
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
-            xDialogProps->setPropertyValue("QueryComposer", Any( xComposer ) );
-            xDialogProps->setPropertyValue("RowSet",        Any( m_xComponent ) );
+            xDialogProps->setPropertyValue(u"QueryComposer"_ustr, Any( xComposer ) );
+            xDialogProps->setPropertyValue(u"RowSet"_ustr,        Any( m_xComponent ) );
             if (auto pTopLevel = impl_getDefaultDialogFrame_nothrow())
-                xDialogProps->setPropertyValue("ParentWindow",  Any(pTopLevel->GetXWindow()));
-            xDialogProps->setPropertyValue("Title",         Any( sPropertyUIName ) );
+                xDialogProps->setPropertyValue(u"ParentWindow"_ustr,  Any(pTopLevel->GetXWindow()));
+            xDialogProps->setPropertyValue(u"Title"_ustr,         Any( sPropertyUIName ) );
 
             _rClearBeforeDialog.clear();
             bSuccess = ( xDialog->execute() != 0 );
@@ -2700,7 +2700,7 @@ namespace pcr
 
             // a tab dialog with a single page
             SfxSingleTabDialogController aDialog(impl_getDefaultDialogFrame_nothrow(), &aCoreSet,
-                "cui/ui/formatnumberdialog.ui", "FormatNumberDialog");
+                u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr);
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
             if ( !fnCreatePage )
@@ -2865,7 +2865,7 @@ namespace pcr
         weld::Window* pWin = impl_getDefaultDialogFrame_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE,
-                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, pWin);
+                u"sdatabase"_ustr, SfxFilterFlags::NONE, SfxFilterFlags::NONE, pWin);
 
         OUString sDataSource;
         if( ! (impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource) )
@@ -2876,7 +2876,7 @@ namespace pcr
             // is considered to be potentially expensive
             aFileDlg.SetDisplayDirectory( sDataSource );
 
-        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {
@@ -2923,7 +2923,7 @@ namespace pcr
     Reference< XControlContainer > FormComponentPropertyHandler::impl_getContextControlContainer_nothrow() const
     {
         Reference< XControlContainer > xControlContext;
-        Any any = m_xContext->getValueByName( "ControlContext" );
+        Any any = m_xContext->getValueByName( u"ControlContext"_ustr );
         any >>= xControlContext;
         return xControlContext;
     }

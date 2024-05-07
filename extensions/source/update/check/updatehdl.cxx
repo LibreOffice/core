@@ -125,7 +125,7 @@ void UpdateHandler::enableControls( short nCtrlState )
         if ( ( nCurStateVal & 0x01 ) != ( nOldStateVal & 0x01 ) )
         {
             bool bEnableControl = ( ( nCurStateVal & 0x01 ) == 0x01 );
-            setControlProperty( msButtonIDs[i], "Enabled", uno::Any( bEnableControl ) );
+            setControlProperty( msButtonIDs[i], u"Enabled"_ustr, uno::Any( bEnableControl ) );
         }
     }
 
@@ -144,8 +144,8 @@ void UpdateHandler::setDownloadBtnLabel( bool bAppendDots )
         if ( bAppendDots )
             aLabel += "...";
 
-        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], "Label", uno::Any( aLabel ) );
-        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD2 )) );
+        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], u"Label"_ustr, uno::Any( aLabel ) );
+        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD2 )) );
 
         mbDownloadBtnHasDots = bAppendDots;
     }
@@ -231,15 +231,15 @@ void UpdateHandler::setProgress( sal_Int32 nPercent )
         osl::MutexGuard aGuard( maMutex );
 
         mnPercent = nPercent;
-        setControlProperty( CTRL_PROGRESS, "ProgressValue", uno::Any( nPercent ) );
-        setControlProperty( TEXT_PERCENT, "Text", uno::Any( substVariables(msPercent) ) );
+        setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( nPercent ) );
+        setControlProperty( TEXT_PERCENT, u"Text"_ustr, uno::Any( substVariables(msPercent) ) );
     }
 }
 
 
 void UpdateHandler::setErrorMessage( const OUString& rErrorMsg )
 {
-    setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( rErrorMsg ) );
+    setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( rErrorMsg ) );
 }
 
 
@@ -404,12 +404,12 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
     if ( !mxInteractionHdl.is() )
     {
         if( !mxContext.is() )
-            throw uno::RuntimeException( "UpdateHandler:: empty component context", *this );
+            throw uno::RuntimeException( u"UpdateHandler:: empty component context"_ustr, *this );
 
         uno::Reference< lang::XMultiComponentFactory > xServiceManager(mxContext->getServiceManager());
 
         if( !xServiceManager.is() )
-            throw uno::RuntimeException( "UpdateHandler: unable to obtain service manager from component context", *this );
+            throw uno::RuntimeException( u"UpdateHandler: unable to obtain service manager from component context"_ustr, *this );
 
         mxInteractionHdl.set(
             task::InteractionHandler::createWithParent(mxContext, nullptr),
@@ -420,7 +420,7 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
     beans::Optional< OUString > aErrorText = xStrResolver->getStringFromInformationalRequest( rRequest );
     if ( aErrorText.IsPresent )
     {
-        setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( aErrorText.Value ) );
+        setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( aErrorText.Value ) );
 
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
         if ( xContinuations.getLength() == 1 )
@@ -451,7 +451,7 @@ void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
             xTopWindow->toFront();
 
         throw frame::TerminationVetoException(
-            "The office cannot be closed while displaying a warning!",
+            u"The office cannot be closed while displaying a warning!"_ustr,
             static_cast<frame::XTerminateListener*>(this));
     }
     else
@@ -490,25 +490,25 @@ void UpdateHandler::updateState( UpdateState eState )
         case UPDATESTATE_CHECKING:
             showControls( (1<<CANCEL_BUTTON) + (1<<THROBBER_CTRL) );
             enableControls( 1<<CANCEL_BUTTON );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msChecking) ) );
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( OUString() ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msChecking) ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( OUString() ) );
             focusControl( CANCEL_BUTTON );
             break;
         case UPDATESTATE_ERROR_CHECKING:
             showControls( 0 );
             enableControls( 1 << CLOSE_BUTTON );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msCheckingError) ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msCheckingError) ) );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_UPDATE_AVAIL:
             showControls( 0 );
             enableControls( ( 1 << CLOSE_BUTTON )  + ( 1 << DOWNLOAD_BUTTON ) );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msUpdFound) ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msUpdFound) ) );
 
             sText = substVariables(msDownloadWarning);
             if ( !msDescriptionMsg.isEmpty() )
                 sText += "\n\n" + msDescriptionMsg;
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( sText ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( sText ) );
 
             setDownloadBtnLabel( false );
             focusControl( DOWNLOAD_BUTTON );
@@ -516,12 +516,12 @@ void UpdateHandler::updateState( UpdateState eState )
         case UPDATESTATE_UPDATE_NO_DOWNLOAD:
             showControls( 0 );
             enableControls( ( 1 << CLOSE_BUTTON )  + ( 1 << DOWNLOAD_BUTTON ) );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msUpdFound) ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msUpdFound) ) );
 
             sText = substVariables(msDownloadNotAvail);
             if ( !msDescriptionMsg.isEmpty() )
                 sText += "\n\n" + msDescriptionMsg;
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( sText ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( sText ) );
 
             setDownloadBtnLabel( true );
             focusControl( DOWNLOAD_BUTTON );
@@ -530,38 +530,38 @@ void UpdateHandler::updateState( UpdateState eState )
         case UPDATESTATE_EXT_UPD_AVAIL:     // will only be set, when there are no office updates avail
             showControls( 0 );
             enableControls( 1 << CLOSE_BUTTON );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msNoUpdFound) ) );
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( OUString() ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msNoUpdFound) ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( OUString() ) );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_DOWNLOADING:
             showControls( (1<<PROGRESS_CTRL) + (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) + (1<<RESUME_BUTTON) );
             enableControls( (1<<CLOSE_BUTTON) + (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msDownloading) ) );
-            setControlProperty( TEXT_PERCENT, "Text", uno::Any( substVariables(msPercent) ) );
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( substVariables(msDownloadWarning) ) );
-            setControlProperty( CTRL_PROGRESS, "ProgressValue", uno::Any( mnPercent ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msDownloading) ) );
+            setControlProperty( TEXT_PERCENT, u"Text"_ustr, uno::Any( substVariables(msPercent) ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( substVariables(msDownloadWarning) ) );
+            setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( mnPercent ) );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_DOWNLOAD_PAUSED:
             showControls( (1<<PROGRESS_CTRL) + (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) + (1<<RESUME_BUTTON) );
             enableControls( (1<<CLOSE_BUTTON) + (1<<CANCEL_BUTTON) + (1<<RESUME_BUTTON) );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msDownloadPause) ) );
-            setControlProperty( TEXT_PERCENT, "Text", uno::Any( substVariables(msPercent) ) );
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( substVariables(msDownloadWarning) ) );
-            setControlProperty( CTRL_PROGRESS, "ProgressValue", uno::Any( mnPercent ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msDownloadPause) ) );
+            setControlProperty( TEXT_PERCENT, u"Text"_ustr, uno::Any( substVariables(msPercent) ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( substVariables(msDownloadWarning) ) );
+            setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( mnPercent ) );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_ERROR_DOWNLOADING:
             showControls( (1<<PROGRESS_CTRL) + (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) + (1<<RESUME_BUTTON) );
             enableControls( (1<<CLOSE_BUTTON) + (1<<CANCEL_BUTTON) );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msDownloadError) ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msDownloadError) ) );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_DOWNLOAD_AVAIL:
             showControls( 0 );
-            setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msReady2Install) ) );
-            setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( substVariables(msDownloadDescr) ) );
+            setControlProperty( TEXT_STATUS, u"Text"_ustr, uno::Any( substVariables(msReady2Install) ) );
+            setControlProperty( TEXT_DESCRIPTION, u"Text"_ustr, uno::Any( substVariables(msDownloadDescr) ) );
             break;
         case UPDATESTATE_AUTO_START:
         case UPDATESTATES_COUNT:
@@ -746,11 +746,11 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > con
     }
 
     // @see awt/UnoControlDialogElement.idl
-    xPropSet->setPropertyValue( "Name", uno::Any (rControlName) );
-    xPropSet->setPropertyValue( "PositionX", uno::Any (rPosSize.X) );
-    xPropSet->setPropertyValue( "PositionY", uno::Any (rPosSize.Y) );
-    xPropSet->setPropertyValue( "Height", uno::Any (rPosSize.Height) );
-    xPropSet->setPropertyValue( "Width", uno::Any (rPosSize.Width) );
+    xPropSet->setPropertyValue( u"Name"_ustr, uno::Any (rControlName) );
+    xPropSet->setPropertyValue( u"PositionX"_ustr, uno::Any (rPosSize.X) );
+    xPropSet->setPropertyValue( u"PositionY"_ustr, uno::Any (rPosSize.Y) );
+    xPropSet->setPropertyValue( u"Height"_ustr, uno::Any (rPosSize.Height) );
+    xPropSet->setPropertyValue( u"Width"_ustr, uno::Any (rPosSize.Width) );
 
     // insert by Name into DialogModel container
     uno::Reference< container::XNameContainer > xContainer (rxDialogModel, uno::UNO_QUERY_THROW);
@@ -765,19 +765,19 @@ void UpdateHandler::setFullVersion( OUString& rString )
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value <<= OUString("org.openoffice.Setup/Product");
+    aProperty.Value <<= u"org.openoffice.Setup/Product"_ustr;
 
     uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
-    uno::Reference< uno::XInterface > xConfigAccess = xConfigurationProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
+    uno::Reference< uno::XInterface > xConfigAccess = xConfigurationProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                                                          aArgumentList );
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );
 
     OUString aProductVersion;
-    xNameAccess->getByName("ooSetupVersion") >>= aProductVersion;
+    xNameAccess->getByName(u"ooSetupVersion"_ustr) >>= aProductVersion;
     OUString aProductFullVersion;
-    xNameAccess->getByName("ooSetupVersionAboutBox") >>= aProductFullVersion;
+    xNameAccess->getByName(u"ooSetupVersionAboutBox"_ustr) >>= aProductFullVersion;
     rString = rString.replaceFirst( aProductVersion, aProductFullVersion );
 }
 
@@ -871,12 +871,12 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
                 if ( xMsgBoxCtrl.is() )
                 {
                     bool bIsDefault = true;
-                    uno::Any aValue = xMsgBoxCtrl->getProperty( "DefaultButton" );
+                    uno::Any aValue = xMsgBoxCtrl->getProperty( u"DefaultButton"_ustr );
                     aValue >>= bIsDefault;
                     if ( bIsDefault )
-                        xMsgBoxCtrl->setProperty( "Text", uno::Any( rBtnText_1 ) );
+                        xMsgBoxCtrl->setProperty( u"Text"_ustr, uno::Any( rBtnText_1 ) );
                     else
-                        xMsgBoxCtrl->setProperty( "Text", uno::Any( rBtnText_2 ) );
+                        xMsgBoxCtrl->setProperty( u"Text"_ustr, uno::Any( rBtnText_2 ) );
                 }
             }
         }
@@ -971,15 +971,15 @@ void UpdateHandler::showControls( short nControls )
 
     // Status text needs to be smaller, when there are buttons at the right side of the dialog
     if ( ( nControls & ( (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) + (1<<RESUME_BUTTON) ) )  != 0 )
-        setControlProperty( TEXT_STATUS, "Width", uno::Any( sal_Int32(EDIT_WIDTH - BUTTON_WIDTH - 2*INNER_BORDER - TEXT_OFFSET ) ) );
+        setControlProperty( TEXT_STATUS, u"Width"_ustr, uno::Any( sal_Int32(EDIT_WIDTH - BUTTON_WIDTH - 2*INNER_BORDER - TEXT_OFFSET ) ) );
     else
-        setControlProperty( TEXT_STATUS, "Width", uno::Any( sal_Int32(EDIT_WIDTH - 2*TEXT_OFFSET ) ) );
+        setControlProperty( TEXT_STATUS, u"Width"_ustr, uno::Any( sal_Int32(EDIT_WIDTH - 2*TEXT_OFFSET ) ) );
 
     // Status text needs to be taller, when we show the progress bar
     if ( ( nControls & ( 1<<PROGRESS_CTRL ) ) != 0 )
-        setControlProperty( TEXT_STATUS, "Height", uno::Any( sal_Int32(LABEL_HEIGHT) ) );
+        setControlProperty( TEXT_STATUS, u"Height"_ustr, uno::Any( sal_Int32(LABEL_HEIGHT) ) );
     else
-        setControlProperty( TEXT_STATUS, "Height", uno::Any( sal_Int32(BOX_HEIGHT1 - 4*TEXT_OFFSET - LABEL_HEIGHT ) ) );
+        setControlProperty( TEXT_STATUS, u"Height"_ustr, uno::Any( sal_Int32(BOX_HEIGHT1 - 4*TEXT_OFFSET - LABEL_HEIGHT ) ) );
 }
 
 
@@ -1001,48 +1001,48 @@ void UpdateHandler::createDialog()
 
     uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< awt::XControlModel > xControlModel( xFactory->createInstanceWithContext(
-                                                         "com.sun.star.awt.UnoControlDialogModel",
+                                                         u"com.sun.star.awt.UnoControlDialogModel"_ustr,
                                                          mxContext), uno::UNO_QUERY_THROW );
     {
         // @see awt/UnoControlDialogModel.idl
         uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
-        xPropSet->setPropertyValue( "Title", uno::Any( msDlgTitle ) );
-        xPropSet->setPropertyValue( "Closeable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Enabled", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Moveable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Sizeable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "DesktopAsParent", uno::Any( true ) );
-        xPropSet->setPropertyValue( "PositionX", uno::Any(sal_Int32( 100 )) );
-        xPropSet->setPropertyValue( "PositionY", uno::Any(sal_Int32( 100 )) );
-        xPropSet->setPropertyValue( "Width", uno::Any(sal_Int32( DIALOG_WIDTH )) );
-        xPropSet->setPropertyValue( "Height", uno::Any(sal_Int32( DIALOG_HEIGHT )) );
-        xPropSet->setPropertyValue( "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DLG )) );
+        xPropSet->setPropertyValue( u"Title"_ustr, uno::Any( msDlgTitle ) );
+        xPropSet->setPropertyValue( u"Closeable"_ustr, uno::Any( true ) );
+        xPropSet->setPropertyValue( u"Enabled"_ustr, uno::Any( true ) );
+        xPropSet->setPropertyValue( u"Moveable"_ustr, uno::Any( true ) );
+        xPropSet->setPropertyValue( u"Sizeable"_ustr, uno::Any( true ) );
+        xPropSet->setPropertyValue( u"DesktopAsParent"_ustr, uno::Any( true ) );
+        xPropSet->setPropertyValue( u"PositionX"_ustr, uno::Any(sal_Int32( 100 )) );
+        xPropSet->setPropertyValue( u"PositionY"_ustr, uno::Any(sal_Int32( 100 )) );
+        xPropSet->setPropertyValue( u"Width"_ustr, uno::Any(sal_Int32( DIALOG_WIDTH )) );
+        xPropSet->setPropertyValue( u"Height"_ustr, uno::Any(sal_Int32( DIALOG_HEIGHT )) );
+        xPropSet->setPropertyValue( u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DLG )) );
     }
     {   // Label (fixed text) <status>
-        uno::Sequence< beans::NamedValue > aProps { { "Label", uno::Any( msStatusFL ) } };
+        uno::Sequence< beans::NamedValue > aProps { { u"Label"_ustr, uno::Any( msStatusFL ) } };
 
-        insertControlModel( xControlModel, FIXED_TEXT_MODEL, "fixedLineStatus",
+        insertControlModel( xControlModel, FIXED_TEXT_MODEL, u"fixedLineStatus"_ustr,
                             awt::Rectangle( DIALOG_BORDER+1, DIALOG_BORDER, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
     {   // box around <status> text
         uno::Sequence< beans::NamedValue > aProps;
 
-        insertControlModel( xControlModel, GROUP_BOX_MODEL, "StatusBox",
+        insertControlModel( xControlModel, GROUP_BOX_MODEL, u"StatusBox"_ustr,
                             awt::Rectangle( DIALOG_BORDER, DIALOG_BORDER + LABEL_HEIGHT, EDIT_WIDTH, BOX_HEIGHT1 - LABEL_HEIGHT ),
                             aProps );
     }
     {   // Text (multiline edit) <status>
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "Text", uno::Any( substVariables(msChecking) ) },
-            { "Border", uno::Any( sal_Int16( 0 ) ) },
-            { "PaintTransparent", uno::Any( true ) },
-            { "MultiLine", uno::Any( true ) },
-            { "ReadOnly", uno::Any( true ) },
-            { "AutoVScroll", uno::Any( true ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_STATUS )) }
+            { u"Text"_ustr, uno::Any( substVariables(msChecking) ) },
+            { u"Border"_ustr, uno::Any( sal_Int16( 0 ) ) },
+            { u"PaintTransparent"_ustr, uno::Any( true ) },
+            { u"MultiLine"_ustr, uno::Any( true ) },
+            { u"ReadOnly"_ustr, uno::Any( true ) },
+            { u"AutoVScroll"_ustr, uno::Any( true ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_STATUS )) }
         };
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_STATUS,
@@ -1055,10 +1055,10 @@ void UpdateHandler::createDialog()
     {   // Text (edit) <percent>
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "Text", uno::Any( substVariables(msPercent) ) },
-            { "Border", uno::Any( sal_Int16( 0 ) ) },
-            { "PaintTransparent", uno::Any( true ) },
-            { "ReadOnly", uno::Any( true ) },
+            { u"Text"_ustr, uno::Any( substVariables(msPercent) ) },
+            { u"Border"_ustr, uno::Any( sal_Int16( 0 ) ) },
+            { u"PaintTransparent"_ustr, uno::Any( true ) },
+            { u"ReadOnly"_ustr, uno::Any( true ) },
         };
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_PERCENT,
@@ -1071,11 +1071,11 @@ void UpdateHandler::createDialog()
     {   // pause button
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
-            { "Label", uno::Any( msPauseBtn ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_PAUSE )) }
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
+            { u"Label"_ustr, uno::Any( msPauseBtn ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_PAUSE )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[PAUSE_BUTTON],
@@ -1085,11 +1085,11 @@ void UpdateHandler::createDialog()
     {   // resume button
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
-            { "Label", uno::Any( msResumeBtn ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_RESUME )) }
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
+            { u"Label"_ustr, uno::Any( msResumeBtn ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_RESUME )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[RESUME_BUTTON],
@@ -1102,11 +1102,11 @@ void UpdateHandler::createDialog()
     {   // abort button
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
-            { "Label", uno::Any( msCancelBtn ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CANCEL )) }
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
+            { u"Label"_ustr, uno::Any( msCancelBtn ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CANCEL )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[CANCEL_BUTTON],
@@ -1117,29 +1117,29 @@ void UpdateHandler::createDialog()
                              aProps );
     }
     {   // Label (FixedText) <description>
-        uno::Sequence< beans::NamedValue > aProps { { "Label", uno::Any( msDescription ) } };
+        uno::Sequence< beans::NamedValue > aProps { { u"Label"_ustr, uno::Any( msDescription ) } };
 
-        insertControlModel( xControlModel, FIXED_TEXT_MODEL, "fixedTextDescription",
+        insertControlModel( xControlModel, FIXED_TEXT_MODEL, u"fixedTextDescription"_ustr,
                             awt::Rectangle( DIALOG_BORDER+1, LABEL_Y_POS, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
     {   // box around <description> text
         uno::Sequence< beans::NamedValue > aProps;
 
-        insertControlModel( xControlModel, GROUP_BOX_MODEL, "DescriptionBox",
+        insertControlModel( xControlModel, GROUP_BOX_MODEL, u"DescriptionBox"_ustr,
                             awt::Rectangle( DIALOG_BORDER, EDIT2_Y_POS, EDIT_WIDTH, BOX_HEIGHT2 ),
                             aProps );
     }
     {   // Text (MultiLineEdit) <description>
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "Text", uno::Any( OUString() ) },
-            { "Border", uno::Any( sal_Int16( 0 ) ) },
-            { "PaintTransparent", uno::Any( true ) },
-            { "MultiLine", uno::Any( true ) },
-            { "ReadOnly", uno::Any( true ) },
-            { "AutoVScroll", uno::Any( true ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DESCRIPTION )) }
+            { u"Text"_ustr, uno::Any( OUString() ) },
+            { u"Border"_ustr, uno::Any( sal_Int16( 0 ) ) },
+            { u"PaintTransparent"_ustr, uno::Any( true ) },
+            { u"MultiLine"_ustr, uno::Any( true ) },
+            { u"ReadOnly"_ustr, uno::Any( true ) },
+            { u"AutoVScroll"_ustr, uno::Any( true ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DESCRIPTION )) }
         };
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_DESCRIPTION,
@@ -1150,25 +1150,25 @@ void UpdateHandler::createDialog()
                             aProps );
     }
     {   // @see awt/UnoControlFixedLineModel.idl
-        uno::Sequence< beans::NamedValue > aProps { { "Orientation", uno::Any( sal_Int32( 0 ) ) } };
+        uno::Sequence< beans::NamedValue > aProps { { u"Orientation"_ustr, uno::Any( sal_Int32( 0 ) ) } };
 
-        insertControlModel( xControlModel, FIXED_LINE_MODEL, "fixedLine",
+        insertControlModel( xControlModel, FIXED_LINE_MODEL, u"fixedLine"_ustr,
                             awt::Rectangle( 0, BUTTON_BAR_Y_POS, DIALOG_WIDTH, 5 ),
                             aProps );
     }
     {   // close button // @see awt/UnoControlButtonModel.idl
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
             // [property] short PushButtonType
             // with own "ButtonActionListener"
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             // with default ActionListener => endDialog().
             // setProperty( aProps, 2, "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_CANCEL) ) );
             // [property] string Label // only if PushButtonType_STANDARD
-            { "Label", uno::Any( msClose ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CLOSE )) }
+            { u"Label"_ustr, uno::Any( msClose ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CLOSE )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[ CLOSE_BUTTON ],
@@ -1178,11 +1178,11 @@ void UpdateHandler::createDialog()
     {   // download button
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
-            { "Label", uno::Any( msDownload ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD )) }
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
+            { u"Label"_ustr, uno::Any( msDownload ) },
+            { u"HelpURL"_ustr, uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[DOWNLOAD_BUTTON],
@@ -1192,9 +1192,9 @@ void UpdateHandler::createDialog()
     {   // help button
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_HELP) ) }
+            { u"DefaultButton"_ustr, uno::Any( false ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"PushButtonType"_ustr, uno::Any( sal_Int16(awt::PushButtonType_HELP) ) }
         };
 
         insertControlModel( xControlModel, BUTTON_MODEL, msButtonIDs[HELP_BUTTON],
@@ -1204,19 +1204,19 @@ void UpdateHandler::createDialog()
     {   // @see awt/UnoControlThrobberModel.idl
         uno::Sequence< beans::NamedValue > aProps;
 
-        insertControlModel( xControlModel, "com.sun.star.awt.SpinningProgressControlModel", CTRL_THROBBER,
+        insertControlModel( xControlModel, u"com.sun.star.awt.SpinningProgressControlModel"_ustr, CTRL_THROBBER,
                             awt::Rectangle( THROBBER_X_POS, THROBBER_Y_POS, THROBBER_WIDTH, THROBBER_HEIGHT),
                             aProps );
     }
     {    // @see awt/UnoControlProgressBarModel.idl
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "Enabled", uno::Any( true ) },
-            { "ProgressValue", uno::Any( sal_Int32( 0 ) ) },
-            { "ProgressValueMax", uno::Any( sal_Int32( 100 ) ) },
-            { "ProgressValueMin", uno::Any( sal_Int32( 0 ) ) },
+            { u"Enabled"_ustr, uno::Any( true ) },
+            { u"ProgressValue"_ustr, uno::Any( sal_Int32( 0 ) ) },
+            { u"ProgressValueMax"_ustr, uno::Any( sal_Int32( 100 ) ) },
+            { u"ProgressValueMin"_ustr, uno::Any( sal_Int32( 0 ) ) },
         };
-        insertControlModel( xControlModel, "com.sun.star.awt.UnoControlProgressBarModel", CTRL_PROGRESS,
+        insertControlModel( xControlModel, u"com.sun.star.awt.UnoControlProgressBarModel"_ustr, CTRL_PROGRESS,
                             awt::Rectangle( PROGRESS_X_POS, PROGRESS_Y_POS, PROGRESS_WIDTH, PROGRESS_HEIGHT ),
                             aProps);
     }

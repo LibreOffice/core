@@ -96,25 +96,25 @@ namespace pcr
         ,m_bIsReadOnly( false )
     {
         registerProperty(
-            "HasHelpSection",
+            u"HasHelpSection"_ustr,
             static_cast<sal_Int32>(ModelPropertyId::HAS_HELP_SECTION),
             PropertyAttribute::READONLY,
             &m_bHasHelpSection, cppu::UnoType<decltype(m_bHasHelpSection)>::get()
         );
         registerProperty(
-            "MinHelpTextLines",
+            u"MinHelpTextLines"_ustr,
             static_cast<sal_Int32>(ModelPropertyId::MIN_HELP_TEXT_LINES),
             PropertyAttribute::READONLY,
             &m_nMinHelpTextLines, cppu::UnoType<decltype(m_nMinHelpTextLines)>::get()
         );
         registerProperty(
-            "MaxHelpTextLines",
+            u"MaxHelpTextLines"_ustr,
             static_cast<sal_Int32>(ModelPropertyId::MAX_HELP_TEXT_LINES),
             PropertyAttribute::READONLY,
             &m_nMaxHelpTextLines, cppu::UnoType<decltype(m_nMaxHelpTextLines)>::get()
         );
         registerProperty(
-            "IsReadOnly",
+            u"IsReadOnly"_ustr,
             static_cast<sal_Int32>(ModelPropertyId::IS_READ_ONLY),
             PropertyAttribute::BOUND,
             &m_bIsReadOnly, cppu::UnoType<decltype(m_bIsReadOnly)>::get()

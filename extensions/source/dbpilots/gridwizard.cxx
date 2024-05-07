@@ -186,11 +186,11 @@ namespace dbp
                     disambiguateName(xExistenceChecker, sColumnName);
 
                     // the data field the column should be bound to
-                    xColumn->setPropertyValue("DataField", Any(*pFormFieldName));
+                    xColumn->setPropertyValue(u"DataField"_ustr, Any(*pFormFieldName));
                     // the label
-                    xColumn->setPropertyValue("Label", Any(*pFormFieldName + *pColumnLabelPostfix));
+                    xColumn->setPropertyValue(u"Label"_ustr, Any(*pFormFieldName + *pColumnLabelPostfix));
                     // the width (<void/> => column will be auto-sized)
-                    xColumn->setPropertyValue("Width", Any());
+                    xColumn->setPropertyValue(u"Width"_ustr, Any());
 
                     if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
                         xColumn->setPropertyValue( s_sMouseWheelBehavior, Any( MouseWheelBehavior::SCROLL_DISABLED ) );
@@ -277,13 +277,13 @@ namespace dbp
     }
 
     OGridFieldsSelection::OGridFieldsSelection(weld::Container* pPage, OGridWizard* pWizard)
-        : OGridPage(pPage, pWizard, "modules/sabpilot/ui/gridfieldsselectionpage.ui", "GridFieldsSelection")
-        , m_xExistFields(m_xBuilder->weld_tree_view("existingfields"))
-        , m_xSelectOne(m_xBuilder->weld_button("fieldright"))
-        , m_xSelectAll(m_xBuilder->weld_button("allfieldsright"))
-        , m_xDeselectOne(m_xBuilder->weld_button("fieldleft"))
-        , m_xDeselectAll(m_xBuilder->weld_button("allfieldsleft"))
-        , m_xSelFields(m_xBuilder->weld_tree_view("selectedfields"))
+        : OGridPage(pPage, pWizard, u"modules/sabpilot/ui/gridfieldsselectionpage.ui"_ustr, u"GridFieldsSelection"_ustr)
+        , m_xExistFields(m_xBuilder->weld_tree_view(u"existingfields"_ustr))
+        , m_xSelectOne(m_xBuilder->weld_button(u"fieldright"_ustr))
+        , m_xSelectAll(m_xBuilder->weld_button(u"allfieldsright"_ustr))
+        , m_xDeselectOne(m_xBuilder->weld_button(u"fieldleft"_ustr))
+        , m_xDeselectAll(m_xBuilder->weld_button(u"allfieldsleft"_ustr))
+        , m_xSelFields(m_xBuilder->weld_tree_view(u"selectedfields"_ustr))
     {
         enableFormDatasourceDisplay();
 

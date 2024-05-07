@@ -169,12 +169,12 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue("ListSourceType", Any(sal_Int32(ListSourceType_SQL)));
+            getContext().xObjectModel->setPropertyValue(u"ListSourceType"_ustr, Any(sal_Int32(ListSourceType_SQL)));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue("BoundColumn", Any(sal_Int16(1)));
+                getContext().xObjectModel->setPropertyValue(u"BoundColumn"_ustr, Any(sal_Int16(1)));
 
                 Sequence< OUString > aListSource {
                     // build the statement to set as list source
@@ -182,7 +182,7 @@ namespace dbp
                         getSettings().sListContentField +  ", " + getSettings().sLinkedListField +
                         " FROM " + getSettings().sListContentTable)
                 };
-                getContext().xObjectModel->setPropertyValue("ListSource", Any(aListSource));
+                getContext().xObjectModel->setPropertyValue(u"ListSource"_ustr, Any(aListSource));
             }
             else
             {
@@ -190,11 +190,11 @@ namespace dbp
                 OUString sStatement = "SELECT DISTINCT " +
                     getSettings().sListContentField +
                     " FROM " + getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue( "ListSource", Any(sStatement));
+                getContext().xObjectModel->setPropertyValue( u"ListSource"_ustr, Any(sStatement));
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue("DataField", Any(getSettings().sLinkedFormField));
+            getContext().xObjectModel->setPropertyValue(u"DataField"_ustr, Any(getSettings().sLinkedFormField));
         }
         catch(const Exception&)
         {
@@ -259,8 +259,8 @@ namespace dbp
     }
 
     OContentTableSelection::OContentTableSelection(weld::Container* pPage, OListComboWizard* pWizard)
-        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/contenttablepage.ui", "TableSelectionPage")
-        , m_xSelectTable(m_xBuilder->weld_tree_view("table"))
+        : OLCPage(pPage, pWizard, u"modules/sabpilot/ui/contenttablepage.ui"_ustr, u"TableSelectionPage"_ustr)
+        , m_xSelectTable(m_xBuilder->weld_tree_view(u"table"_ustr))
     {
         enableFormDatasourceDisplay();
 
@@ -336,10 +336,10 @@ namespace dbp
     }
 
     OContentFieldSelection::OContentFieldSelection(weld::Container* pPage, OListComboWizard* pWizard)
-        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/contentfieldpage.ui", "FieldSelectionPage")
-        , m_xSelectTableField(m_xBuilder->weld_tree_view("selectfield"))
-        , m_xDisplayedField(m_xBuilder->weld_entry("displayfield"))
-        , m_xInfo(m_xBuilder->weld_label("info"))
+        : OLCPage(pPage, pWizard, u"modules/sabpilot/ui/contentfieldpage.ui"_ustr, u"FieldSelectionPage"_ustr)
+        , m_xSelectTableField(m_xBuilder->weld_tree_view(u"selectfield"_ustr))
+        , m_xDisplayedField(m_xBuilder->weld_entry(u"displayfield"_ustr))
+        , m_xInfo(m_xBuilder->weld_label(u"info"_ustr))
     {
         m_xInfo->set_label(compmodule::ModuleRes( isListBox() ? RID_STR_FIELDINFO_LISTBOX : RID_STR_FIELDINFO_COMBOBOX));
         m_xSelectTableField->connect_changed(LINK(this, OContentFieldSelection, OnFieldSelected));
@@ -393,9 +393,9 @@ namespace dbp
     }
 
     OLinkFieldsPage::OLinkFieldsPage(weld::Container* pPage, OListComboWizard* pWizard)
-        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/fieldlinkpage.ui", "FieldLinkPage")
-        , m_xValueListField(m_xBuilder->weld_combo_box("valuefield"))
-        , m_xTableField(m_xBuilder->weld_combo_box("listtable"))
+        : OLCPage(pPage, pWizard, u"modules/sabpilot/ui/fieldlinkpage.ui"_ustr, u"FieldLinkPage"_ustr)
+        , m_xValueListField(m_xBuilder->weld_combo_box(u"valuefield"_ustr))
+        , m_xTableField(m_xBuilder->weld_combo_box(u"listtable"_ustr))
     {
         m_xValueListField->connect_changed(LINK(this, OLinkFieldsPage, OnSelectionModified));
         m_xTableField->connect_changed(LINK(this, OLinkFieldsPage, OnSelectionModified));

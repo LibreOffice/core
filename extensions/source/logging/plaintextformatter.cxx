@@ -66,7 +66,7 @@ namespace logging
     OUString SAL_CALL PlainTextFormatter::getHead(  )
     {
         return
-            "  event no"                 // column 1: the event number
+            u"  event no"                 // column 1: the event number
             " "
             "thread  "                   // column 2: the thread ID
             " "
@@ -75,7 +75,7 @@ namespace logging
             "time       "                // column 4: time
             " "
             "(class/method:) message"    // column 5: class/method/message
-            "\n";
+            "\n"_ustr;
     }
 
 
@@ -129,12 +129,12 @@ namespace logging
 
     OUString SAL_CALL PlainTextFormatter::getImplementationName()
     {
-        return "com.sun.star.comp.extensions.PlainTextFormatter";
+        return u"com.sun.star.comp.extensions.PlainTextFormatter"_ustr;
     }
 
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames()
     {
-        return { "com.sun.star.logging.PlainTextFormatter" };
+        return { u"com.sun.star.logging.PlainTextFormatter"_ustr };
     }
 
 } // namespace logging
