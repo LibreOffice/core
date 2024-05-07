@@ -3,5 +3,6 @@ host=gerrit.libreoffice.org
 port=29418
 project=core
 defaultremote=logerrit
-defaultbranch=libreoffice-24-2
+defaultbranch=feature/cib_contract49c
+
 
