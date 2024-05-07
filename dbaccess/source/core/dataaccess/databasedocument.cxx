@@ -1542,15 +1542,11 @@ Reference< XNameAccess > SAL_CALL ODatabaseDocument::getReportDocuments(  )
     return impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType::Report );
 }
 
-void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xComponent, const char* pStreamName,
-    const char* pServiceName, const Sequence< Any >& _rArguments, const Sequence< PropertyValue >& rMediaDesc,
+void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xComponent, const OUString& sStreamName,
+    const OUString & rServiceName, const Sequence< Any >& _rArguments, const Sequence< PropertyValue >& rMediaDesc,
     const Reference<XStorage>& _xStorageToSaveTo ) const
 {
-    OSL_ENSURE( pStreamName, "Need stream name!" );
-    OSL_ENSURE( pServiceName, "Need service name!" );
-
     // open stream
-    OUString sStreamName = OUString::createFromAscii( pStreamName );
     Reference< XStream > xStream = _xStorageToSaveTo->openStreamElement( sStreamName, ElementModes::READWRITE | ElementModes::TRUNCATE );
     if ( !xStream.is() )
         return;
@@ -1569,16 +1565,15 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
     xStreamProp->setPropertyValue( u"Compressed"_ustr, Any( true ) );
 
     // write the stuff
-    WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
+    WriteThroughComponent( xOutputStream, xComponent, rServiceName, _rArguments, rMediaDesc );
 }
 
 void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >& xOutputStream,
-    const Reference< XComponent >& xComponent, const char* pServiceName, const Sequence< Any >& _rArguments,
+    const Reference< XComponent >& xComponent, const OUString& rServiceName, const Sequence< Any >& _rArguments,
     const Sequence< PropertyValue >& rMediaDesc ) const
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
-    OSL_ENSURE( nullptr != pServiceName, "Need component name!" );
 
     // get component
     Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext );
@@ -1594,7 +1589,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
         pArgs[ i+1 ] = _rArguments[i];
 
     // get filter component
-    Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pServiceName), aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
+    Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(rServiceName, aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
 
     // connect model and filter
     xExporter->setSourceDocument( xComponent );
@@ -1677,11 +1672,11 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     _rMediaDescriptor >>= aMediaDescriptor;
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
-    WriteThroughComponent( xComponent, "settings.xml", "com.sun.star.comp.sdb.XMLSettingsExporter",
+    WriteThroughComponent( xComponent, u"settings.xml"_ustr, u"com.sun.star.comp.sdb.XMLSettingsExporter"_ustr,
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
-    WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
+    WriteThroughComponent( xComponent, u"content.xml"_ustr, u"com.sun.star.comp.sdb.DBExportFilter"_ustr,
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
     if ( _rxTargetStorage->hasByName ( sPictures ) )
