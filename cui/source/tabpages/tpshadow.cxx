@@ -50,7 +50,7 @@ const WhichRangesContainer SvxShadowTabPage::pShadowRanges(svl::Items<
 >);
 
 SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pPage, pController, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)
+    : SvxTabPage(pPage, pController, u"cui/ui/shadowtabpage.ui"_ustr, u"ShadowTabPage"_ustr, rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnColorListState(nullptr)
     , m_nPageType(PageType::Area)
@@ -58,15 +58,15 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_aCtlPosition(this)
-    , m_xTsbShowShadow(m_xBuilder->weld_check_button("TSB_SHOW_SHADOW"))
-    , m_xGridShadow(m_xBuilder->weld_widget("gridSHADOW"))
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
-    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"),
+    , m_xTsbShowShadow(m_xBuilder->weld_check_button(u"TSB_SHOW_SHADOW"_ustr))
+    , m_xGridShadow(m_xBuilder->weld_widget(u"gridSHADOW"_ustr))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_DISTANCE"_ustr, FieldUnit::CM))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_SHADOW_COLOR"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FieldUnit::PERCENT))
-    , m_xLbShadowBlurMetric(m_xBuilder->weld_metric_spin_button("LB_SHADOW_BLUR", FieldUnit::POINT))
-    , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
-    , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_COLOR_PREVIEW", m_aCtlXRectPreview))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button(u"MTR_SHADOW_TRANSPARENT"_ustr, FieldUnit::PERCENT))
+    , m_xLbShadowBlurMetric(m_xBuilder->weld_metric_spin_button(u"LB_SHADOW_BLUR"_ustr, FieldUnit::POINT))
+    , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, u"CTL_POSITION"_ustr, m_aCtlPosition))
+    , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_COLOR_PREVIEW"_ustr, m_aCtlXRectPreview))
 {
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -390,7 +390,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
         // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
         // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
-        m_xMtrDistance->set_text( "" );
+        m_xMtrDistance->set_text( u""_ustr );
         m_aCtlPosition.SetActualRP( RectPoint::MM );
     }
 
@@ -407,7 +407,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         m_xMtrTransparent->set_value(nTransp, FieldUnit::PERCENT);
     }
     else
-        m_xMtrTransparent->set_text("");
+        m_xMtrTransparent->set_text(u""_ustr);
 
     if( rAttrs->GetItemState( SDRATTR_SHADOWBLUR ) != SfxItemState::INVALID )
     {
@@ -415,7 +415,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         m_xLbShadowBlurMetric->set_value(nBlur, FieldUnit::MM_100TH);
     }
     else
-        m_xLbShadowBlurMetric->set_text("");
+        m_xLbShadowBlurMetric->set_text(u""_ustr);
 
     //aCtlPosition
     m_xMtrDistance->save_value();

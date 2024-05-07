@@ -32,12 +32,12 @@ using namespace ::com::sun::star::beans;
 SvxPersonalizationTabPage::SvxPersonalizationTabPage(weld::Container* pPage,
                                                      weld::DialogController* pController,
                                                      const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/personalization_tab.ui", "PersonalizationTabPage",
-                 &rSet)
-    , m_xNoPersona(m_xBuilder->weld_radio_button("no_persona"))
-    , m_xPersonaImg(m_xBuilder->weld_widget("lockpersona"))
-    , m_xDefaultPersona(m_xBuilder->weld_radio_button("default_persona"))
-    , m_xContentGrid(m_xBuilder->weld_container("gridpersonasetting"))
+    : SfxTabPage(pPage, pController, u"cui/ui/personalization_tab.ui"_ustr,
+                 u"PersonalizationTabPage"_ustr, &rSet)
+    , m_xNoPersona(m_xBuilder->weld_radio_button(u"no_persona"_ustr))
+    , m_xPersonaImg(m_xBuilder->weld_widget(u"lockpersona"_ustr))
+    , m_xDefaultPersona(m_xBuilder->weld_radio_button(u"default_persona"_ustr))
+    , m_xContentGrid(m_xBuilder->weld_container(u"gridpersonasetting"_ustr))
 {
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
@@ -62,7 +62,7 @@ std::unique_ptr<SfxTabPage> SvxPersonalizationTabPage::Create(weld::Container* p
 OUString SvxPersonalizationTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString radioButton[] = { "no_persona", "default_persona" };
+    OUString radioButton[] = { u"no_persona"_ustr, u"default_persona"_ustr };
 
     for (const auto& radio : radioButton)
     {
@@ -70,7 +70,7 @@ OUString SvxPersonalizationTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_label("personas_label"))
+    if (const auto& pString = m_xBuilder->weld_label(u"personas_label"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
@@ -79,7 +79,7 @@ OUString SvxPersonalizationTabPage::GetAllStrings()
 bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
 {
     // persona
-    OUString aPersona("default");
+    OUString aPersona(u"default"_ustr);
     if (m_xNoPersona->get_active())
         aPersona = "no";
 
@@ -136,7 +136,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 {
     // Load the pre saved personas
 
-    OUString gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
+    OUString gallery = u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/"_ustr;
     rtl::Bootstrap::expandMacros(gallery);
     OUString aPersonasList = gallery + "personas_list.txt";
     SvFileStream aStream(aPersonasList, StreamMode::READ);

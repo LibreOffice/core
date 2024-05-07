@@ -51,32 +51,32 @@
 using namespace ::css;
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optonlineupdatepage.ui"_ustr, u"OptOnlineUpdatePage"_ustr, &rSet)
     , m_showTraditionalOnlineUpdate(isTraditionalOnlineUpdateAvailable())
     , m_showMarOnlineUpdate(isMarOnlineUpdateAvailable())
-    , m_xNeverChecked(m_xBuilder->weld_label("neverchecked"))
-    , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button("autocheck"))
-    , m_xAutoCheckImg(m_xBuilder->weld_widget("lockautocheck"))
-    , m_xEveryDayButton(m_xBuilder->weld_radio_button("everyday"))
-    , m_xEveryWeekButton(m_xBuilder->weld_radio_button("everyweek"))
-    , m_xEveryMonthButton(m_xBuilder->weld_radio_button("everymonth"))
-    , m_xCheckIntervalImg(m_xBuilder->weld_widget("lockcheckinterval"))
-    , m_xCheckNowButton(m_xBuilder->weld_button("checknow"))
-    , m_xAutoDownloadCheckBox(m_xBuilder->weld_check_button("autodownload"))
-    , m_xAutoDownloadImg(m_xBuilder->weld_widget("lockautodownload"))
-    , m_xDestPathLabel(m_xBuilder->weld_label("destpathlabel"))
-    , m_xDestPath(m_xBuilder->weld_label("destpath"))
-    , m_xChangePathButton(m_xBuilder->weld_button("changepath"))
-    , m_xLastChecked(m_xBuilder->weld_label("lastchecked"))
-    , m_xExtrasCheckBox(m_xBuilder->weld_check_button("extrabits"))
-    , m_xExtrasImg(m_xBuilder->weld_widget("lockextrabits"))
-    , m_xUserAgentLabel(m_xBuilder->weld_label("useragent"))
-    , m_xPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
-    , m_xBox2(m_xBuilder->weld_box("box2"))
-    , m_xFrameDest(m_xBuilder->weld_frame("frameDest"))
-    , m_xFrameAgent(m_xBuilder->weld_frame("frameAgent"))
-    , m_xMar(m_xBuilder->weld_frame("frameMar"))
-    , m_xEnableMar(m_xBuilder->weld_check_button("enableMar"))
+    , m_xNeverChecked(m_xBuilder->weld_label(u"neverchecked"_ustr))
+    , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button(u"autocheck"_ustr))
+    , m_xAutoCheckImg(m_xBuilder->weld_widget(u"lockautocheck"_ustr))
+    , m_xEveryDayButton(m_xBuilder->weld_radio_button(u"everyday"_ustr))
+    , m_xEveryWeekButton(m_xBuilder->weld_radio_button(u"everyweek"_ustr))
+    , m_xEveryMonthButton(m_xBuilder->weld_radio_button(u"everymonth"_ustr))
+    , m_xCheckIntervalImg(m_xBuilder->weld_widget(u"lockcheckinterval"_ustr))
+    , m_xCheckNowButton(m_xBuilder->weld_button(u"checknow"_ustr))
+    , m_xAutoDownloadCheckBox(m_xBuilder->weld_check_button(u"autodownload"_ustr))
+    , m_xAutoDownloadImg(m_xBuilder->weld_widget(u"lockautodownload"_ustr))
+    , m_xDestPathLabel(m_xBuilder->weld_label(u"destpathlabel"_ustr))
+    , m_xDestPath(m_xBuilder->weld_label(u"destpath"_ustr))
+    , m_xChangePathButton(m_xBuilder->weld_button(u"changepath"_ustr))
+    , m_xLastChecked(m_xBuilder->weld_label(u"lastchecked"_ustr))
+    , m_xExtrasCheckBox(m_xBuilder->weld_check_button(u"extrabits"_ustr))
+    , m_xExtrasImg(m_xBuilder->weld_widget(u"lockextrabits"_ustr))
+    , m_xUserAgentLabel(m_xBuilder->weld_label(u"useragent"_ustr))
+    , m_xPrivacyPolicyButton(m_xBuilder->weld_link_button(u"btnPrivacyPolicy"_ustr))
+    , m_xBox2(m_xBuilder->weld_box(u"box2"_ustr))
+    , m_xFrameDest(m_xBuilder->weld_frame(u"frameDest"_ustr))
+    , m_xFrameAgent(m_xBuilder->weld_frame(u"frameAgent"_ustr))
+    , m_xMar(m_xBuilder->weld_frame(u"frameMar"_ustr))
+    , m_xEnableMar(m_xBuilder->weld_check_button(u"enableMar"_ustr))
 {
     if (m_showTraditionalOnlineUpdate) {
         m_aNeverChecked = m_xNeverChecked->get_label();
@@ -94,10 +94,10 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
         uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
         m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
-        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         bool bDownloadSupported = false;
-        m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
+        m_xUpdateAccess->getByName( u"DownloadSupported"_ustr ) >>= bDownloadSupported;
 
         m_xAutoDownloadCheckBox->set_visible(bDownloadSupported);
         m_xDestPathLabel->set_visible(bDownloadSupported);
@@ -139,7 +139,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     OUString aText;
     sal_Int64 lastChecked = 0;
 
-    m_xUpdateAccess->getByName("LastCheck") >>= lastChecked;
+    m_xUpdateAccess->getByName(u"LastCheck"_ustr) >>= lastChecked;
 
     if( lastChecked == 0 ) // never checked
     {
@@ -198,7 +198,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
                 ::comphelper::getProcessComponentContext() ),
             css::uno::UNO_QUERY_THROW );
 
-        OUString aPseudoURL = "useragent:normal";
+        OUString aPseudoURL = u"useragent:normal"_ustr;
         if( m_xExtrasCheckBox->get_active() )
             aPseudoURL = "useragent:extended";
         const uno::Sequence< beans::StringPair > aHeaders
@@ -228,8 +228,8 @@ std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( weld::Container* pPa
 OUString SvxOnlineUpdateTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1",        "lastchecked", "neverchecked",    "labeldest",
-                          "destpathlabel", "labelagent",  "useragent_label", "useragent_changed" };
+    OUString labels[] = { u"label1"_ustr,        u"lastchecked"_ustr, u"neverchecked"_ustr,    u"labeldest"_ustr,
+                          u"destpathlabel"_ustr, u"labelagent"_ustr,  u"useragent_label"_ustr, u"useragent_changed"_ustr };
 
     for (const auto& label : labels)
     {
@@ -237,7 +237,7 @@ OUString SvxOnlineUpdateTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "autocheck", "autodownload", "extrabits" };
+    OUString checkButton[] = { u"autocheck"_ustr, u"autodownload"_ustr, u"extrabits"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -245,7 +245,7 @@ OUString SvxOnlineUpdateTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "everyday", "everyweek", "everymonth" };
+    OUString radioButton[] = { u"everyday"_ustr, u"everyweek"_ustr, u"everymonth"_ustr };
 
     for (const auto& radio : radioButton)
     {
@@ -270,7 +270,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
         if( m_xAutoCheckCheckBox->get_state_changed_from_saved() )
         {
             bValue = m_xAutoCheckCheckBox->get_active();
-            m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::Any( bValue ) );
+            m_xUpdateAccess->replaceByName( u"AutoCheckEnabled"_ustr, uno::Any( bValue ) );
             bModified = true;
         }
 
@@ -293,31 +293,31 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 
         if( nValue > 0 )
         {
-            m_xUpdateAccess->replaceByName( "CheckInterval", uno::Any( nValue ) );
+            m_xUpdateAccess->replaceByName( u"CheckInterval"_ustr, uno::Any( nValue ) );
             bModified = true;
         }
 
         if( m_xAutoDownloadCheckBox->get_state_changed_from_saved() )
         {
             bValue = m_xAutoDownloadCheckBox->get_active();
-            m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::Any( bValue ) );
+            m_xUpdateAccess->replaceByName( u"AutoDownloadEnabled"_ustr, uno::Any( bValue ) );
             bModified = true;
         }
 
         OUString sValue, aURL;
-        m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
+        m_xUpdateAccess->getByName( u"DownloadDestination"_ustr ) >>= sValue;
 
         if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_xDestPath->get_label(), aURL) ) &&
             ( aURL != sValue ) )
         {
-            m_xUpdateAccess->replaceByName( "DownloadDestination", uno::Any( aURL ) );
+            m_xUpdateAccess->replaceByName( u"DownloadDestination"_ustr, uno::Any( aURL ) );
             bModified = true;
         }
 
         if( m_xExtrasCheckBox->get_state_changed_from_saved() )
         {
             bValue = m_xExtrasCheckBox->get_active();
-            m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::Any( bValue ) );
+            m_xUpdateAccess->replaceByName( u"ExtendedUserAgent"_ustr, uno::Any( bValue ) );
             bModified = true;
         }
 
@@ -340,8 +340,8 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 {
     if (m_showTraditionalOnlineUpdate) {
         bool bValue = false;
-        m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
-        beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled");
+        m_xUpdateAccess->getByName( u"AutoCheckEnabled"_ustr ) >>= bValue;
+        beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled"_ustr);
         bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
 
         m_xAutoCheckCheckBox->set_active(bValue);
@@ -349,8 +349,8 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
         m_xAutoCheckImg->set_visible(bReadOnly);
 
         sal_Int64 nValue = 0;
-        m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
-        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
+        m_xUpdateAccess->getByName( u"CheckInterval"_ustr ) >>= nValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval"_ustr);
         bool bReadOnly2 = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
         m_xEveryDayButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
         m_xEveryWeekButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
@@ -369,8 +369,8 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
         m_xEveryWeekButton->save_state();
         m_xEveryMonthButton->save_state();
 
-        m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
-        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoDownloadEnabled");
+        m_xUpdateAccess->getByName( u"AutoDownloadEnabled"_ustr ) >>= bValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoDownloadEnabled"_ustr);
         bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
         m_xAutoDownloadCheckBox->set_active(bValue);
         m_xAutoDownloadCheckBox->set_sensitive(!bReadOnly);
@@ -379,16 +379,16 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
         m_xDestPath->set_sensitive(true);
 
         OUString sValue, aPath;
-        m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
-        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/DownloadDestination");
+        m_xUpdateAccess->getByName( u"DownloadDestination"_ustr ) >>= sValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/DownloadDestination"_ustr);
         bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
         m_xChangePathButton->set_sensitive(!bReadOnly);
 
         if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
             m_xDestPath->set_label(aPath);
 
-        m_xUpdateAccess->getByName( "ExtendedUserAgent" ) >>= bValue;
-        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/ExtendedUserAgent");
+        m_xUpdateAccess->getByName( u"ExtendedUserAgent"_ustr ) >>= bValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/ExtendedUserAgent"_ustr);
         bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
         m_xExtrasCheckBox->set_active(bValue);
         m_xExtrasCheckBox->set_sensitive(!bReadOnly);
@@ -412,7 +412,7 @@ void SvxOnlineUpdateTabPage::FillUserData()
 IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bEnabled = rBox.get_active();
-    beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
+    beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(u"/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval"_ustr);
     bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
     m_xEveryDayButton->set_sensitive(bEnabled && !bReadOnly);
     m_xEveryWeekButton->set_sensitive(bEnabled && !bReadOnly);
@@ -456,17 +456,17 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
 
         beans::NamedValue aProperty;
         aProperty.Name  = "nodepath";
-        aProperty.Value <<= OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob");
+        aProperty.Value <<= u"org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob"_ustr;
 
         uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgumentList ),
             uno::UNO_QUERY_THROW );
 
         util::URL aURL;
-        xNameAccess->getByName("URL") >>= aURL.Complete;
+        xNameAccess->getByName(u"URL"_ustr) >>= aURL.Complete;
 
         uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( xContext ) );
 

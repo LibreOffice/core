@@ -33,11 +33,11 @@
 SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
                                                SvxHpLinkDlg* pDlg,
                                                const SfxItemSet* pItemSet)
-    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkinternetpage.ui", "HyperlinkInternetPage",
+    : SvxHyperlinkTabPageBase(pParent, pDlg, u"cui/ui/hyperlinkinternetpage.ui"_ustr, u"HyperlinkInternetPage"_ustr,
                               pItemSet)
     , m_bMarkWndOpen(false)
-    , m_xCbbTarget(new SvxHyperURLBox(xBuilder->weld_combo_box("target")))
-    , m_xFtTarget(xBuilder->weld_label("target_label"))
+    , m_xCbbTarget(new SvxHyperURLBox(xBuilder->weld_combo_box(u"target"_ustr)))
+    , m_xFtTarget(xBuilder->weld_label(u"target_label"_ustr))
 {
     // gtk_size_group_set_ignore_hidden, "Measuring the size of hidden widgets
     // ...  they will report a size of 0 nowadays, and thus, their size will

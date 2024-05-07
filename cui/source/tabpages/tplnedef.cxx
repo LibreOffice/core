@@ -51,7 +51,7 @@ using namespace com::sun::star;
 
 
 SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/linestyletabpage.ui", "LineStylePage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/linestyletabpage.ui"_ustr, u"LineStylePage"_ustr, &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aXLineAttr(rInAttrs.GetPool())
     , rXLSet(aXLineAttr.GetItemSet())
@@ -59,21 +59,21 @@ SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogControl
     , pPageType(nullptr)
     , nDlgType(0)
     , pPosDashLb(nullptr)
-    , m_xLbLineStyles(new SvxLineLB(m_xBuilder->weld_combo_box("LB_LINESTYLES")))
-    , m_xLbType1(m_xBuilder->weld_combo_box("LB_TYPE_1"))
-    , m_xLbType2(m_xBuilder->weld_combo_box("LB_TYPE_2"))
-    , m_xNumFldNumber1(m_xBuilder->weld_spin_button("NUM_FLD_1"))
-    , m_xNumFldNumber2(m_xBuilder->weld_spin_button("NUM_FLD_2"))
-    , m_xMtrLength1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_1", FieldUnit::CM))
-    , m_xMtrLength2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LENGTH_2", FieldUnit::CM))
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
-    , m_xCbxSynchronize(m_xBuilder->weld_check_button("CBX_SYNCHRONIZE"))
-    , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
-    , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
-    , m_xBtnDelete(m_xBuilder->weld_button("BTN_DELETE"))
-    , m_xBtnLoad(m_xBuilder->weld_button("BTN_LOAD"))
-    , m_xBtnSave(m_xBuilder->weld_button("BTN_SAVE"))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
+    , m_xLbLineStyles(new SvxLineLB(m_xBuilder->weld_combo_box(u"LB_LINESTYLES"_ustr)))
+    , m_xLbType1(m_xBuilder->weld_combo_box(u"LB_TYPE_1"_ustr))
+    , m_xLbType2(m_xBuilder->weld_combo_box(u"LB_TYPE_2"_ustr))
+    , m_xNumFldNumber1(m_xBuilder->weld_spin_button(u"NUM_FLD_1"_ustr))
+    , m_xNumFldNumber2(m_xBuilder->weld_spin_button(u"NUM_FLD_2"_ustr))
+    , m_xMtrLength1(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LENGTH_1"_ustr, FieldUnit::CM))
+    , m_xMtrLength2(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LENGTH_2"_ustr, FieldUnit::CM))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_DISTANCE"_ustr, FieldUnit::CM))
+    , m_xCbxSynchronize(m_xBuilder->weld_check_button(u"CBX_SYNCHRONIZE"_ustr))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"BTN_ADD"_ustr))
+    , m_xBtnModify(m_xBuilder->weld_button(u"BTN_MODIFY"_ustr))
+    , m_xBtnDelete(m_xBuilder->weld_button(u"BTN_DELETE"_ustr))
+    , m_xBtnLoad(m_xBuilder->weld_button(u"BTN_LOAD"_ustr))
+    , m_xBtnSave(m_xBuilder->weld_button(u"BTN_SAVE"_ustr))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_PREVIEW"_ustr, m_aCtlPreview))
 {
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -461,7 +461,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(const weld::ComboBox* p)
         if (m_xLbType1->get_active() == 0)
         {
             m_xMtrLength1->set_sensitive(false);
-            m_xMtrLength1->set_text("");
+            m_xMtrLength1->set_text(u""_ustr);
         }
         else if (!m_xMtrLength1->get_sensitive())
         {
@@ -475,7 +475,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(const weld::ComboBox* p)
         if (m_xLbType2->get_active() == 0)
         {
             m_xMtrLength2->set_sensitive(false);
-            m_xMtrLength2->set_text("");
+            m_xMtrLength2->set_text(u""_ustr);
         }
         else if (!m_xMtrLength2->get_sensitive())
         {
@@ -547,8 +547,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xBox->run();
         }
     }
@@ -616,8 +616,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xBox->run();
         }
     }
@@ -628,8 +628,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
     int nPos = m_xLbLineStyles->get_active();
     if (nPos != -1)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletelinestyledialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelLineStyleDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletelinestyledialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelLineStyleDialog"_ustr));
         if (xQueryBox->run() == RET_YES)
         {
             pDashList->Remove(nPos);
@@ -660,8 +660,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
 
     if ( *pnDashListState & ChangeType::MODIFIED )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querysavelistdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("AskSaveList"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querysavelistdialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"AskSaveList"_ustr));
 
         nReturn = xBox->run();
 
@@ -673,7 +673,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
     {
         ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                       FileDialogFlags::NONE, GetFrameWeld());
-        OUString aStrFilterType( "*.sod" );
+        OUString aStrFilterType( u"*.sod"_ustr );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         OUString aPalettePath(SvtPathOptions().GetPalettePath());
         OUString aLastDir;
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XDashListRef pDshLst = XPropertyList::AsDashList(XPropertyList::CreatePropertyList( XPropertyListType::Dash, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" ));
+            XDashListRef pDshLst = XPropertyList::AsDashList(XPropertyList::CreatePropertyList( XPropertyListType::Dash, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), u""_ustr ));
             pDshLst->SetName( aURL.getName() );
 
             if( pDshLst->Load() )
@@ -714,8 +714,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querynoloadedfiledialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"NoLoadedFileDialog"_ustr));
                 xBox->run();
             }
         }
@@ -739,7 +739,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
 {
     ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
-    OUString aStrFilterType( "*.sod" );
+    OUString aStrFilterType( u"*.sod"_ustr );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     OUString aPalettePath(SvtPathOptions().GetPalettePath());
@@ -781,8 +781,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
     }
     else
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querynosavefiledialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"NoSaveFileDialog"_ustr));
         xBox->run();
     }
 }

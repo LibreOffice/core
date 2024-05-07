@@ -59,9 +59,9 @@ namespace
 
     OUString lcl_AltDescr()
     {
-        OUString aTempl("<alt id=\"%1\">"
+        OUString aTempl(u"<alt id=\"%1\">"
                         " " //FIXME real dialog title or something
-                        "</alt>");
+                        "</alt>"_ustr);
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"alt_id") );
 
         return aTempl;
@@ -69,10 +69,10 @@ namespace
 
     OUString lcl_Image( std::u16string_view rScreenshotId, const Size& rSize )
     {
-        OUString aTempl("<image id=\"%1\" src=\"media/screenshots/%2.png\""
+        OUString aTempl(u"<image id=\"%1\" src=\"media/screenshots/%2.png\""
                            " width=\"%3cm\"  height=\"%4cm\">"
                            "%5"
-                        "</image>");
+                        "</image>"_ustr);
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"img_id") );
         aTempl = aTempl.replaceFirst( "%2", rScreenshotId );
         aTempl = aTempl.replaceFirst( "%3", OUString::number( rSize.Width() ) );
@@ -84,8 +84,8 @@ namespace
 
     OUString lcl_ParagraphWithImage( std::u16string_view rScreenshotId, const Size& rSize )
     {
-        OUString aTempl( "<paragraph id=\"%1\" role=\"paragraph\">%2"
-                         "</paragraph>"  SAL_NEWLINE_STRING );
+        OUString aTempl( u"<paragraph id=\"%1\" role=\"paragraph\">%2"
+                         "</paragraph>"  SAL_NEWLINE_STRING ""_ustr );
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"par_id") );
         aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId, rSize) );
 
@@ -94,8 +94,8 @@ namespace
 
     OUString lcl_Bookmark( std::u16string_view rWidgetId )
     {
-        OUString aTempl = "<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
-                          "<bookmark branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING;
+        OUString aTempl = u"<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
+                          "<bookmark branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING ""_ustr;
         aTempl = aTempl.replaceFirst( "%1", rWidgetId );
         aTempl = aTempl.replaceFirst( "%2", rWidgetId );
         aTempl = aTempl.replaceFirst( "%3", lcl_genRandom(u"bm_id") );
@@ -215,11 +215,11 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     assert(0 != maParentDialogBitmap.GetSizePixel().Height());
 
     // get needed widgets
-    mxPicture.reset(new weld::CustomWeld(rParentBuilder, "picture", maPicture));
+    mxPicture.reset(new weld::CustomWeld(rParentBuilder, u"picture"_ustr, maPicture));
     assert(mxPicture);
-    mxText = rParentBuilder.weld_text_view("text");
+    mxText = rParentBuilder.weld_text_view(u"text"_ustr);
     assert(mxText);
-    mxSave = rParentBuilder.weld_button("save");
+    mxSave = rParentBuilder.weld_button(u"save"_ustr);
     assert(mxSave);
 
     // set screenshot image at DrawingArea, resize, set event listener
@@ -291,8 +291,8 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
         xFilePicker->setDisplayDirectory(maLastFolderURL);
     }
 
-    xFilePicker->appendFilter("*.png", "*.png");
-    xFilePicker->setCurrentFilter("*.png");
+    xFilePicker->appendFilter(u"*.png"_ustr, u"*.png"_ustr);
+    xFilePicker->setCurrentFilter(u"*.png"_ustr);
     xFilePicker->setDefaultName(aDerivedFileName);
     xFilePicker->setMultiSelectionMode(false);
 
@@ -566,7 +566,7 @@ bool Picture::MouseButtonUp(const MouseEvent&)
 }
 
 ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(weld::Dialog& rParentDialog)
-    : GenericDialogController(&rParentDialog, "cui/ui/screenshotannotationdialog.ui", "ScreenshotAnnotationDialog")
+    : GenericDialogController(&rParentDialog, u"cui/ui/screenshotannotationdialog.ui"_ustr, u"ScreenshotAnnotationDialog"_ustr)
 {
     m_pImpl.reset(new ScreenshotAnnotationDlg_Impl(m_xDialog.get(), *m_xBuilder, rParentDialog));
 }

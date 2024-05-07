@@ -20,9 +20,9 @@
 #include <newtabledlg.hxx>
 
 SvxNewTableDialog::SvxNewTableDialog(weld::Window* pWindow)
-    : GenericDialogController(pWindow, "cui/ui/newtabledialog.ui", "NewTableDialog")
-    , mxNumColumns(m_xBuilder->weld_spin_button("columns"))
-    , mxNumRows(m_xBuilder->weld_spin_button("rows"))
+    : GenericDialogController(pWindow, u"cui/ui/newtabledialog.ui"_ustr, u"NewTableDialog"_ustr)
+    , mxNumColumns(m_xBuilder->weld_spin_button(u"columns"_ustr))
+    , mxNumRows(m_xBuilder->weld_spin_button(u"rows"_ustr))
 {
 }
 

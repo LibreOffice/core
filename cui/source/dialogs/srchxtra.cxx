@@ -36,23 +36,23 @@
 #include <vcl/svapp.hxx>
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabDialogController(pParent, "cui/ui/searchformatdialog.ui", "SearchFormatDialog", &rSet)
+    : SfxTabDialogController(pParent, u"cui/ui/searchformatdialog.ui"_ustr, u"SearchFormatDialog"_ustr, &rSet)
 {
-    AddTabPage("font", SvxCharNamePage::Create, nullptr);
-    AddTabPage("fonteffects", SvxCharEffectsPage::Create, nullptr);
-    AddTabPage("position", SvxCharPositionPage::Create, nullptr);
-    AddTabPage("asianlayout", SvxCharTwoLinesPage::Create, nullptr);
-    AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, nullptr);
-    AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
-    AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, nullptr);
-    AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, nullptr );
-    AddTabPage("background", SvxBkgTabPage::Create, nullptr);
+    AddTabPage(u"font"_ustr, SvxCharNamePage::Create, nullptr);
+    AddTabPage(u"fonteffects"_ustr, SvxCharEffectsPage::Create, nullptr);
+    AddTabPage(u"position"_ustr, SvxCharPositionPage::Create, nullptr);
+    AddTabPage(u"asianlayout"_ustr, SvxCharTwoLinesPage::Create, nullptr);
+    AddTabPage(u"labelTP_PARA_STD"_ustr, SvxStdParagraphTabPage::Create, nullptr);
+    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, SvxParaAlignTabPage::Create, nullptr);
+    AddTabPage(u"labelTP_PARA_EXT"_ustr, SvxExtParagraphTabPage::Create, nullptr);
+    AddTabPage(u"labelTP_PARA_ASIAN"_ustr, SvxAsianTabPage::Create, nullptr );
+    AddTabPage(u"background"_ustr, SvxBkgTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     if ( !SvtCJKOptions::IsDoubleLinesEnabled() )
-        RemoveTabPage("asianlayout");
+        RemoveTabPage(u"asianlayout"_ustr);
     if ( !SvtCJKOptions::IsAsianTypographyEnabled() )
-        RemoveTabPage("labelTP_PARA_ASIAN");
+        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
 }
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
@@ -103,10 +103,10 @@ void SvxSearchFormatDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 
 SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
     SearchAttrItemList& rLst, const WhichRangesContainer& pWhRanges)
-    : GenericDialogController(pParent, "cui/ui/searchattrdialog.ui", "SearchAttrDialog")
+    : GenericDialogController(pParent, u"cui/ui/searchattrdialog.ui"_ustr, u"SearchAttrDialog"_ustr)
     , rList(rLst)
-    , m_xAttrLB(m_xBuilder->weld_tree_view("treeview"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xAttrLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xAttrLB->set_size_request(m_xAttrLB->get_approximate_digit_width() * 50,
                                 m_xAttrLB->get_height_rows(12));
@@ -211,11 +211,11 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog(weld::Window* pParent, bool bRelax,
     sal_uInt16 nOther, sal_uInt16 nShorter, sal_uInt16 nLonger)
-    : GenericDialogController(pParent, "cui/ui/similaritysearchdialog.ui", "SimilaritySearchDialog")
-    , m_xOtherFld(m_xBuilder->weld_spin_button("otherfld"))
-    , m_xLongerFld(m_xBuilder->weld_spin_button("longerfld"))
-    , m_xShorterFld(m_xBuilder->weld_spin_button("shorterfld"))
-    , m_xRelaxBox(m_xBuilder->weld_check_button("relaxbox"))
+    : GenericDialogController(pParent, u"cui/ui/similaritysearchdialog.ui"_ustr, u"SimilaritySearchDialog"_ustr)
+    , m_xOtherFld(m_xBuilder->weld_spin_button(u"otherfld"_ustr))
+    , m_xLongerFld(m_xBuilder->weld_spin_button(u"longerfld"_ustr))
+    , m_xShorterFld(m_xBuilder->weld_spin_button(u"shorterfld"_ustr))
+    , m_xRelaxBox(m_xBuilder->weld_check_button(u"relaxbox"_ustr))
 {
     m_xOtherFld->set_value(nOther);
     m_xShorterFld->set_value(nShorter);

@@ -30,24 +30,24 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
     bool bEnableDrawingLayerFillStyles)
     : SfxTabDialogController(pParent,
         bEnableDrawingLayerFillStyles
-            ? OUString("cui/ui/borderareatransparencydialog.ui")
-            : OUString("cui/ui/borderbackgrounddialog.ui"),
+            ? u"cui/ui/borderareatransparencydialog.ui"_ustr
+            : u"cui/ui/borderbackgrounddialog.ui"_ustr,
         bEnableDrawingLayerFillStyles
-            ? OUString("BorderAreaTransparencyDialog")
-            : OUString("BorderBackgroundDialog"),
+            ? u"BorderAreaTransparencyDialog"_ustr
+            : u"BorderBackgroundDialog"_ustr,
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
 {
-    AddTabPage("borders", SvxBorderTabPage::Create, nullptr );
+    AddTabPage(u"borders"_ustr, SvxBorderTabPage::Create, nullptr );
     if (bEnableDrawingLayerFillStyles)
     {
         // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
-        AddTabPage("area", SvxAreaTabPage::Create, nullptr);
-        AddTabPage("transparence", SvxTransparenceTabPage::Create, nullptr);
+        AddTabPage(u"area"_ustr, SvxAreaTabPage::Create, nullptr);
+        AddTabPage(u"transparence"_ustr, SvxTransparenceTabPage::Create, nullptr);
     }
     else
     {
-        AddTabPage("background", SvxBkgTabPage::Create, nullptr );
+        AddTabPage(u"background"_ustr, SvxBkgTabPage::Create, nullptr );
     }
 }
 

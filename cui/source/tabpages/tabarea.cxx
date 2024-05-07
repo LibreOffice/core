@@ -34,7 +34,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     bool bShadow,
     bool bSlideBackground
 )
-    : SfxTabDialogController(pParent, "cui/ui/areadialog.ui", "AreaDialog", pAttr)
+    : SfxTabDialogController(pParent, u"cui/ui/areadialog.ui"_ustr, u"AreaDialog"_ustr, pAttr)
     , mpDrawModel          ( pModel ),
     mpColorList          ( pModel->GetColorList() ),
     mpNewColorList       ( pModel->GetColorList() ),
@@ -54,20 +54,20 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnHatchingListState ( ChangeType::NONE )
 {
     if (bSlideBackground)
-        AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::CreateWithSlideBackground, nullptr);
+        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, SvxAreaTabPage::CreateWithSlideBackground, nullptr);
     else
-        AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr);
+        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, SvxAreaTabPage::Create, nullptr);
 
     if (bShadow)
     {
-        AddTabPage("RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr);
+        AddTabPage(u"RID_SVXPAGE_SHADOW"_ustr, SvxShadowTabPage::Create, nullptr);
     }
     else
     {
-        RemoveTabPage( "RID_SVXPAGE_SHADOW" );
+        RemoveTabPage( u"RID_SVXPAGE_SHADOW"_ustr );
     }
 
-    AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
+    AddTabPage( u"RID_SVXPAGE_TRANSPARENCE"_ustr, SvxTransparenceTabPage::Create,  nullptr);
 
     weld::Button& rBtnCancel = GetCancelButton();
     rBtnCancel.connect_clicked(LINK(this, SvxAreaTabDialog, CancelHdlImpl));

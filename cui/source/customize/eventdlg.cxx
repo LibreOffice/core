@@ -38,14 +38,14 @@ using namespace ::com::sun::star;
 
 SvxEventConfigPage::SvxEventConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet,
     SvxEventConfigPage::EarlyInit)
-    : SvxMacroTabPage_(pPage, pController, "cui/ui/eventsconfigpage.ui", "EventsConfigPage", rSet)
-    , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
+    : SvxMacroTabPage_(pPage, pController, u"cui/ui/eventsconfigpage.ui"_ustr, u"EventsConfigPage"_ustr, rSet)
+    , m_xSaveInListBox(m_xBuilder->weld_combo_box(u"savein"_ustr))
 {
-    mpImpl->xEventLB = m_xBuilder->weld_tree_view("events");
-    mpImpl->xAssignPB = m_xBuilder->weld_button("macro");
-    mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
-    mpImpl->xDeleteAllPB = m_xBuilder->weld_button("deleteall");
-    mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
+    mpImpl->xEventLB = m_xBuilder->weld_tree_view(u"events"_ustr);
+    mpImpl->xAssignPB = m_xBuilder->weld_button(u"macro"_ustr);
+    mpImpl->xDeletePB = m_xBuilder->weld_button(u"delete"_ustr);
+    mpImpl->xDeleteAllPB = m_xBuilder->weld_button(u"deleteall"_ustr);
+    mpImpl->xAssignComponentPB = m_xBuilder->weld_button(u"component"_ustr);
 
     mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
                                        mpImpl->xEventLB->get_height_rows(20));

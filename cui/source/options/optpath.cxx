@@ -180,12 +180,12 @@ static bool IsMultiPath_Impl( const SvtPathOptions::Paths nIndex )
 // class SvxPathTabPage --------------------------------------------------
 
 SvxPathTabPage::SvxPathTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage( pPage, pController, "cui/ui/optpathspage.ui", "OptPathsPage", &rSet)
+    : SfxTabPage( pPage, pController, u"cui/ui/optpathspage.ui"_ustr, u"OptPathsPage"_ustr, &rSet)
     , pImpl(new OptPath_Impl)
     , xDialogListener ( new ::svt::DialogClosedListener() )
-    , m_xStandardBtn(m_xBuilder->weld_button("default"))
-    , m_xPathBtn(m_xBuilder->weld_button("edit"))
-    , m_xPathBox(m_xBuilder->weld_tree_view("paths"))
+    , m_xStandardBtn(m_xBuilder->weld_button(u"default"_ustr))
+    , m_xPathBtn(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xPathBox(m_xBuilder->weld_tree_view(u"paths"_ustr))
 {
     m_xStandardBtn->connect_clicked(LINK(this, SvxPathTabPage, StandardHdl_Impl));
     m_xPathBtn->connect_clicked( LINK( this, SvxPathTabPage, PathHdl_Impl ) );
@@ -223,7 +223,7 @@ std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( weld::Container* pPage, weld
 OUString SvxPathTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    if (const auto& pString = m_xBuilder->weld_label("label1"))
+    if (const auto& pString = m_xBuilder->weld_label(u"label1"_ustr))
         sAllStrings += pString->get_label() + " ";
     return sAllStrings.replaceAll("_", "");
 }
@@ -576,7 +576,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
         {
             sfx2::FileDialogHelper aHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
             uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aHelper.GetFilePicker();
-            xFilePicker->appendFilter(OUString(), "*.xml");
+            xFilePicker->appendFilter(OUString(), u"*.xml"_ustr);
             if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
             {
                 uno::Sequence<OUString> aPathSeq(xFilePicker->getSelectedFiles());

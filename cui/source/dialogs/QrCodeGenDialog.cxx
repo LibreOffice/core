@@ -169,15 +169,15 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
 
 QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                  bool bEditExisting)
-    : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
+    : GenericDialogController(pParent, u"cui/ui/qrcodegen.ui"_ustr, u"QrCodeGenDialog"_ustr)
     , m_xModel(std::move(xModel))
-    , m_xEdittext(m_xBuilder->weld_text_view("edit_text"))
-    , m_xECC{ m_xBuilder->weld_radio_button("button_low"),
-              m_xBuilder->weld_radio_button("button_medium"),
-              m_xBuilder->weld_radio_button("button_quartile"),
-              m_xBuilder->weld_radio_button("button_high") }
-    , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_margin"))
-    , m_xComboType(m_xBuilder->weld_combo_box("choose_type"))
+    , m_xEdittext(m_xBuilder->weld_text_view(u"edit_text"_ustr))
+    , m_xECC{ m_xBuilder->weld_radio_button(u"button_low"_ustr),
+              m_xBuilder->weld_radio_button(u"button_medium"_ustr),
+              m_xBuilder->weld_radio_button(u"button_quartile"_ustr),
+              m_xBuilder->weld_radio_button(u"button_high"_ustr) }
+    , m_xSpinBorder(m_xBuilder->weld_spin_button(u"edit_margin"_ustr))
+    , m_xComboType(m_xBuilder->weld_combo_box(u"choose_type"_ustr))
 #if ENABLE_ZXING
     , mpParent(pParent)
 #endif
@@ -203,7 +203,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 
     // Read properties from selected QR Code
     css::drawing::BarCode aBarCode;
-    xProps->getPropertyValue("BarCodeProperties") >>= aBarCode;
+    xProps->getPropertyValue(u"BarCodeProperties"_ustr) >>= aBarCode;
 
     m_xEdittext->set_text(aBarCode.Payload);
 
@@ -320,7 +320,7 @@ void QrCodeGenDialog::Apply()
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
-    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("InputStream",
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue(u"InputStream"_ustr,
                                                                             xInputStream) };
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
@@ -330,13 +330,13 @@ void QrCodeGenDialog::Apply()
         xShapeProps = m_xExistingShapeProperties;
     else
         xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
-                            ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                            ->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         UNO_QUERY);
 
-    xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
+    xShapeProps->setPropertyValue(u"Graphic"_ustr, Any(xGraphic));
 
     // Set QRCode properties
-    xShapeProps->setPropertyValue("BarCodeProperties", Any(aBarCode));
+    xShapeProps->setPropertyValue(u"BarCodeProperties"_ustr, Any(aBarCode));
 
     if (bIsExistingQRCode)
         return;
@@ -349,12 +349,12 @@ void QrCodeGenDialog::Apply()
     xShape->setSize(aShapeSize);
 
     // Default anchoring
-    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+    xShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(TextContentAnchorType_AT_PARAGRAPH));
 
     const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
 
     // Writer
-    if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+    if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
     {
         Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
         Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
@@ -368,11 +368,11 @@ void QrCodeGenDialog::Apply()
     }
 
     // Calc
-    else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+    else if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
     {
         Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
         awt::Point aCellPosition;
-        xSheetCell->getPropertyValue("Position") >>= aCellPosition;
+        xSheetCell->getPropertyValue(u"Position"_ustr) >>= aCellPosition;
         xShape->setPosition(aCellPosition);
 
         Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
@@ -386,8 +386,8 @@ void QrCodeGenDialog::Apply()
     }
 
     //Impress and Draw
-    else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument")
-             || xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
+    else if (xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr)
+             || xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
     {
         Reference<XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
         Reference<XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
@@ -400,7 +400,7 @@ void QrCodeGenDialog::Apply()
     else
     {
         //Not implemented for math,base and other apps.
-        throw uno::RuntimeException("Not implemented");
+        throw uno::RuntimeException(u"Not implemented"_ustr);
     }
 #endif
 }

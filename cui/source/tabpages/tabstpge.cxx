@@ -60,34 +60,34 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
 }
 
 SvxTabulatorTabPage::SvxTabulatorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
-    : SfxTabPage(pPage, pController, "cui/ui/paratabspage.ui", "ParagraphTabsPage", &rAttr)
+    : SfxTabPage(pPage, pController, u"cui/ui/paratabspage.ui"_ustr, u"ParagraphTabsPage"_ustr, &rAttr)
     , aCurrentTab(0)
     , aNewTabs(std::make_unique<SvxTabStopItem>(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP)))
     , nDefDist(0)
-    , m_xTabSpin(m_xBuilder->weld_metric_spin_button("SP_TABPOS", FieldUnit::CM))
-    , m_xTabBox(m_xBuilder->weld_entry_tree_view("tabgrid", "ED_TABPOS", "LB_TABPOS"))
-    , m_xCenterTab(m_xBuilder->weld_radio_button("radiobuttonBTN_TABTYPE_CENTER"))
-    , m_xDezTab(m_xBuilder->weld_radio_button("radiobuttonBTN_TABTYPE_DECIMAL"))
-    , m_xDezChar(m_xBuilder->weld_entry("entryED_TABTYPE_DECCHAR"))
-    , m_xDezCharLabel(m_xBuilder->weld_label("labelFT_TABTYPE_DECCHAR"))
+    , m_xTabSpin(m_xBuilder->weld_metric_spin_button(u"SP_TABPOS"_ustr, FieldUnit::CM))
+    , m_xTabBox(m_xBuilder->weld_entry_tree_view(u"tabgrid"_ustr, u"ED_TABPOS"_ustr, u"LB_TABPOS"_ustr))
+    , m_xCenterTab(m_xBuilder->weld_radio_button(u"radiobuttonBTN_TABTYPE_CENTER"_ustr))
+    , m_xDezTab(m_xBuilder->weld_radio_button(u"radiobuttonBTN_TABTYPE_DECIMAL"_ustr))
+    , m_xDezChar(m_xBuilder->weld_entry(u"entryED_TABTYPE_DECCHAR"_ustr))
+    , m_xDezCharLabel(m_xBuilder->weld_label(u"labelFT_TABTYPE_DECCHAR"_ustr))
     // lower radio buttons
-    , m_xNoFillChar(m_xBuilder->weld_radio_button("radiobuttonBTN_FILLCHAR_NO"))
-    , m_xFillPoints(m_xBuilder->weld_radio_button("radiobuttonBTN_FILLCHAR_POINTS"))
-    , m_xFillDashLine(m_xBuilder->weld_radio_button("radiobuttonBTN_FILLCHAR_DASHLINE"))
-    , m_xFillSolidLine(m_xBuilder->weld_radio_button("radiobuttonBTN_FILLCHAR_UNDERSCORE"))
-    , m_xFillSpecial(m_xBuilder->weld_radio_button("radiobuttonBTN_FILLCHAR_OTHER"))
-    , m_xFillChar(m_xBuilder->weld_entry("entryED_FILLCHAR_OTHER"))
+    , m_xNoFillChar(m_xBuilder->weld_radio_button(u"radiobuttonBTN_FILLCHAR_NO"_ustr))
+    , m_xFillPoints(m_xBuilder->weld_radio_button(u"radiobuttonBTN_FILLCHAR_POINTS"_ustr))
+    , m_xFillDashLine(m_xBuilder->weld_radio_button(u"radiobuttonBTN_FILLCHAR_DASHLINE"_ustr))
+    , m_xFillSolidLine(m_xBuilder->weld_radio_button(u"radiobuttonBTN_FILLCHAR_UNDERSCORE"_ustr))
+    , m_xFillSpecial(m_xBuilder->weld_radio_button(u"radiobuttonBTN_FILLCHAR_OTHER"_ustr))
+    , m_xFillChar(m_xBuilder->weld_entry(u"entryED_FILLCHAR_OTHER"_ustr))
     // button bar
-    , m_xNewBtn(m_xBuilder->weld_button("buttonBTN_NEW"))
-    , m_xDelAllBtn(m_xBuilder->weld_button("buttonBTN_DELALL"))
-    , m_xDelBtn(m_xBuilder->weld_button("buttonBTN_DEL"))
-    , m_xTypeFrame(m_xBuilder->weld_container("frameFL_TABTYPE"))
-    , m_xFillFrame(m_xBuilder->weld_container("frameFL_FILLCHAR"))
+    , m_xNewBtn(m_xBuilder->weld_button(u"buttonBTN_NEW"_ustr))
+    , m_xDelAllBtn(m_xBuilder->weld_button(u"buttonBTN_DELALL"_ustr))
+    , m_xDelBtn(m_xBuilder->weld_button(u"buttonBTN_DEL"_ustr))
+    , m_xTypeFrame(m_xBuilder->weld_container(u"frameFL_TABTYPE"_ustr))
+    , m_xFillFrame(m_xBuilder->weld_container(u"frameFL_FILLCHAR"_ustr))
     // the tab images
-    , m_xLeftWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABLEFT", m_aLeftWin))
-    , m_xRightWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABRIGHT", m_aRightWin))
-    , m_xCenterWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABCENTER", m_aCenterWin))
-    , m_xDezWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABDECIMAL", m_aDezWin))
+    , m_xLeftWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaWIN_TABLEFT"_ustr, m_aLeftWin))
+    , m_xRightWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaWIN_TABRIGHT"_ustr, m_aRightWin))
+    , m_xCenterWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaWIN_TABCENTER"_ustr, m_aCenterWin))
+    , m_xDezWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaWIN_TABDECIMAL"_ustr, m_aDezWin))
 {
     m_aLeftWin.SetTabStyle(sal_uInt16(RULER_TAB_LEFT|WB_HORZ));
     m_aRightWin.SetTabStyle(sal_uInt16(RULER_TAB_RIGHT|WB_HORZ));
@@ -392,7 +392,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
         pTypeBtn->set_active(true);
 
     m_xFillChar->set_sensitive(false);
-    m_xFillChar->set_text("");
+    m_xFillChar->set_text(u""_ustr);
 
     if ( aCurrentTab.GetFill() == ' ' )
         pFillBtn = m_xNoFillChar.get();
@@ -529,7 +529,7 @@ IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Toggleable&, rBox, vo
     SvxTabAdjust eAdj;
     m_xDezChar->set_sensitive(false);
     m_xDezCharLabel->set_sensitive(false);
-    m_xDezChar->set_text("");
+    m_xDezChar->set_text(u""_ustr);
 
     if (&rBox == m_xLeftTab.get())
         eAdj = SvxTabAdjust::Left;
@@ -560,7 +560,7 @@ IMPL_LINK(SvxTabulatorTabPage, FillTypeCheckHdl_Impl, weld::Toggleable&, rBox, v
         return;
 
     sal_uInt8 cFill = ' ';
-    m_xFillChar->set_text( "" );
+    m_xFillChar->set_text( u""_ustr );
     m_xFillChar->set_sensitive(false);
 
     if (&rBox == m_xFillSpecial.get())

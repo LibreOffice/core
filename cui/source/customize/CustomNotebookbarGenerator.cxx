@@ -42,13 +42,13 @@ static OUString lcl_activeAppName(vcl::EnumContext::Application eApp)
     switch (eApp)
     {
         case vcl::EnumContext::Application::Writer:
-            return "ActiveWriter";
+            return u"ActiveWriter"_ustr;
         case vcl::EnumContext::Application::Calc:
-            return "ActiveCalc";
+            return u"ActiveCalc"_ustr;
         case vcl::EnumContext::Application::Impress:
-            return "ActiveImpress";
+            return u"ActiveImpress"_ustr;
         case vcl::EnumContext::Application::Draw:
-            return "ActiveDraw";
+            return u"ActiveDraw"_ustr;
         default:
             return OUString();
     }
@@ -59,13 +59,13 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
     switch (eApp)
     {
         case vcl::EnumContext::Application::Writer:
-            return "Writer";
+            return u"Writer"_ustr;
         case vcl::EnumContext::Application::Calc:
-            return "Calc";
+            return u"Calc"_ustr;
         case vcl::EnumContext::Application::Impress:
-            return "Impress";
+            return u"Impress"_ustr;
         case vcl::EnumContext::Application::Draw:
-            return "Draw";
+            return u"Draw"_ustr;
         default:
             return OUString();
     }
@@ -89,8 +89,8 @@ static OUString getAppNameRegistryPath()
 
 static OUString customizedUIPathBuffer()
 {
-    OUString sDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
-        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/");
+    OUString sDirPath(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
+        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/"_ustr);
     rtl::Bootstrap::expandMacros(sDirPath);
     return sDirPath;
 }
@@ -217,7 +217,8 @@ void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
         return;
 
     const auto xContext = comphelper::getProcessComponentContext();
-    utl::OConfigurationTreeRoot aRoot(xContext, "org.openoffice.Office.UI.ToolbarMode/", false);
+    utl::OConfigurationTreeRoot aRoot(xContext, u"org.openoffice.Office.UI.ToolbarMode/"_ustr,
+                                      false);
     const Reference<frame::XFrame>& xFrame = pFrame->GetFrame().GetFrameInterface();
     const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create(xContext);
 

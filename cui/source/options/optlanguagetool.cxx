@@ -30,20 +30,21 @@ constexpr OUString LANGUAGETOOLPLUS_DEFAULT_URL = u"https://api.languagetoolplus
 OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
                                                weld::DialogController* pController,
                                                const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/langtoolconfigpage.ui", "OptLangToolPage", &rSet)
-    , m_xBaseURLED(m_xBuilder->weld_entry("baseurl"))
-    , m_xBaseURLImg(m_xBuilder->weld_widget("lockbaseurl"))
-    , m_xUsernameED(m_xBuilder->weld_entry("username"))
-    , m_xUsernameImg(m_xBuilder->weld_widget("lockusername"))
-    , m_xApiKeyED(m_xBuilder->weld_entry("apikey"))
-    , m_xApiKeyImg(m_xBuilder->weld_widget("lockapikey"))
-    , m_xRestProtocol(m_xBuilder->weld_entry("restprotocol"))
-    , m_xRestProtocolImg(m_xBuilder->weld_widget("lockrestprotocol"))
-    , m_xActivateBox(m_xBuilder->weld_check_button("activate"))
-    , m_xActivateBoxImg(m_xBuilder->weld_widget("lockactivate"))
-    , m_xSSLDisableVerificationBox(m_xBuilder->weld_check_button("verifyssl"))
-    , m_xSSLDisableVerificationBoxImg(m_xBuilder->weld_widget("lockverifyssl"))
-    , m_xApiSettingsFrame(m_xBuilder->weld_frame("apisettings"))
+    : SfxTabPage(pPage, pController, u"cui/ui/langtoolconfigpage.ui"_ustr, u"OptLangToolPage"_ustr,
+                 &rSet)
+    , m_xBaseURLED(m_xBuilder->weld_entry(u"baseurl"_ustr))
+    , m_xBaseURLImg(m_xBuilder->weld_widget(u"lockbaseurl"_ustr))
+    , m_xUsernameED(m_xBuilder->weld_entry(u"username"_ustr))
+    , m_xUsernameImg(m_xBuilder->weld_widget(u"lockusername"_ustr))
+    , m_xApiKeyED(m_xBuilder->weld_entry(u"apikey"_ustr))
+    , m_xApiKeyImg(m_xBuilder->weld_widget(u"lockapikey"_ustr))
+    , m_xRestProtocol(m_xBuilder->weld_entry(u"restprotocol"_ustr))
+    , m_xRestProtocolImg(m_xBuilder->weld_widget(u"lockrestprotocol"_ustr))
+    , m_xActivateBox(m_xBuilder->weld_check_button(u"activate"_ustr))
+    , m_xActivateBoxImg(m_xBuilder->weld_widget(u"lockactivate"_ustr))
+    , m_xSSLDisableVerificationBox(m_xBuilder->weld_check_button(u"verifyssl"_ustr))
+    , m_xSSLDisableVerificationBoxImg(m_xBuilder->weld_widget(u"lockverifyssl"_ustr))
+    , m_xApiSettingsFrame(m_xBuilder->weld_frame(u"apisettings"_ustr))
 {
     m_xActivateBox->connect_toggled(LINK(this, OptLanguageToolTabPage, CheckHdl));
     EnableControls(LanguageToolCfg::IsEnabled::get());
@@ -112,9 +113,11 @@ void OptLanguageToolTabPage::Reset(const SfxItemSet*)
 OUString OptLanguageToolTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "langtoolsettings", "disclaimer",  "apisettingsheader", "base",
-                          "urldesc",          "usernamelbl", "usernamedesc",      "apikeylbl",
-                          "apikeydesc",       "restlbl",     "restdesc" };
+    OUString labels[] = {
+        u"langtoolsettings"_ustr, u"disclaimer"_ustr,  u"apisettingsheader"_ustr, u"base"_ustr,
+        u"urldesc"_ustr,          u"usernamelbl"_ustr, u"usernamedesc"_ustr,      u"apikeylbl"_ustr,
+        u"apikeydesc"_ustr,       u"restlbl"_ustr,     u"restdesc"_ustr
+    };
 
     for (const auto& label : labels)
     {
@@ -122,7 +125,7 @@ OUString OptLanguageToolTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "activate", "verifyssl" };
+    OUString checkButton[] = { u"activate"_ustr, u"verifyssl"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -130,7 +133,7 @@ OUString OptLanguageToolTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_link_button("policy"))
+    if (const auto& pString = m_xBuilder->weld_link_button(u"policy"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");

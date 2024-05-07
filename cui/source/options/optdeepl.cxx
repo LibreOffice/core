@@ -22,9 +22,9 @@
 
 OptDeeplTabPage::OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,
                                  const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optdeeplpage.ui", "OptDeeplPage", &rSet)
-    , m_xAPIUrl(m_xBuilder->weld_entry("apiurl"))
-    , m_xAuthKey(m_xBuilder->weld_entry("authkey"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optdeeplpage.ui"_ustr, u"OptDeeplPage"_ustr, &rSet)
+    , m_xAPIUrl(m_xBuilder->weld_entry(u"apiurl"_ustr))
+    , m_xAuthKey(m_xBuilder->weld_entry(u"authkey"_ustr))
 {
 }
 
@@ -46,7 +46,7 @@ void OptDeeplTabPage::Reset(const SfxItemSet*)
 OUString OptDeeplTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
@@ -54,7 +54,7 @@ OUString OptDeeplTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_link_button("privacy"))
+    if (const auto& pString = m_xBuilder->weld_link_button(u"privacy"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");

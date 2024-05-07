@@ -67,7 +67,7 @@ enum TileOffset
 }
 
 SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/imagetabpage.ui", "ImageTabPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/imagetabpage.ui"_ustr, u"ImageTabPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)
@@ -76,23 +76,23 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("imagewin", true)))
-    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("imagestyle"))
-    , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
-    , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))
-    , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::PERCENT))
-    , m_xBitmapHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::PERCENT))
-    , m_xPositionBox(m_xBuilder->weld_container("posbox"))
-    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
-    , m_xPositionOffBox(m_xBuilder->weld_container("posoffbox"))
-    , m_xPositionOffX(m_xBuilder->weld_metric_spin_button("posoffx", FieldUnit::PERCENT))
-    , m_xPositionOffY(m_xBuilder->weld_metric_spin_button("posoffy", FieldUnit::PERCENT))
-    , m_xTileOffBox(m_xBuilder->weld_container("tileoffbox"))
-    , m_xTileOffLB(m_xBuilder->weld_combo_box("tileofflb"))
-    , m_xTileOffset(m_xBuilder->weld_metric_spin_button("tileoffmtr", FieldUnit::PERCENT))
-    , m_xBtnImport(m_xBuilder->weld_button("BTN_IMPORT"))
-    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_IMAGE_PREVIEW", m_aCtlBitmapPreview))
-    , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, "IMAGE", *m_xBitmapLB))
+    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"imagewin"_ustr, true)))
+    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box(u"imagestyle"_ustr))
+    , m_xSizeBox(m_xBuilder->weld_container(u"sizebox"_ustr))
+    , m_xTsbScale(m_xBuilder->weld_check_button(u"scaletsb"_ustr))
+    , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::PERCENT))
+    , m_xBitmapHeight(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::PERCENT))
+    , m_xPositionBox(m_xBuilder->weld_container(u"posbox"_ustr))
+    , m_xPositionLB(m_xBuilder->weld_combo_box(u"positionlb"_ustr))
+    , m_xPositionOffBox(m_xBuilder->weld_container(u"posoffbox"_ustr))
+    , m_xPositionOffX(m_xBuilder->weld_metric_spin_button(u"posoffx"_ustr, FieldUnit::PERCENT))
+    , m_xPositionOffY(m_xBuilder->weld_metric_spin_button(u"posoffy"_ustr, FieldUnit::PERCENT))
+    , m_xTileOffBox(m_xBuilder->weld_container(u"tileoffbox"_ustr))
+    , m_xTileOffLB(m_xBuilder->weld_combo_box(u"tileofflb"_ustr))
+    , m_xTileOffset(m_xBuilder->weld_metric_spin_button(u"tileoffmtr"_ustr, FieldUnit::PERCENT))
+    , m_xBtnImport(m_xBuilder->weld_button(u"BTN_IMPORT"_ustr))
+    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_IMAGE_PREVIEW"_ustr, m_aCtlBitmapPreview))
+    , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, u"IMAGE"_ustr, *m_xBitmapLB))
 {
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
@@ -379,7 +379,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         m_xPositionOffX->set_value(nValue, FieldUnit::PERCENT);
     }
     else
-        m_xPositionOffX->set_text("");
+        m_xPositionOffX->set_text(u""_ustr);
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::INVALID )
     {
@@ -387,7 +387,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         m_xPositionOffY->set_value(nValue, FieldUnit::PERCENT);
     }
     else
-        m_xPositionOffY->set_text("");
+        m_xPositionOffY->set_text(u""_ustr);
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETX ) != SfxItemState::INVALID)
     {
@@ -543,8 +543,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xBox->run();
         }
     }
@@ -558,8 +558,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletebitmapdialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelBitmapDialog"_ustr));
 
     if (xQueryBox->run() != RET_YES)
         return;
@@ -753,8 +753,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
                 break;
             }
 
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             if (xBox->run() != RET_OK)
                 break;
         }
@@ -778,8 +778,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
     else
     {
         // graphic couldn't be loaded
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/querynoloadedfiledialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, u"cui/ui/querynoloadedfiledialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"NoLoadedFileDialog"_ustr));
         xBox->run();
     }
 }

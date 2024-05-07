@@ -48,17 +48,17 @@ using namespace css::security;
 using namespace css::ui::dialogs;
 
 SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel)
-    : SignatureLineDialogBase(pParent, std::move(xModel), "cui/ui/signsignatureline.ui",
-                              "SignSignatureLineDialog")
-    , m_xEditName(m_xBuilder->weld_entry("edit_name"))
-    , m_xEditComment(m_xBuilder->weld_text_view("edit_comment"))
-    , m_xBtnLoadImage(m_xBuilder->weld_button("btn_load_image"))
-    , m_xBtnClearImage(m_xBuilder->weld_button("btn_clear_image"))
-    , m_xBtnChooseCertificate(m_xBuilder->weld_button("btn_select_certificate"))
-    , m_xBtnSign(m_xBuilder->weld_button("ok"))
-    , m_xLabelHint(m_xBuilder->weld_label("label_hint"))
-    , m_xLabelHintText(m_xBuilder->weld_label("label_hint_text"))
-    , m_xLabelAddComment(m_xBuilder->weld_label("label_add_comment"))
+    : SignatureLineDialogBase(pParent, std::move(xModel), u"cui/ui/signsignatureline.ui"_ustr,
+                              u"SignSignatureLineDialog"_ustr)
+    , m_xEditName(m_xBuilder->weld_entry(u"edit_name"_ustr))
+    , m_xEditComment(m_xBuilder->weld_text_view(u"edit_comment"_ustr))
+    , m_xBtnLoadImage(m_xBuilder->weld_button(u"btn_load_image"_ustr))
+    , m_xBtnClearImage(m_xBuilder->weld_button(u"btn_clear_image"_ustr))
+    , m_xBtnChooseCertificate(m_xBuilder->weld_button(u"btn_select_certificate"_ustr))
+    , m_xBtnSign(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xLabelHint(m_xBuilder->weld_label(u"label_hint"_ustr))
+    , m_xLabelHintText(m_xBuilder->weld_label(u"label_hint_text"_ustr))
+    , m_xLabelAddComment(m_xBuilder->weld_label(u"label_add_comment"_ustr))
     , m_bShowSignDate(false)
 {
     Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
@@ -66,7 +66,7 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     m_xShapeProperties.set(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     bool bIsSignatureLine(false);
-    m_xShapeProperties->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
+    m_xShapeProperties->getPropertyValue(u"IsSignatureLine"_ustr) >>= bIsSignatureLine;
     if (!bIsSignatureLine)
     {
         SAL_WARN("cui.dialogs", "No signature line selected!");
@@ -80,17 +80,17 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     m_xEditName->connect_changed(LINK(this, SignSignatureLineDialog, entryChanged));
 
     // Read properties from selected signature line
-    m_xShapeProperties->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
-    m_xShapeProperties->getPropertyValue("SignatureLineSuggestedSignerName")
+    m_xShapeProperties->getPropertyValue(u"SignatureLineId"_ustr) >>= m_aSignatureLineId;
+    m_xShapeProperties->getPropertyValue(u"SignatureLineSuggestedSignerName"_ustr)
         >>= m_aSuggestedSignerName;
-    m_xShapeProperties->getPropertyValue("SignatureLineSuggestedSignerTitle")
+    m_xShapeProperties->getPropertyValue(u"SignatureLineSuggestedSignerTitle"_ustr)
         >>= m_aSuggestedSignerTitle;
     OUString aSigningInstructions;
-    m_xShapeProperties->getPropertyValue("SignatureLineSigningInstructions")
+    m_xShapeProperties->getPropertyValue(u"SignatureLineSigningInstructions"_ustr)
         >>= aSigningInstructions;
-    m_xShapeProperties->getPropertyValue("SignatureLineShowSignDate") >>= m_bShowSignDate;
+    m_xShapeProperties->getPropertyValue(u"SignatureLineShowSignDate"_ustr) >>= m_bShowSignDate;
     bool bCanAddComment(false);
-    m_xShapeProperties->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
+    m_xShapeProperties->getPropertyValue(u"SignatureLineCanAddComment"_ustr) >>= bCanAddComment;
 
     if (aSigningInstructions.isEmpty())
     {
@@ -132,7 +132,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
         return;
 
     Reference<XGraphicProvider> xProvider = GraphicProvider::create(xContext);
-    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("URL",
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue(u"URL"_ustr,
                                                                             aSelectedFiles[0]) };
     m_xSignatureImage = xProvider->queryGraphic(aMediaProperties);
     m_sOriginalImageBtnLabel = m_xBtnLoadImage->get_label();
@@ -232,10 +232,10 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
         if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false))
             SAL_WARN("cui.dialogs", "Could not convert graphic to base64");
 
-        OUString aImagePart = "<image y=\"825\" x=\"1300\" "
+        OUString aImagePart = u"<image y=\"825\" x=\"1300\" "
                               "xlink:href=\"data:[MIMETYPE];base64,[BASE64_IMG]>\" "
                               "preserveAspectRatio=\"xMidYMid\" height=\"1520\" "
-                              "width=\"7600\" />";
+                              "width=\"7600\" />"_ustr;
         aImagePart = aImagePart.replaceAll(
             "[MIMETYPE]", GraphicMimeTypeHelper::GetMimeTypeForXGraphic(m_xSignatureImage));
         aImagePart = aImagePart.replaceAll("[BASE64_IMG]", aGraphicInBase64);

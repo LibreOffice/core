@@ -20,8 +20,9 @@
 #include <cuitbxform.hxx>
 
 FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/recordnumberdialog.ui", "RecordNumberDialog")
-    , m_xRecordNo(m_xBuilder->weld_spin_button("entry"))
+    : GenericDialogController(pParent, u"cui/ui/recordnumberdialog.ui"_ustr,
+                              u"RecordNumberDialog"_ustr)
+    , m_xRecordNo(m_xBuilder->weld_spin_button(u"entry"_ustr))
 {
     m_xRecordNo->set_range(1, 0x7FFFFFFF);
 }

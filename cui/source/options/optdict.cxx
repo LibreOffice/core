@@ -110,11 +110,11 @@ static CDE_RESULT cmpDicEntry_Impl( std::u16string_view rText1, std::u16string_v
 // class SvxNewDictionaryDialog -------------------------------------------
 
 SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/optnewdictionarydialog.ui", "OptNewDictionaryDialog")
-    , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
-    , m_xExceptBtn(m_xBuilder->weld_check_button("except"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"cui/ui/optnewdictionarydialog.ui"_ustr, u"OptNewDictionaryDialog"_ustr)
+    , m_xNameEdit(m_xBuilder->weld_entry(u"nameedit"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
+    , m_xExceptBtn(m_xBuilder->weld_check_button(u"except"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     // Prevent creation of dictionary without a name.
     m_xOKBtn->set_sensitive(false);
@@ -210,21 +210,21 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl, weld::Entry&, void)
 // class SvxEditDictionaryDialog -------------------------------------------
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16string_view rName)
-    : GenericDialogController(pParent, "cui/ui/editdictionarydialog.ui", "EditDictionaryDialog")
+    : GenericDialogController(pParent, u"cui/ui/editdictionarydialog.ui"_ustr, u"EditDictionaryDialog"_ustr)
     , sModify(CuiResId(STR_MODIFY))
     , bFirstSelect(false)
     , bDoNothing(false)
     , bDicIsReadonly(false)
-    , m_xAllDictsLB(m_xBuilder->weld_combo_box("book"))
-    , m_xLangFT(m_xBuilder->weld_label("lang_label"))
-    , m_xLangLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
-    , m_xWordED(m_xBuilder->weld_entry("word"))
-    , m_xReplaceFT(m_xBuilder->weld_label("replace_label"))
-    , m_xReplaceED(m_xBuilder->weld_entry("replace"))
-    , m_xSingleColumnLB(m_xBuilder->weld_tree_view("words"))
-    , m_xDoubleColumnLB(m_xBuilder->weld_tree_view("replaces"))
-    , m_xNewReplacePB(m_xBuilder->weld_button("newreplace"))
-    , m_xDeletePB(m_xBuilder->weld_button("delete"))
+    , m_xAllDictsLB(m_xBuilder->weld_combo_box(u"book"_ustr))
+    , m_xLangFT(m_xBuilder->weld_label(u"lang_label"_ustr))
+    , m_xLangLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"lang"_ustr)))
+    , m_xWordED(m_xBuilder->weld_entry(u"word"_ustr))
+    , m_xReplaceFT(m_xBuilder->weld_label(u"replace_label"_ustr))
+    , m_xReplaceED(m_xBuilder->weld_entry(u"replace"_ustr))
+    , m_xSingleColumnLB(m_xBuilder->weld_tree_view(u"words"_ustr))
+    , m_xDoubleColumnLB(m_xBuilder->weld_tree_view(u"replaces"_ustr))
+    , m_xNewReplacePB(m_xBuilder->weld_button(u"newreplace"_ustr))
+    , m_xDeletePB(m_xBuilder->weld_button(u"delete"_ustr))
 {
     sReplaceFT_Text = m_xReplaceFT->get_label();
     m_xSingleColumnLB->set_size_request(-1, m_xSingleColumnLB->get_height_rows(8));
@@ -589,8 +589,8 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
 {
     if (pBtn == m_xDeletePB.get())
     {
-        m_xWordED->set_text("");
-        m_xReplaceED->set_text("");
+        m_xWordED->set_text(u""_ustr);
+        m_xReplaceED->set_text(u""_ustr);
         m_xDeletePB->set_sensitive(false);
 
         int nEntry = m_pWordsLB->get_selected_index();

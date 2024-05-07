@@ -27,12 +27,12 @@
 #include "optopencl.hxx"
 
 SvxOpenCLTabPage::SvxOpenCLTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optopenclpage.ui", "OptOpenCLPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optopenclpage.ui"_ustr, u"OptOpenCLPage"_ustr, &rSet)
     , maConfig(OpenCLConfig::get())
-    , mxUseOpenCL(m_xBuilder->weld_check_button("useopencl"))
-    , mxUseOpenImg(m_xBuilder->weld_widget("lockuseopencl"))
-    , mxOclUsed(m_xBuilder->weld_label("openclused"))
-    , mxOclNotUsed(m_xBuilder->weld_label("openclnotused"))
+    , mxUseOpenCL(m_xBuilder->weld_check_button(u"useopencl"_ustr))
+    , mxUseOpenImg(m_xBuilder->weld_widget(u"lockuseopencl"_ustr))
+    , mxOclUsed(m_xBuilder->weld_label(u"openclused"_ustr))
+    , mxOclNotUsed(m_xBuilder->weld_label(u"openclnotused"_ustr))
 {
     mxUseOpenCL->set_active(maConfig.mbUseOpenCL);
     mxUseOpenCL->set_sensitive(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
@@ -55,7 +55,7 @@ std::unique_ptr<SfxTabPage> SvxOpenCLTabPage::Create(weld::Container* pPage, wel
 OUString SvxOpenCLTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "openclnotused", "openclused" };
+    OUString labels[] = { u"label1"_ustr, u"openclnotused"_ustr, u"openclused"_ustr };
 
     for (const auto& label : labels)
     {

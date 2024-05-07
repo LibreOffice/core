@@ -25,10 +25,10 @@
 
 GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog,
                                    OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/graphictestentry.ui"))
-    , m_xContainer(m_xBuilder->weld_container("gptestbox"))
-    , m_xTestLabel(m_xBuilder->weld_label("gptestlabel"))
-    , m_xTestButton(m_xBuilder->weld_button("gptestbutton"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/graphictestentry.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"gptestbox"_ustr))
+    , m_xTestLabel(m_xBuilder->weld_label(u"gptestlabel"_ustr))
+    , m_xTestButton(m_xBuilder->weld_button(u"gptestbutton"_ustr))
     , m_xResultBitmap(aTestBitmap)
 {
     m_xParentDialog = pDialog;
@@ -57,10 +57,10 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
 }
 
 GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
-    : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
-    , m_xResultLog(m_xBuilder->weld_text_view("gptest_txtVW"))
-    , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
-    , m_xContainerBox(m_xBuilder->weld_box("gptest_box"))
+    : GenericDialogController(pParent, u"cui/ui/graphictestdlg.ui"_ustr, u"GraphicTestsDialog"_ustr)
+    , m_xResultLog(m_xBuilder->weld_text_view(u"gptest_txtVW"_ustr))
+    , m_xDownloadResults(m_xBuilder->weld_button(u"gptest_downld"_ustr))
+    , m_xContainerBox(m_xBuilder->weld_box(u"gptest_box"_ustr))
 {
     OUString userProfile = comphelper::BackupFileHelper::getUserProfileURL();
     m_xZipFileUrl = userProfile + "/GraphicTestResults.zip";

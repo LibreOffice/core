@@ -38,13 +38,13 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Toggleable&, vo
 }
 
 SvxCTLOptionsPage::SvxCTLOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optctlpage.ui", "OptCTLPage", &rSet)
-    , m_xSequenceCheckingCB(m_xBuilder->weld_check_button("sequencechecking"))
-    , m_xRestrictedCB(m_xBuilder->weld_check_button("restricted"))
-    , m_xTypeReplaceCB(m_xBuilder->weld_check_button("typeandreplace"))
-    , m_xMovementLogicalRB(m_xBuilder->weld_radio_button("movementlogical"))
-    , m_xMovementVisualRB(m_xBuilder->weld_radio_button("movementvisual"))
-    , m_xNumeralsLB(m_xBuilder->weld_combo_box("numerals"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optctlpage.ui"_ustr, u"OptCTLPage"_ustr, &rSet)
+    , m_xSequenceCheckingCB(m_xBuilder->weld_check_button(u"sequencechecking"_ustr))
+    , m_xRestrictedCB(m_xBuilder->weld_check_button(u"restricted"_ustr))
+    , m_xTypeReplaceCB(m_xBuilder->weld_check_button(u"typeandreplace"_ustr))
+    , m_xMovementLogicalRB(m_xBuilder->weld_radio_button(u"movementlogical"_ustr))
+    , m_xMovementVisualRB(m_xBuilder->weld_radio_button(u"movementvisual"_ustr))
+    , m_xNumeralsLB(m_xBuilder->weld_combo_box(u"numerals"_ustr))
 {
     m_xSequenceCheckingCB->connect_toggled(LINK(this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl));
 }
@@ -61,7 +61,7 @@ std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( weld::Container* pPage, w
 OUString SvxCTLOptionsPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3", "label4", "label5" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"label4"_ustr, u"label5"_ustr };
 
     for (const auto& label : labels)
     {
@@ -69,7 +69,7 @@ OUString SvxCTLOptionsPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "sequencechecking", "restricted", "typeandreplace" };
+    OUString checkButton[] = { u"sequencechecking"_ustr, u"restricted"_ustr, u"typeandreplace"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -77,7 +77,7 @@ OUString SvxCTLOptionsPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "movementlogical", "movementvisual" };
+    OUString radioButton[] = { u"movementlogical"_ustr, u"movementvisual"_ustr };
 
     for (const auto& radio : radioButton)
     {

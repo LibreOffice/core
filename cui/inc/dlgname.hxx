@@ -37,7 +37,7 @@ private:
 
 public:
     SvxNameDialog(weld::Window* pWindow, const OUString& rName, const OUString& rDesc,
-                  const OUString& rTitle = "");
+                  const OUString& rTitle = u""_ustr);
 
     OUString GetName() const { return m_xEdtName->get_text(); }
 

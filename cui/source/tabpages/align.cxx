@@ -107,37 +107,37 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, const SfxItemSet& rOldSet, 
 }//namespace
 
 AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/cellalignment.ui", "CellAlignPage", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/cellalignment.ui"_ustr, u"CellAlignPage"_ustr, &rCoreAttrs)
     , m_aVsRefEdge(nullptr)
     // text alignment
-    , m_xLbHorAlign(m_xBuilder->weld_combo_box("comboboxHorzAlign"))
-    , m_xFtIndent(m_xBuilder->weld_label("labelIndent"))
-    , m_xEdIndent(m_xBuilder->weld_metric_spin_button("spinIndentFrom", FieldUnit::POINT))
-    , m_xFtVerAlign(m_xBuilder->weld_label("labelVertAlign"))
-    , m_xLbVerAlign(m_xBuilder->weld_combo_box("comboboxVertAlign"))
+    , m_xLbHorAlign(m_xBuilder->weld_combo_box(u"comboboxHorzAlign"_ustr))
+    , m_xFtIndent(m_xBuilder->weld_label(u"labelIndent"_ustr))
+    , m_xEdIndent(m_xBuilder->weld_metric_spin_button(u"spinIndentFrom"_ustr, FieldUnit::POINT))
+    , m_xFtVerAlign(m_xBuilder->weld_label(u"labelVertAlign"_ustr))
+    , m_xLbVerAlign(m_xBuilder->weld_combo_box(u"comboboxVertAlign"_ustr))
     //text rotation
-    , m_xFtRotate(m_xBuilder->weld_label("labelDegrees"))
-    , m_xNfRotate(m_xBuilder->weld_metric_spin_button("spinDegrees", FieldUnit::DEGREE))
-    , m_xFtRefEdge(m_xBuilder->weld_label("labelRefEdge"))
+    , m_xFtRotate(m_xBuilder->weld_label(u"labelDegrees"_ustr))
+    , m_xNfRotate(m_xBuilder->weld_metric_spin_button(u"spinDegrees"_ustr, FieldUnit::DEGREE))
+    , m_xFtRefEdge(m_xBuilder->weld_label(u"labelRefEdge"_ustr))
     //Asian mode
-    , m_xCbStacked(m_xBuilder->weld_check_button("checkVertStack"))
-    , m_xCbAsianMode(m_xBuilder->weld_check_button("checkAsianMode"))
+    , m_xCbStacked(m_xBuilder->weld_check_button(u"checkVertStack"_ustr))
+    , m_xCbAsianMode(m_xBuilder->weld_check_button(u"checkAsianMode"_ustr))
     // Properties
-    , m_xBtnWrap(m_xBuilder->weld_check_button("checkWrapTextAuto"))
-    , m_xBtnHyphen(m_xBuilder->weld_check_button("checkHyphActive"))
-    , m_xBtnShrink(m_xBuilder->weld_check_button("checkShrinkFitCellSize"))
-    , m_xLbFrameDir(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextDirBox")))
+    , m_xBtnWrap(m_xBuilder->weld_check_button(u"checkWrapTextAuto"_ustr))
+    , m_xBtnHyphen(m_xBuilder->weld_check_button(u"checkHyphActive"_ustr))
+    , m_xBtnShrink(m_xBuilder->weld_check_button(u"checkShrinkFitCellSize"_ustr))
+    , m_xLbFrameDir(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboTextDirBox"_ustr)))
     //ValueSet hover strings
-    , m_xFtBotLock(m_xBuilder->weld_label("labelSTR_BOTTOMLOCK"))
-    , m_xFtTopLock(m_xBuilder->weld_label("labelSTR_TOPLOCK"))
-    , m_xFtCelLock(m_xBuilder->weld_label("labelSTR_CELLLOCK"))
-    , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
-    , m_xAlignmentFrame(m_xBuilder->weld_widget("alignment"))
-    , m_xOrientFrame(m_xBuilder->weld_widget("orientation"))
-    , m_xPropertiesFrame(m_xBuilder->weld_widget("properties"))
-    , m_xVsRefEdge(new weld::CustomWeld(*m_xBuilder, "references", m_aVsRefEdge))
+    , m_xFtBotLock(m_xBuilder->weld_label(u"labelSTR_BOTTOMLOCK"_ustr))
+    , m_xFtTopLock(m_xBuilder->weld_label(u"labelSTR_TOPLOCK"_ustr))
+    , m_xFtCelLock(m_xBuilder->weld_label(u"labelSTR_CELLLOCK"_ustr))
+    , m_xFtABCD(m_xBuilder->weld_label(u"labelABCD"_ustr))
+    , m_xAlignmentFrame(m_xBuilder->weld_widget(u"alignment"_ustr))
+    , m_xOrientFrame(m_xBuilder->weld_widget(u"orientation"_ustr))
+    , m_xPropertiesFrame(m_xBuilder->weld_widget(u"properties"_ustr))
+    , m_xVsRefEdge(new weld::CustomWeld(*m_xBuilder, u"references"_ustr, m_aVsRefEdge))
     , m_xCtrlDial(new DialControl)
-    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialcontrol", *m_xCtrlDial))
+    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, u"dialcontrol"_ustr, *m_xCtrlDial))
 {
     m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
     m_xCtrlDial->SetText(m_xFtABCD->get_label());
@@ -483,7 +483,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xEdIndent->set_sensitive(false);
             break;
         case SfxItemState::INVALID:
-            m_xEdIndent->set_text("");
+            m_xEdIndent->set_text(u""_ustr);
             break;
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:

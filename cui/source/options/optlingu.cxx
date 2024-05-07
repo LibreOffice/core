@@ -94,7 +94,7 @@ static bool KillFile_Impl( const OUString& rURL )
     try
     {
         Content aCnt( rURL, uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( "delete", Any( true ) );
+        aCnt.executeCommand( u"delete"_ustr, Any( true ) );
     }
     catch( ... )
     {
@@ -229,27 +229,27 @@ class OptionsBreakSet : public weld::GenericDialogController
 
 public:
     OptionsBreakSet(weld::Window* pParent, sal_uInt16 nRID)
-        : GenericDialogController(pParent, "cui/ui/breaknumberoption.ui", "BreakNumberOption")
-        , m_xBeforeFrame(m_xBuilder->weld_widget("beforeframe"))
-        , m_xAfterFrame(m_xBuilder->weld_widget("afterframe"))
-        , m_xMinimalFrame(m_xBuilder->weld_widget("miniframe"))
+        : GenericDialogController(pParent, u"cui/ui/breaknumberoption.ui"_ustr, u"BreakNumberOption"_ustr)
+        , m_xBeforeFrame(m_xBuilder->weld_widget(u"beforeframe"_ustr))
+        , m_xAfterFrame(m_xBuilder->weld_widget(u"afterframe"_ustr))
+        , m_xMinimalFrame(m_xBuilder->weld_widget(u"miniframe"_ustr))
     {
         assert(EID_NUM_PRE_BREAK == nRID || EID_NUM_POST_BREAK == nRID || EID_NUM_MIN_WORDLEN == nRID); //unexpected ID
 
         if (nRID == EID_NUM_PRE_BREAK)
         {
             m_xBeforeFrame->show();
-            m_xBreakNF = m_xBuilder->weld_spin_button("beforebreak");
+            m_xBreakNF = m_xBuilder->weld_spin_button(u"beforebreak"_ustr);
         }
         else if(nRID == EID_NUM_POST_BREAK)
         {
             m_xAfterFrame->show();
-            m_xBreakNF = m_xBuilder->weld_spin_button("afterbreak");
+            m_xBreakNF = m_xBuilder->weld_spin_button(u"afterbreak"_ustr);
         }
         else if(nRID == EID_NUM_MIN_WORDLEN)
         {
             m_xMinimalFrame->show();
-            m_xBreakNF = m_xBuilder->weld_spin_button("wordlength");
+            m_xBreakNF = m_xBuilder->weld_spin_button(u"wordlength"_ustr);
         }
     }
 
@@ -781,7 +781,7 @@ void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEna
 // class SvxLinguTabPage -------------------------------------------------
 
 SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optlingupage.ui", "OptLinguPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optlingupage.ui"_ustr, u"OptLinguPage"_ustr, &rSet)
     , sCapitalWords   (CuiResId(RID_CUISTR_CAPITAL_WORDS))
     , sWordsWithDigits(CuiResId(RID_CUISTR_WORDS_WITH_DIGITS))
     , sSpellSpecial   (CuiResId(RID_CUISTR_SPELL_SPECIAL))
@@ -798,18 +798,18 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , nUPN_HYPH_MIN_LEADING(-1)
     , nUPN_HYPH_MIN_TRAILING(-1)
     , m_nDlbClickEventId(nullptr)
-    , m_xLinguModulesFT(m_xBuilder->weld_label("lingumodulesft"))
-    , m_xLinguModulesCLB(m_xBuilder->weld_tree_view("lingumodules"))
-    , m_xLinguModulesEditPB(m_xBuilder->weld_button("lingumodulesedit"))
-    , m_xLinguDicsFT(m_xBuilder->weld_label("lingudictsft"))
-    , m_xLinguDicsCLB(m_xBuilder->weld_tree_view("lingudicts"))
-    , m_xLinguDicsNewPB(m_xBuilder->weld_button("lingudictsnew"))
-    , m_xLinguDicsEditPB(m_xBuilder->weld_button("lingudictsedit"))
-    , m_xLinguDicsDelPB(m_xBuilder->weld_button("lingudictsdelete"))
-    , m_xLinguOptionsCLB(m_xBuilder->weld_tree_view("linguoptions"))
-    , m_xLinguOptionsEditPB(m_xBuilder->weld_button("linguoptionsedit"))
-    , m_xMoreDictsBox(m_xBuilder->weld_box("moredictsbox"))
-    , m_xMoreDictsLink(m_xBuilder->weld_link_button("moredictslink"))
+    , m_xLinguModulesFT(m_xBuilder->weld_label(u"lingumodulesft"_ustr))
+    , m_xLinguModulesCLB(m_xBuilder->weld_tree_view(u"lingumodules"_ustr))
+    , m_xLinguModulesEditPB(m_xBuilder->weld_button(u"lingumodulesedit"_ustr))
+    , m_xLinguDicsFT(m_xBuilder->weld_label(u"lingudictsft"_ustr))
+    , m_xLinguDicsCLB(m_xBuilder->weld_tree_view(u"lingudicts"_ustr))
+    , m_xLinguDicsNewPB(m_xBuilder->weld_button(u"lingudictsnew"_ustr))
+    , m_xLinguDicsEditPB(m_xBuilder->weld_button(u"lingudictsedit"_ustr))
+    , m_xLinguDicsDelPB(m_xBuilder->weld_button(u"lingudictsdelete"_ustr))
+    , m_xLinguOptionsCLB(m_xBuilder->weld_tree_view(u"linguoptions"_ustr))
+    , m_xLinguOptionsEditPB(m_xBuilder->weld_button(u"linguoptionsedit"_ustr))
+    , m_xMoreDictsBox(m_xBuilder->weld_box(u"moredictsbox"_ustr))
+    , m_xMoreDictsLink(m_xBuilder->weld_link_button(u"moredictslink"_ustr))
 {
     m_xLinguModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xLinguDicsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
@@ -839,7 +839,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     if (comphelper::LibreOfficeKit::isActive())
     {
         // hide User-defined Dictionaries part
-        m_xBuilder->weld_frame("dictsframe")->hide();
+        m_xBuilder->weld_frame(u"dictsframe"_ustr)->hide();
         // hide Get more dictionaries URL + icon
         m_xMoreDictsBox->hide();
     }
@@ -889,7 +889,7 @@ std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( weld::Container* pPage, wel
 OUString SvxLinguTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "lingumodulesft", "lingudictsft", "label4" };
+    OUString labels[] = { u"lingumodulesft"_ustr, u"lingudictsft"_ustr, u"label4"_ustr };
 
     for (const auto& label : labels)
     {
@@ -1410,8 +1410,8 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
     }
     else if (m_xLinguDicsDelPB.get() == &rBtn)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletedictionarydialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteDictionaryDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletedictionarydialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"QueryDeleteDictionaryDialog"_ustr));
         if (RET_NO == xQuery->run())
             return;
 
@@ -1553,24 +1553,24 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 
 IMPL_STATIC_LINK_NOARG(SvxLinguTabPage, OnLinkClick, weld::LinkButton&, bool)
 {
-    comphelper::dispatchCommand(".uno:MoreDictionaries", {});
+    comphelper::dispatchCommand(u".uno:MoreDictionaries"_ustr, {});
     return true;
 }
 
 SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& rData)
-    : GenericDialogController(pParent, "cui/ui/editmodulesdialog.ui", "EditModulesDialog")
+    : GenericDialogController(pParent, u"cui/ui/editmodulesdialog.ui"_ustr, u"EditModulesDialog"_ustr)
     , sSpell(CuiResId(RID_CUISTR_SPELL))
     , sHyph(CuiResId(RID_CUISTR_HYPH))
     , sThes(CuiResId(RID_CUISTR_THES))
     , sGrammar(CuiResId(RID_CUISTR_GRAMMAR))
     , rLinguData(rData)
-    , m_xModulesCLB(m_xBuilder->weld_tree_view("lingudicts"))
-    , m_xPrioUpPB(m_xBuilder->weld_button("up"))
-    , m_xPrioDownPB(m_xBuilder->weld_button("down"))
-    , m_xBackPB(m_xBuilder->weld_button("back"))
-    , m_xMoreDictsLink(m_xBuilder->weld_link_button("moredictslink"))
-    , m_xClosePB(m_xBuilder->weld_button("close"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xModulesCLB(m_xBuilder->weld_tree_view(u"lingudicts"_ustr))
+    , m_xPrioUpPB(m_xBuilder->weld_button(u"up"_ustr))
+    , m_xPrioDownPB(m_xBuilder->weld_button(u"down"_ustr))
+    , m_xBackPB(m_xBuilder->weld_button(u"back"_ustr))
+    , m_xMoreDictsLink(m_xBuilder->weld_link_button(u"moredictslink"_ustr))
+    , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
 {
     m_xModulesCLB->set_size_request(m_xModulesCLB->get_approximate_digit_width() * 40,
                                     m_xModulesCLB->get_height_rows(12));
@@ -1610,7 +1610,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
         m_xLanguageLB->set_active(0);
 
     css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
     m_xLanguageLB->connect_changed( LINK( this, SvxEditModulesDlg, LangSelectListBoxHdl_Impl ));
     LangSelectHdl_Impl(m_xLanguageLB.get());
@@ -2009,7 +2009,7 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl, weld::Button&, void)
 
 IMPL_STATIC_LINK_NOARG(SvxEditModulesDlg, OnLinkClick, weld::LinkButton&, bool)
 {
-    comphelper::dispatchCommand(".uno:MoreDictionaries", {});
+    comphelper::dispatchCommand(u".uno:MoreDictionaries"_ustr, {});
     return true;
 }
 

@@ -129,7 +129,7 @@ GraphicFilterDialog::GraphicFilterDialog(weld::Window* pParent,
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , maTimer("cui GraphicFilterDialog maTimer")
     , maModifyHdl(LINK(this, GraphicFilterDialog, ImplModifyHdl))
-    , mxPreview(new weld::CustomWeld(*m_xBuilder, "preview", maPreview))
+    , mxPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, maPreview))
 {
     bIsBitmap = rGraphic.GetType() == GraphicType::Bitmap;
 
@@ -157,10 +157,10 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 
 GraphicFilterMosaic::GraphicFilterMosaic(weld::Window* pParent, const Graphic& rGraphic,
                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges)
-    : GraphicFilterDialog(pParent, "cui/ui/mosaicdialog.ui", "MosaicDialog", rGraphic)
-    , mxMtrWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::PIXEL))
-    , mxMtrHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::PIXEL))
-    , mxCbxEdges(m_xBuilder->weld_check_button("edges"))
+    : GraphicFilterDialog(pParent, u"cui/ui/mosaicdialog.ui"_ustr, u"MosaicDialog"_ustr, rGraphic)
+    , mxMtrWidth(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::PIXEL))
+    , mxMtrHeight(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::PIXEL))
+    , mxCbxEdges(m_xBuilder->weld_check_button(u"edges"_ustr))
 {
     mxMtrWidth->set_value(nTileWidth, FieldUnit::PIXEL);
     mxMtrWidth->set_max(GetGraphicSizePixel().Width(), FieldUnit::PIXEL);
@@ -224,8 +224,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 GraphicFilterSmooth::GraphicFilterSmooth(weld::Window* pParent, const Graphic& rGraphic, double nRadius)
-    : GraphicFilterDialog(pParent, "cui/ui/smoothdialog.ui", "SmoothDialog", rGraphic)
-    , mxMtrRadius(m_xBuilder->weld_spin_button("radius"))
+    : GraphicFilterDialog(pParent, u"cui/ui/smoothdialog.ui"_ustr, u"SmoothDialog"_ustr, rGraphic)
+    , mxMtrRadius(m_xBuilder->weld_spin_button(u"radius"_ustr))
 {
     mxMtrRadius->set_value(nRadius * 10);
     mxMtrRadius->connect_value_changed(LINK(this, GraphicFilterSmooth, EditModifyHdl));
@@ -266,9 +266,9 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 
 GraphicFilterSolarize::GraphicFilterSolarize(weld::Window* pParent, const Graphic& rGraphic,
                                              sal_uInt8 cGreyThreshold, bool bInvert)
-    : GraphicFilterDialog(pParent, "cui/ui/solarizedialog.ui", "SolarizeDialog", rGraphic)
-    , mxMtrThreshold(m_xBuilder->weld_metric_spin_button("value", FieldUnit::PERCENT))
-    , mxCbxInvert(m_xBuilder->weld_check_button("invert"))
+    : GraphicFilterDialog(pParent, u"cui/ui/solarizedialog.ui"_ustr, u"SolarizeDialog"_ustr, rGraphic)
+    , mxMtrThreshold(m_xBuilder->weld_metric_spin_button(u"value"_ustr, FieldUnit::PERCENT))
+    , mxCbxInvert(m_xBuilder->weld_check_button(u"invert"_ustr))
 {
     mxMtrThreshold->set_value(basegfx::fround(cGreyThreshold / 2.55), FieldUnit::PERCENT);
     mxMtrThreshold->connect_value_changed(LINK(this, GraphicFilterSolarize, EditModifyHdl));
@@ -322,8 +322,8 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
 
 GraphicFilterSepia::GraphicFilterSepia(weld::Window* pParent, const Graphic& rGraphic,
                                        sal_uInt16 nSepiaPercent)
-    : GraphicFilterDialog(pParent, "cui/ui/agingdialog.ui", "AgingDialog", rGraphic)
-    , mxMtrSepia(m_xBuilder->weld_metric_spin_button("value", FieldUnit::PERCENT))
+    : GraphicFilterDialog(pParent, u"cui/ui/agingdialog.ui"_ustr, u"AgingDialog"_ustr, rGraphic)
+    , mxMtrSepia(m_xBuilder->weld_metric_spin_button(u"value"_ustr, FieldUnit::PERCENT))
 {
     mxMtrSepia->set_value(nSepiaPercent, FieldUnit::PERCENT);
     mxMtrSepia->connect_value_changed(LINK(this, GraphicFilterSepia, EditModifyHdl));
@@ -359,8 +359,8 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double,
 
 GraphicFilterPoster::GraphicFilterPoster(weld::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount)
-    : GraphicFilterDialog(pParent, "cui/ui/posterdialog.ui", "PosterDialog", rGraphic)
-    , mxNumPoster(m_xBuilder->weld_spin_button("value"))
+    : GraphicFilterDialog(pParent, u"cui/ui/posterdialog.ui"_ustr, u"PosterDialog"_ustr, rGraphic)
+    , mxNumPoster(m_xBuilder->weld_spin_button(u"value"_ustr))
 {
     mxNumPoster->set_range(2, vcl::pixelFormatBitCount(rGraphic.GetBitmapEx().getPixelFormat()));
     mxNumPoster->set_value(nPosterCount);
@@ -416,8 +416,8 @@ void EmbossControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 GraphicFilterEmboss::GraphicFilterEmboss(weld::Window* pParent,
     const Graphic& rGraphic, RectPoint eLightSource)
-    : GraphicFilterDialog(pParent, "cui/ui/embossdialog.ui", "EmbossDialog", rGraphic)
-    , mxCtlLight(new weld::CustomWeld(*m_xBuilder, "lightsource", maCtlLight))
+    : GraphicFilterDialog(pParent, u"cui/ui/embossdialog.ui"_ustr, u"EmbossDialog"_ustr, rGraphic)
+    , mxCtlLight(new weld::CustomWeld(*m_xBuilder, u"lightsource"_ustr, maCtlLight))
 {
     maCtlLight.SetActualRP(eLightSource);
     maCtlLight.SetModifyHdl( GetModifyHdl() );

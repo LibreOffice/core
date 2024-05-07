@@ -70,23 +70,23 @@ public:
 };
 
 SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pPage, pController, "cui/ui/patterntabpage.ui", "PatternTabPage", rInAttrs)
+    : SvxTabPage(pPage, pController, u"cui/ui/patterntabpage.ui"_ustr, u"PatternTabPage"_ustr, rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnPatternListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xCtlPixel(new SvxPixelCtl(this))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"),
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_COLOR"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"),
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_BACKGROUND_COLOR"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin", true)))
-    , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
-    , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
-    , m_xCtlPixelWin(new weld::CustomWeld(*m_xBuilder, "CTL_PIXEL", *m_xCtlPixel))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
-    , m_xPatternLBWin(new weld::CustomWeld(*m_xBuilder, "patternpresetlist", *m_xPatternLB))
+    , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"patternpresetlistwin"_ustr, true)))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"BTN_ADD"_ustr))
+    , m_xBtnModify(m_xBuilder->weld_button(u"BTN_MODIFY"_ustr))
+    , m_xCtlPixelWin(new weld::CustomWeld(*m_xBuilder, u"CTL_PIXEL"_ustr, *m_xCtlPixel))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_PREVIEW"_ustr, m_aCtlPreview))
+    , m_xPatternLBWin(new weld::CustomWeld(*m_xBuilder, u"patternpresetlist"_ustr, *m_xPatternLB))
 {
     // size of the bitmap display
     Size aSize = getDrawPreviewOptimalSize(m_aCtlPreview.GetDrawingArea()->get_ref_device());
@@ -350,8 +350,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
         if (xWarnBox->run() != RET_OK)
             break;
     }
@@ -458,8 +458,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xWarnBox->run();
         }
     }
@@ -472,8 +472,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletebitmapdialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelBitmapDialog"_ustr));
         if (xQueryBox->run() == RET_YES)
         {
             m_pPatternList->Remove(nPos);

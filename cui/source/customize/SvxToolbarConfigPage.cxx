@@ -46,12 +46,12 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
                                            const SfxItemSet& rSet)
     : SvxConfigPage(pPage, pController, rSet)
 {
-    m_xGearBtn = m_xBuilder->weld_menu_button("toolbargearbtn");
+    m_xGearBtn = m_xBuilder->weld_menu_button(u"toolbargearbtn"_ustr);
     m_xGearBtn->show();
     m_xContainer->set_help_id(HID_SVX_CONFIG_TOOLBAR);
 
     m_xContentsListBox.reset(
-        new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
+        new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view(u"toolcontents"_ustr), this));
     m_xDropTargetHelper.reset(
         new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
 
@@ -95,10 +95,10 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
     m_xResetBtn->connect_clicked(LINK(this, SvxToolbarConfigPage, ResetToolbarHdl));
 
     // "Insert Submenu" is irrelevant to the toolbars
-    m_xInsertBtn->remove_item("insertsubmenu");
+    m_xInsertBtn->remove_item(u"insertsubmenu"_ustr);
 
     // Gear menu's "Move" action is irrelevant to the toolbars
-    m_xGearBtn->set_item_sensitive("toolbar_gear_move", false);
+    m_xGearBtn->set_item_sensitive(u"toolbar_gear_move"_ustr, false);
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
@@ -482,7 +482,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
             aNewName = aNameDialog.GetName();
 
             if (aNewName.isEmpty()) // tdf#80758 - Accelerator character ("~") is passed as
-                pEntry->SetName("~"); // the button name in case of empty values.
+                pEntry->SetName(u"~"_ustr); // the button name in case of empty values.
             else
                 pEntry->SetName(aNewName);
 
@@ -686,8 +686,10 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     // Handle the gear button
     // "toolbar_gear_add" option is always enabled
-    m_xGearBtn->set_item_sensitive("toolbar_gear_delete", pToolbar && pToolbar->IsDeletable());
-    m_xGearBtn->set_item_sensitive("toolbar_gear_rename", pToolbar && pToolbar->IsRenamable());
+    m_xGearBtn->set_item_sensitive(u"toolbar_gear_delete"_ustr,
+                                   pToolbar && pToolbar->IsDeletable());
+    m_xGearBtn->set_item_sensitive(u"toolbar_gear_rename"_ustr,
+                                   pToolbar && pToolbar->IsRenamable());
 }
 
 short SvxToolbarConfigPage::QueryReset()
@@ -728,17 +730,17 @@ void SvxToolbarConfigPage::SelectElement()
     {
         case 0:
         {
-            m_xGearBtn->set_item_active("toolbar_gear_iconOnly", true);
+            m_xGearBtn->set_item_active(u"toolbar_gear_iconOnly"_ustr, true);
             break;
         }
         case 1:
         {
-            m_xGearBtn->set_item_active("toolbar_gear_textOnly", true);
+            m_xGearBtn->set_item_active(u"toolbar_gear_textOnly"_ustr, true);
             break;
         }
         case 2:
         {
-            m_xGearBtn->set_item_active("toolbar_gear_iconAndText", true);
+            m_xGearBtn->set_item_active(u"toolbar_gear_iconAndText"_ustr, true);
             break;
         }
     }
@@ -867,27 +869,27 @@ IMPL_LINK(SvxToolbarConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEv
     bool bIsValidSelection = (m_xContentsListBox->n_children() != 0 && nSelectIndex != -1);
 
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(&rTreeView, "cui/ui/entrycontextmenu.ui"));
-    auto xContextMenu = xBuilder->weld_menu("menu");
-    xContextMenu->set_visible("add", false);
-    xContextMenu->set_visible("remove", bIsValidSelection);
-    xContextMenu->set_visible("rename", bIsValidSelection && !bIsSeparator);
-    xContextMenu->set_visible("changeIcon", bIsValidSelection && !bIsSeparator);
-    xContextMenu->set_visible("resetIcon", bIsValidSelection && !bIsSeparator);
-    xContextMenu->set_visible("restoreDefault", bIsValidSelection && !bIsSeparator);
+        Application::CreateBuilder(&rTreeView, u"cui/ui/entrycontextmenu.ui"_ustr));
+    auto xContextMenu = xBuilder->weld_menu(u"menu"_ustr);
+    xContextMenu->set_visible(u"add"_ustr, false);
+    xContextMenu->set_visible(u"remove"_ustr, bIsValidSelection);
+    xContextMenu->set_visible(u"rename"_ustr, bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible(u"changeIcon"_ustr, bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible(u"resetIcon"_ustr, bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible(u"restoreDefault"_ustr, bIsValidSelection && !bIsSeparator);
     OUString sCommand(xContextMenu->popup_at_rect(
         &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
 
     if (sCommand == "remove")
         RemoveCommandHdl(*m_xRemoveCommandButton);
     else if (sCommand == "rename")
-        ModifyItemHdl("renameItem");
+        ModifyItemHdl(u"renameItem"_ustr);
     else if (sCommand == "changeIcon")
-        ModifyItemHdl("changeIcon");
+        ModifyItemHdl(u"changeIcon"_ustr);
     else if (sCommand == "resetIcon")
-        ModifyItemHdl("resetIcon");
+        ModifyItemHdl(u"resetIcon"_ustr);
     else if (sCommand == "restoreDefault")
-        ModifyItemHdl("restoreItem");
+        ModifyItemHdl(u"restoreItem"_ustr);
     else if (!sCommand.isEmpty())
         SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand);
     return true;
@@ -907,14 +909,14 @@ IMPL_LINK(SvxToolbarConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCE
     rTreeView.select(*xIter);
     SelectFunctionHdl(rTreeView);
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(&rTreeView, "cui/ui/entrycontextmenu.ui"));
-    auto xContextMenu = xBuilder->weld_menu("menu");
-    xContextMenu->set_visible("add", true);
-    xContextMenu->set_visible("remove", false);
-    xContextMenu->set_visible("rename", false);
-    xContextMenu->set_visible("changeIcon", false);
-    xContextMenu->set_visible("resetIcon", false);
-    xContextMenu->set_visible("restoreDefault", false);
+        Application::CreateBuilder(&rTreeView, u"cui/ui/entrycontextmenu.ui"_ustr));
+    auto xContextMenu = xBuilder->weld_menu(u"menu"_ustr);
+    xContextMenu->set_visible(u"add"_ustr, true);
+    xContextMenu->set_visible(u"remove"_ustr, false);
+    xContextMenu->set_visible(u"rename"_ustr, false);
+    xContextMenu->set_visible(u"changeIcon"_ustr, false);
+    xContextMenu->set_visible(u"resetIcon"_ustr, false);
+    xContextMenu->set_visible(u"restoreDefault"_ustr, false);
     OUString sCommand(xContextMenu->popup_at_rect(
         &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
 

@@ -17,12 +17,12 @@
 using namespace ::com::sun::star;
 
 TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/tsaurldialog.ui", "TSAURLDialog")
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xURLListBox(m_xBuilder->weld_tree_view("urls"))
-    , m_xEnterAUrl(m_xBuilder->weld_label("enteraurl"))
+    : GenericDialogController(pParent, u"cui/ui/tsaurldialog.ui"_ustr, u"TSAURLDialog"_ustr)
+    , m_xAddBtn(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xDeleteBtn(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xURLListBox(m_xBuilder->weld_tree_view(u"urls"_ustr))
+    , m_xEnterAUrl(m_xBuilder->weld_label(u"enteraurl"_ustr))
 {
     m_xURLListBox->set_size_request(m_xURLListBox->get_approximate_digit_width() * 28,
                                     m_xURLListBox->get_height_rows(8));

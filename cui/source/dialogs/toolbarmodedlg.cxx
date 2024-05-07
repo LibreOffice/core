@@ -79,20 +79,21 @@ static OUString GetCurrentMode()
 }
 
 ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/toolbarmodedialog.ui", "ToolbarmodeDialog")
-    , m_pImage(m_xBuilder->weld_image("imImage"))
-    , m_pApply(m_xBuilder->weld_button("btnApply"))
-    , m_pApplyAll(m_xBuilder->weld_button("btnApplyAll"))
-    , m_pRadioButtons{ (m_xBuilder->weld_radio_button("rbButton1")),
-                       (m_xBuilder->weld_radio_button("rbButton2")),
-                       (m_xBuilder->weld_radio_button("rbButton3")),
-                       (m_xBuilder->weld_radio_button("rbButton4")),
-                       (m_xBuilder->weld_radio_button("rbButton5")),
-                       (m_xBuilder->weld_radio_button("rbButton6")),
-                       (m_xBuilder->weld_radio_button("rbButton7")),
-                       (m_xBuilder->weld_radio_button("rbButton8")),
-                       (m_xBuilder->weld_radio_button("rbButton9")) }
-    , m_pInfoLabel(m_xBuilder->weld_label("lbInfo"))
+    : GenericDialogController(pParent, u"cui/ui/toolbarmodedialog.ui"_ustr,
+                              u"ToolbarmodeDialog"_ustr)
+    , m_pImage(m_xBuilder->weld_image(u"imImage"_ustr))
+    , m_pApply(m_xBuilder->weld_button(u"btnApply"_ustr))
+    , m_pApplyAll(m_xBuilder->weld_button(u"btnApplyAll"_ustr))
+    , m_pRadioButtons{ (m_xBuilder->weld_radio_button(u"rbButton1"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton2"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton3"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton4"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton5"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton6"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton7"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton8"_ustr)),
+                       (m_xBuilder->weld_radio_button(u"rbButton9"_ustr)) }
+    , m_pInfoLabel(m_xBuilder->weld_label(u"lbInfo"_ustr))
 {
     static_assert(SAL_N_ELEMENTS(m_pRadioButtons) == std::size(TOOLBARMODES_ARRAY));
 
@@ -142,7 +143,7 @@ int ToolbarmodeDialog::GetActiveRadioButton()
 void ToolbarmodeDialog::UpdateImage(std::u16string_view sFileName)
 {
     // load image
-    OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/toolbarmode/");
+    OUString aURL(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/toolbarmode/"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
     aURL += sFileName;
     if (sFileName.empty() || !file_exists(aURL))
@@ -191,7 +192,7 @@ IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
         {
             const auto xContext = comphelper::getProcessComponentContext();
             const utl::OConfigurationTreeRoot aAppNode(
-                xContext, "org.openoffice.Office.UI.ToolbarMode/Applications/", true);
+                xContext, u"org.openoffice.Office.UI.ToolbarMode/Applications/"_ustr, true);
             if (sCurrentApp != "Writer")
                 aAppNode.setNodeValue("Writer/Active", css::uno::Any(sCmd));
             if (sCurrentApp != "Calc")

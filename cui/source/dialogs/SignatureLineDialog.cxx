@@ -42,14 +42,14 @@ using namespace css::graphic;
 
 SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                          bool bEditExisting)
-    : SignatureLineDialogBase(pParent, std::move(xModel), "cui/ui/signatureline.ui",
-                              "SignatureLineDialog")
-    , m_xEditName(m_xBuilder->weld_entry("edit_name"))
-    , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
-    , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))
-    , m_xEditInstructions(m_xBuilder->weld_text_view("edit_instructions"))
-    , m_xCheckboxCanAddComments(m_xBuilder->weld_check_button("checkbox_can_add_comments"))
-    , m_xCheckboxShowSignDate(m_xBuilder->weld_check_button("checkbox_show_sign_date"))
+    : SignatureLineDialogBase(pParent, std::move(xModel), u"cui/ui/signatureline.ui"_ustr,
+                              u"SignatureLineDialog"_ustr)
+    , m_xEditName(m_xBuilder->weld_entry(u"edit_name"_ustr))
+    , m_xEditTitle(m_xBuilder->weld_entry(u"edit_title"_ustr))
+    , m_xEditEmail(m_xBuilder->weld_entry(u"edit_email"_ustr))
+    , m_xEditInstructions(m_xBuilder->weld_text_view(u"edit_instructions"_ustr))
+    , m_xCheckboxCanAddComments(m_xBuilder->weld_check_button(u"checkbox_can_add_comments"_ustr))
+    , m_xCheckboxShowSignDate(m_xBuilder->weld_check_button(u"checkbox_show_sign_date"_ustr))
 {
     m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_digit_width() * 48,
                                           m_xEditInstructions->get_text_height() * 5);
@@ -67,24 +67,24 @@ SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel
     Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     // Read properties from selected signature line
-    xProps->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
+    xProps->getPropertyValue(u"SignatureLineId"_ustr) >>= m_aSignatureLineId;
     OUString aSuggestedSignerName;
-    xProps->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
+    xProps->getPropertyValue(u"SignatureLineSuggestedSignerName"_ustr) >>= aSuggestedSignerName;
     m_xEditName->set_text(aSuggestedSignerName);
     OUString aSuggestedSignerTitle;
-    xProps->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
+    xProps->getPropertyValue(u"SignatureLineSuggestedSignerTitle"_ustr) >>= aSuggestedSignerTitle;
     m_xEditTitle->set_text(aSuggestedSignerTitle);
     OUString aSuggestedSignerEmail;
-    xProps->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
+    xProps->getPropertyValue(u"SignatureLineSuggestedSignerEmail"_ustr) >>= aSuggestedSignerEmail;
     m_xEditEmail->set_text(aSuggestedSignerEmail);
     OUString aSigningInstructions;
-    xProps->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
+    xProps->getPropertyValue(u"SignatureLineSigningInstructions"_ustr) >>= aSigningInstructions;
     m_xEditInstructions->set_text(aSigningInstructions);
     bool bCanAddComments = false;
-    xProps->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComments;
+    xProps->getPropertyValue(u"SignatureLineCanAddComment"_ustr) >>= bCanAddComments;
     m_xCheckboxCanAddComments->set_active(bCanAddComments);
     bool bShowSignDate = false;
-    xProps->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
+    xProps->getPropertyValue(u"SignatureLineShowSignDate"_ustr) >>= bShowSignDate;
     m_xCheckboxShowSignDate->set_active(bShowSignDate);
 
     // Mark this as existing shape
@@ -123,26 +123,26 @@ void SignatureLineDialog::Apply()
         xShapeProps = m_xExistingShapeProperties;
     else
         xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
-                            ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                            ->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         UNO_QUERY);
 
-    xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
-    xShapeProps->setPropertyValue("SignatureLineUnsignedImage", Any(xGraphic));
+    xShapeProps->setPropertyValue(u"Graphic"_ustr, Any(xGraphic));
+    xShapeProps->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, Any(xGraphic));
 
     // Set signature line properties
-    xShapeProps->setPropertyValue("IsSignatureLine", Any(true));
-    xShapeProps->setPropertyValue("SignatureLineId", Any(m_aSignatureLineId));
+    xShapeProps->setPropertyValue(u"IsSignatureLine"_ustr, Any(true));
+    xShapeProps->setPropertyValue(u"SignatureLineId"_ustr, Any(m_aSignatureLineId));
     if (!aSignerName.isEmpty())
-        xShapeProps->setPropertyValue("SignatureLineSuggestedSignerName", Any(aSignerName));
+        xShapeProps->setPropertyValue(u"SignatureLineSuggestedSignerName"_ustr, Any(aSignerName));
     if (!aSignerTitle.isEmpty())
-        xShapeProps->setPropertyValue("SignatureLineSuggestedSignerTitle", Any(aSignerTitle));
+        xShapeProps->setPropertyValue(u"SignatureLineSuggestedSignerTitle"_ustr, Any(aSignerTitle));
     if (!aSignerEmail.isEmpty())
-        xShapeProps->setPropertyValue("SignatureLineSuggestedSignerEmail", Any(aSignerEmail));
+        xShapeProps->setPropertyValue(u"SignatureLineSuggestedSignerEmail"_ustr, Any(aSignerEmail));
     if (!aSigningInstructions.isEmpty())
-        xShapeProps->setPropertyValue("SignatureLineSigningInstructions",
+        xShapeProps->setPropertyValue(u"SignatureLineSigningInstructions"_ustr,
                                       Any(aSigningInstructions));
-    xShapeProps->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
-    xShapeProps->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComments));
+    xShapeProps->setPropertyValue(u"SignatureLineShowSignDate"_ustr, Any(bShowSignDate));
+    xShapeProps->setPropertyValue(u"SignatureLineCanAddComment"_ustr, Any(bCanAddComments));
 
     if (bIsExistingSignatureLine)
         return;
@@ -155,7 +155,7 @@ void SignatureLineDialog::Apply()
     xShape->setSize(aShapeSize);
 
     // Default anchoring
-    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+    xShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(TextContentAnchorType_AT_PARAGRAPH));
 
     // Writer
     const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
@@ -179,7 +179,7 @@ void SignatureLineDialog::Apply()
 
     Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
     awt::Point aCellPosition;
-    xSheetCell->getPropertyValue("Position") >>= aCellPosition;
+    xSheetCell->getPropertyValue(u"Position"_ustr) >>= aCellPosition;
     xShape->setPosition(aCellPosition);
 
     Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);

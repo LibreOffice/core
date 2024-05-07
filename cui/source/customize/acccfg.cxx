@@ -852,7 +852,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
                                                    weld::DialogController* pController,
                                                    const SfxItemSet& aSet)
-    : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/accelconfigpage.ui"_ustr, u"AccelConfigPage"_ustr,
+                 &aSet)
 #if HAVE_FEATURE_SCRIPTING
     , m_pMacroInfoItem()
 #endif
@@ -863,18 +864,18 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , m_bStylesInfoInitialized(false)
     , m_aUpdateDataTimer("SfxAcceleratorConfigPage UpdateDataTimer")
     , m_aFillGroupIdle("SfxAcceleratorConfigPage m_aFillGroupIdle")
-    , m_xEntriesBox(m_xBuilder->weld_tree_view("shortcuts"))
-    , m_xOfficeButton(m_xBuilder->weld_radio_button("office"))
-    , m_xModuleButton(m_xBuilder->weld_radio_button("module"))
-    , m_xChangeButton(m_xBuilder->weld_button("change"))
-    , m_xRemoveButton(m_xBuilder->weld_button("delete"))
-    , m_xGroupLBox(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("category")))
-    , m_xFunctionBox(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("function")))
-    , m_xKeyBox(m_xBuilder->weld_tree_view("keys"))
-    , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
-    , m_xLoadButton(m_xBuilder->weld_button("load"))
-    , m_xSaveButton(m_xBuilder->weld_button("save"))
-    , m_xResetButton(m_xBuilder->weld_button("reset"))
+    , m_xEntriesBox(m_xBuilder->weld_tree_view(u"shortcuts"_ustr))
+    , m_xOfficeButton(m_xBuilder->weld_radio_button(u"office"_ustr))
+    , m_xModuleButton(m_xBuilder->weld_radio_button(u"module"_ustr))
+    , m_xChangeButton(m_xBuilder->weld_button(u"change"_ustr))
+    , m_xRemoveButton(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xGroupLBox(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view(u"category"_ustr)))
+    , m_xFunctionBox(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view(u"function"_ustr)))
+    , m_xKeyBox(m_xBuilder->weld_tree_view(u"keys"_ustr))
+    , m_xSearchEdit(m_xBuilder->weld_entry(u"searchEntry"_ustr))
+    , m_xLoadButton(m_xBuilder->weld_button(u"load"_ustr))
+    , m_xSaveButton(m_xBuilder->weld_button(u"save"_ustr))
+    , m_xResetButton(m_xBuilder->weld_button(u"reset"_ustr))
 {
     Size aSize(m_xEntriesBox->get_approximate_digit_width() * 40,
                m_xEntriesBox->get_height_rows(10));
@@ -977,7 +978,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
         m_sModuleUIName
-            = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
+            = lModuleProps.getUnpackedValueOrDefault(u"ooSetupFactoryUIName"_ustr, OUString());
 
         // get global accelerator configuration
         m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(m_xContext);
@@ -1428,7 +1429,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
         xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
         if (sMediaType.isEmpty())
             xUIConfigProps->setPropertyValue(
-                MEDIATYPE_PROPNAME, uno::Any(OUString("application/vnd.sun.xml.ui.configuration")));
+                MEDIATYPE_PROPNAME, uno::Any(u"application/vnd.sun.xml.ui.configuration"_ustr));
 
         uno::Reference<ui::XUIConfigurationManager2> xCfgMgr
             = ui::UIConfigurationManager::create(m_xContext);
@@ -1482,7 +1483,7 @@ void SfxAcceleratorConfigPage::StartFileDialog(StartFileDialogType nType, const 
 
     m_pFileDlg->SetTitle(rTitle);
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
-    m_pFileDlg->AddFilter(aFilterCfgStr, "*.cfg");
+    m_pFileDlg->AddFilter(aFilterCfgStr, u"*.cfg"_ustr);
     m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
     m_pFileDlg->SetContext(sfx2::FileDialogHelper::AcceleratorConfig);
 
@@ -1501,10 +1502,10 @@ bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
         css::uno::Reference<css::beans::XPropertySet> xFrameProps(m_xFrame,
                                                                   css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
-        xFrameProps->getPropertyValue("LayoutManager") >>= xLayoutManager;
+        xFrameProps->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
         css::uno::Reference<css::beans::XPropertySet> xLayoutProps(xLayoutManager,
                                                                    css::uno::UNO_QUERY_THROW);
-        xLayoutProps->setPropertyValue("RefreshContextToolbarToolTip", css::uno::Any(true));
+        xLayoutProps->setPropertyValue(u"RefreshContextToolbarToolTip"_ustr, css::uno::Any(true));
     }
     catch (const uno::RuntimeException&)
     {
@@ -1580,7 +1581,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            OUString sLabel = lProps.getUnpackedValueOrDefault("Name", OUString());
+            OUString sLabel = lProps.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
             if (!sLabel.isEmpty())
                 return sLabel;
         }

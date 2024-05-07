@@ -90,14 +90,14 @@ void SvxDefaultColorOptPage::FillBoxChartColorLB()
 }
 
 SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/optchartcolorspage.ui", "OptChartColorsPage", &rInAttrs)
-    , m_xLbChartColors(m_xBuilder->weld_tree_view("colors"))
-    , m_xLbPaletteSelector(m_xBuilder->weld_combo_box("paletteselector"))
-    , m_xPBDefault(m_xBuilder->weld_button("default"))
-    , m_xPBAdd(m_xBuilder->weld_button("add"))
-    , m_xPBRemove(m_xBuilder->weld_button("delete"))
-    , m_xValSetColorBox(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("tablewin", true)))
-    , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, "table", *m_xValSetColorBox))
+    : SfxTabPage(pPage, pController, u"cui/ui/optchartcolorspage.ui"_ustr, u"OptChartColorsPage"_ustr, &rInAttrs)
+    , m_xLbChartColors(m_xBuilder->weld_tree_view(u"colors"_ustr))
+    , m_xLbPaletteSelector(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
+    , m_xPBDefault(m_xBuilder->weld_button(u"default"_ustr))
+    , m_xPBAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xPBRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xValSetColorBox(new SvxColorValueSet(m_xBuilder->weld_scrolled_window(u"tablewin"_ustr, true)))
+    , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, u"table"_ustr, *m_xValSetColorBox))
 {
     m_xLbChartColors->set_size_request(-1, m_xLbChartColors->get_height_rows(16));
 
@@ -155,7 +155,7 @@ std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPa
 OUString SvxDefaultColorOptPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label20", "label1" };
+    OUString labels[] = { u"label20"_ustr, u"label1"_ustr };
 
     for (const auto& label : labels)
     {
@@ -163,7 +163,7 @@ OUString SvxDefaultColorOptPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString buttons[] = { "add", "delete", "default" };
+    OUString buttons[] = { u"add"_ustr, u"delete"_ustr, u"default"_ustr };
 
     for (const auto& btn : buttons)
     {
@@ -255,8 +255,8 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, RemoveChartColor, weld::Button&, void )
 
     OSL_ENSURE(m_SvxChartColorTableUniquePtr->size() > 1, "don't delete the last chart color");
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteChartColorDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletechartcolordialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"QueryDeleteChartColorDialog"_ustr));
 
     if (RET_YES != xQuery->run())
         return;

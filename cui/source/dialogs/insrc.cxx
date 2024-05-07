@@ -32,10 +32,10 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bColumn, const OUString& rHelpId)
-    : GenericDialogController(pParent, "cui/ui/insertrowcolumn.ui", "InsertRowColumnDialog")
-    , m_xCountEdit(m_xBuilder->weld_spin_button("insert_number"))
-    , m_xBeforeBtn(m_xBuilder->weld_radio_button("insert_before"))
-    , m_xAfterBtn(m_xBuilder->weld_radio_button("insert_after"))
+    : GenericDialogController(pParent, u"cui/ui/insertrowcolumn.ui"_ustr, u"InsertRowColumnDialog"_ustr)
+    , m_xCountEdit(m_xBuilder->weld_spin_button(u"insert_number"_ustr))
+    , m_xBeforeBtn(m_xBuilder->weld_radio_button(u"insert_before"_ustr))
+    , m_xAfterBtn(m_xBuilder->weld_radio_button(u"insert_after"_ustr))
 {
     m_xDialog->set_title(bColumn ? CuiResId(RID_CUISTR_COL) : CuiResId(RID_CUISTR_ROW));
 

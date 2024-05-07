@@ -160,37 +160,37 @@ sal_uInt16 SpellUndoAction_Impl::GetId()const
 SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     weld::Window * pParent, SfxBindings* _pBindings)
     : SfxModelessDialogController (_pBindings, pChildWindow,
-        pParent, "cui/ui/spellingdialog.ui", "SpellingDialog")
+        pParent, u"cui/ui/spellingdialog.ui"_ustr, u"SpellingDialog"_ustr)
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
     , m_pInitHdlEvent(nullptr)
     , bFocusLocked(true)
     , rParent(*pChildWindow)
     , pImpl( new SpellDialog_Impl )
-    , m_xAltTitle(m_xBuilder->weld_label("alttitleft"))
-    , m_xResumeFT(m_xBuilder->weld_label("resumeft"))
-    , m_xNoSuggestionsFT(m_xBuilder->weld_label("nosuggestionsft"))
-    , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("languagelb")))
-    , m_xExplainFT(m_xBuilder->weld_label("explain"))
-    , m_xExplainLink(m_xBuilder->weld_link_button("explainlink"))
-    , m_xNotInDictFT(m_xBuilder->weld_label("notindictft"))
-    , m_xSentenceED(new SentenceEditWindow_Impl(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
-    , m_xSuggestionFT(m_xBuilder->weld_label("suggestionsft"))
-    , m_xSuggestionLB(m_xBuilder->weld_tree_view("suggestionslb"))
-    , m_xIgnorePB(m_xBuilder->weld_button("ignore"))
-    , m_xIgnoreAllPB(m_xBuilder->weld_button("ignoreall"))
-    , m_xIgnoreRulePB(m_xBuilder->weld_button("ignorerule"))
-    , m_xAddToDictPB(m_xBuilder->weld_button("add"))
-    , m_xAddToDictMB(m_xBuilder->weld_menu_button("addmb"))
-    , m_xChangePB(m_xBuilder->weld_button("change"))
-    , m_xChangeAllPB(m_xBuilder->weld_button("changeall"))
-    , m_xAutoCorrPB(m_xBuilder->weld_button("autocorrect"))
-    , m_xCheckGrammarCB(m_xBuilder->weld_check_button("checkgrammar"))
-    , m_xOptionsPB(m_xBuilder->weld_button("options"))
-    , m_xUndoPB(m_xBuilder->weld_button("undo"))
-    , m_xClosePB(m_xBuilder->weld_button("close"))
-    , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
-    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, "sentence", *m_xSentenceED))
+    , m_xAltTitle(m_xBuilder->weld_label(u"alttitleft"_ustr))
+    , m_xResumeFT(m_xBuilder->weld_label(u"resumeft"_ustr))
+    , m_xNoSuggestionsFT(m_xBuilder->weld_label(u"nosuggestionsft"_ustr))
+    , m_xLanguageFT(m_xBuilder->weld_label(u"languageft"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"languagelb"_ustr)))
+    , m_xExplainFT(m_xBuilder->weld_label(u"explain"_ustr))
+    , m_xExplainLink(m_xBuilder->weld_link_button(u"explainlink"_ustr))
+    , m_xNotInDictFT(m_xBuilder->weld_label(u"notindictft"_ustr))
+    , m_xSentenceED(new SentenceEditWindow_Impl(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true)))
+    , m_xSuggestionFT(m_xBuilder->weld_label(u"suggestionsft"_ustr))
+    , m_xSuggestionLB(m_xBuilder->weld_tree_view(u"suggestionslb"_ustr))
+    , m_xIgnorePB(m_xBuilder->weld_button(u"ignore"_ustr))
+    , m_xIgnoreAllPB(m_xBuilder->weld_button(u"ignoreall"_ustr))
+    , m_xIgnoreRulePB(m_xBuilder->weld_button(u"ignorerule"_ustr))
+    , m_xAddToDictPB(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xAddToDictMB(m_xBuilder->weld_menu_button(u"addmb"_ustr))
+    , m_xChangePB(m_xBuilder->weld_button(u"change"_ustr))
+    , m_xChangeAllPB(m_xBuilder->weld_button(u"changeall"_ustr))
+    , m_xAutoCorrPB(m_xBuilder->weld_button(u"autocorrect"_ustr))
+    , m_xCheckGrammarCB(m_xBuilder->weld_check_button(u"checkgrammar"_ustr))
+    , m_xOptionsPB(m_xBuilder->weld_button(u"options"_ustr))
+    , m_xUndoPB(m_xBuilder->weld_button(u"undo"_ustr))
+    , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xToolbar(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
+    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, u"sentence"_ustr, *m_xSentenceED))
 {
     m_xSentenceED->SetSpellDialog(this);
     m_xSentenceED->Init(m_xToolbar.get());
@@ -1035,7 +1035,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                     SpellErrorDescription aDesc( false, elem.xAlternatives->getWord(),
                                     elem.xAlternatives->getLocale(), elem.xAlternatives->getAlternatives(), nullptr);
                     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
-                    aSpellErrorDescription.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+                    aSpellErrorDescription.GetGrabBag()[u"SpellErrorDescription"_ustr] <<= aDesc.toSequence();
                     m_xSentenceED->SetAttrib(aSpellErrorDescription, nStartPosition, nEndPosition);
                 }
                 else if(elem.bIsGrammarError )
@@ -1064,7 +1064,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                         &sFullCommentURL );
 
                     SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG);
-                    aSpellErrorDescriptionItem.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+                    aSpellErrorDescriptionItem.GetGrabBag()[u"SpellErrorDescription"_ustr] <<= aDesc.toSequence();
                     m_xSentenceED->SetAttrib(aSpellErrorDescriptionItem, nStartPosition, nEndPosition);
                 }
 
@@ -1249,7 +1249,7 @@ namespace
     {
         css::uno::Sequence<css::uno::Any> aSequence;
         const auto pGrabBag = static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag();
-        const auto iter = pGrabBag.find("SpellErrorDescription");
+        const auto iter = pGrabBag.find(u"SpellErrorDescription"_ustr);
         assert(iter != pGrabBag.end());
         iter->second >>= aSequence;
         rSpellErrorDescription.fromSequence(aSequence);
@@ -1856,7 +1856,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     if (bSpellErrorDescription)
     {
         SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG);
-        aSpellErrorDescriptionItem.GetGrabBag()["SpellErrorDescription"] <<= aSpellErrorDescription.toSequence();
+        aSpellErrorDescriptionItem.GetGrabBag()[u"SpellErrorDescription"_ustr] <<= aSpellErrorDescription.toSequence();
         SetAttrib(aSpellErrorDescriptionItem, m_nErrorStart, m_nErrorEnd);
     }
     SetAttrib(SvxLanguageItem(eLanguage, EE_CHAR_LANGUAGE), m_nErrorStart, m_nErrorEnd);
@@ -1914,7 +1914,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
     }
     SpellErrorDescription aDesc( false, aWord, std::move(aLocale), aAlts, nullptr);
     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
-    aSpellErrorDescription.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+    aSpellErrorDescription.GetGrabBag()[u"SpellErrorDescription"_ustr] <<= aDesc.toSequence();
     SetAttrib(aSpellErrorDescription, m_nErrorStart, m_nErrorEnd);
 }
 

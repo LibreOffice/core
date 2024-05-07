@@ -24,39 +24,39 @@
 
 
 OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/opthtmlpage.ui", "OptHtmlPage", &rSet)
-    , m_xSize1NF(m_xBuilder->weld_spin_button("size1"))
-    , m_xSize1Img(m_xBuilder->weld_widget("locksize1"))
-    , m_xSize2NF(m_xBuilder->weld_spin_button("size2"))
-    , m_xSize2Img(m_xBuilder->weld_widget("locksize2"))
-    , m_xSize3NF(m_xBuilder->weld_spin_button("size3"))
-    , m_xSize3Img(m_xBuilder->weld_widget("locksize3"))
-    , m_xSize4NF(m_xBuilder->weld_spin_button("size4"))
-    , m_xSize4Img(m_xBuilder->weld_widget("locksize4"))
-    , m_xSize5NF(m_xBuilder->weld_spin_button("size5"))
-    , m_xSize5Img(m_xBuilder->weld_widget("locksize5"))
-    , m_xSize6NF(m_xBuilder->weld_spin_button("size6"))
-    , m_xSize6Img(m_xBuilder->weld_widget("locksize6"))
-    , m_xSize7NF(m_xBuilder->weld_spin_button("size7"))
-    , m_xSize7Img(m_xBuilder->weld_widget("locksize7"))
-    , m_xNumbersEnglishUSCB(m_xBuilder->weld_check_button("numbersenglishus"))
-    , m_xNumbersEnglishUSImg(m_xBuilder->weld_widget("locknumbersenglishus"))
-    , m_xUnknownTagCB(m_xBuilder->weld_check_button("unknowntag"))
-    , m_xUnknownTagImg(m_xBuilder->weld_widget("lockunknowntag"))
-    , m_xIgnoreFontNamesCB(m_xBuilder->weld_check_button("ignorefontnames"))
-    , m_xIgnoreFontNamesImg(m_xBuilder->weld_widget("lockignorefontnames"))
-    , m_xStarBasicCB(m_xBuilder->weld_check_button("starbasic"))
-    , m_xStarBasicImg(m_xBuilder->weld_widget("lockstarbasic"))
-    , m_xStarBasicWarningCB(m_xBuilder->weld_check_button("starbasicwarning"))
-    , m_xStarBasicWarningImg(m_xBuilder->weld_widget("lockstarbasicwarning"))
-    , m_xPrintExtensionCB(m_xBuilder->weld_check_button("printextension"))
-    , m_xPrintExtensionImg(m_xBuilder->weld_widget("lockprintextension"))
-    , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button("savegrflocal"))
-    , m_xSaveGrfLocalImg(m_xBuilder->weld_widget("locksavegrflocal"))
+    : SfxTabPage(pPage, pController, u"cui/ui/opthtmlpage.ui"_ustr, u"OptHtmlPage"_ustr, &rSet)
+    , m_xSize1NF(m_xBuilder->weld_spin_button(u"size1"_ustr))
+    , m_xSize1Img(m_xBuilder->weld_widget(u"locksize1"_ustr))
+    , m_xSize2NF(m_xBuilder->weld_spin_button(u"size2"_ustr))
+    , m_xSize2Img(m_xBuilder->weld_widget(u"locksize2"_ustr))
+    , m_xSize3NF(m_xBuilder->weld_spin_button(u"size3"_ustr))
+    , m_xSize3Img(m_xBuilder->weld_widget(u"locksize3"_ustr))
+    , m_xSize4NF(m_xBuilder->weld_spin_button(u"size4"_ustr))
+    , m_xSize4Img(m_xBuilder->weld_widget(u"locksize4"_ustr))
+    , m_xSize5NF(m_xBuilder->weld_spin_button(u"size5"_ustr))
+    , m_xSize5Img(m_xBuilder->weld_widget(u"locksize5"_ustr))
+    , m_xSize6NF(m_xBuilder->weld_spin_button(u"size6"_ustr))
+    , m_xSize6Img(m_xBuilder->weld_widget(u"locksize6"_ustr))
+    , m_xSize7NF(m_xBuilder->weld_spin_button(u"size7"_ustr))
+    , m_xSize7Img(m_xBuilder->weld_widget(u"locksize7"_ustr))
+    , m_xNumbersEnglishUSCB(m_xBuilder->weld_check_button(u"numbersenglishus"_ustr))
+    , m_xNumbersEnglishUSImg(m_xBuilder->weld_widget(u"locknumbersenglishus"_ustr))
+    , m_xUnknownTagCB(m_xBuilder->weld_check_button(u"unknowntag"_ustr))
+    , m_xUnknownTagImg(m_xBuilder->weld_widget(u"lockunknowntag"_ustr))
+    , m_xIgnoreFontNamesCB(m_xBuilder->weld_check_button(u"ignorefontnames"_ustr))
+    , m_xIgnoreFontNamesImg(m_xBuilder->weld_widget(u"lockignorefontnames"_ustr))
+    , m_xStarBasicCB(m_xBuilder->weld_check_button(u"starbasic"_ustr))
+    , m_xStarBasicImg(m_xBuilder->weld_widget(u"lockstarbasic"_ustr))
+    , m_xStarBasicWarningCB(m_xBuilder->weld_check_button(u"starbasicwarning"_ustr))
+    , m_xStarBasicWarningImg(m_xBuilder->weld_widget(u"lockstarbasicwarning"_ustr))
+    , m_xPrintExtensionCB(m_xBuilder->weld_check_button(u"printextension"_ustr))
+    , m_xPrintExtensionImg(m_xBuilder->weld_widget(u"lockprintextension"_ustr))
+    , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button(u"savegrflocal"_ustr))
+    , m_xSaveGrfLocalImg(m_xBuilder->weld_widget(u"locksavegrflocal"_ustr))
 {
     // replace placeholder with UI string from language list
     OUString aText(m_xNumbersEnglishUSCB->get_label());
-    OUString aPlaceholder("%ENGLISHUSLOCALE");
+    OUString aPlaceholder(u"%ENGLISHUSLOCALE"_ustr);
     sal_Int32 nPos;
     if ((nPos = aText.indexOf( aPlaceholder)) != -1)
     {
@@ -84,8 +84,8 @@ std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( weld::Container* pPage, weld
 OUString OfaHtmlTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1",  "label2",  "label3",  "size1FT", "size2FT",
-                          "size3FT", "size4FT", "size5FT", "size6FT", "size7FT" };
+    OUString labels[] = { u"label1"_ustr,  u"label2"_ustr,  u"label3"_ustr,  u"size1FT"_ustr, u"size2FT"_ustr,
+                          u"size3FT"_ustr, u"size4FT"_ustr, u"size5FT"_ustr, u"size6FT"_ustr, u"size7FT"_ustr };
 
     for (const auto& label : labels)
     {
@@ -93,8 +93,8 @@ OUString OfaHtmlTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "numbersenglishus", "unknowntag",     "ignorefontnames", "starbasic",
-                               "starbasicwarning", "printextension", "savegrflocal" };
+    OUString checkButton[] = { u"numbersenglishus"_ustr, u"unknowntag"_ustr,     u"ignorefontnames"_ustr, u"starbasic"_ustr,
+                               u"starbasicwarning"_ustr, u"printextension"_ustr, u"savegrflocal"_ustr };
 
     for (const auto& check : checkButton)
     {

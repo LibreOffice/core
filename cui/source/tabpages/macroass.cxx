@@ -100,21 +100,21 @@ void SfxMacroTabPage::EnableButtons()
 }
 
 SfxMacroTabPage::SfxMacroTabPage(weld::Container* pPage, weld::DialogController* pController, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
-    : SfxTabPage(pPage, pController, "cui/ui/eventassignpage.ui", "EventAssignPage", &rAttrSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/eventassignpage.ui"_ustr, u"EventAssignPage"_ustr, &rAttrSet)
 {
     mpImpl.reset(new SfxMacroTabPage_Impl);
 
     mpImpl->m_aFillGroupIdle.SetInvokeHandler( LINK( this, SfxMacroTabPage, TimeOut_Impl ) );
     mpImpl->m_aFillGroupIdle.SetPriority( TaskPriority::HIGHEST );
 
-    mpImpl->m_xEventLB.reset(new MacroEventListBox(m_xBuilder->weld_tree_view("assignments")));
-    mpImpl->m_xAssignPB = m_xBuilder->weld_button("assign");
-    mpImpl->m_xDeletePB = m_xBuilder->weld_button("delete");
-    mpImpl->m_xGroupFrame = m_xBuilder->weld_widget("groupframe");
-    mpImpl->m_xGroupLB.reset(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("libraries")));
-    mpImpl->m_xMacroFrame = m_xBuilder->weld_frame("macroframe");
+    mpImpl->m_xEventLB.reset(new MacroEventListBox(m_xBuilder->weld_tree_view(u"assignments"_ustr)));
+    mpImpl->m_xAssignPB = m_xBuilder->weld_button(u"assign"_ustr);
+    mpImpl->m_xDeletePB = m_xBuilder->weld_button(u"delete"_ustr);
+    mpImpl->m_xGroupFrame = m_xBuilder->weld_widget(u"groupframe"_ustr);
+    mpImpl->m_xGroupLB.reset(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr)));
+    mpImpl->m_xMacroFrame = m_xBuilder->weld_frame(u"macroframe"_ustr);
     mpImpl->m_aStaticMacroLBLabel = mpImpl->m_xMacroFrame->get_label();
-    mpImpl->m_xMacroLB.reset(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("macros")));
+    mpImpl->m_xMacroLB.reset(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view(u"macros"_ustr)));
 
     SetFrame( rxDocumentFrame );
 
@@ -388,8 +388,8 @@ std::unique_ptr<SfxTabPage> SfxMacroTabPage::Create(weld::Container* pPage, weld
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Widget* pParent,
     const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet,"cui/ui/eventassigndialog.ui",
-                                   "EventAssignDialog")
+    : SfxSingleTabDialogController(pParent, &rSet,u"cui/ui/eventassigndialog.ui"_ustr,
+                                   u"EventAssignDialog"_ustr)
 {
     std::unique_ptr<SfxMacroTabPage> xPage = CreateSfxMacroTabPage(get_content_area(), this, rSet);
     xPage->SetFrame(rxDocumentFrame);

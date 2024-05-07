@@ -202,8 +202,8 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
 
     // copy the images to the user's additions folder
-    OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}";
+    OUString userFolder = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros(userFolder);
     userFolder += "/user/additions/" + aAdditionInfo.sExtensionID + "/";
 
@@ -425,17 +425,17 @@ void SearchAndParseThread::execute()
 }
 
 AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag)
-    : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
+    : GenericDialogController(pParent, u"cui/ui/additionsdialog.ui"_ustr, u"AdditionsDialog"_ustr)
     , m_aSearchDataTimer("AdditionsDialog SearchDataTimer")
-    , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
-    , m_xButtonClose(m_xBuilder->weld_button("buttonClose"))
-    , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
-    , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
-    , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
-    , m_xGearBtn(m_xBuilder->weld_menu_button("buttonGear"))
+    , m_xEntrySearch(m_xBuilder->weld_entry(u"entrySearch"_ustr))
+    , m_xButtonClose(m_xBuilder->weld_button(u"buttonClose"_ustr))
+    , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
+    , m_xContentGrid(m_xBuilder->weld_container(u"contentGrid"_ustr))
+    , m_xLabelProgress(m_xBuilder->weld_label(u"labelProgress"_ustr))
+    , m_xGearBtn(m_xBuilder->weld_menu_button(u"buttonGear"_ustr))
 {
     m_xGearBtn->connect_selected(LINK(this, AdditionsDialog, GearHdl));
-    m_xGearBtn->set_item_active("gear_sort_voting", true);
+    m_xGearBtn->set_item_active(u"gear_sort_voting"_ustr, true);
 
     m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
     m_aSearchDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
@@ -451,7 +451,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     OUString titlePrefix = CuiResId(RID_CUISTR_ADDITIONS_DIALOG_TITLE_PREFIX);
     if (!m_sTag.isEmpty())
     { // tdf#142564 localize extension category names
-        OUString sDialogTitle = "";
+        OUString sDialogTitle = u""_ustr;
         if (sAdditionsTag == "Templates")
         {
             sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_TEMPLATES);
@@ -597,27 +597,27 @@ bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& 
 
 AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
                              const AdditionInfo& additionInfo)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/additionsfragment.ui"))
-    , m_xContainer(m_xBuilder->weld_widget("additionsEntry"))
-    , m_xImageScreenshot(m_xBuilder->weld_image("imageScreenshot"))
-    , m_xButtonInstall(m_xBuilder->weld_button("buttonInstall"))
-    , m_xLinkButtonWebsite(m_xBuilder->weld_link_button("btnWebsite"))
-    , m_xLabelName(m_xBuilder->weld_label("lbName"))
-    , m_xLabelAuthor(m_xBuilder->weld_label("labelAuthor"))
-    , m_xLabelDescription(m_xBuilder->weld_label("labelDescription"))
-    , m_xLabelLicense(m_xBuilder->weld_label("lbLicenseText"))
-    , m_xLabelVersion(m_xBuilder->weld_label("lbVersionText"))
-    , m_xLinkButtonComments(m_xBuilder->weld_link_button("linkButtonComments"))
-    , m_xImageVoting1(m_xBuilder->weld_image("imageVoting1"))
-    , m_xImageVoting2(m_xBuilder->weld_image("imageVoting2"))
-    , m_xImageVoting3(m_xBuilder->weld_image("imageVoting3"))
-    , m_xImageVoting4(m_xBuilder->weld_image("imageVoting4"))
-    , m_xImageVoting5(m_xBuilder->weld_image("imageVoting5"))
-    , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
-    , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/additionsfragment.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_widget(u"additionsEntry"_ustr))
+    , m_xImageScreenshot(m_xBuilder->weld_image(u"imageScreenshot"_ustr))
+    , m_xButtonInstall(m_xBuilder->weld_button(u"buttonInstall"_ustr))
+    , m_xLinkButtonWebsite(m_xBuilder->weld_link_button(u"btnWebsite"_ustr))
+    , m_xLabelName(m_xBuilder->weld_label(u"lbName"_ustr))
+    , m_xLabelAuthor(m_xBuilder->weld_label(u"labelAuthor"_ustr))
+    , m_xLabelDescription(m_xBuilder->weld_label(u"labelDescription"_ustr))
+    , m_xLabelLicense(m_xBuilder->weld_label(u"lbLicenseText"_ustr))
+    , m_xLabelVersion(m_xBuilder->weld_label(u"lbVersionText"_ustr))
+    , m_xLinkButtonComments(m_xBuilder->weld_link_button(u"linkButtonComments"_ustr))
+    , m_xImageVoting1(m_xBuilder->weld_image(u"imageVoting1"_ustr))
+    , m_xImageVoting2(m_xBuilder->weld_image(u"imageVoting2"_ustr))
+    , m_xImageVoting3(m_xBuilder->weld_image(u"imageVoting3"_ustr))
+    , m_xImageVoting4(m_xBuilder->weld_image(u"imageVoting4"_ustr))
+    , m_xImageVoting5(m_xBuilder->weld_image(u"imageVoting5"_ustr))
+    , m_xLabelDownloadNumber(m_xBuilder->weld_label(u"labelDownloadNumber"_ustr))
+    , m_xButtonShowMore(m_xBuilder->weld_button(u"buttonShowMore"_ustr))
     , m_pParentDialog(pParentDialog)
-    , m_sDownloadURL("")
-    , m_sExtensionID("")
+    , m_sDownloadURL(u""_ustr)
+    , m_sExtensionID(u""_ustr)
 {
     SolarMutexGuard aGuard;
 
@@ -687,8 +687,8 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
 
     // copy the extensions' files to the user's additions folder
-    OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}";
+    OUString userFolder = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros(userFolder);
     userFolder += "/user/additions/" + m_sExtensionID + "/";
 
@@ -763,8 +763,9 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     uno::Reference<task::XAbortChannel> xAbortChannel;
     try
     {
-        m_pParentDialog->m_xExtensionManager->addExtension(
-            aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, pCmdEnv);
+        m_pParentDialog->m_xExtensionManager->addExtension(aExtensionFile,
+                                                           uno::Sequence<beans::NamedValue>(),
+                                                           u"user"_ustr, xAbortChannel, pCmdEnv);
         m_xButtonInstall->set_label(CuiResId(RID_CUISTR_ADDITIONS_INSTALLEDBUTTON));
     }
     catch (const ucb::CommandFailedException)

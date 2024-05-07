@@ -237,7 +237,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         if ( nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
         {
             m_xBtnBitmap->show();
-            m_xTblLBox = m_xBuilder->weld_combo_box("tablelb");
+            m_xTblLBox = m_xBuilder->weld_combo_box(u"tablelb"_ustr);
             m_xTblLBox->connect_changed(LINK(this, SvxBkgTabPage, TblDestinationHdl_Impl));
             m_xTblLBox->show();
         }

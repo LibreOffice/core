@@ -504,7 +504,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
 
 IMPL_LINK_NOARG(SvxMacroTabPage_, DeleteAllHdl_Impl, weld::Button&, void)
 {
-    OUString sEventType =  "Script" ;
+    OUString sEventType =  u"Script"_ustr ;
     OUString sEmptyString;
 
     mpImpl->xEventLB->all_foreach([this, &sEventType, &sEmptyString](weld::TreeIter& rEntry) {
@@ -608,8 +608,8 @@ Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eve
     ::comphelper::NamedValueCollection aProps;
     if ( !(rAssignedEvent.first.isEmpty() || rAssignedEvent.second.isEmpty()) )
     {
-        aProps.put( "EventType", rAssignedEvent.first );
-        aProps.put( "Script", rAssignedEvent.second );
+        aProps.put( u"EventType"_ustr, rAssignedEvent.first );
+        aProps.put( u"Script"_ustr, rAssignedEvent.second );
     }
     aReturn <<= aProps.getPropertyValues();
 
@@ -625,8 +625,8 @@ EventPair SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
     if( aAny >>= props )
     {
         ::comphelper::NamedValueCollection aProps( props );
-        type = aProps.getOrDefault( "EventType", type );
-        url = aProps.getOrDefault( "Script", url );
+        type = aProps.getOrDefault( u"EventType"_ustr, type );
+        url = aProps.getOrDefault( u"Script"_ustr, url );
     }
     return std::make_pair( type, url );
 }
@@ -636,15 +636,15 @@ SvxMacroTabPage::SvxMacroTabPage(weld::Container* pPage, weld::DialogController*
     const SfxItemSet& rSet,
     Reference< container::XNameReplace > const & xNameReplace,
     sal_uInt16 nSelectedIndex)
-    : SvxMacroTabPage_(pPage, pController, "cui/ui/macroassignpage.ui", "MacroAssignPage", rSet)
+    : SvxMacroTabPage_(pPage, pController, u"cui/ui/macroassignpage.ui"_ustr, u"MacroAssignPage"_ustr, rSet)
 {
-    mpImpl->xEventLB = m_xBuilder->weld_tree_view("assignments");
+    mpImpl->xEventLB = m_xBuilder->weld_tree_view(u"assignments"_ustr);
     mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
                                        mpImpl->xEventLB->get_height_rows(9));
-    mpImpl->xAssignPB = m_xBuilder->weld_button("assign");
-    mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
-    mpImpl->xDeleteAllPB = m_xBuilder->weld_button("deleteall");
-    mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
+    mpImpl->xAssignPB = m_xBuilder->weld_button(u"assign"_ustr);
+    mpImpl->xDeletePB = m_xBuilder->weld_button(u"delete"_ustr);
+    mpImpl->xDeleteAllPB = m_xBuilder->weld_button(u"deleteall"_ustr);
+    mpImpl->xAssignComponentPB = m_xBuilder->weld_button(u"component"_ustr);
 
     SetFrame( _rxDocumentFrame );
 
@@ -681,10 +681,10 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)
 }
 
 AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, OUString aURL)
-    : GenericDialogController(pParent, "cui/ui/assigncomponentdialog.ui", "AssignComponent")
+    : GenericDialogController(pParent, u"cui/ui/assigncomponentdialog.ui"_ustr, u"AssignComponent"_ustr)
     , maURL(std::move( aURL ))
-    , mxMethodEdit(m_xBuilder->weld_entry("methodEntry"))
-    , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxMethodEdit(m_xBuilder->weld_entry(u"methodEntry"_ustr))
+    , mxOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     mxOKButton->connect_clicked(LINK(this, AssignComponentDialog, ButtonHandler));
 
@@ -709,7 +709,7 @@ IMPL_LINK_NOARG(SvxMacroAssignSingleTabDialog, OKHdl_Impl, weld::Button&, void)
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(weld::Window *pParent,
     const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/macroassigndialog.ui", "MacroAssignDialog")
+    : SfxSingleTabDialogController(pParent, &rSet, u"cui/ui/macroassigndialog.ui"_ustr, u"MacroAssignDialog"_ustr)
 {
     GetOKButton().connect_clicked(LINK(this, SvxMacroAssignSingleTabDialog, OKHdl_Impl));
 }

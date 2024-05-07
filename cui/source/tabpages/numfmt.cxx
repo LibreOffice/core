@@ -198,37 +198,37 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/numberingformatpage.ui"_ustr, u"NumberingFormatPage"_ustr, &rCoreAttrs)
     , nInitFormat(std::numeric_limits<sal_uInt32>::max())
     , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_CUISTR_AUTO_ENTRY))
-    , m_xFtCategory(m_xBuilder->weld_label("categoryft"))
-    , m_xLbCategory(m_xBuilder->weld_tree_view("categorylb"))
-    , m_xFtFormat(m_xBuilder->weld_label("formatft"))
-    , m_xLbCurrency(m_xBuilder->weld_combo_box("currencylb"))
-    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
-    , m_xFtLanguage(m_xBuilder->weld_label("languageft"))
-    , m_xCbSourceFormat(m_xBuilder->weld_check_button("sourceformat"))
-    , m_xFtOptions(m_xBuilder->weld_label("optionsft"))
-    , m_xFtDecimals(m_xBuilder->weld_label("decimalsft"))
-    , m_xEdDecimals(m_xBuilder->weld_spin_button("decimalsed"))
-    , m_xFtDenominator(m_xBuilder->weld_label("denominatorft"))
-    , m_xEdDenominator(m_xBuilder->weld_spin_button("denominatored"))
-    , m_xBtnNegRed(m_xBuilder->weld_check_button("negnumred"))
-    , m_xFtLeadZeroes(m_xBuilder->weld_label("leadzerosft"))
-    , m_xEdLeadZeroes(m_xBuilder->weld_spin_button("leadzerosed"))
-    , m_xBtnThousand(m_xBuilder->weld_check_button("thousands"))
-    , m_xBtnEngineering(m_xBuilder->weld_check_button("engineering"))
-    , m_xFormatCodeFrame(m_xBuilder->weld_widget("formatcode"))
-    , m_xEdFormat(m_xBuilder->weld_entry("formatted"))
-    , m_xIbAdd(m_xBuilder->weld_button("add"))
-    , m_xIbInfo(m_xBuilder->weld_button("edit"))
-    , m_xIbRemove(m_xBuilder->weld_button("delete"))
-    , m_xFtComment(m_xBuilder->weld_label("commentft"))
-    , m_xEdComment(m_xBuilder->weld_entry("commented"))
-    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("languagelb")))
-    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
+    , m_xFtCategory(m_xBuilder->weld_label(u"categoryft"_ustr))
+    , m_xLbCategory(m_xBuilder->weld_tree_view(u"categorylb"_ustr))
+    , m_xFtFormat(m_xBuilder->weld_label(u"formatft"_ustr))
+    , m_xLbCurrency(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
+    , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
+    , m_xFtLanguage(m_xBuilder->weld_label(u"languageft"_ustr))
+    , m_xCbSourceFormat(m_xBuilder->weld_check_button(u"sourceformat"_ustr))
+    , m_xFtOptions(m_xBuilder->weld_label(u"optionsft"_ustr))
+    , m_xFtDecimals(m_xBuilder->weld_label(u"decimalsft"_ustr))
+    , m_xEdDecimals(m_xBuilder->weld_spin_button(u"decimalsed"_ustr))
+    , m_xFtDenominator(m_xBuilder->weld_label(u"denominatorft"_ustr))
+    , m_xEdDenominator(m_xBuilder->weld_spin_button(u"denominatored"_ustr))
+    , m_xBtnNegRed(m_xBuilder->weld_check_button(u"negnumred"_ustr))
+    , m_xFtLeadZeroes(m_xBuilder->weld_label(u"leadzerosft"_ustr))
+    , m_xEdLeadZeroes(m_xBuilder->weld_spin_button(u"leadzerosed"_ustr))
+    , m_xBtnThousand(m_xBuilder->weld_check_button(u"thousands"_ustr))
+    , m_xBtnEngineering(m_xBuilder->weld_check_button(u"engineering"_ustr))
+    , m_xFormatCodeFrame(m_xBuilder->weld_widget(u"formatcode"_ustr))
+    , m_xEdFormat(m_xBuilder->weld_entry(u"formatted"_ustr))
+    , m_xIbAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xIbInfo(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xIbRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xFtComment(m_xBuilder->weld_label(u"commentft"_ustr))
+    , m_xEdComment(m_xBuilder->weld_entry(u"commented"_ustr))
+    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"languagelb"_ustr)))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
 {
     for (size_t i = 0; i < std::size(NUM_CATEGORIES); ++i)
         m_xLbCategory->append_text(CuiResId(NUM_CATEGORIES[i]));
@@ -494,7 +494,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         // is this a calc document
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
-            bUseStarFormat = xSI->supportsService("com.sun.star.sheet.SpreadsheetDocument");
+            bUseStarFormat = xSI->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
     }
     pNumFmtShell->SetUseStarFormat( bUseStarFormat );
 
@@ -930,7 +930,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_xEdLeadZeroes->set_sensitive( nCategory != CAT_TIME );
             m_xBtnNegRed->set_sensitive(true);
             if ( nCategory == CAT_NUMBER && m_xLbFormat->get_selected_index() == 0 )
-                m_xEdDecimals->set_text( "" ); //General format tdf#44399
+                m_xEdDecimals->set_text( u""_ustr ); //General format tdf#44399
             else
                 if ( nCategory == CAT_FRACTION )
                     m_xEdDenominator->set_value( nDecimals );

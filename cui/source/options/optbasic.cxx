@@ -22,13 +22,13 @@
 #include <officecfg/Office/BasicIDE.hxx>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optbasicidepage.ui", "OptBasicIDEPage", &rSet)
-    , m_xCodeCompleteChk(m_xBuilder->weld_check_button("codecomplete_enable"))
-    , m_xAutocloseProcChk(m_xBuilder->weld_check_button("autoclose_proc"))
-    , m_xAutocloseParenChk(m_xBuilder->weld_check_button("autoclose_paren"))
-    , m_xAutocloseQuotesChk(m_xBuilder->weld_check_button("autoclose_quotes"))
-    , m_xAutoCorrectChk(m_xBuilder->weld_check_button("autocorrect"))
-    , m_xUseExtendedTypesChk(m_xBuilder->weld_check_button("extendedtypes_enable"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optbasicidepage.ui"_ustr, u"OptBasicIDEPage"_ustr, &rSet)
+    , m_xCodeCompleteChk(m_xBuilder->weld_check_button(u"codecomplete_enable"_ustr))
+    , m_xAutocloseProcChk(m_xBuilder->weld_check_button(u"autoclose_proc"_ustr))
+    , m_xAutocloseParenChk(m_xBuilder->weld_check_button(u"autoclose_paren"_ustr))
+    , m_xAutocloseQuotesChk(m_xBuilder->weld_check_button(u"autoclose_quotes"_ustr))
+    , m_xAutoCorrectChk(m_xBuilder->weld_check_button(u"autocorrect"_ustr))
+    , m_xUseExtendedTypesChk(m_xBuilder->weld_check_button(u"extendedtypes_enable"_ustr))
 {
     LoadConfig();
 }
@@ -56,7 +56,7 @@ void SvxBasicIDEOptionsPage::LoadConfig()
 OUString SvxBasicIDEOptionsPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
@@ -64,8 +64,8 @@ OUString SvxBasicIDEOptionsPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "codecomplete_enable", "autocorrect",    "autoclose_quotes",
-                               "autoclose_paren",     "autoclose_proc", "extendedtypes_enable" };
+    OUString checkButton[] = { u"codecomplete_enable"_ustr, u"autocorrect"_ustr,    u"autoclose_quotes"_ustr,
+                               u"autoclose_paren"_ustr,     u"autoclose_proc"_ustr, u"extendedtypes_enable"_ustr };
 
     for (const auto& check : checkButton)
     {

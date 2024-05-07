@@ -11,8 +11,8 @@
 #include <ImageViewerDialog.hxx>
 
 ImageViewerDialog::ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap, OUString atitle)
-    : GenericDialogController(pParent, "cui/ui/imageviewer.ui", "ImageViewerDialog")
-    , m_xDisplayImage(m_xBuilder->weld_image("ImgVW_mainImage"))
+    : GenericDialogController(pParent, u"cui/ui/imageviewer.ui"_ustr, u"ImageViewerDialog"_ustr)
+    , m_xDisplayImage(m_xBuilder->weld_image(u"ImgVW_mainImage"_ustr))
 {
     m_xDialog->set_title(atitle);
     aBitmap.Scale(Size(300, 300), BmpScaleFlag::Fast);

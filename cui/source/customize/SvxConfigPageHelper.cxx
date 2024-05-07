@@ -206,29 +206,29 @@ OUString SvxConfigPageHelper::GetModuleName(std::u16string_view aModuleId)
 {
     if (aModuleId == u"com.sun.star.text.TextDocument"
         || aModuleId == u"com.sun.star.text.GlobalDocument")
-        return "Writer";
+        return u"Writer"_ustr;
     else if (aModuleId == u"com.sun.star.text.WebDocument")
-        return "Writer/Web";
+        return u"Writer/Web"_ustr;
     else if (aModuleId == u"com.sun.star.drawing.DrawingDocument")
-        return "Draw";
+        return u"Draw"_ustr;
     else if (aModuleId == u"com.sun.star.presentation.PresentationDocument")
-        return "Impress";
+        return u"Impress"_ustr;
     else if (aModuleId == u"com.sun.star.sheet.SpreadsheetDocument")
-        return "Calc";
+        return u"Calc"_ustr;
     else if (aModuleId == u"com.sun.star.script.BasicIDE")
-        return "Basic";
+        return u"Basic"_ustr;
     else if (aModuleId == u"com.sun.star.formula.FormulaProperties")
-        return "Math";
+        return u"Math"_ustr;
     else if (aModuleId == u"com.sun.star.sdb.RelationDesign")
-        return "Relation Design";
+        return u"Relation Design"_ustr;
     else if (aModuleId == u"com.sun.star.sdb.QueryDesign")
-        return "Query Design";
+        return u"Query Design"_ustr;
     else if (aModuleId == u"com.sun.star.sdb.TableDesign")
-        return "Table Design";
+        return u"Table Design"_ustr;
     else if (aModuleId == u"com.sun.star.sdb.DataSourceBrowser")
-        return "Data Source Browser";
+        return u"Data Source Browser"_ustr;
     else if (aModuleId == u"com.sun.star.sdb.DatabaseDocument")
-        return "Database";
+        return u"Database"_ustr;
 
     return OUString();
 }

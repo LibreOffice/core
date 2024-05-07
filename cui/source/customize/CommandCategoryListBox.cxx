@@ -139,7 +139,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         }
 
         // Separate the "All commands"category from the actual categories
-        m_xControl->append_separator("");
+        m_xControl->append_separator(u""_ustr);
 
         typedef std::pair<OUString, sal_Int16> str_id;
         std::vector<str_id> aCategories;
@@ -184,7 +184,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         }
 
         // Separate regular commands from styles and macros
-        m_xControl->append_separator("");
+        m_xControl->append_separator(u""_ustr);
 
         // Add macros category
         m_aGroupInfo.push_back(
@@ -270,7 +270,7 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
+            sUIName = lProps.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
         }
     }
     catch (const css::uno::RuntimeException&)
@@ -569,12 +569,12 @@ void CommandCategoryListBox::addChildren(
                 continue;
             }
 
-            css::uno::Any value = xPropSet->getPropertyValue("URI");
+            css::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
             value >>= uri;
 
             try
             {
-                value = xPropSet->getPropertyValue("Description");
+                value = xPropSet->getPropertyValue(u"Description"_ustr);
                 value >>= description;
             }
             catch (css::uno::Exception&)

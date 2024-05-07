@@ -11,12 +11,12 @@
 #include <bitmaps.hlst>
 
 WidgetTestDialog::WidgetTestDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/widgettestdialog.ui", "WidgetTestDialog")
+    : GenericDialogController(pParent, u"cui/ui/widgettestdialog.ui"_ustr, u"WidgetTestDialog"_ustr)
 {
-    m_xOKButton = m_xBuilder->weld_button("ok_btn");
-    m_xCancelButton = m_xBuilder->weld_button("cancel_btn");
-    m_xTreeView = m_xBuilder->weld_tree_view("contenttree");
-    m_xTreeView2 = m_xBuilder->weld_tree_view("contenttree2");
+    m_xOKButton = m_xBuilder->weld_button(u"ok_btn"_ustr);
+    m_xCancelButton = m_xBuilder->weld_button(u"cancel_btn"_ustr);
+    m_xTreeView = m_xBuilder->weld_tree_view(u"contenttree"_ustr);
+    m_xTreeView2 = m_xBuilder->weld_tree_view(u"contenttree2"_ustr);
 
     m_xOKButton->connect_clicked(LINK(this, WidgetTestDialog, OkHdl));
     m_xCancelButton->connect_clicked(LINK(this, WidgetTestDialog, CancelHdl));
@@ -47,7 +47,7 @@ void WidgetTestDialog::FillTreeView()
 
         m_xTreeView2->append();
         m_xTreeView2->set_image(nCount, (nCount % 2 == 0) ? aImage1 : aImage2);
-        m_xTreeView2->set_text(nCount, "First Column", 0);
+        m_xTreeView2->set_text(nCount, u"First Column"_ustr, 0);
         m_xTreeView2->set_text(
             nCount, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
         m_xTreeView2->set_id(nCount, OUString::number(nCount));

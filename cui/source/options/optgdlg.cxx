@@ -158,23 +158,23 @@ bool lcl_HasSystemFilePicker()
 }
 
 OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
-    , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
-    , m_xExtHelpImg(m_xBuilder->weld_widget("lockexthelp"))
-    , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
-    , m_xPopUpNoHelpImg(m_xBuilder->weld_widget("lockpopupnohelp"))
-    , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbShowTipOfTheDay"))
-    , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget("lockcbShowTipOfTheDay"))
-    , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
-    , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
-    , m_xFileDlgCB(m_xBuilder->weld_check_button("filedlg"))
-    , m_xDocStatusCB(m_xBuilder->weld_check_button("docstatus"))
-    , m_xDocStatusImg(m_xBuilder->weld_widget("lockdocstatus"))
-    , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
-    , m_xYearLabel(m_xBuilder->weld_label("yearslabel"))
-    , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
-    , m_xToYearFT(m_xBuilder->weld_label("toyear"))
-    , m_xYearFrameImg(m_xBuilder->weld_widget("lockyears"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optgeneralpage.ui"_ustr, u"OptGeneralPage"_ustr, &rSet)
+    , m_xExtHelpCB(m_xBuilder->weld_check_button(u"exthelp"_ustr))
+    , m_xExtHelpImg(m_xBuilder->weld_widget(u"lockexthelp"_ustr))
+    , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button(u"popupnohelp"_ustr))
+    , m_xPopUpNoHelpImg(m_xBuilder->weld_widget(u"lockpopupnohelp"_ustr))
+    , m_xShowTipOfTheDay(m_xBuilder->weld_check_button(u"cbShowTipOfTheDay"_ustr))
+    , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget(u"lockcbShowTipOfTheDay"_ustr))
+    , m_xFileDlgFrame(m_xBuilder->weld_widget(u"filedlgframe"_ustr))
+    , m_xFileDlgROImage(m_xBuilder->weld_widget(u"lockimage"_ustr))
+    , m_xFileDlgCB(m_xBuilder->weld_check_button(u"filedlg"_ustr))
+    , m_xDocStatusCB(m_xBuilder->weld_check_button(u"docstatus"_ustr))
+    , m_xDocStatusImg(m_xBuilder->weld_widget(u"lockdocstatus"_ustr))
+    , m_xYearFrame(m_xBuilder->weld_widget(u"yearframe"_ustr))
+    , m_xYearLabel(m_xBuilder->weld_label(u"yearslabel"_ustr))
+    , m_xYearValueField(m_xBuilder->weld_spin_button(u"year"_ustr))
+    , m_xToYearFT(m_xBuilder->weld_label(u"toyear"_ustr))
+    , m_xYearFrameImg(m_xBuilder->weld_widget(u"lockyears"_ustr))
 #if HAVE_FEATURE_BREAKPAD
     , m_xPrivacyFrame(m_xBuilder->weld_widget("privacyframe"))
     , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
@@ -222,8 +222,8 @@ std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld
 OUString OfaMiscTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label4", "label5", "yearslabel",
-                          "toyear", "label7", "label8", "label9" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label4"_ustr, u"label5"_ustr, u"yearslabel"_ustr,
+                          u"toyear"_ustr, u"label7"_ustr, u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
@@ -232,8 +232,8 @@ OUString OfaMiscTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "exthelp",   "popupnohelp", "cbShowTipOfTheDay", "filedlg",
-            "docstatus", "crashreport", "quicklaunch",       "cbPerformFileExtCheck" };
+        = { u"exthelp"_ustr,   u"popupnohelp"_ustr, u"cbShowTipOfTheDay"_ustr, u"filedlg"_ustr,
+            u"docstatus"_ustr, u"crashreport"_ustr, u"quicklaunch"_ustr,       u"cbPerformFileExtCheck"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -241,7 +241,7 @@ OUString OfaMiscTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_button("assocfiles"))
+    if (const auto& pString = m_xBuilder->weld_button(u"assocfiles"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
@@ -445,21 +445,21 @@ CanvasSettings::CanvasSettings() :
 
         Sequence<Any> aArgs1(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(OUString("/org.openoffice.Office.Canvas"))}
+            {"nodepath", Any(u"/org.openoffice.Office.Canvas"_ustr)}
         }));
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess",
+                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                 aArgs1 ),
             UNO_QUERY_THROW );
 
         Sequence<Any> aArgs2(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(OUString("/org.openoffice.Office.Canvas/CanvasServiceList"))}
+            {"nodepath", Any(u"/org.openoffice.Office.Canvas/CanvasServiceList"_ustr)}
         }));
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                 aArgs2 ), UNO_QUERY_THROW );
         Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
@@ -473,7 +473,7 @@ CanvasSettings::CanvasSettings() :
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> preferredImplementations;
-                if( xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations )
+                if( xEntryNameAccess->getByName(u"PreferredImplementations"_ustr) >>= preferredImplementations )
                     maAvailableImplementations.emplace_back(serviceName, preferredImplementations);
             }
         }
@@ -503,7 +503,7 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
                                                           currImpl.trim() ),
                                                       UNO_QUERY_THROW );
                     bool bHasAccel(false);
-                    if( xPropSet->getPropertyValue("HardwareAcceleration") >>= bHasAccel )
+                    if( xPropSet->getPropertyValue(u"HardwareAcceleration"_ustr) >>= bHasAccel )
                         if( bHasAccel )
                         {
                             mbHWAccelAvailable = true;
@@ -526,7 +526,7 @@ bool CanvasSettings::IsHardwareAccelerationEnabled() const
     if( !mxForceFlagNameAccess.is() )
         return true;
 
-    if( !(mxForceFlagNameAccess->getByName("ForceSafeServiceImpl") >>= bForceLastEntry) )
+    if( !(mxForceFlagNameAccess->getByName(u"ForceSafeServiceImpl"_ustr) >>= bForceLastEntry) )
         return true;
 
     return !bForceLastEntry;
@@ -539,7 +539,7 @@ bool CanvasSettings::IsHardwareAccelerationRO() const
         return true;
 
     Reference< XPropertySetInfo > xInfo = xSet->getPropertySetInfo();
-    Property aProp = xInfo->getPropertyByName("ForceSafeServiceImpl");
+    Property aProp = xInfo->getPropertyByName(u"ForceSafeServiceImpl"_ustr);
     return ((aProp.Attributes & css::beans::PropertyAttribute::READONLY ) == css::beans::PropertyAttribute::READONLY);
 }
 
@@ -551,7 +551,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
     if( !xNameReplace.is() )
         return;
 
-    xNameReplace->replaceByName( "ForceSafeServiceImpl", Any(!_bEnabled) );
+    xNameReplace->replaceByName( u"ForceSafeServiceImpl"_ustr, Any(!_bEnabled) );
 
     Reference< XChangesBatch > xChangesBatch(
         mxForceFlagNameAccess, UNO_QUERY );
@@ -570,51 +570,51 @@ static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const v
 }
 
 OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optviewpage.ui", "OptViewPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optviewpage.ui"_ustr, u"OptViewPage"_ustr, &rSet)
     , nSizeLB_InitialSelection(0)
     , nSidebarSizeLB_InitialSelection(0)
     , nNotebookbarSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
     , pCanvasSettings(new CanvasSettings)
-    , m_xIconSizeLabel(m_xBuilder->weld_label("label14"))
-    , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
-    , m_xIconSizeImg(m_xBuilder->weld_widget("lockiconsize"))
-    , m_xSidebarIconSizeLabel(m_xBuilder->weld_label("label9"))
-    , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
-    , m_xSidebarIconSizeImg(m_xBuilder->weld_widget("locksidebariconsize"))
-    , m_xNotebookbarIconSizeLabel(m_xBuilder->weld_label("label8"))
-    , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
-    , m_xNotebookbarIconSizeImg(m_xBuilder->weld_widget("locknotebookbariconsize"))
-    , m_xDarkModeFrame(m_xBuilder->weld_widget("darkmode"))
-    , m_xAppearanceStyleLabel(m_xBuilder->weld_label("label7"))
-    , m_xAppearanceStyleLB(m_xBuilder->weld_combo_box("appearance"))
-    , m_xAppearanceStyleImg(m_xBuilder->weld_widget("lockappearance"))
-    , m_xIconStyleLabel(m_xBuilder->weld_label("label6"))
-    , m_xIconStyleLB(m_xBuilder->weld_combo_box("iconstyle"))
-    , m_xIconStyleImg(m_xBuilder->weld_widget("lockiconstyle"))
-    , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
-    , m_xFontAntiAliasingImg(m_xBuilder->weld_widget("lockaafont"))
-    , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
-    , m_xAAPointLimitLabelImg(m_xBuilder->weld_widget("lockaafrom"))
-    , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button("aanf", FieldUnit::PIXEL))
-    , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
-    , m_xFontShowImg(m_xBuilder->weld_widget("lockshowfontpreview"))
-    , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
-    , m_xUseHardwareAccellImg(m_xBuilder->weld_widget("lockuseaccel"))
-    , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
-    , m_xUseAntiAliaseImg(m_xBuilder->weld_widget("lockuseaa"))
-    , m_xUseSkia(m_xBuilder->weld_check_button("useskia"))
-    , m_xUseSkiaImg(m_xBuilder->weld_widget("lockuseskia"))
-    , m_xForceSkiaRaster(m_xBuilder->weld_check_button("forceskiaraster"))
-    , m_xForceSkiaRasterImg(m_xBuilder->weld_widget("lockforceskiaraster"))
-    , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
-    , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
-    , m_xSkiaLog(m_xBuilder->weld_button("btnSkialog"))
-    , m_xMouseMiddleLabel(m_xBuilder->weld_label("label12"))
-    , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
-    , m_xMouseMiddleImg(m_xBuilder->weld_widget("lockmousemiddle"))
-    , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
-    , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
+    , m_xIconSizeLabel(m_xBuilder->weld_label(u"label14"_ustr))
+    , m_xIconSizeLB(m_xBuilder->weld_combo_box(u"iconsize"_ustr))
+    , m_xIconSizeImg(m_xBuilder->weld_widget(u"lockiconsize"_ustr))
+    , m_xSidebarIconSizeLabel(m_xBuilder->weld_label(u"label9"_ustr))
+    , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box(u"sidebariconsize"_ustr))
+    , m_xSidebarIconSizeImg(m_xBuilder->weld_widget(u"locksidebariconsize"_ustr))
+    , m_xNotebookbarIconSizeLabel(m_xBuilder->weld_label(u"label8"_ustr))
+    , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box(u"notebookbariconsize"_ustr))
+    , m_xNotebookbarIconSizeImg(m_xBuilder->weld_widget(u"locknotebookbariconsize"_ustr))
+    , m_xDarkModeFrame(m_xBuilder->weld_widget(u"darkmode"_ustr))
+    , m_xAppearanceStyleLabel(m_xBuilder->weld_label(u"label7"_ustr))
+    , m_xAppearanceStyleLB(m_xBuilder->weld_combo_box(u"appearance"_ustr))
+    , m_xAppearanceStyleImg(m_xBuilder->weld_widget(u"lockappearance"_ustr))
+    , m_xIconStyleLabel(m_xBuilder->weld_label(u"label6"_ustr))
+    , m_xIconStyleLB(m_xBuilder->weld_combo_box(u"iconstyle"_ustr))
+    , m_xIconStyleImg(m_xBuilder->weld_widget(u"lockiconstyle"_ustr))
+    , m_xFontAntiAliasing(m_xBuilder->weld_check_button(u"aafont"_ustr))
+    , m_xFontAntiAliasingImg(m_xBuilder->weld_widget(u"lockaafont"_ustr))
+    , m_xAAPointLimitLabel(m_xBuilder->weld_label(u"aafrom"_ustr))
+    , m_xAAPointLimitLabelImg(m_xBuilder->weld_widget(u"lockaafrom"_ustr))
+    , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button(u"aanf"_ustr, FieldUnit::PIXEL))
+    , m_xFontShowCB(m_xBuilder->weld_check_button(u"showfontpreview"_ustr))
+    , m_xFontShowImg(m_xBuilder->weld_widget(u"lockshowfontpreview"_ustr))
+    , m_xUseHardwareAccell(m_xBuilder->weld_check_button(u"useaccel"_ustr))
+    , m_xUseHardwareAccellImg(m_xBuilder->weld_widget(u"lockuseaccel"_ustr))
+    , m_xUseAntiAliase(m_xBuilder->weld_check_button(u"useaa"_ustr))
+    , m_xUseAntiAliaseImg(m_xBuilder->weld_widget(u"lockuseaa"_ustr))
+    , m_xUseSkia(m_xBuilder->weld_check_button(u"useskia"_ustr))
+    , m_xUseSkiaImg(m_xBuilder->weld_widget(u"lockuseskia"_ustr))
+    , m_xForceSkiaRaster(m_xBuilder->weld_check_button(u"forceskiaraster"_ustr))
+    , m_xForceSkiaRasterImg(m_xBuilder->weld_widget(u"lockforceskiaraster"_ustr))
+    , m_xSkiaStatusEnabled(m_xBuilder->weld_label(u"skiaenabled"_ustr))
+    , m_xSkiaStatusDisabled(m_xBuilder->weld_label(u"skiadisabled"_ustr))
+    , m_xSkiaLog(m_xBuilder->weld_button(u"btnSkialog"_ustr))
+    , m_xMouseMiddleLabel(m_xBuilder->weld_label(u"label12"_ustr))
+    , m_xMouseMiddleLB(m_xBuilder->weld_combo_box(u"mousemiddle"_ustr))
+    , m_xMouseMiddleImg(m_xBuilder->weld_widget(u"lockmousemiddle"_ustr))
+    , m_xMoreIcons(m_xBuilder->weld_button(u"btnMoreIcons"_ustr))
+    , m_xRunGPTests(m_xBuilder->weld_button(u"btn_rungptest"_ustr))
     , m_sAutoStr(m_xIconStyleLB->get_text(0))
 {
     OUString sToolKitName(Application::GetToolkitName());
@@ -648,10 +648,10 @@ void OfaViewTabPage::UpdateIconThemes()
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
     OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
-    m_xIconStyleLB->append("auto", entryForAuto); // index 0 means choose style automatically
+    m_xIconStyleLB->append(u"auto"_ustr, entryForAuto); // index 0 means choose style automatically
 
     // separate auto and other icon themes
-    m_xIconStyleLB->append_separator("");
+    m_xIconStyleLB->append_separator(u""_ustr);
 
     for (auto const& installIconTheme : mInstalledIconThemes)
         m_xIconStyleLB->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
@@ -670,8 +670,8 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
 IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        "AdditionsTag", OUString("Icons")) };
-    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+        u"AdditionsTag"_ustr, u"Icons"_ustr) };
+    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::Toggleable&, void )
@@ -756,9 +756,9 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 OUString OfaViewTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label16", "label7",      "label1",       "label6", "label15",
-                          "label14", "label8",      "label9",       "label4", "label12",
-                          "label2",  "skiaenabled", "skiadisabled", "label5", "aafrom" };
+    OUString labels[] = { u"label16"_ustr, u"label7"_ustr,      u"label1"_ustr,       u"label6"_ustr, u"label15"_ustr,
+                          u"label14"_ustr, u"label8"_ustr,      u"label9"_ustr,       u"label4"_ustr, u"label12"_ustr,
+                          u"label2"_ustr,  u"skiaenabled"_ustr, u"skiadisabled"_ustr, u"label5"_ustr, u"aafrom"_ustr };
 
     for (const auto& label : labels)
     {
@@ -767,7 +767,7 @@ OUString OfaViewTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "useaccel", "useaa", "useskia", "forceskiaraster", "showfontpreview", "aafont" };
+        = { u"useaccel"_ustr, u"useaa"_ustr, u"useskia"_ustr, u"forceskiaraster"_ustr, u"showfontpreview"_ustr, u"aafont"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -1152,34 +1152,34 @@ namespace
 }
 
 OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optlanguagespage.ui", "OptLanguagesPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optlanguagespage.ui"_ustr, u"OptLanguagesPage"_ustr, &rSet)
     , pLangConfig(new LanguageConfig_Impl)
     , m_bDatePatternsValid(false)
-    , m_xUserInterfaceLB(m_xBuilder->weld_combo_box("userinterface"))
-    , m_xLocaleSettingFT(m_xBuilder->weld_label("localesettingFT"))
-    , m_xLocaleSettingLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("localesetting")))
-    , m_xLocaleSettingImg(m_xBuilder->weld_widget("locklocalesetting"))
-    , m_xDecimalSeparatorFT(m_xBuilder->weld_label("label6"))
-    , m_xDecimalSeparatorCB(m_xBuilder->weld_check_button("decimalseparator"))
-    , m_xDecimalSeparatorImg(m_xBuilder->weld_widget("lockdecimalseparator"))
-    , m_xCurrencyFT(m_xBuilder->weld_label("defaultcurrency"))
-    , m_xCurrencyLB(m_xBuilder->weld_combo_box("currencylb"))
-    , m_xCurrencyImg(m_xBuilder->weld_widget("lockcurrencylb"))
-    , m_xDatePatternsFT(m_xBuilder->weld_label("dataaccpatterns"))
-    , m_xDatePatternsED(m_xBuilder->weld_entry("datepatterns"))
-    , m_xDatePatternsImg(m_xBuilder->weld_widget("lockdatepatterns"))
-    , m_xWesternLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("westernlanguage")))
-    , m_xWesternLanguageFT(m_xBuilder->weld_label("western"))
-    , m_xWesternLanguageImg(m_xBuilder->weld_widget("lockwesternlanguage"))
-    , m_xAsianLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("asianlanguage")))
-    , m_xComplexLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("complexlanguage")))
-    , m_xCurrentDocCB(m_xBuilder->weld_check_button("currentdoc"))
-    , m_xAsianSupportCB(m_xBuilder->weld_check_button("asiansupport"))
-    , m_xAsianSupportImg(m_xBuilder->weld_widget("lockasiansupport"))
-    , m_xCTLSupportCB(m_xBuilder->weld_check_button("ctlsupport"))
-    , m_xCTLSupportImg(m_xBuilder->weld_widget("lockctlsupport"))
-    , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button("ignorelanguagechange"))
-    , m_xIgnoreLanguageChangeImg(m_xBuilder->weld_widget("lockignorelanguagechange"))
+    , m_xUserInterfaceLB(m_xBuilder->weld_combo_box(u"userinterface"_ustr))
+    , m_xLocaleSettingFT(m_xBuilder->weld_label(u"localesettingFT"_ustr))
+    , m_xLocaleSettingLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"localesetting"_ustr)))
+    , m_xLocaleSettingImg(m_xBuilder->weld_widget(u"locklocalesetting"_ustr))
+    , m_xDecimalSeparatorFT(m_xBuilder->weld_label(u"label6"_ustr))
+    , m_xDecimalSeparatorCB(m_xBuilder->weld_check_button(u"decimalseparator"_ustr))
+    , m_xDecimalSeparatorImg(m_xBuilder->weld_widget(u"lockdecimalseparator"_ustr))
+    , m_xCurrencyFT(m_xBuilder->weld_label(u"defaultcurrency"_ustr))
+    , m_xCurrencyLB(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
+    , m_xCurrencyImg(m_xBuilder->weld_widget(u"lockcurrencylb"_ustr))
+    , m_xDatePatternsFT(m_xBuilder->weld_label(u"dataaccpatterns"_ustr))
+    , m_xDatePatternsED(m_xBuilder->weld_entry(u"datepatterns"_ustr))
+    , m_xDatePatternsImg(m_xBuilder->weld_widget(u"lockdatepatterns"_ustr))
+    , m_xWesternLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"westernlanguage"_ustr)))
+    , m_xWesternLanguageFT(m_xBuilder->weld_label(u"western"_ustr))
+    , m_xWesternLanguageImg(m_xBuilder->weld_widget(u"lockwesternlanguage"_ustr))
+    , m_xAsianLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"asianlanguage"_ustr)))
+    , m_xComplexLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"complexlanguage"_ustr)))
+    , m_xCurrentDocCB(m_xBuilder->weld_check_button(u"currentdoc"_ustr))
+    , m_xAsianSupportCB(m_xBuilder->weld_check_button(u"asiansupport"_ustr))
+    , m_xAsianSupportImg(m_xBuilder->weld_widget(u"lockasiansupport"_ustr))
+    , m_xCTLSupportCB(m_xBuilder->weld_check_button(u"ctlsupport"_ustr))
+    , m_xCTLSupportImg(m_xBuilder->weld_widget(u"lockctlsupport"_ustr))
+    , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button(u"ignorelanguagechange"_ustr))
+    , m_xIgnoreLanguageChangeImg(m_xBuilder->weld_widget(u"lockignorelanguagechange"_ustr))
 {
     // tdf#125483 save original default label
     m_sDecimalSeparatorLabel = m_xDecimalSeparatorCB->get_label();
@@ -1191,15 +1191,15 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
                        " - " +
                        SvtLanguageTable::GetLanguageString(GetInstalledLocaleForSystemUILanguage().getLanguageType());
 
-    m_xUserInterfaceLB->append("0", aUILang);
-    m_xUserInterfaceLB->append_separator("");
+    m_xUserInterfaceLB->append(u"0"_ustr, aUILang);
+    m_xUserInterfaceLB->append_separator(u""_ustr);
     try
     {
         Reference< XMultiServiceFactory > theConfigProvider(
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         // find out which locales are currently installed and add them to the listbox
-        Sequence< Any > theArgs{ Any(NamedValue("nodepath", Any(sInstalledLocalesPath))) };
+        Sequence< Any > theArgs{ Any(NamedValue(u"nodepath"_ustr, Any(sInstalledLocalesPath))) };
         Reference< XNameAccess > theNameAccess(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1231,7 +1231,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         m_xUserInterfaceLB->set_active(0);
 
         // find out whether the user has a specific locale specified
-        Sequence< Any > theArgs2{ Any(NamedValue("nodepath", Any(sUserLocalePath))) };
+        Sequence< Any > theArgs2{ Any(NamedValue(u"nodepath"_ustr, Any(sUserLocalePath))) };
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1275,12 +1275,12 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
-    m_xCurrencyLB->append("default", aDefaultCurr);
-    m_xCurrencyLB->append_separator("");
+    m_xCurrencyLB->append(u"default"_ustr, aDefaultCurr);
+    m_xCurrencyLB->append_separator(u""_ustr);
 
-    assert(m_xCurrencyLB->find_id("default") != -1);
+    assert(m_xCurrencyLB->find_id(u"default"_ustr) != -1);
     // all currencies
-    OUString aTwoSpace( "  " );
+    OUString aTwoSpace( u"  "_ustr );
     sal_uInt16 nCurrCount = rCurrTab.size();
     std::vector< const NfCurrencyEntry* > aCurrencies;
     // first entry is SYSTEM, skip it
@@ -1363,8 +1363,8 @@ OUString OfaLanguagesTabPage::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[]
-        = { "label1", "label4",          "label7", "localesettingFT", "defaultcurrency",
-            "label6", "dataaccpatterns", "label2", "western",         "label3" };
+        = { u"label1"_ustr, u"label4"_ustr,          u"label7"_ustr, u"localesettingFT"_ustr, u"defaultcurrency"_ustr,
+            u"label6"_ustr, u"dataaccpatterns"_ustr, u"label2"_ustr, u"western"_ustr,         u"label3"_ustr };
 
     for (const auto& label : labels)
     {
@@ -1372,8 +1372,8 @@ OUString OfaLanguagesTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "decimalseparator", "asiansupport", "ctlsupport", "currentdoc",
-                               "ignorelanguagechange" };
+    OUString checkButton[] = { u"decimalseparator"_ustr, u"asiansupport"_ustr, u"ctlsupport"_ustr, u"currentdoc"_ustr,
+                               u"ignorelanguagechange"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -1427,7 +1427,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         Reference< XMultiServiceFactory > theConfigProvider(
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
-        Sequence< Any > theArgs{ Any(NamedValue("nodepath", Any(sUserLocalePath))) };
+        Sequence< Any > theArgs{ Any(NamedValue(u"nodepath"_ustr, Any(sUserLocalePath))) };
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( m_sUserLocaleValue != aLangString)
@@ -1666,7 +1666,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==nullptr the SYSTEM entry is selected
-    OUString sId = !pCurr ? OUString("default") : weld::toId(pCurr);
+    OUString sId = !pCurr ? u"default"_ustr : weld::toId(pCurr);
     m_xCurrencyLB->set_active_id(sId);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Currency);
     m_xCurrencyLB->set_sensitive(!bReadonly);

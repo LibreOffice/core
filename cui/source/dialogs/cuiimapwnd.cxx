@@ -28,12 +28,12 @@
 URLDlg::URLDlg(weld::Widget* pWindow, const OUString& rURL, const OUString& rAlternativeText,
                const OUString& rDescription, const OUString& rTarget, const OUString& rName,
                TargetList& rTargetList)
-    : GenericDialogController(pWindow, "cui/ui/cuiimapdlg.ui", "IMapDialog")
-    , m_xEdtURL(m_xBuilder->weld_entry("urlentry"))
-    , m_xCbbTargets(m_xBuilder->weld_combo_box("frameCB"))
-    , m_xEdtName(m_xBuilder->weld_entry("nameentry"))
-    , m_xEdtAlternativeText(m_xBuilder->weld_entry("textentry"))
-    , m_xEdtDescription(m_xBuilder->weld_text_view("descTV"))
+    : GenericDialogController(pWindow, u"cui/ui/cuiimapdlg.ui"_ustr, u"IMapDialog"_ustr)
+    , m_xEdtURL(m_xBuilder->weld_entry(u"urlentry"_ustr))
+    , m_xCbbTargets(m_xBuilder->weld_combo_box(u"frameCB"_ustr))
+    , m_xEdtName(m_xBuilder->weld_entry(u"nameentry"_ustr))
+    , m_xEdtAlternativeText(m_xBuilder->weld_entry(u"textentry"_ustr))
+    , m_xEdtDescription(m_xBuilder->weld_text_view(u"descTV"_ustr))
 {
     m_xEdtDescription->set_size_request(m_xEdtDescription->get_approximate_digit_width() * 51,
                                         m_xEdtDescription->get_height_rows(5));
@@ -47,7 +47,7 @@ URLDlg::URLDlg(weld::Widget* pWindow, const OUString& rURL, const OUString& rAlt
         m_xCbbTargets->append_text(a);
 
     if (rTarget.isEmpty())
-        m_xCbbTargets->set_entry_text("_self");
+        m_xCbbTargets->set_entry_text(u"_self"_ustr);
     else
         m_xCbbTargets->set_entry_text(rTarget);
 }

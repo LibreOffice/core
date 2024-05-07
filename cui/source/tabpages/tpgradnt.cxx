@@ -40,34 +40,34 @@
 using namespace com::sun::star;
 
 SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/gradientpage.ui", "GradientPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/gradientpage.ui"_ustr, u"GradientPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnGradientListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_xLbGradientType(m_xBuilder->weld_combo_box("gradienttypelb"))
-    , m_xFtCenter(m_xBuilder->weld_label("centerft"))
-    , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button("centerxmtr", FieldUnit::PERCENT))
-    , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button("centerymtr", FieldUnit::PERCENT))
-    , m_xFtAngle(m_xBuilder->weld_label("angleft"))
-    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
-    , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
-    , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FieldUnit::PERCENT))
-    , m_xSliderBorder(m_xBuilder->weld_scale("borderslider"))
-    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"),
+    , m_xLbGradientType(m_xBuilder->weld_combo_box(u"gradienttypelb"_ustr))
+    , m_xFtCenter(m_xBuilder->weld_label(u"centerft"_ustr))
+    , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button(u"centerxmtr"_ustr, FieldUnit::PERCENT))
+    , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button(u"centerymtr"_ustr, FieldUnit::PERCENT))
+    , m_xFtAngle(m_xBuilder->weld_label(u"angleft"_ustr))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button(u"anglemtr"_ustr, FieldUnit::DEGREE))
+    , m_xSliderAngle(m_xBuilder->weld_scale(u"angleslider"_ustr))
+    , m_xMtrBorder(m_xBuilder->weld_metric_spin_button(u"bordermtr"_ustr, FieldUnit::PERCENT))
+    , m_xSliderBorder(m_xBuilder->weld_scale(u"borderslider"_ustr))
+    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button(u"colorfromlb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FieldUnit::PERCENT))
-    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"),
+    , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button(u"colorfrommtr"_ustr, FieldUnit::PERCENT))
+    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button(u"colortolb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FieldUnit::PERCENT))
-    , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin", true)))
-    , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))
-    , m_xCbIncrement(m_xBuilder->weld_check_button("autoincrement"))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnModify(m_xBuilder->weld_button("modify"))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
-    , m_xGradientLBWin(new weld::CustomWeld(*m_xBuilder, "gradientpresetlist", *m_xGradientLB))
+    , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button(u"colortomtr"_ustr, FieldUnit::PERCENT))
+    , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"gradientpresetlistwin"_ustr, true)))
+    , m_xMtrIncrement(m_xBuilder->weld_spin_button(u"incrementmtr"_ustr))
+    , m_xCbIncrement(m_xBuilder->weld_check_button(u"autoincrement"_ustr))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnModify(m_xBuilder->weld_button(u"modify"_ustr))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"previewctl"_ustr, m_aCtlPreview))
+    , m_xGradientLBWin(new weld::CustomWeld(*m_xBuilder, u"gradientpresetlist"_ustr, *m_xGradientLB))
 {
     Size aSize = getDrawPreviewOptimalSize(m_aCtlPreview.GetDrawingArea()->get_ref_device());
     m_xGradientLB->set_size_request(aSize.Width(), aSize.Height());
@@ -352,8 +352,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
         if (xWarnBox->run() != RET_OK)
             break;
     }
@@ -436,8 +436,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletegradientdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelGradientDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletegradientdialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelGradientDialog"_ustr));
         if (xQueryBox->run() == RET_YES)
         {
             m_pGradientList->Remove(nPos);
@@ -491,8 +491,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xBox->run();
         }
     }

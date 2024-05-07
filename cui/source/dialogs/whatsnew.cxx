@@ -22,14 +22,14 @@ constexpr tools::Long PROGRESS_DOTSIZE(24);
 constexpr tools::Long PROGRESS_DOTSPACING(4);
 
 WhatsNewDialog::WhatsNewDialog(weld::Window* pParent, const bool bWelcome)
-    : GenericDialogController(pParent, "cui/ui/whatsnewdialog.ui", "WhatsNewDialog")
+    : GenericDialogController(pParent, u"cui/ui/whatsnewdialog.ui"_ustr, u"WhatsNewDialog"_ustr)
     , m_bWelcome(bWelcome)
     , m_aPreview()
     , m_aProgress()
-    , m_pPrevBtn(m_xBuilder->weld_button("btnPrev"))
-    , m_pNextBtn(m_xBuilder->weld_button("btnNext"))
-    , m_pProgress(new weld::CustomWeld(*m_xBuilder, "imProgress", m_aProgress))
-    , m_pImage(new weld::CustomWeld(*m_xBuilder, "imNews", m_aPreview))
+    , m_pPrevBtn(m_xBuilder->weld_button(u"btnPrev"_ustr))
+    , m_pNextBtn(m_xBuilder->weld_button(u"btnNext"_ustr))
+    , m_pProgress(new weld::CustomWeld(*m_xBuilder, u"imProgress"_ustr, m_aProgress))
+    , m_pImage(new weld::CustomWeld(*m_xBuilder, u"imNews"_ustr, m_aPreview))
 {
     if (m_bWelcome)
         m_xDialog->set_title(CuiResId(STR_WELCOME));
@@ -55,7 +55,7 @@ void WhatsNewDialog::LoadImage()
     {
         auto[sText, sImage] = m_bWelcome ? WELCOME_STRINGARRAY[m_nCurrentNews]
                                          : WHATSNEW_STRINGARRAY[m_nCurrentNews];
-        OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/whatsnew/");
+        OUString aURL(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/whatsnew/"_ustr);
         rtl::Bootstrap::expandMacros(aURL);
 
         const bool bFileExists = comphelper::DirectoryHelper::fileExists(aURL + sImage);

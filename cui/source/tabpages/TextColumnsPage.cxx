@@ -21,10 +21,11 @@ const WhichRangesContainer
 
 SvxTextColumnsPage::SvxTextColumnsPage(weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/textcolumnstabpage.ui", "TextColumnsPage", &rInAttrs)
-    , m_xColumnsNumber(m_xBuilder->weld_spin_button("FLD_COL_NUMBER"))
-    , m_xColumnsSpacing(
-          m_xBuilder->weld_metric_spin_button("MTR_FLD_COL_SPACING", GetModuleFieldUnit(rInAttrs)))
+    : SfxTabPage(pPage, pController, u"cui/ui/textcolumnstabpage.ui"_ustr, u"TextColumnsPage"_ustr,
+                 &rInAttrs)
+    , m_xColumnsNumber(m_xBuilder->weld_spin_button(u"FLD_COL_NUMBER"_ustr))
+    , m_xColumnsSpacing(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_COL_SPACING"_ustr,
+                                                            GetModuleFieldUnit(rInAttrs)))
 {
 }
 

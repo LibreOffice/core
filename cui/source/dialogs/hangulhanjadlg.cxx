@@ -289,9 +289,9 @@ namespace svx
     SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
         : m_bDisplayListBox( true )
         , m_bInSelectionUpdate( false )
-        , m_xValueSet(new SuggestionSet(rBuilder.weld_scrolled_window("scrollwin", true)))
-        , m_xValueSetWin(new weld::CustomWeld(rBuilder, "valueset", *m_xValueSet))
-        , m_xListBox(rBuilder.weld_tree_view("listbox"))
+        , m_xValueSet(new SuggestionSet(rBuilder.weld_scrolled_window(u"scrollwin"_ustr, true)))
+        , m_xValueSetWin(new weld::CustomWeld(rBuilder, u"valueset"_ustr, *m_xValueSet))
+        , m_xListBox(rBuilder.weld_tree_view(u"listbox"_ustr))
     {
         m_xValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionValueSetHdl ) );
         m_xListBox->connect_changed( LINK( this, SuggestionDisplay, SelectSuggestionListBoxHdl ) );
@@ -299,7 +299,7 @@ namespace svx
         m_xValueSet->SetLineCount( LINE_CNT );
         m_xValueSet->SetStyle( m_xValueSet->GetStyle() | WB_ITEMBORDER | WB_VSCROLL );
 
-        auto nItemWidth = 2 * m_xListBox->get_pixel_size("AU").Width();
+        auto nItemWidth = 2 * m_xListBox->get_pixel_size(u"AU"_ustr).Width();
         m_xValueSet->SetItemWidth( nItemWidth );
 
         Size aSize(m_xListBox->get_approximate_digit_width() * 42, m_xListBox->get_text_height() * 5);
@@ -422,31 +422,31 @@ namespace svx
     }
 
     HangulHanjaConversionDialog::HangulHanjaConversionDialog(weld::Widget* pParent)
-        : GenericDialogController(pParent, "cui/ui/hangulhanjaconversiondialog.ui", "HangulHanjaConversionDialog")
+        : GenericDialogController(pParent, u"cui/ui/hangulhanjaconversiondialog.ui"_ustr, u"HangulHanjaConversionDialog"_ustr)
         , m_bDocumentMode( true )
-        , m_xFind(m_xBuilder->weld_button("find"))
-        , m_xIgnore(m_xBuilder->weld_button("ignore"))
-        , m_xIgnoreAll(m_xBuilder->weld_button("ignoreall"))
-        , m_xReplace(m_xBuilder->weld_button("replace"))
-        , m_xReplaceAll(m_xBuilder->weld_button("replaceall"))
-        , m_xOptions(m_xBuilder->weld_button("options"))
+        , m_xFind(m_xBuilder->weld_button(u"find"_ustr))
+        , m_xIgnore(m_xBuilder->weld_button(u"ignore"_ustr))
+        , m_xIgnoreAll(m_xBuilder->weld_button(u"ignoreall"_ustr))
+        , m_xReplace(m_xBuilder->weld_button(u"replace"_ustr))
+        , m_xReplaceAll(m_xBuilder->weld_button(u"replaceall"_ustr))
+        , m_xOptions(m_xBuilder->weld_button(u"options"_ustr))
         , m_xSuggestions(new SuggestionDisplay(*m_xBuilder))
-        , m_xSimpleConversion(m_xBuilder->weld_radio_button("simpleconversion"))
-        , m_xHangulBracketed(m_xBuilder->weld_radio_button("hangulbracket"))
-        , m_xHanjaBracketed(m_xBuilder->weld_radio_button("hanjabracket"))
-        , m_xWordInput(m_xBuilder->weld_entry("wordinput"))
-        , m_xOriginalWord(m_xBuilder->weld_label("originalword"))
-        , m_xHanjaAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_above"),
-                                            m_xBuilder->weld_image("hanja_above_img")))
-        , m_xHanjaBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_below"),
-                                            m_xBuilder->weld_image("hanja_below_img")))
-        , m_xHangulAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_above"),
-                                             m_xBuilder->weld_image("hangul_above_img")))
-        , m_xHangulBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_below"),
-                                             m_xBuilder->weld_image("hangul_below_img")))
-        , m_xHangulOnly(m_xBuilder->weld_check_button("hangulonly"))
-        , m_xHanjaOnly(m_xBuilder->weld_check_button("hanjaonly"))
-        , m_xReplaceByChar(m_xBuilder->weld_check_button("replacebychar"))
+        , m_xSimpleConversion(m_xBuilder->weld_radio_button(u"simpleconversion"_ustr))
+        , m_xHangulBracketed(m_xBuilder->weld_radio_button(u"hangulbracket"_ustr))
+        , m_xHanjaBracketed(m_xBuilder->weld_radio_button(u"hanjabracket"_ustr))
+        , m_xWordInput(m_xBuilder->weld_entry(u"wordinput"_ustr))
+        , m_xOriginalWord(m_xBuilder->weld_label(u"originalword"_ustr))
+        , m_xHanjaAbove(new RubyRadioButton(m_xBuilder->weld_radio_button(u"hanja_above"_ustr),
+                                            m_xBuilder->weld_image(u"hanja_above_img"_ustr)))
+        , m_xHanjaBelow(new RubyRadioButton(m_xBuilder->weld_radio_button(u"hanja_below"_ustr),
+                                            m_xBuilder->weld_image(u"hanja_below_img"_ustr)))
+        , m_xHangulAbove(new RubyRadioButton(m_xBuilder->weld_radio_button(u"hangul_above"_ustr),
+                                             m_xBuilder->weld_image(u"hangul_above_img"_ustr)))
+        , m_xHangulBelow(new RubyRadioButton(m_xBuilder->weld_radio_button(u"hangul_below"_ustr),
+                                             m_xBuilder->weld_image(u"hangul_below_img"_ustr)))
+        , m_xHangulOnly(m_xBuilder->weld_check_button(u"hangulonly"_ustr))
+        , m_xHanjaOnly(m_xBuilder->weld_check_button(u"hanjaonly"_ustr))
+        , m_xReplaceByChar(m_xBuilder->weld_check_button(u"replacebychar"_ustr))
     {
         m_xSuggestions->set_size_request(m_xOriginalWord->get_approximate_digit_width() * 42,
                                          m_xOriginalWord->get_text_height() * 5);
@@ -879,15 +879,15 @@ namespace svx
     }
 
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(weld::Window* pParent)
-        : GenericDialogController(pParent, "cui/ui/hangulhanjaoptdialog.ui", "HangulHanjaOptDialog")
-        , m_xDictsLB(m_xBuilder->weld_tree_view("dicts"))
-        , m_xIgnorepostCB(m_xBuilder->weld_check_button("ignorepost"))
-        , m_xShowrecentlyfirstCB(m_xBuilder->weld_check_button("showrecentfirst"))
-        , m_xAutoreplaceuniqueCB(m_xBuilder->weld_check_button("autoreplaceunique"))
-        , m_xNewPB(m_xBuilder->weld_button("new"))
-        , m_xEditPB(m_xBuilder->weld_button("edit"))
-        , m_xDeletePB(m_xBuilder->weld_button("delete"))
-        , m_xOkPB(m_xBuilder->weld_button("ok"))
+        : GenericDialogController(pParent, u"cui/ui/hangulhanjaoptdialog.ui"_ustr, u"HangulHanjaOptDialog"_ustr)
+        , m_xDictsLB(m_xBuilder->weld_tree_view(u"dicts"_ustr))
+        , m_xIgnorepostCB(m_xBuilder->weld_check_button(u"ignorepost"_ustr))
+        , m_xShowrecentlyfirstCB(m_xBuilder->weld_check_button(u"showrecentfirst"_ustr))
+        , m_xAutoreplaceuniqueCB(m_xBuilder->weld_check_button(u"autoreplaceunique"_ustr))
+        , m_xNewPB(m_xBuilder->weld_button(u"new"_ustr))
+        , m_xEditPB(m_xBuilder->weld_button(u"edit"_ustr))
+        , m_xDeletePB(m_xBuilder->weld_button(u"delete"_ustr))
+        , m_xOkPB(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xDictsLB->set_size_request(m_xDictsLB->get_approximate_digit_width() * 32,
                                      m_xDictsLB->get_height_rows(5));
@@ -951,10 +951,10 @@ namespace svx
     }
 
     HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(weld::Window* pParent)
-        : GenericDialogController(pParent, "cui/ui/hangulhanjaadddialog.ui", "HangulHanjaAddDialog")
+        : GenericDialogController(pParent, u"cui/ui/hangulhanjaadddialog.ui"_ustr, u"HangulHanjaAddDialog"_ustr)
         , m_bEntered(false)
-        , m_xOkBtn(m_xBuilder->weld_button("ok"))
-        , m_xDictNameED(m_xBuilder->weld_entry("entry"))
+        , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xDictNameED(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         m_xOkBtn->connect_clicked( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
         m_xDictNameED->connect_changed( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
@@ -1416,23 +1416,23 @@ namespace svx
     }
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog(weld::Window* pParent, HHDictList& _rDictList, sal_uInt32 nSelDict)
-        : GenericDialogController(pParent, "cui/ui/hangulhanjaeditdictdialog.ui", "HangulHanjaEditDictDialog")
+        : GenericDialogController(pParent, u"cui/ui/hangulhanjaeditdictdialog.ui"_ustr, u"HangulHanjaEditDictDialog"_ustr)
         , m_aEditHintText        ( CuiResId(RID_CUISTR_EDITHINT) )
         , m_rDictList            ( _rDictList )
         , m_nCurrentDict         ( 0xFFFFFFFF )
         , m_nTopPos              ( 0 )
         , m_bModifiedSuggestions ( false )
         , m_bModifiedOriginal    ( false )
-        , m_xBookLB(m_xBuilder->weld_combo_box("book"))
-        , m_xOriginalLB(m_xBuilder->weld_combo_box("original"))
-        , m_xEdit1(new SuggestionEdit(m_xBuilder->weld_entry("edit1"), this))
-        , m_xEdit2(new SuggestionEdit(m_xBuilder->weld_entry("edit2"), this))
-        , m_xEdit3(new SuggestionEdit(m_xBuilder->weld_entry("edit3"), this))
-        , m_xEdit4(new SuggestionEdit(m_xBuilder->weld_entry("edit4"), this))
-        , m_xContents(m_xBuilder->weld_widget("box"))
-        , m_xScrollSB(m_xBuilder->weld_scrolled_window("scrollbar", true))
-        , m_xNewPB(m_xBuilder->weld_button("new"))
-        , m_xDeletePB(m_xBuilder->weld_button("delete"))
+        , m_xBookLB(m_xBuilder->weld_combo_box(u"book"_ustr))
+        , m_xOriginalLB(m_xBuilder->weld_combo_box(u"original"_ustr))
+        , m_xEdit1(new SuggestionEdit(m_xBuilder->weld_entry(u"edit1"_ustr), this))
+        , m_xEdit2(new SuggestionEdit(m_xBuilder->weld_entry(u"edit2"_ustr), this))
+        , m_xEdit3(new SuggestionEdit(m_xBuilder->weld_entry(u"edit3"_ustr), this))
+        , m_xEdit4(new SuggestionEdit(m_xBuilder->weld_entry(u"edit4"_ustr), this))
+        , m_xContents(m_xBuilder->weld_widget(u"box"_ustr))
+        , m_xScrollSB(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
+        , m_xNewPB(m_xBuilder->weld_button(u"new"_ustr))
+        , m_xDeletePB(m_xBuilder->weld_button(u"delete"_ustr))
     {
         Size aSize(m_xContents->get_preferred_size());
         m_xScrollSB->set_size_request(-1, aSize.Height());

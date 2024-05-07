@@ -39,23 +39,23 @@ enum class MSFltrPg2_CheckBoxEntries {
 
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optfltrpage.ui", "OptFltrPage", &rSet)
-    , m_xWBasicCodeCB(m_xBuilder->weld_check_button("wo_basic"))
-    , m_xWBasicCodeImg(m_xBuilder->weld_widget("lockwo_basic"))
-    , m_xWBasicWbctblCB(m_xBuilder->weld_check_button("wo_exec"))
-    , m_xWBasicWbctblImg(m_xBuilder->weld_widget("lockwo_exec"))
-    , m_xWBasicStgCB(m_xBuilder->weld_check_button("wo_saveorig"))
-    , m_xWBasicStgImg(m_xBuilder->weld_widget("lockwo_saveorig"))
-    , m_xEBasicCodeCB(m_xBuilder->weld_check_button("ex_basic"))
-    , m_xEBasicCodeImg(m_xBuilder->weld_widget("lockex_basic"))
-    , m_xEBasicExectblCB(m_xBuilder->weld_check_button("ex_exec"))
-    , m_xEBasicExectblImg(m_xBuilder->weld_widget("lockex_exec"))
-    , m_xEBasicStgCB(m_xBuilder->weld_check_button("ex_saveorig"))
-    , m_xEBasicStgImg(m_xBuilder->weld_widget("lockex_saveorig"))
-    , m_xPBasicCodeCB(m_xBuilder->weld_check_button("pp_basic"))
-    , m_xPBasicCodeImg(m_xBuilder->weld_widget("lockpp_basic"))
-    , m_xPBasicStgCB(m_xBuilder->weld_check_button("pp_saveorig"))
-    , m_xPBasicStgImg(m_xBuilder->weld_widget("lockpp_saveorig"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optfltrpage.ui"_ustr, u"OptFltrPage"_ustr, &rSet)
+    , m_xWBasicCodeCB(m_xBuilder->weld_check_button(u"wo_basic"_ustr))
+    , m_xWBasicCodeImg(m_xBuilder->weld_widget(u"lockwo_basic"_ustr))
+    , m_xWBasicWbctblCB(m_xBuilder->weld_check_button(u"wo_exec"_ustr))
+    , m_xWBasicWbctblImg(m_xBuilder->weld_widget(u"lockwo_exec"_ustr))
+    , m_xWBasicStgCB(m_xBuilder->weld_check_button(u"wo_saveorig"_ustr))
+    , m_xWBasicStgImg(m_xBuilder->weld_widget(u"lockwo_saveorig"_ustr))
+    , m_xEBasicCodeCB(m_xBuilder->weld_check_button(u"ex_basic"_ustr))
+    , m_xEBasicCodeImg(m_xBuilder->weld_widget(u"lockex_basic"_ustr))
+    , m_xEBasicExectblCB(m_xBuilder->weld_check_button(u"ex_exec"_ustr))
+    , m_xEBasicExectblImg(m_xBuilder->weld_widget(u"lockex_exec"_ustr))
+    , m_xEBasicStgCB(m_xBuilder->weld_check_button(u"ex_saveorig"_ustr))
+    , m_xEBasicStgImg(m_xBuilder->weld_widget(u"lockex_saveorig"_ustr))
+    , m_xPBasicCodeCB(m_xBuilder->weld_check_button(u"pp_basic"_ustr))
+    , m_xPBasicCodeImg(m_xBuilder->weld_widget(u"lockpp_basic"_ustr))
+    , m_xPBasicStgCB(m_xBuilder->weld_check_button(u"pp_saveorig"_ustr))
+    , m_xPBasicStgImg(m_xBuilder->weld_widget(u"lockpp_saveorig"_ustr))
 {
     m_xWBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
     m_xEBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
@@ -86,7 +86,7 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( weld::Container* pPage, 
 OUString OfaMSFilterTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
@@ -94,8 +94,8 @@ OUString OfaMSFilterTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "wo_basic", "wo_exec",     "wo_saveorig", "ex_basic",
-                               "ex_exec",  "ex_saveorig", "pp_basic",    "pp_saveorig" };
+    OUString checkButton[] = { u"wo_basic"_ustr, u"wo_exec"_ustr,     u"wo_saveorig"_ustr, u"ex_basic"_ustr,
+                               u"ex_exec"_ustr,  u"ex_saveorig"_ustr, u"pp_basic"_ustr,    u"pp_saveorig"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -175,7 +175,7 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet* )
 }
 
 OfaMSFilterTabPage2::OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optfltrembedpage.ui", "OptFilterPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optfltrembedpage.ui"_ustr, u"OptFilterPage"_ustr, &rSet)
     , sChgToFromMath(CuiResId(RID_CUISTR_CHG_MATH))
     , sChgToFromWriter(CuiResId(RID_CUISTR_CHG_WRITER))
     , sChgToFromCalc(CuiResId(RID_CUISTR_CHG_CALC))
@@ -183,13 +183,13 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogCon
     , sChgToFromSmartArt(CuiResId(RID_CUISTR_CHG_SMARTART))
     , sChgToFromVisio(CuiResId(RID_CUISTR_CHG_VISIO))
     , sChgToFromPDF(CuiResId(RID_CUISTR_CHG_PDF))
-    , m_xCheckLB(m_xBuilder->weld_tree_view("checklbcontainer"))
-    , m_xHighlightingFT(m_xBuilder->weld_label("label5"))
-    , m_xHighlightingRB(m_xBuilder->weld_radio_button("highlighting"))
-    , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
-    , m_xShadingImg(m_xBuilder->weld_widget("lockbuttonbox1"))
-    , m_xMSOLockFileCB(m_xBuilder->weld_check_button("mso_lockfile"))
-    , m_xMSOLockFileImg(m_xBuilder->weld_widget("lockmso_lockfile"))
+    , m_xCheckLB(m_xBuilder->weld_tree_view(u"checklbcontainer"_ustr))
+    , m_xHighlightingFT(m_xBuilder->weld_label(u"label5"_ustr))
+    , m_xHighlightingRB(m_xBuilder->weld_radio_button(u"highlighting"_ustr))
+    , m_xShadingRB(m_xBuilder->weld_radio_button(u"shading"_ustr))
+    , m_xShadingImg(m_xBuilder->weld_widget(u"lockbuttonbox1"_ustr))
+    , m_xMSOLockFileCB(m_xBuilder->weld_check_button(u"mso_lockfile"_ustr))
+    , m_xMSOLockFileImg(m_xBuilder->weld_widget(u"lockmso_lockfile"_ustr))
 {
     std::vector<int> aWidths
     {
@@ -212,7 +212,7 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( weld::Container* pPage,
 OUString OfaMSFilterTabPage2::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3", "label4", "label5", "label6" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"label4"_ustr, u"label5"_ustr, u"label6"_ustr };
 
     for (const auto& label : labels)
     {
@@ -220,7 +220,7 @@ OUString OfaMSFilterTabPage2::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "highlighting", "shading" };
+    OUString radioButton[] = { u"highlighting"_ustr, u"shading"_ustr };
 
     for (const auto& radio : radioButton)
     {

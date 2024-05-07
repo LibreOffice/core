@@ -49,13 +49,14 @@
 const Size ThumbSize(150, 150);
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
+    : GenericDialogController(pParent, u"cui/ui/tipofthedaydialog.ui"_ustr,
+                              u"TipOfTheDayDialog"_ustr)
     , m_xParent(pParent ? pParent->GetXWindow() : nullptr)
-    , m_pText(m_xBuilder->weld_label("lbText"))
-    , m_pShowTip(m_xBuilder->weld_check_button("cbShowTip"))
-    , m_pNext(m_xBuilder->weld_button("btnNext"))
-    , m_pLink(m_xBuilder->weld_link_button("btnLink"))
-    , m_pPreview(new weld::CustomWeld(*m_xBuilder, "imPreview", m_aPreview))
+    , m_pText(m_xBuilder->weld_label(u"lbText"_ustr))
+    , m_pShowTip(m_xBuilder->weld_check_button(u"cbShowTip"_ustr))
+    , m_pNext(m_xBuilder->weld_button(u"btnNext"_ustr))
+    , m_pLink(m_xBuilder->weld_link_button(u"btnLink"_ustr))
+    , m_pPreview(new weld::CustomWeld(*m_xBuilder, u"imPreview"_ustr, m_aPreview))
 {
     m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
@@ -218,7 +219,7 @@ void TipOfTheDayDialog::UpdateTip()
         m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
     }
     // image
-    OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
+    OUString aURL(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
     OUString aImageName = sImage;
     Graphic aGraphic;

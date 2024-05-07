@@ -237,17 +237,17 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     uno::Reference< linguistic2::XThesaurus > const & xThes,
     const OUString &rWord,
     LanguageType nLanguage)
-    : SfxDialogController(pParent, "cui/ui/thesaurus.ui", "ThesaurusDialog")
+    : SfxDialogController(pParent, u"cui/ui/thesaurus.ui"_ustr, u"ThesaurusDialog"_ustr)
     , m_aModifyIdle("cui SvxThesaurusDialog LookUp Modify")
     , nLookUpLanguage(LANGUAGE_NONE)
     , m_bWordFound(false)
-    , m_xLeftBtn(m_xBuilder->weld_button("left"))
-    , m_xWordCB(m_xBuilder->weld_combo_box("wordcb"))
-    , m_xAlternativesCT(m_xBuilder->weld_tree_view("alternatives"))
-    , m_xNotFound(m_xBuilder->weld_label("notfound"))
-    , m_xReplaceEdit(m_xBuilder->weld_entry("replaceed"))
-    , m_xLangLB(m_xBuilder->weld_combo_box("langcb"))
-    , m_xReplaceBtn(m_xBuilder->weld_button("ok"))
+    , m_xLeftBtn(m_xBuilder->weld_button(u"left"_ustr))
+    , m_xWordCB(m_xBuilder->weld_combo_box(u"wordcb"_ustr))
+    , m_xAlternativesCT(m_xBuilder->weld_tree_view(u"alternatives"_ustr))
+    , m_xNotFound(m_xBuilder->weld_label(u"notfound"_ustr))
+    , m_xReplaceEdit(m_xBuilder->weld_entry(u"replaceed"_ustr))
+    , m_xLangLB(m_xBuilder->weld_combo_box(u"langcb"_ustr))
+    , m_xReplaceBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_nSelectFirstEvent(nullptr)
 {
     m_aModifyIdle.SetInvokeHandler( LINK( this, SvxThesaurusDialog, ModifyTimer_Hdl ) );

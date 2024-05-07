@@ -1077,8 +1077,8 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDi
 {
     auto pDlg = std::make_shared<SvxTransformTabDialog>(pParent, pAttr, pSdrView,
             bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize);
-    pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
-    pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
+    pDlg->RemoveTabPage( u"RID_SVXPAGE_ANGLE"_ustr );
+    pDlg->RemoveTabPage( u"RID_SVXPAGE_SLANT"_ustr );
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::move(pDlg));
 }
 

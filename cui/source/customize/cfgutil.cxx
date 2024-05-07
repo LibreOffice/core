@@ -232,7 +232,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
             xStyleSet->getByName(aStyleInfo.sStyle) >>= xStyle;
             if (!xStyle.is())
                 continue;
-            xStyle->getPropertyValue("DisplayName") >>= aStyleInfo.sLabel;
+            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= aStyleInfo.sLabel;
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
@@ -521,8 +521,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 xRootNode->getChildNodes();
             bool bIsRootNode = false;
 
-            OUString user("user");
-            OUString share("share");
+            OUString user(u"user"_ustr);
+            OUString share(u"share"_ustr);
             if ( xRootNode->getName() == "Root" )
             {
                 bIsRootNode = true;
@@ -740,7 +740,7 @@ OUString CuiConfigGroupListBox::GetImage(
                 Any aAny = xModuleManager->getByName(appModule);
                 if( !( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException("SFTreeListBox::Init: failed to get PropertyValue");
+                    throw RuntimeException(u"SFTreeListBox::Init: failed to get PropertyValue"_ustr);
                 }
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
@@ -810,7 +810,7 @@ OUString CuiConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
+            sUIName = lProps.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
         }
     }
     catch(const css::uno::RuntimeException&)
@@ -902,12 +902,12 @@ void CuiConfigGroupListBox::GroupSelected()
                                 }
 
                                 Any value =
-                                    xPropSet->getPropertyValue("URI");
+                                    xPropSet->getPropertyValue(u"URI"_ustr);
                                 value >>= uri;
 
                                 try
                                 {
-                                    value = xPropSet->getPropertyValue("Description");
+                                    value = xPropSet->getPropertyValue(u"Description"_ustr);
                                     value >>= description;
                                 }
                                 catch (Exception &) {
@@ -1129,16 +1129,16 @@ void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& xFrame)
-    : GenericDialogController(pParent, "cui/ui/macroselectordialog.ui", "MacroSelectorDialog")
-    , m_xDialogDescription(m_xBuilder->weld_label("helpmacro"))
-    , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("categories")))
-    , m_xCommands(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("commands")))
-    , m_xLibraryFT(m_xBuilder->weld_label("libraryft"))
-    , m_xMacronameFT(m_xBuilder->weld_label("macronameft"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
-    , m_xDescriptionText(m_xBuilder->weld_text_view("description"))
-    , m_xDescriptionFrame(m_xBuilder->weld_frame("descriptionframe"))
+    : GenericDialogController(pParent, u"cui/ui/macroselectordialog.ui"_ustr, u"MacroSelectorDialog"_ustr)
+    , m_xDialogDescription(m_xBuilder->weld_label(u"helpmacro"_ustr))
+    , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view(u"categories"_ustr)))
+    , m_xCommands(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view(u"commands"_ustr)))
+    , m_xLibraryFT(m_xBuilder->weld_label(u"libraryft"_ustr))
+    , m_xMacronameFT(m_xBuilder->weld_label(u"macronameft"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancelButton(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xDescriptionText(m_xBuilder->weld_text_view(u"description"_ustr))
+    , m_xDescriptionFrame(m_xBuilder->weld_frame(u"descriptionframe"_ustr))
 {
     m_xCancelButton->show();
     m_xDialogDescription->show();
@@ -1209,11 +1209,11 @@ IMPL_LINK(SvxScriptSelectorDialog, ContextMenuHdl, const CommandEvent&, rCEvt, b
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !xTreeView.n_children())
          return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&xTreeView, "modules/BasicIDE/ui/sortmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("sortmenu"));
-    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("sortsubmenu"));
-    xDropMenu->set_active("alphabetically", xTreeView.get_sort_order());
-    xDropMenu->set_active("properorder", !xTreeView.get_sort_order());
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&xTreeView, u"modules/BasicIDE/ui/sortmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"sortmenu"_ustr));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu(u"sortsubmenu"_ustr));
+    xDropMenu->set_active(u"alphabetically"_ustr, xTreeView.get_sort_order());
+    xDropMenu->set_active(u"properorder"_ustr, !xTreeView.get_sort_order());
 
     OUString sCommand(xPopup->popup_at_rect(&xTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand == "alphabetically")

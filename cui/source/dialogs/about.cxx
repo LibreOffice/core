@@ -55,22 +55,22 @@
 using namespace ::com::sun::star::uno;
 
 AboutDialog::AboutDialog(weld::Window *pParent)
-    : GenericDialogController(pParent, "cui/ui/aboutdialog.ui", "AboutDialog"),
-      m_pCreditsButton(m_xBuilder->weld_link_button("btnCredits")),
-      m_pWebsiteButton(m_xBuilder->weld_link_button("btnWebsite")),
-      m_pReleaseNotesButton(m_xBuilder->weld_link_button("btnReleaseNotes")),
-      m_pCloseButton(m_xBuilder->weld_button("btnClose")),
-      m_pCopyButton(m_xBuilder->weld_button("btnCopyVersion")),
-      m_pBrandImage(m_xBuilder->weld_image("imBrand")),
-      m_pAboutImage(m_xBuilder->weld_image("imAbout")),
-      m_pVersionLabel(m_xBuilder->weld_label("lbVersionString")),
-      m_pBuildCaption(m_xBuilder->weld_label("lbBuild")),
-      m_pBuildLabel(m_xBuilder->weld_link_button("lbBuildString")),
-      m_pEnvLabel(m_xBuilder->weld_label("lbEnvString")),
-      m_pUILabel(m_xBuilder->weld_label("lbUIString")),
-      m_pLocaleLabel(m_xBuilder->weld_label("lbLocaleString")),
-      m_pMiscLabel(m_xBuilder->weld_label("lbMiscString")),
-      m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright")) {
+    : GenericDialogController(pParent, u"cui/ui/aboutdialog.ui"_ustr, u"AboutDialog"_ustr),
+      m_pCreditsButton(m_xBuilder->weld_link_button(u"btnCredits"_ustr)),
+      m_pWebsiteButton(m_xBuilder->weld_link_button(u"btnWebsite"_ustr)),
+      m_pReleaseNotesButton(m_xBuilder->weld_link_button(u"btnReleaseNotes"_ustr)),
+      m_pCloseButton(m_xBuilder->weld_button(u"btnClose"_ustr)),
+      m_pCopyButton(m_xBuilder->weld_button(u"btnCopyVersion"_ustr)),
+      m_pBrandImage(m_xBuilder->weld_image(u"imBrand"_ustr)),
+      m_pAboutImage(m_xBuilder->weld_image(u"imAbout"_ustr)),
+      m_pVersionLabel(m_xBuilder->weld_label(u"lbVersionString"_ustr)),
+      m_pBuildCaption(m_xBuilder->weld_label(u"lbBuild"_ustr)),
+      m_pBuildLabel(m_xBuilder->weld_link_button(u"lbBuildString"_ustr)),
+      m_pEnvLabel(m_xBuilder->weld_label(u"lbEnvString"_ustr)),
+      m_pUILabel(m_xBuilder->weld_label(u"lbUIString"_ustr)),
+      m_pLocaleLabel(m_xBuilder->weld_label(u"lbLocaleString"_ustr)),
+      m_pMiscLabel(m_xBuilder->weld_label(u"lbMiscString"_ustr)),
+      m_pCopyrightLabel(m_xBuilder->weld_label(u"lbCopyright"_ustr)) {
 
   // Labels
   m_pVersionLabel->set_label(GetVersionString());
@@ -148,7 +148,7 @@ bool AboutDialog::IsStringValidGitHash(std::u16string_view hash) {
 
 OUString AboutDialog::GetVersionString() {
   OUString arch;
-  auto const ok = rtl::Bootstrap::get("_ARCH", arch);
+  auto const ok = rtl::Bootstrap::get(u"_ARCH"_ustr, arch);
   assert(ok); (void) ok;
   OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")) + " (" + arch + ")";
 
@@ -161,7 +161,7 @@ OUString AboutDialog::GetVersionString() {
 
 OUString AboutDialog::GetBuildString()
 {
-  OUString sBuildId(utl::Bootstrap::getBuildIdData(""));
+  OUString sBuildId(utl::Bootstrap::getBuildIdData(u""_ustr));
   SAL_WARN_IF(sBuildId.isEmpty(), "cui.dialogs", "No BUILDID in bootstrap file");
 
   return sBuildId;
@@ -192,7 +192,7 @@ OUString AboutDialog::GetLocaleString(const bool bLocalized) {
   if (bLocalized)
      sUILocaleStr = CuiResId(RID_CUISTR_ABOUT_UILOCALE);
   else
-     sUILocaleStr = Translate::get(RID_CUISTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag("en-US")));
+     sUILocaleStr = Translate::get(RID_CUISTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag(u"en-US"_ustr)));
 
   if (sUILocaleStr.indexOf("$LOCALE") == -1) {
     SAL_WARN("cui.dialogs", "translated uilocale string in translations "

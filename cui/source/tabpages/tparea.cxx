@@ -75,7 +75,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 
 SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,
                                const SfxItemSet& rInAttrs, bool bSlideBackground)
-    : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/areatabpage.ui"_ustr, u"AreaTabPage"_ustr, &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
@@ -86,14 +86,14 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     , m_pnHatchingListState(&maFixed_ChangeType)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_xFillTab(m_xBuilder->weld_container("fillstylebox"))
-    , m_xBtnNone(m_xBuilder->weld_toggle_button("btnnone"))
-    , m_xBtnColor(m_xBuilder->weld_toggle_button("btncolor"))
-    , m_xBtnGradient(m_xBuilder->weld_toggle_button("btngradient"))
-    , m_xBtnHatch(m_xBuilder->weld_toggle_button("btnhatch"))
-    , m_xBtnBitmap(m_xBuilder->weld_toggle_button("btnbitmap"))
-    , m_xBtnPattern(m_xBuilder->weld_toggle_button("btnpattern"))
-    , m_xBtnUseBackground(m_xBuilder->weld_toggle_button("btnusebackground"))
+    , m_xFillTab(m_xBuilder->weld_container(u"fillstylebox"_ustr))
+    , m_xBtnNone(m_xBuilder->weld_toggle_button(u"btnnone"_ustr))
+    , m_xBtnColor(m_xBuilder->weld_toggle_button(u"btncolor"_ustr))
+    , m_xBtnGradient(m_xBuilder->weld_toggle_button(u"btngradient"_ustr))
+    , m_xBtnHatch(m_xBuilder->weld_toggle_button(u"btnhatch"_ustr))
+    , m_xBtnBitmap(m_xBuilder->weld_toggle_button(u"btnbitmap"_ustr))
+    , m_xBtnPattern(m_xBuilder->weld_toggle_button(u"btnpattern"_ustr))
+    , m_xBtnUseBackground(m_xBuilder->weld_toggle_button(u"btnusebackground"_ustr))
 {
     maBox.AddButton(m_xBtnNone.get());
     maBox.AddButton(m_xBtnColor.get());
@@ -281,8 +281,8 @@ bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
 OUString SvxAreaTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString toggleButton[] = { "btnnone",    "btncolor", "btngradient",     "btnbitmap",
-                                "btnpattern", "btnhatch", "btnusebackground" };
+    OUString toggleButton[] = { u"btnnone"_ustr,    u"btncolor"_ustr, u"btngradient"_ustr,     u"btnbitmap"_ustr,
+                                u"btnpattern"_ustr, u"btnhatch"_ustr, u"btnusebackground"_ustr };
 
     for (const auto& toggle : toggleButton)
     {

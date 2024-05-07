@@ -22,12 +22,12 @@
 using namespace ::com::sun::star;
 
 CertPathDialog::CertPathDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/certdialog.ui", "CertDialog")
-    , m_xManualButton(m_xBuilder->weld_button("add"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xCertPathList(m_xBuilder->weld_tree_view("paths"))
-    , m_sAddDialogText(m_xBuilder->weld_label("certdir")->get_label())
-    , m_sManualLabel(m_xBuilder->weld_label("manual")->get_label())
+    : GenericDialogController(pParent, u"cui/ui/certdialog.ui"_ustr, u"CertDialog"_ustr)
+    , m_xManualButton(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCertPathList(m_xBuilder->weld_tree_view(u"paths"_ustr))
+    , m_sAddDialogText(m_xBuilder->weld_label(u"certdir"_ustr)->get_label())
+    , m_sManualLabel(m_xBuilder->weld_label(u"manual"_ustr)->get_label())
 {
     m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 70,
                                       m_xCertPathList->get_height_rows(6));
@@ -66,7 +66,7 @@ void CertPathDialog::Init()
             {
                 if (rNSSProfile.Name == "MOZILLA_CERTIFICATE_FOLDER" && !rNSSProfile.Path.isEmpty())
                 {
-                    AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", rNSSProfile.Path);
+                    AddCertPath(u"$MOZILLA_CERTIFICATE_FOLDER"_ustr, rNSSProfile.Path);
                     m_xCertPathList->set_sensitive(false);
                 }
                 else if (rNSSProfile.Name == "MANUAL")

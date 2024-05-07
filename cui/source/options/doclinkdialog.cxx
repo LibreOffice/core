@@ -43,12 +43,12 @@ namespace svx
     using namespace ::svt;
 
     ODocumentLinkDialog::ODocumentLinkDialog(weld::Window* pParent, bool _bCreateNew)
-        : GenericDialogController(pParent, "cui/ui/databaselinkdialog.ui", "DatabaseLinkDialog")
-        , m_xBrowseFile(m_xBuilder->weld_button("browse"))
-        , m_xName(m_xBuilder->weld_entry("name"))
-        , m_xOK(m_xBuilder->weld_button("ok"))
-        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-        , m_xURL(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
+        : GenericDialogController(pParent, u"cui/ui/databaselinkdialog.ui"_ustr, u"DatabaseLinkDialog"_ustr)
+        , m_xBrowseFile(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xName(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
+        , m_xURL(new SvtURLBox(m_xBuilder->weld_combo_box(u"url"_ustr)))
     {
         if (!_bCreateNew)
             m_xDialog->set_title(m_xAltTitle->get_label());
@@ -58,7 +58,7 @@ namespace svx
         m_xURL->SetFilter(u"*.odb");
 
         css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );
         m_xURL->connect_changed( LINK(this, ODocumentLinkDialog, OnComboBoxModified) );
@@ -100,8 +100,8 @@ namespace svx
                 xItemList->getByName(sNodeName) >>= xSet;
 
                 OUString aDatabaseName;
-                if (xSet->getPropertySetInfo()->hasPropertyByName("Name"))
-                    xSet->getPropertyValue("Name") >>= aDatabaseName;
+                if (xSet->getPropertySetInfo()->hasPropertyByName(u"Name"_ustr))
+                    xSet->getPropertyValue(u"Name"_ustr) >>= aDatabaseName;
 
                 if (!aDatabaseName.isEmpty() && m_xName->get_text() == aDatabaseName)
                 {
@@ -191,7 +191,7 @@ namespace svx
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE, m_xDialog.get());
-        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+        std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
         if ( pFilter )
         {
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());

@@ -57,9 +57,9 @@ static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 using namespace ::com::sun::star;
 
 OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
-    : SfxTabDialogController(pParent, "cui/ui/autocorrectdialog.ui", "AutoCorrectDialog", _pSet)
-    , m_xLanguageBox(m_xBuilder->weld_widget("langbox"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
+    : SfxTabDialogController(pParent, u"cui/ui/autocorrectdialog.ui"_ustr, u"AutoCorrectDialog"_ustr, _pSet)
+    , m_xLanguageBox(m_xBuilder->weld_widget(u"langbox"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"lang"_ustr)))
 {
     bool bShowSWOptions = false;
     bool bOpenSmartTagOptions = false;
@@ -75,16 +75,16 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
             bOpenSmartTagOptions = true;
     }
 
-    AddTabPage("options", OfaAutocorrOptionsPage::Create, nullptr);
-    AddTabPage("applypage", OfaSwAutoFmtOptionsPage::Create, nullptr);
-    AddTabPage("wordcompletion", OfaAutoCompleteTabPage::Create, nullptr);
-    AddTabPage("smarttags", OfaSmartTagOptionsTabPage::Create, nullptr);
+    AddTabPage(u"options"_ustr, OfaAutocorrOptionsPage::Create, nullptr);
+    AddTabPage(u"applypage"_ustr, OfaSwAutoFmtOptionsPage::Create, nullptr);
+    AddTabPage(u"wordcompletion"_ustr, OfaAutoCompleteTabPage::Create, nullptr);
+    AddTabPage(u"smarttags"_ustr, OfaSmartTagOptionsTabPage::Create, nullptr);
 
     if (!bShowSWOptions)
     {
-        RemoveTabPage("applypage");
-        RemoveTabPage("wordcompletion");
-        RemoveTabPage("smarttags");
+        RemoveTabPage(u"applypage"_ustr);
+        RemoveTabPage(u"wordcompletion"_ustr);
+        RemoveTabPage(u"smarttags"_ustr);
     }
     else
     {
@@ -92,14 +92,14 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxSwAutoFormatFlags& rOpt = pAutoCorrect->GetSwFlags();
         if (!rOpt.pSmartTagMgr || 0 == rOpt.pSmartTagMgr->NumberOfRecognizers())
-            RemoveTabPage("smarttags");
+            RemoveTabPage(u"smarttags"_ustr);
 
-        RemoveTabPage("options");
+        RemoveTabPage(u"options"_ustr);
     }
 
-    AddTabPage("replace", OfaAutocorrReplacePage::Create, nullptr);
-    AddTabPage("exceptions",  OfaAutocorrExceptPage::Create, nullptr);
-    AddTabPage("localized", OfaQuoteTabPage::Create, nullptr);
+    AddTabPage(u"replace"_ustr, OfaAutocorrReplacePage::Create, nullptr);
+    AddTabPage(u"exceptions"_ustr,  OfaAutocorrExceptPage::Create, nullptr);
+    AddTabPage(u"localized"_ustr, OfaQuoteTabPage::Create, nullptr);
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
@@ -129,7 +129,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
     m_xLanguageLB->connect_changed(LINK(this, OfaAutoCorrDlg, SelectLanguageHdl));
 
     if ( bOpenSmartTagOptions )
-        SetCurPageId("smarttags");
+        SetCurPageId(u"smarttags"_ustr);
 }
 
 OfaAutoCorrDlg::~OfaAutoCorrDlg()
@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(OfaAutoCorrDlg, SelectLanguageHdl, weld::ComboBox&, void)
 }
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/acoroptionspage.ui", "AutocorrectOptionsPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/acoroptionspage.ui"_ustr, u"AutocorrectOptionsPage"_ustr, &rSet)
     , m_sInput(CuiResId(RID_CUISTR_USE_REPLACE))
     , m_sDoubleCaps(CuiResId(RID_CUISTR_CPTL_STT_WORD))
     , m_sStartCap(CuiResId(RID_CUISTR_CPTL_STT_SENT))
@@ -192,7 +192,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(weld::Container* pPage, weld::Dia
     , m_sNoDblSpaces(CuiResId(RID_CUISTR_NO_DBL_SPACES))
     , m_sDash(CuiResId(RID_CUISTR_DASH))
     , m_sAccidentalCaps(CuiResId(RID_CUISTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
-    , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
+    , m_xCheckLB(m_xBuilder->weld_tree_view(u"checklist"_ustr))
 {
     m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xCheckLB->set_size_request(-1, m_xCheckLB->get_height_rows(10));
@@ -312,8 +312,8 @@ class OfaAutoFmtPrcntSet : public weld::GenericDialogController
     std::unique_ptr<weld::MetricSpinButton> m_xPrcntMF;
 public:
     explicit OfaAutoFmtPrcntSet(weld::Window* pParent)
-        : GenericDialogController(pParent, "cui/ui/percentdialog.ui", "PercentDialog")
-        , m_xPrcntMF(m_xBuilder->weld_metric_spin_button("margin", FieldUnit::PERCENT))
+        : GenericDialogController(pParent, u"cui/ui/percentdialog.ui"_ustr, u"PercentDialog"_ustr)
+        , m_xPrcntMF(m_xBuilder->weld_metric_spin_button(u"margin"_ustr, FieldUnit::PERCENT))
     {
     }
 
@@ -357,7 +357,7 @@ enum OfaAutoFmtOptions
 
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet& rSet )
-    : SfxTabPage(pPage, pController, "cui/ui/applyautofmtpage.ui", "ApplyAutoFmtPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/applyautofmtpage.ui"_ustr, u"ApplyAutoFmtPage"_ustr, &rSet)
     , sDeleteEmptyPara(CuiResId(RID_CUISTR_DEL_EMPTY_PARA))
     , sUseReplaceTbl(CuiResId(RID_CUISTR_USE_REPLACE))
     , sCapitalStartWord(CuiResId(RID_CUISTR_CPTL_STT_WORD))
@@ -379,8 +379,8 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
     , sDelSpaceAtSttEnd(CuiResId(RID_CUISTR_DEL_SPACES_AT_STT_END))
     , sDelSpaceBetweenLines(CuiResId(RID_CUISTR_DEL_SPACES_BETWEEN_LINES))
     , nPercent(50)
-    , m_xCheckLB(m_xBuilder->weld_tree_view("list"))
-    , m_xEditPB(m_xBuilder->weld_button("edit"))
+    , m_xCheckLB(m_xBuilder->weld_tree_view(u"list"_ustr))
+    , m_xEditPB(m_xBuilder->weld_button(u"edit"_ustr))
 {
     m_xCheckLB->connect_changed(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     m_xCheckLB->connect_row_activated(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
@@ -688,21 +688,21 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, weld::Button&, void)
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage(weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/acorreplacepage.ui", "AcorReplacePage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/acorreplacepage.ui"_ustr, u"AcorReplacePage"_ustr, &rSet)
     , maCompareClass(comphelper::getProcessComponentContext())
     , eLang(eLastDialogLanguage)
     , bHasSelectionText(false)
     , bFirstSelect(true)
     , bReplaceEditChanged(false)
     , bSWriter(true)
-    , m_xTextOnlyCB(m_xBuilder->weld_check_button("textonly"))
-    , m_xShortED(m_xBuilder->weld_entry("origtext"))
-    , m_xReplaceED(m_xBuilder->weld_entry("newtext"))
-    , m_xReplaceTLB(m_xBuilder->weld_tree_view("tabview"))
-    , m_xNewReplacePB(m_xBuilder->weld_button("new"))
-    , m_xReplacePB(m_xBuilder->weld_button("replace"))
-    , m_xDeleteReplacePB(m_xBuilder->weld_button("delete"))
-    , m_xButtonBox(m_xBuilder->weld_container("buttonbox"))
+    , m_xTextOnlyCB(m_xBuilder->weld_check_button(u"textonly"_ustr))
+    , m_xShortED(m_xBuilder->weld_entry(u"origtext"_ustr))
+    , m_xReplaceED(m_xBuilder->weld_entry(u"newtext"_ustr))
+    , m_xReplaceTLB(m_xBuilder->weld_tree_view(u"tabview"_ustr))
+    , m_xNewReplacePB(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xReplacePB(m_xBuilder->weld_button(u"replace"_ustr))
+    , m_xDeleteReplacePB(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xButtonBox(m_xBuilder->weld_container(u"buttonbox"_ustr))
 {
     sNew = m_xNewReplacePB->get_label();
     sModify = m_xReplacePB->get_label();
@@ -1211,19 +1211,19 @@ static bool lcl_FindInArray(std::vector<OUString>& rStrings, std::u16string_view
 }
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/acorexceptpage.ui", "AcorExceptPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/acorexceptpage.ui"_ustr, u"AcorExceptPage"_ustr, &rSet)
     , maCompareClass(comphelper::getProcessComponentContext())
     , eLang(eLastDialogLanguage)
-    , m_xAbbrevED(m_xBuilder->weld_entry("abbrev"))
-    , m_xAbbrevLB(m_xBuilder->weld_tree_view("abbrevlist"))
-    , m_xNewAbbrevPB(m_xBuilder->weld_button("newabbrev"))
-    , m_xDelAbbrevPB(m_xBuilder->weld_button("delabbrev"))
-    , m_xAutoAbbrevCB(m_xBuilder->weld_check_button("autoabbrev"))
-    , m_xDoubleCapsED(m_xBuilder->weld_entry("double"))
-    , m_xDoubleCapsLB(m_xBuilder->weld_tree_view("doublelist"))
-    , m_xNewDoublePB(m_xBuilder->weld_button("newdouble"))
-    , m_xDelDoublePB(m_xBuilder->weld_button("deldouble"))
-    , m_xAutoCapsCB(m_xBuilder->weld_check_button("autodouble"))
+    , m_xAbbrevED(m_xBuilder->weld_entry(u"abbrev"_ustr))
+    , m_xAbbrevLB(m_xBuilder->weld_tree_view(u"abbrevlist"_ustr))
+    , m_xNewAbbrevPB(m_xBuilder->weld_button(u"newabbrev"_ustr))
+    , m_xDelAbbrevPB(m_xBuilder->weld_button(u"delabbrev"_ustr))
+    , m_xAutoAbbrevCB(m_xBuilder->weld_check_button(u"autoabbrev"_ustr))
+    , m_xDoubleCapsED(m_xBuilder->weld_entry(u"double"_ustr))
+    , m_xDoubleCapsLB(m_xBuilder->weld_tree_view(u"doublelist"_ustr))
+    , m_xNewDoublePB(m_xBuilder->weld_button(u"newdouble"_ustr))
+    , m_xDelDoublePB(m_xBuilder->weld_button(u"deldouble"_ustr))
+    , m_xAutoCapsCB(m_xBuilder->weld_check_button(u"autodouble"_ustr))
 {
     m_xAbbrevLB->make_sorted();
     m_xAbbrevLB->set_size_request(-1, m_xAbbrevLB->get_height_rows(6));
@@ -1426,8 +1426,8 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
     }
     m_xDoubleCapsLB->clear();
     m_xAbbrevLB->clear();
-    m_xAbbrevED->set_text("");
-    m_xDoubleCapsED->set_text("");
+    m_xAbbrevED->set_text(u""_ustr);
+    m_xDoubleCapsED->set_text(u""_ustr);
 
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {
@@ -1571,7 +1571,7 @@ void OfaQuoteTabPage::CreateEntry(weld::TreeView& rCheckLB, const OUString& rTxt
 }
 
 OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/applylocalizedpage.ui", "ApplyLocalizedPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/applylocalizedpage.ui"_ustr, u"ApplyLocalizedPage"_ustr, &rSet)
     , sNonBrkSpace(CuiResId(RID_CUISTR_NON_BREAK_SPACE))
     , sOrdinal(CuiResId(RID_CUISTR_ORDINAL))
     , sTransliterateRTL(CuiResId(RID_CUISTR_OLD_HUNGARIAN))
@@ -1580,21 +1580,21 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     , cSglEndQuote(0)
     , cStartQuote(0)
     , cEndQuote(0)
-    , m_xSingleTypoCB(m_xBuilder->weld_check_button("singlereplace"))
-    , m_xSglStartQuotePB(m_xBuilder->weld_button("startsingle"))
-    , m_xSglStartExFT(m_xBuilder->weld_label("singlestartex"))
-    , m_xSglEndQuotePB(m_xBuilder->weld_button("endsingle"))
-    , m_xSglEndExFT(m_xBuilder->weld_label("singleendex"))
-    , m_xSglStandardPB(m_xBuilder->weld_button("defaultsingle"))
-    , m_xDoubleTypoCB(m_xBuilder->weld_check_button("doublereplace"))
-    , m_xDblStartQuotePB(m_xBuilder->weld_button("startdouble"))
-    , m_xDblStartExFT(m_xBuilder->weld_label("doublestartex"))
-    , m_xDblEndQuotePB(m_xBuilder->weld_button("enddouble"))
-    , m_xDblEndExFT(m_xBuilder->weld_label("doubleendex"))
-    , m_xDblStandardPB(m_xBuilder->weld_button("defaultdouble"))
+    , m_xSingleTypoCB(m_xBuilder->weld_check_button(u"singlereplace"_ustr))
+    , m_xSglStartQuotePB(m_xBuilder->weld_button(u"startsingle"_ustr))
+    , m_xSglStartExFT(m_xBuilder->weld_label(u"singlestartex"_ustr))
+    , m_xSglEndQuotePB(m_xBuilder->weld_button(u"endsingle"_ustr))
+    , m_xSglEndExFT(m_xBuilder->weld_label(u"singleendex"_ustr))
+    , m_xSglStandardPB(m_xBuilder->weld_button(u"defaultsingle"_ustr))
+    , m_xDoubleTypoCB(m_xBuilder->weld_check_button(u"doublereplace"_ustr))
+    , m_xDblStartQuotePB(m_xBuilder->weld_button(u"startdouble"_ustr))
+    , m_xDblStartExFT(m_xBuilder->weld_label(u"doublestartex"_ustr))
+    , m_xDblEndQuotePB(m_xBuilder->weld_button(u"enddouble"_ustr))
+    , m_xDblEndExFT(m_xBuilder->weld_label(u"doubleendex"_ustr))
+    , m_xDblStandardPB(m_xBuilder->weld_button(u"defaultdouble"_ustr))
     , m_sStandard(m_xSglStartExFT->get_label())
-    , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
-    , m_xSwCheckLB(m_xBuilder->weld_tree_view("list"))
+    , m_xCheckLB(m_xBuilder->weld_tree_view(u"checklist"_ustr))
+    , m_xSwCheckLB(m_xBuilder->weld_tree_view(u"list"_ustr))
 {
     m_xSwCheckLB->set_size_request(m_xSwCheckLB->get_approximate_digit_width() * 50,
                                    m_xSwCheckLB->get_height_rows(6));
@@ -1920,20 +1920,20 @@ OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 
 OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/wordcompletionpage.ui",
-                 "WordCompletionPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/wordcompletionpage.ui"_ustr,
+                 u"WordCompletionPage"_ustr, &rSet)
     , m_pAutoCompleteList(nullptr)
     , m_nAutoCmpltListCnt(0)
-    , m_xCBActiv(m_xBuilder->weld_check_button("enablewordcomplete"))
-    , m_xCBAppendSpace(m_xBuilder->weld_check_button("appendspace"))
-    , m_xCBAsTip(m_xBuilder->weld_check_button("showastip"))
-    , m_xCBCollect(m_xBuilder->weld_check_button("collectwords"))
-    , m_xCBRemoveList(m_xBuilder->weld_check_button("whenclosing"))
-    , m_xDCBExpandKey(m_xBuilder->weld_combo_box("acceptwith"))
-    , m_xNFMinWordlen(m_xBuilder->weld_spin_button("minwordlen"))
-    , m_xNFMaxEntries(m_xBuilder->weld_spin_button("maxentries"))
-    , m_xLBEntries(m_xBuilder->weld_tree_view("entries"))
-    , m_xPBEntries(m_xBuilder->weld_button("delete"))
+    , m_xCBActiv(m_xBuilder->weld_check_button(u"enablewordcomplete"_ustr))
+    , m_xCBAppendSpace(m_xBuilder->weld_check_button(u"appendspace"_ustr))
+    , m_xCBAsTip(m_xBuilder->weld_check_button(u"showastip"_ustr))
+    , m_xCBCollect(m_xBuilder->weld_check_button(u"collectwords"_ustr))
+    , m_xCBRemoveList(m_xBuilder->weld_check_button(u"whenclosing"_ustr))
+    , m_xDCBExpandKey(m_xBuilder->weld_combo_box(u"acceptwith"_ustr))
+    , m_xNFMinWordlen(m_xBuilder->weld_spin_button(u"minwordlen"_ustr))
+    , m_xNFMaxEntries(m_xBuilder->weld_spin_button(u"maxentries"_ustr))
+    , m_xLBEntries(m_xBuilder->weld_tree_view(u"entries"_ustr))
+    , m_xPBEntries(m_xBuilder->weld_button(u"delete"_ustr))
 {
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
@@ -2165,10 +2165,10 @@ IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 
 OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                      const SfxItemSet& rSet )
-    : SfxTabPage(pPage, pController, "cui/ui/smarttagoptionspage.ui", "SmartTagOptionsPage", &rSet)
-    , m_xMainCB(m_xBuilder->weld_check_button("main"))
-    , m_xSmartTagTypesLB(m_xBuilder->weld_tree_view("list"))
-    , m_xPropertiesPB(m_xBuilder->weld_button("properties"))
+    : SfxTabPage(pPage, pController, u"cui/ui/smarttagoptionspage.ui"_ustr, u"SmartTagOptionsPage"_ustr, &rSet)
+    , m_xMainCB(m_xBuilder->weld_check_button(u"main"_ustr))
+    , m_xSmartTagTypesLB(m_xBuilder->weld_tree_view(u"list"_ustr))
+    , m_xPropertiesPB(m_xBuilder->weld_button(u"properties"_ustr))
 {
     m_xSmartTagTypesLB->set_size_request(m_xSmartTagTypesLB->get_approximate_digit_width() * 50,
                                          m_xSmartTagTypesLB->get_height_rows(6));

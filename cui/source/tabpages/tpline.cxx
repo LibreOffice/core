@@ -77,7 +77,7 @@ const WhichRangesContainer SvxLineTabPage::pLineRanges(svl::Items<
 >);
 
 SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/linetabpage.ui"_ustr, u"LineTabPage"_ustr, &rInAttrs)
     , m_pSymbolList(nullptr)
     , m_bNewSize(false)
     , m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN) // unknown respectively unchanged
@@ -95,36 +95,36 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     , m_nDlgType(0)
     , m_pPosDashLb(nullptr)
     , m_pPosLineEndLb(nullptr)
-    , m_xBoxColor(m_xBuilder->weld_widget("boxCOLOR"))
-    , m_xLbLineStyle(new SvxLineLB(m_xBuilder->weld_combo_box("LB_LINE_STYLE")))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"),
+    , m_xBoxColor(m_xBuilder->weld_widget(u"boxCOLOR"_ustr))
+    , m_xLbLineStyle(new SvxLineLB(m_xBuilder->weld_combo_box(u"LB_LINE_STYLE"_ustr)))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_COLOR"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xBoxWidth(m_xBuilder->weld_widget("boxWIDTH"))
-    , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_WIDTH", FieldUnit::CM))
-    , m_xBoxTransparency(m_xBuilder->weld_widget("boxTRANSPARENCY"))
-    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_LINE_TRANSPARENT", FieldUnit::PERCENT))
-    , m_xFlLineEnds(m_xBuilder->weld_widget("FL_LINE_ENDS"))
-    , m_xBoxArrowStyles(m_xBuilder->weld_widget("boxARROW_STYLES"))
-    , m_xLbStartStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box("LB_START_STYLE")))
-    , m_xBoxStart(m_xBuilder->weld_widget("boxSTART"))
-    , m_xMtrStartWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_START_WIDTH", FieldUnit::CM))
-    , m_xTsbCenterStart(m_xBuilder->weld_check_button("TSB_CENTER_START"))
-    , m_xBoxEnd(m_xBuilder->weld_widget("boxEND"))
-    , m_xLbEndStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box("LB_END_STYLE")))
-    , m_xMtrEndWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_END_WIDTH", FieldUnit::CM))
-    , m_xTsbCenterEnd(m_xBuilder->weld_check_button("TSB_CENTER_END"))
-    , m_xCbxSynchronize(m_xBuilder->weld_check_button("CBX_SYNCHRONIZE"))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
-    , m_xFLEdgeStyle(m_xBuilder->weld_widget("FL_EDGE_STYLE"))
-    , m_xGridEdgeCaps(m_xBuilder->weld_widget("gridEDGE_CAPS"))
-    , m_xLBEdgeStyle(m_xBuilder->weld_combo_box("LB_EDGE_STYLE"))
-    , m_xLBCapStyle(m_xBuilder->weld_combo_box("LB_CAP_STYLE")) // LineCaps
-    , m_xFlSymbol(m_xBuilder->weld_widget("FL_SYMBOL_FORMAT")) //#58425# Symbols on a line (e.g. StarChart)
-    , m_xGridIconSize(m_xBuilder->weld_widget("gridICON_SIZE"))
-    , m_xSymbolMB(m_xBuilder->weld_menu_button("MB_SYMBOL_BITMAP"))
-    , m_xSymbolWidthMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_WIDTH", FieldUnit::CM))
-    , m_xSymbolHeightMF(m_xBuilder->weld_metric_spin_button("MF_SYMBOL_HEIGHT", FieldUnit::CM))
-    , m_xSymbolRatioCB(m_xBuilder->weld_check_button("CB_SYMBOL_RATIO"))
+    , m_xBoxWidth(m_xBuilder->weld_widget(u"boxWIDTH"_ustr))
+    , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LINE_WIDTH"_ustr, FieldUnit::CM))
+    , m_xBoxTransparency(m_xBuilder->weld_widget(u"boxTRANSPARENCY"_ustr))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button(u"MTR_LINE_TRANSPARENT"_ustr, FieldUnit::PERCENT))
+    , m_xFlLineEnds(m_xBuilder->weld_widget(u"FL_LINE_ENDS"_ustr))
+    , m_xBoxArrowStyles(m_xBuilder->weld_widget(u"boxARROW_STYLES"_ustr))
+    , m_xLbStartStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box(u"LB_START_STYLE"_ustr)))
+    , m_xBoxStart(m_xBuilder->weld_widget(u"boxSTART"_ustr))
+    , m_xMtrStartWidth(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_START_WIDTH"_ustr, FieldUnit::CM))
+    , m_xTsbCenterStart(m_xBuilder->weld_check_button(u"TSB_CENTER_START"_ustr))
+    , m_xBoxEnd(m_xBuilder->weld_widget(u"boxEND"_ustr))
+    , m_xLbEndStyle(new SvxLineEndLB(m_xBuilder->weld_combo_box(u"LB_END_STYLE"_ustr)))
+    , m_xMtrEndWidth(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_END_WIDTH"_ustr, FieldUnit::CM))
+    , m_xTsbCenterEnd(m_xBuilder->weld_check_button(u"TSB_CENTER_END"_ustr))
+    , m_xCbxSynchronize(m_xBuilder->weld_check_button(u"CBX_SYNCHRONIZE"_ustr))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_PREVIEW"_ustr, m_aCtlPreview))
+    , m_xFLEdgeStyle(m_xBuilder->weld_widget(u"FL_EDGE_STYLE"_ustr))
+    , m_xGridEdgeCaps(m_xBuilder->weld_widget(u"gridEDGE_CAPS"_ustr))
+    , m_xLBEdgeStyle(m_xBuilder->weld_combo_box(u"LB_EDGE_STYLE"_ustr))
+    , m_xLBCapStyle(m_xBuilder->weld_combo_box(u"LB_CAP_STYLE"_ustr)) // LineCaps
+    , m_xFlSymbol(m_xBuilder->weld_widget(u"FL_SYMBOL_FORMAT"_ustr)) //#58425# Symbols on a line (e.g. StarChart)
+    , m_xGridIconSize(m_xBuilder->weld_widget(u"gridICON_SIZE"_ustr))
+    , m_xSymbolMB(m_xBuilder->weld_menu_button(u"MB_SYMBOL_BITMAP"_ustr))
+    , m_xSymbolWidthMF(m_xBuilder->weld_metric_spin_button(u"MF_SYMBOL_WIDTH"_ustr, FieldUnit::CM))
+    , m_xSymbolHeightMF(m_xBuilder->weld_metric_spin_button(u"MF_SYMBOL_HEIGHT"_ustr, FieldUnit::CM))
+    , m_xSymbolRatioCB(m_xBuilder->weld_check_button(u"CB_SYMBOL_RATIO"_ustr))
 {
     // This Page requires ExchangeSupport
     SetExchangeSupport();
@@ -947,7 +947,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         SetMetricValue( *m_xMtrLineWidth, rAttrs->Get( XATTR_LINEWIDTH ).GetValue(), m_ePoolUnit );
     }
     else
-        m_xMtrLineWidth->set_text("");
+        m_xMtrLineWidth->set_text(u""_ustr);
 
     // Line color
     m_xLbColor->SetNoSelection();
@@ -1034,7 +1034,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                         m_ePoolUnit );
     }
     else
-        m_xMtrStartWidth->set_text( "" );
+        m_xMtrStartWidth->set_text( u""_ustr );
 
     // Line end strength
     if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SfxItemState::DEFAULT )
@@ -1048,7 +1048,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                         m_ePoolUnit );
     }
     else
-        m_xMtrEndWidth->set_text("");
+        m_xMtrEndWidth->set_text(u""_ustr);
 
     // Centered line end (start)
     if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINESTARTCENTER ) == SfxItemState::DEFAULT )
@@ -1092,7 +1092,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         ChangeTransparentHdl_Impl(*m_xMtrTransparent);
     }
     else
-        m_xMtrTransparent->set_text( "" );
+        m_xMtrTransparent->set_text( u""_ustr );
 
     if( !m_xLbStartStyle->get_sensitive()  &&
         !m_xLbEndStyle->get_sensitive()    &&
@@ -1385,7 +1385,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
     // Initialize popup
     if (!m_xGalleryMenu)
     {
-        m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+        m_xGalleryMenu = m_xBuilder->weld_menu(u"gallerysubmenu"_ustr);
         weld::WaitObject aWait(GetFrameWeld());
         // Get gallery entries
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
@@ -1404,7 +1404,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
             }
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
-            pInfo->pBrushItem.reset(new SvxBrushItem(grfName, "", GPOS_AREA, SID_ATTR_BRUSH));
+            pInfo->pBrushItem.reset(new SvxBrushItem(grfName, u""_ustr, GPOS_AREA, SID_ATTR_BRUSH));
             pInfo->sItemId = "gallery" + OUString::number(i);
             m_aGalleryBrushItems.emplace_back(pInfo);
             const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic();
@@ -1434,13 +1434,13 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
         }
 
         if (m_aGrfNames.empty())
-            m_xSymbolMB->set_item_sensitive("gallery", false);
+            m_xSymbolMB->set_item_sensitive(u"gallery"_ustr, false);
     }
 
     if (m_xSymbolsMenu || !m_pSymbolList)
         return;
 
-    m_xSymbolsMenu = m_xBuilder->weld_menu("symbolssubmenu");
+    m_xSymbolsMenu = m_xBuilder->weld_menu(u"symbolssubmenu"_ustr);
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     std::unique_ptr<SdrModel> pModel(
@@ -1507,13 +1507,13 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
             }
             pVD->SetOutputSizePixel(aBitmapEx.GetSizePixel());
             pVD->DrawBitmapEx(Point(), aBitmapEx);
-            m_xSymbolsMenu->append(pInfo->sItemId, "", *pVD);
+            m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr, *pVD);
         }
         pPage->RemoveObject(0);
         pInvisibleSquare.clear();
 
         if (m_aGrfNames.empty())
-            m_xSymbolMB->set_item_sensitive("symbols", false);
+            m_xSymbolMB->set_item_sensitive(u"symbols"_ustr, false);
     }
 }
 

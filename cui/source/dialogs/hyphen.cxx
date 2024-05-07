@@ -393,7 +393,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     weld::Widget* pParent,
     uno::Reference< linguistic2::XHyphenator > const &xHyphen,
     SvxSpellWrapper* pWrapper)
-    : SfxDialogController(pParent, "cui/ui/hyphenate.ui", "HyphenateDialog")
+    : SfxDialogController(pParent, u"cui/ui/hyphenate.ui"_ustr, u"HyphenateDialog"_ustr)
     , m_pHyphWrapper(pWrapper)
     , m_aActWord(std::move(aWord))
     , m_nActLanguage(nLang)
@@ -401,14 +401,14 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     , m_nOldPos(0)
     , m_nHyphenationPositionsOffset(0)
     , m_bBusy(false)
-    , m_xWordEdit(m_xBuilder->weld_entry("worded"))
-    , m_xLeftBtn(m_xBuilder->weld_button("left"))
-    , m_xRightBtn(m_xBuilder->weld_button("right"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
-    , m_xContBtn(m_xBuilder->weld_button("continue"))
-    , m_xDelBtn(m_xBuilder->weld_button("delete"))
-    , m_xHyphAll(m_xBuilder->weld_button("hyphall"))
-    , m_xCloseBtn(m_xBuilder->weld_button("close"))
+    , m_xWordEdit(m_xBuilder->weld_entry(u"worded"_ustr))
+    , m_xLeftBtn(m_xBuilder->weld_button(u"left"_ustr))
+    , m_xRightBtn(m_xBuilder->weld_button(u"right"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xContBtn(m_xBuilder->weld_button(u"continue"_ustr))
+    , m_xDelBtn(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xHyphAll(m_xBuilder->weld_button(u"hyphall"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
 {
     m_nWordEditWidth = m_xWordEdit->get_width_chars();
     m_aLabel = m_xDialog->get_title();

@@ -20,11 +20,11 @@
 #include <splitcelldlg.hxx>
 
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal)
-    : GenericDialogController(pParent, "cui/ui/splitcellsdialog.ui", "SplitCellsDialog")
-    , m_xCountEdit(m_xBuilder->weld_spin_button("countnf"))
-    , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("hori") : m_xBuilder->weld_radio_button("vert"))
-    , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("vert") : m_xBuilder->weld_radio_button("hori"))
-    , m_xPropCB(m_xBuilder->weld_check_button("prop"))
+    : GenericDialogController(pParent, u"cui/ui/splitcellsdialog.ui"_ustr, u"SplitCellsDialog"_ustr)
+    , m_xCountEdit(m_xBuilder->weld_spin_button(u"countnf"_ustr))
+    , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"hori"_ustr) : m_xBuilder->weld_radio_button(u"vert"_ustr))
+    , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"vert"_ustr) : m_xBuilder->weld_radio_button(u"hori"_ustr))
+    , m_xPropCB(m_xBuilder->weld_check_button(u"prop"_ustr))
     , mnMaxVertical(nMaxVertical)
     , mnMaxHorizontal(nMaxHorizontal)
 {

@@ -20,16 +20,17 @@ using namespace css;
 namespace cui
 {
 FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName)
-    : GenericDialogController(pParent, "cui/ui/fontfeaturesdialog.ui", "FontFeaturesDialog")
+    : GenericDialogController(pParent, u"cui/ui/fontfeaturesdialog.ui"_ustr,
+                              u"FontFeaturesDialog"_ustr)
     , m_sFontName(std::move(aFontName))
-    , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
-    , m_xContentBox(m_xBuilder->weld_container("contentBox"))
-    , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
-    , m_xStylisticSetsBox(m_xBuilder->weld_container("stylisticSetsBox"))
-    , m_xStylisticSetsGrid(m_xBuilder->weld_container("stylisticSetsGrid"))
-    , m_xCharacterVariantsBox(m_xBuilder->weld_container("characterVariantsBox"))
-    , m_xCharacterVariantsGrid(m_xBuilder->weld_container("characterVariantsGrid"))
-    , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWindow))
+    , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
+    , m_xContentBox(m_xBuilder->weld_container(u"contentBox"_ustr))
+    , m_xContentGrid(m_xBuilder->weld_container(u"contentGrid"_ustr))
+    , m_xStylisticSetsBox(m_xBuilder->weld_container(u"stylisticSetsBox"_ustr))
+    , m_xStylisticSetsGrid(m_xBuilder->weld_container(u"stylisticSetsGrid"_ustr))
+    , m_xCharacterVariantsBox(m_xBuilder->weld_container(u"characterVariantsBox"_ustr))
+    , m_xCharacterVariantsGrid(m_xBuilder->weld_container(u"characterVariantsGrid"_ustr))
+    , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWindow))
 {
     initialize();
 }
@@ -103,7 +104,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         if (rFontFeature.m_aDefinition)
             aDefinition = rFontFeature.m_aDefinition;
         if (!aDefinition)
-            aDefinition = { nFontFeatureCode, "" };
+            aDefinition = { nFontFeatureCode, u""_ustr };
 
         if (rFontFeature.isStylisticSet())
         {

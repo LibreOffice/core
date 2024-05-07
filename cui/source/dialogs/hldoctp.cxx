@@ -34,12 +34,12 @@ char const sHash[]          = "#";
 |************************************************************************/
 
 SvxHyperlinkDocTp::SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
-    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkdocpage.ui", "HyperlinkDocPage", pItemSet)
-    , m_xCbbPath(new SvxHyperURLBox(xBuilder->weld_combo_box("path")))
-    , m_xBtFileopen(xBuilder->weld_button("fileopen"))
-    , m_xEdTarget(xBuilder->weld_entry("target"))
-    , m_xFtFullURL(xBuilder->weld_label("url"))
-    , m_xBtBrowse(xBuilder->weld_button("browse"))
+    : SvxHyperlinkTabPageBase(pParent, pDlg, u"cui/ui/hyperlinkdocpage.ui"_ustr, u"HyperlinkDocPage"_ustr, pItemSet)
+    , m_xCbbPath(new SvxHyperURLBox(xBuilder->weld_combo_box(u"path"_ustr)))
+    , m_xBtFileopen(xBuilder->weld_button(u"fileopen"_ustr))
+    , m_xEdTarget(xBuilder->weld_entry(u"target"_ustr))
+    , m_xFtFullURL(xBuilder->weld_label(u"url"_ustr))
+    , m_xBtBrowse(xBuilder->weld_button(u"browse"_ustr))
     , m_bMarkWndOpen(false)
 {
     m_xCbbPath->SetSmartProtocol(INetProtocol::File);
@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, weld::Button&, void)
         weld::WaitObject aWait(mpDialog->getDialog());
 
         if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
-            mxMarkWnd->RefreshTree ( "" );
+            mxMarkWnd->RefreshTree ( u""_ustr );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
     }
@@ -254,7 +254,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
         weld::WaitObject aWait(mpDialog->getDialog());
 
         if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
-            mxMarkWnd->RefreshTree ( "" );
+            mxMarkWnd->RefreshTree ( u""_ustr );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
     }

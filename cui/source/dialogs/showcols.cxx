@@ -28,9 +28,9 @@ constexpr OUString CUIFM_PROP_HIDDEN = u"Hidden"_ustr;
 constexpr OUStringLiteral CUIFM_PROP_LABEL = u"Label";
 
 FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/showcoldialog.ui", "ShowColDialog")
-    , m_xList(m_xBuilder->weld_tree_view("treeview"))
-    , m_xOK(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"cui/ui/showcoldialog.ui"_ustr, u"ShowColDialog"_ustr)
+    , m_xList(m_xBuilder->weld_tree_view(u"treeview"_ustr))
+    , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xList->set_size_request(m_xList->get_approximate_digit_width() * 40,
                               m_xList->get_height_rows(8));

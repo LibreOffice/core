@@ -24,21 +24,21 @@
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optaccessibilitypage.ui", "OptAccessibilityPage", &rSet)
-    , m_xAccessibilityTool(m_xBuilder->weld_check_button("acctool"))
-    , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button("textselinreadonly"))
-    , m_xTextSelectionInReadonlyImg(m_xBuilder->weld_widget("locktextselinreadonly"))
-    , m_xAnimatedGraphics(m_xBuilder->weld_check_button("animatedgraphics"))
-    , m_xAnimatedGraphicsImg(m_xBuilder->weld_widget("lockanimatedgraphics"))
-    , m_xAnimatedTexts(m_xBuilder->weld_check_button("animatedtext"))
-    , m_xAnimatedTextsImg(m_xBuilder->weld_widget("lockanimatedtext"))
-    , m_xHighContrast(m_xBuilder->weld_combo_box("highcontrast"))
-    , m_xHighContrastImg(m_xBuilder->weld_widget("lockhighcontrast"))
-    , m_xHighContrastLabel(m_xBuilder->weld_label("label13"))
-    , m_xAutomaticFontColor(m_xBuilder->weld_check_button("autofontcolor"))
-    , m_xAutomaticFontColorImg(m_xBuilder->weld_widget("lockautofontcolor"))
-    , m_xPagePreviews(m_xBuilder->weld_check_button("systempagepreviewcolor"))
-    , m_xPagePreviewsImg(m_xBuilder->weld_widget("locksystempagepreviewcolor"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optaccessibilitypage.ui"_ustr, u"OptAccessibilityPage"_ustr, &rSet)
+    , m_xAccessibilityTool(m_xBuilder->weld_check_button(u"acctool"_ustr))
+    , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button(u"textselinreadonly"_ustr))
+    , m_xTextSelectionInReadonlyImg(m_xBuilder->weld_widget(u"locktextselinreadonly"_ustr))
+    , m_xAnimatedGraphics(m_xBuilder->weld_check_button(u"animatedgraphics"_ustr))
+    , m_xAnimatedGraphicsImg(m_xBuilder->weld_widget(u"lockanimatedgraphics"_ustr))
+    , m_xAnimatedTexts(m_xBuilder->weld_check_button(u"animatedtext"_ustr))
+    , m_xAnimatedTextsImg(m_xBuilder->weld_widget(u"lockanimatedtext"_ustr))
+    , m_xHighContrast(m_xBuilder->weld_combo_box(u"highcontrast"_ustr))
+    , m_xHighContrastImg(m_xBuilder->weld_widget(u"lockhighcontrast"_ustr))
+    , m_xHighContrastLabel(m_xBuilder->weld_label(u"label13"_ustr))
+    , m_xAutomaticFontColor(m_xBuilder->weld_check_button(u"autofontcolor"_ustr))
+    , m_xAutomaticFontColorImg(m_xBuilder->weld_widget(u"lockautofontcolor"_ustr))
+    , m_xPagePreviews(m_xBuilder->weld_check_button(u"systempagepreviewcolor"_ustr))
+    , m_xPagePreviewsImg(m_xBuilder->weld_widget(u"locksystempagepreviewcolor"_ustr))
 {
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
@@ -58,7 +58,7 @@ std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(weld::Contain
 OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label13" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label13"_ustr };
 
     for (const auto& label : labels)
     {
@@ -66,8 +66,8 @@ OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "acctool",      "textselinreadonly", "animatedgraphics",
-                               "animatedtext", "autofontcolor",     "systempagepreviewcolor" };
+    OUString checkButton[] = { u"acctool"_ustr,      u"textselinreadonly"_ustr, u"animatedgraphics"_ustr,
+                               u"animatedtext"_ustr, u"autofontcolor"_ustr,     u"systempagepreviewcolor"_ustr };
 
     for (const auto& check : checkButton)
     {

@@ -77,21 +77,21 @@ static OUString getFileName(std::u16string_view aFileName)
     else if (aFileName == u"notebookbar_groupedbar_compact.ui")
         return CuiResId(RID_CUISTR_GROUPEDBAR_COMPACT);
     else
-        return "None";
+        return u"None"_ustr;
 }
 
 static OUString getModuleId(std::u16string_view sModuleName)
 {
     if (sModuleName == u"Writer")
-        return "com.sun.star.text.TextDocument";
+        return u"com.sun.star.text.TextDocument"_ustr;
     else if (sModuleName == u"Draw")
-        return "com.sun.star.drawing.DrawingDocument";
+        return u"com.sun.star.drawing.DrawingDocument"_ustr;
     else if (sModuleName == u"Impress")
-        return "com.sun.star.presentation.PresentationDocument";
+        return u"com.sun.star.presentation.PresentationDocument"_ustr;
     else if (sModuleName == u"Calc")
-        return "com.sun.star.sheet.SpreadsheetDocument";
+        return u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
     else
-        return "None";
+        return u"None"_ustr;
 }
 
 SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
@@ -116,7 +116,7 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
     rCommandCategoryBox.hide();
 
     m_xContentsListBox.reset(
-        new SvxNotebookbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
+        new SvxNotebookbarEntriesListBox(m_xBuilder->weld_tree_view(u"toolcontents"_ustr), this));
     m_xDropTargetHelper.reset(
         new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
@@ -149,8 +149,8 @@ void SvxNotebookbarConfigPage::Init()
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
     m_xSaveInListBox->set_active_id(sSaveInListBoxID);
 
-    m_xTopLevelListBox->append("NotebookBar", CuiResId(RID_CUISTR_ALL_COMMANDS));
-    m_xTopLevelListBox->set_active_id("NotebookBar");
+    m_xTopLevelListBox->append(u"NotebookBar"_ustr, CuiResId(RID_CUISTR_ALL_COMMANDS));
+    m_xTopLevelListBox->set_active_id(u"NotebookBar"_ustr);
     SelectElement();
 }
 
@@ -223,7 +223,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
 
     if (sClassId == u"GtkSeparatorMenuItem" || sClassId == u"GtkSeparator")
     {
-        rTreeView.set_text(rIter, "--------------------------------------------", 0);
+        rTreeView.set_text(rIter, u"--------------------------------------------"_ustr, 0);
     }
     else
     {

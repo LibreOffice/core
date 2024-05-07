@@ -80,22 +80,22 @@ void SvxHlinkCtrl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState e
 }
 
 // tdf#90496 - remember last used view in hyperlink dialog
-OUString SvxHpLinkDlg::msRememberedPageId("internet");
+OUString SvxHpLinkDlg::msRememberedPageId(u"internet"_ustr);
 
 //#                                                                      #
 //# Hyperlink - Dialog                                                   #
 //#                                                                      #
 SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld::Window* pParent)
-    : SfxModelessDialogController(pBindings, pChild, pParent, "cui/ui/hyperlinkdialog.ui", "HyperlinkDialog")
+    : SfxModelessDialogController(pBindings, pChild, pParent, u"cui/ui/hyperlinkdialog.ui"_ustr, u"HyperlinkDialog"_ustr)
     , pSet            ( nullptr )
     , maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this )
     , mbIsHTMLDoc     ( false )
-    , m_xIconCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xApplyBtn(m_xBuilder->weld_button("apply"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
-    , m_xHelpBtn(m_xBuilder->weld_button("help"))
-    , m_xResetBtn(m_xBuilder->weld_button("reset"))
+    , m_xIconCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xApplyBtn(m_xBuilder->weld_button(u"apply"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr))
 {
     m_xIconCtrl->connect_enter_page( LINK ( this, SvxHpLinkDlg, ChosePageHdl_Impl ) );
     m_xIconCtrl->show();
@@ -139,12 +139,12 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     SetInputSet (mpItemSet.get());
 
     // insert pages
-    AddTabPage("internet", SvxHyperlinkInternetTp::Create);
-    AddTabPage("mail", SvxHyperlinkMailTp::Create);
+    AddTabPage(u"internet"_ustr, SvxHyperlinkInternetTp::Create);
+    AddTabPage(u"mail"_ustr, SvxHyperlinkMailTp::Create);
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        AddTabPage("document", SvxHyperlinkDocTp::Create);
-        AddTabPage("newdocument", SvxHyperlinkNewDocTp::Create);
+        AddTabPage(u"document"_ustr, SvxHyperlinkDocTp::Create);
+        AddTabPage(u"newdocument"_ustr, SvxHyperlinkNewDocTp::Create);
     }
 
     // tdf#90496 - remember last used view in hyperlink dialog
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
 |************************************************************************/
 void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
-    OUString sPageId("internet");
+    OUString sPageId(u"internet"_ustr);
 
     OUString aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);

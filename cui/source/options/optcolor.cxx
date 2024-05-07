@@ -71,13 +71,13 @@ struct
 const vGroupInfo[] =
 {
     // the groups are in the same order as in enum Group above
-    { Group_General, "general" },
-    { Group_Writer, "writer" },
-    { Group_Html, "html" },
-    { Group_Calc, "calc" },
-    { Group_Draw, "draw" },
-    { Group_Basic, "basic" },
-    { Group_Sql, "sql" }
+    { Group_General, u"general"_ustr },
+    { Group_Writer, u"writer"_ustr },
+    { Group_Html, u"html"_ustr },
+    { Group_Calc, u"calc"_ustr },
+    { Group_Draw, u"draw"_ustr },
+    { Group_Basic, u"basic"_ustr },
+    { Group_Sql, u"sql"_ustr }
 };
 
 // color config entry data (see ColorConfigWindow_Impl::Entry below)
@@ -97,10 +97,10 @@ struct
 const vEntryInfo[] =
 {
     #define IDS(Name) \
-        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), false
+        u"" SAL_STRINGIFY(Name) ""_ustr, u"" SAL_STRINGIFY(Name##_lb) ""_ustr, false
 
     #define IDS_CB(Name) \
-        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), true
+        u"" SAL_STRINGIFY(Name) ""_ustr, u"" SAL_STRINGIFY(Name##_lb) ""_ustr, true
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
 
@@ -445,13 +445,13 @@ void ColorConfigWindow_Impl::Entry::ColorChanged(ExtendedColorConfigValue& rValu
 // ColorConfigWindow_Impl
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Container* pParent)
     : m_pTopLevel(pTopLevel)
-    , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/colorconfigwin.ui"))
-    , m_xBox(m_xBuilder->weld_box("ColorConfigWindow"))
-    , m_xWidget1(m_xBuilder->weld_widget("docboundaries"))
-    , m_xWidget2(m_xBuilder->weld_widget("docboundaries_lb"))
+    , m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/colorconfigwin.ui"_ustr))
+    , m_xBox(m_xBuilder->weld_box(u"ColorConfigWindow"_ustr))
+    , m_xWidget1(m_xBuilder->weld_widget(u"docboundaries"_ustr))
+    , m_xWidget2(m_xBuilder->weld_widget(u"docboundaries_lb"_ustr))
 {
     css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
     CreateEntries();
 }
@@ -470,9 +470,9 @@ void ColorConfigWindow_Impl::CreateEntries()
     // Here we want to get the amount to add to the position of a FixedText to
     // get it to align its contents with that of a CheckBox
     {
-        OUString sSampleText("XXXXXX");
-        std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button("docboundaries"));
-        std::unique_ptr<weld::Label> xFixedText(m_xBuilder->weld_label("doccolor"));
+        OUString sSampleText(u"XXXXXX"_ustr);
+        std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button(u"docboundaries"_ustr));
+        std::unique_ptr<weld::Label> xFixedText(m_xBuilder->weld_label(u"doccolor"_ustr));
         OUString sOrigCheck(xCheckBox->get_label());
         OUString sOrigFixed(xFixedText->get_label());
         xCheckBox->set_label(sSampleText);
@@ -508,22 +508,22 @@ void ColorConfigWindow_Impl::CreateEntries()
 
     for (unsigned j = 0; j != nExtGroupCount; ++j)
     {
-        vExtBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), "cui/ui/chapterfragment.ui"));
-        vExtContainers.emplace_back(vExtBuilders.back()->weld_frame("ChapterFragment"));
+        vExtBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), u"cui/ui/chapterfragment.ui"_ustr));
+        vExtContainers.emplace_back(vExtBuilders.back()->weld_frame(u"ChapterFragment"_ustr));
 
         OUString const sComponentName = aExtConfig.GetComponentName(j);
         vChapters.push_back(std::make_shared<Chapter>(
             *vExtBuilders.back(), "chapter", true));
         vChapters.back()->SetText(aExtConfig.GetComponentDisplayName(sComponentName));
 
-        vExtContainers.emplace_back(vExtBuilders.back()->weld_box("contents"));
+        vExtContainers.emplace_back(vExtBuilders.back()->weld_box(u"contents"_ustr));
         weld::Container* pChapterBox = vExtContainers.back().get();
 
         unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
         for (unsigned i = 0; i != nColorCount; ++i)
         {
-            vExtBuilders.emplace_back(Application::CreateBuilder(pChapterBox, "cui/ui/colorfragment.ui"));
-            vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ColorFragment"));
+            vExtBuilders.emplace_back(Application::CreateBuilder(pChapterBox, u"cui/ui/colorfragment.ui"_ustr));
+            vExtContainers.emplace_back(vExtBuilders.back()->weld_container(u"ColorFragment"_ustr));
 
             ExtendedColorConfigValue const aColorEntry =
                 aExtConfig.GetComponentColorConfigValue(sComponentName, i);
@@ -720,8 +720,8 @@ public:
 };
 
 ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builder& rBuilder)
-    : m_xVScroll(rBuilder.weld_scrolled_window("scroll"))
-    , m_xBody(rBuilder.weld_container("colorconfig"))
+    : m_xVScroll(rBuilder.weld_scrolled_window(u"scroll"_ustr))
+    , m_xBody(rBuilder.weld_container(u"colorconfig"_ustr))
     , m_xScrollWindow(std::make_unique<ColorConfigWindow_Impl>(pTopLevel, m_xBody.get()))
     , pColorConfig(nullptr)
     , pExtColorConfig(nullptr)
@@ -798,19 +798,19 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
 
 // SvxColorOptionsTabPage
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optappearancepage.ui"_ustr, u"OptAppearancePage"_ustr, &rCoreSet)
     , bFillItemSetCalled(false)
     , m_nSizeAllocEventId(nullptr)
-    , m_xAutoColorLB(m_xBuilder->weld_combo_box("autocolorlb"))
-    , m_xAutoColorImg(m_xBuilder->weld_widget("lockautocolorlb"))
-    , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
-    , m_xColorSchemeImg(m_xBuilder->weld_widget("lockcolorschemelb"))
-    , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
-    , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
+    , m_xAutoColorLB(m_xBuilder->weld_combo_box(u"autocolorlb"_ustr))
+    , m_xAutoColorImg(m_xBuilder->weld_widget(u"lockautocolorlb"_ustr))
+    , m_xColorSchemeLB(m_xBuilder->weld_combo_box(u"colorschemelb"_ustr))
+    , m_xColorSchemeImg(m_xBuilder->weld_widget(u"lockcolorschemelb"_ustr))
+    , m_xSaveSchemePB(m_xBuilder->weld_button(u"save"_ustr))
+    , m_xDeleteSchemePB(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xColorConfigCT(new ColorConfigCtrl_Impl(pController->getDialog(), *m_xBuilder))
-    , m_xTable(m_xBuilder->weld_widget("table"))
-    , m_xOnFT(m_xBuilder->weld_label("on"))
-    , m_xColorFT(m_xBuilder->weld_label("colorsetting"))
+    , m_xTable(m_xBuilder->weld_widget(u"table"_ustr))
+    , m_xOnFT(m_xBuilder->weld_label(u"on"_ustr))
+    , m_xColorFT(m_xBuilder->weld_label(u"colorsetting"_ustr))
     , m_rWidget1(m_xColorConfigCT->GetWidget1())
     , m_rWidget2(m_xColorConfigCT->GetWidget2())
 {
@@ -862,7 +862,7 @@ OUString SvxColorOptionsTabPage::GetAllStrings()
 {
     // buttons are excluded
     OUString sAllStrings;
-    OUString labels[] = { "label2", "label3", "autocolor", "uielements", "colorsetting" };
+    OUString labels[] = { u"label2"_ustr, u"label3"_ustr, u"autocolor"_ustr, u"uielements"_ustr, u"colorsetting"_ustr };
 
     for (const auto& label : labels)
     {

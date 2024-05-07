@@ -802,30 +802,30 @@ private:
 }
 
 ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nDialogMode)
-    : SfxDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
-    , m_xColorField(new weld::CustomWeld(*m_xBuilder, "colorField", m_aColorField))
-    , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, "colorSlider", m_aColorSlider))
-    , m_xColorPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aColorPreview))
-    , m_xColorPrevious(new weld::CustomWeld(*m_xBuilder, "previous", m_aColorPrevious))
-    , m_xFISliderLeft(m_xBuilder->weld_widget("leftImage"))
-    , m_xFISliderRight(m_xBuilder->weld_widget("rightImage"))
-    , m_xRBRed(m_xBuilder->weld_radio_button("redRadiobutton"))
-    , m_xRBGreen(m_xBuilder->weld_radio_button("greenRadiobutton"))
-    , m_xRBBlue(m_xBuilder->weld_radio_button("blueRadiobutton"))
-    , m_xRBHue(m_xBuilder->weld_radio_button("hueRadiobutton"))
-    , m_xRBSaturation(m_xBuilder->weld_radio_button("satRadiobutton"))
-    , m_xRBBrightness(m_xBuilder->weld_radio_button("brightRadiobutton"))
-    , m_xMFRed(m_xBuilder->weld_spin_button("redSpinbutton"))
-    , m_xMFGreen(m_xBuilder->weld_spin_button("greenSpinbutton"))
-    , m_xMFBlue(m_xBuilder->weld_spin_button("blueSpinbutton"))
-    , m_xEDHex(new weld::HexColorControl(m_xBuilder->weld_entry("hexEntry")))
-    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton", FieldUnit::DEGREE))
-    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton", FieldUnit::PERCENT))
-    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton", FieldUnit::PERCENT))
-    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton", FieldUnit::PERCENT))
-    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton", FieldUnit::PERCENT))
-    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton", FieldUnit::PERCENT))
-    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton", FieldUnit::PERCENT))
+    : SfxDialogController(pParent, u"cui/ui/colorpickerdialog.ui"_ustr, u"ColorPicker"_ustr)
+    , m_xColorField(new weld::CustomWeld(*m_xBuilder, u"colorField"_ustr, m_aColorField))
+    , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, u"colorSlider"_ustr, m_aColorSlider))
+    , m_xColorPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aColorPreview))
+    , m_xColorPrevious(new weld::CustomWeld(*m_xBuilder, u"previous"_ustr, m_aColorPrevious))
+    , m_xFISliderLeft(m_xBuilder->weld_widget(u"leftImage"_ustr))
+    , m_xFISliderRight(m_xBuilder->weld_widget(u"rightImage"_ustr))
+    , m_xRBRed(m_xBuilder->weld_radio_button(u"redRadiobutton"_ustr))
+    , m_xRBGreen(m_xBuilder->weld_radio_button(u"greenRadiobutton"_ustr))
+    , m_xRBBlue(m_xBuilder->weld_radio_button(u"blueRadiobutton"_ustr))
+    , m_xRBHue(m_xBuilder->weld_radio_button(u"hueRadiobutton"_ustr))
+    , m_xRBSaturation(m_xBuilder->weld_radio_button(u"satRadiobutton"_ustr))
+    , m_xRBBrightness(m_xBuilder->weld_radio_button(u"brightRadiobutton"_ustr))
+    , m_xMFRed(m_xBuilder->weld_spin_button(u"redSpinbutton"_ustr))
+    , m_xMFGreen(m_xBuilder->weld_spin_button(u"greenSpinbutton"_ustr))
+    , m_xMFBlue(m_xBuilder->weld_spin_button(u"blueSpinbutton"_ustr))
+    , m_xEDHex(new weld::HexColorControl(m_xBuilder->weld_entry(u"hexEntry"_ustr)))
+    , m_xMFHue(m_xBuilder->weld_metric_spin_button(u"hueSpinbutton"_ustr, FieldUnit::DEGREE))
+    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button(u"satSpinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button(u"brightSpinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xMFCyan(m_xBuilder->weld_metric_spin_button(u"cyanSpinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button(u"magSpinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xMFYellow(m_xBuilder->weld_metric_spin_button(u"yellowSpinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xMFKey(m_xBuilder->weld_metric_spin_button(u"keySpinbutton"_ustr, FieldUnit::PERCENT))
     , meMode( DefaultMode )
 {
     m_aColorField.SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
@@ -1287,7 +1287,7 @@ void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments )
 // XInitialization
 OUString SAL_CALL ColorPicker::getImplementationName(  )
 {
-    return "com.sun.star.cui.ColorPicker";
+    return u"com.sun.star.cui.ColorPicker"_ustr;
 }
 
 sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
@@ -1297,8 +1297,8 @@ sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
 
 Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.ui.dialogs.ColorPicker",
-             "com.sun.star.ui.dialogs.AsynchronousColorPicker" };
+    return { u"com.sun.star.ui.dialogs.ColorPicker"_ustr,
+             u"com.sun.star.ui.dialogs.AsynchronousColorPicker"_ustr };
 }
 
 // XPropertyAccess

@@ -225,7 +225,7 @@ bool ShadowControlsWrapper::get_value_changed_from_saved() const
 void ShadowControlsWrapper::SetControlDontKnow()
 {
     mrVsPos.SetNoSelection();
-    mrMfSize.set_text("");
+    mrMfSize.set_text(u""_ustr);
     mrLbColor.SetNoSelection();
 }
 
@@ -282,7 +282,7 @@ void MarginControlsWrapper::SetControlDontKnow()
 }
 
 SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/borderpage.ui", "BorderPage", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/borderpage.ui"_ustr, u"BorderPage"_ustr, &rCoreAttrs)
     , nMinValue(0)
     , nSWMode(SwBorderModes::NONE)
     , mnBoxSlot(SID_ATTR_BORDER_OUTER)
@@ -300,37 +300,37 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , mbRemoveAdjacentCellBorders(false)
     , bIsCalcDoc(false)
     , m_xWndPresets(new ValueSet(nullptr))
-    , m_xWndPresetsWin(new weld::CustomWeld(*m_xBuilder, "presets", *m_xWndPresets))
-    , m_xUserDefFT(m_xBuilder->weld_label("userdefft"))
-    , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, "framesel", m_aFrameSel))
-    , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"),
+    , m_xWndPresetsWin(new weld::CustomWeld(*m_xBuilder, u"presets"_ustr, *m_xWndPresets))
+    , m_xUserDefFT(m_xBuilder->weld_label(u"userdefft"_ustr))
+    , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, u"framesel"_ustr, m_aFrameSel))
+    , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button(u"linestylelb"_ustr)))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button(u"linecolorlb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xLineWidthLB(m_xBuilder->weld_combo_box("linewidthlb"))
-    , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
-    , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
-    , m_xLeftFT(m_xBuilder->weld_label("leftft"))
-    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("leftmf", FieldUnit::MM))
-    , m_xRightFT(m_xBuilder->weld_label("rightft"))
-    , m_xRightMF(m_xBuilder->weld_metric_spin_button("rightmf", FieldUnit::MM))
-    , m_xTopFT(m_xBuilder->weld_label("topft"))
-    , m_xTopMF(m_xBuilder->weld_metric_spin_button("topmf", FieldUnit::MM))
-    , m_xBottomFT(m_xBuilder->weld_label("bottomft"))
-    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottommf", FieldUnit::MM))
-    , m_xSynchronizeCB(m_xBuilder->weld_check_button("sync"))
-    , m_xShadowFrame(m_xBuilder->weld_container("shadow"))
+    , m_xLineWidthLB(m_xBuilder->weld_combo_box(u"linewidthlb"_ustr))
+    , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button(u"linewidthmf"_ustr, FieldUnit::POINT))
+    , m_xSpacingFrame(m_xBuilder->weld_container(u"spacing"_ustr))
+    , m_xLeftFT(m_xBuilder->weld_label(u"leftft"_ustr))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button(u"leftmf"_ustr, FieldUnit::MM))
+    , m_xRightFT(m_xBuilder->weld_label(u"rightft"_ustr))
+    , m_xRightMF(m_xBuilder->weld_metric_spin_button(u"rightmf"_ustr, FieldUnit::MM))
+    , m_xTopFT(m_xBuilder->weld_label(u"topft"_ustr))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button(u"topmf"_ustr, FieldUnit::MM))
+    , m_xBottomFT(m_xBuilder->weld_label(u"bottomft"_ustr))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button(u"bottommf"_ustr, FieldUnit::MM))
+    , m_xSynchronizeCB(m_xBuilder->weld_check_button(u"sync"_ustr))
+    , m_xShadowFrame(m_xBuilder->weld_container(u"shadow"_ustr))
     , m_xWndShadows(new ValueSet(nullptr))
-    , m_xWndShadowsWin(new weld::CustomWeld(*m_xBuilder, "shadows", *m_xWndShadows))
-    , m_xFtShadowSize(m_xBuilder->weld_label("distanceft"))
-    , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FieldUnit::MM))
-    , m_xFtShadowColor(m_xBuilder->weld_label("shadowcolorft"))
-    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"),
+    , m_xWndShadowsWin(new weld::CustomWeld(*m_xBuilder, u"shadows"_ustr, *m_xWndShadows))
+    , m_xFtShadowSize(m_xBuilder->weld_label(u"distanceft"_ustr))
+    , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button(u"distancemf"_ustr, FieldUnit::MM))
+    , m_xFtShadowColor(m_xBuilder->weld_label(u"shadowcolorft"_ustr))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"shadowcolorlb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xPropertiesFrame(m_xBuilder->weld_container("properties"))
-    , m_xMergeWithNextCB(m_xBuilder->weld_check_button("mergewithnext"))
-    , m_xMergeAdjacentBordersCB(m_xBuilder->weld_check_button("mergeadjacent"))
-    , m_xRemoveAdjacentCellBordersCB(m_xBuilder->weld_check_button("rmadjcellborders"))
-    , m_xRemoveAdjacentCellBordersFT(m_xBuilder->weld_label("rmadjcellbordersft"))
+    , m_xPropertiesFrame(m_xBuilder->weld_container(u"properties"_ustr))
+    , m_xMergeWithNextCB(m_xBuilder->weld_check_button(u"mergewithnext"_ustr))
+    , m_xMergeAdjacentBordersCB(m_xBuilder->weld_check_button(u"mergeadjacent"_ustr))
+    , m_xRemoveAdjacentCellBordersCB(m_xBuilder->weld_check_button(u"rmadjcellborders"_ustr))
+    , m_xRemoveAdjacentCellBordersFT(m_xBuilder->weld_label(u"rmadjcellbordersft"_ustr))
 {
     static std::vector<OUString> aBorderImageIds;
 
@@ -544,7 +544,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_PARA_GRABBAG), &pItem))
     {
         const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
-        auto it = pGrabBag->GetGrabBag().find("DialogUseCharAttr");
+        auto it = pGrabBag->GetGrabBag().find(u"DialogUseCharAttr"_ustr);
         if (it != pGrabBag->GetGrabBag().end())
         {
             bool bDialogUseCharAttr = false;
@@ -575,7 +575,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     {
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
-            bIsCalcDoc = xSI->supportsService("com.sun.star.sheet.SpreadsheetDocument");
+            bIsCalcDoc = xSI->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
     }
     if( bIsCalcDoc )
     {
@@ -1318,7 +1318,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
             m_xLineWidthLB->remove_id(OUString::number(i));
         }
         if (m_xLineWidthLB->get_active_id().isEmpty())
-            m_xLineWidthLB->set_active_id("3");
+            m_xLineWidthLB->set_active_id(u"3"_ustr);
     }
     else
     {

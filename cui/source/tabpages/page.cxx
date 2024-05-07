@@ -138,7 +138,7 @@ std::unique_ptr<SfxTabPage> SvxPageDescPage::Create( weld::Container* pPage, wel
 }
 
 SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
-    : SfxTabPage(pPage, pController, "cui/ui/pageformatpage.ui", "PageFormatPage", &rAttr)
+    : SfxTabPage(pPage, pController, u"cui/ui/pageformatpage.ui"_ustr, u"PageFormatPage"_ustr, &rAttr)
     , bLandscape(false)
     , eMode(SVX_PAGE_MODE_STANDARD)
     , ePaperStart(PAPER_A3)
@@ -146,42 +146,42 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , mpDefPrinter(nullptr)
     , mbDelPrinter(false)
     , mbEnableDrawingLayerFillStyles(false)
-    , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("comboPageFormat")))
-    , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button("spinWidth", FieldUnit::CM))
-    , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FieldUnit::CM))
-    , m_xPortraitBtn(m_xBuilder->weld_radio_button("radiobuttonPortrait"))
-    , m_xLandscapeBtn(m_xBuilder->weld_radio_button("radiobuttonLandscape"))
-    , m_xTextFlowLbl(m_xBuilder->weld_label("labelTextFlow"))
-    , m_xTextFlowBox(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextFlowBox")))
-    , m_xPaperTrayBox(m_xBuilder->weld_combo_box("comboPaperTray"))
-    , m_xLeftMarginLbl(m_xBuilder->weld_label("labelLeftMargin"))
-    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FieldUnit::CM))
-    , m_xRightMarginLbl(m_xBuilder->weld_label("labelRightMargin"))
-    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FieldUnit::CM))
-    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargTop", FieldUnit::CM))
-    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FieldUnit::CM))
-    , m_xGutterMarginLbl(m_xBuilder->weld_label("labelGutterMargin"))
-    , m_xGutterMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargGut", FieldUnit::CM))
-    , m_xPageText(m_xBuilder->weld_label("labelPageLayout"))
-    , m_xLayoutBox(m_xBuilder->weld_combo_box("comboPageLayout"))
-    , m_xNumberFormatText(m_xBuilder->weld_label("labelPageNumbers"))
-    , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("comboLayoutFormat")))
-    , m_xTblAlignFT(m_xBuilder->weld_label("labelTblAlign"))
-    , m_xHorzBox(m_xBuilder->weld_check_button("checkbuttonHorz"))
-    , m_xVertBox(m_xBuilder->weld_check_button("checkbuttonVert"))
-    , m_xAdaptBox(m_xBuilder->weld_check_button("checkAdaptBox"))
-    , m_xRegisterCB(m_xBuilder->weld_check_button("checkRegisterTrue"))
-    , m_xRegisterFT(m_xBuilder->weld_label("labelRegisterStyle"))
-    , m_xRegisterLB(m_xBuilder->weld_combo_box("comboRegisterStyle"))
-    , m_xGutterPositionFT(m_xBuilder->weld_label("labelGutterPosition"))
-    , m_xGutterPositionLB(m_xBuilder->weld_combo_box("comboGutterPosition"))
-    , m_xRtlGutterCB(m_xBuilder->weld_check_button("checkRtlGutter"))
-    , m_xBackgroundFullSizeCB(m_xBuilder->weld_check_button("checkBackgroundFullSize"))
+    , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box(u"comboPageFormat"_ustr)))
+    , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button(u"spinWidth"_ustr, FieldUnit::CM))
+    , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button(u"spinHeight"_ustr, FieldUnit::CM))
+    , m_xPortraitBtn(m_xBuilder->weld_radio_button(u"radiobuttonPortrait"_ustr))
+    , m_xLandscapeBtn(m_xBuilder->weld_radio_button(u"radiobuttonLandscape"_ustr))
+    , m_xTextFlowLbl(m_xBuilder->weld_label(u"labelTextFlow"_ustr))
+    , m_xTextFlowBox(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboTextFlowBox"_ustr)))
+    , m_xPaperTrayBox(m_xBuilder->weld_combo_box(u"comboPaperTray"_ustr))
+    , m_xLeftMarginLbl(m_xBuilder->weld_label(u"labelLeftMargin"_ustr))
+    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargLeft"_ustr, FieldUnit::CM))
+    , m_xRightMarginLbl(m_xBuilder->weld_label(u"labelRightMargin"_ustr))
+    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargRight"_ustr, FieldUnit::CM))
+    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargTop"_ustr, FieldUnit::CM))
+    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargBot"_ustr, FieldUnit::CM))
+    , m_xGutterMarginLbl(m_xBuilder->weld_label(u"labelGutterMargin"_ustr))
+    , m_xGutterMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargGut"_ustr, FieldUnit::CM))
+    , m_xPageText(m_xBuilder->weld_label(u"labelPageLayout"_ustr))
+    , m_xLayoutBox(m_xBuilder->weld_combo_box(u"comboPageLayout"_ustr))
+    , m_xNumberFormatText(m_xBuilder->weld_label(u"labelPageNumbers"_ustr))
+    , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box(u"comboLayoutFormat"_ustr)))
+    , m_xTblAlignFT(m_xBuilder->weld_label(u"labelTblAlign"_ustr))
+    , m_xHorzBox(m_xBuilder->weld_check_button(u"checkbuttonHorz"_ustr))
+    , m_xVertBox(m_xBuilder->weld_check_button(u"checkbuttonVert"_ustr))
+    , m_xAdaptBox(m_xBuilder->weld_check_button(u"checkAdaptBox"_ustr))
+    , m_xRegisterCB(m_xBuilder->weld_check_button(u"checkRegisterTrue"_ustr))
+    , m_xRegisterFT(m_xBuilder->weld_label(u"labelRegisterStyle"_ustr))
+    , m_xRegisterLB(m_xBuilder->weld_combo_box(u"comboRegisterStyle"_ustr))
+    , m_xGutterPositionFT(m_xBuilder->weld_label(u"labelGutterPosition"_ustr))
+    , m_xGutterPositionLB(m_xBuilder->weld_combo_box(u"comboGutterPosition"_ustr))
+    , m_xRtlGutterCB(m_xBuilder->weld_check_button(u"checkRtlGutter"_ustr))
+    , m_xBackgroundFullSizeCB(m_xBuilder->weld_check_button(u"checkBackgroundFullSize"_ustr))
     // Strings stored in UI
-    , m_xInsideLbl(m_xBuilder->weld_label("labelInner"))
-    , m_xOutsideLbl(m_xBuilder->weld_label("labelOuter"))
-    , m_xPrintRangeQueryText(m_xBuilder->weld_label("labelMsg"))
-    , m_xBspWin(new weld::CustomWeld(*m_xBuilder, "drawingareaPageDirection", m_aBspWin))
+    , m_xInsideLbl(m_xBuilder->weld_label(u"labelInner"_ustr))
+    , m_xOutsideLbl(m_xBuilder->weld_label(u"labelOuter"_ustr))
+    , m_xPrintRangeQueryText(m_xBuilder->weld_label(u"labelMsg"_ustr))
+    , m_xBspWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaPageDirection"_ustr, m_aBspWin))
 {
     m_xRegisterLB->set_size_request(m_xRegisterLB->get_approximate_digit_width() * 20, -1);
 
@@ -362,7 +362,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     if (const SfxGrabBagItem* pGragbagItem = rSet->GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
         bool bGutterAtTop{};
-        auto it = pGragbagItem->GetGrabBag().find("GutterAtTop");
+        auto it = pGragbagItem->GetGrabBag().find(u"GutterAtTop"_ustr);
         if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= bGutterAtTop;
@@ -377,7 +377,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             // Left.
             m_xGutterPositionLB->set_active(0);
         }
-        it = pGragbagItem->GetGrabBag().find("RtlGutter");
+        it = pGragbagItem->GetGrabBag().find(u"RtlGutter"_ustr);
         bool bRtlGutter{};
         if (it != pGragbagItem->GetGrabBag().end())
         {
@@ -385,7 +385,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             m_xRtlGutterCB->set_active(bRtlGutter);
             m_xRtlGutterCB->show();
         }
-        it = pGragbagItem->GetGrabBag().find("BackgroundFullSize");
+        it = pGragbagItem->GetGrabBag().find(u"BackgroundFullSize"_ustr);
         bool isBackgroundFullSize{};
         if (it != pGragbagItem->GetGrabBag().end())
         {
@@ -610,7 +610,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 void SvxPageDescPage::FillUserData()
 {
     if (SVX_PAGE_MODE_PRESENTATION == eMode)
-        SetUserData(m_xAdaptBox->get_active() ? OUString("1") : OUString("0")) ;
+        SetUserData(m_xAdaptBox->get_active() ? u"1"_ustr : u"0"_ustr) ;
 
 }
 
@@ -667,19 +667,19 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         if (m_xGutterPositionLB->get_value_changed_from_saved())
         {
             bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
-            aGrabBagItem.GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+            aGrabBagItem.GetGrabBag()[u"GutterAtTop"_ustr] <<= bGutterAtTop;
             bModified = true;
         }
         if (m_xRtlGutterCB->get_state_changed_from_saved())
         {
             bool const bRtlGutter(m_xRtlGutterCB->get_active());
-            aGrabBagItem.GetGrabBag()["RtlGutter"] <<= bRtlGutter;
+            aGrabBagItem.GetGrabBag()[u"RtlGutter"_ustr] <<= bRtlGutter;
             bModified = true;
         }
         if (m_xBackgroundFullSizeCB->get_state_changed_from_saved())
         {
             bool const isBackgroundFullSize(m_xBackgroundFullSizeCB->get_active());
-            aGrabBagItem.GetGrabBag()["BackgroundFullSize"] <<= isBackgroundFullSize;
+            aGrabBagItem.GetGrabBag()[u"BackgroundFullSize"_ustr] <<= isBackgroundFullSize;
             bModified = true;
         }
 

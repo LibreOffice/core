@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     // add filter
     try
     {
-        xFilePicker->appendFilter(CuiResId(RID_CUISTR_FILTER_ALL), "*.*");
+        xFilePicker->appendFilter(CuiResId(RID_CUISTR_FILTER_ALL), u"*.*"_ustr);
     }
     catch( const IllegalArgumentException& )
     {
@@ -128,17 +128,17 @@ IMPL_LINK(SvInsertOleDlg, RadioHdl, weld::Toggleable&, rButton, void)
 
 SvInsertOleDlg::SvInsertOleDlg(weld::Window* pParent, const Reference<embed::XStorage>& xStorage,
         const SvObjectServerList* pServers)
-    : InsertObjectDialog_Impl( pParent, "cui/ui/insertoleobject.ui", "InsertOLEObjectDialog", xStorage)
+    : InsertObjectDialog_Impl( pParent, u"cui/ui/insertoleobject.ui"_ustr, u"InsertOLEObjectDialog"_ustr, xStorage)
     , m_pServers( pServers )
-    , m_xRbNewObject(m_xBuilder->weld_radio_button("createnew"))
-    , m_xRbObjectFromfile(m_xBuilder->weld_radio_button("createfromfile"))
-    , m_xObjectTypeFrame(m_xBuilder->weld_frame("objecttypeframe"))
-    , m_xLbObjecttype(m_xBuilder->weld_tree_view("types"))
-    , m_xFileFrame(m_xBuilder->weld_frame("fileframe"))
-    , m_xEdFilepath(m_xBuilder->weld_entry("urled"))
-    , m_xBtnFilepath(m_xBuilder->weld_button("urlbtn"))
-    , m_xCbFilelink(m_xBuilder->weld_check_button("linktofile"))
-    , m_xCbAsIcon(m_xBuilder->weld_check_button("asicon"))
+    , m_xRbNewObject(m_xBuilder->weld_radio_button(u"createnew"_ustr))
+    , m_xRbObjectFromfile(m_xBuilder->weld_radio_button(u"createfromfile"_ustr))
+    , m_xObjectTypeFrame(m_xBuilder->weld_frame(u"objecttypeframe"_ustr))
+    , m_xLbObjecttype(m_xBuilder->weld_tree_view(u"types"_ustr))
+    , m_xFileFrame(m_xBuilder->weld_frame(u"fileframe"_ustr))
+    , m_xEdFilepath(m_xBuilder->weld_entry(u"urled"_ustr))
+    , m_xBtnFilepath(m_xBuilder->weld_button(u"urlbtn"_ustr))
+    , m_xCbFilelink(m_xBuilder->weld_check_button(u"linktofile"_ustr))
+    , m_xCbAsIcon(m_xBuilder->weld_check_button(u"asicon"_ustr))
 {
     m_xLbObjecttype->set_size_request(m_xLbObjecttype->get_approximate_digit_width() * 32,
                                       m_xLbObjecttype->get_height_rows(6));
@@ -215,8 +215,8 @@ short SvInsertOleDlg::run()
                             const embed::InsertedObjectInfo aNewInf = xDialogCreator->createInstanceByDialog(
                                                                     m_xStorage,
                                                                     aName,
-                                                                    {comphelper::makePropertyValue("StatusIndicator", xProgress),
-                                                                     comphelper::makePropertyValue("StatusIndicatorText", aProgressText)} );
+                                                                    {comphelper::makePropertyValue(u"StatusIndicator"_ustr, xProgress),
+                                                                     comphelper::makePropertyValue(u"StatusIndicatorText"_ustr, aProgressText)} );
 
                             OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
@@ -293,8 +293,8 @@ short SvInsertOleDlg::run()
 
                 // create MediaDescriptor for file to create object from
                 uno::Sequence < beans::PropertyValue > aMedium{
-                    comphelper::makePropertyValue("URL", aFileName),
-                    comphelper::makePropertyValue("InteractionHandler", xInteraction)
+                    comphelper::makePropertyValue(u"URL"_ustr, aFileName),
+                    comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteraction)
                 };
 
                 // create object from media descriptor
@@ -374,7 +374,7 @@ uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString*
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog(weld::Window *pParent,
                             const css::uno::Reference < css::embed::XStorage >& xStorage)
-    : InsertObjectDialog_Impl(pParent, "cui/ui/insertfloatingframe.ui", "InsertFloatingFrameDialog",
+    : InsertObjectDialog_Impl(pParent, u"cui/ui/insertfloatingframe.ui"_ustr, u"InsertFloatingFrameDialog"_ustr,
                               xStorage)
 {
     Init();
@@ -382,7 +382,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog(weld::Window *pParent
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog(weld::Window *pParent,
                             const uno::Reference < embed::XEmbeddedObject >& xObj)
-    : InsertObjectDialog_Impl(pParent, "cui/ui/insertfloatingframe.ui", "InsertFloatingFrameDialog",
+    : InsertObjectDialog_Impl(pParent, u"cui/ui/insertfloatingframe.ui"_ustr, u"InsertFloatingFrameDialog"_ustr,
                               uno::Reference<embed::XStorage>())
 {
     m_xObj = xObj;
@@ -392,20 +392,20 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog(weld::Window *pParent
 
 void SfxInsertFloatingFrameDialog::Init()
 {
-    m_xEDName = m_xBuilder->weld_entry("edname");
-    m_xEDURL = m_xBuilder->weld_entry("edurl");
-    m_xBTOpen = m_xBuilder->weld_button("buttonbrowse");
-    m_xRBScrollingOn = m_xBuilder->weld_radio_button("scrollbaron");
-    m_xRBScrollingOff = m_xBuilder->weld_radio_button("scrollbaroff");
-    m_xRBScrollingAuto = m_xBuilder->weld_radio_button("scrollbarauto");
-    m_xRBFrameBorderOn = m_xBuilder->weld_radio_button("borderon");
-    m_xRBFrameBorderOff = m_xBuilder->weld_radio_button("borderoff");
-    m_xFTMarginWidth = m_xBuilder->weld_label("widthlabel");
-    m_xNMMarginWidth = m_xBuilder->weld_spin_button("width");
-    m_xCBMarginWidthDefault = m_xBuilder->weld_check_button("defaultwidth");
-    m_xFTMarginHeight = m_xBuilder->weld_label("heightlabel");
-    m_xNMMarginHeight = m_xBuilder->weld_spin_button("height");
-    m_xCBMarginHeightDefault = m_xBuilder->weld_check_button("defaultheight");
+    m_xEDName = m_xBuilder->weld_entry(u"edname"_ustr);
+    m_xEDURL = m_xBuilder->weld_entry(u"edurl"_ustr);
+    m_xBTOpen = m_xBuilder->weld_button(u"buttonbrowse"_ustr);
+    m_xRBScrollingOn = m_xBuilder->weld_radio_button(u"scrollbaron"_ustr);
+    m_xRBScrollingOff = m_xBuilder->weld_radio_button(u"scrollbaroff"_ustr);
+    m_xRBScrollingAuto = m_xBuilder->weld_radio_button(u"scrollbarauto"_ustr);
+    m_xRBFrameBorderOn = m_xBuilder->weld_radio_button(u"borderon"_ustr);
+    m_xRBFrameBorderOff = m_xBuilder->weld_radio_button(u"borderoff"_ustr);
+    m_xFTMarginWidth = m_xBuilder->weld_label(u"widthlabel"_ustr);
+    m_xNMMarginWidth = m_xBuilder->weld_spin_button(u"width"_ustr);
+    m_xCBMarginWidthDefault = m_xBuilder->weld_check_button(u"defaultwidth"_ustr);
+    m_xFTMarginHeight = m_xBuilder->weld_label(u"heightlabel"_ustr);
+    m_xNMMarginHeight = m_xBuilder->weld_spin_button(u"height"_ustr);
+    m_xCBMarginHeightDefault = m_xBuilder->weld_check_button(u"defaultheight"_ustr);
 
     Link<weld::Toggleable&, void> aLink(LINK(this, SfxInsertFloatingFrameDialog, CheckHdl));
     m_xCBMarginWidthDefault->connect_toggled(aLink);
@@ -432,15 +432,15 @@ short SfxInsertFloatingFrameDialog::run()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet.set( m_xObj->getComponent(), uno::UNO_QUERY );
             OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( "FrameURL" );
+            uno::Any aAny = xSet->getPropertyValue( u"FrameURL"_ustr );
             if ( aAny >>= aStr )
                 m_xEDURL->set_text( aStr );
-            aAny = xSet->getPropertyValue( "FrameName" );
+            aAny = xSet->getPropertyValue( u"FrameName"_ustr );
             if ( aAny >>= aStr )
                 m_xEDName->set_text(aStr);
 
             sal_Int32 nSize = SIZE_NOT_SET;
-            aAny = xSet->getPropertyValue( "FrameMarginWidth" );
+            aAny = xSet->getPropertyValue( u"FrameMarginWidth"_ustr );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
@@ -453,7 +453,7 @@ short SfxInsertFloatingFrameDialog::run()
             else
                 m_xNMMarginWidth->set_text(OUString::number(nSize));
 
-            aAny = xSet->getPropertyValue( "FrameMarginHeight" );
+            aAny = xSet->getPropertyValue( u"FrameMarginHeight"_ustr );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
@@ -471,11 +471,11 @@ short SfxInsertFloatingFrameDialog::run()
             bool bScrollAuto = false;
 
             bool bSet = false;
-            aAny = xSet->getPropertyValue( "FrameIsAutoScroll" );
+            aAny = xSet->getPropertyValue( u"FrameIsAutoScroll"_ustr );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( "FrameIsScrollingMode" );
+                aAny = xSet->getPropertyValue( u"FrameIsScrollingMode"_ustr );
                 aAny >>= bSet;
                 bScrollOn = bSet;
                 bScrollOff = !bSet;
@@ -488,11 +488,11 @@ short SfxInsertFloatingFrameDialog::run()
             m_xRBScrollingAuto->set_sensitive(bScrollAuto);
 
             bSet = false;
-            aAny = xSet->getPropertyValue( "FrameIsAutoBorder" );
+            aAny = xSet->getPropertyValue( u"FrameIsAutoBorder"_ustr );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( "FrameIsBorder" );
+                aAny = xSet->getPropertyValue( u"FrameIsBorder"_ustr );
                 aAny >>= bSet;
                 m_xRBFrameBorderOn->set_active(bSet);
                 m_xRBFrameBorderOff->set_active(!bSet);
@@ -569,17 +569,17 @@ short SfxInsertFloatingFrameDialog::run()
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
-                xSet->setPropertyValue( "FrameURL", Any( aURL ) );
-                xSet->setPropertyValue( "FrameName", Any( aName ) );
+                xSet->setPropertyValue( u"FrameURL"_ustr, Any( aURL ) );
+                xSet->setPropertyValue( u"FrameName"_ustr, Any( aName ) );
 
                 if ( eScroll == ScrollingMode::Auto )
-                    xSet->setPropertyValue( "FrameIsAutoScroll", Any( true ) );
+                    xSet->setPropertyValue( u"FrameIsAutoScroll"_ustr, Any( true ) );
                 else
-                    xSet->setPropertyValue( "FrameIsScrollingMode", Any( eScroll == ScrollingMode::Yes ) );
+                    xSet->setPropertyValue( u"FrameIsScrollingMode"_ustr, Any( eScroll == ScrollingMode::Yes ) );
 
-                xSet->setPropertyValue( "FrameIsBorder", Any( bHasBorder ) );
-                xSet->setPropertyValue( "FrameMarginWidth", Any( sal_Int32( lMarginWidth ) ) );
-                xSet->setPropertyValue( "FrameMarginHeight", Any( sal_Int32( lMarginHeight ) ) );
+                xSet->setPropertyValue( u"FrameIsBorder"_ustr, Any( bHasBorder ) );
+                xSet->setPropertyValue( u"FrameMarginWidth"_ustr, Any( sal_Int32( lMarginWidth ) ) );
+                xSet->setPropertyValue( u"FrameMarginHeight"_ustr, Any( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );

@@ -24,26 +24,26 @@
 
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optjsearchpage.ui", "OptJSearchPage", &rSet)
-    , m_xMatchCase(m_xBuilder->weld_check_button("matchcase"))
-    , m_xMatchFullHalfWidth(m_xBuilder->weld_check_button("matchfullhalfwidth"))
-    , m_xMatchHiraganaKatakana(m_xBuilder->weld_check_button("matchhiraganakatakana"))
-    , m_xMatchContractions(m_xBuilder->weld_check_button("matchcontractions"))
-    , m_xMatchMinusDashChoon(m_xBuilder->weld_check_button("matchminusdashchoon"))
-    , m_xMatchRepeatCharMarks(m_xBuilder->weld_check_button("matchrepeatcharmarks"))
-    , m_xMatchVariantFormKanji(m_xBuilder->weld_check_button("matchvariantformkanji"))
-    , m_xMatchOldKanaForms(m_xBuilder->weld_check_button("matcholdkanaforms"))
-    , m_xMatchDiziDuzu(m_xBuilder->weld_check_button("matchdiziduzu"))
-    , m_xMatchBavaHafa(m_xBuilder->weld_check_button("matchbavahafa"))
-    , m_xMatchTsithichiDhizi(m_xBuilder->weld_check_button("matchtsithichidhizi"))
-    , m_xMatchHyuiyuByuvyu(m_xBuilder->weld_check_button("matchhyuiyubyuvyu"))
-    , m_xMatchSesheZeje(m_xBuilder->weld_check_button("matchseshezeje"))
-    , m_xMatchIaiya(m_xBuilder->weld_check_button("matchiaiya"))
-    , m_xMatchKiku(m_xBuilder->weld_check_button("matchkiku"))
-    , m_xMatchProlongedSoundMark(m_xBuilder->weld_check_button("matchprolongedsoundmark"))
-    , m_xIgnorePunctuation(m_xBuilder->weld_check_button("ignorepunctuation"))
-    , m_xIgnoreWhitespace(m_xBuilder->weld_check_button("ignorewhitespace"))
-    , m_xIgnoreMiddleDot(m_xBuilder->weld_check_button("ignoremiddledot"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optjsearchpage.ui"_ustr, u"OptJSearchPage"_ustr, &rSet)
+    , m_xMatchCase(m_xBuilder->weld_check_button(u"matchcase"_ustr))
+    , m_xMatchFullHalfWidth(m_xBuilder->weld_check_button(u"matchfullhalfwidth"_ustr))
+    , m_xMatchHiraganaKatakana(m_xBuilder->weld_check_button(u"matchhiraganakatakana"_ustr))
+    , m_xMatchContractions(m_xBuilder->weld_check_button(u"matchcontractions"_ustr))
+    , m_xMatchMinusDashChoon(m_xBuilder->weld_check_button(u"matchminusdashchoon"_ustr))
+    , m_xMatchRepeatCharMarks(m_xBuilder->weld_check_button(u"matchrepeatcharmarks"_ustr))
+    , m_xMatchVariantFormKanji(m_xBuilder->weld_check_button(u"matchvariantformkanji"_ustr))
+    , m_xMatchOldKanaForms(m_xBuilder->weld_check_button(u"matcholdkanaforms"_ustr))
+    , m_xMatchDiziDuzu(m_xBuilder->weld_check_button(u"matchdiziduzu"_ustr))
+    , m_xMatchBavaHafa(m_xBuilder->weld_check_button(u"matchbavahafa"_ustr))
+    , m_xMatchTsithichiDhizi(m_xBuilder->weld_check_button(u"matchtsithichidhizi"_ustr))
+    , m_xMatchHyuiyuByuvyu(m_xBuilder->weld_check_button(u"matchhyuiyubyuvyu"_ustr))
+    , m_xMatchSesheZeje(m_xBuilder->weld_check_button(u"matchseshezeje"_ustr))
+    , m_xMatchIaiya(m_xBuilder->weld_check_button(u"matchiaiya"_ustr))
+    , m_xMatchKiku(m_xBuilder->weld_check_button(u"matchkiku"_ustr))
+    , m_xMatchProlongedSoundMark(m_xBuilder->weld_check_button(u"matchprolongedsoundmark"_ustr))
+    , m_xIgnorePunctuation(m_xBuilder->weld_check_button(u"ignorepunctuation"_ustr))
+    , m_xIgnoreWhitespace(m_xBuilder->weld_check_button(u"ignorewhitespace"_ustr))
+    , m_xIgnoreMiddleDot(m_xBuilder->weld_check_button(u"ignoremiddledot"_ustr))
     , nTransliterationFlags(TransliterationFlags::NONE)
     , bSaveOptions(true)
 {
@@ -202,7 +202,7 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet* )
 OUString SvxJSearchOptionsPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {
@@ -210,25 +210,25 @@ OUString SvxJSearchOptionsPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "matchcase",
-                               "matchfullhalfwidth",
-                               "matchhiraganakatakana",
-                               "matchcontractions",
-                               "matchminusdashchoon",
-                               "matchrepeatcharmarks",
-                               "matchvariantformkanji",
-                               "matcholdkanaforms",
-                               "ignorepunctuation",
-                               "ignorewhitespace",
-                               "matchdiziduzu",
-                               "matchbavahafa",
-                               "matchtsithichidhizi",
-                               "matchhyuiyubyuvyu",
-                               "matchseshezeje",
-                               "matchiaiya",
-                               "matchkiku",
-                               "matchprolongedsoundmark",
-                               "ignoremiddledot" };
+    OUString checkButton[] = { u"matchcase"_ustr,
+                               u"matchfullhalfwidth"_ustr,
+                               u"matchhiraganakatakana"_ustr,
+                               u"matchcontractions"_ustr,
+                               u"matchminusdashchoon"_ustr,
+                               u"matchrepeatcharmarks"_ustr,
+                               u"matchvariantformkanji"_ustr,
+                               u"matcholdkanaforms"_ustr,
+                               u"ignorepunctuation"_ustr,
+                               u"ignorewhitespace"_ustr,
+                               u"matchdiziduzu"_ustr,
+                               u"matchbavahafa"_ustr,
+                               u"matchtsithichidhizi"_ustr,
+                               u"matchhyuiyubyuvyu"_ustr,
+                               u"matchseshezeje"_ustr,
+                               u"matchiaiya"_ustr,
+                               u"matchkiku"_ustr,
+                               u"matchprolongedsoundmark"_ustr,
+                               u"ignoremiddledot"_ustr };
 
     for (const auto& check : checkButton)
     {

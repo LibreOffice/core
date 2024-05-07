@@ -74,40 +74,40 @@ SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 // class SvxSaveTabPage --------------------------------------------------
 
 SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
+    : SfxTabPage( pPage, pController, u"cui/ui/optsavepage.ui"_ustr, u"OptSavePage"_ustr, &rCoreSet )
     , pImpl(new SvxSaveTabPage_Impl)
-    , m_xLoadViewPosAnyUserCB(m_xBuilder->weld_check_button("load_anyuser"))
-    , m_xLoadViewPosAnyUserImg(m_xBuilder->weld_widget("lockload_anyuser"))
-    , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button("load_settings"))
-    , m_xLoadUserSettingsImg(m_xBuilder->weld_widget("lockload_settings"))
-    , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
-    , m_xLoadDocPrinterImg(m_xBuilder->weld_widget("lockload_docprinter"))
-    , m_xDocInfoCB(m_xBuilder->weld_check_button("docinfo"))
-    , m_xDocInfoImg(m_xBuilder->weld_widget("lockdocinfo"))
-    , m_xBackupCB(m_xBuilder->weld_check_button("backup"))
-    , m_xBackupImg(m_xBuilder->weld_widget("lockbackup"))
-    , m_xBackupIntoDocumentFolderCB(m_xBuilder->weld_check_button("backupintodocumentfolder"))
-    , m_xBackupIntoDocumentFolderImg(m_xBuilder->weld_widget("lockbackupintodoc"))
-    , m_xAutoSaveCB(m_xBuilder->weld_check_button("autosave"))
-    , m_xAutoSaveImg(m_xBuilder->weld_widget("lockautosave"))
-    , m_xAutoSaveEdit(m_xBuilder->weld_spin_button("autosave_spin"))
-    , m_xMinuteFT(m_xBuilder->weld_label("autosave_mins"))
-    , m_xUserAutoSaveCB(m_xBuilder->weld_check_button("userautosave"))
-    , m_xUserAutoSaveImg(m_xBuilder->weld_widget("lockuserautosave"))
-    , m_xRelativeFsysCB(m_xBuilder->weld_check_button("relative_fsys"))
-    , m_xRelativeFsysImg(m_xBuilder->weld_widget("lockrelative_fsys"))
-    , m_xRelativeInetCB(m_xBuilder->weld_check_button("relative_inet"))
-    , m_xRelativeInetImg(m_xBuilder->weld_widget("lockrelative_inet"))
-    , m_xODFVersionLB(m_xBuilder->weld_combo_box("odfversion"))
-    , m_xODFVersionFT(m_xBuilder->weld_label("label5"))
-    , m_xODFVersionImg(m_xBuilder->weld_widget("lockodfversion"))
-    , m_xWarnAlienFormatCB(m_xBuilder->weld_check_button("warnalienformat"))
-    , m_xWarnAlienFormatImg(m_xBuilder->weld_widget("lockwarnalienformat"))
-    , m_xDocTypeLB(m_xBuilder->weld_combo_box("doctype"))
-    , m_xSaveAsFT(m_xBuilder->weld_label("saveas_label"))
-    , m_xSaveAsLB(m_xBuilder->weld_combo_box("saveas"))
-    , m_xODFWarningFI(m_xBuilder->weld_widget("odfwarning_image"))
-    , m_xODFWarningFT(m_xBuilder->weld_label("odfwarning_label"))
+    , m_xLoadViewPosAnyUserCB(m_xBuilder->weld_check_button(u"load_anyuser"_ustr))
+    , m_xLoadViewPosAnyUserImg(m_xBuilder->weld_widget(u"lockload_anyuser"_ustr))
+    , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button(u"load_settings"_ustr))
+    , m_xLoadUserSettingsImg(m_xBuilder->weld_widget(u"lockload_settings"_ustr))
+    , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button(u"load_docprinter"_ustr))
+    , m_xLoadDocPrinterImg(m_xBuilder->weld_widget(u"lockload_docprinter"_ustr))
+    , m_xDocInfoCB(m_xBuilder->weld_check_button(u"docinfo"_ustr))
+    , m_xDocInfoImg(m_xBuilder->weld_widget(u"lockdocinfo"_ustr))
+    , m_xBackupCB(m_xBuilder->weld_check_button(u"backup"_ustr))
+    , m_xBackupImg(m_xBuilder->weld_widget(u"lockbackup"_ustr))
+    , m_xBackupIntoDocumentFolderCB(m_xBuilder->weld_check_button(u"backupintodocumentfolder"_ustr))
+    , m_xBackupIntoDocumentFolderImg(m_xBuilder->weld_widget(u"lockbackupintodoc"_ustr))
+    , m_xAutoSaveCB(m_xBuilder->weld_check_button(u"autosave"_ustr))
+    , m_xAutoSaveImg(m_xBuilder->weld_widget(u"lockautosave"_ustr))
+    , m_xAutoSaveEdit(m_xBuilder->weld_spin_button(u"autosave_spin"_ustr))
+    , m_xMinuteFT(m_xBuilder->weld_label(u"autosave_mins"_ustr))
+    , m_xUserAutoSaveCB(m_xBuilder->weld_check_button(u"userautosave"_ustr))
+    , m_xUserAutoSaveImg(m_xBuilder->weld_widget(u"lockuserautosave"_ustr))
+    , m_xRelativeFsysCB(m_xBuilder->weld_check_button(u"relative_fsys"_ustr))
+    , m_xRelativeFsysImg(m_xBuilder->weld_widget(u"lockrelative_fsys"_ustr))
+    , m_xRelativeInetCB(m_xBuilder->weld_check_button(u"relative_inet"_ustr))
+    , m_xRelativeInetImg(m_xBuilder->weld_widget(u"lockrelative_inet"_ustr))
+    , m_xODFVersionLB(m_xBuilder->weld_combo_box(u"odfversion"_ustr))
+    , m_xODFVersionFT(m_xBuilder->weld_label(u"label5"_ustr))
+    , m_xODFVersionImg(m_xBuilder->weld_widget(u"lockodfversion"_ustr))
+    , m_xWarnAlienFormatCB(m_xBuilder->weld_check_button(u"warnalienformat"_ustr))
+    , m_xWarnAlienFormatImg(m_xBuilder->weld_widget(u"lockwarnalienformat"_ustr))
+    , m_xDocTypeLB(m_xBuilder->weld_combo_box(u"doctype"_ustr))
+    , m_xSaveAsFT(m_xBuilder->weld_label(u"saveas_label"_ustr))
+    , m_xSaveAsLB(m_xBuilder->weld_combo_box(u"saveas"_ustr))
+    , m_xODFWarningFI(m_xBuilder->weld_widget(u"odfwarning_image"_ustr))
+    , m_xODFWarningFT(m_xBuilder->weld_label(u"odfwarning_label"_ustr))
 {
     m_xAutoSaveEdit->set_max_length(2);
     m_xBackupIntoDocumentFolderCB->set_accessible_description(CuiResId(RID_CUISTR_A11Y_DESC_BACKUP));
@@ -121,7 +121,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
 
     auto aFilterClassesNode = utl::OConfigurationTreeRoot::createWithComponentContext(
             comphelper::getProcessComponentContext(),
-            "org.openoffice.Office.UI/FilterClassification/GlobalFilters/Classes",
+            u"org.openoffice.Office.UI/FilterClassification/GlobalFilters/Classes"_ustr,
             -1,
             utl::OConfigurationTreeRoot::CM_READONLY
         );
@@ -221,8 +221,8 @@ std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(weld::Container* pPage, weld:
 OUString SvxSaveTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "autosave_mins", "label3",
-                          "label5", "label6", "saveas_label",  "odfwarning_label" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"autosave_mins"_ustr, u"label3"_ustr,
+                          u"label5"_ustr, u"label6"_ustr, u"saveas_label"_ustr,  u"odfwarning_label"_ustr };
 
     for (const auto& label : labels)
     {
@@ -231,9 +231,9 @@ OUString SvxSaveTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "load_settings", "load_docprinter", "load_anyuser",   "autosave",
-            "userautosave",  "docinfo",         "backup",         "backupintodocumentfolder",
-            "relative_fsys", "relative_inet",   "warnalienformat" };
+        = { u"load_settings"_ustr, u"load_docprinter"_ustr, u"load_anyuser"_ustr,   u"autosave"_ustr,
+            u"userautosave"_ustr,  u"docinfo"_ustr,         u"backup"_ustr,         u"backupintodocumentfolder"_ustr,
+            u"relative_fsys"_ustr, u"relative_inet"_ustr,   u"warnalienformat"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -415,7 +415,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         try
         {
             Reference< XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-            pImpl->xFact.set(xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY);
+            pImpl->xFact.set(xMSF->createInstance(u"com.sun.star.document.FilterFactory"_ustr), UNO_QUERY);
 
             DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable");
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
@@ -447,7 +447,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
-                        OUString sFilter = aFilter.getUnpackedValueOrDefault("Name",OUString());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault(u"Name"_ustr,OUString());
                         if (!sFilter.isEmpty())
                         {
                             lList.push_back(sFilter);

@@ -18,14 +18,14 @@
 #include <svx/diagram/IDiagramHelper.hxx>
 
 DiagramDialog::DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram)
-    : GenericDialogController(pWindow, "cui/ui/diagramdialog.ui", "DiagramDialog")
+    : GenericDialogController(pWindow, u"cui/ui/diagramdialog.ui"_ustr, u"DiagramDialog"_ustr)
     , m_rDiagram(rDiagram)
     , m_nUndos(0)
-    , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
-    , mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
-    , mpBtnRemove(m_xBuilder->weld_button("btnRemove"))
-    , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
-    , mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
+    , mpBtnCancel(m_xBuilder->weld_button(u"btnCancel"_ustr))
+    , mpBtnAdd(m_xBuilder->weld_button(u"btnAdd"_ustr))
+    , mpBtnRemove(m_xBuilder->weld_button(u"btnRemove"_ustr))
+    , mpTreeDiagram(m_xBuilder->weld_tree_view(u"treeDiagram"_ustr))
+    , mpTextAdd(m_xBuilder->weld_text_view(u"textAdd"_ustr))
 {
     mpBtnCancel->connect_clicked(LINK(this, DiagramDialog, OnAddCancel));
     mpBtnAdd->connect_clicked(LINK(this, DiagramDialog, OnAddClick));
@@ -48,7 +48,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddCancel, weld::Button&, void)
     // available (?) - but it does no harm either...
     while (0 != m_nUndos)
     {
-        comphelper::dispatchCommand(".uno:Undo", {});
+        comphelper::dispatchCommand(u".uno:Undo"_ustr, {});
         m_nUndos--;
     }
 
@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
         mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
         mpTreeDiagram->select(*pEntry);
-        comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+        comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
     }
 }
 
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
             }
 
             mpTreeDiagram->remove(*pEntry);
-            comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+            comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
         }
     }
 }

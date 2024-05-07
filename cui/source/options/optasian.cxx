@@ -106,21 +106,21 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters(USHRT_MAX);
 
 SvxAsianLayoutPage::SvxAsianLayoutPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optasianpage.ui", "OptAsianPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/optasianpage.ui"_ustr, u"OptAsianPage"_ustr, &rSet)
     , pImpl(new SvxAsianLayoutPage_Impl)
-    , m_xCharKerningRB(m_xBuilder->weld_radio_button("charkerning"))
-    , m_xCharPunctKerningRB(m_xBuilder->weld_radio_button("charpunctkerning"))
-    , m_xNoCompressionRB(m_xBuilder->weld_radio_button("nocompression"))
-    , m_xPunctCompressionRB(m_xBuilder->weld_radio_button("punctcompression"))
-    , m_xPunctKanaCompressionRB(m_xBuilder->weld_radio_button("punctkanacompression"))
-    , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
-    , m_xStandardCB(m_xBuilder->weld_check_button("standard"))
-    , m_xStartFT(m_xBuilder->weld_label("startft"))
-    , m_xStartED(m_xBuilder->weld_entry("start"))
-    , m_xEndFT(m_xBuilder->weld_label("endft"))
-    , m_xEndED(m_xBuilder->weld_entry("end"))
-    , m_xHintFT(m_xBuilder->weld_label("hintft"))
+    , m_xCharKerningRB(m_xBuilder->weld_radio_button(u"charkerning"_ustr))
+    , m_xCharPunctKerningRB(m_xBuilder->weld_radio_button(u"charpunctkerning"_ustr))
+    , m_xNoCompressionRB(m_xBuilder->weld_radio_button(u"nocompression"_ustr))
+    , m_xPunctCompressionRB(m_xBuilder->weld_radio_button(u"punctcompression"_ustr))
+    , m_xPunctKanaCompressionRB(m_xBuilder->weld_radio_button(u"punctkanacompression"_ustr))
+    , m_xLanguageFT(m_xBuilder->weld_label(u"languageft"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
+    , m_xStandardCB(m_xBuilder->weld_check_button(u"standard"_ustr))
+    , m_xStartFT(m_xBuilder->weld_label(u"startft"_ustr))
+    , m_xStartED(m_xBuilder->weld_entry(u"start"_ustr))
+    , m_xEndFT(m_xBuilder->weld_label(u"endft"_ustr))
+    , m_xEndED(m_xBuilder->weld_entry(u"end"_ustr))
+    , m_xHintFT(m_xBuilder->weld_label(u"hintft"_ustr))
 {
     LanguageHdl(*m_xLanguageLB->get_widget());
     m_xLanguageLB->connect_changed(LINK(this, SvxAsianLayoutPage, LanguageHdl));
@@ -145,7 +145,7 @@ OUString SvxAsianLayoutPage::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[]
-        = { "label1", "label2", "label3", "languageft", "startft", "endft", "hintft" };
+        = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"languageft"_ustr, u"startft"_ustr, u"endft"_ustr, u"hintft"_ustr };
 
     for (const auto& label : labels)
     {
@@ -153,8 +153,8 @@ OUString SvxAsianLayoutPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "charkerning", "charpunctkerning", "nocompression",
-                               "punctcompression", "punctkanacompression" };
+    OUString radioButton[] = { u"charkerning"_ustr, u"charpunctkerning"_ustr, u"nocompression"_ustr,
+                               u"punctcompression"_ustr, u"punctkanacompression"_ustr };
 
     for (const auto& radio : radioButton)
     {
@@ -227,7 +227,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     Reference<XMultiServiceFactory> xFact(xModel, UNO_QUERY);
     if(xFact.is())
     {
-        pImpl->xPrSet.set(xFact->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+        pImpl->xPrSet.set(xFact->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
@@ -235,7 +235,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     CharCompressType nCompress = SvxAsianConfig::GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
     {
-        OUString sForbidden("ForbiddenCharacters");
+        OUString sForbidden(u"ForbiddenCharacters"_ustr);
         if(pImpl->xPrSetInfo->hasPropertyByName(sForbidden))
         {
             Any aForbidden = pImpl->xPrSet->getPropertyValue(sForbidden);

@@ -34,10 +34,10 @@ using namespace ::com::sun::star;
 |*
 |************************************************************************/
 SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
-    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkmailpage.ui", "HyperlinkMailPage", pItemSet)
-    , m_xCbbReceiver(new SvxHyperURLBox(xBuilder->weld_combo_box("receiver")))
-    , m_xBtAdrBook(xBuilder->weld_button("addressbook"))
-    , m_xEdSubject(xBuilder->weld_entry("subject"))
+    : SvxHyperlinkTabPageBase(pParent, pDlg, u"cui/ui/hyperlinkmailpage.ui"_ustr, u"HyperlinkMailPage"_ustr, pItemSet)
+    , m_xCbbReceiver(new SvxHyperURLBox(xBuilder->weld_combo_box(u"receiver"_ustr)))
+    , m_xBtAdrBook(xBuilder->weld_button(u"addressbook"_ustr))
+    , m_xEdSubject(xBuilder->weld_entry(u"subject"_ustr))
 {
     m_xCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
 
@@ -95,7 +95,7 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
     }
     else
     {
-        m_xEdSubject->set_text("");
+        m_xEdSubject->set_text(u""_ustr);
     }
 
     m_xCbbReceiver->set_entry_text(aStrURLc);

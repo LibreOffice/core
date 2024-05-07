@@ -461,13 +461,13 @@ struct OptionsPageIdInfo
 
 // Basic ctor with common initialization
 OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExtensionManager)
-    : SfxOkDialogController(pParent, "cui/ui/optionsdialog.ui", "OptionsDialog")
-    , xOkPB(m_xBuilder->weld_button("ok"))
-    , xApplyPB(m_xBuilder->weld_button("apply"))
-    , xBackPB(m_xBuilder->weld_button("revert"))
-    , xTreeLB(m_xBuilder->weld_tree_view("pages"))
-    , xTabBox(m_xBuilder->weld_container("box"))
-    , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
+    : SfxOkDialogController(pParent, u"cui/ui/optionsdialog.ui"_ustr, u"OptionsDialog"_ustr)
+    , xOkPB(m_xBuilder->weld_button(u"ok"_ustr))
+    , xApplyPB(m_xBuilder->weld_button(u"apply"_ustr))
+    , xBackPB(m_xBuilder->weld_button(u"revert"_ustr))
+    , xTreeLB(m_xBuilder->weld_tree_view(u"pages"_ustr))
+    , xTabBox(m_xBuilder->weld_container(u"box"_ustr))
+    , m_xSearchEdit(m_xBuilder->weld_entry(u"searchEntry"_ustr))
     , m_pParent(pParent)
     , m_aUpdateDataTimer("OfaTreeOptionsDialog UpdateDataTimer")
     , bIsFirtsInitialize(true)
@@ -1868,10 +1868,10 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), RID_SW_TP_OPTTEST_PAGE)
                         != vPageId.end())
-                        AddTabPage(RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup);
+                        AddTabPage(RID_SW_TP_OPTTEST_PAGE, u"Internal Test"_ustr, nGroup);
                 }
                 else
-                    AddTabPage(RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup);
+                    AddTabPage(RID_SW_TP_OPTTEST_PAGE, u"Internal Test"_ustr, nGroup);
 #endif
             }
         }
@@ -1922,10 +1922,10 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), RID_SW_TP_OPTTEST_PAGE)
                         != vPageId.end())
-                        AddTabPage(RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup);
+                        AddTabPage(RID_SW_TP_OPTTEST_PAGE, u"Internal Test"_ustr, nGroup);
                 }
                 else
-                    AddTabPage(RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup);
+                    AddTabPage(RID_SW_TP_OPTTEST_PAGE, u"Internal Test"_ustr, nGroup);
 #endif
             }
         }
@@ -2323,7 +2323,7 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
             {
                 // load the nodes of this module
                 Reference< XNameAccess > xNodeAccess;
-                xModAccess->getByName( "Nodes" ) >>= xNodeAccess;
+                xModAccess->getByName( u"Nodes"_ustr ) >>= xNodeAccess;
                 if ( xNodeAccess.is() )
                 {
                     const Sequence< OUString > xTemp = xNodeAccess->getElementNames();
@@ -2334,7 +2334,7 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
                         xNodeAccess->getByName( rNode ) >>= xAccess;
                         if ( xAccess.is() )
                         {
-                            xAccess->getByName( "Index" ) >>= nIndex;
+                            xAccess->getByName( u"Index"_ustr ) >>= nIndex;
                             if ( nIndex < 0 )
                                 // append nodes with index < 0
                                 pModule->m_aNodeList.push_back(
@@ -2385,9 +2385,9 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             bool bAllModules = false;
 
             sNodeId = sGroupName;
-            xNodeAccess->getByName( "Label" ) >>= sLabel;
-            xNodeAccess->getByName( "OptionsPage" ) >>= sPageURL;
-            xNodeAccess->getByName( "AllModules" ) >>= bAllModules;
+            xNodeAccess->getByName( u"Label"_ustr ) >>= sLabel;
+            xNodeAccess->getByName( u"OptionsPage"_ustr ) >>= sPageURL;
+            xNodeAccess->getByName( u"AllModules"_ustr ) >>= bAllModules;
 
             if ( sLabel.isEmpty() )
                 sLabel = sGroupName;
@@ -2402,7 +2402,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             }
 
             Reference< XNameAccess > xLeavesSet;
-            xNodeAccess->getByName( "Leaves" ) >>= xLeavesSet;
+            xNodeAccess->getByName( u"Leaves"_ustr ) >>= xLeavesSet;
             if ( xLeavesSet.is() )
             {
                 const Sequence< OUString > seqLeaves = xLeavesSet->getElementNames();
@@ -2416,12 +2416,12 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                         OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
                         sal_Int32 nLeafGrpIdx = 0;
 
-                        xLeaveAccess->getByName( "Id" ) >>= sId;
-                        xLeaveAccess->getByName( "Label" ) >>= sLeafLabel;
-                        xLeaveAccess->getByName( "OptionsPage" ) >>= sLeafURL;
-                        xLeaveAccess->getByName( "EventHandlerService" ) >>= sEventHdl;
-                        xLeaveAccess->getByName( "GroupId" ) >>= sLeafGrpId;
-                        xLeaveAccess->getByName( "GroupIndex" ) >>= nLeafGrpIdx;
+                        xLeaveAccess->getByName( u"Id"_ustr ) >>= sId;
+                        xLeaveAccess->getByName( u"Label"_ustr ) >>= sLeafLabel;
+                        xLeaveAccess->getByName( u"OptionsPage"_ustr ) >>= sLeafURL;
+                        xLeaveAccess->getByName( u"EventHandlerService"_ustr ) >>= sEventHdl;
+                        xLeaveAccess->getByName( u"GroupId"_ustr ) >>= sLeafGrpId;
+                        xLeaveAccess->getByName( u"GroupIndex"_ustr ) >>= nLeafGrpIdx;
 
                         if ( rExtensionId.empty() || sId == rExtensionId )
                         {
@@ -2655,7 +2655,7 @@ bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, Any( rAction ), "external_event" );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, Any( rAction ), u"external_event"_ustr );
         }
         catch ( Exception const & )
         {
@@ -2699,7 +2699,7 @@ void ExtensionsTabPage::ActivatePage()
             auto aWindowRect = m_xPageParent->getPosSize();
             m_xPage->setPosSize(0, 0, aWindowRect.Width, aWindowRect.Height, awt::PosSize::POSSIZE);
             if ( !m_sEventHdl.isEmpty() )
-                DispatchAction( "initialize" );
+                DispatchAction( u"initialize"_ustr );
         }
     }
 
@@ -2717,13 +2717,13 @@ void ExtensionsTabPage::DeactivatePage()
 
 void ExtensionsTabPage::ResetPage()
 {
-    DispatchAction( "back" );
+    DispatchAction( u"back"_ustr );
     ActivatePage();
 }
 
 void ExtensionsTabPage::SavePage()
 {
-    DispatchAction( "ok" );
+    DispatchAction( u"ok"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

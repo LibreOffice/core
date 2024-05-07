@@ -35,16 +35,16 @@
 
 SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)
-    : SfxDialogController(pParent, "cui/ui/comment.ui", "CommentDialog")
+    : SfxDialogController(pParent, u"cui/ui/comment.ui"_ustr, u"CommentDialog"_ustr)
     , m_rSet(rCoreSet)
-    , m_xLastEditFT(m_xBuilder->weld_label("lastedit"))
-    , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-    , m_xEditED(m_xBuilder->weld_text_view("edit"))
-    , m_xInsertAuthor(m_xBuilder->weld_widget("insertauthor"))
-    , m_xAuthorBtn(m_xBuilder->weld_button("author"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xPrevBtn(m_xBuilder->weld_button("previous"))
-    , m_xNextBtn(m_xBuilder->weld_button("next"))
+    , m_xLastEditFT(m_xBuilder->weld_label(u"lastedit"_ustr))
+    , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
+    , m_xEditED(m_xBuilder->weld_text_view(u"edit"_ustr))
+    , m_xInsertAuthor(m_xBuilder->weld_widget(u"insertauthor"_ustr))
+    , m_xAuthorBtn(m_xBuilder->weld_button(u"author"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xPrevBtn(m_xBuilder->weld_button(u"previous"_ustr))
+    , m_xNextBtn(m_xBuilder->weld_button(u"next"_ustr))
 {
     m_xPrevBtn->connect_clicked( LINK( this, SvxPostItDialog, PrevHdl ) );
     m_xNextBtn->connect_clicked( LINK( this, SvxPostItDialog, NextHdl ) );

@@ -60,22 +60,22 @@ SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet
 \************************************************************************/
 
 SvxConnectionPage::SvxConnectionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/connectortabpage.ui", "ConnectorTabPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/connectortabpage.ui"_ustr, u"ConnectorTabPage"_ustr, &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
     , pView(nullptr)
-    , m_xLbType(m_xBuilder->weld_combo_box("LB_TYPE"))
-    , m_xFtLine1(m_xBuilder->weld_label("FT_LINE_1"))
-    , m_xMtrFldLine1(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_1", FieldUnit::CM))
-    , m_xFtLine2(m_xBuilder->weld_label("FT_LINE_2"))
-    , m_xMtrFldLine2(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_2", FieldUnit::CM))
-    , m_xFtLine3(m_xBuilder->weld_label("FT_LINE_3"))
-    , m_xMtrFldLine3(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_3", FieldUnit::CM))
-    , m_xMtrFldHorz1(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_1", FieldUnit::MM))
-    , m_xMtrFldVert1(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_1", FieldUnit::MM))
-    , m_xMtrFldHorz2(m_xBuilder->weld_metric_spin_button("MTR_FLD_HORZ_2", FieldUnit::MM))
-    , m_xMtrFldVert2(m_xBuilder->weld_metric_spin_button("MTR_FLD_VERT_2", FieldUnit::MM))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
+    , m_xLbType(m_xBuilder->weld_combo_box(u"LB_TYPE"_ustr))
+    , m_xFtLine1(m_xBuilder->weld_label(u"FT_LINE_1"_ustr))
+    , m_xMtrFldLine1(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LINE_1"_ustr, FieldUnit::CM))
+    , m_xFtLine2(m_xBuilder->weld_label(u"FT_LINE_2"_ustr))
+    , m_xMtrFldLine2(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LINE_2"_ustr, FieldUnit::CM))
+    , m_xFtLine3(m_xBuilder->weld_label(u"FT_LINE_3"_ustr))
+    , m_xMtrFldLine3(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_LINE_3"_ustr, FieldUnit::CM))
+    , m_xMtrFldHorz1(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_HORZ_1"_ustr, FieldUnit::MM))
+    , m_xMtrFldVert1(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_VERT_1"_ustr, FieldUnit::MM))
+    , m_xMtrFldHorz2(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_HORZ_2"_ustr, FieldUnit::MM))
+    , m_xMtrFldVert2(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_VERT_2"_ustr, FieldUnit::MM))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_PREVIEW"_ustr, m_aCtlPreview))
 {
     SfxItemPool* pPool = rOutAttrs.GetPool();
     assert(pPool && "Where is the pool");
@@ -170,17 +170,17 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         case 0:
             m_xFtLine1->set_sensitive(false);
             m_xMtrFldLine1->set_sensitive(false);
-            m_xMtrFldLine1->set_text("");
+            m_xMtrFldLine1->set_text(u""_ustr);
             [[fallthrough]];
         case 1:
             m_xFtLine2->set_sensitive(false);
             m_xMtrFldLine2->set_sensitive(false);
-            m_xMtrFldLine2->set_text("");
+            m_xMtrFldLine2->set_text(u""_ustr);
             [[fallthrough]];
         case 2:
             m_xFtLine3->set_sensitive(false);
             m_xMtrFldLine3->set_sensitive(false);
-            m_xMtrFldLine3->set_text("");
+            m_xMtrFldLine3->set_text(u""_ustr);
             break;
     }
 
@@ -303,21 +303,21 @@ IMPL_LINK_NOARG(SvxConnectionPage, ChangeAttrListBoxHdl_Impl, weld::ComboBox&, v
     if( nCount > 2 )
         m_xMtrFldLine3->set_value(m_xMtrFldLine3->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
-        m_xMtrFldLine3->set_text("");
+        m_xMtrFldLine3->set_text(u""_ustr);
 
     m_xFtLine2->set_sensitive( nCount > 1 );
     m_xMtrFldLine2->set_sensitive( nCount > 1 );
     if( nCount > 1 )
         m_xMtrFldLine2->set_value(m_xMtrFldLine2->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
-        m_xMtrFldLine2->set_text("");
+        m_xMtrFldLine2->set_text(u""_ustr);
 
     m_xFtLine1->set_sensitive( nCount > 0 );
     m_xMtrFldLine1->set_sensitive( nCount > 0 );
     if( nCount > 0 )
         m_xMtrFldLine1->set_value(m_xMtrFldLine1->get_value(FieldUnit::NONE), FieldUnit::NONE);
     else
-        m_xMtrFldLine1->set_text("");
+        m_xMtrFldLine1->set_text(u""_ustr);
 }
 
 IMPL_LINK(SvxConnectionPage, ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, r, void)

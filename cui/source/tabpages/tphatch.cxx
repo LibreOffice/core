@@ -44,26 +44,26 @@
 using namespace com::sun::star;
 
 SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/hatchpage.ui", "HatchPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/hatchpage.ui"_ustr, u"HatchPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnHatchingListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FieldUnit::MM))
-    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
-    , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
-    , m_xLbLineType(m_xBuilder->weld_combo_box("linetypelb"))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"),
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button(u"distancemtr"_ustr, FieldUnit::MM))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button(u"anglemtr"_ustr, FieldUnit::DEGREE))
+    , m_xSliderAngle(m_xBuilder->weld_scale(u"angleslider"_ustr))
+    , m_xLbLineType(m_xBuilder->weld_combo_box(u"linetypelb"_ustr))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button(u"linecolorlb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"),
+    , m_xCbBackgroundColor(m_xBuilder->weld_check_button(u"backgroundcolor"_ustr))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button(u"backgroundcolorlb"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin", true)))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnModify(m_xBuilder->weld_button("modify"))
-    , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, "hatchpresetlist", *m_xHatchLB))
-    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
+    , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"hatchpresetlistwin"_ustr, true)))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnModify(m_xBuilder->weld_button(u"modify"_ustr))
+    , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, u"hatchpresetlist"_ustr, *m_xHatchLB))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"previewctl"_ustr, m_aCtlPreview))
 {
     Size aSize = getDrawPreviewOptimalSize(m_aCtlPreview.GetDrawingArea()->get_ref_device());
     m_xHatchLBWin->set_size_request(aSize.Width(), aSize.Height());
@@ -431,8 +431,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
         if (xWarnBox->run() != RET_OK)
             break;
     }
@@ -500,8 +500,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletehatchdialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelHatchDialog"_ustr));
     if (xQueryBox->run() != RET_YES)
         return;
 
@@ -551,8 +551,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
             xBox->run();
         }
     }

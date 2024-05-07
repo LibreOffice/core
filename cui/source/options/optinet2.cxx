@@ -123,26 +123,26 @@ IMPL_STATIC_LINK(SvxProxyTabPage, NoSpaceTextFilterHdl, OUString&, rTest, bool)
 /*                                                                  */
 /********************************************************************/
 SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optproxypage.ui", "OptProxyPage", &rSet)
-    , m_xProxyModeFT(m_xBuilder->weld_label("label2"))
-    , m_xProxyModeLB(m_xBuilder->weld_combo_box("proxymode"))
-    , m_xProxyModeImg(m_xBuilder->weld_widget("lockproxymode"))
-    , m_xHttpProxyFT(m_xBuilder->weld_label("httpft"))
-    , m_xHttpProxyED(m_xBuilder->weld_entry("http"))
-    , m_xHttpProxyImg(m_xBuilder->weld_widget("lockhttp"))
-    , m_xHttpPortFT(m_xBuilder->weld_label("httpportft"))
-    , m_xHttpPortED(m_xBuilder->weld_entry("httpport"))
-    , m_xHttpPortImg(m_xBuilder->weld_widget("lockhttpport"))
-    , m_xHttpsProxyFT(m_xBuilder->weld_label("httpsft"))
-    , m_xHttpsProxyED(m_xBuilder->weld_entry("https"))
-    , m_xHttpsProxyImg(m_xBuilder->weld_widget("lockhttps"))
-    , m_xHttpsPortFT(m_xBuilder->weld_label("httpsportft"))
-    , m_xHttpsPortED(m_xBuilder->weld_entry("httpsport"))
-    , m_xHttpsPortImg(m_xBuilder->weld_widget("lockhttpsport"))
-    , m_xNoProxyForFT(m_xBuilder->weld_label("noproxyft"))
-    , m_xNoProxyForED(m_xBuilder->weld_entry("noproxy"))
-    , m_xNoProxyForImg(m_xBuilder->weld_widget("locknoproxy"))
-    , m_xNoProxyDescFT(m_xBuilder->weld_label("noproxydesc"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optproxypage.ui"_ustr, u"OptProxyPage"_ustr, &rSet)
+    , m_xProxyModeFT(m_xBuilder->weld_label(u"label2"_ustr))
+    , m_xProxyModeLB(m_xBuilder->weld_combo_box(u"proxymode"_ustr))
+    , m_xProxyModeImg(m_xBuilder->weld_widget(u"lockproxymode"_ustr))
+    , m_xHttpProxyFT(m_xBuilder->weld_label(u"httpft"_ustr))
+    , m_xHttpProxyED(m_xBuilder->weld_entry(u"http"_ustr))
+    , m_xHttpProxyImg(m_xBuilder->weld_widget(u"lockhttp"_ustr))
+    , m_xHttpPortFT(m_xBuilder->weld_label(u"httpportft"_ustr))
+    , m_xHttpPortED(m_xBuilder->weld_entry(u"httpport"_ustr))
+    , m_xHttpPortImg(m_xBuilder->weld_widget(u"lockhttpport"_ustr))
+    , m_xHttpsProxyFT(m_xBuilder->weld_label(u"httpsft"_ustr))
+    , m_xHttpsProxyED(m_xBuilder->weld_entry(u"https"_ustr))
+    , m_xHttpsProxyImg(m_xBuilder->weld_widget(u"lockhttps"_ustr))
+    , m_xHttpsPortFT(m_xBuilder->weld_label(u"httpsportft"_ustr))
+    , m_xHttpsPortED(m_xBuilder->weld_entry(u"httpsport"_ustr))
+    , m_xHttpsPortImg(m_xBuilder->weld_widget(u"lockhttpsport"_ustr))
+    , m_xNoProxyForFT(m_xBuilder->weld_label(u"noproxyft"_ustr))
+    , m_xNoProxyForED(m_xBuilder->weld_entry(u"noproxy"_ustr))
+    , m_xNoProxyForImg(m_xBuilder->weld_widget(u"locknoproxy"_ustr))
+    , m_xNoProxyDescFT(m_xBuilder->weld_label(u"noproxydesc"_ustr))
 {
     m_xHttpProxyED->connect_insert_text(LINK(this, SvxProxyTabPage, NoSpaceTextFilterHdl));
     m_xHttpPortED->connect_insert_text(LINK(this, SvxProxyTabPage, NumberOnlyTextFilterHdl));
@@ -164,12 +164,12 @@ SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController*
 
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value <<= OUString( "org.openoffice.Inet/Settings" );
+    aProperty.Value <<= u"org.openoffice.Inet/Settings"_ustr;
 
     Sequence< Any > aArgumentList{ Any(aProperty) };
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
-        "com.sun.star.configuration.ConfigurationUpdateAccess",
+        u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
         aArgumentList );
 }
 
@@ -201,7 +201,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         m_xHttpPortED->set_text( OUString::number( nIntValue ));
     }
     else
-        m_xHttpPortED->set_text( "" );
+        m_xHttpPortED->set_text( u""_ustr );
 
     m_xHttpsProxyED->set_text( officecfg::Inet::Settings::ooInetHTTPSProxyName::get() );
     x = officecfg::Inet::Settings::ooInetHTTPSProxyPort::get();
@@ -211,7 +211,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         m_xHttpsPortED->set_text( OUString::number( nIntValue ));
     }
     else
-        m_xHttpsPortED->set_text( "" );
+        m_xHttpsPortED->set_text( u""_ustr );
 
     m_xNoProxyForED->set_text( officecfg::Inet::Settings::ooInetNoProxy::get() );
 }
@@ -311,8 +311,8 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
 OUString SvxProxyTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1",    "label2",     "httpft",      "httpsft",
-                          "noproxyft", "httpportft", "httpsportft", "noproxydesc" };
+    OUString labels[] = { u"label1"_ustr,    u"label2"_ustr,     u"httpft"_ustr,      u"httpsft"_ustr,
+                          u"noproxyft"_ustr, u"httpportft"_ustr, u"httpsportft"_ustr, u"noproxydesc"_ustr };
 
     for (const auto& label : labels)
     {
@@ -458,30 +458,30 @@ IMPL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, rControl, vo
 /*                                                                  */
 /********************************************************************/
 SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
-    , m_xSecurityOptionsPB(m_xBuilder->weld_button("options"))
-    , m_xSavePasswordsCB(m_xBuilder->weld_check_button("savepassword"))
-    , m_xSavePasswordsImg(m_xBuilder->weld_widget("locksavepassword"))
-    , m_xShowConnectionsPB(m_xBuilder->weld_button("connections"))
-    , m_xMasterPasswordCB(m_xBuilder->weld_check_button("usemasterpassword"))
-    , m_xMasterPasswordImg(m_xBuilder->weld_widget("lockusemasterpassword"))
-    , m_xMasterPasswordFT(m_xBuilder->weld_label("masterpasswordtext"))
-    , m_xMasterPasswordPB(m_xBuilder->weld_button("masterpassword"))
-    , m_xMacroSecFrame(m_xBuilder->weld_container("macrosecurity"))
-    , m_xMacroSecPB(m_xBuilder->weld_button("macro"))
-    , m_xCertFrame(m_xBuilder->weld_container("certificatepath"))
-    , m_xCertPathPB(m_xBuilder->weld_button("cert"))
-    , m_xCertPathImg(m_xBuilder->weld_widget("lockcertipath"))
-    , m_xCertPathLabel(m_xBuilder->weld_label("label7"))
-    , m_xTSAURLsFrame(m_xBuilder->weld_container("tsaurls"))
-    , m_xTSAURLsPB(m_xBuilder->weld_button("tsas"))
-    , m_xTSAURLsImg(m_xBuilder->weld_widget("locktsas"))
-    , m_xTSAURLsLabel(m_xBuilder->weld_label("label9"))
-    , m_xNoPasswordSaveFT(m_xBuilder->weld_label("nopasswordsave"))
-    , m_xCertMgrPathLB(m_xBuilder->weld_button("browse"))
-    , m_xParameterEdit(m_xBuilder->weld_entry("parameterfield"))
-    , m_xCertMgrPathImg(m_xBuilder->weld_widget("lockcertimanager"))
-    , m_xCertMgrPathLabel(m_xBuilder->weld_label("label11"))
+    : SfxTabPage(pPage, pController, u"cui/ui/optsecuritypage.ui"_ustr, u"OptSecurityPage"_ustr, &rSet)
+    , m_xSecurityOptionsPB(m_xBuilder->weld_button(u"options"_ustr))
+    , m_xSavePasswordsCB(m_xBuilder->weld_check_button(u"savepassword"_ustr))
+    , m_xSavePasswordsImg(m_xBuilder->weld_widget(u"locksavepassword"_ustr))
+    , m_xShowConnectionsPB(m_xBuilder->weld_button(u"connections"_ustr))
+    , m_xMasterPasswordCB(m_xBuilder->weld_check_button(u"usemasterpassword"_ustr))
+    , m_xMasterPasswordImg(m_xBuilder->weld_widget(u"lockusemasterpassword"_ustr))
+    , m_xMasterPasswordFT(m_xBuilder->weld_label(u"masterpasswordtext"_ustr))
+    , m_xMasterPasswordPB(m_xBuilder->weld_button(u"masterpassword"_ustr))
+    , m_xMacroSecFrame(m_xBuilder->weld_container(u"macrosecurity"_ustr))
+    , m_xMacroSecPB(m_xBuilder->weld_button(u"macro"_ustr))
+    , m_xCertFrame(m_xBuilder->weld_container(u"certificatepath"_ustr))
+    , m_xCertPathPB(m_xBuilder->weld_button(u"cert"_ustr))
+    , m_xCertPathImg(m_xBuilder->weld_widget(u"lockcertipath"_ustr))
+    , m_xCertPathLabel(m_xBuilder->weld_label(u"label7"_ustr))
+    , m_xTSAURLsFrame(m_xBuilder->weld_container(u"tsaurls"_ustr))
+    , m_xTSAURLsPB(m_xBuilder->weld_button(u"tsas"_ustr))
+    , m_xTSAURLsImg(m_xBuilder->weld_widget(u"locktsas"_ustr))
+    , m_xTSAURLsLabel(m_xBuilder->weld_label(u"label9"_ustr))
+    , m_xNoPasswordSaveFT(m_xBuilder->weld_label(u"nopasswordsave"_ustr))
+    , m_xCertMgrPathLB(m_xBuilder->weld_button(u"browse"_ustr))
+    , m_xParameterEdit(m_xBuilder->weld_entry(u"parameterfield"_ustr))
+    , m_xCertMgrPathImg(m_xBuilder->weld_widget(u"lockcertimanager"_ustr))
+    , m_xCertMgrPathLabel(m_xBuilder->weld_label(u"label11"_ustr))
 {
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
@@ -836,10 +836,10 @@ DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 OUString SvxSecurityTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1",         "label4",  "label2", "masterpasswordtext",
-                          "nopasswordsave", "label3",  "label5", "label8",
-                          "label7",         "label10", "label9", "label12",
-                          "label11" };
+    OUString labels[] = { u"label1"_ustr,         u"label4"_ustr,  u"label2"_ustr, u"masterpasswordtext"_ustr,
+                          u"nopasswordsave"_ustr, u"label3"_ustr,  u"label5"_ustr, u"label8"_ustr,
+                          u"label7"_ustr,         u"label10"_ustr, u"label9"_ustr, u"label12"_ustr,
+                          u"label11"_ustr };
 
     for (const auto& label : labels)
     {
@@ -847,7 +847,7 @@ OUString SvxSecurityTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "savepassword", "usemasterpassword" };
+    OUString checkButton[] = { u"savepassword"_ustr, u"usemasterpassword"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -857,7 +857,7 @@ OUString SvxSecurityTabPage::GetAllStrings()
 
     // TODO: Should we exclude button strings from the search?
     // button id: "browse" is excluded
-    OUString buttons[] = { "options", "connections", "masterpassword", "macro", "cert", "tsas" };
+    OUString buttons[] = { u"options"_ustr, u"connections"_ustr, u"masterpassword"_ustr, u"macro"_ustr, u"cert"_ustr, u"tsas"_ustr };
 
     for (const auto& btn : buttons)
     {
@@ -913,16 +913,16 @@ struct SvxEMailTabPage_Impl
 };
 
 SvxEMailTabPage::SvxEMailTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage( pPage, pController, "cui/ui/optemailpage.ui", "OptEmailPage", &rSet)
+    : SfxTabPage( pPage, pController, u"cui/ui/optemailpage.ui"_ustr, u"OptEmailPage"_ustr, &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
-    , m_xMailContainer(m_xBuilder->weld_container("program"))
-    , m_xMailerURLFI(m_xBuilder->weld_image("lockemail"))
-    , m_xMailerURLED(m_xBuilder->weld_entry("url"))
-    , m_xMailerURLPB(m_xBuilder->weld_button("browse"))
-    , m_xSuppressHiddenContainer(m_xBuilder->weld_container("suppressHiddenCont"))
-    , m_xSuppressHiddenFI(m_xBuilder->weld_image("lockSuppressHidden"))
-    , m_xSuppressHidden(m_xBuilder->weld_check_button("suppressHidden"))
-    , m_xDefaultFilterFT(m_xBuilder->weld_label("browsetitle"))
+    , m_xMailContainer(m_xBuilder->weld_container(u"program"_ustr))
+    , m_xMailerURLFI(m_xBuilder->weld_image(u"lockemail"_ustr))
+    , m_xMailerURLED(m_xBuilder->weld_entry(u"url"_ustr))
+    , m_xMailerURLPB(m_xBuilder->weld_button(u"browse"_ustr))
+    , m_xSuppressHiddenContainer(m_xBuilder->weld_container(u"suppressHiddenCont"_ustr))
+    , m_xSuppressHiddenFI(m_xBuilder->weld_image(u"lockSuppressHidden"_ustr))
+    , m_xSuppressHidden(m_xBuilder->weld_check_button(u"suppressHidden"_ustr))
+    , m_xDefaultFilterFT(m_xBuilder->weld_label(u"browsetitle"_ustr))
 {
     m_sDefaultFilterName = m_xDefaultFilterFT->get_label();
     m_xMailerURLPB->connect_clicked( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
@@ -946,7 +946,7 @@ std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( weld::Container* pPage, wel
 OUString SvxEMailTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "browsetitle", "suppress" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"browsetitle"_ustr, u"suppress"_ustr };
 
     for (const auto& label : labels)
     {
@@ -1018,7 +1018,7 @@ IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
     OUString sUrl;
     osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
     aHelper.SetDisplayDirectory(sUrl);
-    aHelper.AddFilter( m_sDefaultFilterName, "*");
+    aHelper.AddFilter( m_sDefaultFilterName, u"*"_ustr);
 
     if ( ERRCODE_NONE == aHelper.Execute() )
     {

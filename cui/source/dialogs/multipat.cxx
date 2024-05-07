@@ -187,10 +187,10 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, weld::Button&, void)
 }
 
 SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/multipathdialog.ui", "MultiPathDialog")
-    , m_xRadioLB(m_xBuilder->weld_tree_view("paths"))
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xDelBtn(m_xBuilder->weld_button("delete"))
+    : GenericDialogController(pParent, u"cui/ui/multipathdialog.ui"_ustr, u"MultiPathDialog"_ustr)
+    , m_xRadioLB(m_xBuilder->weld_tree_view(u"paths"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xDelBtn(m_xBuilder->weld_button(u"delete"_ustr))
 {
     m_xRadioLB->set_size_request(m_xRadioLB->get_approximate_digit_width() * 60,
                                  m_xRadioLB->get_text_height() * 10);
@@ -205,10 +205,10 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
 }
 
 SvxPathSelectDialog::SvxPathSelectDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/selectpathdialog.ui", "SelectPathDialog")
-    , m_xPathLB(m_xBuilder->weld_tree_view("paths"))
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xDelBtn(m_xBuilder->weld_button("delete"))
+    : GenericDialogController(pParent, u"cui/ui/selectpathdialog.ui"_ustr, u"SelectPathDialog"_ustr)
+    , m_xPathLB(m_xBuilder->weld_tree_view(u"paths"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xDelBtn(m_xBuilder->weld_button(u"delete"_ustr))
 {
     m_xPathLB->set_size_request(m_xPathLB->get_approximate_digit_width() * 60,
                                 m_xPathLB->get_text_height() * 10);

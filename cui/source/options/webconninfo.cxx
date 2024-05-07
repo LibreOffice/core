@@ -35,12 +35,12 @@ namespace svx
 // class WebConnectionInfoDialog -----------------------------------------
 
 WebConnectionInfoDialog::WebConnectionInfoDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/storedwebconnectiondialog.ui", "StoredWebConnectionDialog")
+    : GenericDialogController(pParent, u"cui/ui/storedwebconnectiondialog.ui"_ustr, u"StoredWebConnectionDialog"_ustr)
     , m_nPos( -1 )
-    , m_xRemoveBtn(m_xBuilder->weld_button("remove"))
-    , m_xRemoveAllBtn(m_xBuilder->weld_button("removeall"))
-    , m_xChangeBtn(m_xBuilder->weld_button("change"))
-    , m_xPasswordsLB(m_xBuilder->weld_tree_view("logins"))
+    , m_xRemoveBtn(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xRemoveAllBtn(m_xBuilder->weld_button(u"removeall"_ustr))
+    , m_xChangeBtn(m_xBuilder->weld_button(u"change"_ustr))
+    , m_xPasswordsLB(m_xBuilder->weld_tree_view(u"logins"_ustr))
 {
     std::vector<int> aWidths
     {
@@ -110,7 +110,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             for ( OUString const & url : aUrls )
             {
                 m_xPasswordsLB->append(OUString::number(nCount), url);
-                m_xPasswordsLB->set_text(nCount, "*");
+                m_xPasswordsLB->set_text(nCount, u"*"_ustr);
                 ++nCount;
             }
         }

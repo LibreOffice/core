@@ -76,7 +76,7 @@ public:
 }
 
 SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool bHtmlMode)
-    : GenericDialogController(pParent, "cui/ui/baselinksdialog.ui", "BaseLinksDialog")
+    : GenericDialogController(pParent, u"cui/ui/baselinksdialog.ui"_ustr, u"BaseLinksDialog"_ustr)
     , aStrAutolink( CuiResId( STR_AUTOLINK ) )
     , aStrManuallink( CuiResId( STR_MANUALLINK ) )
     , aStrBrokenlink( CuiResId( STR_BROKENLINK ) )
@@ -85,15 +85,15 @@ SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool b
     , aStrWaitinglink( CuiResId( STR_WAITINGLINK ) )
     , pLinkMgr( nullptr )
     , aUpdateIdle("cui SvBaseLinksDlg UpdateIdle")
-    , m_xTbLinks(m_xBuilder->weld_tree_view("TB_LINKS"))
-    , m_xFtFullFileName(m_xBuilder->weld_link_button("FULL_FILE_NAME"))
-    , m_xFtFullSourceName(m_xBuilder->weld_label("FULL_SOURCE_NAME"))
-    , m_xFtFullTypeName(m_xBuilder->weld_label("FULL_TYPE_NAME"))
-    , m_xRbAutomatic(m_xBuilder->weld_radio_button("AUTOMATIC"))
-    , m_xRbManual(m_xBuilder->weld_radio_button("MANUAL"))
-    , m_xPbUpdateNow(m_xBuilder->weld_button("UPDATE_NOW"))
-    , m_xPbChangeSource(m_xBuilder->weld_button("CHANGE_SOURCE"))
-    , m_xPbBreakLink(m_xBuilder->weld_button("BREAK_LINK"))
+    , m_xTbLinks(m_xBuilder->weld_tree_view(u"TB_LINKS"_ustr))
+    , m_xFtFullFileName(m_xBuilder->weld_link_button(u"FULL_FILE_NAME"_ustr))
+    , m_xFtFullSourceName(m_xBuilder->weld_label(u"FULL_SOURCE_NAME"_ustr))
+    , m_xFtFullTypeName(m_xBuilder->weld_label(u"FULL_TYPE_NAME"_ustr))
+    , m_xRbAutomatic(m_xBuilder->weld_radio_button(u"AUTOMATIC"_ustr))
+    , m_xRbManual(m_xBuilder->weld_radio_button(u"MANUAL"_ustr))
+    , m_xPbUpdateNow(m_xBuilder->weld_button(u"UPDATE_NOW"_ustr))
+    , m_xPbChangeSource(m_xBuilder->weld_button(u"CHANGE_SOURCE"_ustr))
+    , m_xPbBreakLink(m_xBuilder->weld_button(u"BREAK_LINK"_ustr))
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
 {
     // expand the point size of the desired font to the equivalent pixel size
@@ -440,8 +440,8 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, weld::Button&, void )
         m_xPbChangeSource->set_sensitive(false);
         m_xPbBreakLink->set_sensitive(false);
 
-        m_xFtFullSourceName->set_label( "" );
-        m_xFtFullTypeName->set_label( "" );
+        m_xFtFullSourceName->set_label( u""_ustr );
+        m_xFtFullTypeName->set_label( u""_ustr );
     }
     if( pLinkMgr && pLinkMgr->GetPersist() )
         pLinkMgr->GetPersist()->SetModified();

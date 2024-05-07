@@ -47,20 +47,20 @@ namespace offapp
     }
 
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
-        : SfxTabPage(pPage, pController, "cui/ui/connpooloptions.ui", "ConnPoolPage", &_rAttrSet)
+        : SfxTabPage(pPage, pController, u"cui/ui/connpooloptions.ui"_ustr, u"ConnPoolPage"_ustr, &_rAttrSet)
         , m_sYes(CuiResId(RID_CUISTR_YES))
         , m_sNo(CuiResId(RID_CUISTR_NO))
-        , m_xEnablePooling(m_xBuilder->weld_check_button("connectionpooling"))
-        , m_xEnablePoolingImg(m_xBuilder->weld_widget("lockconnectionpooling"))
-        , m_xDriversLabel(m_xBuilder->weld_label("driverslabel"))
-        , m_xDriverList(m_xBuilder->weld_tree_view("driverlist"))
-        , m_xDriverLabel(m_xBuilder->weld_label("driverlabel"))
-        , m_xDriver(m_xBuilder->weld_label("driver"))
-        , m_xDriverPoolingEnabled(m_xBuilder->weld_check_button("enablepooling"))
-        , m_xDriverPoolingEnabledImg(m_xBuilder->weld_widget("lockenablepooling"))
-        , m_xTimeoutLabel(m_xBuilder->weld_label("timeoutlabel"))
-        , m_xTimeout(m_xBuilder->weld_spin_button("timeout"))
-        , m_xTimeoutImg(m_xBuilder->weld_widget("locktimeout"))
+        , m_xEnablePooling(m_xBuilder->weld_check_button(u"connectionpooling"_ustr))
+        , m_xEnablePoolingImg(m_xBuilder->weld_widget(u"lockconnectionpooling"_ustr))
+        , m_xDriversLabel(m_xBuilder->weld_label(u"driverslabel"_ustr))
+        , m_xDriverList(m_xBuilder->weld_tree_view(u"driverlist"_ustr))
+        , m_xDriverLabel(m_xBuilder->weld_label(u"driverlabel"_ustr))
+        , m_xDriver(m_xBuilder->weld_label(u"driver"_ustr))
+        , m_xDriverPoolingEnabled(m_xBuilder->weld_check_button(u"enablepooling"_ustr))
+        , m_xDriverPoolingEnabledImg(m_xBuilder->weld_widget(u"lockenablepooling"_ustr))
+        , m_xTimeoutLabel(m_xBuilder->weld_label(u"timeoutlabel"_ustr))
+        , m_xTimeout(m_xBuilder->weld_spin_button(u"timeout"_ustr))
+        , m_xTimeoutImg(m_xBuilder->weld_widget(u"locktimeout"_ustr))
     {
         m_xDriverList->set_size_request(m_xDriverList->get_approximate_digit_width() * 60,
                                         m_xDriverList->get_height_rows(15));
@@ -74,7 +74,7 @@ namespace offapp
         m_xDriverList->set_column_fixed_widths(aWidths);
 
         css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
         m_xDriverPoolingEnabled->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
@@ -95,7 +95,7 @@ namespace offapp
         else
         {
             m_xDriverList->set_text(nRow, m_sNo, 1);
-            m_xDriverList->set_text(nRow, "-", 2);
+            m_xDriverList->set_text(nRow, u"-"_ustr, 2);
         }
     }
 
@@ -172,7 +172,7 @@ namespace offapp
     OUString ConnectionPoolOptionsPage::GetAllStrings()
     {
         OUString sAllStrings;
-        OUString labels[] = { "label1", "driverslabel", "driverlabel", "timeoutlabel", "driver" };
+        OUString labels[] = { u"label1"_ustr, u"driverslabel"_ustr, u"driverlabel"_ustr, u"timeoutlabel"_ustr, u"driver"_ustr };
 
         for (const auto& label : labels)
         {
@@ -180,7 +180,7 @@ namespace offapp
                 sAllStrings += pString->get_label() + " ";
         }
 
-        OUString checkButton[] = { "connectionpooling", "enablepooling" };
+        OUString checkButton[] = { u"connectionpooling"_ustr, u"enablepooling"_ustr };
 
         for (const auto& check : checkButton)
         {

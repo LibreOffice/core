@@ -71,7 +71,7 @@ const WhichRangesContainer SvxSlantTabPage::pSlantRanges(svl::Items<
 
 SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
                                              const SdrView* pSdrView, SvxAnchorIds nAnchorTypes)
-    : SfxTabDialogController(pParent, "cui/ui/positionsizedialog.ui", "PositionAndSizeDialog", pAttr)
+    : SfxTabDialogController(pParent, u"cui/ui/positionsizedialog.ui"_ustr, u"PositionAndSizeDialog"_ustr, pAttr)
     , pView(pSdrView)
     , nAnchorCtrls(nAnchorTypes)
 {
@@ -80,17 +80,17 @@ SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxIte
     //different positioning page in Writer
     if(nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
-        AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
-        RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
+        RemoveTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr);
     }
     else
     {
-        AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
-        RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
+        RemoveTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr);
     }
 
-    AddTabPage("RID_SVXPAGE_ANGLE", SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
-    AddTabPage("RID_SVXPAGE_SLANT", SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
+    AddTabPage(u"RID_SVXPAGE_ANGLE"_ustr, SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
+    AddTabPage(u"RID_SVXPAGE_SLANT"_ustr, SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
 }
 
 
@@ -149,18 +149,18 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 |*
 \************************************************************************/
 SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pPage, pController, "cui/ui/rotationtabpage.ui", "Rotation", rInAttrs)
+    : SvxTabPage(pPage, pController, u"cui/ui/rotationtabpage.ui"_ustr, u"Rotation"_ustr, rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
     , m_aCtlRect(this)
-    , m_xFlPosition(m_xBuilder->weld_widget("FL_POSITION"))
-    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_X", FieldUnit::CM))
-    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_Y", FieldUnit::CM))
-    , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_RECT", m_aCtlRect))
-    , m_xFlAngle(m_xBuilder->weld_widget("FL_ANGLE"))
-    , m_xNfAngle(m_xBuilder->weld_metric_spin_button("NF_ANGLE", FieldUnit::DEGREE))
+    , m_xFlPosition(m_xBuilder->weld_widget(u"FL_POSITION"_ustr))
+    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_X"_ustr, FieldUnit::CM))
+    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_Y"_ustr, FieldUnit::CM))
+    , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, u"CTL_RECT"_ustr, m_aCtlRect))
+    , m_xFlAngle(m_xBuilder->weld_widget(u"FL_ANGLE"_ustr))
+    , m_xNfAngle(m_xBuilder->weld_metric_spin_button(u"NF_ANGLE"_ustr, FieldUnit::DEGREE))
     , m_xCtlAngle(new svx::DialControl)
-    , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
+    , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, u"CTL_ANGLE"_ustr, *m_xCtlAngle))
 {
     // calculate PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
@@ -377,13 +377,13 @@ void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eR
 |*
 \************************************************************************/
 SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/slantcornertabpage.ui"_ustr, u"SlantAndCornerRadius"_ustr, &rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
-    , m_xFlRadius(m_xBuilder->weld_widget("FL_RADIUS"))
-    , m_xMtrRadius(m_xBuilder->weld_metric_spin_button("MTR_FLD_RADIUS", FieldUnit::CM))
-    , m_xFlAngle(m_xBuilder->weld_widget("FL_SLANT"))
-    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("MTR_FLD_ANGLE", FieldUnit::DEGREE))
+    , m_xFlRadius(m_xBuilder->weld_widget(u"FL_RADIUS"_ustr))
+    , m_xMtrRadius(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_RADIUS"_ustr, FieldUnit::CM))
+    , m_xFlAngle(m_xBuilder->weld_widget(u"FL_SLANT"_ustr))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_ANGLE"_ustr, FieldUnit::DEGREE))
 {
     for (int i = 0; i < 2; ++i)
     {
@@ -553,7 +553,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     // corner radius
     if(!pView->IsEdgeRadiusAllowed())
     {
-        m_xMtrRadius->set_text("");
+        m_xMtrRadius->set_text(u""_ustr);
         m_xFlRadius->set_sensitive(false);
     }
     else
@@ -568,7 +568,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         }
         else
         {
-            m_xMtrRadius->set_text("");
+            m_xMtrRadius->set_text(u""_ustr);
         }
     }
 
@@ -577,7 +577,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     // slant: angle
     if( !pView->IsShearAllowed() )
     {
-        m_xMtrAngle->set_text( "" );
+        m_xMtrAngle->set_text( u""_ustr );
         m_xFlAngle->set_sensitive(false);
     }
     else
@@ -590,7 +590,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         }
         else
         {
-            m_xMtrAngle->set_text("");
+            m_xMtrAngle->set_text(u""_ustr);
         }
     }
 
@@ -717,7 +717,7 @@ DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 |*
 \************************************************************************/
 SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pPage, pController, "cui/ui/possizetabpage.ui", "PositionAndSize", rInAttrs)
+    : SvxTabPage(pPage, pController, u"cui/ui/possizetabpage.ui"_ustr, u"PositionAndSize"_ustr, rInAttrs)
     , mrOutAttrs(rInAttrs)
     , mpView(nullptr)
     , meDlgUnit(FieldUnit::NONE)
@@ -734,26 +734,26 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
     , m_aCtlSize(this)
     , m_aRatioTop(ConnectorType::Top)
     , m_aRatioBottom(ConnectorType::Bottom)
-    , m_xFlPosition(m_xBuilder->weld_widget("FL_POSITION"))
-    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_X", FieldUnit::CM))
-    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_Y", FieldUnit::CM))
-    , m_xCtlPos(new weld::CustomWeld(*m_xBuilder, "CTL_POSRECT", m_aCtlPos))
-    , m_xFlSize(m_xBuilder->weld_widget("FL_SIZE"))
-    , m_xFtWidth(m_xBuilder->weld_label("FT_WIDTH"))
-    , m_xMtrWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_WIDTH", FieldUnit::CM))
-    , m_xFtHeight(m_xBuilder->weld_label("FT_HEIGHT"))
-    , m_xMtrHeight(m_xBuilder->weld_metric_spin_button("MTR_FLD_HEIGHT", FieldUnit::CM))
-    , m_xCbxScale(m_xBuilder->weld_check_button("CBX_SCALE"))
-    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
-    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
-    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
-    , m_xCtlSize(new weld::CustomWeld(*m_xBuilder, "CTL_SIZERECT", m_aCtlSize))
-    , m_xFlProtect(m_xBuilder->weld_widget("FL_PROTECT"))
-    , m_xTsbPosProtect(m_xBuilder->weld_check_button("TSB_POSPROTECT"))
-    , m_xTsbSizeProtect(m_xBuilder->weld_check_button("TSB_SIZEPROTECT"))
-    , m_xFlAdjust(m_xBuilder->weld_widget("FL_ADJUST"))
-    , m_xTsbAutoGrowWidth(m_xBuilder->weld_check_button("TSB_AUTOGROW_WIDTH"))
-    , m_xTsbAutoGrowHeight(m_xBuilder->weld_check_button("TSB_AUTOGROW_HEIGHT"))
+    , m_xFlPosition(m_xBuilder->weld_widget(u"FL_POSITION"_ustr))
+    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_X"_ustr, FieldUnit::CM))
+    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_Y"_ustr, FieldUnit::CM))
+    , m_xCtlPos(new weld::CustomWeld(*m_xBuilder, u"CTL_POSRECT"_ustr, m_aCtlPos))
+    , m_xFlSize(m_xBuilder->weld_widget(u"FL_SIZE"_ustr))
+    , m_xFtWidth(m_xBuilder->weld_label(u"FT_WIDTH"_ustr))
+    , m_xMtrWidth(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_WIDTH"_ustr, FieldUnit::CM))
+    , m_xFtHeight(m_xBuilder->weld_label(u"FT_HEIGHT"_ustr))
+    , m_xMtrHeight(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_HEIGHT"_ustr, FieldUnit::CM))
+    , m_xCbxScale(m_xBuilder->weld_check_button(u"CBX_SCALE"_ustr))
+    , m_xCbxScaleImg(m_xBuilder->weld_image(u"imRatio"_ustr))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, u"daRatioTop"_ustr, m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, u"daRatioBottom"_ustr, m_aRatioBottom))
+    , m_xCtlSize(new weld::CustomWeld(*m_xBuilder, u"CTL_SIZERECT"_ustr, m_aCtlSize))
+    , m_xFlProtect(m_xBuilder->weld_widget(u"FL_PROTECT"_ustr))
+    , m_xTsbPosProtect(m_xBuilder->weld_check_button(u"TSB_POSPROTECT"_ustr))
+    , m_xTsbSizeProtect(m_xBuilder->weld_check_button(u"TSB_SIZEPROTECT"_ustr))
+    , m_xFlAdjust(m_xBuilder->weld_widget(u"FL_ADJUST"_ustr))
+    , m_xTsbAutoGrowWidth(m_xBuilder->weld_check_button(u"TSB_AUTOGROW_WIDTH"_ustr))
+    , m_xTsbAutoGrowHeight(m_xBuilder->weld_check_button(u"TSB_AUTOGROW_HEIGHT"_ustr))
 {
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -839,8 +839,8 @@ void SvxPositionSizeTabPage::Construct()
                 if(maAnchor != basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y()))
                 {
                     // different anchor positions
-                    m_xMtrPosX->set_text("");
-                    m_xMtrPosY->set_text("");
+                    m_xMtrPosX->set_text(u""_ustr);
+                    m_xMtrPosY->set_text(u""_ustr);
                     mbPageDisabled = true;
                     return;
                 }
@@ -1573,7 +1573,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, weld::Toggleable&, void)
 void SvxPositionSizeTabPage::FillUserData()
 {
     // matching is saved in the Ini-file
-    OUString aStr = m_xCbxScale->get_active() ? OUString("1") : OUString("0");
+    OUString aStr = m_xCbxScale->get_active() ? u"1"_ustr : u"0"_ustr;
     SetUserData( aStr );
 }
 

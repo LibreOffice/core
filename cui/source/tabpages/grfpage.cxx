@@ -55,29 +55,29 @@ static int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/croppage.ui", "CropPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/croppage.ui"_ustr, u"CropPage"_ustr, &rSet)
     , m_nOldWidth(0)
     , m_nOldHeight(0)
     , m_bSetOrigSize(false)
     , m_aPreferredDPI(0)
-    , m_xCropFrame(m_xBuilder->weld_widget("cropframe"))
-    , m_xZoomConstRB(m_xBuilder->weld_radio_button("keepscale"))
-    , m_xSizeConstRB(m_xBuilder->weld_radio_button("keepsize"))
-    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
-    , m_xRightMF(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
-    , m_xTopMF(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
-    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottom", FieldUnit::CM))
-    , m_xScaleFrame(m_xBuilder->weld_widget("scaleframe"))
-    , m_xWidthZoomMF(m_xBuilder->weld_metric_spin_button("widthzoom", FieldUnit::PERCENT))
-    , m_xHeightZoomMF(m_xBuilder->weld_metric_spin_button("heightzoom", FieldUnit::PERCENT))
-    , m_xSizeFrame(m_xBuilder->weld_widget("sizeframe"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
-    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
-    , m_xOrigSizeGrid(m_xBuilder->weld_widget("origsizegrid"))
-    , m_xOrigSizeFT(m_xBuilder->weld_label("origsizeft"))
-    , m_xOrigSizePB(m_xBuilder->weld_button("origsize"))
-    , m_xUncropPB(m_xBuilder->weld_button("uncrop"))
-    , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "preview", m_aExampleWN))
+    , m_xCropFrame(m_xBuilder->weld_widget(u"cropframe"_ustr))
+    , m_xZoomConstRB(m_xBuilder->weld_radio_button(u"keepscale"_ustr))
+    , m_xSizeConstRB(m_xBuilder->weld_radio_button(u"keepsize"_ustr))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button(u"left"_ustr, FieldUnit::CM))
+    , m_xRightMF(m_xBuilder->weld_metric_spin_button(u"right"_ustr, FieldUnit::CM))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button(u"top"_ustr, FieldUnit::CM))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button(u"bottom"_ustr, FieldUnit::CM))
+    , m_xScaleFrame(m_xBuilder->weld_widget(u"scaleframe"_ustr))
+    , m_xWidthZoomMF(m_xBuilder->weld_metric_spin_button(u"widthzoom"_ustr, FieldUnit::PERCENT))
+    , m_xHeightZoomMF(m_xBuilder->weld_metric_spin_button(u"heightzoom"_ustr, FieldUnit::PERCENT))
+    , m_xSizeFrame(m_xBuilder->weld_widget(u"sizeframe"_ustr))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::CM))
+    , m_xHeightMF(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::CM))
+    , m_xOrigSizeGrid(m_xBuilder->weld_widget(u"origsizegrid"_ustr))
+    , m_xOrigSizeFT(m_xBuilder->weld_label(u"origsizeft"_ustr))
+    , m_xOrigSizePB(m_xBuilder->weld_button(u"origsize"_ustr))
+    , m_xUncropPB(m_xBuilder->weld_button(u"uncrop"_ustr))
+    , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aExampleWN))
 {
     SetExchangeSupport();
 
@@ -292,7 +292,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 #endif
 
     auto& aProperties = getAdditionalProperties();
-    auto aIterator = aProperties.find("PreferredDPI");
+    auto aIterator = aProperties.find(u"PreferredDPI"_ustr);
     if (aIterator != aProperties.end())
         m_aPreferredDPI = aIterator->second.get<sal_Int32>();
 
@@ -663,9 +663,9 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
 
         OUString sTemp;
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
-            std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog("SpinDialog"));
-            std::unique_ptr<weld::MetricSpinButton> xFld(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/spinbox.ui"_ustr));
+            std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog(u"SpinDialog"_ustr));
+            std::unique_ptr<weld::MetricSpinButton> xFld(xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::CM));
             SetFieldUnit( *xFld, eMetric );
             xFld->set_digits(m_xWidthMF->get_digits());
             xFld->set_max(INT_MAX - 1, FieldUnit::NONE);

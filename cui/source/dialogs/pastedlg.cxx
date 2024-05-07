@@ -30,10 +30,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")
-    , m_xFtObjectSource(m_xBuilder->weld_label("source"))
-    , m_xLbInsertList(m_xBuilder->weld_tree_view("list"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"cui/ui/pastespecial.ui"_ustr, u"PasteSpecialDialog"_ustr)
+    , m_xFtObjectSource(m_xBuilder->weld_label(u"source"_ustr))
+    , m_xLbInsertList(m_xBuilder->weld_tree_view(u"list"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xLbInsertList->set_size_request(m_xLbInsertList->get_approximate_digit_width() * 40,
                                       m_xLbInsertList->get_height_rows(6));

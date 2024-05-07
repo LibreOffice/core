@@ -42,46 +42,46 @@
 using namespace com::sun::star;
 
 SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/colorpage.ui"_ustr, u"ColorPage"_ustr, &rInAttrs)
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
     , aXFillAttr( rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
-    , m_xValSetColorList(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
+    , m_xValSetColorList(new SvxColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
     , m_xValSetRecentList(new SvxColorValueSet(nullptr))
-    , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
-    , m_xRbRGB(m_xBuilder->weld_radio_button("RGB"))
-    , m_xRbCMYK(m_xBuilder->weld_radio_button("CMYK"))
-    , m_xRGBcustom(m_xBuilder->weld_widget("rgbcustom"))
-    , m_xRGBpreset(m_xBuilder->weld_widget("rgbpreset"))
-    , m_xRpreset(m_xBuilder->weld_entry("R_preset"))
-    , m_xGpreset(m_xBuilder->weld_entry("G_preset"))
-    , m_xBpreset(m_xBuilder->weld_entry("B_preset"))
-    , m_xRcustom(m_xBuilder->weld_spin_button("R_custom"))
-    , m_xGcustom(m_xBuilder->weld_spin_button("G_custom"))
-    , m_xBcustom(m_xBuilder->weld_spin_button("B_custom"))
-    , m_xHexpreset(new weld::HexColorControl(m_xBuilder->weld_entry("hex_preset")))
-    , m_xHexcustom(new weld::HexColorControl(m_xBuilder->weld_entry("hex_custom")))
-    , m_xCMYKcustom(m_xBuilder->weld_widget("cmykcustom"))
-    , m_xCMYKpreset(m_xBuilder->weld_widget("cmykpreset"))
-    , m_xCpreset(m_xBuilder->weld_entry("C_preset"))
-    , m_xYpreset(m_xBuilder->weld_entry("Y_preset"))
-    , m_xMpreset(m_xBuilder->weld_entry("M_preset"))
-    , m_xKpreset(m_xBuilder->weld_entry("K_preset"))
-    , m_xCcustom(m_xBuilder->weld_metric_spin_button("C_custom", FieldUnit::PERCENT))
-    , m_xYcustom(m_xBuilder->weld_metric_spin_button("Y_custom", FieldUnit::PERCENT))
-    , m_xMcustom(m_xBuilder->weld_metric_spin_button("M_custom", FieldUnit::PERCENT))
-    , m_xKcustom(m_xBuilder->weld_metric_spin_button("K_custom", FieldUnit::PERCENT))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
-    , m_xBtnWorkOn(m_xBuilder->weld_button("edit"))
-    , m_xMoreColors(m_xBuilder->weld_button("btnMoreColors"))
-    , m_xCtlPreviewOld(new weld::CustomWeld(*m_xBuilder, "oldpreview", m_aCtlPreviewOld))
-    , m_xCtlPreviewNew(new weld::CustomWeld(*m_xBuilder, "newpreview", m_aCtlPreviewNew))
-    , m_xValSetColorListWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xValSetColorList))
-    , m_xValSetRecentListWin(new weld::CustomWeld(*m_xBuilder, "recentcolorset", *m_xValSetRecentList))
+    , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
+    , m_xRbRGB(m_xBuilder->weld_radio_button(u"RGB"_ustr))
+    , m_xRbCMYK(m_xBuilder->weld_radio_button(u"CMYK"_ustr))
+    , m_xRGBcustom(m_xBuilder->weld_widget(u"rgbcustom"_ustr))
+    , m_xRGBpreset(m_xBuilder->weld_widget(u"rgbpreset"_ustr))
+    , m_xRpreset(m_xBuilder->weld_entry(u"R_preset"_ustr))
+    , m_xGpreset(m_xBuilder->weld_entry(u"G_preset"_ustr))
+    , m_xBpreset(m_xBuilder->weld_entry(u"B_preset"_ustr))
+    , m_xRcustom(m_xBuilder->weld_spin_button(u"R_custom"_ustr))
+    , m_xGcustom(m_xBuilder->weld_spin_button(u"G_custom"_ustr))
+    , m_xBcustom(m_xBuilder->weld_spin_button(u"B_custom"_ustr))
+    , m_xHexpreset(new weld::HexColorControl(m_xBuilder->weld_entry(u"hex_preset"_ustr)))
+    , m_xHexcustom(new weld::HexColorControl(m_xBuilder->weld_entry(u"hex_custom"_ustr)))
+    , m_xCMYKcustom(m_xBuilder->weld_widget(u"cmykcustom"_ustr))
+    , m_xCMYKpreset(m_xBuilder->weld_widget(u"cmykpreset"_ustr))
+    , m_xCpreset(m_xBuilder->weld_entry(u"C_preset"_ustr))
+    , m_xYpreset(m_xBuilder->weld_entry(u"Y_preset"_ustr))
+    , m_xMpreset(m_xBuilder->weld_entry(u"M_preset"_ustr))
+    , m_xKpreset(m_xBuilder->weld_entry(u"K_preset"_ustr))
+    , m_xCcustom(m_xBuilder->weld_metric_spin_button(u"C_custom"_ustr, FieldUnit::PERCENT))
+    , m_xYcustom(m_xBuilder->weld_metric_spin_button(u"Y_custom"_ustr, FieldUnit::PERCENT))
+    , m_xMcustom(m_xBuilder->weld_metric_spin_button(u"M_custom"_ustr, FieldUnit::PERCENT))
+    , m_xKcustom(m_xBuilder->weld_metric_spin_button(u"K_custom"_ustr, FieldUnit::PERCENT))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnDelete(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xBtnWorkOn(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xMoreColors(m_xBuilder->weld_button(u"btnMoreColors"_ustr))
+    , m_xCtlPreviewOld(new weld::CustomWeld(*m_xBuilder, u"oldpreview"_ustr, m_aCtlPreviewOld))
+    , m_xCtlPreviewNew(new weld::CustomWeld(*m_xBuilder, u"newpreview"_ustr, m_aCtlPreviewNew))
+    , m_xValSetColorListWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *m_xValSetColorList))
+    , m_xValSetRecentListWin(new weld::CustomWeld(*m_xBuilder, u"recentcolorset"_ustr, *m_xValSetRecentList))
 {
     Size aSize(m_xBtnWorkOn->get_approximate_digit_width() * 25,
                m_xBtnWorkOn->get_text_height() * 10);
@@ -359,8 +359,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
         if (xWarnBox->run() != RET_OK)
             break;
     }
@@ -523,7 +523,7 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         if (m_xSelectPalette->get_active() == 0 && m_xValSetColorList->GetSelectedItemId() != 0)
         {
             m_xBtnDelete->set_sensitive(true);
-            m_xBtnDelete->set_tooltip_text("");
+            m_xBtnDelete->set_tooltip_text(u""_ustr);
         }
         else
         {
@@ -574,8 +574,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, voi
 IMPL_STATIC_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        "AdditionsTag", OUString("Color Palette")) };
-    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+        u"AdditionsTag"_ustr, u"Color Palette"_ustr) };
+    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 void SvxColorTabPage::ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset )

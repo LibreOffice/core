@@ -58,7 +58,7 @@ const WhichRangesContainer SvxCaptionTabPage::pCaptionRanges(
     SDRATTR_CAPTIONLINELEN, SDRATTR_CAPTIONFITLINELEN>);
 
 SvxCaptionTabPage::SvxCaptionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/calloutpage.ui"_ustr, u"CalloutPage"_ustr, &rInAttrs)
     , nCaptionType(SdrCaptionType::Type1)
     , nGap(0)
     , nEscDir(SdrCaptionEscDir::Horizontal)
@@ -71,18 +71,18 @@ SvxCaptionTabPage::SvxCaptionTabPage(weld::Container* pPage, weld::DialogControl
     , nExtension(0)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
-    , m_xMF_SPACING(m_xBuilder->weld_metric_spin_button("spacing", FieldUnit::MM))
-    , m_xLB_EXTENSION(m_xBuilder->weld_combo_box("extension"))
-    , m_xFT_BYFT(m_xBuilder->weld_label("byft"))
-    , m_xMF_BY(m_xBuilder->weld_metric_spin_button("by", FieldUnit::MM))
-    , m_xFT_POSITIONFT(m_xBuilder->weld_label("positionft"))
-    , m_xLB_POSITION(m_xBuilder->weld_combo_box("position"))
-    , m_xLineTypes(m_xBuilder->weld_combo_box("linetypes"))
-    , m_xFT_LENGTHFT(m_xBuilder->weld_label("lengthft"))
-    , m_xMF_LENGTH(m_xBuilder->weld_metric_spin_button("length", FieldUnit::MM))
-    , m_xCB_OPTIMAL(m_xBuilder->weld_check_button("optimal"))
-    , m_xCT_CAPTTYPE(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
-    , m_xCT_CAPTTYPEWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xCT_CAPTTYPE))
+    , m_xMF_SPACING(m_xBuilder->weld_metric_spin_button(u"spacing"_ustr, FieldUnit::MM))
+    , m_xLB_EXTENSION(m_xBuilder->weld_combo_box(u"extension"_ustr))
+    , m_xFT_BYFT(m_xBuilder->weld_label(u"byft"_ustr))
+    , m_xMF_BY(m_xBuilder->weld_metric_spin_button(u"by"_ustr, FieldUnit::MM))
+    , m_xFT_POSITIONFT(m_xBuilder->weld_label(u"positionft"_ustr))
+    , m_xLB_POSITION(m_xBuilder->weld_combo_box(u"position"_ustr))
+    , m_xLineTypes(m_xBuilder->weld_combo_box(u"linetypes"_ustr))
+    , m_xFT_LENGTHFT(m_xBuilder->weld_label(u"lengthft"_ustr))
+    , m_xMF_LENGTH(m_xBuilder->weld_metric_spin_button(u"length"_ustr, FieldUnit::MM))
+    , m_xCB_OPTIMAL(m_xBuilder->weld_check_button(u"optimal"_ustr))
+    , m_xCT_CAPTTYPE(new ValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , m_xCT_CAPTTYPEWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xCT_CAPTTYPE))
 {
     Size aSize(m_xCT_CAPTTYPE->GetDrawingArea()->get_ref_device().LogicToPixel(Size(187, 38), MapMode(MapUnit::MapAppFont)));
     m_xCT_CAPTTYPEWin->set_size_request(aSize.Width(), aSize.Height());
@@ -451,7 +451,7 @@ void SvxCaptionTabPage::FillValueSet()
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* pSdrView,
     SvxAnchorIds nAnchorTypes)
-    : SfxTabDialogController(pParent, "cui/ui/calloutdialog.ui", "CalloutDialog")
+    : SfxTabDialogController(pParent, u"cui/ui/calloutdialog.ui"_ustr, u"CalloutDialog"_ustr)
     , pView(pSdrView)
     , nAnchorCtrls(nAnchorTypes)
 {
@@ -460,17 +460,17 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* p
     //different positioning page in Writer
     if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
-        AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, SvxSwPosSizeTabPage::Create,
             SvxSwPosSizeTabPage::GetRanges );
-        RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
+        RemoveTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr);
     }
     else
     {
-        AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create,
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, SvxPositionSizeTabPage::Create,
             SvxPositionSizeTabPage::GetRanges );
-        RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
+        RemoveTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr);
     }
-    AddTabPage("RID_SVXPAGE_CAPTION", SvxCaptionTabPage::Create,
+    AddTabPage(u"RID_SVXPAGE_CAPTION"_ustr, SvxCaptionTabPage::Create,
         SvxCaptionTabPage::GetRanges );
 }
 

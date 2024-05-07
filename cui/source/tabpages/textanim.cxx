@@ -39,12 +39,12 @@ const WhichRangesContainer SvxTextAnimationPage::pRanges(
 \************************************************************************/
 
 SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrView* pSdrView)
-    : SfxTabDialogController(pParent, "cui/ui/textdialog.ui", "TextDialog", pAttr)
+    : SfxTabDialogController(pParent, u"cui/ui/textdialog.ui"_ustr, u"TextDialog"_ustr, pAttr)
     , pView(pSdrView)
 {
-    AddTabPage("RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
-    AddTabPage("RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
-    AddTabPage("RID_SVXPAGE_TEXTCOLUMNS", SvxTextColumnsPage::Create, nullptr);
+    AddTabPage(u"RID_SVXPAGE_TEXTATTR"_ustr, SvxTextAttrPage::Create, nullptr);
+    AddTabPage(u"RID_SVXPAGE_TEXTANIMATION"_ustr, SvxTextAnimationPage::Create, nullptr);
+    AddTabPage(u"RID_SVXPAGE_TEXTCOLUMNS"_ustr, SvxTextColumnsPage::Create, nullptr);
 }
 
 /*************************************************************************
@@ -82,28 +82,28 @@ void SvxTextTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 |*
 \************************************************************************/
 SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/textanimtabpage.ui", "TextAnimation", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"cui/ui/textanimtabpage.ui"_ustr, u"TextAnimation"_ustr, &rInAttrs)
     , eAniKind(SdrTextAniKind::NONE)
     , m_aUpState(TRISTATE_INDET)
     , m_aLeftState(TRISTATE_INDET)
     , m_aRightState(TRISTATE_INDET)
     , m_aDownState(TRISTATE_INDET)
-    , m_xLbEffect(m_xBuilder->weld_combo_box("LB_EFFECT"))
-    , m_xBoxDirection(m_xBuilder->weld_widget("boxDIRECTION"))
-    , m_xBtnUp(m_xBuilder->weld_toggle_button("BTN_UP"))
-    , m_xBtnLeft(m_xBuilder->weld_toggle_button("BTN_LEFT"))
-    , m_xBtnRight(m_xBuilder->weld_toggle_button("BTN_RIGHT"))
-    , m_xBtnDown(m_xBuilder->weld_toggle_button("BTN_DOWN"))
-    , m_xFlProperties(m_xBuilder->weld_frame("FL_PROPERTIES"))
-    , m_xTsbStartInside(m_xBuilder->weld_check_button("TSB_START_INSIDE"))
-    , m_xTsbStopInside(m_xBuilder->weld_check_button("TSB_STOP_INSIDE"))
-    , m_xBoxCount(m_xBuilder->weld_widget("boxCOUNT"))
-    , m_xTsbEndless(m_xBuilder->weld_check_button("TSB_ENDLESS"))
-    , m_xNumFldCount(m_xBuilder->weld_spin_button("NUM_FLD_COUNT"))
-    , m_xTsbPixel(m_xBuilder->weld_check_button("TSB_PIXEL"))
-    , m_xMtrFldAmount(m_xBuilder->weld_metric_spin_button("MTR_FLD_AMOUNT", FieldUnit::PIXEL))
-    , m_xTsbAuto(m_xBuilder->weld_check_button("TSB_AUTO"))
-    , m_xMtrFldDelay(m_xBuilder->weld_metric_spin_button("MTR_FLD_DELAY", FieldUnit::MILLISECOND))
+    , m_xLbEffect(m_xBuilder->weld_combo_box(u"LB_EFFECT"_ustr))
+    , m_xBoxDirection(m_xBuilder->weld_widget(u"boxDIRECTION"_ustr))
+    , m_xBtnUp(m_xBuilder->weld_toggle_button(u"BTN_UP"_ustr))
+    , m_xBtnLeft(m_xBuilder->weld_toggle_button(u"BTN_LEFT"_ustr))
+    , m_xBtnRight(m_xBuilder->weld_toggle_button(u"BTN_RIGHT"_ustr))
+    , m_xBtnDown(m_xBuilder->weld_toggle_button(u"BTN_DOWN"_ustr))
+    , m_xFlProperties(m_xBuilder->weld_frame(u"FL_PROPERTIES"_ustr))
+    , m_xTsbStartInside(m_xBuilder->weld_check_button(u"TSB_START_INSIDE"_ustr))
+    , m_xTsbStopInside(m_xBuilder->weld_check_button(u"TSB_STOP_INSIDE"_ustr))
+    , m_xBoxCount(m_xBuilder->weld_widget(u"boxCOUNT"_ustr))
+    , m_xTsbEndless(m_xBuilder->weld_check_button(u"TSB_ENDLESS"_ustr))
+    , m_xNumFldCount(m_xBuilder->weld_spin_button(u"NUM_FLD_COUNT"_ustr))
+    , m_xTsbPixel(m_xBuilder->weld_check_button(u"TSB_PIXEL"_ustr))
+    , m_xMtrFldAmount(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_AMOUNT"_ustr, FieldUnit::PIXEL))
+    , m_xTsbAuto(m_xBuilder->weld_check_button(u"TSB_AUTO"_ustr))
+    , m_xMtrFldDelay(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_DELAY"_ustr, FieldUnit::MILLISECOND))
 {
     eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rInAttrs.GetPool();
@@ -196,7 +196,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
         else
         {
             m_xTsbEndless->set_state(TRISTATE_TRUE);
-            m_xNumFldCount->set_text("");
+            m_xNumFldCount->set_text(u""_ustr);
         }
     }
     else
@@ -214,7 +214,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if (nValue == 0)
     {
         m_xTsbAuto->set_state(TRISTATE_TRUE);
-        m_xMtrFldDelay->set_text("");
+        m_xMtrFldDelay->set_text(u""_ustr);
     }
     else
         m_xTsbAuto->set_state(TRISTATE_FALSE);
@@ -445,7 +445,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::Toggleable&, v
     if( eState != TRISTATE_FALSE )
     {
         m_xNumFldCount->set_sensitive(false);
-        m_xNumFldCount->set_text("");
+        m_xNumFldCount->set_text(u""_ustr);
     }
     else
     {
@@ -460,7 +460,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::Toggleable&, void
     if( eState != TRISTATE_FALSE )
     {
         m_xMtrFldDelay->set_sensitive(false);
-        m_xMtrFldDelay->set_text("");
+        m_xMtrFldDelay->set_text(u""_ustr);
     }
     else
     {

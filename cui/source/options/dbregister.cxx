@@ -85,13 +85,13 @@ short DatabaseRegistrationDialog::run()
 // class DbRegistrationOptionsPage --------------------------------------------------
 
 DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "cui/ui/dbregisterpage.ui", "DbRegisterPage", &rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/dbregisterpage.ui"_ustr, u"DbRegisterPage"_ustr, &rSet)
     , m_nOldCount(0)
     , m_bModified(false)
-    , m_xNew(m_xBuilder->weld_button("new"))
-    , m_xEdit(m_xBuilder->weld_button("edit"))
-    , m_xDelete(m_xBuilder->weld_button("delete"))
-    , m_xPathBox(m_xBuilder->weld_tree_view("pathctrl"))
+    , m_xNew(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xEdit(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xDelete(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xPathBox(m_xBuilder->weld_tree_view(u"pathctrl"_ustr))
     , m_xIter(m_xPathBox->make_iterator())
 {
     Size aControlSize(m_xPathBox->get_approximate_digit_width() * 60,
@@ -133,7 +133,7 @@ OUString DbRegistrationOptionsPage::GetAllStrings()
 {
     OUString sAllStrings;
 
-    if (const auto& pString = m_xBuilder->weld_label("label1"))
+    if (const auto& pString = m_xBuilder->weld_label(u"label1"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");

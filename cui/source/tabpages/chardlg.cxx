@@ -189,53 +189,53 @@ struct SvxCharNamePage_Impl
 // class SvxCharNamePage -------------------------------------------------
 
 SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
+    : SvxCharBasePage(pPage, pController, u"cui/ui/charnamepage.ui"_ustr, u"CharNamePage"_ustr, rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
     // Western
-    , m_xWestern(m_xBuilder->weld_notebook("nbWestern"))
-    , m_xWestFontNameFT(m_xBuilder->weld_label("lbWestFontname"))
-    , m_xWestFontStyleFT(m_xBuilder->weld_label("lbWestStyle"))
-    , m_xWestFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbWestStyle")))
-    , m_xWestFontSizeFT(m_xBuilder->weld_label("lbWestSize"))
-    , m_xWestFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbWestSize")))
-    , m_xWestFontLanguageFT(m_xBuilder->weld_label("lbWestLanguage"))
-    , m_xWestFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbWestLanguage")))
-    , m_xWestFontFeaturesButton(m_xBuilder->weld_button("btnWestFeatures"))
-    , m_xWestFontTypeFT(m_xBuilder->weld_label("lbWestFontinfo"))
-    , m_xCJK_CTL(m_xBuilder->weld_notebook("nbCJKCTL"))
+    , m_xWestern(m_xBuilder->weld_notebook(u"nbWestern"_ustr))
+    , m_xWestFontNameFT(m_xBuilder->weld_label(u"lbWestFontname"_ustr))
+    , m_xWestFontStyleFT(m_xBuilder->weld_label(u"lbWestStyle"_ustr))
+    , m_xWestFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box(u"cbWestStyle"_ustr)))
+    , m_xWestFontSizeFT(m_xBuilder->weld_label(u"lbWestSize"_ustr))
+    , m_xWestFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box(u"cbWestSize"_ustr)))
+    , m_xWestFontLanguageFT(m_xBuilder->weld_label(u"lbWestLanguage"_ustr))
+    , m_xWestFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbWestLanguage"_ustr)))
+    , m_xWestFontFeaturesButton(m_xBuilder->weld_button(u"btnWestFeatures"_ustr))
+    , m_xWestFontTypeFT(m_xBuilder->weld_label(u"lbWestFontinfo"_ustr))
+    , m_xCJK_CTL(m_xBuilder->weld_notebook(u"nbCJKCTL"_ustr))
     // CJK
-    , m_xEastFontNameFT(m_xBuilder->weld_label("lbCJKFontname"))
-    , m_xEastFontStyleFT(m_xBuilder->weld_label("lbCJKStyle"))
-    , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbCJKStyle")))
-    , m_xEastFontSizeFT(m_xBuilder->weld_label("lbCJKSize"))
-    , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbCJKSize")))
-    , m_xEastFontLanguageFT(m_xBuilder->weld_label("lbCJKLanguage"))
-    , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbCJKLanguage")))
-    , m_xEastFontFeaturesButton(m_xBuilder->weld_button("btnCJKFeatures"))
-    , m_xEastFontTypeFT(m_xBuilder->weld_label("lbCJKFontinfo"))
+    , m_xEastFontNameFT(m_xBuilder->weld_label(u"lbCJKFontname"_ustr))
+    , m_xEastFontStyleFT(m_xBuilder->weld_label(u"lbCJKStyle"_ustr))
+    , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box(u"cbCJKStyle"_ustr)))
+    , m_xEastFontSizeFT(m_xBuilder->weld_label(u"lbCJKSize"_ustr))
+    , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box(u"cbCJKSize"_ustr)))
+    , m_xEastFontLanguageFT(m_xBuilder->weld_label(u"lbCJKLanguage"_ustr))
+    , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbCJKLanguage"_ustr)))
+    , m_xEastFontFeaturesButton(m_xBuilder->weld_button(u"btnCJKFeatures"_ustr))
+    , m_xEastFontTypeFT(m_xBuilder->weld_label(u"lbCJKFontinfo"_ustr))
     // CTL
-    , m_xCTLFontNameFT(m_xBuilder->weld_label("lbCTLFontname"))
+    , m_xCTLFontNameFT(m_xBuilder->weld_label(u"lbCTLFontname"_ustr))
     // tree
-    , m_xCTLFontStyleFT(m_xBuilder->weld_label("lbCTLStyle"))
-    , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbCTLStyle")))
-    , m_xCTLFontSizeFT(m_xBuilder->weld_label("lbCTLSize"))
-    , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbCTLSize")))
-    , m_xCTLFontLanguageFT(m_xBuilder->weld_label("lbCTLLanguage"))
-    , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbCTLLanguage")))
-    , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("btnCTLFeatures"))
-    , m_xCTLFontTypeFT(m_xBuilder->weld_label("lbCTLFontinfo"))
+    , m_xCTLFontStyleFT(m_xBuilder->weld_label(u"lbCTLStyle"_ustr))
+    , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box(u"cbCTLStyle"_ustr)))
+    , m_xCTLFontSizeFT(m_xBuilder->weld_label(u"lbCTLSize"_ustr))
+    , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box(u"cbCTLSize"_ustr)))
+    , m_xCTLFontLanguageFT(m_xBuilder->weld_label(u"lbCTLLanguage"_ustr))
+    , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbCTLLanguage"_ustr)))
+    , m_xCTLFontFeaturesButton(m_xBuilder->weld_button(u"btnCTLFeatures"_ustr))
+    , m_xCTLFontTypeFT(m_xBuilder->weld_label(u"lbCTLFontinfo"_ustr))
 
     , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::WITH_ALPHA)
 {
-    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin));
 #ifdef IOS
     m_xPreviewWin->hide();
 #endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_CUISTR_CHARNAME_NOSTYLE );
 
-    std::unique_ptr<weld::EntryTreeView> xWestFontName = m_xBuilder->weld_entry_tree_view("gdWestern", "edWestFontName", "trWestFontName");
-    std::unique_ptr<weld::EntryTreeView> xCJKFontName = m_xBuilder->weld_entry_tree_view("gdCJK", "edCJKFontName", "trCJKFontName");
-    std::unique_ptr<weld::EntryTreeView> xCTLFontName = m_xBuilder->weld_entry_tree_view("gdCTL", "edCTLFontName", "trCTLFontName");
+    std::unique_ptr<weld::EntryTreeView> xWestFontName = m_xBuilder->weld_entry_tree_view(u"gdWestern"_ustr, u"edWestFontName"_ustr, u"trWestFontName"_ustr);
+    std::unique_ptr<weld::EntryTreeView> xCJKFontName = m_xBuilder->weld_entry_tree_view(u"gdCJK"_ustr, u"edCJKFontName"_ustr, u"trCJKFontName"_ustr);
+    std::unique_ptr<weld::EntryTreeView> xCTLFontName = m_xBuilder->weld_entry_tree_view(u"gdCTL"_ustr, u"edCTLFontName"_ustr, u"trCTLFontName"_ustr);
 
     // 7 lines in the treeview
     xWestFontName->set_height_request_by_rows(7);
@@ -254,8 +254,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         m_xCJK_CTL->hide();
         m_xWestern->set_show_tabs(false); //hide single tab in case of Western only
     }
-    else if (!bShowCJK) m_xCJK_CTL->remove_page("nbCJK");
-    else if (!bShowCTL) m_xCJK_CTL->remove_page("nbCTL");
+    else if (!bShowCJK) m_xCJK_CTL->remove_page(u"nbCJK"_ustr);
+    else if (!bShowCTL) m_xCJK_CTL->remove_page(u"nbCTL"_ustr);
 
 
     //In MacOSX the standard dialogs name font-name, font-style as
@@ -1298,40 +1298,40 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharEffectsPage ----------------------------------------------
 
 SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pPage, pController, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
+    : SvxCharBasePage(pPage, pController, u"cui/ui/effectspage.ui"_ustr, u"EffectsPage"_ustr, rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
-    , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
-    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"),
+    , m_xFontColorFT(m_xBuilder->weld_label(u"fontcolorft"_ustr))
+    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"fontcolorlb"_ustr),
         [this]{ return GetDialogController()->getDialog(); }))
-    , m_xFontTransparencyFT(m_xBuilder->weld_label("fonttransparencyft"))
+    , m_xFontTransparencyFT(m_xBuilder->weld_label(u"fonttransparencyft"_ustr))
     , m_xFontTransparencyMtr(
-          m_xBuilder->weld_metric_spin_button("fonttransparencymtr", FieldUnit::PERCENT))
-    , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
-    , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
-    , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
-    , m_xReliefLB(m_xBuilder->weld_combo_box("relieflb"))
-    , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
-    , m_xShadowBtn(m_xBuilder->weld_check_button("shadowcb"))
-    , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
-    , m_xOverlineLB(m_xBuilder->weld_combo_box("overlinelb"))
-    , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
-    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"),
+          m_xBuilder->weld_metric_spin_button(u"fonttransparencymtr"_ustr, FieldUnit::PERCENT))
+    , m_xEffectsFT(m_xBuilder->weld_label(u"effectsft"_ustr))
+    , m_xEffectsLB(m_xBuilder->weld_combo_box(u"effectslb"_ustr))
+    , m_xReliefFT(m_xBuilder->weld_label(u"reliefft"_ustr))
+    , m_xReliefLB(m_xBuilder->weld_combo_box(u"relieflb"_ustr))
+    , m_xOutlineBtn(m_xBuilder->weld_check_button(u"outlinecb"_ustr))
+    , m_xShadowBtn(m_xBuilder->weld_check_button(u"shadowcb"_ustr))
+    , m_xHiddenBtn(m_xBuilder->weld_check_button(u"hiddencb"_ustr))
+    , m_xOverlineLB(m_xBuilder->weld_combo_box(u"overlinelb"_ustr))
+    , m_xOverlineColorFT(m_xBuilder->weld_label(u"overlinecolorft"_ustr))
+    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"overlinecolorlb"_ustr),
         [this]{ return GetDialogController()->getDialog(); }))
-    , m_xStrikeoutLB(m_xBuilder->weld_combo_box("strikeoutlb"))
-    , m_xUnderlineLB(m_xBuilder->weld_combo_box("underlinelb"))
-    , m_xUnderlineColorFT(m_xBuilder->weld_label("underlinecolorft"))
-    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"),
+    , m_xStrikeoutLB(m_xBuilder->weld_combo_box(u"strikeoutlb"_ustr))
+    , m_xUnderlineLB(m_xBuilder->weld_combo_box(u"underlinelb"_ustr))
+    , m_xUnderlineColorFT(m_xBuilder->weld_label(u"underlinecolorft"_ustr))
+    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"underlinecolorlb"_ustr),
         [this]{ return GetDialogController()->getDialog(); }))
-    , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
-    , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
-    , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))
-    , m_xPositionFT(m_xBuilder->weld_label("positionft"))
-    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
-    , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
+    , m_xIndividualWordsBtn(m_xBuilder->weld_check_button(u"individualwordscb"_ustr))
+    , m_xEmphasisFT(m_xBuilder->weld_label(u"emphasisft"_ustr))
+    , m_xEmphasisLB(m_xBuilder->weld_combo_box(u"emphasislb"_ustr))
+    , m_xPositionFT(m_xBuilder->weld_label(u"positionft"_ustr))
+    , m_xPositionLB(m_xBuilder->weld_combo_box(u"positionlb"_ustr))
+    , m_xA11yWarningFT(m_xBuilder->weld_label(u"a11ywarning"_ustr))
 {
-    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin));
 #ifdef IOS
     m_xPreviewWin->hide();
 #endif
@@ -2405,34 +2405,34 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pPage, pController, "cui/ui/positionpage.ui", "PositionPage", rInSet)
+    : SvxCharBasePage(pPage, pController, u"cui/ui/positionpage.ui"_ustr, u"PositionPage"_ustr, rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
     , m_nScaleWidthItemSetVal(100)
     , m_nScaleWidthInitialVal(100)
     , m_nSuperProp(sal_uInt8(DFLT_ESC_PROP))
     , m_nSubProp(sal_uInt8(DFLT_ESC_PROP))
-    , m_xHighPosBtn(m_xBuilder->weld_radio_button("superscript"))
-    , m_xNormalPosBtn(m_xBuilder->weld_radio_button("normal"))
-    , m_xLowPosBtn(m_xBuilder->weld_radio_button("subscript"))
-    , m_xHighLowFT(m_xBuilder->weld_label("raiselower"))
-    , m_xHighLowMF(m_xBuilder->weld_metric_spin_button("raiselowersb", FieldUnit::PERCENT))
-    , m_xHighLowRB(m_xBuilder->weld_check_button("automatic"))
-    , m_xFontSizeFT(m_xBuilder->weld_label("relativefontsize"))
-    , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button("fontsizesb", FieldUnit::PERCENT))
-    , m_xRotationContainer(m_xBuilder->weld_widget("rotationcontainer"))
-    , m_xScalingFT(m_xBuilder->weld_label("scale"))
-    , m_xScalingAndRotationFT(m_xBuilder->weld_label("rotateandscale"))
-    , m_x0degRB(m_xBuilder->weld_radio_button("0deg"))
-    , m_x90degRB(m_xBuilder->weld_radio_button("90deg"))
-    , m_x270degRB(m_xBuilder->weld_radio_button("270deg"))
-    , m_xFitToLineCB(m_xBuilder->weld_check_button("fittoline"))
-    , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button("scalewidthsb", FieldUnit::PERCENT))
-    , m_xKerningMF(m_xBuilder->weld_metric_spin_button("kerningsb", FieldUnit::POINT))
-    , m_xPairKerningBtn(m_xBuilder->weld_check_button("pairkerning"))
-    , m_xNoHyphenationBtn(m_xBuilder->weld_check_button("nohyphenation"))
+    , m_xHighPosBtn(m_xBuilder->weld_radio_button(u"superscript"_ustr))
+    , m_xNormalPosBtn(m_xBuilder->weld_radio_button(u"normal"_ustr))
+    , m_xLowPosBtn(m_xBuilder->weld_radio_button(u"subscript"_ustr))
+    , m_xHighLowFT(m_xBuilder->weld_label(u"raiselower"_ustr))
+    , m_xHighLowMF(m_xBuilder->weld_metric_spin_button(u"raiselowersb"_ustr, FieldUnit::PERCENT))
+    , m_xHighLowRB(m_xBuilder->weld_check_button(u"automatic"_ustr))
+    , m_xFontSizeFT(m_xBuilder->weld_label(u"relativefontsize"_ustr))
+    , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button(u"fontsizesb"_ustr, FieldUnit::PERCENT))
+    , m_xRotationContainer(m_xBuilder->weld_widget(u"rotationcontainer"_ustr))
+    , m_xScalingFT(m_xBuilder->weld_label(u"scale"_ustr))
+    , m_xScalingAndRotationFT(m_xBuilder->weld_label(u"rotateandscale"_ustr))
+    , m_x0degRB(m_xBuilder->weld_radio_button(u"0deg"_ustr))
+    , m_x90degRB(m_xBuilder->weld_radio_button(u"90deg"_ustr))
+    , m_x270degRB(m_xBuilder->weld_radio_button(u"270deg"_ustr))
+    , m_xFitToLineCB(m_xBuilder->weld_check_button(u"fittoline"_ustr))
+    , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button(u"scalewidthsb"_ustr, FieldUnit::PERCENT))
+    , m_xKerningMF(m_xBuilder->weld_metric_spin_button(u"kerningsb"_ustr, FieldUnit::POINT))
+    , m_xPairKerningBtn(m_xBuilder->weld_check_button(u"pairkerning"_ustr))
+    , m_xNoHyphenationBtn(m_xBuilder->weld_check_button(u"nohyphenation"_ustr))
 {
-    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin));
 #ifdef IOS
     m_xPreviewWin->hide();
 #endif
@@ -3046,20 +3046,20 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pPage, pController, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
+    : SvxCharBasePage(pPage, pController, u"cui/ui/twolinespage.ui"_ustr, u"TwoLinesPage"_ustr, rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
-    , m_xTwoLinesBtn(m_xBuilder->weld_check_button("twolines"))
-    , m_xEnclosingFrame(m_xBuilder->weld_widget("enclosing"))
-    , m_xStartBracketLB(m_xBuilder->weld_tree_view("startbracket"))
-    , m_xEndBracketLB(m_xBuilder->weld_tree_view("endbracket"))
+    , m_xTwoLinesBtn(m_xBuilder->weld_check_button(u"twolines"_ustr))
+    , m_xEnclosingFrame(m_xBuilder->weld_widget(u"enclosing"_ustr))
+    , m_xStartBracketLB(m_xBuilder->weld_tree_view(u"startbracket"_ustr))
+    , m_xEndBracketLB(m_xBuilder->weld_tree_view(u"endbracket"_ustr))
 {
     for (size_t i = 0; i < std::size(TWOLINE_OPEN); ++i)
         m_xStartBracketLB->append(OUString::number(TWOLINE_OPEN[i].second), CuiResId(TWOLINE_OPEN[i].first));
     for (size_t i = 0; i < std::size(TWOLINE_CLOSE); ++i)
         m_xEndBracketLB->append(OUString::number(TWOLINE_CLOSE[i].second), CuiResId(TWOLINE_CLOSE[i].first));
 
-    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin));
 #ifdef IOS
     m_xPreviewWin->hide();
 #endif

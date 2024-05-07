@@ -23,11 +23,11 @@ struct FontFeatureItem
     FontFeatureItem(weld::Widget* pParent)
         : m_aFeatureCode(0)
         , m_nDefault(-1)
-        , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/fontfragment.ui"))
-        , m_xContainer(m_xBuilder->weld_widget("fontentry"))
-        , m_xText(m_xBuilder->weld_label("label"))
-        , m_xCombo(m_xBuilder->weld_combo_box("combo"))
-        , m_xCheck(m_xBuilder->weld_check_button("check"))
+        , m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/fontfragment.ui"_ustr))
+        , m_xContainer(m_xBuilder->weld_widget(u"fontentry"_ustr))
+        , m_xText(m_xBuilder->weld_label(u"label"_ustr))
+        , m_xCombo(m_xBuilder->weld_combo_box(u"combo"_ustr))
+        , m_xCheck(m_xBuilder->weld_check_button(u"check"_ustr))
     {
         m_xCheck->connect_toggled(LINK(this, FontFeatureItem, CheckBoxToggledHdl));
     }
