@@ -750,7 +750,22 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
         // not NSEventTypeScrollWheel.
         NSEvent* pCurrentEvent = [NSApp currentEvent];
         if( pCurrentEvent && [pCurrentEvent type] == NSEventTypeScrollWheel )
-            nEventMask &= ~NSEventMaskScrollWheel;
+        {
+            // tdf#160767 skip fix for tdf#155266 when the event hasn't changed
+            // When scrolling in Writer with automatic spellchecking enabled,
+            // the current event never changes because the fix for tdf#155266
+            // causes Writer to get stuck in a loop. So, if the current event
+            // has not changed since the last pass through this code, skip
+            // the fix for tdf#155266.
+            static NSEvent *pLastCurrentEvent = nil;
+            if( pLastCurrentEvent != pCurrentEvent )
+            {
+                if( pLastCurrentEvent )
+                    [pLastCurrentEvent release];
+                pLastCurrentEvent = [pCurrentEvent retain];
+                nEventMask &= ~NSEventMaskScrollWheel;
+            }
+        }
     }
 
     if( nType & VclInputFlags::KEYBOARD)
