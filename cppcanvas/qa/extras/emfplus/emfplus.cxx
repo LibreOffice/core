@@ -22,7 +22,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/cppcanvas/qa/extras/emfplus/data/")
+        : UnoApiTest(u"/cppcanvas/qa/extras/emfplus/data/"_ustr)
     {
     }
 

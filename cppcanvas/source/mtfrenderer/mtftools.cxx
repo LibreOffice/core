@@ -70,7 +70,7 @@ namespace cppcanvas::tools
 
                 default:
                     throw css::uno::RuntimeException(
-                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
+                                      u"tools::getBaselineOffset(): Unexpected TextAlign value"_ustr );
             }
         }
 

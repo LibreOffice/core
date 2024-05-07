@@ -830,7 +830,7 @@ namespace cppcanvas::internal
             if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
             {
                 uno::Sequence< beans::PropertyValue > aProperties{ comphelper::makePropertyValue(
-                    "EmphasisMark", sal_uInt32(rFont.GetEmphasisMark())) };
+                    u"EmphasisMark"_ustr, sal_uInt32(rFont.GetEmphasisMark())) };
                 return rParms.mrCanvas->getUNOCanvas()->createFont(aFontRequest,
                                                                 aProperties,
                                                                 aFontMatrix);
