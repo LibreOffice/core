@@ -58,3 +58,63 @@
  	break;
      }
      return ret;
+--- misc/cairo-1.10.2/src/cairo-ft-font.c
++++ misc/cairo-1.10.2/src/cairo-ft-font.c
+@@ -1318,6 +1321,19 @@
+ 	    memcpy (data, bitmap->buffer, (size_t)stride * height);
+ 	}
+ 
++	{
++	    /* swizzle to rgba */
++	    unsigned int i, count = height * width;
++	    unsigned char *p = data;
++	    for (i = 0; i < count; i++)
++	    {
++		unsigned char tmp = p[0];
++		p[0] = p[2];
++		p[2] = tmp;
++		p+=4;
++	    }
++	}
++
+ 	if (!_cairo_is_little_endian ())
+ 	{
+ 	    /* Byteswap. */
+@@ -2573,7 +2589,7 @@
+     if (unlikely (status))
+ 	return status;
+ 
+-    if (pixman_image_get_format (surface->pixman_image) == PIXMAN_a8r8g8b8 &&
++    if (pixman_image_get_format (surface->pixman_image) == PIXMAN_a8b8g8r8 &&
+ 	!pixman_image_get_component_alpha (surface->pixman_image)) {
+ 	_cairo_scaled_glyph_set_color_surface (scaled_glyph,
+ 					       &scaled_font->base,
+--- misc/cairo-1.10.2/src/cairo-image-compositor.c
++++ misc/cairo-1.10.2/src/cairo-image-compositor.c
+@@ -1074,7 +1074,7 @@
+     format = PIXMAN_a8;
+     i = (info->extents.width + 3) & ~3;
+     if (scaled_glyph->surface->base.content & CAIRO_CONTENT_COLOR) {
+-	format = PIXMAN_a8r8g8b8;
++	format = PIXMAN_a8b8g8r8;
+ 	i = info->extents.width * 4;
+     }
+ 
+@@ -1126,7 +1126,7 @@
+ 		format == PIXMAN_a8) {
+ 		pixman_image_t *ca_mask;
+ 
+-		format = PIXMAN_a8r8g8b8;
++		format = PIXMAN_a8b8g8r8;
+ 		ca_mask = pixman_image_create_bits (format,
+ 						    info->extents.width,
+ 						    info->extents.height,
+@@ -1175,7 +1175,7 @@
+ 	}
+     }
+ 
+-    if (format == PIXMAN_a8r8g8b8)
++    if (format == PIXMAN_a8b8g8r8)
+ 	pixman_image_set_component_alpha (mask, TRUE);
+ 
+     pixman_image_composite32 (_pixman_operator (op),
