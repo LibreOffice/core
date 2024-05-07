@@ -1226,23 +1226,23 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 
     if ( m_aExternalFeatures.empty() )
     {
-        const char* pURLs[] = {
-            ".uno:DataSourceBrowser/DocumentDataSource",
-            ".uno:DataSourceBrowser/FormLetter",
-            ".uno:DataSourceBrowser/InsertColumns",
-            ".uno:DataSourceBrowser/InsertContent",
+        constexpr OUString aURLs[] {
+            u".uno:DataSourceBrowser/DocumentDataSource"_ustr,
+            u".uno:DataSourceBrowser/FormLetter"_ustr,
+            u".uno:DataSourceBrowser/InsertColumns"_ustr,
+            u".uno:DataSourceBrowser/InsertContent"_ustr,
         };
-        const sal_uInt16 nIds[] = {
+        constexpr sal_uInt16 nIds[] = {
             ID_BROWSER_DOCUMENT_DATASOURCE,
             ID_BROWSER_FORMLETTER,
             ID_BROWSER_INSERTCOLUMNS,
             ID_BROWSER_INSERTCONTENT
         };
 
-        for ( size_t i=0; i < std::size( pURLs ); ++i )
+        for ( size_t i=0; i < std::size( aURLs ); ++i )
         {
             URL aURL;
-            aURL.Complete = OUString::createFromAscii( pURLs[i] );
+            aURL.Complete = aURLs[i];
             if ( m_xUrlTransformer.is() )
                 m_xUrlTransformer->parseStrict( aURL );
             m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( std::move(aURL) );
