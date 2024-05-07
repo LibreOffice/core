@@ -117,14 +117,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     static constexpr struct ServiceNameToImplName
     {
         OUString     sServiceName;
-        const char*     pAsciiImplementationName;
+        OUString     aAsciiImplementationName;
     } aImplementations[] = {
-        { URL_COMPONENT_FORMGRIDVIEW,      "org.openoffice.comp.dbu.OFormGridView"        },
-        { URL_COMPONENT_DATASOURCEBROWSER, "org.openoffice.comp.dbu.ODatasourceBrowser"   },
-        { URL_COMPONENT_QUERYDESIGN,       "org.openoffice.comp.dbu.OQueryDesign"         },
-        { URL_COMPONENT_TABLEDESIGN,       "org.openoffice.comp.dbu.OTableDesign"         },
-        { URL_COMPONENT_RELATIONDESIGN,    "org.openoffice.comp.dbu.ORelationDesign"      },
-        { URL_COMPONENT_VIEWDESIGN,        "org.openoffice.comp.dbu.OViewDesign"          }
+        { URL_COMPONENT_FORMGRIDVIEW,      u"org.openoffice.comp.dbu.OFormGridView"_ustr        },
+        { URL_COMPONENT_DATASOURCEBROWSER, u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr   },
+        { URL_COMPONENT_QUERYDESIGN,       u"org.openoffice.comp.dbu.OQueryDesign"_ustr         },
+        { URL_COMPONENT_TABLEDESIGN,       u"org.openoffice.comp.dbu.OTableDesign"_ustr         },
+        { URL_COMPONENT_RELATIONDESIGN,    u"org.openoffice.comp.dbu.ORelationDesign"_ustr      },
+        { URL_COMPONENT_VIEWDESIGN,        u"org.openoffice.comp.dbu.OViewDesign"_ustr          }
     };
 
     INetURLObject aParser( rURL );
@@ -136,7 +136,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         if ( sComponentURL == aImplementation.sServiceName )
         {
             xController.set( m_xContext->getServiceManager()->
-               createInstanceWithContext( OUString::createFromAscii( aImplementation.pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
+               createInstanceWithContext( aImplementation.aAsciiImplementationName, m_xContext), UNO_QUERY_THROW );
             break;
         }
     }
