@@ -70,6 +70,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Draw::Snap::Object::ObjectFrame::set( m_xCbxSnapFrame->get_active(), batch );
         officecfg::Office::Draw::Snap::Object::ObjectPoint::set( m_xCbxSnapPoints->get_active(), batch );
         officecfg::Office::Draw::Snap::Position::CreatingMoving::set( m_xCbxOrtho->get_active(), batch );
+        officecfg::Office::Draw::Snap::Position::ExtendEdges::set( m_xCbxBigOrtho->get_active(), batch );
     }
     else
     {
@@ -78,9 +79,9 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Impress::Snap::Object::ObjectFrame::set( m_xCbxSnapFrame->get_active(), batch );
         officecfg::Office::Impress::Snap::Object::ObjectPoint::set( m_xCbxSnapPoints->get_active(), batch );
         officecfg::Office::Impress::Snap::Position::CreatingMoving::set( m_xCbxOrtho->get_active(), batch );
+        officecfg::Office::Impress::Snap::Position::ExtendEdges::set( m_xCbxBigOrtho->get_active(), batch );
     }
 
-    aOptsItem.GetOptionsSnap().SetBigOrtho( m_xCbxBigOrtho->get_active() );
     aOptsItem.GetOptionsSnap().SetRotate( m_xCbxRotate->get_active() );
     aOptsItem.GetOptionsSnap().SetSnapArea(static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FieldUnit::PIXEL)));
     aOptsItem.GetOptionsSnap().SetAngle(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE)));
@@ -108,6 +109,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxSnapFrame->set_active( officecfg::Office::Draw::Snap::Object::ObjectFrame::get() );
         m_xCbxSnapPoints->set_active( officecfg::Office::Draw::Snap::Object::ObjectPoint::get() );
         m_xCbxOrtho->set_active( officecfg::Office::Draw::Snap::Position::CreatingMoving::get() );
+        m_xCbxBigOrtho->set_active( officecfg::Office::Draw::Snap::Position::ExtendEdges::get() );
     }
     else
     {
@@ -116,6 +118,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxSnapFrame->set_active( officecfg::Office::Impress::Snap::Object::ObjectFrame::get() );
         m_xCbxSnapPoints->set_active( officecfg::Office::Impress::Snap::Object::ObjectPoint::get() );
         m_xCbxOrtho->set_active( officecfg::Office::Impress::Snap::Position::CreatingMoving::get() );
+        m_xCbxBigOrtho->set_active( officecfg::Office::Impress::Snap::Position::ExtendEdges::get() );
     }
 
     bool bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::SnapLine::isReadOnly() :
@@ -145,7 +148,6 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
     bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::ExtendEdges::isReadOnly() :
         officecfg::Office::Impress::Snap::Position::ExtendEdges::isReadOnly();
-    m_xCbxBigOrtho->set_active( aOptsItem.GetOptionsSnap().IsBigOrtho() );
     m_xCbxBigOrtho->set_sensitive(!bReadOnly);
     m_xCbxBigOrthoImg->set_visible(bReadOnly);
 
