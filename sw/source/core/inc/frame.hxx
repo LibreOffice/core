@@ -948,6 +948,9 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
+
+    /// Determines if the upper margin of this frame should be ignored.
+    bool IsCollapseUpper() const;
 };
 
 inline bool SwFrame::IsInDocBody() const
