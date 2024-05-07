@@ -44,14 +44,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -75,7 +75,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     OUString aMediaType;
     try {
-        uno::Any aAny = xPropSet->getPropertyValue("MediaType");
+        uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
         aAny >>= aMediaType;
     }
     catch ( const uno::Exception& )
@@ -123,14 +123,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -176,16 +176,16 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
@@ -221,14 +221,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 {
     // the initialization is completely controlled by user
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -268,7 +268,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -280,7 +280,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             prop.Value >>= aURL;
 
     if ( aURL.isEmpty() )
-        throw lang::IllegalArgumentException( "No URL for the link is provided!",
+        throw lang::IllegalArgumentException( u"No URL for the link is provided!"_ustr,
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
@@ -315,17 +315,17 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     uno::Reference< uno::XInterface > xResult;
 
     // the initialization is completely controlled by user
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -337,7 +337,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             prop.Value >>= aURL;
 
     if ( aURL.isEmpty() )
-        throw lang::IllegalArgumentException( "No URL for the link is provided!",
+        throw lang::IllegalArgumentException( u"No URL for the link is provided!"_ustr,
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
@@ -365,7 +365,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
 OUString SAL_CALL OOoEmbeddedObjectFactory::getImplementationName()
 {
-    return "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
+    return u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr;
 }
 
 sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -375,7 +375,7 @@ sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.OOoEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoEmbeddedObjectFactory" };
+    return { u"com.sun.star.embed.OOoEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -396,7 +396,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
             const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active embedded content is disabled!");
+        throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
@@ -411,7 +411,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
 
 OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
 {
-    return "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
+    return u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr;
 }
 
 sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -421,7 +421,7 @@ sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUStri
 
 uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory" };
+    return { u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -125,7 +125,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 
             uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
                                                             aFileURL,
-                                                            "_blank",
+                                                            u"_blank"_ustr,
                                                             0,
                                                             aArgs ),
                                                         uno::UNO_QUERY );
@@ -181,7 +181,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         throw uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
             uno::UNO_QUERY_THROW );
 
     OUString aTypeName;
@@ -195,7 +195,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = "URL";
-    pArgs[0].Value <<= OUString( "private:stream" );
+    pArgs[0].Value <<= u"private:stream"_ustr;
     pArgs[1].Name = "InputStream";
     pArgs[1].Value <<= xInputStream;
     if ( !aTypeName.isEmpty() )
@@ -397,7 +397,7 @@ void OwnView_Impl::CreateNative()
         uno::Sequence< uno::Any > aArgs{ uno::Any(xInStream) };
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        "com.sun.star.embed.OLESimpleStorage",
+                        u"com.sun.star.embed.OLESimpleStorage"_ustr,
                         aArgs, m_xContext ),
                 uno::UNO_QUERY_THROW );
 

@@ -377,7 +377,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw uno::RuntimeException( "The object is not loaded!",
+        throw uno::RuntimeException( u"The object is not loaded!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -687,14 +687,14 @@ void OleEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
         return;
 
     comphelper::SequenceAsHashMap aValues(rArguments[0]);
-    auto it = aValues.find("StreamReadOnly");
+    auto it = aValues.find(u"StreamReadOnly"_ustr);
     if (it != aValues.end())
         it->second >>= m_bStreamReadOnly;
 }
 
 OUString SAL_CALL OleEmbeddedObject::getImplementationName()
 {
-    return "com.sun.star.comp.embed.OleEmbeddedObject";
+    return u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr;
 }
 
 sal_Bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
@@ -704,7 +704,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName
 
 uno::Sequence<OUString> SAL_CALL OleEmbeddedObject::getSupportedServiceNames()
 {
-    return { "com.sun.star.comp.embed.OleEmbeddedObject" };
+    return { u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

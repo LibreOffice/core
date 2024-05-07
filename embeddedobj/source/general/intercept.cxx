@@ -110,7 +110,7 @@ Interceptor::dispatch(
         }
 
         uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-            URL, "_self", 0 );
+            URL, u"_self"_ustr, 0 );
         if ( xDispatch.is() )
             xDispatch->dispatch( URL, aNewArgs );
     }
@@ -178,7 +178,7 @@ Interceptor::addStatusListener(
     aStateEvent.FeatureDescriptor = "SaveCopyTo";
     aStateEvent.IsEnabled = true;
     aStateEvent.Requery = false;
-    aStateEvent.State <<= OUString("($3)");
+    aStateEvent.State <<= u"($3)"_ustr;
     Control->statusChanged(aStateEvent);
 
     {

@@ -45,14 +45,14 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active OLE content is disabled!");
+        throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -107,14 +107,14 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
         const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active OLE content is disabled!");
+        throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -141,14 +141,14 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active OLE content is disabled!");
+        throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             3 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             4 );
 
@@ -174,14 +174,14 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
-        throw lang::NoSupportException("Active OLE content is disabled!");
+        throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -210,15 +210,15 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
-        throw lang::NoSupportException("Active OLE content is disabled!");
+        throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
     // the initialization is completely controlled by user
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -239,7 +239,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
 OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
 {
-    return "com.sun.star.comp.embed.OLEEmbeddedObjectFactory";
+    return u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr;
 }
 
 sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -250,8 +250,8 @@ sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.OLEEmbeddedObjectFactory",
-             "com.sun.star.comp.embed.OLEEmbeddedObjectFactory" };
+    return { u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr,
+             u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

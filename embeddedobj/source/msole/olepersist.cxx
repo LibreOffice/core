@@ -101,7 +101,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException("Cannot create tempfile.");
+        throw uno::RuntimeException(u"Cannot create tempfile."_ustr);
 
     return aResult;
 }
@@ -195,7 +195,7 @@ static void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStrea
 static void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
+    xPropSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr,
                                 uno::Any( true ) );
 }
 #ifdef _WIN32
@@ -365,7 +365,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.embed.OLESimpleStorage",
+                    u"com.sun.star.embed.OLESimpleStorage"_ustr,
                     aArgs, m_xContext ),
             uno::UNO_QUERY_THROW );
 
@@ -483,7 +483,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         xCachedSeek->seek( 0 );
 
     // insert the result file as replacement image
-    OUString aCacheName = "\002OlePres000";
+    OUString aCacheName = u"\002OlePres000"_ustr;
     if ( xNameContainer->hasByName( aCacheName ) )
         xNameContainer->replaceByName( aCacheName, uno::Any( xTempFile ) );
     else
@@ -504,7 +504,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
                                      uno::Any(true) }; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.embed.OLESimpleStorage",
+                    u"com.sun.star.embed.OLESimpleStorage"_ustr,
                     aArgs, m_xContext ),
             uno::UNO_QUERY_THROW );
 
@@ -565,7 +565,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
                                                  uno::Any(true) }; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                                "com.sun.star.embed.OLESimpleStorage",
+                                u"com.sun.star.embed.OLESimpleStorage"_ustr,
                                 aArgs, m_xContext ),
                         uno::UNO_QUERY );
 
@@ -610,7 +610,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         {
             xNameContainer.set(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        "com.sun.star.embed.OLESimpleStorage",
+                        u"com.sun.star.embed.OLESimpleStorage"_ustr,
                         aArgs, m_xContext ),
                 uno::UNO_QUERY );
         }
@@ -657,7 +657,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
             {
                 if ( bAllowToRepair50 && !xResult.is() )
                 {
-                    OUString aOrigContName( "Ole-Object" );
+                    OUString aOrigContName( u"Ole-Object"_ustr );
                     if ( xNameContainer->hasByName( aOrigContName ) )
                     {
                         uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );
@@ -1070,13 +1070,13 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "Can't store object without persistence!",
+        throw embed::WrongStateException( u"Can't store object without persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!" );
@@ -1299,12 +1299,12 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -1319,7 +1319,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         // it can switch persistent representation only without initialization
 
         throw embed::WrongStateException(
-                    "Can't change persistent representation of activated object!",
+                    u"Can't change persistent representation of activated object!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -1327,7 +1327,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     {
         if ( nEntryConnectionMode != embed::EntryInitModes::NO_INIT )
             throw embed::WrongStateException(
-                        "The object waits for saveCompleted() call!",
+                        u"The object waits for saveCompleted() call!"_ustr,
                         static_cast< ::cppu::OWeakObject* >(this) );
         saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
     }
@@ -1462,7 +1462,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         // do nothing, the object has already switched it's persistence
     }
     else
-        throw lang::IllegalArgumentException( "Wrong connection mode is provided!",
+        throw lang::IllegalArgumentException( u"Wrong connection mode is provided!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this),
                                     3 );
 
@@ -1543,7 +1543,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "Can't store object without persistence!",
+        throw embed::WrongStateException( u"Can't store object without persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -1608,13 +1608,13 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     aGuard.clear();
     if ( bUseNew )
     {
-        MakeEventListenerNotification_Impl( "OnSaveAsDone");
+        MakeEventListenerNotification_Impl( u"OnSaveAsDone"_ustr);
 
         // the object can be changed only on windows
         // the notification should be done only if the object is not in loaded state
         if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
         {
-            MakeEventListenerNotification_Impl( "OnVisAreaChanged");
+            MakeEventListenerNotification_Impl( u"OnVisAreaChanged"_ustr);
         }
     }
 }
@@ -1637,7 +1637,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_xObjectStream.is() )
@@ -1665,13 +1665,13 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "The object persistence is not initialized!",
+        throw embed::WrongStateException( u"The object persistence is not initialized!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     return m_aEntryName;
@@ -1703,13 +1703,13 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "Can't store object without persistence!",
+        throw embed::WrongStateException( u"Can't store object without persistence!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_bReadOnly )
@@ -1783,12 +1783,12 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     aGuard.clear();
 
-    MakeEventListenerNotification_Impl( "OnSaveDone");
+    MakeEventListenerNotification_Impl( u"OnSaveDone"_ustr);
 
     // the object can be changed only on Windows
     // the notification should be done only if the object is not in loaded state
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
-        MakeEventListenerNotification_Impl( "OnVisAreaChanged");
+        MakeEventListenerNotification_Impl( u"OnVisAreaChanged"_ustr);
 }
 
 
@@ -1810,13 +1810,13 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "The object persistence is not initialized!",
+        throw embed::WrongStateException( u"The object persistence is not initialized!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     return m_bReadOnly;
@@ -1846,13 +1846,13 @@ void SAL_CALL OleEmbeddedObject::reload(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( "The object persistence is not initialized!",
+        throw embed::WrongStateException( u"The object persistence is not initialized!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO:
@@ -1880,12 +1880,12 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( "No parent storage is provided!",
+        throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( "Empty element name is provided!",
+        throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
@@ -1894,7 +1894,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
-                    "The object is not a valid linked object!",
+                    u"The object is not a valid linked object!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -1903,7 +1903,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
 
@@ -2006,12 +2006,12 @@ OUString SAL_CALL OleEmbeddedObject::getLinkURL()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    "The object waits for saveCompleted() call!",
+                    u"The object waits for saveCompleted() call!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(
-                    "The object is not a link object!",
+                    u"The object is not a link object!"_ustr,
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: probably the link URL can be retrieved from OLE

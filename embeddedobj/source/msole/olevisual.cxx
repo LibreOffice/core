@@ -60,16 +60,16 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a bitmap
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
-            "Bitmap",
+            u"application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""_ustr,
+            u"Bitmap"_ustr,
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
     else
     {
         // it's a metafile
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
-            "Windows Metafile",
+            u"application/x-openoffice-wmf;windows_formatname=\"Image WMF\""_ustr,
+            u"Windows Metafile"_ustr,
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 
@@ -100,11 +100,11 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object is not loaded!",
+        throw embed::WrongStateException( u"The object is not loaded!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef _WIN32
@@ -173,11 +173,11 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object is not loaded!",
+        throw embed::WrongStateException( u"The object is not loaded!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     awt::Size aResult;
@@ -304,7 +304,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         if ( !m_bHasCachedSize )
         {
             throw embed::NoVisualAreaSizeException(
-                            "No size available!",
+                            u"No size available!"_ustr,
                             static_cast< ::cppu::OWeakObject* >(this) );
         }
         SAL_WARN_IF( nAspect != m_nCachedAspect, "embeddedobj.ole", "Unexpected aspect is requested!" );
@@ -332,13 +332,13 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object is not loaded!",
+        throw embed::WrongStateException( u"The object is not loaded!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: in case of different aspects they must be applied to the mediatype and XTransferable must be used
@@ -396,7 +396,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( !m_xCachedVisualRepresentation.is() )
     {
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -421,11 +421,11 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object is not loaded!",
+        throw embed::WrongStateException( u"The object is not loaded!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;

@@ -217,7 +217,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
     if ( !xResult.is() )
     {
         o_aStorageName.clear();
-        throw uno::RuntimeException("Failed to create temporary storage for OLE embed object");
+        throw uno::RuntimeException(u"Failed to create temporary storage for OLE embed object"_ustr);
     }
 
     return xResult;
@@ -238,7 +238,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException("Failed to rename temporary storage for OLE embed object");
+        throw uno::RuntimeException(u"Failed to rename temporary storage for OLE embed object"_ustr);
 
     return aResult;
 }
@@ -269,7 +269,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
               || m_aFilterName == "MS Excel 97 Vorlage/Template" || m_aFilterName == "MS Word 97 Vorlage" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
+                m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW );
 
             OUString aDocServiceName;
@@ -286,7 +286,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             {
                 // create the model
                 uno::Sequence< uno::Any > aArguments{ uno::Any(
-                    beans::NamedValue( "EmbeddedObject", uno::Any( true ))) };
+                    beans::NamedValue( u"EmbeddedObject"_ustr, uno::Any( true ))) };
 
                 uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
@@ -295,16 +295,16 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 // let the model behave as embedded one
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
-                    "SetEmbedded", true) };
+                    u"SetEmbedded"_ustr, true) };
                 xModel->attachResource( OUString(), aSeq );
 
                 // load the model from the stream
                 uno::Sequence< beans::PropertyValue > aArgs{
-                    comphelper::makePropertyValue("HierarchicalDocumentName", m_aEntryName),
-                    comphelper::makePropertyValue("ReadOnly", true),
-                    comphelper::makePropertyValue("FilterName", m_aFilterName),
-                    comphelper::makePropertyValue("URL", OUString( "private:stream" )),
-                    comphelper::makePropertyValue("InputStream", xStream->getInputStream())
+                    comphelper::makePropertyValue(u"HierarchicalDocumentName"_ustr, m_aEntryName),
+                    comphelper::makePropertyValue(u"ReadOnly"_ustr, true),
+                    comphelper::makePropertyValue(u"FilterName"_ustr, m_aFilterName),
+                    comphelper::makePropertyValue(u"URL"_ustr, u"private:stream"_ustr),
+                    comphelper::makePropertyValue(u"InputStream"_ustr, xStream->getInputStream())
                 };
 
                 xSeekable->seek( 0 );
@@ -316,7 +316,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 xDocument->close( true );
                 uno::Reference< beans::XPropertySet > xStorProps( xTmpStorage, uno::UNO_QUERY_THROW );
                 OUString aMediaType;
-                xStorProps->getPropertyValue("MediaType") >>= aMediaType;
+                xStorProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
                 xTmpStorage->dispose();
 
                 // look for the related embedded object factory
@@ -326,7 +326,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
                 if ( aEmbedFactory.isEmpty() )
-                    throw uno::RuntimeException("Failed to get OLE embedded object factory");
+                    throw uno::RuntimeException(u"Failed to get OLE embedded object factory"_ustr);
 
                 uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
 
@@ -457,7 +457,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
     // in case the object is already in requested state
@@ -609,7 +609,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef _WIN32
@@ -652,7 +652,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: Shouldn't we ask object? ( I guess no )
@@ -696,7 +696,7 @@ namespace
                                          uno::Any(true) }; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.embed.OLESimpleStorage",
+                u"com.sun.star.embed.OLESimpleStorage"_ustr,
                 aArgs, xContext ), uno::UNO_QUERY_THROW );
 
         //various stream names that can contain the real document contents for
@@ -731,7 +731,7 @@ namespace
             uno::Reference< io::XStream > xOle10Native;
             try
             {
-                xNameContainer->getByName("\1Ole10Native") >>= xOle10Native;
+                xNameContainer->getByName(u"\1Ole10Native"_ustr) >>= xOle10Native;
             }
             catch (container::NoSuchElementException const&)
             {
@@ -843,7 +843,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef _WIN32
@@ -985,7 +985,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 #ifdef _WIN32
     if ( m_pOleComponent )
@@ -1034,7 +1034,7 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
     {
         if ( m_nObjectState != embed::EmbedStates::LOADED && m_nObjectState != embed::EmbedStates::RUNNING )
             throw embed::WrongStateException(
-                                    "The client site can not be set currently!",
+                                    u"The client site can not be set currently!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
         m_xClientSite = xClient;
@@ -1058,7 +1058,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
     return m_xClientSite;
@@ -1082,7 +1082,7 @@ void SAL_CALL OleEmbeddedObject::update()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
@@ -1114,7 +1114,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object has no persistence!",
+        throw embed::WrongStateException( u"The object has no persistence!"_ustr,
                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
@@ -1142,7 +1142,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The object must be in running state!",
+        throw embed::WrongStateException( u"The object must be in running state!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     sal_Int64 nResult = 0;

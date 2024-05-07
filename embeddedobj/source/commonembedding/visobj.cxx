@@ -40,11 +40,11 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The own object has no persistence!",
+        throw embed::WrongStateException( u"The own object has no persistence!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     m_bHasClonedSize = false;
@@ -64,7 +64,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception("SetExtent failed", nullptr); // TODO:
+        throw uno::Exception(u"SetExtent failed"_ustr, nullptr); // TODO:
 }
 
 awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
@@ -74,7 +74,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The own object has no persistence!",
+        throw embed::WrongStateException( u"The own object has no persistence!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
@@ -98,7 +98,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception("GetExtent failed", nullptr); // TODO:
+        throw uno::Exception(u"GetExtent failed"_ustr, nullptr); // TODO:
 
     return aResult;
 }
@@ -112,11 +112,11 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The own object has no persistence!",
+        throw embed::WrongStateException( u"The own object has no persistence!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_bHasClonedSize )
@@ -149,14 +149,14 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( "The own object has no persistence!",
+        throw embed::WrongStateException( u"The own object has no persistence!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( "Illegal call!",
+        throw embed::WrongStateException( u"Illegal call!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
     bool bBackToLoaded = false;
@@ -190,8 +190,8 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
 
         datatransfer::DataFlavor aDataFlavor(
-                "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
-                "GDIMetaFile",
+                u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr,
+                u"GDIMetaFile"_ustr,
                 cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         if( !xTransferable->isDataFlavorSupported( aDataFlavor ))
