@@ -295,55 +295,6 @@ static void handle_tabpage_activated(vcl::Window *pWindow)
         atk_wrapper_notify_focus_change(xSelection->getSelectedAccessibleChild(0));
 }
 
-/*****************************************************************************/
-
-/*
- * toolbar items in gtk are widgets, so we need to simulate focus events for those
- */
-
-static void notify_toolbox_item_focus(ToolBox *pToolBox)
-{
-    uno::Reference< accessibility::XAccessible > xAccessible =
-        pToolBox->GetAccessible();
-
-    if( ! xAccessible.is() )
-        return;
-
-    uno::Reference< accessibility::XAccessibleContext > xContext =
-        xAccessible->getAccessibleContext();
-
-    if( ! xContext.is() )
-        return;
-
-    ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
-    if( nPos != ToolBox::ITEM_NOTFOUND )
-        atk_wrapper_notify_focus_change(xContext->getAccessibleChild(nPos));
-}
-
-static void handle_toolbox_highlight(vcl::Window *pWindow)
-{
-    ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
-
-    // Make sure either the toolbox or its parent toolbox has the focus
-    if ( ! pToolBox->HasFocus() )
-    {
-        ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
-        if ( ! pToolBoxParent || ! pToolBoxParent->HasFocus() )
-            return;
-    }
-
-    notify_toolbox_item_focus(pToolBox);
-}
-
-static void handle_toolbox_highlightoff(vcl::Window const *pWindow)
-{
-    ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pWindow->GetParent() );
-
-    // Notify when leaving sub toolboxes
-    if( pToolBoxParent && pToolBoxParent->HasFocus() )
-        notify_toolbox_item_focus( pToolBoxParent );
-}
-
 rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
 {
     rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
@@ -394,14 +345,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
             {
                 handle_menu_highlighted(pMenuEvent);
             }
-            break;
-
-        case VclEventId::ToolboxHighlight:
-            handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
-            break;
-
-        case VclEventId::ToolboxHighlightOff:
-            handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
         case VclEventId::TabpageActivate:
