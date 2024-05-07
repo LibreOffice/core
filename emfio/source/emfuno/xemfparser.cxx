@@ -89,7 +89,7 @@ namespace emfio::emfreader
                 const bool bExternalHeaderUsed(aExternalHeader.setSequence(rProperties));
                 bool bEnableEMFPlus = true;
                 comphelper::SequenceAsHashMap aMap(rProperties);
-                auto it = aMap.find("EMFPlusEnable");
+                auto it = aMap.find(u"EMFPlusEnable"_ustr);
                 if (it != aMap.end())
                 {
                     bool bValue;
@@ -212,7 +212,7 @@ namespace emfio::emfreader
 
         OUString SAL_CALL XEmfParser::getImplementationName()
         {
-            return "emfio::emfreader::XEmfParser";
+            return u"emfio::emfreader::XEmfParser"_ustr;
         }
 
         sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
@@ -222,7 +222,7 @@ namespace emfio::emfreader
 
         uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
         {
-            return { "com.sun.star.graphic.EmfTools" };
+            return { u"com.sun.star.graphic.EmfTools"_ustr };
         }
 
 } // end of namespace emfio::emfreader

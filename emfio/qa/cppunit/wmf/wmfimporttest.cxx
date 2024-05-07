@@ -41,7 +41,7 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 public:
     WmfTest()
         : BootstrapFixture(true, false)
-        , maDataUrl("/emfio/qa/cppunit/wmf/data/")
+        , maDataUrl(u"/emfio/qa/cppunit/wmf/data/"_ustr)
     {
     }
 
@@ -97,15 +97,15 @@ void WmfTest::testEOFWmf()
 
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/metafile/push"_ostr, 2);
-    assertXPath(pDoc, "/metafile/push[2]"_ostr, "flags"_ostr, "PushClipRegion");
+    assertXPath(pDoc, "/metafile/push[2]"_ostr, "flags"_ostr, u"PushClipRegion"_ustr);
     assertXPath(pDoc, "/metafile/push[2]/fillcolor"_ostr, 2);
-    assertXPath(pDoc, "/metafile/push[2]/fillcolor[1]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]"_ostr, "color"_ostr, "#d0d0d0");
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[1]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]"_ostr, "color"_ostr, u"#d0d0d0"_ustr);
     assertXPath(pDoc, "/metafile/push[2]/linecolor"_ostr, 60);
     assertXPath(pDoc, "/metafile/push[2]/polyline"_ostr, 209);
     assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point"_ostr, 5);
-    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]"_ostr, "x"_ostr, "16906");
-    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]"_ostr, "y"_ostr, "12673");
+    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]"_ostr, "x"_ostr, u"16906"_ustr);
+    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]"_ostr, "y"_ostr, u"12673"_ustr);
     assertXPath(pDoc, "/metafile/push[2]/textarray"_ostr, 307);
 }
 
@@ -124,20 +124,20 @@ void WmfTest::testNonPlaceableWmf()
     CPPUNIT_ASSERT(pDoc);
 
     // These values come from changes done in tdf#88163
-    assertXPath(pDoc, "/metafile/polyline[1]/point[1]"_ostr, "x"_ostr, "16813");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[1]"_ostr, "y"_ostr, "1004");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]"_ostr, "x"_ostr, u"16813"_ustr);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]"_ostr, "y"_ostr, u"1004"_ustr);
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[2]"_ostr, "x"_ostr, "16813");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[2]"_ostr, "y"_ostr, "7514");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[2]"_ostr, "x"_ostr, u"16813"_ustr);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[2]"_ostr, "y"_ostr, u"7514"_ustr);
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[3]"_ostr, "x"_ostr, "26112");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[3]"_ostr, "y"_ostr, "7514");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[3]"_ostr, "x"_ostr, u"26112"_ustr);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[3]"_ostr, "y"_ostr, u"7514"_ustr);
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[4]"_ostr, "x"_ostr, "26112");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[4]"_ostr, "y"_ostr, "1004");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[4]"_ostr, "x"_ostr, u"26112"_ustr);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[4]"_ostr, "y"_ostr, u"1004"_ustr);
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[5]"_ostr, "x"_ostr, "16813");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[5]"_ostr, "y"_ostr, "1004");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[5]"_ostr, "x"_ostr, u"16813"_ustr);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[5]"_ostr, "y"_ostr, u"1004"_ustr);
 }
 
 void WmfTest::testTdf88163NonPlaceableWmf()
@@ -160,19 +160,19 @@ void WmfTest::testTdf88163NonPlaceableWmf()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3272), x.toInt32());
 
     // Fails without the fix: Expected: 7359, Actual: 7336
-    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "x"_ostr, "7359");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "x"_ostr, u"7359"_ustr);
     // Fails without the fix: Expected: 4118, Actual: 4104
-    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "y"_ostr, "4118");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "y"_ostr, u"4118"_ustr);
 
     // Fails without the fix: Expected: 5989, Actual: 5971
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, "5989");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, u"5989"_ustr);
     // Fails without the fix: Expected: 16264, Actual: 16208
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, "16264");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, u"16264"_ustr);
 
     // Fails without the fix: Expected: 20769, Actual: 20705
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "x"_ostr, "20769");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "x"_ostr, u"20769"_ustr);
     // Fails without the fix: Expected: 4077, Actual: 4062
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, "4077");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, u"4077"_ustr);
 }
 
 void WmfTest::testTdf88163PlaceableWmf()
@@ -195,22 +195,22 @@ void WmfTest::testTdf88163PlaceableWmf()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(313), x.toInt32());
 
     // Fails without the fix: Expected: 1900, Actual: 19818
-    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, "1900");
+    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, u"1900"_ustr);
 
     // Fails without the fix: Expected: 704, Actual: 7336
-    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "x"_ostr, "704");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "x"_ostr, u"704"_ustr);
     // Fails without the fix: Expected: 394, Actual: 4110
-    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "y"_ostr, "394");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]"_ostr, "y"_ostr, u"394"_ustr);
 
     // Fails without the fix: Expected: 573, Actual: 5971
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, "573");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, u"573"_ustr);
     // Fails without the fix: Expected: 1556, Actual: 16230
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, "1556");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, u"1556"_ustr);
 
     // Fails without the fix: Expected: 1987, Actual: 20706
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "x"_ostr, "1987");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "x"_ostr, u"1987"_ustr);
     // Fails without the fix: Expected: 390, Actual: 4068
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, "390");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, u"390"_ustr);
 }
 
 void WmfTest::testSetTextAlignWmf()
@@ -226,80 +226,94 @@ void WmfTest::testSetTextAlignWmf()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, "20999");
+    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, u"20999"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[2]"_ostr, "align"_ostr, "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, "11642");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, "212");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[2]/text"_ostr, "textalignment:default");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[2]"_ostr, "align"_ostr, u"top"_ustr);
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "x"_ostr, u"11642"_ustr);
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]"_ostr, "y"_ostr, u"212"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[2]/text"_ostr,
+                       u"textalignment:default"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[3]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[3]"_ostr, "align"_ostr, u"top"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "x"_ostr, 12700, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, "212");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[3]/text"_ostr, "textalignment:0x00");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]"_ostr, "y"_ostr, u"212"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[3]/text"_ostr,
+                       u"textalignment:0x00"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[4]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[4]"_ostr, "align"_ostr, u"top"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[4]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[4]"_ostr, "y"_ostr, "423");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[4]/text"_ostr, "textalignment:0x02");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[4]"_ostr, "y"_ostr, u"423"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[4]/text"_ostr,
+                       u"textalignment:0x02"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[5]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[5]"_ostr, "align"_ostr, u"top"_ustr);
     // Fails without the fix: Expected: 12026, Actual: 12350
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[5]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[5]"_ostr, "y"_ostr, "635");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[5]/text"_ostr, "textalignment:0x04");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[5]"_ostr, "y"_ostr, u"635"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[5]/text"_ostr,
+                       u"textalignment:0x04"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[6]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[6]"_ostr, "align"_ostr, u"top"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[6]"_ostr, "x"_ostr, 12363, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[6]"_ostr, "y"_ostr, "847");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[6]/text"_ostr, "textalignment:0x06");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[6]"_ostr, "y"_ostr, u"847"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[6]/text"_ostr,
+                       u"textalignment:0x06"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[7]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[7]"_ostr, "align"_ostr, u"top"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[7]"_ostr, "x"_ostr, 12700, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[7]"_ostr, "y"_ostr, "1058");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[7]/text"_ostr, "textalignment:0x08");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[7]"_ostr, "y"_ostr, u"1058"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[7]/text"_ostr,
+                       u"textalignment:0x08"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[8]"_ostr, "align"_ostr, "top");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[8]"_ostr, "align"_ostr, u"top"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[8]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[8]"_ostr, "y"_ostr, "1270");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[8]/text"_ostr, "textalignment:0x0A");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[8]"_ostr, "y"_ostr, u"1270"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[8]/text"_ostr,
+                       u"textalignment:0x0A"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[9]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[9]"_ostr, "align"_ostr, u"bottom"_ustr);
     // Fails without the fix: Expected: 12026, Actual: 12350
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[9]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[9]"_ostr, "y"_ostr, "1482");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[9]/text"_ostr, "textalignment:0x0C");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[9]"_ostr, "y"_ostr, u"1482"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[9]/text"_ostr,
+                       u"textalignment:0x0C"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[10]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[10]"_ostr, "align"_ostr, u"bottom"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[10]"_ostr, "x"_ostr, 12363, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[10]"_ostr, "y"_ostr, "1693");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[10]/text"_ostr, "textalignment:0x0E");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[10]"_ostr, "y"_ostr, u"1693"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[10]/text"_ostr,
+                       u"textalignment:0x0E"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[11]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[11]"_ostr, "align"_ostr, u"bottom"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[11]"_ostr, "x"_ostr, 12700, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[11]"_ostr, "y"_ostr, "1905");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[11]/text"_ostr, "textalignment:0x10");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[11]"_ostr, "y"_ostr, u"1905"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[11]/text"_ostr,
+                       u"textalignment:0x10"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[12]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[12]"_ostr, "align"_ostr, u"bottom"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[12]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[12]"_ostr, "y"_ostr, "2117");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[12]/text"_ostr, "textalignment:0x12");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[12]"_ostr, "y"_ostr, u"2117"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[12]/text"_ostr,
+                       u"textalignment:0x12"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[13]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[13]"_ostr, "align"_ostr, u"bottom"_ustr);
     // Fails without the fix: Expected: 12026, Actual: 12350
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[13]"_ostr, "x"_ostr, 12026, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[13]"_ostr, "y"_ostr, "2328");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[13]/text"_ostr, "textalignment:0x14");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[13]"_ostr, "y"_ostr, u"2328"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[13]/text"_ostr,
+                       u"textalignment:0x14"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[14]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[14]"_ostr, "align"_ostr, u"bottom"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[14]"_ostr, "x"_ostr, 12363, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[14]"_ostr, "y"_ostr, "2540");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[14]/text"_ostr, "textalignment:0x16");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[14]"_ostr, "y"_ostr, u"2540"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[14]/text"_ostr,
+                       u"textalignment:0x16"_ustr);
 
-    assertXPath(pDoc, "/metafile/push[2]/textalign[15]"_ostr, "align"_ostr, "bottom");
+    assertXPath(pDoc, "/metafile/push[2]/textalign[15]"_ostr, "align"_ostr, u"bottom"_ustr);
     assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[15]"_ostr, "x"_ostr, 12700, 30);
-    assertXPath(pDoc, "/metafile/push[2]/textarray[15]"_ostr, "y"_ostr, "2752");
-    assertXPathContent(pDoc, "/metafile/push[2]/textarray[15]/text"_ostr, "textalignment:0x18");
+    assertXPath(pDoc, "/metafile/push[2]/textarray[15]"_ostr, "y"_ostr, u"2752"_ustr);
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray[15]/text"_ostr,
+                       u"textalignment:0x18"_ustr);
 }
 
 void WmfTest::testSine()
@@ -332,10 +346,10 @@ void WmfTest::testEmfProblem()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/metafile/sectrectclipregion"_ostr, 2);
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "top"_ostr, "2125");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "left"_ostr, "1084");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "bottom"_ostr, "2927");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "right"_ostr, "2376");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "top"_ostr, u"2125"_ustr);
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "left"_ostr, u"1084"_ustr);
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "bottom"_ostr, u"2927"_ustr);
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]"_ostr, "right"_ostr, u"2376"_ustr);
 }
 
 void WmfTest::testEmfLineStyles()
@@ -355,47 +369,47 @@ void WmfTest::testEmfLineStyles()
     assertXPath(pDoc, "/metafile/line"_ostr, 4);
     assertXPath(pDoc, "/metafile/linecolor"_ostr, 5);
 
-    assertXPath(pDoc, "/metafile/linecolor[1]"_ostr, "color"_ostr, "#ffffff");
-    assertXPath(pDoc, "/metafile/linecolor[2]"_ostr, "color"_ostr, "#00ff00");
-    assertXPath(pDoc, "/metafile/linecolor[3]"_ostr, "color"_ostr, "#408080");
-    assertXPath(pDoc, "/metafile/linecolor[4]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#0000ff");
+    assertXPath(pDoc, "/metafile/linecolor[1]"_ostr, "color"_ostr, u"#ffffff"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[2]"_ostr, "color"_ostr, u"#00ff00"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[3]"_ostr, "color"_ostr, u"#408080"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[4]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#0000ff"_ustr);
 
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "style"_ostr, "dash");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dashlen"_ostr, "528");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dashcount"_ostr, "1");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dotlen"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dotcount"_ostr, "0");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "distance"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "join"_ostr, "miter");
-    assertXPath(pDoc, "/metafile/line[1]"_ostr, "cap"_ostr, "butt");
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "style"_ostr, u"dash"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dashlen"_ostr, u"528"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dashcount"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dotlen"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "dotcount"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "distance"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "join"_ostr, u"miter"_ustr);
+    assertXPath(pDoc, "/metafile/line[1]"_ostr, "cap"_ostr, u"butt"_ustr);
 
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "style"_ostr, "dash");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dashlen"_ostr, "528");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dashcount"_ostr, "0");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dotlen"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dotcount"_ostr, "1");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "distance"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "join"_ostr, "miter");
-    assertXPath(pDoc, "/metafile/line[2]"_ostr, "cap"_ostr, "butt");
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "style"_ostr, u"dash"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dashlen"_ostr, u"528"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dashcount"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dotlen"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "dotcount"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "distance"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "join"_ostr, u"miter"_ustr);
+    assertXPath(pDoc, "/metafile/line[2]"_ostr, "cap"_ostr, u"butt"_ustr);
 
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "style"_ostr, "dash");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dashlen"_ostr, "528");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dashcount"_ostr, "1");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dotlen"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dotcount"_ostr, "1");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "distance"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "join"_ostr, "miter");
-    assertXPath(pDoc, "/metafile/line[3]"_ostr, "cap"_ostr, "butt");
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "style"_ostr, u"dash"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dashlen"_ostr, u"528"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dashcount"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dotlen"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "dotcount"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "distance"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "join"_ostr, u"miter"_ustr);
+    assertXPath(pDoc, "/metafile/line[3]"_ostr, "cap"_ostr, u"butt"_ustr);
 
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "style"_ostr, "dash");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dashlen"_ostr, "528");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dashcount"_ostr, "1");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dotlen"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dotcount"_ostr, "2");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "distance"_ostr, "176");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "join"_ostr, "miter");
-    assertXPath(pDoc, "/metafile/line[4]"_ostr, "cap"_ostr, "butt");
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "style"_ostr, u"dash"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dashlen"_ostr, u"528"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dashcount"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dotlen"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "dotcount"_ostr, u"2"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "distance"_ostr, u"176"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "join"_ostr, u"miter"_ustr);
+    assertXPath(pDoc, "/metafile/line[4]"_ostr, "cap"_ostr, u"butt"_ustr);
 };
 
 void WmfTest::testWorldTransformFontSize()
@@ -413,25 +427,25 @@ void WmfTest::testWorldTransformFontSize()
 
     assertXPath(pDoc, "/metafile/font"_ostr, 9);
 
-    assertXPath(pDoc, "/metafile/font[1]"_ostr, "color"_ostr, "#595959");
-    assertXPath(pDoc, "/metafile/font[1]"_ostr, "width"_ostr, "0");
-    assertXPath(pDoc, "/metafile/font[1]"_ostr, "height"_ostr, "389");
-    assertXPath(pDoc, "/metafile/font[1]"_ostr, "orientation"_ostr, "0");
-    assertXPath(pDoc, "/metafile/font[1]"_ostr, "weight"_ostr, "bold");
+    assertXPath(pDoc, "/metafile/font[1]"_ostr, "color"_ostr, u"#595959"_ustr);
+    assertXPath(pDoc, "/metafile/font[1]"_ostr, "width"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/font[1]"_ostr, "height"_ostr, u"389"_ustr);
+    assertXPath(pDoc, "/metafile/font[1]"_ostr, "orientation"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/font[1]"_ostr, "weight"_ostr, u"bold"_ustr);
 
-    assertXPath(pDoc, "/metafile/font[3]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/font[3]"_ostr, "width"_ostr, "0");
-    assertXPath(pDoc, "/metafile/font[3]"_ostr, "height"_ostr, "389");
-    assertXPath(pDoc, "/metafile/font[3]"_ostr, "orientation"_ostr, "0");
-    assertXPath(pDoc, "/metafile/font[3]"_ostr, "weight"_ostr, "bold");
+    assertXPath(pDoc, "/metafile/font[3]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/font[3]"_ostr, "width"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/font[3]"_ostr, "height"_ostr, u"389"_ustr);
+    assertXPath(pDoc, "/metafile/font[3]"_ostr, "orientation"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/font[3]"_ostr, "weight"_ostr, u"bold"_ustr);
 
     // World transform should not affect font size. Rotating text for 90 degrees
     // should not exchange font width and height.
-    assertXPath(pDoc, "/metafile/font[4]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/font[4]"_ostr, "width"_ostr, "0");
-    assertXPath(pDoc, "/metafile/font[4]"_ostr, "height"_ostr, "530");
-    assertXPath(pDoc, "/metafile/font[4]"_ostr, "orientation"_ostr, "900");
-    assertXPath(pDoc, "/metafile/font[4]"_ostr, "weight"_ostr, "normal");
+    assertXPath(pDoc, "/metafile/font[4]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/font[4]"_ostr, "width"_ostr, u"0"_ustr);
+    assertXPath(pDoc, "/metafile/font[4]"_ostr, "height"_ostr, u"530"_ustr);
+    assertXPath(pDoc, "/metafile/font[4]"_ostr, "orientation"_ostr, u"900"_ustr);
+    assertXPath(pDoc, "/metafile/font[4]"_ostr, "weight"_ostr, u"normal"_ustr);
 }
 
 void WmfTest::testBigPPI()
@@ -451,8 +465,8 @@ void WmfTest::testBigPPI()
 
     // If the PPI was not reduced the width and height would be <100 which is too small
     // Related: tdf#150888
-    assertXPath(pDoc, "/metafile"_ostr, "width"_ostr, "2540");
-    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, "2143");
+    assertXPath(pDoc, "/metafile"_ostr, "width"_ostr, u"2540"_ustr);
+    assertXPath(pDoc, "/metafile"_ostr, "height"_ostr, u"2143"_ustr);
 }
 
 void WmfTest::testTdf93750()
@@ -466,8 +480,8 @@ void WmfTest::testTdf93750()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile/push[1]/comment[2]"_ostr, "datasize"_ostr, "28");
-    assertXPath(pDoc, "/metafile/push[1]/comment[3]"_ostr, "datasize"_ostr, "72");
+    assertXPath(pDoc, "/metafile/push[1]/comment[2]"_ostr, "datasize"_ostr, u"28"_ustr);
+    assertXPath(pDoc, "/metafile/push[1]/comment[3]"_ostr, "datasize"_ostr, u"72"_ustr);
 }
 
 void WmfTest::testTdf99402()
@@ -580,7 +594,7 @@ void WmfTest::testStockObject()
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '/metafile/push[2]/fillcolor[2]' number of nodes is incorrect
-    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]"_ostr, "color"_ostr, "#000000");
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]"_ostr, "color"_ostr, u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);

@@ -827,7 +827,7 @@ namespace emfio
         bool    bHaveDC = false;
 
         OUString aEMFPlusDisable;
-        rtl::Bootstrap::get("EMF_PLUS_DISABLE", aEMFPlusDisable);
+        rtl::Bootstrap::get(u"EMF_PLUS_DISABLE"_ustr, aEMFPlusDisable);
         bool bEnableEMFPlus = aEMFPlusDisable.isEmpty();
         if (!mbEnableEMFPlus)
         {

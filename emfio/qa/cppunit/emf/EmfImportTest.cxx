@@ -39,7 +39,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/emfio/qa/cppunit/emf/data/")
+        : UnoApiXmlTest(u"/emfio/qa/cppunit/emf/data/"_ustr)
     {
     }
 
@@ -80,37 +80,42 @@ CPPUNIT_TEST_FIXTURE(Test, testPolyPolygon)
 
     // Chart axis
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
-                "m0 0h19746v14817h-19746z");
+                u"m0 0h19746v14817h-19746z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 2);
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr,
+                u"#ffffff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m0 0h19781v14852h-19781z");
+                u"m0 0h19781v14852h-19781z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m2574 13194v-12065h15303v12065z");
+                u"m2574 13194v-12065h15303v12065z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 44);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       "2574,13194 2574,1129");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, "0");
+                       u"2574,13194 2574,1129"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr,
+                u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, u"0"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       "2574,1129 2574,1129");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, "0");
+                       u"2574,1129 2574,1129"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr,
+                u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, u"0"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[10]/polygon",
-                       "8674,1129 8674,1129");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "width"_ostr, "0");
+                       u"8674,1129 8674,1129"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "color"_ostr,
+                u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "width"_ostr, u"0"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 28);
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "width"_ostr, "459");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "x"_ostr, "9908");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "text"_ostr, "0.5");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "width"_ostr, u"459"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "x"_ostr, u"9908"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "text"_ostr, u"0.5"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "fontcolor"_ostr,
+                u"#000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/pointarray", 98);
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "x"_ostr, "2574");
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y"_ostr, "1129");
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]", "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "x"_ostr, u"2574"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y"_ostr, u"1129"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
@@ -125,23 +130,23 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#0080ff");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy11"_ostr, "5347");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy12"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy13"_ostr, "5558");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy21"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy22"_ostr, "4717");
-    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy23"_ostr, "5565");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#0080ff"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy11"_ostr, u"5347"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy12"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy13"_ostr, u"5558"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy21"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy22"_ostr, u"4717"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "bitmap", "xy23"_ostr, u"5565"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "bitmap/data[2]", "row"_ostr,
-        "020202,ffffff,ffffff,ffffff,fefefe,ffffff,ffffff,fefefe,ffffff,ffffff,f8f8f8,ffffff,"
+        u"020202,ffffff,ffffff,ffffff,fefefe,ffffff,ffffff,fefefe,ffffff,ffffff,f8f8f8,ffffff,"
         "fdfdfd,ffffff,ffffff,fdfdfd,ffffff,ffffff,ffffff,fbfbfb,010101,ffffff,fefefe,ffffff,"
         "ffffff,fbfbfb,ffffff,fdfdfd,fcfcfc,fdfdfd,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,"
         "ffffff,ffffff,ffffff,ffffff,020202,fdfdfd,ffffff,ffffff,fefefe,ffffff,ffffff,ffffff,"
         "ffffff,fbfbfb,fefefe,ffffff,fcfcfc,ffffff,fdfdfd,ffffff,ffffff,ffffff,ffffff,fbfbfb,"
         "010101,ffffff,fefefe,ffffff,ffffff,ffffff,fcfcfc,ffffff,fafafa,ffffff,ffffff,fefefe,"
         "ffffff,fdfdfd,fefefe,fefefe,ffffff,ffffff,fdfdfd,fffbfb,1e0000,8f4347,b13a3e,b82d32,"
-        "bb3438,b73237,b63338,b33035,b63338");
+        "bb3438,b73237,b63338,b33035,b63338"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawString)
@@ -157,14 +162,15 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawString)
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawString: height, position, text, color and font
-    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "height"_ostr, "120");
-    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "x"_ostr, "817");
-    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "y"_ostr, "1138");
-    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "text"_ostr, "TEST");
+    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "height"_ostr,
+                u"120"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "x"_ostr, u"817"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "y"_ostr, u"1138"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "text"_ostr, u"TEST"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform/textsimpleportion", "familyname"_ostr,
-                "CALIBRI");
+                u"CALIBRI"_ustr);
 #endif
 }
 
@@ -181,26 +187,30 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform", 9);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "width"_ostr,
-                "12");
+                u"12"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "height"_ostr,
-                "12");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "x"_ostr, "12");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "y"_ostr, "22");
+                u"12"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "x"_ostr,
+                u"12"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "y"_ostr,
+                u"22"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "text"_ostr,
-                "HLVT");
+                u"HLVT"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[1]/textsimpleportion", "familyname"_ostr,
-                "ARIAL");
+                u"ARIAL"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "width"_ostr,
-                "12");
+                u"12"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "height"_ostr,
-                "12");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "x"_ostr, "144");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "y"_ostr, "22");
+                u"12"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "x"_ostr,
+                u"144"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "y"_ostr,
+                u"22"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "text"_ostr,
-                "HCVT");
+                u"HCVT"_ustr);
 
     // TODO Make the position of the text the same across the platforms (Arial vs Liberation Sans).
     // This is usually 276, but can be 275 as well; depends on what fonts are installed?
@@ -209,47 +219,58 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
               .toInt32();
     CPPUNIT_ASSERT(nX >= 275);
     CPPUNIT_ASSERT(nX <= 276);
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "y"_ostr, "22");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "y"_ostr,
+                u"22"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "text"_ostr,
-                "HRVT");
+                u"HRVT"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "x"_ostr, "12");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "y"_ostr, "66");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "x"_ostr,
+                u"12"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "y"_ostr,
+                u"66"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "text"_ostr,
-                "HLVC");
+                u"HLVC"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "x"_ostr, "143");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "y"_ostr, "66");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "x"_ostr,
+                u"143"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "y"_ostr,
+                u"66"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "text"_ostr,
-                "HCVC");
+                u"HCVC"_ustr);
 
     // This is usually 274, but can be 273 as well; depends on what fonts are installed?
     nX = getXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "x"_ostr)
              .toInt32();
     CPPUNIT_ASSERT(nX >= 273);
     CPPUNIT_ASSERT(nX <= 274);
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "y"_ostr, "66");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "y"_ostr,
+                u"66"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "text"_ostr,
-                "HRVC");
+                u"HRVC"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "x"_ostr, "12");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "y"_ostr, "110");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "x"_ostr,
+                u"12"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "y"_ostr,
+                u"110"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "text"_ostr,
-                "HLVB");
+                u"HLVB"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "x"_ostr, "143");
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "y"_ostr, "110");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "x"_ostr,
+                u"143"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "y"_ostr,
+                u"110"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "text"_ostr,
-                "HCVB");
+                u"HCVB"_ustr);
 
     // This is usually 275, but can be 274 as well; depends on what fonts are installed?
     nX = getXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "x"_ostr)
              .toInt32();
     CPPUNIT_ASSERT(nX >= 274);
     CPPUNIT_ASSERT(nX <= 275);
-    assertXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "y"_ostr, "110");
+    assertXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "y"_ostr,
+                u"110"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "text"_ostr,
-                "HRVB");
+                u"HRVB"_ustr);
 #endif
 }
 
@@ -266,19 +287,19 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringTransparent)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence", "transparence"_ostr,
-                "50");
+                u"50"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "height"_ostr, "24");
+                "height"_ostr, u"24"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "x"_ostr, "66");
+                "x"_ostr, u"66"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "y"_ostr, "74");
+                "y"_ostr, u"74"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "text"_ostr, "Transparent Text");
+                "text"_ostr, u"Transparent Text"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "fontcolor"_ostr, "#0000ff");
+                "fontcolor"_ostr, u"#0000ff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence/textsimpleportion",
-                "familyname"_ostr, "ARIAL");
+                "familyname"_ostr, u"ARIAL"_ustr);
 #endif
 }
 
@@ -291,16 +312,19 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringWithBrush)
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
-    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy11"_ostr, "20");
-    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy13"_ostr, "16");
-    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy22"_ostr, "20");
-    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy33"_ostr, "1");
+    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy11"_ostr,
+                u"20"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy13"_ostr,
+                u"16"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy22"_ostr,
+                u"20"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy33"_ostr, u"1"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "text"_ostr,
-                "0123456789ABCDEF");
+                u"0123456789ABCDEF"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "fontcolor"_ostr,
-                "#a50021");
+                u"#a50021"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "familyname"_ostr,
-                "TIMES NEW ROMAN");
+                u"TIMES NEW ROMAN"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawBeziers)
@@ -315,22 +339,23 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawBeziers)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 4);
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 9);
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[9]/line", "color"_ostr, "#00ff00");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[9]/line", "color"_ostr,
+                u"#00ff00"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "transform", 5);
     assertXPath(pDocument, aXPathPrefix + "transform[1]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "transform[1]/textsimpleportion", "text"_ostr,
-                "% Efficiency");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy11"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy12"_ostr, "4");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy13"_ostr, "800");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy21"_ostr, "-4");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy22"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy23"_ostr, "3196");
+                u"% Efficiency"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy11"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy12"_ostr, u"4"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy13"_ostr, u"800"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy21"_ostr, u"-4"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy22"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy23"_ostr, u"3196"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawLine)
@@ -344,16 +369,17 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawLine)
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
-    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence", "transparence"_ostr, "14");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence", "transparence"_ostr,
+                u"14"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
-                "color"_ostr, "#c01002");
+                "color"_ostr, u"#c01002"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
-                "width"_ostr, "115");
+                "width"_ostr, u"115"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
-                "linecap"_ostr, "BUTT");
+                "linecap"_ostr, u"BUTT"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/polypolygon",
                 "path"_ostr,
-                "m89.1506452315894 403.573503917507 895.170581035125-345.821325648415");
+                u"m89.1506452315894 403.573503917507 895.170581035125-345.821325648415"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithCaps)
@@ -368,46 +394,47 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithCaps)
     CPPUNIT_ASSERT(pDocument);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 3);
 
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/line", "width"_ostr, "212");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/line", "width"_ostr, u"212"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/stroke", 0);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/linestartattribute/polypolygon",
-                "path"_ostr, "m0-1 1 2h-2z");
+                "path"_ostr, u"m0-1 1 2h-2z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/lineendattribute", 0);
 
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/line", "width"_ostr, "212");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/line", "width"_ostr, u"212"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/stroke", 0);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/linestartattribute/polypolygon",
-                "path"_ostr, "m0-1 1 2h-2z");
+                "path"_ostr, u"m0-1 1 2h-2z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/lineendattribute", 0);
 
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/line", "width"_ostr, "423");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/line", "width"_ostr, u"423"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/stroke", 0);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/linestartattribute", 0);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/lineendattribute/polypolygon",
-                "path"_ostr, "m-1-1h2v2h-2z");
+                "path"_ostr, u"m-1-1h2v2h-2z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence", 3);
-    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence"_ostr, "39");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence"_ostr,
+                u"39"_ustr);
     assertXPath(pDocument,
                 aXPathPrefix
                     + "unifiedtransparence[1]/polygonstrokearrow/linestartattribute/polypolygon",
                 "path"_ostr,
-                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
-                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
+                u"m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z"_ustr);
     assertXPath(pDocument,
                 aXPathPrefix
                     + "unifiedtransparence[1]/polygonstrokearrow/lineendattribute/polypolygon",
-                "path"_ostr, "m-1 1h2v-1l-1-1-1 1z");
+                "path"_ostr, u"m-1 1h2v-1l-1-1-1 1z"_ustr);
     assertXPath(pDocument,
                 aXPathPrefix + "unifiedtransparence[2]/polygonstrokearrow/linestartattribute", 0);
     assertXPath(pDocument,
                 aXPathPrefix
                     + "unifiedtransparence[2]/polygonstrokearrow/lineendattribute/polypolygon",
-                "path"_ostr, "m-1-1h2v2h-2z");
+                "path"_ostr, u"m-1-1h2v2h-2z"_ustr);
     assertXPath(pDocument,
                 aXPathPrefix
                     + "unifiedtransparence[3]/polygonstrokearrow/lineendattribute/polypolygon",
-                "path"_ostr, "m0-1 1 1-0.5 0.5v0.5h-1v-0.5l-0.5-0.5z");
+                "path"_ostr, u"m0-1 1 1-0.5 0.5v0.5h-1v-0.5l-0.5-0.5z"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithDash)
@@ -424,47 +451,54 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithDash)
     // check correct import of the DrawLine: color and width of the line
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "color"_ostr,
-                "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "width"_ostr, "185");
+                u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "width"_ostr,
+                u"185"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/stroke", 0);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/line", "width"_ostr, "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/line", "width"_ostr,
+                u"185"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/stroke", "dotDashArray"_ostr,
-                "185 185 ");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/line", "width"_ostr, "185");
+                u"185 185 "_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/line", "width"_ostr,
+                u"185"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/stroke", "dotDashArray"_ostr,
-                "556 185 ");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/line", "width"_ostr, "185");
+                u"556 185 "_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/line", "width"_ostr,
+                u"185"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/stroke", "dotDashArray"_ostr,
-                "556 185 185 185 ");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/line", "width"_ostr, "370");
+                u"556 185 185 185 "_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/line", "width"_ostr,
+                u"370"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/stroke", "dotDashArray"_ostr,
-                "556 185 185 185 185 185 ");
+                u"556 185 185 185 185 185 "_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow", 2);
     //TODO polypolygonstroke[6-9]/stroke add support for PenDataDashedLineOffset
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/line", "width"_ostr, "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/line", "width"_ostr,
+                u"370"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/stroke", "dotDashArray"_ostr,
-                "1851 741 5554 1481 ");
+                u"1851 741 5554 1481 "_ustr);
     // Arrows on both ends
     assertXPath(pDocument,
                 aXPathPrefix + "mask/polygonstrokearrow[1]/linestartattribute/polypolygon",
-                "path"_ostr, "m0-1 1 2h-2z");
+                "path"_ostr, u"m0-1 1 2h-2z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/lineendattribute/polypolygon",
-                "path"_ostr, "m0-1 1 2h-2z");
+                "path"_ostr, u"m0-1 1 2h-2z"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/line", "width"_ostr, "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/line", "width"_ostr,
+                u"370"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/stroke", "dotDashArray"_ostr,
-                "1852 741 5555 1481 ");
+                u"1852 741 5555 1481 "_ustr);
     assertXPath(pDocument,
                 aXPathPrefix + "mask/polygonstrokearrow[2]/linestartattribute/polypolygon",
                 "path"_ostr,
-                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
-                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
+                u"m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/lineendattribute/polypolygon",
                 "path"_ostr,
-                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
-                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
+                u"m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLinearGradient)
@@ -476,38 +510,38 @@ CPPUNIT_TEST_FIXTURE(Test, testLinearGradient)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy11"_ostr, "1");
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy12"_ostr, "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy13"_ostr, "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy21"_ostr, "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy22"_ostr, "1");
-    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy23"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "height"_ostr, "7610");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "width"_ostr, "15232");
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy11"_ostr, u"1"_ustr);
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy12"_ostr, u"0"_ustr);
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy13"_ostr, u"0"_ustr);
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy21"_ostr, u"0"_ustr);
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy22"_ostr, u"1"_ustr);
+    assertXPath(pDocument, "/primitive2D/metafile/transform"_ostr, "xy23"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "height"_ostr, u"7610"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "width"_ostr, u"15232"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
-                "m0 0h15232v7610h-15232z");
+                u"m0 0h15232v7610h-15232z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "spreadmethod"_ostr,
-                "repeat");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "startx"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "starty"_ostr, "-1");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "endx"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "endy"_ostr, "-1");
+                u"repeat"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "startx"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "starty"_ostr, u"-1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "endx"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "endy"_ostr, u"-1"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "opacity"_ostr,
-                "0.392156862745098");
+                u"0.392156862745098"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]/polypolygon", "path"_ostr,
-                "m0 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+                u"m0 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "spreadmethod"_ostr,
-                "repeat");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "startx"_ostr, "-1");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "starty"_ostr, "-1");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endx"_ostr, "-1");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endy"_ostr, "-1");
-    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "opacity"_ostr, "1");
+                u"repeat"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "startx"_ostr, u"-1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "starty"_ostr, u"-1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endx"_ostr, u"-1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endy"_ostr, u"-1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "opacity"_ostr, u"1"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/svglineargradient[2]/polypolygon", "path"_ostr,
-        "m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+        u"m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTextMapMode)
@@ -521,29 +555,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTextMapMode)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ffffff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m0 0h3542v4647h-3542z");
+                u"m0 0h3542v4647h-3542z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 20);
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text"_ostr, "N");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor"_ostr, "#4a70e3");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "x"_ostr, "2099");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "y"_ostr, "1859");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text"_ostr, u"N"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor"_ostr,
+                u"#4a70e3"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "x"_ostr, u"2099"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "y"_ostr, u"1859"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstroke", 138);
-    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon", "2142,1638 2142,1489");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, "#4a70e3");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "width"_ostr, "11");
+    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
+                       u"2142,1638 2142,1489"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, u"#4a70e3"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "width"_ostr, u"11"_ustr);
 
-    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[10]/polygon", "1967,1029 1869,952");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[10]/line", "color"_ostr, "#4a70e3");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[10]/line", "width"_ostr, "11");
+    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[10]/polygon",
+                       u"1967,1029 1869,952"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[10]/line", "color"_ostr, u"#4a70e3"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[10]/line", "width"_ostr, u"11"_ustr);
 
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[20]/polygon",
-                       "2710,1113 2873,1330");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[20]/line", "color"_ostr, "#666666");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[20]/line", "width"_ostr, "11");
+                       u"2710,1113 2873,1330"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[20]/line", "color"_ostr, u"#666666"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[20]/line", "width"_ostr, u"11"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEnglishMapMode)
@@ -559,33 +596,35 @@ CPPUNIT_TEST_FIXTURE(Test, testEnglishMapMode)
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", 1);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon[1]", "path"_ostr,
-                "m0 0h29699v20999h-29699z");
+                u"m0 0h29699v20999h-29699z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 3);
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#ffffad");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr,
+                u"#ffffad"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m-1-1h29700v21001h-29700z");
+                u"m-1-1h29700v21001h-29700z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m1058 7937v5293h3175v-1059h-2118v-4234z");
+                u"m1058 7937v5293h3175v-1059h-2118v-4234z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[3]/polypolygon", "path"_ostr,
-                "m12699 1058h4234v1060h-1587v4231h-1059v-4231h-1588z");
+                u"m12699 1058h4234v1060h-1587v4231h-1059v-4231h-1588z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 4);
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "text"_ostr, "UL");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "fontcolor"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "x"_ostr, "106");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "y"_ostr, "459");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width"_ostr, "424");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "height"_ostr, "424");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "text"_ostr, u"UL"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "fontcolor"_ostr,
+                u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "x"_ostr, u"106"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "y"_ostr, u"459"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width"_ostr, u"424"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "height"_ostr, u"424"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 3);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[1]/polygon",
-                       "-1,-1 29699,-1 29699,21000 -1,21000");
+                       u"-1,-1 29699,-1 29699,21000 -1,21000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[2]/polygon",
-                       "1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937");
+                       u"1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "mask/polygonhairline[3]/polygon",
-        "12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
+        u"12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRectangleWithModifyWorldTransform)
@@ -600,13 +639,13 @@ CPPUNIT_TEST_FIXTURE(Test, testRectangleWithModifyWorldTransform)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 1);
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ffffff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m1042 417 918 529 353 610-918-528z");
+                u"m1042 417 918 529 353 610-918-528z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstroke", 1);
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
-                       "1042,417 1960,946 2313,1556 1395,1028");
+                       u"1042,417 1960,946 2313,1556 1395,1028"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testChordWithModifyWorldTransform)
@@ -619,14 +658,14 @@ CPPUNIT_TEST_FIXTURE(Test, testChordWithModifyWorldTransform)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#ffffff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path"_ostr,
-                "m590 448-21 45-66 24-34 12-33 12-21 45-33 12 12 33-33 12 12 33 12 34 33-12 12 33 "
-                "34-12 33-12 45 21 33-12 33-12 46 21 66-25 33-12 66-24 34-12 66-24z");
+                u"m590 448-21 45-66 24-34 12-33 12-21 45-33 12 12 33-33 12 12 33 12 34 33-12 12 33 "
+                "34-12 33-12 45 21 33-12 33-12 46 21 66-25 33-12 66-24 34-12 66-24z"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke/polygon",
-                       "590,448 569,493 503,517 469,529 436,541 415,586 382,598 394,631 361,643 "
+                       u"590,448 569,493 503,517 469,529 436,541 415,586 382,598 394,631 361,643 "
                        "361,643 373,676 373,676 385,710 418,698 430,731 464,719 497,707 542,728 "
-                       "575,716 608,704 654,725 720,700 753,688 819,664 853,652 919,628");
+                       "575,716 608,704 654,725 720,700 753,688 819,664 853,652 919,628"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testArcStartPointEqualEndPoint)
@@ -641,10 +680,10 @@ CPPUNIT_TEST_FIXTURE(Test, testArcStartPointEqualEndPoint)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polygonhairline", "color"_ostr,
-                "#000000");
+                u"#000000"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "mask/group/mask/polygonhairline/polygon",
-        "11886,23133 11970,23223 12051,23316 12131,23410 12208,23506 12282,23604 12354,23704 "
+        u"11886,23133 11970,23223 12051,23316 12131,23410 12208,23506 12282,23604 12354,23704 "
         "12424,23805 12491,23909 12556,24014 12618,24120 12677,24228 12734,24337 12788,24448 "
         "12839,24560 12888,24673 12933,24788 12976,24903 13016,25020 13053,25137 13087,25256 "
         "13119,25375 13147,25495 13172,25615 13195,25736 13214,25858 13230,25980 13244,26103 "
@@ -677,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArcStartPointEqualEndPoint)
         "8985,21636 9106,21655 9227,21677 9348,21702 9468,21730 9587,21761 9705,21795 9823,21832 "
         "9940,21872 10055,21914 10170,21960 10283,22008 10395,22059 10506,22113 10615,22169 "
         "10723,22229 10830,22291 10935,22355 11038,22422 11140,22491 11240,22563 11338,22638 "
-        "11434,22715 11529,22794 11621,22875 11711,22959 11800,23045");
+        "11434,22715 11529,22794 11621,22875 11711,22959 11800,23045"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testArcInsideWronglyDefinedRectangle)
@@ -690,10 +729,11 @@ CPPUNIT_TEST_FIXTURE(Test, testArcInsideWronglyDefinedRectangle)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline", "color"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonhairline/polygon",
-        "1630,1460 1650,1470 1670,1480 1700,1490 1720,1500 1750,1510 1770,1520 1800,1530 1820,1530 "
+        u"1630,1460 1650,1470 1670,1480 1700,1490 1720,1500 1750,1510 1770,1520 1800,1530 "
+        u"1820,1530 "
         "1850,1540 1870,1540 1900,1540 1930,1540 1950,1540 1980,1540 2000,1530 2030,1530 2050,1520 "
         "2080,1510 2100,1500 2130,1490 2150,1480 2170,1470 2200,1450 2220,1440 2240,1420 2260,1400 "
         "2280,1390 2290,1370 2310,1350 2330,1330 2340,1300 2360,1280 2370,1260 2380,1240 2390,1210 "
@@ -703,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArcInsideWronglyDefinedRectangle)
         "2140,540 2120,520 2090,510 2070,510 2040,500 2020,490 1990,490 1970,480 1940,480 1920,480 "
         "1890,480 1860,480 1840,490 1810,490 1790,500 1760,500 1740,510 1710,520 1690,530 1670,540 "
         "1640,560 1620,570 1600,580 1580,600 1560,620 1540,640 1520,660 1510,680 1490,700 1480,720 "
-        "1460,740 1450,760");
+        "1460,740 1450,760"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEllipseWithSelectClipPath)
@@ -717,25 +757,26 @@ CPPUNIT_TEST_FIXTURE(Test, testEllipseWithSelectClipPath)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygon", 1);
-    assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygon[1]", "path"_ostr,
-                "m2790 "
-                "776v-36-35h-36v-35l-35-35-35-36h-36l-35-35-35-35h-35-36l-35-35h-35-36l-35-36h-35-"
-                "36l-35-35h-35-71-35l-36-35h-70-35-36-70l-36-35h-35-71-35-71-35-71-35-35-71-35-71-"
-                "35-71-35l-35 35h-71-35-36-70l-35 35h-36-70-36l-35 35h-35-36l-35 36h-35-36l-35 "
-                "35h-35-36l-35 35-35 35h-35l-36 36-35 35v35h-35v35 36 35 35h35v35l35 36 36 "
-                "35h35l35 35 35 35h36 35l35 36h36 35l35 35h36 35l35 35h36 70 36l35 35h70 36 35 "
-                "71l35 36h35 71 35 71 35 71 35 35 71 35 71 35 71 35l36-36h70 36 35 70l36-35h35 71 "
-                "35l35-35h36 35l35-35h36 35l35-36h36 35l35-35 35-35h36l35-35 35-36v-35h36v-35z");
+    assertXPath(
+        pDocument, aXPathPrefix + "group/mask/polypolygon[1]", "path"_ostr,
+        u"m2790 "
+        "776v-36-35h-36v-35l-35-35-35-36h-36l-35-35-35-35h-35-36l-35-35h-35-36l-35-36h-35-"
+        "36l-35-35h-35-71-35l-36-35h-70-35-36-70l-36-35h-35-71-35-71-35-71-35-35-71-35-71-"
+        "35-71-35l-35 35h-71-35-36-70l-35 35h-36-70-36l-35 35h-35-36l-35 36h-35-36l-35 "
+        "35h-35-36l-35 35-35 35h-35l-36 36-35 35v35h-35v35 36 35 35h35v35l35 36 36 "
+        "35h35l35 35 35 35h36 35l35 36h36 35l35 35h36 35l35 35h36 70 36l35 35h70 36 35 "
+        "71l35 36h35 71 35 71 35 71 35 35 71 35 71 35 71 35l36-36h70 36 35 70l36-35h35 71 "
+        "35l35-35h36 35l35-35h36 35l35-36h36 35l35-35 35-35h36l35-35 35-36v-35h36v-35z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor", 1);
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor[1]", "color"_ostr,
-                "#ffff00");
+                u"#ffff00"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor[1]/polypolygon[1]",
-                "path"_ostr, "m353 353h2472v1057h-2472z");
+                "path"_ostr, u"m353 353h2472v1057h-2472z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group/mask/polygonstroke", 1);
     assertXPathContent(pDocument, aXPathPrefix + "group/mask/polygonstroke[1]/polygon",
-                       "353,353 2825,353 2825,1410 353,1410");
+                       u"353,353 2825,353 2825,1410 353,1410"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEllipseXformIntersectClipRect)
@@ -748,12 +789,13 @@ CPPUNIT_TEST_FIXTURE(Test, testEllipseXformIntersectClipRect)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr, "m0 0h3000v2000h-3000z");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
+                u"m0 0h3000v2000h-3000z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygon", "path"_ostr,
-                "m370 152 1128-409 592 1623-1128 410z");
+                u"m370 152 1128-409 592 1623-1128 410z"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor/polypolygon", "path"_ostr,
-        "m3613 287-12-33-12-33-12-33-12-33-33 12-12-34-13-33-45-21-12-33-33 "
+        u"m3613 287-12-33-12-33-12-33-12-33-33 12-12-34-13-33-45-21-12-33-33 "
         "12-12-33-45-21-46-21-12-33-33 12-12-33-45-21-33 12-46-21-45-21-33 12-45-21-34 12-45-21-33 "
         "12-45-21-34 12-45-21-33 12-45-21-33 12-34 12-45-21-33 12-33 12-45-21-34 12-66 24-45-21-33 "
         "12-34 12-66 24-33 12-45-21-34 12-66 24-33 12-33 12-34 12-66 24-33 12-33 12-67 25-33 12-33 "
@@ -766,10 +808,11 @@ CPPUNIT_TEST_FIXTURE(Test, testEllipseXformIntersectClipRect)
         "33-12 45 21 33-12 67-24 33-12 33-12 33-12 67-24 33-12 33-12 66-25 34-12 33-12 33-12 66-24 "
         "33-12 22-45 33-12 66-24 33-12 33-12 22-45 66-25 33-12 21-45 33-12 34-12 21-45 33-12 33-12 "
         "21-45 33-12 21-46 34-12 21-45 33-12 21-45 33-12 21-45 33-12 22-46 21-45 33-12 21-45-12-33 "
-        "33-12-12-33 21-46 21-45-12-33 33-12-12-33 21-45-12-33-12-33 33-12-12-34-12-33-12-33z");
+        "33-12-12-33 21-46 21-45-12-33 33-12-12-33 21-45-12-33-12-33 33-12-12-34-12-33-12-33z"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "mask/group/mask/polygonstroke/polygon",
-        "3613,287 3601,254 3601,254 3589,221 3577,188 3565,155 3532,167 3520,133 3507,100 3507,100 "
+        u"3613,287 3601,254 3601,254 3589,221 3577,188 3565,155 3532,167 3520,133 3507,100 "
+        u"3507,100 "
         "3462,79 3450,46 3417,58 3405,25 3360,4 3360,4 3314,-17 3302,-50 3269,-38 3257,-71 "
         "3212,-92 3179,-80 3133,-101 3133,-101 3088,-122 3055,-110 3010,-131 2976,-119 2931,-140 "
         "2898,-128 2853,-149 2819,-137 2774,-158 2741,-146 2696,-167 2663,-155 2629,-143 2584,-164 "
@@ -792,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEllipseXformIntersectClipRect)
         "3278,1121 3312,1109 3333,1064 3366,1052 3387,1007 3420,995 3441,950 3474,938 3496,892 "
         "3496,892 3517,847 3550,835 3571,790 3559,757 3592,745 3580,712 3601,666 3601,666 3622,621 "
         "3610,588 3643,576 3631,543 3652,498 3652,498 3640,465 3628,432 3661,420 3649,386 3637,353 "
-        "3625,320 3625,320");
+        "3625,320 3625,320"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSetArcDirection)
@@ -804,20 +847,21 @@ CPPUNIT_TEST_FIXTURE(Test, testSetArcDirection)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#ffffff"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path"_ostr,
-        "m1640 1570-1000-950 50-50 50-50 50-50 50-40 60-40 50-40 60-30 60-40 60-20 60-30 70-20 "
+        u"m1640 1570-1000-950 50-50 50-50 50-50 50-40 60-40 50-40 60-30 60-40 60-20 60-30 70-20 "
         "60-20 70-10 60-20h70l70-10h60 70l70 10 60 10 70 10 70 20 60 20 60 20 70 30 60 30 60 30 50 "
         "40 60 40 50 40 50 40 50 50 50 50 50 50 40 60 40 60 40 60 30 60 30 60 30 60 20 70 30 70 10 "
-        "60 20 70 10 70 10 70 10 70v80 70l-10 70v70l-10 70-20 70-20 70z");
+        "60 20 70 10 70 10 70 10 70v80 70l-10 70v70l-10 70-20 70-20 70z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, u"#000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
-        "1070,1570 1110,1560 1160,1540 1200,1530 1250,1520 1300,1510 1350,1510 1400,1500 1440,1500 "
+        u"1070,1570 1110,1560 1160,1540 1200,1530 1250,1520 1300,1510 1350,1510 1400,1500 "
+        u"1440,1500 "
         "1490,1500 1540,1500 1590,1500 1640,1510 1690,1510 1740,1520 1780,1530 1830,1540 1880,1560 "
         "1920,1570 1960,1590 2010,1610 2050,1630 2090,1650 2130,1670 2160,1700 2200,1720 2230,1750 "
         "2260,1780 2290,1810 2320,1840 2350,1870 2370,1900 2390,1930 2410,1970 2430,2000 2440,2030 "
@@ -830,15 +874,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSetArcDirection)
         "730,2720 700,2690 670,2660 650,2630 620,2600 600,2560 580,2530 560,2500 550,2460 530,2430 "
         "520,2390 510,2360 510,2320 500,2280 500,2250 500,2210 500,2170 510,2140 520,2100 530,2070 "
         "540,2030 560,1990 570,1960 590,1930 610,1890 640,1860 660,1830 690,1800 720,1770 750,1740 "
-        "790,1720 820,1690 860,1670 900,1650 940,1630 980,1610 1020,1590");
+        "790,1720 820,1690 860,1670 900,1650 940,1630 980,1610 1020,1590"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonhairline[2]/polygon",
-        "1640,1570 640,620 690,570 740,520 790,470 840,430 900,390 950,350 1010,320 1070,280 "
+        u"1640,1570 640,620 690,570 740,520 790,470 840,430 900,390 950,350 1010,320 1070,280 "
         "1130,260 1190,230 1260,210 1320,190 1390,180 1450,160 1520,160 1590,150 1650,150 1720,150 "
         "1790,160 1850,170 1920,180 1990,200 2050,220 2110,240 2180,270 2240,300 2300,330 2350,370 "
         "2410,410 2460,450 2510,490 2560,540 2610,590 2660,640 2700,700 2740,760 2780,820 2810,880 "
         "2840,940 2870,1000 2890,1070 2920,1140 2930,1200 2950,1270 2960,1340 2970,1410 2980,1480 "
-        "2980,1560 2980,1630 2970,1700 2970,1770 2960,1840 2940,1910 2920,1980");
+        "2980,1560 2980,1630 2970,1700 2970,1770 2960,1840 2940,1910 2920,1980"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawPolyLine16WithClip)
@@ -852,23 +896,25 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawPolyLine16WithClip)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr, "m0 0h3943v3939h-3943z");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
+                u"m0 0h3943v3939h-3943z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 1);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#b4ffff");
+                u"m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr,
+                u"#b4ffff"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 1);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[1]/polygon",
-                       "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 "
-                       "1323,2644 0,2644 0,1322 1323,1322");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color"_ostr, "#000000");
+                       u"1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 "
+                       "1323,2644 0,2644 0,1322 1323,1322"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "path"_ostr,
-                "m2646 0v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323v-1322");
+                u"m2646 0v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323v-1322"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/group[1]/mask/polygonstroke/polygon",
-                       "0,793 3969,4230");
+                       u"0,793 3969,4230"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFillRegion)
@@ -880,18 +926,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFillRegion)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr, "m0 0h3943v3939h-3943z");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
+                u"m0 0h3943v3939h-3943z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 1);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#ff0000");
+                u"m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr,
+                u"#ff0000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 1);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[1]/polygon",
-                       "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 "
-                       "1323,2644 0,2644 0,1322 1323,1322");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color"_ostr, "#000000");
+                       u"1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 "
+                       "1323,2644 0,2644 0,1322 1323,1322"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPolylinetoCloseStroke)
@@ -907,18 +955,20 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylinetoCloseStroke)
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
-        "1080,150 1010,170 940,190 870,210 810,230 750,260 690,280 630,310 570,340 520,380 470,410 "
+        u"1080,150 1010,170 940,190 870,210 810,230 750,260 690,280 630,310 570,340 520,380 "
+        u"470,410 "
         "420,450 370,490 330,530 290,570 260,610 230,660 200,700 170,750 150,790 130,840 120,890 "
         "110,930 100,980 100,1030 100,1080 110,1130 120,1180 130,1220 140,1270 160,1320 190,1360 "
-        "210,1410 250,1450 280,1490 320,1540 360,1580 400,1620 450,1650 500,1690");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, "#000000");
+        "210,1410 250,1450 280,1490 320,1540 360,1580 400,1620 450,1650 500,1690"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonhairline[2]/polygon",
-        "1760,1120 1710,1130 1670,1140 1620,1150 1580,1160 1540,1170 1500,1180 1460,1200 1420,1210 "
+        u"1760,1120 1710,1130 1670,1140 1620,1150 1580,1160 1540,1170 1500,1180 1460,1200 "
+        u"1420,1210 "
         "1380,1230 1350,1240 1320,1260 1290,1280 1260,1300 1230,1310 1210,1330 1190,1360 1170,1380 "
         "1150,1400 1140,1420 1120,1440 1110,1460 1110,1490 1100,1510 1100,1530 1100,1550 1100,1580 "
-        "1110,1600 1120,1620 1130,1650 1140,1670 1160,1690 1170,1710 1190,1730");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, "#000000");
+        "1110,1600 1120,1620 1130,1650 1140,1670 1160,1690 1170,1710 1190,1730"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPolydraw)
@@ -931,18 +981,19 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPolydraw)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
-                       "2000,200 3000,200 3000,1000");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, "#000000");
+                       u"2000,200 3000,200 3000,1000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "polygonhairline[2]/polygon",
-                       "3000,2000 3000,2000 4000,2000 3000,3000");
+                       u"3000,2000 3000,2000 4000,2000 3000,3000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstroke", 1);
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
-                       "50,50 50,50 1000,1000 1000,1000 2000,2500 2000,1000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/stroke", "dotDashArray"_ostr, "30 10 ");
+                       u"50,50 50,50 1000,1000 1000,1000 2000,2500 2000,1000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/stroke", "dotDashArray"_ostr,
+                u"30 10 "_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
@@ -955,12 +1006,12 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "radius"_ostr, "0.7");
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "radius"_ostr, u"0.7"_ustr);
     assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focalx", 0);
     assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focaly", 0);
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "startx"_ostr, "1");
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "starty"_ostr, "1");
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "spreadmethod"_ostr, "pad");
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "startx"_ostr, u"1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "starty"_ostr, u"1"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "spreadmethod"_ostr, u"pad"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)
@@ -976,23 +1027,23 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)
 
     // Verify DrawCurve with tension=0.5, offset=0, segments=2
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/line", "color"_ostr,
-                "#ff0000");
+                u"#ff0000"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/polypolygon", "path"_ostr,
-        "m4121.5678588927 597.698391624308 124.350808427242 119.857180790532 168.799608035277 "
+        u"m4121.5678588927 597.698391624308 124.350808427242 119.857180790532 168.799608035277 "
         "163.249184432137 191.024007839294 186.003527805174 191.024007839294 188.120210909643 "
         "168.799608035277 169.599233745543 124.350808427242 130.440596312875 57.677609015188 "
         "70.6442986116379 14.8162665360123 69.7182497534329 10.5830475257226 128.191620514377 "
         "6.34982851543373 166.821087170928 2.11660950514397 185.606649723086-2.11660950514397 "
         "184.548308170852-6.34982851543373 163.646062514225-10.5830475257226 "
-        "122.899912753206-14.8162665360123 62.3098588877929");
+        "122.899912753206-14.8162665360123 62.3098588877929"_ustr);
 
     // Verify DrawCurve with tension=1.125, offset=0, segments=3
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[9]/line", "color"_ostr,
-                "#ff0000");
+                u"#ff0000"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/polypolygonstroke[9]/polypolygon", "path"_ostr,
-        "m6593.23860852523 4960.44685532205 129.113179813817 111.125862984599 154.512493875552 "
+        u"m6593.23860852523 4960.44685532205 129.113179813817 111.125862984599 154.512493875552 "
         "132.292694029285 167.212150906418 147.109475760564 167.212150906418 155.576208178439 "
         "154.512493875552 157.692891282907 129.113179813817 153.45952507397 91.0142087212153 "
         "142.876109551627 59.2650661440466 139.171914118808 42.3321901028912 144.463621879979 "
@@ -1002,14 +1053,14 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)
         "99.2195205219632-111.121999020089 93.3986419846751-132.288094071533 "
         "85.9902511190348-147.104360607545 76.9943479250442-155.570798628123 "
         "66.4109324027004-157.687408133268 54.2400045520071-153.454189122979 "
-        "40.4815643729608-142.871141597256 25.135611865564");
+        "40.4815643729608-142.871141597256 25.135611865564"_ustr);
 
     // Verify DrawCurve with tension=0.125, offset=0, segments=4
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[13]/line", "color"_ostr,
-                "#ff0000");
+                u"#ff0000"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/polypolygonstroke[13]/polypolygon", "path"_ostr,
-        "m4121.5678588927 9267.6323875275 124.350808427242 119.857180790532 168.799608035277 "
+        u"m4121.5678588927 9267.6323875275 124.350808427242 119.857180790532 168.799608035277 "
         "163.249184432138 191.024007839294 186.003527805173 191.024007839294 188.120210909643 "
         "168.799608035277 169.599233745543 124.350808427242 130.440596312876 57.677609015188 "
         "70.6442986116381 14.8162665360123 69.7182497534323 10.5830475257226 128.191620514377 "
@@ -1023,28 +1074,28 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)
         "23.7465385782562-70.6418422341985-7.93756164175647-130.436060754532-28.046051134208-169."
         "593336599706-41.8044913132544-188.113669769721-49.2128821788938-185.997060264576-50."
         "271223731128-163.243508084272-44.979515969957-119.853013228809-33.3377588953808-55."
-        "8255756981871-15.3459525073959");
+        "8255756981871-15.3459525073959"_ustr);
 
     // Verify DrawCurve with tension=0.125, offset=1, segments=3
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[18]/line", "color"_ostr,
-                "#ff0000");
+                u"#ff0000"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/polypolygonstroke[18]/polypolygon", "path"_ostr,
-        "m5162.41058304753 14700.2318678401 10.5830475257226 128.191620514377 6.34982851543373 "
+        u"m5162.41058304753 14700.2318678401 10.5830475257226 128.191620514377 6.34982851543373 "
         "166.821087170927 2.11660950514397 185.606649723086-2.11660950514397 "
         "184.548308170854-6.34982851543373 163.646062514224-10.5830475257226 "
         "122.899912753204-14.8162665360123 62.3098588877929-55.8255756981871 "
         "42.2675157423582-119.853013228809 69.3875180183586-163.243508084272 "
         "86.5855682421661-185.997060264576 93.861666413779-188.113669769721 "
         "91.2158125331916-169.593336599706 78.6480066004096-130.436060754531 "
-        "56.1582486154312-70.6418422341994 23.7465385782562");
+        "56.1582486154312-70.6418422341994 23.7465385782562"_ustr);
 
     // Verify DrawClosedCurve with tension=0.5
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[22]/line", "color"_ostr,
-                "#ff0000");
+                u"#ff0000"_ustr);
     assertXPath(
         pDocument, aXPathPrefix + "mask/polypolygonstroke[22]/polypolygon", "path"_ostr,
-        "m2709.26016658501 19012.0476443365v122.767620059174 173.568014566423 198.968211820044 "
+        u"m2709.26016658501 19012.0476443365v122.767620059174 173.568014566423 198.968211820044 "
         "198.968211820044 173.568014566423 122.767620059174 46.5670282983083l-46.5654091131796 "
         "23.283514149156-122.763351298383 61.383810029587-173.561979421852 "
         "86.7840072832114-198.961293483586 99.4841059100218-198.961293483586 "
@@ -1060,7 +1111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)
         "46.5654091131798-104.775813671193 46.5654091131796 46.5670282983083 122.763351298383 "
         "122.767620059178 173.561979421852 173.568014566419 198.961293483586 198.968211820044 "
         "198.961293483586 198.968211820047 173.561979421852 173.568014566419 122.763351298383 "
-        "122.767620059178 46.5654091131796 46.5670282983083z");
+        "122.767620059178 46.5654091131796 46.5670282983083z"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC)
@@ -1072,32 +1123,33 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", "text"_ostr, "sd CCCCCCCCCCCCCCC");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", "text"_ostr,
+                u"sd CCCCCCCCCCCCCCC"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", "fontcolor"_ostr, u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group", 5);
     assertXPath(
         pDocument, aXPathPrefix + "group[4]/textsimpleportion", "text"_ostr,
-        "Getttttttttttttttttttttttttttttt, uuuu: \"eeeeeeeeeeeeeeeeeeeeeee-7acd04a3953b\")");
+        u"Getttttttttttttttttttttttttttttt, uuuu: \"eeeeeeeeeeeeeeeeeeeeeee-7acd04a3953b\")"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[5]/textsimpleportion", "text"_ostr,
-                "TTTTTTTTTTTTTTTTTTTTTTTTTTTTT, trackId: 55)");
+                u"TTTTTTTTTTTTTTTTTTTTTTTTTTTTT, trackId: 55)"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[5]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 6);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m105.78125 "
+                u"m105.78125 "
                 "776.111111111111h3878.64583333333l458.385416666667-493.888888888889v-176."
-                "388888888889h-4337.03125v670.277777777778");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#ffffff");
+                "388888888889h-4337.03125v670.277777777778"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ffffff"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]/polypolygon", "path"_ostr,
-                "m2291.92708333333 4550.83333333333h317.34375v-317.5h-317.34375z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, "#fcf2e3");
+                u"m2291.92708333333 4550.83333333333h317.34375v-317.5h-317.34375z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, u"#fcf2e3"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]/polypolygon", "path"_ostr,
-                "m19428.4895833333 6632.22222222222h317.34375v-2398.88888888889h-317.34375z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]", "color"_ostr, "#fcf2e3");
+                u"m19428.4895833333 6632.22222222222h317.34375v-2398.88888888889h-317.34375z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]", "color"_ostr, u"#fcf2e3"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 4);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 13);
@@ -1113,22 +1165,23 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusSave)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
-                "m0 0h33544v21311h-33544z");
+                u"m0 0h33544v21311h-33544z"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor/polypolygon",
-                "path"_ostr,
-                "m327.458333333333 638.222222222222h437007.1875v295555.555555556h-437007.1875z");
+    assertXPath(
+        pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor/polypolygon", "path"_ostr,
+        u"m327.458333333333 638.222222222222h437007.1875v295555.555555556h-437007.1875z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polypolygoncolor", "color"_ostr,
-                "#ff0cad");
+                u"#ff0cad"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor/polypolygon", "path"_ostr,
-                "m10853.4145539602 7321.41354709201h41952690v29630720h-41952690z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", "color"_ostr, "#00ffad");
+                u"m10853.4145539602 7321.41354709201h41952690v29630720h-41952690z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", "color"_ostr, u"#00ffad"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "color"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "color"_ostr,
+                u"#000000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstrokearrow/polygon",
-                       "10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
-                       "12832.6557236512,4907.54325697157");
+                       u"10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
+                       "12832.6557236512,4907.54325697157"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithCustomCap)
@@ -1143,17 +1196,17 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithCustomCap)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPathContent(pDocument, aXPathPrefix + "polygonstrokearrow/polygon",
-                       "1423.297394625,1268.98481214025 705.717657763014,1304.88786195939");
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "color"_ostr, "#cc0000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "width"_ostr, "96");
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "linecap"_ostr, "BUTT");
+                       u"1423.297394625,1268.98481214025 705.717657763014,1304.88786195939"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "color"_ostr, u"#cc0000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "width"_ostr, u"96"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "linecap"_ostr, u"BUTT"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/stroke", 0);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/linestartattribute", 0);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/lineendattribute", "centered"_ostr,
-                "0");
+                u"0"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/lineendattribute/polypolygon",
-                "path"_ostr, "m-1.5 3 1.5-3 1.5 3z");
+                "path"_ostr, u"m-1.5 3 1.5-3 1.5 3z"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithMiterLimit)
@@ -1168,39 +1221,51 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithMiterLimit)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 3);
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color"_ostr, "#c800c8");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width"_ostr, "1058");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin"_ostr, "Miter");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle"_ostr, "5");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color"_ostr,
+                u"#c800c8"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width"_ostr, u"1058"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin"_ostr,
+                u"Miter"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle"_ostr,
+                u"5"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/stroke", 0);
 
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence", 3);
-    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence"_ostr, "85");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence"_ostr,
+                u"85"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
-                "color"_ostr, "#6400c8");
+                "color"_ostr, u"#6400c8"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
-                "width"_ostr, "1058");
+                "width"_ostr, u"1058"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
-                "linejoin"_ostr, "Miter");
+                "linejoin"_ostr, u"Miter"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
-                "miterangle"_ostr, "19");
-    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[2]", "transparence"_ostr, "69");
+                "miterangle"_ostr, u"19"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[2]", "transparence"_ostr,
+                u"69"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[2]/polypolygonstroke/line",
-                "miterangle"_ostr, "19");
-    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[3]", "transparence"_ostr, "53");
+                "miterangle"_ostr, u"19"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[3]", "transparence"_ostr,
+                u"53"_ustr);
     assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[3]/polypolygonstroke/line",
-                "miterangle"_ostr, "19");
+                "miterangle"_ostr, u"19"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color"_ostr, "#0000ff");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width"_ostr, "1058");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "linejoin"_ostr, "Miter");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "miterangle"_ostr, "60");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color"_ostr,
+                u"#0000ff"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width"_ostr, u"1058"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "linejoin"_ostr,
+                u"Miter"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "miterangle"_ostr,
+                u"60"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/stroke", 0);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "color"_ostr, "#0000ff");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "width"_ostr, "1058");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "linejoin"_ostr, "Miter");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "miterangle"_ostr, "60");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "color"_ostr,
+                u"#0000ff"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "width"_ostr, u"1058"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "linejoin"_ostr,
+                u"Miter"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "miterangle"_ostr,
+                u"60"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/stroke", 0);
 }
 
@@ -1215,13 +1280,13 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillClosedCurve)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#808080");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, "#808080");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#808080"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, u"#808080"_ustr);
 
     // Validate curve generated by FillClosedCurve, tension=0.25
     assertXPath(
         pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
-        "m1305.97700269476 "
+        u"m1305.97700269476 "
         "808.572945906987-50.3314857912787-25.4001972536228-68.1076984321412-40.2169789849024-76."
         "5824044585986-48.6837114027768-75.7556038706516-50.8003945072452-65.6272966683-46."
         "5670282983082-46.1974828515433-35.9836127759654-17.4661624203823-19.050147940217 "
@@ -1238,12 +1303,12 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillClosedCurve)
         "30.4882716805487-59.1348342310902 19.9465641842235-22.3574652909491 19.9465641842235 "
         "22.3574652909491 30.4882716805487 59.1348342310902 36.6892760901519 84.0058607085957 "
         "38.5495774130327 96.9705447234655 36.0691756491917 98.0288862757 29.2480707986281 "
-        "87.1808853652984 18.0862628613424 64.4265419922616 2.5837518373346 29.7658561565891z");
+        "87.1808853652984 18.0862628613424 64.4265419922616 2.5837518373346 29.7658561565891z"_ustr);
 
     // Validate curve generated by DrawClosedCurve, tension=0.25
     assertXPath(
         pDocument, aXPathPrefix + "polypolygonstroke[2]/polypolygon", "path"_ostr,
-        "m1305.97700269476 "
+        u"m1305.97700269476 "
         "808.572945906987-50.3314857912787-25.4001972536228-68.1076984321412-40.2169789849024-76."
         "5824044585986-48.6837114027768-75.7556038706516-50.8003945072452-65.6272966683-46."
         "5670282983082-46.1974828515433-35.9836127759654-17.4661624203823-19.050147940217 "
@@ -1260,16 +1325,21 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillClosedCurve)
         "30.4882716805487-59.1348342310902 19.9465641842235-22.3574652909491 19.9465641842235 "
         "22.3574652909491 30.4882716805487 59.1348342310902 36.6892760901519 84.0058607085957 "
         "38.5495774130327 96.9705447234655 36.0691756491917 98.0288862757 29.2480707986281 "
-        "87.1808853652984 18.0862628613424 64.4265419922616 2.5837518373346 29.7658561565891z");
+        "87.1808853652984 18.0862628613424 64.4265419922616 2.5837518373346 29.7658561565891z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 2);
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color"_ostr, "#00ff00");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width"_ostr, "4");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin"_ostr, "Miter");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle"_ostr, "4");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linecap"_ostr, "BUTT");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color"_ostr, "#aaaa00");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width"_ostr, "4");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color"_ostr,
+                u"#00ff00"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width"_ostr, u"4"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin"_ostr,
+                u"Miter"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle"_ostr,
+                u"4"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linecap"_ostr,
+                u"BUTT"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color"_ostr,
+                u"#aaaa00"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width"_ostr, u"4"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipTransform)
@@ -1283,49 +1353,54 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipTransform)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 2);
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text"_ostr, "No_rect- DLP-");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text"_ostr,
+                u"No_rect- DLP-"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor"_ostr,
+                u"#000000"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "text"_ostr, "OpaqueTranspa");
-    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "text"_ostr,
+                u"OpaqueTranspa"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "fontcolor"_ostr,
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 3);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m966 490-477-275-84 147 476 275z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#ff0000");
+                u"m966 490-477-275-84 147 476 275z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ff0000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m251 713 623 361-148 257-623-361z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, "#0080ff");
+                u"m251 713 623 361-148 257-623-361z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, u"#0080ff"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]/polypolygon", "path"_ostr,
-                "m972 1326-476-275-148 257 476 276z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, "#800080");
+                u"m972 1326-476-275-148 257 476 276z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, u"#800080"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group", 3);
-    assertXPath(pDocument, aXPathPrefix + "group[1]/polypolygoncolor", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "group[1]/polypolygoncolor", "color"_ostr,
+                u"#ff0000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[1]/textsimpleportion", "text"_ostr,
-                "Opaque - DLP-");
+                u"Opaque - DLP-"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[1]/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group[2]/mask/group/polypolygoncolor", "color"_ostr,
-                "#00ff00");
+                u"#00ff00"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygon", "path"_ostr,
-                "m320 508 586 340-169 293-586-339z");
+                u"m320 508 586 340-169 293-586-339z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[2]/mask/group/textsimpleportion", "text"_ostr,
-                "Clip  -  DLP-");
+                u"Clip  -  DLP-"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[2]/mask/group/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/group/polypolygoncolor", "color"_ostr,
-                "#0080ff");
+                u"#0080ff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/polypolygon", "path"_ostr,
-                "m251 713 623 361-148 257-623-361z");
+                u"m251 713 623 361-148 257-623-361z"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/group/textsimpleportion", "text"_ostr,
-                "Opaque ClipP-");
+                u"Opaque ClipP-"_ustr);
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativeWinOrg)
@@ -1340,10 +1415,13 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativeWinOrg)
     // and be lower and more to the right than it actually is which would cut the
     // text in the emf above in half.
     assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", 1);
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "minx"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "miny"_ostr, "272");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxx"_ostr, "6800");
-    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxy"_ostr, "644");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "minx"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "miny"_ostr,
+                u"272"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxx"_ostr,
+                u"6800"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxy"_ostr,
+                u"644"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBitBltStretchBltWMF)
@@ -1357,35 +1435,35 @@ CPPUNIT_TEST_FIXTURE(Test, testBitBltStretchBltWMF)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap", 2);
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy11"_ostr, "508");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy12"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy13"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy21"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy22"_ostr, "508");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy23"_ostr, "406");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "height"_ostr, "10");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "width"_ostr, "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy11"_ostr, u"508"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy12"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy13"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy21"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy22"_ostr, u"508"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy23"_ostr, u"406"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "height"_ostr, u"10"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "width"_ostr, u"10"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[1]", "row"_ostr,
-                "000000,000000,000000,000000,000000,000000,000000,000000,000000,000000");
+                u"000000,000000,000000,000000,000000,000000,000000,000000,000000,000000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[4]", "row"_ostr,
-                "000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff");
+                u"000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[5]", "row"_ostr,
-                "ffffff,000000,ffffff,ffffff,000000,000000,000000,ffffff,ffffff,000000");
+                u"ffffff,000000,ffffff,ffffff,000000,000000,000000,ffffff,ffffff,000000"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy11"_ostr, "1524");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy12"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy13"_ostr, "813");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy21"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy22"_ostr, "1016");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy23"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "height"_ostr, "10");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "width"_ostr, "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy11"_ostr, u"1524"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy12"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy13"_ostr, u"813"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy21"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy22"_ostr, u"1016"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy23"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "height"_ostr, u"10"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "width"_ostr, u"10"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[1]", "row"_ostr,
-                "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
+                u"000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[5]", "row"_ostr,
-                "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
+                u"720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)
@@ -1408,33 +1486,36 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)
     // These values come from the fix for tdf#88163
     assertXPath(pDocument, aPrefix + "polypolygoncolor", 5);
     assertXPath(pDocument, aPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m7257 1836h320v3628h-320z");
-    assertXPath(pDocument, aPrefix + "polypolygoncolor[1]", "color"_ostr, "#ff0000");
+                u"m7257 1836h320v3628h-320z"_ustr);
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ff0000"_ustr);
 
     assertXPath(pDocument, aPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m7257 5976h320v321h-320z");
-    assertXPath(pDocument, aPrefix + "polypolygoncolor[2]", "color"_ostr, "#00ff00");
+                u"m7257 5976h320v321h-320z"_ustr);
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[2]", "color"_ostr, u"#00ff00"_ustr);
 
     assertXPath(pDocument, aPrefix + "polypolygoncolor[3]/polypolygon", "path"_ostr,
-                "m10203 5976h320v321h-320z");
-    assertXPath(pDocument, aPrefix + "polypolygoncolor[3]", "color"_ostr, "#8080ff");
+                u"m10203 5976h320v321h-320z"_ustr);
+    assertXPath(pDocument, aPrefix + "polypolygoncolor[3]", "color"_ostr, u"#8080ff"_ustr);
 
     assertXPath(pDocument, aPrefix + "group", 5);
-    assertXPath(pDocument, aPrefix + "group[1]/polypolygoncolor", "color"_ostr, "#00ff00");
-    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "text"_ostr, "ABCD");
-    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aPrefix + "group[1]/polypolygoncolor", "color"_ostr, u"#00ff00"_ustr);
+    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "text"_ostr, u"ABCD"_ustr);
+    assertXPath(pDocument, aPrefix + "group[1]/textsimpleportion", "fontcolor"_ostr,
+                u"#000000"_ustr);
 
-    assertXPath(pDocument, aPrefix + "group[2]/polypolygoncolor", "color"_ostr, "#8080ff");
-    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "text"_ostr, "MMMM");
-    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aPrefix + "group[2]/polypolygoncolor", "color"_ostr, u"#8080ff"_ustr);
+    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "text"_ostr, u"MMMM"_ustr);
+    assertXPath(pDocument, aPrefix + "group[2]/textsimpleportion", "fontcolor"_ostr,
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor", "color"_ostr,
-                "#ff8000");
+                u"#ff8000"_ustr);
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor/polypolygon",
-                "path"_ostr, "m1067 1067h1317v473h-1317z");
-    assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "text"_ostr, "OOOO");
+                "path"_ostr, u"m1067 1067h1317v473h-1317z"_ustr);
+    assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "text"_ostr,
+                u"OOOO"_ustr);
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPaletteWMF)
@@ -1448,23 +1529,27 @@ CPPUNIT_TEST_FIXTURE(Test, testPaletteWMF)
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 2);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m0 0h3015v3015h-3015z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr, "#ffff00");
+                u"m0 0h3015v3015h-3015z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color"_ostr,
+                u"#ffff00"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m2222 2222h2698v2698h-2698z");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]", "color"_ostr, "#0080ff");
+                u"m2222 2222h2698v2698h-2698z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]", "color"_ostr,
+                u"#0080ff"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 2);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       "0,0 3015,0 3015,3015 0,3015");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr, "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, "132");
+                       u"0,0 3015,0 3015,3015 0,3015"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr,
+                u"#ff0000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, u"132"_ustr);
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       "2222,2222 4920,2222 4920,4920 2222,4920");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr, "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, "132");
+                       u"2222,2222 4920,2222 4920,4920 2222,4920"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr,
+                u"#ff0000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, u"132"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRestoreDCWMF)
@@ -1477,22 +1562,22 @@ CPPUNIT_TEST_FIXTURE(Test, testRestoreDCWMF)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 3);
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#0000ff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#0000ff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m238 2884h1640v1110h-1640z");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, "#000000");
+                u"m238 2884h1640v1110h-1640z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
-                       "238,2884 1878,2884 1878,3994 238,3994");
+                       u"238,2884 1878,2884 1878,3994 238,3994"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, u"#ff0000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
-                "m238 238h1640v1110h-1640z");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, "#000000");
+                u"m238 238h1640v1110h-1640z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color"_ostr, u"#000000"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]", "color"_ostr, u"#ff0000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[3]/polypolygon", "path"_ostr,
-                "m238 5530h1640v1110h-1640z");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline[3]", "color"_ostr, "#000000");
+                u"m238 5530h1640v1110h-1640z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[3]", "color"_ostr, u"#000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRoundrectWMF)
@@ -1504,11 +1589,12 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundrectWMF)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#ffffff"_ustr);
 
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonstroke/polygon",
-        "2858,659 2858,651 2858,643 2858,635 2858,619 2858,611 2858,603 2850,595 2850,587 2850,580 "
+        u"2858,659 2858,651 2858,643 2858,635 2858,619 2858,611 2858,603 2850,595 2850,587 "
+        u"2850,580 "
         "2850,564 2850,556 2842,548 2842,540 2842,532 2834,524 2834,516 2834,508 2826,500 2826,492 "
         "2818,484 2818,476 2810,468 2810,460 2802,452 2802,445 2794,437 2794,429 2786,421 2786,421 "
         "2778,413 2770,405 2770,397 2762,389 2754,389 2754,381 2746,373 2738,373 2731,365 2731,365 "
@@ -1531,9 +1617,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundrectWMF)
         "2762,1937 2770,1929 2770,1921 2778,1913 2786,1905 2786,1905 2794,1897 2794,1889 2802,1881 "
         "2802,1874 2810,1866 2810,1858 2818,1850 2818,1842 2826,1834 2826,1826 2834,1818 2834,1810 "
         "2834,1802 2842,1794 2842,1786 2842,1778 2850,1770 2850,1762 2850,1746 2850,1739 2850,1731 "
-        "2858,1723 2858,1715 2858,1707 2858,1691 2858,1683 2858,1675 2858,1667");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, "143");
+        "2858,1723 2858,1715 2858,1707 2858,1691 2858,1683 2858,1675 2858,1667"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, u"143"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testStretchDIBWMF)
@@ -1545,20 +1631,20 @@ CPPUNIT_TEST_FIXTURE(Test, testStretchDIBWMF)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy11"_ostr, "12065");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy12"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy13"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy21"_ostr, "0");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy22"_ostr, "12065");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy23"_ostr, "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy11"_ostr, u"12065"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy12"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy13"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy21"_ostr, u"0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy22"_ostr, u"12065"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy23"_ostr, u"0"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "height"_ostr, "10");
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "width"_ostr, "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "height"_ostr, u"10"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "width"_ostr, u"10"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap/data", 10);
     assertXPath(pDocument, aXPathPrefix + "/mask/bitmap/data[1]", "row"_ostr,
-                "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
+                u"000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff"_ustr);
     assertXPath(pDocument, aXPathPrefix + "/mask/bitmap/data[5]", "row"_ostr,
-                "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
+                u"720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMoveToLineToWMF)
@@ -1571,11 +1657,11 @@ CPPUNIT_TEST_FIXTURE(Test, testMoveToLineToWMF)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke/polygon",
-                       "5856,3586 7167,621 8625,3586");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, "#800000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, "310");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linejoin"_ostr, "Bevel");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linecap"_ostr, "ROUND");
+                       u"5856,3586 7167,621 8625,3586"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, u"#800000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, u"310"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linejoin"_ostr, u"Bevel"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linecap"_ostr, u"ROUND"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPolyLineWidth)
@@ -1588,13 +1674,13 @@ CPPUNIT_TEST_FIXTURE(Test, testPolyLineWidth)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path"_ostr,
-                "m530 529 1236-176-707 352z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#ffff00");
+                u"m530 529 1236-176-707 352z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#ffff00"_ustr);
 
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke/polygon",
-                       "530,529 530,529 1766,353 1059,705");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, "71");
+                       u"530,529 530,529 1766,353 1059,705"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width"_ostr, u"71"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRestoreDC)
@@ -1606,12 +1692,12 @@ CPPUNIT_TEST_FIXTURE(Test, testRestoreDC)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color"_ostr, u"#ff0000"_ustr);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path"_ostr,
-                "m1148 4354v1481h4943v-1481z");
-    assertXPath(pDocument, aXPathPrefix + "polygonhairline", "color"_ostr, "#000000");
+                u"m1148 4354v1481h4943v-1481z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline", "color"_ostr, u"#000000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "polygonhairline/polygon",
-                       "1148,4354 1148,5835 6091,5835 6091,4354");
+                       u"1148,4354 1148,5835 6091,5835 6091,4354"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
@@ -1625,17 +1711,17 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path"_ostr,
-                "m100 100h4000v2000h-4000z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, "#ffffff");
+                u"m100 100h4000v2000h-4000z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color"_ostr, u"#ffffff"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "polygonstroke", 2);
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
-                       "100,100 4100,100 4100,2100 100,2100");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, "#ff0000");
+                       u"100,100 4100,100 4100,2100 100,2100"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color"_ostr, u"#ff0000"_ustr);
 
     assertXPath(
         pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path"_ostr,
-        "m4090 "
+        u"m4090 "
         "2700v-30-20l-10-30v-20l-10-30-10-20-10-20-20-30-10-20-20-20-20-20-20-30-20-20-20-20-20-10-"
         "30-20-20-20-30-20-30-10-30-10-30-20-30-10-30-10-40-10-30-10h-30l-40-10h-30l-40-10h-30-40-"
         "2590-40-30l-40 10h-30l-40 10h-30l-30 10-40 10-30 10-30 10-30 20-30 10-30 10-30 20-20 "
@@ -1643,12 +1729,13 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
         "30 990 30 20l10 30v20l10 30 10 20 10 20 20 30 10 20 20 20 20 20 20 30 20 20 20 20 20 10 "
         "30 20 20 20 30 20 30 10 30 10 30 20 30 10 30 10 40 10 30 10h30l40 10h30l40 10h30 40 2590 "
         "40 30l40-10h30l40-10h30l30-10 40-10 30-10 30-10 30-20 30-10 30-10 30-20 20-20 30-20 20-10 "
-        "20-20 20-20 20-30 20-20 20-20 10-20 20-30 10-20 10-20 10-30v-20l10-30v-20-30z");
-    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, "#ffffff");
+        "20-20 20-20 20-30 20-20 20-20 10-20 20-30 10-20 10-20 10-30v-20l10-30v-20-30z"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color"_ostr, u"#ffffff"_ustr);
 
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonstroke[2]/polygon",
-        "4090,2700 4090,2670 4090,2650 4080,2620 4080,2600 4070,2570 4060,2550 4050,2530 4030,2500 "
+        u"4090,2700 4090,2670 4090,2650 4080,2620 4080,2600 4070,2570 4060,2550 4050,2530 "
+        u"4030,2500 "
         "4020,2480 4000,2460 3980,2440 3960,2410 3940,2390 3920,2370 3900,2360 3870,2340 3850,2320 "
         "3820,2300 3790,2290 3760,2280 3730,2260 3700,2250 3670,2240 3630,2230 3600,2220 3570,2220 "
         "3530,2210 3500,2210 3460,2200 3430,2200 3390,2200 800,2200 760,2200 730,2200 690,2210 "
@@ -1661,8 +1748,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
         "3390,4190 3430,4190 3460,4190 3500,4180 3530,4180 3570,4170 3600,4170 3630,4160 3670,4150 "
         "3700,4140 3730,4130 3760,4110 3790,4100 3820,4090 3850,4070 3870,4050 3900,4030 3920,4020 "
         "3940,4000 3960,3980 3980,3950 4000,3930 4020,3910 4030,3890 4050,3860 4060,3840 4070,3820 "
-        "4080,3790 4080,3770 4090,3740 4090,3720 4090,3690");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[2]/line", "color"_ostr, "#ff0000");
+        "4080,3790 4080,3770 4090,3740 4090,3720 4090,3690"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[2]/line", "color"_ostr, u"#ff0000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
@@ -1676,50 +1763,55 @@ CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path"_ostr,
-                "m0 0h31250v18192h-31250z");
+                u"m0 0h31250v18192h-31250z"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 3);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       "17898,5693 20172,5693");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr, "#008000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, "0");
+                       u"17898,5693 20172,5693"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color"_ostr,
+                u"#008000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width"_ostr, u"0"_ustr);
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       "17898,6959 20172,6959");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr, "#000080");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, "0");
+                       u"17898,6959 20172,6959"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color"_ostr,
+                u"#000080"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width"_ostr, u"0"_ustr);
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[3]/polygon",
-                       "17898,7381 20172,7381");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "color"_ostr, "#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width"_ostr, "0");
+                       u"17898,7381 20172,7381"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "color"_ostr,
+                u"#ff0000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width"_ostr, u"0"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 755);
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[5]", "color"_ostr, "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[5]", "color"_ostr, u"#ff0000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[5]/polygon",
-                       "27925,16078 27875,16078");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[10]", "color"_ostr, "#ff0000");
+                       u"27925,16078 27875,16078"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[10]", "color"_ostr,
+                u"#ff0000"_ustr);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[10]/polygon",
-                       "27925,14180 27875,14180");
+                       u"27925,14180 27875,14180"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 69);
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width"_ostr, "374");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "x"_ostr, "28124");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "y"_ostr, "16581");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "text"_ostr, "0.0");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "fontcolor"_ostr, "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width"_ostr, u"374"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "x"_ostr, u"28124"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "y"_ostr, u"16581"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "text"_ostr, u"0.0"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "fontcolor"_ostr,
+                u"#000000"_ustr);
 
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "width"_ostr, "266");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "x"_ostr, "28000");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "y"_ostr, "428");
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "text"_ostr, "-6");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "width"_ostr, u"266"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "x"_ostr, u"28000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "y"_ostr, u"428"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "text"_ostr, u"-6"_ustr);
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "fontcolor"_ostr,
-                "#000000");
+                u"#000000"_ustr);
 
     assertXPath(pDocument, aXPathPrefix + "mask/pointarray", 8);
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]", "color"_ostr, "#008000");
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "x"_ostr, "25844");
-    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y"_ostr, "8918");
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]", "color"_ostr, u"#008000"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "x"_ostr, u"25844"_ustr);
+    assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y"_ostr, u"8918"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
@@ -1738,7 +1830,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
-    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    xShape->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     Graphic aGraphic(xGraphic);
 
     // Check the size hint of the EMF, which influences the bitmap generated from the PDF.

@@ -1130,7 +1130,7 @@ namespace emfio
                                                                                  // this is necessary to be able to support
                                                                                  // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
 
-        maFont.SetFamilyName( "Arial" );                                         // sj: #i57205#, we do have some scaling problems if using
+        maFont.SetFamilyName( u"Arial"_ustr );                                         // sj: #i57205#, we do have some scaling problems if using
         maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                           // the default font then most times a x11 font is used, we
         maFont.SetFontHeight( 423 );                                      // will prevent this defining a font
 
