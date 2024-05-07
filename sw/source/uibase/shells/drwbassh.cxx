@@ -594,7 +594,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             if(1 == pSdrView->GetMarkedObjectCount())
             {
                 // #i68101#
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aOrigName(pSelected->GetName());
 
@@ -615,8 +615,12 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             // update accessibility sidebar object name if we modify the object name on the navigator bar
                             if (!aNewName.isEmpty() && aOrigName != aNewName)
                             {
-                                if (SwNode* pSwNode = FindFrameFormat(pSelected)->GetAnchor().GetAnchorNode())
-                                    pSwNode->resetAndQueueAccessibilityCheck(true);
+                                auto pFrameFormat = FindFrameFormat(pSelected.get());
+                                if (pFrameFormat)
+                                {
+                                    if (SwNode* pSwNode = pFrameFormat->GetAnchor().GetAnchorNode())
+                                        pSwNode->resetAndQueueAccessibilityCheck(true);
+                                }
                             }
                         }
                         pDlg->disposeOnce();
@@ -634,28 +638,38 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
             if(1 == pSdrView->GetMarkedObjectCount())
             {
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
                 bool isDecorative(pSelected->IsDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
                             aTitle, aDescription, isDecorative));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
-                    pDlg->IsDecorative(isDecorative);
+                pDlg->StartExecuteAsync(
+                    [pDlg, pSelected, pSh] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            OUString aTitle;
+                            OUString aDescription;
+                            bool isDecorative;
 
-                    pSelected->SetTitle(aTitle);
-                    pSelected->SetDescription(aDescription);
-                    pSelected->SetDecorative(isDecorative);
+                            pDlg->GetTitle(aTitle);
+                            pDlg->GetDescription(aDescription);
+                            pDlg->IsDecorative(isDecorative);
 
-                    pSh->SetModified();
-                }
+                            pSelected->SetTitle(aTitle);
+                            pSelected->SetDescription(aDescription);
+                            pSelected->SetDecorative(isDecorative);
+
+                            pSh->SetModified();
+                        }
+                        pDlg->disposeOnce();
+                    }
+                );
             }
 
             break;
