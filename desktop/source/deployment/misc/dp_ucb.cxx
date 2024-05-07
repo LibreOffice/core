@@ -169,7 +169,7 @@ bool erase_path( OUString const & url,
     {
         try {
             ucb_content.executeCommand(
-                "delete", Any( true /* delete physically */ ) );
+                u"delete"_ustr, Any( true /* delete physically */ ) );
         }
         catch (const RuntimeException &) {
             throw;
@@ -191,7 +191,7 @@ std::vector<sal_Int8> readFile( ::ucbhelper::Content & ucb_content )
         ::xmlscript::createOutputStream( &bytes ) );
     if (! ucb_content.openStream( xStream ))
         throw RuntimeException(
-            "::ucbhelper::Content::openStream( XOutputStream ) failed!",
+            u"::ucbhelper::Content::openStream( XOutputStream ) failed!"_ustr,
             nullptr );
     return bytes;
 }

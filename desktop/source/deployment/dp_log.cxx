@@ -85,7 +85,7 @@ ProgressLogImpl::ProgressLogImpl(
 // XServiceInfo
 OUString ProgressLogImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.ProgressLog";
+    return u"com.sun.star.comp.deployment.ProgressLog"_ustr;
 }
 
 sal_Bool ProgressLogImpl::supportsService( const OUString& ServiceName )
@@ -96,7 +96,7 @@ sal_Bool ProgressLogImpl::supportsService( const OUString& ServiceName )
 css::uno::Sequence< OUString > ProgressLogImpl::getSupportedServiceNames()
 {
     // a private one
-    return { "com.sun.star.comp.deployment.ProgressLog" };
+    return { u"com.sun.star.comp.deployment.ProgressLog"_ustr };
 }
 
 // XProgressHandler

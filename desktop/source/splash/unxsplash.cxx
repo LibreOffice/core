@@ -103,7 +103,7 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
 
 OUString UnxSplashScreen::getImplementationName()
 {
-    return "com.sun.star.office.comp.PipeSplashScreen";
+    return u"com.sun.star.office.comp.PipeSplashScreen"_ustr;
 }
 
 sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
@@ -113,7 +113,7 @@ sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 {
-    return { "com.sun.star.office.PipeSplashScreen" };
+    return { u"com.sun.star.office.PipeSplashScreen"_ustr };
 }
 
 }

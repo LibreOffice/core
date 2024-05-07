@@ -86,7 +86,7 @@ bool prepareLocale() {
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(
                     comphelper::ConfigurationChanges::create());
                 officecfg::Office::Linguistic::General::UILocale::set(
-                    "", batch);
+                    u""_ustr, batch);
                 batch->commit();
             } catch (const css::uno::Exception &) {
                 TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");

@@ -35,7 +35,7 @@ namespace
     {
         static const OUString theOS = []()
             {
-                OUString os( "$_OS" );
+                OUString os( u"$_OS"_ustr );
                 ::rtl::Bootstrap::expandMacros( os );
                 return os;
             }();
@@ -46,7 +46,7 @@ namespace
     {
         static const OUString theCPU = []()
             {
-                OUString arch( "$_ARCH" );
+                OUString arch( u"$_ARCH"_ustr );
                 ::rtl::Bootstrap::expandMacros( arch );
                 return arch;
             }();

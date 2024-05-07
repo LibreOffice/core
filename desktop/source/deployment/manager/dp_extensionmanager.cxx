@@ -173,7 +173,7 @@ ExtensionManager::~ExtensionManager()
 // XServiceInfo
 OUString ExtensionManager::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.ExtensionManager";
+    return u"com.sun.star.comp.deployment.ExtensionManager"_ustr;
 }
 
 sal_Bool ExtensionManager::supportsService( const OUString& ServiceName )
@@ -184,28 +184,28 @@ sal_Bool ExtensionManager::supportsService( const OUString& ServiceName )
 css::uno::Sequence< OUString > ExtensionManager::getSupportedServiceNames()
 {
     // a private one:
-    return { "com.sun.star.comp.deployment.ExtensionManager" };
+    return { u"com.sun.star.comp.deployment.ExtensionManager"_ustr };
 }
 
 Reference<css::deployment::XPackageManager> ExtensionManager::getUserRepository()
 {
-    return m_xPackageManagerFactory->getPackageManager("user");
+    return m_xPackageManagerFactory->getPackageManager(u"user"_ustr);
 }
 Reference<css::deployment::XPackageManager>  ExtensionManager::getSharedRepository()
 {
-    return m_xPackageManagerFactory->getPackageManager("shared");
+    return m_xPackageManagerFactory->getPackageManager(u"shared"_ustr);
 }
 Reference<css::deployment::XPackageManager>  ExtensionManager::getBundledRepository()
 {
-    return m_xPackageManagerFactory->getPackageManager("bundled");
+    return m_xPackageManagerFactory->getPackageManager(u"bundled"_ustr);
 }
 Reference<css::deployment::XPackageManager>  ExtensionManager::getTmpRepository()
 {
-    return m_xPackageManagerFactory->getPackageManager("tmp");
+    return m_xPackageManagerFactory->getPackageManager(u"tmp"_ustr);
 }
 Reference<css::deployment::XPackageManager>  ExtensionManager::getBakRepository()
 {
-    return m_xPackageManagerFactory->getPackageManager("bak");
+    return m_xPackageManagerFactory->getPackageManager(u"bak"_ustr);
 }
 
 Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
@@ -229,7 +229,7 @@ ExtensionManager::getPackageManager(std::u16string_view repository)
         xPackageManager = getBakRepository();
     else
         throw lang::IllegalArgumentException(
-            "No valid repository name provided.",
+            u"No valid repository name provided."_ustr,
             static_cast<cppu::OWeakObject*>(this), 0);
     return xPackageManager;
 }
@@ -349,7 +349,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
     {
         uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
-            "Extension Manager: exception during getExtensionsWithSameIdentifier",
+            u"Extension Manager: exception during getExtensionsWithSameIdentifier"_ustr,
             static_cast<OWeakObject*>(this), exc);
     }
 }
@@ -594,12 +594,12 @@ bool ExtensionManager::doChecksForAddExtension(
     } catch (const uno::Exception &) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception in doChecksForAddExtension",
+            u"Extension Manager: exception in doChecksForAddExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
         throw exc;
     } catch (...) {
         throw uno::RuntimeException(
-            "Extension Manager: unexpected exception in doChecksForAddExtension",
+            u"Extension Manager: unexpected exception in doChecksForAddExtension"_ustr,
             static_cast<OWeakObject*>(this));
     }
 }
@@ -620,7 +620,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
         xPackageManager = getSharedRepository();
     else
         throw lang::IllegalArgumentException(
-            "No valid repository name provided.",
+            u"No valid repository name provided."_ustr,
             static_cast<cppu::OWeakObject*>(this), 0);
     //We must make sure that the xTmpExtension is not create twice, because this
     //would remove the first one.
@@ -744,14 +744,14 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                     } catch (const uno::Exception &) {
                         uno::Any excOccurred = ::cppu::getCaughtException();
                         css::deployment::DeploymentException exc(
-                            "Extension Manager: Exception on fireModified() "
-                            "in the scope of 'if (failedPrereq == 0)'",
+                            u"Extension Manager: Exception on fireModified() "
+                            "in the scope of 'if (failedPrereq == 0)'"_ustr,
                             static_cast<OWeakObject*>(this), excOccurred);
                         throw exc;
                     } catch (...) {
                         throw uno::RuntimeException(
-                            "Extension Manager: RuntimeException on fireModified() "
-                            "in the scope of 'if (failedPrereq == 0)'",
+                            u"Extension Manager: RuntimeException on fireModified() "
+                            "in the scope of 'if (failedPrereq == 0)'"_ustr,
                             static_cast<OWeakObject*>(this));
                     }
                 }
@@ -763,7 +763,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                         ::cppu::throwException(pSilentCommandEnv->m_UnknownException);
                     else
                         throw css::deployment::DeploymentException (
-                            "Extension Manager: exception during addExtension, ckeckPrerequisites failed",
+                            u"Extension Manager: exception during addExtension, ckeckPrerequisites failed"_ustr,
                             static_cast<OWeakObject*>(this), uno::Any());
                 }
             }
@@ -835,7 +835,7 @@ void ExtensionManager::removeExtension(
             xPackageManager = getSharedRepository();
         else
             throw lang::IllegalArgumentException(
-                "No valid repository name provided.",
+                u"No valid repository name provided."_ustr,
                 static_cast<cppu::OWeakObject*>(this), 0);
 
         bUserDisabled = isUserDisabled(identifier, fileName);
@@ -868,7 +868,7 @@ void ExtensionManager::removeExtension(
     } catch (...) {
         excOccurred1 = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception during removeExtension",
+            u"Extension Manager: exception during removeExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred1);
         excOccurred1 <<= exc;
     }
@@ -925,7 +925,7 @@ void ExtensionManager::enableExtension(
         OUString repository = extension->getRepositoryName();
         if (repository != "user")
             throw lang::IllegalArgumentException(
-                "No valid repository name provided.",
+                u"No valid repository name provided."_ustr,
                 static_cast<cppu::OWeakObject*>(this), 0);
 
         bUserDisabled = isUserDisabled(dp_misc::getIdentifier(extension),
@@ -948,7 +948,7 @@ void ExtensionManager::enableExtension(
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception during enableExtension",
+            u"Extension Manager: exception during enableExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
         excOccurred <<= exc;
     }
@@ -1006,7 +1006,7 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     } catch (...) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception during disableExtension",
+            u"Extension Manager: exception during disableExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
         throw exc;
     }
@@ -1027,7 +1027,7 @@ void ExtensionManager::disableExtension(
         const OUString repository( extension->getRepositoryName());
         if (repository != "user")
             throw lang::IllegalArgumentException(
-                "No valid repository name provided.",
+                u"No valid repository name provided."_ustr,
                 static_cast<cppu::OWeakObject*>(this), 0);
 
         const OUString id(dp_misc::getIdentifier(extension));
@@ -1049,7 +1049,7 @@ void ExtensionManager::disableExtension(
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception during disableExtension",
+            u"Extension Manager: exception during disableExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
         excOccurred <<= exc;
     }
@@ -1144,7 +1144,7 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
-            "Extension Manager: exception during enableExtension",
+            u"Extension Manager: exception during enableExtension"_ustr,
             static_cast<OWeakObject*>(this), exc);
    }
 }
@@ -1223,7 +1223,7 @@ void ExtensionManager::reinstallDeployedExtensions(
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
-            "Extension Manager: exception during enableExtension",
+            u"Extension Manager: exception during enableExtension"_ustr,
             static_cast<OWeakObject*>(this), exc);
     }
 }
@@ -1239,13 +1239,13 @@ sal_Bool ExtensionManager::synchronize(
         sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
         bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
-        progressShared.update("\n\n");
+        progressShared.update(u"\n\n"_ustr);
 
         OUString sSynchronizingBundled(StrSyncRepository());
         sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
         bModified |= static_cast<bool>(getBundledRepository()->synchronize(xAbortChannel, xCmdEnv));
-        progressBundled.update("\n\n");
+        progressBundled.update(u"\n\n"_ustr);
 
         //Always determine the active extension.
         //TODO: Is this still necessary?  (It used to be necessary for the
@@ -1272,9 +1272,9 @@ sal_Bool ExtensionManager::synchronize(
             //so we will no repeat this every time OOo starts.
             OSL_FAIL("Extensions Manager: synchronize");
         }
-        OUString lastSyncBundled("$BUNDLED_EXTENSIONS_USER/lastsynchronized");
+        OUString lastSyncBundled(u"$BUNDLED_EXTENSIONS_USER/lastsynchronized"_ustr);
         writeLastModified(lastSyncBundled, xCmdEnv, m_xContext);
-        OUString lastSyncShared("$SHARED_EXTENSIONS_USER/lastsynchronized");
+        OUString lastSyncShared(u"$SHARED_EXTENSIONS_USER/lastsynchronized"_ustr);
         writeLastModified(lastSyncShared, xCmdEnv, m_xContext);
         return bModified;
     } catch ( const css::deployment::DeploymentException& ) {
@@ -1290,7 +1290,7 @@ sal_Bool ExtensionManager::synchronize(
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
-            "Extension Manager: exception in synchronize",
+            u"Extension Manager: exception in synchronize"_ustr,
             static_cast<OWeakObject*>(this), exc);
     }
 }
@@ -1400,7 +1400,7 @@ void ExtensionManager::check()
     ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            "ExtensionManager instance has already been disposed!",
+            u"ExtensionManager instance has already been disposed!"_ustr,
             static_cast<OWeakObject *>(this) );
     }
 }

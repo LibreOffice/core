@@ -68,24 +68,24 @@ TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent
         configuration::theDefaultProvider::get(xContext));
     uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", uno::Any(OUString("/org.openoffice.Office.OptionsDialog/Nodes"))}
+        {"nodepath", uno::Any(u"/org.openoffice.Office.OptionsDialog/Nodes"_ustr)}
     }));
     m_xNameAccessNodes.set(
-        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args),
+        xConfig->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, args),
         uno::UNO_QUERY_THROW);
 
     // get the 'get more extensions here' url
     uno::Sequence<uno::Any> args2(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", uno::Any(OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories"))}
+        {"nodepath", uno::Any(u"/org.openoffice.Office.ExtensionManager/ExtensionRepositories"_ustr)}
     }));
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
     xNameAccessRepositories.set(
-        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args2),
+        xConfig->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, args2),
         uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-        uno::Any value = xNameAccessRepositories->getByName("WebsiteLink");
+        uno::Any value = xNameAccessRepositories->getByName(u"WebsiteLink"_ustr);
         m_sGetExtensionsURL = value.get< OUString > ();
      }
     catch ( const uno::Exception& )
@@ -395,7 +395,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
 
-        uno::Any anyLeaves = xNode->getByName("Leaves");
+        uno::Any anyLeaves = xNode->getByName(u"Leaves"_ustr);
         uno::Reference< XInterface > xIntLeaves = anyLeaves.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xLeaves( xIntLeaves, uno::UNO_QUERY_THROW );
 
@@ -408,7 +408,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
             uno::Reference< beans::XPropertySet > xLeaf( xIntLeaf, uno::UNO_QUERY_THROW );
             //investigate the Id property if it matches the extension identifier which
             //has been passed in.
-            uno::Any anyValue = xLeaf->getPropertyValue("Id");
+            uno::Any anyValue = xLeaf->getPropertyValue(u"Id"_ustr);
 
             OUString sId = anyValue.get< OUString >();
             if ( sId == aId.Value )
@@ -468,7 +468,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     {
         ToTop();
         throw frame::TerminationVetoException(
-            "The office cannot be closed while the Extension Manager is running",
+            u"The office cannot be closed while the Extension Manager is running"_ustr,
             static_cast<frame::XTerminateListener*>(this));
     }
     else

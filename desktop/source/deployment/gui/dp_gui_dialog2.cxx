@@ -223,13 +223,13 @@ bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
 OUString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Long nPos )
 {
     if ( nPos >= static_cast<tools::Long>(getItemCount()) )
-        return "CMD_NONE";
+        return u"CMD_NONE"_ustr;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "desktop/ui/extensionmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"desktop/ui/extensionmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
 #if ENABLE_EXTENSION_UPDATE
-    xPopup->append("CMD_UPDATE", DpResId( RID_CTX_ITEM_CHECK_UPDATE ) );
+    xPopup->append(u"CMD_UPDATE"_ustr, DpResId( RID_CTX_ITEM_CHECK_UPDATE ) );
 #endif
 
     if ( ! GetEntryData( nPos )->m_bLocked )
@@ -237,18 +237,18 @@ OUString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Lo
         if ( GetEntryData( nPos )->m_bUser )
         {
             if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                xPopup->append("CMD_DISABLE", DpResId(RID_CTX_ITEM_DISABLE));
+                xPopup->append(u"CMD_DISABLE"_ustr, DpResId(RID_CTX_ITEM_DISABLE));
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                xPopup->append("CMD_ENABLE", DpResId(RID_CTX_ITEM_ENABLE));
+                xPopup->append(u"CMD_ENABLE"_ustr, DpResId(RID_CTX_ITEM_ENABLE));
         }
         if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
         {
-            xPopup->append("CMD_REMOVE", DpResId(RID_CTX_ITEM_REMOVE));
+            xPopup->append(u"CMD_REMOVE"_ustr, DpResId(RID_CTX_ITEM_REMOVE));
         }
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
-        xPopup->append("CMD_SHOW_LICENSE", DpResId(RID_STR_SHOW_LICENSE_CMD));
+        xPopup->append(u"CMD_SHOW_LICENSE"_ustr, DpResId(RID_STR_SHOW_LICENSE_CMD));
 
     return xPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
 }
@@ -385,8 +385,8 @@ bool DialogHelper::installForAllUsers(bool &bInstallForAll)
 {
     const SolarMutexGuard guard;
     incBusy();
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "desktop/ui/installforalldialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InstallForAllDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), u"desktop/ui/installforalldialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"InstallForAllDialog"_ustr));
     short nRet = xQuery->run();
     xQuery.reset();
     decBusy();
@@ -407,7 +407,7 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 
 //                             ExtMgrDialog
 ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
-    : GenericDialogController(pParent, "desktop/ui/extensionmanager.ui", "ExtensionManagerDialog")
+    : GenericDialogController(pParent, u"desktop/ui/extensionmanager.ui"_ustr, u"ExtensionManagerDialog"_ustr)
     , DialogHelper(pManager->getContext(), m_xDialog.get())
     , m_sAddPackages(DpResId(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
@@ -421,22 +421,22 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     , m_nProgress(0)
     , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
     , m_pManager(pManager)
-    , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window("scroll", true)))
-    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
-    , m_xOptionsBtn(m_xBuilder->weld_button("optionsbtn"))
-    , m_xAddBtn(m_xBuilder->weld_button("addbtn"))
-    , m_xRemoveBtn(m_xBuilder->weld_button("removebtn"))
-    , m_xEnableBtn(m_xBuilder->weld_button("enablebtn"))
-    , m_xUpdateBtn(m_xBuilder->weld_button("updatebtn"))
-    , m_xCloseBtn(m_xBuilder->weld_button("close"))
-    , m_xBundledCbx(m_xBuilder->weld_check_button("bundled"))
-    , m_xSharedCbx(m_xBuilder->weld_check_button("shared"))
-    , m_xUserCbx(m_xBuilder->weld_check_button("user"))
-    , m_xGetExtensions(m_xBuilder->weld_link_button("getextensions"))
-    , m_xProgressText(m_xBuilder->weld_label("progressft"))
-    , m_xProgressBar(m_xBuilder->weld_progress_bar("progressbar"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
-    , m_xSearchEntry(m_xBuilder->weld_entry("search"))
+    , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
+    , m_xOptionsBtn(m_xBuilder->weld_button(u"optionsbtn"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"addbtn"_ustr))
+    , m_xRemoveBtn(m_xBuilder->weld_button(u"removebtn"_ustr))
+    , m_xEnableBtn(m_xBuilder->weld_button(u"enablebtn"_ustr))
+    , m_xUpdateBtn(m_xBuilder->weld_button(u"updatebtn"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xBundledCbx(m_xBuilder->weld_check_button(u"bundled"_ustr))
+    , m_xSharedCbx(m_xBuilder->weld_check_button(u"shared"_ustr))
+    , m_xUserCbx(m_xBuilder->weld_check_button(u"user"_ustr))
+    , m_xGetExtensions(m_xBuilder->weld_link_button(u"getextensions"_ustr))
+    , m_xProgressText(m_xBuilder->weld_label(u"progressft"_ustr))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progressbar"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xSearchEntry(m_xBuilder->weld_entry(u"search"_ustr))
 {
     m_xExtensionBox->InitFromDialog(this);
 
@@ -674,7 +674,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }();
 
     // All files at top:
-    xFilePicker->appendFilter( StrAllFiles, "*.*" );
+    xFilePicker->appendFilter( StrAllFiles, u"*.*"_ustr );
     xFilePicker->appendFilter( DpResId(RID_STR_ALL_SUPPORTED), supportedFilters.makeStringAndClear() );
     // then supported ones:
     for (auto const& elem : title2filter)
@@ -713,7 +713,7 @@ void ExtMgrDialog::enableRemoveButton( bool bEnable )
     }
     else
     {
-        m_xRemoveBtn->set_tooltip_text("");
+        m_xRemoveBtn->set_tooltip_text(u""_ustr);
     }
 }
 
@@ -803,7 +803,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
     }
     else
     {
-        m_xAddBtn->set_tooltip_text("");
+        m_xAddBtn->set_tooltip_text(u""_ustr);
     }
 
     m_xUpdateBtn->set_sensitive( !bLockInterface && m_xExtensionBox->getItemCount() );
@@ -984,7 +984,7 @@ void ExtMgrDialog::Close()
 
 //UpdateRequiredDialog
 UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionManager *pManager)
-    : GenericDialogController(pParent, "desktop/ui/updaterequireddialog.ui", "UpdateRequiredDialog")
+    : GenericDialogController(pParent, u"desktop/ui/updaterequireddialog.ui"_ustr, u"UpdateRequiredDialog"_ustr)
     , DialogHelper(pManager->getContext(), m_xDialog.get())
     , m_sCloseText(DpResId(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)
@@ -995,14 +995,14 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     , m_nProgress(0)
     , m_aIdle( "UpdateRequiredDialog m_aIdle TimeOutHdl" )
     , m_pManager(pManager)
-    , m_xExtensionBox(new ExtensionBox_Impl(m_xBuilder->weld_scrolled_window("scroll", true)))
-    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
-    , m_xUpdateNeeded(m_xBuilder->weld_label("updatelabel"))
-    , m_xUpdateBtn(m_xBuilder->weld_button("ok"))
-    , m_xCloseBtn(m_xBuilder->weld_button("disable"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
-    , m_xProgressText(m_xBuilder->weld_label("progresslabel"))
-    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
+    , m_xExtensionBox(new ExtensionBox_Impl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
+    , m_xUpdateNeeded(m_xBuilder->weld_label(u"updatelabel"_ustr))
+    , m_xUpdateBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"disable"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xProgressText(m_xBuilder->weld_label(u"progresslabel"_ustr))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
 {
     m_xExtensionBox->setExtensionManager(pManager);
 
@@ -1342,8 +1342,8 @@ void UpdateRequiredDialog::disableAllEntries()
 //                             ShowLicenseDialog
 ShowLicenseDialog::ShowLicenseDialog(weld::Window* pParent,
                                      const uno::Reference< deployment::XPackage> &xPackage)
-    : GenericDialogController(pParent, "desktop/ui/showlicensedialog.ui", "ShowLicenseDialog")
-    , m_xLicenseText(m_xBuilder->weld_text_view("textview"))
+    : GenericDialogController(pParent, u"desktop/ui/showlicensedialog.ui"_ustr, u"ShowLicenseDialog"_ustr)
+    , m_xLicenseText(m_xBuilder->weld_text_view(u"textview"_ustr))
 {
     m_xLicenseText->set_size_request(m_xLicenseText->get_approximate_digit_width() * 72,
                                      m_xLicenseText->get_height_rows(21));
@@ -1365,7 +1365,7 @@ UpdateRequiredDialogService::UpdateRequiredDialogService( SAL_UNUSED_PARAMETER u
 // XServiceInfo
 OUString UpdateRequiredDialogService::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.ui.UpdateRequiredDialog";
+    return u"com.sun.star.comp.deployment.ui.UpdateRequiredDialog"_ustr;
 }
 
 sal_Bool UpdateRequiredDialogService::supportsService( const OUString& ServiceName )
@@ -1375,7 +1375,7 @@ sal_Bool UpdateRequiredDialogService::supportsService( const OUString& ServiceNa
 
 css::uno::Sequence< OUString > UpdateRequiredDialogService::getSupportedServiceNames()
 {
-    return { "com.sun.star.deployment.ui.UpdateRequiredDialog" };
+    return { u"com.sun.star.deployment.ui.UpdateRequiredDialog"_ustr };
 }
 
 

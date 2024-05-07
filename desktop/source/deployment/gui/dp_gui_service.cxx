@@ -161,7 +161,7 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
 // XServiceInfo
 OUString ServiceImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.ui.PackageManagerDialog";
+    return u"com.sun.star.comp.deployment.ui.PackageManagerDialog"_ustr;
 }
 
 sal_Bool ServiceImpl::supportsService( const OUString& ServiceName )
@@ -171,7 +171,7 @@ sal_Bool ServiceImpl::supportsService( const OUString& ServiceName )
 
 css::uno::Sequence< OUString > ServiceImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.deployment.ui.PackageManagerDialog" };
+    return { u"com.sun.star.deployment.ui.PackageManagerDialog"_ustr };
 }
 
 // XAsynchronousExecutableDialog
@@ -220,7 +220,7 @@ void ServiceImpl::startExecuteModal(
             OSL_ASSERT( ! bAppUp );
             app.reset( new MyApp );
             if (! InitVCL() )
-                throw RuntimeException( "Cannot initialize VCL!",
+                throw RuntimeException( u"Cannot initialize VCL!"_ustr,
                                         static_cast<OWeakObject *>(this) );
             Application::SetDisplayName(
                 utl::ConfigManager::getProductName() +

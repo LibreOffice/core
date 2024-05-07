@@ -270,7 +270,7 @@ void UpdateDialog::Thread::execute()
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
 
-        bool bSharedReadOnly = extMgr->isReadOnlyRepository("shared");
+        bool bSharedReadOnly = extMgr->isReadOnlyRepository(u"shared"_ustr);
 
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
@@ -421,7 +421,7 @@ UpdateDialog::UpdateDialog(
     uno::Reference< uno::XComponentContext > const & context,
     weld::Window * parent, std::vector<uno::Reference< deployment::XPackage > > && vExtensionList,
     std::vector< dp_gui::UpdateData > * updateData)
-    : GenericDialogController(parent, "desktop/ui/updatedialog.ui", "UpdateDialog")
+    : GenericDialogController(parent, u"desktop/ui/updatedialog.ui"_ustr, u"UpdateDialog"_ustr)
     , m_context(context)
     , m_none(DpResId(RID_DLG_UPDATE_NONE))
     , m_noInstallable(DpResId(RID_DLG_UPDATE_NOINSTALLABLE))
@@ -436,20 +436,20 @@ UpdateDialog::UpdateDialog(
     , m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE))
     , m_updateData(*updateData)
     , m_thread(new UpdateDialog::Thread(context, *this, std::move(vExtensionList)))
-    , m_xChecking(m_xBuilder->weld_label("UPDATE_CHECKING"))
-    , m_xThrobber(m_xBuilder->weld_spinner("THROBBER"))
-    , m_xUpdate(m_xBuilder->weld_label("UPDATE_LABEL"))
-    , m_xUpdates(m_xBuilder->weld_tree_view("checklist"))
-    , m_xAll(m_xBuilder->weld_check_button("UPDATE_ALL"))
-    , m_xDescription(m_xBuilder->weld_label("DESCRIPTION_LABEL"))
-    , m_xPublisherLabel(m_xBuilder->weld_label("PUBLISHER_LABEL"))
-    , m_xPublisherLink(m_xBuilder->weld_link_button("PUBLISHER_LINK"))
-    , m_xReleaseNotesLabel(m_xBuilder->weld_label("RELEASE_NOTES_LABEL"))
-    , m_xReleaseNotesLink(m_xBuilder->weld_link_button("RELEASE_NOTES_LINK"))
-    , m_xDescriptions(m_xBuilder->weld_text_view("DESCRIPTIONS"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xClose(m_xBuilder->weld_button("close"))
-    , m_xHelp(m_xBuilder->weld_button("help"))
+    , m_xChecking(m_xBuilder->weld_label(u"UPDATE_CHECKING"_ustr))
+    , m_xThrobber(m_xBuilder->weld_spinner(u"THROBBER"_ustr))
+    , m_xUpdate(m_xBuilder->weld_label(u"UPDATE_LABEL"_ustr))
+    , m_xUpdates(m_xBuilder->weld_tree_view(u"checklist"_ustr))
+    , m_xAll(m_xBuilder->weld_check_button(u"UPDATE_ALL"_ustr))
+    , m_xDescription(m_xBuilder->weld_label(u"DESCRIPTION_LABEL"_ustr))
+    , m_xPublisherLabel(m_xBuilder->weld_label(u"PUBLISHER_LABEL"_ustr))
+    , m_xPublisherLink(m_xBuilder->weld_link_button(u"PUBLISHER_LINK"_ustr))
+    , m_xReleaseNotesLabel(m_xBuilder->weld_label(u"RELEASE_NOTES_LABEL"_ustr))
+    , m_xReleaseNotesLink(m_xBuilder->weld_link_button(u"RELEASE_NOTES_LINK"_ustr))
+    , m_xDescriptions(m_xBuilder->weld_text_view(u"DESCRIPTIONS"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xClose(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xHelp(m_xBuilder->weld_button(u"help"_ustr))
 {
     auto nWidth = m_xDescriptions->get_approximate_digit_width() * 62;
     auto nHeight = m_xDescriptions->get_height_rows(8);
@@ -608,16 +608,16 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
                 comphelper::getProcessComponentContext()));
 
         uno::Sequence< uno::Any > aArgumentList{ uno::Any(comphelper::makePropertyValue(
-            "nodepath",
-            OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob"))) };
+            u"nodepath"_ustr,
+            u"org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob"_ustr)) };
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgumentList ),
             uno::UNO_QUERY_THROW );
 
         util::URL aURL;
-        xNameAccess->getByName("URL") >>= aURL.Complete;
+        xNameAccess->getByName(u"URL"_ustr) >>= aURL.Complete;
 
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference < util::XURLTransformer > xTransformer = util::URLTransformer::create(xContext);
@@ -631,8 +631,8 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
 
         if( xDispatch.is() )
         {
-            uno::Sequence aPropList{ comphelper::makePropertyValue("updateList", rItemList),
-                                     comphelper::makePropertyValue("prepareOnly", bPrepareOnly) };
+            uno::Sequence aPropList{ comphelper::makePropertyValue(u"updateList"_ustr, rItemList),
+                                     comphelper::makePropertyValue(u"prepareOnly"_ustr, bPrepareOnly) };
 
             xDispatch->dispatch(aURL, aPropList );
         }
@@ -695,12 +695,12 @@ void UpdateDialog::clearDescription()
 {
     m_xPublisherLabel->hide();
     m_xPublisherLink->hide();
-    m_xPublisherLink->set_label("");
-    m_xPublisherLink->set_uri("");
+    m_xPublisherLink->set_label(u""_ustr);
+    m_xPublisherLink->set_uri(u""_ustr);
     m_xReleaseNotesLabel->hide();
     m_xReleaseNotesLink->hide();
-    m_xReleaseNotesLink->set_uri( "" );
-    m_xDescriptions->set_text("");
+    m_xReleaseNotesLink->set_uri( u""_ustr );
+    m_xDescriptions->set_text(u""_ustr);
 }
 
 bool UpdateDialog::showDescription(uno::Reference< xml::dom::XNode > const & aUpdateInfo)
@@ -715,7 +715,7 @@ bool UpdateDialog::showDescription(uno::Reference< deployment::XPackage > const 
     OSL_ASSERT(aExtension.is());
     beans::StringPair pubInfo = aExtension->getPublisherInfo();
     return showDescription(std::make_pair(pubInfo.First, pubInfo.Second),
-                           "");
+                           u""_ustr);
 }
 
 bool UpdateDialog::showDescription(std::pair< OUString, OUString > const & pairPublisher,
@@ -759,10 +759,10 @@ void UpdateDialog::getIgnoredUpdates()
 {
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(m_context));
-    beans::NamedValue aValue( "nodepath", uno::Any( OUString(IGNORED_UPDATES) ) );
+    beans::NamedValue aValue( u"nodepath"_ustr, uno::Any( OUString(IGNORED_UPDATES) ) );
     uno::Sequence< uno::Any > args{ uno::Any(aValue) };
 
-    uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, args), uno::UNO_QUERY_THROW );
     const uno::Sequence< OUString > aElementNames = xNameAccess->getElementNames();
 
     for ( OUString const & aIdentifier : aElementNames )
@@ -862,8 +862,8 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
                 if (data.unsatisfiedDependencies.hasElements())
                 {
                     // create error string for version mismatch
-                    OUString sVersion( "%VERSION" );
-                    OUString sProductName( "%PRODUCTNAME" );
+                    OUString sVersion( u"%VERSION"_ustr );
+                    OUString sProductName( u"%PRODUCTNAME"_ustr );
                     sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
                     if ( nPos >= 0 )
                     {

@@ -75,7 +75,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
     {
         if ( aName == "parcel" )
         {
-            m_sLang = xAttribs->getValueByName( "language" );
+            m_sLang = xAttribs->getValueByName( u"language"_ustr );
         }
         ++skipIndex;
     }

@@ -167,14 +167,14 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
                 {
                     uno::Reference< xml::xpath::XXPathAPI > xPath = xml::xpath::XPathAPI::create(m_ctx);
 
-                    xPath->registerNS("desc", xRoot->getNamespaceURI());
-                    xPath->registerNS("xlink", "http://www.w3.org/1999/xlink");
+                    xPath->registerNS(u"desc"_ustr, xRoot->getNamespaceURI());
+                    xPath->registerNS(u"xlink"_ustr, u"http://www.w3.org/1999/xlink"_ustr);
 
                     try
                     {
                         uno::Reference< xml::dom::XNode > xNode(
                             xPath->selectSingleNode(
-                                xRoot, "desc:identifier/@value" ));
+                                xRoot, u"desc:identifier/@value"_ustr ));
                         if ( xNode.is() )
                             aExtIdentifier = xNode->getNodeValue();
                     }
@@ -241,7 +241,7 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 
         uno::Reference< task::XAbortChannel > xAbortChannel;
         extMgr->addExtension(
-            sSourceDir, uno::Sequence<beans::NamedValue>(), "user",
+            sSourceDir, uno::Sequence<beans::NamedValue>(), u"user"_ustr,
             xAbortChannel, pCmdEnv );
     }
     catch ( css::uno::Exception & )
@@ -258,7 +258,7 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 
 OUString OO3ExtensionMigration::getImplementationName()
 {
-    return "com.sun.star.comp.desktop.migration.OOo3Extensions";
+    return u"com.sun.star.comp.desktop.migration.OOo3Extensions"_ustr;
 }
 
 
@@ -270,7 +270,7 @@ sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
 
 Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames()
 {
-    return { "com.sun.star.migration.Extensions" };
+    return { u"com.sun.star.migration.Extensions"_ustr };
 }
 
 

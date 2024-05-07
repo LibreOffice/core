@@ -104,7 +104,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_v
 
     const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     const Reference< XContainerQuery > xFilterFactory(
-            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext ),
+            xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.FilterFactory"_ustr, xContext ),
             UNO_QUERY_THROW );
 
     std::shared_ptr<const SfxFilter> pBestMatch;
@@ -114,7 +114,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_v
     while ( xFilterEnum->hasMoreElements() )
     {
         comphelper::SequenceAsHashMap aFilterProps( xFilterEnum->nextElement() );
-        const OUString aName( aFilterProps.getUnpackedValueOrDefault( "Name", OUString() ) );
+        const OUString aName( aFilterProps.getUnpackedValueOrDefault( u"Name"_ustr, OUString() ) );
         if ( !aName.isEmpty() )
         {
             std::shared_ptr<const SfxFilter> pFilter( SfxFilter::GetFilterByName( aName ) );
@@ -136,7 +136,7 @@ std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
     {
         const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         const Reference< document::XTypeDetection > xTypeDetector(
-            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", xContext ),
+            xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.TypeDetection"_ustr, xContext ),
             UNO_QUERY_THROW );
         const OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
@@ -273,13 +273,13 @@ void batchPrint( std::u16string_view rPrinterName, const Reference< XPrintable >
     Sequence < PropertyValue > aPrinterArgs;
     if( !aPrinterName.isEmpty() )
     {
-        aPrinterArgs = { comphelper::makePropertyValue("Name", aPrinterName) };
+        aPrinterArgs = { comphelper::makePropertyValue(u"Name"_ustr, aPrinterName) };
         xDoc->setPrinter( aPrinterArgs );
     }
 
     // print ( also without user interaction )
-    aPrinterArgs = { comphelper::makePropertyValue("FileName", aOutFile),
-                     comphelper::makePropertyValue("Wait", true) };
+    aPrinterArgs = { comphelper::makePropertyValue(u"FileName"_ustr, aOutFile),
+                     comphelper::makePropertyValue(u"Wait"_ustr, true) };
     xDoc->print( aPrinterArgs );
 }
 
@@ -292,31 +292,31 @@ OUString getName(const Reference< XInterface > & xDoc)
     utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
     OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
     if (aDocService == "com.sun.star.text.TextDocument")
-        return "Writer";
+        return u"Writer"_ustr;
     else if (aDocService == "com.sun.star.text.GlobalDocument")
-        return "Writer master";
+        return u"Writer master"_ustr;
     else if (aDocService == "com.sun.star.text.WebDocument")
-        return "Writer/Web";
+        return u"Writer/Web"_ustr;
     else if (aDocService == "com.sun.star.drawing.DrawingDocument")
-        return "Draw";
+        return u"Draw"_ustr;
     else if (aDocService == "com.sun.star.presentation.PresentationDocument")
-        return "Impress";
+        return u"Impress"_ustr;
     else if (aDocService == "com.sun.star.sheet.SpreadsheetDocument")
-        return "Calc";
+        return u"Calc"_ustr;
     else if (aDocService == "com.sun.star.script.BasicIDE")
-        return "Basic";
+        return u"Basic"_ustr;
     else if (aDocService == "com.sun.star.formula.FormulaProperties")
-        return "Math";
+        return u"Math"_ustr;
     else if (aDocService == "com.sun.star.sdb.RelationDesign")
-        return "Relation Design";
+        return u"Relation Design"_ustr;
     else if (aDocService == "com.sun.star.sdb.QueryDesign")
-        return "Query Design";
+        return u"Query Design"_ustr;
     else if (aDocService == "com.sun.star.sdb.TableDesign")
-        return "Table Design";
+        return u"Table Design"_ustr;
     else if (aDocService == "com.sun.star.sdb.DataSourceBrowser")
-        return "Data Source Browser";
+        return u"Data Source Browser"_ustr;
     else if (aDocService == "com.sun.star.sdb.DatabaseDocument")
-        return "Database";
+        return u"Database"_ustr;
 
     return OUString();
 }
@@ -357,10 +357,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         std::vector<PropertyValue> aArgs;
 
         // mark request as user interaction from outside
-        aArgs.emplace_back("Referer", 0, Any(OUString("private:OpenEvent")),
+        aArgs.emplace_back("Referer", 0, Any(u"private:OpenEvent"_ustr),
                            PropertyState_DIRECT_VALUE);
 
-        OUString aTarget("_default");
+        OUString aTarget(u"_default"_ustr);
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
@@ -464,7 +464,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     // We have to be listener to catch errors during dispatching URLs.
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
-                    Sequence < PropertyValue > aArgs2{ comphelper::makePropertyValue("SynchronMode",
+                    Sequence < PropertyValue > aArgs2{ comphelper::makePropertyValue(u"SynchronMode"_ustr,
                                                                                      true) };
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
@@ -645,7 +645,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 Sequence<PropertyValue> conversionProperties( nProps );
                                 auto pconversionProperties = conversionProperties.getArray();
                                 pconversionProperties[0].Name = "ConversionRequestOrigin";
-                                pconversionProperties[0].Value <<= OUString("CommandLine");
+                                pconversionProperties[0].Value <<= u"CommandLine"_ustr;
                                 pconversionProperties[1].Name = "Overwrite";
                                 pconversionProperties[1].Value <<= true;
 
@@ -753,12 +753,12 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                         {
                             // create the printer
                             Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue(
-                                "Name", aDispatchRequest.aPrinterName) };
+                                u"Name"_ustr, aDispatchRequest.aPrinterName) };
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
                         // print ( also without user interaction )
-                        Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue("Wait",
+                        Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue(u"Wait"_ustr,
                                                                                                true) };
                         xDoc->print( aPrinterArgs );
                     }
@@ -795,8 +795,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
     {
         // Execute all asynchronous dispatches now after we placed them into our request container!
         Sequence < PropertyValue > aArgs{
-            comphelper::makePropertyValue("Referer", OUString("private:OpenEvent")),
-            comphelper::makePropertyValue("SynchronMode", true)
+            comphelper::makePropertyValue(u"Referer"_ustr, u"private:OpenEvent"_ustr),
+            comphelper::makePropertyValue(u"SynchronMode"_ustr, true)
         };
 
         for (const DispatchHolder & aDispatche : aDispatches)

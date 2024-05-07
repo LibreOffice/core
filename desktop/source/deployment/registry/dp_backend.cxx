@@ -107,7 +107,7 @@ void PackageRegistryBackend::check()
     ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            "PackageRegistryBackend instance has already been disposed!",
+            u"PackageRegistryBackend instance has already been disposed!"_ustr,
             static_cast<OWeakObject *>(this) );
     }
 }
@@ -128,7 +128,7 @@ void PackageRegistryBackend::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            "caught unexpected exception while disposing!",
+            u"caught unexpected exception while disposing!"_ustr,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -151,11 +151,11 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
             if (!mediaType.isEmpty() &&
                 mediaType != xPackage->getPackageType()->getMediaType())
                 throw lang::IllegalArgumentException
-                    ("XPackageRegistry::bindPackage: media type does not match",
+                    (u"XPackageRegistry::bindPackage: media type does not match"_ustr,
                      static_cast<OWeakObject*>(this), 1);
             if (xPackage->isRemoved() != bRemoved)
                 throw deployment::InvalidRemovedParameterException(
-                    "XPackageRegistry::bindPackage: bRemoved parameter does not match",
+                    u"XPackageRegistry::bindPackage: bRemoved parameter does not match"_ustr,
                     static_cast<OWeakObject*>(this), xPackage->isRemoved(), xPackage);
             return xPackage;
         }
@@ -338,7 +338,7 @@ void Package::check() const
     ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            "Package instance has already been disposed!",
+            u"Package instance has already been disposed!"_ustr,
             static_cast<OWeakObject *>(const_cast<Package *>(this)));
     }
 }
@@ -393,7 +393,7 @@ void Package::checkAborted(
 {
     if (abortChannel.is() && abortChannel->isAborted()) {
         throw CommandAbortedException(
-            "abort!", static_cast<OWeakObject *>(this) );
+            u"abort!"_ustr, static_cast<OWeakObject *>(this) );
     }
 }
 
@@ -546,7 +546,7 @@ void Package::exportTo(
     }
 
     if (!bOk)
-        throw RuntimeException( "UCB transferContent() failed!", nullptr );
+        throw RuntimeException( u"UCB transferContent() failed!"_ustr, nullptr );
 }
 
 void Package::fireModified()
@@ -707,7 +707,7 @@ PackageRegistryBackend * Package::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            "Failed to get the BackendImpl",
+            u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<Package *>(this)));
     }
     return pBackend;

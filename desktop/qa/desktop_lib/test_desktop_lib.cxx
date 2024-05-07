@@ -97,7 +97,7 @@ static LibreOfficeKitDocumentType getDocumentTypeFromName(const char* pName)
 class DesktopLOKTest : public UnoApiTest
 {
 public:
-    DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
+    DesktopLOKTest() : UnoApiTest(u"/desktop/qa/data/"_ustr),
     m_nSelectionBeforeSearchResult(0),
     m_nSelectionAfterSearchResult(0),
     m_bModified(false),
@@ -602,11 +602,11 @@ void DesktopLOKTest::testSearchCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::Any(OUString("foo"))},
+        {"SearchItem.SearchString", uno::Any(u"foo"_ustr)},
         {"SearchItem.Backward", uno::Any(false)},
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
-    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -632,11 +632,11 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::Any(OUString("foo"))},
+        {"SearchItem.SearchString", uno::Any(u"foo"_ustr)},
         {"SearchItem.Backward", uno::Any(false)},
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
-    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
     // This was 1, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
@@ -736,7 +736,7 @@ void DesktopLOKTest::testPasteWriter()
     uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xTextPortionEnumeration = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), xTextPortion->getPropertyValue("TextPortionType").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, xTextPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     // Without the accompanying fix in place, this test would have failed, as we had a comment
     // between "foo" and "baz".
     CPPUNIT_ASSERT(!xTextPortionEnumeration->hasMoreElements());
@@ -759,7 +759,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
 
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AT_PARAGRAPH.
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
 
     // Delete the pasted picture, and paste again with a custom anchor type.
     uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
@@ -767,10 +767,10 @@ void DesktopLOKTest::testPasteWriterJPEG()
     {
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
-    dispatchCommand(mxComponent, ".uno:Paste", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, aPropertyValues);
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
 }
 
 void DesktopLOKTest::testUndoWriter()
@@ -1017,7 +1017,7 @@ void DesktopLOKTest::testWriterComments()
     uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xTextPortionEnumeration = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), xTextPortion->getPropertyValue("TextPortionType").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, xTextPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
 
     // Type "test" and finish editing.
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
@@ -1028,9 +1028,9 @@ void DesktopLOKTest::testWriterComments()
     Scheduler::ProcessEventsToIdle();
 
     // Test that the typed characters ended up in the right window.
-    auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
+    auto xTextField = xTextPortion->getPropertyValue(u"TextField"_ustr).get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xTextField->getPropertyValue(u"Content"_ustr).get<OUString>());
 }
 
 void DesktopLOKTest::testTrackChanges()
@@ -1229,7 +1229,7 @@ void DesktopLOKTest::testSheetDragDrop()
         rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
         aValue >>= sValue;
-        CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.A1:E1"), sValue);
+        CPPUNIT_ASSERT_EQUAL(u"Sheet5.A1:E1"_ustr, sValue);
     }
 
     // Check selection content
@@ -1285,7 +1285,7 @@ void DesktopLOKTest::testSheetDragDrop()
         rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
         aValue >>= sValue;
-        CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.D1:H1"), sValue);
+        CPPUNIT_ASSERT_EQUAL(u"Sheet5.D1:H1"_ustr, sValue);
     }
 
     // Check selection content
@@ -2071,7 +2071,7 @@ void DesktopLOKTest::testRedlineWriter()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
@@ -2098,7 +2098,7 @@ void DesktopLOKTest::testRedlineCalc()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
@@ -2299,10 +2299,10 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
 
     constexpr int nCanvasWidth = 256;
@@ -2342,7 +2342,7 @@ void DesktopLOKTest::testGetFontSubset()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OUString aFontName = rtl::Uri::encode(
-        OUString("Liberation Sans"),
+        u"Liberation Sans"_ustr,
         rtl_UriCharClassRelSegment,
         rtl_UriEncodeKeepEscapes,
         RTL_TEXTENCODING_UTF8
@@ -2680,30 +2680,30 @@ void DesktopLOKTest::testRunMacro()
 
 void DesktopLOKTest::testExtractParameter()
 {
-    OUString aOptions("Language=de-DE");
+    OUString aOptions(u"Language=de-DE"_ustr);
     OUString aValue = extractParameter(aOptions, u"Language");
-    CPPUNIT_ASSERT_EQUAL(OUString("de-DE"), aValue);
+    CPPUNIT_ASSERT_EQUAL(u"de-DE"_ustr, aValue);
     CPPUNIT_ASSERT_EQUAL(OUString(), aOptions);
 
     aOptions = "Language=en-US,Something";
     aValue = extractParameter(aOptions, u"Language");
-    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("Something"), aOptions);
+    CPPUNIT_ASSERT_EQUAL(u"en-US"_ustr, aValue);
+    CPPUNIT_ASSERT_EQUAL(u"Something"_ustr, aOptions);
 
     aOptions = "SomethingElse,Language=cs-CZ";
     aValue = extractParameter(aOptions, u"Language");
-    CPPUNIT_ASSERT_EQUAL(OUString("cs-CZ"), aValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("SomethingElse"), aOptions);
+    CPPUNIT_ASSERT_EQUAL(u"cs-CZ"_ustr, aValue);
+    CPPUNIT_ASSERT_EQUAL(u"SomethingElse"_ustr, aOptions);
 
     aOptions = "Something1,Language=hu-HU,Something2";
     aValue = extractParameter(aOptions, u"Language");
-    CPPUNIT_ASSERT_EQUAL(OUString("hu-HU"), aValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2"), aOptions);
+    CPPUNIT_ASSERT_EQUAL(u"hu-HU"_ustr, aValue);
+    CPPUNIT_ASSERT_EQUAL(u"Something1,Something2"_ustr, aOptions);
 
     aOptions = "Something1,Something2=blah,Something3";
     aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
+    CPPUNIT_ASSERT_EQUAL(u"Something1,Something2=blah,Something3"_ustr, aOptions);
 }
 
 void DesktopLOKTest::readFileIntoByteVector(std::u16string_view sFilename, std::vector<unsigned char> & rByteVector)
@@ -3029,7 +3029,7 @@ void DesktopLOKTest::testDialogPaste()
     Control* pCtrlFocused = GetFocusControl(pWindow.get());
     CPPUNIT_ASSERT(pCtrlFocused);
     CPPUNIT_ASSERT_EQUAL(WindowType::COMBOBOX, pCtrlFocused->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("www.softwarelibre.org.bo"), pCtrlFocused->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"www.softwarelibre.org.bo"_ustr, pCtrlFocused->GetText());
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
@@ -3287,15 +3287,15 @@ void DesktopLOKTest::testMetricField()
     CPPUNIT_ASSERT(pWin);
 
     WindowUIObject aWinUI(pWin);
-    std::unique_ptr<UIObject> pUIWin(aWinUI.get_child("selectwidth"));
+    std::unique_ptr<UIObject> pUIWin(aWinUI.get_child(u"selectwidth"_ustr));
     CPPUNIT_ASSERT(pUIWin);
 
     StringMap aMap;
-    aMap["VALUE"] = "75.06";
-    pUIWin->execute("VALUE", aMap);
+    aMap[u"VALUE"_ustr] = "75.06";
+    pUIWin->execute(u"VALUE"_ustr, aMap);
 
     StringMap aRet = pUIWin->get_state();
-    CPPUNIT_ASSERT_EQUAL(aMap["VALUE"], aRet["Value"]);
+    CPPUNIT_ASSERT_EQUAL(aMap[u"VALUE"_ustr], aRet[u"Value"_ustr]);
 }
 
 void DesktopLOKTest::testJumpCursor()
@@ -3363,7 +3363,7 @@ void DesktopLOKTest::testRenderSearchResult_WriterNode()
 
     if (bDumpBitmap)
     {
-        SvFileStream aStream("~/SearchResultBitmap.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"~/SearchResultBitmap.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         vcl::PngImageWriter aPNGWriter(aStream);
         aPNGWriter.write(aBitmap);
     }
@@ -3408,7 +3408,7 @@ void DesktopLOKTest::testRenderSearchResult_CommonNode()
 
     if (bDumpBitmap)
     {
-        SvFileStream aStream("~/SearchResultBitmap.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"~/SearchResultBitmap.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         vcl::PngImageWriter aPNGWriter(aStream);
         aPNGWriter.write(aBitmap);
     }

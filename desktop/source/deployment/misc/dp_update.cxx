@@ -222,8 +222,8 @@ bool onlyBundledExtensions(
 OUString getExtensionDefaultUpdateURL()
 {
     OUString sUrl(
-        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
-        ":Version:ExtensionUpdateURL}");
+        u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
+        ":Version:ExtensionUpdateURL}"_ustr);
     ::rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
 }

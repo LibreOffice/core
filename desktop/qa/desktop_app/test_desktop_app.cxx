@@ -72,7 +72,7 @@ void Test::testTdf100837() {
 
     {
         // 1. Test default behaviour: Office URIs define open mode
-        TestSupplier supplier{ "foo", "ms-word:ofe|u|bar1", "ms-word:ofv|u|bar2", "ms-word:nft|u|bar3", "baz" };
+        TestSupplier supplier{ u"foo"_ustr, u"ms-word:ofe|u|bar1"_ustr, u"ms-word:ofv|u|bar2"_ustr, u"ms-word:nft|u|bar3"_ustr, u"baz"_ustr };
         desktop::CommandLineArgs args(supplier);
         auto vOpenList      = args.GetOpenList();
         auto vForceOpenList = args.GetForceOpenList();
@@ -80,37 +80,37 @@ void Test::testTdf100837() {
         auto vForceNewList  = args.GetForceNewList();
         // 2 documents go to Open list: foo; baz
         CPPUNIT_ASSERT_EQUAL(decltype(vOpenList.size())(2), vOpenList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vOpenList[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vOpenList[1]);
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, vOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, vOpenList[1]);
         // 1 document goes to ForceOpen list: bar1
         CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar1"_ustr, vForceOpenList[0]);
         // 1 document goes to View list: bar2
         CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar2"_ustr, vViewList[0]);
         // 1 document goes to ForceNew list: bar3
         CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar3"_ustr, vForceNewList[0]);
     }
 
     {
         // 2. Test explicit open mode arguments. Office URI commands should have no effect
-        TestSupplier supplier{ "--view", "ms-word:ofe|u|foo", "-o", "ms-word:ofv|u|bar", "ms-word:nft|u|baz" };
+        TestSupplier supplier{ u"--view"_ustr, u"ms-word:ofe|u|foo"_ustr, u"-o"_ustr, u"ms-word:ofv|u|bar"_ustr, u"ms-word:nft|u|baz"_ustr };
         desktop::CommandLineArgs args(supplier);
         auto vViewList      = args.GetViewList();
         auto vForceOpenList = args.GetForceOpenList();
         // 1 document goes to View list: foo
         CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vViewList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, vViewList[0]);
         // 2 documents go to ForceOpen list: bar, baz
         CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(2), vForceOpenList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"),  vForceOpenList[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vForceOpenList[1]);
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr,  vForceOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, vForceOpenList[1]);
     }
 
     {
         // 3. Test encoded URLs
-        TestSupplier supplier{ "foo", "ms-word:ofe%7Cu%7cbar1", "ms-word:ofv%7cu%7Cbar2", "ms-word:nft%7Cu%7cbar3", "baz" };
+        TestSupplier supplier{ u"foo"_ustr, u"ms-word:ofe%7Cu%7cbar1"_ustr, u"ms-word:ofv%7cu%7Cbar2"_ustr, u"ms-word:nft%7Cu%7cbar3"_ustr, u"baz"_ustr };
         desktop::CommandLineArgs args(supplier);
         auto vOpenList = args.GetOpenList();
         auto vForceOpenList = args.GetForceOpenList();
@@ -118,17 +118,17 @@ void Test::testTdf100837() {
         auto vForceNewList = args.GetForceNewList();
         // 2 documents go to Open list: foo; baz
         CPPUNIT_ASSERT_EQUAL(decltype(vOpenList.size())(2), vOpenList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vOpenList[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vOpenList[1]);
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, vOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, vOpenList[1]);
         // 1 document goes to ForceOpen list: bar1
         CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar1"_ustr, vForceOpenList[0]);
         // 1 document goes to View list: bar2
         CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar2"_ustr, vViewList[0]);
         // 1 document goes to ForceNew list: bar3
         CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+        CPPUNIT_ASSERT_EQUAL(u"bar3"_ustr, vForceNewList[0]);
     }
 }
 

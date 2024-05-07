@@ -320,7 +320,7 @@ oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pDat
 // XServiceInfo
 OUString SAL_CALL RequestHandlerController::getImplementationName()
 {
-    return "com.sun.star.comp.RequestHandlerController";
+    return u"com.sun.star.comp.RequestHandlerController"_ustr;
 }
 
 sal_Bool RequestHandlerController::supportsService(
@@ -1306,14 +1306,14 @@ bool RequestHandler::ExecuteCmdLineRequests(
     static std::vector<DispatchWatcher::DispatchRequest> aDispatchList;
 
     // Create dispatch list for dispatch watcher
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aInFilter, DispatchWatcher::REQUEST_INFILTER, "", aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, "", aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, "", aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aStartList, DispatchWatcher::REQUEST_START, "", aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, "", aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aInFilter, DispatchWatcher::REQUEST_INFILTER, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aStartList, DispatchWatcher::REQUEST_START, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, u""_ustr, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, "", aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, "", aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, u""_ustr, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, u""_ustr, aRequest.aModule );
     AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.aImageConversionType, aRequest.bTextCat, aRequest.bScriptCat );
     bool bShutdown( false );
 

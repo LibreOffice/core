@@ -841,19 +841,19 @@ OUString lcl_getCurrentDocumentMimeType(const LibLODocument_Impl* pDocument)
 {
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
-        return "";
+        return u""_ustr;
 
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     if (!pObjectShell)
-        return "";
+        return u""_ustr;
 
     SfxMedium* pMedium = pObjectShell->GetMedium();
     if (!pMedium)
-        return "";
+        return u""_ustr;
 
     auto pFilter = pMedium->GetFilter();
     if (!pFilter)
-        return "";
+        return u""_ustr;
 
     return pFilter->GetMimeType();
 }
@@ -922,7 +922,7 @@ void ExecuteOrientationChange()
                 getUndoManager( pViewFrm->GetFrame().GetFrameInterface() ) );
 
     if ( mxUndoManager.is() )
-        mxUndoManager->enterUndoContext( "" );
+        mxUndoManager->enterUndoContext( u""_ustr );
 
     SfxPoolItemHolder aResult;
     pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, aResult);
@@ -3296,7 +3296,7 @@ void FunctionBasedURPConnection::close()
     SAL_INFO("lok.urp", "Requested to close FunctionBasedURPConnection");
 }
 
-OUString FunctionBasedURPConnection::getDescription() { return ""; }
+OUString FunctionBasedURPConnection::getDescription() { return u""_ustr; }
 
 void FunctionBasedURPConnection::setBridge(const Reference<XBridge>& xBridge) { m_URPBridge = xBridge; }
 }
@@ -5081,7 +5081,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(false);
-        pDevice->AddTempDevFont(sMagicFileName, "");
+        pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
         OutputDevice::ImplRefreshAllFontData(false);
     }
 #endif
@@ -7546,7 +7546,7 @@ static void preloadData()
         std::cerr << "CheckExtensionDependencies failed" << std::endl;
 
     // inhibit forced 2nd synchronization from Main
-    ::rtl::Bootstrap::set( "DISABLE_EXTENSION_SYNCHRONIZATION", "true");
+    ::rtl::Bootstrap::set( u"DISABLE_EXTENSION_SYNCHRONIZATION"_ustr, u"true"_ustr);
 
     std::cerr << "Preload textencodings"; // sal_textenc
     // Use RTL_TEXTENCODING_MS_1250 to trigger Impl_getTextEncodingData
@@ -7601,7 +7601,7 @@ static void preloadData()
         css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
         css::i18n::LineBreakUserOptions aUserOptions;
         css::i18n::LineBreakHyphenationOptions aHyphOptions( LinguMgr::GetHyphenator(), css::uno::Sequence<beans::PropertyValue>(), 1 );
-        xBreakIterator->getLineBreak("", /*nMaxBreakPos*/0, aLocales[0], /*nMinBreakPos*/0, aHyphOptions, aUserOptions);
+        xBreakIterator->getLineBreak(u""_ustr, /*nMaxBreakPos*/0, aLocales[0], /*nMinBreakPos*/0, aHyphOptions, aUserOptions);
     }
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
@@ -7684,7 +7684,7 @@ static void preloadData()
     uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);
     for (const auto& component : preloadComponents)
     {
-        auto xComp = xCompLoader->loadComponentFromURL(component, "_blank", 0, szEmptyArgs);
+        auto xComp = xCompLoader->loadComponentFromURL(component, u"_blank"_ustr, 0, szEmptyArgs);
         xComp->dispose();
     }
 

@@ -65,7 +65,7 @@ std::shared_ptr<rtl::Bootstrap> & UnoRc()
 {
     static std::shared_ptr<rtl::Bootstrap> theRc = []()
         {
-            OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
+            OUString unorc( u"$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") ""_ustr );
             ::rtl::Bootstrap::expandMacros( unorc );
             auto ret = std::make_shared<::rtl::Bootstrap>( unorc );
             OSL_ASSERT( ret->getHandle() != nullptr );
@@ -82,12 +82,12 @@ OUString generateOfficePipeId()
     if (aLocateResult != ::utl::Bootstrap::PATH_EXISTS &&
         aLocateResult != ::utl::Bootstrap::PATH_VALID)
     {
-        throw Exception("Extension Manager: Could not obtain path for UserInstallation.", nullptr);
+        throw Exception(u"Extension Manager: Could not obtain path for UserInstallation."_ustr, nullptr);
     }
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if (!digest) {
-        throw RuntimeException("cannot get digest rtl_Digest_AlgorithmMD5!", nullptr );
+        throw RuntimeException(u"cannot get digest rtl_Digest_AlgorithmMD5!"_ustr, nullptr );
     }
 
     sal_uInt8 const * data =
@@ -390,16 +390,16 @@ oslProcess raiseProcess(
     case osl_Process_E_None:
         break;
     case osl_Process_E_NotFound:
-        throw RuntimeException( "image not found!", nullptr );
+        throw RuntimeException( u"image not found!"_ustr, nullptr );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( "timeout occurred!", nullptr );
+        throw RuntimeException( u"timeout occurred!"_ustr, nullptr );
     case osl_Process_E_NoPermission:
-        throw RuntimeException( "permission denied!", nullptr );
+        throw RuntimeException( u"permission denied!"_ustr, nullptr );
     case osl_Process_E_Unknown:
-        throw RuntimeException( "unknown error!", nullptr );
+        throw RuntimeException( u"unknown error!"_ustr, nullptr );
     case osl_Process_E_InvalidError:
     default:
-        throw RuntimeException( "unmapped error!", nullptr );
+        throw RuntimeException( u"unmapped error!"_ustr, nullptr );
     }
 
     return hProcess;
@@ -411,11 +411,11 @@ OUString generateRandomPipeId()
     // compute some good pipe id:
     static rtlRandomPool s_hPool = rtl_random_createPool();
     if (s_hPool == nullptr)
-        throw RuntimeException( "cannot create random pool!?", nullptr );
+        throw RuntimeException( u"cannot create random pool!?"_ustr, nullptr );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
             s_hPool, bytes, std::size(bytes) ) != rtl_Random_E_None) {
-        throw RuntimeException( "random pool error!?", nullptr );
+        throw RuntimeException( u"random pool error!?"_ustr, nullptr );
     }
     OUStringBuffer buf;
     for (unsigned char byte : bytes) {
@@ -436,7 +436,7 @@ Reference<XInterface> resolveUnoURL(
     for (int i = 0; i <= 40; ++i) // 20 seconds
     {
         if (abortChannel != nullptr && abortChannel->isAborted()) {
-            throw ucb::CommandAbortedException( "abort!" );
+            throw ucb::CommandAbortedException( u"abort!"_ustr );
         }
         try {
             return xUnoUrlResolver->resolve( connectString );
@@ -479,7 +479,7 @@ OUString readConsole()
         OUString value = OStringToOUString(std::string_view(buf), osl_getThreadTextEncoding());
         return value.trim();
     }
-    throw css::uno::RuntimeException("reading from stdin failed");
+    throw css::uno::RuntimeException(u"reading from stdin failed"_ustr);
 }
 
 void TRACE(OUString const & sText)
@@ -491,7 +491,7 @@ void syncRepositories(
     bool force, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
     OUString sDisable;
-    ::rtl::Bootstrap::get( "DISABLE_EXTENSION_SYNCHRONIZATION", sDisable, OUString() );
+    ::rtl::Bootstrap::get( u"DISABLE_EXTENSION_SYNCHRONIZATION"_ustr, sDisable, OUString() );
     if (!sDisable.isEmpty())
         return;
 

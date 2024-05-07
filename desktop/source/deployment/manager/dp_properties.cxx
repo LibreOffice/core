@@ -84,18 +84,18 @@ ExtensionProperties::ExtensionProperties(
         else
         {
             throw lang::IllegalArgumentException(
-                "Extension Manager: unknown property", nullptr, -1);
+                u"Extension Manager: unknown property"_ustr, nullptr, -1);
         }
     }
 }
 
 OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
 {
-    OUString value("0");
+    OUString value(u"0"_ustr);
     if (! (v.Value >>= value) )
     {
         throw lang::IllegalArgumentException(
-            "Extension Manager: wrong property value", nullptr, -1);
+            u"Extension Manager: wrong property value"_ustr, nullptr, -1);
     }
     return value;
 }

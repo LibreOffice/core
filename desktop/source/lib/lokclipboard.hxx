@@ -51,7 +51,7 @@ public:
         const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
         override;
-    OUString SAL_CALL getName() override { return "CLIPBOARD"; }
+    OUString SAL_CALL getName() override { return u"CLIPBOARD"_ustr; }
 
     // XClipboardEx
     sal_Int8 SAL_CALL getRenderingCapabilities() override { return 0; }

@@ -145,12 +145,12 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : t_helper( args, xComponentContext ),
       m_xBasicLibTypeInfo( new Package::TypeInfo(
-                               "application/vnd.sun.star.basic-library",
+                               u"application/vnd.sun.star.basic-library"_ustr,
                                OUString() /* no file filter */,
                                DpResId(RID_STR_BASIC_LIB)
                                ) ),
       m_xDialogLibTypeInfo( new Package::TypeInfo(
-                                "application/vnd.sun.star.dialog-library",
+                                u"application/vnd.sun.star.dialog-library"_ustr,
                                 OUString() /* no file filter */,
                                 DpResId(RID_STR_DIALOG_LIB)
                                 ) ),
@@ -160,7 +160,7 @@ BackendImpl::BackendImpl(
 
     if (!transientMode())
     {
-        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+        OUString dbFile = makeURL(getCachePath(), u"backenddb.xml"_ustr);
         m_backendDb.reset(
             new ScriptBackendDb(getComponentContext(), dbFile));
     }
@@ -170,7 +170,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.script.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.script.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -239,12 +239,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for script.xlb:
             if (create_ucb_content(
-                    nullptr, makeURL( url, "script.xlb" ),
+                    nullptr, makeURL( url, u"script.xlb"_ustr ),
                     xCmdEnv, false /* no throw */ ))
                 mediaType = "application/vnd.sun.star.basic-library";
             // probe for dialog.xlb:
             else if (create_ucb_content(
-                         nullptr, makeURL( url, "dialog.xlb" ),
+                         nullptr, makeURL( url, u"dialog.xlb"_ustr ),
                          xCmdEnv, false /* no throw */ ))
                 mediaType = "application/vnd.sun.star.dialog-library";
         }
@@ -260,7 +260,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.equalsIgnoreAsciiCase("application"))
         {
-            OUString dialogURL( makeURL( url, "dialog.xlb" ) );
+            OUString dialogURL( makeURL( url, u"dialog.xlb"_ustr ) );
             if (! create_ucb_content(
                     nullptr, dialogURL, xCmdEnv, false /* no throw */ )) {
                 dialogURL.clear();
@@ -268,7 +268,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
             if (subType.equalsIgnoreAsciiCase("vnd.sun.star.basic-library"))
             {
-                OUString scriptURL( makeURL( url, "script.xlb"));
+                OUString scriptURL( makeURL( url, u"script.xlb"_ustr));
                 if (! create_ucb_content(
                         nullptr, scriptURL, xCmdEnv, false /* no throw */ )) {
                     scriptURL.clear();
@@ -305,7 +305,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            "Failed to get the BackendImpl",
+            u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -406,7 +406,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             xScriptLibs.set(
                 xComponentContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.script.ApplicationScriptLibraryContainer",
+                    u"com.sun.star.script.ApplicationScriptLibraryContainer"_ustr,
                     xComponentContext ), UNO_QUERY_THROW );
         }
 
@@ -414,7 +414,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             xDialogLibs.set(
                 xComponentContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.script.ApplicationDialogLibraryContainer",
+                    u"com.sun.star.script.ApplicationDialogLibraryContainer"_ustr,
                     xComponentContext ), UNO_QUERY_THROW );
         }
     }

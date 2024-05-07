@@ -169,7 +169,7 @@ void BackendDb::revokeEntry(std::u16string_view url)
         Reference<css::xml::dom::XElement> entry(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
-            entry->setAttribute("revoked", "true");
+            entry->setAttribute(u"revoked"_ustr, u"true"_ustr);
             save();
         }
     }
@@ -191,7 +191,7 @@ bool BackendDb::activateEntry(std::u16string_view url)
         if (entry.is())
         {
             //no attribute "active" means it is active, that is, registered.
-            entry->removeAttribute("revoked");
+            entry->removeAttribute(u"revoked"_ustr);
             save();
             ret = true;
         }
@@ -214,7 +214,7 @@ bool BackendDb::hasActiveEntry(std::u16string_view url)
         Reference<css::xml::dom::XElement> entry(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
-            OUString sActive = entry->getAttribute("revoked");
+            OUString sActive = entry->getAttribute(u"revoked"_ustr);
             if (!(sActive == "true"))
                 ret = true;
         }
@@ -484,7 +484,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         const Reference<css::xml::dom::XElement> keyElement(
             doc->createElementNS(sNameSpace, sPrefix +  ":" + sElementName));
 
-        keyElement->setAttribute("url", url);
+        keyElement->setAttribute(u"url"_ustr, url);
 
         const Reference<css::xml::dom::XNode> keyNode(
             keyElement, UNO_QUERY_THROW);
@@ -632,7 +632,7 @@ void RegisteredDb::addEntry(OUString const & url)
             Reference<css::xml::dom::XElement> helpElement(
                 doc->createElementNS(sNameSpace, sPrefix +  ":" + sEntry));
 
-            helpElement->setAttribute("url", url);
+            helpElement->setAttribute(u"url"_ustr, url);
 
             Reference<css::xml::dom::XNode> helpNode(
                 helpElement, UNO_QUERY_THROW);

@@ -127,7 +127,7 @@ void PackageRegistryImpl::check()
     ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            "PackageRegistry instance has already been disposed!",
+            u"PackageRegistry instance has already been disposed!"_ustr,
             static_cast<OWeakObject *>(this) );
     }
 }
@@ -282,7 +282,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         Reference<container::XContentEnumerationAccess>(
             xComponentContext->getServiceManager(),
             UNO_QUERY_THROW )->createContentEnumeration(
-                "com.sun.star.deployment.PackageRegistryBackend" ) );
+                u"com.sun.star.deployment.PackageRegistryBackend"_ustr ) );
     if (xEnum.is())
     {
         while (xEnum->hasMoreElements())
@@ -361,7 +361,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // dump tables:
     {
         t_registryset allBackends;
-        dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
+        dp_misc::TRACE(u"> [dp_registry.cxx] media-type detection:\n\n"_ustr );
         for (auto const& elem : that->m_filter2mediaType)
         {
             const Reference<deployment::XPackageRegistry> xBackend(
@@ -375,7 +375,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                         ->getImplementationName()
                 + "\n");
         }
-        dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
+        dp_misc::TRACE( u"> [dp_registry.cxx] ambiguous backends:\n\n"_ustr );
         for (auto const& ambiguousBackend : that->m_ambiguousBackends)
         {
             OUStringBuffer buf;

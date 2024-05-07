@@ -179,8 +179,8 @@ UpdateInstallDialog::UpdateInstallDialog(
     weld::Window* pParent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
     css::uno::Reference< css::uno::XComponentContext > const & xCtx)
-    : GenericDialogController(pParent, "desktop/ui/updateinstalldialog.ui",
-                              "UpdateInstallDialog")
+    : GenericDialogController(pParent, u"desktop/ui/updateinstalldialog.ui"_ustr,
+                              u"UpdateInstallDialog"_ustr)
     , m_thread(new Thread(xCtx, *this, aVecUpdateData))
     , m_bError(false)
     , m_bNoEntry(true)
@@ -192,13 +192,13 @@ UpdateInstallDialog::UpdateInstallDialog(
     , m_sErrorLicenseDeclined(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))
     , m_sNoInstall(DpResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))
     , m_sThisErrorOccurred(DpResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
-    , m_xFt_action(m_xBuilder->weld_label("DOWNLOADING"))
-    , m_xStatusbar(m_xBuilder->weld_progress_bar("STATUSBAR"))
-    , m_xFt_extension_name(m_xBuilder->weld_label("EXTENSION_NAME"))
-    , m_xMle_info(m_xBuilder->weld_text_view("INFO"))
-    , m_xHelp(m_xBuilder->weld_button("help"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFt_action(m_xBuilder->weld_label(u"DOWNLOADING"_ustr))
+    , m_xStatusbar(m_xBuilder->weld_progress_bar(u"STATUSBAR"_ustr))
+    , m_xFt_extension_name(m_xBuilder->weld_label(u"EXTENSION_NAME"_ustr))
+    , m_xMle_info(m_xBuilder->weld_text_view(u"INFO"_ustr))
+    , m_xHelp(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xMle_info->set_size_request(m_xMle_info->get_approximate_digit_width() * 52,
                                   m_xMle_info->get_height_rows(5));
@@ -292,7 +292,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         //create the download directory in the temp folder
         OUString sTempDir;
         if (::osl::FileBase::getTempDirURL(sTempDir) != ::osl::FileBase::E_None)
-            throw css::uno::Exception("Could not get URL for the temp directory. No extensions will be installed.", nullptr);
+            throw css::uno::Exception(u"Could not get URL for the temp directory. No extensions will be installed."_ustr, nullptr);
 
         //create a unique name for the directory
         OUString tempEntry, destFolder;
@@ -439,15 +439,15 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             if (!updateData.aUpdateSource.is() && !updateData.sLocalURL.isEmpty())
             {
-                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::Any(OUString("1")));
+                css::beans::NamedValue prop(u"EXTENSION_UPDATE"_ustr, css::uno::Any(u"1"_ustr));
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "user", xAbortChannel, m_updateCmdEnv);
+                        u"user"_ustr, xAbortChannel, m_updateCmdEnv);
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "shared", xAbortChannel, m_updateCmdEnv);
+                        u"shared"_ustr, xAbortChannel, m_updateCmdEnv);
             }
             else if (updateData.aUpdateSource.is())
             {
@@ -456,15 +456,15 @@ void UpdateInstallDialog::Thread::installExtensions()
                 //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
                 //that a license is displayed when updating from the shared repository, although the
                 //shared extension was installed using "SUPPRESS_LICENSE".
-                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::Any(OUString("1")));
+                css::beans::NamedValue prop(u"EXTENSION_UPDATE"_ustr, css::uno::Any(u"1"_ustr));
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "user", xAbortChannel, m_updateCmdEnv);
+                        u"user"_ustr, xAbortChannel, m_updateCmdEnv);
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "shared", xAbortChannel, m_updateCmdEnv);
+                        u"shared"_ustr, xAbortChannel, m_updateCmdEnv);
             }
         }
         catch (css::deployment::DeploymentException & de)

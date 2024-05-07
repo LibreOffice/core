@@ -263,7 +263,7 @@ void MigrationImpl::setMigrationCompleted()
 {
     try {
         uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
-        aPropertySet->setPropertyValue("MigrationCompleted", uno::Any(true));
+        aPropertySet->setPropertyValue(u"MigrationCompleted"_ustr, uno::Any(true));
         uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
     } catch (...) {
         // fail silently
@@ -276,7 +276,7 @@ bool MigrationImpl::checkMigrationCompleted()
     try {
         uno::Reference< XPropertySet > aPropertySet(
             getConfigAccess("org.openoffice.Setup/Office"), uno::UNO_QUERY_THROW);
-        aPropertySet->getPropertyValue("MigrationCompleted") >>= bMigrationCompleted;
+        aPropertySet->getPropertyValue(u"MigrationCompleted"_ustr) >>= bMigrationCompleted;
 
         if( !bMigrationCompleted && getenv("SAL_DISABLE_USERMIGRATION" ) ) {
             // migration prevented - fake its success
@@ -335,7 +335,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 
     // get migration description from org.openoffice.Setup/Migration
     // and build vector of migration steps
-    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName("MigrationSteps"), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(u"MigrationSteps"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference< XNameAccess > tmpAccess;
     uno::Sequence< OUString > tmpSeq;
     migrations_vr vrMigrations(new migrations_v);
@@ -346,37 +346,37 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
         migration_step tmpStep;
 
         // read included files from current step description
-        if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq) {
+        if (tmpAccess->getByName(u"IncludedFiles"_ustr) >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.includeFiles.push_back(rSeqEntry);
         }
 
         // excluded files...
-        if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq) {
+        if (tmpAccess->getByName(u"ExcludedFiles"_ustr) >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeFiles.push_back(rSeqEntry);
         }
 
         // included nodes...
-        if (tmpAccess->getByName("IncludedNodes") >>= tmpSeq) {
+        if (tmpAccess->getByName(u"IncludedNodes"_ustr) >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.includeConfig.push_back(rSeqEntry);
         }
 
         // excluded nodes...
-        if (tmpAccess->getByName("ExcludedNodes") >>= tmpSeq) {
+        if (tmpAccess->getByName(u"ExcludedNodes"_ustr) >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeConfig.push_back(rSeqEntry);
         }
 
         // excluded extensions...
-        if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq) {
+        if (tmpAccess->getByName(u"ExcludedExtensions"_ustr) >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeExtensions.push_back(rSeqEntry);
         }
 
         // generic service
-        tmpAccess->getByName("MigrationService") >>= tmpStep.service;
+        tmpAccess->getByName(u"MigrationService"_ustr) >>= tmpStep.service;
 
         vrMigrations->push_back(tmpStep);
     }
@@ -772,17 +772,17 @@ next:
         OUString sMigratedColorScheme;
         uno::Reference<XPropertySet> aPropertySet(
             getConfigAccess("org.openoffice.Office.UI/ColorScheme", true), uno::UNO_QUERY_THROW);
-        if (aPropertySet->getPropertyValue("CurrentColorScheme") >>= sMigratedColorScheme)
+        if (aPropertySet->getPropertyValue(u"CurrentColorScheme"_ustr) >>= sMigratedColorScheme)
         {
             if (sMigratedColorScheme.equals(sMigratedProductName))
             {
-                aPropertySet->setPropertyValue("CurrentColorScheme",
+                aPropertySet->setPropertyValue(u"CurrentColorScheme"_ustr,
                                                uno::Any(sProductName));
                 uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
             }
             else if (sMigratedColorScheme.equals(sMigratedProductNameDark))
             {
-                aPropertySet->setPropertyValue("CurrentColorScheme",
+                aPropertySet->setPropertyValue(u"CurrentColorScheme"_ustr,
                                                uno::Any(sProductNameDark));
                 uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
             }
@@ -858,9 +858,9 @@ void MigrationImpl::runServices()
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(3);
     auto pseqArguments = seqArguments.getArray();
-    pseqArguments[0] <<= NamedValue("Productname",
+    pseqArguments[0] <<= NamedValue(u"Productname"_ustr,
                                    uno::Any(m_aInfo.productname));
-    pseqArguments[1] <<= NamedValue("UserData",
+    pseqArguments[1] <<= NamedValue(u"UserData"_ustr,
                                    uno::Any(m_aInfo.userdata));
 
 
@@ -880,7 +880,7 @@ void MigrationImpl::runServices()
                 if ( nSize > 0 )
                     seqExtDenyList = comphelper::arrayToSequence< OUString >(
                                           rMigration.excludeExtensions.data(), nSize );
-                pseqArguments[2] <<= NamedValue("ExtensionDenyList",
+                pseqArguments[2] <<= NamedValue(u"ExtensionDenyList"_ustr,
                                                uno::Any( seqExtDenyList ));
 
                 xMigrationJob.set(

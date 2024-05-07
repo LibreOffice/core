@@ -80,7 +80,7 @@ PackageManagerFactoryImpl::PackageManagerFactoryImpl(
 // XServiceInfo
 OUString PackageManagerFactoryImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.PackageManagerFactory";
+    return u"com.sun.star.comp.deployment.PackageManagerFactory"_ustr;
 }
 
 sal_Bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName )
@@ -91,7 +91,7 @@ sal_Bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName
 css::uno::Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNames()
 {
     // a private one:
-    return { "com.sun.star.comp.deployment.PackageManagerFactory" };
+    return { u"com.sun.star.comp.deployment.PackageManagerFactory"_ustr };
 }
 
 inline void PackageManagerFactoryImpl::check()
@@ -100,7 +100,7 @@ inline void PackageManagerFactoryImpl::check()
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "PackageManagerFactory instance has already been disposed!",
+            u"PackageManagerFactory instance has already been disposed!"_ustr,
             static_cast<OWeakObject *>(this) );
     }
 }

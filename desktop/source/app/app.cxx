@@ -206,11 +206,11 @@ namespace {
 // UserInstallation can be poisoned by old junk any more.
 bool cleanExtensionCache() {
     OUString buildId(
-        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
+        u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}"_ustr);
     rtl::Bootstrap::expandMacros(buildId); //TODO: detect failure
     OUString extDir(
-        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
-        ":UserInstallation}/user/extensions");
+        u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
+        ":UserInstallation}/user/extensions"_ustr);
     rtl::Bootstrap::expandMacros(extDir); //TODO: detect failure
     OUString buildIdFile(extDir + "/buildid");
     osl::File fr(buildIdFile);
@@ -247,8 +247,8 @@ bool cleanExtensionCache() {
     }
     utl::removeTree(extDir);
     OUString userRcFile(
-        "$UNO_USER_PACKAGES_CACHE/registry/"
-        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+        u"$UNO_USER_PACKAGES_CACHE/registry/"
+        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc"_ustr);
     rtl::Bootstrap::expandMacros(userRcFile); //TODO: detect failure
     rc = osl::File::remove(userRcFile);
     SAL_WARN_IF(
@@ -332,8 +332,8 @@ void DoRestartActionsIfNecessary(bool quickstart) {
 void RemoveIconCacheDirectory()
 {
     // See getIconCacheUrl in vcl/source/image/ImplImageTree.cxx
-    OUString sUrl = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-        "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache";
+    OUString sUrl = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+        "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache"_ustr;
     rtl::Bootstrap::expandMacros(sUrl);
     utl::UCBContentHelper::Kill(sUrl);
 }
@@ -402,7 +402,7 @@ CommandLineArgs& Desktop::GetCommandLineArgs()
 
 OUString ReplaceStringHookProc( const OUString& rStr )
 {
-    const static OUString sBuildId(utl::Bootstrap::getBuildIdData("development")),
+    const static OUString sBuildId(utl::Bootstrap::getBuildIdData(u"development"_ustr)),
         sBrandName(utl::ConfigManager::getProductName()),
         sVersion(utl::ConfigManager::getProductVersion()),
         sAboutBoxVersion(utl::ConfigManager::getAboutBoxProductVersion()),
@@ -485,7 +485,7 @@ void Desktop::Init()
     if (officecfg::Setup::Office::OfficeRestartInProgress::get())
     {
         if (!officecfg::Office::Common::Misc::FirstRun::get())
-            GetCommandLineArgs().RemoveFilesFromOpenListEndingWith(".oxt");
+            GetCommandLineArgs().RemoveFilesFromOpenListEndingWith(u".oxt"_ustr);
     }
 
     try
@@ -933,7 +933,7 @@ void handleSafeMode()
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     Reference< css::frame::XSynchronousDispatch > xSafeModeUI(
-        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.svx.SafeModeUI", xContext),
+        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.SafeModeUI"_ustr, xContext),
         css::uno::UNO_QUERY_THROW);
 
     css::util::URL aURL;
@@ -1002,7 +1002,7 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     g_xRecoveryUI.set(
-        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.svx.RecoveryUI", xContext),
+        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.RecoveryUI"_ustr, xContext),
         css::uno::UNO_QUERY_THROW);
     RefClearGuard<Reference< css::frame::XSynchronousDispatch >> refClearGuard(g_xRecoveryUI);
 
@@ -1225,7 +1225,7 @@ private:
         Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
 
         Reference< css::loader::XImplementationLoader > xJavaComponentLoader(
-            xSMgr->createInstance("com.sun.star.comp.stoc.JavaComponentLoader"),
+            xSMgr->createInstance(u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr),
             css::uno::UNO_QUERY_THROW);
 
         if (xJavaComponentLoader.is())
@@ -1233,7 +1233,7 @@ private:
             const css::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey;
             try
             {
-                xJavaComponentLoader->activate("", "", "", xRegistryKey);
+                xJavaComponentLoader->activate(u""_ustr, u""_ustr, u""_ustr, xRegistryKey);
             }
             catch (...)
             {
@@ -1367,7 +1367,7 @@ int Desktop::Main()
     OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
 #ifdef DBG_UTIL
     //include buildid in non product builds
-    aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
+    aTitle += " [" + utl::Bootstrap::getBuildIdData(u"development"_ustr) + "]";
 #endif
 
     SetDisplayName( aTitle );
@@ -2077,7 +2077,7 @@ void Desktop::OpenClients()
     }
 
     // write this information here to avoid depending on vcl in the crash reporter lib
-    CrashReporter::addKeyValue("Language", Application::GetSettings().GetLanguageTag().getBcp47(), CrashReporter::Create);
+    CrashReporter::addKeyValue(u"Language"_ustr, Application::GetSettings().GetLanguageTag().getBcp47(), CrashReporter::Create);
 
     RequestHandler::EnableRequests();
 
@@ -2295,7 +2295,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 // no visible task that could be activated found
                 Reference< css::awt::XWindow > xContainerWindow;
-                Reference< XFrame > xBackingFrame = xDesktop->findFrame( "_blank", 0);
+                Reference< XFrame > xBackingFrame = xDesktop->findFrame( u"_blank"_ustr, 0);
                 if (xBackingFrame.is())
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
@@ -2442,7 +2442,7 @@ void Desktop::OpenSplashScreen()
         aAppName = "web";
 
     // Which splash to use
-    OUString aSplashService( "com.sun.star.office.SplashScreen" );
+    OUString aSplashService( u"com.sun.star.office.SplashScreen"_ustr );
     if ( rCmdLine.HasSplashPipe() )
         aSplashService = "com.sun.star.office.PipeSplashScreen";
 
@@ -2453,7 +2453,7 @@ void Desktop::OpenSplashScreen()
         UNO_QUERY);
 
     if(m_rSplashScreen.is())
-            m_rSplashScreen->start("SplashScreen", 100);
+            m_rSplashScreen->start(u"SplashScreen"_ustr, 100);
 
 }
 #endif
@@ -2501,7 +2501,7 @@ IMPL_STATIC_LINK_NOARG(Desktop, AsyncInitFirstRun, Timer *, void)
     try
     {
         Reference< XJobExecutor > xExecutor = theJobExecutor::get( ::comphelper::getProcessComponentContext() );
-        xExecutor->trigger( "onFirstRunInitialization" );
+        xExecutor->trigger( u"onFirstRunInitialization"_ustr );
     }
     catch(const css::uno::Exception&)
     {
@@ -2521,7 +2521,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     {
         progress->SetSplashScreenProgress(60);
     }
-    Reference< XFrame > xBackingFrame = xDesktop->findFrame( "_blank", 0);
+    Reference< XFrame > xBackingFrame = xDesktop->findFrame( u"_blank"_ustr, 0);
     Reference< css::awt::XWindow > xContainerWindow;
 
     if (xBackingFrame.is())

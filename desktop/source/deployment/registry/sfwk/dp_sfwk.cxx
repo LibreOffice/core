@@ -115,7 +115,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException("Failed to get the BackendImpl",
+        throw RuntimeException(u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -165,9 +165,9 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
       m_xTypeInfo( new Package::TypeInfo(
-                       "application/vnd.sun.star.framework-script",
+                       u"application/vnd.sun.star.framework-script"_ustr,
                        OUString() /* no file filter */,
-                       "Scripting Framework Script Library"
+                       u"Scripting Framework Script Library"_ustr
                        ) )
 {
 }
@@ -176,7 +176,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.sfwk.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -217,7 +217,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for parcel-descriptor.xml:
             if (create_ucb_content(
-                    nullptr, makeURL( url, "parcel-descriptor.xml" ),
+                    nullptr, makeURL( url, u"parcel-descriptor.xml"_ustr ),
                     xCmdEnv, false /* no throw */ ))
             {
                 mediaType = "application/vnd.sun.star.framework-script";
@@ -237,9 +237,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.equalsIgnoreAsciiCase("vnd.sun.star.framework-script"))
             {
-                OUString lang = "Script";
+                OUString lang = u"Script"_ustr;
                 OUString sParcelDescURL = makeURL(
-                    url, "parcel-descriptor.xml" );
+                    url, u"parcel-descriptor.xml"_ustr );
 
                 ::ucbhelper::Content ucb_content;
 
@@ -268,14 +268,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
                 OUString sfwkLibType = DpResId( RID_STR_SFWK_LIB );
                 // replace %MACRONAME placeholder with language name
-                OUString MACRONAME( "%MACROLANG" );
+                OUString MACRONAME( u"%MACROLANG"_ustr );
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
                 sal_Int32 charsToReplace = MACRONAME.getLength();
                 sfwkLibType = sfwkLibType.replaceAt( startOfReplace, charsToReplace, lang );
-                dp_misc::TRACE("******************************\n");
+                dp_misc::TRACE(u"******************************\n"_ustr);
                 dp_misc::TRACE(" BackEnd detected lang = " + lang + "\n");
                 dp_misc::TRACE(" for url " + sParcelDescURL + "\n");
-                dp_misc::TRACE("******************************\n");
+                dp_misc::TRACE(u"******************************\n"_ustr);
                 return new PackageImpl( this, url, sfwkLibType, bRemoved, identifier);
             }
         }
@@ -297,15 +297,15 @@ void BackendImpl::PackageImpl:: initPackageHandler()
 
     if ( that->m_eContext == Context::User )
     {
-        aContext  <<= OUString("user");
+        aContext  <<= u"user"_ustr;
     }
     else if ( that->m_eContext == Context::Shared )
     {
-        aContext  <<= OUString("share");
+        aContext  <<= u"share"_ustr;
     }
     else if ( that->m_eContext == Context::Bundled )
     {
-        aContext  <<= OUString("bundled");
+        aContext  <<= u"bundled"_ustr;
     }
     else
     {
@@ -350,8 +350,8 @@ void BackendImpl::PackageImpl::processPackage_(
 {
     if ( !m_xNameCntrPkgHandler.is() )
     {
-        dp_misc::TRACE("no package handler!!!!\n");
-        throw RuntimeException( "No package Handler " );
+        dp_misc::TRACE(u"no package handler!!!!\n"_ustr);
+        throw RuntimeException( u"No package Handler "_ustr );
     }
 
     if (doRegisterPackage)

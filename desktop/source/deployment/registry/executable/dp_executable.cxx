@@ -106,12 +106,12 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
       m_xExecutableTypeInfo(new Package::TypeInfo(
-                                "application/vnd.sun.star.executable",
-                                "", "Executable" ) )
+                                u"application/vnd.sun.star.executable"_ustr,
+                                u""_ustr, u"Executable"_ustr ) )
 {
     if (!transientMode())
     {
-        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+        OUString dbFile = makeURL(getCachePath(), u"backenddb.xml"_ustr);
         m_backendDb.reset(
             new ExecutableBackendDb(getComponentContext(), dbFile));
     }
@@ -120,7 +120,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.executable.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.executable.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -213,7 +213,7 @@ BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException( "Failed to get the BackendImpl",
+        throw RuntimeException( u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<ExecutablePackageImpl *>(this)));
     }
     return pBackend;
@@ -282,11 +282,11 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension() const
     bool bSuccess = false;
     OUString sExtensionDir;
     if(getMyBackend()->m_context == "user")
-        sExtensionDir = dp_misc::expandUnoRcTerm("$UNO_USER_PACKAGES_CACHE");
+        sExtensionDir = dp_misc::expandUnoRcTerm(u"$UNO_USER_PACKAGES_CACHE"_ustr);
     else if (getMyBackend()->m_context == "shared")
-        sExtensionDir = dp_misc::expandUnoRcTerm("$UNO_SHARED_PACKAGES_CACHE");
+        sExtensionDir = dp_misc::expandUnoRcTerm(u"$UNO_SHARED_PACKAGES_CACHE"_ustr);
     else if (getMyBackend()->m_context == "bundled")
-        sExtensionDir = dp_misc::expandUnoRcTerm("$BUNDLED_EXTENSIONS");
+        sExtensionDir = dp_misc::expandUnoRcTerm(u"$BUNDLED_EXTENSIONS"_ustr);
     else
         OSL_ASSERT(false);
     //remove file ellipses

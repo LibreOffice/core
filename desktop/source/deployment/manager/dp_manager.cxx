@@ -416,7 +416,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             comphelper::EventLogger logger(xComponentContext, "unopkg");
             const Reference<XLogger> xLogger(logger.getLogger());
             Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xComponentContext));
-            Sequence < beans::NamedValue > aSeq2 { { "Formatter", Any(xLogFormatter) }, {"FileURL", Any(logFile)} };
+            Sequence < beans::NamedValue > aSeq2 { { u"Formatter"_ustr, Any(xLogFormatter) }, {u"FileURL"_ustr, Any(logFile)} };
             Reference<XLogHandler> xFileHandler(css::logging::FileHandler::createWithSettings(xComponentContext, aSeq2));
             xFileHandler->setLevel(LogLevel::WARNING);
             xLogger->addLogHandler(xFileHandler);
@@ -424,7 +424,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.comp.deployment.ProgressLog",
+                    u"com.sun.star.comp.deployment.ProgressLog"_ustr,
                     Sequence<Any>(),
                     that->m_xComponentContext ),
                 UNO_QUERY_THROW );
@@ -488,7 +488,7 @@ void PackageManagerImpl::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            "caught unexpected exception while disposing...",
+            u"caught unexpected exception while disposing..."_ustr,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -570,7 +570,7 @@ OUString PackageManagerImpl::detectMediaType(
     if (url.match( "vnd.sun.star.tdoc:" ) || url.match( "vnd.sun.star.pkg:" ))
     {
         try {
-            ucbContent.getPropertyValue( "MediaType" ) >>= mediaType;
+            ucbContent.getPropertyValue( u"MediaType"_ustr ) >>= mediaType;
         }
         catch (const beans::UnknownPropertyException &) {
         }
@@ -761,11 +761,11 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 // clashes, but the whole m_activePackages.getLength()==0
                 // case (i.e., document-relative deployment) currently does
                 // not work, anyway.
-            docContent.setPropertyValue("MediaType", Any(mediaType) );
+            docContent.setPropertyValue(u"MediaType"_ustr, Any(mediaType) );
 
             // xxx todo: obsolete in the future
             try {
-                docFolderContent.executeCommand( "flush", Any() );
+                docFolderContent.executeCommand( u"flush"_ustr, Any() );
             }
             catch (const UnsupportedCommandException &) {
             }
@@ -1126,7 +1126,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
     check();
     if (!force && office_is_running())
         throw RuntimeException(
-            "You must close any running Office process before reinstalling packages!",
+            u"You must close any running Office process before reinstalling packages!"_ustr,
             static_cast<OWeakObject *>(this) );
 
     Reference<XCommandEnvironment> xCmdEnv;
@@ -1137,7 +1137,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
     try {
         ProgressLevel progress(
-            xCmdEnv, "Reinstalling all deployed packages..." );
+            xCmdEnv, u"Reinstalling all deployed packages..."_ustr );
 
         try_dispose( m_xRegistry );
         m_xRegistry.clear();
@@ -1469,7 +1469,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
     {
         Any exc = ::cppu::getCaughtException();
         deployment::DeploymentException de(
-            "PackageManagerImpl::getExtensionsWithUnacceptedLicenses",
+            u"PackageManagerImpl::getExtensionsWithUnacceptedLicenses"_ustr,
             static_cast<OWeakObject*>(this), exc);
         exc <<= de;
         ::cppu::throwException(exc);
@@ -1489,7 +1489,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
             return 0;
         if (m_context != extension->getRepositoryName())
             throw lang::IllegalArgumentException(
-                "PackageManagerImpl::checkPrerequisites: extension is not from this repository.",
+                u"PackageManagerImpl::checkPrerequisites: extension is not from this repository."_ustr,
                 nullptr, 0);
 
         ActivePackages::Data dbData;
@@ -1497,7 +1497,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         if (!m_activePackagesDB->get( &dbData, id, OUString()))
         {
             throw lang::IllegalArgumentException(
-                "PackageManagerImpl::checkPrerequisites: unknown extension",
+                u"PackageManagerImpl::checkPrerequisites: unknown extension"_ustr,
                 nullptr, 0);
 
         }
@@ -1526,7 +1526,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     } catch (...) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         deployment::DeploymentException exc(
-            "PackageManagerImpl::checkPrerequisites: exception ",
+            u"PackageManagerImpl::checkPrerequisites: exception "_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
         throw exc;
     }

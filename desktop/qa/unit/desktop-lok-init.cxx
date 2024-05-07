@@ -62,7 +62,7 @@ void LOKInitTest::testJsonToPropertyValues()
                              "\"value\":\"something.odt\""
                              "}}";
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue("FileName", OUString("something.odt")) };
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"FileName"_ustr, u"something.odt"_ustr) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
@@ -146,8 +146,8 @@ void LOKInitTest::testJsonToPropertyValuesBorder()
                                        uno::Any(static_cast<sal_Int16>(0x7F)),
                                        uno::Any(static_cast<sal_Int32>(0)) };
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue("OuterBorder", aOuterSeq),
-                         comphelper::makePropertyValue("InnerBorder", aInnerSeq) };
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
+                         comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));

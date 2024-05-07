@@ -88,7 +88,7 @@ namespace {
 
 OUString getVersion( OUString const & sVersion )
 {
-    return ( sVersion.isEmpty() ) ? OUString( "0" ) : sVersion;
+    return ( sVersion.isEmpty() ) ? u"0"_ustr : sVersion;
 }
 
 OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
@@ -838,7 +838,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     uno::Any anyTitle;
     try
     {
-        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv, m_xContext ).getPropertyValue( "Title" );
+        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv, m_xContext ).getPropertyValue( u"Title"_ustr );
     }
     catch ( const uno::Exception & )
     {
@@ -1092,7 +1092,7 @@ void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackag
 
 void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, nullptr, "Extension Manager" ) );
+    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, nullptr, u"Extension Manager"_ustr ) );
 }
 
 bool ExtensionCmdQueue::isBusy()
@@ -1103,7 +1103,7 @@ bool ExtensionCmdQueue::isBusy()
 void handleInteractionRequest( const uno::Reference< uno::XComponentContext > & xContext,
                                const uno::Reference< task::XInteractionRequest > & xRequest )
 {
-    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, nullptr, "Extension Manager" ) );
+    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, nullptr, u"Extension Manager"_ustr ) );
     xCmdEnv->handle( xRequest );
 }
 

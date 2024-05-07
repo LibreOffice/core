@@ -164,7 +164,7 @@ static bool IsUserWordbook( const OUString& rFile )
 
     OUString WordbookMigration::getImplementationName()
     {
-        return "com.sun.star.comp.desktop.migration.Wordbooks";
+        return u"com.sun.star.comp.desktop.migration.Wordbooks"_ustr;
     }
 
 
@@ -176,7 +176,7 @@ static bool IsUserWordbook( const OUString& rFile )
 
     Sequence< OUString > WordbookMigration::getSupportedServiceNames()
     {
-        return { "com.sun.star.migration.Wordbooks" };
+        return { u"com.sun.star.migration.Wordbooks"_ustr };
     }
 
 

@@ -377,7 +377,7 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            "Failed to get the BackendImpl",
+            u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<ComponentPackageImpl *>(this)));
     }
     return pBackend;
@@ -406,7 +406,7 @@ void BackendImpl::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            "caught unexpected exception while disposing...",
+            u"caught unexpected exception while disposing..."_ustr,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -460,7 +460,7 @@ void BackendImpl::initServiceRdbFiles()
         m_xCommonRDB.set(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
-            "com.sun.star.registry.SimpleRegistry",
+            u"com.sun.star.registry.SimpleRegistry"_ustr,
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xCommonRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
@@ -470,7 +470,7 @@ void BackendImpl::initServiceRdbFiles()
         m_xNativeRDB.set(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
-            "com.sun.star.registry.SimpleRegistry",
+            u"com.sun.star.registry.SimpleRegistry"_ustr,
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xNativeRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
@@ -488,33 +488,33 @@ BackendImpl::BackendImpl(
       m_xDynComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=native;platform=" +
                                    getPlatformString(),
-                                   "*" SAL_DLLEXTENSION,
+                                   u"*" SAL_DLLEXTENSION ""_ustr,
                                    DpResId(RID_STR_DYN_COMPONENT)
                                    ) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(
-             "application/vnd.sun.star.uno-component;type=Java",
-                                    "*.jar",
+             u"application/vnd.sun.star.uno-component;type=Java"_ustr,
+                                    u"*.jar"_ustr,
                                     DpResId(RID_STR_JAVA_COMPONENT)
                                     ) ),
       m_xPythonComponentTypeInfo( new Package::TypeInfo(
-             "application/vnd.sun.star.uno-component;type=Python",
-                                      "*.py",
+             u"application/vnd.sun.star.uno-component;type=Python"_ustr,
+                                      u"*.py"_ustr,
                                       DpResId(
                                           RID_STR_PYTHON_COMPONENT)
                                       ) ),
       m_xComponentsTypeInfo( new Package::TypeInfo(
-                                 "application/vnd.sun.star.uno-components",
-                                 "*.components",
+                                 u"application/vnd.sun.star.uno-components"_ustr,
+                                 u"*.components"_ustr,
                                  DpResId(RID_STR_COMPONENTS)
                                  ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
-             "application/vnd.sun.star.uno-typelibrary;type=RDB",
-                                 "*.rdb",
+             u"application/vnd.sun.star.uno-typelibrary;type=RDB"_ustr,
+                                 u"*.rdb"_ustr,
                                  DpResId(RID_STR_RDB_TYPELIB)
                                  ) ),
       m_xJavaTypelibTypeInfo( new Package::TypeInfo(
-             "application/vnd.sun.star.uno-typelibrary;type=Java",
-                                  "*.jar",
+             u"application/vnd.sun.star.uno-typelibrary;type=Java"_ustr,
+                                  u"*.jar"_ustr,
                                   DpResId(RID_STR_JAVA_TYPELIB)
                                   ) ),
       m_typeInfos{ m_xDynComponentTypeInfo, m_xJavaComponentTypeInfo, m_xPythonComponentTypeInfo,
@@ -528,13 +528,13 @@ BackendImpl::BackendImpl(
         // common rdb for java, native rdb for shared lib components
         m_xCommonRDB.set(
             xComponentContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.SimpleRegistry",
+                u"com.sun.star.registry.SimpleRegistry"_ustr,
                 xComponentContext ), UNO_QUERY_THROW );
         m_xCommonRDB->open( OUString() /* in-mem */,
                             false /* ! read-only */, true /* create */ );
         m_xNativeRDB.set(
             xComponentContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.SimpleRegistry",
+                u"com.sun.star.registry.SimpleRegistry"_ustr,
                 xComponentContext ), UNO_QUERY_THROW );
         m_xNativeRDB->open( OUString() /* in-mem */,
                             false /* ! read-only */, true /* create */ );
@@ -542,7 +542,7 @@ BackendImpl::BackendImpl(
     else
     {
         unorc_verify_init( xCmdEnv );
-        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+        OUString dbFile = makeURL(getCachePath(), u"backenddb.xml"_ustr);
         m_backendDb.reset(
             new ComponentBackendDb(getComponentContext(), dbFile));
     }
@@ -551,7 +551,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.component.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.component.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -673,7 +673,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                             if (bPlatformFits)
                                 return new BackendImpl::ComponentPackageImpl(
                                     this, url, name, m_xDynComponentTypeInfo,
-                                    "com.sun.star.loader.SharedLibrary",
+                                    u"com.sun.star.loader.SharedLibrary"_ustr,
                                     bRemoved, identifier);
                             else
                                 return new BackendImpl::OtherPlatformPackageImpl(
@@ -683,13 +683,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         if (value.equalsIgnoreAsciiCase("Java")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xJavaComponentTypeInfo,
-                                "com.sun.star.loader.Java2",
+                                u"com.sun.star.loader.Java2"_ustr,
                                 bRemoved, identifier);
                         }
                         if (value.equalsIgnoreAsciiCase("Python")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xPythonComponentTypeInfo,
-                                "com.sun.star.loader.Python",
+                                u"com.sun.star.loader.Python"_ustr,
                                 bRemoved, identifier);
                         }
                     }
@@ -744,7 +744,7 @@ void BackendImpl::unorc_verify_init(
     ::ucbhelper::Content ucb_content;
     if (create_ucb_content(
             &ucb_content,
-            makeURL( getCachePath(), "unorc" ),
+            makeURL( getCachePath(), u"unorc"_ustr ),
             xCmdEnv, false /* no throw */ ))
     {
         OUString line;
@@ -958,7 +958,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), "unorc" ), xCmdEnv, m_xComponentContext );
+        makeURL( getCachePath(), u"unorc"_ustr ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
     m_unorc_modified = false;
@@ -1009,7 +1009,7 @@ css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
     const
 {
     css::uno::Reference< css::uno::XComponentContext > rootContext(
-        getComponentContext()->getValueByName("_root"),
+        getComponentContext()->getValueByName(u"_root"_ustr),
         css::uno::UNO_QUERY);
     return rootContext.is() ? rootContext : getComponentContext();
 }
@@ -1049,7 +1049,7 @@ Reference<XComponentContext> raise_uno_process(
 {
     OSL_ASSERT( xContext.is() );
 
-    OUString url( util::theMacroExpander::get(xContext)->expandMacros( "$URE_BIN_DIR/uno" ) );
+    OUString url( util::theMacroExpander::get(xContext)->expandMacros( u"$URE_BIN_DIR/uno"_ustr ) );
 
     const OUString connectStr = "uno:pipe,name=" + generateRandomPipeId() + ";urp;uno.ComponentContext";
 
@@ -1061,11 +1061,11 @@ Reference<XComponentContext> raise_uno_process(
 #if OSL_DEBUG_LEVEL == 0
         "--quiet",
 #endif
-        "--singleaccept",
-        "-u",
+        u"--singleaccept"_ustr,
+        u"-u"_ustr,
         connectStr,
         // don't inherit from unorc:
-        "-env:INIFILENAME=" };
+        u"-env:INIFILENAME="_ustr };
 
     //now add the bootstrap variables which were supplied on the command line
     std::vector<OUString> bootvars = getCmdBootstrapVariables();
@@ -1121,7 +1121,7 @@ void extractComponentData(
         OUString name(key->getKeyName().copy(prefix));
         data->implementationNames.push_back(name);
         css::uno::Reference< css::registry::XRegistryKey > singletons(
-            key->openKey("UNO/SINGLETONS"));
+            key->openKey(u"UNO/SINGLETONS"_ustr));
         if (singletons.is()) {
             sal_Int32 prefix2 = key->getKeyName().getLength() +
                 RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
@@ -1165,7 +1165,7 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
     OUString url(getURL());
     const Reference<registry::XSimpleRegistry> xMemReg(
         xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.registry.SimpleRegistry", xContext ),
+            u"com.sun.star.registry.SimpleRegistry"_ustr, xContext ),
         UNO_QUERY_THROW );
     xMemReg->open( OUString() /* in mem */, false, true );
     xLoader->writeRegistryInfo( xMemReg->getRootKey(), OUString(), url );
@@ -1275,7 +1275,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
             const Reference<registry::XRegistryKey> xRootKey(
                 xRDB->getRootKey() );
             const Reference<registry::XRegistryKey> xImplKey(
-                xRootKey->openKey( "IMPLEMENTATIONS" ) );
+                xRootKey->openKey( u"IMPLEMENTATIONS"_ustr ) );
             Sequence<OUString> implNames;
             if (xImplKey.is() && xImplKey->isValid())
                 implNames = xImplKey->getKeyNames();
@@ -1361,7 +1361,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         }
         css::uno::Reference< css::registry::XImplementationRegistration> impreg(
             context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.ImplementationRegistration",
+                u"com.sun.star.registry.ImplementationRegistration"_ustr,
                 context),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::registry::XSimpleRegistry > rdb(getRDB());
@@ -1404,7 +1404,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         }
         css::uno::Reference< css::registry::XImplementationRegistration >(
             context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.ImplementationRegistration",
+                u"com.sun.star.registry.ImplementationRegistration"_ustr,
                 context),
             css::uno::UNO_QUERY_THROW)->revokeImplementation(url, getRDB());
         if (data.javaTypeLibrary) {
@@ -1438,7 +1438,7 @@ BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException( "Failed to get the BackendImpl",
+        throw RuntimeException( u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<TypelibraryPackageImpl *>(this)));
     }
     return pBackend;
@@ -1486,8 +1486,8 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         {
             css::uno::Reference< css::container::XSet >(
                 that->getComponentContext()->getValueByName(
-                    "/singletons"
-                    "/com.sun.star.reflection.theTypeDescriptionManager"),
+                    u"/singletons"
+                    "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                 css::uno::UNO_QUERY_THROW)->insert(
                     css::uno::Any(expandUnoRcUrl(url)));
         }
@@ -1504,8 +1504,8 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         if (!m_jarFile) {
             css::uno::Reference< css::container::XSet >(
                 that->getComponentContext()->getValueByName(
-                    "/singletons"
-                    "/com.sun.star.reflection.theTypeDescriptionManager"),
+                    u"/singletons"
+                    "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                 css::uno::UNO_QUERY_THROW)->remove(
                     css::uno::Any(expandUnoRcUrl(url)));
         }
@@ -1532,7 +1532,7 @@ BackendImpl::OtherPlatformPackageImpl::getMyBackend() const
         //Throws a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException("Failed to get the BackendImpl",
+        throw RuntimeException(u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<OtherPlatformPackageImpl*>(this)));
     }
     return pBackend;
@@ -1549,7 +1549,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
     try
     {
         xRegistry.set(
-                impl_createInstance("com.sun.star.registry.SimpleRegistry"),
+                impl_createInstance(u"com.sun.star.registry.SimpleRegistry"_ustr),
                 UNO_QUERY)
             ;
         if (xRegistry.is())
@@ -1601,7 +1601,7 @@ BackendImpl::OtherPlatformPackageImpl::processPackage_(
 
     Reference<registry::XSimpleRegistry> const xServicesRDB(impl_openRDB());
     Reference<registry::XImplementationRegistration> const xImplReg(
-            impl_createInstance("com.sun.star.registry.ImplementationRegistration"),
+            impl_createInstance(u"com.sun.star.registry.ImplementationRegistration"_ustr),
             UNO_QUERY)
         ;
     if (xImplReg.is() && xServicesRDB.is())
@@ -1620,7 +1620,7 @@ BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
         //Throws a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException("Failed to get the BackendImpl",
+        throw RuntimeException(u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<ComponentsPackageImpl *>(this)));
     }
     return pBackend;
@@ -1663,8 +1663,8 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // supporting the extended XSet semantics:
             css::uno::Sequence< css::beans::NamedValue > args
             {
-                { "uri", css::uno::Any(expandUnoRcUrl(url)) },
-                { "component-context", css::uno::Any(context) }
+                { u"uri"_ustr, css::uno::Any(expandUnoRcUrl(url)) },
+                { u"component-context"_ustr, css::uno::Any(context) }
             };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
@@ -1677,7 +1677,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
         if (!startup) {
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
-            css::uno::Sequence< css::beans::NamedValue > args { { "uri", css::uno::Any(expandUnoRcUrl(url)) } };
+            css::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, css::uno::Any(expandUnoRcUrl(url)) } };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);

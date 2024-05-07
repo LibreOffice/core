@@ -168,7 +168,7 @@ void BackendImpl::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            "caught unexpected exception while disposing...",
+            u"caught unexpected exception while disposing..."_ustr,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -181,13 +181,13 @@ BackendImpl::BackendImpl(
       m_configmgrini_inited( false ),
       m_configmgrini_modified( false ),
       m_xConfDataTypeInfo( new Package::TypeInfo(
-                               "application/vnd.sun.star.configuration-data",
-                               "*.xcu",
+                               u"application/vnd.sun.star.configuration-data"_ustr,
+                               u"*.xcu"_ustr,
                                DpResId(RID_STR_CONF_DATA)
                                ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
-                                 "application/vnd.sun.star.configuration-schema",
-                                 "*.xcs",
+                                 u"application/vnd.sun.star.configuration-schema"_ustr,
+                                 u"*.xcs"_ustr,
                                  DpResId(RID_STR_CONF_SCHEMA)
                                  ) ),
       m_typeInfos{ m_xConfDataTypeInfo, m_xConfSchemaTypeInfo }
@@ -200,7 +200,7 @@ BackendImpl::BackendImpl(
     }
     else
     {
-        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+        OUString dbFile = makeURL(getCachePath(), u"backenddb.xml"_ustr);
         m_backendDb.reset(
             new ConfigurationBackendDb(getComponentContext(), dbFile));
         //clean up data folders which are no longer used.
@@ -215,7 +215,7 @@ BackendImpl::BackendImpl(
 
 #if HAVE_FEATURE_EXTENSIONS
         std::unique_ptr<PersistentMap> pMap;
-        OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
+        OUString aCompatURL( makeURL( getCachePath(), u"registered_packages.pmap"_ustr ) );
 
         // Don't create it if it doesn't exist already
         if ( ::utl::UCBContentHelper::Exists( expandUnoRcUrl( aCompatURL ) ) )
@@ -240,7 +240,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.configuration.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.configuration.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -377,7 +377,7 @@ void BackendImpl::configmgrini_verify_init(
     ::ucbhelper::Content ucb_content;
     if (create_ucb_content(
             &ucb_content,
-            makeURL( getCachePath(), "configmgr.ini" ),
+            makeURL( getCachePath(), u"configmgr.ini"_ustr ),
             xCmdEnv, false /* no throw */ ))
     {
         OUString line;
@@ -469,7 +469,7 @@ void BackendImpl::configmgrini_flush(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), "configmgr.ini" ), xCmdEnv, m_xComponentContext );
+        makeURL( getCachePath(), u"configmgr.ini"_ustr ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
     m_configmgrini_modified = false;
@@ -534,7 +534,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            "Failed to get the BackendImpl",
+            u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -752,9 +752,9 @@ void BackendImpl::PackageImpl::processPackage_(
             try
             {
                 ::ucbhelper::Content(
-                    makeURL( that->getCachePath(), "registry" ),
+                    makeURL( that->getCachePath(), u"registry"_ustr ),
                     xCmdEnv, that->getComponentContext() ).executeCommand(
-                        "delete", Any( true /* delete physically */ ) );
+                        u"delete"_ustr, Any( true /* delete physically */ ) );
             }
             catch(const Exception&)
             {

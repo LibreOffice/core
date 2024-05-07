@@ -153,7 +153,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     Sequence< Any > aSeq{ Any(aAcceptString), Any(bAccept) };
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference<XInitialization> rAcceptor(
-        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Acceptor", xContext),
+        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.office.Acceptor"_ustr, xContext),
         UNO_QUERY );
     if ( rAcceptor.is() )
     {

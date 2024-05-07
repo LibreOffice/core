@@ -65,8 +65,8 @@ OUString getReferenceOpenOfficeOrgMajorMinor() {
     OUString v("4.1");
 #else
     OUString v(
-            "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
-            ":Version:ReferenceOOoMajorMinor}");
+            u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
+            ":Version:ReferenceOOoMajorMinor}"_ustr);
     rtl::Bootstrap::expandMacros(v); //TODO: check for failure
 #endif
     return v;
@@ -125,20 +125,20 @@ check(dp_misc::DescriptionInfoset const & infoset) {
         {
             sat = bIgnoreOoo || satisfiesMinimalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
-                e->getAttribute("value"));
+                e->getAttribute(u"value"_ustr));
         } else if ( e->getNamespaceURI() == namespaceOpenOfficeOrg && e->getTagName() == maximalVersionOpenOfficeOrg )
         {
             sat = bIgnoreOoo || satisfiesMaximalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
-                e->getAttribute("value"));
+                e->getAttribute(u"value"_ustr));
         } else if (e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == minimalVersionLibreOffice )
         {
             sat = satisfiesMinimalVersion(
                 getLibreOfficeMajorMinorMicro(),
-                e->getAttribute("value"));
+                e->getAttribute(u"value"_ustr));
         } else if (e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == maximalVersionLibreOffice )
         {
-            sat = satisfiesMaximalVersion(getLibreOfficeMajorMinorMicro(), e->getAttribute("value"));
+            sat = satisfiesMaximalVersion(getLibreOfficeMajorMinorMicro(), e->getAttribute(u"value"_ustr));
         } else if (e->hasAttributeNS(namespaceOpenOfficeOrg,
                        minimalVersionOpenOfficeOrg))
         {
@@ -163,22 +163,22 @@ OUString getErrorText(
     {
         return produceErrorText(
                 DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
-            dependency->getAttribute("value"));
+            dependency->getAttribute(u"value"_ustr));
     } else if (dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == maximalVersionOpenOfficeOrg )
     {
         return produceErrorText(
                 DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX),
-            dependency->getAttribute("value"));
+            dependency->getAttribute(u"value"_ustr));
     } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == minimalVersionLibreOffice )
     {
         return produceErrorText(
                 DpResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN),
-            dependency->getAttribute("value"));
+            dependency->getAttribute(u"value"_ustr));
     } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == maximalVersionLibreOffice )
     {
         return produceErrorText(
                 DpResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MAX),
-            dependency->getAttribute("value"));
+            dependency->getAttribute(u"value"_ustr));
     } else if (dependency->hasAttributeNS(namespaceOpenOfficeOrg,
                    minimalVersionOpenOfficeOrg))
     {

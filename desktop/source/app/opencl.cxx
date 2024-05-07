@@ -56,7 +56,7 @@ static bool testOpenCLDriver()
     // whether the driver crashes (asserts,etc.) when trying to use OpenCL.
     SAL_INFO("opencl", "Starting CL driver test");
 
-    OUString testerURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/opencltest");
+    OUString testerURL(u"$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/opencltest"_ustr);
     rtl::Bootstrap::expandMacros(testerURL); //TODO: detect failure
 
     OUString deviceName, platformName;
@@ -126,10 +126,10 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     try {
         css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden",
+        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                              true) };
 
-        xComponent.set(xLoader->loadComponentFromURL(rURL, "_blank", 0, aArgs));
+        xComponent.set(xLoader->loadComponentFromURL(rURL, u"_blank"_ustr, 0, aArgs));
 
         // What an unpleasant API to use.
         css::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, css::uno::UNO_QUERY_THROW);
@@ -148,7 +148,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
 
         // So we insert our MAX call at the end on a named range.
         css::uno::Reference< css::table::XCell2 > xCell( xSheet->getCellByPosition(1,0), css::uno::UNO_QUERY_THROW );
-        xCell->setFormula("=MAX(results)");
+        xCell->setFormula(u"=MAX(results)"_ustr);
         double fResult = xCell->getValue();
 
         // Ensure the maximum variance is below our tolerance.
@@ -212,7 +212,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     aSelectedCLDeviceVersionID += "--" LIBO_VERSION_DOTTED;
 
     // Append timestamp of the file.
-    OUString aURL("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/opencl/cl-test.ods");
+    OUString aURL(u"$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/opencl/cl-test.ods"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
 
     DirectoryItem aItem;

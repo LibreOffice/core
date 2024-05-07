@@ -72,7 +72,7 @@ LOKInteractionHandler::~LOKInteractionHandler()
 
 OUString SAL_CALL LOKInteractionHandler::getImplementationName()
 {
-    return "com.sun.star.comp.uui.LOKInteractionHandler";
+    return u"com.sun.star.comp.uui.LOKInteractionHandler"_ustr;
 }
 
 sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServiceName)
@@ -82,11 +82,11 @@ sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServi
 
 uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNames()
 {
-    return { "com.sun.star.task.InteractionHandler",
+    return { u"com.sun.star.task.InteractionHandler"_ustr,
              // added to indicate support for configuration.backend.MergeRecoveryRequest
-             "com.sun.star.configuration.backend.InteractionHandler",
+             u"com.sun.star.configuration.backend.InteractionHandler"_ustr,
               // for backwards compatibility
-             "com.sun.star.uui.InteractionHandler" };
+             u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
 void SAL_CALL LOKInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
@@ -188,7 +188,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
         ERRCODE_IO_WRONGVERSION,
     };
 
-    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)], "");
+    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)], u""_ustr);
     selectApproved(rContinuations);
 
     return true;

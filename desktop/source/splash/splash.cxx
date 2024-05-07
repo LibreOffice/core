@@ -110,13 +110,13 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.office.comp.SplashScreen"; }
+    { return u"com.sun.star.office.comp.SplashScreen"_ustr; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return { "com.sun.star.office.SplashScreen" }; }
+    { return { u"com.sun.star.office.SplashScreen"_ustr }; }
 };
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
@@ -343,16 +343,16 @@ OUString implReadBootstrapKey( const OUString& _rKey )
 
 void SplashScreen::loadConfig()
 {
-    _bShowLogo = implReadBootstrapKey( "Logo" ) != "0";
+    _bShowLogo = implReadBootstrapKey( u"Logo"_ustr ) != "0";
 
-    OUString sProgressFrameColor = implReadBootstrapKey( "ProgressFrameColor" );
-    OUString sProgressBarColor = implReadBootstrapKey( "ProgressBarColor" );
-    OUString sProgressTextColor = implReadBootstrapKey( "ProgressTextColor" );
-    OUString sProgressTextBaseline = implReadBootstrapKey( "ProgressTextBaseline" );
-    OUString sSize = implReadBootstrapKey( "ProgressSize" );
-    OUString sPosition = implReadBootstrapKey( "ProgressPosition" );
-    OUString sFullScreenSplash = implReadBootstrapKey( "FullScreenSplash" );
-    OUString sNativeProgress = implReadBootstrapKey( "NativeProgress" );
+    OUString sProgressFrameColor = implReadBootstrapKey( u"ProgressFrameColor"_ustr );
+    OUString sProgressBarColor = implReadBootstrapKey( u"ProgressBarColor"_ustr );
+    OUString sProgressTextColor = implReadBootstrapKey( u"ProgressTextColor"_ustr );
+    OUString sProgressTextBaseline = implReadBootstrapKey( u"ProgressTextBaseline"_ustr );
+    OUString sSize = implReadBootstrapKey( u"ProgressSize"_ustr );
+    OUString sPosition = implReadBootstrapKey( u"ProgressPosition"_ustr );
+    OUString sFullScreenSplash = implReadBootstrapKey( u"FullScreenSplash"_ustr );
+    OUString sNativeProgress = implReadBootstrapKey( u"NativeProgress"_ustr );
 
 
     // Determine full screen splash mode

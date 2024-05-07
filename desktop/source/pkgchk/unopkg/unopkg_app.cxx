@@ -219,23 +219,23 @@ extern "C" int unopkg_main()
     std::unique_ptr<utl::TempFileNamed> pUserProfileTempDir;
 
     OptionInfo const * info_shared = getOptionInfo(
-        s_option_infos, "shared" );
+        s_option_infos, u"shared"_ustr );
     OptionInfo const * info_force = getOptionInfo(
-        s_option_infos, "force" );
+        s_option_infos, u"force"_ustr );
     OptionInfo const * info_verbose = getOptionInfo(
-        s_option_infos, "verbose" );
+        s_option_infos, u"verbose"_ustr );
     OptionInfo const * info_log = getOptionInfo(
-        s_option_infos, "log-file" );
+        s_option_infos, u"log-file"_ustr );
     OptionInfo const * info_context = getOptionInfo(
-        s_option_infos, "deployment-context" );
+        s_option_infos, u"deployment-context"_ustr );
     OptionInfo const * info_help = getOptionInfo(
-        s_option_infos, "help" );
+        s_option_infos, u"help"_ustr );
     OptionInfo const * info_version = getOptionInfo(
-        s_option_infos, "version" );
+        s_option_infos, u"version"_ustr );
     OptionInfo const * info_bundled = getOptionInfo(
-        s_option_infos, "bundled" );
+        s_option_infos, u"bundled"_ustr );
     OptionInfo const * info_suppressLicense = getOptionInfo(
-        s_option_infos, "suppress-license" );
+        s_option_infos, u"suppress-license"_ustr );
 
 
     Reference<XComponentContext> xComponentContext;
@@ -319,7 +319,7 @@ extern "C" int unopkg_main()
         }
 
         xComponentContext = getUNO(option_verbose, subcmd_gui,
-                                   pUserProfileTempDir ? pUserProfileTempDir->GetURL() : "",
+                                   pUserProfileTempDir ? pUserProfileTempDir->GetURL() : u""_ustr,
                                    xLocalComponentContext);
 
         // Initialize logging. This will log errors to the console and
@@ -328,7 +328,7 @@ extern "C" int unopkg_main()
         const Reference<XLogger> xLogger(logger->getLogger());
         xLogger->setLevel(LogLevel::WARNING);
         Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xLocalComponentContext));
-        Sequence < beans::NamedValue > aSeq { { "Formatter", Any(xLogFormatter) } };
+        Sequence < beans::NamedValue > aSeq { { u"Formatter"_ustr, Any(xLogFormatter) } };
 
         xConsoleHandler.set(ConsoleHandler::createWithSettings(xLocalComponentContext, aSeq));
         xLogger->addLogHandler(xConsoleHandler);
@@ -338,7 +338,7 @@ extern "C" int unopkg_main()
 
         if (!logFile.isEmpty())
         {
-            Sequence < beans::NamedValue > aSeq2 { { "Formatter", Any(xLogFormatter) }, {"FileURL", Any(logFile)} };
+            Sequence < beans::NamedValue > aSeq2 { { u"Formatter"_ustr, Any(xLogFormatter) }, {u"FileURL"_ustr, Any(logFile)} };
             xFileHandler.set(css::logging::FileHandler::createWithSettings(xLocalComponentContext, aSeq2));
             xFileHandler->setLevel(LogLevel::WARNING);
             xLogger->addLogHandler(xFileHandler);
@@ -424,8 +424,8 @@ extern "C" int unopkg_main()
                 if (subcmd_add)
                 {
                     beans::NamedValue nvSuppress(
-                        "SUPPRESS_LICENSE", option_suppressLicense ?
-                        Any(OUString("1")):Any(OUString("0")));
+                        u"SUPPRESS_LICENSE"_ustr, option_suppressLicense ?
+                        Any(u"1"_ustr):Any(u"0"_ustr));
                     xExtensionManager->addExtension(
                             cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),
                             repository, Reference<task::XAbortChannel>(), xCmdEnv);
@@ -616,18 +616,18 @@ extern "C" int unopkg_main()
     }
     catch (const ucb::CommandFailedException &e)
     {
-        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
+        logFatal(logger.get(), LogLevel::SEVERE, u"Exception occurred: $1$"_ustr, e.Message);
     }
     catch (const ucb::CommandAbortedException &)
     {
-        logFatal(logger.get(), LogLevel::SEVERE, "$1$ aborted.", APP_NAME);
+        logFatal(logger.get(), LogLevel::SEVERE, u"$1$ aborted."_ustr, u"" APP_NAME ""_ustr);
         bShowFailedMsg = false;
     }
     catch (const deployment::DeploymentException & exc)
     {
-        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", exc.Message);
+        logFatal(logger.get(), LogLevel::SEVERE, u"Exception occurred: $1$"_ustr, exc.Message);
         logFatal(
-            logger.get(), LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc.Cause));
+            logger.get(), LogLevel::INFO, u"    Cause: $1$"_ustr, comphelper::anyToString(exc.Cause));
     }
     catch (const LockFileException & e)
     {
@@ -638,11 +638,11 @@ extern "C" int unopkg_main()
     catch (const css::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
-        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
-        logFatal(logger.get(), LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc));
+        logFatal(logger.get(), LogLevel::SEVERE, u"Exception occurred: $1$"_ustr, e.Message);
+        logFatal(logger.get(), LogLevel::INFO, u"    Cause: $1$"_ustr, comphelper::anyToString(exc));
     }
     if (bShowFailedMsg)
-        logFatal(logger.get(), LogLevel::SEVERE, "$1$ failed.", APP_NAME);
+        logFatal(logger.get(), LogLevel::SEVERE, u"$1$ failed."_ustr, u"" APP_NAME ""_ustr);
     dp_misc::disposeBridges(xLocalComponentContext);
     if (xLocalComponentContext.is()) {
         css::uno::Reference<css::lang::XComponent>(

@@ -47,17 +47,17 @@ void Test::test() {
     };
     static Data const data[] = {
         { OUString(),
-          OUString("0.0000.00.0"),
+          u"0.0000.00.0"_ustr,
           ::dp_misc::EQUAL },
-        { OUString(".01"),
-          OUString("0.1"),
+        { u".01"_ustr,
+          u"0.1"_ustr,
           ::dp_misc::EQUAL },
-        { OUString("10"),
-          OUString("2"),
+        { u"10"_ustr,
+          u"2"_ustr,
           ::dp_misc::GREATER },
-        { OUString("9223372036854775808"),
+        { u"9223372036854775808"_ustr,
               // 2^63
-          OUString("9223372036854775807"),
+          u"9223372036854775807"_ustr,
           ::dp_misc::GREATER }
     };
     for (std::size_t i = 0; i < std::size(data); ++i) {

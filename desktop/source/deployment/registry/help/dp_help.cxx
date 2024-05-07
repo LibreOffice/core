@@ -129,7 +129,7 @@ BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
-      m_xHelpTypeInfo( new Package::TypeInfo("application/vnd.sun.star.help",
+      m_xHelpTypeInfo( new Package::TypeInfo(u"application/vnd.sun.star.help"_ustr,
                                OUString(),
                                DpResId(RID_STR_HELP)
                                ) ),
@@ -138,7 +138,7 @@ BackendImpl::BackendImpl(
     if (transientMode())
         return;
 
-    OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+    OUString dbFile = makeURL(getCachePath(), u"backenddb.xml"_ustr);
     m_backendDb.reset(
         new HelpBackendDb(getComponentContext(), dbFile));
 
@@ -154,7 +154,7 @@ BackendImpl::BackendImpl(
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return "com.sun.star.comp.deployment.help.PackageRegistryBackend";
+    return u"com.sun.star.comp.deployment.help.PackageRegistryBackend"_ustr;
 }
 
 sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
@@ -265,7 +265,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException("Failed to get the BackendImpl",
+        throw RuntimeException(u"Failed to get the BackendImpl"_ustr,
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -476,7 +476,7 @@ void BackendImpl::implProcessHelp(
                             else
                                 aLang = "en";
 
-                            HelpIndexer aIndexer(aLang, "help", langFolderDestExpanded, langFolderDestExpanded);
+                            HelpIndexer aIndexer(aLang, u"help"_ustr, langFolderDestExpanded, langFolderDestExpanded);
                             aIndexer.indexDocuments();
                         }
 
@@ -588,8 +588,8 @@ Reference< ucb::XSimpleFileAccess3 > const & BackendImpl::getFileAccess()
         if( !m_xSFA.is() )
         {
             throw RuntimeException(
-                "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instantiate SimpleFileAccess."  );
+                u"dp_registry::backend::help::BackendImpl::getFileAccess(), "
+                "could not instantiate SimpleFileAccess."_ustr  );
         }
     }
     return m_xSFA;

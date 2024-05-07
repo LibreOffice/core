@@ -217,7 +217,7 @@ inline void PackageManagerImpl::check()
     ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed)
         throw css::lang::DisposedException(
-            "PackageManager instance has already been disposed!",
+            u"PackageManager instance has already been disposed!"_ustr,
             static_cast< ::cppu::OWeakObject * >(this) );
 }
 

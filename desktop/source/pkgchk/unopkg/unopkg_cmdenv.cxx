@@ -108,7 +108,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     m_xLogFile.set(
         xComponentContext->getServiceManager()
         ->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.deployment.ProgressLog",
+            u"com.sun.star.comp.deployment.ProgressLog"_ustr,
             Sequence<Any>(), xComponentContext ),
         UNO_QUERY_THROW );
 }
@@ -140,7 +140,7 @@ void CommandEnvironmentImpl::printLicense(
     OUString sNO = DpResId(RID_STR_UNOPKG_ACCEPT_LIC_NO);
     OUString sN = DpResId(RID_STR_UNOPKG_ACCEPT_LIC_N);
 
-    OUString sNewLine("\n");
+    OUString sNewLine(u"\n"_ustr);
 
     dp_misc::writeConsole(Concat2View(sNewLine + sNewLine + s1 + sNewLine + sNewLine));
     dp_misc::writeConsole(Concat2View(sLicense + sNewLine + sNewLine));

@@ -77,11 +77,14 @@ LOKClipboard::LOKClipboard()
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
 {
-    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.LokClipboard" };
+    Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.LokClipboard"_ustr };
     return aRet;
 }
 
-OUString LOKClipboard::getImplementationName() { return "com.sun.star.datatransfer.LOKClipboard"; }
+OUString LOKClipboard::getImplementationName()
+{
+    return u"com.sun.star.datatransfer.LOKClipboard"_ustr;
+}
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames()
 {
@@ -156,7 +159,7 @@ LOKTransferable::LOKTransferable()
 {
     m_aContent.reserve(1);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
-    initFlavourFromMime(m_aFlavors.getArray()[0], "text/plain");
+    initFlavourFromMime(m_aFlavors.getArray()[0], u"text/plain"_ustr);
     uno::Any aContent;
     aContent <<= OUString();
     m_aContent.push_back(aContent);

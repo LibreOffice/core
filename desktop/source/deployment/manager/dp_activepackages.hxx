@@ -37,7 +37,7 @@ namespace dp_manager {
 class ActivePackages {
 public:
     struct Data {
-        Data(): failedPrerequisites("0")
+        Data(): failedPrerequisites(u"0"_ustr)
             {}
         /* name of the temporary file (shared, user extension) or the name of
            the folder of the bundled extension.

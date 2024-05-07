@@ -36,12 +36,12 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 {
     static css::uno::Sequence< OUString > getTitleSequence()
     {
-        css::uno::Sequence<OUString> aSeq { "Title" };
+        css::uno::Sequence<OUString> aSeq { u"Title"_ustr };
         return aSeq;
     }
     static OUString getTitle( ::ucbhelper::Content &rContent )
     {
-        return rContent.getPropertyValue("Title").get<OUString>();
+        return rContent.getPropertyValue(u"Title"_ustr).get<OUString>();
     }
     // just return titles - the ucbhelper should have a simpler API for this [!]
     static css::uno::Reference< css::sdbc::XResultSet >

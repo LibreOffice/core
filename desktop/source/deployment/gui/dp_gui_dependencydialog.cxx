@@ -27,8 +27,9 @@
 using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(weld::Window* parent, std::vector<OUString> const& dependencies)
-    : GenericDialogController(parent, "desktop/ui/dependenciesdialog.ui", "Dependencies")
-    , m_xList(m_xBuilder->weld_tree_view("depListTreeview"))
+    : GenericDialogController(parent, u"desktop/ui/dependenciesdialog.ui"_ustr,
+                              u"Dependencies"_ustr)
+    , m_xList(m_xBuilder->weld_tree_view(u"depListTreeview"_ustr))
 {
     m_xList->set_size_request(-1, m_xList->get_height_rows(10));
     for (auto const& dependency : dependencies)

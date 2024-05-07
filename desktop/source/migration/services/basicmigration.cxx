@@ -133,7 +133,7 @@ namespace migration
 
     OUString BasicMigration::getImplementationName()
     {
-        return "com.sun.star.comp.desktop.migration.Basic";
+        return u"com.sun.star.comp.desktop.migration.Basic"_ustr;
     }
 
 
@@ -145,7 +145,7 @@ namespace migration
 
     Sequence< OUString > BasicMigration::getSupportedServiceNames()
     {
-        return { "com.sun.star.migration.Basic" };
+        return { u"com.sun.star.migration.Basic"_ustr };
     }
 
 
