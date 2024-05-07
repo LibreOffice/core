@@ -293,112 +293,109 @@ namespace {
 
 struct OptionsMapping_Impl
 {
-    const char* m_pGroupName;
-    const char* m_pPageName;
+    OUString m_aGroupName;
+    OUString m_aPageName;
     sal_uInt16      m_nPageId;
 };
 
 }
 
-OptionsMapping_Impl const OptionsMap_Impl[] =
+constexpr OptionsMapping_Impl OptionsMap_Impl[]
 {
 //    GROUP                 PAGE                    PAGE-ID
-    { "ProductName",        nullptr,                SID_GENERAL_OPTIONS },
-    { "ProductName",        "UserData",             RID_SFXPAGE_GENERAL },
-    { "ProductName",        "General",              OFA_TP_MISC },
-    { "ProductName",        "View",                 OFA_TP_VIEW },
-    { "ProductName",        "Print",                RID_SFXPAGE_PRINTOPTIONS },
-    { "ProductName",        "Paths",                RID_SFXPAGE_PATH },
-    { "ProductName",        "Fonts",                RID_SVX_FONT_SUBSTITUTION },
-    { "ProductName",        "Security",             RID_SVXPAGE_INET_SECURITY },
-    { "ProductName",        "Personalization",      RID_SVXPAGE_PERSONALIZATION },
-    { "ProductName",        "Appearance",           RID_SVXPAGE_COLORCONFIG },
-    { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
-    { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
-    { "ProductName",        "BasicIDEOptions",      RID_SVXPAGE_BASICIDE_OPTIONS },
-    { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
-    { "LanguageSettings",   nullptr,                SID_LANGUAGE_OPTIONS },
-    { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
-    { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
-    { "LanguageSettings",   "SearchingInJapanese",  RID_SVXPAGE_JSEARCH_OPTIONS },
-    { "LanguageSettings",   "AsianLayout",          RID_SVXPAGE_ASIAN_LAYOUT },
-    { "LanguageSettings",   "ComplexTextLayout",    RID_SVXPAGE_OPTIONS_CTL },
-    { "Internet",           nullptr,                SID_INET_DLG },
-    { "Internet",           "Proxy",                RID_SVXPAGE_INET_PROXY },
-    { "Internet",           "Email",                RID_SVXPAGE_INET_MAIL },
-    { "LoadSave",           nullptr,                SID_FILTER_DLG },
-    { "LoadSave",           "General",              RID_SFXPAGE_SAVE },
-    { "LoadSave",           "VBAProperties",        SID_OPTFILTER_MSOFFICE },
-    { "LoadSave",           "MicrosoftOffice",      RID_OFAPAGE_MSFILTEROPT2 },
-    { "LoadSave",           "HTMLCompatibility",    RID_OFAPAGE_HTMLOPT },
-    { "Writer",             nullptr,                SID_SW_EDITOPTIONS },
-    { "Writer",             "General",              RID_SW_TP_OPTLOAD_PAGE },
-    { "Writer",             "View",                 RID_SW_TP_CONTENT_OPT },
-    { "Writer",             "FormattingAids",       RID_SW_TP_OPTSHDWCRSR },
-    { "Writer",             "Grid",                 RID_SVXPAGE_GRID },
-    { "Writer",             "BasicFontsWestern",    RID_SW_TP_STD_FONT },
-    { "Writer",             "BasicFontsAsian",      RID_SW_TP_STD_FONT_CJK },
-    { "Writer",             "BasicFontsCTL",        RID_SW_TP_STD_FONT_CTL },
-    { "Writer",             "Print",                RID_SW_TP_OPTPRINT_PAGE },
-    { "Writer",             "Table",                RID_SW_TP_OPTTABLE_PAGE },
-    { "Writer",             "Changes",              RID_SW_TP_REDLINE_OPT },
-    { "Writer",             "Comparison",           RID_SW_TP_COMPARISON_OPT },
-    { "Writer",             "Compatibility",        RID_SW_TP_OPTCOMPATIBILITY_PAGE },
-    { "Writer",             "AutoCaption",          RID_SW_TP_OPTCAPTION_PAGE },
-    { "Writer",             "MailMerge",            RID_SW_TP_MAILCONFIG },
-    { "WriterWeb",          nullptr,                SID_SW_ONLINEOPTIONS },
-    { "WriterWeb",          "View",                 RID_SW_TP_HTML_CONTENT_OPT },
-    { "WriterWeb",          "FormattingAids",       RID_SW_TP_HTML_OPTSHDWCRSR },
-    { "WriterWeb",          "Grid",                 RID_SW_TP_HTML_OPTGRID_PAGE },
-    { "WriterWeb",          "Print",                RID_SW_TP_HTML_OPTPRINT_PAGE },
-    { "WriterWeb",          "Table",                RID_SW_TP_HTML_OPTTABLE_PAGE },
-    { "WriterWeb",          "Background",           RID_SW_TP_BACKGROUND },
-    { "Math",               nullptr,                SID_SM_EDITOPTIONS },
-    { "Math",               "Settings",             SID_SM_TP_PRINTOPTIONS },
-    { "Calc",               nullptr,                SID_SC_EDITOPTIONS },
-    { "Calc",               "General",              SID_SC_TP_LAYOUT },
-    { "Calc",               "View",                 SID_SC_TP_CONTENT },
-    { "Calc",               "Calculate",            SID_SC_TP_CALC },
-    { "Calc",               "Formula",              SID_SC_TP_FORMULA },
-    { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
-    { "Calc",               "Changes",              SID_SC_TP_CHANGES },
-    { "Calc",               "Compatibility",        SID_SC_TP_COMPATIBILITY },
-    { "Calc",               "Grid",                 SID_SC_TP_GRID },
-    { "Calc",               "Print",                RID_SC_TP_PRINT },
-    { "Impress",            nullptr,                SID_SD_EDITOPTIONS },
-    { "Impress",            "General",              SID_SI_TP_MISC },
-    { "Impress",            "View",                 SID_SI_TP_CONTENTS },
-    { "Impress",            "Grid",                 SID_SI_TP_SNAP },
-    { "Impress",            "Print",                SID_SI_TP_PRINT },
-    { "Draw",               nullptr,                SID_SD_GRAPHIC_OPTIONS },
-    { "Draw",               "General",              SID_SD_TP_MISC },
-    { "Draw",               "View",                 SID_SD_TP_CONTENTS },
-    { "Draw",               "Grid",                 SID_SD_TP_SNAP },
-    { "Draw",               "Print",                SID_SD_TP_PRINT },
-    { "Charts",             nullptr,                SID_SCH_EDITOPTIONS },
-    { "Charts",             "DefaultColors",        RID_OPTPAGE_CHART_DEFCOLORS },
-    { "Base",               nullptr,                SID_SB_STARBASEOPTIONS },
-    { "Base",               "Connections",          SID_SB_CONNECTIONPOOLING },
-    { "Base",               "Databases",            SID_SB_DBREGISTEROPTIONS },
-    { nullptr,                 nullptr,             0 }
+    { u"ProductName"_ustr,        u""_ustr,                SID_GENERAL_OPTIONS },
+    { u"ProductName"_ustr,        u"UserData"_ustr,             RID_SFXPAGE_GENERAL },
+    { u"ProductName"_ustr,        u"General"_ustr,              OFA_TP_MISC },
+    { u"ProductName"_ustr,        u"View"_ustr,                 OFA_TP_VIEW },
+    { u"ProductName"_ustr,        u"Print"_ustr,                RID_SFXPAGE_PRINTOPTIONS },
+    { u"ProductName"_ustr,        u"Paths"_ustr,                RID_SFXPAGE_PATH },
+    { u"ProductName"_ustr,        u"Fonts"_ustr,                RID_SVX_FONT_SUBSTITUTION },
+    { u"ProductName"_ustr,        u"Security"_ustr,             RID_SVXPAGE_INET_SECURITY },
+    { u"ProductName"_ustr,        u"Personalization"_ustr,      RID_SVXPAGE_PERSONALIZATION },
+    { u"ProductName"_ustr,        u"Appearance"_ustr,           RID_SVXPAGE_COLORCONFIG },
+    { u"ProductName"_ustr,        u"Accessibility"_ustr,        RID_SVXPAGE_ACCESSIBILITYCONFIG },
+    { u"ProductName"_ustr,        u"Java"_ustr,                 RID_SVXPAGE_OPTIONS_JAVA },
+    { u"ProductName"_ustr,        u"BasicIDEOptions"_ustr,      RID_SVXPAGE_BASICIDE_OPTIONS },
+    { u"ProductName"_ustr,        u"OnlineUpdate"_ustr,         RID_SVXPAGE_ONLINEUPDATE },
+    { u"LanguageSettings"_ustr,   u""_ustr,                SID_LANGUAGE_OPTIONS },
+    { u"LanguageSettings"_ustr,   u"Languages"_ustr,            OFA_TP_LANGUAGES  },
+    { u"LanguageSettings"_ustr,   u"WritingAids"_ustr,          RID_SFXPAGE_LINGU },
+    { u"LanguageSettings"_ustr,   u"SearchingInJapanese"_ustr,  RID_SVXPAGE_JSEARCH_OPTIONS },
+    { u"LanguageSettings"_ustr,   u"AsianLayout"_ustr,          RID_SVXPAGE_ASIAN_LAYOUT },
+    { u"LanguageSettings"_ustr,   u"ComplexTextLayout"_ustr,    RID_SVXPAGE_OPTIONS_CTL },
+    { u"Internet"_ustr,           u""_ustr,                SID_INET_DLG },
+    { u"Internet"_ustr,           u"Proxy"_ustr,                RID_SVXPAGE_INET_PROXY },
+    { u"Internet"_ustr,           u"Email"_ustr,                RID_SVXPAGE_INET_MAIL },
+    { u"LoadSave"_ustr,           u""_ustr,                SID_FILTER_DLG },
+    { u"LoadSave"_ustr,           u"General"_ustr,              RID_SFXPAGE_SAVE },
+    { u"LoadSave"_ustr,           u"VBAProperties"_ustr,        SID_OPTFILTER_MSOFFICE },
+    { u"LoadSave"_ustr,           u"MicrosoftOffice"_ustr,      RID_OFAPAGE_MSFILTEROPT2 },
+    { u"LoadSave"_ustr,           u"HTMLCompatibility"_ustr,    RID_OFAPAGE_HTMLOPT },
+    { u"Writer"_ustr,             u""_ustr,                SID_SW_EDITOPTIONS },
+    { u"Writer"_ustr,             u"General"_ustr,              RID_SW_TP_OPTLOAD_PAGE },
+    { u"Writer"_ustr,             u"View"_ustr,                 RID_SW_TP_CONTENT_OPT },
+    { u"Writer"_ustr,             u"FormattingAids"_ustr,       RID_SW_TP_OPTSHDWCRSR },
+    { u"Writer"_ustr,             u"Grid"_ustr,                 RID_SVXPAGE_GRID },
+    { u"Writer"_ustr,             u"BasicFontsWestern"_ustr,    RID_SW_TP_STD_FONT },
+    { u"Writer"_ustr,             u"BasicFontsAsian"_ustr,      RID_SW_TP_STD_FONT_CJK },
+    { u"Writer"_ustr,             u"BasicFontsCTL"_ustr,        RID_SW_TP_STD_FONT_CTL },
+    { u"Writer"_ustr,             u"Print"_ustr,                RID_SW_TP_OPTPRINT_PAGE },
+    { u"Writer"_ustr,             u"Table"_ustr,                RID_SW_TP_OPTTABLE_PAGE },
+    { u"Writer"_ustr,             u"Changes"_ustr,              RID_SW_TP_REDLINE_OPT },
+    { u"Writer"_ustr,             u"Comparison"_ustr,           RID_SW_TP_COMPARISON_OPT },
+    { u"Writer"_ustr,             u"Compatibility"_ustr,        RID_SW_TP_OPTCOMPATIBILITY_PAGE },
+    { u"Writer"_ustr,             u"AutoCaption"_ustr,          RID_SW_TP_OPTCAPTION_PAGE },
+    { u"Writer"_ustr,             u"MailMerge"_ustr,            RID_SW_TP_MAILCONFIG },
+    { u"WriterWeb"_ustr,          u""_ustr,                SID_SW_ONLINEOPTIONS },
+    { u"WriterWeb"_ustr,          u"View"_ustr,                 RID_SW_TP_HTML_CONTENT_OPT },
+    { u"WriterWeb"_ustr,          u"FormattingAids"_ustr,       RID_SW_TP_HTML_OPTSHDWCRSR },
+    { u"WriterWeb"_ustr,          u"Grid"_ustr,                 RID_SW_TP_HTML_OPTGRID_PAGE },
+    { u"WriterWeb"_ustr,          u"Print"_ustr,                RID_SW_TP_HTML_OPTPRINT_PAGE },
+    { u"WriterWeb"_ustr,          u"Table"_ustr,                RID_SW_TP_HTML_OPTTABLE_PAGE },
+    { u"WriterWeb"_ustr,          u"Background"_ustr,           RID_SW_TP_BACKGROUND },
+    { u"Math"_ustr,               u""_ustr,                SID_SM_EDITOPTIONS },
+    { u"Math"_ustr,               u"Settings"_ustr,             SID_SM_TP_PRINTOPTIONS },
+    { u"Calc"_ustr,               u""_ustr,                SID_SC_EDITOPTIONS },
+    { u"Calc"_ustr,               u"General"_ustr,              SID_SC_TP_LAYOUT },
+    { u"Calc"_ustr,               u"View"_ustr,                 SID_SC_TP_CONTENT },
+    { u"Calc"_ustr,               u"Calculate"_ustr,            SID_SC_TP_CALC },
+    { u"Calc"_ustr,               u"Formula"_ustr,              SID_SC_TP_FORMULA },
+    { u"Calc"_ustr,               u"SortLists"_ustr,            SID_SC_TP_USERLISTS },
+    { u"Calc"_ustr,               u"Changes"_ustr,              SID_SC_TP_CHANGES },
+    { u"Calc"_ustr,               u"Compatibility"_ustr,        SID_SC_TP_COMPATIBILITY },
+    { u"Calc"_ustr,               u"Grid"_ustr,                 SID_SC_TP_GRID },
+    { u"Calc"_ustr,               u"Print"_ustr,                RID_SC_TP_PRINT },
+    { u"Impress"_ustr,            u""_ustr,                SID_SD_EDITOPTIONS },
+    { u"Impress"_ustr,            u"General"_ustr,              SID_SI_TP_MISC },
+    { u"Impress"_ustr,            u"View"_ustr,                 SID_SI_TP_CONTENTS },
+    { u"Impress"_ustr,            u"Grid"_ustr,                 SID_SI_TP_SNAP },
+    { u"Impress"_ustr,            u"Print"_ustr,                SID_SI_TP_PRINT },
+    { u"Draw"_ustr,               u""_ustr,                SID_SD_GRAPHIC_OPTIONS },
+    { u"Draw"_ustr,               u"General"_ustr,              SID_SD_TP_MISC },
+    { u"Draw"_ustr,               u"View"_ustr,                 SID_SD_TP_CONTENTS },
+    { u"Draw"_ustr,               u"Grid"_ustr,                 SID_SD_TP_SNAP },
+    { u"Draw"_ustr,               u"Print"_ustr,                SID_SD_TP_PRINT },
+    { u"Charts"_ustr,             u""_ustr,                SID_SCH_EDITOPTIONS },
+    { u"Charts"_ustr,             u"DefaultColors"_ustr,        RID_OPTPAGE_CHART_DEFCOLORS },
+    { u"Base"_ustr,               u""_ustr,                SID_SB_STARBASEOPTIONS },
+    { u"Base"_ustr,               u"Connections"_ustr,          SID_SB_CONNECTIONPOOLING },
+    { u"Base"_ustr,               u"Databases"_ustr,            SID_SB_DBREGISTEROPTIONS },
 };
 
 static bool lcl_getStringFromID( sal_uInt16 _nPageId, OUString& _rGroupName, OUString& _rPageName )
 {
     bool bRet = false;
 
-    sal_uInt16 nIdx = 0;
-    while ( OptionsMap_Impl[nIdx].m_pGroupName != nullptr )
+    for (const auto & rMapping : OptionsMap_Impl )
     {
-        if ( _nPageId == OptionsMap_Impl[nIdx].m_nPageId )
+        if ( _nPageId == rMapping.m_nPageId )
         {
             bRet = true;
-            _rGroupName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pGroupName );
-            if ( OptionsMap_Impl[nIdx].m_pPageName != nullptr )
-                _rPageName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pPageName );
+            _rGroupName = rMapping.m_aGroupName;
+            if ( !rMapping.m_aPageName.isEmpty() )
+                _rPageName = rMapping.m_aPageName;
             break;
         }
-        ++nIdx;
     }
 
     return bRet;
