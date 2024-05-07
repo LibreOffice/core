@@ -23,6 +23,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <osl/diagnose.h>
+#include <svl/itemset.hxx>
 
 
 namespace frm
@@ -139,7 +140,7 @@ namespace frm
     }
 
 
-    const SfxPoolItem* OAsianFontLayoutDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
+    SfxPoolItemHolder OAsianFontLayoutDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
         // look for the "Enable" parameter
         const PropertyValue* pLookup = _rArguments.getConstArray();
@@ -154,13 +155,18 @@ namespace frm
         {
             bool bEnable = true;
             OSL_VERIFY( pLookup->Value >>= bEnable );
+
             if ( m_nAttributeId == sal_uInt16(SID_ATTR_PARA_SCRIPTSPACE) )
-                return new SvxScriptSpaceItem( bEnable, static_cast<WhichId>(m_nAttributeId) );
-            return new SfxBoolItem( static_cast<WhichId>(m_nAttributeId), bEnable );
+                return SfxPoolItemHolder(
+                    *getEditView()->GetEmptyItemSet().GetPool(),
+                    new SvxScriptSpaceItem(bEnable, static_cast<WhichId>(m_nAttributeId)));
+            return SfxPoolItemHolder(
+                *getEditView()->GetEmptyItemSet().GetPool(),
+                new SfxBoolItem(static_cast<WhichId>(m_nAttributeId), bEnable));
         }
 
         OSL_FAIL( "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
-        return nullptr;
+        return SfxPoolItemHolder();
     }
 
 
