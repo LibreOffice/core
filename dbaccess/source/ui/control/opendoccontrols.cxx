@@ -52,12 +52,8 @@ namespace dbaui
         using ::com::sun::star::ui::XImageManager;
         using ::com::sun::star::graphic::XGraphic;
 
-        Reference< XGraphic> GetCommandIcon( const char* _pCommandURL, const OUString& _rModuleName )
+        Reference< XGraphic> GetCommandIcon( const OUString& sCommandURL, const OUString& _rModuleName )
         {
-            if ( !_pCommandURL || !*_pCommandURL )
-                return nullptr;
-
-            OUString sCommandURL = OUString::createFromAscii( _pCommandURL );
             try
             {
                 do
@@ -94,24 +90,17 @@ namespace dbaui
 
     // OpenButton
 
-    OpenDocumentButton::OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const char* _pAsciiModuleName)
-        : m_xControl(std::move(xControl))
+    OpenDocumentButton::OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const OUString& _rAsciiModuleName)
+        : m_sModule( _rAsciiModuleName )
+        , m_xControl(std::move(xControl))
     {
-        impl_init( _pAsciiModuleName );
-    }
-
-    void OpenDocumentButton::impl_init( const char* _pAsciiModuleName )
-    {
-        OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
-        m_sModule = OUString::createFromAscii( _pAsciiModuleName );
-
         // our label should equal the UI text of the "Open" command
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:Open"_ustr, m_sModule);
         OUString sLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         m_xControl->set_label(" " + sLabel.replaceAll("~", ""));
 
         // Place icon left of text and both centered in the button.
-        m_xControl->set_image(GetCommandIcon(".uno:Open", m_sModule));
+        m_xControl->set_image(GetCommandIcon(u".uno:Open"_ustr, m_sModule));
     }
 
     // OpenDocumentListBox
