@@ -25,7 +25,6 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
-#include <unx/gtk/atkbridge.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
@@ -244,10 +243,6 @@ void GtkInstance::EnsureInit()
     pSalData->Init();
     GtkSalData::initNWF();
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    InitAtkBridge();
-#endif
-
     ImplSVData* pSVData = ImplGetSVData();
 #ifdef GTK_TOOLKIT_NAME
     pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
@@ -261,9 +256,6 @@ void GtkInstance::EnsureInit()
 GtkInstance::~GtkInstance()
 {
     assert( nullptr == m_pTimer );
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    DeInitAtkBridge();
-#endif
     ResetLastSeenCairoFontOptions(nullptr);
 }
 

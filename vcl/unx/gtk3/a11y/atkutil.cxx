@@ -34,10 +34,6 @@
 
 #include <unx/gtk/gtkdata.hxx>
 #include "atkwrapper.hxx"
-#include "atkutil.hxx"
-
-#include <cassert>
-#include <set>
 
 using namespace ::com::sun::star;
 
@@ -283,45 +279,6 @@ rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
         m_xDocumentFocusListener = xDFL.get();
     }
     return xDFL;
-}
-
-static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
-{
-    try
-    {
-        switch (rEvent.GetId())
-        {
-
-        case VclEventId::ComboboxSetText:
-            // This looks quite strange to me. Stumbled over this when fixing #i104290#.
-            // This kicked in when leaving the combobox in the toolbar, after that the events worked.
-            // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
-            // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
-            // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-            break;
-
-        default:
-            break;
-        }
-    }
-    catch (const lang::IndexOutOfBoundsException&)
-    {
-        g_warning("WindowEventHandler: Focused object has invalid index in parent");
-    }
-}
-
-static Link<VclSimpleEvent&,void> g_aEventListenerLink( nullptr, WindowEventHandler );
-
-/*****************************************************************************/
-
-void ooo_atk_util_ensure_event_listener()
-{
-    static bool bInited;
-    if (!bInited)
-    {
-        Application::AddEventListener( g_aEventListenerLink );
-        bInited = true;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -82,7 +82,6 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/a11y/atkaction \
-    vcl/unx/gtk3/a11y/atkbridge \
     vcl/unx/gtk3/a11y/atkcomponent \
     vcl/unx/gtk3/a11y/atkeditabletext \
     vcl/unx/gtk3/a11y/atkfactory \
