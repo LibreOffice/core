@@ -92,42 +92,39 @@ struct PathUserData_Impl
 struct Handle2CfgNameMapping_Impl
 {
     SvtPathOptions::Paths m_nHandle;
-    const char* m_pCfgName;
+    OUString m_aCfgName;
 };
 
 }
 
-Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
+constexpr Handle2CfgNameMapping_Impl Hdl2CfgMap_Impl[]
 {
-    { SvtPathOptions::Paths::AutoCorrect, "AutoCorrect" },
-    { SvtPathOptions::Paths::AutoText,    "AutoText" },
-    { SvtPathOptions::Paths::Backup,      "Backup" },
-    { SvtPathOptions::Paths::Gallery,     "Gallery" },
-    { SvtPathOptions::Paths::Graphic,     "Graphic" },
-    { SvtPathOptions::Paths::Temp,        "Temp" },
-    { SvtPathOptions::Paths::Template,    "Template" },
-    { SvtPathOptions::Paths::Work,        "Work" },
-    { SvtPathOptions::Paths::Dictionary,        "Dictionary" },
-    { SvtPathOptions::Paths::Classification, "Classification" },
+    { SvtPathOptions::Paths::AutoCorrect, u"AutoCorrect"_ustr },
+    { SvtPathOptions::Paths::AutoText,    u"AutoText"_ustr },
+    { SvtPathOptions::Paths::Backup,      u"Backup"_ustr },
+    { SvtPathOptions::Paths::Gallery,     u"Gallery"_ustr },
+    { SvtPathOptions::Paths::Graphic,     u"Graphic"_ustr },
+    { SvtPathOptions::Paths::Temp,        u"Temp"_ustr },
+    { SvtPathOptions::Paths::Template,    u"Template"_ustr },
+    { SvtPathOptions::Paths::Work,        u"Work"_ustr },
+    { SvtPathOptions::Paths::Dictionary,     u"Dictionary"_ustr },
+    { SvtPathOptions::Paths::Classification, u"Classification"_ustr },
 #if OSL_DEBUG_LEVEL > 1
-    { SvtPathOptions::Paths::Linguistic,        "Linguistic" },
+    { SvtPathOptions::Paths::Linguistic,     u"Linguistic"_ustr },
 #endif
-    { SvtPathOptions::Paths::LAST, nullptr }
 };
 
 static OUString getCfgName_Impl( SvtPathOptions::Paths _nHandle )
 {
     OUString sCfgName;
-    sal_uInt16 nIndex = 0;
-    while ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle != SvtPathOptions::Paths::LAST )
+    for (const auto & rMapping : Hdl2CfgMap_Impl)
     {
-        if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
+        if ( rMapping.m_nHandle == _nHandle )
         {
             // config name found
-            sCfgName = OUString::createFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
+            sCfgName = rMapping.m_aCfgName;
             break;
         }
-        ++nIndex;
     }
 
     return sCfgName;
