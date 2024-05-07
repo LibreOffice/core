@@ -22,8 +22,8 @@ odk_cpp_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Type.h \
 	com/sun/star/uno/Type.hxx
 
-# Cygwin Doxygen needs unix paths, wsl-as-helper needs paths into windows-realm
-odk_cygwin_path = $(if $(MSYSTEM),$(call gb_Helper_wsl_path,$(1)),$(call gb_Helper_cyg_path,$(1)))
+# Cygwin Doxygen needs unix paths, wsl-as-helper works in windows-realm
+odk_cygwin_path = $(if $(MSYSTEM),$(1),$(call gb_Helper_cyg_path,$(1)))
 odk_cpp_PREFIX := $(call odk_cygwin_path,$(INSTDIR)/$(SDKDIRNAME)/include/)
 odk_cpp_DOXY_INPUT := $(call odk_cygwin_path,$(SRCDIR)/odk/docs/cpp/main.dox \
 	$(SRCDIR)/include/sal/log-areas.dox \
@@ -57,7 +57,7 @@ $(gb_CustomTarget_workdir)/odk/docs/cpp/doxygen.log : \
 		$(call gb_Package_get_target,odk_headers_generated)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GEN)
-	rm -rf $(odk_cpp_DOXY_WORKDIR)/ && $(call gb_Helper_wsl_path,$(WSL) $(DOXYGEN) $<) > $@
+	rm -rf $(odk_cpp_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),GEN)
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
@@ -98,7 +98,7 @@ $(gb_CustomTarget_workdir)/odk/docs/idl/doxygen.log : \
 		$(SRCDIR)/odk/docs/idl/main.dox
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GEN)
-	rm -rf $(odk_idl_DOXY_WORKDIR)/ && $(call gb_Helper_wsl_path,$(WSL) $(DOXYGEN) $<) > $@
+	rm -rf $(odk_idl_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),GEN)
 
 # vim: set noet sw=4 ts=4:
