@@ -67,6 +67,11 @@
         <property name="position">2</property>
       </packing>
     </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="box-atkobject">
+        <property name="AtkObject::accessible-role">combo-box</property>
+      </object>
+    </child>
     <style>
       <class name="linked"/>
     </style>
