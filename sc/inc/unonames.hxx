@@ -561,6 +561,7 @@ inline constexpr OUString SC_UNO_SHOWFORM             = u"ShowFormulas"_ustr;
 inline constexpr OUString SC_UNO_SHOWGRID             = u"ShowGrid"_ustr;
 inline constexpr OUString SC_UNO_SHOWHELP             = u"ShowHelpLines"_ustr;
 inline constexpr OUString SC_UNO_SHOWNOTES            = u"ShowNotes"_ustr;
+inline constexpr OUString SC_UNO_SHOWNOTEAUTHOR       = u"ShowNoteAuthor"_ustr;
 inline constexpr OUString SC_UNO_SHOWFORMULASMARKS    = u"ShowFormulasMarks"_ustr;
 inline constexpr OUString SC_UNO_SHOWOBJ              = u"ShowObjects"_ustr;
 inline constexpr OUString SC_UNO_SHOWPAGEBR           = u"ShowPageBreaks"_ustr;

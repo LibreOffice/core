@@ -53,6 +53,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
     {
         { SC_UNO_SHOWZERO,     0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_SHOWNOTES,    0,  cppu::UnoType<bool>::get(),              0, 0},
+        { SC_UNO_SHOWNOTEAUTHOR,    0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_SHOWFORMULASMARKS,    0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_SHOWGRID,     0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_GRIDCOLOR,    0,  cppu::UnoType<sal_Int32>::get(),        0, 0},
@@ -153,6 +154,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
         aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
+        aViewOpt.SetOption(VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
         aViewOpt.SetOption(VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWGRID )
@@ -461,6 +464,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         aRet <<= aViewOpt.GetOption( VOPT_NULLVALS );
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
         aRet <<= aViewOpt.GetOption( VOPT_NOTES );
+    else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
+        aRet <<= aViewOpt.GetOption( VOPT_NOTEAUTHOR );
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
         aRet <<= aViewOpt.GetOption( VOPT_FORMULAS_MARKS );
     else if ( aPropertyName == SC_UNO_SHOWGRID )

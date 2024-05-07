@@ -104,6 +104,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
         { SC_UNO_SHOWGRID,     0,  cppu::UnoType<bool>::get(),          0, 0},
         { SC_UNO_SHOWHELP,     0,  cppu::UnoType<bool>::get(),          0, 0},
         { SC_UNO_SHOWNOTES,    0,  cppu::UnoType<bool>::get(),          0, 0},
+        { SC_UNO_SHOWNOTEAUTHOR,    0,  cppu::UnoType<bool>::get(),          0, 0},
         { SC_UNO_SHOWFORMULASMARKS,    0,  cppu::UnoType<bool>::get(),          0, 0},
         { SC_UNO_SHOWOBJ,      0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         { SC_UNO_SHOWPAGEBR,   0,  cppu::UnoType<bool>::get(),          0, 0},
@@ -1780,6 +1781,8 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         aNewOpt.SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
         aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
+        aNewOpt.SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
         aNewOpt.SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
@@ -1912,6 +1915,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         else if ( aPropertyName == SC_UNO_SHOWGRID )   aRet <<= rOpt.GetOption( VOPT_GRID );
         else if ( aPropertyName == SC_UNO_SHOWHELP )   aRet <<= rOpt.GetOption( VOPT_HELPLINES );
         else if ( aPropertyName == SC_UNO_SHOWNOTES )  aRet <<= rOpt.GetOption( VOPT_NOTES );
+        else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )  aRet <<= rOpt.GetOption( VOPT_NOTEAUTHOR );
         else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )  aRet <<= rOpt.GetOption( VOPT_FORMULAS_MARKS );
         else if ( aPropertyName == SC_UNO_SHOWPAGEBR ) aRet <<= rOpt.GetOption( VOPT_PAGEBREAKS );
         else if ( aPropertyName == SC_UNO_SHOWZERO )   aRet <<= rOpt.GetOption( VOPT_NULLVALS );

@@ -41,6 +41,8 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xNilImg;
     std::unique_ptr<weld::CheckButton> m_xAnnotCB;
     std::unique_ptr<weld::Widget> m_xAnnotImg;
+    std::unique_ptr<weld::CheckButton> m_xNoteAuthorCB;
+    std::unique_ptr<weld::Widget> m_xNoteAuthorImg;
     std::unique_ptr<weld::CheckButton> m_xFormulaMarkCB;
     std::unique_ptr<weld::Widget> m_xFormulaMarkImg;
     std::unique_ptr<weld::CheckButton> m_xValueCB;

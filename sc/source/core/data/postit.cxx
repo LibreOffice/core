@@ -45,6 +45,7 @@
 #include <scresid.hxx>
 #include <utility>
 #include <strings.hrc>
+#include <officecfg/Office/Calc.hxx>
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
@@ -865,7 +866,8 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( *pOPO );
         // Setting and formatting rUserText: Author name and date time
-        lcl_FormatAndInsertAuthorAndDatepara(pCaption.get(), aBuffer, bUserWithTrackText);
+        if (officecfg::Office::Calc::Content::Display::NoteAuthor::get())
+           lcl_FormatAndInsertAuthorAndDatepara(pCaption.get(), aBuffer, bUserWithTrackText);
         // set formatting (must be done after setting text) and resize the box to fit the text
         if (auto pStyleSheet = pNoteCaption->GetStyleSheet())
             pCaption->SetStyleSheet(pStyleSheet, true);

@@ -3785,6 +3785,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_SHOWZERO].Value <<= maOptions.GetOption(VOPT_NULLVALS);
     pSettings[SC_SHOWNOTES].Name = SC_UNO_SHOWNOTES;
     pSettings[SC_SHOWNOTES].Value <<= maOptions.GetOption(VOPT_NOTES);
+    pSettings[SC_SHOWNOTEAUTHOR].Name = SC_UNO_SHOWNOTEAUTHOR;
+    pSettings[SC_SHOWNOTEAUTHOR].Value <<= maOptions.GetOption(VOPT_NOTEAUTHOR);
     pSettings[SC_SHOWFORMULASMARKS].Name = SC_UNO_SHOWFORMULASMARKS;
     pSettings[SC_SHOWFORMULASMARKS].Value <<= maOptions.GetOption(VOPT_FORMULAS_MARKS);
     pSettings[SC_SHOWGRID].Name = SC_UNO_SHOWGRID;
@@ -3931,6 +3933,8 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             maOptions.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWNOTES )
             maOptions.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+        else if ( sName == SC_UNO_SHOWNOTEAUTHOR )
+            maOptions.SetOption(VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWFORMULASMARKS )
             maOptions.SetOption(VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWGRID )

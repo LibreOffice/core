@@ -24,7 +24,7 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               26
+#define SC_VIEWSETTINGS_COUNT               27
 
 #define SC_VIEW_ID                          0
 #define SC_TABLE_VIEWSETTINGS               1
@@ -36,22 +36,23 @@
 #define SC_PAGE_BREAK_PREVIEW               7
 #define SC_SHOWZERO                         8
 #define SC_SHOWNOTES                        9
-#define SC_SHOWFORMULASMARKS                10
-#define SC_SHOWGRID                         11
-#define SC_GRIDCOLOR                        12
-#define SC_SHOWPAGEBR                       13
-#define SC_COLROWHDR                        14
-#define SC_SHEETTABS                        15
-#define SC_OUTLSYMB                         16
-#define SC_VALUE_HIGHLIGHTING               17
-#define SC_SNAPTORASTER                     18
-#define SC_RASTERVIS                        19
-#define SC_RASTERRESX                       20
-#define SC_RASTERRESY                       21
-#define SC_RASTERSUBX                       22
-#define SC_RASTERSUBY                       23
-#define SC_RASTERSYNC                       24
-#define SC_FORMULA_BAR_HEIGHT               25
+#define SC_SHOWNOTEAUTHOR                   10
+#define SC_SHOWFORMULASMARKS                11
+#define SC_SHOWGRID                         12
+#define SC_GRIDCOLOR                        13
+#define SC_SHOWPAGEBR                       14
+#define SC_COLROWHDR                        15
+#define SC_SHEETTABS                        16
+#define SC_OUTLSYMB                         17
+#define SC_VALUE_HIGHLIGHTING               18
+#define SC_SNAPTORASTER                     19
+#define SC_RASTERVIS                        20
+#define SC_RASTERRESX                       21
+#define SC_RASTERRESY                       22
+#define SC_RASTERSUBX                       23
+#define SC_RASTERSUBY                       24
+#define SC_RASTERSYNC                       25
+#define SC_FORMULA_BAR_HEIGHT               26
 
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence

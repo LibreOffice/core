@@ -48,6 +48,8 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xNilImg(m_xBuilder->weld_widget("locknil"))
     , m_xAnnotCB(m_xBuilder->weld_check_button("annot"))
     , m_xAnnotImg(m_xBuilder->weld_widget("lockannot"))
+    , m_xNoteAuthorCB(m_xBuilder->weld_check_button("cbNoteAuthor"))
+    , m_xNoteAuthorImg(m_xBuilder->weld_widget("imNoteAuthor"))
     , m_xFormulaMarkCB(m_xBuilder->weld_check_button("formulamark"))
     , m_xFormulaMarkImg(m_xBuilder->weld_widget("lockformulamark"))
     , m_xValueCB(m_xBuilder->weld_check_button("value"))
@@ -96,6 +98,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xNilCB->connect_toggled(aCBHdl);
     m_xAnnotCB->connect_toggled(aCBHdl);
     m_xAnnotCB->set_accessible_description(ScResId(STR_A11Y_DESC_ANNOT));
+    m_xNoteAuthorCB->connect_toggled(aCBHdl);
     m_xFormulaMarkCB->connect_toggled(aCBHdl);
     m_xValueCB->connect_toggled(aCBHdl);
     m_xColRowHighCB->connect_toggled(aCBHdl);
@@ -155,6 +158,7 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
     if( m_xFormulaCB->get_state_changed_from_saved() ||
         m_xNilCB->get_state_changed_from_saved() ||
         m_xAnnotCB->get_state_changed_from_saved() ||
+        m_xNoteAuthorCB->get_state_changed_from_saved() ||
         m_xFormulaMarkCB->get_state_changed_from_saved() ||
         m_xValueCB->get_state_changed_from_saved() ||
         m_xAnchorCB->get_state_changed_from_saved() ||
@@ -212,6 +216,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaCB ->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS));
     m_xNilCB     ->set_active(m_xLocalOptions->GetOption(VOPT_NULLVALS));
     m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(VOPT_NOTES));
+    m_xNoteAuthorCB->set_active(m_xLocalOptions->GetOption(VOPT_NOTEAUTHOR));
     m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
     m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
     m_xColRowHighCB->set_active(officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get());
@@ -267,6 +272,10 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     bReadOnly = officecfg::Office::Calc::Content::Display::NoteTag::isReadOnly();
     m_xAnnotCB->set_sensitive(!bReadOnly);
     m_xAnnotImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::NoteAuthor::isReadOnly();
+    m_xNoteAuthorCB->set_sensitive(!bReadOnly);
+    m_xNoteAuthorImg->set_visible(bReadOnly);
 
     bReadOnly = officecfg::Office::Calc::Content::Display::FormulaMark::isReadOnly();
     m_xFormulaMarkCB->set_sensitive(!bReadOnly);
@@ -343,6 +352,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaCB->save_state();
     m_xNilCB->save_state();
     m_xAnnotCB->save_state();
+    m_xNoteAuthorCB->save_state();
     m_xFormulaMarkCB->save_state();
     m_xValueCB->save_state();
     m_xColRowHighCB->save_state();
@@ -398,6 +408,7 @@ IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
     if (m_xFormulaCB.get() == &rBtn )   eOption = VOPT_FORMULAS;
     else if ( m_xNilCB.get() == &rBtn )   eOption = VOPT_NULLVALS;
     else if ( m_xAnnotCB.get() == &rBtn )   eOption = VOPT_NOTES;
+    else if ( m_xNoteAuthorCB.get() == &rBtn )   eOption = VOPT_NOTEAUTHOR;
     else if ( m_xFormulaMarkCB.get() == &rBtn )   eOption = VOPT_FORMULAS_MARKS;
     else if ( m_xValueCB.get() == &rBtn )   eOption = VOPT_SYNTAX;
     else if ( m_xAnchorCB.get() == &rBtn )   eOption = VOPT_ANCHOR;
