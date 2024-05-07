@@ -57,9 +57,9 @@ namespace dbaccess
         */
         static OUString  loadString(
                 TranslateId pResId,
-                const char* _pPlaceholderAscii1,
+                std::u16string_view _rPlaceholderAscii1,
                 std::u16string_view _rReplace1,
-                const char* _pPlaceholderAscii2,
+                std::u16string_view _rPlaceholderAscii2,
                 std::u16string_view _rReplace2
         );
     };

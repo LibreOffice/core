@@ -2180,7 +2180,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
             {
                 Any aError = ::cppu::getCaughtException();
                 OUString sMessage = ResourceManager::loadString( RID_NO_SUCH_DATA_SOURCE,
-                    "$name$", m_aDataSourceName, "$error$", extractExceptionMessage( m_aContext, aError ) );
+                    u"$name$", m_aDataSourceName, u"$error$", extractExceptionMessage( m_aContext, aError ) );
                 ::dbtools::throwGenericSQLException( sMessage, *this, aError );
             }
         }

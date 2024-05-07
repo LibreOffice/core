@@ -993,8 +993,8 @@ void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rE
     OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
     sErrorMessage = ResourceManager::loadString(
         RID_STR_ERROR_WHILE_SAVING,
-        "$location$", i_rTargetURL,
-        "$message$", sErrorMessage
+        u"$location$", i_rTargetURL,
+        u"$message$", sErrorMessage
     );
     throw IOException( sErrorMessage, *const_cast< ODatabaseDocument* >( this ) );
 }
