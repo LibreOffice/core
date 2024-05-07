@@ -294,6 +294,7 @@ void FrameView::Update(SdOptions const * pOptions)
         SetNoDragXorPolys ( !officecfg::Office::Impress::Layout::Display::Contour::get() );
         SetOFrmSnap( officecfg::Office::Impress::Snap::Object::ObjectFrame::get() );
         SetOPntSnap( officecfg::Office::Impress::Snap::Object::ObjectPoint::get() );
+        SetOrtho( officecfg::Office::Impress::Snap::Position::CreatingMoving::get() );
         SetPlusHandlesAlwaysVisible( officecfg::Office::Impress::Layout::Display::Bezier::get() );
     }
     else
@@ -306,6 +307,7 @@ void FrameView::Update(SdOptions const * pOptions)
         SetNoDragXorPolys ( !officecfg::Office::Draw::Layout::Display::Contour::get() );
         SetOFrmSnap( officecfg::Office::Draw::Snap::Object::ObjectFrame::get() );
         SetOPntSnap( officecfg::Office::Draw::Snap::Object::ObjectPoint::get() );
+        SetOrtho( officecfg::Office::Draw::Snap::Position::CreatingMoving::get() );
         SetPlusHandlesAlwaysVisible( officecfg::Office::Draw::Layout::Display::Bezier::get() );
     }
 
@@ -319,7 +321,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetCrookNoContortion( pOptions->IsCrookNoContortion() );
     SetAngleSnapEnabled( pOptions->IsRotate() );
     SetBigOrtho( pOptions->IsBigOrtho() );
-    SetOrtho( pOptions->IsOrtho() );
     SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
     GetModel().SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
