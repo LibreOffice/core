@@ -307,14 +307,14 @@ namespace dbaui
             return bSuccess;
         }
 
-        void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const char* _pAsciiEventName,
+        void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const OUString& _rAsciiEventName,
                 const SubComponentDescriptor& _rComponent )
         {
             try
             {
                 Reference< XDocumentEventBroadcaster > xBroadcaster( _rData.m_rController.getModel(), UNO_QUERY_THROW );
                 xBroadcaster->notifyDocumentEvent(
-                    OUString::createFromAscii( _pAsciiEventName ),
+                    _rAsciiEventName,
                     &_rData.m_rController,
                     Any( _rComponent.xFrame )
                 );
@@ -397,7 +397,7 @@ namespace dbaui
         if ( aClosedComponent.is() )
         {
             aGuard.clear();
-            lcl_notifySubComponentEvent( *m_pData, "OnSubComponentClosed", aClosedComponent );
+            lcl_notifySubComponentEvent( *m_pData, u"OnSubComponentClosed"_ustr, aClosedComponent );
         }
     }
 
@@ -474,7 +474,7 @@ namespace dbaui
 
         // notify this to interested parties
         aGuard.clear();
-        lcl_notifySubComponentEvent( *m_pData, "OnSubComponentOpened", aElement );
+        lcl_notifySubComponentEvent( *m_pData, u"OnSubComponentOpened"_ustr, aElement );
     }
 
     bool SubComponentManager::activateSubFrame( const OUString& _rName, const sal_Int32 _nComponentType,
