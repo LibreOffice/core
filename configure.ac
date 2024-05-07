@@ -9488,14 +9488,28 @@ else
             fi
         else
             AC_MSG_CHECKING([for doxygen])
-            DOXYGEN=$with_doxygen
-            AC_MSG_RESULT([$DOXYGEN])
+            PathFormat "$with_doxygen"
+            DOXYGEN="$formatted_path_unix"
+            AC_MSG_RESULT([$formatted_path])
         fi
         if test -n "$DOXYGEN"; then
             DOXYGEN_VERSION=`$DOXYGEN --version 2>/dev/null`
             DOXYGEN_NUMVERSION=`echo $DOXYGEN_VERSION | $AWK -F. '{ print \$1*10000 + \$2*100 + \$3 }'`
             if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
                 AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
+            fi
+        fi
+        if test -n "$WSL_ONLY_AS_HELPER"; then
+            dnl what really should be tested is whether it is doxygen from windows-realm
+            dnl i.e. one that runs on the windows-side and deals with windows-pathnames
+            dnl using doxygen from wsl container would be possible, but there's a performance
+            dnl penalty when accessing the files outside the container
+            AC_MSG_CHECKING([whether doxygen is a windows executable])
+            if $(file "$DOXYGEN" | grep -q "PE32"); then
+                AC_MSG_RESULT([yes])
+            else
+                AC_MSG_RESULT([no])
+                AC_MSG_ERROR([please provide a path to a windows version of doxygen or use --without-doxygen])
             fi
         fi
     fi
