@@ -35,12 +35,12 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 
 OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent)
-    : InterimItemWindow(pParent, "dbaccess/ui/tableborderwindow.ui", "TableBorderWindow", false)
-    , m_xHorzSplitter(m_xBuilder->weld_paned("splitter"))
-    , m_xEditorParent(m_xBuilder->weld_container("editor"))
+    : InterimItemWindow(pParent, u"dbaccess/ui/tableborderwindow.ui"_ustr, u"TableBorderWindow"_ustr, false)
+    , m_xHorzSplitter(m_xBuilder->weld_paned(u"splitter"_ustr))
+    , m_xEditorParent(m_xBuilder->weld_container(u"editor"_ustr))
     , m_xEditorParentWin(m_xEditorParent->CreateChildFrame())
     , m_xEditorCtrl(VclPtr<OTableEditorCtrl>::Create(VCLUnoHelper::GetWindow(m_xEditorParentWin), pParent))
-    , m_xFieldDescParent(m_xBuilder->weld_container("fielddesc"))
+    , m_xFieldDescParent(m_xBuilder->weld_container(u"fielddesc"_ustr))
     , m_xFieldDescWin(new OTableFieldDescWin(m_xFieldDescParent.get(), pParent))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);

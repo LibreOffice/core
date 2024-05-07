@@ -54,20 +54,20 @@ namespace dbaui
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
         {
-            m_xOptionsLabel = m_xBuilder->weld_label("optionslabel");
+            m_xOptionsLabel = m_xBuilder->weld_label(u"optionslabel"_ustr);
             m_xOptionsLabel->show();
-            m_xOptions = m_xBuilder->weld_entry("options");
+            m_xOptions = m_xBuilder->weld_entry(u"options"_ustr);
             m_xOptions->show();
             m_xOptions->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
         }
 
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
         {
-            m_xDataConvertLabel = m_xBuilder->weld_label("charsetheader");
+            m_xDataConvertLabel = m_xBuilder->weld_label(u"charsetheader"_ustr);
             m_xDataConvertLabel->show();
-            m_xCharsetLabel = m_xBuilder->weld_label("charsetlabel");
+            m_xCharsetLabel = m_xBuilder->weld_label(u"charsetlabel"_ustr);
             m_xCharsetLabel->show();
-            m_xCharset.reset(new CharSetListBox(m_xBuilder->weld_combo_box("charset")));
+            m_xCharset.reset(new CharSetListBox(m_xBuilder->weld_combo_box(u"charset"_ustr)));
             m_xCharset->show();
             m_xCharset->connect_changed(LINK(this, OCommonBehaviourTabPage, CharsetSelectHdl));
         }
@@ -152,11 +152,11 @@ namespace dbaui
 
     // ODbaseDetailsPage
     ODbaseDetailsPage::ODbaseDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/dbasepage.ui", "DbasePage",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/dbasepage.ui"_ustr, u"DbasePage"_ustr,
                                     _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
-        , m_xShowDeleted(m_xBuilder->weld_check_button("showDelRowsCheckbutton"))
-        , m_xFT_Message(m_xBuilder->weld_label("specMessageLabel"))
-        , m_xIndexes(m_xBuilder->weld_button("indiciesButton"))
+        , m_xShowDeleted(m_xBuilder->weld_check_button(u"showDelRowsCheckbutton"_ustr))
+        , m_xFT_Message(m_xBuilder->weld_label(u"specMessageLabel"_ustr))
+        , m_xIndexes(m_xBuilder->weld_button(u"indiciesButton"_ustr))
     {
         m_xIndexes->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
         m_xShowDeleted->connect_toggled(LINK(this, ODbaseDetailsPage, OnButtonToggled));
@@ -220,7 +220,7 @@ namespace dbaui
 
     // OAdoDetailsPage
     OAdoDetailsPage::OAdoDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/autocharsetpage.ui"_ustr, u"AutoCharset"_ustr,
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
 
@@ -233,9 +233,9 @@ namespace dbaui
 
     // OOdbcDetailsPage
     OOdbcDetailsPage::OOdbcDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/odbcpage.ui"_ustr, u"ODBC"_ustr, rCoreAttrs,
                                     OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
-        , m_xUseCatalog(m_xBuilder->weld_check_button("useCatalogCheckbutton"))
+        , m_xUseCatalog(m_xBuilder->weld_check_button(u"useCatalogCheckbutton"_ustr))
     {
         m_xUseCatalog->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
     }
@@ -270,13 +270,13 @@ namespace dbaui
     }
     // OOdbcDetailsPage
     OUserDriverDetailsPage::OUserDriverDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/userdetailspage.ui"_ustr, u"UserDetailsPage"_ustr,
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
-        , m_xFTHostname(m_xBuilder->weld_label("hostnameft"))
-        , m_xEDHostname(m_xBuilder->weld_entry("hostname"))
-        , m_xPortNumber(m_xBuilder->weld_label("portnumberft"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portnumber"))
-        , m_xUseCatalog(m_xBuilder->weld_check_button("usecatalog"))
+        , m_xFTHostname(m_xBuilder->weld_label(u"hostnameft"_ustr))
+        , m_xEDHostname(m_xBuilder->weld_entry(u"hostname"_ustr))
+        , m_xPortNumber(m_xBuilder->weld_label(u"portnumberft"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portnumber"_ustr))
+        , m_xUseCatalog(m_xBuilder->weld_check_button(u"usecatalog"_ustr))
     {
         m_xUseCatalog->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
     }
@@ -338,7 +338,7 @@ namespace dbaui
     }
     // OMySQLODBCDetailsPage
     OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/autocharsetpage.ui"_ustr, u"AutoCharset"_ustr,
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
     }
@@ -350,17 +350,17 @@ namespace dbaui
 
     // OMySQLJDBCDetailsPage
     OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/generalspecialjdbcdetailspage.ui"_ustr, u"GeneralSpecialJDBCDetails"_ustr,
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_nPortId(_nPortId)
         , m_bUseClass(true)
-        , m_xEDHostname(m_xBuilder->weld_entry("hostNameEntry"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumberSpinbutton"))
-        , m_xFTSocket(m_xBuilder->weld_label("socketLabel"))
-        , m_xEDSocket(m_xBuilder->weld_entry("socketEntry"))
-        , m_xFTDriverClass(m_xBuilder->weld_label("driverClassLabel"))
-        , m_xEDDriverClass(m_xBuilder->weld_entry("jdbcDriverClassEntry"))
-        , m_xTestJavaDriver(m_xBuilder->weld_button("testDriverClassButton"))
+        , m_xEDHostname(m_xBuilder->weld_entry(u"hostNameEntry"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumberSpinbutton"_ustr))
+        , m_xFTSocket(m_xBuilder->weld_label(u"socketLabel"_ustr))
+        , m_xEDSocket(m_xBuilder->weld_entry(u"socketEntry"_ustr))
+        , m_xFTDriverClass(m_xBuilder->weld_label(u"driverClassLabel"_ustr))
+        , m_xEDDriverClass(m_xBuilder->weld_entry(u"jdbcDriverClassEntry"_ustr))
+        , m_xTestJavaDriver(m_xBuilder->weld_button(u"testDriverClassButton"_ustr))
     {
         const SfxStringItem* pUrlItem = rCoreAttrs.GetItem<SfxStringItem>(DSID_CONNECTURL);
         const DbuTypeCollectionItem* pTypesItem = rCoreAttrs.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
@@ -481,14 +481,14 @@ namespace dbaui
 
     // MySQLNativePage
     MySQLNativePage::MySQLNativePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
-        , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/mysqlnativepage.ui"_ustr, u"MysqlNativePage"_ustr, rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_xMySQLSettingsContainer(m_xBuilder->weld_widget(u"MySQLSettingsContainer"_ustr))
         , m_xMySQLSettings(new MySQLNativeSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified)))
-        , m_xSeparator1(m_xBuilder->weld_label("connectionheader"))
-        , m_xSeparator2(m_xBuilder->weld_label("userheader"))
-        , m_xUserNameLabel(m_xBuilder->weld_label("usernamelabel"))
-        , m_xUserName(m_xBuilder->weld_entry("username"))
-        , m_xPasswordRequired(m_xBuilder->weld_check_button("passwordrequired"))
+        , m_xSeparator1(m_xBuilder->weld_label(u"connectionheader"_ustr))
+        , m_xSeparator2(m_xBuilder->weld_label(u"userheader"_ustr))
+        , m_xUserNameLabel(m_xBuilder->weld_label(u"usernamelabel"_ustr))
+        , m_xUserName(m_xBuilder->weld_entry(u"username"_ustr))
+        , m_xPasswordRequired(m_xBuilder->weld_check_button(u"passwordrequired"_ustr))
     {
         m_xUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
     }
@@ -571,12 +571,12 @@ namespace dbaui
 
     // OLDAPDetailsPage
     OLDAPDetailsPage::OLDAPDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/ldappage.ui", "LDAP",
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/ldappage.ui"_ustr, u"LDAP"_ustr,
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
-        , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
-        , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumberSpinbutton"))
-        , m_xNFRowCount(m_xBuilder->weld_spin_button("LDAPRowCountspinbutton"))
+        , m_xETBaseDN(m_xBuilder->weld_entry(u"baseDNEntry"_ustr))
+        , m_xCBUseSSL(m_xBuilder->weld_check_button(u"useSSLCheckbutton"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumberSpinbutton"_ustr))
+        , m_xNFRowCount(m_xBuilder->weld_spin_button(u"LDAPRowCountspinbutton"_ustr))
     {
         m_xETBaseDN->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
         m_xNFPortNumber->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
@@ -647,7 +647,7 @@ namespace dbaui
 
     // OTextDetailsPage
     OTextDetailsPage::OTextDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/emptypage.ui"_ustr, u"EmptyPage"_ustr, rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
     }

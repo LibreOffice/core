@@ -124,7 +124,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
     static void lcl_ensureComposedName( TableInfo& _io_tableInfo, const Reference< XDatabaseMetaData >& _metaData )
     {
         if ( !_metaData.is() )
-            throw RuntimeException("lcl_ensureComposedName: _metaData cannot be null!");
+            throw RuntimeException(u"lcl_ensureComposedName: _metaData cannot be null!"_ustr);
 
         if ( !_io_tableInfo.sComposedName )
         {
@@ -145,7 +145,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         lcl_ensureComposedName( _io_tableInfo, _metaData );
 
         if ( !_masterContainer.is() )
-            throw RuntimeException("lcl_ensureType: _masterContainer cannot be null!");
+            throw RuntimeException(u"lcl_ensureType: _masterContainer cannot be null!"_ustr);
 
         OUString sTypeName;
         try

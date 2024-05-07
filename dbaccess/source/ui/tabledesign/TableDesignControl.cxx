@@ -111,11 +111,11 @@ void OTableRowView::Command(const CommandEvent& rEvt)
             {
                 ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
                 weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/tabledesignrowmenu.ui"));
-                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"dbaccess/ui/tabledesignrowmenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
                 sal_Int32 nSelectRowCount = GetSelectRowCount();
-                xContextMenu->set_sensitive("cut", nSelectRowCount != 0);
-                xContextMenu->set_sensitive("copy", nSelectRowCount  != 0);
+                xContextMenu->set_sensitive(u"cut"_ustr, nSelectRowCount != 0);
+                xContextMenu->set_sensitive(u"copy"_ustr, nSelectRowCount  != 0);
                 OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                 if (sIdent == "cut")
                     cut();

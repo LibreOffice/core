@@ -352,7 +352,7 @@ void ODBTableDecorator::construct()
 // XServiceInfo
 OUString SAL_CALL ODBTableDecorator::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.ODBTableDecorator";
+        return u"com.sun.star.sdb.dbaccess.ODBTableDecorator"_ustr;
     }
 sal_Bool SAL_CALL ODBTableDecorator::supportsService(const OUString& _rServiceName)
     {
@@ -628,7 +628,7 @@ void SAL_CALL ODBTableDecorator::release() noexcept
 
 void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ )
 {
-    throwFunctionNotSupportedRuntimeException( "XNamed::setName", *this );
+    throwFunctionNotSupportedRuntimeException( u"XNamed::setName"_ustr, *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

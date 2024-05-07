@@ -37,7 +37,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,const Reference< XFastAttributeList > & _xAttrList
                 ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                 ) :
-    OXMLTable( rImport, _xAttrList,_xParentContainer, "com.sun.star.sdb.CommandDefinition" )
+    OXMLTable( rImport, _xAttrList,_xParentContainer, u"com.sun.star.sdb.CommandDefinition"_ustr )
         ,m_bEscapeProcessing(true)
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))

@@ -152,10 +152,10 @@ namespace dbaccess
             const ::comphelper::NamedValueCollection aScriptDescriptor( xDocEvents->getByName( Event.EventName ) );
 
             OUString sEventType;
-            bool bScriptAssigned = aScriptDescriptor.get_ensureType( "EventType", sEventType );
+            bool bScriptAssigned = aScriptDescriptor.get_ensureType( u"EventType"_ustr, sEventType );
 
             OUString sScript;
-            bScriptAssigned = bScriptAssigned && aScriptDescriptor.get_ensureType( "Script", sScript );
+            bScriptAssigned = bScriptAssigned && aScriptDescriptor.get_ensureType( u"Script"_ustr, sScript );
 
             if ( !bScriptAssigned )
                 // no script is assigned to this event

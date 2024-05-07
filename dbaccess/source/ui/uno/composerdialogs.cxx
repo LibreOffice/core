@@ -153,7 +153,7 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
 
     OUString SAL_CALL RowsetFilterDialog::getImplementationName()
     {
-        return "com.sun.star.uno.comp.sdb.RowsetFilterDialog";
+        return u"com.sun.star.uno.comp.sdb.RowsetFilterDialog"_ustr;
     }
     sal_Bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
     {
@@ -166,7 +166,7 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
     }
     css::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.FilterDialog" };
+        return { u"com.sun.star.sdb.FilterDialog"_ustr };
     }
 
     std::unique_ptr<weld::GenericDialogController> RowsetFilterDialog::createComposerDialog(weld::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
@@ -185,9 +185,9 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
             aArguments[1] >>= xRowSet;
             Reference<css::awt::XWindow> xParentWindow;
             aArguments[2] >>= xParentWindow;
-            setPropertyValue( "QueryComposer", Any( xQueryComposer ) );
-            setPropertyValue( "RowSet",        Any( xRowSet ) );
-            setPropertyValue( "ParentWindow",  Any( xParentWindow ) );
+            setPropertyValue( u"QueryComposer"_ustr, Any( xQueryComposer ) );
+            setPropertyValue( u"RowSet"_ustr,        Any( xRowSet ) );
+            setPropertyValue( u"ParentWindow"_ustr,  Any( xParentWindow ) );
         }
         else
             ComposerDialog::initialize(aArguments);
@@ -209,7 +209,7 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
 
     OUString SAL_CALL RowsetOrderDialog::getImplementationName()
     {
-        return "com.sun.star.uno.comp.sdb.RowsetOrderDialog";
+        return u"com.sun.star.uno.comp.sdb.RowsetOrderDialog"_ustr;
     }
     sal_Bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
     {
@@ -222,7 +222,7 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
     }
     css::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.OrderDialog" };
+        return { u"com.sun.star.sdb.OrderDialog"_ustr };
     }
 
     std::unique_ptr<weld::GenericDialogController> RowsetOrderDialog::createComposerDialog(weld::Window* pParent, const Reference< XConnection >& rxConnection, const Reference< XNameAccess >& rxColumns)
@@ -238,13 +238,13 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
             aArguments[0] >>= xQueryComposer;
             Reference<css::beans::XPropertySet> xRowSet;
             aArguments[1] >>= xRowSet;
-            setPropertyValue( "QueryComposer", Any( xQueryComposer ) );
-            setPropertyValue( "RowSet",        Any( xRowSet ) );
+            setPropertyValue( u"QueryComposer"_ustr, Any( xQueryComposer ) );
+            setPropertyValue( u"RowSet"_ustr,        Any( xRowSet ) );
             if (aArguments.getLength() == 3)
             {
                 Reference<css::awt::XWindow> xParentWindow;
                 aArguments[2] >>= xParentWindow;
-                setPropertyValue("ParentWindow",  Any(xParentWindow));
+                setPropertyValue(u"ParentWindow"_ustr,  Any(xParentWindow));
             }
         }
         else

@@ -396,12 +396,12 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUSt
 
 OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  )
 {
-    return "DataMode";
+    return u"DataMode"_ustr;
 }
 
 Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  )
 {
-    Sequence< OUString > aModes { "DataMode" };
+    Sequence< OUString > aModes { u"DataMode"_ustr };
     return aModes;
 }
 
@@ -509,7 +509,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(DBA_RES(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(DBA_RES(RID_STR_UNDO_MODIFY_RECORD))
-    ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
+    ,m_sModuleIdentifier( u"com.sun.star.sdb.DataSourceBrowser"_ustr )
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( false )
     ,m_bCannotSelectUnfiltered( true )
@@ -668,24 +668,24 @@ void SbaXDataBrowserController::initFormatter()
 void SbaXDataBrowserController::describeSupportedFeatures()
 {
     SbaXDataBrowserController_Base::describeSupportedFeatures();
-    implDescribeSupportedFeature( ".uno:FormSlots/undoRecord",      ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FormController/undoRecord", ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:RecUndo",                   ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FormSlots/saveRecord",      ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FormController/saveRecord", ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:RecSave",                   ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:Save",                      ID_BROWSER_SAVERECORD,  CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:RecSearch",                 SID_FM_SEARCH,          CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:AutoFilter",                SID_FM_AUTOFILTER,      CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:Refresh",                   SID_FM_REFRESH,         CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:OrderCrit",                 SID_FM_ORDERCRIT,       CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:RemoveFilterSort",          SID_FM_REMOVE_FILTER_SORT,CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FormFiltered",              SID_FM_FORM_FILTERED,   CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FilterCrit",                SID_FM_FILTERCRIT,      CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:Sortup",                    ID_BROWSER_SORTUP,      CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:SortDown",                  ID_BROWSER_SORTDOWN,    CommandGroup::CONTROLS );
-    implDescribeSupportedFeature( ".uno:FormSlots/deleteRecord",    SID_FM_DELETEROWS,      CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FormSlots/undoRecord"_ustr,      ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FormController/undoRecord"_ustr, ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:RecUndo"_ustr,                   ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FormSlots/saveRecord"_ustr,      ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FormController/saveRecord"_ustr, ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:RecSave"_ustr,                   ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:Save"_ustr,                      ID_BROWSER_SAVERECORD,  CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:RecSearch"_ustr,                 SID_FM_SEARCH,          CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:AutoFilter"_ustr,                SID_FM_AUTOFILTER,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:Refresh"_ustr,                   SID_FM_REFRESH,         CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:OrderCrit"_ustr,                 SID_FM_ORDERCRIT,       CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:RemoveFilterSort"_ustr,          SID_FM_REMOVE_FILTER_SORT,CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FormFiltered"_ustr,              SID_FM_FORM_FILTERED,   CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FilterCrit"_ustr,                SID_FM_FILTERCRIT,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:Sortup"_ustr,                    ID_BROWSER_SORTUP,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:SortDown"_ustr,                  ID_BROWSER_SORTDOWN,    CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( u".uno:FormSlots/deleteRecord"_ustr,    SID_FM_DELETEROWS,      CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:FormSlots/insertRecord"_ustr,    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
 }
 
 bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
@@ -816,14 +816,14 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
     return Reference< XRowSet > (
-      getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.form.component.Form", getORB()),
+      getORB()->getServiceManager()->createInstanceWithContext(u"com.sun.star.form.component.Form"_ustr, getORB()),
       UNO_QUERY);
 }
 
 Reference< css::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
     return Reference< css::form::XFormComponent > (
-      getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.form.component.GridControl", getORB()),
+      getORB()->getServiceManager()->createInstanceWithContext(u"com.sun.star.form.component.GridControl"_ustr, getORB()),
       UNO_QUERY);
 }
 
@@ -1385,7 +1385,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue("AllowInserts") >>= bAllowInsertions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue(u"AllowInserts"_ustr) >>= bAllowInsertions );
                     }
                     catch( const Exception& )
                     {
@@ -1404,7 +1404,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue("AllowDeletes") >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue(u"AllowDeletes"_ustr) >>= bAllowDeletions );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
                     }
@@ -1521,9 +1521,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
-                bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
-                bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
+                bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(u"AllowInserts"_ustr));
+                bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(u"AllowUpdates"_ustr));
+                bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(u"AllowDeletes"_ustr));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1785,9 +1785,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(false));
-    xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(true));
-    xModelSet->setPropertyValue("CursorColor", Any(COL_LIGHTRED));
+    xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, css::uno::Any(false));
+    xModelSet->setPropertyValue(u"AlwaysShowCursor"_ustr, css::uno::Any(true));
+    xModelSet->setPropertyValue(u"CursorColor"_ustr, Any(COL_LIGHTRED));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractFmSearchDialog> pDialog;
@@ -1801,9 +1801,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     pDialog.disposeAndClear();
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
-    xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(false));
-    xModelSet->setPropertyValue("CursorColor", Any());
+    xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, css::uno::Any(true));
+    xModelSet->setPropertyValue(u"AlwaysShowCursor"_ustr, css::uno::Any(false));
+    xModelSet->setPropertyValue(u"CursorColor"_ustr, Any());
 }
 
 void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& _rArgs)
@@ -2149,8 +2149,8 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/savemodifieddialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog("SaveModifiedDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), u"dbaccess/ui/savemodifieddialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog(u"SaveModifiedDialog"_ustr));
         switch (xQry->run())
         {
             case RET_NO:
@@ -2353,9 +2353,9 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rIn
     // let the grid sync its display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
-    Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
-    xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
+    Any aOld = xModelSet->getPropertyValue(u"DisplayIsSynchron"_ustr);
+    xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, css::uno::Any(true));
+    xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, aOld);
 
     // and move to the field
     Reference< css::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -2397,9 +2397,9 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
         // let the grid sync its display with the cursor
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
-        Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-        xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
-        xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
+        Any aOld = xModelSet->getPropertyValue(u"DisplayIsSynchron"_ustr);
+        xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, css::uno::Any(true));
+        xModelSet->setPropertyValue(u"DisplayIsSynchron"_ustr, aOld);
     }
     catch( const Exception& )
     {

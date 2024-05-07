@@ -16,10 +16,10 @@ namespace dbaui
 
 QueryPropertiesDialog::QueryPropertiesDialog(
     weld::Window* pParent, const bool bDistinct, const sal_Int64 nLimit )
-    : GenericDialogController(pParent, "dbaccess/ui/querypropertiesdialog.ui", "QueryPropertiesDialog")
-    , m_xRB_Distinct(m_xBuilder->weld_radio_button("distinct"))
-    , m_xRB_NonDistinct(m_xBuilder->weld_radio_button("nondistinct"))
-    , m_xLB_Limit(m_xBuilder->weld_combo_box("limitbox"))
+    : GenericDialogController(pParent, u"dbaccess/ui/querypropertiesdialog.ui"_ustr, u"QueryPropertiesDialog"_ustr)
+    , m_xRB_Distinct(m_xBuilder->weld_radio_button(u"distinct"_ustr))
+    , m_xRB_NonDistinct(m_xBuilder->weld_radio_button(u"nondistinct"_ustr))
+    , m_xLB_Limit(m_xBuilder->weld_combo_box(u"limitbox"_ustr))
 {
     m_xRB_Distinct->set_active(bDistinct);
     m_xRB_NonDistinct->set_active(!bDistinct);

@@ -100,7 +100,7 @@ namespace dbaccess
 
             StorageTextOutputStream aTextOutput( i_rContext, i_rStorage, sObjectMapStreamName );
 
-            aTextOutput.writeLine( "[storages]" );
+            aTextOutput.writeLine( u"[storages]"_ustr );
 
             for (auto const& elem : i_mapStorageToCompDesc)
             {
@@ -145,7 +145,7 @@ namespace dbaccess
                 sObjectMapStreamName, ElementModes::READ ), UNO_SET_THROW );
 
             Reference< XTextInputStream2 > xTextInput = TextInputStream::create( i_rxContext );
-            xTextInput->setEncoding( "UTF-8" );
+            xTextInput->setEncoding( u"UTF-8"_ustr );
             xTextInput->setInputStream( xIniStream->getInputStream() );
 
             OUString sCurrentSection;

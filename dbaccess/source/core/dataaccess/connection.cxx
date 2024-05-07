@@ -70,7 +70,7 @@ namespace dbaccess
 // XServiceInfo
 OUString OConnection::getImplementationName(  )
 {
-    return "com.sun.star.comp.dbaccess.Connection";
+    return u"com.sun.star.comp.dbaccess.Connection"_ustr;
 }
 
 sal_Bool OConnection::supportsService( const OUString& _rServiceName )
@@ -629,7 +629,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
             if ( aFind == m_aSupportServices.end() )
             {
                 Reference<XConnection> xMy(this);
-                Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection",Any(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue(u"ActiveConnection"_ustr,Any(xMy))) };
                 aFind = m_aSupportServices.emplace(
                                _sServiceSpecifier,
                                m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceSpecifier, aArgs, m_aContext)

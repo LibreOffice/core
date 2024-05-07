@@ -58,16 +58,16 @@ OCollectionView::OCollectionView(weld::Window* pParent,
                                  const Reference< XContent>& _xContent,
                                  const OUString& _sDefaultName,
                                  css::uno::Reference< css::uno::XComponentContext > _xContext)
-    : GenericDialogController(pParent, "dbaccess/ui/collectionviewdialog.ui", "CollectionView")
+    : GenericDialogController(pParent, u"dbaccess/ui/collectionviewdialog.ui"_ustr, u"CollectionView"_ustr)
     , m_xContent(_xContent)
     , m_xContext(std::move(_xContext))
     , m_bCreateForm(true)
-    , m_xFTCurrentPath(m_xBuilder->weld_label("currentPathLabel"))
-    , m_xNewFolder(m_xBuilder->weld_button("newFolderButton"))
-    , m_xUp(m_xBuilder->weld_button("upButton"))
-    , m_xView(m_xBuilder->weld_tree_view("viewTreeview"))
-    , m_xName(m_xBuilder->weld_entry("fileNameEntry"))
-    , m_xPB_OK(m_xBuilder->weld_button("ok"))
+    , m_xFTCurrentPath(m_xBuilder->weld_label(u"currentPathLabel"_ustr))
+    , m_xNewFolder(m_xBuilder->weld_button(u"newFolderButton"_ustr))
+    , m_xUp(m_xBuilder->weld_button(u"upButton"_ustr))
+    , m_xView(m_xBuilder->weld_tree_view(u"viewTreeview"_ustr))
+    , m_xName(m_xBuilder->weld_entry(u"fileNameEntry"_ustr))
+    , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     Reference<XInteractionHandler2> xHandler(
         InteractionHandler::createWithParent(m_xContext, m_xDialog->GetXWindow()));
@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, weld::Button&, void)
                     Sequence<Any> aValues(comphelper::InitAnyPropertySequence(
                     {
                         {"ResourceName", Any(sSubFolder)},
-                        {"ResourceType", Any(OUString("folder"))}
+                        {"ResourceType", Any(u"folder"_ustr)}
                     }));
                     InteractiveAugmentedIOException aException(OUString(),Reference<XInterface>(),
                                                                InteractionClassification_ERROR,
@@ -255,7 +255,7 @@ void OCollectionView::initCurrentPath()
             static const char s_sFormsCID[] = "private:forms";
             static const char s_sReportsCID[] = "private:reports";
             m_bCreateForm = s_sFormsCID == sCID;
-            OUString sPath("/");
+            OUString sPath(u"/"_ustr);
             if ( m_bCreateForm && o3tl::make_unsigned(sCID.getLength()) != strlen(s_sFormsCID))
                 sPath = sCID.copy(strlen(s_sFormsCID));
             else if ( !m_bCreateForm && o3tl::make_unsigned(sCID.getLength()) != strlen(s_sReportsCID) )
@@ -290,7 +290,7 @@ void OCollectionView::Initialize()
     try
     {
         ::ucbhelper::Content aContent(m_xContent, m_xCmdEnv, comphelper::getProcessComponentContext());
-        Sequence<OUString> aProps { "Title", "IsFolder" };
+        Sequence<OUString> aProps { u"Title"_ustr, u"IsFolder"_ustr };
         auto xDynResultSet = aContent.createDynamicCursor(aProps, ucbhelper::INCLUDE_FOLDERS_ONLY);
         if (!xDynResultSet.is())
             return;

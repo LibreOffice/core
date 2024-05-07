@@ -27,11 +27,11 @@
 using namespace dbaui;
 
 OTableFieldDescWin::OTableFieldDescWin(weld::Container* pParent, OTableDesignView* pView)
-    : OChildWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
-    , m_aHelpBar(m_xBuilder->weld_text_view("textview"))
-    , m_xBox(m_xBuilder->weld_container("box"))
+    : OChildWindow(pParent, u"dbaccess/ui/fielddescpanel.ui"_ustr, u"FieldDescPanel"_ustr)
+    , m_aHelpBar(m_xBuilder->weld_text_view(u"textview"_ustr))
+    , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xFieldControl(new OTableFieldControl(m_xBox.get(), &m_aHelpBar, pView))
-    , m_xHeader(m_xBuilder->weld_label("header"))
+    , m_xHeader(m_xBuilder->weld_label(u"header"_ustr))
     , m_eChildFocus(NONE)
 {
     // Header

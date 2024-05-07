@@ -92,7 +92,7 @@ org_openoffice_comp_dbu_DBContentLoader_get_implementation(
 // XServiceInfo
 OUString SAL_CALL DBContentLoader::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.DBContentLoader";
+    return u"org.openoffice.comp.dbu.DBContentLoader"_ustr;
 }
 
 // XServiceInfo
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.FrameLoader", "com.sun.star.sdb.ContentLoader" };
+    return { u"com.sun.star.frame.FrameLoader"_ustr, u"com.sun.star.sdb.ContentLoader"_ustr };
 }
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
@@ -148,7 +148,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
-        bool bDisableBrowser =  !aLoadArgs.getOrDefault( "ShowTreeViewButton", true )   // compatibility name
+        bool bDisableBrowser =  !aLoadArgs.getOrDefault( u"ShowTreeViewButton"_ustr, true )   // compatibility name
                                 ||  !aLoadArgs.getOrDefault( PROPERTY_ENABLE_BROWSER, true );
 
         if ( bDisableBrowser )
@@ -156,7 +156,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             try
             {
                 Reference< XModule > xModule( xController, UNO_QUERY_THROW );
-                xModule->setIdentifier( "com.sun.star.sdb.TableDataView" );
+                xModule->setIdentifier( u"com.sun.star.sdb.TableDataView"_ustr );
             }
             catch( const Exception& )
             {
@@ -167,14 +167,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if ( sComponentURL == URL_COMPONENT_REPORTDESIGN )
     {
-        bool bPreview = aLoadArgs.getOrDefault( "Preview", false );
+        bool bPreview = aLoadArgs.getOrDefault( u"Preview"_ustr, false );
         if ( bPreview )
         {   // report designs cannot be previewed
             if ( rListener.is() )
                 rListener->loadCancelled( this );
             return;
         }
-        Reference< XModel > xReportModel( aLoadArgs.getOrDefault( "Model", Reference< XModel >() ) );
+        Reference< XModel > xReportModel( aLoadArgs.getOrDefault( u"Model"_ustr, Reference< XModel >() ) );
         if ( xReportModel.is() )
         {
             xController.set( ReportDesign::create( m_xContext ) );
@@ -186,9 +186,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     Reference< XModel > xDatabaseDocument;
     if ( bSuccess )
     {
-        Reference< XDataSource > xDataSource    ( aLoadArgs.getOrDefault( "DataSource",       Reference< XDataSource >() ) );
-        OUString          sDataSourceName( aLoadArgs.getOrDefault( "DataSourceName",   OUString()          ) );
-        Reference< XConnection > xConnection    ( aLoadArgs.getOrDefault( "ActiveConnection", Reference< XConnection >() ) );
+        Reference< XDataSource > xDataSource    ( aLoadArgs.getOrDefault( u"DataSource"_ustr,       Reference< XDataSource >() ) );
+        OUString          sDataSourceName( aLoadArgs.getOrDefault( u"DataSourceName"_ustr,   OUString()          ) );
+        Reference< XConnection > xConnection    ( aLoadArgs.getOrDefault( u"ActiveConnection"_ustr, Reference< XConnection >() ) );
         if ( xDataSource.is() )
         {
             xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
@@ -215,7 +215,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aFrame("Frame",0,Any(rFrame),PropertyState_DIRECT_VALUE);
+            PropertyValue aFrame(u"Frame"_ustr,0,Any(rFrame),PropertyState_DIRECT_VALUE);
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();

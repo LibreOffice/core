@@ -523,7 +523,7 @@ public:
     void checkDisposed() const
     {
         if ( !m_pImpl.is() )
-            throw css::lang::DisposedException( "Component is already disposed.", getThis() );
+            throw css::lang::DisposedException( u"Component is already disposed."_ustr, getThis() );
     }
 
     void lockModify()

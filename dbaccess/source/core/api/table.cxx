@@ -233,7 +233,7 @@ void ODBTable::construct()
 // XServiceInfo
 OUString SAL_CALL ODBTable::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.ODBTable";
+        return u"com.sun.star.sdb.dbaccess.ODBTable"_ustr;
     }
 sal_Bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
     {

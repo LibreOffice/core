@@ -249,7 +249,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     bool bSuccess = false;
     try
     {
-        NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
+        NamedStorages::const_iterator pos = m_aExposedStorages.find( u"database"_ustr );
         if ( pos != m_aExposedStorages.end() )
             bSuccess = tools::stor::commitStorageIfWriteable( pos->second );
     }
@@ -315,7 +315,7 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     Reference< XStorage > xStorage( aEvent.Source, UNO_QUERY );
 
     // check if this is the dedicated "database" sub storage
-    NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
+    NamedStorages::const_iterator pos = m_aExposedStorages.find( u"database"_ustr );
     if  (   ( pos != m_aExposedStorages.end() )
         &&  ( pos->second == xStorage )
         )
@@ -371,7 +371,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
 {
     // some kind of default
     m_sConnectURL = "jdbc:";
-    m_aTableFilter = { "%" };
+    m_aTableFilter = { u"%"_ustr };
     impl_construct_nothrow();
 }
 
@@ -696,9 +696,9 @@ void ODatabaseModelImpl::setResource( const OUString& i_rDocumentURL, const Sequ
 
     ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
 #if OSL_DEBUG_LEVEL > 0
-    if ( aMediaDescriptor.has( "SalvagedFile" ) )
+    if ( aMediaDescriptor.has( u"SalvagedFile"_ustr ) )
     {
-        OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", OUString() ) );
+        OUString sSalvagedFile( aMediaDescriptor.getOrDefault( u"SalvagedFile"_ustr, OUString() ) );
         // If SalvagedFile is an empty string, this indicates "the document is being recovered, but i_rDocumentURL already
         // is the real document URL, not the temporary document location"
         if ( sSalvagedFile.isEmpty() )
@@ -716,12 +716,12 @@ void ODatabaseModelImpl::setResource( const OUString& i_rDocumentURL, const Sequ
 
 ::comphelper::NamedValueCollection ODatabaseModelImpl::stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments )
 {
-    OSL_ENSURE( !_rArguments.has( "Model" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (1)!" );
-    OSL_ENSURE( !_rArguments.has( "ViewName" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (2)!" );
+    OSL_ENSURE( !_rArguments.has( u"Model"_ustr ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (1)!" );
+    OSL_ENSURE( !_rArguments.has( u"ViewName"_ustr ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (2)!" );
 
     ::comphelper::NamedValueCollection aMutableArgs( _rArguments );
-    aMutableArgs.remove( "Model" );
-    aMutableArgs.remove( "ViewName" );
+    aMutableArgs.remove( u"Model"_ustr );
+    aMutableArgs.remove( u"ViewName"_ustr );
     return aMutableArgs;
 }
 
@@ -748,9 +748,9 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
     if ( !m_xDocumentStorage.is() )
     {
         Reference< XSingleServiceFactory> xStorageFactory = StorageFactory::create( m_aContext );
-        Any aSource = m_aMediaDescriptor.get( "Stream" );
+        Any aSource = m_aMediaDescriptor.get( u"Stream"_ustr );
         if ( !aSource.hasValue() )
-            aSource = m_aMediaDescriptor.get( "InputStream" );
+            aSource = m_aMediaDescriptor.get( u"InputStream"_ustr );
         if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
             aSource <<= m_sDocFileLocation;
         // TODO: shouldn't we also check URL?
@@ -843,7 +843,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
         // For that, we need a temporary copy of the original file.
         osl::File::RC rc = osl::File::copy(sLocation, sTmpFileUrl);
         if (rc != osl::FileBase::E_None)
-            throw uno::RuntimeException("Could not create temp file");
+            throw uno::RuntimeException(u"Could not create temp file"_ustr);
     }
 
     bool bSuccess = false;
@@ -877,10 +877,10 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
                 if (!xReadOrig.is())
                     throw uno::RuntimeException("Could not read " + sTmpFileUrl);
                 uno::Reference<embed::XStorage> xMetaInf
-                    = xReadOrig->openStorageElement("META-INF", embed::ElementModes::READ);
+                    = xReadOrig->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ);
 
                 uno::Reference<embed::XStorage> xTargetMetaInf
-                    = _rxStorage->openStorageElement("META-INF", embed::ElementModes::READWRITE);
+                    = _rxStorage->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READWRITE);
                 if (xMetaInf.is() && xTargetMetaInf.is() && xMetaInf->hasByName(aScriptSignName))
                 {
                     xMetaInf->copyElementTo(aScriptSignName, xTargetMetaInf, aScriptSignName);
@@ -1034,9 +1034,9 @@ std::span<const DefaultPropertyValue> ODatabaseModelImpl::getDefaultDataSourceSe
         { u"Extension"_ustr,                  Any( OUString() ) },
         { u"CharSet"_ustr,                    Any( OUString() ) },
         { u"HeaderLine"_ustr,                 Any( true ) },
-        { u"FieldDelimiter"_ustr,             Any( OUString( "," ) ) },
-        { u"StringDelimiter"_ustr,            Any( OUString( "\"" ) ) },
-        { u"DecimalDelimiter"_ustr,           Any( OUString( "." ) ) },
+        { u"FieldDelimiter"_ustr,             Any( u","_ustr ) },
+        { u"StringDelimiter"_ustr,            Any( u"\""_ustr ) },
+        { u"DecimalDelimiter"_ustr,           Any( u"."_ustr ) },
         { u"ThousandDelimiter"_ustr,          Any( OUString() ) },
         { u"ShowDeleted"_ustr,                Any( false ) },
         // known ODBC settings
@@ -1114,7 +1114,7 @@ bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
     Reference< XInteractionHandler > xInteraction;
-    xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
+    xInteraction = m_aMediaDescriptor.getOrDefault( u"InteractionHandler"_ustr, xInteraction );
     const bool bHasMacros = m_aMacroMode.hasMacros();
     return m_aMacroMode.checkMacrosOnLoading(xInteraction, false /*HasValidContentSignature*/, bHasMacros);
 }
@@ -1283,7 +1283,7 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     sal_Int16 nCurrentMode = MacroExecMode::NEVER_EXECUTE;
     try
     {
-        nCurrentMode = m_aMediaDescriptor.getOrDefault( "MacroExecutionMode", nCurrentMode );
+        nCurrentMode = m_aMediaDescriptor.getOrDefault( u"MacroExecutionMode"_ustr, nCurrentMode );
     }
     catch( const Exception& )
     {
@@ -1294,7 +1294,7 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
 
 void ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
-    m_aMediaDescriptor.put( "MacroExecutionMode", nMacroMode );
+    m_aMediaDescriptor.put( u"MacroExecutionMode"_ustr, nMacroMode );
 }
 
 OUString ODatabaseModelImpl::getDocumentLocation() const

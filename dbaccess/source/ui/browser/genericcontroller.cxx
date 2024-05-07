@@ -79,7 +79,7 @@ void OGenericUnoController::executeUserDefinedFeatures( const URL& _rFeatureURL,
         Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
             _rFeatureURL,
-            "_self",
+            u"_self"_ustr,
             FrameSearchFlag::AUTO
         ) );
 
@@ -196,20 +196,20 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     try
     {
         if ( !xFrame.is() )
-            throw IllegalArgumentException("need a frame", *this, 1 );
+            throw IllegalArgumentException(u"need a frame"_ustr, *this, 1 );
 
         Reference<XWindow> xParent = xFrame->getContainerWindow();
         VclPtr<vcl::Window> pParentWin = VCLUnoHelper::GetWindow(xParent);
         if (!pParentWin)
         {
-            throw IllegalArgumentException("Parent window is null", *this, 1 );
+            throw IllegalArgumentException(u"Parent window is null"_ustr, *this, 1 );
         }
 
         Construct( pParentWin );
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException("unable to create a view", *this );
+            throw RuntimeException(u"unable to create a view"_ustr, *this );
 
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( false );
@@ -281,7 +281,7 @@ Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar()
 
 OUString SAL_CALL OGenericUnoController::getViewControllerName()
 {
-    return "Default";
+    return u"Default"_ustr;
 }
 
 Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments()
@@ -724,11 +724,11 @@ void OGenericUnoController::implDescribeSupportedFeature( const OUString& _rComm
 void OGenericUnoController::describeSupportedFeatures()
 {
     // add all supported features
-    implDescribeSupportedFeature( ".uno:Copy", ID_BROWSER_COPY, CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Cut", ID_BROWSER_CUT, CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Paste", ID_BROWSER_PASTE, CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:ClipboardFormatItems", ID_BROWSER_CLIPBOARD_FORMAT_ITEMS );
-    implDescribeSupportedFeature( ".uno:DSBEditDoc", ID_BROWSER_EDITDOC, CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:Copy"_ustr, ID_BROWSER_COPY, CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Cut"_ustr, ID_BROWSER_CUT, CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Paste"_ustr, ID_BROWSER_PASTE, CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:ClipboardFormatItems"_ustr, ID_BROWSER_CLIPBOARD_FORMAT_ITEMS );
+    implDescribeSupportedFeature( u".uno:DSBEditDoc"_ustr, ID_BROWSER_EDITDOC, CommandGroup::DOCUMENT );
 }
 
 FeatureState OGenericUnoController::GetState( sal_uInt16 _nId ) const
@@ -868,7 +868,7 @@ Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Refere
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -883,8 +883,8 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
     if ( xLayoutManager.is() )
     {
         xLayoutManager->lock();
-        xLayoutManager->createElement( "private:resource/menubar/menubar" );
-        xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
+        xLayoutManager->createElement( u"private:resource/menubar/menubar"_ustr );
+        xLayoutManager->createElement( u"private:resource/toolbar/toolbar"_ustr );
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
     }

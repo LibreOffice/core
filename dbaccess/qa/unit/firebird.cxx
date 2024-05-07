@@ -69,7 +69,7 @@ void FirebirdTest::testIntegerDatabase()
     CPPUNIT_ASSERT(xStatement.is());
 
     uno::Reference< XResultSet > xResultSet = xStatement->executeQuery(
-        "SELECT * FROM TESTTABLE");
+        u"SELECT * FROM TESTTABLE"_ustr);
     CPPUNIT_ASSERT(xResultSet.is());
     CPPUNIT_ASSERT(xResultSet->next());
 
@@ -79,15 +79,15 @@ void FirebirdTest::testIntegerDatabase()
     CPPUNIT_ASSERT(xColumnLocate.is());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-30000),
-        xRow->getShort(xColumnLocate->findColumn("_SMALLINT")));
+        xRow->getShort(xColumnLocate->findColumn(u"_SMALLINT"_ustr)));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2100000000),
-        xRow->getInt(xColumnLocate->findColumn("_INT")));
+        xRow->getInt(xColumnLocate->findColumn(u"_INT"_ustr)));
     CPPUNIT_ASSERT_EQUAL(SAL_CONST_INT64(-9000000000000000000),
-        xRow->getLong(xColumnLocate->findColumn("_BIGINT")));
-    CPPUNIT_ASSERT_EQUAL(OUString("5"),
-        xRow->getString(xColumnLocate->findColumn("_CHAR")));
-    CPPUNIT_ASSERT_EQUAL(OUString("5"),
-        xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
+        xRow->getLong(xColumnLocate->findColumn(u"_BIGINT"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr,
+        xRow->getString(xColumnLocate->findColumn(u"_CHAR"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr,
+        xRow->getString(xColumnLocate->findColumn(u"_VARCHAR"_ustr)));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
 
@@ -104,7 +104,7 @@ void FirebirdTest::testTdf132924()
     uno::Reference<XStatement> xStatement = xConnection->createStatement();
     CPPUNIT_ASSERT(xStatement.is());
 
-    uno::Reference<XResultSet> xResultSet = xStatement->executeQuery("SELECT * FROM AliasTest");
+    uno::Reference<XResultSet> xResultSet = xStatement->executeQuery(u"SELECT * FROM AliasTest"_ustr);
     CPPUNIT_ASSERT(xResultSet.is());
     CPPUNIT_ASSERT(xResultSet->next());
 
@@ -116,8 +116,8 @@ void FirebirdTest::testTdf132924()
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : The column name 'TestId' is not valid
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xRow->getShort(xColumnLocate->findColumn("TestId")));
-    CPPUNIT_ASSERT_EQUAL(OUString("TestName"), xRow->getString(xColumnLocate->findColumn("TestName")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xRow->getShort(xColumnLocate->findColumn(u"TestId"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"TestName"_ustr, xRow->getString(xColumnLocate->findColumn(u"TestName"_ustr)));
 
     css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(false);

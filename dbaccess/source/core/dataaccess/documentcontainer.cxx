@@ -126,7 +126,7 @@ css::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
 }
 OUString SAL_CALL ODocumentContainer::getImplementationName()
     {
-        return "com.sun.star.comp.dba.ODocumentContainer";
+        return u"com.sun.star.comp.dba.ODocumentContainer"_ustr;
     };
 sal_Bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
     {
@@ -215,10 +215,10 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         lcl_extractAndRemove( aArgs, PROPERTY_ACTIVE_CONNECTION, xConnection );
         lcl_extractAndRemove( aArgs, PROPERTY_AS_TEMPLATE, bAsTemplate );
         lcl_extractAndRemove( aArgs, INFO_MEDIATYPE, sMediaType );
-        lcl_extractAndRemove( aArgs, "DocumentServiceName" , sDocServiceName );
+        lcl_extractAndRemove( aArgs, u"DocumentServiceName"_ustr , sDocServiceName );
 
         // ClassID has two allowed types, so a special treatment here
-        Any aClassIDArg = aArgs.get( "ClassID" );
+        Any aClassIDArg = aArgs.get( u"ClassID"_ustr );
         if ( aClassIDArg.hasValue() )
         {
             if ( !( aClassIDArg >>= aClassID ) )
@@ -235,7 +235,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             OUString sClassIDString = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation( aClassID );
             (void)sClassIDString;
 #endif
-            aArgs.remove( "ClassID" );
+            aArgs.remove( u"ClassID"_ustr );
         }
         // Everything which now is still present in the arguments is passed to the embedded object
         const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
@@ -277,7 +277,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                         ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext );
                         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
                         const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
-                        aClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+                        aClassID = aMediaTypeProps.getOrDefault( u"ClassID"_ustr, Sequence< sal_Int8 >() );
                     }
                 }
             }
@@ -542,12 +542,12 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
             Command aCommand;
 
             ::comphelper::NamedValueCollection aArgs( Arguments );
-            aCommand.Name = aArgs.getOrDefault( "OpenMode", OUString("open") );
-            aArgs.remove( "OpenMode" );
+            aCommand.Name = aArgs.getOrDefault( u"OpenMode"_ustr, u"open"_ustr );
+            aArgs.remove( u"OpenMode"_ustr );
 
             OpenCommandArgument2 aOpenCommand;
             aOpenCommand.Mode = OpenMode::DOCUMENT;
-            aArgs.put( "OpenCommandArgument", aOpenCommand );
+            aArgs.put( u"OpenCommandArgument"_ustr, aOpenCommand );
 
             aCommand.Argument <<= aArgs.getPropertyValues();
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);

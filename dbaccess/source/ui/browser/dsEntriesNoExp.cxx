@@ -106,28 +106,28 @@ void SbaTableQueryBrowser::describeSupportedFeatures()
 {
     SbaXDataBrowserController::describeSupportedFeatures();
 
-    implDescribeSupportedFeature( ".uno:Title",                             ID_BROWSER_TITLE );
+    implDescribeSupportedFeature( u".uno:Title"_ustr,                             ID_BROWSER_TITLE );
     if ( !m_bShowMenu )
     {
-        implDescribeSupportedFeature( ".uno:DSBEditDB",          ID_TREE_EDIT_DATABASE );
-        implDescribeSupportedFeature( ".uno:DSBCloseConnection", ID_TREE_CLOSE_CONN );
-        implDescribeSupportedFeature( ".uno:DSBAdministrate",    ID_TREE_ADMINISTRATE );
+        implDescribeSupportedFeature( u".uno:DSBEditDB"_ustr,          ID_TREE_EDIT_DATABASE );
+        implDescribeSupportedFeature( u".uno:DSBCloseConnection"_ustr, ID_TREE_CLOSE_CONN );
+        implDescribeSupportedFeature( u".uno:DSBAdministrate"_ustr,    ID_TREE_ADMINISTRATE );
 
-        implDescribeSupportedFeature( ".uno:DSBrowserExplorer",                 ID_BROWSER_EXPLORER, CommandGroup::VIEW );
+        implDescribeSupportedFeature( u".uno:DSBrowserExplorer"_ustr,                 ID_BROWSER_EXPLORER, CommandGroup::VIEW );
 
-        implDescribeSupportedFeature( ".uno:DSBFormLetter",                     ID_BROWSER_FORMLETTER, CommandGroup::DOCUMENT );
-        implDescribeSupportedFeature( ".uno:DSBInsertColumns",                  ID_BROWSER_INSERTCOLUMNS, CommandGroup::INSERT );
-        implDescribeSupportedFeature( ".uno:DSBInsertContent",                  ID_BROWSER_INSERTCONTENT, CommandGroup::INSERT );
-        implDescribeSupportedFeature( ".uno:DSBDocumentDataSource",             ID_BROWSER_DOCUMENT_DATASOURCE, CommandGroup::VIEW );
+        implDescribeSupportedFeature( u".uno:DSBFormLetter"_ustr,                     ID_BROWSER_FORMLETTER, CommandGroup::DOCUMENT );
+        implDescribeSupportedFeature( u".uno:DSBInsertColumns"_ustr,                  ID_BROWSER_INSERTCOLUMNS, CommandGroup::INSERT );
+        implDescribeSupportedFeature( u".uno:DSBInsertContent"_ustr,                  ID_BROWSER_INSERTCONTENT, CommandGroup::INSERT );
+        implDescribeSupportedFeature( u".uno:DSBDocumentDataSource"_ustr,             ID_BROWSER_DOCUMENT_DATASOURCE, CommandGroup::VIEW );
 
-        implDescribeSupportedFeature( ".uno:DataSourceBrowser/FormLetter",          ID_BROWSER_FORMLETTER );
-        implDescribeSupportedFeature( ".uno:DataSourceBrowser/InsertColumns",       ID_BROWSER_INSERTCOLUMNS );
-        implDescribeSupportedFeature( ".uno:DataSourceBrowser/InsertContent",       ID_BROWSER_INSERTCONTENT );
-        implDescribeSupportedFeature( ".uno:DataSourceBrowser/DocumentDataSource",  ID_BROWSER_DOCUMENT_DATASOURCE );
+        implDescribeSupportedFeature( u".uno:DataSourceBrowser/FormLetter"_ustr,          ID_BROWSER_FORMLETTER );
+        implDescribeSupportedFeature( u".uno:DataSourceBrowser/InsertColumns"_ustr,       ID_BROWSER_INSERTCOLUMNS );
+        implDescribeSupportedFeature( u".uno:DataSourceBrowser/InsertContent"_ustr,       ID_BROWSER_INSERTCONTENT );
+        implDescribeSupportedFeature( u".uno:DataSourceBrowser/DocumentDataSource"_ustr,  ID_BROWSER_DOCUMENT_DATASOURCE );
     }
 
-    implDescribeSupportedFeature( ".uno:CloseWin",      ID_BROWSER_CLOSE, CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:DBRebuildData", ID_BROWSER_REFRESH_REBUILD, CommandGroup::DATA );
+    implDescribeSupportedFeature( u".uno:CloseWin"_ustr,      ID_BROWSER_CLOSE, CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:DBRebuildData"_ustr, ID_BROWSER_REFRESH_REBUILD, CommandGroup::DATA );
 }
 
 sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )

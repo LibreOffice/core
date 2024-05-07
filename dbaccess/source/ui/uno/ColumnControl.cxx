@@ -57,12 +57,12 @@ sal_Bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
     }
 css::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl" };
+    return { u"com.sun.star.awt.UnoControl"_ustr,u"com.sun.star.sdb.ColumnDescriptorControl"_ustr };
 }
 
 OUString OColumnControl::GetComponentServiceName() const
 {
-    return "com.sun.star.sdb.ColumnDescriptorControl";
+    return u"com.sun.star.sdb.ColumnDescriptorControl"_ustr;
 }
 
 void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer)

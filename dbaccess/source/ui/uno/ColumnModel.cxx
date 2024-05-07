@@ -130,7 +130,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OColumnControlMode
 
 OUString SAL_CALL OColumnControlModel::getImplementationName()
 {
-    return "com.sun.star.comp.dbu.OColumnControlModel";
+    return u"com.sun.star.comp.dbu.OColumnControlModel"_ustr;
 }
 sal_Bool SAL_CALL OColumnControlModel::supportsService(const OUString& _rServiceName)
     {
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL OColumnControlModel::supportsService(const OUString& _rService
     }
 css::uno::Sequence< OUString > SAL_CALL OColumnControlModel::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel" };
+    return { u"com.sun.star.awt.UnoControlModel"_ustr,u"com.sun.star.sdb.ColumnDescriptorControlModel"_ustr };
 }
 IMPLEMENT_FORWARD_REFCOUNT( OColumnControlModel, OColumnControlModel_BASE )
 Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType )

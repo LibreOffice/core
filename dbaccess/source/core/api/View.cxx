@@ -52,7 +52,7 @@ namespace dbaccess
         try
         {
             Reference<XMultiServiceFactory> xFac(_rxConnection,UNO_QUERY_THROW);
-            m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,"ViewAccessServiceName")),UNO_QUERY);
+            m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,u"ViewAccessServiceName"_ustr)),UNO_QUERY);
         }
         catch(const Exception& )
         {

@@ -94,11 +94,11 @@ namespace dbaui
     {
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return "org.openoffice.comp.dbu.OViewDesign";
+            return u"org.openoffice.comp.dbu.OViewDesign"_ustr;
         }
         virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() override
         {
-            return { "com.sun.star.sdb.ViewDesign" };
+            return { u"com.sun.star.sdb.ViewDesign"_ustr };
         }
 
     public:
@@ -173,7 +173,7 @@ namespace
     void grabFocusFromLimitBox( OQueryController& _rController )
     {
         Reference< XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
-        Reference< XUIElement > xUIElement = xLayoutManager->getElement("private:resource/toolbar/designobjectbar");
+        Reference< XUIElement > xUIElement = xLayoutManager->getElement(u"private:resource/toolbar/designobjectbar"_ustr);
         if (xUIElement.is())
         {
             Reference< XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
@@ -188,12 +188,12 @@ namespace
 
 OUString SAL_CALL OQueryController::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.OQueryDesign";
+    return u"org.openoffice.comp.dbu.OQueryDesign"_ustr;
 }
 
 Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.QueryDesign" };
+    return { u"com.sun.star.sdb.QueryDesign"_ustr };
 }
 
 OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
@@ -244,18 +244,18 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     case PROPERTY_ID_CURRENT_QUERY_DESIGN:
     {
         ::comphelper::NamedValueCollection aCurrentDesign;
-        aCurrentDesign.put( "GraphicalDesign", isGraphicalDesign() );
+        aCurrentDesign.put( u"GraphicalDesign"_ustr, isGraphicalDesign() );
         aCurrentDesign.put( PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
 
         if ( isGraphicalDesign() )
         {
             getContainer()->SaveUIConfig();
             saveViewSettings( aCurrentDesign, true );
-            aCurrentDesign.put( "Statement", m_sStatement );
+            aCurrentDesign.put( u"Statement"_ustr, m_sStatement );
         }
         else
         {
-            aCurrentDesign.put( "Statement", getContainer()->getStatement() );
+            aCurrentDesign.put( u"Statement"_ustr, getContainer()->getStatement() );
         }
 
         o_rValue <<= aCurrentDesign.getPropertyValues();
@@ -283,7 +283,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     aProps.realloc( nLength + 1 );
     auto pProps = aProps.getArray();
     pProps[ nLength ] = Property(
-        "CurrentQueryDesign",
+        u"CurrentQueryDesign"_ustr,
         PROPERTY_ID_CURRENT_QUERY_DESIGN,
         ::cppu::UnoType< Sequence< PropertyValue > >::get(),
         PropertyAttribute::READONLY
@@ -495,7 +495,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 aError = SQLException(
                                     DBA_RES(STR_QRY_NOSELECT),
                                     nullptr,
-                                    "S1000",
+                                    u"S1000"_ustr,
                                     1000,
                                     Any()
                                 );
@@ -518,7 +518,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                         aError = SQLException(
                             DBA_RES(STR_QRY_SYNTAX),
                             nullptr,
-                            "S1000",
+                            u"S1000"_ustr,
                             1000,
                             Any()
                         );
@@ -657,7 +657,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
 
     // legacy parameters first (later overwritten by regular parameters)
     OUString sIndependentSQLCommand;
-    if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
+    if ( rArguments.get_ensureType( u"IndependentSQLCommand"_ustr, sIndependentSQLCommand ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
         sCommand = sIndependentSQLCommand;
@@ -665,7 +665,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
     }
 
     OUString sCurrentQuery;
-    if ( rArguments.get_ensureType( "CurrentQuery", sCurrentQuery ) )
+    if ( rArguments.get_ensureType( u"CurrentQuery"_ustr, sCurrentQuery ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         sCommand = sCurrentQuery;
@@ -673,7 +673,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
     }
 
     bool bCreateView( false );
-    if ( rArguments.get_ensureType( "CreateView", bCreateView ) && bCreateView )
+    if ( rArguments.get_ensureType( u"CreateView"_ustr, bCreateView ) && bCreateView )
     {
         OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         m_nCommandType = CommandType::TABLE;
@@ -727,7 +727,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
     // initial design
     bool bForceInitialDesign = false;
     Sequence< PropertyValue > aCurrentQueryDesignProps;
-    aCurrentQueryDesignProps = rArguments.getOrDefault( "CurrentQueryDesign", aCurrentQueryDesignProps );
+    aCurrentQueryDesignProps = rArguments.getOrDefault( u"CurrentQueryDesign"_ustr, aCurrentQueryDesignProps );
 
     if ( aCurrentQueryDesignProps.hasElements() )
     {
@@ -740,11 +740,11 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
         {
             aCurrentQueryDesign.get_ensureType( PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
         }
-        if ( aCurrentQueryDesign.has( "Statement" ) )
+        if ( aCurrentQueryDesign.has( u"Statement"_ustr ) )
         {
             OUString sStatement;
-            aCurrentQueryDesign.get_ensureType( "Statement", sStatement );
-            aCurrentQueryDesign.remove( "Statement" );
+            aCurrentQueryDesign.get_ensureType( u"Statement"_ustr, sStatement );
+            aCurrentQueryDesign.remove( u"Statement"_ustr );
             setStatement_fireEvent( sStatement );
         }
 
@@ -919,23 +919,23 @@ OJoinDesignView* OQueryController::getJoinView()
 void OQueryController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
-    implDescribeSupportedFeature( ".uno:SaveAs",            ID_BROWSER_SAVEASDOC,       CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SbaNativeSql",      ID_BROWSER_ESCAPEPROCESSING,CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DBViewFunctions",   SID_QUERY_VIEW_FUNCTIONS,   CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBViewTableNames",  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBViewAliases",     SID_QUERY_VIEW_ALIASES,     CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBDistinctValues",  SID_QUERY_DISTINCT_VALUES,  CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DBChangeDesignMode",ID_BROWSER_SQL,             CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBClearQuery",      SID_BROWSER_CLEAR_QUERY,    CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SbaExecuteSql",     ID_BROWSER_QUERY_EXECUTE,   CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBAddRelation",     SID_RELATION_ADD_RELATION,  CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:DBQueryPreview",    SID_DB_QUERY_PREVIEW,       CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DBLimit",           SID_QUERY_LIMIT,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DBQueryPropertiesDialog", SID_QUERY_PROP_DLG,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SaveAs"_ustr,            ID_BROWSER_SAVEASDOC,       CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:SbaNativeSql"_ustr,      ID_BROWSER_ESCAPEPROCESSING,CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DBViewFunctions"_ustr,   SID_QUERY_VIEW_FUNCTIONS,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBViewTableNames"_ustr,  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBViewAliases"_ustr,     SID_QUERY_VIEW_ALIASES,     CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBDistinctValues"_ustr,  SID_QUERY_DISTINCT_VALUES,  CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DBChangeDesignMode"_ustr,ID_BROWSER_SQL,             CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBClearQuery"_ustr,      SID_BROWSER_CLEAR_QUERY,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:SbaExecuteSql"_ustr,     ID_BROWSER_QUERY_EXECUTE,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBAddRelation"_ustr,     SID_RELATION_ADD_RELATION,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:DBQueryPreview"_ustr,    SID_DB_QUERY_PREVIEW,       CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DBLimit"_ustr,           SID_QUERY_LIMIT,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DBQueryPropertiesDialog"_ustr, SID_QUERY_PROP_DLG,         CommandGroup::FORMAT );
 
 #if OSL_DEBUG_LEVEL > 0
-    implDescribeSupportedFeature( ".uno:DBShowParseTree",   ID_EDIT_QUERY_SQL );
-    implDescribeSupportedFeature( ".uno:DBMakeDisjunct",    ID_EDIT_QUERY_DESIGN );
+    implDescribeSupportedFeature( u".uno:DBShowParseTree"_ustr,   ID_EDIT_QUERY_SQL );
+    implDescribeSupportedFeature( u".uno:DBMakeDisjunct"_ustr,    ID_EDIT_QUERY_DESIGN );
 #endif
 }
 
@@ -1010,18 +1010,18 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
         ++i;
     }
 
-    o_rViewSettings.put( "Fields", aAllFieldsData.getPropertyValues() );
-    o_rViewSettings.put( "SplitterPosition", m_nSplitPos );
-    o_rViewSettings.put( "VisibleRows", m_nVisibleRows );
+    o_rViewSettings.put( u"Fields"_ustr, aAllFieldsData.getPropertyValues() );
+    o_rViewSettings.put( u"SplitterPosition"_ustr, m_nSplitPos );
+    o_rViewSettings.put( u"VisibleRows"_ustr, m_nVisibleRows );
 }
 
 void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings )
 {
     loadTableWindows( o_rViewSettings );
 
-    m_nSplitPos = o_rViewSettings.getOrDefault( "SplitterPosition", m_nSplitPos );
-    m_nVisibleRows = o_rViewSettings.getOrDefault( "VisibleRows", m_nVisibleRows );
-    m_aFieldInformation = o_rViewSettings.getOrDefault( "Fields", m_aFieldInformation );
+    m_nSplitPos = o_rViewSettings.getOrDefault( u"SplitterPosition"_ustr, m_nSplitPos );
+    m_nVisibleRows = o_rViewSettings.getOrDefault( u"VisibleRows"_ustr, m_nVisibleRows );
+    m_aFieldInformation = o_rViewSettings.getOrDefault( u"Fields"_ustr, m_aFieldInformation );
 }
 
 void OQueryController::execute_QueryPropDlg()
@@ -1547,7 +1547,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
     }
     else if(m_sStatement.isEmpty())
     {
-        showError(SQLException(DBA_RES(STR_QRY_NOSELECT), nullptr, "S1000", 1000, Any()));
+        showError(SQLException(DBA_RES(STR_QRY_NOSELECT), nullptr, u"S1000"_ustr, 1000, Any()));
     }
     else
         sTranslatedStmt = m_sStatement;

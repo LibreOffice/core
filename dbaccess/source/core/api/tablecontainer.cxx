@@ -120,7 +120,7 @@ OUString OTableContainer::getTableTypeRestriction() const
 // XServiceInfo
 OUString SAL_CALL OTableContainer::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.OTableContainer";
+        return u"com.sun.star.sdb.dbaccess.OTableContainer"_ustr;
     }
 sal_Bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
     {
@@ -366,7 +366,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         if(sComposedName.isEmpty())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-        OUString aSql("DROP ");
+        OUString aSql(u"DROP "_ustr);
 
         if ( bIsView ) // here we have a view
             aSql += "VIEW ";

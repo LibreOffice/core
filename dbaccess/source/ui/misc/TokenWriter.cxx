@@ -260,7 +260,7 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", m_xContext), UNO_QUERY );
+                m_xResultSet.set( m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.sdb.RowSet"_ustr, m_xContext), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
                 xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( m_xConnection.getTyped() ) );
                 xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, Any( m_nCommandType ) );

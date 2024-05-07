@@ -41,19 +41,19 @@ using namespace ::com::sun::star::sdbcx;
 namespace CopyTableOperation = css::sdb::application::CopyTableOperation;
 
 OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
-    : OWizardPage(pPage, pWizard, "dbaccess/ui/copytablepage.ui", "CopyTablePage")
+    : OWizardPage(pPage, pWizard, u"dbaccess/ui/copytablepage.ui"_ustr, u"CopyTablePage"_ustr)
     , m_bPKeyAllowed(false)
     , m_bUseHeaderAllowed(true)
     , m_nOldOperation(0)
-    , m_xEdTableName(m_xBuilder->weld_entry("name"))
-    , m_xRB_DefData(m_xBuilder->weld_radio_button("defdata"))
-    , m_xRB_Def(m_xBuilder->weld_radio_button("def"))
-    , m_xRB_View(m_xBuilder->weld_radio_button("view"))
-    , m_xRB_AppendData(m_xBuilder->weld_radio_button("data"))
-    , m_xCB_UseHeaderLine(m_xBuilder->weld_check_button("firstline"))
-    , m_xCB_PrimaryColumn(m_xBuilder->weld_check_button("primarykey"))
-    , m_xFT_KeyName(m_xBuilder->weld_label("keynamelabel"))
-    , m_xEdKeyName(m_xBuilder->weld_entry("keyname"))
+    , m_xEdTableName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xRB_DefData(m_xBuilder->weld_radio_button(u"defdata"_ustr))
+    , m_xRB_Def(m_xBuilder->weld_radio_button(u"def"_ustr))
+    , m_xRB_View(m_xBuilder->weld_radio_button(u"view"_ustr))
+    , m_xRB_AppendData(m_xBuilder->weld_radio_button(u"data"_ustr))
+    , m_xCB_UseHeaderLine(m_xBuilder->weld_check_button(u"firstline"_ustr))
+    , m_xCB_PrimaryColumn(m_xBuilder->weld_check_button(u"primarykey"_ustr))
+    , m_xFT_KeyName(m_xBuilder->weld_label(u"keynamelabel"_ustr))
+    , m_xEdKeyName(m_xBuilder->weld_entry(u"keyname"_ustr))
 {
     if ( m_pParent->m_xDestConnection.is() )
     {
@@ -74,7 +74,7 @@ OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
 
         m_xFT_KeyName->set_sensitive(false);
         m_xEdKeyName->set_sensitive(false);
-        m_xEdKeyName->set_text(m_pParent->createUniqueName("ID"));
+        m_xEdKeyName->set_text(m_pParent->createUniqueName(u"ID"_ustr));
 
         const sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
         m_xEdKeyName->set_max_length(nMaxLen);

@@ -69,7 +69,7 @@ namespace dbaui
     void SAL_CALL BasicInteractionHandler::initialize(const Sequence<Any>& rArgs)
     {
         comphelper::SequenceAsHashMap aMap(rArgs);
-        m_xParentWindow.set(aMap.getValue("Parent"), UNO_QUERY);
+        m_xParentWindow.set(aMap.getValue(u"Parent"_ustr), UNO_QUERY);
     }
 
     sal_Bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest )
@@ -344,7 +344,7 @@ namespace dbaui
     // SQLExceptionInteractionHandler
     OUString SAL_CALL SQLExceptionInteractionHandler::getImplementationName()
     {
-        return "com.sun.star.comp.dbaccess.DatabaseInteractionHandler";
+        return u"com.sun.star.comp.dbaccess.DatabaseInteractionHandler"_ustr;
     }
     sal_Bool SAL_CALL SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
     {
@@ -357,13 +357,13 @@ namespace dbaui
     }
     css::uno::Sequence< OUString > SAL_CALL SQLExceptionInteractionHandler::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.DatabaseInteractionHandler" };
+        return { u"com.sun.star.sdb.DatabaseInteractionHandler"_ustr };
     }
 
     // LegacyInteractionHandler
     OUString SAL_CALL LegacyInteractionHandler::getImplementationName()
     {
-        return "com.sun.star.comp.dbaccess.LegacyInteractionHandler";
+        return u"com.sun.star.comp.dbaccess.LegacyInteractionHandler"_ustr;
     }
     sal_Bool SAL_CALL LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
     {
@@ -376,7 +376,7 @@ namespace dbaui
     }
     css::uno::Sequence< OUString > SAL_CALL LegacyInteractionHandler::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.InteractionHandler" };
+        return { u"com.sun.star.sdb.InteractionHandler"_ustr };
     }
 
 }   // namespace dbaui

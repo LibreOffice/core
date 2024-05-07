@@ -103,7 +103,7 @@ Sequence< sal_Int8 > OResultColumn::getImplementationId()
 // XServiceInfo
 OUString OResultColumn::getImplementationName(  )
 {
-    return "com.sun.star.sdb.OResultColumn";
+    return u"com.sun.star.sdb.OResultColumn"_ustr;
 }
 
 Sequence< OUString > OResultColumn::getSupportedServiceNames(  )

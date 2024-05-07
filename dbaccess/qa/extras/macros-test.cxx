@@ -27,7 +27,7 @@ public:
 };
 
 DBAccessTest::DBAccessTest()
-    : UnoApiTest("/dbaccess/qa/extras/testdocuments")
+    : UnoApiTest(u"/dbaccess/qa/extras/testdocuments"_ustr)
 {
 }
 

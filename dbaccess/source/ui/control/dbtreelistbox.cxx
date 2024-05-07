@@ -55,9 +55,9 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
 InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "dbaccess/ui/dbtreelist.ui", "DBTreeList")
-    , TreeListBox(m_xBuilder->weld_tree_view("treeview"), true)
-    , m_xStatusBar(m_xBuilder->weld_label("statusbar"))
+    : InterimItemWindow(pParent, u"dbaccess/ui/dbtreelist.ui"_ustr, u"DBTreeList"_ustr)
+    , TreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr), true)
+    , m_xStatusBar(m_xBuilder->weld_label(u"statusbar"_ustr))
 {
     InitControlBase(&GetWidget());
 }
@@ -376,15 +376,15 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         return false;
 
     css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( "Value", aResourceName )),
-        css::uno::Any(comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
-        css::uno::Any(comphelper::makePropertyValue( "IsContextMenu", true ))
+        css::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aResourceName )),
+        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
+        css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XPopupMenuController> xMenuController
         (xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);
 
     if (!xMenuController.is())
         return false;
@@ -493,8 +493,8 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetRootLevelParent(const weld::Tree
 }
 
 DBTreeViewBase::DBTreeViewBase(weld::Container* pContainer)
-    : m_xBuilder(Application::CreateBuilder(pContainer, "dbaccess/ui/dbtreelist.ui"))
-    , m_xContainer(m_xBuilder->weld_container("DBTreeList"))
+    : m_xBuilder(Application::CreateBuilder(pContainer, u"dbaccess/ui/dbtreelist.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"DBTreeList"_ustr))
 {
 }
 
@@ -505,7 +505,7 @@ DBTreeViewBase::~DBTreeViewBase()
 DBTreeView::DBTreeView(weld::Container* pContainer, bool bSQLType)
     : DBTreeViewBase(pContainer)
 {
-    m_xTreeListBox.reset(new TreeListBox(m_xBuilder->weld_tree_view("treeview"), bSQLType));
+    m_xTreeListBox.reset(new TreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr), bSQLType));
 }
 
 }   // namespace dbaui

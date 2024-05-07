@@ -54,24 +54,24 @@ namespace dbaui
 
     // SpecialSettingsPage
     SpecialSettingsPage::SpecialSettingsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/specialsettingspage.ui", "SpecialSettingsPage", _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/specialsettingspage.ui"_ustr, u"SpecialSettingsPage"_ustr, _rCoreAttrs)
         , m_aBooleanSettings {
-            { m_xIsSQL92Check,               "usesql92",        DSID_SQL92CHECK,            false, false },
-            { m_xAppendTableAlias,           "append",          DSID_APPEND_TABLE_ALIAS,    false, false },
-            { m_xAsBeforeCorrelationName,    "useas",           DSID_AS_BEFORE_CORRNAME,    false, false },
-            { m_xEnableOuterJoin,            "useoj",           DSID_ENABLEOUTERJOIN,       false, false },
-            { m_xIgnoreDriverPrivileges,     "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false, false },
-            { m_xParameterSubstitution,      "replaceparams",   DSID_PARAMETERNAMESUBST,    false, false },
-            { m_xSuppressVersionColumn,      "displayver",      DSID_SUPPRESSVERSIONCL,     true,  false },
-            { m_xCatalog,                    "usecatalogname",  DSID_CATALOG,               false, false },
-            { m_xSchema,                     "useschemaname",   DSID_SCHEMA,                false, false },
-            { m_xIndexAppendix,              "createindex",     DSID_INDEXAPPENDIX,         false, false },
-            { m_xDosLineEnds,                "eol",             DSID_DOSLINEENDS,           false, false },
-            { m_xCheckRequiredFields,        "inputchecks",     DSID_CHECK_REQUIRED_FIELDS, false, false },
-            { m_xIgnoreCurrency,             "ignorecurrency",  DSID_IGNORECURRENCY,        false, false },
-            { m_xEscapeDateTime,             "useodbcliterals", DSID_ESCAPE_DATETIME,       false, false },
-            { m_xPrimaryKeySupport,          "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false, false },
-            { m_xRespectDriverResultSetType, "resulttype",      DSID_RESPECTRESULTSETTYPE,  false, false } }
+            { m_xIsSQL92Check,               u"usesql92"_ustr,        DSID_SQL92CHECK,            false, false },
+            { m_xAppendTableAlias,           u"append"_ustr,          DSID_APPEND_TABLE_ALIAS,    false, false },
+            { m_xAsBeforeCorrelationName,    u"useas"_ustr,           DSID_AS_BEFORE_CORRNAME,    false, false },
+            { m_xEnableOuterJoin,            u"useoj"_ustr,           DSID_ENABLEOUTERJOIN,       false, false },
+            { m_xIgnoreDriverPrivileges,     u"ignoreprivs"_ustr,     DSID_IGNOREDRIVER_PRIV,     false, false },
+            { m_xParameterSubstitution,      u"replaceparams"_ustr,   DSID_PARAMETERNAMESUBST,    false, false },
+            { m_xSuppressVersionColumn,      u"displayver"_ustr,      DSID_SUPPRESSVERSIONCL,     true,  false },
+            { m_xCatalog,                    u"usecatalogname"_ustr,  DSID_CATALOG,               false, false },
+            { m_xSchema,                     u"useschemaname"_ustr,   DSID_SCHEMA,                false, false },
+            { m_xIndexAppendix,              u"createindex"_ustr,     DSID_INDEXAPPENDIX,         false, false },
+            { m_xDosLineEnds,                u"eol"_ustr,             DSID_DOSLINEENDS,           false, false },
+            { m_xCheckRequiredFields,        u"inputchecks"_ustr,     DSID_CHECK_REQUIRED_FIELDS, false, false },
+            { m_xIgnoreCurrency,             u"ignorecurrency"_ustr,  DSID_IGNORECURRENCY,        false, false },
+            { m_xEscapeDateTime,             u"useodbcliterals"_ustr, DSID_ESCAPE_DATETIME,       false, false },
+            { m_xPrimaryKeySupport,          u"primarykeys"_ustr,     DSID_PRIMARY_KEY_SUPPORT,   false, false },
+            { m_xRespectDriverResultSetType, u"resulttype"_ustr,      DSID_RESPECTRESULTSETTYPE,  false, false } }
         , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
         , m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
     {
@@ -97,8 +97,8 @@ namespace dbaui
         // create the controls for the boolean comparison mode
         if ( m_bHasBooleanComparisonMode )
         {
-            m_xBooleanComparisonModeLabel = m_xBuilder->weld_label("comparisonft");
-            m_xBooleanComparisonMode = m_xBuilder->weld_combo_box("comparison");
+            m_xBooleanComparisonModeLabel = m_xBuilder->weld_label(u"comparisonft"_ustr);
+            m_xBooleanComparisonMode = m_xBuilder->weld_combo_box(u"comparison"_ustr);
             m_xBooleanComparisonMode->connect_changed(LINK(this, SpecialSettingsPage, BooleanComparisonSelectHdl));
             m_xBooleanComparisonModeLabel->show();
             m_xBooleanComparisonMode->show();
@@ -106,8 +106,8 @@ namespace dbaui
         // create the controls for the max row scan
         if ( m_bHasMaxRowScan )
         {
-            m_xMaxRowScanLabel  = m_xBuilder->weld_label("rowsft");
-            m_xMaxRowScan = m_xBuilder->weld_spin_button("rows");
+            m_xMaxRowScanLabel  = m_xBuilder->weld_label(u"rowsft"_ustr);
+            m_xMaxRowScan = m_xBuilder->weld_spin_button(u"rows"_ustr);
             m_xMaxRowScan->connect_value_changed(LINK(this, OGenericAdministrationPage, OnControlSpinButtonModifyHdl));
             m_xMaxRowScanLabel->show();
             m_xMaxRowScan->show();
@@ -284,11 +284,11 @@ namespace dbaui
 
     // GeneratedValuesPage
     GeneratedValuesPage::GeneratedValuesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/generatedvaluespage.ui", "GeneratedValuesPage", _rCoreAttrs)
-        , m_xAutoRetrievingEnabled(m_xBuilder->weld_check_button("autoretrieve"))
-        , m_xGrid(m_xBuilder->weld_widget("grid"))
-        , m_xAutoIncrement(m_xBuilder->weld_entry("statement"))
-        , m_xAutoRetrieving(m_xBuilder->weld_entry("query"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/generatedvaluespage.ui"_ustr, u"GeneratedValuesPage"_ustr, _rCoreAttrs)
+        , m_xAutoRetrievingEnabled(m_xBuilder->weld_check_button(u"autoretrieve"_ustr))
+        , m_xGrid(m_xBuilder->weld_widget(u"grid"_ustr))
+        , m_xAutoIncrement(m_xBuilder->weld_entry(u"statement"_ustr))
+        , m_xAutoRetrieving(m_xBuilder->weld_entry(u"query"_ustr))
     {
         m_xAutoRetrievingEnabled->connect_toggled(LINK(this, GeneratedValuesPage, OnAutoToggleHdl));
         m_xAutoIncrement->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
@@ -356,7 +356,7 @@ namespace dbaui
     // AdvancedSettingsDialog
     AdvancedSettingsDialog::AdvancedSettingsDialog(weld::Window* pParent, SfxItemSet* _pItems,
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
-        : SfxTabDialogController(pParent, "dbaccess/ui/advancedsettingsdialog.ui", "AdvancedSettingsDialog", _pItems)
+        : SfxTabDialogController(pParent, u"dbaccess/ui/advancedsettingsdialog.ui"_ustr, u"AdvancedSettingsDialog"_ustr, _pItems)
     {
         m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -373,15 +373,15 @@ namespace dbaui
 
         // auto-generated values?
         if (rFeatures.supportsGeneratedValues())
-            AddTabPage("generated", ODriversSettings::CreateGeneratedValuesPage, nullptr);
+            AddTabPage(u"generated"_ustr, ODriversSettings::CreateGeneratedValuesPage, nullptr);
         else
-            RemoveTabPage("generated");
+            RemoveTabPage(u"generated"_ustr);
 
         // any "special settings"?
         if (rFeatures.supportsAnySpecialSetting())
-            AddTabPage("special", ODriversSettings::CreateSpecialSettingsPage, nullptr);
+            AddTabPage(u"special"_ustr, ODriversSettings::CreateSpecialSettingsPage, nullptr);
         else
-            RemoveTabPage("special");
+            RemoveTabPage(u"special"_ustr);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();

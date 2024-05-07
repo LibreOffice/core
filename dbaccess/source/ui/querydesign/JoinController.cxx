@@ -280,13 +280,13 @@ void OJoinController::removeConnectionData(const TTableConnectionData::value_typ
 void OJoinController::describeSupportedFeatures()
 {
     OJoinController_BASE::describeSupportedFeatures();
-    implDescribeSupportedFeature( ".uno:Redo",      ID_BROWSER_REDO,    CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Save",      ID_BROWSER_SAVEDOC, CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:Undo",      ID_BROWSER_UNDO,    CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:AddTable",  ID_BROWSER_ADDTABLE,CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:EditDoc",   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:GetUndoStrings", SID_GETUNDOSTRINGS );
-    implDescribeSupportedFeature( ".uno:GetRedoStrings", SID_GETREDOSTRINGS );
+    implDescribeSupportedFeature( u".uno:Redo"_ustr,      ID_BROWSER_REDO,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Save"_ustr,      ID_BROWSER_SAVEDOC, CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:Undo"_ustr,      ID_BROWSER_UNDO,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:AddTable"_ustr,  ID_BROWSER_ADDTABLE,CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:EditDoc"_ustr,   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:GetUndoStrings"_ustr, SID_GETUNDOSTRINGS );
+    implDescribeSupportedFeature( u".uno:GetRedoStrings"_ustr, SID_GETREDOSTRINGS );
 }
 
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend)
@@ -314,7 +314,7 @@ void OJoinController::loadTableWindows( const ::comphelper::NamedValueCollection
 
     m_aMinimumTableViewSize = Point();
 
-    for (auto& table : i_rViewSettings.getOrDefault("Tables", Sequence<PropertyValue>()))
+    for (auto& table : i_rViewSettings.getOrDefault(u"Tables"_ustr, Sequence<PropertyValue>()))
     {
         ::comphelper::NamedValueCollection aSingleTableData(table.Value);
         loadTableWindow( aSingleTableData );
@@ -332,14 +332,14 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
     OUString sComposedName,sTableName,sWindowName;
     bool bShowAll = false;
 
-    sComposedName = i_rTableWindowSettings.getOrDefault( "ComposedName", sComposedName );
-    sTableName = i_rTableWindowSettings.getOrDefault( "TableName", sTableName );
-    sWindowName = i_rTableWindowSettings.getOrDefault( "WindowName", sWindowName );
-    nY = i_rTableWindowSettings.getOrDefault( "WindowTop", nY );
-    nX = i_rTableWindowSettings.getOrDefault( "WindowLeft", nX );
-    nWidth = i_rTableWindowSettings.getOrDefault( "WindowWidth", nWidth );
-    nHeight = i_rTableWindowSettings.getOrDefault( "WindowHeight", nHeight );
-    bShowAll = i_rTableWindowSettings.getOrDefault( "ShowAll", bShowAll );
+    sComposedName = i_rTableWindowSettings.getOrDefault( u"ComposedName"_ustr, sComposedName );
+    sTableName = i_rTableWindowSettings.getOrDefault( u"TableName"_ustr, sTableName );
+    sWindowName = i_rTableWindowSettings.getOrDefault( u"WindowName"_ustr, sWindowName );
+    nY = i_rTableWindowSettings.getOrDefault( u"WindowTop"_ustr, nY );
+    nX = i_rTableWindowSettings.getOrDefault( u"WindowLeft"_ustr, nX );
+    nWidth = i_rTableWindowSettings.getOrDefault( u"WindowWidth"_ustr, nWidth );
+    nHeight = i_rTableWindowSettings.getOrDefault( u"WindowHeight"_ustr, nHeight );
+    bShowAll = i_rTableWindowSettings.getOrDefault( u"ShowAll"_ustr, bShowAll );
 
     TTableWindowData::value_type pData = createTableWindowData(sComposedName,sTableName,sWindowName);
     if ( pData )
@@ -366,20 +366,20 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
     for (auto const& elem : m_vTableData)
     {
         ::comphelper::NamedValueCollection aWindowData;
-        aWindowData.put( "ComposedName", elem->GetComposedName() );
-        aWindowData.put( "TableName", elem->GetTableName() );
-        aWindowData.put( "WindowName", elem->GetWinName() );
-        aWindowData.put( "WindowTop", static_cast<sal_Int32>(elem->GetPosition().Y()) );
-        aWindowData.put( "WindowLeft", static_cast<sal_Int32>(elem->GetPosition().X()) );
-        aWindowData.put( "WindowWidth", static_cast<sal_Int32>(elem->GetSize().Width()) );
-        aWindowData.put( "WindowHeight", static_cast<sal_Int32>(elem->GetSize().Height()) );
-        aWindowData.put( "ShowAll", elem->IsShowAll() );
+        aWindowData.put( u"ComposedName"_ustr, elem->GetComposedName() );
+        aWindowData.put( u"TableName"_ustr, elem->GetTableName() );
+        aWindowData.put( u"WindowName"_ustr, elem->GetWinName() );
+        aWindowData.put( u"WindowTop"_ustr, static_cast<sal_Int32>(elem->GetPosition().Y()) );
+        aWindowData.put( u"WindowLeft"_ustr, static_cast<sal_Int32>(elem->GetPosition().X()) );
+        aWindowData.put( u"WindowWidth"_ustr, static_cast<sal_Int32>(elem->GetSize().Width()) );
+        aWindowData.put( u"WindowHeight"_ustr, static_cast<sal_Int32>(elem->GetSize().Height()) );
+        aWindowData.put( u"ShowAll"_ustr, elem->IsShowAll() );
 
         const OUString sTableName( "Table" + OUString::number( i++ ) );
         aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
     }
 
-    o_rViewSettings.put( "Tables", aAllTablesData.getPropertyValues() );
+    o_rViewSettings.put( u"Tables"_ustr, aAllTablesData.getPropertyValues() );
 }
 
 TTableWindowData::value_type OJoinController::createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName)

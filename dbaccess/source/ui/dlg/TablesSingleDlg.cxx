@@ -33,7 +33,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(weld::Window* pParent
             ,const Reference< XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName)
     : SfxSingleTabDialogController(pParent, _pItems,
-        "dbaccess/ui/tablesfilterdialog.ui", "TablesFilterDialog")
+        u"dbaccess/ui/tablesfilterdialog.ui"_ustr, u"TablesFilterDialog"_ustr)
     , m_pImpl(new ODbDataSourceAdministrationHelper(_rxORB, m_xDialog.get(), pParent, this))
     , m_bStopExecution(false)
 {

@@ -106,7 +106,7 @@ namespace dbaui
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:Open", m_sModule);
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:Open"_ustr, m_sModule);
         OUString sLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         m_xControl->set_label(" " + sLabel.replaceAll("~", ""));
 
@@ -133,7 +133,7 @@ namespace dbaui
         std::vector< SvtHistoryOptions::HistoryItem > aHistory = SvtHistoryOptions::GetList( EHistoryType::PickList );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory.set(::comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.document.FilterFactory" ), css::uno::UNO_QUERY);
+            u"com.sun.star.document.FilterFactory"_ustr ), css::uno::UNO_QUERY);
 
         for ( const SvtHistoryOptions::HistoryItem& rHistoryItem : aHistory )
         {
@@ -151,7 +151,7 @@ namespace dbaui
 
                 ::comphelper::SequenceAsHashMap aFilterProperties( aProps );
                 OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
-                    "DocumentService", OUString() );
+                    u"DocumentService"_ustr, OUString() );
                 if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
                 {
                     // yes, it's a Base document

@@ -129,7 +129,7 @@ void SchemaParser::parseSchema()
 
     Reference<XComponentContext> rContext = comphelper::getProcessComponentContext();
     Reference<XTextInputStream2> xTextInput = TextInputStream::create(rContext);
-    xTextInput->setEncoding("UTF-8");
+    xTextInput->setEncoding(u"UTF-8"_ustr);
     xTextInput->setInputStream(xStream->getInputStream());
 
     while (!xTextInput->isEOF())

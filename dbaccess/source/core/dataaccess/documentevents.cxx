@@ -136,16 +136,16 @@ namespace dbaccess
         // Weird enough, the event assignment UI has (well: had) the idea of using an empty "EventType"/"Script"
         // to indicate the event descriptor should be reset, instead of just passing an empty event descriptor.
         ::comphelper::NamedValueCollection aCheck( aEventDescriptor );
-        if ( aCheck.has( "EventType" ) )
+        if ( aCheck.has( u"EventType"_ustr ) )
         {
-            OUString sEventType = aCheck.getOrDefault( "EventType", OUString() );
+            OUString sEventType = aCheck.getOrDefault( u"EventType"_ustr, OUString() );
             OSL_ENSURE( !sEventType.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty EventType is weird!" );
             if ( sEventType.isEmpty() )
                 aEventDescriptor.realloc( 0 );
         }
-        if ( aCheck.has( "Script" ) )
+        if ( aCheck.has( u"Script"_ustr ) )
         {
-            OUString sScript = aCheck.getOrDefault( "Script", OUString() );
+            OUString sScript = aCheck.getOrDefault( u"Script"_ustr, OUString() );
             OSL_ENSURE( !sScript.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty Script is weird!" );
             if ( sScript.isEmpty() )
                 aEventDescriptor.realloc( 0 );

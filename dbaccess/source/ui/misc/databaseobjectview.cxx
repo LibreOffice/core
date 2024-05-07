@@ -104,9 +104,9 @@ namespace dbaui
                 if ( !m_xFrameLoader.is() )
                 {
                     Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
-                    Sequence< Any > lArgs{ Any(NamedValue("ParentFrame", Any(m_xParentFrame))),
-                                           Any(NamedValue("TopWindow", Any(true))),
-                                           Any(NamedValue("SupportPersistentWindowState",
+                    Sequence< Any > lArgs{ Any(NamedValue(u"ParentFrame"_ustr, Any(m_xParentFrame))),
+                                           Any(NamedValue(u"TopWindow"_ustr, Any(true))),
+                                           Any(NamedValue(u"SupportPersistentWindowState"_ustr,
                                                           Any(true))) };
 
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
@@ -124,7 +124,7 @@ namespace dbaui
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_SET_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
-                    "_self",
+                    u"_self"_ustr,
                     0,
                     i_rDispatchArgs.getPropertyValues()
                 );

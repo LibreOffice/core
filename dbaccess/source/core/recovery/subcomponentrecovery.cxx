@@ -84,13 +84,13 @@ namespace dbaccess
             switch ( i_eType )
             {
             case FORM:
-                return "form";
+                return u"form"_ustr;
             case REPORT:
-                return "report";
+                return u"report"_ustr;
             case TABLE:
-                return "table";
+                return u"table"_ustr;
             case QUERY:
-                return "query";
+                return u"query"_ustr;
             default:
                 break;
             }
@@ -126,7 +126,7 @@ namespace dbaccess
                 return false;
 
             ::comphelper::NamedValueCollection aDocArgs( xDocument->getArgs() );
-            return aDocArgs.getOrDefault( "ReadOnly", false );
+            return aDocArgs.getOrDefault( u"ReadOnly"_ustr, false );
         }
 
         Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XDatabaseDocumentUI >& i_rAppUI,
@@ -215,7 +215,7 @@ namespace dbaccess
 
     void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName )
     {
-        m_rDelegator.ignorableWhitespace( " " );
+        m_rDelegator.ignorableWhitespace( u" "_ustr );
 
         m_rDelegator.startElement( impl_prefix( i_eName ) );
     }
@@ -223,7 +223,7 @@ namespace dbaccess
     void SettingsExportContext::EndElement( const bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
-            m_rDelegator.ignorableWhitespace( " " );
+            m_rDelegator.ignorableWhitespace( u" "_ustr );
         m_rDelegator.endElement();
     }
 
@@ -349,15 +349,15 @@ namespace dbaccess
         switch ( i_eType )
         {
         case FORM:
-            return "forms";
+            return u"forms"_ustr;
         case REPORT:
-            return "reports";
+            return u"reports"_ustr;
         case TABLE:
-            return "tables";
+            return u"tables"_ustr;
         case QUERY:
-            return "queries";
+            return u"queries"_ustr;
         case RELATION_DESIGN:
-            return "relations";
+            return u"relations"_ustr;
         default:
             break;
         }
@@ -472,7 +472,7 @@ namespace dbaccess
         // the latter is updated only upon successful save of the design)
         Reference< XPropertySet > xDesignerProps( m_xComponent, UNO_QUERY_THROW );
         Sequence< PropertyValue > aCurrentQueryDesign;
-        OSL_VERIFY( xDesignerProps->getPropertyValue( "CurrentQueryDesign" ) >>= aCurrentQueryDesign );
+        OSL_VERIFY( xDesignerProps->getPropertyValue( u"CurrentQueryDesign"_ustr ) >>= aCurrentQueryDesign );
 
         // write the query design
         StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, sSettingsStreamName );
@@ -480,7 +480,7 @@ namespace dbaccess
 
         static constexpr OUString sWhitespace( u" "_ustr );
 
-        aDesignOutput.startElement( "office:settings" );
+        aDesignOutput.startElement( u"office:settings"_ustr );
         aDesignOutput.ignorableWhitespace( sWhitespace );
 
         XMLSettingsExportHelper aSettingsExporter( aSettingsExportContext );
@@ -508,10 +508,10 @@ namespace dbaccess
         Reference< XCommandProcessor > xDocDefinition;
 
         ::comphelper::NamedValueCollection aLoadArgs;
-        aLoadArgs.put( "RecoveryStorage", i_rRecoveryStorage );
+        aLoadArgs.put( u"RecoveryStorage"_ustr, i_rRecoveryStorage );
 
         // load/create the sub component hidden. We'll show it when the main app window is shown.
-        aLoadArgs.put( "Hidden", true );
+        aLoadArgs.put( u"Hidden"_ustr, true );
 
         if ( !i_rComponentName.isEmpty() )
         {
@@ -569,8 +569,8 @@ namespace dbaccess
 
         // then load the query designer
         ::comphelper::NamedValueCollection aLoadArgs;
-        aLoadArgs.put( "CurrentQueryDesign", aCurrentQueryDesign );
-        aLoadArgs.put( "Hidden", true );
+        aLoadArgs.put( u"CurrentQueryDesign"_ustr, aCurrentQueryDesign );
+        aLoadArgs.put( u"Hidden"_ustr, true );
 
         if ( !i_rComponentName.isEmpty() )
         {

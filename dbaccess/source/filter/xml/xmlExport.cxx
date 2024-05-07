@@ -63,7 +63,7 @@ com_sun_star_comp_sdb_DBExportFilter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
-        "com.sun.star.comp.sdb.DBExportFilter"));
+        u"com.sun.star.comp.sdb.DBExportFilter"_ustr));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -71,7 +71,7 @@ com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
-        "com.sun.star.comp.sdb.XMLSettingsExporter",
+        u"com.sun.star.comp.sdb.XMLSettingsExporter"_ustr,
         SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
 }
 
@@ -80,7 +80,7 @@ com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
-        "com.sun.star.comp.sdb.XMLFullExporter",
+        u"com.sun.star.comp.sdb.XMLFullExporter"_ustr,
         SvXMLExportFlags::ALL));
 }
 
@@ -95,24 +95,24 @@ namespace dbaxml
         switch (_rType.getTypeClass())
         {
             case TypeClass_STRING:
-                return "string";
+                return u"string"_ustr;
             case TypeClass_DOUBLE:
-                return "double";
+                return u"double"_ustr;
             case TypeClass_BOOLEAN:
-                return "boolean";
+                return u"boolean"_ustr;
             case TypeClass_BYTE:
             case TypeClass_SHORT:
-                return "short";
+                return u"short"_ustr;
             case TypeClass_LONG:
-                return "int";
+                return u"int"_ustr;
             case TypeClass_HYPER:
-                return "long";
+                return u"long"_ustr;
             case TypeClass_ENUM:
-                return "int";
+                return u"int"_ustr;
 
             default:
                 OSL_FAIL( "lcl_implGetPropertyXMLType: unsupported value type!" );
-                return "double";
+                return u"double"_ustr;
         }
     }
 
@@ -770,7 +770,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     OUString sValue;
     _xProp->getPropertyValue(PROPERTY_PERSISTENT_NAME) >>= sValue;
     bool bIsForm = true;
-    _xProp->getPropertyValue("IsForm") >>= bIsForm;
+    _xProp->getPropertyValue(u"IsForm"_ustr) >>= bIsForm;
     if ( bIsForm )
         sValue = "forms/" + sValue;
     else

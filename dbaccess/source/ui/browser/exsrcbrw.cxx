@@ -71,12 +71,12 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 
 css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.FormGridView" };
+    return { u"com.sun.star.sdb.FormGridView"_ustr };
 }
 
 OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.OFormGridView";
+    return u"org.openoffice.comp.dbu.OFormGridView"_ustr;
 }
 
 Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()

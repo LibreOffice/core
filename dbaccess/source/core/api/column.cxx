@@ -78,7 +78,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyCont
 // css::lang::XServiceInfo
 OUString OColumn::getImplementationName(  )
 {
-    return "com.sun.star.sdb.OColumn";
+    return u"com.sun.star.sdb.OColumn"_ustr;
 }
 
 sal_Bool OColumn::supportsService( const OUString& _rServiceName )
@@ -169,7 +169,7 @@ OColumns::~OColumns()
 // XServiceInfo
 OUString OColumns::getImplementationName(  )
 {
-    return "com.sun.star.sdb.OColumns";
+    return u"com.sun.star.sdb.OColumns"_ustr;
 }
 
 sal_Bool OColumns::supportsService( const OUString& _rServiceName )

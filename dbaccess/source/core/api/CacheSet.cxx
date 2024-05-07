@@ -226,8 +226,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     sal_Int32 nCheckCount = 1; // index for the original values
     sal_Int32 i = 1;
 
-    OUString sIsNull(" IS NULL");
-    OUString sParam(" = ?");
+    OUString sIsNull(u" IS NULL"_ustr);
+    OUString sParam(u" = ?"_ustr);
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->begin()+1;
     ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->end();
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)

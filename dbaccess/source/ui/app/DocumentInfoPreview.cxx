@@ -120,7 +120,7 @@ void ODocumentInfoPreview::insertEntry(
     std::u16string_view title, OUString const & value)
 {
     if (!m_xEditEngine->GetText().isEmpty()) {
-        m_xEditEngine->QuickInsertText("\n\n", InsertAtEnd(*m_xEditEngine));
+        m_xEditEngine->QuickInsertText(u"\n\n"_ustr, InsertAtEnd(*m_xEditEngine));
     }
 
     OUString caption(OUString::Concat(title) + ":\n");

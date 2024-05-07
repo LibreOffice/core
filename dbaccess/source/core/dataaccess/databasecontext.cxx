@@ -193,7 +193,7 @@ ODatabaseContext::~ODatabaseContext()
 // XServiceInfo
 OUString ODatabaseContext::getImplementationName(  )
 {
-    return "com.sun.star.comp.dba.ODatabaseContext";
+    return u"com.sun.star.comp.dba.ODatabaseContext"_ustr;
 }
 
 sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName )
@@ -203,7 +203,7 @@ sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.sdb.DatabaseContext" };
+    return { u"com.sun.star.sdb.DatabaseContext"_ustr };
 }
 
 Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
@@ -330,9 +330,9 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
 
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "URL", _sURL );
-        aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, nullptr) );
+        aArgs.put( u"URL"_ustr, _sURL );
+        aArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
+        aArgs.put( u"InteractionHandler"_ustr, task::InteractionHandler::createWithParent(m_aContext, nullptr) );
         if (bEmbeddedDataSource)
         {
             // In this case the host contains the real path, and the path is the embedded stream name.
@@ -346,7 +346,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
                 if (auth.isEmpty() == decAuth.isEmpty()) {
                     // Decoding of auth to UTF-8 succeeded:
                     OUString sBaseURI = decAuth + uri->getPath();
-                    aArgs.put("BaseURI", sBaseURI);
+                    aArgs.put(u"BaseURI"_ustr, sBaseURI);
                 } else {
                     SAL_WARN(
                         "dbaccess.core",
@@ -470,7 +470,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
 
     // additionally, remember the "failed password", which is not available as property
     // #i86178#
-    aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
+    aRememberProps.put( u"AuthFailedPassword"_ustr, _rModelImpl.m_sFailedPassword );
 
     OUString sDocumentURL( _rModelImpl.getURL() );
     if ( m_aDatabaseObjects.find( sDocumentURL ) != m_aDatabaseObjects.end() )
@@ -718,7 +718,7 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
 
     // ... whose BasicManager has just been created, then add the global DatabaseDocument variable to its scope.
     if ( xDatabaseDocument.is() )
-        _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", Any( xDatabaseDocument ) );
+        _rBasicManager.SetGlobalUNOConstant( u"ThisDatabaseDocument"_ustr, Any( xDatabaseDocument ) );
 #endif
 }
 

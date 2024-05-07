@@ -96,7 +96,7 @@ namespace
         std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
-            OUString sNormalImageID("dialog-error");
+            OUString sNormalImageID(u"dialog-error"_ustr);
 
             switch ( _eType )
             {
@@ -276,9 +276,9 @@ protected:
 }
 
 OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDisplayChain&& rExceptions)
-    : GenericDialogController(pParent, "dbaccess/ui/sqlexception.ui", "SQLExceptionDialog")
-    , m_xExceptionList(m_xBuilder->weld_tree_view("list"))
-    , m_xExceptionText(m_xBuilder->weld_text_view("description"))
+    : GenericDialogController(pParent, u"dbaccess/ui/sqlexception.ui"_ustr, u"SQLExceptionDialog"_ustr)
+    , m_xExceptionList(m_xBuilder->weld_tree_view(u"list"_ustr))
+    , m_xExceptionText(m_xBuilder->weld_text_view(u"description"_ustr))
     , m_aExceptions(std::move(rExceptions))
 {
     int nListWidth = m_xExceptionText->get_approximate_digit_width() * 28;
@@ -546,7 +546,7 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
             break;
     }
 
-    m_xDialog.reset(Application::CreateMessageDialog(pParent, eMessageType, VclButtonsType::NONE, ""));
+    m_xDialog.reset(Application::CreateMessageDialog(pParent, eMessageType, VclButtonsType::NONE, u""_ustr));
     m_xDialog->set_title(utl::ConfigManager::getProductName() + " Base");
 
     impl_fillMessages();

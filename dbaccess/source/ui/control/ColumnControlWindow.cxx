@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 
 OColumnControlTopLevel::OColumnControlTopLevel(vcl::Window* pParent,
                                                const Reference<XComponentContext>& _rxContext)
-    : InterimItemWindow(pParent, "dbaccess/ui/colcontrolbox.ui", "ColControlBox")
+    : InterimItemWindow(pParent, u"dbaccess/ui/colcontrolbox.ui"_ustr, u"ColControlBox"_ustr)
     , m_xControl(new OColumnControlWindow(m_xContainer.get(), _rxContext))
 {
 }

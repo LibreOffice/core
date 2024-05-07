@@ -146,8 +146,8 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
     std::pair< OUString, OUString > aProperties[] = {
-                 std::pair< OUString, OUString >(PROPERTY_FILTER,OUString(" AND "))
-                ,std::pair< OUString, OUString >(PROPERTY_ORDER,OUString(" ORDER BY "))
+                 std::pair< OUString, OUString >(PROPERTY_FILTER,u" AND "_ustr)
+                ,std::pair< OUString, OUString >(PROPERTY_ORDER,u" ORDER BY "_ustr)
     };
 
     try
@@ -1182,7 +1182,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         if(xMetaData->getDatabaseProductName() == "MySQL")
         {
             Reference< XStatement > xSelect = m_xDestConnection->createStatement();
-            Reference< XResultSet > xRs = xSelect->executeQuery("select database()");
+            Reference< XResultSet > xRs = xSelect->executeQuery(u"select database()"_ustr);
             (void)xRs->next(); // first and only result
             Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
             sSchema = xRow->getString(1);
@@ -1477,7 +1477,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
         if ( !pType )
         {
             _bNotConvert = false;
-            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,"x",50,0,false,bForce);
+            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,u"x"_ustr,50,0,false,bForce);
             if ( !pType )
                 pType = m_pTypeInfo;
         }

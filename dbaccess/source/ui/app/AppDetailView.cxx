@@ -107,10 +107,10 @@ IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, weld::TreeView&, void)
 }
 
 OTasksWindow::OTasksWindow(weld::Container* pParent, OApplicationDetailView* pDetailView)
-    : OChildWindow(pParent, "dbaccess/ui/taskwindow.ui", "TaskWindow")
-    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
-    , m_xDescription(m_xBuilder->weld_label("description"))
-    , m_xHelpText(m_xBuilder->weld_text_view("helptext"))
+    : OChildWindow(pParent, u"dbaccess/ui/taskwindow.ui"_ustr, u"TaskWindow"_ustr)
+    , m_xTreeView(m_xBuilder->weld_tree_view(u"treeview"_ustr))
+    , m_xDescription(m_xBuilder->weld_label(u"description"_ustr))
+    , m_xHelpText(m_xBuilder->weld_text_view(u"helptext"_ustr))
     , m_pDetailView(pDetailView)
     , m_nCursorIndex(-1)
 {
@@ -150,7 +150,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( getDetailView()->getBorderWin().getView()->getORB() );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
-            "com.sun.star.sdb.OfficeDatabaseDocument"
+            u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr
         );
         Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
 
@@ -194,11 +194,11 @@ void OTasksWindow::Clear()
 
 OApplicationDetailView::OApplicationDetailView(weld::Container* pParent, OAppBorderWindow& rBorder,
                                                PreviewMode ePreviewMode)
-    : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/appdetailwindow.ui"))
-    , m_xContainer(m_xBuilder->weld_container("AppDetailWindow"))
-    , m_xHorzSplitter(m_xBuilder->weld_paned("splitter"))
-    , m_xTasksParent(m_xBuilder->weld_container("tasks"))
-    , m_xContainerParent(m_xBuilder->weld_container("container"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"dbaccess/ui/appdetailwindow.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"AppDetailWindow"_ustr))
+    , m_xHorzSplitter(m_xBuilder->weld_paned(u"splitter"_ustr))
+    , m_xTasksParent(m_xBuilder->weld_container(u"tasks"_ustr))
+    , m_xContainerParent(m_xBuilder->weld_container(u"container"_ustr))
     , m_xTasks(new dbaui::OTitleWindow(m_xTasksParent.get(), STR_TASKS))
     , m_xTitleContainer(new dbaui::OTitleWindow(m_xContainerParent.get(), TranslateId()))
     , m_rBorderWin(rBorder)

@@ -97,13 +97,13 @@ void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
     vcl::Font aAppFont(sFontName, aFontSize);
 
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO));
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CJK));
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CTL));
 
     pItemPool->SetUserDefaultItem(
@@ -148,7 +148,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
         std::unique_lock g(m_mutex);
         m_notifier = n;
     }
-    css::uno::Sequence< OUString > s { "FontHeight", "FontName" };
+    css::uno::Sequence< OUString > s { u"FontHeight"_ustr, u"FontName"_ustr };
     n->addPropertiesChangeListener(s, m_listener);
     m_ColorConfig.AddListener(this);
 }
@@ -369,8 +369,8 @@ bool SQLEditView::Command(const CommandEvent& rCEvt)
     {
         ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
         weld::Widget* pPopupParent = GetDrawingArea();
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "vcl/ui/editmenu.ui"));
-        std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"vcl/ui/editmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
 
         bool bEnableCut = true;
         bool bEnableCopy = true;
@@ -395,13 +395,13 @@ bool SQLEditView::Command(const CommandEvent& rCEvt)
             bEnableSpecialChar = false;
         }
 
-        xContextMenu->set_sensitive("cut", bEnableCut);
-        xContextMenu->set_sensitive("copy", bEnableCopy);
-        xContextMenu->set_sensitive("delete", bEnableDelete);
-        xContextMenu->set_sensitive("paste", bEnablePaste);
-        xContextMenu->set_sensitive("specialchar", bEnableSpecialChar);
-        xContextMenu->set_visible("undo", false);
-        xContextMenu->set_visible("specialchar", vcl::GetGetSpecialCharsFunction() != nullptr);
+        xContextMenu->set_sensitive(u"cut"_ustr, bEnableCut);
+        xContextMenu->set_sensitive(u"copy"_ustr, bEnableCopy);
+        xContextMenu->set_sensitive(u"delete"_ustr, bEnableDelete);
+        xContextMenu->set_sensitive(u"paste"_ustr, bEnablePaste);
+        xContextMenu->set_sensitive(u"specialchar"_ustr, bEnableSpecialChar);
+        xContextMenu->set_visible(u"undo"_ustr, false);
+        xContextMenu->set_visible(u"specialchar"_ustr, vcl::GetGetSpecialCharsFunction() != nullptr);
 
         OUString sCommand = xContextMenu->popup_at_rect(pPopupParent, aRect);
 

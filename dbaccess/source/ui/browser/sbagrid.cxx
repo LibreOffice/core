@@ -80,8 +80,8 @@ com_sun_star_comp_dbu_SbaXGridControl_get_implementation(
 
 css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.form.control.InteractionGridControl", "com.sun.star.form.control.GridControl",
-         "com.sun.star.awt.UnoControl" };
+    return { u"com.sun.star.form.control.InteractionGridControl"_ustr, u"com.sun.star.form.control.GridControl"_ustr,
+         u"com.sun.star.awt.UnoControl"_ustr };
 }
 
 
@@ -89,7 +89,7 @@ css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames(
 
 OUString SAL_CALL SbaXGridControl::getImplementationName()
 {
-    return "com.sun.star.comp.dbu.SbaXGridControl";
+    return u"com.sun.star.comp.dbu.SbaXGridControl"_ustr;
 }
 
 SbaXGridControl::SbaXGridControl(const Reference< XComponentContext >& _rM)
@@ -551,10 +551,10 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& r
 
     if (bDBIsReadOnly)
     {
-        rMenu.set_visible("hide", false);
-        rMenu.set_sensitive("hide", false);
-        rMenu.set_visible("show", false);
-        rMenu.set_sensitive("show", false);
+        rMenu.set_visible(u"hide"_ustr, false);
+        rMenu.set_sensitive(u"hide"_ustr, false);
+        rMenu.set_visible(u"show"_ustr, false);
+        rMenu.set_sensitive(u"show"_ustr, false);
     }
 
     // prepend some new items
@@ -580,15 +580,15 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& r
         case DataType::REF:
             break;
         default:
-            rMenu.insert(nPos++, "colattrset", DBA_RES(RID_STR_COLUMN_FORMAT),
+            rMenu.insert(nPos++, u"colattrset"_ustr, DBA_RES(RID_STR_COLUMN_FORMAT),
                          nullptr, nullptr, nullptr, TRISTATE_INDET);
-            rMenu.insert_separator(nPos++, "separator1");
+            rMenu.insert_separator(nPos++, u"separator1"_ustr);
         }
     }
 
-    rMenu.insert(nPos++, "colwidth", DBA_RES(RID_STR_COLUMN_WIDTH),
+    rMenu.insert(nPos++, u"colwidth"_ustr, DBA_RES(RID_STR_COLUMN_WIDTH),
                  nullptr, nullptr, nullptr, TRISTATE_INDET);
-    rMenu.insert_separator(nPos++, "separator2");
+    rMenu.insert_separator(nPos++, u"separator2"_ustr);
 }
 
 void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OUString& rExecutionResult)
@@ -645,18 +645,18 @@ void SbaGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
 
     if (!IsReadOnlyDB())
     {
-        rMenu.insert(nPos++, "tableattr", DBA_RES(RID_STR_TABLE_FORMAT),
+        rMenu.insert(nPos++, u"tableattr"_ustr, DBA_RES(RID_STR_TABLE_FORMAT),
                      nullptr, nullptr, nullptr, TRISTATE_INDET);
-        rMenu.insert(nPos++, "rowheight", DBA_RES(RID_STR_ROW_HEIGHT),
+        rMenu.insert(nPos++, u"rowheight"_ustr, DBA_RES(RID_STR_ROW_HEIGHT),
                      nullptr, nullptr, nullptr, TRISTATE_INDET);
-        rMenu.insert_separator(nPos++, "separator1");
+        rMenu.insert_separator(nPos++, u"separator1"_ustr);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.insert(nPos++, "copy", DBA_RES(RID_STR_COPY),
+        rMenu.insert(nPos++, u"copy"_ustr, DBA_RES(RID_STR_COPY),
                      nullptr, nullptr, nullptr, TRISTATE_INDET);
-        rMenu.insert_separator(nPos++, "separator2");
+        rMenu.insert_separator(nPos++, u"separator2"_ustr);
     }
 }
 
@@ -775,10 +775,10 @@ void SbaGridControl::SetBrowserAttrs()
     {
         Reference< XComponentContext > xContext = getContext();
         css::uno::Sequence<css::uno::Any> aArguments{
-            Any(comphelper::makePropertyValue("IntrospectedObject", xGridModel)),
-            Any(comphelper::makePropertyValue("ParentWindow", VCLUnoHelper::GetInterface(this)))
+            Any(comphelper::makePropertyValue(u"IntrospectedObject"_ustr, xGridModel)),
+            Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, VCLUnoHelper::GetInterface(this)))
         };
-        Reference<XExecutableDialog> xExecute(xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.form.ControlFontDialog",
+        Reference<XExecutableDialog> xExecute(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.form.ControlFontDialog"_ustr,
                                               aArguments, xContext), css::uno::UNO_QUERY_THROW);
         xExecute->execute();
     }

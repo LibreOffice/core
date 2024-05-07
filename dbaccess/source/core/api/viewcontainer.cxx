@@ -61,7 +61,7 @@ OViewContainer::~OViewContainer()
 // XServiceInfo
 OUString SAL_CALL OViewContainer::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.OViewContainer";
+        return u"com.sun.star.sdb.dbaccess.OViewContainer"_ustr;
     }
 sal_Bool SAL_CALL OViewContainer::supportsService(const OUString& _rServiceName)
     {
@@ -246,7 +246,7 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 OUString OViewContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)
-    return "VIEW";
+    return u"VIEW"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

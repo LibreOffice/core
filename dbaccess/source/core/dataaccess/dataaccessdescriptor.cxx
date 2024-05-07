@@ -146,7 +146,7 @@ namespace
 
     OUString SAL_CALL DataAccessDescriptor::getImplementationName()
     {
-        return "com.sun.star.comp.dba.DataAccessDescriptor";
+        return u"com.sun.star.comp.dba.DataAccessDescriptor"_ustr;
     }
 
     sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName )
@@ -156,7 +156,7 @@ namespace
 
     Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.sdb.DataAccessDescriptor" };
+        return { u"com.sun.star.sdb.DataAccessDescriptor"_ustr };
     }
 
     Reference< XPropertySetInfo > SAL_CALL DataAccessDescriptor::getPropertySetInfo()
@@ -198,7 +198,7 @@ namespace
 
     OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName()
     {
-        return "com.sun.star.comp.dba.DataAccessDescriptorFactory";
+        return u"com.sun.star.comp.dba.DataAccessDescriptorFactory"_ustr;
     }
 
     sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )
@@ -208,7 +208,7 @@ namespace
 
     Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.DataAccessDescriptorFactory" };
+        return { u"com.sun.star.sdb.DataAccessDescriptorFactory"_ustr };
     }
 
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  )

@@ -32,15 +32,15 @@ using namespace dbaui;
 
 SbaSbAttrDlg::SbaSbAttrDlg(weld::Widget* pParent, const SfxItemSet* pCellAttrs,
     SvNumberFormatter* pFormatter, bool bHasFormat)
-    : SfxTabDialogController(pParent, "dbaccess/ui/fielddialog.ui", "FieldDialog", pCellAttrs)
+    : SfxTabDialogController(pParent, u"dbaccess/ui/fielddialog.ui"_ustr, u"FieldDialog"_ustr, pCellAttrs)
 {
     pNumberInfoItem.reset( new SvxNumberInfoItem( pFormatter, SID_ATTR_NUMBERFORMAT_INFO ) );
 
     if (bHasFormat)
-        AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
+        AddTabPage(u"format"_ustr, RID_SVXPAGE_NUMBERFORMAT);
     else
-        RemoveTabPage("format");
-    AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);
+        RemoveTabPage(u"format"_ustr);
+    AddTabPage(u"alignment"_ustr, RID_SVXPAGE_ALIGNMENT);
 }
 
 SbaSbAttrDlg::~SbaSbAttrDlg()

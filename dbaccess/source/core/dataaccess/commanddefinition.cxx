@@ -106,15 +106,15 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OCommandDefinition
 
 OUString SAL_CALL OCommandDefinition::getImplementationName()
 {
-    return "com.sun.star.comp.dba.OCommandDefinition";
+    return u"com.sun.star.comp.dba.OCommandDefinition"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.sdb.QueryDefinition",
-        "com.sun.star.sdb.CommandDefinition",
-        "com.sun.star.ucb.Content"
+        u"com.sun.star.sdb.QueryDefinition"_ustr,
+        u"com.sun.star.sdb.CommandDefinition"_ustr,
+        u"com.sun.star.ucb.Content"_ustr
     };
 }
 

@@ -162,30 +162,30 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.emplace( DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME );
     m_aIndirectPropTranslator.emplace( DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS );
     m_aIndirectPropTranslator.emplace( DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME );
-    m_aIndirectPropTranslator.emplace( DSID_PRIMARY_KEY_SUPPORT, OUString("PrimaryKeySupport") );
+    m_aIndirectPropTranslator.emplace( DSID_PRIMARY_KEY_SUPPORT, u"PrimaryKeySupport"_ustr );
     m_aIndirectPropTranslator.emplace( DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST );
     m_aIndirectPropTranslator.emplace( DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV );
     m_aIndirectPropTranslator.emplace( DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE );
     m_aIndirectPropTranslator.emplace( DSID_ENABLEOUTERJOIN, PROPERTY_ENABLEOUTERJOIN );
     m_aIndirectPropTranslator.emplace( DSID_CATALOG, PROPERTY_USECATALOGINSELECT );
     m_aIndirectPropTranslator.emplace( DSID_SCHEMA, PROPERTY_USESCHEMAINSELECT );
-    m_aIndirectPropTranslator.emplace( DSID_INDEXAPPENDIX, OUString("AddIndexAppendix") );
-    m_aIndirectPropTranslator.emplace( DSID_DOSLINEENDS, OUString("PreferDosLikeLineEnds") );
-    m_aIndirectPropTranslator.emplace( DSID_CONN_SOCKET, OUString("LocalSocket") );
-    m_aIndirectPropTranslator.emplace( DSID_NAMED_PIPE, OUString("NamedPipe") );
-    m_aIndirectPropTranslator.emplace( DSID_RESPECTRESULTSETTYPE, OUString("RespectDriverResultSetType") );
-    m_aIndirectPropTranslator.emplace( DSID_MAX_ROW_SCAN, OUString("MaxRowScan") );
+    m_aIndirectPropTranslator.emplace( DSID_INDEXAPPENDIX, u"AddIndexAppendix"_ustr );
+    m_aIndirectPropTranslator.emplace( DSID_DOSLINEENDS, u"PreferDosLikeLineEnds"_ustr );
+    m_aIndirectPropTranslator.emplace( DSID_CONN_SOCKET, u"LocalSocket"_ustr );
+    m_aIndirectPropTranslator.emplace( DSID_NAMED_PIPE, u"NamedPipe"_ustr );
+    m_aIndirectPropTranslator.emplace( DSID_RESPECTRESULTSETTYPE, u"RespectDriverResultSetType"_ustr );
+    m_aIndirectPropTranslator.emplace( DSID_MAX_ROW_SCAN, u"MaxRowScan"_ustr );
 
     // extra settings for ODBC
     m_aIndirectPropTranslator.emplace( DSID_USECATALOG, INFO_USECATALOG );
     // extra settings for an LDAP address book
     m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN );
     m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT );
-    m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_USESSL, OUString("UseSSL") );
+    m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_USESSL, u"UseSSL"_ustr );
     m_aIndirectPropTranslator.emplace( DSID_DOCUMENT_URL, PROPERTY_URL );
 
     // Oracle
-    m_aIndirectPropTranslator.emplace( DSID_IGNORECURRENCY, OUString("IgnoreCurrency") );
+    m_aIndirectPropTranslator.emplace( DSID_IGNORECURRENCY, u"IgnoreCurrency"_ustr );
 
     try
     {
@@ -226,7 +226,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
 
             Reference< XModel > xModel( getDataSourceOrModel( m_xDatasource ), UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
-            Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+            Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( u"InteractionHandler"_ustr, Reference< XInteractionHandler >() ) );
 
             if ( !xHandler.is() )
             {
@@ -380,7 +380,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // wrap the exception into an SQLException
-        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, anyEx);
+        throw SQLException(sCurrentActionError, getORB(), u"S1000"_ustr, 0, anyEx);
     }
 
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
@@ -389,7 +389,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
         sCurrentActionError = DBA_RES(STR_NOREGISTEREDDRIVER);
         sCurrentActionError = sCurrentActionError.replaceFirst("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
-        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), u"S1000"_ustr, 0, Any());
     }
     return xDriver;
 }
@@ -798,11 +798,11 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     }
 
     Sequence< Any> aTypeSettings;
-    aTypeSettings = aProperties.getOrDefault("TypeInfoSettings",aTypeSettings);
+    aTypeSettings = aProperties.getOrDefault(u"TypeInfoSettings"_ustr,aTypeSettings);
     // here we have a special entry for types from oracle
     if ( aTypeSettings.hasElements() )
     {
-        aRelevantSettings.insert(PropertyValue("TypeInfoSettings", 0, Any(aTypeSettings), PropertyState_DIRECT_VALUE));
+        aRelevantSettings.insert(PropertyValue(u"TypeInfoSettings"_ustr, 0, Any(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)

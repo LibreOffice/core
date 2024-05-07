@@ -24,11 +24,11 @@
 namespace dbaui
 {
 OTitleWindow::OTitleWindow(weld::Container* pParent, TranslateId pTitleId)
-    : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/titlewindow.ui"))
-    , m_xContainer(m_xBuilder->weld_container("TitleWindow"))
-    , m_xTitleFrame(m_xBuilder->weld_container("titleparent"))
-    , m_xTitle(m_xBuilder->weld_label("title"))
-    , m_xChildContainer(m_xBuilder->weld_container("box"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"dbaccess/ui/titlewindow.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"TitleWindow"_ustr))
+    , m_xTitleFrame(m_xBuilder->weld_container(u"titleparent"_ustr))
+    , m_xTitle(m_xBuilder->weld_label(u"title"_ustr))
+    , m_xChildContainer(m_xBuilder->weld_container(u"box"_ustr))
 {
     setTitle(pTitleId);
 

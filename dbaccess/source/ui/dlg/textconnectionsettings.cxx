@@ -26,10 +26,10 @@ namespace dbaui
 {
     // TextConnectionSettingsDialog
     TextConnectionSettingsDialog::TextConnectionSettingsDialog(weld::Window* pParent, SfxItemSet& rItems)
-        : GenericDialogController(pParent, "dbaccess/ui/textconnectionsettings.ui", "TextConnectionSettingsDialog")
+        : GenericDialogController(pParent, u"dbaccess/ui/textconnectionsettings.ui"_ustr, u"TextConnectionSettingsDialog"_ustr)
         , m_rItems(rItems)
-        , m_xContainer(m_xBuilder->weld_widget("TextPageContainer"))
-        , m_xOK(m_xBuilder->weld_button("ok"))
+        , m_xContainer(m_xBuilder->weld_widget(u"TextPageContainer"_ustr))
+        , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
         m_xOK->connect_clicked(LINK(this, TextConnectionSettingsDialog, OnOK));

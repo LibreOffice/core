@@ -28,7 +28,7 @@ class DBTestBase
     : public UnoApiTest
 {
 public:
-    DBTestBase() : UnoApiTest("dbaccess/qa/unit/data") {};
+    DBTestBase() : UnoApiTest(u"dbaccess/qa/unit/data"_ustr) {};
 
     uno::Reference<XOfficeDatabaseDocument> getDocumentForUrl(OUString const & url);
 
@@ -49,7 +49,7 @@ uno::Reference< XConnection > DBTestBase::getConnectionForDocument(
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
 
-    uno::Reference< XConnection > xConnection = xDataSource->getConnection("","");
+    uno::Reference< XConnection > xConnection = xDataSource->getConnection(u""_ustr,u""_ustr);
     CPPUNIT_ASSERT(xConnection.is());
 
     return xConnection;

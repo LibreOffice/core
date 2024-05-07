@@ -106,9 +106,9 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
     {
         ::comphelper::NamedValueCollection aMedia( Descriptor );
         bool bStreamFromDescr = false;
-        OUString sURL = aMedia.getOrDefault( "URL", OUString() );
+        OUString sURL = aMedia.getOrDefault( u"URL"_ustr, OUString() );
 
-        Reference< XInputStream > xInStream( aMedia.getOrDefault( "InputStream",  Reference< XInputStream >() ) );
+        Reference< XInputStream > xInStream( aMedia.getOrDefault( u"InputStream"_ustr,  Reference< XInputStream >() ) );
         Reference< XPropertySet > xStorageProperties;
         if ( xInStream.is() )
         {
@@ -118,7 +118,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
         }
         else
         {
-            OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", OUString() ) );
+            OUString sSalvagedURL( aMedia.getOrDefault( u"SalvagedFile"_ustr, OUString() ) );
 
             OUString sFileLocation( sSalvagedURL.isEmpty() ? sURL : sSalvagedURL );
             if ( !sFileLocation.isEmpty() )
@@ -138,8 +138,8 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
                 {
                     // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
                     // for now the file should be reopened to have read/write access
-                    aMedia.remove( "InputStream" );
-                    aMedia.remove( "Stream" );
+                    aMedia.remove( u"InputStream"_ustr );
+                    aMedia.remove( u"Stream"_ustr );
                     aMedia >>= Descriptor;
                     try
                     {
@@ -153,7 +153,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
                     }
                 }
 
-                return "StarBase";
+                return u"StarBase"_ustr;
             }
             ::comphelper::disposeComponent(xStorageProperties);
         }
@@ -164,7 +164,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
 // XServiceInfo
 OUString SAL_CALL DBTypeDetection::getImplementationName()
 {
-    return "org.openoffice.comp.dbflt.DBTypeDetection";
+    return u"org.openoffice.comp.dbflt.DBTypeDetection"_ustr;
 }
 
 // XServiceInfo
@@ -176,7 +176,7 @@ sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 } // namespace dbaxml
@@ -232,7 +232,7 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactor
 // XServiceInfo
 OUString SAL_CALL DBContentLoader::getImplementationName()
 {
-    return "org.openoffice.comp.dbflt.DBContentLoader2";
+    return u"org.openoffice.comp.dbflt.DBContentLoader2"_ustr;
 }
 
 // XServiceInfo
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.FrameLoader" };
+    return { u"com.sun.star.frame.FrameLoader"_ustr };
 }
 
 
@@ -297,7 +297,7 @@ bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel > const &
     }));
 
     // create the dialog
-    Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, m_aContext), UNO_QUERY_THROW);
+    Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.sdb.DatabaseWizardDialog"_ustr, aWizardArgs, m_aContext), UNO_QUERY_THROW);
 
     // execute it
     if ( RET_OK != xAdminDialog->execute() )
@@ -305,8 +305,8 @@ bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel > const &
 
     Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
     bool bSuccess = false;
-    xProp->getPropertyValue("OpenDatabase") >>= bSuccess;
-    xProp->getPropertyValue("StartTableWizard") >>= _bShouldStartTableWizard;
+    xProp->getPropertyValue(u"OpenDatabase"_ustr) >>= bSuccess;
+    xProp->getPropertyValue(u"StartTableWizard"_ustr) >>= _bShouldStartTableWizard;
     return bSuccess;
 }
 
@@ -316,7 +316,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 {
     // first check if preview is true, if so return without creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
-    bool bPreview = aMediaDesc.getOrDefault( "Preview", false );
+    bool bPreview = aMediaDesc.getOrDefault( u"Preview"_ustr, false );
     if ( bPreview )
     {
         if (rListener.is())
@@ -324,8 +324,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         return;
     }
 
-    Reference< XModel > xModel       = aMediaDesc.getOrDefault( "Model", Reference< XModel >() );
-    OUString            sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
+    Reference< XModel > xModel       = aMediaDesc.getOrDefault( u"Model"_ustr, Reference< XModel >() );
+    OUString            sSalvagedURL = aMediaDesc.getOrDefault( u"SalvagedFile"_ustr, _rURL );
 
     bool bCreateNew = false;        // does the URL denote the private:factory URL?
     bool bStartTableWizard = false; // start the table wizard after everything was loaded successfully?
@@ -338,20 +338,20 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     // a default handler, we simply ensure there is one.
     // If a handler is present in the media descriptor, even if it is NULL, we will
     // not touch it.
-    if ( !aMediaDesc.has( "InteractionHandler" ) )
+    if ( !aMediaDesc.has( u"InteractionHandler"_ustr ) )
     {
        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
-       aMediaDesc.put( "InteractionHandler", xHandler );
+       aMediaDesc.put( u"InteractionHandler"_ustr, xHandler );
     }
 
     // it's allowed to pass an existing document
     Reference< XOfficeDatabaseDocument > xExistentDBDoc;
-    xModel.set( aMediaDesc.getOrDefault( "Model", xExistentDBDoc ), UNO_QUERY );
-    aMediaDesc.remove( "Model" );
+    xModel.set( aMediaDesc.getOrDefault( u"Model"_ustr, xExistentDBDoc ), UNO_QUERY );
+    aMediaDesc.remove( u"Model"_ustr );
 
     // also, it's allowed to specify the type of view which should be created
-    OUString sViewName = aMediaDesc.getOrDefault( "ViewName", OUString( "Default" ) );
-    aMediaDesc.remove( "ViewName" );
+    OUString sViewName = aMediaDesc.getOrDefault( u"ViewName"_ustr, u"Default"_ustr );
+    aMediaDesc.remove( u"ViewName"_ustr );
 
     // this needs to stay alive for duration of this method
     Reference< XDatabaseContext > xDatabaseContext;
@@ -421,7 +421,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         bool bNeedLoad = xModel->getURL().isEmpty();
         try
         {
-            aMediaDesc.put( "FileName", _rURL );
+            aMediaDesc.put( u"FileName"_ustr, _rURL );
             Sequence< PropertyValue > aResource( aMediaDesc.getPropertyValues() );
 
             if ( bNeedLoad )
@@ -509,9 +509,9 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
             {"DatabaseLocation", Any(m_sCurrentURL)}
         }));
         SolarMutexGuard aGuard;
-        Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.table.CallTableWizard", aWizArgs, m_aContext), UNO_QUERY);
+        Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.wizards.table.CallTableWizard"_ustr, aWizArgs, m_aContext), UNO_QUERY);
         if ( xTableWizard.is() )
-            xTableWizard->trigger("start");
+            xTableWizard->trigger(u"start"_ustr);
     }
     catch(const Exception&)
     {

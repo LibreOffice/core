@@ -112,7 +112,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // a non-SQLException exception occurred ... simply throw an SQLException
-        throw SQLException(sCurrentActionError, nullptr, "", 0, anyEx);
+        throw SQLException(sCurrentActionError, nullptr, u""_ustr, 0, anyEx);
     }
 
     UpdateTableList( _rxConnection, sTables, sViews );
@@ -698,7 +698,7 @@ TriState OTableTreeListBox::implDetermineState(const weld::TreeIter& rEntry)
 DBTableTreeView::DBTableTreeView(weld::Container* pContainer)
     : DBTreeViewBase(pContainer)
 {
-    m_xTreeListBox.reset(new OTableTreeListBox(m_xBuilder->weld_tree_view("treeview"), /*bShowToggles*/false));
+    m_xTreeListBox.reset(new OTableTreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr), /*bShowToggles*/false));
 }
 
 }   // namespace dbaui

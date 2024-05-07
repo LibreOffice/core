@@ -41,17 +41,17 @@ constexpr OString aGroupIdent("dBase III"_ostr);
 
 
 ODbaseIndexDialog::ODbaseIndexDialog(weld::Window * pParent, OUString aDataSrcName)
-    : GenericDialogController(pParent, "dbaccess/ui/dbaseindexdialog.ui", "DBaseIndexDialog")
+    : GenericDialogController(pParent, u"dbaccess/ui/dbaseindexdialog.ui"_ustr, u"DBaseIndexDialog"_ustr)
     , m_aDSN(std::move(aDataSrcName))
-    , m_xPB_OK(m_xBuilder->weld_button("ok"))
-    , m_xCB_Tables(m_xBuilder->weld_combo_box("table"))
-    , m_xIndexes(m_xBuilder->weld_widget("frame"))
-    , m_xLB_TableIndexes(m_xBuilder->weld_tree_view("tableindex"))
-    , m_xLB_FreeIndexes(m_xBuilder->weld_tree_view("freeindex"))
-    , m_xAdd(m_xBuilder->weld_button("add"))
-    , m_xRemove(m_xBuilder->weld_button("remove"))
-    , m_xAddAll(m_xBuilder->weld_button("addall"))
-    , m_xRemoveAll(m_xBuilder->weld_button("removeall"))
+    , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCB_Tables(m_xBuilder->weld_combo_box(u"table"_ustr))
+    , m_xIndexes(m_xBuilder->weld_widget(u"frame"_ustr))
+    , m_xLB_TableIndexes(m_xBuilder->weld_tree_view(u"tableindex"_ustr))
+    , m_xLB_FreeIndexes(m_xBuilder->weld_tree_view(u"freeindex"_ustr))
+    , m_xAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xRemove(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xAddAll(m_xBuilder->weld_button(u"addall"_ustr))
+    , m_xRemoveAll(m_xBuilder->weld_button(u"removeall"_ustr))
 {
     int nWidth = m_xLB_TableIndexes->get_approximate_digit_width() * 18;
     int nHeight = m_xLB_TableIndexes->get_height_rows(10);
@@ -411,7 +411,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     try
     {
         ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-        aContent.executeCommand( "delete", Any( true ) );
+        aContent.executeCommand( u"delete"_ustr, Any( true ) );
     }
     catch (const Exception& )
     {

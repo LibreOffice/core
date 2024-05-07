@@ -37,7 +37,7 @@ public:
 
 
 DialogSaveTest::DialogSaveTest()
-      : UnoApiTest("/dbaccess/qa/extras/testdocuments")
+      : UnoApiTest(u"/dbaccess/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -66,12 +66,12 @@ void DialogSaveTest::test()
         a = xBasLib->getByName(sStandard);
         a >>= xI;
         CPPUNIT_ASSERT(xI.is());
-        xI->removeByName("Raralix");
+        xI->removeByName(u"Raralix"_ustr);
 
         a = xDlgLib->getByName(sStandard);
         a >>= xI;
         CPPUNIT_ASSERT(xI.is());
-        xI->removeByName("Dialog1");
+        xI->removeByName(u"Dialog1"_ustr);
 
         // uno::Reference< util::XModifiable > xDlgMod(xDlgLib, UNO_QUERY_THROW);
         // xDlgMod->setModified(sal_True);
@@ -93,9 +93,9 @@ void DialogSaveTest::test()
     }
     {
         uno::Sequence<uno::Any> args{ uno::Any(aFileName) };
-        Reference<container::XHierarchicalNameAccess> xHNA(getMultiServiceFactory()->createInstanceWithArguments("com.sun.star.packages.Package", args), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(!xHNA->hasByHierarchicalName("Basic/Standard"));
-        CPPUNIT_ASSERT(!xHNA->hasByHierarchicalName("Dialogs/Standard"));
+        Reference<container::XHierarchicalNameAccess> xHNA(getMultiServiceFactory()->createInstanceWithArguments(u"com.sun.star.packages.Package"_ustr, args), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(!xHNA->hasByHierarchicalName(u"Basic/Standard"_ustr));
+        CPPUNIT_ASSERT(!xHNA->hasByHierarchicalName(u"Dialogs/Standard"_ustr));
     }
 }
 

@@ -48,12 +48,12 @@ Sequence<sal_Int8> SAL_CALL OTableFilterDialog::getImplementationId(  )
 
 OUString SAL_CALL OTableFilterDialog::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.OTableFilterDialog";
+    return u"org.openoffice.comp.dbu.OTableFilterDialog"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.TableFilterDialog" };
+    return { u"com.sun.star.sdb.TableFilterDialog"_ustr };
 }
 
 Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo()

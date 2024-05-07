@@ -64,11 +64,11 @@ void HsqlSchemaImportTest::testIntegerPrimaryKeyNotNull()
     FbCreateStmtParser aCreateParser;
     aCreateParser.parse(u"CREATE CACHED TABLE \"myTable\"(\"id\" INTEGER NOT NULL PRIMARY KEY)");
 
-    CPPUNIT_ASSERT_EQUAL(OUString{ "\"myTable\"" }, aCreateParser.getTableName());
+    CPPUNIT_ASSERT_EQUAL(u"\"myTable\""_ustr, aCreateParser.getTableName());
     const auto& columns = aCreateParser.getColumnDef();
     CPPUNIT_ASSERT_EQUAL(1_z, columns.size());
     const auto& column = columns.at(0);
-    CPPUNIT_ASSERT_EQUAL(OUString{ "\"id\"" }, column.getName());
+    CPPUNIT_ASSERT_EQUAL(u"\"id\""_ustr, column.getName());
     CPPUNIT_ASSERT_EQUAL(css::sdbc::DataType::INTEGER, column.getDataType());
     CPPUNIT_ASSERT(column.isPrimaryKey());
     CPPUNIT_ASSERT(!column.isNullable());
@@ -186,7 +186,7 @@ void HsqlSchemaImportTest::testDefaultValueNow()
     const ColumnDefinition* colTimeStamp = lcl_findByType(columns, css::sdbc::DataType::TIMESTAMP);
 
     CPPUNIT_ASSERT(colTimeStamp != nullptr);
-    CPPUNIT_ASSERT_EQUAL(OUString{ "NOW" }, colTimeStamp->getDefault()); // parsed NOW
+    CPPUNIT_ASSERT_EQUAL(u"NOW"_ustr, colTimeStamp->getDefault()); // parsed NOW
     OUString fbSql = aCreateParser.compose();
     CPPUNIT_ASSERT(fbSql.indexOf("\'NOW\'") > 0); // composed 'NOW'
 }

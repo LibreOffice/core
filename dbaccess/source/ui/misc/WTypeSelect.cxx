@@ -202,14 +202,14 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
 }
 
 OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream* pStream)
-    : OWizardPage(pPage, pWizard, "dbaccess/ui/typeselectpage.ui", "TypeSelect")
-    , m_xColumnNames(new OWizTypeSelectList(m_xBuilder->weld_tree_view("columnnames")))
-    , m_xControlContainer(m_xBuilder->weld_container("control_container"))
+    : OWizardPage(pPage, pWizard, u"dbaccess/ui/typeselectpage.ui"_ustr, u"TypeSelect"_ustr)
+    , m_xColumnNames(new OWizTypeSelectList(m_xBuilder->weld_tree_view(u"columnnames"_ustr)))
+    , m_xControlContainer(m_xBuilder->weld_container(u"control_container"_ustr))
     , m_xTypeControl(new OWizTypeSelectControl(m_xControlContainer.get(), this))
-    , m_xAutoType(m_xBuilder->weld_label("autotype"))
-    , m_xAutoFt(m_xBuilder->weld_label("autolabel"))
-    , m_xAutoEt(m_xBuilder->weld_spin_button("auto"))
-    , m_xAutoPb(m_xBuilder->weld_button("autobutton"))
+    , m_xAutoType(m_xBuilder->weld_label(u"autotype"_ustr))
+    , m_xAutoFt(m_xBuilder->weld_label(u"autolabel"_ustr))
+    , m_xAutoEt(m_xBuilder->weld_spin_button(u"auto"_ustr))
+    , m_xAutoPb(m_xBuilder->weld_button(u"autobutton"_ustr))
     , m_pParserStream(pStream)
     , m_nDisplayRow(0)
     , m_bAutoIncrementEnabled(false)
@@ -219,7 +219,7 @@ OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard
 
     m_xTypeControl->Init();
 
-    m_xAutoEt->set_text("10");
+    m_xAutoEt->set_text(u"10"_ustr);
     m_xAutoEt->set_digits(0);
     m_xAutoPb->connect_clicked(LINK(this,OWizTypeSelect,ButtonClickHdl));
     m_xColumnNames->set_selection_mode(SelectionMode::Multiple);
@@ -365,8 +365,8 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!IsPrimaryKeyAllowed())
         return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xControl.get(), "dbaccess/ui/keymenu.ui"));
-    auto xContextMenu = xBuilder->weld_menu("menu");
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xControl.get(), u"dbaccess/ui/keymenu.ui"_ustr));
+    auto xContextMenu = xBuilder->weld_menu(u"menu"_ustr);
     // Should primary key checkbox be checked?
     const sal_Int32 nCount = m_xControl->n_children();
     bool bCheckOk = false;
@@ -386,7 +386,7 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
 
     if (bCheckOk)
-        xContextMenu->set_active("primarykey", true);
+        xContextMenu->set_active(u"primarykey"_ustr, true);
 
     OUString sCommand(xContextMenu->popup_at_rect(m_xControl.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand != "primarykey")

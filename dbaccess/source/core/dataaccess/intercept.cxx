@@ -63,12 +63,12 @@ void OInterceptor::dispose()
 
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
-    ,m_aInterceptedURL{ /* DISPATCH_SAVEAS     */ ".uno:SaveAs",
-                        /* DISPATCH_SAVE       */ ".uno:Save",
-                        /* DISPATCH_CLOSEDOC   */ ".uno:CloseDoc",
-                        /* DISPATCH_CLOSEWIN   */ ".uno:CloseWin",
-                        /* DISPATCH_CLOSEFRAME */ ".uno:CloseFrame",
-                        /* DISPATCH_RELOAD     */ ".uno:Reload" }
+    ,m_aInterceptedURL{ /* DISPATCH_SAVEAS     */ u".uno:SaveAs"_ustr,
+                        /* DISPATCH_SAVE       */ u".uno:Save"_ustr,
+                        /* DISPATCH_CLOSEDOC   */ u".uno:CloseDoc"_ustr,
+                        /* DISPATCH_CLOSEWIN   */ u".uno:CloseWin"_ustr,
+                        /* DISPATCH_CLOSEFRAME */ u".uno:CloseFrame"_ustr,
+                        /* DISPATCH_RELOAD     */ u".uno:Reload"_ustr }
 {
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 }
@@ -140,7 +140,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
                 pNewArgs[nInd].Value <<= true;
             }
 
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(URL, "_self", 0 );
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(URL, u"_self"_ustr, 0 );
             if ( xDispatch.is() )
                 xDispatch->dispatch( URL, aNewArgs );
         }
@@ -167,7 +167,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher, void )
     {
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
         {
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, "_self", 0 );
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, u"_self"_ustr, 0 );
             if ( xDispatch.is() )
             {
                 Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
@@ -199,7 +199,7 @@ void SAL_CALL OInterceptor::addStatusListener(
             aStateEvent.FeatureDescriptor = "SaveCopyTo";
             aStateEvent.IsEnabled = true;
             aStateEvent.Requery = false;
-            aStateEvent.State <<= OUString("($3)");
+            aStateEvent.State <<= u"($3)"_ustr;
             Control->statusChanged(aStateEvent);
         }
 

@@ -65,21 +65,21 @@ namespace dbaui
                                    const Reference< XNameAccess >& _rxIndexes,
                                    const Reference< XConnection >& _rxConnection,
                                    const Reference< XComponentContext >& _rxContext)
-        : GenericDialogController(pParent, "dbaccess/ui/indexdesigndialog.ui", "IndexDesignDialog")
+        : GenericDialogController(pParent, u"dbaccess/ui/indexdesigndialog.ui"_ustr, u"IndexDesignDialog"_ustr)
         , m_xConnection(_rxConnection)
         , m_bEditingActive(false)
         , m_bEditAgain(false)
         , m_bNoHandlerCall(false)
         , m_xContext(_rxContext)
-        , m_xActions(m_xBuilder->weld_toolbar("ACTIONS"))
-        , m_xIndexList(m_xBuilder->weld_tree_view("INDEX_LIST"))
-        , m_xIndexDetails(m_xBuilder->weld_label("INDEX_DETAILS"))
-        , m_xDescriptionLabel(m_xBuilder->weld_label("DESC_LABEL"))
-        , m_xDescription(m_xBuilder->weld_label("DESCRIPTION"))
-        , m_xUnique(m_xBuilder->weld_check_button("UNIQUE"))
-        , m_xFieldsLabel(m_xBuilder->weld_label("FIELDS_LABEL"))
-        , m_xClose(m_xBuilder->weld_button("close"))
-        , m_xTable(m_xBuilder->weld_container("FIELDS"))
+        , m_xActions(m_xBuilder->weld_toolbar(u"ACTIONS"_ustr))
+        , m_xIndexList(m_xBuilder->weld_tree_view(u"INDEX_LIST"_ustr))
+        , m_xIndexDetails(m_xBuilder->weld_label(u"INDEX_DETAILS"_ustr))
+        , m_xDescriptionLabel(m_xBuilder->weld_label(u"DESC_LABEL"_ustr))
+        , m_xDescription(m_xBuilder->weld_label(u"DESCRIPTION"_ustr))
+        , m_xUnique(m_xBuilder->weld_check_button(u"UNIQUE"_ustr))
+        , m_xFieldsLabel(m_xBuilder->weld_label(u"FIELDS_LABEL"_ustr))
+        , m_xClose(m_xBuilder->weld_button(u"close"_ustr))
+        , m_xTable(m_xBuilder->weld_container(u"FIELDS"_ustr))
         , m_xTableCtrlParent(m_xTable->CreateChildFrame())
         , m_xFields(VclPtr<IndexFieldsControl>::Create(m_xTableCtrlParent))
     {
@@ -141,7 +141,7 @@ namespace dbaui
 
     void DbaIndexDialog::updateToolbox()
     {
-        m_xActions->set_item_sensitive("ID_INDEX_NEW", !m_bEditingActive);
+        m_xActions->set_item_sensitive(u"ID_INDEX_NEW"_ustr, !m_bEditingActive);
 
         int nSelected = m_xIndexList->get_selected_index();
         bool bSelectedAnything = nSelected != -1;
@@ -149,17 +149,17 @@ namespace dbaui
         {
             // is the current entry modified?
             Indexes::const_iterator aSelectedPos = m_xIndexes->begin() + m_xIndexList->get_id(nSelected).toUInt32();
-            m_xActions->set_item_sensitive("ID_INDEX_SAVE", aSelectedPos->isModified() || aSelectedPos->isNew());
-            m_xActions->set_item_sensitive("ID_INDEX_RESET", aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_xActions->set_item_sensitive(u"ID_INDEX_SAVE"_ustr, aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_xActions->set_item_sensitive(u"ID_INDEX_RESET"_ustr, aSelectedPos->isModified() || aSelectedPos->isNew());
             bSelectedAnything = !aSelectedPos->bPrimaryKey;
         }
         else
         {
-            m_xActions->set_item_sensitive("ID_INDEX_SAVE", false);
-            m_xActions->set_item_sensitive("ID_INDEX_RESET", false);
+            m_xActions->set_item_sensitive(u"ID_INDEX_SAVE"_ustr, false);
+            m_xActions->set_item_sensitive(u"ID_INDEX_RESET"_ustr, false);
         }
-        m_xActions->set_item_sensitive("ID_INDEX_DROP", bSelectedAnything);
-        m_xActions->set_item_sensitive("ID_INDEX_RENAME", bSelectedAnything);
+        m_xActions->set_item_sensitive(u"ID_INDEX_DROP"_ustr, bSelectedAnything);
+        m_xActions->set_item_sensitive(u"ID_INDEX_RENAME"_ustr, bSelectedAnything);
     }
 
     void DbaIndexDialog::fillIndexList()
@@ -451,8 +451,8 @@ namespace dbaui
             Indexes::const_iterator aSelected = m_xIndexes->begin() + m_xIndexList->get_id(*xSelected).toUInt32();
             if (aSelected->isModified() || aSelected->isNew())
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "dbaccess/ui/saveindexdialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveIndexDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), u"dbaccess/ui/saveindexdialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"SaveIndexDialog"_ustr));
                 nResponse = xQuery->run();
             }
         }

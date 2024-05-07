@@ -195,7 +195,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 
     if ( o_pKeyColumnNames->empty() )
     {
-        ::dbtools::throwGenericSQLException("Could not find any key column.", *this );
+        ::dbtools::throwGenericSQLException(u"Could not find any key column."_ustr, *this );
     }
 
     for (auto const& keyColumn : *o_pKeyColumnNames)
@@ -440,8 +440,8 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     constexpr OUStringLiteral aPara(u" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
     constexpr OUString aAnd(u" AND "_ustr);
-    OUString sIsNull(" IS NULL");
-    OUString sParam(" = ?");
+    OUString sIsNull(u" IS NULL"_ustr);
+    OUString sParam(u" = ?"_ustr);
 
     // use keys and indexes for exact positioning
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
@@ -1222,7 +1222,7 @@ bool OKeySet::fillAllRows()
 sal_Bool SAL_CALL OKeySet::wasNull(  )
 {
     if ( ! m_xRow.is() )
-        throwGenericSQLException("Must call getFOO() for some FOO before wasNull()", *this);
+        throwGenericSQLException(u"Must call getFOO() for some FOO before wasNull()"_ustr, *this);
 
     OSL_ENSURE(m_xRow.is(),"m_xRow is null! I've thrown, but function execution continued?");
     return m_xRow->wasNull();
@@ -1233,7 +1233,7 @@ inline void OKeySet::ensureRowForData( )
     if (! m_xRow.is() )
         refreshRow();
     if (! m_xRow.is() )
-        throwSQLException("Failed to refetch row", "02000", *this, -2);
+        throwSQLException(u"Failed to refetch row"_ustr, u"02000"_ustr, *this, -2);
 
     OSL_ENSURE(m_xRow.is(),"m_xRow is null! I've called throwSQLException but execution continued?");
 }

@@ -45,8 +45,8 @@ namespace dbaccess
         // find the name of the setting
         if ( i_rAttributes.is() )
         {
-            m_sItemName = i_rAttributes->getValueByName( "config:name" );
-            m_sItemType = i_rAttributes->getValueByName( "config:type" );
+            m_sItemName = i_rAttributes->getValueByName( u"config:name"_ustr );
+            m_sItemType = i_rAttributes->getValueByName( u"config:type"_ustr );
         }
     }
 

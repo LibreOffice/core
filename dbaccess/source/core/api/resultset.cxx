@@ -164,7 +164,7 @@ void OResultSet::close()
 // XServiceInfo
 OUString OResultSet::getImplementationName(  )
 {
-    return "com.sun.star.sdb.OResultSet";
+    return u"com.sun.star.sdb.OResultSet"_ustr;
 }
 
 sal_Bool OResultSet::supportsService( const OUString& _rServiceName )
@@ -982,13 +982,13 @@ void OResultSet::checkReadOnly() const
     if  (   ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         ||  !m_xDelegatorResultSetUpdate.is()
         )
-        throwSQLException( "The result set is read-only.", StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
+        throwSQLException( u"The result set is read-only."_ustr, StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
 
 void OResultSet::checkBookmarkable() const
 {
     if ( !m_bIsBookmarkable )
-        throwSQLException( "The result set does not have bookmark support.", StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
+        throwSQLException( u"The result set does not have bookmark support."_ustr, StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

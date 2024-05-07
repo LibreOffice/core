@@ -31,9 +31,10 @@ using namespace ::com::sun::star::uno;
 
 OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent,
                                                OAppBorderWindow& rBorderWindow)
-    : OChildWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
-    , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll", true)))
-    , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xIconControl))
+    : OChildWindow(pParent, u"dbaccess/ui/appswapwindow.ui"_ustr, u"AppSwapWindow"_ustr)
+    , m_xIconControl(
+          new OApplicationIconControl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xIconControl))
     , m_eLastType(E_NONE)
     , m_rBorderWin(rBorderWindow)
     , m_nChangeEvent(nullptr)

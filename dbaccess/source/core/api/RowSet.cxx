@@ -258,7 +258,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             break;
         case PROPERTY_ID_FETCHDIRECTION:
             if( m_nResultSetType == ResultSetType::FORWARD_ONLY)
-                throw Exception("resultsettype is FORWARD_ONLY", nullptr);
+                throw Exception(u"resultsettype is FORWARD_ONLY"_ustr, nullptr);
             [[fallthrough]];
         default:
             OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
@@ -430,7 +430,7 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType )
 // css::XServiceInfo
 OUString SAL_CALL ORowSet::getImplementationName()
 {
-    return "com.sun.star.comp.dba.ORowSet";
+    return u"com.sun.star.comp.dba.ORowSet"_ustr;
 }
 
 sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName )
@@ -2221,7 +2221,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
 
         m_xTables.reset(new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,m_nInAppend));
         xTables = m_xTables.get();
-        Sequence<OUString> aTableFilter { "%" };
+        Sequence<OUString> aTableFilter { u"%"_ustr };
         m_xTables->construct(aTableFilter,Sequence< OUString>());
     }
 
@@ -2278,7 +2278,7 @@ void ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
         // don't simply overwrite an existent filter, this would lead to problems if this existent
         // filter contains parameters (since a keyset may add parameters itself)
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
-        m_xComposer->setFilter( "0 = 1" );
+        m_xComposer->setFilter( u"0 = 1"_ustr );
     }
 
     m_xComposer->setOrder( m_aOrder );
@@ -2544,7 +2544,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
     catch( Exception const & )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw SQLException("ORowSet::setBinaryStream", *this, "S1000", 0,anyEx);
+        throw SQLException(u"ORowSet::setBinaryStream"_ustr, *this, u"S1000"_ustr, 0,anyEx);
     }
 }
 
@@ -2568,7 +2568,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
     catch( Exception const & )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw SQLException("ORowSet::setCharacterStream", *this, "S1000", 0, anyEx);
+        throw SQLException(u"ORowSet::setCharacterStream"_ustr, *this, u"S1000"_ustr, 0, anyEx);
     }
 }
 
@@ -2591,22 +2591,22 @@ void SAL_CALL ORowSet::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x
 
 void SAL_CALL ORowSet::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setRef"_ustr, *this );
 }
 
 void SAL_CALL ORowSet::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setBlob"_ustr, *this );
 }
 
 void SAL_CALL ORowSet::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setClob"_ustr, *this );
 }
 
 void SAL_CALL ORowSet::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XParameters::setArray"_ustr, *this );
 }
 
 void SAL_CALL ORowSet::clearParameters(  )
@@ -2838,7 +2838,7 @@ void ORowSetClone::release() noexcept
 // XServiceInfo
 OUString ORowSetClone::getImplementationName(  )
 {
-    return "com.sun.star.sdb.ORowSetClone";
+    return u"com.sun.star.sdb.ORowSetClone"_ustr;
 }
 
 sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName )
@@ -2919,17 +2919,17 @@ bool ORowSetClone::isNew( )
 
 void SAL_CALL ORowSetClone::execute(  )
 {
-    throwFunctionNotSupportedSQLException( "RowSetClone::XRowSet::execute", *this );
+    throwFunctionNotSupportedSQLException( u"RowSetClone::XRowSet::execute"_ustr, *this );
 }
 
 void SAL_CALL ORowSetClone::addRowSetListener( const Reference< XRowSetListener >& )
 {
-    throwFunctionNotSupportedRuntimeException( "RowSetClone::XRowSet", *this );
+    throwFunctionNotSupportedRuntimeException( u"RowSetClone::XRowSet"_ustr, *this );
 }
 
 void SAL_CALL ORowSetClone::removeRowSetListener( const Reference< XRowSetListener >& )
 {
-    throwFunctionNotSupportedRuntimeException( "RowSetClone::XRowSet", *this );
+    throwFunctionNotSupportedRuntimeException( u"RowSetClone::XRowSet"_ustr, *this );
 }
 
 } // dbaccess

@@ -371,7 +371,7 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *m_pMySelf );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XRow::getRef"_ustr, *m_pMySelf );
 }
 
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex )
@@ -386,7 +386,7 @@ Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex )
 
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ )
 {
-    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *m_pMySelf );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XRow::getArray"_ustr, *m_pMySelf );
 }
 
 // css::sdbcx::XRowLocate
@@ -1087,7 +1087,7 @@ void SAL_CALL ORowSetBase::refreshRow(  )
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     if ( impl_rowDeleted() )
-        throwSQLException( "The current row is deleted", StandardSQLState::INVALID_CURSOR_STATE, Reference< XRowSet >( this ) );
+        throwSQLException( u"The current row is deleted"_ustr, StandardSQLState::INVALID_CURSOR_STATE, Reference< XRowSet >( this ) );
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {

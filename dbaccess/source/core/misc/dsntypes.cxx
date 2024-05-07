@@ -149,7 +149,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(std::u16string_view _sURL) cons
 OUString ODsnTypeCollection::getMediaType(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("MediaType",OUString());
+    return aFeatures.getOrDefault(u"MediaType"_ustr,OUString());
 }
 
 OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_view _sMediaType,std::u16string_view _sExtension)
@@ -158,9 +158,9 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_vie
     for (auto& url : m_aDriverConfig.getURLs())
     {
         const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(url);
-        if ( aFeatures.getOrDefault("MediaType",OUString()) == _sMediaType )
+        if ( aFeatures.getOrDefault(u"MediaType"_ustr,OUString()) == _sMediaType )
         {
-            const OUString sFileExtension = aFeatures.getOrDefault("Extension",OUString());
+            const OUString sFileExtension = aFeatures.getOrDefault(u"Extension"_ustr,OUString());
             if ( _sExtension == sFileExtension )
             {
                 sURL = url;
@@ -235,37 +235,37 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
 OUString ODsnTypeCollection::getJavaDriverClass(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getProperties(_sURL);
-    return aFeatures.getOrDefault("JavaDriverClass",OUString());
+    return aFeatures.getOrDefault(u"JavaDriverClass"_ustr,OUString());
 }
 
 bool ODsnTypeCollection::isFileSystemBased(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("FileSystemBased",false);
+    return aFeatures.getOrDefault(u"FileSystemBased"_ustr,false);
 }
 
 bool ODsnTypeCollection::supportsTableCreation(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsTableCreation",false);
+    return aFeatures.getOrDefault(u"SupportsTableCreation"_ustr,false);
 }
 
 bool ODsnTypeCollection::supportsColumnDescription(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsColumnDescription",false);
+    return aFeatures.getOrDefault(u"SupportsColumnDescription"_ustr,false);
 }
 
 bool ODsnTypeCollection::supportsBrowsing(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsBrowsing",false);
+    return aFeatures.getOrDefault(u"SupportsBrowsing"_ustr,false);
 }
 
 bool ODsnTypeCollection::supportsDBCreation(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsDBCreation",false);
+    return aFeatures.getOrDefault(u"SupportsDBCreation"_ustr,false);
 }
 
 Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( std::u16string_view _sURL ) const
@@ -282,9 +282,9 @@ bool ODsnTypeCollection::isEmbeddedDatabase( std::u16string_view _sURL )
 OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
     if (!HAVE_FEATURE_JAVA || officecfg::Office::Common::Misc::ExperimentalMode::get())
-        return "sdbc:embedded:firebird";
+        return u"sdbc:embedded:firebird"_ustr;
     else
-        return "sdbc:embedded:hsqldb";
+        return u"sdbc:embedded:hsqldb"_ustr;
 }
 
 
@@ -364,28 +364,28 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
     };
     const KnownPrefix aKnowPrefixes[] =
     {
-        KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
-        KnownPrefix( "sdbc:writer:",        DST_WRITER,             false ),
-        KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
-        KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
-        KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
-        KnownPrefix( "sdbc:firebird:",      DST_FIREBIRD,           false ),
-        KnownPrefix( "sdbc:mysql:odbc:",    DST_MYSQL_ODBC,         false ),
-        KnownPrefix( "sdbc:mysql:jdbc:",    DST_MYSQL_JDBC,         false ),
-        KnownPrefix( "sdbc:mysql:mysqlc:",  DST_MYSQL_NATIVE,       false ),
-        KnownPrefix( "sdbc:mysqlc:",        DST_MYSQL_NATIVE_DIRECT,false ),
-        KnownPrefix( "sdbc:postgresql:",    DST_POSTGRES           ,false ),
+        KnownPrefix( u"sdbc:calc:"_ustr,          DST_CALC,               false ),
+        KnownPrefix( u"sdbc:writer:"_ustr,        DST_WRITER,             false ),
+        KnownPrefix( u"sdbc:flat:"_ustr,          DST_FLAT,               false ),
+        KnownPrefix( u"sdbc:odbc:"_ustr,          DST_ODBC,               false ),
+        KnownPrefix( u"sdbc:dbase:"_ustr,         DST_DBASE,              false ),
+        KnownPrefix( u"sdbc:firebird:"_ustr,      DST_FIREBIRD,           false ),
+        KnownPrefix( u"sdbc:mysql:odbc:"_ustr,    DST_MYSQL_ODBC,         false ),
+        KnownPrefix( u"sdbc:mysql:jdbc:"_ustr,    DST_MYSQL_JDBC,         false ),
+        KnownPrefix( u"sdbc:mysql:mysqlc:"_ustr,  DST_MYSQL_NATIVE,       false ),
+        KnownPrefix( u"sdbc:mysqlc:"_ustr,        DST_MYSQL_NATIVE_DIRECT,false ),
+        KnownPrefix( u"sdbc:postgresql:"_ustr,    DST_POSTGRES           ,false ),
 
-        KnownPrefix( "sdbc:address:mozilla:",           DST_MOZILLA,            true ),
-        KnownPrefix( "sdbc:address:thunderbird:",       DST_THUNDERBIRD,        true ),
-        KnownPrefix( "sdbc:address:ldap:",              DST_LDAP,               true ),
-        KnownPrefix( "sdbc:address:outlook",            DST_OUTLOOK,            true ),
-        KnownPrefix( "sdbc:address:outlookexp",         DST_OUTLOOKEXP,         true ),
-        KnownPrefix( "sdbc:address:evolution:ldap",     DST_EVOLUTION_LDAP,     true ),
-        KnownPrefix( "sdbc:address:evolution:groupwise",DST_EVOLUTION_GROUPWISE,true ),
-        KnownPrefix( "sdbc:address:evolution:local",    DST_EVOLUTION,          true ),
-        KnownPrefix( "sdbc:address:kab",                DST_KAB,                true ),
-        KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
+        KnownPrefix( u"sdbc:address:mozilla:"_ustr,           DST_MOZILLA,            true ),
+        KnownPrefix( u"sdbc:address:thunderbird:"_ustr,       DST_THUNDERBIRD,        true ),
+        KnownPrefix( u"sdbc:address:ldap:"_ustr,              DST_LDAP,               true ),
+        KnownPrefix( u"sdbc:address:outlook"_ustr,            DST_OUTLOOK,            true ),
+        KnownPrefix( u"sdbc:address:outlookexp"_ustr,         DST_OUTLOOKEXP,         true ),
+        KnownPrefix( u"sdbc:address:evolution:ldap"_ustr,     DST_EVOLUTION_LDAP,     true ),
+        KnownPrefix( u"sdbc:address:evolution:groupwise"_ustr,DST_EVOLUTION_GROUPWISE,true ),
+        KnownPrefix( u"sdbc:address:evolution:local"_ustr,    DST_EVOLUTION,          true ),
+        KnownPrefix( u"sdbc:address:kab"_ustr,                DST_KAB,                true ),
+        KnownPrefix( u"sdbc:address:macab"_ustr,              DST_MACAB,              true )
     };
 
     for (const auto & aKnowPrefixe : aKnowPrefixes)

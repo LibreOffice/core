@@ -676,10 +676,10 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 CreateDatabase();
 
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
-            aArgs.put( "Overwrite", true );
-            aArgs.put( "InteractionHandler", xHandler );
-            aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-            aArgs.put( "IgnoreFirebirdMigration", true );
+            aArgs.put( u"Overwrite"_ustr, true );
+            aArgs.put( u"InteractionHandler"_ustr, xHandler );
+            aArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
+            aArgs.put( u"IgnoreFirebirdMigration"_ustr, true );
 
             OUString sPath = ODbDataSourceAdministrationHelper::getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
@@ -915,14 +915,14 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 if ( m_xFrameLoader.is() )
                 {
                     ::comphelper::NamedValueCollection aLoadArgs;
-                    aLoadArgs.put( "InteractionHandler", m_xInteractionHandler );
-                    aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+                    aLoadArgs.put( u"InteractionHandler"_ustr, m_xInteractionHandler );
+                    aLoadArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
 
                     Sequence< PropertyValue > aLoadArgPV;
                     aLoadArgs >>= aLoadArgPV;
 
                     m_xFrameLoader->loadComponentFromURL( m_sURL,
-                        "_default",
+                        u"_default"_ustr,
                         FrameSearchFlag::ALL,
                         aLoadArgPV
                     );

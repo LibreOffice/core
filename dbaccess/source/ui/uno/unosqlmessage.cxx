@@ -64,12 +64,12 @@ Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
 
 OUString SAL_CALL OSQLMessageDialog::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.OSQLMessageDialog";
+    return u"org.openoffice.comp.dbu.OSQLMessageDialog"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.ErrorMessageDialog" };
+    return { u"com.sun.star.sdb.ErrorMessageDialog"_ustr };
 }
 
 void OSQLMessageDialog::initialize(Sequence<Any> const & args)

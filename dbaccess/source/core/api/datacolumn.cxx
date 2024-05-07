@@ -75,7 +75,7 @@ Any SAL_CALL ODataColumn::queryInterface( const Type & _rType )
 // XServiceInfo
 OUString ODataColumn::getImplementationName(  )
 {
-    return "com.sun.star.sdb.ODataColumn";
+    return u"com.sun.star.sdb.ODataColumn"_ustr;
 }
 
 Sequence< OUString > ODataColumn::getSupportedServiceNames(  )

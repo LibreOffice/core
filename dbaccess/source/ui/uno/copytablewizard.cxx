@@ -370,7 +370,7 @@ CopyTableWizard::CopyTableWizard( const Reference< XComponentContext >& _rxORB )
     :CopyTableWizard_Base( _rxORB )
     ,m_xContext( _rxORB )
     ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
-    ,m_aPrimaryKeyName( false,  "ID" )
+    ,m_aPrimaryKeyName( false,  u"ID"_ustr )
     ,m_bUseHeaderLineAsColumnNames( true )
     ,m_nCommandType( CommandType::COMMAND )
     ,m_bSourceSelectionBookmarks( true )
@@ -398,12 +398,12 @@ CopyTableWizard::~CopyTableWizard()
 
 OUString SAL_CALL CopyTableWizard::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.CopyTableWizard";
+    return u"org.openoffice.comp.dbu.CopyTableWizard"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.application.CopyTableWizard" };
+    return { u"com.sun.star.sdb.application.CopyTableWizard"_ustr };
 }
 
 Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo()
@@ -616,7 +616,7 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
     {
         Reference< XServiceInfo > xSI( xDescriptor, UNO_QUERY );
         bIsValid =  (   xSI.is()
-                    &&  xSI->supportsService( "com.sun.star.sdb.DataAccessDescriptor" ) );
+                    &&  xSI->supportsService( u"com.sun.star.sdb.DataAccessDescriptor"_ustr ) );
     }
 
     // it must be able to provide a connection
@@ -692,7 +692,7 @@ std::unique_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObj
     if  (   !xPSI->hasPropertyByName( PROPERTY_COMMAND )
         ||  !xPSI->hasPropertyByName( PROPERTY_COMMAND_TYPE )
         )
-        throw IllegalArgumentException("Expecting a table or query specification.",
+        throw IllegalArgumentException(u"Expecting a table or query specification."_ustr,
                                        // TODO: resource
                                        *const_cast< CopyTableWizard* >( this ), 1);
 
@@ -768,7 +768,7 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
     const bool bHasResultSet = m_xSourceResultSet.is();
     const bool bHasSelection = m_aSourceSelection.hasElements();
     if ( bHasSelection && !bHasResultSet )
-        throw IllegalArgumentException("A result set is needed when specifying a selection to copy.",
+        throw IllegalArgumentException(u"A result set is needed when specifying a selection to copy."_ustr,
                                        // TODO: resource
                                        *this, 1);
 
@@ -884,7 +884,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 {
     OSL_PRECOND( m_xSourceConnection.is(), "CopyTableWizard::impl_createSourceStatement_throw: illegal call!" );
     if ( !m_xSourceConnection.is() )
-        throw RuntimeException( "CopyTableWizard::impl_createSourceStatement_throw: illegal call!", *const_cast< CopyTableWizard* >( this ));
+        throw RuntimeException( u"CopyTableWizard::impl_createSourceStatement_throw: illegal call!"_ustr, *const_cast< CopyTableWizard* >( this ));
 
     ::utl::SharedUNOComponent< XPreparedStatement > xStatement;
     switch ( m_nCommandType )
@@ -930,7 +930,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
     default:
         // this should not have survived initialization phase
-        throw RuntimeException("No case matched, this should not have survived the initialization phase", *const_cast< CopyTableWizard* >( this ));
+        throw RuntimeException(u"No case matched, this should not have survived the initialization phase"_ustr, *const_cast< CopyTableWizard* >( this ));
     }
 
     return xStatement;
@@ -1055,7 +1055,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 {
     OSL_PRECOND( m_xDestConnection.is(), "CopyTableWizard::impl_copyRows_throw: illegal call!" );
     if ( !m_xDestConnection.is() )
-        throw RuntimeException( "m_xDestConnection is set to null, CopyTableWizard::impl_copyRows_throw: illegal call!", *this );
+        throw RuntimeException( u"m_xDestConnection is set to null, CopyTableWizard::impl_copyRows_throw: illegal call!"_ustr, *this );
 
     Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
 
@@ -1160,7 +1160,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                 if ( ( nSourceColumn < 1 ) || ( o3tl::make_unsigned(nSourceColumn) >= aSourceColTypes.size() ) )
                 {   // ( we have to check here against 1 because the parameters are 1 based)
-                    ::dbtools::throwSQLException("Internal error: invalid column type index.",
+                    ::dbtools::throwSQLException(u"Internal error: invalid column type index."_ustr,
                                                  ::dbtools::StandardSQLState::INVALID_DESCRIPTOR_INDEX, *this);
                 }
 
@@ -1362,9 +1362,9 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
 
                     OUString aSchema,aTable;
-                    xTable->getPropertyValue("SchemaName") >>= aSchema;
-                    xTable->getPropertyValue("Name")       >>= aTable;
-                    Any aCatalog = xTable->getPropertyValue("CatalogName");
+                    xTable->getPropertyValue(u"SchemaName"_ustr) >>= aSchema;
+                    xTable->getPropertyValue(u"Name"_ustr)       >>= aTable;
+                    Any aCatalog = xTable->getPropertyValue(u"CatalogName"_ustr);
 
                     const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
                     Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
@@ -1504,7 +1504,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
         Reference< XPropertySet > xInteractionHandler(m_xInteractionHandler, UNO_QUERY);
         if (xInteractionHandler.is())
         {
-            Any aParentWindow(xInteractionHandler->getPropertyValue("ParentWindow"));
+            Any aParentWindow(xInteractionHandler->getPropertyValue(u"ParentWindow"_ustr));
             aParentWindow >>= m_xParent;
         }
     }

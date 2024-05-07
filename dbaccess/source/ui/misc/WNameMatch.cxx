@@ -30,17 +30,17 @@ using namespace ::dbaui;
 
 // OWizColumnSelect
 OWizNameMatching::OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWizard)
-    : OWizardPage(pPage, pWizard, "dbaccess/ui/namematchingpage.ui", "NameMatching")
-    , m_xTABLE_LEFT(m_xBuilder->weld_label("leftlabel"))
-    , m_xTABLE_RIGHT(m_xBuilder->weld_label("rightlabel"))
-    , m_xCTRL_LEFT(m_xBuilder->weld_tree_view("left"))
-    , m_xCTRL_RIGHT(m_xBuilder->weld_tree_view("right"))
-    , m_xColumn_up(m_xBuilder->weld_button("up"))
-    , m_xColumn_down(m_xBuilder->weld_button("down"))
-    , m_xColumn_up_right(m_xBuilder->weld_button("up_right"))
-    , m_xColumn_down_right(m_xBuilder->weld_button("down_right"))
-    , m_xAll(m_xBuilder->weld_button("all"))
-    , m_xNone(m_xBuilder->weld_button("none"))
+    : OWizardPage(pPage, pWizard, u"dbaccess/ui/namematchingpage.ui"_ustr, u"NameMatching"_ustr)
+    , m_xTABLE_LEFT(m_xBuilder->weld_label(u"leftlabel"_ustr))
+    , m_xTABLE_RIGHT(m_xBuilder->weld_label(u"rightlabel"_ustr))
+    , m_xCTRL_LEFT(m_xBuilder->weld_tree_view(u"left"_ustr))
+    , m_xCTRL_RIGHT(m_xBuilder->weld_tree_view(u"right"_ustr))
+    , m_xColumn_up(m_xBuilder->weld_button(u"up"_ustr))
+    , m_xColumn_down(m_xBuilder->weld_button(u"down"_ustr))
+    , m_xColumn_up_right(m_xBuilder->weld_button(u"up_right"_ustr))
+    , m_xColumn_down_right(m_xBuilder->weld_button(u"down_right"_ustr))
+    , m_xAll(m_xBuilder->weld_button(u"all"_ustr))
+    , m_xNone(m_xBuilder->weld_button(u"none"_ustr))
 {
     OUString aImgUp(BMP_UP);
     OUString aImgDown(BMP_DOWN);

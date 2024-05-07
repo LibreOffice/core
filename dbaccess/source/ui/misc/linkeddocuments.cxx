@@ -120,7 +120,7 @@ namespace dbaui
                 break;
 
             case ElementOpenMode::Mail:
-                aArguments.put( "Hidden", true );
+                aArguments.put( u"Hidden"_ustr, true );
                 [[fallthrough]];
 
             case ElementOpenMode::Design:
@@ -131,7 +131,7 @@ namespace dbaui
                 OSL_FAIL( "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
                 break;
         }
-        aArguments.put( "OpenMode", sOpenMode );
+        aArguments.put( u"OpenMode"_ustr, sOpenMode );
 
         aArguments.put( PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
@@ -153,18 +153,18 @@ namespace dbaui
         try
         {
             ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( "DataSourceName", m_sDataSourceName );
+            aArgs.put( u"DataSourceName"_ustr, m_sDataSourceName );
 
             if ( m_xConnection.is() )
-                aArgs.put( "ActiveConnection", m_xConnection );
+                aArgs.put( u"ActiveConnection"_ustr, m_xConnection );
 
             if ( !_rObjectName.isEmpty() && ( _nCommandType != -1 ) )
             {
-                aArgs.put( "CommandType", _nCommandType );
-                aArgs.put( "Command", _rObjectName );
+                aArgs.put( u"CommandType"_ustr, _nCommandType );
+                aArgs.put( u"Command"_ustr, _rObjectName );
             }
 
-            aArgs.put( "DocumentUI", m_xDocumentUI );
+            aArgs.put( u"DocumentUI"_ustr, m_xDocumentUI );
 
             Reference< XJobExecutor > xWizard;
             {
@@ -176,7 +176,7 @@ namespace dbaui
                     ), UNO_QUERY_THROW );
             }
 
-            xWizard->trigger( "start" );
+            xWizard->trigger( u"start"_ustr );
             ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception&)
@@ -207,9 +207,9 @@ namespace dbaui
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::newDocument: invalid document container!");
         // determine the class ID to use for the new document
         Sequence<sal_Int8> aClassId;
-        if  (   !i_rCreationArgs.has( "ClassID" )
-            &&  !i_rCreationArgs.has( "MediaType" )
-            &&  !i_rCreationArgs.has( "DocumentServiceName" )
+        if  (   !i_rCreationArgs.has( u"ClassID"_ustr )
+            &&  !i_rCreationArgs.has( u"MediaType"_ustr )
+            &&  !i_rCreationArgs.has( u"DocumentServiceName"_ustr )
             )
         {
             switch ( i_nActionID )
@@ -248,15 +248,15 @@ namespace dbaui
             {
                 ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
                 if ( aClassId.hasElements() )
-                    aCreationArgs.put( "ClassID", aClassId );
+                    aCreationArgs.put( u"ClassID"_ustr, aClassId );
                 aCreationArgs.put( PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
                 // separate values which are real creation args from args relevant for opening the doc
                 ::comphelper::NamedValueCollection aCommandArgs;
-                if ( aCreationArgs.has( "Hidden" ) )
+                if ( aCreationArgs.has( u"Hidden"_ustr ) )
                 {
-                    aCommandArgs.put( "Hidden", aCreationArgs.get( "Hidden" ) );
-                    aCreationArgs.remove( "Hidden" );
+                    aCommandArgs.put( u"Hidden"_ustr, aCreationArgs.get( u"Hidden"_ustr ) );
+                    aCreationArgs.remove( u"Hidden"_ustr );
                 }
 
                 Reference< XCommandProcessor > xContent( xORB->createInstanceWithArguments(
@@ -270,7 +270,7 @@ namespace dbaui
                 // put the OpenMode into the OpenArgs
                 OpenCommandArgument aOpenModeArg;
                 aOpenModeArg.Mode = OpenMode::DOCUMENT;
-                aCommandArgs.put( "OpenMode", aOpenModeArg );
+                aCommandArgs.put( u"OpenMode"_ustr, aOpenModeArg );
 
                 Command aCommand;
                 aCommand.Name = "openDesign";
@@ -328,7 +328,7 @@ namespace dbaui
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
                 // more like a hack, insert an empty message
-                aInfo.prepend(" \n");
+                aInfo.prepend(u" \n"_ustr);
 
                 OUString sMessage = DBA_RES(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);

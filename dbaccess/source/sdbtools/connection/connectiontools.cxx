@@ -89,7 +89,7 @@ namespace sdbtools
 
     OUString SAL_CALL ConnectionTools::getImplementationName()
     {
-        return "com.sun.star.comp.dbaccess.ConnectionTools";
+        return u"com.sun.star.comp.dbaccess.ConnectionTools"_ustr;
     }
 
     sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName)
@@ -99,7 +99,7 @@ namespace sdbtools
 
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames()
     {
-        return  { "com.sun.star.sdb.tools.ConnectionTools" };
+        return  { u"com.sun.star.sdb.tools.ConnectionTools"_ustr };
     }
 
     void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments)
@@ -113,7 +113,7 @@ namespace sdbtools
         else
         {
             ::comphelper::NamedValueCollection aArguments( _rArguments );
-            aArguments.get( "Connection" ) >>= xConnection;
+            aArguments.get( u"Connection"_ustr ) >>= xConnection;
         }
         if ( !xConnection.is() )
             throw IllegalArgumentException();

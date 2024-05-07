@@ -471,12 +471,12 @@ void SAL_CALL ODatabaseSource::disposing( const css::lang::EventObject& Source )
 // XServiceInfo
 OUString ODatabaseSource::getImplementationName(  )
 {
-    return "com.sun.star.comp.dba.ODatabaseSource";
+    return u"com.sun.star.comp.dba.ODatabaseSource"_ustr;
 }
 
 Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  )
 {
-    return { SERVICE_SDB_DATASOURCE, "com.sun.star.sdb.DocumentDataSource" };
+    return { SERVICE_SDB_DATASOURCE, u"com.sun.star.sdb.DocumentDataSource"_ustr };
 }
 
 sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName )
@@ -545,7 +545,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     {
         Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
         OUString sMigrEnvVal;
-        osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
+        osl_getEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr.pData,
             &sMigrEnvVal.pData);
         if(!sMigrEnvVal.isEmpty())
             bNeedMigration = true;
@@ -553,7 +553,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         {
             Reference<XPropertySet> const xPropSet(xRootStorage, UNO_QUERY_THROW);
             sal_Int32 nOpenMode(0);
-            if ((xPropSet->getPropertyValue("OpenMode") >>= nOpenMode)
+            if ((xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode)
                 && (nOpenMode & css::embed::ElementModes::WRITE)
                 && (!Application::IsHeadlessModeEnabled()))
             {
@@ -574,7 +574,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             {
                 SAL_INFO("dbaccess", "No file content_before_migration.xml found" );
             }
-            xRootStorage->copyElementTo("content.xml", xRootStorage,
+            xRootStorage->copyElementTo(u"content.xml"_ustr, xRootStorage,
                 BACKUP_XML_NAME);
 
             m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
@@ -659,7 +659,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
                 pDriverInfo[nCount].Name = "Storage";
                 Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
-                pDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE);
+                pDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage(u"database"_ustr,ElementModes::READWRITE);
 
                 pDriverInfo[nCount].Name = "Document";
                 pDriverInfo[nCount++].Value <<= getDatabaseDocument();
@@ -700,7 +700,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
                 m_pImpl->getDocumentSubStorageSupplier() );
         dbahsql::HsqlImporter importer(xReturn,
-                xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
+                xDocSup->getDocumentSubStorage(u"database"_ustr,ElementModes::READWRITE) );
         importer.importHsqlDatabase(m_pImpl->GetFrameWeld());
     }
 #endif
@@ -1181,7 +1181,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs{ Any(NamedValue("DataSource",Any(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue(u"DataSource"_ustr,Any(xMy))) };
                 xContainer.set( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext), UNO_QUERY);
             }
         }
@@ -1316,8 +1316,8 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
 void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< css::uno::Any > const & rArguments)
 {
     ::comphelper::NamedValueCollection aProperties( rArguments );
-    if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= m_pImpl->m_xDialogParent;
+    if (aProperties.has(u"ParentWindow"_ustr))
+        aProperties.get(u"ParentWindow"_ustr) >>= m_pImpl->m_xDialogParent;
 }
 
 Reference< XInterface > ODatabaseSource::getThis() const

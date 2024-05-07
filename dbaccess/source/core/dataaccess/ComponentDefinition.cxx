@@ -153,12 +153,12 @@ IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings
 
 OUString SAL_CALL OComponentDefinition::getImplementationName()
 {
-    return "com.sun.star.comp.dba.OComponentDefinition";
+    return u"com.sun.star.comp.dba.OComponentDefinition"_ustr;
 }
 
 Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.TableDefinition", "com.sun.star.ucb.Content" };
+    return { u"com.sun.star.sdb.TableDefinition"_ustr, u"com.sun.star.ucb.Content"_ustr };
 }
 
 void SAL_CALL OComponentDefinition::disposing()
@@ -193,8 +193,8 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
 OUString OComponentDefinition::determineContentType() const
 {
     return m_bTable
-        ?   OUString( "application/vnd.org.openoffice.DatabaseTable" )
-        :   OUString( "application/vnd.org.openoffice.DatabaseCommandDefinition" );
+        ?   u"application/vnd.org.openoffice.DatabaseTable"_ustr
+        :   u"application/vnd.org.openoffice.DatabaseCommandDefinition"_ustr;
 }
 
 Reference< XNameAccess> OComponentDefinition::getColumns()

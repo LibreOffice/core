@@ -63,7 +63,7 @@ namespace dbaui
 
     OUString SAL_CALL ODirectSQLDialog::getImplementationName()
     {
-        return "com.sun.star.comp.sdb.DirectSQLDialog";
+        return u"com.sun.star.comp.sdb.DirectSQLDialog"_ustr;
     }
     sal_Bool SAL_CALL ODirectSQLDialog::supportsService(const OUString& _rServiceName)
     {

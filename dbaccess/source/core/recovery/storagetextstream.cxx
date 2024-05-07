@@ -39,7 +39,7 @@ namespace dbaccess
         :StorageOutputStream( i_rParentStorage, i_rStreamName )
     {
         mxTextOutput = TextOutputStream::create( i_rContext );
-        mxTextOutput->setEncoding( "UTF-8" );
+        mxTextOutput->setEncoding( u"UTF-8"_ustr );
         mxTextOutput->setOutputStream( getOutputStream() );
     }
 

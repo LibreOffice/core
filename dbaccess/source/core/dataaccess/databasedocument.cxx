@@ -231,7 +231,7 @@ namespace
     Reference< XStatusIndicator > lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments )
     {
         Reference< XStatusIndicator > xStatusIndicator;
-        return _rArguments.getOrDefault( "StatusIndicator", xStatusIndicator );
+        return _rArguments.getOrDefault( u"StatusIndicator"_ustr, xStatusIndicator );
     }
 
     void lcl_triggerStatusIndicator_throw( const ::comphelper::NamedValueCollection& _rArguments, DocumentGuard& _rGuard, const bool _bStart )
@@ -294,8 +294,8 @@ namespace
             return _rDescriptor.getPropertyValues();
 
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
-        aMutableDescriptor.put( "FileName", _rURL );
-        aMutableDescriptor.put( "URL", _rURL );
+        aMutableDescriptor.put( u"FileName"_ustr, _rURL );
+        aMutableDescriptor.put( u"URL"_ustr, _rURL );
         return aMutableDescriptor.getPropertyValues();
     }
 }
@@ -329,7 +329,7 @@ constexpr OUString sPictures = u"Pictures"_ustr;
 static void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext )
 {
     const Sequence< OUString > sLibraries = xDlgCont->getElementNames();
-    Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );
+    Reference< XStorage > xTmpPic = xStorage->openStorageElement( u"tempPictures"_ustr, ElementModes::READWRITE  );
 
     std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
     for ( OUString const & sLibrary : sLibraries )
@@ -415,11 +415,11 @@ namespace
     /** property map for import/export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
      {
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"TargetStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"StreamRelPath"_ustr, 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
      };
 }
 
@@ -431,19 +431,19 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
-    OUString sBaseURI = _rResource.getOrDefault("BaseURI", OUString());
+    OUString sBaseURI = _rResource.getOrDefault(u"BaseURI"_ustr, OUString());
     if (sBaseURI.isEmpty())
-        sBaseURI = _rResource.getOrDefault("URL",OUString());
+        sBaseURI = _rResource.getOrDefault(u"URL"_ustr,OUString());
     assert(!sBaseURI.isEmpty()); // needed for relative URLs
-    xInfoSet->setPropertyValue("BaseURI", uno::Any(sBaseURI));
-    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
+    xInfoSet->setPropertyValue(u"BaseURI"_ustr, uno::Any(sBaseURI));
+    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
 
     const sal_Int32 nCount = aFilterCreationArgs.getLength();
     aFilterCreationArgs.realloc(nCount + 1);
     aFilterCreationArgs.getArray()[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-        _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, _rContext),
+        _rContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.comp.sdb.DBFilter"_ustr, aFilterCreationArgs, _rContext),
         UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( _rxTargetComponent, UNO_QUERY_THROW );
@@ -498,19 +498,19 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& Argument
     impl_reset_nothrow();
 
     ::comphelper::NamedValueCollection aResource( Arguments );
-    if ( aResource.has( "FileName" ) && !aResource.has( "URL" ) )
+    if ( aResource.has( u"FileName"_ustr ) && !aResource.has( u"URL"_ustr ) )
         // FileName is the compatibility name for URL, so we might have clients passing
         // a FileName only. However, some of our code works with the URL only, so ensure
         // we have one.
-        aResource.put( "URL", aResource.get( "FileName" ) );
-    if ( aResource.has( "URL" ) && !aResource.has( "FileName" ) )
+        aResource.put( u"URL"_ustr, aResource.get( u"FileName"_ustr ) );
+    if ( aResource.has( u"URL"_ustr ) && !aResource.has( u"FileName"_ustr ) )
         // similar ... just in case there is legacy code which expects a FileName only
-        aResource.put( "FileName", aResource.get( "URL" ) );
+        aResource.put( u"FileName"_ustr, aResource.get( u"URL"_ustr ) );
 
     // now that somebody (perhaps) told us a macro execution mode, remember it as
     // ImposedMacroExecMode
     m_pImpl->setImposedMacroExecMode(
-        aResource.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
+        aResource.getOrDefault( u"MacroExecutionMode"_ustr, m_pImpl->getImposedMacroExecMode() ) );
 
     impl_setInitializing();
     try
@@ -653,8 +653,8 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 
         // our load implementation expects the SalvagedFile and URL to be in the media descriptor
         ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
-        aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
-        aMediaDescriptor.put( "URL", i_SourceLocation );
+        aMediaDescriptor.put( u"SalvagedFile"_ustr, i_SalvagedFile );
+        aMediaDescriptor.put( u"URL"_ustr, i_SourceLocation );
 
         aGuard.clear(); // (load has an own guarding scheme)
         load( aMediaDescriptor.getPropertyValues() );
@@ -731,12 +731,12 @@ bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentU
         // for
 
         // we do not support macro signatures, so we can ignore that request
-        aArgs.remove("BreakMacroSignature");
+        aArgs.remove(u"BreakMacroSignature"_ustr);
 
         bool bMacroEventRead = false;
-        if ((aArgs.get( "MacroEventRead" ) >>= bMacroEventRead) && bMacroEventRead)
+        if ((aArgs.get( u"MacroEventRead"_ustr ) >>= bMacroEventRead) && bMacroEventRead)
             m_pImpl->m_bMacroCallsSeenWhileLoading = true;
-        aArgs.remove( "MacroEventRead" );
+        aArgs.remove( u"MacroEventRead"_ustr );
 
         if (aArgs.empty())
             return false;
@@ -901,9 +901,9 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
 
     // check if there are sub components to recover from our document storage
     bool bAttemptRecovery = m_bHasBeenRecovered;
-    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
+    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( u"ForceRecovery"_ustr ) )
         // do not use getOrDefault, it will throw for invalid types, which is not desired here
-        m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
+        m_pImpl->getMediaDescriptor().get( u"ForceRecovery"_ustr ) >>= bAttemptRecovery;
 
     if ( !bAttemptRecovery )
         return;
@@ -1126,12 +1126,12 @@ css::uno::Reference<css::embed::XStorage> ODatabaseDocument::impl_GetStorageOrCr
 {
     // Try to get the storage from arguments, then create storage for target URL
     uno::Reference<embed::XStorage> xTargetStorage;
-    _rArguments.get("TargetStorage") >>= xTargetStorage;
+    _rArguments.get(u"TargetStorage"_ustr) >>= xTargetStorage;
     if (!xTargetStorage.is())
         xTargetStorage = impl_createStorageFor_throw(_rURL);
 
     // In case we got a StreamRelPath, then xTargetStorage should reference that sub-storage.
-    OUString sStreamRelPath = _rArguments.getOrDefault("StreamRelPath", OUString());
+    OUString sStreamRelPath = _rArguments.getOrDefault(u"StreamRelPath"_ustr, OUString());
     if (!sStreamRelPath.isEmpty())
         xTargetStorage
             = xTargetStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READWRITE);
@@ -1414,7 +1414,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs{ Any(NamedValue("DatabaseDocument",Any(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue(u"DatabaseDocument"_ustr,Any(xMy))) };
                 xContainer.set(
                        m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext),
                        UNO_QUERY);
@@ -1565,8 +1565,8 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
         xSeek->seek(0);
 
     Reference< XPropertySet > xStreamProp( xOutputStream, UNO_QUERY_THROW );
-    xStreamProp->setPropertyValue( INFO_MEDIATYPE, Any( OUString( "text/xml" ) ) );
-    xStreamProp->setPropertyValue( "Compressed", Any( true ) );
+    xStreamProp->setPropertyValue( INFO_MEDIATYPE, Any( u"text/xml"_ustr ) );
+    xStreamProp->setPropertyValue( u"Compressed"_ustr, Any( true ) );
 
     // write the stuff
     WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
@@ -1612,21 +1612,21 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
+    xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, uno::Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
     if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
-        OUString sBaseURI = _rMediaDescriptor.getOrDefault("BaseURI", OUString());
+        OUString sBaseURI = _rMediaDescriptor.getOrDefault(u"BaseURI"_ustr, OUString());
         if (sBaseURI.isEmpty())
-            sBaseURI = _rMediaDescriptor.getOrDefault("URL",OUString());
-        xInfoSet->setPropertyValue("BaseURI", uno::Any(sBaseURI));
+            sBaseURI = _rMediaDescriptor.getOrDefault(u"URL"_ustr,OUString());
+        xInfoSet->setPropertyValue(u"BaseURI"_ustr, uno::Any(sBaseURI));
     }
 
     // Set TargetStorage, so it doesn't have to be re-constructed based on possibly empty URL.
-    xInfoSet->setPropertyValue("TargetStorage", uno::Any(m_pImpl->getRootStorage()));
+    xInfoSet->setPropertyValue(u"TargetStorage"_ustr, uno::Any(m_pImpl->getRootStorage()));
 
     // Set StreamRelPath, in case this document is an embedded one.
     OUString sStreamRelPath;
-    OUString sURL = _rMediaDescriptor.getOrDefault("URL", OUString());
+    OUString sURL = _rMediaDescriptor.getOrDefault(u"URL"_ustr, OUString());
     if (sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
     {
         // In this case the host contains the real path, and the path is the embedded stream name.
@@ -1636,7 +1636,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
             sStreamRelPath = sStreamRelPath.copy(1);
     }
     if (!sStreamRelPath.isEmpty())
-        xInfoSet->setPropertyValue("StreamRelPath", uno::Any(sStreamRelPath));
+        xInfoSet->setPropertyValue(u"StreamRelPath"_ustr, uno::Any(sStreamRelPath));
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
@@ -1663,7 +1663,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     {
         try
         {
-            xProp->setPropertyValue("Version" , uno::Any(aVersion));
+            xProp->setPropertyValue(u"Version"_ustr , uno::Any(aVersion));
         }
         catch (const uno::Exception&)
         {
@@ -1676,11 +1676,11 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     Sequence< PropertyValue > aMediaDescriptor;
     _rMediaDescriptor >>= aMediaDescriptor;
 
-    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("settings.xml")));
+    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
     WriteThroughComponent( xComponent, "settings.xml", "com.sun.star.comp.sdb.XMLSettingsExporter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
-    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
+    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
     WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
@@ -1718,7 +1718,7 @@ Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurat
     {
         m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext );
 
-        OUString aUIConfigFolderName( "Configurations2" );
+        OUString aUIConfigFolderName( u"Configurations2"_ustr );
 
         // First try to open with READWRITE and then READ
         Reference< XStorage > xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
@@ -1729,7 +1729,7 @@ Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurat
             Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
             if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
             {
-                a <<= OUString("application/vnd.sun.xml.ui.configuration");
+                a <<= u"application/vnd.sun.xml.ui.configuration"_ustr;
                 xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
             }
         }
@@ -1873,12 +1873,12 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< lang::XEv
 // XServiceInfo
 OUString ODatabaseDocument::getImplementationName()
 {
-    return "com.sun.star.comp.dba.ODatabaseDocument";
+    return u"com.sun.star.comp.dba.ODatabaseDocument"_ustr;
 }
 
 Sequence< OUString > ODatabaseDocument::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.OfficeDatabaseDocument", "com.sun.star.document.OfficeDocument" };
+    return { u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr, u"com.sun.star.document.OfficeDocument"_ustr };
 }
 
 sal_Bool ODatabaseDocument::supportsService( const OUString& _rServiceName )
@@ -1897,9 +1897,9 @@ namespace
 /// Property map for embedded import info set.
 comphelper::PropertyMapEntry const aEmbeddedImportInfoMap[] =
 {
-    {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-    {OUString("StreamName"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-    {OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {u"StreamRelPath"_ustr, 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {u"StreamName"_ustr, 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {u"SourceStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
 };
 }
 
@@ -1908,13 +1908,13 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
     DocumentGuard aGuard(*this, DocumentGuard::InitMethod);
 
     uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aEmbeddedImportInfoMap)));
-    xInfoSet->setPropertyValue("StreamRelPath", uno::Any(comphelper::NamedValueCollection::getOrDefault(rMediaDescriptor, u"HierarchicalDocumentName", OUString())));
-    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
-    xInfoSet->setPropertyValue("SourceStorage", uno::Any(xStorage));
+    xInfoSet->setPropertyValue(u"StreamRelPath"_ustr, uno::Any(comphelper::NamedValueCollection::getOrDefault(rMediaDescriptor, u"HierarchicalDocumentName", OUString())));
+    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
+    xInfoSet->setPropertyValue(u"SourceStorage"_ustr, uno::Any(xStorage));
 
     uno::Sequence<uno::Any> aFilterCreationArgs{ Any(xInfoSet) };
 
-    uno::Reference<document::XImporter> xImporter(m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XImporter> xImporter(m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.comp.sdb.DBFilter"_ustr, aFilterCreationArgs, m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XComponent> xComponent(*this, uno::UNO_QUERY_THROW);
     xImporter->setTargetDocument(xComponent);
@@ -2048,7 +2048,7 @@ Sequence< OUString > SAL_CALL ODatabaseDocument::getAvailableViewControllerNames
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& Frame )
 {
-    return createViewController( "Default", Sequence< PropertyValue >(), Frame);
+    return createViewController( u"Default"_ustr, Sequence< PropertyValue >(), Frame);
 }
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const OUString& ViewName, const Sequence< PropertyValue >& Arguments, const Reference< XFrame >& Frame )
@@ -2062,13 +2062,13 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
     aGuard.clear();
 
     Reference< XController2 > xController(
-         m_pImpl->m_aContext->getServiceManager()->createInstanceWithContext("org.openoffice.comp.dbu.OApplicationController", m_pImpl->m_aContext),
+         m_pImpl->m_aContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.comp.dbu.OApplicationController"_ustr, m_pImpl->m_aContext),
          UNO_QUERY_THROW );
 
     ::comphelper::NamedValueCollection aInitArgs( Arguments );
-    aInitArgs.put( "Frame", Frame );
+    aInitArgs.put( u"Frame"_ustr, Frame );
     if ( ViewName == "Preview" )
-        aInitArgs.put( "Preview", true );
+        aInitArgs.put( u"Preview"_ustr, true );
     Reference< XInitialization > xInitController( xController, UNO_QUERY_THROW );
     xInitController->initialize( aInitArgs.getWrappedPropertyValues() );
 

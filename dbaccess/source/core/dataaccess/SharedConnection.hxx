@@ -78,23 +78,23 @@ namespace dbaccess
         // XConnection
         virtual void SAL_CALL setAutoCommit( sal_Bool /*autoCommit*/ ) override
         {
-            throw css::sdbc::SQLException("This call is not allowed when sharing connections.",*this,"S10000",0,css::uno::Any());
+            throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
         virtual void SAL_CALL setReadOnly( sal_Bool /*readOnly*/ ) override
         {
-            throw css::sdbc::SQLException("This call is not allowed when sharing connections.",*this,"S10000",0,css::uno::Any());
+            throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
         virtual void SAL_CALL setCatalog( const OUString& /*catalog*/ ) override
         {
-            throw css::sdbc::SQLException("This call is not allowed when sharing connections.",*this,"S10000",0,css::uno::Any());
+            throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
         virtual void SAL_CALL setTransactionIsolation( sal_Int32 /*level*/ ) override
         {
-            throw css::sdbc::SQLException("This call is not allowed when sharing connections.",*this,"S10000",0,css::uno::Any());
+            throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
         virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& /*typeMap*/ ) override
         {
-            throw css::sdbc::SQLException("This call is not allowed when sharing connections.",*this,"S10000",0,css::uno::Any());
+            throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
         // XConnection
         virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;

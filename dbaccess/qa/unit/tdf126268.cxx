@@ -32,7 +32,7 @@ public:
 void Tdf126268Test::setUp()
 {
     DBTestBase::setUp();
-    osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
+    osl_setEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr.pData, u"1"_ustr.pData);
 }
 
 namespace
@@ -45,8 +45,9 @@ struct expect_t
 }
 
 const expect_t expect[] = {
-    { 1, "0.00" },   { 2, "25.00" },  { 3, "26.00" }, { 4, "30.4" },  { 5, "45.8" },
-    { 6, "-25.00" }, { 7, "-26.00" }, { 8, "-30.4" }, { 9, "-45.8" },
+    { 1, u"0.00"_ustr },   { 2, u"25.00"_ustr }, { 3, u"26.00"_ustr },
+    { 4, u"30.4"_ustr },   { 5, u"45.8"_ustr },  { 6, u"-25.00"_ustr },
+    { 7, u"-26.00"_ustr }, { 8, u"-30.4"_ustr }, { 9, u"-45.8"_ustr },
 };
 
 void Tdf126268Test::testNumbers()
@@ -70,7 +71,7 @@ void Tdf126268Test::testNumbers()
     uno::Reference<XStatement> statement = xConnection->createStatement();
 
     uno::Reference<XResultSet> xRes
-        = statement->executeQuery("SELECT ID, Column1, Column2 FROM tableTest ORDER BY ID");
+        = statement->executeQuery(u"SELECT ID, Column1, Column2 FROM tableTest ORDER BY ID"_ustr);
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // check result

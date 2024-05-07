@@ -791,7 +791,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA
     >;
 
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("GridBrowserProperties"));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool(u"GridBrowserProperties"_ustr));
     pPool->registerItemInfoPackage(getItemInfoPackageColumnFormatDialog());
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
 
@@ -865,7 +865,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
 
 std::shared_ptr<const SfxFilter> getStandardDatabaseFilter()
 {
-    std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
+    std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
     OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
     return pFilter;
 }
@@ -1156,7 +1156,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     if ( !pTypeInfo )
     {
         bool bForce = true;
-        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,OUString(),"x",50,0,false,bForce);
+        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,OUString(),u"x"_ustr,50,0,false,bForce);
     }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
@@ -1327,7 +1327,7 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
     {
         OUString sError(DBA_RES(STR_NAME_ALREADY_EXISTS));
         sError = sError.replaceFirst("#",sNewName);
-        throw SQLException(sError,nullptr,"S1000",0,Any());
+        throw SQLException(sError,nullptr,u"S1000"_ustr,0,Any());
     }
 
     try

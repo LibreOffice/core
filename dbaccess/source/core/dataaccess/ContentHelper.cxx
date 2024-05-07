@@ -86,7 +86,7 @@ void SAL_CALL OContentHelper::disposing()
 
 OUString SAL_CALL OContentHelper::getImplementationName()
     {
-        return "com.sun.star.comp.sdb.Content";
+        return u"com.sun.star.comp.sdb.Content"_ustr;
     }
 sal_Bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
     {
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
     }
 css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.Content" };
+    return { u"com.sun.star.ucb.Content"_ustr };
 }
 
 
@@ -343,7 +343,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         if ( rValue.Name == "ContentType" || rValue.Name == "IsDocument" || rValue.Name == "IsFolder" )
         {
             // Read-only property!
-            aRetRange[ n ] <<= IllegalAccessException("Property is read-only!",
+            aRetRange[ n ] <<= IllegalAccessException(u"Property is read-only!"_ustr,
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "Title" )
@@ -377,14 +377,14 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             }
             else
             {
-                aRetRange[ n ] <<= IllegalTypeException("Property value has wrong type!",
+                aRetRange[ n ] <<= IllegalTypeException(u"Property value has wrong type!"_ustr,
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
 
         else
         {
-            aRetRange[ n ] <<= Exception("No property set for storing the value!",
+            aRetRange[ n ] <<= Exception(u"No property set for storing the value!"_ustr,
                             static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -437,24 +437,24 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
     {
         // Append all Core Properties.
         xRow->appendString (
-            Property( "ContentType", -1,
+            Property( u"ContentType"_ustr, -1,
                       cppu::UnoType<OUString>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
-            Property( "Title", -1,
+            Property( u"Title"_ustr, -1,
                       cppu::UnoType<OUString>::get(),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
-            Property( "IsDocument", -1,
+            Property( u"IsDocument"_ustr, -1,
                       cppu::UnoType<bool>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsDocument );
         xRow->appendBoolean(
-            Property( "IsFolder", -1,
+            Property( u"IsFolder"_ustr, -1,
                       cppu::UnoType<bool>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),

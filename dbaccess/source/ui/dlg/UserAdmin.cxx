@@ -73,12 +73,12 @@ public:
 }
 
 OPasswordDialog::OPasswordDialog(weld::Window* _pParent, std::u16string_view rUserName)
-    : GenericDialogController(_pParent, "dbaccess/ui/password.ui", "PasswordDialog")
-    , m_xUser(m_xBuilder->weld_frame("userframe"))
-    , m_xEDOldPassword(m_xBuilder->weld_entry("oldpassword"))
-    , m_xEDPassword(m_xBuilder->weld_entry("newpassword"))
-    , m_xEDPasswordRepeat(m_xBuilder->weld_entry("confirmpassword"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(_pParent, u"dbaccess/ui/password.ui"_ustr, u"PasswordDialog"_ustr)
+    , m_xUser(m_xBuilder->weld_frame(u"userframe"_ustr))
+    , m_xEDOldPassword(m_xBuilder->weld_entry(u"oldpassword"_ustr))
+    , m_xEDPassword(m_xBuilder->weld_entry(u"newpassword"_ustr))
+    , m_xEDPasswordRepeat(m_xBuilder->weld_entry(u"confirmpassword"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     OUString sUser = m_xUser->get_label();
     sUser = sUser.replaceFirst("$name$:  $", rUserName);
@@ -113,16 +113,16 @@ IMPL_LINK(OPasswordDialog, ModifiedHdl, weld::Entry&, rEdit, void)
 
 // OUserAdmin
 OUserAdmin::OUserAdmin(weld::Container* pPage, weld::DialogController* pController,const SfxItemSet& _rAttrSet)
-    : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/useradminpage.ui", "UserAdminPage", _rAttrSet)
-    , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
-    , m_xUSER(m_xBuilder->weld_combo_box("user"))
-    , m_xTable(m_xBuilder->weld_container("table"))
+    : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/useradminpage.ui"_ustr, u"UserAdminPage"_ustr, _rAttrSet)
+    , mxActionBar(m_xBuilder->weld_menu_button(u"action_menu"_ustr))
+    , m_xUSER(m_xBuilder->weld_combo_box(u"user"_ustr))
+    , m_xTable(m_xBuilder->weld_container(u"table"_ustr))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
     , m_xTableCtrl(VclPtr<OTableGrantControl>::Create(m_xTableCtrlParent))
 {
-    mxActionBar->append_item(MNI_ACTION_ADD_USER, DBA_RES(STR_ADD_USER));
-    mxActionBar->append_item(MNI_ACTION_DEL_USER, DBA_RES(STR_DELETE_USER));
-    mxActionBar->append_item(MNI_ACTION_CHANGE_PASSWORD, DBA_RES(STR_CHANGE_PASSWORD));
+    mxActionBar->append_item(u"" MNI_ACTION_ADD_USER ""_ustr, DBA_RES(STR_ADD_USER));
+    mxActionBar->append_item(u"" MNI_ACTION_DEL_USER ""_ustr, DBA_RES(STR_DELETE_USER));
+    mxActionBar->append_item(u"" MNI_ACTION_CHANGE_PASSWORD ""_ustr, DBA_RES(STR_CHANGE_PASSWORD));
     mxActionBar->connect_selected(LINK(this,OUserAdmin,MenuSelectHdl));
 
     m_xTableCtrl->Show();
@@ -240,10 +240,10 @@ void OUserAdmin::FillUserNames()
     }
 
     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
-    mxActionBar->set_item_sensitive(MNI_ACTION_ADD_USER, xAppend.is());
+    mxActionBar->set_item_sensitive(u"" MNI_ACTION_ADD_USER ""_ustr, xAppend.is());
     Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
-    mxActionBar->set_item_sensitive(MNI_ACTION_DEL_USER, xDrop.is());
-    mxActionBar->set_item_sensitive(MNI_ACTION_CHANGE_PASSWORD, m_xUsers.is());
+    mxActionBar->set_item_sensitive(u"" MNI_ACTION_DEL_USER ""_ustr, xDrop.is());
+    mxActionBar->set_item_sensitive(u"" MNI_ACTION_CHANGE_PASSWORD ""_ustr, m_xUsers.is());
 
     m_xTableCtrl->Enable(m_xUsers.is());
 }

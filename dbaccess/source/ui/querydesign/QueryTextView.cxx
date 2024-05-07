@@ -29,10 +29,10 @@ using namespace dbaui;
 
 // end of temp classes
 OQueryTextView::OQueryTextView(OQueryContainerWindow* pParent, OQueryController& rController)
-    : InterimItemWindow(pParent, "dbaccess/ui/queryview.ui", "QueryView")
+    : InterimItemWindow(pParent, u"dbaccess/ui/queryview.ui"_ustr, u"QueryView"_ustr)
     , m_rController(rController)
-    , m_xSQL(new SQLEditView(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
-    , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
+    , m_xSQL(new SQLEditView(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true)))
+    , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, u"sql"_ustr, *m_xSQL))
     , m_timerUndoActionCreation("dbaccess OQueryTextView m_timerUndoActionCreation")
     , m_timerInvalidate("dbaccess OQueryTextView m_timerInvalidate")
     , m_bStopTimer(false)

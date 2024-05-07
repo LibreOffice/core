@@ -91,20 +91,20 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
         if ( !bFoundField )
         {
             aProperty.Name = INFO_FIELDDELIMITER;
-            aProperty.Value <<= OUString(";");
+            aProperty.Value <<= u";"_ustr;
             rImport.addInfo(aProperty);
         }
         if ( !bFoundThousand )
         {
             aProperty.Name = INFO_THOUSANDSDELIMITER;
-            aProperty.Value <<= OUString(",");
+            aProperty.Value <<= u","_ustr;
             rImport.addInfo(aProperty);
         }
     }
     if ( (nElement & TOKEN_MASK) == XML_FONT_CHARSET && !bFoundCharset )
     {
         aProperty.Name = INFO_CHARSET;
-        aProperty.Value <<= OUString("utf8");
+        aProperty.Value <<= u"utf8"_ustr;
         rImport.addInfo(aProperty);
     }
 }

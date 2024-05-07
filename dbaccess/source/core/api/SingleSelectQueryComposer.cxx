@@ -281,7 +281,7 @@ void SAL_CALL OSingleSelectQueryComposer::disposing()
 IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
 OUString SAL_CALL OSingleSelectQueryComposer::getImplementationName()
     {
-        return "org.openoffice.comp.dba.OSingleSelectQueryComposer";
+        return u"org.openoffice.comp.dba.OSingleSelectQueryComposer"_ustr;
     }
 sal_Bool SAL_CALL OSingleSelectQueryComposer::supportsService(const OUString& _rServiceName)
     {
@@ -496,13 +496,13 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
         m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
-        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName("Function"),"Property FUNCTION not available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(u"Function"_ustr),"Property FUNCTION not available!");
 
         OUString sRealName, sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
         bool bFunction = false;
-        xColumn->getPropertyValue("Function") >>= bFunction;
+        xColumn->getPropertyValue(u"Function"_ustr) >>= bFunction;
         if ( sRealName == aName )
         {
             if ( bFunction )
@@ -931,8 +931,8 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                     continue;
 
                 rtl::Reference<::connectivity::parse::OParseColumn> pColumn = new ::connectivity::parse::OParseColumn(xProp,bCase);
-                pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue("Function")));
-                pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue("AggregateFunction")));
+                pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue(u"Function"_ustr)));
+                pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue(u"AggregateFunction"_ustr)));
 
                 OUString sRealName;
                 xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
@@ -1648,7 +1648,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
             OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
             OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
-            OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName("AggregateFunction"),"Property AggregateFunction not available!");
+            OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(u"AggregateFunction"_ustr),"Property AggregateFunction not available!");
 
             OUString sRealName,sTableName;
             xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
@@ -1662,7 +1662,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             else
                 sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
-            if ( !::comphelper::getBOOL(xColumn->getPropertyValue("Function")) )
+            if ( !::comphelper::getBOOL(xColumn->getPropertyValue(u"Function"_ustr)) )
             {
                 aSQL =  sTableName + "." + ::dbtools::quoteName( aQuote, sRealName );
             }

@@ -45,14 +45,14 @@ DlgQryJoin::DlgQryJoin(const OQueryTableView* pParent,
                        const OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
                        bool _bAllowTableSelect)
-    : GenericDialogController(pParent->GetFrameWeld(), "dbaccess/ui/joindialog.ui", "JoinDialog")
+    : GenericDialogController(pParent->GetFrameWeld(), u"dbaccess/ui/joindialog.ui"_ustr, u"JoinDialog"_ustr)
     , eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())
     , m_pOrigConnData(_pData)
     , m_xConnection(_xConnection)
-    , m_xML_HelpText(m_xBuilder->weld_label("helptext"))
-    , m_xPB_OK(m_xBuilder->weld_button("ok"))
-    , m_xLB_JoinType(m_xBuilder->weld_combo_box("type"))
-    , m_xCBNatural(m_xBuilder->weld_check_button("natural"))
+    , m_xML_HelpText(m_xBuilder->weld_label(u"helptext"_ustr))
+    , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xLB_JoinType(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , m_xCBNatural(m_xBuilder->weld_check_button(u"natural"_ustr))
 {
     Size aSize(m_xML_HelpText->get_approximate_digit_width() * 44,
                m_xML_HelpText->get_text_height() * 6);
@@ -184,7 +184,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, weld::ComboBox&, void )
                 m_xTableControl->lateInit();
                 m_xCBNatural->set_active(false);
                 m_xTableControl->enableRelation(false);
-                m_pConnData->AppendConnLine("","");
+                m_pConnData->AppendConnLine(u""_ustr,u""_ustr);
                 m_xPB_OK->set_sensitive(true);
             }
             break;

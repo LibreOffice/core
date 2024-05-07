@@ -47,12 +47,12 @@ Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId()
 
 OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.ODatasourceAdministrationDialog";
+    return u"org.openoffice.comp.dbu.ODatasourceAdministrationDialog"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.DatasourceAdministrationDialog" };
+    return { u"com.sun.star.sdb.DatasourceAdministrationDialog"_ustr };
 }
 
 Reference<XPropertySetInfo> SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo()

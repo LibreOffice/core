@@ -40,19 +40,19 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  bool bAllowTableSelect )
     : GenericDialogController(pParent->GetFrameWeld(),
-        "dbaccess/ui/relationdialog.ui", "RelationDialog")
+        u"dbaccess/ui/relationdialog.ui"_ustr, u"RelationDialog"_ustr)
     , m_pParent(pParent)
     , m_pOrigConnData(pConnectionData)
     , m_bTriedOneUpdate(false)
-    , m_xRB_NoCascUpd(m_xBuilder->weld_radio_button("addaction"))
-    , m_xRB_CascUpd(m_xBuilder->weld_radio_button("addcascade"))
-    , m_xRB_CascUpdNull(m_xBuilder->weld_radio_button("addnull"))
-    , m_xRB_CascUpdDefault(m_xBuilder->weld_radio_button("adddefault"))
-    , m_xRB_NoCascDel(m_xBuilder->weld_radio_button("delaction"))
-    , m_xRB_CascDel(m_xBuilder->weld_radio_button("delcascade"))
-    , m_xRB_CascDelNull(m_xBuilder->weld_radio_button("delnull"))
-    , m_xRB_CascDelDefault(m_xBuilder->weld_radio_button("deldefault"))
-    , m_xPB_OK(m_xBuilder->weld_button("ok"))
+    , m_xRB_NoCascUpd(m_xBuilder->weld_radio_button(u"addaction"_ustr))
+    , m_xRB_CascUpd(m_xBuilder->weld_radio_button(u"addcascade"_ustr))
+    , m_xRB_CascUpdNull(m_xBuilder->weld_radio_button(u"addnull"_ustr))
+    , m_xRB_CascUpdDefault(m_xBuilder->weld_radio_button(u"adddefault"_ustr))
+    , m_xRB_NoCascDel(m_xBuilder->weld_radio_button(u"delaction"_ustr))
+    , m_xRB_CascDel(m_xBuilder->weld_radio_button(u"delcascade"_ustr))
+    , m_xRB_CascDelNull(m_xBuilder->weld_radio_button(u"delnull"_ustr))
+    , m_xRB_CascDelDefault(m_xBuilder->weld_radio_button(u"deldefault"_ustr))
+    , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     // Copy connection
     m_pConnData = pConnectionData->NewInstance();

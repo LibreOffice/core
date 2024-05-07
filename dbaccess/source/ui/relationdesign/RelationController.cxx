@@ -72,12 +72,12 @@ using namespace ::osl;
 
 OUString SAL_CALL ORelationController::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.ORelationDesign";
+    return u"org.openoffice.comp.dbu.ORelationDesign"_ustr;
 }
 
 Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.RelationDesign" };
+    return { u"com.sun.star.sdb.RelationDesign"_ustr };
 }
 
 ORelationController::ORelationController(const Reference< XComponentContext >& _rM)
@@ -218,8 +218,8 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/designsavemodifieddialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("DesignSaveModifiedDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), u"dbaccess/ui/designsavemodifieddialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"DesignSaveModifiedDialog"_ustr));
         nSaved = xQuery->run();
         if(nSaved == RET_YES)
             Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
@@ -230,7 +230,7 @@ short ORelationController::saveModified()
 void ORelationController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
-    implDescribeSupportedFeature( ".uno:DBAddRelation", SID_RELATION_ADD_RELATION, CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:DBAddRelation"_ustr, SID_RELATION_ADD_RELATION, CommandGroup::EDIT );
 }
 
 namespace

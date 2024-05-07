@@ -53,9 +53,9 @@ using namespace ::com::sun::star;
 
     // OTextConnectionPageSetup
     OTextConnectionPageSetup::OTextConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
+        : OConnectionTabPageSetup(pPage, pController, u"dbaccess/ui/dbwiztextpage.ui"_ustr, u"DBWizTextPage"_ustr,
                                   rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
-        , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
+        , m_xSubContainer(m_xBuilder->weld_widget(u"TextPageContainer"_ustr))
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS))
     {
         m_xTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
@@ -119,16 +119,16 @@ using namespace ::com::sun::star;
 
     // OLDAPPageSetup
     OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs )
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/ldapconnectionpage.ui", "LDAPConnectionPage", _rCoreAttrs)
-        , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
-        , m_xFTHostServer(m_xBuilder->weld_label("hostNameLabel"))
-        , m_xETHostServer(m_xBuilder->weld_entry("hostNameEntry"))
-        , m_xFTBaseDN(m_xBuilder->weld_label("baseDNLabel"))
-        , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
-        , m_xFTPortNumber(m_xBuilder->weld_label("portNumLabel"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumEntry"))
-        , m_xFTDefaultPortNumber(m_xBuilder->weld_label("portNumDefLabel"))
-        , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/ldapconnectionpage.ui"_ustr, u"LDAPConnectionPage"_ustr, _rCoreAttrs)
+        , m_xFTHelpText(m_xBuilder->weld_label(u"helpLabel"_ustr))
+        , m_xFTHostServer(m_xBuilder->weld_label(u"hostNameLabel"_ustr))
+        , m_xETHostServer(m_xBuilder->weld_entry(u"hostNameEntry"_ustr))
+        , m_xFTBaseDN(m_xBuilder->weld_label(u"baseDNLabel"_ustr))
+        , m_xETBaseDN(m_xBuilder->weld_entry(u"baseDNEntry"_ustr))
+        , m_xFTPortNumber(m_xBuilder->weld_label(u"portNumLabel"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumEntry"_ustr))
+        , m_xFTDefaultPortNumber(m_xBuilder->weld_label(u"portNumDefLabel"_ustr))
+        , m_xCBUseSSL(m_xBuilder->weld_check_button(u"useSSLCheckbutton"_ustr))
     {
         m_xETHostServer->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
         m_xETBaseDN->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
@@ -211,10 +211,10 @@ using namespace ::com::sun::star;
     }
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/dbwizmysqlintropage.ui", "DBWizMysqlIntroPage", _rCoreAttrs)
-        , m_xODBCDatabase(m_xBuilder->weld_radio_button("odbc"))
-        , m_xJDBCDatabase(m_xBuilder->weld_radio_button("jdbc"))
-        , m_xNATIVEDatabase(m_xBuilder->weld_radio_button("directly"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/dbwizmysqlintropage.ui"_ustr, u"DBWizMysqlIntroPage"_ustr, _rCoreAttrs)
+        , m_xODBCDatabase(m_xBuilder->weld_radio_button(u"odbc"_ustr))
+        , m_xJDBCDatabase(m_xBuilder->weld_radio_button(u"jdbc"_ustr))
+        , m_xNATIVEDatabase(m_xBuilder->weld_radio_button(u"directly"_ustr))
     {
         m_xODBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_xJDBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
@@ -280,9 +280,9 @@ using namespace ::com::sun::star;
 
     // MySQLNativeSetupPage
     MySQLNativeSetupPage::MySQLNativeSetupPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs )
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/dbwizmysqlnativepage.ui", "DBWizMysqlNativePage", rCoreAttrs)
-        , m_xHelpText(m_xBuilder->weld_label("helptext"))
-        , m_xSettingsContainer(m_xBuilder->weld_container("MySQLSettingsContainer"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/dbwizmysqlnativepage.ui"_ustr, u"DBWizMysqlNativePage"_ustr, rCoreAttrs)
+        , m_xHelpText(m_xBuilder->weld_label(u"helptext"_ustr))
+        , m_xSettingsContainer(m_xBuilder->weld_container(u"MySQLSettingsContainer"_ustr))
         , m_xMySQLSettings(new MySQLNativeSettings(m_xSettingsContainer.get(), LINK(this, OGenericAdministrationPage, OnControlModified)))
     {
         SetRoadmapStateValue(false);
@@ -332,20 +332,20 @@ using namespace ::com::sun::star;
 
     // OMySQLJDBCConnectionPageSetup
     OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, TranslateId pDefaultPortResId, TranslateId pHelpTextResId, TranslateId pHeaderTextResId, TranslateId pDriverClassId)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/specialjdbcconnectionpage.ui", "SpecialJDBCConnectionPage", _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/specialjdbcconnectionpage.ui"_ustr, u"SpecialJDBCConnectionPage"_ustr, _rCoreAttrs)
         , m_nPortId(_nPortId)
-        , m_xHeaderText(m_xBuilder->weld_label("header"))
-        , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
-        , m_xFTDatabasename(m_xBuilder->weld_label("dbNameLabel"))
-        , m_xETDatabasename(m_xBuilder->weld_entry("dbNameEntry"))
-        , m_xFTHostname(m_xBuilder->weld_label("hostNameLabel"))
-        , m_xETHostname(m_xBuilder->weld_entry("hostNameEntry"))
-        , m_xFTPortNumber(m_xBuilder->weld_label("portNumLabel"))
-        , m_xFTDefaultPortNumber(m_xBuilder->weld_label("portNumDefLabel"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumEntry"))
-        , m_xFTDriverClass(m_xBuilder->weld_label("jdbcDriverLabel"))
-        , m_xETDriverClass(m_xBuilder->weld_entry("jdbcDriverEntry"))
-        , m_xPBTestJavaDriver(m_xBuilder->weld_button("testDriverButton"))
+        , m_xHeaderText(m_xBuilder->weld_label(u"header"_ustr))
+        , m_xFTHelpText(m_xBuilder->weld_label(u"helpLabel"_ustr))
+        , m_xFTDatabasename(m_xBuilder->weld_label(u"dbNameLabel"_ustr))
+        , m_xETDatabasename(m_xBuilder->weld_entry(u"dbNameEntry"_ustr))
+        , m_xFTHostname(m_xBuilder->weld_label(u"hostNameLabel"_ustr))
+        , m_xETHostname(m_xBuilder->weld_entry(u"hostNameEntry"_ustr))
+        , m_xFTPortNumber(m_xBuilder->weld_label(u"portNumLabel"_ustr))
+        , m_xFTDefaultPortNumber(m_xBuilder->weld_label(u"portNumDefLabel"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumEntry"_ustr))
+        , m_xFTDriverClass(m_xBuilder->weld_label(u"jdbcDriverLabel"_ustr))
+        , m_xETDriverClass(m_xBuilder->weld_entry(u"jdbcDriverEntry"_ustr))
+        , m_xPBTestJavaDriver(m_xBuilder->weld_button(u"testDriverButton"_ustr))
     {
         m_xFTDriverClass->set_label(DBA_RES(pDriverClassId));
 
@@ -508,12 +508,12 @@ using namespace ::com::sun::star;
 
     // OPostgresConnectionPageSetup
     OPostgresConnectionPageSetup::OPostgresConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs , sal_uInt16 _nPortId )
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/postgrespage.ui", "SpecialPostgresPage", _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/postgrespage.ui"_ustr, u"SpecialPostgresPage"_ustr, _rCoreAttrs)
         , m_nPortId(_nPortId)
-        , m_xETDatabasename(m_xBuilder->weld_entry("dbNameEntry"))
-        , m_xETHostname(m_xBuilder->weld_entry("hostNameEntry"))
-        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumEntry"))
-        , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry("browseurl"), m_xBuilder->weld_label("browselabel")))
+        , m_xETDatabasename(m_xBuilder->weld_entry(u"dbNameEntry"_ustr))
+        , m_xETHostname(m_xBuilder->weld_entry(u"hostNameEntry"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumEntry"_ustr))
+        , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry(u"browseurl"_ustr), m_xBuilder->weld_label(u"browselabel"_ustr)))
     {
         m_xETDatabasename->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
         m_xETHostname->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
@@ -631,11 +631,11 @@ using namespace ::com::sun::star;
 
     // OMySQLJDBCConnectionPageSetup
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
+        : OConnectionTabPageSetup(pPage, pController, u"dbaccess/ui/jdbcconnectionpage.ui"_ustr, u"JDBCConnectionPage"_ustr, rCoreAttrs,
                                 STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
-        , m_xFTDriverClass(m_xBuilder->weld_label("jdbcLabel"))
-        , m_xETDriverClass(m_xBuilder->weld_entry("jdbcEntry"))
-        , m_xPBTestJavaDriver(m_xBuilder->weld_button("jdbcButton"))
+        , m_xFTDriverClass(m_xBuilder->weld_label(u"jdbcLabel"_ustr))
+        , m_xETDriverClass(m_xBuilder->weld_entry(u"jdbcEntry"_ustr))
+        , m_xPBTestJavaDriver(m_xBuilder->weld_button(u"jdbcButton"_ustr))
     {
         m_xETDriverClass->connect_changed(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
         m_xPBTestJavaDriver->connect_clicked(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
@@ -742,9 +742,9 @@ using namespace ::com::sun::star;
     }
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
+        : OConnectionTabPageSetup(pPage, pController, u"dbaccess/ui/dbwizspreadsheetpage.ui"_ustr, u"DBWizSpreadsheetPage"_ustr,
                                  rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
-        , m_xPasswordrequired(m_xBuilder->weld_check_button("passwordrequired"))
+        , m_xPasswordrequired(m_xBuilder->weld_check_button(u"passwordrequired"_ustr))
     {
         m_xPasswordrequired->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
     }
@@ -777,12 +777,12 @@ using namespace ::com::sun::star;
     }
 
     OAuthentificationPageSetup::OAuthentificationPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/authentificationpage.ui", "AuthentificationPage", _rCoreAttrs)
-        , m_xFTHelpText(m_xBuilder->weld_label("helptext"))
-        , m_xFTUserName(m_xBuilder->weld_label("generalUserNameLabel"))
-        , m_xETUserName(m_xBuilder->weld_entry("generalUserNameEntry"))
-        , m_xCBPasswordRequired(m_xBuilder->weld_check_button("passRequiredCheckbutton"))
-        , m_xPBTestConnection(m_xBuilder->weld_button("testConnectionButton"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/authentificationpage.ui"_ustr, u"AuthentificationPage"_ustr, _rCoreAttrs)
+        , m_xFTHelpText(m_xBuilder->weld_label(u"helptext"_ustr))
+        , m_xFTUserName(m_xBuilder->weld_label(u"generalUserNameLabel"_ustr))
+        , m_xETUserName(m_xBuilder->weld_entry(u"generalUserNameEntry"_ustr))
+        , m_xCBPasswordRequired(m_xBuilder->weld_check_button(u"passRequiredCheckbutton"_ustr))
+        , m_xPBTestConnection(m_xBuilder->weld_button(u"testConnectionButton"_ustr))
     {
         m_xETUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
         m_xCBPasswordRequired->connect_toggled(LINK(this,OGenericAdministrationPage,OnControlModifiedButtonClick));
@@ -840,15 +840,15 @@ using namespace ::com::sun::star;
     }
 
     OFinalDBPageSetup::OFinalDBPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/finalpagewizard.ui", "PageFinal", _rCoreAttrs)
-        , m_xFTFinalHeader(m_xBuilder->weld_label("headerText"))
-        , m_xFTFinalHelpText(m_xBuilder->weld_label("helpText"))
-        , m_xRBRegisterDataSource(m_xBuilder->weld_radio_button("yesregister"))
-        , m_xRBDontregisterDataSource(m_xBuilder->weld_radio_button("noregister"))
-        , m_xFTAdditionalSettings(m_xBuilder->weld_label("additionalText"))
-        , m_xCBOpenAfterwards(m_xBuilder->weld_check_button("openediting"))
-        , m_xCBStartTableWizard(m_xBuilder->weld_check_button("usewizard"))
-        , m_xFTFinalText(m_xBuilder->weld_label("finishText"))
+        : OGenericAdministrationPage(pPage, pController, u"dbaccess/ui/finalpagewizard.ui"_ustr, u"PageFinal"_ustr, _rCoreAttrs)
+        , m_xFTFinalHeader(m_xBuilder->weld_label(u"headerText"_ustr))
+        , m_xFTFinalHelpText(m_xBuilder->weld_label(u"helpText"_ustr))
+        , m_xRBRegisterDataSource(m_xBuilder->weld_radio_button(u"yesregister"_ustr))
+        , m_xRBDontregisterDataSource(m_xBuilder->weld_radio_button(u"noregister"_ustr))
+        , m_xFTAdditionalSettings(m_xBuilder->weld_label(u"additionalText"_ustr))
+        , m_xCBOpenAfterwards(m_xBuilder->weld_check_button(u"openediting"_ustr))
+        , m_xCBStartTableWizard(m_xBuilder->weld_check_button(u"usewizard"_ustr))
+        , m_xFTFinalText(m_xBuilder->weld_label(u"finishText"_ustr))
     {
         m_xCBOpenAfterwards->connect_toggled(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_xRBRegisterDataSource->set_active(true);

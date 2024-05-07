@@ -55,12 +55,12 @@ namespace dbaui
     }
     OUString SAL_CALL OTableWindowAccess::getImplementationName()
     {
-        return "org.openoffice.comp.dbu.TableWindowAccessibility";
+        return u"org.openoffice.comp.dbu.TableWindowAccessibility"_ustr;
     }
     Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames()
     {
-        return { "com.sun.star.accessibility.Accessible",
-                 "com.sun.star.accessibility.AccessibleContext" };
+        return { u"com.sun.star.accessibility.Accessible"_ustr,
+                 u"com.sun.star.accessibility.AccessibleContext"_ustr };
     }
     // XAccessibleContext
     sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )

@@ -55,8 +55,8 @@ namespace dbaui
 
     OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OUString& _rId, const SfxItemSet& _rCoreAttrs, TranslateId pHelpTextResId, TranslateId pHeaderResId, TranslateId pUrlResId)
         : OConnectionHelper(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
-        , m_xHelpText(m_xBuilder->weld_label("helptext"))
-        , m_xHeaderText(m_xBuilder->weld_label("header"))
+        , m_xHelpText(m_xBuilder->weld_label(u"helptext"_ustr))
+        , m_xHeaderText(m_xBuilder->weld_label(u"header"_ustr))
     {
 
         if (pHelpTextResId)

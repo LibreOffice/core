@@ -71,7 +71,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDocuments::createF
         case XML_TABLE:
         case XML_TABLE_REPRESENTATION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLTable( GetOwnImport(), xAttrList, m_xContainer, "com.sun.star.sdb.TableDefinition");
+            pContext = new OXMLTable( GetOwnImport(), xAttrList, m_xContainer, u"com.sun.star.sdb.TableDefinition"_ustr);
             break;
         case XML_QUERY:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );

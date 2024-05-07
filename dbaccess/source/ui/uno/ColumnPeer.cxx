@@ -88,7 +88,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         m_pActFieldDescr = new OFieldDescription(_xColumn,true);
         // search for type
         bool bForce;
-        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*rControl.getTypeInfo(),nType,sTypeName,"x",nPrecision,nScale,bAutoIncrement,bForce);
+        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*rControl.getTypeInfo(),nType,sTypeName,u"x"_ustr,nPrecision,nScale,bAutoIncrement,bForce);
         if ( !pTypeInfo )
             pTypeInfo = rControl.getDefaultTyp();
 

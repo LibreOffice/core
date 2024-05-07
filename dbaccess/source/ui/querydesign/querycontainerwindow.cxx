@@ -183,7 +183,7 @@ namespace dbaui
             Reference < XPropertySet > xLMPropSet(m_xBeamer->getLayoutManager(), UNO_QUERY);
             if ( xLMPropSet.is() )
             {
-                xLMPropSet->setPropertyValue( "AutomaticToolbars", Any( false ));
+                xLMPropSet->setPropertyValue( u"AutomaticToolbars"_ustr, Any( false ));
             }
         }
         catch( Exception& )

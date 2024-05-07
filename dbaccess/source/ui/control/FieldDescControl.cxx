@@ -65,8 +65,8 @@ namespace
 }
 
 OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar)
-    : m_xBuilder(Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui"))
-    , m_xContainer(m_xBuilder->weld_container("FieldDescPage"))
+    : m_xBuilder(Application::CreateBuilder(pPage, u"dbaccess/ui/fielddescpage.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"FieldDescPage"_ustr))
     , m_pHelp( pHelpBar )
     , m_pLastFocusWindow(nullptr)
     , m_pActFocusWindow(nullptr)
@@ -389,10 +389,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xDefault)
             return;
         m_nPos++;
-        m_xDefaultText = m_xBuilder->weld_label("DefaultValueText");
+        m_xDefaultText = m_xBuilder->weld_label(u"DefaultValueText"_ustr);
         m_xDefaultText->show();
         m_xDefault = std::make_unique<OPropEditCtrl>(
-                m_xBuilder->weld_entry("DefaultValue"), STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT);
+                m_xBuilder->weld_entry(u"DefaultValue"_ustr), STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT);
         InitializeControl(m_xDefault->GetWidget(),HID_TAB_ENT_DEFAULT);
         m_xDefault->show();
         break;
@@ -400,10 +400,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xAutoIncrementValue || !isAutoIncrementValueEnabled())
             return;
         m_nPos++;
-        m_xAutoIncrementValueText = m_xBuilder->weld_label("AutoIncrementValueText");
+        m_xAutoIncrementValueText = m_xBuilder->weld_label(u"AutoIncrementValueText"_ustr);
         m_xAutoIncrementValueText->show();
         m_xAutoIncrementValue = std::make_unique<OPropEditCtrl>(
-                m_xBuilder->weld_spin_button("AutoIncrementValue"), STR_HELP_AUTOINCREMENT_VALUE,
+                m_xBuilder->weld_spin_button(u"AutoIncrementValue"_ustr), STR_HELP_AUTOINCREMENT_VALUE,
                 FIELD_PROPERTY_AUTOINCREMENT);
         m_xAutoIncrementValue->set_text( getAutoIncrementValue() );
         InitializeControl(m_xAutoIncrementValue->GetWidget(),HID_TAB_AUTOINCREMENTVALUE);
@@ -419,10 +419,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if(xMetaData.is() && xMetaData->supportsNonNullableColumns())
         {
             m_nPos++;
-            m_xRequiredText = m_xBuilder->weld_label("RequiredText");
+            m_xRequiredText = m_xBuilder->weld_label(u"RequiredText"_ustr);
             m_xRequiredText->show();
             m_xRequired = std::make_unique<OPropListBoxCtrl>(
-                    m_xBuilder->weld_combo_box("Required"), STR_HELP_AUTOINCREMENT_VALUE,
+                    m_xBuilder->weld_combo_box(u"Required"_ustr), STR_HELP_AUTOINCREMENT_VALUE,
                     FIELD_PROPERTY_AUTOINCREMENT);
             m_xRequired->append_text(aYes);
             m_xRequired->append_text(aNo);
@@ -438,10 +438,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xAutoIncrement)
             return;
         m_nPos++;
-        m_xAutoIncrementText = m_xBuilder->weld_label("AutoIncrementText");
+        m_xAutoIncrementText = m_xBuilder->weld_label(u"AutoIncrementText"_ustr);
         m_xAutoIncrementText->show();
         m_xAutoIncrement = std::make_unique<OPropListBoxCtrl>(
-                m_xBuilder->weld_combo_box("AutoIncrement"), STR_HELP_AUTOINCREMENT,
+                m_xBuilder->weld_combo_box(u"AutoIncrement"_ustr), STR_HELP_AUTOINCREMENT,
                 FIELD_PROPERTY_AUTOINC);
         m_xAutoIncrement->append_text(aYes);
         m_xAutoIncrement->append_text(aNo);
@@ -454,19 +454,19 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xTextLen)
             return;
         m_nPos++;
-        m_xTextLenText = m_xBuilder->weld_label("TextLengthText");
+        m_xTextLenText = m_xBuilder->weld_label(u"TextLengthText"_ustr);
         m_xTextLenText->show();
-        m_xTextLen = CreateNumericControl("TextLength", STR_HELP_TEXT_LENGTH, FIELD_PROPERTY_TEXTLEN,HID_TAB_ENT_TEXT_LEN);
+        m_xTextLen = CreateNumericControl(u"TextLength"_ustr, STR_HELP_TEXT_LENGTH, FIELD_PROPERTY_TEXTLEN,HID_TAB_ENT_TEXT_LEN);
         break;
 
     case tpType:
         if (m_xType)
             return;
         m_nPos++;
-        m_xTypeText = m_xBuilder->weld_label("TypeText");
+        m_xTypeText = m_xBuilder->weld_label(u"TypeText"_ustr);
         m_xTypeText->show();
         m_xType = std::make_unique<OPropListBoxCtrl>(
-                m_xBuilder->weld_combo_box("Type"), STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE);
+                m_xBuilder->weld_combo_box(u"Type"_ustr), STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
             for (auto const& elem : *pTypeInfo)
@@ -496,10 +496,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             {
                 DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
-            m_xColumnNameText = m_xBuilder->weld_label("ColumnNameText");
+            m_xColumnNameText = m_xBuilder->weld_label(u"ColumnNameText"_ustr);
             m_xColumnNameText->show();
             m_xColumnName = std::make_unique<OPropColumnEditCtrl>(
-                    m_xBuilder->weld_entry("ColumnName"), aTmpString,
+                    m_xBuilder->weld_entry(u"ColumnName"_ustr), aTmpString,
                     STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_COLUMNNAME);
             m_xColumnName->set_max_length(nMax);
             m_xColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
@@ -512,15 +512,15 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xNumType)
             return;
         m_nPos++;
-        m_xNumTypeText = m_xBuilder->weld_label("NumTypeText");
+        m_xNumTypeText = m_xBuilder->weld_label(u"NumTypeText"_ustr);
         m_xNumTypeText->show();
         m_xNumType = std::make_unique<OPropListBoxCtrl>(
-                m_xBuilder->weld_combo_box("NumType"), STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE);
-        m_xNumType->append_text("Byte");
-        m_xNumType->append_text("SmallInt");
-        m_xNumType->append_text("Integer");
-        m_xNumType->append_text("Single");
-        m_xNumType->append_text("Double");
+                m_xBuilder->weld_combo_box(u"NumType"_ustr), STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE);
+        m_xNumType->append_text(u"Byte"_ustr);
+        m_xNumType->append_text(u"SmallInt"_ustr);
+        m_xNumType->append_text(u"Integer"_ustr);
+        m_xNumType->append_text(u"Single"_ustr);
+        m_xNumType->append_text(u"Double"_ustr);
         m_xNumType->set_active(2);
         InitializeControl(m_xNumType.get(),HID_TAB_ENT_NUMTYP, true);
         m_xNumType->show();
@@ -530,35 +530,35 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (m_xLength)
             return;
         m_nPos++;
-        m_xLengthText = m_xBuilder->weld_label("LengthText");
+        m_xLengthText = m_xBuilder->weld_label(u"LengthText"_ustr);
         m_xLengthText->show();
-        m_xLength = CreateNumericControl("Length", STR_HELP_LENGTH, FIELD_PROPERTY_LENGTH,HID_TAB_ENT_LEN);
+        m_xLength = CreateNumericControl(u"Length"_ustr, STR_HELP_LENGTH, FIELD_PROPERTY_LENGTH,HID_TAB_ENT_LEN);
         break;
 
     case tpScale:
         if (m_xScale)
             return;
         m_nPos++;
-        m_xScaleText = m_xBuilder->weld_label("ScaleText");
+        m_xScaleText = m_xBuilder->weld_label(u"ScaleText"_ustr);
         m_xScaleText->show();
-        m_xScale = CreateNumericControl("Scale", STR_HELP_SCALE, FIELD_PROPERTY_SCALE,HID_TAB_ENT_SCALE);
+        m_xScale = CreateNumericControl(u"Scale"_ustr, STR_HELP_SCALE, FIELD_PROPERTY_SCALE,HID_TAB_ENT_SCALE);
         break;
 
     case tpFormat:
         if (!m_xFormat)
         {
             m_nPos++;
-            m_xFormatText = m_xBuilder->weld_label("FormatTextText");
+            m_xFormatText = m_xBuilder->weld_label(u"FormatTextText"_ustr);
             m_xFormatText->show();
 
             m_xFormatSample = std::make_unique<OPropEditCtrl>(
-                    m_xBuilder->weld_entry("FormatText"), STR_HELP_FORMAT_CODE, -1);
+                    m_xBuilder->weld_entry(u"FormatText"_ustr), STR_HELP_FORMAT_CODE, -1);
             m_xFormatSample->set_editable(false);
             m_xFormatSample->set_sensitive(false);
             InitializeControl(m_xFormatSample->GetWidget(),HID_TAB_ENT_FORMAT_SAMPLE);
             m_xFormatSample->show();
 
-            m_xFormat = m_xBuilder->weld_button("FormatButton");
+            m_xFormat = m_xBuilder->weld_button(u"FormatButton"_ustr);
             m_xFormat->connect_clicked( LINK( this, OFieldDescControl, FormatClickHdl ) );
             InitializeControl(m_xFormat.get(),HID_TAB_ENT_FORMAT);
             m_xFormat->show();
@@ -571,10 +571,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
 
         m_nPos++;
-        m_xBoolDefaultText = m_xBuilder->weld_label("BoolDefaultText");
+        m_xBoolDefaultText = m_xBuilder->weld_label(u"BoolDefaultText"_ustr);
         m_xBoolDefaultText->show();
         m_xBoolDefault = std::make_unique<OPropListBoxCtrl>(
-                m_xBuilder->weld_combo_box("BoolDefault"), STR_HELP_BOOL_DEFAULT,
+                m_xBuilder->weld_combo_box(u"BoolDefault"_ustr), STR_HELP_BOOL_DEFAULT,
                 FIELD_PROPERTY_BOOL_DEFAULT);
         m_xBoolDefault->append_text(DBA_RES(STR_VALUE_NONE));
         m_xBoolDefault->append_text(aYes);
@@ -1311,12 +1311,12 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             OUString sFormat;
-            xFormSet->getPropertyValue("FormatString") >>= sFormat;
+            xFormSet->getPropertyValue(u"FormatString"_ustr) >>= sFormat;
 
             if ( !bTextFormat )
             {
                 Locale aLocale;
-                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,"Locale") >>= aLocale;
+                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,u"Locale"_ustr) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
                 if(     (nNumberFormat & css::util::NumberFormat::DATE)    == css::util::NumberFormat::DATE

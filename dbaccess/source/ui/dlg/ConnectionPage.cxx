@@ -49,16 +49,16 @@ namespace dbaui
 
     // OConnectionTabPage
     OConnectionTabPage::OConnectionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
-        : OConnectionHelper(pPage, pController, "dbaccess/ui/connectionpage.ui", "ConnectionPage", _rCoreAttrs)
-        , m_xFL2(m_xBuilder->weld_label("userlabel"))
-        , m_xUserNameLabel(m_xBuilder->weld_label("userNameLabel"))
-        , m_xUserName(m_xBuilder->weld_entry("userNameEntry"))
-        , m_xPasswordRequired(m_xBuilder->weld_check_button("passCheckbutton"))
-        , m_xFL3(m_xBuilder->weld_label("JDBCLabel"))
-        , m_xJavaDriverLabel(m_xBuilder->weld_label("javaDriverLabel"))
-        , m_xJavaDriver(m_xBuilder->weld_entry("driverEntry"))
-        , m_xTestJavaDriver(m_xBuilder->weld_button("driverButton"))
-        , m_xTestConnection(m_xBuilder->weld_button("connectionButton"))
+        : OConnectionHelper(pPage, pController, u"dbaccess/ui/connectionpage.ui"_ustr, u"ConnectionPage"_ustr, _rCoreAttrs)
+        , m_xFL2(m_xBuilder->weld_label(u"userlabel"_ustr))
+        , m_xUserNameLabel(m_xBuilder->weld_label(u"userNameLabel"_ustr))
+        , m_xUserName(m_xBuilder->weld_entry(u"userNameEntry"_ustr))
+        , m_xPasswordRequired(m_xBuilder->weld_check_button(u"passCheckbutton"_ustr))
+        , m_xFL3(m_xBuilder->weld_label(u"JDBCLabel"_ustr))
+        , m_xJavaDriverLabel(m_xBuilder->weld_label(u"javaDriverLabel"_ustr))
+        , m_xJavaDriver(m_xBuilder->weld_entry(u"driverEntry"_ustr))
+        , m_xTestJavaDriver(m_xBuilder->weld_button(u"driverButton"_ustr))
+        , m_xTestConnection(m_xBuilder->weld_button(u"connectionButton"_ustr))
     {
         m_xConnectionURL->connect_changed(LINK(this, OConnectionTabPage, OnEditModified));
         m_xJavaDriver->connect_changed(LINK(this, OConnectionTabPage, OnEditModified));

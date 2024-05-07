@@ -1475,7 +1475,7 @@ namespace
                     for (auto const& table : rTabList)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(table.second.get());
-                        if (pTabWin->ExistsField( "*", aDragLeft ))
+                        if (pTabWin->ExistsField( u"*"_ustr, aDragLeft ))
                         {
                             aDragLeft->SetAlias(OUString());
                             aDragLeft->SetTable(OUString());
@@ -2026,7 +2026,7 @@ namespace
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(table.second.get());
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
-            if (pTabWin->ExistsField( "*", aInfo ))
+            if (pTabWin->ExistsField( u"*"_ustr, aInfo ))
             {
                 eErrorCode = _pView->InsertField(aInfo, bFirstField);
                 bFirstField = false;
@@ -2122,7 +2122,7 @@ namespace
                                 for (auto const& table : *pTabList)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(table.second.get());
-                                    if (pTabWin->ExistsField( "*", aInfo ))
+                                    if (pTabWin->ExistsField( u"*"_ustr, aInfo ))
                                     {
                                         aInfo->SetAlias(OUString());
                                         aInfo->SetTable(OUString());
@@ -2624,7 +2624,7 @@ SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, bo
 
 sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 {
-    static sal_Int32 s_nDefaultWidth = GetTextWidth("0") * 15;
+    static sal_Int32 s_nDefaultWidth = GetTextWidth(u"0"_ustr) * 15;
     sal_Int32 nWidth = static_cast<OQueryController&>(getController()).getColWidth(_nColPos);
     if ( !nWidth )
         nWidth = s_nDefaultWidth;

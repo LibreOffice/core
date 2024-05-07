@@ -214,7 +214,7 @@ void OQuery::rebuildColumns()
 // XServiceInfo
 OUString SAL_CALL OQuery::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.OQuery";
+        return u"com.sun.star.sdb.dbaccess.OQuery"_ustr;
     }
 sal_Bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
     {
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
     }
 css::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
 {
-    return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition" };
+    return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, u"com.sun.star.sdb.QueryDefinition"_ustr };
 }
 
 // css::beans::XPropertyChangeListener
@@ -374,7 +374,7 @@ void OQuery::registerProperties()
 
 OUString OQuery::determineContentType() const
 {
-    return "application/vnd.org.openoffice.DatabaseQuery";
+    return u"application/vnd.org.openoffice.DatabaseQuery"_ustr;
 }
 
 }   // namespace dbaccess

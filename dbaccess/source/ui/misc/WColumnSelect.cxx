@@ -46,13 +46,13 @@ OWizardPage::~OWizardPage()
 
 // OWizColumnSelect
 OWizColumnSelect::OWizColumnSelect(weld::Container* pPage, OCopyTableWizard* pWizard)
-    : OWizardPage(pPage, pWizard, "dbaccess/ui/applycolpage.ui", "ApplyColPage")
-    , m_xOrgColumnNames(m_xBuilder->weld_tree_view("from"))
-    , m_xColumn_RH(m_xBuilder->weld_button("colrh"))
-    , m_xColumns_RH(m_xBuilder->weld_button("colsrh"))
-    , m_xColumn_LH(m_xBuilder->weld_button("collh"))
-    , m_xColumns_LH(m_xBuilder->weld_button("colslh"))
-    , m_xNewColumnNames(m_xBuilder->weld_tree_view("to"))
+    : OWizardPage(pPage, pWizard, u"dbaccess/ui/applycolpage.ui"_ustr, u"ApplyColPage"_ustr)
+    , m_xOrgColumnNames(m_xBuilder->weld_tree_view(u"from"_ustr))
+    , m_xColumn_RH(m_xBuilder->weld_button(u"colrh"_ustr))
+    , m_xColumns_RH(m_xBuilder->weld_button(u"colsrh"_ustr))
+    , m_xColumn_LH(m_xBuilder->weld_button(u"collh"_ustr))
+    , m_xColumns_LH(m_xBuilder->weld_button(u"colslh"_ustr))
+    , m_xNewColumnNames(m_xBuilder->weld_tree_view(u"to"_ustr))
 {
     m_xColumn_RH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));
     m_xColumn_LH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));

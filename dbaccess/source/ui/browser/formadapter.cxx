@@ -224,7 +224,7 @@ void SbaXFormAdapter::StartListening()
     {
         Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
-            xBroadcaster->addPropertiesChangeListener(css::uno::Sequence<OUString>{""}, &m_aPropertiesChangeListeners);
+            xBroadcaster->addPropertiesChangeListener(css::uno::Sequence<OUString>{u""_ustr}, &m_aPropertiesChangeListeners);
     }
 
     // log off ourself
@@ -1422,7 +1422,7 @@ void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUStr
     {
         Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
-            xBroadcaster->addPropertiesChangeListener(Sequence< OUString>{""}, &m_aPropertiesChangeListeners);
+            xBroadcaster->addPropertiesChangeListener(Sequence< OUString>{u""_ustr}, &m_aPropertiesChangeListeners);
     }
 }
 

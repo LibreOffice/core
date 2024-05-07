@@ -40,7 +40,7 @@ public:
 
 
 RowSetClones::RowSetClones()
-    : UnoApiTest("")
+    : UnoApiTest(u""_ustr)
 {
 }
 
@@ -54,16 +54,16 @@ void RowSetClones::test()
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
 
-    uno::Reference< XConnection > xConnection = xDataSource->getConnection("","");
+    uno::Reference< XConnection > xConnection = xDataSource->getConnection(u""_ustr,u""_ustr);
     CPPUNIT_ASSERT(xConnection.is());
 
-    uno::Reference< XRowSet > xRowSet (getMultiServiceFactory()->createInstance("com.sun.star.sdb.RowSet" ), UNO_QUERY);
+    uno::Reference< XRowSet > xRowSet (getMultiServiceFactory()->createInstance(u"com.sun.star.sdb.RowSet"_ustr ), UNO_QUERY);
     CPPUNIT_ASSERT(xRowSet.is());
     uno::Reference< XPropertySet > rowSetProperties ( xRowSet, UNO_QUERY );
     CPPUNIT_ASSERT(rowSetProperties.is());
-    rowSetProperties->setPropertyValue("Command", Any(OUString("SELECT * FROM Assets ORDER BY AssetID")));
-    rowSetProperties->setPropertyValue("CommandType", Any(CommandType::COMMAND));
-    rowSetProperties->setPropertyValue("ActiveConnection", Any(xConnection));
+    rowSetProperties->setPropertyValue(u"Command"_ustr, Any(u"SELECT * FROM Assets ORDER BY AssetID"_ustr));
+    rowSetProperties->setPropertyValue(u"CommandType"_ustr, Any(CommandType::COMMAND));
+    rowSetProperties->setPropertyValue(u"ActiveConnection"_ustr, Any(xConnection));
 
     xRowSet->execute();
     uno::Reference< XResultSet > xResultSet = xRowSet;

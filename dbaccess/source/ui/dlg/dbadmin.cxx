@@ -44,8 +44,8 @@ using namespace com::sun::star::beans;
 ODbAdminDialog::ODbAdminDialog(weld::Window* pParent,
                                SfxItemSet const * _pItems,
                                const Reference< XComponentContext >& _rxContext)
-    : SfxTabDialogController(pParent, "dbaccess/ui/admindialog.ui", "AdminDialog", _pItems)
-    , m_sMainPageID("advanced")
+    : SfxTabDialogController(pParent, u"dbaccess/ui/admindialog.ui"_ustr, u"AdminDialog"_ustr, _pItems)
+    , m_sMainPageID(u"advanced"_ustr)
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
 
@@ -97,35 +97,35 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
     switch ( eType )
     {
         case  ::dbaccess::DST_DBASE:
-            addDetailPage("dbase", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
+            addDetailPage(u"dbase"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
             break;
 
         case  ::dbaccess::DST_ADO:
-            addDetailPage("ado", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdo);
+            addDetailPage(u"ado"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdo);
             break;
 
         case  ::dbaccess::DST_FLAT:
-            addDetailPage("text", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
+            addDetailPage(u"text"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
             break;
 
         case  ::dbaccess::DST_ODBC:
-            addDetailPage("odbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateODBC);
+            addDetailPage(u"odbc"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateODBC);
             break;
 
         case  ::dbaccess::DST_MYSQL_ODBC:
-            addDetailPage("mysqlodbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
+            addDetailPage(u"mysqlodbc"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
             break;
 
         case  ::dbaccess::DST_MYSQL_JDBC:
-            addDetailPage("mysqljdbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
+            addDetailPage(u"mysqljdbc"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
             break;
 
         case  ::dbaccess::DST_ORACLE_JDBC:
-            addDetailPage("oraclejdbc", STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
+            addDetailPage(u"oraclejdbc"_ustr, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
             break;
 
         case  ::dbaccess::DST_LDAP:
-            addDetailPage("ldap",STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
+            addDetailPage(u"ldap"_ustr,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
         case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
         case  ::dbaccess::DST_USERDEFINE2:
@@ -180,9 +180,9 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     if ( pCollection->determineType(getDatasourceType( *m_xExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
-        OUString sMySqlNative("mysqlnative");
+        OUString sMySqlNative(u"mysqlnative"_ustr);
         AddTabPage(sMySqlNative, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE);
-        RemoveTabPage("advanced");
+        RemoveTabPage(u"advanced"_ustr);
         m_sMainPageID = sMySqlNative;
     }
 
@@ -292,7 +292,7 @@ static ItemInfoPackage& getItemInfoPackageAdminDlg()
             { DSID_TEXTDELIMITER, new SfxStringItem(DSID_TEXTDELIMITER, OUString('"')), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_DECIMALDELIMITER, new SfxStringItem(DSID_DECIMALDELIMITER, OUString('.')), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_THOUSANDSDELIMITER, new SfxStringItem(DSID_THOUSANDSDELIMITER, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
-            { DSID_TEXTFILEEXTENSION, new SfxStringItem(DSID_TEXTFILEEXTENSION, "txt"), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_TEXTFILEEXTENSION, new SfxStringItem(DSID_TEXTFILEEXTENSION, u"txt"_ustr), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_TEXTFILEHEADER, new SfxBoolItem(DSID_TEXTFILEHEADER, true), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_PARAMETERNAMESUBST, new SfxBoolItem(DSID_PARAMETERNAMESUBST, false), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_CONN_PORTNUMBER, new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100), 0, SFX_ITEMINFOFLAG_NONE },
@@ -362,7 +362,7 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Ref
     // just to be sure...
     _rpSet = nullptr;
     _rpPool = nullptr;
-    _rpPool = new SfxItemPool("DSAItemPool");
+    _rpPool = new SfxItemPool(u"DSAItemPool"_ustr);
 
     // here we have to use the callback to create all needed default entries since
     // the DSID_TYPECOLLECTION needs the local given _pTypeCollection. Thus this will

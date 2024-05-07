@@ -107,7 +107,7 @@ namespace dbaui
                     Reference< XComponentSupplier > xCompSupp( i_rComponent, UNO_QUERY_THROW );
                     Reference< XComponent > xComponent( xCompSupp->getComponent(), UNO_QUERY_THROW );
                     if ( !impl_constructFrom( xComponent ) )
-                        throw RuntimeException("Illegal component type." );
+                        throw RuntimeException(u"Illegal component type."_ustr );
                     xComponentCommandProcessor.set( i_rComponent, UNO_QUERY_THROW );
                     xDocumentDefinitionProperties.set( i_rComponent, UNO_QUERY_THROW );
                 }

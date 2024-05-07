@@ -52,9 +52,9 @@ class LimitBox final : public InterimItemWindow
 {
 public:
     LimitBox(vcl::Window* pParent, LimitBoxController* pCtrl)
-        : InterimItemWindow(pParent, "dbaccess/ui/limitbox.ui", "LimitBox")
+        : InterimItemWindow(pParent, u"dbaccess/ui/limitbox.ui"_ustr, u"LimitBox"_ustr)
         , m_pControl( pCtrl )
-        , m_xWidget(m_xBuilder->weld_combo_box("limit"))
+        , m_xWidget(m_xBuilder->weld_combo_box(u"limit"_ustr))
     {
         InitControlBase(m_xWidget.get());
 
@@ -117,7 +117,7 @@ private:
                 nLimit = -1;
         }
         set_value(nLimit);
-        m_pControl->dispatchCommand({ comphelper::makePropertyValue("DBLimit.Value", nLimit) });
+        m_pControl->dispatchCommand({ comphelper::makePropertyValue(u"DBLimit.Value"_ustr, nLimit) });
     }
 
     ///Initialize entries
@@ -188,7 +188,7 @@ LimitBoxController::~LimitBoxController()
 /// XServiceInfo
 OUString SAL_CALL LimitBoxController::getImplementationName()
 {
-    return "org.libreoffice.comp.dbu.LimitBoxController";
+    return u"org.libreoffice.comp.dbu.LimitBoxController"_ustr;
 }
 
 sal_Bool SAL_CALL LimitBoxController::supportsService(const OUString& _rServiceName)
@@ -203,7 +203,7 @@ sal_Bool SAL_CALL LimitBoxController::supportsService(const OUString& _rServiceN
 
 css::uno::Sequence< OUString > SAL_CALL LimitBoxController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 /// XComponent

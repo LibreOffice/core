@@ -130,7 +130,7 @@ void OQueryContainer::disposing()
 // XServiceInfo
 OUString SAL_CALL OQueryContainer::getImplementationName()
     {
-        return "com.sun.star.sdb.dbaccess.OQueryContainer";
+        return u"com.sun.star.sdb.dbaccess.OQueryContainer"_ustr;
     }
 sal_Bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
     {
@@ -345,7 +345,7 @@ void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource
 
 OUString OQueryContainer::determineContentType() const
 {
-    return "application/vnd.org.openoffice.DatabaseQueryContainer";
+    return u"application/vnd.org.openoffice.DatabaseQueryContainer"_ustr;
 }
 
 Reference< XContent > OQueryContainer::implCreateWrapper(const OUString& _rName)

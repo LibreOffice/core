@@ -176,11 +176,11 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( "_db",
+    GetNamespaceMap().Add( u"_db"_ustr,
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
 
-    GetNamespaceMap().Add( "__db",
+    GetNamespaceMap().Add( u"__db"_ustr,
                         GetXMLToken(XML_N_DB_OASIS),
                         XML_NAMESPACE_DB );
 }
@@ -194,7 +194,7 @@ ODBFilter::~ODBFilter() noexcept
 
 OUString ODBFilter::getImplementationName_Static()
 {
-    return "com.sun.star.comp.sdb.DBFilter";
+    return u"com.sun.star.comp.sdb.DBFilter"_ustr;
 }
 
 
@@ -244,10 +244,10 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     bool bRet = true;
     if (!xStorage.is())
     {
-        if (aMediaDescriptor.has("URL"))
-            sFileName = aMediaDescriptor.getOrDefault("URL", OUString());
-        if (sFileName.isEmpty() && aMediaDescriptor.has("FileName"))
-            sFileName = aMediaDescriptor.getOrDefault("FileName", sFileName);
+        if (aMediaDescriptor.has(u"URL"_ustr))
+            sFileName = aMediaDescriptor.getOrDefault(u"URL"_ustr, OUString());
+        if (sFileName.isEmpty() && aMediaDescriptor.has(u"FileName"_ustr))
+            sFileName = aMediaDescriptor.getOrDefault(u"FileName"_ustr, sFileName);
 
         OSL_ENSURE(!sFileName.isEmpty(), "ODBFilter::implImport: no URL given!");
         bRet = !sFileName.isEmpty();

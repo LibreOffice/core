@@ -433,9 +433,9 @@ namespace dbaui
     OTableListBoxControl::OTableListBoxControl(weld::Builder* _pParent,
         const OJoinTableView::OTableWindowMap* _pTableMap,
         IRelationControlInterface* _pParentDialog)
-        : m_xLeftTable(_pParent->weld_combo_box("table1"))
-        , m_xRightTable(_pParent->weld_combo_box("table2"))
-        , m_xTable(_pParent->weld_container("relations"))
+        : m_xLeftTable(_pParent->weld_combo_box(u"table1"_ustr))
+        , m_xRightTable(_pParent->weld_combo_box(u"table2"_ustr))
+        , m_xTable(_pParent->weld_container(u"relations"_ustr))
         , m_xTableCtrlParent(m_xTable->CreateChildFrame())
         , m_xRC_Tables(VclPtr<ORelationControl>::Create(m_xTableCtrlParent))
         , m_pTableMap(_pTableMap)

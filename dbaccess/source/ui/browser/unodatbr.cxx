@@ -151,12 +151,12 @@ static void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, c
 
 OUString SAL_CALL SbaTableQueryBrowser::getImplementationName()
 {
-    return "org.openoffice.comp.dbu.ODatasourceBrowser";
+    return u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.DataSourceBrowser" };
+    return { u"com.sun.star.sdb.DataSourceBrowser"_ustr };
 }
 
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >& _rM)
@@ -417,7 +417,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         {
             // reset the complete order statement at both the row set and the parser
             xRowSetProps->setPropertyValue( PROPERTY_ORDER, Any( OUString() ) );
-            xComposer->setOrder( "" );
+            xComposer->setOrder( u""_ustr );
         }
 
         // check if the columns participating in the filter refer to existing tables
@@ -523,9 +523,9 @@ void SbaTableQueryBrowser::initializePreviewMode()
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
     if ( xDataSourceSet.is() )
     {
-        xDataSourceSet->setPropertyValue("AllowInserts",Any(false));
-        xDataSourceSet->setPropertyValue("AllowUpdates",Any(false));
-        xDataSourceSet->setPropertyValue("AllowDeletes",Any(false));
+        xDataSourceSet->setPropertyValue(u"AllowInserts"_ustr,Any(false));
+        xDataSourceSet->setPropertyValue(u"AllowUpdates"_ustr,Any(false));
+        xDataSourceSet->setPropertyValue(u"AllowDeletes"_ustr,Any(false));
     }
 }
 
@@ -1252,7 +1252,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
     for (auto & externalFeature : m_aExternalFeatures)
     {
         externalFeature.second.xDispatcher = xProvider->queryDispatch(
-            externalFeature.second.aURL, "_parent", FrameSearchFlag::PARENT
+            externalFeature.second.aURL, u"_parent"_ustr, FrameSearchFlag::PARENT
         );
 
         if ( externalFeature.second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
@@ -1459,7 +1459,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< css::frame::XFrame > & _
     Reference< XFrame > xCurrentFrame( getFrame() );
     if ( xCurrentFrame.is() )
     {
-        m_xCurrentFrameParent = xCurrentFrame->findFrame("_parent",FrameSearchFlag::PARENT);
+        m_xCurrentFrameParent = xCurrentFrame->findFrame(u"_parent"_ustr,FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
 
@@ -1468,13 +1468,13 @@ void SbaTableQueryBrowser::attachFrame(const Reference< css::frame::XFrame > & _
         {
             Reference< XPropertySet > xFrameProps( m_aCurrentFrame.getFrame(), UNO_QUERY_THROW );
             Reference< XLayoutManager > xLayouter(
-                xFrameProps->getPropertyValue("LayoutManager"),
+                xFrameProps->getPropertyValue(u"LayoutManager"_ustr),
                 UNO_QUERY );
 
             if ( xLayouter.is() )
             {
                 Reference< XUIElement > xUI(
-                    xLayouter->getElement( "private:resource/toolbar/toolbar" ),
+                    xLayouter->getElement( u"private:resource/toolbar/toolbar"_ustr ),
                     UNO_SET_THROW );
                 m_xMainToolbar.set(xUI->getRealInterface(), css::uno::UNO_QUERY);
                 OSL_ENSURE( m_xMainToolbar.is(), "SbaTableQueryBrowser::attachFrame: where's my toolbox?" );
@@ -1655,7 +1655,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             else if ( nId == ID_TREE_EDIT_DATABASE )
             {
                 ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( getORB(),
-                    "/org.openoffice.Office.DataAccess/Policies/Features/Common" ) );
+                    u"/org.openoffice.Office.DataAccess/Policies/Features/Common"_ustr ) );
                 bool bHaveEditDatabase( true );
                 OSL_VERIFY( aConfig.getNodeValue( "EditDatabaseFromDataSourceView" ) >>= bHaveEditDatabase );
                 aReturn.bEnabled = getORB().is() && xDataSourceEntry && bHaveEditDatabase;
@@ -2655,7 +2655,7 @@ bool SbaTableQueryBrowser::implSelect(const weld::TreeIter* pEntry)
                                                 OUString sReplace = sSql.replaceFirst(sFilter, "");
                                                 xAnalyzer->setQuery(sReplace);
                                                 Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
-                                                xComposer->setFilter("0=1");
+                                                xComposer->setFilter(u"0=1"_ustr);
                                                 aName = xAnalyzer->getQuery();
                                                 nCommandType = CommandType::COMMAND;
                                             }
@@ -3120,22 +3120,22 @@ void SbaTableQueryBrowser::impl_initialize(const ::comphelper::NamedValueCollect
     rArguments.get_ensureType( PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
     rArguments.get_ensureType( PROPERTY_UPDATE_TABLENAME, aTableName );
     rArguments.get_ensureType( PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing );
-    rArguments.get_ensureType( "Frame", xFrame );
+    rArguments.get_ensureType( u"Frame"_ustr, xFrame );
     rArguments.get_ensureType( PROPERTY_SHOWMENU, m_bShowMenu );
 
     // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
     // is present and set to FALSE
-    bool bDisableBrowser =  !rArguments.getOrDefault( "ShowTreeViewButton", true )   // compatibility name
+    bool bDisableBrowser =  !rArguments.getOrDefault( u"ShowTreeViewButton"_ustr, true )   // compatibility name
                             ||  !rArguments.getOrDefault( PROPERTY_ENABLE_BROWSER, true );
-    OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
+    OSL_ENSURE( !rArguments.has( u"ShowTreeViewButton"_ustr ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
     m_bEnableBrowser = !bDisableBrowser;
 
     // hide the tree view it is disabled in general, or if the settings tell to hide it initially
     bool bHideTreeView =    ( !m_bEnableBrowser )
-                            ||  !rArguments.getOrDefault( "ShowTreeView", true )  // compatibility name
+                            ||  !rArguments.getOrDefault( u"ShowTreeView"_ustr, true )  // compatibility name
                             ||  !rArguments.getOrDefault( PROPERTY_SHOW_BROWSER, true );
-    OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
+    OSL_ENSURE( !rArguments.has( u"ShowTreeView"_ustr ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
 
     if ( bHideTreeView )
@@ -3149,7 +3149,7 @@ void SbaTableQueryBrowser::impl_initialize(const ::comphelper::NamedValueCollect
         {
             Sequence< OUString> aProperties
             {
-                "AlwaysShowCursor", PROPERTY_BORDER, "HasNavigationBar", "HasRecordMarker", "Tabstop"
+                u"AlwaysShowCursor"_ustr, PROPERTY_BORDER, u"HasNavigationBar"_ustr, u"HasRecordMarker"_ustr, u"Tabstop"_ustr
             };
             Sequence< Any> aValues
             {
@@ -3458,16 +3458,16 @@ void SbaTableQueryBrowser::implAdministrate(const weld::TreeIter& rApplyTo)
                 InteractionHandler::createWithParent(getORB(), nullptr) );
 
             ::comphelper::NamedValueCollection aLoadArgs;
-            aLoadArgs.put( "Model", xDocumentModel );
-            aLoadArgs.put( "InteractionHandler", xInteractionHandler );
-            aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+            aLoadArgs.put( u"Model"_ustr, xDocumentModel );
+            aLoadArgs.put( u"InteractionHandler"_ustr, xInteractionHandler );
+            aLoadArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
 
             Sequence< PropertyValue > aLoadArgPV;
             aLoadArgs >>= aLoadArgPV;
 
             xFrameLoader->loadComponentFromURL(
                 xDocumentModel->getURL(),
-                "_default",
+                u"_default"_ustr,
                 FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL,
                 aLoadArgPV
             );
@@ -3492,7 +3492,7 @@ bool SbaTableQueryBrowser::requestQuickHelp(const void* pUserData, OUString& rTe
 
 OUString SbaTableQueryBrowser::getContextMenuResourceName() const
 {
-    return "explorer";
+    return u"explorer"_ustr;
 }
 
 IController& SbaTableQueryBrowser::getCommandController()
@@ -3641,7 +3641,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
+            xLayoutManager->createElement( u"private:resource/toolbar/toolbar"_ustr );
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }

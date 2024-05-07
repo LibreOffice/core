@@ -32,7 +32,7 @@ public:
 void HsqlBinaryImportTest::setUp()
 {
     DBTestBase::setUp();
-    osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
+    osl_setEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr.pData, u"1"_ustr.pData);
 }
 
 void HsqlBinaryImportTest::testBinaryImport()
@@ -56,16 +56,16 @@ void HsqlBinaryImportTest::testBinaryImport()
     uno::Reference<XStatement> statement = xConnection->createStatement();
 
     uno::Reference<XResultSet> xRes
-        = statement->executeQuery("SELECT \"ID\", \"Power_value\", \"Power_name\", \"Retired\", "
-                                  "\"Birth_date\" FROM \"TestTable\" ORDER BY \"ID\"");
+        = statement->executeQuery(u"SELECT \"ID\", \"Power_value\", \"Power_name\", \"Retired\", "
+                                  "\"Birth_date\" FROM \"TestTable\" ORDER BY \"ID\""_ustr);
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // assert first row
     CPPUNIT_ASSERT(xRes->next());
     constexpr sal_Int16 idExpected = 1;
     CPPUNIT_ASSERT_EQUAL(idExpected, xRow->getShort(1));
-    CPPUNIT_ASSERT_EQUAL(OUString{ "45.32" }, xRow->getString(2)); // numeric
-    CPPUNIT_ASSERT_EQUAL(OUString{ "laser eye" }, xRow->getString(3)); // varchar
+    CPPUNIT_ASSERT_EQUAL(u"45.32"_ustr, xRow->getString(2)); // numeric
+    CPPUNIT_ASSERT_EQUAL(u"laser eye"_ustr, xRow->getString(3)); // varchar
     CPPUNIT_ASSERT(xRow->getBoolean(4)); // boolean
 
     css::util::Date date = xRow->getDate(5);
@@ -78,8 +78,8 @@ void HsqlBinaryImportTest::testBinaryImport()
     CPPUNIT_ASSERT(xRes->next());
     constexpr sal_Int16 secondIdExpected = 2;
     CPPUNIT_ASSERT_EQUAL(secondIdExpected, xRow->getShort(1)); // ID
-    CPPUNIT_ASSERT_EQUAL(OUString{ "54.12" }, xRow->getString(2)); // numeric
-    CPPUNIT_ASSERT_EQUAL(OUString{ "telekinesis" }, xRow->getString(3)); // varchar
+    CPPUNIT_ASSERT_EQUAL(u"54.12"_ustr, xRow->getString(2)); // numeric
+    CPPUNIT_ASSERT_EQUAL(u"telekinesis"_ustr, xRow->getString(3)); // varchar
     CPPUNIT_ASSERT(!xRow->getBoolean(4)); // boolean
 
     date = xRow->getDate(5);

@@ -26,11 +26,11 @@ namespace dbaui
 #define DEF_COL_WIDTH   227
 
 DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
-    : GenericDialogController(pParent, bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"),
-                              bRow ? OUString("RowHeightDialog") : OUString("ColWidthDialog"))
+    : GenericDialogController(pParent, bRow ? u"dbaccess/ui/rowheightdialog.ui"_ustr : u"dbaccess/ui/colwidthdialog.ui"_ustr,
+                              bRow ? u"RowHeightDialog"_ustr : u"ColWidthDialog"_ustr)
     , m_nPrevValue(nVal)
-    , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
-    , m_xCB_STANDARD(m_xBuilder->weld_check_button("automatic"))
+    , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button(u"value"_ustr, FieldUnit::CM))
+    , m_xCB_STANDARD(m_xBuilder->weld_check_button(u"automatic"_ustr))
 {
     sal_Int32 nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH);
     if ( _nAlternativeStandard > 0 )
@@ -70,7 +70,7 @@ IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::Toggleable&, void)
     {
         // don't use getValue as this will use m_xCB_STANDARD->to determine if we're standard
         m_nPrevValue = static_cast<sal_Int32>(m_xMF_VALUE->get_value(FieldUnit::CM));
-        m_xMF_VALUE->set_text("");
+        m_xMF_VALUE->set_text(u""_ustr);
     }
     else
     {

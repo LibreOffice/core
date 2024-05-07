@@ -72,10 +72,10 @@ namespace dbaui
         : OGenericAdministrationPage(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(nullptr)
-        , m_xFT_Connection(m_xBuilder->weld_label("browseurllabel"))
-        , m_xPB_Connection(m_xBuilder->weld_button("browse"))
-        , m_xPB_CreateDB(m_xBuilder->weld_button("create"))
-        , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry("browseurl"), m_xBuilder->weld_label("browselabel")))
+        , m_xFT_Connection(m_xBuilder->weld_label(u"browseurllabel"_ustr))
+        , m_xPB_Connection(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xPB_CreateDB(m_xBuilder->weld_button(u"create"_ustr))
+        , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry(u"browseurl"_ustr), m_xBuilder->weld_label(u"browselabel"_ustr)))
     {
         // extract the datasource type collection from the item set
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rCoreAttrs.GetItem(DSID_TYPECOLLECTION) );
@@ -217,7 +217,7 @@ namespace dbaui
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,"*.accdb;*.accde;*.mdb;*.mde");
+                aFileDlg.AddFilter(sFilterName,u"*.accdb;*.accde;*.mdb;*.mde"_ustr);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
             }
@@ -303,7 +303,7 @@ namespace dbaui
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,"*.fdb");
+                aFileDlg.AddFilter(sFilterName,u"*.fdb"_ustr);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
                 break;
@@ -327,7 +327,7 @@ namespace dbaui
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,"*.fdb");
+                aFileDlg.AddFilter(sFilterName,u"*.fdb"_ustr);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
                 break;
@@ -587,12 +587,12 @@ namespace dbaui
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue("ContentType");
+                Any aContentType = aParent.getPropertyValue(u"ContentType"_ustr);
                 aContentType >>= sContentType;
             }
 
             // the properties which need to be set on the new content
-            Sequence< OUString > aNewDirectoryProperties { "Title" };
+            Sequence< OUString > aNewDirectoryProperties { u"Title"_ustr };
 
             // loop
             for (   std::vector< OUString >::const_reverse_iterator aLocalName = aToBeCreated.rbegin();

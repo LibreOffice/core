@@ -42,8 +42,8 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 }
 
 OTableWindowListBox::OTableWindowListBox(OTableWindow* pParent)
-    : InterimItemWindow(pParent, "dbaccess/ui/tablelistbox.ui", "TableListBox")
-    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
+    : InterimItemWindow(pParent, u"dbaccess/ui/tablelistbox.ui"_ustr, u"TableListBox"_ustr)
+    , m_xTreeView(m_xBuilder->weld_tree_view(u"treeview"_ustr))
     , m_xDragDropTargetHelper(new TableWindowListBoxHelper(*this, m_xTreeView->get_drop_target()))
     , m_pTabWin(pParent)
     , m_nDropEvent(nullptr)

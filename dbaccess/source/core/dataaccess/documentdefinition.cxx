@@ -375,7 +375,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
                     OUString aEntryDocName;
 
                     if (    ( xObjConfig->getByName( classId ) >>= xObjectProps ) && xObjectProps.is()
-                         && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
+                         && ( xObjectProps->getByName(u"ObjectDocumentServiceName"_ustr) >>= aEntryDocName )
                          && aEntryDocName == sResult )
                     {
                         _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(classId);
@@ -388,9 +388,9 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
         // alternative, shorter approach
         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByMediaType( _rMediaType ) );
         const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
-        const OUString sAlternativeResult = aMediaTypeProps.getOrDefault( "ObjectDocumentServiceName", OUString() );
+        const OUString sAlternativeResult = aMediaTypeProps.getOrDefault( u"ObjectDocumentServiceName"_ustr, OUString() );
         OSL_ENSURE( sAlternativeResult == sResult, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (1)!" );
-        const Sequence< sal_Int8 > aAlternativeClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+        const Sequence< sal_Int8 > aAlternativeClassID = aMediaTypeProps.getOrDefault( u"ClassID"_ustr, Sequence< sal_Int8 >() );
         OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
 #endif
     }
@@ -674,7 +674,7 @@ namespace
             {
                 Reference< XPropertySet > xPropSet( xFrame, UNO_QUERY_THROW );
                 m_xLayoutManager.set(
-                    xPropSet->getPropertyValue( "LayoutManager" ),
+                    xPropSet->getPropertyValue( u"LayoutManager"_ustr ),
                     UNO_QUERY_THROW );
                 m_xLayoutManager->lock();
 
@@ -720,14 +720,14 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
         LayoutManagerLock aLockLayout( _rxController );
 
         // setting of the visual properties
-        xViewSettings->setPropertyValue("ShowRulers",Any(true));
-        xViewSettings->setPropertyValue("ShowVertRuler",Any(true));
-        xViewSettings->setPropertyValue("ShowHoriRuler",Any(true));
-        xViewSettings->setPropertyValue("IsRasterVisible",Any(true));
-        xViewSettings->setPropertyValue("IsSnapToRaster",Any(true));
-        xViewSettings->setPropertyValue("ShowOnlineLayout",Any(true));
-        xViewSettings->setPropertyValue("RasterSubdivisionX",Any(sal_Int32(5)));
-        xViewSettings->setPropertyValue("RasterSubdivisionY",Any(sal_Int32(5)));
+        xViewSettings->setPropertyValue(u"ShowRulers"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"ShowVertRuler"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"ShowHoriRuler"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"IsRasterVisible"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"IsSnapToRaster"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr,Any(true));
+        xViewSettings->setPropertyValue(u"RasterSubdivisionX"_ustr,Any(sal_Int32(5)));
+        xViewSettings->setPropertyValue(u"RasterSubdivisionY"_ustr,Any(sal_Int32(5)));
     }
     catch( const Exception& )
     {
@@ -780,9 +780,9 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
     const ::comphelper::NamedValueCollection& aDBDocArgs( m_pImpl->m_pDataSource->getMediaDescriptor() );
-    Reference< XInteractionHandler > xHandler( aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+    Reference< XInteractionHandler > xHandler( aDBDocArgs.getOrDefault( u"InteractionHandler"_ustr, Reference< XInteractionHandler >() ) );
     if ( xHandler.is() )
-        aDocumentArgs.put( "InteractionHandler", xHandler );
+        aDocumentArgs.put( u"InteractionHandler"_ustr, xHandler );
 
     ::std::optional< sal_Int16 > aDocumentMacroMode;
 
@@ -868,7 +868,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         aDocumentMacroMode = bExecuteDBDocMacros ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN
                                                  : MacroExecMode::NEVER_EXECUTE;
     }
-    aDocumentArgs.put( "MacroExecutionMode", *aDocumentMacroMode );
+    aDocumentArgs.put( u"MacroExecutionMode"_ustr, *aDocumentMacroMode );
 
     if  (   ( nOpenMode == OpenMode::ALL )
         ||  ( nOpenMode == OpenMode::FOLDERS )
@@ -895,8 +895,8 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
 
     // embedded objects themself do not support the hidden flag. We implement support for
     // it by changing the STATE to RUNNING only, instead of ACTIVE.
-    bool bOpenHidden = aDocumentArgs.getOrDefault( "Hidden", false );
-    aDocumentArgs.remove( "Hidden" );
+    bool bOpenHidden = aDocumentArgs.getOrDefault( u"Hidden"_ustr, false );
+    aDocumentArgs.remove( u"Hidden"_ustr );
 
     loadEmbeddedObject( xConnection, Sequence< sal_Int8 >(), aDocumentArgs.getPropertyValues(), false, !m_bOpenInDesign );
     OSL_ENSURE( m_xEmbeddedObject.is(), "ODocumentDefinition::onCommandOpenSomething: what's this?" );
@@ -910,9 +910,9 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     if ( xModule.is() )
     {
         if ( m_bForm )
-            xModule->setIdentifier( "com.sun.star.sdb.FormDesign" );
+            xModule->setIdentifier( u"com.sun.star.sdb.FormDesign"_ustr );
         else if ( !xReportDefinition.is() )
-            xModule->setIdentifier( "com.sun.star.text.TextDocument" );
+            xModule->setIdentifier( u"com.sun.star.text.TextDocument"_ustr );
 
         updateDocumentTitle();
     }
@@ -922,7 +922,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     {
         // we are in ReadOnly mode
         // we would like to open the Writer or Calc with the report direct, without design it.
-        Reference< report::XReportEngine > xReportEngine( m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.report.OReportEngineJFree", m_aContext), UNO_QUERY_THROW );
+        Reference< report::XReportEngine > xReportEngine( m_aContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.report.OReportEngineJFree"_ustr, m_aContext), UNO_QUERY_THROW );
 
         xReportEngine->setReportDefinition(xReportDefinition);
         xReportEngine->setActiveConnection(m_xLastKnownConnection);
@@ -1343,7 +1343,7 @@ void ODocumentDefinition::saveAs()
                     {
                         Reference< XStorage> xStorage = getContainerStorage();
 
-                        OUString sPersistentName = ::dbtools::createUniqueName(xStorage,"Obj");
+                        OUString sPersistentName = ::dbtools::createUniqueName(xStorage,u"Obj"_ustr);
                         xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
 
                         OUString sOldName = m_pImpl->m_aProps.aTitle;
@@ -1390,20 +1390,20 @@ namespace
             if ( *_bSuppressMacros )
             {
                 // if we're to suppress macros, do exactly this
-                _io_rArgs.put( "MacroExecutionMode", MacroExecMode::NEVER_EXECUTE );
+                _io_rArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::NEVER_EXECUTE );
             }
             else
             {
                 // otherwise, put the setting only if not already present
-                if ( !_io_rArgs.has( "MacroExecutionMode" ) )
+                if ( !_io_rArgs.has( u"MacroExecutionMode"_ustr ) )
                 {
-                    _io_rArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+                    _io_rArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
                 }
             }
         }
 
         if ( _bReadOnly.has_value() )
-            _io_rArgs.put( "ReadOnly", *_bReadOnly );
+            _io_rArgs.put( u"ReadOnly"_ustr, *_bReadOnly );
     }
 }
 
@@ -1475,15 +1475,15 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
-    aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
+    aEmbeddedDescriptor.put( u"OutplaceDispatchInterceptor"_ustr, xInterceptor );
 
     ::comphelper::NamedValueCollection aMediaDesc;
     separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );
 
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
     ::comphelper::NamedValueCollection OutplaceFrameProperties;
-    OutplaceFrameProperties.put( "TopWindow", true );
-    OutplaceFrameProperties.put( "SupportPersistentWindowState", true );
+    OutplaceFrameProperties.put( u"TopWindow"_ustr, true );
+    OutplaceFrameProperties.put( u"SupportPersistentWindowState"_ustr, true );
 
     Reference< XFrame > xParentFrame;
     if ( m_pImpl->m_pDataSource )
@@ -1501,15 +1501,15 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     }
     OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );
     if  ( xParentFrame.is() )
-        OutplaceFrameProperties.put( "ParentFrame", xParentFrame );
+        OutplaceFrameProperties.put( u"ParentFrame"_ustr, xParentFrame );
 
-    aEmbeddedDescriptor.put( "OutplaceFrameProperties", OutplaceFrameProperties.getNamedValues() );
+    aEmbeddedDescriptor.put( u"OutplaceFrameProperties"_ustr, OutplaceFrameProperties.getNamedValues() );
 
     // tell the embedded object to have (or not have) script support
-    aEmbeddedDescriptor.put( "EmbeddedScriptSupport", objectSupportsEmbeddedScripts() );
+    aEmbeddedDescriptor.put( u"EmbeddedScriptSupport"_ustr, objectSupportsEmbeddedScripts() );
 
     // tell the embedded object to not participate in the document recovery game - the DB doc will handle it
-    aEmbeddedDescriptor.put( "DocumentRecoverySupport", false );
+    aEmbeddedDescriptor.put( u"DocumentRecoverySupport"_ustr, false );
 
     // pass the descriptor of the embedded object to the caller
     aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
@@ -1517,15 +1517,15 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     // create the ComponentData, and put it into the document's media descriptor
     {
         ::comphelper::NamedValueCollection aComponentData;
-        aComponentData.put( "ActiveConnection", _xConnection );
-        aComponentData.put( "ApplyFormDesignMode", !_bReadOnly );
-        aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
+        aComponentData.put( u"ActiveConnection"_ustr, _xConnection );
+        aComponentData.put( u"ApplyFormDesignMode"_ustr, !_bReadOnly );
+        aMediaDesc.put( u"ComponentData"_ustr, aComponentData.getPropertyValues() );
     }
 
     if ( !m_pImpl->m_aProps.aTitle.isEmpty() )
-        aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
+        aMediaDesc.put( u"DocumentTitle"_ustr, m_pImpl->m_aProps.aTitle );
 
-    aMediaDesc.put( "DocumentBaseURL", m_pImpl->m_pDataSource->getURL() );
+    aMediaDesc.put( u"DocumentBaseURL"_ustr, m_pImpl->m_pDataSource->getURL() );
 
     // put the common load arguments into the document's media descriptor
     lcl_putLoadArgs( aMediaDesc, optional_bool( _bSuppressMacros ), optional_bool( _bReadOnly ) );
@@ -2007,8 +2007,8 @@ void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& 
     try
     {
         Reference< XJobExecutor > xExecutable(
-            _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.report.CallReportWizard", aArgs, _rContext), UNO_QUERY_THROW );
-        xExecutable->trigger( "fill" );
+            _rContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.wizards.report.CallReportWizard"_ustr, aArgs, _rContext), UNO_QUERY_THROW );
+        xExecutable->trigger( u"fill"_ustr );
     }
     catch( const Exception& )
     {

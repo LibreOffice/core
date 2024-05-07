@@ -267,7 +267,7 @@ void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent
     if ( _rEvent.Accessor >>= sName )
     {
         OUString aQueryImage(ImageProvider::getDefaultImageResourceID(css::sdb::application::DatabaseObject::QUERY));
-        m_rQueryList.append("", sName, aQueryImage);
+        m_rQueryList.append(u""_ustr, sName, aQueryImage);
     }
 }
 
@@ -297,7 +297,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
         const Sequence< OUString > aQueryNames = xQueries->getElementNames();
 
         for ( auto const & name : aQueryNames )
-            m_rQueryList.append("", name, aQueryImage);
+            m_rQueryList.append(u""_ustr, name, aQueryImage);
     }
     catch( const Exception& )
     {
@@ -324,15 +324,15 @@ bool QueryListFacade::isLeafSelected() const
 }
 
 OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rContext)
-   : GenericDialogController(pParent, "dbaccess/ui/tablesjoindialog.ui", "TablesJoinDialog")
+   : GenericDialogController(pParent, u"dbaccess/ui/tablesjoindialog.ui"_ustr, u"TablesJoinDialog"_ustr)
    , m_rContext(_rContext)
-   , m_xCaseTables(m_xBuilder->weld_radio_button("tables"))
-   , m_xCaseQueries(m_xBuilder->weld_radio_button("queries"))
+   , m_xCaseTables(m_xBuilder->weld_radio_button(u"tables"_ustr))
+   , m_xCaseQueries(m_xBuilder->weld_radio_button(u"queries"_ustr))
    // false means: do not show any buttons
-   , m_xTableList(new OTableTreeListBox(m_xBuilder->weld_tree_view("tablelist"), false))
-   , m_xQueryList(m_xBuilder->weld_tree_view("querylist"))
-   , m_xAddButton(m_xBuilder->weld_button("add"))
-   , m_xCloseButton(m_xBuilder->weld_button("close"))
+   , m_xTableList(new OTableTreeListBox(m_xBuilder->weld_tree_view(u"tablelist"_ustr), false))
+   , m_xQueryList(m_xBuilder->weld_tree_view(u"querylist"_ustr))
+   , m_xAddButton(m_xBuilder->weld_button(u"add"_ustr))
+   , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))
 {
     weld::TreeView& rTableList = m_xTableList->GetWidget();
     Size aSize(rTableList.get_approximate_digit_width() * 23,

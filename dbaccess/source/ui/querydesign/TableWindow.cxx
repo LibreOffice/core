@@ -189,7 +189,7 @@ void OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        rTreeView.append(weld::toId(createUserData(nullptr,false)), OUString("*"));
+        rTreeView.append(weld::toId(createUserData(nullptr,false)), u"*"_ustr);
     }
 
     Reference<XNameAccess> xPKeyColumns;
@@ -539,8 +539,8 @@ void OTableWindow::Command(const CommandEvent& rEvt)
 
                 ::tools::Rectangle aRect(ptWhere, Size(1, 1));
                 weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/jointablemenu.ui"));
-                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"dbaccess/ui/jointablemenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
                 if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                     Remove();
             }

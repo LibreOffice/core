@@ -130,23 +130,23 @@ void OTableFieldDesc::Load( const css::beans::PropertyValue& i_rSettings, const 
 {
 
     ::comphelper::NamedValueCollection aFieldDesc( i_rSettings.Value );
-    m_aAliasName = aFieldDesc.getOrDefault( "AliasName", m_aAliasName );
-    m_aTableName = aFieldDesc.getOrDefault( "TableName", m_aTableName );
-    m_aFieldName = aFieldDesc.getOrDefault( "FieldName", m_aFieldName );
-    m_aFieldAlias = aFieldDesc.getOrDefault( "FieldAlias", m_aFieldAlias );
-    m_aFunctionName = aFieldDesc.getOrDefault( "FunctionName", m_aFunctionName );
-    m_eDataType = aFieldDesc.getOrDefault( "DataType", m_eDataType );
-    m_eFunctionType = aFieldDesc.getOrDefault( "FunctionType", m_eFunctionType );
-    m_nColWidth = aFieldDesc.getOrDefault( "ColWidth", m_nColWidth );
-    m_bGroupBy = aFieldDesc.getOrDefault( "GroupBy", m_bGroupBy );
-    m_bVisible = aFieldDesc.getOrDefault( "Visible", m_bVisible );
+    m_aAliasName = aFieldDesc.getOrDefault( u"AliasName"_ustr, m_aAliasName );
+    m_aTableName = aFieldDesc.getOrDefault( u"TableName"_ustr, m_aTableName );
+    m_aFieldName = aFieldDesc.getOrDefault( u"FieldName"_ustr, m_aFieldName );
+    m_aFieldAlias = aFieldDesc.getOrDefault( u"FieldAlias"_ustr, m_aFieldAlias );
+    m_aFunctionName = aFieldDesc.getOrDefault( u"FunctionName"_ustr, m_aFunctionName );
+    m_eDataType = aFieldDesc.getOrDefault( u"DataType"_ustr, m_eDataType );
+    m_eFunctionType = aFieldDesc.getOrDefault( u"FunctionType"_ustr, m_eFunctionType );
+    m_nColWidth = aFieldDesc.getOrDefault( u"ColWidth"_ustr, m_nColWidth );
+    m_bGroupBy = aFieldDesc.getOrDefault( u"GroupBy"_ustr, m_bGroupBy );
+    m_bVisible = aFieldDesc.getOrDefault( u"Visible"_ustr, m_bVisible );
 
-    m_eFieldType = static_cast< ETableFieldType >( aFieldDesc.getOrDefault( "FieldType", static_cast< sal_Int32 >( m_eFieldType ) ) );
-    m_eOrderDir = static_cast< EOrderDir >( aFieldDesc.getOrDefault( "OrderDir", static_cast< sal_Int32 >( m_eOrderDir ) ) );
+    m_eFieldType = static_cast< ETableFieldType >( aFieldDesc.getOrDefault( u"FieldType"_ustr, static_cast< sal_Int32 >( m_eFieldType ) ) );
+    m_eOrderDir = static_cast< EOrderDir >( aFieldDesc.getOrDefault( u"OrderDir"_ustr, static_cast< sal_Int32 >( m_eOrderDir ) ) );
 
     if ( i_bIncludingCriteria )
     {
-        const Sequence< PropertyValue > aCriteria( aFieldDesc.getOrDefault( "Criteria", Sequence< PropertyValue >() ) );
+        const Sequence< PropertyValue > aCriteria( aFieldDesc.getOrDefault( u"Criteria"_ustr, Sequence< PropertyValue >() ) );
         m_aCriteria.resize( aCriteria.getLength() );
         std::transform(
             aCriteria.begin(),
@@ -160,18 +160,18 @@ void OTableFieldDesc::Load( const css::beans::PropertyValue& i_rSettings, const 
 void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria )
 {
 
-    o_rSettings.put( "AliasName", m_aAliasName );
-    o_rSettings.put( "TableName", m_aTableName );
-    o_rSettings.put( "FieldName", m_aFieldName );
-    o_rSettings.put( "FieldAlias", m_aFieldAlias );
-    o_rSettings.put( "FunctionName", m_aFunctionName );
-    o_rSettings.put( "DataType", m_eDataType );
-    o_rSettings.put( "FunctionType", m_eFunctionType );
-    o_rSettings.put( "FieldType", static_cast<sal_Int32>(m_eFieldType) );
-    o_rSettings.put( "OrderDir", static_cast<sal_Int32>(m_eOrderDir) );
-    o_rSettings.put( "ColWidth", m_nColWidth );
-    o_rSettings.put( "GroupBy", m_bGroupBy );
-    o_rSettings.put( "Visible", m_bVisible );
+    o_rSettings.put( u"AliasName"_ustr, m_aAliasName );
+    o_rSettings.put( u"TableName"_ustr, m_aTableName );
+    o_rSettings.put( u"FieldName"_ustr, m_aFieldName );
+    o_rSettings.put( u"FieldAlias"_ustr, m_aFieldAlias );
+    o_rSettings.put( u"FunctionName"_ustr, m_aFunctionName );
+    o_rSettings.put( u"DataType"_ustr, m_eDataType );
+    o_rSettings.put( u"FunctionType"_ustr, m_eFunctionType );
+    o_rSettings.put( u"FieldType"_ustr, static_cast<sal_Int32>(m_eFieldType) );
+    o_rSettings.put( u"OrderDir"_ustr, static_cast<sal_Int32>(m_eOrderDir) );
+    o_rSettings.put( u"ColWidth"_ustr, m_nColWidth );
+    o_rSettings.put( u"GroupBy"_ustr, m_bGroupBy );
+    o_rSettings.put( u"Visible"_ustr, m_bVisible );
 
     if ( !i_bIncludingCriteria )
         return;
@@ -189,7 +189,7 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
         ++c;
     }
 
-    o_rSettings.put( "Criteria", aCriteria );
+    o_rSettings.put( u"Criteria"_ustr, aCriteria );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

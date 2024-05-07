@@ -43,9 +43,9 @@ using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 OAppBorderWindow::OAppBorderWindow(OApplicationView* pParent, PreviewMode ePreviewMode)
-    : InterimItemWindow(pParent, "dbaccess/ui/appborderwindow.ui", "AppBorderWindow", false)
-    , m_xPanelParent(m_xBuilder->weld_container("panel"))
-    , m_xDetailViewParent(m_xBuilder->weld_container("detail"))
+    : InterimItemWindow(pParent, u"dbaccess/ui/appborderwindow.ui"_ustr, u"AppBorderWindow"_ustr, false)
+    , m_xPanelParent(m_xBuilder->weld_container(u"panel"_ustr))
+    , m_xDetailViewParent(m_xBuilder->weld_container(u"detail"_ustr))
     , m_xView(pParent)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);

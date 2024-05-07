@@ -33,7 +33,7 @@ public:
 void Tdf119625Test::setUp()
 {
     DBTestBase::setUp();
-    osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
+    osl_setEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr.pData, u"1"_ustr.pData);
 }
 
 namespace
@@ -90,9 +90,9 @@ void Tdf119625Test::testTime()
     // select basically everything from the .odb
     uno::Reference<XStatement> statement = xConnection->createStatement();
 
-    uno::Reference<XResultSet> xRes = statement->executeQuery("  SELECT id, tst_dt, tst_d, tst_t "
+    uno::Reference<XResultSet> xRes = statement->executeQuery(u"  SELECT id, tst_dt, tst_d, tst_t "
                                                               "    FROM tst_data "
-                                                              "ORDER BY id");
+                                                              "ORDER BY id"_ustr);
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // check result

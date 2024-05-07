@@ -122,7 +122,7 @@ namespace dbaui
 
     OUString SAL_CALL OTextConnectionSettingsDialog::getImplementationName()
     {
-        return "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog";
+        return u"com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog"_ustr;
     }
     sal_Bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
     {
@@ -135,7 +135,7 @@ namespace dbaui
     }
     css::uno::Sequence< OUString > SAL_CALL OTextConnectionSettingsDialog::getSupportedServiceNames()
     {
-        return { "com.sun.star.sdb.TextConnectionSettings" };
+        return { u"com.sun.star.sdb.TextConnectionSettings"_ustr };
     }
 
     Reference< XPropertySetInfo >  SAL_CALL OTextConnectionSettingsDialog::getPropertySetInfo()
@@ -161,42 +161,42 @@ namespace dbaui
         auto pProps = aProps.getArray();
 
         pProps[ nProp++ ] = Property(
-            "HeaderLine",
+            u"HeaderLine"_ustr,
             PROPERTY_ID_HEADER_LINE,
             ::cppu::UnoType< sal_Bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         pProps[ nProp++ ] = Property(
-            "FieldDelimiter",
+            u"FieldDelimiter"_ustr,
             PROPERTY_ID_FIELD_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         pProps[ nProp++ ] = Property(
-            "StringDelimiter",
+            u"StringDelimiter"_ustr,
             PROPERTY_ID_STRING_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         pProps[ nProp++ ] = Property(
-            "DecimalDelimiter",
+            u"DecimalDelimiter"_ustr,
             PROPERTY_ID_DECIMAL_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         pProps[ nProp++ ] = Property(
-            "ThousandDelimiter",
+            u"ThousandDelimiter"_ustr,
             PROPERTY_ID_THOUSAND_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         pProps[ nProp++ ] = Property(
-            "CharSet",
+            u"CharSet"_ustr,
             PROPERTY_ID_ENCODING,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
