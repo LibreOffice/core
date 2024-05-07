@@ -30,6 +30,7 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -239,7 +240,14 @@ void BackingWindow::initControls()
     mpLocalView->ShowTooltips( true );
 
     setupButton( mpOpenButton );
-    setupButton( mpRemoteButton );
+
+    // Hide OpenRemote button on startpage if the OpenRemote uno command is not available
+    SvtCommandOptions aCmdOptions;
+    if (aCmdOptions.Lookup(SvtCommandOptions::CMDOPTION_DISABLED, "OpenRemote"))
+        mpRemoteButton->Hide();
+    else
+        setupButton( mpRemoteButton );
+
     setupButton( mpRecentButton );
     setupButton( mpTemplateButton );
     setupButton( mpWriterAllButton );
