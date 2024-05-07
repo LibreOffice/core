@@ -1228,157 +1228,157 @@ void dumpCustomShapeReplacementURLAsAttribute(std::u16string_view sCustomShapeRe
 void dumpTextPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
-    if(xInfo->hasPropertyByName("CharHeight"))
+    if(xInfo->hasPropertyByName(u"CharHeight"_ustr))
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CharHeight");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CharHeight"_ustr);
         float fHeight;
         if(anotherAny >>= fHeight)
             dumpCharHeightAsAttribute(fHeight, xmlWriter);
     }
-    if(xInfo->hasPropertyByName("CharColor"))
+    if(xInfo->hasPropertyByName(u"CharColor"_ustr))
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CharColor");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CharColor"_ustr);
         sal_Int32 aColor = sal_Int32();
         if(anotherAny >>= aColor)
             dumpCharColorAsAttribute(aColor, xmlWriter);
     }
     // TODO - more properties from CharacterProperties.idl (similar to above)
 
-    if(xInfo->hasPropertyByName("IsNumbering"))
+    if(xInfo->hasPropertyByName(u"IsNumbering"_ustr))
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"IsNumbering"_ustr);
         bool bIsNumbering;
         if(anotherAny >>= bIsNumbering)
             dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAutoGrowHeight"_ustr);
         bool bTextAutoGrowHeight;
         if(anotherAny >>= bTextAutoGrowHeight)
             dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAutoGrowWidth"_ustr);
         bool bTextAutoGrowWidth;
         if(anotherAny >>= bTextAutoGrowWidth)
             dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextContourFrame"_ustr);
         bool bTextContourFrame;
         if(anotherAny >>= bTextContourFrame)
             dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextFitToSize");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextFitToSize"_ustr);
         drawing::TextFitToSizeType eTextFitToSize;
         if(anotherAny >>= eTextFitToSize)
             dumpTextFitToSizeAsAttribute(eTextFitToSize, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextHorizontalAdjust");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextHorizontalAdjust"_ustr);
         drawing::TextHorizontalAdjust eTextHorizontalAdjust;
         if(anotherAny >>= eTextHorizontalAdjust)
             dumpTextHorizontalAdjustAsAttribute(eTextHorizontalAdjust, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextVerticalAdjust");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextVerticalAdjust"_ustr);
         drawing::TextVerticalAdjust eTextVerticalAdjust;
         if(anotherAny >>= eTextVerticalAdjust)
             dumpTextVerticalAdjustAsAttribute(eTextVerticalAdjust, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextLeftDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextLeftDistance"_ustr);
         sal_Int32 aTextLeftDistance = sal_Int32();
         if(anotherAny >>= aTextLeftDistance)
             dumpTextLeftDistanceAsAttribute(aTextLeftDistance, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextRightDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextRightDistance"_ustr);
         sal_Int32 aTextRightDistance = sal_Int32();
         if(anotherAny >>= aTextRightDistance)
             dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextUpperDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextUpperDistance"_ustr);
         sal_Int32 aTextUpperDistance = sal_Int32();
         if(anotherAny >>= aTextUpperDistance)
             dumpTextUpperDistanceAsAttribute(aTextUpperDistance, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextLowerDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextLowerDistance"_ustr);
         sal_Int32 aTextLowerDistance = sal_Int32();
         if(anotherAny >>= aTextLowerDistance)
             dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameHeight");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextMaximumFrameHeight"_ustr);
         sal_Int32 aTextMaximumFrameHeight = sal_Int32();
         if(anotherAny >>= aTextMaximumFrameHeight)
             dumpTextMaximumFrameHeightAsAttribute(aTextMaximumFrameHeight, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextMaximumFrameWidth"_ustr);
         sal_Int32 aTextMaximumFrameWidth = sal_Int32();
         if(anotherAny >>= aTextMaximumFrameWidth)
             dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameHeight");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextMinimumFrameHeight"_ustr);
         sal_Int32 aTextMinimumFrameHeight = sal_Int32();
         if(anotherAny >>= aTextMinimumFrameHeight)
             dumpTextMinimumFrameHeightAsAttribute(aTextMinimumFrameHeight, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextMinimumFrameWidth"_ustr);
         sal_Int32 aTextMinimumFrameWidth = sal_Int32();
         if(anotherAny >>= aTextMinimumFrameWidth)
             dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationAmount");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationAmount"_ustr);
         sal_Int32 aTextAnimationAmount = sal_Int32();
         if(anotherAny >>= aTextAnimationAmount)
             dumpTextAnimationAmountAsAttribute(aTextAnimationAmount, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationCount");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationCount"_ustr);
         sal_Int32 aTextAnimationCount = sal_Int32();
         if(anotherAny >>= aTextAnimationCount)
             dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDelay");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationDelay"_ustr);
         sal_Int32 aTextAnimationDelay = sal_Int32();
         if(anotherAny >>= aTextAnimationDelay)
             dumpTextAnimationDelayAsAttribute(aTextAnimationDelay, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDirection");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationDirection"_ustr);
         drawing::TextAnimationDirection eTextAnimationDirection;
         if(anotherAny >>= eTextAnimationDirection)
             dumpTextAnimationDirectionAsAttribute(eTextAnimationDirection, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationKind");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationKind"_ustr);
         drawing::TextAnimationKind eTextAnimationKind;
         if(anotherAny >>= eTextAnimationKind)
             dumpTextAnimationKindAsAttribute(eTextAnimationKind, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationStartInside"_ustr);
         bool bTextAnimationStartInside;
         if(anotherAny >>= bTextAnimationStartInside)
             dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextAnimationStopInside"_ustr);
         bool bTextAnimationStopInside;
         if(anotherAny >>= bTextAnimationStopInside)
             dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextWritingMode");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextWritingMode"_ustr);
         text::WritingMode eTextWritingMode;
         if(anotherAny >>= eTextWritingMode)
             dumpTextWritingModeAsAttribute(eTextWritingMode, xmlWriter);
@@ -1388,139 +1388,139 @@ void dumpTextPropertiesService(const uno::Reference< beans::XPropertySet >& xPro
 void dumpFillPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillStyle"_ustr);
         drawing::FillStyle eFillStyle;
         if(anotherAny >>= eFillStyle)
             dumpFillStyleAsAttribute(eFillStyle, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillColor"_ustr);
         sal_Int32 aColor = sal_Int32();
         if(anotherAny >>= aColor)
             dumpFillColorAsAttribute(aColor, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparence");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillTransparence"_ustr);
         sal_Int32 aTransparence = sal_Int32();
         if(anotherAny >>= aTransparence)
             dumpFillTransparenceAsAttribute(aTransparence, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradientName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillTransparenceGradientName"_ustr);
         OUString sTranspGradName;
         if(anotherAny >>= sTranspGradName)
             dumpFillTransparenceGradientNameAsAttribute(sTranspGradName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradient");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillTransparenceGradient"_ustr);
         awt::Gradient aTranspGrad;
         if(anotherAny >>= aTranspGrad)
             dumpFillTransparenceGradientAsElement(aTranspGrad, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillGradientName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillGradientName"_ustr);
         OUString sGradName;
         if(anotherAny >>= sGradName)
             dumpFillGradientNameAsAttribute(sGradName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillGradient");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillGradient"_ustr);
         awt::Gradient aGradient;
         if(anotherAny >>= aGradient)
             dumpFillGradientAsElement(aGradient, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillHatchName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillHatchName"_ustr);
         OUString sHatchName;
         if(anotherAny >>= sHatchName)
             dumpFillGradientNameAsAttribute(sHatchName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillHatch");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillHatch"_ustr);
         drawing::Hatch aHatch;
         if(anotherAny >>= aHatch)
             dumpFillHatchAsElement(aHatch, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBackground");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBackground"_ustr);
         bool bFillBackground;
         if(anotherAny >>= bFillBackground)
             dumpFillBackgroundAsAttribute(bFillBackground, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapName"_ustr);
         OUString sBitmapName;
         if(anotherAny >>= sBitmapName)
             dumpFillGradientNameAsAttribute(sBitmapName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmap");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmap"_ustr);
         uno::Reference<awt::XBitmap> xBitmap;
         if(anotherAny >>= xBitmap)
             dumpFillBitmapAsElement(xBitmap, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapPositionOffsetX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapPositionOffsetX"_ustr);
         sal_Int32 aBitmapPositionOffsetX = sal_Int32();
         if(anotherAny >>= aBitmapPositionOffsetX)
             dumpFillBitmapPositionOffsetXAsAttribute(aBitmapPositionOffsetX, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapPositionOffsetY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapPositionOffsetY"_ustr);
         sal_Int32 aBitmapPositionOffsetY = sal_Int32();
         if(anotherAny >>= aBitmapPositionOffsetY)
             dumpFillBitmapPositionOffsetYAsAttribute(aBitmapPositionOffsetY, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapOffsetX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapOffsetX"_ustr);
         sal_Int32 aBitmapOffsetX = sal_Int32();
         if(anotherAny >>= aBitmapOffsetX)
             dumpFillBitmapOffsetXAsAttribute(aBitmapOffsetX, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapOffsetY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapOffsetY"_ustr);
         sal_Int32 aBitmapOffsetY = sal_Int32();
         if(anotherAny >>= aBitmapOffsetY)
             dumpFillBitmapOffsetYAsAttribute(aBitmapOffsetY, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapRectanglePoint");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapRectanglePoint"_ustr);
         drawing::RectanglePoint eBitmapRectanglePoint;
         if(anotherAny >>= eBitmapRectanglePoint)
             dumpFillBitmapRectanglePointAsAttribute(eBitmapRectanglePoint, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapLogicalSize");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapLogicalSize"_ustr);
         bool bBitmapLogicalSize;
         if(anotherAny >>= bBitmapLogicalSize)
             dumpFillBitmapLogicalSizeAsAttribute(bBitmapLogicalSize, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapSizeX"_ustr);
         sal_Int32 aBitmapSizeX = sal_Int32();
         if(anotherAny >>= aBitmapSizeX)
             dumpFillBitmapSizeXAsAttribute(aBitmapSizeX, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapSizeY"_ustr);
         sal_Int32 aBitmapSizeY = sal_Int32();
         if(anotherAny >>= aBitmapSizeY)
             dumpFillBitmapSizeYAsAttribute(aBitmapSizeY, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapMode");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapMode"_ustr);
         drawing::BitmapMode eBitmapMode;
         if(anotherAny >>= eBitmapMode)
             dumpFillBitmapModeAsAttribute(eBitmapMode, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapStretch");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapStretch"_ustr);
         bool bBitmapStretch;
         if(anotherAny >>= bBitmapStretch)
             dumpFillBitmapStretchAsAttribute(bBitmapStretch, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapTile");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FillBitmapTile"_ustr);
         bool bBitmapTile;
         if(anotherAny >>= bBitmapTile)
             dumpFillBitmapTileAsAttribute(bBitmapTile, xmlWriter);
@@ -1530,91 +1530,91 @@ void dumpFillPropertiesService(const uno::Reference< beans::XPropertySet >& xPro
 void dumpLinePropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineStyle");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineStyle"_ustr);
         drawing::LineStyle eLineStyle;
         if(anotherAny >>= eLineStyle)
             dumpLineStyleAsAttribute(eLineStyle, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineDash");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineDash"_ustr);
         drawing::LineDash aLineDash;
         if(anotherAny >>= aLineDash)
             dumpLineDashAsElement(aLineDash, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineDashName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineDashName"_ustr);
         OUString sLineDashName;
         if(anotherAny >>= sLineDashName)
             dumpLineDashNameAsAttribute(sLineDashName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineColor");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineColor"_ustr);
         sal_Int32 aLineColor = sal_Int32();
         if(anotherAny >>= aLineColor)
             dumpLineColorAsAttribute(aLineColor, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineTransparence");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineTransparence"_ustr);
         sal_Int32 aLineTransparence = sal_Int32();
         if(anotherAny >>= aLineTransparence)
             dumpLineTransparenceAsAttribute(aLineTransparence, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineWidth"_ustr);
         sal_Int32 aLineWidth = sal_Int32();
         if(anotherAny >>= aLineWidth)
             dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineJoint");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineJoint"_ustr);
         drawing::LineJoint eLineJoint;
         if(anotherAny >>= eLineJoint)
             dumpLineJointAsAttribute(eLineJoint, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineStartName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineStartName"_ustr);
         OUString sLineStartName;
         if(anotherAny >>= sLineStartName)
             dumpLineStartNameAsAttribute(sLineStartName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineEndName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineEndName"_ustr);
         OUString sLineEndName;
         if(anotherAny >>= sLineEndName)
             dumpLineEndNameAsAttribute(sLineEndName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineStart");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineStart"_ustr);
         drawing::PolyPolygonBezierCoords aLineStart;
         if(anotherAny >>= aLineStart)
             dumpLineStartAsElement(aLineStart, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineEnd");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineEnd"_ustr);
         drawing::PolyPolygonBezierCoords aLineEnd;
         if(anotherAny >>= aLineEnd)
             dumpLineEndAsElement(aLineEnd, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineStartCenter"_ustr);
         bool bLineStartCenter;
         if(anotherAny >>= bLineStartCenter)
             dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineStartWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineStartWidth"_ustr);
         sal_Int32 aLineStartWidth = sal_Int32();
         if(anotherAny >>= aLineStartWidth)
             dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineEndCenter"_ustr);
         bool bLineEndCenter;
         if(anotherAny >>= bLineEndCenter)
             dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LineEndWidth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LineEndWidth"_ustr);
         sal_Int32 aLineEndWidth = sal_Int32();
         if(anotherAny >>= aLineEndWidth)
             dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
@@ -1624,31 +1624,31 @@ void dumpLinePropertiesService(const uno::Reference< beans::XPropertySet >& xPro
 void dumpShadowPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Shadow"_ustr);
         bool bShadow;
         if(anotherAny >>= bShadow)
             dumpShadowAsAttribute(bShadow, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ShadowColor");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ShadowColor"_ustr);
         sal_Int32 aShadowColor = sal_Int32();
         if(anotherAny >>= aShadowColor)
             dumpShadowColorAsAttribute(aShadowColor, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ShadowTransparence");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ShadowTransparence"_ustr);
         sal_Int32 aShadowTransparence = sal_Int32();
         if(anotherAny >>= aShadowTransparence)
             dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ShadowXDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ShadowXDistance"_ustr);
         sal_Int32 aShadowXDistance = sal_Int32();
         if(anotherAny >>= aShadowXDistance)
             dumpShadowXDistanceAsAttribute(aShadowXDistance, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ShadowYDistance");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ShadowYDistance"_ustr);
         sal_Int32 aShadowYDistance = sal_Int32();
         if(anotherAny >>= aShadowYDistance)
             dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
@@ -1658,19 +1658,19 @@ void dumpShadowPropertiesService(const uno::Reference< beans::XPropertySet >& xP
 void dumpPolyPolygonDescriptorService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"PolygonKind"_ustr);
         drawing::PolygonKind ePolygonKind;
         if(anotherAny >>= ePolygonKind)
             dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygon");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"PolyPolygon"_ustr);
         drawing::PointSequenceSequence aPolyPolygon;
         if(anotherAny >>= aPolyPolygon)
             dumpPolyPolygonAsElement(aPolyPolygon, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Geometry");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Geometry"_ustr);
         drawing::PointSequenceSequence aGeometry;
         if(anotherAny >>= aGeometry)
             dumpGeometryAsElement(aGeometry, xmlWriter);
@@ -1681,75 +1681,75 @@ void dumpShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xml
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ZOrder"_ustr);
         sal_Int32 aZOrder = sal_Int32();
         if(anotherAny >>= aZOrder)
             dumpZOrderAsAttribute(aZOrder, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LayerID");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LayerID"_ustr);
         sal_Int32 aLayerID = sal_Int32();
         if(anotherAny >>= aLayerID)
             dumpLayerIDAsAttribute(aLayerID, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LayerName");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LayerName"_ustr);
         OUString sLayerName;
         if(anotherAny >>= sLayerName)
             dumpLayerNameAsAttribute(sLayerName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Visible"_ustr);
         bool bVisible;
         if(anotherAny >>= bVisible)
             dumpVisibleAsAttribute(bVisible, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Printable"_ustr);
         bool bPrintable;
         if(anotherAny >>= bPrintable)
             dumpPrintableAsAttribute(bPrintable, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"MoveProtect"_ustr);
         bool bMoveProtect;
         if(anotherAny >>= bMoveProtect)
             dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Name");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Name"_ustr);
         OUString sName;
         if(anotherAny >>= sName)
             dumpNameAsAttribute(sName, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"SizeProtect"_ustr);
         bool bSizeProtect;
         if(anotherAny >>= bSizeProtect)
             dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Transformation");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Transformation"_ustr);
         drawing::HomogenMatrix3 aTransformation;
         if(anotherAny >>= aTransformation)
             dumpTransformationAsElement(aTransformation, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("NavigationOrder");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"NavigationOrder"_ustr);
         sal_Int32 aNavigationOrder = sal_Int32();
         if(anotherAny >>= aNavigationOrder)
             dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
     }
-    if(xInfo->hasPropertyByName("Hyperlink"))
+    if(xInfo->hasPropertyByName(u"Hyperlink"_ustr))
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Hyperlink"_ustr);
         OUString sHyperlink;
         if(anotherAny >>= sHyperlink)
             dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
     }
-    if(xInfo->hasPropertyByName("InteropGrabBag") && bDumpInteropProperties)
+    if(xInfo->hasPropertyByName(u"InteropGrabBag"_ustr) && bDumpInteropProperties)
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("InteropGrabBag");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"InteropGrabBag"_ustr);
         uno::Sequence< beans::PropertyValue> aInteropGrabBag;
         if(anotherAny >>= aInteropGrabBag)
             dumpInteropGrabBagAsElement(aInteropGrabBag, xmlWriter);
@@ -1759,19 +1759,19 @@ void dumpShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xml
 void dumpPolyPolygonBezierDescriptorService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"PolygonKind"_ustr);
         drawing::PolygonKind ePolygonKind;
         if(anotherAny >>= ePolygonKind)
             dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygonBezier");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"PolyPolygonBezier"_ustr);
         drawing::PolyPolygonBezierCoords aPolyPolygonBezier;
         if(anotherAny >>= aPolyPolygonBezier)
             dumpPolyPolygonBezierCoords(aPolyPolygonBezier, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Geometry");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Geometry"_ustr);
         drawing::PolyPolygonBezierCoords aGeometry;
         if(anotherAny >>= aGeometry)
             dumpPolyPolygonBezierCoords(aGeometry, xmlWriter);
@@ -1782,26 +1782,26 @@ void dumpCustomShapeService(const uno::Reference< beans::XPropertySet >& xPropSe
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeEngine");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CustomShapeEngine"_ustr);
         OUString sCustomShapeEngine;
         if(anotherAny >>= sCustomShapeEngine)
             dumpCustomShapeEngineAsAttribute(sCustomShapeEngine, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeData");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CustomShapeData"_ustr);
         OUString sCustomShapeData;
         if(anotherAny >>= sCustomShapeData)
             dumpCustomShapeDataAsAttribute(sCustomShapeData, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeGeometry");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr);
         uno::Sequence< beans::PropertyValue> aCustomShapeGeometry;
         if(anotherAny >>= aCustomShapeGeometry)
             dumpCustomShapeGeometryAsElement(aCustomShapeGeometry, xmlWriter);
     }
-    if(xInfo->hasPropertyByName("CustomShapeReplacementURL"))
+    if(xInfo->hasPropertyByName(u"CustomShapeReplacementURL"_ustr))
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeReplacementURL");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"CustomShapeReplacementURL"_ustr);
         OUString sCustomShapeReplacementURL;
         if(anotherAny >>= sCustomShapeReplacementURL)
             dumpCustomShapeReplacementURLAsAttribute(sCustomShapeReplacementURL, xmlWriter);
@@ -1825,9 +1825,9 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
-    if(xInfo->hasPropertyByName("Name"))
+    if(xInfo->hasPropertyByName(u"Name"_ustr))
     {
-        uno::Any aAny = xPropSet->getPropertyValue("Name");
+        uno::Any aAny = xPropSet->getPropertyValue(u"Name"_ustr);
         if ((aAny >>= aName) && !aName.isEmpty())
         {
             (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
@@ -1837,65 +1837,65 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
 
     try
     {
-    if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
+    if (xServiceInfo->supportsService(u"com.sun.star.drawing.Text"_ustr))
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
         OUString aText = xText->getString();
         if(!aText.isEmpty())
             (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.TextProperties"_ustr))
         dumpTextPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
     {
         uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
         dumpXShapes(xShapes, xmlWriter, bDumpInteropProperties);
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.FillProperties"_ustr))
         dumpFillPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.LineProperties"_ustr))
         dumpLinePropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonDescriptor"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonDescriptor"_ustr))
         dumpPolyPolygonDescriptorService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.ShadowProperties"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.ShadowProperties"_ustr))
         dumpShadowPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.Shape"_ustr))
         dumpShapeService(xPropSet, xmlWriter, bDumpInteropProperties);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonBezierDescriptor"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonBezierDescriptor"_ustr))
         dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.CustomShape"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
         dumpCustomShapeService(xPropSet, xmlWriter);
 
     // EnhancedShapeDumper used
 
-    if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeExtrusion"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeExtrusion"_ustr))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapeExtrusionService(xPropSet);
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeGeometry"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeGeometry"_ustr))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapeGeometryService(xPropSet);
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeHandle"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeHandle"_ustr))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapeHandleService(xPropSet);
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapePath"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapePath"_ustr))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapePathService(xPropSet);
     }
-    if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeTextPath"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeTextPath"_ustr))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);

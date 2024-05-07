@@ -52,13 +52,13 @@ namespace emfplushelper
     {
         switch (type)
         {
-            case BrushTypeSolidColor: return "BrushTypeSolidColor";
-            case BrushTypeHatchFill: return "BrushTypeHatchFill";
-            case BrushTypeTextureFill: return "BrushTypeTextureFill";
-            case BrushTypePathGradient: return "BrushTypePathGradient";
-            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
+            case BrushTypeSolidColor: return u"BrushTypeSolidColor"_ustr;
+            case BrushTypeHatchFill: return u"BrushTypeHatchFill"_ustr;
+            case BrushTypeTextureFill: return u"BrushTypeTextureFill"_ustr;
+            case BrushTypePathGradient: return u"BrushTypePathGradient"_ustr;
+            case BrushTypeLinearGradient: return u"BrushTypeLinearGradient"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)

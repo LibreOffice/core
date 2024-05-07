@@ -87,14 +87,14 @@ namespace emfplushelper
         switch(nAlignment)
         {
             case StringAlignment::StringAlignmentNear:
-                return "StringAlignmentNear";
+                return u"StringAlignmentNear"_ustr;
             case StringAlignment::StringAlignmentCenter:
-                return "StringAlignmentCenter";
+                return u"StringAlignmentCenter"_ustr;
             case StringAlignment::StringAlignmentFar:
-                return "StringAlignmentFar";
+                return u"StringAlignmentFar"_ustr;
             default:
                 assert(false && nAlignment && "invalid string alignment value");
-                return "INVALID";
+                return u"INVALID"_ustr;
         }
     }
 
@@ -103,16 +103,16 @@ namespace emfplushelper
         switch(nSubst)
         {
             case StringDigitSubstitution::StringDigitSubstitutionUser:
-                return "StringDigitSubstitutionUser";
+                return u"StringDigitSubstitutionUser"_ustr;
             case StringDigitSubstitution::StringDigitSubstitutionNone:
-                return "StringDigitSubstitutionNone";
+                return u"StringDigitSubstitutionNone"_ustr;
             case StringDigitSubstitution::StringDigitSubstitutionNational:
-                return "StringDigitSubstitutionNational";
+                return u"StringDigitSubstitutionNational"_ustr;
             case StringDigitSubstitution::StringDigitSubstitutionTraditional:
-                return "StringDigitSubstitutionTraditional";
+                return u"StringDigitSubstitutionTraditional"_ustr;
             default:
                 assert(false && nSubst && "invalid string digit substitution value");
-                return "INVALID";
+                return u"INVALID"_ustr;
         }
     }
 
@@ -121,14 +121,14 @@ namespace emfplushelper
         switch(nHotkey)
         {
             case HotkeyPrefix::HotkeyPrefixNone:
-                return "HotkeyPrefixNone";
+                return u"HotkeyPrefixNone"_ustr;
             case HotkeyPrefix::HotkeyPrefixShow:
-                return "HotkeyPrefixShow";
+                return u"HotkeyPrefixShow"_ustr;
             case HotkeyPrefix::HotkeyPrefixHide:
-                return "HotkeyPrefixHide";
+                return u"HotkeyPrefixHide"_ustr;
             default:
                 assert(false && nHotkey && "invalid hotkey prefix value");
-                return "INVALID";
+                return u"INVALID"_ustr;
         }
     }
 
@@ -137,20 +137,20 @@ namespace emfplushelper
         switch(nTrimming)
         {
             case StringTrimming::StringTrimmingNone:
-                return "StringTrimmingNone";
+                return u"StringTrimmingNone"_ustr;
             case StringTrimming::StringTrimmingCharacter:
-                return "StringTrimmingCharacter";
+                return u"StringTrimmingCharacter"_ustr;
             case StringTrimming::StringTrimmingWord:
-                return "StringTrimmingWord";
+                return u"StringTrimmingWord"_ustr;
             case StringTrimming::StringTrimmingEllipsisCharacter:
-                return "StringTrimmingEllipsisCharacter";
+                return u"StringTrimmingEllipsisCharacter"_ustr;
             case StringTrimming::StringTrimmingEllipsisWord:
-                return "StringTrimmingEllipsisWord";
+                return u"StringTrimmingEllipsisWord"_ustr;
             case StringTrimming::StringTrimmingEllipsisPath:
-                return "StringTrimmingEllipsisPath";
+                return u"StringTrimmingEllipsisPath"_ustr;
             default:
                 assert(false && nTrimming && "invalid trim value");
-                return "INVALID";
+                return u"INVALID"_ustr;
         }
     }
 

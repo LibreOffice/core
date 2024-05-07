@@ -102,43 +102,43 @@ namespace emfplushelper
     {
         switch (linecap)
         {
-            case LineCapTypeFlat: return "LineCapTypeFlat";
-            case LineCapTypeSquare: return "LineCapTypeSquare";
-            case LineCapTypeRound: return "LineCapTypeRound";
-            case LineCapTypeTriangle: return "LineCapTypeTriangle";
-            case LineCapTypeNoAnchor: return "LineCapTypeNoAnchor";
-            case LineCapTypeSquareAnchor: return "LineCapTypeSquareAnchor";
-            case LineCapTypeRoundAnchor: return "LineCapTypeRoundAchor";
-            case LineCapTypeDiamondAnchor: return "LineCapTypeDiamondAnchor";
-            case LineCapTypeArrowAnchor: return "LineCapTypeArrowAnchor";
-            case LineCapTypeAnchorMask: return "LineCapTypeAnchorMask";
-            case LineCapTypeCustom: return "LineCapTypeCustom";
+            case LineCapTypeFlat: return u"LineCapTypeFlat"_ustr;
+            case LineCapTypeSquare: return u"LineCapTypeSquare"_ustr;
+            case LineCapTypeRound: return u"LineCapTypeRound"_ustr;
+            case LineCapTypeTriangle: return u"LineCapTypeTriangle"_ustr;
+            case LineCapTypeNoAnchor: return u"LineCapTypeNoAnchor"_ustr;
+            case LineCapTypeSquareAnchor: return u"LineCapTypeSquareAnchor"_ustr;
+            case LineCapTypeRoundAnchor: return u"LineCapTypeRoundAchor"_ustr;
+            case LineCapTypeDiamondAnchor: return u"LineCapTypeDiamondAnchor"_ustr;
+            case LineCapTypeArrowAnchor: return u"LineCapTypeArrowAnchor"_ustr;
+            case LineCapTypeAnchorMask: return u"LineCapTypeAnchorMask"_ustr;
+            case LineCapTypeCustom: return u"LineCapTypeCustom"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString DashedLineCapTypeToString(sal_uInt32 dashedlinecaptype)
     {
         switch (dashedlinecaptype)
         {
-            case DashedLineCapTypeFlat: return "DashedLineCapTypeFlat";
-            case DashedLineCapTypeRound: return "DashedLineCapTypeRound";
-            case DashedLineCapTypeTriangle: return "DashedLineCapTypeTriangle";
+            case DashedLineCapTypeFlat: return u"DashedLineCapTypeFlat"_ustr;
+            case DashedLineCapTypeRound: return u"DashedLineCapTypeRound"_ustr;
+            case DashedLineCapTypeTriangle: return u"DashedLineCapTypeTriangle"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString PenAlignmentToString(sal_uInt32 alignment)
     {
         switch (alignment)
         {
-            case PenAlignmentCenter: return "PenAlignmentCenter";
-            case PenAlignmentInset: return "PenAlignmentInset";
-            case PenAlignmentLeft: return "PenAlignmentLeft";
-            case PenAlignmentOutset: return "PenAlignmentOutset";
-            case PenAlignmentRight: return "PenAlignmentRight";
+            case PenAlignmentCenter: return u"PenAlignmentCenter"_ustr;
+            case PenAlignmentInset: return u"PenAlignmentInset"_ustr;
+            case PenAlignmentLeft: return u"PenAlignmentLeft"_ustr;
+            case PenAlignmentOutset: return u"PenAlignmentOutset"_ustr;
+            case PenAlignmentRight: return u"PenAlignmentRight"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     drawinglayer::attribute::StrokeAttribute

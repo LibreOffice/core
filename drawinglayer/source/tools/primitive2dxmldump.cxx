@@ -704,7 +704,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 for (tools::Long y = 0; y < rSizePixel.getHeight(); y++)
                 {
                     rWriter.startElement("data");
-                    OUString aBitmapData = "";
+                    OUString aBitmapData = u""_ustr;
                     for (tools::Long x = 0; x < rSizePixel.getHeight(); x++)
                     {
                         if (x != 0)

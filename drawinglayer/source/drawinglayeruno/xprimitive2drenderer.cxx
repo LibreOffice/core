@@ -83,7 +83,7 @@ namespace drawinglayer::unorenderer
         {
             o3tl::Length eRangeUnit = o3tl::Length::mm100;
             comphelper::SequenceAsHashMap aViewInformationMap(aViewInformationSequence);
-            auto it = aViewInformationMap.find("RangeUnit");
+            auto it = aViewInformationMap.find(u"RangeUnit"_ustr);
             if (it != aViewInformationMap.end())
             {
                 sal_Int32 nVal{};
@@ -165,7 +165,7 @@ namespace drawinglayer::unorenderer
 
         OUString SAL_CALL XPrimitive2DRenderer::getImplementationName()
         {
-            return "drawinglayer::unorenderer::XPrimitive2DRenderer";
+            return u"drawinglayer::unorenderer::XPrimitive2DRenderer"_ustr;
         }
 
         sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
@@ -175,7 +175,7 @@ namespace drawinglayer::unorenderer
 
         uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames()
         {
-            return { "com.sun.star.graphic.Primitive2DTools" };
+            return { u"com.sun.star.graphic.Primitive2DTools"_ustr };
         }
 
 } // end of namespace

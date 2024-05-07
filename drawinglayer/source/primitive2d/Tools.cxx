@@ -80,159 +80,159 @@ OUString idToString(sal_uInt32 nId)
     switch (nId)
     {
         case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D:
-            return "TRANSPARENCE";
+            return u"TRANSPARENCE"_ustr;
         case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D:
-            return "ANIMATEDSWITCH";
+            return u"ANIMATEDSWITCH"_ustr;
         case PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D:
-            return "ANIMATEDBLINK";
+            return u"ANIMATEDBLINK"_ustr;
         case PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D:
-            return "ANIMATEDINTERPOLATE";
+            return u"ANIMATEDINTERPOLATE"_ustr;
         case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
-            return "BACKGROUNDCOLOR";
+            return u"BACKGROUNDCOLOR"_ustr;
         case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
-            return "BITMAP";
+            return u"BITMAP"_ustr;
         case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D:
-            return "CONTROL";
+            return u"CONTROL"_ustr;
         case PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D:
-            return "EMBEDDED3D";
+            return u"EMBEDDED3D"_ustr;
         case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
-            return "FILLGRAPHIC";
+            return u"FILLGRAPHIC"_ustr;
         case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D:
-            return "FILLGRADIENT";
+            return u"FILLGRADIENT"_ustr;
         case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D:
-            return "FILLHATCH";
+            return u"FILLHATCH"_ustr;
         case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D:
-            return "GRAPHIC";
+            return u"GRAPHIC"_ustr;
         case PRIMITIVE2D_ID_GRIDPRIMITIVE2D:
-            return "GRID";
+            return u"GRID"_ustr;
         case PRIMITIVE2D_ID_GROUPPRIMITIVE2D:
-            return "GROUP";
+            return u"GROUP"_ustr;
         case PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D:
-            return "HELPLINE";
+            return u"HELPLINE"_ustr;
         case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D:
-            return "MARKERARRAY";
+            return u"MARKERARRAY"_ustr;
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
-            return "MASK";
+            return u"MASK"_ustr;
         case PRIMITIVE2D_ID_MEDIAPRIMITIVE2D:
-            return "MEDIA";
+            return u"MEDIA"_ustr;
         case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D:
-            return "METAFILE";
+            return u"METAFILE"_ustr;
         case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
-            return "MODIFIEDCOLOR";
+            return u"MODIFIEDCOLOR"_ustr;
         case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
-            return "POLYGONHAIRLINE";
+            return u"POLYGONHAIRLINE"_ustr;
         case PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D:
-            return "POLYGONMARKER";
+            return u"POLYGONMARKER"_ustr;
         case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
-            return "POLYGONSTROKE";
+            return u"POLYGONSTROKE"_ustr;
         case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D:
-            return "POLYGONSTROKEARROW";
+            return u"POLYGONSTROKEARROW"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
-            return "POLYPOLYGONSTROKE";
+            return u"POLYPOLYGONSTROKE"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONSTROKEARROWPRIMITIVE2D:
-            return "POLYPOLYGONSTROKEARROW";
+            return u"POLYPOLYGONSTROKEARROW"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
-            return "POLYPOLYGONCOLOR";
+            return u"POLYPOLYGONCOLOR"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D:
-            return "POLYPOLYGONGRADIENT";
+            return u"POLYPOLYGONGRADIENT"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D:
-            return "POLYPOLYGONHATCH";
+            return u"POLYPOLYGONHATCH"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
-            return "POLYPOLYGONGRAPHIC";
+            return u"POLYPOLYGONGRAPHIC"_ustr;
         case PRIMITIVE2D_ID_SCENEPRIMITIVE2D:
-            return "SCENE";
+            return u"SCENE"_ustr;
         case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
-            return "SHADOW";
+            return u"SHADOW"_ustr;
         case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
-            return "TEXTSIMPLEPORTION";
+            return u"TEXTSIMPLEPORTION"_ustr;
         case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D:
-            return "TEXTDECORATEDPORTION";
+            return u"TEXTDECORATEDPORTION"_ustr;
         case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
-            return "TRANSFORM";
+            return u"TRANSFORM"_ustr;
         case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
-            return "UNIFIEDTRANSPARENCE";
+            return u"UNIFIEDTRANSPARENCE"_ustr;
         case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D:
-            return "POINTARRAY";
+            return u"POINTARRAY"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D:
-            return "TEXTHIERARCHYFIELD";
+            return u"TEXTHIERARCHYFIELD"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D:
-            return "TEXTHIERARCHYLINE";
+            return u"TEXTHIERARCHYLINE"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D:
-            return "TEXTHIERARCHYPARAGRAPH";
+            return u"TEXTHIERARCHYPARAGRAPH"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D:
-            return "TEXTHIERARCHYBLOCK";
+            return u"TEXTHIERARCHYBLOCK"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
-            return "TEXTHIERARCHYEDIT";
+            return u"TEXTHIERARCHYEDIT"_ustr;
         case PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D:
-            return "POLYGONWAVE";
+            return u"POLYGONWAVE"_ustr;
         case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D:
-            return "WRONGSPELL";
+            return u"WRONGSPELL"_ustr;
         case PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D:
-            return "TEXTEFFECT";
+            return u"TEXTEFFECT"_ustr;
         case PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D:
-            return "TEXTHIERARCHYBULLET";
+            return u"TEXTHIERARCHYBULLET"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D:
-            return "POLYPOLYGONHAIRLINE";
+            return u"POLYPOLYGONHAIRLINE"_ustr;
         case PRIMITIVE2D_ID_EXECUTEPRIMITIVE2D:
-            return "EXECUTE";
+            return u"EXECUTE"_ustr;
         case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D:
-            return "PAGEPREVIEW";
+            return u"PAGEPREVIEW"_ustr;
         case PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D:
-            return "STRUCTURETAG";
+            return u"STRUCTURETAG"_ustr;
         case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
-            return "BORDERLINE";
+            return u"BORDERLINE"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONMARKERPRIMITIVE2D:
-            return "POLYPOLYGONMARKER";
+            return u"POLYPOLYGONMARKER"_ustr;
         case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D:
-            return "HITTEST";
+            return u"HITTEST"_ustr;
         case PRIMITIVE2D_ID_INVERTPRIMITIVE2D:
-            return "INVERT";
+            return u"INVERT"_ustr;
         case PRIMITIVE2D_ID_DISCRETEBITMAPPRIMITIVE2D:
-            return "DISCRETEBITMAP";
+            return u"DISCRETEBITMAP"_ustr;
         case PRIMITIVE2D_ID_WALLPAPERBITMAPPRIMITIVE2D:
-            return "WALLPAPERBITMAP";
+            return u"WALLPAPERBITMAP"_ustr;
         case PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D:
-            return "TEXTLINE";
+            return u"TEXTLINE"_ustr;
         case PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D:
-            return "TEXTCHARACTERSTRIKEOUT";
+            return u"TEXTCHARACTERSTRIKEOUT"_ustr;
         case PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D:
-            return "TEXTGEOMETRYSTRIKEOUT";
+            return u"TEXTGEOMETRYSTRIKEOUT"_ustr;
         case PRIMITIVE2D_ID_EPSPRIMITIVE2D:
-            return "EPS";
+            return u"EPS"_ustr;
         case PRIMITIVE2D_ID_DISCRETESHADOWPRIMITIVE2D:
-            return "DISCRETESHADOW";
+            return u"DISCRETESHADOW"_ustr;
         case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
-            return "HIDDENGEOMETRY";
+            return u"HIDDENGEOMETRY"_ustr;
         case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
-            return "SVGLINEARGRADIENT";
+            return u"SVGLINEARGRADIENT"_ustr;
         case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
-            return "SVGRADIALGRADIENT";
+            return u"SVGRADIALGRADIENT"_ustr;
         case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
-            return "SVGLINEARATOM";
+            return u"SVGLINEARATOM"_ustr;
         case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
-            return "SVGRADIALATOM";
+            return u"SVGRADIALATOM"_ustr;
         case PRIMITIVE2D_ID_CROPPRIMITIVE2D:
-            return "CROP";
+            return u"CROP"_ustr;
         case PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D:
-            return "PATTERNFILL";
+            return u"PATTERNFILL"_ustr;
         case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D:
-            return "OBJECTINFO";
+            return u"OBJECTINFO"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D:
-            return "POLYPOLYGONSELECTION";
+            return u"POLYPOLYGONSELECTION"_ustr;
         case PRIMITIVE2D_ID_PAGEHIERARCHYPRIMITIVE2D:
-            return "PAGEHIERARCHY";
+            return u"PAGEHIERARCHY"_ustr;
         case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
-            return "GLOWPRIMITIVE";
+            return u"GLOWPRIMITIVE"_ustr;
         case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
-            return "SOFTEDGEPRIMITIVE";
+            return u"SOFTEDGEPRIMITIVE"_ustr;
         case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
-            return "LINERECTANGLEPRIMITIVE";
+            return u"LINERECTANGLEPRIMITIVE"_ustr;
         case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
-            return "FILLEDRECTANGLEPRIMITIVE";
+            return u"FILLEDRECTANGLEPRIMITIVE"_ustr;
         case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
-            return "SINGLELINEPRIMITIVE";
+            return u"SINGLELINEPRIMITIVE"_ustr;
         case PRIMITIVE2D_ID_EXCLUSIVEEDITVIEWPRIMITIVE2D:
-            return "EXCLUSIVEEDITVIEWPRIMITIVE2D";
+            return u"EXCLUSIVEEDITVIEWPRIMITIVE2D"_ustr;
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

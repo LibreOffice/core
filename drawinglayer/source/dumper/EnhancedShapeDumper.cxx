@@ -19,139 +19,139 @@ using namespace com::sun::star;
 void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Extrusion"_ustr);
         bool bExtrusion;
         if(anotherAny >>= bExtrusion)
             dumpExtrusionAsAttribute(bExtrusion);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Brightness");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Brightness"_ustr);
         double aBrightness = double();
         if(anotherAny >>= aBrightness)
             dumpBrightnessAsAttribute(aBrightness);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Depth");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Depth"_ustr);
         drawing::EnhancedCustomShapeParameterPair aDepth;
         if(anotherAny >>= aDepth)
             dumpDepthAsElement(aDepth);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Diffusion");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Diffusion"_ustr);
         double aDiffusion = double();
         if(anotherAny >>= aDiffusion)
             dumpDiffusionAsAttribute(aDiffusion);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("NumberOfLineSegments");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"NumberOfLineSegments"_ustr);
         sal_Int32 aNumberOfLineSegments = sal_Int32();
         if(anotherAny >>= aNumberOfLineSegments)
             dumpNumberOfLineSegmentsAsAttribute(aNumberOfLineSegments);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("LightFace");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"LightFace"_ustr);
         bool bLightFace;
         if(anotherAny >>= bLightFace)
             dumpLightFaceAsAttribute(bLightFace);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightHarsh");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FirstLightHarsh"_ustr);
         bool bFirstLightHarsh;
         if(anotherAny >>= bFirstLightHarsh)
             dumpFirstLightHarshAsAttribute(bFirstLightHarsh);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightHarsh");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"SecondLightHarsh"_ustr);
         bool bSecondLightHarsh;
         if(anotherAny >>= bSecondLightHarsh)
             dumpSecondLightHarshAsAttribute(bSecondLightHarsh);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightLevel");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FirstLightLevel"_ustr);
         double aFirstLightLevel = double();
         if(anotherAny >>= aFirstLightLevel)
             dumpFirstLightLevelAsAttribute(aFirstLightLevel);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightLevel");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"SecondLightLevel"_ustr);
         double aSecondLightLevel = double();
         if(anotherAny >>= aSecondLightLevel)
             dumpSecondLightLevelAsAttribute(aSecondLightLevel);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightDirection");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"FirstLightDirection"_ustr);
         drawing::Direction3D aFirstLightDirection;
         if(anotherAny >>= aFirstLightDirection)
             dumpFirstLightDirectionAsElement(aFirstLightDirection);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightDirection");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"SecondLightDirection"_ustr);
         drawing::Direction3D aSecondLightDirection;
         if(anotherAny >>= aSecondLightDirection)
             dumpSecondLightDirectionAsElement(aSecondLightDirection);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Metal");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Metal"_ustr);
         bool bMetal;
         if(anotherAny >>= bMetal)
             dumpMetalAsAttribute(bMetal);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ShadeMode");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ShadeMode"_ustr);
         drawing::ShadeMode eShadeMode;
         if(anotherAny >>= eShadeMode)
             dumpShadeModeAsAttribute(eShadeMode);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RotateAngle");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RotateAngle"_ustr);
         drawing::EnhancedCustomShapeParameterPair aRotateAngle;
         if(anotherAny >>= aRotateAngle)
             dumpRotateAngleAsElement(aRotateAngle);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RotationCenter");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RotationCenter"_ustr);
         drawing::Direction3D aRotationCenter;
         if(anotherAny >>= aRotationCenter)
             dumpRotationCenterAsElement(aRotationCenter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Shininess");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Shininess"_ustr);
         double aShininess = double();
         if(anotherAny >>= aShininess)
             dumpShininessAsAttribute(aShininess);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Skew");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Skew"_ustr);
         drawing::EnhancedCustomShapeParameterPair aSkew;
         if(anotherAny >>= aSkew)
             dumpSkewAsElement(aSkew);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Specularity");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Specularity"_ustr);
         double aSpecularity = double();
         if(anotherAny >>= aSpecularity)
             dumpSpecularityAsAttribute(aSpecularity);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ProjectionMode");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ProjectionMode"_ustr);
         drawing::ProjectionMode eProjectionMode;
         if(anotherAny >>= eProjectionMode)
             dumpProjectionModeAsAttribute(eProjectionMode);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ViewPoint");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ViewPoint"_ustr);
         drawing::Position3D aViewPoint;
         if(anotherAny >>= aViewPoint)
             dumpViewPointAsElement(aViewPoint);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Origin");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Origin"_ustr);
         drawing::EnhancedCustomShapeParameterPair aOrigin;
         if(anotherAny >>= aOrigin)
             dumpOriginAsElement(aOrigin);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionColor");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ExtrusionColor"_ustr);
         bool bExtrusionColor;
         if(anotherAny >>= bExtrusionColor)
             dumpExtrusionColorAsAttribute(bExtrusionColor);
@@ -363,67 +363,67 @@ void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(bool bExtrusionColor)
 void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Type");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Type"_ustr);
         OUString sType;
         if(anotherAny >>= sType)
             dumpTypeAsAttribute(sType);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ViewBox");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ViewBox"_ustr);
         awt::Rectangle aViewBox;
         if(anotherAny >>= aViewBox)
             dumpViewBoxAsElement(aViewBox);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"MirroredX"_ustr);
         bool bMirroredX;
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"MirroredY"_ustr);
         bool bMirroredY;
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextRotateAngle");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextRotateAngle"_ustr);
         double aTextRotateAngle = double();
         if(anotherAny >>= aTextRotateAngle)
             dumpTextRotateAngleAsAttribute(aTextRotateAngle);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("AdjustmentValues");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"AdjustmentValues"_ustr);
         uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
         if(anotherAny >>= aAdjustmentValues)
             dumpAdjustmentValuesAsElement(aAdjustmentValues);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Extrusion"_ustr);
         uno::Sequence< beans::PropertyValue > aExtrusion;
         if(anotherAny >>= aExtrusion)
             dumpExtrusionAsElement(aExtrusion);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Path");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Path"_ustr);
         uno::Sequence< beans::PropertyValue > aPath;
         if(anotherAny >>= aPath)
             dumpPathAsElement(aPath);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextPath"_ustr);
         uno::Sequence< beans::PropertyValue > aTextPath;
         if(anotherAny >>= aTextPath)
             dumpTextPathAsElement(aTextPath);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Equations");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Equations"_ustr);
         uno::Sequence< OUString > aEquations;
         if(anotherAny >>= aEquations)
             dumpEquationsAsElement(aEquations);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Handles");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Handles"_ustr);
         uno::Sequence< beans::PropertyValues > aHandles;
         if(anotherAny >>= aHandles)
             dumpHandlesAsElement(aHandles);
@@ -613,91 +613,91 @@ void EnhancedShapeDumper::dumpHandlesAsElement(const uno::Sequence< beans::Prope
 void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"MirroredX"_ustr);
         bool bMirroredX;
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"MirroredY"_ustr);
         bool bMirroredY;
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Switched");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Switched"_ustr);
         bool bSwitched;
         if(anotherAny >>= bSwitched)
             dumpSwitchedAsAttribute(bSwitched);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Position");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Position"_ustr);
         drawing::EnhancedCustomShapeParameterPair aPosition;
         if(anotherAny >>= aPosition)
             dumpPositionAsElement(aPosition);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Polar");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Polar"_ustr);
         drawing::EnhancedCustomShapeParameterPair aPolar;
         if(anotherAny >>= aPolar)
             dumpPolarAsElement(aPolar);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RefX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RefX"_ustr);
         sal_Int32 aRefX = sal_Int32();
         if(anotherAny >>= aRefX)
             dumpRefXAsAttribute(aRefX);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RefY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RefY"_ustr);
         sal_Int32 aRefY = sal_Int32();
         if(anotherAny >>= aRefY)
             dumpRefYAsAttribute(aRefY);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RefAngle");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RefAngle"_ustr);
         sal_Int32 aRefAngle = sal_Int32();
         if(anotherAny >>= aRefAngle)
             dumpRefAngleAsAttribute(aRefAngle);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RefR");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RefR"_ustr);
         sal_Int32 aRefR = sal_Int32();
         if(anotherAny >>= aRefR)
             dumpRefRAsAttribute(aRefR);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RangeXMinimum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RangeXMinimum"_ustr);
         drawing::EnhancedCustomShapeParameter aRangeXMinimum;
         if(anotherAny >>= aRangeXMinimum)
             dumpRangeXMinimumAsElement(aRangeXMinimum);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RangeXMaximum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RangeXMaximum"_ustr);
         drawing::EnhancedCustomShapeParameter aRangeXMaximum;
         if(anotherAny >>= aRangeXMaximum)
             dumpRangeXMaximumAsElement(aRangeXMaximum);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RangeYMinimum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RangeYMinimum"_ustr);
         drawing::EnhancedCustomShapeParameter aRangeYMinimum;
         if(anotherAny >>= aRangeYMinimum)
             dumpRangeYMinimumAsElement(aRangeYMinimum);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RangeYMaximum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RangeYMaximum"_ustr);
         drawing::EnhancedCustomShapeParameter aRangeYMaximum;
         if(anotherAny >>= aRangeYMaximum)
             dumpRangeYMaximumAsElement(aRangeYMaximum);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RadiusRangeMinimum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RadiusRangeMinimum"_ustr);
         drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
         if(anotherAny >>= aRadiusRangeMinimum)
             dumpRadiusRangeMinimumAsElement(aRadiusRangeMinimum);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("RadiusRangeMaximum");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"RadiusRangeMaximum"_ustr);
         drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
         if(anotherAny >>= aRadiusRangeMaximum)
             dumpRadiusRangeMaximumAsElement(aRadiusRangeMaximum);
@@ -824,73 +824,73 @@ void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(const drawing::Enhance
 void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Coordinates");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Coordinates"_ustr);
         uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
         if(anotherAny >>= aCoordinates)
             dumpCoordinatesAsElement(aCoordinates);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("Segments");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"Segments"_ustr);
         uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
         if(anotherAny >>= aSegments)
             dumpSegmentsAsElement(aSegments);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("StretchX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"StretchX"_ustr);
         sal_Int32 aStretchX = sal_Int32();
         if(anotherAny >>= aStretchX)
             dumpStretchXAsAttribute(aStretchX);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("StretchY");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"StretchY"_ustr);
         sal_Int32 aStretchY = sal_Int32();
         if(anotherAny >>= aStretchY)
             dumpStretchYAsAttribute(aStretchY);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextFrames");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextFrames"_ustr);
         uno::Sequence< drawing::EnhancedCustomShapeTextFrame > aTextFrames;
         if(anotherAny >>= aTextFrames)
             dumpTextFramesAsElement(aTextFrames);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("GluePoints");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"GluePoints"_ustr);
         uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aGluePoints;
         if(anotherAny >>= aGluePoints)
             dumpGluePointsAsElement(aGluePoints);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("GluePointLeavingDirections");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"GluePointLeavingDirections"_ustr);
         uno::Sequence< double > aGluePointLeavingDirections;
         if(anotherAny >>= aGluePointLeavingDirections)
             dumpGluePointLeavingDirectionsAsElement(aGluePointLeavingDirections);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("GluePointType");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"GluePointType"_ustr);
         sal_Int32 aGluePointType = sal_Int32();
         if(anotherAny >>= aGluePointType)
             dumpGluePointTypeAsAttribute(aGluePointType);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionAllowed");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ExtrusionAllowed"_ustr);
         bool bExtrusionAllowed;
         if(anotherAny >>= bExtrusionAllowed)
             dumpExtrusionAllowedAsAttribute(bExtrusionAllowed);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ConcentricGradientFillAllowed");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ConcentricGradientFillAllowed"_ustr);
         bool bConcentricGradientFillAllowed;
         if(anotherAny >>= bConcentricGradientFillAllowed)
             dumpConcentricGradientFillAllowedAsAttribute(bConcentricGradientFillAllowed);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextPathAllowed");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextPathAllowed"_ustr);
         bool bTextPathAllowed;
         if(anotherAny >>= bTextPathAllowed)
             dumpTextPathAllowedAsAttribute(bTextPathAllowed);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("SubViewSize");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"SubViewSize"_ustr);
         uno::Sequence< awt::Size > aSubViewSize;
         if(anotherAny >>= aSubViewSize)
             dumpSubViewSizeAsElement(aSubViewSize);
@@ -1025,19 +1025,19 @@ void EnhancedShapeDumper::dumpSubViewSizeAsElement(const uno::Sequence< awt::Siz
 void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextPath"_ustr);
         bool bTextPath;
         if(anotherAny >>= bTextPath)
             dumpTextPathAsAttribute(bTextPath);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("TextPathMode");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"TextPathMode"_ustr);
         drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
         if(anotherAny >>= eTextPathMode)
             dumpTextPathModeAsAttribute(eTextPathMode);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue("ScaleX");
+        uno::Any anotherAny = xPropSet->getPropertyValue(u"ScaleX"_ustr);
         bool bScaleX;
         if(anotherAny >>= bScaleX)
             dumpScaleXAsAttribute(bScaleX);

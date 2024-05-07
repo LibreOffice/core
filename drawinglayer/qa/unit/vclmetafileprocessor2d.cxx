@@ -131,7 +131,7 @@ public:
             cppCanvas, metafile, cppcanvas::Renderer::Parameters());
         renderer->setTransformation(basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431));
         CPPUNIT_ASSERT(renderer->draw());
-        exportDevice("test-tdf136957", mVclDevice);
+        exportDevice(u"test-tdf136957"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), Size(1920, 1080));
         BitmapScopedReadAccess access(bitmap);
         // There should be a dotted line, without the fix it wouldn't be there, so check

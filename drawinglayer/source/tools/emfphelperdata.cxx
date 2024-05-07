@@ -127,89 +127,89 @@ namespace emfplushelper
     {
         switch (type)
         {
-            case EmfPlusObjectTypeBrush: return "EmfPlusObjectTypeBrush";
-            case EmfPlusObjectTypePen: return "EmfPlusObjectTypePen";
-            case EmfPlusObjectTypePath: return "EmfPlusObjectTypePath";
-            case EmfPlusObjectTypeRegion: return "EmfPlusObjectTypeRegion";
-            case EmfPlusObjectTypeImage: return "EmfPlusObjectTypeImage";
-            case EmfPlusObjectTypeFont: return "EmfPlusObjectTypeFont";
-            case EmfPlusObjectTypeStringFormat: return "EmfPlusObjectTypeStringFormat";
-            case EmfPlusObjectTypeImageAttributes: return "EmfPlusObjectTypeImageAttributes";
-            case EmfPlusObjectTypeCustomLineCap: return "EmfPlusObjectTypeCustomLineCap";
+            case EmfPlusObjectTypeBrush: return u"EmfPlusObjectTypeBrush"_ustr;
+            case EmfPlusObjectTypePen: return u"EmfPlusObjectTypePen"_ustr;
+            case EmfPlusObjectTypePath: return u"EmfPlusObjectTypePath"_ustr;
+            case EmfPlusObjectTypeRegion: return u"EmfPlusObjectTypeRegion"_ustr;
+            case EmfPlusObjectTypeImage: return u"EmfPlusObjectTypeImage"_ustr;
+            case EmfPlusObjectTypeFont: return u"EmfPlusObjectTypeFont"_ustr;
+            case EmfPlusObjectTypeStringFormat: return u"EmfPlusObjectTypeStringFormat"_ustr;
+            case EmfPlusObjectTypeImageAttributes: return u"EmfPlusObjectTypeImageAttributes"_ustr;
+            case EmfPlusObjectTypeCustomLineCap: return u"EmfPlusObjectTypeCustomLineCap"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset)
     {
         switch (nPixelOffset)
         {
-            case PixelOffsetMode::PixelOffsetModeDefault: return "PixelOffsetModeDefault";
-            case PixelOffsetMode::PixelOffsetModeHighSpeed: return "PixelOffsetModeHighSpeed";
-            case PixelOffsetMode::PixelOffsetModeHighQuality: return "PixelOffsetModeHighQuality";
-            case PixelOffsetMode::PixelOffsetModeNone: return "PixelOffsetModeNone";
-            case PixelOffsetMode::PixelOffsetModeHalf: return "PixelOffsetModeHalf";
+            case PixelOffsetMode::PixelOffsetModeDefault: return u"PixelOffsetModeDefault"_ustr;
+            case PixelOffsetMode::PixelOffsetModeHighSpeed: return u"PixelOffsetModeHighSpeed"_ustr;
+            case PixelOffsetMode::PixelOffsetModeHighQuality: return u"PixelOffsetModeHighQuality"_ustr;
+            case PixelOffsetMode::PixelOffsetModeNone: return u"PixelOffsetModeNone"_ustr;
+            case PixelOffsetMode::PixelOffsetModeHalf: return u"PixelOffsetModeHalf"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString SmoothingModeToString(sal_uInt16 nSmoothMode)
     {
         switch (nSmoothMode)
         {
-            case SmoothingMode::SmoothingModeDefault: return "SmoothingModeDefault";
-            case SmoothingMode::SmoothingModeHighSpeed: return "SmoothModeHighSpeed";
-            case SmoothingMode::SmoothingModeHighQuality: return "SmoothingModeHighQuality";
-            case SmoothingMode::SmoothingModeNone: return "SmoothingModeNone";
-            case SmoothingMode::SmoothingModeAntiAlias8x4: return "SmoothingModeAntiAlias8x4";
-            case SmoothingMode::SmoothingModeAntiAlias8x8: return "SmoothingModeAntiAlias8x8";
+            case SmoothingMode::SmoothingModeDefault: return u"SmoothingModeDefault"_ustr;
+            case SmoothingMode::SmoothingModeHighSpeed: return u"SmoothModeHighSpeed"_ustr;
+            case SmoothingMode::SmoothingModeHighQuality: return u"SmoothingModeHighQuality"_ustr;
+            case SmoothingMode::SmoothingModeNone: return u"SmoothingModeNone"_ustr;
+            case SmoothingMode::SmoothingModeAntiAlias8x4: return u"SmoothingModeAntiAlias8x4"_ustr;
+            case SmoothingMode::SmoothingModeAntiAlias8x8: return u"SmoothingModeAntiAlias8x8"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString TextRenderingHintToString(sal_uInt16 nHint)
     {
         switch (nHint)
         {
-            case TextRenderingHint::TextRenderingHintSystemDefault: return "TextRenderingHintSystemDefault";
-            case TextRenderingHint::TextRenderingHintSingleBitPerPixelGridFit: return "TextRenderingHintSingleBitPerPixelGridFit";
-            case TextRenderingHint::TextRenderingHintSingleBitPerPixel: return "TextRenderingHintSingleBitPerPixel";
-            case TextRenderingHint::TextRenderingHintAntialiasGridFit: return "TextRenderingHintAntialiasGridFit";
-            case TextRenderingHint::TextRenderingHintAntialias: return "TextRenderingHintAntialias";
-            case TextRenderingHint::TextRenderingHintClearTypeGridFit: return "TextRenderingHintClearTypeGridFit";
+            case TextRenderingHint::TextRenderingHintSystemDefault: return u"TextRenderingHintSystemDefault"_ustr;
+            case TextRenderingHint::TextRenderingHintSingleBitPerPixelGridFit: return u"TextRenderingHintSingleBitPerPixelGridFit"_ustr;
+            case TextRenderingHint::TextRenderingHintSingleBitPerPixel: return u"TextRenderingHintSingleBitPerPixel"_ustr;
+            case TextRenderingHint::TextRenderingHintAntialiasGridFit: return u"TextRenderingHintAntialiasGridFit"_ustr;
+            case TextRenderingHint::TextRenderingHintAntialias: return u"TextRenderingHintAntialias"_ustr;
+            case TextRenderingHint::TextRenderingHintClearTypeGridFit: return u"TextRenderingHintClearTypeGridFit"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static OUString InterpolationModeToString(sal_uInt16 nMode)
     {
         switch (nMode)
         {
-            case InterpolationMode::InterpolationModeDefault: return "InterpolationModeDefault";
-            case InterpolationMode::InterpolationModeLowQuality: return "InterpolationModeLowQuality";
-            case InterpolationMode::InterpolationModeHighQuality: return "InterpolationModeHighQuality";
-            case InterpolationMode::InterpolationModeBilinear: return "InterpolationModeBilinear";
-            case InterpolationMode::InterpolationModeBicubic: return "InterpolationModeBicubic";
-            case InterpolationMode::InterpolationModeNearestNeighbor: return "InterpolationModeNearestNeighbor";
-            case InterpolationMode::InterpolationModeHighQualityBilinear: return "InterpolationModeHighQualityBilinear";
-            case InterpolationMode::InterpolationModeHighQualityBicubic: return "InterpolationModeHighQualityBicubic";
+            case InterpolationMode::InterpolationModeDefault: return u"InterpolationModeDefault"_ustr;
+            case InterpolationMode::InterpolationModeLowQuality: return u"InterpolationModeLowQuality"_ustr;
+            case InterpolationMode::InterpolationModeHighQuality: return u"InterpolationModeHighQuality"_ustr;
+            case InterpolationMode::InterpolationModeBilinear: return u"InterpolationModeBilinear"_ustr;
+            case InterpolationMode::InterpolationModeBicubic: return u"InterpolationModeBicubic"_ustr;
+            case InterpolationMode::InterpolationModeNearestNeighbor: return u"InterpolationModeNearestNeighbor"_ustr;
+            case InterpolationMode::InterpolationModeHighQualityBilinear: return u"InterpolationModeHighQualityBilinear"_ustr;
+            case InterpolationMode::InterpolationModeHighQualityBicubic: return u"InterpolationModeHighQualityBicubic"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     OUString UnitTypeToString(sal_uInt16 nType)
     {
         switch (nType)
         {
-            case UnitTypeWorld: return "UnitTypeWorld";
-            case UnitTypeDisplay: return "UnitTypeDisplay";
-            case UnitTypePixel: return "UnitTypePixel";
-            case UnitTypePoint: return "UnitTypePoint";
-            case UnitTypeInch: return "UnitTypeInch";
-            case UnitTypeDocument: return "UnitTypeDocument";
-            case UnitTypeMillimeter: return "UnitTypeMillimeter";
+            case UnitTypeWorld: return u"UnitTypeWorld"_ustr;
+            case UnitTypeDisplay: return u"UnitTypeDisplay"_ustr;
+            case UnitTypePixel: return u"UnitTypePixel"_ustr;
+            case UnitTypePoint: return u"UnitTypePoint"_ustr;
+            case UnitTypeInch: return u"UnitTypeInch"_ustr;
+            case UnitTypeDocument: return u"UnitTypeDocument"_ustr;
+            case UnitTypeMillimeter: return u"UnitTypeMillimeter"_ustr;
         }
-        return "";
+        return u""_ustr;
     }
 
     static bool IsBrush(sal_uInt16 flags)
@@ -1609,7 +1609,7 @@ namespace emfplushelper
 
                         drawinglayer::attribute::FontAttribute fontAttribute(
                             font->family,                                          // font family
-                            "",                                                    // (no) font style
+                            u""_ustr,                                                    // (no) font style
                             font->Bold() ? 8u : 1u,                                // weight: 8 = bold
                             font->family == "SYMBOL",                              // symbol
                             stringFormat && stringFormat->DirectionVertical(),     // vertical
@@ -2171,7 +2171,7 @@ namespace emfplushelper
 
                             drawinglayer::attribute::FontAttribute fontAttribute(
                                 font->family,                                    // font family
-                                "",                                              // (no) font style
+                                u""_ustr,                                              // (no) font style
                                 font->Bold() ? 8u : 1u,                          // weight: 8 = bold
                                 font->family == "SYMBOL",                        // symbol
                                 optionFlags & 0x2,                               // vertical

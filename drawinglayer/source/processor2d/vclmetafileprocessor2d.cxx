@@ -1274,7 +1274,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
         }
         case drawinglayer::primitive2d::FIELD_TYPE_URL:
         {
-            aURL = rFieldPrimitive.getValue("URL");
+            aURL = rFieldPrimitive.getValue(u"URL"_ustr);
 
             if (!aURL.isEmpty())
             {
@@ -1306,7 +1306,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxX())),
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
     vcl::PDFExtOutDevBookmarkEntry aBookmark;
-    OUString const content(rFieldPrimitive.getValue("Representation"));
+    OUString const content(rFieldPrimitive.getValue(u"Representation"_ustr));
     aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic, content);
     aBookmark.aBookmark = aURL;
     std::vector<vcl::PDFExtOutDevBookmarkEntry>& rBookmarks = mpPDFExtOutDevData->GetBookmarks();

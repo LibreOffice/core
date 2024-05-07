@@ -115,7 +115,7 @@ public:
         };
         processor->process(primitives);
 
-        exportDevice("test-tdf139000.png", device);
+        exportDevice(u"test-tdf139000.png"_ustr, device);
         Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
         BitmapScopedReadAccess access(bitmap);
         // The upper half should keep its red background color.

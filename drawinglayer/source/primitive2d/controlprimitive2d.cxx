@@ -56,7 +56,7 @@ namespace drawinglayer::primitive2d
             if(!xSet.is())
                 return;
 
-            uno::Any aValue(xSet->getPropertyValue("DefaultControl"));
+            uno::Any aValue(xSet->getPropertyValue(u"DefaultControl"_ustr));
             OUString aUnoControlTypeName;
 
             if(!(aValue >>= aUnoControlTypeName))
@@ -150,7 +150,7 @@ namespace drawinglayer::primitive2d
                                     if (xWindowPeer)
                                     {
                                         uno::Reference<awt::XVclWindowPeer> xPeerProps(xWindowPeer, uno::UNO_QUERY_THROW);
-                                        uno::Any aAny = xPeerProps->getProperty("ParentIs100thmm"); // see VCLXWindow::getProperty
+                                        uno::Any aAny = xPeerProps->getProperty(u"ParentIs100thmm"_ustr); // see VCLXWindow::getProperty
                                         aAny >>= bUserIs100thmm;
                                     }
                                 }
