@@ -274,27 +274,6 @@ void DocumentFocusListener::detachRecursive(
     }
 }
 
-/*****************************************************************************/
-
-/*
- * page tabs in gtk are widgets, so we need to simulate focus events for those
- */
-
-static void handle_tabpage_activated(vcl::Window *pWindow)
-{
-    uno::Reference< accessibility::XAccessible > xAccessible =
-        pWindow->GetAccessible();
-
-    if( ! xAccessible.is() )
-        return;
-
-    uno::Reference< accessibility::XAccessibleSelection > xSelection(
-        xAccessible->getAccessibleContext(), uno::UNO_QUERY);
-
-    if( xSelection.is() )
-        atk_wrapper_notify_focus_change(xSelection->getSelectedAccessibleChild(0));
-}
-
 rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
 {
     rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
@@ -312,9 +291,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
     {
         switch (rEvent.GetId())
         {
-        case VclEventId::TabpageActivate:
-            handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
-            break;
 
         case VclEventId::ComboboxSetText:
             // This looks quite strange to me. Stumbled over this when fixing #i104290#.
