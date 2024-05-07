@@ -1658,6 +1658,11 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                   CastFlowFrame( pOwn )->HasParaSpaceAtPages( m_rThis.IsSctFrame() ) )
         {
             nUpper = pAttrs->GetULSpace().GetUpper();
+
+            if (m_rThis.IsCollapseUpper())
+            {
+                nUpper = 0;
+            }
         }
     }
 

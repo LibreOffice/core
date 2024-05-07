@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_core_layout))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_core_layout))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_layout, \
+    sw/qa/core/layout/calcmove \
     sw/qa/core/layout/fly \
     sw/qa/core/layout/flycnt \
     sw/qa/core/layout/frmtool \
