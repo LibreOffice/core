@@ -21,7 +21,7 @@
 
 #include "attributedispatcher.hxx"
 
-class SfxPoolItem;
+class SfxPoolItemHolder;
 
 namespace frm
 {
@@ -47,10 +47,10 @@ namespace frm
 
     protected:
         // own overridables
-        /** convert the arguments as got in a XDispatch::dispatch call into an SfxPoolItem, which can
+        /** convert the arguments as got in a XDispatch::dispatch call into an SfxPoolItemHolder, which can
             be used with a IMultiAttributeDispatcher::executeAttribute
         */
-        virtual const SfxPoolItem* convertDispatchArgsToItem(
+        virtual SfxPoolItemHolder convertDispatchArgsToItem(
             const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
     };
 
