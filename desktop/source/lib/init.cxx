@@ -1524,32 +1524,14 @@ static OUString getGenerator()
 
 extern "C" {
 
-CallbackFlushHandler::TimeoutIdle::TimeoutIdle( CallbackFlushHandler* handler )
-    : Timer( "lokit timer callback" )
-    , mHandler( handler )
-{
-    // A second timer with higher priority, it'll ensure we flush in reasonable time if we get too busy
-    // to get POST_PAINT priority processing. Otherwise it could take a long time to flush.
-    SetPriority(TaskPriority::DEFAULT);
-    SetTimeout( 100 ); // 100 ms
-}
-
-void CallbackFlushHandler::TimeoutIdle::Invoke()
-{
-    mHandler->Invoke();
-}
-
 // One of these is created per view to handle events cf. doc_registerCallback
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
-    : Idle( "lokit idle callback" ),
-      m_pDocument(pDocument),
+    : m_pDocument(pDocument),
       m_pCallback(pCallback),
+      m_pFlushEvent(nullptr),
       m_pData(pData),
-      m_nDisableCallbacks(0),
-      m_TimeoutIdle( this )
+      m_nDisableCallbacks(0)
 {
-    SetPriority(TaskPriority::POST_PAINT);
-
     // Add the states that are safe to skip duplicates on, even when
     // not consequent (i.e. do no emit them if unchanged from last).
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL"_ostr);
@@ -1568,9 +1550,18 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 }
 
+void CallbackFlushHandler::stop()
+{
+    if (m_pFlushEvent)
+    {
+        Application::RemoveUserEvent(m_pFlushEvent);
+        m_pFlushEvent = nullptr;
+    }
+}
+
 CallbackFlushHandler::~CallbackFlushHandler()
 {
-    Stop();
+    stop();
 }
 
 CallbackFlushHandler::queue_type2::iterator CallbackFlushHandler::toQueue2(CallbackFlushHandler::queue_type1::iterator pos)
@@ -1592,7 +1583,7 @@ void CallbackFlushHandler::setUpdatedType( int nType, bool value )
         m_updatedTypes.resize( nType + 1 ); // new are default-constructed, i.e. false
     m_updatedTypes[ nType ] = value;
     if(value)
-        startTimer();
+        scheduleFlush();
 }
 
 void CallbackFlushHandler::resetUpdatedType( int nType )
@@ -1608,7 +1599,7 @@ void CallbackFlushHandler::setUpdatedTypePerViewId( int nType, int nViewId, int 
         types.resize( nType + 1 ); // new are default-constructed, i.e. 'set' is false
     types[ nType ] = PerViewIdData{ value, nSourceViewId };
     if(value)
-        startTimer();
+        scheduleFlush();
 }
 
 void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
@@ -1685,7 +1676,7 @@ void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
 void CallbackFlushHandler::libreOfficeKitViewAddPendingInvalidateTiles()
 {
     // Invoke() will call flushPendingLOKInvalidateTiles(), so just make sure the timer is active.
-    startTimer();
+    scheduleFlush();
 }
 
 void CallbackFlushHandler::queue(const int type, const OString& data)
@@ -1998,7 +1989,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 #endif
 
     lock.unlock();
-    startTimer();
+    scheduleFlush();
 }
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
@@ -2376,7 +2367,7 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
         << "] to have " << m_queue1.size() << " entries.");
 }
 
-void CallbackFlushHandler::Invoke()
+void CallbackFlushHandler::invoke()
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::Invoke");
 
@@ -2484,16 +2475,19 @@ void CallbackFlushHandler::Invoke()
 
     m_queue1.clear();
     m_queue2.clear();
-    Stop();
-    m_TimeoutIdle.Stop();
+    stop();
 }
 
-void CallbackFlushHandler::startTimer()
+void CallbackFlushHandler::scheduleFlush()
 {
-    if (!IsActive())
-        Start();
-    if (!m_TimeoutIdle.IsActive())
-        m_TimeoutIdle.Start();
+    if (!m_pFlushEvent)
+        m_pFlushEvent = Application::PostUserEvent(LINK(this, CallbackFlushHandler, FlushQueue));
+}
+
+IMPL_LINK_NOARG(CallbackFlushHandler, FlushQueue, void*, void)
+{
+    m_pFlushEvent = nullptr;
+    invoke();
 }
 
 bool CallbackFlushHandler::removeAll(int type)
