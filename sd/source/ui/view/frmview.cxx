@@ -287,6 +287,7 @@ void FrameView::Update(SdOptions const * pOptions)
     if (bImpress)
     {
         mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
+        SetAngleSnapEnabled( officecfg::Office::Impress::Snap::Position::Rotating::get() );
         SetBigOrtho( officecfg::Office::Impress::Snap::Position::ExtendEdges::get() );
         SetBordSnap( officecfg::Office::Impress::Snap::Object::PageMargin::get() );
         SetDragStripes( officecfg::Office::Impress::Layout::Display::Guide::get() );
@@ -301,6 +302,7 @@ void FrameView::Update(SdOptions const * pOptions)
     else
     {
         mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
+        SetAngleSnapEnabled( officecfg::Office::Draw::Snap::Position::Rotating::get() );
         SetBigOrtho( officecfg::Office::Draw::Snap::Position::ExtendEdges::get() );
         SetBordSnap( officecfg::Office::Draw::Snap::Object::PageMargin::get() );
         SetDragStripes( officecfg::Office::Draw::Layout::Display::Guide::get() );
@@ -321,7 +323,6 @@ void FrameView::Update(SdOptions const * pOptions)
     SetMoveOnlyDragging( pOptions->IsMoveOnlyDragging() );
     SetSlantButShear( pOptions->IsMoveOnlyDragging() );
     SetCrookNoContortion( pOptions->IsCrookNoContortion() );
-    SetAngleSnapEnabled( pOptions->IsRotate() );
     SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
     GetModel().SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
