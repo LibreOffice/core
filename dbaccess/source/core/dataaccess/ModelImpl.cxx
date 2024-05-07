@@ -457,17 +457,17 @@ namespace
 {
     OUString lcl_getContainerStorageName_throw( ODatabaseModelImpl::ObjectType _eType )
     {
-        const char* pAsciiName( nullptr );
+        OUString sName;
         switch ( _eType )
         {
-        case ODatabaseModelImpl::ObjectType::Form:   pAsciiName = "forms"; break;
-        case ODatabaseModelImpl::ObjectType::Report: pAsciiName = "reports"; break;
-        case ODatabaseModelImpl::ObjectType::Query:  pAsciiName = "queries"; break;
-        case ODatabaseModelImpl::ObjectType::Table:  pAsciiName = "tables"; break;
+        case ODatabaseModelImpl::ObjectType::Form:   sName = u"forms"_ustr; break;
+        case ODatabaseModelImpl::ObjectType::Report: sName = u"reports"_ustr; break;
+        case ODatabaseModelImpl::ObjectType::Query:  sName = u"queries"_ustr; break;
+        case ODatabaseModelImpl::ObjectType::Table:  sName = u"tables"_ustr; break;
         default:
             throw RuntimeException();
         }
-        return OUString::createFromAscii( pAsciiName );
+        return sName;
     }
 
     bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const Reference< XStorage >& _rxContainerStorage )
