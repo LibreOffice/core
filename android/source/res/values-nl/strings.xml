@@ -118,4 +118,18 @@
     <string name="display_language_summary">De standaard weergavetaal instellen</string>
     <string name="page">Pagina</string>
     <string name="font_color">Tekstkleur</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Opslaan onvolledig. Waren er veranderingen?</string>
+    <string name="action_underline">Onderstrepen</string>
+    <string name="unable_to_go_further">Kan niet verder te gaan.</string>
+    <string name="action_bold">Vet</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Zoeken</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Doorhalen</string>
+    <string name="search_not_found">Sleutelwoord niet gevonden</string>
+    <string name="menu_preferences">Voorkeuren</string>
+    <string name="directory_not_saved">Map is niet opgeslagen</string>
+    <string name="action_italic">Cursief</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Uw Android-apparaat ondersteunt geen in-app SVG-diavoorstelling. We hebben de link naar de diavoorstelling naar het klembord gekopieerd. Druk op de knop Start, open een moderne webbrowser, plak deze in de adresbalk en ga.</string>
 </resources>

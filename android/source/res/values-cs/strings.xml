@@ -118,4 +118,18 @@
     <string name="current_uno_command">Aktuální příkaz UNO</string>
     <string name="action_rename_slide">Přejmenovat snímek</string>
     <string name="action_copy">Kopírovat</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Ukládání nedokončeno. Byly v dokumentu nějaké změny?</string>
+    <string name="action_underline">Podtržené</string>
+    <string name="unable_to_go_further">Nelze jít dále.</string>
+    <string name="action_bold">Tučné</string>
+    <string name="browser_app_name">Prohlížeč LibreOffice</string>
+    <string name="menu_search">Hledat</string>
+    <string name="app_about_name"><b>LibreOffice Viewer „Beta“</b></string>
+    <string name="action_strikeout">Přeškrtnuté</string>
+    <string name="search_not_found">Klíčové slovo nenalezeno</string>
+    <string name="menu_preferences">Předvolby</string>
+    <string name="directory_not_saved">Adresář nebyl uložen.</string>
+    <string name="action_italic">Kurzíva</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Vaše zařízení s Androidem nepodporuje v aplikacích prezentace ve formátu SVG. Prezentace byla zkopírována do schránky. Stiskněte tlačítko Domů, otevřete moderní webový prohlížeč a vložte obsah schránky do adresního řádku.</string>
 </resources>

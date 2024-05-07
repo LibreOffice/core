@@ -118,4 +118,18 @@
     <string name="pdf_export_finished">Exportação em PDF terminada</string>
     <string name="unable_to_save">Não foi possível salvar o arquivo</string>
     <string name="action_rename_slide">Renomear slide</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="message_save_incomplete">Gravação incompleta. Houve mudanças?</string>
+    <string name="action_underline">Sublinhado</string>
+    <string name="unable_to_go_further">Não foi possível ir mais longe.</string>
+    <string name="action_bold">Negrito</string>
+    <string name="browser_app_name">Navegador LibreOffice</string>
+    <string name="menu_search">Pesquisar</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="action_strikeout">Tachado</string>
+    <string name="search_not_found">Palavra-chave não encontrada</string>
+    <string name="menu_preferences">Preferências</string>
+    <string name="directory_not_saved">Diretório não salvo.</string>
+    <string name="action_italic">Itálico</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Seu dispositivo Android não permite apresentações em SVG dentro da aplicação. O link foi copiado para a área de transferência. Abra um navegador internet moderno, cole o endereço na barra de endereços e navegue.</string>
 </resources>

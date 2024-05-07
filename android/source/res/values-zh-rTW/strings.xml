@@ -118,4 +118,18 @@
     <string name="pref_experimental_editing_summary">啟用實驗性編輯模式。使用風險自負。</string>
     <string name="calc_optimal_length_default_text">輸入額外長度（以 100th/mm 為單位）</string>
     <string name="action_presentation">投影片放映</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">確定</string>
+    <string name="message_save_incomplete">儲存未完成。有任何變動嗎？</string>
+    <string name="action_underline">底線</string>
+    <string name="unable_to_go_further">無法更進一步。</string>
+    <string name="action_bold">粗體</string>
+    <string name="browser_app_name">LibreOffice 瀏覽器</string>
+    <string name="menu_search">搜尋</string>
+    <string name="app_about_name"><b>LibreOffice Viewer「測試版」</b></string>
+    <string name="action_strikeout">刪除線</string>
+    <string name="search_not_found">找不到關鍵字</string>
+    <string name="menu_preferences">偏好設定</string>
+    <string name="directory_not_saved">目錄未儲存。</string>
+    <string name="action_italic">義式斜體</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">您的 Android 裝置不支援應用程式內 svg 投影片放映。我們已將投影片放映的連結複製到剪貼簿。請按下主畫面按鈕，開啟現代網路瀏覽器，貼上到網址列並瀏覽。</string>
 </resources>
