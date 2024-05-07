@@ -87,38 +87,6 @@ namespace dbaccess
                     const css::uno::Any& Supplement
                 );
 
-        /** notifies a document event to all registered listeners
-
-            @precond
-                the mutex is not locked
-            @precond
-                ->onDocumentInitialized has been called
-        */
-        void    notifyDocumentEvent(
-                    const char* _pAsciiEventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
-                    const css::uno::Any& _rSupplement = css::uno::Any()
-                )
-        {
-            notifyDocumentEvent( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
-        }
-
-        /** notifies a document event to all registered listeners, asynchronously
-
-            Note that no event is actually notified before you called ->onDocumentInitialized.
-
-            @precond
-                the mutex is locked
-        */
-        void    notifyDocumentEventAsync(
-                    const char* _pAsciiEventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
-                    const css::uno::Any& _rSupplement = css::uno::Any()
-                )
-        {
-            notifyDocumentEventAsync( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
-        }
-
     private:
         ::rtl::Reference< DocumentEventNotifier_Impl >   m_pImpl;
     };

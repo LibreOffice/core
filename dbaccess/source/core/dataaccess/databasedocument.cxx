@@ -124,7 +124,7 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
 
     // notify the respective events
     if ( bLoadFinished )
-        m_rEventNotifier.notifyDocumentEventAsync( m_bIsNewDocument ? "OnNew" : "OnLoad" );
+        m_rEventNotifier.notifyDocumentEventAsync( m_bIsNewDocument ? u"OnNew"_ustr : u"OnLoad"_ustr, nullptr, Any() );
 
     return bLoadFinished;
 }
@@ -480,12 +480,12 @@ void SAL_CALL ODatabaseDocument::initNew(  )
 
     impl_setInitialized();
 
-    m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
+    m_aEventNotifier.notifyDocumentEventAsync( u"OnTitleChanged"_ustr, nullptr, Any() );
 
     impl_setModified_nothrow( false, aGuard );
     // <- SYNCHRONIZED
 
-    m_aEventNotifier.notifyDocumentEvent( "OnCreate" );
+    m_aEventNotifier.notifyDocumentEvent( u"OnCreate"_ustr, nullptr, Any() );
 
     impl_notifyStorageChange_nolck_nothrow( xTempStor );
 }
@@ -763,7 +763,7 @@ bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentU
 
         _rDocGuard.clear();
         // <- SYNCHRONIZED
-        m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
+        m_aEventNotifier.notifyDocumentEvent( u"OnLoadFinished"_ustr, nullptr, Any() );
     }
 
     return true;
@@ -808,7 +808,7 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     m_aControllers.push_back( _xController );
 
-    m_aEventNotifier.notifyDocumentEventAsync( "OnViewCreated", Reference< XController2 >( _xController, UNO_QUERY ) );
+    m_aEventNotifier.notifyDocumentEventAsync( u"OnViewCreated"_ustr, Reference< XController2 >( _xController, UNO_QUERY ), Any() );
 
     bool bFirstControllerEver = m_aViewMonitor.onControllerConnected( _xController );
     if ( !bFirstControllerEver )
@@ -845,7 +845,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     // <- SYNCHRONIZED
 
     if ( bNotifyViewClosed )
-        m_aEventNotifier.notifyDocumentEvent( "OnViewClosed", Reference< XController2 >( _xController, UNO_QUERY ) );
+        m_aEventNotifier.notifyDocumentEvent( u"OnViewClosed"_ustr, Reference< XController2 >( _xController, UNO_QUERY ), Any() );
 
     if ( !bLastControllerGone || bIsClosing )
         return;
@@ -1013,7 +1013,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     if ( !bIsInitializationProcess )
     {
         _rGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? "OnSave" : "OnSaveAs", nullptr, Any( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? u"OnSave"_ustr : u"OnSaveAs"_ustr, nullptr, Any( _rURL ) );
         _rGuard.reset();
     }
 
@@ -1073,13 +1073,13 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     catch( const IOException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? u"OnSaveFailed"_ustr : u"OnSaveAsFailed"_ustr, nullptr, Any( _rURL ) );
         throw;
     }
     catch( const RuntimeException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? u"OnSaveFailed"_ustr : u"OnSaveAsFailed"_ustr, nullptr, Any( _rURL ) );
         throw;
     }
     catch( const Exception& )
@@ -1088,14 +1088,14 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
         // notify the failure
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? u"OnSaveFailed"_ustr : u"OnSaveAsFailed"_ustr, nullptr, Any( _rURL ) );
 
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     // notify the document event
     if ( !bIsInitializationProcess )
-        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", nullptr, Any( _rURL ) );
+        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? u"OnSaveDone"_ustr : u"OnSaveAsDone"_ustr, nullptr, Any( _rURL ) );
 
     // reset our "modified" flag, and clear the guard
     impl_setModified_nothrow( false, _rGuard );
@@ -1169,7 +1169,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
         // an up-to-date result, as the call is delegated to our TitleHelper instance, which itself
         // updates its title only if it gets the OnSaveAsDone event (which was sent asynchronously
         // by impl_storeAs_throw). So, we simply notify always, and also asynchronously
-        m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
+        m_aEventNotifier.notifyDocumentEventAsync( u"OnTitleChanged"_ustr, nullptr, Any() );
     }
     catch( const Exception& )
     {
@@ -1184,7 +1184,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
     // <- SYNCHRONIZED
 
     if ( bImplicitInitialization )
-        m_aEventNotifier.notifyDocumentEvent( "OnCreate" );
+        m_aEventNotifier.notifyDocumentEvent( u"OnCreate"_ustr, nullptr, Any() );
 }
 
 void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& _rxTargetStorage, const Sequence< PropertyValue >& _rMediaDescriptor,
@@ -1235,7 +1235,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
 
     {
         aGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( "OnSaveTo", nullptr, Any( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( u"OnSaveTo"_ustr, nullptr, Any( _rURL ) );
         aGuard.reset();
     }
 
@@ -1309,7 +1309,7 @@ void ODatabaseDocument::impl_setModified_nothrow( bool _bModified, DocumentGuard
     if ( bModifiedChanged )
     {
         m_pImpl->m_bModified = _bModified;
-        m_aEventNotifier.notifyDocumentEventAsync( "OnModifyChanged" );
+        m_aEventNotifier.notifyDocumentEventAsync( u"OnModifyChanged"_ustr, nullptr, Any() );
     }
     _rGuard.clear();
     // <- SYNCHRONIZED
@@ -1497,7 +1497,7 @@ void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
             });
 
         // notify that we're going to unload
-        m_aEventNotifier.notifyDocumentEvent( "OnPrepareUnload" );
+        m_aEventNotifier.notifyDocumentEvent( u"OnPrepareUnload"_ustr, nullptr, Any() );
 
         impl_closeControllerFrames_nolck_throw( bDeliverOwnership );
 
@@ -1777,7 +1777,7 @@ void ODatabaseDocument::disposing()
     }
 
     if ( impl_isInitialized() )
-        m_aEventNotifier.notifyDocumentEvent( "OnUnload" );
+        m_aEventNotifier.notifyDocumentEvent( u"OnUnload"_ustr, nullptr, Any() );
 
     Reference< XModel > xHoldAlive( this );
 
@@ -2128,7 +2128,7 @@ void SAL_CALL ODatabaseDocument::setTitle( const OUString& sTitle )
     // SYNCHRONIZED ->
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     impl_getTitleHelper_throw()->setTitle( sTitle );
-    m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
+    m_aEventNotifier.notifyDocumentEventAsync( u"OnTitleChanged"_ustr, nullptr, Any() );
     // <- SYNCHRONIZED
 }
 
