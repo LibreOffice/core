@@ -306,47 +306,12 @@ rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
     return xDFL;
 }
 
-static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
-{
-    try
-    {
-        Menu* pMenu = pEvent->GetMenu();
-        sal_uInt16 nPos = pEvent->GetItemPos();
-
-        if( pMenu &&  nPos != 0xFFFF)
-        {
-            uno::Reference< accessibility::XAccessible > xAccessible ( pMenu->GetAccessible() );
-
-            if( xAccessible.is() )
-            {
-                uno::Reference< accessibility::XAccessibleContext > xContext ( xAccessible->getAccessibleContext() );
-
-                if( xContext.is() )
-                    atk_wrapper_notify_focus_change(xContext->getAccessibleChild(nPos));
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        g_warning( "Exception caught processing menu highlight events" );
-    }
-}
-
-/*****************************************************************************/
-
 static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 {
     try
     {
         switch (rEvent.GetId())
         {
-        case VclEventId::MenuHighlight:
-            if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(&rEvent))
-            {
-                handle_menu_highlighted(pMenuEvent);
-            }
-            break;
-
         case VclEventId::TabpageActivate:
             handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
