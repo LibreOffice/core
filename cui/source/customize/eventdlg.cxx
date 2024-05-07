@@ -50,8 +50,6 @@ SvxEventConfigPage::SvxEventConfigPage(weld::Container* pPage, weld::DialogContr
     mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
                                        mpImpl->xEventLB->get_height_rows(20));
 
-    InitResources();
-
     m_xSaveInListBox->connect_changed( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 

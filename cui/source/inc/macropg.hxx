@@ -33,20 +33,8 @@
 typedef std::pair<OUString, OUString> EventPair;
 typedef std::unordered_map<OUString, EventPair> EventsHash;
 
-struct EventDisplayName
-{
-    const char* pAsciiEventName;
-    TranslateId pEventResourceID;
-    EventDisplayName(const char* pAsciiName, TranslateId pResId)
-        : pAsciiEventName(pAsciiName)
-        , pEventResourceID(pResId)
-    {
-    }
-};
-
 class SvxMacroTabPage_;
 class SvTabListBox;
-
 class SvxMacroTabPage_Impl;
 
 
@@ -69,7 +57,6 @@ protected:
     EventsHash m_docEventsHash;
     int m_nAssignedEvents;
     bool bDocModified, bAppEvents, bInitialized;
-    std::vector< EventDisplayName > aDisplayNames;
 
     SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet& rItemSet);
 
@@ -80,7 +67,6 @@ protected:
 public:
 
     virtual                     ~SvxMacroTabPage_() override;
-    void                        InitResources();
 
     void                        InitAndSetHandler( const css::uno::Reference< css::container::XNameReplace >& xAppEvents, const css::uno::Reference< css::container::XNameReplace >& xDocEvents, const css::uno::Reference< css::util::XModifiable >& xModifiable );
     virtual bool                FillItemSet( SfxItemSet* rSet ) override;

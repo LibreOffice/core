@@ -87,87 +87,93 @@ SvxMacroTabPage_::~SvxMacroTabPage_()
     mpImpl.reset();
 }
 
-void SvxMacroTabPage_::InitResources()
+namespace {
+struct EventDisplayName
 {
-    // Note: the order here controls the order in which the events are displayed in the UI!
+    OUString aAsciiEventName;
+    TranslateId pEventResourceID;
+};
+}
 
-    // the event name to UI string mappings for App Events
-    aDisplayNames.emplace_back( "OnStartApp",            RID_CUISTR_EVENT_STARTAPP );
-    aDisplayNames.emplace_back( "OnCloseApp",            RID_CUISTR_EVENT_CLOSEAPP );
-    aDisplayNames.emplace_back( "OnCreate",              RID_CUISTR_EVENT_CREATEDOC );
-    aDisplayNames.emplace_back( "OnNew",                 RID_CUISTR_EVENT_NEWDOC );
-    aDisplayNames.emplace_back( "OnLoadFinished",        RID_CUISTR_EVENT_LOADDOCFINISHED );
-    aDisplayNames.emplace_back( "OnLoad",                RID_CUISTR_EVENT_OPENDOC );
-    aDisplayNames.emplace_back( "OnPrepareUnload",       RID_CUISTR_EVENT_PREPARECLOSEDOC );
-    aDisplayNames.emplace_back( "OnUnload",              RID_CUISTR_EVENT_CLOSEDOC ) ;
-    aDisplayNames.emplace_back( "OnViewCreated",         RID_CUISTR_EVENT_VIEWCREATED );
-    aDisplayNames.emplace_back( "OnPrepareViewClosing",  RID_CUISTR_EVENT_PREPARECLOSEVIEW );
-    aDisplayNames.emplace_back( "OnViewClosed",          RID_CUISTR_EVENT_CLOSEVIEW ) ;
-    aDisplayNames.emplace_back( "OnFocus",               RID_CUISTR_EVENT_ACTIVATEDOC );
-    aDisplayNames.emplace_back( "OnUnfocus",             RID_CUISTR_EVENT_DEACTIVATEDOC );
-    aDisplayNames.emplace_back( "OnSave",                RID_CUISTR_EVENT_SAVEDOC );
-    aDisplayNames.emplace_back( "OnSaveDone",            RID_CUISTR_EVENT_SAVEDOCDONE );
-    aDisplayNames.emplace_back( "OnSaveFailed",          RID_CUISTR_EVENT_SAVEDOCFAILED );
-    aDisplayNames.emplace_back( "OnSaveAs",              RID_CUISTR_EVENT_SAVEASDOC );
-    aDisplayNames.emplace_back( "OnSaveAsDone",          RID_CUISTR_EVENT_SAVEASDOCDONE );
-    aDisplayNames.emplace_back( "OnSaveAsFailed",        RID_CUISTR_EVENT_SAVEASDOCFAILED );
-    aDisplayNames.emplace_back( "OnCopyTo",              RID_CUISTR_EVENT_COPYTODOC );
-    aDisplayNames.emplace_back( "OnCopyToDone",          RID_CUISTR_EVENT_COPYTODOCDONE );
-    aDisplayNames.emplace_back( "OnCopyToFailed",        RID_CUISTR_EVENT_COPYTODOCFAILED );
-    aDisplayNames.emplace_back( "OnPrint",               RID_CUISTR_EVENT_PRINTDOC );
-    aDisplayNames.emplace_back( "OnModifyChanged",       RID_CUISTR_EVENT_MODIFYCHANGED );
-    aDisplayNames.emplace_back( "OnTitleChanged",        RID_CUISTR_EVENT_TITLECHANGED );
+// Note: the order here controls the order in which the events are displayed in the UI!
+// the event name to UI string mappings for App Events
+constexpr EventDisplayName gDisplayNames[] {
+    { u"OnStartApp"_ustr,            RID_CUISTR_EVENT_STARTAPP },
+    { u"OnCloseApp"_ustr,            RID_CUISTR_EVENT_CLOSEAPP },
+    { u"OnCreate"_ustr,              RID_CUISTR_EVENT_CREATEDOC },
+    { u"OnNew"_ustr,                 RID_CUISTR_EVENT_NEWDOC },
+    { u"OnLoadFinished"_ustr,        RID_CUISTR_EVENT_LOADDOCFINISHED },
+    { u"OnLoad"_ustr,                RID_CUISTR_EVENT_OPENDOC },
+    { u"OnPrepareUnload"_ustr,       RID_CUISTR_EVENT_PREPARECLOSEDOC },
+    { u"OnUnload"_ustr,              RID_CUISTR_EVENT_CLOSEDOC },
+    { u"OnViewCreated"_ustr,         RID_CUISTR_EVENT_VIEWCREATED },
+    { u"OnPrepareViewClosing"_ustr,  RID_CUISTR_EVENT_PREPARECLOSEVIEW },
+    { u"OnViewClosed"_ustr,          RID_CUISTR_EVENT_CLOSEVIEW },
+    { u"OnFocus"_ustr,               RID_CUISTR_EVENT_ACTIVATEDOC },
+    { u"OnUnfocus"_ustr,             RID_CUISTR_EVENT_DEACTIVATEDOC },
+    { u"OnSave"_ustr,                RID_CUISTR_EVENT_SAVEDOC },
+    { u"OnSaveDone"_ustr,            RID_CUISTR_EVENT_SAVEDOCDONE },
+    { u"OnSaveFailed"_ustr,          RID_CUISTR_EVENT_SAVEDOCFAILED },
+    { u"OnSaveAs"_ustr,              RID_CUISTR_EVENT_SAVEASDOC },
+    { u"OnSaveAsDone"_ustr,          RID_CUISTR_EVENT_SAVEASDOCDONE },
+    { u"OnSaveAsFailed"_ustr,        RID_CUISTR_EVENT_SAVEASDOCFAILED },
+    { u"OnCopyTo"_ustr,              RID_CUISTR_EVENT_COPYTODOC },
+    { u"OnCopyToDone"_ustr,          RID_CUISTR_EVENT_COPYTODOCDONE },
+    { u"OnCopyToFailed"_ustr,        RID_CUISTR_EVENT_COPYTODOCFAILED },
+    { u"OnPrint"_ustr,               RID_CUISTR_EVENT_PRINTDOC },
+    { u"OnModifyChanged"_ustr,       RID_CUISTR_EVENT_MODIFYCHANGED },
+    { u"OnTitleChanged"_ustr,        RID_CUISTR_EVENT_TITLECHANGED },
 
     // application specific events
-    aDisplayNames.emplace_back( "OnMailMerge",           RID_CUISTR_EVENT_MAILMERGE );
-    aDisplayNames.emplace_back( "OnMailMergeFinished",           RID_CUISTR_EVENT_MAILMERGE_END );
-    aDisplayNames.emplace_back( "OnFieldMerge",           RID_CUISTR_EVENT_FIELDMERGE );
-    aDisplayNames.emplace_back( "OnFieldMergeFinished",           RID_CUISTR_EVENT_FIELDMERGE_FINISHED );
-    aDisplayNames.emplace_back( "OnPageCountChange",     RID_CUISTR_EVENT_PAGECOUNTCHANGE );
-    aDisplayNames.emplace_back( "OnSubComponentOpened",  RID_CUISTR_EVENT_SUBCOMPONENT_OPENED );
-    aDisplayNames.emplace_back( "OnSubComponentClosed",  RID_CUISTR_EVENT_SUBCOMPONENT_CLOSED );
-    aDisplayNames.emplace_back( "OnSelect",              RID_CUISTR_EVENT_SELECTIONCHANGED );
-    aDisplayNames.emplace_back( "OnDoubleClick",         RID_CUISTR_EVENT_DOUBLECLICK );
-    aDisplayNames.emplace_back( "OnRightClick",          RID_CUISTR_EVENT_RIGHTCLICK );
-    aDisplayNames.emplace_back( "OnCalculate",           RID_CUISTR_EVENT_CALCULATE );
-    aDisplayNames.emplace_back( "OnChange",              RID_CUISTR_EVENT_CONTENTCHANGED );
+    { u"OnMailMerge"_ustr,           RID_CUISTR_EVENT_MAILMERGE },
+    { u"OnMailMergeFinished"_ustr,           RID_CUISTR_EVENT_MAILMERGE_END },
+    { u"OnFieldMerge"_ustr,           RID_CUISTR_EVENT_FIELDMERGE },
+    { u"OnFieldMergeFinished"_ustr,           RID_CUISTR_EVENT_FIELDMERGE_FINISHED },
+    { u"OnPageCountChange"_ustr,     RID_CUISTR_EVENT_PAGECOUNTCHANGE },
+    { u"OnSubComponentOpened"_ustr,  RID_CUISTR_EVENT_SUBCOMPONENT_OPENED },
+    { u"OnSubComponentClosed"_ustr,  RID_CUISTR_EVENT_SUBCOMPONENT_CLOSED },
+    { u"OnSelect"_ustr,              RID_CUISTR_EVENT_SELECTIONCHANGED },
+    { u"OnDoubleClick"_ustr,         RID_CUISTR_EVENT_DOUBLECLICK },
+    { u"OnRightClick"_ustr,          RID_CUISTR_EVENT_RIGHTCLICK },
+    { u"OnCalculate"_ustr,           RID_CUISTR_EVENT_CALCULATE },
+    { u"OnChange"_ustr,              RID_CUISTR_EVENT_CONTENTCHANGED },
 
     // the event name to UI string mappings for forms & dialogs
 
-    aDisplayNames.emplace_back( "approveAction",         RID_CUISTR_EVENT_APPROVEACTIONPERFORMED );
-    aDisplayNames.emplace_back( "actionPerformed",       RID_CUISTR_EVENT_ACTIONPERFORMED );
-    aDisplayNames.emplace_back( "changed",               RID_CUISTR_EVENT_CHANGED );
-    aDisplayNames.emplace_back( "textChanged",           RID_CUISTR_EVENT_TEXTCHANGED );
-    aDisplayNames.emplace_back( "itemStateChanged",      RID_CUISTR_EVENT_ITEMSTATECHANGED );
-    aDisplayNames.emplace_back( "focusGained",           RID_CUISTR_EVENT_FOCUSGAINED );
-    aDisplayNames.emplace_back( "focusLost",             RID_CUISTR_EVENT_FOCUSLOST );
-    aDisplayNames.emplace_back( "keyPressed",            RID_CUISTR_EVENT_KEYTYPED );
-    aDisplayNames.emplace_back( "keyReleased",           RID_CUISTR_EVENT_KEYUP );
-    aDisplayNames.emplace_back( "mouseEntered",          RID_CUISTR_EVENT_MOUSEENTERED );
-    aDisplayNames.emplace_back( "mouseDragged",          RID_CUISTR_EVENT_MOUSEDRAGGED );
-    aDisplayNames.emplace_back( "mouseMoved",            RID_CUISTR_EVENT_MOUSEMOVED );
-    aDisplayNames.emplace_back( "mousePressed",          RID_CUISTR_EVENT_MOUSEPRESSED );
-    aDisplayNames.emplace_back( "mouseReleased",         RID_CUISTR_EVENT_MOUSERELEASED );
-    aDisplayNames.emplace_back( "mouseExited",           RID_CUISTR_EVENT_MOUSEEXITED );
-    aDisplayNames.emplace_back( "approveReset",          RID_CUISTR_EVENT_APPROVERESETTED );
-    aDisplayNames.emplace_back( "resetted",              RID_CUISTR_EVENT_RESETTED );
-    aDisplayNames.emplace_back( "approveSubmit",         RID_CUISTR_EVENT_SUBMITTED );
-    aDisplayNames.emplace_back( "approveUpdate",         RID_CUISTR_EVENT_BEFOREUPDATE );
-    aDisplayNames.emplace_back( "updated",               RID_CUISTR_EVENT_AFTERUPDATE );
-    aDisplayNames.emplace_back( "loaded",                RID_CUISTR_EVENT_LOADED );
-    aDisplayNames.emplace_back( "reloading",             RID_CUISTR_EVENT_RELOADING );
-    aDisplayNames.emplace_back( "reloaded",              RID_CUISTR_EVENT_RELOADED );
-    aDisplayNames.emplace_back( "unloading",             RID_CUISTR_EVENT_UNLOADING );
-    aDisplayNames.emplace_back( "unloaded",              RID_CUISTR_EVENT_UNLOADED );
-    aDisplayNames.emplace_back( "confirmDelete",         RID_CUISTR_EVENT_CONFIRMDELETE );
-    aDisplayNames.emplace_back( "approveRowChange",      RID_CUISTR_EVENT_APPROVEROWCHANGE );
-    aDisplayNames.emplace_back( "rowChanged",            RID_CUISTR_EVENT_ROWCHANGE );
-    aDisplayNames.emplace_back( "approveCursorMove",     RID_CUISTR_EVENT_POSITIONING );
-    aDisplayNames.emplace_back( "cursorMoved",           RID_CUISTR_EVENT_POSITIONED );
-    aDisplayNames.emplace_back( "approveParameter",      RID_CUISTR_EVENT_APPROVEPARAMETER );
-    aDisplayNames.emplace_back( "errorOccured",          RID_CUISTR_EVENT_ERROROCCURRED );
-    aDisplayNames.emplace_back( "adjustmentValueChanged",   RID_CUISTR_EVENT_ADJUSTMENTVALUECHANGED );
-}
+    { u"approveAction"_ustr,         RID_CUISTR_EVENT_APPROVEACTIONPERFORMED },
+    { u"actionPerformed"_ustr,       RID_CUISTR_EVENT_ACTIONPERFORMED },
+    { u"changed"_ustr,               RID_CUISTR_EVENT_CHANGED },
+    { u"textChanged"_ustr,           RID_CUISTR_EVENT_TEXTCHANGED },
+    { u"itemStateChanged"_ustr,      RID_CUISTR_EVENT_ITEMSTATECHANGED },
+    { u"focusGained"_ustr,           RID_CUISTR_EVENT_FOCUSGAINED },
+    { u"focusLost"_ustr,             RID_CUISTR_EVENT_FOCUSLOST },
+    { u"keyPressed"_ustr,            RID_CUISTR_EVENT_KEYTYPED },
+    { u"keyReleased"_ustr,           RID_CUISTR_EVENT_KEYUP },
+    { u"mouseEntered"_ustr,          RID_CUISTR_EVENT_MOUSEENTERED },
+    { u"mouseDragged"_ustr,          RID_CUISTR_EVENT_MOUSEDRAGGED },
+    { u"mouseMoved"_ustr,            RID_CUISTR_EVENT_MOUSEMOVED },
+    { u"mousePressed"_ustr,          RID_CUISTR_EVENT_MOUSEPRESSED },
+    { u"mouseReleased"_ustr,         RID_CUISTR_EVENT_MOUSERELEASED },
+    { u"mouseExited"_ustr,           RID_CUISTR_EVENT_MOUSEEXITED },
+    { u"approveReset"_ustr,          RID_CUISTR_EVENT_APPROVERESETTED },
+    { u"resetted"_ustr,              RID_CUISTR_EVENT_RESETTED },
+    { u"approveSubmit"_ustr,         RID_CUISTR_EVENT_SUBMITTED },
+    { u"approveUpdate"_ustr,         RID_CUISTR_EVENT_BEFOREUPDATE },
+    { u"updated"_ustr,               RID_CUISTR_EVENT_AFTERUPDATE },
+    { u"loaded"_ustr,                RID_CUISTR_EVENT_LOADED },
+    { u"reloading"_ustr,             RID_CUISTR_EVENT_RELOADING },
+    { u"reloaded"_ustr,              RID_CUISTR_EVENT_RELOADED },
+    { u"unloading"_ustr,             RID_CUISTR_EVENT_UNLOADING },
+    { u"unloaded"_ustr,              RID_CUISTR_EVENT_UNLOADED },
+    { u"confirmDelete"_ustr,         RID_CUISTR_EVENT_CONFIRMDELETE },
+    { u"approveRowChange"_ustr,      RID_CUISTR_EVENT_APPROVEROWCHANGE },
+    { u"rowChanged"_ustr,            RID_CUISTR_EVENT_ROWCHANGE },
+    { u"approveCursorMove"_ustr,     RID_CUISTR_EVENT_POSITIONING },
+    { u"cursorMoved"_ustr,           RID_CUISTR_EVENT_POSITIONED },
+    { u"approveParameter"_ustr,      RID_CUISTR_EVENT_APPROVEPARAMETER },
+    { u"errorOccured"_ustr,          RID_CUISTR_EVENT_ERROROCCURRED },
+    { u"adjustmentValueChanged"_ustr,   RID_CUISTR_EVENT_ADJUSTMENTVALUECHANGED },
+};
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
@@ -328,9 +334,9 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         return;
     }
 
-    for (auto const& displayableEvent : aDisplayNames)
+    for (auto const& displayableEvent : gDisplayNames)
     {
-        OUString sEventName( OUString::createFromAscii( displayableEvent.pAsciiEventName ) );
+        const OUString & sEventName( displayableEvent.aAsciiEventName );
         if ( !nameReplace->hasByName( sEventName ) )
             continue;
 
@@ -653,8 +659,6 @@ SvxMacroTabPage::SvxMacroTabPage(weld::Container* pPage, weld::DialogController*
         mpImpl->xAssignComponentPB->hide();
         mpImpl->xAssignComponentPB->set_sensitive(false);
     }
-
-    InitResources();
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(nullptr), Reference< util::XModifiable >(nullptr));
     DisplayAppEvents(true);
