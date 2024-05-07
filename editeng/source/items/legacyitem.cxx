@@ -113,7 +113,7 @@ namespace legacy
                     RTL_TEXTENCODING_SYMBOL :
                     GetSOStoreTextEncoding(rItem.GetCharSet()));
 
-            const OUString aStoreFamilyName(bToBats ? "StarBats" : rItem.GetFamilyName());
+            const OUString aStoreFamilyName(bToBats ? u"StarBats"_ustr : rItem.GetFamilyName());
 
             rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
             rStrm.WriteUniOrByteString(rItem.GetStyleName(), rStrm.GetStreamCharSet());

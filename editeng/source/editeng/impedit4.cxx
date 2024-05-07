@@ -2714,7 +2714,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     {
         aSel = SelectWord( aSel, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true, true );
         if (!aSel.HasRange() && aSel.Min().GetIndex() > 0 &&
-            OUString(".!?").indexOf(aSel.Min().GetNode()->GetChar(aSel.Min().GetIndex() - 1)) > -1 )
+            u".!?"_ustr.indexOf(aSel.Min().GetNode()->GetChar(aSel.Min().GetIndex() - 1)) > -1 )
         {
             aSel = SelectSentence(aSel);
         }

@@ -314,7 +314,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
         SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
-            throw uno::RuntimeException("Failed to retrieve a valid text base object from the Uno Tunnel");
+            throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
         rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
         xRange = pRange;
@@ -342,7 +342,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
         SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
-            throw uno::RuntimeException("Failed to retrieve a valid text base object from the Uno Tunnel");
+            throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
         rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
         xRet = pNew;
@@ -668,11 +668,11 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
     case WID_PORTIONTYPE:
         if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {
-            rAny <<= OUString("TextField");
+            rAny <<= u"TextField"_ustr;
         }
         else
         {
-            rAny <<= OUString("Text");
+            rAny <<= u"Text"_ustr;
         }
         break;
 
@@ -704,12 +704,12 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         {
             SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET );
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
-                throw uno::RuntimeException("Invalid item state for paragraph numbering/bullet. Expected SET or DEFAULT.");
+                throw uno::RuntimeException(u"Invalid item state for paragraph numbering/bullet. Expected SET or DEFAULT."_ustr);
 
             const SvxNumBulletItem* pBulletItem = rSet.GetItem( EE_PARA_NUMBULLET );
 
             if( pBulletItem == nullptr )
-                throw uno::RuntimeException("Unable to retrieve paragraph numbering/bullet item.");
+                throw uno::RuntimeException(u"Unable to retrieve paragraph numbering/bullet item."_ustr);
 
             aAny <<= SvxCreateNumRule( pBulletItem->GetNumRule() );
         }
@@ -777,7 +777,7 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< OUStr
 void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara )
 {
     if (aPropertyNames.getLength() != aValues.getLength())
-        throw lang::IllegalArgumentException("lengths do not match",
+        throw lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                              static_cast<css::beans::XPropertySet*>(this), -1);
 
     SolarMutexGuard aGuard;
@@ -1536,9 +1536,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
 
 uno::Sequence< OUString > SvxUnoTextRangeBase::getSupportedServiceNames_Static()
 {
-    return { "com.sun.star.style.CharacterProperties",
-             "com.sun.star.style.CharacterPropertiesComplex",
-             "com.sun.star.style.CharacterPropertiesAsian" };
+    return { u"com.sun.star.style.CharacterProperties"_ustr,
+             u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+             u"com.sun.star.style.CharacterPropertiesAsian"_ustr };
 }
 
 // XTextRangeCompare
@@ -1667,7 +1667,7 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextRange::getText()
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 {
-    return "SvxUnoTextRange";
+    return u"SvxUnoTextRange"_ustr;
 }
 
 
@@ -1835,7 +1835,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
     {
     case text::ControlCharacter::PARAGRAPH_BREAK:
     {
-        insertString( xRange, "\x0D", bAbsorb );
+        insertString( xRange, u"\x0D"_ustr, bAbsorb );
 
         return;
     }
@@ -1848,7 +1848,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 
             if( bAbsorb )
             {
-                pForwarder->QuickInsertText( "", aRange );
+                pForwarder->QuickInsertText( u""_ustr, aRange );
 
                 aRange.nEndPos = aRange.nStartPos;
                 aRange.nEndPara = aRange.nStartPara;
@@ -2233,7 +2233,7 @@ void SvxUnoTextBase::copyText(
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextBase::getImplementationName()
 {
-    return "SvxUnoTextBase";
+    return u"SvxUnoTextBase"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )

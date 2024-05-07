@@ -160,7 +160,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     {
         if ( bInPara )
         {
-            ImpInsertText( " " );
+            ImpInsertText( u" "_ustr );
         }
     }
     break;

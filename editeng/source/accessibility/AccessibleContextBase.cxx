@@ -362,7 +362,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 // XServiceInfo
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
 {
-    return "AccessibleContextBase";
+    return u"AccessibleContextBase"_ustr;
 }
 
 sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
@@ -374,8 +374,8 @@ uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.accessibility.Accessible",
-        "com.sun.star.accessibility.AccessibleContext"};
+        u"com.sun.star.accessibility.Accessible"_ustr,
+        u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
 
@@ -452,7 +452,7 @@ void AccessibleContextBase::SetAccessibleName (
 
 OUString AccessibleContextBase::CreateAccessibleName()
 {
-    return "Empty Name";
+    return u"Empty Name"_ustr;
 }
 
 
@@ -490,7 +490,7 @@ void AccessibleContextBase::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException ("object has been already disposed",
+        throw lang::DisposedException (u"object has been already disposed"_ustr,
             getXWeak());
     }
 }

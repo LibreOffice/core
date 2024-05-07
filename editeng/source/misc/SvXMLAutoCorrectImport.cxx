@@ -30,7 +30,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     css::uno::Reference < css::embed::XStorage > xNewStorage)
-:   SvXMLImport( xContext, "" ),
+:   SvXMLImport( xContext, u""_ustr ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
     xStorage (std::move( xNewStorage ))
@@ -105,7 +105,7 @@ SvXMLWordContext::~SvXMLWordContext()
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< uno::XComponentContext > & xContext,
     SvStringsISortDtor & rNewList )
-:   SvXMLImport( xContext, "" ),
+:   SvXMLImport( xContext, u""_ustr ),
     rList (rNewList)
 {
 }

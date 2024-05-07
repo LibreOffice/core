@@ -891,10 +891,10 @@ sal_Int32 EditDoc::Count() const
 OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
     if ( eEnd == LINEEND_CR )
-        return "\015"; // 0x0d
+        return u"\015"_ustr; // 0x0d
     if ( eEnd == LINEEND_LF )
-        return "\012"; // 0x0a
-    return "\015\012"; // 0x0d, 0x0a
+        return u"\012"_ustr; // 0x0a
+    return u"\015\012"_ustr; // 0x0d, 0x0a
 }
 
 OUString EditDoc::GetText( LineEnd eEnd ) const
@@ -1478,7 +1478,7 @@ void EditDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 EditEngineItemPool::EditEngineItemPool()
-: SfxItemPool("EditEngineItemPool")
+: SfxItemPool(u"EditEngineItemPool"_ustr)
 {
     registerItemInfoPackage(getItemInfoPackageEditEngine());
 }

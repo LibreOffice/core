@@ -120,7 +120,7 @@ SvXMLImportContext *SvxXMLXTextImportComponent::CreateFastContext(
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     uno::Reference< XText > xText )
-:   SvXMLImport(xContext, ""),
+:   SvXMLImport(xContext, u""_ustr),
     mxText(std::move( xText ))
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );

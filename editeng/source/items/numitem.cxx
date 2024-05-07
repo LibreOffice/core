@@ -108,7 +108,7 @@ SvxNumberType::~SvxNumberType()
 OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
 {
     LanguageTag aLang = comphelper::IsFuzzing() ?
-        LanguageTag("en-US") :
+        LanguageTag(u"en-US"_ustr) :
         Application::GetSettings().GetLanguageTag();
     return GetNumStr( nNo, aLang.getLocale() );
 }
@@ -305,7 +305,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
         // are present, so Brush save is forced
         if(!pGraphicBrush->GetGraphicLink().isEmpty() && pGraphicBrush->GetGraphic())
         {
-            pGraphicBrush->SetGraphicLink("");
+            pGraphicBrush->SetGraphicLink(u""_ustr);
         }
 
         legacy::SvxBrush::Store(*pGraphicBrush, rStream, BRUSH_GRAPHIC_VERSION);
@@ -449,7 +449,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
     if( pGraphicBrush && pGraphicBrush->GetGraphicLink() == rName )
         return ;
 
-    pGraphicBrush.reset( new SvxBrushItem( rName, "", GPOS_AREA, 0 ) );
+    pGraphicBrush.reset( new SvxBrushItem( rName, u""_ustr, GPOS_AREA, 0 ) );
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;
 
@@ -502,11 +502,11 @@ OUString SvxNumberFormat::GetLabelFollowedByAsString() const
     switch (meLabelFollowedBy)
     {
         case LISTTAB:
-            return "\t";
+            return u"\t"_ustr;
         case SPACE:
-            return " ";
+            return u" "_ustr;
         case NEWLINE:
-            return "\n";
+            return u"\n"_ustr;
         case NOTHING:
             // intentionally left blank.
             return OUString();
@@ -1047,7 +1047,7 @@ void SvxNumRule::UnLinkGraphics()
                 if (pGraphic)
                 {
                     SvxBrushItem aTempItem(*pBrush);
-                    aTempItem.SetGraphicLink("");
+                    aTempItem.SetGraphicLink(u""_ustr);
                     aTempItem.SetGraphic(*pGraphic);
                     sal_Int16    eOrient = aFmt.GetVertOrient();
                     aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );

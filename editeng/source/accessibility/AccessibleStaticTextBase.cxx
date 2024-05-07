@@ -215,7 +215,7 @@ namespace accessibility
     {
 
         if( !mxTextParagraph.is() )
-            throw lang::DisposedException ("object has been already disposed", mpThis );
+            throw lang::DisposedException (u"object has been already disposed"_ustr, mpThis );
 
         // TODO: Have a different method on AccessibleEditableTextPara
         // that does not care about state changes
@@ -272,7 +272,7 @@ namespace accessibility
     {
 
         if( nFlatIndex < 0 )
-            throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
+            throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds"_ustr,
                                                   mpThis);
         // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
 
@@ -304,7 +304,7 @@ namespace accessibility
         }
 
         // not found? Out of bounds
-        throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
+        throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds"_ustr,
                                               mpThis);
     }
 

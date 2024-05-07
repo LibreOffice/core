@@ -483,7 +483,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
         }
 
         // #92009# pass fixed attribute to constructor
-        pData.reset( new SvxAuthorField( aFirstName, aLastName, "",
+        pData.reset( new SvxAuthorField( aFirstName, aLastName, u""_ustr,
                                     mpImpl->mbBoolean1 ? SvxAuthorType::Fix : SvxAuthorType::Var ) );
 
         if( !mpImpl->mbBoolean2 )
@@ -588,39 +588,39 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
         switch (mnServiceId)
         {
             case text::textfield::Type::DATE:
-                return "Date";
+                return u"Date"_ustr;
             case text::textfield::Type::URL:
-                return "URL";
+                return u"URL"_ustr;
             case text::textfield::Type::PAGE:
-                return "Page";
+                return u"Page"_ustr;
             case text::textfield::Type::PAGES:
-                return "Pages";
+                return u"Pages"_ustr;
             case text::textfield::Type::TIME:
-                return "Time";
+                return u"Time"_ustr;
             case text::textfield::Type::DOCINFO_TITLE:
-                return "File";
+                return u"File"_ustr;
             case text::textfield::Type::TABLE:
-                return "Table";
+                return u"Table"_ustr;
             case text::textfield::Type::EXTENDED_TIME:
-                return "ExtTime";
+                return u"ExtTime"_ustr;
             case text::textfield::Type::EXTENDED_FILE:
-                return "ExtFile";
+                return u"ExtFile"_ustr;
             case text::textfield::Type::AUTHOR:
-                return "Author";
+                return u"Author"_ustr;
             case text::textfield::Type::MEASURE:
-                return "Measure";
+                return u"Measure"_ustr;
             case text::textfield::Type::PRESENTATION_HEADER:
-                return "Header";
+                return u"Header"_ustr;
             case text::textfield::Type::PRESENTATION_FOOTER:
-                return "Footer";
+                return u"Footer"_ustr;
             case text::textfield::Type::PRESENTATION_DATE_TIME:
-                return "DateTime";
+                return u"DateTime"_ustr;
             case text::textfield::Type::PAGE_NAME:
-                return "PageName";
+                return u"PageName"_ustr;
             case text::textfield::Type::DOCINFO_CUSTOM:
-                return "Custom";
+                return u"Custom"_ustr;
             default:
-                return "Unknown";
+                return u"Unknown"_ustr;
         }
     }
     else
@@ -788,7 +788,7 @@ void SvxUnoTextField::disposing()
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextField::getImplementationName()
 {
-    return "SvxUnoTextField";
+    return u"SvxUnoTextField"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()

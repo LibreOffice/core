@@ -496,7 +496,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      "Dumped editenginedump.log!" ));
+                                                      u"Dumped editenginedump.log!"_ustr ));
         xInfoBox->run();
     }
 }

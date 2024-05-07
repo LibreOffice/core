@@ -34,7 +34,7 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const OUString &rFileName,
     css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
-:   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, u""_ustr, rFileName, util::MeasureUnit::CM, rHandler ),
     pAutocorr_List( pNewAutocorr_List )
 {
     GetNamespaceMap_().Add( GetXMLToken ( XML_NP_BLOCK_LIST),
@@ -75,7 +75,7 @@ SvXMLExceptionListExport::SvXMLExceptionListExport(
     const SvStringsISortDtor &rNewList,
     const OUString &rFileName,
     css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
-:   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, u""_ustr, rFileName, util::MeasureUnit::CM, rHandler ),
     rList( rNewList )
 {
     GetNamespaceMap_().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

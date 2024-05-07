@@ -679,7 +679,7 @@ sal_Int32 SvxAutoCorrect::FnAddNonBrkSpace(
     if ( rCC.getLanguageTag().getLanguage() == "fr" )
     {
         bool bFrCA = (rCC.getLanguageTag().getCountry() == "CA");
-        OUString allChars = ":;?!%";
+        OUString allChars = u":;?!%"_ustr;
         OUString chars( allChars );
         if ( bFrCA )
             chars = ":";
@@ -1284,7 +1284,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     // i' -> I' in English (last step for the Undo)
     if( eType == ACQuotes::CapitalizeIAm )
-        rDoc.Replace( nInsPos-1, "I" );
+        rDoc.Replace( nInsPos-1, u"I"_ustr );
 }
 
 OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
@@ -1371,7 +1371,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         primary(eLang) == primary(LANGUAGE_FRENCH) &&
                         ( ( ( nInsPos == 2 || ( nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ) ) ) &&
                                // abbreviated form of ce, de, je, la, le, ne, me, te, se or si
-                               OUString("cdjlnmtsCDJLNMTS").indexOf( rTxt[ nInsPos-2 ] ) > -1 ) ||
+                               u"cdjlnmtsCDJLNMTS"_ustr.indexOf( rTxt[ nInsPos-2 ] ) > -1 ) ||
                           ( ( nInsPos == 3 || (nInsPos > 3 && IsWordDelim( rTxt[ nInsPos-4 ] ) ) ) &&
                                // abbreviated form of que
                                ( rTxt[ nInsPos-2 ] == 'u' || rTxt[ nInsPos-2 ] == 'U' ) &&
@@ -2317,7 +2317,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create( xContext );
                 uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler = new SvXMLAutoCorrectTokenHandler;
                 xParser->setFastDocumentHandler( xFilter );
-                xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+                xParser->registerNamespace( u"http://openoffice.org/2001/block-list"_ustr, SvXMLAutoCorrectToken::NAMESPACE );
                 xParser->setTokenHandler( xTokenHandler );
 
                 // parse
@@ -2370,7 +2370,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
         {
             xStrm->SetSize( 0 );
             xStrm->SetBufferSize( 8192 );
-            xStrm->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
+            xStrm->SetProperty( u"MediaType"_ustr, Any(u"text/xml"_ustr) );
 
 
             uno::Reference< uno::XComponentContext > xContext =
@@ -2428,7 +2428,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 
         // connect parser and filter
         xParser->setFastDocumentHandler( xFilter );
-        xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+        xParser->registerNamespace( u"http://openoffice.org/2001/block-list"_ustr, SvXMLAutoCorrectToken::NAMESPACE );
         xParser->setTokenHandler(xTokenHandler);
 
         // parse
@@ -2647,7 +2647,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             aInfo.NewTitle = aDest.GetLastName();
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             aInfo.MoveData  = false;
-            aNewContent.executeCommand( "transfer", Any(aInfo));
+            aNewContent.executeCommand( u"transfer"_ustr, Any(aInfo));
         }
         catch (...)
         {
@@ -2689,7 +2689,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             try
             {
                 ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aContent.executeCommand ( "delete", Any ( true ) );
+                aContent.executeCommand ( u"delete"_ustr, Any ( true ) );
             }
             catch (...)
             {
@@ -2711,7 +2711,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
-            refList->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
+            refList->SetProperty( u"MediaType"_ustr, Any(u"text/xml"_ustr) );
 
             uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();

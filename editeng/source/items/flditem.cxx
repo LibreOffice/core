@@ -653,7 +653,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
         case SvxTimeFormat::HH12_MM_SS_00:
         {
             // no builtin format available, try to insert or reuse
-            OUString aFormatCode( "HH:MM:SS.00 AM/PM" );
+            OUString aFormatCode( u"HH:MM:SS.00 AM/PM"_ustr );
             sal_Int32 nCheckPos;
             SvNumFormatType nType;
             rFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType,

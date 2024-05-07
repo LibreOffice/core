@@ -557,7 +557,7 @@ void EditRTFParser::ReadField()
     }
     if ( !aFldInst.isEmpty() )
     {
-        OUString aHyperLinkMarker( "HYPERLINK " );
+        OUString aHyperLinkMarker( u"HYPERLINK "_ustr );
         if ( aFldInst.startsWithIgnoreAsciiCase( aHyperLinkMarker ) )
         {
             aFldInst = aFldInst.copy( aHyperLinkMarker.getLength() );

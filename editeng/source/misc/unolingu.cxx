@@ -102,7 +102,7 @@ void ThesDummy_Impl::GetCfgLocales()
         return;
 
     SvtLinguConfig aCfg;
-    Sequence < OUString > aNodeNames( aCfg.GetNodeNames( "ServiceManager/ThesaurusList" ) );
+    Sequence < OUString > aNodeNames( aCfg.GetNodeNames( u"ServiceManager/ThesaurusList"_ustr ) );
     const OUString *pNodeNames = aNodeNames.getConstArray();
     sal_Int32 nLen = aNodeNames.getLength();
     pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
@@ -596,7 +596,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     if (xTmpDicList.is())
     {
         const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
-                                    ? LanguageTag("en-US")
+                                    ? LanguageTag(u"en-US"_ustr)
                                     : SvtSysLocale().GetUILanguageTag();
         std::locale loc(Translate::Create("svt", tag));
         xIgnoreAll = xTmpDicList->getDictionaryByName(
@@ -617,7 +617,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
     if (_xDicList.is())
     {
         xChangeAll = _xDicList->createDictionary(
-                            "ChangeAllList",
+                            u"ChangeAllList"_ustr,
                             LanguageTag::convertToLocale( LANGUAGE_NONE ),
                             DictionaryType_NEGATIVE, OUString() );
     }

@@ -502,8 +502,8 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
     SfxStyleSheet* pStyle= pEditEngine->GetStyleSheet( nPara );
     if( pStyle )
     {
-        OUString aHeading_US( "heading" );
-        OUString aNumber_US( "Numbering" );
+        OUString aHeading_US( u"heading"_ustr );
+        OUString aNumber_US( u"Numbering"_ustr );
         aName = pStyle->GetName();
         sal_Int32 nSearch;
         if ( ( nSearch = aName.indexOf( aHeading_US ) ) != -1 )

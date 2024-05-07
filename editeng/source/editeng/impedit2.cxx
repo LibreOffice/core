@@ -102,7 +102,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mpStylePool(nullptr),
     mpTextObjectPool(nullptr),
     mpUndoManager(nullptr),
-    maWordDelimiters(" .,;:-`'?!_=\"{}()[]"),
+    maWordDelimiters(u" .,;:-`'?!_=\"{}()[]"_ustr),
     maBackgroundColor(COL_AUTO),
     mbRoundToNearestPt(false),
     mnAsianCompressionMode(CharCompressType::NONE),

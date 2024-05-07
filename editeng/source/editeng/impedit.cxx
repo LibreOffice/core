@@ -348,7 +348,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         aItems.emplace_back("rectangles", sRectangle);
         aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
         aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
-        pNotifier->notifyWindow(pParent->GetLOKWindowId(), "text_selection", aItems);
+        pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);
     }
     else if (mpViewShell)
     {
@@ -2094,7 +2094,7 @@ void ImpEditView::DeselectAll()
             const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
-            pNotifier->notifyWindow(pParent->GetLOKWindowId(), "text_selection", aItems);
+            pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);
         }
     }
 }

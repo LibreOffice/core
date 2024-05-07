@@ -350,14 +350,14 @@ namespace accessibility
     void AccessibleEditableTextPara::CheckIndex( sal_Int32 nIndex )
     {
         if( nIndex < 0 || nIndex >= getCharacterCount() )
-            throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character index out of bounds",
+            throw lang::IndexOutOfBoundsException(u"AccessibleEditableTextPara: character index out of bounds"_ustr,
                                                   getXWeak() );
     }
 
     void AccessibleEditableTextPara::CheckPosition( sal_Int32 nIndex )
     {
         if( nIndex < 0 || nIndex > getCharacterCount() )
-            throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character position out of bounds",
+            throw lang::IndexOutOfBoundsException(u"AccessibleEditableTextPara: character position out of bounds"_ustr,
                                                   getXWeak() );
     }
 
@@ -423,7 +423,7 @@ namespace accessibility
     SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const
     {
         if( !mpEditSource )
-            throw uno::RuntimeException("No edit source, object is defunct",
+            throw uno::RuntimeException(u"No edit source, object is defunct"_ustr,
                                          const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *mpEditSource;
     }
@@ -434,11 +434,11 @@ namespace accessibility
         SvxAccessibleTextAdapter* pTextForwarder = rEditSource.GetTextForwarderAdapter();
 
         if( !pTextForwarder )
-            throw uno::RuntimeException("Unable to fetch text forwarder, object is defunct",
+            throw uno::RuntimeException(u"Unable to fetch text forwarder, object is defunct"_ustr,
                                         const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
 
         if( !pTextForwarder->IsValid() )
-            throw uno::RuntimeException("Text forwarder is invalid, object is defunct",
+            throw uno::RuntimeException(u"Text forwarder is invalid, object is defunct"_ustr,
                                         const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *pTextForwarder;
     }
@@ -450,12 +450,12 @@ namespace accessibility
 
         if( !pViewForwarder )
         {
-            throw uno::RuntimeException("Unable to fetch view forwarder, object is defunct",
+            throw uno::RuntimeException(u"Unable to fetch view forwarder, object is defunct"_ustr,
                                         const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
 
         if( !pViewForwarder->IsValid() )
-            throw uno::RuntimeException("View forwarder is invalid, object is defunct",
+            throw uno::RuntimeException(u"View forwarder is invalid, object is defunct"_ustr,
                                         const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *pViewForwarder;
     }
@@ -468,10 +468,10 @@ namespace accessibility
         if( !pTextEditViewForwarder )
         {
             if( bCreate )
-                throw uno::RuntimeException("Unable to fetch view forwarder, object is defunct",
+                throw uno::RuntimeException(u"Unable to fetch view forwarder, object is defunct"_ustr,
                                             const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
             else
-                throw uno::RuntimeException("No view forwarder, object not in edit mode",
+                throw uno::RuntimeException(u"No view forwarder, object not in edit mode"_ustr,
                                             const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
 
@@ -480,10 +480,10 @@ namespace accessibility
         else
         {
             if( bCreate )
-                throw uno::RuntimeException("View forwarder is invalid, object is defunct",
+                throw uno::RuntimeException(u"View forwarder is invalid, object is defunct"_ustr,
                                             const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
             else
-                throw uno::RuntimeException("View forwarder is invalid, object not in edit mode",
+                throw uno::RuntimeException(u"View forwarder is invalid, object not in edit mode"_ustr,
                                             const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
     }
@@ -632,11 +632,11 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         if( !HaveChildren() )
-            throw lang::IndexOutOfBoundsException("No children available",
+            throw lang::IndexOutOfBoundsException(u"No children available"_ustr,
                                                   getXWeak() );
 
         if( i != 0 )
-            throw lang::IndexOutOfBoundsException("Invalid child index",
+            throw lang::IndexOutOfBoundsException(u"Invalid child index"_ustr,
                                                   getXWeak() );
 
         auto aChild( maImageBullet.get() );
@@ -766,28 +766,28 @@ namespace accessibility
     static uno::Sequence< OUString > const & getAttributeNames()
     {
         static const uno::Sequence<OUString> aNames{
-            "CharColor",
-            "CharContoured",
-            "CharEmphasis",
-            "CharEscapement",
-            "CharFontName",
-            "CharHeight",
-            "CharPosture",
-            "CharShadowed",
-            "CharStrikeout",
-            "CharCaseMap",
-            "CharUnderline",
-            "CharUnderlineColor",
-            "CharWeight",
-            "NumberingLevel",
-            "NumberingRules",
-            "ParaAdjust",
-            "ParaBottomMargin",
-            "ParaFirstLineIndent",
-            "ParaLeftMargin",
-            "ParaLineSpacing",
-            "ParaRightMargin",
-            "ParaTabStops"};
+            u"CharColor"_ustr,
+            u"CharContoured"_ustr,
+            u"CharEmphasis"_ustr,
+            u"CharEscapement"_ustr,
+            u"CharFontName"_ustr,
+            u"CharHeight"_ustr,
+            u"CharPosture"_ustr,
+            u"CharShadowed"_ustr,
+            u"CharStrikeout"_ustr,
+            u"CharCaseMap"_ustr,
+            u"CharUnderline"_ustr,
+            u"CharUnderlineColor"_ustr,
+            u"CharWeight"_ustr,
+            u"NumberingLevel"_ustr,
+            u"NumberingRules"_ustr,
+            u"ParaAdjust"_ustr,
+            u"ParaBottomMargin"_ustr,
+            u"ParaFirstLineIndent"_ustr,
+            u"ParaLeftMargin"_ustr,
+            u"ParaLineSpacing"_ustr,
+            u"ParaRightMargin"_ustr,
+            u"ParaTabStops"_ustr};
 
         return aNames;
     }
@@ -1068,7 +1068,7 @@ namespace accessibility
             }
         }
 
-        throw uno::RuntimeException("Cannot access parent",
+        throw uno::RuntimeException(u"Cannot access parent"_ustr,
                                     uno::Reference< uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
@@ -2351,7 +2351,7 @@ namespace accessibility
         xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if (!xPropSetInfo.is())
-            throw uno::RuntimeException("Cannot query XPropertySetInfo",
+            throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
                         uno::Reference< uno::XInterface >
                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
@@ -2437,7 +2437,7 @@ namespace accessibility
         xPropSet->SetSelection( MakeSelection( nIndex ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if (!xPropSetInfo.is())
-            throw uno::RuntimeException("Cannot query XPropertySetInfo",
+            throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
@@ -2654,7 +2654,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleEditableTextPara::getImplementationName()
     {
 
-        return "AccessibleEditableTextPara";
+        return u"AccessibleEditableTextPara"_ustr;
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::supportsService (const OUString& sServiceName)
@@ -2666,7 +2666,7 @@ namespace accessibility
     uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames()
     {
         // #105185# Using correct service now
-        return { OUString("com.sun.star.text.AccessibleParagraphView") };
+        return { u"com.sun.star.text.AccessibleParagraphView"_ustr };
     }
 
 }  // end of namespace accessibility

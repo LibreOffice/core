@@ -3609,7 +3609,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             if ( 0x200B == cChar || 0x2060 == cChar )
                                             {
                                                 tools::Long nHalfBlankWidth = aTmpFont.QuickGetTextSize( &rOutDev,
-                                                    " ", 0, 1, nullptr ).Width() / 2;
+                                                    u" "_ustr, 0, 1, nullptr ).Width() / 2;
 
                                                 const tools::Long nAdvanceX = ( nTmpIdx == nTmpEnd ?
                                                                          rTextPortion.GetSize().Width() :
@@ -3988,7 +3988,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                     auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData);
                                                     if (pUrlField)
                                                         if (pPDFExtOutDevData->GetIsExportTaggedPDF())
-                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Link, "Link");
+                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Link, u"Link"_ustr);
                                                 }
                                             }
                                         }

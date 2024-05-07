@@ -52,7 +52,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
         {
             // Title is file name here.
             uno::Reference<sdbc::XResultSet> xResultSet = aContent.createCursor(
-                    {"Title"}, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
+                    {u"Title"_ustr}, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
             uno::Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY);
             if (xResultSet.is() && xRow.is())
             {
@@ -311,7 +311,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
 }
 
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem("Office.Common/AutoCorrect"),
+    utl::ConfigItem(u"Office.Common/AutoCorrect"_ustr),
     rParent(rPar)
 {
 }
@@ -580,7 +580,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
 }
 
 SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem("Office.Writer/AutoFunction"),
+    utl::ConfigItem(u"Office.Writer/AutoFunction"_ustr),
     rParent(rPar)
 {
 }

@@ -178,7 +178,7 @@ void Test::testLineSpacing()
     CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(0)));
 
     // Set initial text
-    OUString aText = "This is multi-line paragraph";
+    OUString aText = u"This is multi-line paragraph"_ustr;
 
     sal_Int32 aTextLen = aText.getLength();
     aEditEngine.SetText(aText);
@@ -199,7 +199,7 @@ void Test::testLineSpacing()
 
         // Set font
         SvxFontItem aFont(EE_CHAR_FONTINFO);
-        aFont.SetFamilyName("Liberation Sans");
+        aFont.SetFamilyName(u"Liberation Sans"_ustr);
         pSet->Put(aFont);
         SvxFontHeightItem aFontSize(240, 100, EE_CHAR_FONTHEIGHT);
         pSet->Put(aFontSize);
@@ -243,7 +243,7 @@ void Test::testConstruction()
 {
     EditEngine aEngine(mpItemPool.get());
 
-    aEngine.SetText("I am Edit Engine.");
+    aEngine.SetText(u"I am Edit Engine."_ustr);
 }
 
 bool includes(const uno::Sequence<OUString>& rSeq, std::u16string_view rVal)
@@ -460,65 +460,65 @@ void Test::testAutocorrect()
     SvxAutoCorrect aAutoCorrect((OUString()), (OUString()));
 
     {
-        OUString sInput("TEst-TEst");
+        OUString sInput(u"TEst-TEst"_ustr);
         sal_Unicode const cNextChar(' ');
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test-Test "), aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test-Test "_ustr, aFoo.getResult());
     }
 
     {
-        OUString sInput("TEst/TEst");
+        OUString sInput(u"TEst/TEst"_ustr);
         sal_Unicode const cNextChar(' ');
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test/Test "), aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test/Test "_ustr, aFoo.getResult());
     }
 
     {
         // test auto-bolding with '*'
-        OUString sInput("*foo");
+        OUString sInput(u"*foo"_ustr);
         sal_Unicode const cNextChar('*');
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, aFoo.getResult());
     }
 
     {
-        OUString sInput("Test. test");
+        OUString sInput(u"Test. test"_ustr);
         sal_Unicode const cNextChar(' ');
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test. Test "), aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test. Test "_ustr, aFoo.getResult());
     }
 
     // don't autocapitalize after a field mark
     {
-        OUString sInput("Test. \x01 test");
+        OUString sInput(u"Test. \x01 test"_ustr);
         sal_Unicode const cNextChar(' ');
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test. \x01 test "), aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test. \x01 test "_ustr, aFoo.getResult());
     }
 
     // consider field contents as text for auto quotes
     {
-        OUString sInput("T\x01");
+        OUString sInput(u"T\x01"_ustr);
         sal_Unicode const cNextChar('"');
         static constexpr OUStringLiteral sExpected = u"T\x01\u201d";
         bool bNbspRunNext = false;
@@ -585,18 +585,18 @@ void Test::testHyperlinkCopyPaste()
 
     // Get corresponding Field Item for inserting URLs in text
     // URL 1
-    OUString aURL1 = "mailto:///user@example.com";
-    OUString aRepres1 = "user@example.com";
+    OUString aURL1 = u"mailto:///user@example.com"_ustr;
+    OUString aRepres1 = u"user@example.com"_ustr;
     SvxURLField aURLField1( aURL1, aRepres1, SvxURLFormat::Repr );
     SvxFieldItem aField1( aURLField1, EE_FEATURE_FIELD );
     // URL 2
-    OUString aURL2 = "mailto:///example@domain.com";
-    OUString aRepres2 = "example@domain.com";
+    OUString aURL2 = u"mailto:///example@domain.com"_ustr;
+    OUString aRepres2 = u"example@domain.com"_ustr;
     SvxURLField aURLField2( aURL2, aRepres2, SvxURLFormat::Repr );
     SvxFieldItem aField2( aURLField2, EE_FEATURE_FIELD );
 
     // Insert initial text
-    OUString aParaText = "sampletextfortestingfeaturefields";
+    OUString aParaText = u"sampletextfortestingfeaturefields"_ustr;
     // Positions Ref      .............*13....*20..........
     sal_Int32 aTextLen = aParaText.getLength();
     aEditEngine.SetText( aParaText );
@@ -623,7 +623,7 @@ void Test::testHyperlinkCopyPaste()
     // Assert URL Fields and text before copy
     // Check text
     CPPUNIT_ASSERT_EQUAL( aTextLen + aRepres1.getLength() + aRepres2.getLength(), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefields"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"sampletextforuser@example.comtestingexample@domain.comfeaturefields"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check Field 1
     EFieldInfo aURLFieldInfo1 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(0) );
@@ -658,7 +658,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aTextLen + 10 + aRepres1.getLength()*2 + aRepres2.getLength(), rDoc.GetTextLen() );
 
     // Check the updated text contents
-    CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefieldsforuser@example.comtesting"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"sampletextforuser@example.comtestingexample@domain.comfeaturefieldsforuser@example.comtesting"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check the Fields and their values
 
@@ -703,7 +703,7 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Set initial text
-    OUString aText = "This is custom initial text";
+    OUString aText = u"This is custom initial text"_ustr;
     sal_Int32 aTextLen = aText.getLength();
     aEditEngine.SetText( aText );
 
@@ -783,7 +783,7 @@ void Test::testHTMLPaste()
     // - Expected: test
     // - Actual  :
     // i.e. RTF and plain text paste worked, but not HTML.
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
 void Test::testHTMLFragmentPaste()
@@ -802,7 +802,7 @@ void Test::testHTMLFragmentPaste()
     // - Expected: abc
     // - Actual  :
     // i.e. a HTML fragment without a proper header was ignored on paste.
-    CPPUNIT_ASSERT_EQUAL(OUString("abc"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
 void Test::testMultiParaSelCopyPaste()
@@ -818,15 +818,15 @@ void Test::testMultiParaSelCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
-    OUString aFirstPara = "This is first paragraph";
+    OUString aFirstPara = u"This is first paragraph"_ustr;
     // Selection Ref       ........8..............
-    OUString aSecondPara = "This is second paragraph";
+    OUString aSecondPara = u"This is second paragraph"_ustr;
     // Selection Ref        .............14.........
-    OUString aThirdPara = "This is third paragraph";
+    OUString aThirdPara = u"This is third paragraph"_ustr;
     OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
     sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength();
     aEditEngine.SetText( aText );
-    OUString aCopyText = "first paragraphThis is second";
+    OUString aCopyText = u"first paragraphThis is second"_ustr;
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
@@ -847,7 +847,7 @@ void Test::testMultiParaSelCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
-    CPPUNIT_ASSERT_EQUAL( OUString("This is second"), rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( u"This is second"_ustr, rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
 void Test::testTabsCopyPaste()
@@ -866,7 +866,7 @@ void Test::testTabsCopyPaste()
     SfxVoidItem aTab( EE_FEATURE_TAB );
 
     // Insert initial text
-    OUString aParaText = "sampletextfortestingtab";
+    OUString aParaText = u"sampletextfortestingtab"_ustr;
     // Positions Ref      ......*6...............*23
     sal_Int32 aTextLen = aParaText.getLength();
     aEditEngine.SetText( aParaText );
@@ -882,7 +882,7 @@ void Test::testTabsCopyPaste()
 
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( aTextLen + 1, rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"sample\ttextfortestingtab"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert tab 2 at desired position
     EditSelection aSel2( EditPaM(pNode, 23+1), EditPaM(pNode, 23+1) );
@@ -890,7 +890,7 @@ void Test::testTabsCopyPaste()
 
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( aTextLen + 2, rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"sample\ttextfortestingtab\t"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Copy text using legacy format
     uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,6,0,aTextLen+2) );
@@ -900,7 +900,7 @@ void Test::testTabsCopyPaste()
 
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( aTextLen + aTextLen - 6 + 4, rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"sample\ttextfortestingtab\t\ttextfortestingtab\t"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
 class UrlEditEngine : public EditEngine
@@ -910,7 +910,7 @@ public:
 
     virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, std::optional<Color>&, std::optional<Color>&, std::optional<FontLineStyle>& ) override
     {
-        return "jim@bob.com"; // a sophisticated view of value:
+        return u"jim@bob.com"_ustr; // a sophisticated view of value:
     }
 };
 
@@ -921,21 +921,21 @@ void Test::testHyperlinkSearch()
     UrlEditEngine aEngine(mpItemPool.get());
     EditDoc &rDoc = aEngine.GetEditDoc();
 
-    OUString aSampleText = "Please write email to . if you find a fish(not a dog).";
+    OUString aSampleText = u"Please write email to . if you find a fish(not a dog)."_ustr;
     aEngine.SetText(aSampleText);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("set text", aSampleText, rDoc.GetParaAsString(sal_Int32(0)));
 
     ContentNode *pNode = rDoc.GetObject(0);
     EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
-    SvxURLField aURLField("mailto:///jim@bob.com", "jim@bob.com",
+    SvxURLField aURLField(u"mailto:///jim@bob.com"_ustr, u"jim@bob.com"_ustr,
                           SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
     aEngine.InsertField(aSel, aField);
 
     OUString aContent = pNode->GetExpandedText();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", OUString("Please write email to jim@bob.com. if you find a fish(not a dog)."),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", u"Please write email to jim@bob.com. if you find a fish(not a dog)."_ustr,
                            aContent);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", aContent.getLength(), rDoc.GetTextLen());
 
@@ -976,9 +976,9 @@ void Test::testHyperlinkSearch()
     SvxSearchItem aItem(1); //SID_SEARCH_ITEM);
     aItem.SetBackward(false);
     aItem.SetSelection(false);
-    aItem.SetSearchString("fish");
+    aItem.SetSearchString(u"fish"_ustr);
     CPPUNIT_ASSERT_MESSAGE("no fish", aEngine.HasText(aItem));
-    aItem.SetSearchString("dog");
+    aItem.SetSearchString(u"dog"_ustr);
     CPPUNIT_ASSERT_MESSAGE("no dog", aEngine.HasText(aItem));
 }
 
@@ -1018,7 +1018,7 @@ void Test::testBoldItalicCopyPaste()
     SvxPostureItem aItalic( ITALIC_NORMAL, EE_CHAR_ITALIC );
 
     // Insert initial text
-    OUString aParaText = "boldeditengineitalic";
+    OUString aParaText = u"boldeditengineitalic"_ustr;
     // Positions Ref      ..*2....*8...*13.*17
     // Bold Ref           ..[   BOLD   ]......
     // Italic Ref         ........[ ITALIC ]..
@@ -1198,7 +1198,7 @@ void Test::testUnderlineCopyPaste()
     SvxUnderlineItem aULine( LINESTYLE_SINGLE, EE_CHAR_UNDERLINE );
 
     // Insert initial text
-    OUString aParaText = "sampletextforunderline";
+    OUString aParaText = u"sampletextforunderline"_ustr;
     // Positions Ref      ......*6.........*17..
     // Underline Ref      ......[UNDERLINE ]....
     sal_Int32 aTextLen = aParaText.getLength();
@@ -1287,9 +1287,9 @@ void Test::testMultiParaCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
-    OUString aFirstPara = "This is first paragraph";
-    OUString aSecondPara = "This is second paragraph";
-    OUString aThirdPara = "This is third paragraph";
+    OUString aFirstPara = u"This is first paragraph"_ustr;
+    OUString aSecondPara = u"This is second paragraph"_ustr;
+    OUString aThirdPara = u"This is third paragraph"_ustr;
     OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
     sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength();
     aEditEngine.SetText( aText );
@@ -1334,21 +1334,21 @@ void Test::testParaBoldItalicCopyPaste()
     SvxPostureItem aItalic( ITALIC_NORMAL, EE_CHAR_ITALIC );
 
     // Insert initial text
-    OUString aFirstPara = "This is first paragraph";
+    OUString aFirstPara = u"This is first paragraph"_ustr;
     // Positions Ref       .....*5.*8....*14*17...
     // Bold Ref            .....[    BOLD   ].....
     // Italic Ref          ..............[     ITA
     // Copy Ref            ........[      Copy Sel
-    OUString aSecondPara = "This is second paragraph";
+    OUString aSecondPara = u"This is second paragraph"_ustr;
     // Positions Ref        .....*5.*8...*13..*18...
     // Bold Ref             .....[    BOLD    ].....
     // Italic Ref           LIC     ]...............
     // Copy Ref             ection       ]..........
-    OUString aThirdPara = "This is third paragraph";
+    OUString aThirdPara = u"This is third paragraph"_ustr;
     OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
     sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength();
     aEditEngine.SetText( aText );
-    OUString aCopyText = "first paragraphThis is second";
+    OUString aCopyText = u"first paragraphThis is second"_ustr;
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes - text insertion
@@ -1485,7 +1485,7 @@ void Test::testParaBoldItalicCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
-    CPPUNIT_ASSERT_EQUAL( OUString("This is second"), rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( u"This is second"_ustr, rDoc.GetParaAsString(sal_Int32(3)) );
 
     // Check updated text for appropriate Bold/Italics
     std::unique_ptr<EditTextObject> pEditText3( aEditEngine.CreateTextObject() );
@@ -1600,15 +1600,15 @@ void Test::testParaStartCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
-    OUString aFirstPara = "This is first paragraph";
+    OUString aFirstPara = u"This is first paragraph"_ustr;
     // Selection Ref       ........8..............
-    OUString aSecondPara = "This is second paragraph";
+    OUString aSecondPara = u"This is second paragraph"_ustr;
     // Selection Ref        .............14.........
-    OUString aThirdPara = "This is third paragraph";
+    OUString aThirdPara = u"This is third paragraph"_ustr;
     OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
     sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength();
     aEditEngine.SetText( aText );
-    OUString aCopyText = "first paragraphThis is second";
+    OUString aCopyText = u"first paragraphThis is second"_ustr;
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
@@ -1626,7 +1626,7 @@ void Test::testParaStartCopyPaste()
     // Assert changes
     OUString aSecondParaAfterCopyPaste = "This is second" + aFirstPara;
     CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("first paragraph"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( u"first paragraph"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(2)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(3)) );
@@ -1641,7 +1641,7 @@ void Test::testSectionAttributes()
     SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
 
     {
-        aEngine.SetText("aaabbbccc");
+        aEngine.SetText(u"aaabbbccc"_ustr);
         pSet->Put(aBold);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one item.", static_cast<sal_uInt16>(1), pSet->Count());
         aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
@@ -1685,7 +1685,7 @@ void Test::testSectionAttributes()
         // Set text consisting of 5 paragraphs with the 2nd and 4th paragraphs
         // being empty.
         aEngine.Clear();
-        aEngine.SetText("one\n\ntwo\n\nthree");
+        aEngine.SetText(u"one\n\ntwo\n\nthree"_ustr);
         sal_Int32 nParaCount = aEngine.GetParagraphCount();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nParaCount);
 
@@ -1737,7 +1737,7 @@ void Test::testSectionAttributes()
 
     {
         aEngine.Clear();
-        aEngine.SetText("one\ntwo");
+        aEngine.SetText(u"one\ntwo"_ustr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aEngine.GetParagraphCount());
 
         // embolden 2nd paragraph
@@ -1786,18 +1786,18 @@ void Test::testLargeParaCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
-    OUString aFirstPara = "This is first paragraph";
-    OUString aSecondPara = "This is second paragraph";
-    OUString aThirdPara = "This is third paragraph";
-    OUString aFourthPara = "This is fourth paragraph";
-    OUString aFifthPara = "This is fifth paragraph";
-    OUString aSixthPara = "This is sixth paragraph";
+    OUString aFirstPara = u"This is first paragraph"_ustr;
+    OUString aSecondPara = u"This is second paragraph"_ustr;
+    OUString aThirdPara = u"This is third paragraph"_ustr;
+    OUString aFourthPara = u"This is fourth paragraph"_ustr;
+    OUString aFifthPara = u"This is fifth paragraph"_ustr;
+    OUString aSixthPara = u"This is sixth paragraph"_ustr;
     //Positions Ref:       ........*8.............
-    OUString aSeventhPara = "This is seventh paragraph";
-    OUString aEighthPara = "This is eighth paragraph";
+    OUString aSeventhPara = u"This is seventh paragraph"_ustr;
+    OUString aEighthPara = u"This is eighth paragraph"_ustr;
     //Positions Ref:        .............*13
-    OUString aNinthPara = "This is ninth paragraph";
-    OUString aTenthPara = "This is tenth paragraph";
+    OUString aNinthPara = u"This is ninth paragraph"_ustr;
+    OUString aTenthPara = u"This is tenth paragraph"_ustr;
     OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara + "\n" +
         aFourthPara + "\n" + aFifthPara + "\n" + aSixthPara + "\n" + aSeventhPara + "\n" +
         aEighthPara + "\n" + aNinthPara + "\n" + aTenthPara;
@@ -1805,7 +1805,7 @@ void Test::testLargeParaCopyPaste()
         aFourthPara.getLength() + aFifthPara.getLength() + aSixthPara.getLength() +
         aSeventhPara.getLength() + aEighthPara.getLength() + aNinthPara.getLength() + aTenthPara.getLength();
     aEditEngine.SetText( aText );
-    OUString aCopyText = "sixth paragraphThis is seventh paragraphThis is eighth";
+    OUString aCopyText = u"sixth paragraphThis is seventh paragraphThis is eighth"_ustr;
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
@@ -1836,7 +1836,7 @@ void Test::testLargeParaCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
     CPPUNIT_ASSERT_EQUAL( aFourthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(3)) );
     CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(4)) );
-    CPPUNIT_ASSERT_EQUAL( OUString("This is eighth"), rDoc.GetParaAsString(sal_Int32(5)) );
+    CPPUNIT_ASSERT_EQUAL( u"This is eighth"_ustr, rDoc.GetParaAsString(sal_Int32(5)) );
     CPPUNIT_ASSERT_EQUAL( aFifthPara, rDoc.GetParaAsString(sal_Int32(6)) );
     CPPUNIT_ASSERT_EQUAL( aSixthPara, rDoc.GetParaAsString(sal_Int32(7)) );
     CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(8)) );
@@ -1858,10 +1858,10 @@ void Test::testTransliterate()
     // Create EditEngine's instance
     EditEngine editEng( mpItemPool.get() );
 
-    OUString sText("one (two) three");
+    OUString sText(u"one (two) three"_ustr);
     editEng.SetText(sText);
     editEng.TransliterateText(ESelection(0, 0, 0, sText.getLength()), TransliterationFlags::TITLE_CASE);
-    CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"), editEng.GetText());
+    CPPUNIT_ASSERT_EQUAL(u"One (Two) Three"_ustr, editEng.GetText());
 
     using TF = TransliterationFlags;
     constexpr OUString sText2 = u"Mary Jones met joe Smith. Time Passed."_ustr;
@@ -1875,88 +1875,88 @@ void Test::testTransliterate()
      * cursor is on a word boundary. */
 
     /* No selection tests. Cursor between the ' ' and 'm' before 'met' - except in SENTENCE_CASE where the complete sentence is selected.*/
-    CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."), lcl_translitTest(editEng, sText2, eSentenSel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary jones met joe smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, eSentenSel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* No selection tests. Cursor between the 't' and the ' ' after 'met'. */
     selStart = 14;
     selEnd = 14;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* No selection tests. Cursor between the 'h' and the '.' after 'Smith'. */
     selStart = 24;
     selEnd = 24;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* No selection tests. Cursor between the 'm' and 'e' in 'met'. */
     selStart = 12;
     selEnd = 12;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test behavior when there is a selection that does not cross a word boundary: "met" */
     selStart = 11;
     selEnd = 14;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString("met"), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"met"_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test behavior when there is a selection that does not begin at a word boundary: "et" */
     selStart = 12;
     selEnd = 14;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString("et"), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"et"_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones mEt joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones mET joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test behavior when there is a selection that ends in the middle of a word */
     selStart = 11;
     selEnd = 13;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString("me"), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MEt joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"me"_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MEt joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
 
     /* Test behavior when there is a selection that crosses a word boundary: "nes met joe Sm" */
     selStart = 7;
     selEnd = 21;
     esel = ESelection(0, selStart, 0, selEnd);
-    CPPUNIT_ASSERT_EQUAL(OUString("nes met joe Sm"), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes met joe smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes Met Joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNES MET JOE SMith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"nes met joe Sm"_ustr, editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNes met joe smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNes Met Joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNES MET JOE SMith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test behavior when there is a selection that crosses a sentence boundary: "joe Smith. Time Passed." */
     selStart = 15;
     selEnd = 38;
     esel = ESelection(0, selStart, 0, selEnd);
     editEng.SetText(sText2);
-    CPPUNIT_ASSERT_EQUAL(OUString("joe Smith. Time Passed."), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"joe Smith. Time Passed."_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe smith. Time passed."), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met JOE SMITH. TIME PASSED."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. time passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met Joe smith. Time passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met Joe Smith. Time Passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met JOE SMITH. TIME PASSED."_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe smith. time passed."_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test behavior when sentence ends with a capital that is not selected: "CURRENT IS EQUAL TO 10 A" */
     selStart = 0;
@@ -1964,21 +1964,21 @@ void Test::testTransliterate()
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText3(u"CURRENT IS EQUAL TO 10 A"_ustr);
     editEng.SetText(sText3);
-    CPPUNIT_ASSERT_EQUAL(OUString("CURRENT IS EQUAL TO"), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"CURRENT IS EQUAL TO"_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Current is equal to 10 A"), lcl_translitTest(editEng, sText3, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Current Is Equal To 10 A"), lcl_translitTest(editEng, sText3, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("CURRENT IS EQUAL TO 10 A"), lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("current is equal to 10 A"), lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"Current is equal to 10 A"_ustr, lcl_translitTest(editEng, sText3, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"Current Is Equal To 10 A"_ustr, lcl_translitTest(editEng, sText3, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"CURRENT IS EQUAL TO 10 A"_ustr, lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"current is equal to 10 A"_ustr, lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
 
 }
 
 void Test::testTdf147196()
 {
     EditEngine editEng( mpItemPool.get() );
-    editEng.SetText("2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or Certification Practice Statement SHALL state the CA\'s policy or practice on processing CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA SHALL log all actions taken, if any, consistent with its processing practice.");
+    editEng.SetText(u"2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or Certification Practice Statement SHALL state the CA\'s policy or practice on processing CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA SHALL log all actions taken, if any, consistent with its processing practice."_ustr);
     editEng.TransliterateText(ESelection(0, 0, 3, 232), TransliterationFlags::TITLE_CASE);
-    CPPUNIT_ASSERT_EQUAL(OUString("2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, Consistent With Its Processing Practice."), editEng.GetText());
+    CPPUNIT_ASSERT_EQUAL(u"2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, Consistent With Its Processing Practice."_ustr, editEng.GetText());
 }
 
 void Test::testTdf148148()
@@ -1992,24 +1992,24 @@ void Test::testTdf148148()
     ESelection esel(0, selStart, 0, selEnd);
     constexpr OUString sText1(u"   text"_ustr);
     editEng.SetText(sText1);
-    CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"   "_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(editEng, sText1, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(editEng, sText1, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(editEng, sText1, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(editEng, sText1, esel, TF::UPPERCASE_LOWERCASE));
 
     selStart = 4;
     selEnd = 8;
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText2(u"text    "_ustr);
     editEng.SetText(sText2);
-    CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"    "_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"text    "_ustr, lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"text    "_ustr, lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"text    "_ustr, lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"text    "_ustr, lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test what happens when node contains only non-word text but selection does not contain any text */
     selStart = 0;
@@ -2017,24 +2017,24 @@ void Test::testTdf148148()
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText3(u"   -1"_ustr);
     editEng.SetText(sText3);
-    CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"   "_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText3, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText3, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
 
     selStart = 2;
     selEnd = 6;
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText4(u"-1    "_ustr);
     editEng.SetText(sText4);
-    CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"    "_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1    "_ustr, lcl_translitTest(editEng, sText4, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1    "_ustr, lcl_translitTest(editEng, sText4, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1    "_ustr, lcl_translitTest(editEng, sText4, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1    "_ustr, lcl_translitTest(editEng, sText4, esel, TF::UPPERCASE_LOWERCASE));
 
     /* Test what happens when node and selection contains only non-word text */
     selStart = 0;
@@ -2042,24 +2042,24 @@ void Test::testTdf148148()
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText5(u"   -1"_ustr);
     editEng.SetText(sText3);
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText5, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText5, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText5, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(editEng, sText5, esel, TF::UPPERCASE_LOWERCASE));
 
     selStart = 0;
     selEnd = 5;
     esel = ESelection(0, selStart, 0, selEnd);
     constexpr OUString sText6(u"-1   "_ustr);
     editEng.SetText(sText4);
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, editEng.GetText(esel));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(editEng, sText6, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(editEng, sText6, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(editEng, sText6, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(editEng, sText6, esel, TF::UPPERCASE_LOWERCASE));
 
 
 }
@@ -2069,7 +2069,7 @@ void Test::testSingleLine()
     EditEngine aEditEngine( mpItemPool.get() );
 
     aEditEngine.SetSingleLine(true);
-    aEditEngine.SetText("Bolivian\nSanta Cruz de la Sierra");
+    aEditEngine.SetText(u"Bolivian\nSanta Cruz de la Sierra"_ustr);
     aEditEngine.QuickFormatDoc(true);
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -2080,88 +2080,88 @@ void Test::testMoveParagraph()
 {
     EditEngine aEditEngine(mpItemPool.get());
     aEditEngine.SetPaperSize(Size(5000, 5000));
-    aEditEngine.SetText("Paragraph 1\nParagraph 2\nParagraph 3\nParagraph 4\nParagraph 5");
+    aEditEngine.SetText(u"Paragraph 1\nParagraph 2\nParagraph 3\nParagraph 4\nParagraph 5"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(1, 1), 4); // Move paragraph 2 (index 1) -> to before index 4
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(3, 3), 1); // Move paragraph 2 (index 3) -> to before index 1
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(1, 2), 4); // Move paragraph 2, 3 -> to before index 4
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(2, 3), 1); // Move paragraph 2, 3 -> to before index 2
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(2, 4), 0); // Move paragraph 3, 4, 5 -> to before index 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(0, 2), 5); // Move paragraph 3, 4, 5 -> to before index 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(0, 0), 8); // Move paragraph 1 -> to before index 8 but 8 is out of bounds
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(4));
 
     aEditEngine.MoveParagraphs(Range(4, 4), 0); // Move paragraph 1 -> to before index 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 2"_ustr, aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 3"_ustr, aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 4"_ustr, aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 }
 
 void Test::testCreateLines()
@@ -2171,7 +2171,7 @@ void Test::testCreateLines()
     EditEngine aEditEngine(mpItemPool.get());
     aEditEngine.SetRefDevice(pVirtualDevice.get());
     aEditEngine.SetPaperSize(Size(500, 500));
-    aEditEngine.SetText("ABC\nABC DEF ABC DEFGH");
+    aEditEngine.SetText(u"ABC\nABC DEF ABC DEFGH"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -2246,12 +2246,12 @@ void Test::testTdf154248MultilineFieldWrapping()
     // Create EditEngine's instance
     EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
     aEditEngine.SetPaperSize(Size(2000, 2000));
-    aEditEngine.SetText("ABC  DEF ABC DEFGH");
+    aEditEngine.SetText(u"ABC  DEF ABC DEFGH"_ustr);
     // Positions Ref     ....*4............
 
     // Get Field Item for inserting URLs in text
-    SvxURLField aURLField("http://not.a.real.link",
-                          "Really long hyperlink text that won't fit in 1 line, no matter what.",
+    SvxURLField aURLField(u"http://not.a.real.link"_ustr,
+                          u"Really long hyperlink text that won't fit in 1 line, no matter what."_ustr,
                           SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 

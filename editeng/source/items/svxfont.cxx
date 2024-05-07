@@ -429,14 +429,14 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
 Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 {
     if ( !IsCaseMap() && !IsFixKerning() )
-        return Size( pOut->GetTextWidth( "" ), pOut->GetTextHeight() );
+        return Size( pOut->GetTextWidth( u""_ustr ), pOut->GetTextHeight() );
 
     Size aTxtSize;
     aTxtSize.setHeight( pOut->GetTextHeight() );
     if ( !IsCaseMap() )
-        aTxtSize.setWidth( pOut->GetTextWidth( "" ) );
+        aTxtSize.setWidth( pOut->GetTextWidth( u""_ustr ) );
     else
-        aTxtSize.setWidth( pOut->GetTextWidth( CalcCaseMap( "" ) ) );
+        aTxtSize.setWidth( pOut->GetTextWidth( CalcCaseMap( u""_ustr ) ) );
 
     return aTxtSize;
 }
@@ -812,7 +812,7 @@ void SvxDoDrawCapital::DoSpace( const bool bDraw )
         pFont->SetWordLineMode( false );
         pFont->SetTransparent( true );
         pFont->SetPhysFont(*pOut);
-        pOut->DrawStretchText( aSpacePos, nDiff, "  ", 0, 2 );
+        pOut->DrawStretchText( aSpacePos, nDiff, u"  "_ustr, 0, 2 );
         pFont->SetWordLineMode( bWordWise );
         pFont->SetTransparent( bTrans );
         pFont->SetPhysFont(*pOut);

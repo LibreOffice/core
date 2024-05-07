@@ -655,7 +655,7 @@ ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterat
     EditSelection aOldSel( getImpl().GetEditSelection() );
     getImpl().DrawSelectionXOR();
     getImpEditEngine().UndoActionStart( EDITUNDO_READ );
-    EditPaM aEndPaM = getImpEditEngine().Read( rInput, "", eFormat, aOldSel, pHTTPHeaderAttrs );
+    EditPaM aEndPaM = getImpEditEngine().Read( rInput, u""_ustr, eFormat, aOldSel, pHTTPHeaderAttrs );
     getImpEditEngine().UndoActionEnd();
     EditSelection aNewSel( aEndPaM, aEndPaM );
 
@@ -964,10 +964,10 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
     OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
 
-    aItemTree.put("text", rMenu.get_label("ignore").toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label(u"ignore"_ustr).toUtf8().getStr());
     aItemTree.put("type", "command");
     aItemTree.put("command", ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
-    aItemTree.put("enabled", rMenu.get_sensitive("ignore"));
+    aItemTree.put("enabled", rMenu.get_sensitive(u"ignore"_ustr));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
@@ -975,19 +975,19 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
-    aItemTree.put("text", rMenu.get_label("wordlanguage").toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label(u"wordlanguage"_ustr).toUtf8().getStr());
     aItemTree.put("type", "command");
     OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + aTmpWord;
     aItemTree.put("command", sCommandString.toUtf8().getStr());
-    aItemTree.put("enabled", rMenu.get_sensitive("wordlanguage"));
+    aItemTree.put("enabled", rMenu.get_sensitive(u"wordlanguage"_ustr));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
-    aItemTree.put("text", rMenu.get_label("paralanguage").toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label(u"paralanguage"_ustr).toUtf8().getStr());
     aItemTree.put("type", "command");
     sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + aTmpPara;
     aItemTree.put("command", sCommandString.toUtf8().getStr());
-    aItemTree.put("enabled", rMenu.get_sensitive("paralanguage"));
+    aItemTree.put("enabled", rMenu.get_sensitive(u"paralanguage"_ustr));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
@@ -1018,10 +1018,10 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     aTempRect = rDevice.LogicToPixel(aTempRect);
 
     weld::Widget* pPopupParent = getImpl().GetPopupParent(aTempRect);
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "editeng/ui/spellmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopupMenu(xBuilder->weld_menu("editviewspellmenu"));
-    std::unique_ptr<weld::Menu> xInsertMenu(xBuilder->weld_menu("insertmenu")); // add word to user-dictionaries
-    std::unique_ptr<weld::Menu> xAutoMenu(xBuilder->weld_menu("automenu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"editeng/ui/spellmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopupMenu(xBuilder->weld_menu(u"editviewspellmenu"_ustr));
+    std::unique_ptr<weld::Menu> xInsertMenu(xBuilder->weld_menu(u"insertmenu"_ustr)); // add word to user-dictionaries
+    std::unique_ptr<weld::Menu> xAutoMenu(xBuilder->weld_menu(u"automenu"_ustr));
 
     EditPaM aPaM2( aPaM );
     aPaM2.SetIndex( aPaM2.GetIndex()+1 );
@@ -1074,15 +1074,15 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         if (nGuessLangPara == LANGUAGE_NONE)
             nGuessLangPara = nGuessLangWord;
 
-        xPopupMenu->append_separator("separator1");
+        xPopupMenu->append_separator(u"separator1"_ustr);
         OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
         OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
         OUString aWordStr( EditResId( RID_STR_WORD ) );
         aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
         OUString aParaStr( EditResId( RID_STR_PARAGRAPH ) );
         aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
-        xPopupMenu->append("wordlanguage", aWordStr);
-        xPopupMenu->append("paralanguage", aParaStr);
+        xPopupMenu->append(u"wordlanguage"_ustr, aWordStr);
+        xPopupMenu->append(u"paralanguage"_ustr, aParaStr);
     }
 
     // Replace suggestions...
@@ -1100,12 +1100,12 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
             xPopupMenu->insert(nW, sId, aAlternate, nullptr, nullptr, nullptr, TRISTATE_INDET);
             xAutoMenu->append(sId, aAlternate);
         }
-        xPopupMenu->insert_separator(nWords, "separator2");
+        xPopupMenu->insert_separator(nWords, u"separator2"_ustr);
     }
     else
     {
         xAutoMenu.reset();
-        xPopupMenu->remove("autocorrect");
+        xPopupMenu->remove(u"autocorrect"_ustr);
     }
 
     SvtLinguConfig aCfg;
@@ -1169,11 +1169,11 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     }
 
     if (xInsertMenu->n_children() != 1)
-        xPopupMenu->remove("add");
+        xPopupMenu->remove(u"add"_ustr);
     if (xInsertMenu->n_children() < 2)
     {
         xInsertMenu.reset();
-        xPopupMenu->remove("insert");
+        xPopupMenu->remove(u"insert"_ustr);
     }
 
     //tdf#106123 store and restore the EditPaM around the menu Execute
@@ -1185,8 +1185,8 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        xPopupMenu->remove("autocorrect");
-        xPopupMenu->remove("autocorrectdlg");
+        xPopupMenu->remove(u"autocorrect"_ustr);
+        xPopupMenu->remove(u"autocorrectdlg"_ustr);
 
         LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
         return true;
