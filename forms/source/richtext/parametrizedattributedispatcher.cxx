@@ -89,7 +89,7 @@ namespace frm
     }
 
 
-    const SfxPoolItem* OParametrizedAttributeDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
+    SfxPoolItemHolder OParametrizedAttributeDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
         // get the real slot id. This may differ from our attribute id: for instance, both
         // SID_ATTR_CHAR_HEIGHT and SID_ATTR_CHAR_LATIN_HEIGHT are mapped to the same which id
@@ -98,16 +98,16 @@ namespace frm
         SfxAllItemSet aParameterSet( getEditView()->GetEmptyItemSet() );
         TransformParameters( nSlotId, _rArguments, aParameterSet );
 
-        const SfxPoolItem* pArgument = nullptr;
         if ( aParameterSet.Count() )
         {
             OSL_ENSURE( aParameterSet.Count() == 1, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: Arguments which form more than 1 item? How this?" );
             WhichId nAttributeWhich = aParameterSet.GetPool()->GetWhich( nSlotId );
-            pArgument = aParameterSet.GetItem( nAttributeWhich );
-            OSL_ENSURE( pArgument, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: suspicious: there were arguments, but they're not for my slot!" );
+            SfxPoolItemHolder aArgument(*aParameterSet.GetPool(), aParameterSet.GetItem(nAttributeWhich));
+            OSL_ENSURE( aArgument.getItem(), "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: suspicious: there were arguments, but they're not for my slot!" );
+            return aArgument;
         }
 
-        return pArgument;
+        return SfxPoolItemHolder();
     }
 
 
@@ -117,8 +117,8 @@ namespace frm
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OParametrizedAttributeDispatcher::dispatch: invalid URL!" );
         if ( m_pMasterDispatcher )
         {
-            const SfxPoolItem* pConvertedArgument = convertDispatchArgsToItem( _rArguments );
-            m_pMasterDispatcher->executeAttribute( m_nAttributeId, pConvertedArgument );
+            const SfxPoolItemHolder aConvertedArgument(convertDispatchArgsToItem(_rArguments));
+            m_pMasterDispatcher->executeAttribute(m_nAttributeId, aConvertedArgument.getItem());
         }
     }
 
