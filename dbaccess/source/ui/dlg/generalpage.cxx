@@ -310,7 +310,7 @@ namespace dbaui
         {
             // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
             // this driver is installed
-            if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
+            if ( m_pCollection->hasDriver( u"sdbc:mysql:mysqlc:" ) )
                 _inout_rDisplayName.clear();
         }
 

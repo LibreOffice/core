@@ -124,9 +124,9 @@ OUString ODsnTypeCollection::getPrefix(std::u16string_view _sURL) const
     return sRet;
 }
 
-bool ODsnTypeCollection::hasDriver( const char* _pAsciiPattern ) const
+bool ODsnTypeCollection::hasDriver( std::u16string_view _rAsciiPattern ) const
 {
-    OUString sPrefix( getPrefix( OUString::createFromAscii( _pAsciiPattern ) ) );
+    OUString sPrefix( getPrefix( _rAsciiPattern ) );
     return !sPrefix.isEmpty();
 }
 

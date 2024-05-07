@@ -128,7 +128,7 @@ public:
     OUString getPrefix(std::u16string_view _sURL) const;
 
     /// determines whether there is a driver for the given URL prefix/pattern
-    bool    hasDriver( const char* _pAsciiPattern ) const;
+    bool hasDriver( std::u16string_view _rAsciiPattern ) const;
 
     /// on a given string, return the Java Driver Class
     OUString getJavaDriverClass(std::u16string_view _sURL) const;

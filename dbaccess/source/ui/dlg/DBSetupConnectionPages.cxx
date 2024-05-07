@@ -235,7 +235,7 @@ using namespace ::com::sun::star;
     {
         // show the "Connect directly" option only if the driver is installed
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rSet.GetItem(DSID_TYPECOLLECTION) );
-        bool bHasMySQLNative = ( pCollectionItem != nullptr ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysql:mysqlc:" );
+        bool bHasMySQLNative = ( pCollectionItem != nullptr ) && pCollectionItem->getCollection()->hasDriver( u"sdbc:mysql:mysqlc:" );
         if ( bHasMySQLNative )
             m_xNATIVEDatabase->show();
 
