@@ -137,6 +137,8 @@ private:
 protected:
     int             mnMinCharPos;
     int             mnEndCharPos;
+    int mnDrawMinCharPos = std::numeric_limits<int>::min();
+    int mnDrawEndCharPos = std::numeric_limits<int>::max();
     LanguageTag     maLanguageTag;
 
     Degree10        mnOrientation;

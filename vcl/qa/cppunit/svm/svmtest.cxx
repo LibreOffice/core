@@ -106,6 +106,9 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextArray(const GDIMetaFile& rMetaFile);
     void testTextArray();
 
+    void checkTextArrayWithContext(const GDIMetaFile& rMetaFile);
+    void testTextArrayWithContext();
+
     void checkstretchText(const GDIMetaFile& rMetaFile);
     void teststretchText();
 
@@ -225,6 +228,7 @@ public:
     CPPUNIT_TEST(testPolyPolygon);
     CPPUNIT_TEST(testText);
     CPPUNIT_TEST(testTextArray);
+    CPPUNIT_TEST(testTextArrayWithContext);
     CPPUNIT_TEST(teststretchText);
     CPPUNIT_TEST(testTextRect);
     CPPUNIT_TEST(testTextLine);
@@ -866,6 +870,33 @@ void SvmTest::testTextArray()
 
     checkTextArray(writeAndReadStream(aGDIMetaFile));
     checkTextArray(readFile(u"textarray.svm"));
+}
+
+void SvmTest::checkTextArrayWithContext(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textarray[1]"_ostr,
+                     { { "x", "4" },
+                       { "y", "6" },
+                       { "index", "1" },
+                       { "length", "4" },
+                       { "layoutcontextindex", "0" },
+                       { "layoutcontextlength", "5" } });
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, "15 20 25 ");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, "123456");
+}
+
+void SvmTest::testTextArrayWithContext()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+    sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
+    pVirtualDev->DrawPartialTextArray(Point(4, 6), "123456", KernArraySpan(aDX), {}, 0, 5, 1, 4);
+
+    checkTextArrayWithContext(writeAndReadStream(aGDIMetaFile));
+    checkTextArrayWithContext(readFile(u"textarraycontext.svm"));
 }
 
 void SvmTest::checkstretchText(const GDIMetaFile& rMetaFile)

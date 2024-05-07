@@ -248,7 +248,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
          ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
     {
         // call GetTextSize with maximum compression (for kanas)
-        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rPor.GetLayoutContext(), nMaxComp,
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rInf.GetLayoutContext(), nMaxComp,
                          m_nBreakWidth, nMaxSizeDiff);
 
         if ( ( m_nBreakWidth <= nLineWidth ) || ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
@@ -259,7 +259,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                         || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
                                                               m_nBreakWidth, m_nExtraBlankWidth,
                                                               nMaxSizeDiff, rInf, rSI, nMaxComp,
-                                                              rPor.GetLayoutContext());
+                                                              rInf.GetLayoutContext());
             if( nItalic &&
                 (m_nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
                   // #i48035# Needed for CalcFitToContent
@@ -421,8 +421,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if ( TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
         {
             sal_uInt16 nMinSize;
-            rInf.GetTextSize(&rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(),
-                             rPor.GetLayoutContext(), nMaxComp, nMinSize, nMaxSizeDiff);
+            rInf.GetTextSize(&rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(), std::nullopt, nMaxComp,
+                             nMinSize, nMaxSizeDiff);
             OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
 #endif
@@ -432,7 +432,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         // second check if everything fits to line
         m_nCutPos = m_nBreakPos = rInf.GetIdx() + nMaxLen - TextFrameIndex(1);
-        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rPor.GetLayoutContext(), nMaxComp,
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nMaxLen, rInf.GetLayoutContext(), nMaxComp,
                          m_nBreakWidth, nMaxSizeDiff);
 
         // The following comparison should always give true, otherwise
@@ -443,7 +443,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                         || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
                                                               m_nBreakWidth, m_nExtraBlankWidth,
                                                               nMaxSizeDiff, rInf, rSI, nMaxComp,
-                                                              rPor.GetLayoutContext());
+                                                              rInf.GetLayoutContext());
 
             if (nItalic && (m_nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
                 m_nBreakWidth += nItalic;
@@ -734,8 +734,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     if( nPorLen )
     {
-        rInf.GetTextSize(&rSI, rInf.GetIdx(), nPorLen, rPor.GetLayoutContext(), nMaxComp,
-                         m_nBreakWidth, nMaxSizeDiff, rInf.GetCachedVclData().get());
+        rInf.GetTextSize(&rSI, rInf.GetIdx(), nPorLen, std::nullopt, nMaxComp, m_nBreakWidth,
+                         nMaxSizeDiff, rInf.GetCachedVclData().get());
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
@@ -749,9 +749,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     if (m_nBreakStart > rInf.GetIdx() + nPorLen + m_nFieldDiff)
     {
         rInf.GetTextSize(&rSI, rInf.GetIdx() + nPorLen,
-                         m_nBreakStart - rInf.GetIdx() - nPorLen - m_nFieldDiff,
-                         rPor.GetLayoutContext(), nMaxComp, m_nExtraBlankWidth, nMaxSizeDiff,
-                         rInf.GetCachedVclData().get());
+                         m_nBreakStart - rInf.GetIdx() - nPorLen - m_nFieldDiff, std::nullopt,
+                         nMaxComp, m_nExtraBlankWidth, nMaxSizeDiff, rInf.GetCachedVclData().get());
     }
 
     if( m_pHanging )

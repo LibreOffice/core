@@ -22,6 +22,9 @@
 
 #include "impglyphitem.hxx"
 #include "ImplLayoutRuns.hxx"
+#include "justificationdata.hxx"
+
+#include <span>
 
 namespace vcl::text
 {
@@ -34,13 +37,15 @@ public:
     const OUString& mrStr;
     int mnMinCharPos;
     int mnEndCharPos;
+    int mnDrawOriginCluster = std::numeric_limits<int>::min();
+    int mnDrawMinCharPos = std::numeric_limits<int>::min();
+    int mnDrawEndCharPos = std::numeric_limits<int>::max();
 
     // performance hack
     vcl::text::TextLayoutCache const* m_pTextLayoutCache;
 
     // positioning related inputs
-    const double* mpDXArray; // in floating point pixel units
-    const sal_Bool* mpKashidaArray;
+    JustificationData mstJustification;
     double mnLayoutWidth; // in pixel units
     Degree10 mnOrientation; // in 0-3600 system
 
@@ -52,15 +57,13 @@ public:
                    LanguageTag aLanguageTag, vcl::text::TextLayoutCache const* pLayoutCache);
 
     void SetLayoutWidth(double nWidth);
-    void SetDXArray(const double* pDXArray);
-    void SetKashidaArray(const sal_Bool* pKashidaArray);
+    void SetJustificationData(JustificationData stJustification);
     void SetOrientation(Degree10 nOrientation);
 
     void ResetPos();
     bool GetNextPos(int* nCharPos, bool* bRTL);
     bool GetNextRun(int* nMinRunPos, int* nEndRunPos, bool* bRTL);
     void AddFallbackRun(int nMinRunPos, int nEndRunPos, bool bRTL);
-    bool HasDXArray() const { return mpDXArray; }
 
     // methods used by BiDi and glyph fallback
     bool HasFallbackRun() const;

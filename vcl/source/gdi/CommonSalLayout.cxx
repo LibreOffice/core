@@ -43,6 +43,7 @@
 
 #include <map>
 #include <memory>
+#include <set>
 
 GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     : m_GlyphItems(rFont)
@@ -81,6 +82,135 @@ struct SubRun
     hb_direction_t maDirection;
 };
 
+struct UnclusteredGlyphData
+{
+    sal_Int32 m_nGlyphId;
+    bool m_bUsed = false;
+
+    explicit UnclusteredGlyphData(sal_Int32 nGlyphId)
+        : m_nGlyphId(nGlyphId)
+    {
+    }
+};
+
+// This is a helper class to enable correct styling and glyph placement when a grapheme cluster is
+// split across multiple adjoining layouts.
+//
+// In order to justify text, we need glyphs grouped into grapheme clusters so diacritics will stay
+// attached to characters under adjustment. However, in order to correctly position and style
+// grapheme clusters that span multiple layouts, we need best-effort character-level position data.
+//
+// At time of writing, HarfBuzz cannot provide both types of information simultaneously. As a work-
+// around, this helper class runs HarfBuzz a second time to get the missing information. Should a
+// future version of HarfBuzz support this use case directly, this helper code should be deleted.
+//
+// See tdf#61444, tdf#71956, tdf#124116
+class UnclusteredGlyphMapper
+{
+private:
+    hb_buffer_t* m_pHbBuffer = nullptr;
+    std::multimap<sal_Int32, UnclusteredGlyphData> m_aGlyphs;
+    bool m_bEnable = false;
+
+public:
+    UnclusteredGlyphMapper(bool bEnable, int nGlyphCapacity)
+        : m_bEnable(bEnable)
+    {
+        if (!m_bEnable)
+        {
+            return;
+        }
+
+        m_pHbBuffer = hb_buffer_create();
+        hb_buffer_pre_allocate(m_pHbBuffer, nGlyphCapacity);
+    }
+
+    ~UnclusteredGlyphMapper()
+    {
+        if (m_bEnable)
+        {
+            hb_buffer_destroy(m_pHbBuffer);
+        }
+    }
+
+    [[nodiscard]] sal_Int32 RemapGlyph(sal_Int32 nClusterId, sal_Int32 nGlyphId)
+    {
+        if (auto it = m_aGlyphs.lower_bound(nClusterId); it != m_aGlyphs.end())
+        {
+            for (; it != m_aGlyphs.end(); ++it)
+            {
+                if (it->second.m_nGlyphId == nGlyphId && !it->second.m_bUsed)
+                {
+                    it->second.m_bUsed = true;
+                    return it->first;
+                }
+            }
+        }
+
+        return nClusterId;
+    }
+
+    void ShapeSubRun(const sal_Unicode* pStr, const int nLength, const SubRun& aSubRun,
+                     hb_font_t* pHbFont, const std::vector<hb_feature_t>& maFeatures,
+                     hb_language_t oHbLanguage)
+    {
+        if (!m_bEnable)
+        {
+            return;
+        }
+
+        m_aGlyphs.clear();
+
+        hb_buffer_clear_contents(m_pHbBuffer);
+
+        const int nMinRunPos = aSubRun.mnMin;
+        const int nEndRunPos = aSubRun.mnEnd;
+        const int nRunLen = nEndRunPos - nMinRunPos;
+
+        int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
+        nHbFlags |= HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL;
+
+        if (nMinRunPos == 0)
+        {
+            nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
+        }
+
+        if (nEndRunPos == nLength)
+        {
+            nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
+        }
+
+        hb_buffer_set_flags(m_pHbBuffer, static_cast<hb_buffer_flags_t>(nHbFlags));
+
+        hb_buffer_set_cluster_level(m_pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_CHARACTERS);
+
+        hb_buffer_set_direction(m_pHbBuffer, aSubRun.maDirection);
+        hb_buffer_set_script(m_pHbBuffer, aSubRun.maScript);
+        hb_buffer_set_language(m_pHbBuffer, oHbLanguage);
+
+        hb_buffer_add_utf16(m_pHbBuffer, reinterpret_cast<uint16_t const*>(pStr), nLength,
+                            nMinRunPos, nRunLen);
+
+        // The shapers that we want HarfBuzz to use, in the order of
+        // preference.
+        const char* const pHbShapers[] = { "graphite2", "ot", "fallback", nullptr };
+        bool ok
+            = hb_shape_full(pHbFont, m_pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
+        assert(ok);
+        (void)ok;
+
+        int nRunGlyphCount = hb_buffer_get_length(m_pHbBuffer);
+        hb_glyph_info_t* pHbGlyphInfos = hb_buffer_get_glyph_infos(m_pHbBuffer, nullptr);
+
+        for (int i = 0; i < nRunGlyphCount; ++i)
+        {
+            int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
+            int32_t nCharPos = pHbGlyphInfos[i].cluster;
+
+            m_aGlyphs.emplace(nCharPos, UnclusteredGlyphData{ nGlyphIndex });
+        }
+    }
+};
 }
 
 namespace {
@@ -155,14 +285,20 @@ void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
 
-    if (rArgs.mpDXArray)
-        ApplyDXArray(rArgs.mpDXArray, rArgs.mpKashidaArray);
+    if (!rArgs.mstJustification.empty())
+    {
+        ApplyJustificationData(rArgs.mstJustification);
+    }
     else if (rArgs.mnLayoutWidth)
+    {
         Justify(rArgs.mnLayoutWidth);
-    // apply asian kerning if the glyphs are not already formatted
+    }
     else if ((rArgs.mnFlags & SalLayoutFlags::KerningAsian)
          && !(rArgs.mnFlags & SalLayoutFlags::Vertical))
+    {
+        // apply asian kerning if the glyphs are not already formatted
         ApplyAsianKerning(rArgs.mrStr);
+    }
 }
 
 void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
@@ -262,6 +398,10 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         if (hb_font_get_h_extents(pHbFont, &extents))
             nBaseOffset = ( extents.ascender + extents.descender ) / 2.0;
     }
+
+    UnclusteredGlyphMapper stClusterMapper{
+        bool{ rArgs.mnFlags & SalLayoutFlags::UnclusteredGlyphs }, nGlyphCapacity
+    };
 
     hb_buffer_t* pHbBuffer = hb_buffer_create();
     hb_buffer_pre_allocate(pHbBuffer, nGlyphCapacity);
@@ -405,15 +545,21 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
             hb_buffer_set_direction(pHbBuffer, aSubRun.maDirection);
             hb_buffer_set_script(pHbBuffer, aSubRun.maScript);
+
+            hb_language_t oHbLanguage = nullptr;
             if (!msLanguage.isEmpty())
             {
-                hb_buffer_set_language(pHbBuffer, hb_language_from_string(msLanguage.getStr(), msLanguage.getLength()));
+                oHbLanguage = hb_language_from_string(msLanguage.getStr(), msLanguage.getLength());
             }
             else
             {
-                OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
-                hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), sLanguage.getLength()));
+                OString sLanguage
+                    = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+                oHbLanguage = hb_language_from_string(sLanguage.getStr(), sLanguage.getLength());
             }
+
+            hb_buffer_set_language(pHbBuffer, oHbLanguage);
+
             hb_buffer_set_flags(pHbBuffer, static_cast<hb_buffer_flags_t>(nHbFlags));
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
@@ -425,6 +571,9 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             bool ok = hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
             assert(ok);
             (void) ok;
+
+            // Populate glyph cluster remapping data
+            stClusterMapper.ShapeSubRun(pStr, nLength, aSubRun, pHbFont, maFeatures, oHbLanguage);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
@@ -494,9 +643,13 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 // if needed request glyph fallback by updating LayoutArgs
                 if (!nGlyphIndex)
                 {
-                    SetNeedFallback(rArgs, nCharPos, bRightToLeft);
-                    if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
-                        continue;
+                    // Only request fallback for grapheme clusters that are drawn
+                    if (nCharPos >= rArgs.mnDrawMinCharPos && nCharPos < rArgs.mnDrawEndCharPos)
+                    {
+                        SetNeedFallback(rArgs, nCharPos, bRightToLeft);
+                        if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
+                            continue;
+                    }
                 }
 
                 GlyphItemFlags nGlyphFlags = GlyphItemFlags::NONE;
@@ -562,10 +715,20 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
                 basegfx::B2DPoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset, nYOffset);
-                m_GlyphItems.push_back(aGI);
+                                    nAdvance, nXOffset, nYOffset,
+                                    stClusterMapper.RemapGlyph(nCharPos, nGlyphIndex));
 
-                aCurrPos.adjustX(nAdvance);
+                if (aGI.origCharPos() >= rArgs.mnDrawMinCharPos
+                    && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
+                {
+                    m_GlyphItems.push_back(aGI);
+                }
+
+                if (aGI.origCharPos() >= rArgs.mnDrawOriginCluster
+                    && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
+                {
+                    aCurrPos.adjustX(nAdvance);
+                }
             }
         }
     }
@@ -677,11 +840,11 @@ void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUS
     }
 }
 
-// - pDXArray: is the adjustments to glyph advances (usually due to
-//   justification).
-// - pKashidaArray: is the places where kashidas are inserted (for Arabic
-//   justification). The number of kashidas is calculated from the pDXArray.
-void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKashidaArray)
+// - stJustification:
+//   - contains adjustments to glyph advances (usually due to justification).
+//   - contains kashida insertion positions, for Arabic script justification.
+//     - The number of kashidas is calculated from the adjusted advances.
+void GenericSalLayout::ApplyJustificationData(const JustificationData& rstJustification)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
     std::vector<double> aOldCharWidths;
@@ -694,9 +857,14 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
     for (int i = 0; i < nCharCount; ++i)
     {
         if (i == 0)
-            pNewCharWidths[i] = pDXArray[i];
+        {
+            pNewCharWidths[i] = rstJustification.GetTotalAdvance(mnMinCharPos + i);
+        }
         else
-            pNewCharWidths[i] = pDXArray[i] - pDXArray[i - 1];
+        {
+            pNewCharWidths[i] = rstJustification.GetTotalAdvance(mnMinCharPos + i)
+                                - rstJustification.GetTotalAdvance(mnMinCharPos + i - 1);
+        }
     }
 
     // Map of Kashida insertion points (in the glyph items vector) and the
@@ -753,8 +921,10 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
             // will be inserted below.
-            if (pKashidaArray && pKashidaArray[nCharPos])
+            if (rstJustification.GetPositionHasKashida(mnMinCharPos + nCharPos).value_or(false))
+            {
                 pKashidas[i] = { nDiff, pNewCharWidths[nCharPos] };
+            }
 
             i++;
         }
@@ -815,7 +985,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
         aPos.adjustX(-nClusterWidth + pGlyphIter->origWidth());
         while (nCopies--)
         {
-            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, 0, 0, 0);
+            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, 0, 0, 0, nCharPos);
             pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
             aPos.adjustX(nKashidaWidth - nOverlap);
             ++pGlyphIter;

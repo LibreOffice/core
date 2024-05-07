@@ -987,7 +987,7 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
 
     const sal_Int32 nAryLen = !rDXArray.empty() ? pAction->GetLen() : 0;
 
-    VersionCompatWrite aCompat(mrStream, 3);
+    VersionCompatWrite aCompat(mrStream, 4);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAction->GetPoint());
     mrStream.WriteUniOrByteString(pAction->GetText(), pData->meActualCharSet);
@@ -1005,6 +1005,15 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
     mrStream.WriteUInt32(rKashidaArray.size());
     for (const auto& val : rKashidaArray)
         mrStream.WriteUChar(val);
+
+    // Version 4
+    bool bHasLayoutContext = (pAction->GetLayoutContextIndex() >= 0);
+    mrStream.WriteBool(bHasLayoutContext);
+    if (bHasLayoutContext)
+    {
+        mrStream.WriteUInt16(pAction->GetLayoutContextIndex());
+        mrStream.WriteUInt16(pAction->GetLayoutContextLen());
+    }
 }
 
 void SvmWriter::StretchTextHandler(const MetaStretchTextAction* pAction,

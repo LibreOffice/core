@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_set_include,vcl_text,\
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_text, \
 	vcl/qa/cppunit/canvasbitmaptest \
 	vcl/qa/cppunit/complextext \
+	vcl/qa/cppunit/justificationdata \
 	vcl/qa/cppunit/text \
 ))
 

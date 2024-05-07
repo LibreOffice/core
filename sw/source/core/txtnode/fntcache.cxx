@@ -751,12 +751,12 @@ static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, Kern
     if (nLayoutContext.has_value())
     {
         auto nStrEnd = nIndex + nLen;
-        auto nContextBegin = std::clamp(nLayoutContext->m_nBegin, sal_Int32{0}, nIndex);
+        auto nContextBegin = std::clamp(nLayoutContext->m_nBegin, sal_Int32{ 0 }, nIndex);
         auto nContextEnd = std::clamp(nLayoutContext->m_nEnd, nStrEnd, rStr.getLength());
         auto nContextLen = nContextEnd - nContextBegin;
 
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
-            &rDevice, rStr, nContextBegin, nContextLen, 0, layoutCache);
+            &rDevice, rStr, nContextBegin, nContextLen, nIndex, nIndex + nLen, 0, layoutCache);
         rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex, nLen, bCaret,
                                     layoutCache, pLayoutCache);
     }

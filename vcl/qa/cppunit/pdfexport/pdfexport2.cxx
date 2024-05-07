@@ -5048,6 +5048,185 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf61444)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(solid_extent, color_extent, /*delta*/ 0.15);
 }
 
+// tdf#124116 - Tests that track-changes inside a grapheme cluster does not break positioning
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124116TrackUntrack)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf124116-hebrew-track-untrack.odt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(15, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    // The underlying document has 4 lines:
+    // - שמחַ plain
+    // - שמחַ tracked
+    // - שמחַ with patah tracked
+    // - שמחַ with everything except patah tracked
+    // ---
+    // However, due to the way text items are inserted for Hebrew, there will be 10:
+    // - het with an improperly spaced patah, then שמ for the first 2 lines
+    // - as above, followed by a blank for the next 2 representing the actual diacritic
+    // ---
+    // This test will likely need to be rewritten if tdf#158329 is fixed.
+    CPPUNIT_ASSERT_EQUAL(10, nTextObjectCount);
+
+    // All that matters for this test is that the patah is positioned well under the het
+    auto het_x0 = aRect.at(4).getMinX();
+    auto patah_x0 = aRect.at(6).getMinX();
+    CPPUNIT_ASSERT_GREATER(10.0, patah_x0 - het_x0);
+
+    auto het_x1 = aRect.at(7).getMinX();
+    auto patah_x1 = aRect.at(9).getMinX();
+    CPPUNIT_ASSERT_GREATER(10.0, patah_x1 - het_x1);
+}
+
+// tdf#134226 - Tests that shaping is not broken by invisible spans
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf134226)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf134226-shadda-in-hidden-span.fodt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(8, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(8, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"ة"_ustr, aText[0].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u0651ق"_ustr, aText[2].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ش"_ustr, aText[3].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u0651ق"_ustr, aText[4].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ش"_ustr, aText[5].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[6].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ة"_ustr, aText[7].trim());
+
+    // Verify that the corresponding text segments are positioned roughly equally
+    auto fnEqualPos
+        = [](const basegfx::B2DRectangle& stExpected, const basegfx::B2DRectangle& stFound) {
+              CPPUNIT_ASSERT_DOUBLES_EQUAL(stExpected.getMinX(), stFound.getMinX(), /*delta*/ 0.15);
+              CPPUNIT_ASSERT_DOUBLES_EQUAL(stExpected.getMaxX(), stFound.getMaxX(), /*delta*/ 0.15);
+          };
+
+    fnEqualPos(aRect[0], aRect[7]);
+    fnEqualPos(aRect[1], aRect[6]);
+    fnEqualPos(aRect[2], aRect[4]);
+    fnEqualPos(aRect[3], aRect[5]);
+}
+
+// tdf#71956 - Tests that glyphs can be individually styled
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf71956)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf71956-styled-diacritics.fodt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(12, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(12, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"ه"_ustr, aText[0].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[2].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[3].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[4].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[5].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[6].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[7].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[8].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[9].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[10].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ه"_ustr, aText[11].trim());
+
+    // Verify that the corresponding text segments are positioned roughly equally
+    auto fnEqualPos
+        = [](const basegfx::B2DRectangle& stExpected, const basegfx::B2DRectangle& stFound) {
+              CPPUNIT_ASSERT_DOUBLES_EQUAL(stExpected.getMinX(), stFound.getMinX(), /*delta*/ 0.15);
+              CPPUNIT_ASSERT_DOUBLES_EQUAL(stExpected.getMaxX(), stFound.getMaxX(), /*delta*/ 0.15);
+          };
+
+    fnEqualPos(aRect[0], aRect[11]);
+    fnEqualPos(aRect[1], aRect[10]);
+    fnEqualPos(aRect[2], aRect[8]);
+    fnEqualPos(aRect[3], aRect[9]);
+    fnEqualPos(aRect[4], aRect[7]);
+    fnEqualPos(aRect[5], aRect[6]);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

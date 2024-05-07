@@ -7183,7 +7183,10 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen )
+void PDFWriterImpl::drawTextArray(const Point& rPos, const OUString& rText, KernArraySpan pDXArray,
+                                  std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex,
+                                  sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
+                                  sal_Int32 nLayoutContextLen)
 {
     MARK( "drawText with array" );
 
@@ -7191,10 +7194,24 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, Ker
 
     // get a layout from the OutputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
-    const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->
-        GetLayoutGlyphs( this, rText, nIndex, nLen );
-    std::unique_ptr<SalLayout> pLayout = ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray, pKashidaArray,
-        SalLayoutFlags::NONE, nullptr, layoutGlyphs );
+    std::unique_ptr<SalLayout> pLayout;
+    if (nLayoutContextIndex >= 0)
+    {
+        const auto* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+            this, rText, nLayoutContextIndex, nLayoutContextLen, nIndex, nIndex + nLen);
+        pLayout = ImplLayout(rText, nLayoutContextIndex, nLayoutContextLen, rPos, 0, pDXArray,
+                             pKashidaArray, SalLayoutFlags::UnclusteredGlyphs, nullptr,
+                             layoutGlyphs, /*nDrawOriginCluster=*/nIndex,
+                             /*nDrawMinCharPos=*/nIndex, /*nDrawEndCharPos=*/nIndex + nLen);
+    }
+    else
+    {
+        const auto* layoutGlyphs
+            = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(this, rText, nIndex, nLen);
+        pLayout = ImplLayout(rText, nIndex, nLen, rPos, 0, pDXArray, pKashidaArray,
+                             SalLayoutFlags::NONE, nullptr, layoutGlyphs);
+    }
+
     if( pLayout )
     {
         drawLayout( *pLayout, rText, true );

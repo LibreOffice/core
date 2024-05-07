@@ -78,15 +78,13 @@ void PDFWriter::DrawTextLine(
     xImplementation->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, false/*bUnderlineAbove*/ );
 }
 
-void PDFWriter::DrawTextArray(
-                              const Point& rStartPt,
-                              const OUString& rStr,
-                              KernArraySpan pDXAry,
-                              std::span<const sal_Bool> pKashidaAry,
-                              sal_Int32 nIndex,
-                              sal_Int32 nLen )
+void PDFWriter::DrawTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan pDXAry,
+                              std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
+                              sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
+                              sal_Int32 nLayoutContextLen)
 {
-    xImplementation->drawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen );
+    xImplementation->drawTextArray(rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen,
+                                   nLayoutContextIndex, nLayoutContextLen);
 }
 
 void PDFWriter::DrawStretchText(

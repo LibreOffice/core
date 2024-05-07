@@ -510,6 +510,8 @@ private:
     std::vector<sal_Bool> maKashidaAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
+    sal_Int32 mnLayoutContextIndex = -1;
+    sal_Int32 mnLayoutContextLen = -1;
 
     SAL_DLLPRIVATE virtual             ~MetaTextArrayAction() override;
 
@@ -526,6 +528,9 @@ public:
                          std::span<const sal_Bool> pKashidaAry,
                          sal_Int32 nIndex,
                          sal_Int32 nLen );
+    MetaTextArrayAction(const Point& rStartPt, OUString aStr, KernArraySpan pDXAry,
+                        std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex, sal_Int32 nLen,
+                        sal_Int32 nLayoutContextIndex, sal_Int32 nLayoutContextLen);
 
     SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
 
@@ -538,12 +543,22 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
+    sal_Int32 GetLayoutContextIndex() const { return mnLayoutContextIndex; }
+    sal_Int32 GetLayoutContextLen() const { return mnLayoutContextLen; }
     const KernArray& GetDXArray() const { return maDXAry; }
     const std::vector<sal_Bool> & GetKashidaArray() const { return maKashidaAry; }
     void            SetPoint(const Point& rPt) { maStartPt = rPt; }
     void            SetText(const OUString& rStr) { maStr = rStr; }
     void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
+    void SetLayoutContextIndex(sal_Int32 nLayoutContextIndex)
+    {
+        mnLayoutContextIndex = nLayoutContextIndex;
+    }
+    void SetLayoutContextLen(sal_Int32 nLayoutContextLen)
+    {
+        mnLayoutContextLen = nLayoutContextLen;
+    }
     SAL_DLLPRIVATE void            SetDXArray(KernArray aArray);
     SAL_DLLPRIVATE void            SetKashidaArray(std::vector<sal_Bool> aArray);
 };

@@ -37,8 +37,6 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     , mnMinCharPos(nMinCharPos)
     , mnEndCharPos(nEndCharPos)
     , m_pTextLayoutCache(pLayoutCache)
-    , mpDXArray(nullptr)
-    , mpKashidaArray(nullptr)
     , mnLayoutWidth(0)
     , mnOrientation(0)
 {
@@ -90,11 +88,9 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
 
 void ImplLayoutArgs::SetLayoutWidth(double nWidth) { mnLayoutWidth = nWidth; }
 
-void ImplLayoutArgs::SetDXArray(double const* pDXArray) { mpDXArray = pDXArray; }
-
-void ImplLayoutArgs::SetKashidaArray(sal_Bool const* pKashidaArray)
+void ImplLayoutArgs::SetJustificationData(JustificationData stJustification)
 {
-    mpKashidaArray = pKashidaArray;
+    mstJustification = std::move(stJustification);
 }
 
 void ImplLayoutArgs::SetOrientation(Degree10 nOrientation) { mnOrientation = nOrientation; }
@@ -303,7 +299,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
     s << "\"";
 
     s << ",DXArray=";
-    if (rArgs.mpDXArray)
+    if (!rArgs.mstJustification.empty())
     {
         s << "[";
         int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -312,7 +308,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
             lim = 7;
         for (int i = 0; i < lim; i++)
         {
-            s << rArgs.mpDXArray[i];
+            s << rArgs.mstJustification.GetTotalAdvance(rArgs.mnMinCharPos + i);
             if (i < lim - 1)
                 s << ",";
         }
@@ -320,7 +316,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         {
             if (count > lim + 1)
                 s << "...";
-            s << rArgs.mpDXArray[count - 1];
+            s << rArgs.mstJustification.GetTotalAdvance(rArgs.mnMinCharPos + count - 1);
         }
         s << "]";
     }
@@ -328,7 +324,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         s << "NULL";
 
     s << ",KashidaArray=";
-    if (rArgs.mpKashidaArray)
+    if (!rArgs.mstJustification.empty() && rArgs.mstJustification.ContainsKashidaPositions())
     {
         s << "[";
         int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -337,7 +333,8 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
             lim = 7;
         for (int i = 0; i < lim; i++)
         {
-            s << rArgs.mpKashidaArray[i];
+            s << rArgs.mstJustification.GetPositionHasKashida(rArgs.mnMinCharPos + i)
+                     .value_or(false);
             if (i < lim - 1)
                 s << ",";
         }
@@ -345,7 +342,8 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         {
             if (count > lim + 1)
                 s << "...";
-            s << rArgs.mpKashidaArray[count - 1];
+            s << rArgs.mstJustification.GetPositionHasKashida(rArgs.mnMinCharPos + count - 1)
+                     .value_or(false);
         }
         s << "]";
     }

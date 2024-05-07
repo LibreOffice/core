@@ -691,23 +691,59 @@ float OutputDevice::approximate_digit_width() const
 
 void OutputDevice::DrawPartialTextArray(const Point& rStartPt, const OUString& rStr,
                                         KernArraySpan pDXArray,
-                                        std::span<const sal_Bool> pKashidaArray,
-                                        sal_Int32 /*nIndex*/, sal_Int32 /*nLen*/,
-                                        sal_Int32 nPartIndex, sal_Int32 nPartLen,
+                                        std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex,
+                                        sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
                                         SalLayoutFlags flags, const SalLayoutGlyphs* pLayoutCache)
 {
-    // Currently, this is just a wrapper for DrawTextArray().
-    //
-    // In certain documents, DrawTextArray/DrawPartialTextArray can be called such that combining
-    // characters straddle multiple draw calls. This can happen if, for example, a user attempts to
-    // use different text colors for a character and its diacritical marks.
-    //
-    // In order to fix this issue, this implementation should be replaced with one that performs
-    // correct glyph substitutions across text portion boundaries, using the extra layout context.
-    //
-    // See tdf#124116
-    DrawTextArray(rStartPt, rStr, pDXArray, pKashidaArray, nPartIndex, nPartLen, flags,
-                  pLayoutCache);
+    assert(!is_double_buffered_window());
+
+    if (nLen < 0 || nIndex + nLen >= rStr.getLength())
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
+
+    if (nPartLen < 0 || nPartIndex + nPartLen >= rStr.getLength())
+    {
+        nPartLen = rStr.getLength() - nPartIndex;
+    }
+
+    if (mpMetaFile)
+    {
+        mpMetaFile->AddAction(new MetaTextArrayAction(rStartPt, rStr, pDXArray, pKashidaArray,
+                                                      nPartIndex, nPartLen, nIndex, nLen));
+    }
+
+    if (!IsDeviceOutputNecessary())
+        return;
+
+    if (!mpGraphics && !AcquireGraphics())
+        return;
+
+    assert(mpGraphics);
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    if (mbOutputClipped)
+        return;
+
+    // Adding the UnclusteredGlyphs flag during layout enables per-glyph styling.
+    std::unique_ptr<SalLayout> pSalLayout
+        = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXArray, pKashidaArray,
+                     flags | SalLayoutFlags::UnclusteredGlyphs, nullptr, pLayoutCache,
+                     /*pivot cluster*/ nPartIndex,
+                     /*min cluster*/ nPartIndex,
+                     /*end cluster*/ nPartIndex + nPartLen);
+
+    if (pSalLayout)
+    {
+        ImplDrawText(*pSalLayout);
+    }
+
+    if (mpAlphaVDev)
+    {
+        mpAlphaVDev->DrawPartialTextArray(rStartPt, rStr, pDXArray, pKashidaArray, nIndex, nLen,
+                                          nPartIndex, nPartLen, flags, pLayoutCache);
+    }
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
@@ -780,8 +816,21 @@ double OutputDevice::GetPartialTextArray(const OUString &rStr,
     std::vector<sal_Int32>* pDXAry = pKernArray ? &pKernArray->get_subunit_array() : nullptr;
 
     // do layout
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, {}, {}, eDefaultLayout, pLayoutCache, pSalLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout;
+    if (nIndex == nPartIndex && nLen == nPartLen)
+    {
+        pSalLayout = ImplLayout(rStr, nIndex, nLen, Point{ 0, 0 }, 0, {}, {}, eDefaultLayout,
+                                pLayoutCache, pSalLayoutCache);
+    }
+    else
+    {
+        pSalLayout = ImplLayout(rStr, nIndex, nLen, Point{ 0, 0 }, 0, {}, {}, eDefaultLayout,
+                                pLayoutCache, pSalLayoutCache,
+                                /*pivot cluster*/ nPartIndex,
+                                /*min cluster*/ nPartIndex,
+                                /*end cluster*/ nPartIndex + nPartLen);
+    }
+
     if( !pSalLayout )
     {
         // The caller expects this to init the elements of pDXAry.
@@ -1110,14 +1159,12 @@ OutputDevice::FontMappingUseData OutputDevice::FinishTrackingFontMappingUse()
     return ret;
 }
 
-std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
-                                    sal_Int32 nMinIndex, sal_Int32 nLen,
-                                    const Point& rLogicalPos, tools::Long nLogicalWidth,
-                                    KernArraySpan pDXArray,
-                                    std::span<const sal_Bool> pKashidaArray,
-                                    SalLayoutFlags flags,
-         vcl::text::TextLayoutCache const* pLayoutCache,
-         const SalLayoutGlyphs* pGlyphs) const
+std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
+    const OUString& rOrigStr, sal_Int32 nMinIndex, sal_Int32 nLen, const Point& rLogicalPos,
+    tools::Long nLogicalWidth, KernArraySpan pDXArray, std::span<const sal_Bool> pKashidaArray,
+    SalLayoutFlags flags, vcl::text::TextLayoutCache const* pLayoutCache,
+    const SalLayoutGlyphs* pGlyphs, std::optional<sal_Int32> nDrawOriginCluster,
+    std::optional<sal_Int32> nDrawMinCharPos, std::optional<sal_Int32> nDrawEndCharPos) const
 {
     if (pGlyphs && !pGlyphs->IsValid())
     {
@@ -1173,33 +1220,70 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, flags, pLayoutCache);
 
-    double nEndGlyphCoord(0);
-    std::unique_ptr<double[]> xDXPixelArray;
-    if( !pDXArray.empty() )
+    if (nDrawOriginCluster.has_value())
     {
-        xDXPixelArray.reset(new double[nLen]);
+        aLayoutArgs.mnDrawOriginCluster = *nDrawOriginCluster;
+    }
 
-        if (mbMap)
+    if (nDrawMinCharPos.has_value())
+    {
+        aLayoutArgs.mnDrawMinCharPos = *nDrawMinCharPos;
+    }
+
+    if (nDrawEndCharPos.has_value())
+    {
+        aLayoutArgs.mnDrawEndCharPos = *nDrawEndCharPos;
+    }
+
+    double nEndGlyphCoord(0);
+    if (!pDXArray.empty() || !pKashidaArray.empty())
+    {
+        // The provided advance and kashida arrays are indexed relative to the first visible cluster
+        auto nJustMinCluster = nDrawMinCharPos.value_or(nMinIndex);
+        auto nJustLen = nLen;
+        if (nDrawEndCharPos.has_value())
+        {
+            nJustLen = *nDrawEndCharPos - nJustMinCluster;
+        }
+
+        JustificationData stJustification{ nJustMinCluster, nJustLen };
+
+        if (!pDXArray.empty() && mbMap)
         {
             // convert from logical units to font units without rounding,
             // keeping accuracy for lower levels
             int nSubPixels = pDXArray.get_factor();
-            for (int i = 0; i < nLen; ++i)
-                xDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels;
-            nEndGlyphCoord = xDXPixelArray[nLen - 1];
+            for (int i = 0; i < nJustLen; ++i)
+            {
+                stJustification.SetTotalAdvance(
+                    nJustMinCluster + i,
+                    ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels);
+            }
+
+            nEndGlyphCoord = stJustification.GetTotalAdvance(nJustMinCluster + nJustLen - 1);
         }
-        else
+        else if (!pDXArray.empty())
         {
-            for(int i = 0; i < nLen; ++i)
-                xDXPixelArray[i] = pDXArray.get(i);
-            nEndGlyphCoord = std::round(xDXPixelArray[nLen - 1]);
+            for (int i = 0; i < nJustLen; ++i)
+            {
+                stJustification.SetTotalAdvance(nJustMinCluster + i, pDXArray.get(i));
+            }
+
+            nEndGlyphCoord
+                = std::round(stJustification.GetTotalAdvance(nJustMinCluster + nJustLen - 1));
         }
 
-        aLayoutArgs.SetDXArray(xDXPixelArray.get());
-    }
+        if (!pKashidaArray.empty())
+        {
+            for (sal_Int32 i = 0; i < static_cast<sal_Int32>(pKashidaArray.size()); ++i)
+            {
+                stJustification.SetKashidaPosition(nJustMinCluster + i,
+                                                   static_cast<bool>(pKashidaArray[i]));
+            }
+        }
 
-    if (!pKashidaArray.empty())
-        aLayoutArgs.SetKashidaArray(pKashidaArray.data());
+        aLayoutArgs.SetJustificationData(std::move(stJustification));
+    }
 
     // get matching layout object for base font
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);

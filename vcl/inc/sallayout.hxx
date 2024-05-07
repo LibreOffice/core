@@ -29,6 +29,7 @@
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/vcllayout.hxx>
 
+#include "justificationdata.hxx"
 #include "ImplLayoutRuns.hxx"
 #include "impglyphitem.hxx"
 
@@ -37,6 +38,7 @@
 #include <hb.h>
 
 #include <memory>
+#include <span>
 #include <vector>
 
 #define MAX_FALLBACK 16
@@ -81,9 +83,9 @@ public:
 
     SAL_DLLPRIVATE void SetIncomplete(bool bIncomplete);
 
-    SAL_DLLPRIVATE void            ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
-                                          vcl::text::ImplLayoutArgs& rMultiArgs,
-                                          const double* pMultiDXArray);
+    SAL_DLLPRIVATE void ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                              vcl::text::ImplLayoutArgs& rMultiArgs,
+                                              const JustificationData& rstJustification);
 
     SAL_DLLPRIVATE ImplLayoutRuns* GetFallbackRuns() { return maFallbackRuns; }
 
@@ -101,10 +103,9 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    friend void MultiSalLayout::ImplAdjustMultiLayout(
-            vcl::text::ImplLayoutArgs& rArgs,
-            vcl::text::ImplLayoutArgs& rMultiArgs,
-            const double* pMultiDXArray);
+    friend void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                                      vcl::text::ImplLayoutArgs& rMultiArgs,
+                                                      const JustificationData& rstJustification);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);
@@ -144,7 +145,7 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    SAL_DLLPRIVATE void ApplyDXArray(const double*, const sal_Bool*);
+    SAL_DLLPRIVATE void ApplyJustificationData(const JustificationData& rstJustification);
     SAL_DLLPRIVATE void Justify(double nNewWidth);
     SAL_DLLPRIVATE void ApplyAsianKerning(std::u16string_view rStr);
 

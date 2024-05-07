@@ -874,6 +874,14 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("index", aIndex);
                 rWriter.attribute("length", aLength);
 
+                if (pMetaTextArrayAction->GetLayoutContextIndex() >= 0)
+                {
+                    rWriter.attribute("layoutcontextindex",
+                                      pMetaTextArrayAction->GetLayoutContextIndex());
+                    rWriter.attribute("layoutcontextlength",
+                                      pMetaTextArrayAction->GetLayoutContextLen());
+                }
+
                 if (!pMetaTextArrayAction->GetDXArray().empty())
                 {
                     auto & rArray = pMetaTextArrayAction->GetDXArray();

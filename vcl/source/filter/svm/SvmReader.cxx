@@ -729,6 +729,34 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         }
     }
 
+    if (aCompat.GetVersion() >= 4) // Version 4
+    {
+        bool bTmpHasContext = false;
+        mrStream.ReadCharAsBool(bTmpHasContext);
+
+        if (bTmpHasContext)
+        {
+            sal_uInt16 nTmpContextIndex = 0;
+            mrStream.ReadUInt16(nTmpContextIndex);
+
+            sal_uInt16 nTmpContextLen = 0;
+            mrStream.ReadUInt16(nTmpContextLen);
+
+            sal_uInt16 nTmpEnd = nTmpIndex + nTmpLen;
+            sal_uInt16 nTmpContextEnd = nTmpContextIndex + nTmpContextLen;
+            if ((nTmpContextEnd <= aStr.getLength()) && (nTmpContextIndex <= nTmpIndex)
+                && (nTmpContextEnd >= nTmpEnd))
+            {
+                pAction->SetLayoutContextIndex(nTmpContextIndex);
+                pAction->SetLayoutContextLen(nTmpContextLen);
+            }
+            else
+            {
+                SAL_WARN("vcl.gdi", "inconsistent layout context offset and len");
+            }
+        }
+    }
+
     return pAction;
 }
 

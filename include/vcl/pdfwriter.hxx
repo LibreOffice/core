@@ -790,11 +790,9 @@ The following structure describes the permissions used in PDF security
                                       FontStrikeout eStrikeout,
                                       FontLineStyle eUnderline,
                                       FontLineStyle eOverline );
-    void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                       KernArraySpan aKernArray,
-                                       std::span<const sal_Bool> pKashidaAry,
-                                       sal_Int32 nIndex,
-                                       sal_Int32 nLen );
+    void DrawTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan aKernArray,
+                       std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex, sal_Int32 nLen,
+                       sal_Int32 nLayoutContextIndex, sal_Int32 nLayoutContextLen);
     void                DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );

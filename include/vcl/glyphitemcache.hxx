@@ -53,6 +53,11 @@ public:
                                            const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
                                            tools::Long nLogicWidth = 0,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);
+    const SalLayoutGlyphs* GetLayoutGlyphs(const VclPtr<const OutputDevice>& outputDevice,
+                                           const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
+                                           sal_Int32 nDrawMinCharPos, sal_Int32 nDrawEndCharPos,
+                                           tools::Long nLogicWidth = 0,
+                                           const vcl::text::TextLayoutCache* layoutCache = nullptr);
     void clear();
 
     /// Normally, we cannot cache glyphs when doing font fallback, because the font fallbacks

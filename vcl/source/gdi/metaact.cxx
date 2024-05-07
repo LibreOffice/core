@@ -632,14 +632,16 @@ MetaTextArrayAction::MetaTextArrayAction() :
     mnLen       ( 0 )
 {}
 
-MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
-    MetaAction  ( MetaActionType::TEXTARRAY ),
-    maStartPt   ( rAction.maStartPt ),
-    maStr       ( rAction.maStr ),
-    maDXAry     ( rAction.maDXAry ),
-    maKashidaAry( rAction.maKashidaAry ),
-    mnIndex     ( rAction.mnIndex ),
-    mnLen       ( rAction.mnLen )
+MetaTextArrayAction::MetaTextArrayAction(const MetaTextArrayAction& rAction)
+    : MetaAction(MetaActionType::TEXTARRAY)
+    , maStartPt(rAction.maStartPt)
+    , maStr(rAction.maStr)
+    , maDXAry(rAction.maDXAry)
+    , maKashidaAry(rAction.maKashidaAry)
+    , mnIndex(rAction.mnIndex)
+    , mnLen(rAction.mnLen)
+    , mnLayoutContextIndex(rAction.mnLayoutContextIndex)
+    , mnLayoutContextLen(rAction.mnLayoutContextLen)
 {
 }
 
@@ -675,6 +677,22 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     maDXAry.assign(pDXAry);
 }
 
+MetaTextArrayAction::MetaTextArrayAction(const Point& rStartPt, OUString aStr, KernArraySpan pDXAry,
+                                         std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
+                                         sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
+                                         sal_Int32 nLayoutContextLen)
+    : MetaAction(MetaActionType::TEXTARRAY)
+    , maStartPt(rStartPt)
+    , maStr(std::move(aStr))
+    , maKashidaAry(pKashidaAry.begin(), pKashidaAry.end())
+    , mnIndex(nIndex)
+    , mnLen(nLen)
+    , mnLayoutContextIndex(nLayoutContextIndex)
+    , mnLayoutContextLen(nLayoutContextLen)
+{
+    maDXAry.assign(pDXAry);
+}
+
 MetaTextArrayAction::~MetaTextArrayAction()
 {
 }
@@ -684,7 +702,15 @@ void MetaTextArrayAction::Execute( OutputDevice* pOut )
     if (!AllowPoint(pOut->LogicToPixel(maStartPt)))
         return;
 
-    pOut->DrawTextArray( maStartPt, maStr, maDXAry, maKashidaAry, mnIndex, mnLen );
+    if (mnLayoutContextIndex >= 0)
+    {
+        pOut->DrawPartialTextArray(maStartPt, maStr, maDXAry, maKashidaAry, mnLayoutContextIndex,
+                                   mnLayoutContextLen, mnIndex, mnLen);
+    }
+    else
+    {
+        pOut->DrawTextArray(maStartPt, maStr, maDXAry, maKashidaAry, mnIndex, mnLen);
+    }
 }
 
 rtl::Reference<MetaAction> MetaTextArrayAction::Clone() const

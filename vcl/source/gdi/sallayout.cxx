@@ -137,6 +137,8 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     mnMinCharPos  = rArgs.mnMinCharPos;
     mnEndCharPos  = rArgs.mnEndCharPos;
+    mnDrawMinCharPos = rArgs.mnDrawMinCharPos;
+    mnDrawEndCharPos = rArgs.mnDrawEndCharPos;
     mnOrientation = rArgs.mnOrientation;
     maLanguageTag = rArgs.maLanguageTag;
 }
@@ -711,7 +713,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::vector<double> aJustificationArray;
 
-    if( !rArgs.HasDXArray() && rArgs.mnLayoutWidth )
+    if (!rArgs.mstJustification.empty() && rArgs.mnLayoutWidth)
     {
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
@@ -759,16 +761,22 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
                 aJustificationArray[ nCharCount-1 ] = nTargetWidth;
 
             // change the DXArray temporarily (just for the justification)
-            aMultiArgs.mpDXArray = aJustificationArray.data();
+            JustificationData stJustData{ rArgs.mnMinCharPos, nCharCount };
+            for (sal_Int32 i = 0; i < nCharCount; ++i)
+            {
+                stJustData.SetTotalAdvance(rArgs.mnMinCharPos + i, aJustificationArray[i]);
+            }
+
+            aMultiArgs.SetJustificationData(std::move(stJustData));
         }
     }
 
-    ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpDXArray);
+    ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mstJustification);
 }
 
 void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
                                            vcl::text::ImplLayoutArgs& rMultiArgs,
-                                           const double* pMultiDXArray)
+                                           const JustificationData& rstJustification)
 {
     // Compute rtl flags, since in some scripts glyphs/char order can be
     // reversed for a few character sequences e.g. Myanmar
@@ -949,7 +957,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
                 bKeepNotDef = bNeedFallback;
             }
             // check for reordered glyphs
-            if (pMultiDXArray &&
+            if (!rstJustification.empty() &&
                 nRunVisibleEndChar < mnEndCharPos &&
                 nRunVisibleEndChar >= mnMinCharPos &&
                 pGlyphs[n]->charPos() < mnEndCharPos &&
@@ -957,14 +965,14 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
             {
                 if (vRtl[nActiveCharPos - mnMinCharPos])
                 {
-                    if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
-                        >= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                    if (rstJustification.GetTotalAdvance(nRunVisibleEndChar)
+                        >= rstJustification.GetTotalAdvance(pGlyphs[n]->charPos()))
                     {
                         nRunVisibleEndChar = pGlyphs[n]->charPos();
                     }
                 }
-                else if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
-                         <= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                else if (rstJustification.GetTotalAdvance(nRunVisibleEndChar)
+                         <= rstJustification.GetTotalAdvance(pGlyphs[n]->charPos()))
                 {
                     nRunVisibleEndChar = pGlyphs[n]->charPos();
                 }
@@ -973,7 +981,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
 
         // if a justification array is available
         // => use it directly to calculate the corresponding run width
-        if (pMultiDXArray)
+        if (!rstJustification.empty())
         {
             // the run advance is the width from the first char
             // in the run to the first char in the next run
@@ -982,16 +990,26 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
             if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
               if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
-                  nRunAdvance -= pMultiDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
+              {
+                  nRunAdvance -= rstJustification.GetTotalAdvance(nRunVisibleEndChar - 1);
+              }
+
               if (nLastRunEndChar > mnMinCharPos && nLastRunEndChar <= mnEndCharPos)
-                  nRunAdvance += pMultiDXArray[nLastRunEndChar - 1 - mnMinCharPos];
+              {
+                  nRunAdvance += rstJustification.GetTotalAdvance(nLastRunEndChar - 1);
+              }
             }
             else
             {
                 if (nRunVisibleEndChar >= mnMinCharPos)
-                  nRunAdvance += pMultiDXArray[nRunVisibleEndChar - mnMinCharPos];
+                {
+                    nRunAdvance += rstJustification.GetTotalAdvance(nRunVisibleEndChar);
+                }
+
                 if (nLastRunEndChar >= mnMinCharPos)
-                  nRunAdvance -= pMultiDXArray[nLastRunEndChar - mnMinCharPos];
+                {
+                    nRunAdvance -= rstJustification.GetTotalAdvance(nLastRunEndChar);
+                }
             }
             nLastRunEndChar = nRunVisibleEndChar;
             nRunVisibleEndChar = pGlyphs[nFirstValid]->charPos();

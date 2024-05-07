@@ -129,10 +129,18 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    std::vector<TextFrameIndex> aKashidaPos;
-    rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aKashidaPos);
-    assert(aKashidaPos.size() >= o3tl::make_unsigned(rKashidas));
-    std::vector<TextFrameIndex> aKashidaPosDropped(aKashidaPos.size());
+    std::vector<TextFrameIndex> aUncastKashidaPos;
+    rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aUncastKashidaPos);
+    assert(aUncastKashidaPos.size() >= o3tl::make_unsigned(rKashidas));
+
+    std::vector<sal_Int32> aKashidaPos;
+    std::transform(std::cbegin(aUncastKashidaPos), std::cend(aUncastKashidaPos),
+                   std::back_inserter(aKashidaPos),
+                   [](TextFrameIndex nPos) { return static_cast<sal_Int32>(nPos); });
+
+    std::vector<sal_Int32> aKashidaPosDropped;
+    std::vector<TextFrameIndex> aCastKashidaPosDropped;
+
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
     {
@@ -147,6 +155,14 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
         if (nNext == TextFrameIndex(COMPLETE_STRING) || nNext > nEnd)
             nNext = nEnd;
+
+        // Use an expanded context to validate kashida insertions between spans
+        TextFrameIndex nWholeNext = nNextScript;
+        if (nWholeNext == TextFrameIndex(COMPLETE_STRING) || nWholeNext > nEnd)
+        {
+            nWholeNext = nEnd;
+        }
+
         sal_Int32 nKashidasInAttr = rSI.KashidaJustify(nullptr, nullptr, nIdx, nNext - nIdx);
         if (nKashidasInAttr > 0)
         {
@@ -167,14 +183,19 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
                 vcl::text::ComplexTextLayoutFlags nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl );
                 nKashidasDropped = rInf.GetOut()->ValidateKashidas(
-                    rInf.GetText(), sal_Int32(nIdx), sal_Int32(nNext - nIdx),
-                    nKashidasInAttr,
-                    reinterpret_cast<sal_Int32*>(aKashidaPos.data() + nKashidaIdx),
-                    reinterpret_cast<sal_Int32*>(aKashidaPosDropped.data()));
+                    rInf.GetText(), /*nIdx=*/sal_Int32{ nIdx },
+                    /*nLen=*/sal_Int32{ nWholeNext - nIdx },
+                    /*nPartIdx=*/sal_Int32{ nIdx }, /*nPartLen=*/sal_Int32{ nNext - nIdx },
+                    std::span(aKashidaPos).subspan(nKashidaIdx, nKashidasInAttr),
+                    &aKashidaPosDropped);
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
                 if ( nKashidasDropped )
                 {
-                    rSI.MarkKashidasInvalid(nKashidasDropped, aKashidaPosDropped.data());
+                    aCastKashidaPosDropped.clear();
+                    std::transform(std::cbegin(aKashidaPosDropped), std::cend(aKashidaPosDropped),
+                                   std::back_inserter(aCastKashidaPosDropped),
+                                   [](sal_Int32 nPos) { return TextFrameIndex{ nPos }; });
+                    rSI.MarkKashidasInvalid(nKashidasDropped, aCastKashidaPosDropped.data());
                     rKashidas -= nKashidasDropped;
                     nGluePortion -= TextFrameIndex(nKashidasDropped);
                 }

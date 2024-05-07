@@ -466,6 +466,34 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
     return nullptr;
 }
 
+const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
+    const VclPtr<const OutputDevice>& outputDevice, const OUString& text, sal_Int32 nIndex,
+    sal_Int32 nLen, sal_Int32 nDrawMinCharPos, sal_Int32 nDrawEndCharPos, tools::Long nLogicWidth,
+    const vcl::text::TextLayoutCache* layoutCache)
+{
+    // This version is used by callers that need to draw a subset of a layout. In all ordinary uses
+    // this function will be called for successive glyph subsets, so should optimize for that case.
+    auto* pWholeGlyphs
+        = GetLayoutGlyphs(outputDevice, text, nIndex, nLen, nLogicWidth, layoutCache);
+    if (nDrawMinCharPos <= nIndex && nDrawEndCharPos >= (nIndex + nLen))
+    {
+        return pWholeGlyphs;
+    }
+
+    if (pWholeGlyphs && pWholeGlyphs->IsValid())
+    {
+        mLastTemporaryKey.reset();
+        mLastTemporaryGlyphs = makeGlyphsSubset(*pWholeGlyphs, outputDevice, text, nDrawMinCharPos,
+                                                nDrawEndCharPos - nDrawMinCharPos);
+        if (mLastTemporaryGlyphs.IsValid())
+        {
+            return &mLastTemporaryGlyphs;
+        }
+    }
+
+    return nullptr;
+}
+
 void SalLayoutGlyphsCache::SetCacheGlyphsWhenDoingFallbackFonts(bool bOK)
 {
     mbCacheGlyphsWhenDoingFallbackFonts = bOK;

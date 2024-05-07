@@ -986,8 +986,10 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
             case MetaActionType::TEXTARRAY:
             {
                 MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
-                aMtf.AddAction( new MetaTextArrayAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                              pAct->GetText(), pAct->GetDXArray(), pAct->GetKashidaArray(), pAct->GetIndex(), pAct->GetLen() ) );
+                aMtf.AddAction(new MetaTextArrayAction(
+                    ImplGetRotatedPoint(pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos),
+                    pAct->GetText(), pAct->GetDXArray(), pAct->GetKashidaArray(), pAct->GetIndex(),
+                    pAct->GetLen(), pAct->GetLayoutContextIndex(), pAct->GetLayoutContextLen()));
             }
             break;
 

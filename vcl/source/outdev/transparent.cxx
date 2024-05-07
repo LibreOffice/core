@@ -1212,9 +1212,26 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             if( !aString.isEmpty() )
             {
                 // #105987# ImplLayout takes everything in logical coordinates
-                std::unique_ptr<SalLayout> pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
-                                                         rTextAct.GetLen(), rTextAct.GetPoint(),
-                                                         0, rTextAct.GetDXArray(), rTextAct.GetKashidaArray() );
+                std::unique_ptr<SalLayout> pSalLayout;
+                if (rTextAct.GetLayoutContextIndex() >= 0)
+                {
+                    pSalLayout = rOut.ImplLayout(
+                        rTextAct.GetText(), rTextAct.GetLayoutContextIndex(),
+                        rTextAct.GetLayoutContextLen(), rTextAct.GetPoint(), 0,
+                        rTextAct.GetDXArray(), rTextAct.GetKashidaArray(), SalLayoutFlags::NONE,
+                        /*pTextLayoutCache=*/nullptr,
+                        /*pGlyphs=*/nullptr,
+                        /*nDrawOriginCluster=*/rTextAct.GetIndex(),
+                        /*nDrawMinCharPos=*/rTextAct.GetIndex(),
+                        /*nDrawEndCharPos=*/rTextAct.GetIndex() + rTextAct.GetLen());
+                }
+                else
+                {
+                    pSalLayout = rOut.ImplLayout(rTextAct.GetText(), rTextAct.GetIndex(),
+                                                 rTextAct.GetLen(), rTextAct.GetPoint(), 0,
+                                                 rTextAct.GetDXArray(), rTextAct.GetKashidaArray());
+                }
+
                 if( pSalLayout )
                 {
                     tools::Rectangle aBoundRect( rOut.ImplGetTextBoundRect( *pSalLayout ) );

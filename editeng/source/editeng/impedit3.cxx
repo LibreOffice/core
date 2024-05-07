@@ -2596,11 +2596,12 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
     }
 
     // Validate
-    std::vector<sal_Int32> aDropped(aKashidaArray.size());
+    std::vector<sal_Int32> aDropped;
     auto nOldLayout = GetRefDevice()->GetLayoutMode();
     GetRefDevice()->SetLayoutMode(nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl);
     GetRefDevice()->ValidateKashidas(pNode->GetString(), nStart, nEnd - nStart,
-            aKashidaArray.size(), aKashidaArray.data(), aDropped.data());
+                                     /*nPartIdx=*/nStart, /*nPartLen=*/nEnd - nStart, aKashidaArray,
+                                     &aDropped);
     GetRefDevice()->SetLayoutMode(nOldLayout);
 
     for (auto const& pos : aKashidaArray)

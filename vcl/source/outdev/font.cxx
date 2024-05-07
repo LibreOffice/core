@@ -1168,38 +1168,49 @@ tools::Long OutputDevice::GetMinKashida() const
     return ImplDevicePixelToLogicWidth(nKashidaWidth);
 }
 
-sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
-                                            sal_Int32 nIdx, sal_Int32 nLen,
-                                            sal_Int32 nKashCount,
-                                            const sal_Int32* pKashidaPos,
-                                            sal_Int32* pKashidaPosDropped ) const
+sal_Int32 OutputDevice::ValidateKashidas(const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen,
+                                         sal_Int32 nPartIdx, sal_Int32 nPartLen,
+                                         std::span<const sal_Int32> pKashidaPos,
+                                         std::vector<sal_Int32>* pKashidaPosDropped) const
 {
+    pKashidaPosDropped->clear();
+
    // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rTxt, nIdx, nLen );
     if( !pSalLayout )
         return 0;
 
-    auto nEnd = nIdx + nLen - 1;
+    auto nEnd = nIdx + nLen;
+    auto nPartEnd = nPartIdx + nPartLen;
     sal_Int32 nDropped = 0;
-    for( int i = 0; i < nKashCount; ++i )
+    for (auto nPos : pKashidaPos)
     {
-        auto nPos = pKashidaPos[i];
         auto nNextPos = nPos + 1;
 
         // Skip combining marks to find the next character after this position.
-        while (nNextPos <= nEnd &&
-               u_getIntPropertyValue(rTxt[nNextPos], UCHAR_JOINING_TYPE) == U_JT_TRANSPARENT)
+        while (nNextPos < nEnd
+               && u_getIntPropertyValue(rTxt[nNextPos], UCHAR_JOINING_TYPE) == U_JT_TRANSPARENT)
+        {
             nNextPos++;
+        }
 
-        // The next position is past end of the layout, it would happen if we
-        // changed the text styling in the middle of a word. Since we don’t do
-        // apply OpenType features across different layouts, this can’t be an
-        // invalid place to insert Kashida.
-        if (nNextPos > nEnd)
-            continue;
+        // tdf#124116: We now apply OpenType features across different layouts. Positions past the
+        // end of the layout must be validated.
 
+        // Currently, kashidas cannot be inserted if the grapheme cluster indicated by nPos is
+        // split across multiple layouts. Reject any such position.
+        if (nNextPos > nPartEnd)
+        {
+            pKashidaPosDropped->push_back(nPos);
+            ++nDropped;
+        }
+
+        // Check the glyph flags from HarfBuzz in all other situations.
         if (!pSalLayout->IsKashidaPosValid(nPos, nNextPos))
-            pKashidaPosDropped[nDropped++] = nPos;
+        {
+            pKashidaPosDropped->push_back(nPos);
+            ++nDropped;
+        }
     }
     return nDropped;
 }

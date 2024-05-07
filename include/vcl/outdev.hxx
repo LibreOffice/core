@@ -1160,11 +1160,12 @@ public:
     // i60594
     // validate kashida positions against the current font
     // returns count of invalid kashida positions
-    sal_Int32                   ValidateKashidas( const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen,
-                                                  sal_Int32 nKashCount, // number of suggested kashida positions (in)
-                                                  const sal_Int32* pKashidaPos, // suggested kashida positions (in)
-                                                  sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
-                                                ) const;
+    sal_Int32
+    ValidateKashidas(const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen, sal_Int32 nPartIdx,
+                     sal_Int32 nPartLen,
+                     std::span<const sal_Int32> pKashidaPos, // suggested kashida positions (in)
+                     std::vector<sal_Int32>* pKashidaPosDropped // invalid kashida positions (out)
+    ) const;
 
     static void                 BeginFontSubstitution();
     static void                 EndFontSubstitution();
@@ -1235,14 +1236,14 @@ public:
     SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
-    std::unique_ptr<SalLayout>
-                                ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
-                                            const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
-                                            KernArraySpan aKernArray = KernArraySpan(),
-                                            std::span<const sal_Bool> pKashidaArray={},
-                                            SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                            vcl::text::TextLayoutCache const* = nullptr,
-                                            const SalLayoutGlyphs* pGlyphs = nullptr) const;
+    std::unique_ptr<SalLayout> ImplLayout(
+        const OUString&, sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos = Point(0, 0),
+        tools::Long nLogicWidth = 0, KernArraySpan aKernArray = KernArraySpan(),
+        std::span<const sal_Bool> pKashidaArray = {}, SalLayoutFlags flags = SalLayoutFlags::NONE,
+        vcl::text::TextLayoutCache const* = nullptr, const SalLayoutGlyphs* pGlyphs = nullptr,
+        std::optional<sal_Int32> nDrawOriginCluster = std::nullopt,
+        std::optional<sal_Int32> nDrawMinCharPos = std::nullopt,
+        std::optional<sal_Int32> nDrawEndCharPos = std::nullopt) const;
 
     SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          double nPixelWidth,

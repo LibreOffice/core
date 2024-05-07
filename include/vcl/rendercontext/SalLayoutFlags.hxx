@@ -33,10 +33,11 @@ enum class SalLayoutFlags
     DisableLigatures = 0x0200,
     ForFallback = 0x2000,
     GlyphItemsOnly = 0x4000,
+    UnclusteredGlyphs = 0x8000,
 };
 namespace o3tl
 {
-template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x6277>
+template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0xE277>
 {
 };
 }
