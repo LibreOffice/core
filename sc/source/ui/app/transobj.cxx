@@ -418,7 +418,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // memory limits, lower the resolution of the bitmap by keeping
             // the VirtualDevice pixel size within an arbitrary number of
             // pixels.
-            // Note: the artibrary "maximum number of pixels" limit that
+            // Note: the arbitrary "maximum number of pixels" limit that
             // that Skia can handle may need to be raised or lowered for
             // platforms other than macOS.
             static constexpr tools::Long nCopyToImageMaxPixels = 8192 * 8192;
