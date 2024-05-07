@@ -31,25 +31,29 @@ namespace dp_misc
 {
 namespace
 {
+    OUString StrOperatingSystemInit()
+    {
+        OUString os( u"$_OS"_ustr );
+        ::rtl::Bootstrap::expandMacros( os );
+        return os;
+    }
+
     const OUString & StrOperatingSystem()
     {
-        static const OUString theOS = []()
-            {
-                OUString os( u"$_OS"_ustr );
-                ::rtl::Bootstrap::expandMacros( os );
-                return os;
-            }();
+        static const OUString theOS = StrOperatingSystemInit();
         return theOS;
     };
 
+    OUString StrCPUInit()
+    {
+        OUString arch( u"$_ARCH"_ustr );
+        ::rtl::Bootstrap::expandMacros( arch );
+        return arch;
+    }
+
     const OUString & StrCPU()
     {
-        static const OUString theCPU = []()
-            {
-                OUString arch( u"$_ARCH"_ustr );
-                ::rtl::Bootstrap::expandMacros( arch );
-                return arch;
-            }();
+        static const OUString theCPU = StrCPUInit();
         return theCPU;
     };
 

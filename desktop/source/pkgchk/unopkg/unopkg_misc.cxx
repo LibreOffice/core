@@ -155,17 +155,18 @@ bool readArgument(
 }
 
 
+static OUString getExecutableDirInit()
+{
+    OUString path;
+    if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
+        throw RuntimeException(u"cannot locate executable directory!"_ustr,nullptr);
+    }
+    return path.copy( 0, path.lastIndexOf( '/' ) );
+}
+
 OUString const & getExecutableDir()
 {
-    static const OUString EXEC =
-        []()
-        {
-            OUString path;
-            if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
-                throw RuntimeException(u"cannot locate executable directory!"_ustr,nullptr);
-            }
-            return path.copy( 0, path.lastIndexOf( '/' ) );
-        }();
+    static const OUString EXEC = getExecutableDirInit();
     return EXEC;
 }
 
