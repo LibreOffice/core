@@ -496,7 +496,7 @@ void ScDocShell::CheckConfigOptions()
         pScMod->SetFormulaOptions(aNew);
 
         // Launch a nice warning dialog to let the users know of this change.
-        ScTabViewShell* pViewShell = GetBestViewShell();
+        ScTabViewShell* pViewShell = comphelper::LibreOfficeKit::isActive() ? nullptr : GetBestViewShell();
         if (pViewShell)
         {
             std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
