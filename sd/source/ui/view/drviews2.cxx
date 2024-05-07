@@ -2665,7 +2665,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if(1 == mpDrawView->GetMarkedObjectCount())
             {
                 // #i68101#
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -2683,7 +2683,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                             SdPage* pPage = GetActualPage();
                             if (pPage)
-                                pPage->notifyObjectRenamed(pSelected);
+                                pPage->notifyObjectRenamed(pSelected.get());
                         }
                         pDlg->disposeOnce();
                         SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -2703,7 +2703,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if(1 == mpDrawView->GetMarkedObjectCount())
             {
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());

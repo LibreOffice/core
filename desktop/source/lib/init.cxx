@@ -3709,6 +3709,8 @@ static void doc_iniUnoCommands ()
         u".uno:Context"_ustr,
         u".uno:WrapText"_ustr,
         u".uno:ToggleMergeCells"_ustr,
+        u".uno:NameGroup"_ustr,
+        u".uno:ObjectTitleDescription"_ustr,
         u".uno:NumberFormatCurrency"_ustr,
         u".uno:NumberFormatPercent"_ustr,
         u".uno:NumberFormatDecimal"_ustr,

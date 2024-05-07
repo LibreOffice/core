@@ -607,7 +607,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
             if(1 == pSdrView->GetMarkedObjectCount())
             {
                 // #i68101#
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 assert(pSelected && "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aOrigName(pSelected->GetName());
 
@@ -628,8 +628,12 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                             // update accessibility sidebar object name if we modify the object name on the navigator bar
                             if (!aNewName.isEmpty() && aOrigName != aNewName)
                             {
-                                if (SwNode* pSwNode = FindFrameFormat(pSelected)->GetAnchor().GetAnchorNode())
-                                    pSwNode->resetAndQueueAccessibilityCheck(true);
+                                auto pFrameFormat = FindFrameFormat(pSelected.get());
+                                if (pFrameFormat)
+                                {
+                                    if (SwNode* pSwNode = pFrameFormat->GetAnchor().GetAnchorNode())
+                                        pSwNode->resetAndQueueAccessibilityCheck(true);
+                                }
                             }
                         }
                         pDlg->disposeOnce();
@@ -647,7 +651,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
 
             if(1 == pSdrView->GetMarkedObjectCount())
             {
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 assert(pSelected && "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
