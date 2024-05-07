@@ -64,6 +64,8 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_CxxObject_get_dwo_target = $(WORKDIR)/CxxObject/$(1).dwo
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_GenCxxObject_get_dwo_target = $(WORKDIR)/GenCxxObject/$(1).dwo
+gb_GenAsmObject_get_target = $(WORKDIR)/GenAsmObject/$(1).o
+gb_GenAsmObject_get_dwo_target = $(WORKDIR)/GenAsmObject/$(1).dwo
 gb_GenNasmObject_get_target = $(WORKDIR)/GenNasmObject/$(1).o
 gb_GenNasmObject_get_dwo_target = $(WORKDIR)/GenNasmObject/$(1).dwo
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
@@ -348,6 +350,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenCxxObject \
 	GenObjCObject \
 	GenObjCxxObject \
+	GenAsmObject \
 	GenNasmObject \
 	GenCxxClrObject \
 	SdiTarget \

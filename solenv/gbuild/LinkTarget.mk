@@ -170,9 +170,9 @@ endef
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
-# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject GenObjCObject GenObjCxxObject GenNasmObject CxxClrObject
+# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject GenObjCObject GenObjCxxObject GenAsmObject GenNasmObject CxxClrObject
 #                                                          LinkTarget/headers
-# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep GenObjCObject/dep GenObjCxxObject/dep GenNasmObject/dep CxxClrObject/dep GenCxxClrObject/dep
+# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep GenObjCObject/dep GenObjCxxObject/dep GenAsmObject/dep GenNasmObject/dep CxxClrObject/dep GenCxxClrObject/dep
 #                                                          | LinkTarget/headers
 # LinkTarget/headers          all headers available
 #                             including own generated
@@ -188,6 +188,8 @@ endef
 # GenObjCObject               objective c compile from     | LinkTarget/headers
 #                              generated source
 # GenObjCxxObject             objective c++ compile from   | LinkTarget/headers
+#                              generated source
+# GenAsmObject                asm compile from             | LinkTarget/headers
 #                              generated source
 # GenNasmObject               nasm compile from            | LinkTarget/headers
 #                              generated source
@@ -205,6 +207,7 @@ endef
 # ObjCxxObject/dep            dependencies
 # GenObjCObject/dep           dependencies
 # GenObjCxxObject/dep         dependencies
+# GenAsmObject/dep            dependencies
 # GenNasmObject/dep           dependencies
 # CxxClrObject/dep            dependencies
 # GenCxxClrObject/dep         dependencies
@@ -637,6 +640,25 @@ $(call gb_GenObjCxxObject_get_dep_target,%) :
 
 endif
 
+# GenAsmObject class
+
+gb_GenAsmObject_get_source = $(call gb_AsmObject_get_source,$(WORKDIR),$(1))
+
+$(call gb_GenAsmObject_get_target,%) :
+	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_GenAsmObject_get_dep_target,$*))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_GenAsmObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_GenAsmObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_GenAsmObject_get_dep_target,%) :
+	$(if $(wildcard $@),touch $@)
+
+endif
+
 # GenNasmObject class
 
 gb_GenNasmObject_get_source = $(WORKDIR)/$(1)
@@ -753,6 +775,9 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dwo_target,$(object))) \
+		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_target,$(object))) \
+		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_dwo_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dwo_target,$(object))) \
@@ -794,6 +819,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
 		) && \
@@ -816,6 +842,7 @@ $(file >$(1),\
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 	$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_target,$(object))) \
 	$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_target,$(object))) \
+	$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_target,$(object))) \
 	$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 	$(PCHOBJS) \
@@ -1004,6 +1031,8 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENOBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : GENASMOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENNASMOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENOBJCXXOBJECTS :=
@@ -1076,6 +1105,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENNASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
@@ -1662,6 +1692,30 @@ endif
 
 endef
 
+# call gb_LinkTarget_add_generated_asm_object,linktarget,sourcefile,asmflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_asm_object
+$(call gb_LinkTarget_get_target,$(1)) : GENASMOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENASMOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenAsmObject_get_target,$(2))
+$(call gb_GenAsmObject_get_target,$(2)) : $(call gb_GenAsmObject_get_source,$(2))
+# Often gb_GenAsmObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenAsmObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
+$(call gb_GenAsmObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenAsmObject_get_target,$(2)) : T_ASMFLAGS += $(call gb_LinkTarget__get_asmflags,$(4)) $(3)
+$(call gb_GenAsmObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENASMOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenAsmObject_get_dep_target,$(2))
+$(call gb_GenAsmObject_get_dep_target,$(2)) :| $(dir $(call gb_GenAsmObject_get_dep_target,$(2))).dir
+$(call gb_GenAsmObject_get_target,$(2)) :| $(dir $(call gb_GenAsmObject_get_dep_target,$(2))).dir
+endif
+
+endef
+
 # call gb_LinkTarget_add_generated_nasm_object,linktarget,sourcefile,nasmflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_nasm_object
 $(call gb_LinkTarget_get_target,$(1)) : GENNASMOBJECTS += $(2)
@@ -1870,6 +1924,11 @@ endef
 # call gb_LinkTarget_add_generated_objcxxobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_objcxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_objcxx_object,$(1),$(obj),$(3),$(4)))
+endef
+
+# call gb_LinkTarget_add_generated_asmobjects,linktarget,sourcefiles,asmflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_asmobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_asm_object,$(1),$(obj),$(3),$(4)))
 endef
 
 # call gb_LinkTarget_add_generated_nasmobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
