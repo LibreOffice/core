@@ -51,7 +51,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
 {
     OTableConnection::Draw(rRenderContext, rRect);
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
-    if (pData && (pData->GetCardinality() == Cardinality::Undefined))
+    if (!pData || pData->GetCardinality() == Cardinality::Undefined)
         return;
 
     // search lines for top line
