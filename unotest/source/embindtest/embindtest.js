@@ -1027,6 +1027,23 @@ Module.addOnPostRun(function() {
         outparamindex.delete();
         outparam.delete();
     }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getNull', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isNull', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
