@@ -153,14 +153,14 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarControl::getImplementationName()
     {
-        return "com.sun.star.comp.form.ONavigationBarControl";
+        return u"com.sun.star.comp.form.ONavigationBarControl"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()
     {
-        return { "com.sun.star.awt.UnoControl",
-        "com.sun.star.form.control.NavigationToolBar" };
+        return { u"com.sun.star.awt.UnoControl"_ustr,
+        u"com.sun.star.form.control.NavigationToolBar"_ustr };
     }
 
 

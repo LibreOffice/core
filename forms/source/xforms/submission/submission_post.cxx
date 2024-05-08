@@ -58,7 +58,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
         aPostArgument.Referer.clear();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
-        aContent.executeCommand( "post", aCommandArgument);
+        aContent.executeCommand( u"post"_ustr, aCommandArgument);
 
         try {
             m_aResultStream = aSink->getInputStream();

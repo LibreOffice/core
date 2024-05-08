@@ -58,7 +58,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.ODateModel"; }
+    { return u"com.sun.star.form.ODateModel"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -105,7 +105,7 @@ public:
 
 // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.ODateControl"; }
+    { return u"com.sun.star.form.ODateControl"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

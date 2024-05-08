@@ -635,7 +635,7 @@ OUString SAL_CALL OControlModel::getName()
     {
         css::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
-            "OControlModel::getName",
+            u"OControlModel::getName"_ustr,
             *this,
             a
         );
@@ -653,7 +653,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName)
     {
         css::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
-            "OControlModel::setName",
+            u"OControlModel::setName"_ustr,
             *this,
             a
         );
@@ -685,7 +685,7 @@ Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames()
 
 Sequence< OUString > OControlModel::getSupportedServiceNames_Static()
 {
-    return { FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormControlModel" };
+    return { FRM_SUN_FORMCOMPONENT, u"com.sun.star.form.FormControlModel"_ustr };
 }
 
 // XEventListener
@@ -1522,7 +1522,7 @@ css::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNam
 
 Sequence< OUString > OBoundControlModel::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aOwnServiceNames { "com.sun.star.form.DataAwareControlModel" };
+    Sequence<OUString> aOwnServiceNames { u"com.sun.star.form.DataAwareControlModel"_ustr };
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
         aOwnServiceNames
@@ -1994,7 +1994,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
         if (xPS.is())
         {
             assert(!shouldTransfer);
-            xPS->getPropertyValue("IsNew") >>= shouldTransfer;
+            xPS->getPropertyValue(u"IsNew"_ustr) >>= shouldTransfer;
         }
     }
     if ( shouldTransfer )

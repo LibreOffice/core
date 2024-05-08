@@ -580,7 +580,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     if ( !m_bMaxTextLenModified )
     {
         sal_Int32 nFieldLen = 0;
-        xField->getPropertyValue("Precision") >>= nFieldLen;
+        xField->getPropertyValue(u"Precision"_ustr) >>= nFieldLen;
 
         if (nFieldLen > 0 && nFieldLen <= SAL_MAX_INT16)
         {

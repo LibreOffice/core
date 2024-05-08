@@ -215,13 +215,13 @@ namespace frm
 
     OUString SAL_CALL ORichTextControl::getImplementationName()
     {
-        return "com.sun.star.comp.form.ORichTextControl";
+        return u"com.sun.star.comp.form.ORichTextControl"_ustr;
     }
 
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()
     {
-        return { "com.sun.star.awt.UnoControl",
-                 "com.sun.star.awt.UnoControlEdit",
+        return { u"com.sun.star.awt.UnoControl"_ustr,
+                 u"com.sun.star.awt.UnoControlEdit"_ustr,
                  FRM_SUN_CONTROL_RICHTEXTCONTROL };
     }
 

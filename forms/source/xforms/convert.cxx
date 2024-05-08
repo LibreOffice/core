@@ -53,7 +53,7 @@ namespace
     { return Any(rStr); }
 
     OUString lcl_toXSD_bool( const Any& rAny )
-    { bool b = false; rAny >>= b; return b ? OUString("true") : OUString("false"); }
+    { bool b = false; rAny >>= b; return b ? u"true"_ustr : u"false"_ustr; }
 
     Any lcl_toAny_bool( const OUString& rStr )
     {

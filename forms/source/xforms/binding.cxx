@@ -425,7 +425,7 @@ bool Binding::getExternalData() const
     try
     {
         OSL_VERIFY(
-            mxModel->getPropertyValue( "ExternalData" ) >>= bExternalData );
+            mxModel->getPropertyValue( u"ExternalData"_ustr ) >>= bExternalData );
     }
     catch( const Exception& )
     {
@@ -438,7 +438,7 @@ bool Binding::getExternalData() const
 void Binding::checkLive()
 {
     if( ! isLive() )
-        throw RuntimeException("Binding not initialized", static_cast<XValueBinding*>(this));
+        throw RuntimeException(u"Binding not initialized"_ustr, static_cast<XValueBinding*>(this));
 }
 
 bool Binding::isLive() const
@@ -454,15 +454,15 @@ static void lcl_addListenerToNode( const Reference<XNode>& xNode,
     if( !xTarget.is() )
         return;
 
-    xTarget->addEventListener( "DOMCharacterDataModified",
+    xTarget->addEventListener( u"DOMCharacterDataModified"_ustr,
                                xListener, false );
-    xTarget->addEventListener( "DOMCharacterDataModified",
+    xTarget->addEventListener( u"DOMCharacterDataModified"_ustr,
                                xListener, true );
-    xTarget->addEventListener( "DOMAttrModified",
+    xTarget->addEventListener( u"DOMAttrModified"_ustr,
                                xListener, false );
-    xTarget->addEventListener( "DOMAttrModified",
+    xTarget->addEventListener( u"DOMAttrModified"_ustr,
                                xListener, true );
-    xTarget->addEventListener( "xforms-generic",
+    xTarget->addEventListener( u"xforms-generic"_ustr,
                                xListener, true );
 }
 
@@ -473,15 +473,15 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
     if( !xTarget.is() )
         return;
 
-    xTarget->removeEventListener( "DOMCharacterDataModified",
+    xTarget->removeEventListener( u"DOMCharacterDataModified"_ustr,
                                   xListener, false );
-    xTarget->removeEventListener( "DOMCharacterDataModified",
+    xTarget->removeEventListener( u"DOMCharacterDataModified"_ustr,
                                   xListener, true );
-    xTarget->removeEventListener( "DOMAttrModified",
+    xTarget->removeEventListener( u"DOMAttrModified"_ustr,
                                   xListener, false );
-    xTarget->removeEventListener( "DOMAttrModified",
+    xTarget->removeEventListener( u"DOMAttrModified"_ustr,
                                   xListener, true );
-    xTarget->removeEventListener( "xforms-generic",
+    xTarget->removeEventListener( u"xforms-generic"_ustr,
                                   xListener, true );
 }
 
@@ -506,7 +506,7 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
 void Binding::bind( bool bForceRebind )
 {
     if( ! mxModel.is() )
-        throw RuntimeException("Binding has no Model", static_cast<XValueBinding*>(this));
+        throw RuntimeException(u"Binding has no Model"_ustr, static_cast<XValueBinding*>(this));
 
     // bind() will evaluate this binding as follows:
     // 1) evaluate the binding expression
@@ -660,7 +660,7 @@ void Binding::valueModified()
 void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
     rtl::Reference<css::xforms::XFormsEventConcrete> pEvent = new css::xforms::XFormsEventConcrete;
-    pEvent->initXFormsEvent("xforms-generic", true, false);
+    pEvent->initXFormsEvent(u"xforms-generic"_ustr, true, false);
 
     // naive depth-first traversal
     css::uno::Reference<css::xml::dom::XNode> xNode( rxNode );
@@ -954,7 +954,7 @@ css::uno::Any Binding::getValue( const css::uno::Type& rType )
 
     // second, check for type
     if( ! supportsType( rType ) )
-        throw IncompatibleTypesException("type unsupported", static_cast<XValueBinding*>(this));
+        throw IncompatibleTypesException(u"type unsupported"_ustr, static_cast<XValueBinding*>(this));
 
     // return string value (if present; else return empty Any)
     css::uno::Any result;
@@ -974,19 +974,19 @@ void Binding::setValue( const css::uno::Any& aValue )
 
     // check for supported type
     if( ! supportsType( aValue.getValueType() ) )
-        throw IncompatibleTypesException("type unsupported", static_cast<XValueBinding*>(this));
+        throw IncompatibleTypesException(u"type unsupported"_ustr, static_cast<XValueBinding*>(this));
 
     if( !maBindingExpression.hasValue() )
-        throw InvalidBindingStateException("no suitable node found", static_cast<XValueBinding*>(this));
+        throw InvalidBindingStateException(u"no suitable node found"_ustr, static_cast<XValueBinding*>(this));
 
     css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
     if( !xNode.is() )
-        throw InvalidBindingStateException("no suitable node found", static_cast<XValueBinding*>(this));
+        throw InvalidBindingStateException(u"no suitable node found"_ustr, static_cast<XValueBinding*>(this));
 
     OUString sValue = Convert::get().toXSD( aValue );
     bool bSuccess = mxModel->setSimpleContent( xNode, sValue );
     if( ! bSuccess )
-        throw InvalidBindingStateException("can't set value", static_cast<XValueBinding*>(this));
+        throw InvalidBindingStateException(u"can't set value"_ustr, static_cast<XValueBinding*>(this));
 
 
 }
@@ -1037,7 +1037,7 @@ OUString Binding::getListEntry( sal_Int32 nPosition )
     // check bounds and return proper item
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
     if( nPosition < 0 || o3tl::make_unsigned(nPosition) >= aNodes.size() )
-        throw IndexOutOfBoundsException("", static_cast<XValueBinding*>(this));
+        throw IndexOutOfBoundsException(u""_ustr, static_cast<XValueBinding*>(this));
     return lcl_getString( aNodes[ nPosition ] );
 }
 
@@ -1186,49 +1186,49 @@ css::uno::Reference<css::xforms::XModel> Binding::getModel() const
 
 void Binding::initializePropertySet()
 {
-    registerProperty( css::beans::Property("BindingID", HANDLE_BindingID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"BindingID"_ustr, HANDLE_BindingID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setBindingID, &Binding::getBindingID));
 
-    registerProperty( css::beans::Property("BindingExpression", HANDLE_BindingExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"BindingExpression"_ustr, HANDLE_BindingExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setBindingExpression, &Binding::getBindingExpression));
 
-    registerProperty( css::beans::Property("Model", HANDLE_Model, cppu::UnoType<css::uno::Reference<css::xforms::XModel>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"Model"_ustr, HANDLE_Model, cppu::UnoType<css::uno::Reference<css::xforms::XModel>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, css::uno::Reference<css::xforms::XModel> >(this, nullptr, &Binding::getModel));
 
-    registerProperty( css::beans::Property("BindingNamespaces", HANDLE_BindingNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"BindingNamespaces"_ustr, HANDLE_BindingNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setBindingNamespaces, &Binding::getBindingNamespaces));
 
-    registerProperty( css::beans::Property("ModelNamespaces", HANDLE_ModelNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"ModelNamespaces"_ustr, HANDLE_ModelNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setModelNamespaces, &Binding::getModelNamespaces));
 
-    registerProperty( css::beans::Property("ModelID", HANDLE_ModelID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"ModelID"_ustr, HANDLE_ModelID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, OUString >(this, nullptr, &Binding::getModelID));
 
-    registerProperty( css::beans::Property("ReadonlyExpression", HANDLE_ReadonlyExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"ReadonlyExpression"_ustr, HANDLE_ReadonlyExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setReadonlyExpression, &Binding::getReadonlyExpression));
 
-    registerProperty( css::beans::Property("RelevantExpression", HANDLE_RelevantExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"RelevantExpression"_ustr, HANDLE_RelevantExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setRelevantExpression, &Binding::getRelevantExpression));
 
-    registerProperty( css::beans::Property("RequiredExpression", HANDLE_RequiredExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"RequiredExpression"_ustr, HANDLE_RequiredExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setRequiredExpression, &Binding::getRequiredExpression));
 
-    registerProperty( css::beans::Property("ConstraintExpression", HANDLE_ConstraintExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"ConstraintExpression"_ustr, HANDLE_ConstraintExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setConstraintExpression, &Binding::getConstraintExpression));
 
-    registerProperty( css::beans::Property("CalculateExpression", HANDLE_CalculateExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"CalculateExpression"_ustr, HANDLE_CalculateExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setCalculateExpression, &Binding::getCalculateExpression));
 
-    registerProperty( css::beans::Property("Type", HANDLE_Type, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Type"_ustr, HANDLE_Type, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setType, &Binding::getType));
 
-    registerProperty( css::beans::Property("ReadOnly", HANDLE_ReadOnly, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"ReadOnly"_ustr, HANDLE_ReadOnly, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, bool >(this, nullptr, &Binding::getReadOnly));
 
-    registerProperty( css::beans::Property("Relevant", HANDLE_Relevant, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"Relevant"_ustr, HANDLE_Relevant, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, bool >(this, nullptr, &Binding::getRelevant));
 
-    registerProperty( css::beans::Property("ExternalData", HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new BooleanPropertyAccessor< Binding >(this, nullptr, &Binding::getExternalData));
 
     initializePropertyValueCache( HANDLE_ReadOnly );

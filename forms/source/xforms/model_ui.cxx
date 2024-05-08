@@ -71,7 +71,7 @@ using namespace com::sun::star::xml::xpath;
 OUString Model::getDefaultServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode )
 {
     // determine service for control. string/text field is default.
-    OUString sService = "com.sun.star.form.component.TextField";
+    OUString sService = u"com.sun.star.form.component.TextField"_ustr;
 
     // query repository for suitable type
     OSL_ENSURE( mxDataTypes.is(), "no type repository?" );
@@ -337,9 +337,9 @@ OUString Model::getBindingName( const css::uno::Reference< ::css::beans::XProper
                                 sal_Bool /*bDetail*/ )
 {
     OUString sID;
-    xBinding->getPropertyValue( "BindingID" ) >>= sID;
+    xBinding->getPropertyValue( u"BindingID"_ustr ) >>= sID;
     OUString sExpression;
-    xBinding->getPropertyValue( "BindingExpression" ) >>= sExpression;
+    xBinding->getPropertyValue( u"BindingExpression"_ustr ) >>= sExpression;
 
     OUString sRet;
     if( !sID.isEmpty() )
@@ -356,7 +356,7 @@ OUString Model::getSubmissionName( const css::uno::Reference< ::css::beans::XPro
                                    sal_Bool /*bDetail*/ )
 {
     OUString sID;
-    xSubmission->getPropertyValue( "ID" ) >>= sID;
+    xSubmission->getPropertyValue( u"ID"_ustr ) >>= sID;
     return sID;
 }
 
@@ -395,7 +395,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::newInstance( const OUString
     DBG_ASSERT( xInstance.is(), "failed to create DOM instance" );
 
     Reference<XNode>( xInstance, UNO_QUERY_THROW )->appendChild(
-        Reference<XNode>( xInstance->createElement( "instanceData" ),
+        Reference<XNode>( xInstance->createElement( u"instanceData"_ustr ),
                           UNO_QUERY_THROW ) );
 
     Sequence<PropertyValue> aSequence;

@@ -474,7 +474,7 @@ namespace frm
         if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && aStringItemListExists )
         {
             if (_rPropertyNames.getLength() != _rValues.getLength())
-                throw css::lang::IllegalArgumentException("lengths do not match",
+                throw css::lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                                           static_cast<cppu::OWeakObject*>(this), -1);
 
             // both properties are present
@@ -795,7 +795,7 @@ namespace frm
                         {
                             // otherwise look for the alias
                             Reference< XColumnsSupplier > xSupplyFields;
-                            xFormProps->getPropertyValue("SingleSelectQueryComposer") >>= xSupplyFields;
+                            xFormProps->getPropertyValue(u"SingleSelectQueryComposer"_ustr) >>= xSupplyFields;
 
                             // search the field
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
@@ -815,7 +815,7 @@ namespace frm
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     OUString aQuote = xMeta->getIdentifierQuoteString();
-                    OUString aStatement("SELECT ");
+                    OUString aStatement(u"SELECT "_ustr);
                     if (aBoundFieldName.isEmpty())   // act like a combobox
                         aStatement += "DISTINCT ";
 
@@ -920,7 +920,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue("Type") >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue(u"Type"_ustr) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {

@@ -78,7 +78,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.OImageControlModel"; }
+    { return u"com.sun.star.form.OImageControlModel"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -163,7 +163,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.OImageControlControl"; }
+    { return u"com.sun.star.form.OImageControlControl"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

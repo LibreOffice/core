@@ -364,7 +364,7 @@ void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArgu
 }
 
 OUString ImageProducer::getImplementationName() {
-    return "com.sun.star.form.ImageProducer";
+    return u"com.sun.star.form.ImageProducer"_ustr;
 }
 
 sal_Bool ImageProducer::supportsService(OUString const & ServiceName) {
@@ -372,7 +372,7 @@ sal_Bool ImageProducer::supportsService(OUString const & ServiceName) {
 }
 
 css::uno::Sequence<OUString> ImageProducer::getSupportedServiceNames() {
-    return {"com.sun.star.awt.ImageProducer"};
+    return {u"com.sun.star.awt.ImageProducer"_ustr};
 }
 
 

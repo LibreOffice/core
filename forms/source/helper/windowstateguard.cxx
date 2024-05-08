@@ -91,9 +91,9 @@ namespace frm
         ,m_xModelProps( _rxMdelProps )
     {
         if ( !m_xWindow.is() )
-            throw IllegalArgumentException("no window supplied", *this, 0);
+            throw IllegalArgumentException(u"no window supplied"_ustr, *this, 0);
         if ( !m_xModelProps.is() )
-            throw IllegalArgumentException("no property set supplied", *this, 1);
+            throw IllegalArgumentException(u"no property set supplied"_ustr, *this, 1);
 
         osl_atomic_increment( &m_refCount );
         {

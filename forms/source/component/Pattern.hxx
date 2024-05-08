@@ -49,7 +49,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.OPatternModel"; }
+    { return u"com.sun.star.form.OPatternModel"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -82,7 +82,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.OPatternControl"; }
+    { return u"com.sun.star.form.OPatternControl"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

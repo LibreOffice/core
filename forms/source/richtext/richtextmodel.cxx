@@ -258,20 +258,20 @@ namespace frm
 
     OUString SAL_CALL ORichTextModel::getImplementationName()
     {
-        return "com.sun.star.comp.forms.ORichTextModel";
+        return u"com.sun.star.comp.forms.ORichTextModel"_ustr;
     }
 
     Sequence< OUString > SAL_CALL ORichTextModel::getSupportedServiceNames()
     {
         Sequence< OUString > aOwnNames {
             FRM_SUN_COMPONENT_RICHTEXTCONTROL,
-            "com.sun.star.text.TextRange",
-            "com.sun.star.style.CharacterProperties",
-            "com.sun.star.style.ParagraphProperties",
-            "com.sun.star.style.CharacterPropertiesAsian",
-            "com.sun.star.style.CharacterPropertiesComplex",
-            "com.sun.star.style.ParagraphPropertiesAsian",
-            "com.sun.star.style.ParagraphPropertiesComplex" };
+            u"com.sun.star.text.TextRange"_ustr,
+            u"com.sun.star.style.CharacterProperties"_ustr,
+            u"com.sun.star.style.ParagraphProperties"_ustr,
+            u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+            u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+            u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+            u"com.sun.star.style.ParagraphPropertiesComplex"_ustr };
 
         return ::comphelper::combineSequences(
             getAggregateServiceNames(),
@@ -440,7 +440,7 @@ namespace frm
             {
                 // forward to our aggregate, so the EditEngine knows about it
                 if ( m_xAggregateSet.is() )
-                    m_xAggregateSet->setPropertyValue( "WritingMode", _rValue );
+                    m_xAggregateSet->setPropertyValue( u"WritingMode"_ustr, _rValue );
             }
             break;
 

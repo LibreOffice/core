@@ -111,7 +111,7 @@ namespace frm
 
     OUString SAL_CALL OScrollBarModel::getImplementationName()
     {
-        return "com.sun.star.comp.forms.OScrollBarModel";
+        return u"com.sun.star.comp.forms.OScrollBarModel"_ustr;
     }
 
         // note that we're passing OControlModel as "base class". This is because
@@ -285,8 +285,8 @@ namespace frm
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            "ScrollValueMin",
-            "ScrollValueMax" );
+            u"ScrollValueMin"_ustr,
+            u"ScrollValueMax"_ustr );
     }
 
 

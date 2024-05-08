@@ -168,7 +168,7 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarModel::getImplementationName()
     {
-        return "com.sun.star.comp.form.ONavigationBarModel";
+        return u"com.sun.star.comp.form.ONavigationBarModel"_ustr;
     }
 
 
@@ -423,7 +423,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aDefault <<= OUString( "com.sun.star.form.control.NavigationToolBar" );
+            aDefault <<= u"com.sun.star.form.control.NavigationToolBar"_ustr;
             break;
 
         case PROPERTY_ID_HELPTEXT:

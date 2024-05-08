@@ -76,7 +76,7 @@ Submission::Submission() :
     mbIndent(),
     mbOmitXmlDeclaration(),
     mbStandalone(),
-    msReplace( "none" )
+    msReplace( u"none"_ustr )
 {
     initializePropertySet();
 }
@@ -210,7 +210,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     }
     else
     {
-        aExpression.setExpression( "/" );
+        aExpression.setExpression( u"/"_ustr );
         aEvalContext = mxModel->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
@@ -285,7 +285,7 @@ void Submission::liveCheck()
     bool bValid = mxModel.is();
 
     if( ! bValid )
-        throw RuntimeException("model not set");
+        throw RuntimeException(u"model not set"_ustr);
 }
 
 css::uno::Reference<XModel> Submission::getModel() const
@@ -316,52 +316,52 @@ css::uno::Reference<XModel> Submission::getModel() const
 
 void Submission::initializePropertySet()
 {
-    registerProperty( css::beans::Property("ID", HANDLE_ID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"ID"_ustr, HANDLE_ID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setID, &Submission::getID) );
 
-    registerProperty( css::beans::Property("Bind", HANDLE_Bind, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Bind"_ustr, HANDLE_Bind, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setBind, &Submission::getBind) );
 
-    registerProperty( css::beans::Property("Ref", HANDLE_Ref, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Ref"_ustr, HANDLE_Ref, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setRef, &Submission::getRef) );
 
-    registerProperty( css::beans::Property("Action", HANDLE_Action, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Action"_ustr, HANDLE_Action, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setAction, &Submission::getAction) );
 
-    registerProperty( css::beans::Property("Method", HANDLE_Method, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Method"_ustr, HANDLE_Method, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setMethod, &Submission::getMethod) );
 
-    registerProperty( css::beans::Property("Version", HANDLE_Version, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Version"_ustr, HANDLE_Version, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setVersion, &Submission::getVersion) );
 
-    registerProperty( css::beans::Property("Indent", HANDLE_Indent, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Indent"_ustr, HANDLE_Indent, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Submission >(this, &Submission::setIndent, &Submission::getIndent));
 
-    registerProperty( css::beans::Property("MediaType", HANDLE_MediaType, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"MediaType"_ustr, HANDLE_MediaType, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setMediaType, &Submission::getMediaType) );
 
-    registerProperty( css::beans::Property("Encoding", HANDLE_Encoding, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Encoding"_ustr, HANDLE_Encoding, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setEncoding, &Submission::getEncoding) );
 
-    registerProperty( css::beans::Property("OmitXmlDeclaration", HANDLE_OmitXmlDeclaration, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"OmitXmlDeclaration"_ustr, HANDLE_OmitXmlDeclaration, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Submission >(this, &Submission::setOmitXmlDeclaration, &Submission::getOmitXmlDeclaration));
 
-    registerProperty( css::beans::Property("Standalone", HANDLE_Standalone, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Standalone"_ustr, HANDLE_Standalone, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Submission >(this, &Submission::setStandalone, &Submission::getStandalone));
 
-    registerProperty( css::beans::Property("CDataSectionElement", HANDLE_CDataSectionElement, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"CDataSectionElement"_ustr, HANDLE_CDataSectionElement, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setCDataSectionElement, &Submission::getCDataSectionElement) );
 
-    registerProperty( css::beans::Property("Replace", HANDLE_Replace, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Replace"_ustr, HANDLE_Replace, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setReplace, &Submission::getReplace) );
 
-    registerProperty( css::beans::Property("Separator", HANDLE_Separator, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Separator"_ustr, HANDLE_Separator, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setSeparator, &Submission::getSeparator) );
 
-    registerProperty( css::beans::Property("IncludeNamespacePrefixes", HANDLE_IncludeNamespacePrefixes, cppu::UnoType<Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"IncludeNamespacePrefixes"_ustr, HANDLE_IncludeNamespacePrefixes, cppu::UnoType<Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, Sequence<OUString> >(this, &Submission::setIncludeNamespacePrefixes, &Submission::getIncludeNamespacePrefixes) );
 
-    registerProperty( css::beans::Property("Model", HANDLE_Model, cppu::UnoType<Reference<XModel>>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"Model"_ustr, HANDLE_Model, cppu::UnoType<Reference<XModel>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Submission, Reference<XModel> >(this, &Submission::setModel, &Submission::getModel) );
 
     initializePropertyValueCache( HANDLE_Indent );
@@ -419,7 +419,7 @@ void SAL_CALL Submission::submitWithInteraction(
 
     if ( !xModel.is() || msID.isEmpty() )
         throw RuntimeException(
-                "This is not a valid submission object.",
+                u"This is not a valid submission object."_ustr,
                 *this
               );
 

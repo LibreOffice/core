@@ -152,7 +152,7 @@ namespace frm
 
     OUString SAL_CALL FormOperations::getImplementationName(  )
     {
-        return "com.sun.star.comp.forms.FormOperations";
+        return u"com.sun.star.comp.forms.FormOperations"_ustr;
     }
 
     sal_Bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName )
@@ -162,7 +162,7 @@ namespace frm
 
     Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.runtime.FormOperations" };
+        return { u"com.sun.star.form.runtime.FormOperations"_ustr };
     }
 
     Reference< XRowSet > SAL_CALL FormOperations::getCursor()
@@ -810,7 +810,7 @@ namespace frm
             sal_Int32 nPosition = -1;
 
             ::comphelper::NamedValueCollection aArguments( _rArguments );
-            aArguments.get_ensureType( "Position", nPosition );
+            aArguments.get_ensureType( u"Position"_ustr, nPosition );
 
             if ( nPosition < 1 )
                 nPosition = 1;
@@ -1204,7 +1204,7 @@ namespace frm
                 Reference< XMultiServiceFactory > xFactory( ::dbtools::getConnection( m_xCursor ), UNO_QUERY );
                 if ( xFactory.is() )
                 {
-                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr), UNO_QUERY );
                     OSL_ENSURE( m_xParser.is(), "FormOperations::impl_ensureInitializedParser_nothrow: factory did not create a parser for us!" );
                 }
             }

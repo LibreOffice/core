@@ -343,7 +343,7 @@ com_sun_star_form_OFormattedFieldWrapper_get_implementation(css::uno::XComponent
 {
     css::uno::Reference<css::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(
-            component, false, "com.sun.star.form.OFormattedFieldWrapper"));
+            component, false, u"com.sun.star.form.OFormattedFieldWrapper"_ustr));
     inst->acquire();
     return inst.get();
 }
@@ -354,7 +354,7 @@ com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementatio
 {
     css::uno::Reference<css::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(
-            component, true, "com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"));
+            component, true, u"com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"_ustr));
     inst->acquire();
     return inst.get();
 }

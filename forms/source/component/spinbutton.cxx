@@ -64,7 +64,7 @@ namespace frm
 
     OUString SAL_CALL OSpinButtonModel::getImplementationName()
     {
-        return "com.sun.star.comp.forms.OSpinButtonModel";
+        return u"com.sun.star.comp.forms.OSpinButtonModel"_ustr;
     }
 
         // note that we're passing OControlModel as "base class". This is because
@@ -239,8 +239,8 @@ namespace frm
     Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            "SpinValueMin",
-            "SpinValueMax" );
+            u"SpinValueMin"_ustr,
+            u"SpinValueMax"_ustr );
     }
 
 

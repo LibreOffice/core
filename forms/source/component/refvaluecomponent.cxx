@@ -108,8 +108,8 @@ namespace frm
                 || nDefaultChecked > 2)
             {
                 throw css::lang::IllegalArgumentException(
-                    ("DefaultState property value must be a SHORT in the range"
-                     " 0--2"),
+                    (u"DefaultState property value must be a SHORT in the range"
+                     " 0--2"_ustr),
                     css::uno::Reference<css::uno::XInterface>(), -1);
             }
             m_eDefaultChecked = static_cast<ToggleState>(nDefaultChecked);

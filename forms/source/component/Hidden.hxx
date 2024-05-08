@@ -48,7 +48,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.OHiddenModel"; }
+    { return u"com.sun.star.form.OHiddenModel"_ustr; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

@@ -36,14 +36,14 @@ class Implementation:
         css::lang::XServiceInfo>
 {
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.form.XForms"; }
+    { return u"com.sun.star.form.XForms"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.xforms.XForms"};
+        return {u"com.sun.star.xforms.XForms"_ustr};
     }
 };
 

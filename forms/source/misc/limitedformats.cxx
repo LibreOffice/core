@@ -55,9 +55,9 @@ namespace frm
 
     static const Locale& getLocale(LocaleType _eType)
     {
-        static const Locale s_aEnglishUS( "en", "us", OUString() );
-        static const Locale s_aGerman( "de", "DE", OUString() );
-        static const Locale s_aSystem( "", "", "" );
+        static const Locale s_aEnglishUS( u"en"_ustr, u"us"_ustr, OUString() );
+        static const Locale s_aGerman( u"de"_ustr, u"DE"_ustr, OUString() );
+        static const Locale s_aSystem( u""_ustr, u""_ustr, u""_ustr );
 
         switch (_eType)
         {
@@ -329,7 +329,7 @@ namespace frm
 
         if (!bFoundIt)
         {   // somebody gave us a format which we can't translate
-            throw IllegalArgumentException("This control supports only a very limited number of formats.", nullptr, 2);
+            throw IllegalArgumentException(u"This control supports only a very limited number of formats."_ustr, nullptr, 2);
         }
 
         return bModified;

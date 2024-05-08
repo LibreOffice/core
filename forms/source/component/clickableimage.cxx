@@ -300,24 +300,24 @@ namespace frm
                             FrameSearchFlag::SELF | FrameSearchFlag::PARENT |
                             FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE );
 
-                    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", xModel->getURL()) };
+                    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue(u"Referer"_ustr, xModel->getURL()) };
 
                     if (xDisp.is())
                         xDisp->dispatch( aURL, aArgs );
                 }
                 else
                 {
-                    URL aHyperLink = m_aFeatureInterception.getTransformer().getStrictURL( ".uno:OpenHyperlink" );
+                    URL aHyperLink = m_aFeatureInterception.getTransformer().getStrictURL( u".uno:OpenHyperlink"_ustr );
 
                     Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aHyperLink, OUString() , 0);
 
                     if ( xDisp.is() )
                     {
                         Sequence<PropertyValue> aProps{
-                            comphelper::makePropertyValue("URL", aURL.Complete),
+                            comphelper::makePropertyValue(u"URL"_ustr, aURL.Complete),
                             comphelper::makePropertyValue(
-                                "FrameName", xSet->getPropertyValue(PROPERTY_TARGET_FRAME)),
-                            comphelper::makePropertyValue("Referer", xModel->getURL())
+                                u"FrameName"_ustr, xSet->getPropertyValue(PROPERTY_TARGET_FRAME)),
+                            comphelper::makePropertyValue(u"Referer"_ustr, xModel->getURL())
                         };
 
                         xDisp->dispatch( aHyperLink, aProps );
@@ -652,7 +652,7 @@ namespace frm
         ImageProducer *pImgProd = GetImageProducer();
         // grab the ImageURL
         OUString sURL;
-        getPropertyValue("ImageURL") >>= sURL;
+        getPropertyValue(u"ImageURL"_ustr) >>= sURL;
         if (!m_pMedium)
         {
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )

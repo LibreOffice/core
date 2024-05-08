@@ -338,7 +338,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         {
             css::uno::Any a(cppu::getCaughtException());
             throw WrappedTargetRuntimeException(
-                "Could not clone the given database form.",
+                u"Could not clone the given database form."_ustr,
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
                 a
             );
@@ -935,7 +935,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, std::u16string_vie
     OUString aBestMatchingEncoding = OUString::createFromAscii(pBestMatchingEncoding);
     pChild->SetContentType(
         "text/plain; charset=\"" + aBestMatchingEncoding + "\"");
-    pChild->SetContentTransferEncoding("8bit");
+    pChild->SetContentTransferEncoding(u"8bit"_ustr);
 
     // Body
     std::unique_ptr<SvMemoryStream> pStream(new SvMemoryStream);
@@ -997,7 +997,7 @@ void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, std::u16string_vie
         "\"";
     pChild->SetContentDisposition(aContentDisp);
     pChild->SetContentType( aContentType );
-    pChild->SetContentTransferEncoding("8bit");
+    pChild->SetContentTransferEncoding(u"8bit"_ustr);
 
 
     // Body
@@ -2111,8 +2111,8 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
 
     Sequence<PropertyValue> aArgs
     {
-        comphelper::makePropertyValue("Referer", aReferer),
-        comphelper::makePropertyValue("PostData", xPostData)
+        comphelper::makePropertyValue(u"Referer"_ustr, aReferer),
+        comphelper::makePropertyValue(u"PostData"_ustr, xPostData)
     };
 
     xDisp->dispatch(aURL, aArgs);
@@ -2192,7 +2192,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
 
             if (xDisp.is())
             {
-                Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", aReferer) };
+                Sequence<PropertyValue> aArgs { comphelper::makePropertyValue(u"Referer"_ustr, aReferer) };
                 xDisp->dispatch(aURL, aArgs);
             }
         }
@@ -2228,9 +2228,9 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
 
             Sequence<PropertyValue> aArgs
             {
-                comphelper::makePropertyValue("Referer", aReferer),
-                comphelper::makePropertyValue("ContentType", aContentType),
-                comphelper::makePropertyValue("PostData", xPostData)
+                comphelper::makePropertyValue(u"Referer"_ustr, aReferer),
+                comphelper::makePropertyValue(u"ContentType"_ustr, aContentType),
+                comphelper::makePropertyValue(u"PostData"_ustr, xPostData)
             };
 
             xDisp->dispatch(aURL, aArgs);
@@ -3708,7 +3708,7 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt )
 
 OUString SAL_CALL ODatabaseForm::getImplementationName()
 {
-    return "com.sun.star.comp.forms.ODatabaseForm";
+    return u"com.sun.star.comp.forms.ODatabaseForm"_ustr;
 }
 
 
@@ -3723,7 +3723,7 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames()
     // concat without own services
     return ::comphelper::concatSequences(
         css::uno::Sequence<OUString> {
-            FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponents",
+            FRM_SUN_FORMCOMPONENT, u"com.sun.star.form.FormComponents"_ustr,
             FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM,
             FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM },
         aServices
@@ -4017,7 +4017,7 @@ OUString SAL_CALL ODatabaseForm::getName()
     catch (const css::beans::UnknownPropertyException&)
     {
         throw WrappedTargetRuntimeException(
-            "ODatabaseForm::getName",
+            u"ODatabaseForm::getName"_ustr,
             *this,
             ::cppu::getCaughtException()
         );

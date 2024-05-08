@@ -112,7 +112,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance("ooo.vba.VBACodeNameProvider"), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance(u"ooo.vba.VBACodeNameProvider"_ustr), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -135,9 +135,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             OUString sServiceName;
-            xProps->getPropertyValue("DefaultControl") >>= sServiceName;
+            xProps->getPropertyValue(u"DefaultControl"_ustr) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext(u"ooo.vba.VBAToOOEventDesc"_ustr, m_xContext), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
 
             // register the vba script events
@@ -205,7 +205,7 @@ void OInterfaceContainer::clonedFrom(const OInterfaceContainer& _cloneSource)
     catch (const Exception&)
     {
         throw WrappedTargetRuntimeException(
-            "Could not clone the given interface hierarchy.",
+            u"Could not clone the given interface hierarchy."_ustr,
             static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
             ::cppu::getCaughtException()
         );
@@ -817,7 +817,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     bool bHandleVbaEvents = false;
     try
     {
-        _rxElement->getPropertyValue("GenerateVbaEvents") >>= bHandleVbaEvents;
+        _rxElement->getPropertyValue(u"GenerateVbaEvents"_ustr) >>= bHandleVbaEvents;
     }
     catch( const Exception& )
     {

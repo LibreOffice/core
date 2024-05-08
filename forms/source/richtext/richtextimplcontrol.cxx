@@ -438,7 +438,7 @@ namespace frm
             {
                 m_pViewport->GetOutDev()->Push( vcl::PushFlags::FONT );
                 m_pViewport->SetFont( m_pEngine->GetStandardFont(0) );
-                nFontWidth = m_pViewport->GetTextWidth( "x" );
+                nFontWidth = m_pViewport->GetTextWidth( u"x"_ustr );
                 m_pViewport->GetOutDev()->Pop();
             }
             // ... is the scroll size for the horizontal scrollbar

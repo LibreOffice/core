@@ -752,7 +752,7 @@ void OImageControlControl::implClearGraphics( bool _bForce )
         if ( sOldImageURL.isEmpty() )
             // the ImageURL is already empty, so simply setting a new empty one would not suffice
             // (since it would be ignored)
-            xSet->setPropertyValue( PROPERTY_IMAGE_URL, Any( OUString( "private:emptyImage" ) ) );
+            xSet->setPropertyValue( PROPERTY_IMAGE_URL, Any( u"private:emptyImage"_ustr ) );
                 // (the concrete URL we're passing here doesn't matter. It's important that
                 // the model cannot resolve it to a valid resource describing an image stream
     }
@@ -838,7 +838,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     {
         Reference< XPropertySet > xModelProps( const_cast< OImageControlControl* >( this )->getModel(), UNO_QUERY_THROW );
         Reference< XGraphic > xGraphic;
-        OSL_VERIFY( xModelProps->getPropertyValue("Graphic") >>= xGraphic );
+        OSL_VERIFY( xModelProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic );
         bIsEmpty = !xGraphic.is();
     }
     catch( const Exception& )

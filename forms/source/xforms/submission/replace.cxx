@@ -63,14 +63,14 @@ CSubmission::SubmissionResult CSubmission::replace(std::u16string_view aReplace,
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor{
-                PropertyValue("InputStream",
+                PropertyValue(u"InputStream"_ustr,
                     -1, Any(m_aResultStream), PropertyState_DIRECT_VALUE),
-                PropertyValue("ReadOnly",
+                PropertyValue(u"ReadOnly"_ustr,
                     -1, Any(true), PropertyState_DIRECT_VALUE)
             };
 
             OUString aURL = m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            xLoader->loadComponentFromURL(aURL, "_default", FrameSearchFlag::ALL, descriptor);
+            xLoader->loadComponentFromURL(aURL, u"_default"_ustr, FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;
 
