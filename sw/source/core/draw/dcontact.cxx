@@ -2216,8 +2216,9 @@ namespace sdr::contact
 
         void VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            // tdf#91260 have already checked top-level one is on the right page
-            assert(isPrimitiveVisible(rDisplayInfo));
+            // this may be called for painting where it's a precondition that
+            // isPrimitiveVisible() is true, or for e.g. getObjectRange() (even
+            // during layout) where there are no preconditions...
             // nasty corner case: override to clear page frame to disable the
             // sub-objects' anchor check, because their anchor is always on
             // the first page that the page style is applied to
