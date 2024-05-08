@@ -62,38 +62,30 @@ SfxPoolItem* SvxSearchItem::CreateDefault() { return new  SvxSearchItem(0);}
 static Sequence< OUString > lcl_GetNotifyNames()
 {
     // names of transliteration relevant properties
-    static const char* aTranslitNames[] =
+    return
     {
-        "IsMatchCase",                          //  0
-        "Japanese/IsMatchFullHalfWidthForms",   //  1
-        "Japanese/IsMatchHiraganaKatakana",     //  2
-        "Japanese/IsMatchContractions",         //  3
-        "Japanese/IsMatchMinusDashCho-on",      //  4
-        "Japanese/IsMatchRepeatCharMarks",      //  5
-        "Japanese/IsMatchVariantFormKanji",     //  6
-        "Japanese/IsMatchOldKanaForms",         //  7
-        "Japanese/IsMatch_DiZi_DuZu",           //  8
-        "Japanese/IsMatch_BaVa_HaFa",           //  9
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 10
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 11
-        "Japanese/IsMatch_SeShe_ZeJe",          // 12
-        "Japanese/IsMatch_IaIya",               // 13
-        "Japanese/IsMatch_KiKu",                // 14
-        "Japanese/IsIgnorePunctuation",         // 15
-        "Japanese/IsIgnoreWhitespace",          // 16
-        "Japanese/IsIgnoreProlongedSoundMark",  // 17
-        "Japanese/IsIgnoreMiddleDot",           // 18
-        "IsIgnoreDiacritics_CTL",               // 19
-        "IsIgnoreKashida_CTL"                   // 20
+        u"IsMatchCase"_ustr,                          //  0
+        u"Japanese/IsMatchFullHalfWidthForms"_ustr,   //  1
+        u"Japanese/IsMatchHiraganaKatakana"_ustr,     //  2
+        u"Japanese/IsMatchContractions"_ustr,         //  3
+        u"Japanese/IsMatchMinusDashCho-on"_ustr,      //  4
+        u"Japanese/IsMatchRepeatCharMarks"_ustr,      //  5
+        u"Japanese/IsMatchVariantFormKanji"_ustr,     //  6
+        u"Japanese/IsMatchOldKanaForms"_ustr,         //  7
+        u"Japanese/IsMatch_DiZi_DuZu"_ustr,           //  8
+        u"Japanese/IsMatch_BaVa_HaFa"_ustr,           //  9
+        u"Japanese/IsMatch_TsiThiChi_DhiZi"_ustr,     // 10
+        u"Japanese/IsMatch_HyuIyu_ByuVyu"_ustr,       // 11
+        u"Japanese/IsMatch_SeShe_ZeJe"_ustr,          // 12
+        u"Japanese/IsMatch_IaIya"_ustr,               // 13
+        u"Japanese/IsMatch_KiKu"_ustr,                // 14
+        u"Japanese/IsIgnorePunctuation"_ustr,         // 15
+        u"Japanese/IsIgnoreWhitespace"_ustr,          // 16
+        u"Japanese/IsIgnoreProlongedSoundMark"_ustr,  // 17
+        u"Japanese/IsIgnoreMiddleDot"_ustr,           // 18
+        u"IsIgnoreDiacritics_CTL"_ustr,               // 19
+        u"IsIgnoreKashida_CTL"_ustr                   // 20
     };
-
-    const int nCount = SAL_N_ELEMENTS( aTranslitNames );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
-        pNames[i] = OUString::createFromAscii( aTranslitNames[i] );
-
-    return aNames;
 }
 
 
