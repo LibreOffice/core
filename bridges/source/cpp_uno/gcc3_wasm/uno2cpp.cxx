@@ -12,11 +12,11 @@
 #include <vector>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
+#include <typelib/typedescription.hxx>
 
 #include <bridge.hxx>
 #include <types.hxx>
@@ -123,9 +123,8 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             break;
         case typelib_TypeClass_STRUCT:
         {
-            typelib_TypeDescription* td = nullptr;
-            css::uno::Type(returnType).getDescription(&td);
-            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(td)))
+            css::uno::TypeDescription td(returnType);
+            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(td.get())))
             {
                 case StructKind::Empty:
                     break;
