@@ -2974,7 +2974,7 @@ struct SvxStyleToolBoxControl::Impl
                 Reference<container::XNameAccess> xParaStyles;
                 xStylesSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>=
                     xParaStyles;
-                static const std::vector<OUString> aWriterStyles =
+                static constexpr OUString aWriterStyles[]
                 {
                     u"Standard"_ustr,
                     u"Text body"_ustr,
@@ -3008,23 +3008,22 @@ struct SvxStyleToolBoxControl::Impl
                 bSpecModeCalc = xServices->supportsService(
                     u"com.sun.star.sheet.SpreadsheetDocument"_ustr)))
             {
-                static const char* aCalcStyles[] =
+                static constexpr OUString aCalcStyles[]
                 {
-                    "Default",
-                    "Accent 1",
-                    "Accent 2",
-                    "Accent 3",
-                    "Heading 1",
-                    "Heading 2",
-                    "Result"
+                    u"Default"_ustr,
+                    u"Accent 1"_ustr,
+                    u"Accent 2"_ustr,
+                    u"Accent 3"_ustr,
+                    u"Heading 1"_ustr,
+                    u"Heading 2"_ustr,
+                    u"Result"_ustr
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr) >>= xCellStyles;
-                for(const char* pCalcStyle : aCalcStyles)
+                for(const OUString & sStyleName : aCalcStyles)
                 {
                     try
                     {
-                        const OUString sStyleName( OUString::createFromAscii( pCalcStyle ) );
                         if( xCellStyles->hasByName( sStyleName ) )
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
