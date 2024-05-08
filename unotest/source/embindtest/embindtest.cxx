@@ -24,6 +24,8 @@
 #include <org/libreoffice/embindtest/Enum.hpp>
 #include <org/libreoffice/embindtest/Exception.hpp>
 #include <org/libreoffice/embindtest/Struct.hpp>
+#include <org/libreoffice/embindtest/StructLong.hpp>
+#include <org/libreoffice/embindtest/StructString.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -110,6 +112,27 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     sal_Bool SAL_CALL isStruct(org::libreoffice::embindtest::Struct const& value) override
     {
         return value == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
+    }
+
+    org::libreoffice::embindtest::StructLong SAL_CALL getStructLong() override
+    {
+        return { -123456 };
+    }
+
+    sal_Bool SAL_CALL isStructLong(org::libreoffice::embindtest::StructLong const& value) override
+    {
+        return value.m == -123456;
+    }
+
+    org::libreoffice::embindtest::StructString SAL_CALL getStructString() override
+    {
+        return { u"hä"_ustr };
+    }
+
+    sal_Bool SAL_CALL
+    isStructString(org::libreoffice::embindtest::StructString const& value) override
+    {
+        return value.m == u"hä";
     }
 
     css::uno::Any SAL_CALL getAnyVoid() override { return {}; }
