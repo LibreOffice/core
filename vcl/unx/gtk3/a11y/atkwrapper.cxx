@@ -641,14 +641,6 @@ wrapper_ref_state_set( AtkObject *atk_obj )
                     if ( (nStateSet & nState) && mapAtkState( nState ) != ATK_STATE_LAST_DEFINED )
                         atk_state_set_add_state( pSet, mapAtkState( nState ) );
                 }
-
-                // We need to emulate FOCUS state for menus, menu-items etc.
-                if( atk_obj == atk_get_focus_object() )
-                    atk_state_set_add_state( pSet, ATK_STATE_FOCUSED );
-/* FIXME - should we do this ?
-                else
-                    atk_state_set_remove_state( pSet, ATK_STATE_FOCUSED );
-*/
             }
         }
 
