@@ -78,8 +78,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         bool bDatabaseFields = true;
-        aCfgRoot.getNodeValue(
-            OUString("DatabaseFields")) >>= bDatabaseFields;
+        aCfgRoot.getNodeValue(u"DatabaseFields"_ustr) >>= bDatabaseFields;
 
         if (bDatabaseFields)
             AddTabPage("database", SwFieldDBPage::Create, nullptr);

@@ -344,12 +344,12 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
             ::utl::OConfigurationNode aType( aTypesNode.openNode( type ) );
             // and there's a child denoting how the responsibility propagates
             OUString sPropagation;
-            OSL_VERIFY( aType.getNodeValue( "Propagation" ) >>= sPropagation );
+            OSL_VERIFY( aType.getNodeValue( u"Propagation"_ustr ) >>= sPropagation );
             if ( lcl_matchesRequest( aRequest, type, sPropagation ) )
             {
                 // retrieve the service/implementation name of the handler
                 OUString sServiceName;
-                OSL_VERIFY( aHandlerNode.getNodeValue( "ServiceName" ) >>= sServiceName );
+                OSL_VERIFY( aHandlerNode.getNodeValue( u"ServiceName"_ustr ) >>= sServiceName );
                 // cache the information who feels responsible for requests of this type
                 m_aTypedCustomHandlers[ aRequest.getValueTypeName() ] = sServiceName;
                 // actually handle the request

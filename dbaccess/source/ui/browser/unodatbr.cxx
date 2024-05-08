@@ -1657,7 +1657,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( getORB(),
                     u"/org.openoffice.Office.DataAccess/Policies/Features/Common"_ustr ) );
                 bool bHaveEditDatabase( true );
-                OSL_VERIFY( aConfig.getNodeValue( "EditDatabaseFromDataSourceView" ) >>= bHaveEditDatabase );
+                OSL_VERIFY( aConfig.getNodeValue( u"EditDatabaseFromDataSourceView"_ustr ) >>= bHaveEditDatabase );
                 aReturn.bEnabled = getORB().is() && xDataSourceEntry && bHaveEditDatabase;
             }
             else if ( nId == ID_BROWSER_COPY )

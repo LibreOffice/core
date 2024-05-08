@@ -245,7 +245,7 @@ static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css:
         if ( !aImplNode.isValid() )
             continue;
 
-        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( "CommandArg" ) );
+        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( u"CommandArg"_ustr ) );
 
         if ( aCommandArg == aActive )
         {
@@ -346,7 +346,7 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     if ( !aAppNode.isValid() )
         return false;
 
-    OUString aActive = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
+    OUString aActive = comphelper::getString( aAppNode.getNodeValue( u"Active"_ustr ) );
 
     if (bConsiderSingleToolbar && aActive == "Single")
         return true;
@@ -363,11 +363,11 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
         if ( !aModeNode.isValid() )
             continue;
 
-        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( u"CommandArg"_ustr ) );
 
         if ( aCommandArg == aActive )
         {
-            return comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
+            return comphelper::getBOOL( aModeNode.getNodeValue( u"HasNotebookbar"_ustr ) );
         }
     }
     return false;
@@ -527,7 +527,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
             const utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
-            SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( "HasMenubar" ) ) );
+            SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( u"HasMenubar"_ustr ) ) );
 
             SfxViewFrame* pView = SfxViewFrame::Current();
 

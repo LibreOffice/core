@@ -126,13 +126,13 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
             utl::OConfigurationTreeRoot::CM_READONLY
         );
 
-    m_xDocTypeLB->append(OUString::number(APP_WRITER), aFilterClassesNode.getNodeValue("com.sun.star.text.TextDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_WRITER_WEB), aFilterClassesNode.getNodeValue("com.sun.star.text.WebDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_WRITER_GLOBAL), aFilterClassesNode.getNodeValue("com.sun.star.text.GlobalDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_CALC), aFilterClassesNode.getNodeValue("com.sun.star.sheet.SpreadsheetDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_IMPRESS), aFilterClassesNode.getNodeValue("com.sun.star.presentation.PresentationDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_DRAW), aFilterClassesNode.getNodeValue("com.sun.star.drawing.DrawingDocument/DisplayName").get<OUString>());
-    m_xDocTypeLB->append(OUString::number(APP_MATH), aFilterClassesNode.getNodeValue("com.sun.star.formula.FormulaProperties/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_WRITER), aFilterClassesNode.getNodeValue(u"com.sun.star.text.TextDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_WRITER_WEB), aFilterClassesNode.getNodeValue(u"com.sun.star.text.WebDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_WRITER_GLOBAL), aFilterClassesNode.getNodeValue(u"com.sun.star.text.GlobalDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_CALC), aFilterClassesNode.getNodeValue(u"com.sun.star.sheet.SpreadsheetDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_IMPRESS), aFilterClassesNode.getNodeValue(u"com.sun.star.presentation.PresentationDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_DRAW), aFilterClassesNode.getNodeValue(u"com.sun.star.drawing.DrawingDocument/DisplayName"_ustr).get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_MATH), aFilterClassesNode.getNodeValue(u"com.sun.star.formula.FormulaProperties/DisplayName"_ustr).get<OUString>());
 
     m_xAutoSaveCB->connect_toggled( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
     m_xBackupCB->connect_toggled(LINK(this, SvxSaveTabPage, BackupClickHdl_Impl));

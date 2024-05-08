@@ -107,11 +107,6 @@ namespace utl
         */
         css::uno::Any       getNodeValue(const OUString& _rPath) const noexcept;
 
-        css::uno::Any       getNodeValue( const char* _pAsciiPath ) const
-        {
-            return getNodeValue( OUString::createFromAscii( _pAsciiPath ) );
-        }
-
         /** write a node value<p/>
             The value given is written into the node specified by the given relative path.<br/>
             In opposite to <method>getNodeValue</method>, _rName must refer to a leaf in the configuration tree, not an inner

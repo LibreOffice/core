@@ -71,7 +71,7 @@ namespace
                 _rxContext, u"/org.openoffice.Office.ReportDesign/PropertyBrowser/"_ustr ) );
 
         bool bEnabled = false;
-        OSL_VERIFY( aConfiguration.getNodeValue( "DirectHelp"  ) >>= bEnabled );
+        OSL_VERIFY( aConfiguration.getNodeValue( u"DirectHelp"_ustr  ) >>= bEnabled );
         return bEnabled;
     }
 }

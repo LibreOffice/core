@@ -61,17 +61,17 @@ namespace
             return;
 
         OUString sParentURLPattern;
-        aURLPatternNode.getNodeValue("ParentURLPattern") >>= sParentURLPattern;
+        aURLPatternNode.getNodeValue(u"ParentURLPattern"_ustr) >>= sParentURLPattern;
         if ( !sParentURLPattern.isEmpty() )
             lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
 
         OUString sDriverFactory;
-        aURLPatternNode.getNodeValue("Driver") >>= sDriverFactory;
+        aURLPatternNode.getNodeValue(u"Driver"_ustr) >>= sDriverFactory;
         if ( !sDriverFactory.isEmpty() )
             _rInstalledDriver.sDriverFactory = sDriverFactory;
 
         OUString sDriverTypeDisplayName;
-        aURLPatternNode.getNodeValue("DriverTypeDisplayName") >>= sDriverTypeDisplayName;
+        aURLPatternNode.getNodeValue(u"DriverTypeDisplayName"_ustr) >>= sDriverTypeDisplayName;
         OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
         if ( !sDriverTypeDisplayName.isEmpty() )
             _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;

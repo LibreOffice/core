@@ -73,7 +73,7 @@ static OUString GetCurrentMode()
         const utl::OConfigurationTreeRoot aAppNode(
             xContext, "org.openoffice.Office.UI.ToolbarMode/Applications/" + GetCurrentApp(), true);
         if (aAppNode.isValid())
-            sResult = comphelper::getString(aAppNode.getNodeValue("Active"));
+            sResult = comphelper::getString(aAppNode.getNodeValue(u"Active"_ustr));
     };
     return sResult;
 }

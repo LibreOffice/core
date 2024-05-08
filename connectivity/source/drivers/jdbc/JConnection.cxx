@@ -702,7 +702,7 @@ OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString
     if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
     {
         ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( _sDriverClass );
-        OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
+        OSL_VERIFY( aRegisterObj.getNodeValue( u"Path"_ustr ) >>= sURL );
     }
     return sURL;
 }

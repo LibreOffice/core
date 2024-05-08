@@ -158,8 +158,8 @@ namespace sfx2
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
 
         // the values
-        aClassDesc.getNodeValue( "DisplayName" ) >>= _rClass.sDisplayName;
-        aClassDesc.getNodeValue( "Filters" ) >>= _rClass.aSubFilters;
+        aClassDesc.getNodeValue( u"DisplayName"_ustr ) >>= _rClass.sDisplayName;
+        aClassDesc.getNodeValue( u"Filters"_ustr ) >>= _rClass.aSubFilters;
     }
 
     namespace {
@@ -232,7 +232,7 @@ namespace sfx2
 
         // get the list describing the order of all global classes
         Sequence< OUString > aGlobalClasses;
-        _rFilterClassification.getNodeValue( "GlobalFilters/Order" ) >>= aGlobalClasses;
+        _rFilterClassification.getNodeValue( u"GlobalFilters/Order"_ustr ) >>= aGlobalClasses;
 
         // copy the logical names
         comphelper::sequenceToContainer(_rGlobalClassNames, aGlobalClasses);

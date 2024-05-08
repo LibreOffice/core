@@ -260,7 +260,7 @@ Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNot
 
     const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
-    const Any aValue = aModeNode.getNodeValue("UIItemProperties");
+    const Any aValue = aModeNode.getNodeValue(u"UIItemProperties"_ustr);
     Sequence<OUString> aValues;
     aValue >>= aValues;
     return aValues;

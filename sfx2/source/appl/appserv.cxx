@@ -896,7 +896,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
                 }
 
-                aCurrentMode = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
+                aCurrentMode = comphelper::getString( aAppNode.getNodeValue( u"Active"_ustr ) );
 
                 if ( !comphelper::LibreOfficeKit::isActive() && aCurrentMode == aNewName )
                 {
@@ -980,13 +980,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         if ( !aModeNode.isValid() )
                             continue;
 
-                        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+                        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( u"CommandArg"_ustr ) );
 
                         if ( aCommandArg == aNewName )
                         {
-                            aMandatoryToolbars = aModeNode.getNodeValue( "Toolbars" ).get< uno::Sequence<OUString> >();
-                            aUserToolbars = aModeNode.getNodeValue( "UserToolbars" ).get< uno::Sequence<OUString> >();
-                            aSidebarMode = comphelper::getString( aModeNode.getNodeValue( "Sidebar" ) );
+                            aMandatoryToolbars = aModeNode.getNodeValue( u"Toolbars"_ustr ).get< uno::Sequence<OUString> >();
+                            aUserToolbars = aModeNode.getNodeValue( u"UserToolbars"_ustr ).get< uno::Sequence<OUString> >();
+                            aSidebarMode = comphelper::getString( aModeNode.getNodeValue( u"Sidebar"_ustr ) );
                             break;
                         }
                     }
@@ -1078,7 +1078,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             if ( !aModeNode.isValid() )
                                 continue;
 
-                            OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+                            OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( u"CommandArg"_ustr ) );
 
                             if ( aCommandArg == aCurrentMode )
                             {
@@ -1209,7 +1209,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     xContext, u"org.openoffice.Office.UI.GlobalSettings/Toolbars/States"_ustr, true);
                 if (aAppNode.isValid())
                 {
-                    bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue("Locked"));
+                    bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue(u"Locked"_ustr));
                     aAppNode.setNodeValue("Locked", Any(!isLocked));
                     aAppNode.commit();
                     //TODO: apply immediately w/o restart needed

@@ -408,7 +408,7 @@ namespace
                 u"/org.openoffice.Office.Common/Forms/PropertyBrowser/"_ustr ) );
 
         bool bEnabled = false;
-        OSL_VERIFY( aConfiguration.getNodeValue( "DirectHelp" ) >>= bEnabled );
+        OSL_VERIFY( aConfiguration.getNodeValue( u"DirectHelp"_ustr ) >>= bEnabled );
         return bEnabled;
     }
 }

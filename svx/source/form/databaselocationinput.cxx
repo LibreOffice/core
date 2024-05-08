@@ -142,7 +142,7 @@ namespace svx
                     u"/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument"_ustr
             ) );
             OUString sDatabaseFilter;
-            OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );
+            OSL_VERIFY( aConfig.getNodeValue( u"ooSetupFactoryActualFilter"_ustr ) >>= sDatabaseFilter );
 
             // get the type this filter is responsible for
             Reference< XNameAccess > xFilterFactory(

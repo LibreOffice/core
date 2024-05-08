@@ -131,11 +131,11 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         if ( !aModeNode.isValid() )
             continue;
 
-        OUString aLabel = comphelper::getString( aModeNode.getNodeValue( "Label" ) );
-        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
-        tools::Long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
-        bool isExperimental = comphelper::getBOOL( aModeNode.getNodeValue( "IsExperimental" ) );
-        bool hasNotebookbar = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
+        OUString aLabel = comphelper::getString( aModeNode.getNodeValue( u"Label"_ustr ) );
+        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( u"CommandArg"_ustr ) );
+        tools::Long nPosition = comphelper::getINT32( aModeNode.getNodeValue( u"MenuPosition"_ustr ) );
+        bool isExperimental = comphelper::getBOOL( aModeNode.getNodeValue( u"IsExperimental"_ustr ) );
+        bool hasNotebookbar = comphelper::getBOOL( aModeNode.getNodeValue( u"HasNotebookbar"_ustr ) );
 
         // Allow Notebookbar only in experimental mode
         if ( isExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get() )
@@ -253,7 +253,7 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
     if ( !aModesNode.isValid() )
         return;
 
-    OUString aMode = comphelper::getString( aModesNode.getNodeValue( "Active" ) );
+    OUString aMode = comphelper::getString( aModesNode.getNodeValue( u"Active"_ustr ) );
 
     for ( int i = 0; i < m_xPopupMenu->getItemCount(); ++i )
     {

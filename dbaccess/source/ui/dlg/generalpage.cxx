@@ -471,7 +471,7 @@ namespace dbaui
             u"/org.openoffice.Office.DataAccess/Policies/Features/Base"_ustr
         ) );
         bool bAllowCreateLocalDatabase( true );
-        OSL_VERIFY( aConfig.getNodeValue( "CreateLocalDatabase" ) >>= bAllowCreateLocalDatabase );
+        OSL_VERIFY( aConfig.getNodeValue( u"CreateLocalDatabase"_ustr ) >>= bAllowCreateLocalDatabase );
         if ( !bAllowCreateLocalDatabase )
             bHideCreateNew = true;
 
