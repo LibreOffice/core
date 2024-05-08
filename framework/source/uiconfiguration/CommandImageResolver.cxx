@@ -21,11 +21,11 @@ namespace vcl
 namespace
 {
 
-const o3tl::enumarray<ImageType, const char*> ImageType_Prefixes =
+constexpr o3tl::enumarray<ImageType, OUString> ImageType_Prefixes
 {
-    "cmd/sc_",
-    "cmd/lc_",
-    "cmd/32/"
+    u"cmd/sc_"_ustr,
+    u"cmd/lc_"_ustr,
+    u"cmd/32/"_ustr
 };
 
 OUString lclConvertToCanonicalName(const OUString& rFileName)
@@ -129,7 +129,7 @@ ImageList* CommandImageResolver::getImageList(ImageType nImageType)
 
     if (!m_pImageList[nImageType])
     {
-        OUString sIconPath = OUString::createFromAscii(ImageType_Prefixes[nImageType]);
+        OUString sIconPath = ImageType_Prefixes[nImageType];
         m_pImageList[nImageType].reset( new ImageList(m_aImageNameVector, sIconPath) );
     }
 
