@@ -370,7 +370,10 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     auto const ifc = *static_cast<css::uno::XInterface* const*>(self.getValue());
                     auto const copy = std::malloc(sizeof(css::uno::XInterface*));
                     *static_cast<css::uno::XInterface**>(copy) = ifc;
-                    ifc->acquire();
+                    if (ifc != nullptr)
+                    {
+                        ifc->acquire();
+                    }
                     emscripten::internal::WireTypePack argv(std::move(copy));
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
