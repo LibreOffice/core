@@ -617,13 +617,13 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(aCustomShape) );
                                 static constexpr OUString sPath( u"Path"_ustr );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
-                                css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, "GluePointType" );
+                                css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, u"GluePointType"_ustr );
                                 if ( pAny )
                                     *pAny >>= nGluePointType;
                                 else
                                 {
                                     OUString sShapeType;
-                                    pAny = aGeometryItem.GetPropertyValueByName( "Type" );
+                                    pAny = aGeometryItem.GetPropertyValueByName( u"Type"_ustr );
                                     if ( pAny )
                                         *pAny >>= sShapeType;
                                     MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
@@ -671,7 +671,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 {
                                     sal_uInt32 nPt = nC;
                                     css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
-                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, "Segments" );
+                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Segments"_ustr );
                                     if ( pAny && (*pAny >>= aSegments) )
                                     {
                                         nPt = 0;
@@ -725,7 +725,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                             }
                                         }
                                     }
-                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
+                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
                                     if ( pAny )
                                     {
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
@@ -771,14 +771,14 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             {
                                 if ( nN )
                                 {
-                                    OUString aPropName( "EndShape" );
+                                    OUString aPropName( u"EndShape"_ustr );
                                     SetPropValue( Any(aXShape), xPropSet, aPropName );
                                     aPropName = "EndGluePointIndex";
                                     SetPropValue( Any(nId), xPropSet, aPropName );
                                 }
                                 else
                                 {
-                                    OUString aPropName( "StartShape" );
+                                    OUString aPropName( u"StartShape"_ustr );
                                     SetPropValue( Any(aXShape), xPropSet, aPropName );
                                     aPropName = "StartGluePointIndex";
                                     SetPropValue( Any(nId), xPropSet, aPropName );
@@ -2787,10 +2787,10 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                     if ( xStorage.is() )
                     {
                         css::uno::Reference< css::embed::XStorage >
-                            xStorageDRS( xStorage->openStorageElement( "drs", css::embed::ElementModes::SEEKABLEREAD ) );
+                            xStorageDRS( xStorage->openStorageElement( u"drs"_ustr, css::embed::ElementModes::SEEKABLEREAD ) );
                         if ( xStorageDRS.is() )
                         {
-                            css::uno::Reference< css::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( "shapexml.xml", css::embed::ElementModes::SEEKABLEREAD ) );
+                            css::uno::Reference< css::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( u"shapexml.xml"_ustr, css::embed::ElementModes::SEEKABLEREAD ) );
                             if ( xShapeXMLStream.is() )
                             {
                                 css::uno::Reference< css::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
@@ -4653,7 +4653,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         // RB(21600,43200) in this coordinate system.
                         basegfx::B2DRectangle aEllipseRect_MS(-21600.0, 0.0, 21600.0, 43200.0);
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
-                        pAny = aGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
+                        pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
                         if (pAny && (*pAny >>= seqCoordinates) && (seqCoordinates.getLength() >= 2))
                         {
                             auto const nL
@@ -4804,8 +4804,8 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
 
                         // clearing items, so MergeDefaultAttributes will set the corresponding
                         // defaults from EnhancedCustomShapeGeometry
-                        aGeometryItem.ClearPropertyValue( "Handles" );
-                        aGeometryItem.ClearPropertyValue( "Equations" );
+                        aGeometryItem.ClearPropertyValue( u"Handles"_ustr );
+                        aGeometryItem.ClearPropertyValue( u"Equations"_ustr );
                         aGeometryItem.ClearPropertyValue( sPath );
 
                         static_cast<SdrObjCustomShape*>(xRet.get())->SetMergedItem( aGeometryItem );
@@ -4814,7 +4814,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         // now setting a new name, so the above correction is only done once when importing from ms
                         SdrCustomShapeGeometryItem aGeoName( static_cast<SdrObjCustomShape*>(xRet.get())->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         aPropVal.Name = "Type";
-                        aPropVal.Value <<= OUString( "mso-spt100" );
+                        aPropVal.Value <<= u"mso-spt100"_ustr;
                         aGeoName.SetPropertyValue( aPropVal );
                         static_cast<SdrObjCustomShape*>(xRet.get())->SetMergedItem( aGeoName );
                     }
@@ -6954,7 +6954,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                     const GDIMetaFile * pMtf, const rtl::Reference<SotStorage>& rDest )
 {
     bool bMtfRead = false;
-    rtl::Reference<SotStorageStream> xOle10Stm = rDest->OpenSotStream( "\1Ole10Native",
+    rtl::Reference<SotStorageStream> xOle10Stm = rDest->OpenSotStream( u"\1Ole10Native"_ustr,
                                                     StreamMode::WRITE| StreamMode::SHARE_DENYALL );
     if( xOle10Stm->GetError() )
         return false;
@@ -7078,40 +7078,40 @@ static const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 OUString SvxMSDffManager::GetFilterNameFromClassID( const SvGlobalName& aGlobName )
 {
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Writer)";
+        return u"StarOffice XML (Writer)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-        return "writer8";
+        return u"writer8"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Calc)";
+        return u"StarOffice XML (Calc)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-        return "calc8";
+        return u"calc8"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Impress)";
+        return u"StarOffice XML (Impress)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-        return "impress8";
+        return u"impress8"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Draw)";
+        return u"StarOffice XML (Draw)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-        return "draw8";
+        return u"draw8"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Math)";
+        return u"StarOffice XML (Math)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-        return "math8";
+        return u"math8"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
-        return "StarOffice XML (Chart)";
+        return u"StarOffice XML (Chart)"_ustr;
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-        return "chart8";
+        return u"chart8"_ustr;
 
     return OUString();
 }
@@ -7119,7 +7119,7 @@ OUString SvxMSDffManager::GetFilterNameFromClassID( const SvGlobalName& aGlobNam
 void SvxMSDffManager::ExtractOwnStream(SotStorage& rSrcStg, SvMemoryStream& rMemStream)
 {
     rtl::Reference<SotStorageStream> xStr
-        = rSrcStg.OpenSotStream("package_stream", StreamMode::STD_READ);
+        = rSrcStg.OpenSotStream(u"package_stream"_ustr, StreamMode::STD_READ);
     xStr->ReadStream(rMemStream);
 }
 
@@ -7231,7 +7231,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aMemStream );
             pMedium[0].Value <<= xStream;
             pMedium[1].Name = "URL";
-            pMedium[1].Value <<= OUString( "private:stream" );
+            pMedium[1].Value <<= u"private:stream"_ustr;
             pMedium[2].Name = "DocumentBaseURL";
             pMedium[2].Value <<= rBaseURL;
 
@@ -7333,13 +7333,13 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
             {
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
-                    rtl::Reference<SotStorageStream> xSrcTst = xObjStg->OpenSotStream("\1CompObj");
+                    rtl::Reference<SotStorageStream> xSrcTst = xObjStg->OpenSotStream(u"\1CompObj"_ustr);
                     bValidStorage = xSrcTst.is() && sizeof( aTestA ) ==
                                     xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
-                        xSrcTst = xObjStg->OpenSotStream( "\1Ole" );
+                        xSrcTst = xObjStg->OpenSotStream( u"\1Ole"_ustr );
                         bValidStorage = xSrcTst.is() && sizeof(aTestA) ==
                                     xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     }
@@ -7355,7 +7355,7 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         rtl::Reference<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
-                            "\3ObjInfo", StreamMode::STD_READ );
+                            u"\3ObjInfo"_ustr, StreamMode::STD_READ );
                         if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;

@@ -172,7 +172,7 @@ void CGM::ImplDoClass1()
                 sal_uInt32 nSize = ImplGetUI(1);
 
                 if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
-                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+                    throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
@@ -187,7 +187,7 @@ void CGM::ImplDoClass1()
                 sal_uInt32 nSize = ImplGetUI(1);
 
                 if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
-                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+                    throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                 pElement->aFontList.InsertCharSet( mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;

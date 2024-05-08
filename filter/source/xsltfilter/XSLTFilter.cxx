@@ -196,11 +196,11 @@ namespace XSLT
     }
     OUString XSLTFilter::getImplementationName()
     {
-        return "com.sun.star.comp.documentconversion.XSLTFilter";
+        return u"com.sun.star.comp.documentconversion.XSLTFilter"_ustr;
     }
     css::uno::Sequence< OUString > XSLTFilter::getSupportedServiceNames()
     {
-        return { "com.sun.star.documentconversion.XSLTFilter" };
+        return { u"com.sun.star.documentconversion.XSLTFilter"_ustr };
     }
 
     OUString
@@ -234,7 +234,7 @@ namespace XSLT
             {
                 xTransformer.set(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        "com.sun.star.xml.xslt.XSLT2Transformer", rArgs, m_xContext),
+                        u"com.sun.star.xml.xslt.XSLT2Transformer"_ustr, rArgs, m_xContext),
                     css::uno::UNO_QUERY_THROW);
             }
             catch (const Exception&)
@@ -283,7 +283,7 @@ namespace XSLT
 
         css::uno::Reference<XStringSubstitution>
                 subs(css::util::PathSubstitution::create(m_xContext));
-        OUString aWorkingDir(subs->getSubstituteVariableValue( "$(progurl)" ));
+        OUString aWorkingDir(subs->getSubstituteVariableValue( u"$(progurl)"_ustr ));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();
         bool bWasAbsolute;
@@ -325,9 +325,9 @@ namespace XSLT
             return false;
 
         // create transformer
-        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
-                            Any(NamedValue("SourceURL", Any(aURL))),
-                            Any(NamedValue("SourceBaseURL", Any(INetURLObject(aURL).getBase()))) };
+        Sequence<Any> args{ Any(NamedValue(u"StylesheetURL"_ustr, Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue(u"SourceURL"_ustr, Any(aURL))),
+                            Any(NamedValue(u"SourceBaseURL"_ustr, Any(INetURLObject(aURL).getBase()))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(xHandler.is());
@@ -371,7 +371,7 @@ namespace XSLT
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         css::ucb::InteractiveAugmentedIOException exc(
-                                                "Timeout!",
+                                                u"Timeout!"_ustr,
                                                 getXWeak(),
                                                 InteractionClassification_ERROR,
                                                 css::ucb::IOErrorCode_GENERAL,
@@ -454,9 +454,9 @@ namespace XSLT
             return false;
 
         // create transformer
-        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
-                            Any(NamedValue("SourceURL", Any(aURL))),
-                            Any(NamedValue("SourceBaseURL", Any(INetURLObject(aURL).getBase()))) };
+        Sequence<Any> args{ Any(NamedValue(u"StylesheetURL"_ustr, Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue(u"SourceURL"_ustr, Any(aURL))),
+                            Any(NamedValue(u"SourceBaseURL"_ustr, Any(INetURLObject(aURL).getBase()))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         assert(xFastParser.is());
@@ -497,7 +497,7 @@ namespace XSLT
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         css::ucb::InteractiveAugmentedIOException exc(
-                                                "Timeout!",
+                                                u"Timeout!"_ustr,
                                                 getXWeak(),
                                                 InteractionClassification_ERROR,
                                                 css::ucb::IOErrorCode_GENERAL,
@@ -576,10 +576,10 @@ namespace XSLT
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();
         m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
-                            Any(NamedValue("TargetURL", Any(sURL))),
-                            Any(NamedValue("DoctypePublic", Any(aDoctypePublic))),
-                            Any(NamedValue("TargetBaseURL", Any(m_aExportBaseUrl))) };
+        Sequence<Any> args{ Any(NamedValue(u"StylesheetURL"_ustr, Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue(u"TargetURL"_ustr, Any(sURL))),
+                            Any(NamedValue(u"DoctypePublic"_ustr, Any(aDoctypePublic))),
+                            Any(NamedValue(u"TargetBaseURL"_ustr, Any(m_aExportBaseUrl))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(m_rOutputStream.is());

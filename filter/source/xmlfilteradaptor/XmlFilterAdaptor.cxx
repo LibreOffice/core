@@ -72,7 +72,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     }
 
     OUString aBaseURI;
-    if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
+    if (aMediaMap.find(u"URL"_ustr)->second >>= aBaseURI)
     {
         INetURLObject aURLObj(aBaseURI);
         // base URI in this case is the URI of the actual saving location
@@ -83,25 +83,25 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     // create an XProperty set to configure the exporter for pretty printing
     static const PropertyMapEntry aImportInfoMap[] =
     {
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
-        { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("DefaultDocumentSettings"), 0,
+        { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+        { u"BuildId"_ustr, 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
+        { u"DefaultDocumentSettings"_ustr, 0,
           ::cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::MAYBEVOID, 0 },
     };
 
     Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( "BaseURI", Any( aBaseURI ));
+    xInfoSet->setPropertyValue( u"BaseURI"_ustr, Any( aBaseURI ));
 
     OUString aFilterName;
-    auto It = aMediaMap.find(OUString("FilterName"));
+    auto It = aMediaMap.find(u"FilterName"_ustr);
     if (It != aMediaMap.end() && (It->second >>= aFilterName)
         && aFilterName == "OpenDocument Text Flat XML")
     {
-        PropertyValue EmptyDbFieldHidesPara("EmptyDbFieldHidesPara", 0, Any(false),
+        PropertyValue EmptyDbFieldHidesPara(u"EmptyDbFieldHidesPara"_ustr, 0, Any(false),
                                             PropertyState::PropertyState_DIRECT_VALUE);
         Sequence<PropertyValue> aSettings{ EmptyDbFieldHidesPara };
-        xInfoSet->setPropertyValue("DefaultDocumentSettings", Any(aSettings));
+        xInfoSet->setPropertyValue(u"DefaultDocumentSettings"_ustr, Any(aSettings));
     }
     Sequence< Any > aAnys{ Any(xInfoSet) };
 
@@ -155,7 +155,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
             if(!comphelper::isFileUrl(msTemplateName))
             {
                 SvtPathOptions aOptions;
-                msTemplateName = aOptions.SubstituteVariable("$(progurl)") + "/" + msTemplateName;
+                msTemplateName = aOptions.SubstituteVariable(u"$(progurl)"_ustr) + "/" + msTemplateName;
             }
 
             xstyleLoader->loadStylesFromURL(msTemplateName,aValue);
@@ -271,7 +271,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;
-        if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
+        if (aMediaMap.find(u"URL"_ustr)->second >>= aBaseURI)
         {
             INetURLObject aURLObj(aBaseURI);
             // base URI in this case is the URI of the actual saving location
@@ -282,18 +282,18 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
         // create an XProperty set to configure the exporter for pretty printing
         static const PropertyMapEntry aImportInfoMap[] =
          {
-             { OUString("UsePrettyPrinting"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { OUString("ExportTextNumberElement"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { u"UsePrettyPrinting"_ustr, 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { u"ExportTextNumberElement"_ustr, 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
          };
 
         Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-        xInfoSet->setPropertyValue("UsePrettyPrinting", Any( bPrettyPrint ));
+        xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, Any( bPrettyPrint ));
         xInfoSet->setPropertyValue(
-                        "ExportTextNumberElement",
+                        u"ExportTextNumberElement"_ustr,
                         Any( bExportTextNumberElementForListItems ));
-        xInfoSet->setPropertyValue("BaseURI", Any( aBaseURI ));
+        xInfoSet->setPropertyValue(u"BaseURI"_ustr, Any( aBaseURI ));
         Sequence < Any > aAnys{ Any(xConverter), Any(xInfoSet) };
 
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -358,18 +358,18 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     {
         comphelper::SequenceAsHashMap aMap(aAnySeq);
         msFilterName = aMap.getUnpackedValueOrDefault(
-            "Type", OUString());
+            u"Type"_ustr, OUString());
         msUserData = aMap.getUnpackedValueOrDefault(
-            "UserData", Sequence< OUString >());
+            u"UserData"_ustr, Sequence< OUString >());
         msTemplateName = aMap.getUnpackedValueOrDefault(
-            "TemplateName", OUString());
+            u"TemplateName"_ustr, OUString());
     }
 }
 
 // XServiceInfo
 OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
 {
-    return "com.sun.star.comp.Writer.XmlFilterAdaptor";
+    return u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr;
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
@@ -379,7 +379,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.ExportFilter", "com.sun.star.document.ImportFilter" };
+    return { u"com.sun.star.document.ExportFilter"_ustr, u"com.sun.star.document.ImportFilter"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

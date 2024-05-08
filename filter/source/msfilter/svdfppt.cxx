@@ -1710,7 +1710,7 @@ bool PPTConvertOCXControls::InsertControl(
         if( rServiceFactory.is() )
         {
             css::uno::Reference< css::uno::XInterface >  xCreate = rServiceFactory
-                ->createInstance( "com.sun.star.drawing.ControlShape" );
+                ->createInstance( u"com.sun.star.drawing.ControlShape"_ustr );
             if( xCreate.is() )
             {
                 xShape.set(xCreate, css::uno::UNO_QUERY);
@@ -1857,14 +1857,14 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                     {
                         xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
                     }
-                    rtl::Reference<SotStorageStream> xSrcTst = xObjStor->OpenSotStream("\1Ole");
+                    rtl::Reference<SotStorageStream> xSrcTst = xObjStor->OpenSotStream(u"\1Ole"_ustr);
                     if ( xSrcTst.is() )
                     {
                         sal_uInt8 aTestA[ 10 ];
                         bool bGetItAsOle = (sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                         if ( !bGetItAsOle )
                         {   // maybe there is a contents stream in here
-                            xSrcTst = xObjStor->OpenSotStream( "Contents", StreamMode::READWRITE | StreamMode::NOCREATE );
+                            xSrcTst = xObjStor->OpenSotStream( u"Contents"_ustr, StreamMode::READWRITE | StreamMode::NOCREATE );
                             bGetItAsOle = (xSrcTst.is() &&
                                 sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                         }
@@ -2034,11 +2034,11 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                         if ( xSource.is() && xDest.is() )
                         {
                             // is this a visual basic storage ?
-                            rtl::Reference<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
+                            rtl::Reference<SotStorage> xSubStorage = xSource->OpenSotStorage( u"VBA"_ustr,
                                 StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                             if( xSubStorage.is() && ( ERRCODE_NONE == xSubStorage->GetError() ) )
                             {
-                                rtl::Reference<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
+                                rtl::Reference<SotStorage> xMacros = xDest->OpenSotStorage( u"MACROS"_ustr );
                                 if ( xMacros.is() )
                                 {
                                     SvStorageInfoList aList;
@@ -2060,10 +2060,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                             rtl::Reference<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
                                             if ( xVBA.is() && ( xVBA->GetError() == ERRCODE_NONE ) )
                                             {
-                                                rtl::Reference<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
+                                                rtl::Reference<SotStorage> xSubVBA = xVBA->OpenSotStorage( u"_MS_VBA_Overhead"_ustr );
                                                 if ( xSubVBA.is() && ( xSubVBA->GetError() == ERRCODE_NONE ) )
                                                 {
-                                                    rtl::Reference<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
+                                                    rtl::Reference<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( u"_MS_VBA_Overhead2"_ustr );
                                                     if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
                                                     {
                                                         if ( nPersistPtr && ( nPersistPtr < m_nPersistPtrCnt ) )
@@ -3457,79 +3457,79 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 0 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 1 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 2 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetListFormat("",  ")", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr,  u")"_ustr, nLevel);
             }
             break;
             case 3 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 4 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetListFormat("(", ")", nLevel);
+                rNumberFormat.SetListFormat(u"("_ustr, u")"_ustr, nLevel);
             }
             break;
             case 5 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetListFormat("", ")", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u")"_ustr, nLevel);
             }
             break;
             case 6 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 7 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 8 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetListFormat("(", ")", nLevel);
+                rNumberFormat.SetListFormat(u"("_ustr, u")"_ustr, nLevel);
             }
             break;
             case 9 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetListFormat("", ")", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u")"_ustr, nLevel);
             }
             break;
             case 10 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetListFormat("(", ")", nLevel);
+                rNumberFormat.SetListFormat(u"("_ustr, u")"_ustr, nLevel);
             }
             break;
             case 11 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetListFormat("", ")", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u")"_ustr, nLevel);
             }
             break;
             case 12 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetListFormat("(", ")", nLevel);
+                rNumberFormat.SetListFormat(u"("_ustr, u")"_ustr, nLevel);
             }
             break;
             case 13 :
@@ -3540,13 +3540,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 14 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetListFormat("(", ")", nLevel);
+                rNumberFormat.SetListFormat(u"("_ustr, u")"_ustr, nLevel);
             }
             break;
             case 15 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetListFormat("", ")", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u")"_ustr, nLevel);
             }
             break;
             case 16: // Simplified Chinese.
@@ -3557,7 +3557,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 17: // Simplified Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 18: // Double byte circle numbers.
@@ -3575,13 +3575,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 22: // Traditional Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH_TW );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 25: // Bidi Hebrew 2 with ANSI minus symbol.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_HEBREW );
-                rNumberFormat.SetListFormat("", "-", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"-"_ustr, nLevel);
             }
             break;
             case 26: // Japanese/Korean.
@@ -3592,7 +3592,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 27: // Japanese/Korean with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
-                rNumberFormat.SetListFormat("", ".", nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, u"."_ustr, nLevel);
             }
             break;
             case 28: // Double-byte Arabic numbers.
@@ -3603,13 +3603,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 29: // Double-byte Arabic numbers with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_FULL_WIDTH_ARABIC );
-                rNumberFormat.SetListFormat("", OUString(u'\xff0e'), nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, OUString(u'\xff0e'), nLevel);
             }
             break;
             case 38: // Japanese with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH ); // No such type. Instead with Lower Chinese Number
-                rNumberFormat.SetListFormat("", OUString(u'\xff0e'), nLevel);
+                rNumberFormat.SetListFormat(u""_ustr, OUString(u'\xff0e'), nLevel);
             }
             break;
         }
@@ -7267,7 +7267,7 @@ static void CreateTableRows( const Reference< XTableRows >& xTableRows, const o3
         }
 
         Reference< XPropertySet > xPropSet( xTableRows->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( "Height", Any( nHeight ) );
+        xPropSet->setPropertyValue( u"Height"_ustr, Any( nHeight ) );
     }
 }
 
@@ -7294,7 +7294,7 @@ static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns,
         }
 
         Reference< XPropertySet > xPropSet( xTableColumns->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( "Width", Any( nWidth ) );
+        xPropSet->setPropertyValue( u"Width"_ustr, Any( nWidth ) );
     }
 }
 
@@ -7327,10 +7327,10 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
         const sal_Int32 nRightDist(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
         const sal_Int32 nUpperDist(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
         const sal_Int32 nLowerDist(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
-        xPropSet->setPropertyValue( "TextUpperDistance", Any( nUpperDist ) );
-        xPropSet->setPropertyValue( "TextRightDistance", Any( nRightDist ) );
-        xPropSet->setPropertyValue( "TextLeftDistance", Any( nLeftDist ) );
-        xPropSet->setPropertyValue( "TextLowerDistance", Any( nLowerDist ) );
+        xPropSet->setPropertyValue( u"TextUpperDistance"_ustr, Any( nUpperDist ) );
+        xPropSet->setPropertyValue( u"TextRightDistance"_ustr, Any( nRightDist ) );
+        xPropSet->setPropertyValue( u"TextLeftDistance"_ustr, Any( nLeftDist ) );
+        xPropSet->setPropertyValue( u"TextLowerDistance"_ustr, Any( nLowerDist ) );
 
         const SdrTextVertAdjust eTextVertAdjust(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
@@ -7338,15 +7338,15 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
             eVA = drawing::TextVerticalAdjust_CENTER;
         else if ( eTextVertAdjust == SDRTEXTVERTADJUST_BOTTOM )
             eVA = drawing::TextVerticalAdjust_BOTTOM;
-        xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
+        xPropSet->setPropertyValue( u"TextVerticalAdjust"_ustr, Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST).GetValue());
         const SvxFrameDirection eDirection = pObj->GetMergedItem(EE_PARA_WRITINGDIR).GetValue();
-        xPropSet->setPropertyValue(  "TextHorizontalAdjust" , Any( eHA ) );
+        xPropSet->setPropertyValue(  u"TextHorizontalAdjust"_ustr , Any( eHA ) );
         if ( eDirection == SvxFrameDirection::Vertical_RL_TB )
         {//vertical writing
-            xPropSet->setPropertyValue(  "TextWritingMode" , Any( css::text::WritingMode_TB_RL ) );
+            xPropSet->setPropertyValue(  u"TextWritingMode"_ustr , Any( css::text::WritingMode_TB_RL ) );
         }
         drawing::FillStyle eFillStyle(pObj->GetMergedItem( XATTR_FILLSTYLE ).GetValue());
         css::drawing::FillStyle eFS( css::drawing::FillStyle_NONE );
@@ -7356,7 +7356,7 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                 {
                     eFS = css::drawing::FillStyle_SOLID;
                     Color aFillColor( pObj->GetMergedItem( XATTR_FILLCOLOR ).GetColorValue() );
-                    xPropSet->setPropertyValue( "FillColor", Any( aFillColor ) );
+                    xPropSet->setPropertyValue( u"FillColor"_ustr, Any( aFillColor ) );
                 }
                 break;
             case drawing::FillStyle_GRADIENT :
@@ -7376,7 +7376,7 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                     aGradient.EndIntensity = aBGradient.GetEndIntens();
                     aGradient.StepCount = aBGradient.GetSteps();
 
-                    xPropSet->setPropertyValue( "FillGradient", Any( aGradient ) );
+                    xPropSet->setPropertyValue( u"FillGradient"_ustr, Any( aGradient ) );
                 }
                 break;
             case drawing::FillStyle_HATCH :
@@ -7389,16 +7389,16 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                     const XFillBitmapItem & rXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     uno::Reference<graphic::XGraphic> xGraphic = rXFillBitmapItem.GetGraphicObject().GetGraphic().GetXGraphic();
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-                    xPropSet->setPropertyValue("FillBitmap", uno::Any(xBitmap));
+                    xPropSet->setPropertyValue(u"FillBitmap"_ustr, uno::Any(xBitmap));
 
                     const XFillBmpStretchItem & rStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
                     const XFillBmpTileItem & rTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
                     if( rTileItem.GetValue() )
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_REPEAT));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_REPEAT));
                     else if( rStretchItem.GetValue() )
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_STRETCH));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_STRETCH));
                     else
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_NO_REPEAT));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_NO_REPEAT));
                 }
             break;
             default:
@@ -7407,11 +7407,11 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
             break;
 
         }
-        xPropSet->setPropertyValue( "FillStyle", Any( eFS ) );
+        xPropSet->setPropertyValue( u"FillStyle"_ustr, Any( eFS ) );
         if ( eFillStyle != drawing::FillStyle_NONE )
         {
             sal_Int16 nFillTransparence( pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ).GetValue() );
-            xPropSet->setPropertyValue( "FillTransparence", Any( nFillTransparence ) );
+            xPropSet->setPropertyValue( u"FillTransparence"_ustr, Any( nFillTransparence ) );
         }
     }
     catch( const Exception& )
@@ -7456,17 +7456,17 @@ static void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >
             Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
             if ( nFlags & LinePositionLeft )
-                xPropSet->setPropertyValue( "LeftBorder", Any( aBorderLine ) );
+                xPropSet->setPropertyValue( u"LeftBorder"_ustr, Any( aBorderLine ) );
             if ( nFlags & LinePositionTop )
-                xPropSet->setPropertyValue( "TopBorder", Any( aBorderLine ) );
+                xPropSet->setPropertyValue( u"TopBorder"_ustr, Any( aBorderLine ) );
             if ( nFlags & LinePositionRight )
-                xPropSet->setPropertyValue( "RightBorder", Any( aBorderLine ) );
+                xPropSet->setPropertyValue( u"RightBorder"_ustr, Any( aBorderLine ) );
             if ( nFlags & LinePositionBottom )
-                xPropSet->setPropertyValue( "BottomBorder", Any( aBorderLine ) );
+                xPropSet->setPropertyValue( u"BottomBorder"_ustr, Any( aBorderLine ) );
             if ( nFlags & LinePositionTLBR )
-                xPropSet->setPropertyValue( "DiagonalTLBR", Any( true ) );
+                xPropSet->setPropertyValue( u"DiagonalTLBR"_ustr, Any( true ) );
             if ( nFlags & LinePositionBLTR )
-                xPropSet->setPropertyValue( "DiagonalBLTR", Any( true ) );
+                xPropSet->setPropertyValue( u"DiagonalBLTR"_ustr, Any( true ) );
         }
     }
     catch( const Exception& )

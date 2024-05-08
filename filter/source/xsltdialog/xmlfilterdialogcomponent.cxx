@@ -94,7 +94,7 @@ XMLFilterDialogComponent::XMLFilterDialogComponent(const css::uno::Reference< XC
 
 OUString SAL_CALL XMLFilterDialogComponent::getImplementationName()
 {
-    return "com.sun.star.comp.ui.XSLTFilterDialog";
+    return u"com.sun.star.comp.ui.XSLTFilterDialog"_ustr;
 }
 
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId()
@@ -106,7 +106,7 @@ Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId()
 
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
+    return { u"com.sun.star.ui.dialogs.XSLTFilterDialog"_ustr };
 }
 
 sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName)

@@ -97,7 +97,7 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
 OUString SAL_CALL XPdfDecomposer::getImplementationName()
 {
-    return "com.sun.star.comp.PDF.PDFDecomposer";
+    return u"com.sun.star.comp.PDF.PDFDecomposer"_ustr;
 }
 
 sal_Bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
 {
-    return { "com.sun.star.graphic.PdfTools" };
+    return { u"com.sun.star.graphic.PdfTools"_ustr };
 }
 }
 

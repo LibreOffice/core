@@ -64,9 +64,9 @@ constexpr OUString sVndSunStarPackage(u"vnd.sun.star.Package:"_ustr);
 
 XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rxContext )
 : mxContext( rxContext ),
-    sXSLTPath( "$(user)/xslt/" ),
-    sTemplatePath( "$(user)/template/" ),
-    sProgPath( "$(prog)/" )
+    sXSLTPath( u"$(user)/xslt/"_ustr ),
+    sTemplatePath( u"$(user)/template/"_ustr ),
+    sProgPath( u"$(prog)/"_ustr )
 {
     SvtPathOptions aOptions;
     sProgPath = aOptions.SubstituteVariable( sProgPath );
@@ -149,11 +149,11 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
         Sequence< Any > aArguments{ Any(rPackageURL),
                                     // let ZipPackage be used ( no manifest.xml is required )
                                     Any(beans::NamedValue(
-                                        "StorageFormat", Any(ZIP_STORAGE_FORMAT_STRING))) };
+                                        u"StorageFormat"_ustr, Any(ZIP_STORAGE_FORMAT_STRING))) };
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.comp.ZipPackage",
+                u"com.sun.star.packages.comp.ZipPackage"_ustr,
                 aArguments, mxContext ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -162,7 +162,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
 
             // get root zip folder
             Reference< XInterface > xRootFolder;
-            xIfc->getByHierarchicalName( "/" ) >>= xRootFolder;
+            xIfc->getByHierarchicalName( u"/"_ustr ) >>= xRootFolder;
 
             // export filters files
             for (auto const& filter : rFilters)
@@ -203,7 +203,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
 
             pStream->Seek(0);
             Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( *pStream ) );
-            addFile_( xRootFolder, xFactory,  XIS, "TypeDetection.xcu" );
+            addFile_( xRootFolder, xFactory,  XIS, u"TypeDetection.xcu"_ustr );
 
             Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
             if( xBatch.is() )
@@ -238,16 +238,16 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL,
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.comp.ZipPackage",
+                u"com.sun.star.packages.comp.ZipPackage"_ustr,
                 aArguments, mxContext ), UNO_QUERY );
 
         if( xIfc.is() )
         {
             // get root zip folder
             Reference< XInterface > xRootFolder;
-            xIfc->getByHierarchicalName( "/" ) >>= xRootFolder;
+            xIfc->getByHierarchicalName( u"/"_ustr ) >>= xRootFolder;
 
-            OUString szTypeDetection("TypeDetection.xcu");
+            OUString szTypeDetection(u"TypeDetection.xcu"_ustr);
             if( xIfc->hasByHierarchicalName( szTypeDetection ) )
             {
                 Reference< XActiveDataSink > xTypeDetection;

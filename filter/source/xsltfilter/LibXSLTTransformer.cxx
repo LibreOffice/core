@@ -295,7 +295,7 @@ namespace XSLT
 
         if (!styleSheet)
         {
-            m_transformer->error("No stylesheet was created");
+            m_transformer->error(u"No stylesheet was created"_ustr);
         }
 
         xmlDocPtr result = nullptr;
@@ -398,11 +398,11 @@ namespace XSLT
     }
     OUString LibXSLTTransformer::getImplementationName()
     {
-        return "com.sun.star.comp.documentconversion.XSLTFilter";
+        return u"com.sun.star.comp.documentconversion.XSLTFilter"_ustr;
     }
     css::uno::Sequence< OUString > LibXSLTTransformer::getSupportedServiceNames()
     {
-        return { "com.sun.star.documentconversion.XSLTFilter" };
+        return { u"com.sun.star.documentconversion.XSLTFilter"_ustr };
     }
 
     void

@@ -168,7 +168,7 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
     //
     const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
         xConfigController->getCurrentConfiguration()->getResources(
-            {}, "", drawing::framework::AnchorBindingMode_INDIRECT));
+            {}, u""_ustr, drawing::framework::AnchorBindingMode_INDIRECT));
 
     for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
     {
@@ -191,10 +191,10 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
                     if (Reference<XPropertySet> xPropSet{ xDrawPage, UNO_QUERY })
                     {
                         Reference<XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-                        if (xPropSetInfo && xPropSetInfo->hasPropertyByName("Visible"))
+                        if (xPropSetInfo && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
                         {
                             bool bIsSlideVisible = true; // default: true
-                            xPropSet->getPropertyValue("Visible") >>= bIsSlideVisible;
+                            xPropSet->getPropertyValue(u"Visible"_ustr) >>= bIsSlideVisible;
                             if (!bIsSlideVisible)
                                 continue;
                         }
@@ -495,9 +495,9 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                             if (xPropSet.is())
                             {
                                 Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
+                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
                                 {
-                                    xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
+                                    xPropSet->getPropertyValue( u"Visible"_ustr )  >>= bIsSlideVisible;
                                     if (!bIsSlideVisible)
                                         continue;
                                 }
@@ -847,13 +847,13 @@ sal_Bool SVGFilter::supportsService(const OUString& sServiceName)
 }
 OUString SVGFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.SVGFilter";
+    return u"com.sun.star.comp.Draw.SVGFilter"_ustr;
 }
 css::uno::Sequence< OUString > SVGFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter",
-            "com.sun.star.document.ExportFilter",
-            "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+            u"com.sun.star.document.ExportFilter"_ustr,
+            u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 

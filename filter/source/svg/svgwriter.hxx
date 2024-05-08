@@ -370,7 +370,7 @@ public:
                                            const Size& rSize100thmm,
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
-                                           const OUString& aElementId = "",
+                                           const OUString& aElementId = u""_ustr,
                                            const Reference< css::drawing::XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 

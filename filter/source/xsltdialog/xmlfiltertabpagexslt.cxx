@@ -28,18 +28,18 @@
 #include "xmlfiltertabpagexslt.hxx"
 
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pDialog)
-    : sInstPath( "$(prog)/" )
+    : sInstPath( u"$(prog)/"_ustr )
     , m_pDialog(pDialog)
-    , m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagetransformation.ui"))
-    , m_xContainer(m_xBuilder->weld_widget("XmlFilterTabPageTransformation"))
-    , m_xEDDocType(m_xBuilder->weld_entry("doc"))
-    , m_xEDExportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box("xsltexport")))
-    , m_xPBExprotXSLT(m_xBuilder->weld_button("browseexport"))
-    , m_xEDImportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box("xsltimport")))
-    , m_xPBImportXSLT(m_xBuilder->weld_button("browseimport"))
-    , m_xEDImportTemplate(new SvtURLBox(m_xBuilder->weld_combo_box("tempimport")))
-    , m_xPBImportTemplate(m_xBuilder->weld_button("browsetemp"))
-    , m_xCBNeedsXSLT2(m_xBuilder->weld_check_button("filtercb"))
+    , m_xBuilder(Application::CreateBuilder(pPage, u"filter/ui/xmlfiltertabpagetransformation.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_widget(u"XmlFilterTabPageTransformation"_ustr))
+    , m_xEDDocType(m_xBuilder->weld_entry(u"doc"_ustr))
+    , m_xEDExportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box(u"xsltexport"_ustr)))
+    , m_xPBExprotXSLT(m_xBuilder->weld_button(u"browseexport"_ustr))
+    , m_xEDImportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box(u"xsltimport"_ustr)))
+    , m_xPBImportXSLT(m_xBuilder->weld_button(u"browseimport"_ustr))
+    , m_xEDImportTemplate(new SvtURLBox(m_xBuilder->weld_combo_box(u"tempimport"_ustr)))
+    , m_xPBImportTemplate(m_xBuilder->weld_button(u"browsetemp"_ustr))
+    , m_xCBNeedsXSLT2(m_xBuilder->weld_check_button(u"filtercb"_ustr))
 {
     SvtPathOptions aOptions;
     sInstPath = aOptions.SubstituteVariable( sInstPath );
@@ -107,7 +107,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
     else
     {
         rURLBox.SetBaseURL( sInstPath );
-        rURLBox.set_entry_text( "" );
+        rURLBox.set_entry_text( u""_ustr );
     }
 }
 

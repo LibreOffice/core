@@ -39,12 +39,12 @@ using namespace com::sun::star::lang;
 
 XMLFilterTabDialog::XMLFilterTabDialog(weld::Window *pParent,
     const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo)
-    : GenericDialogController(pParent, "filter/ui/xsltfilterdialog.ui", "XSLTFilterDialog")
+    : GenericDialogController(pParent, u"filter/ui/xsltfilterdialog.ui"_ustr, u"XSLTFilterDialog"_ustr)
     , mxContext(rxContext)
-    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , mpBasicPage(new XMLFilterTabPageBasic(m_xTabCtrl->get_page("general")))
-    , mpXSLTPage(new XMLFilterTabPageXSLT(m_xTabCtrl->get_page("transformation"), m_xDialog.get()))
+    , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , mpBasicPage(new XMLFilterTabPageBasic(m_xTabCtrl->get_page(u"general"_ustr)))
+    , mpXSLTPage(new XMLFilterTabPageXSLT(m_xTabCtrl->get_page(u"transformation"_ustr), m_xDialog.get()))
 {
     mpOldInfo = pInfo;
     mpNewInfo.reset( new filter_info_impl( *mpOldInfo ) );
@@ -86,7 +86,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.FilterFactory"_ustr, mxContext ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
@@ -118,7 +118,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.FilterFactory"_ustr, mxContext ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );

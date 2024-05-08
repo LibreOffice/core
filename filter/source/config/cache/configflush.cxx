@@ -35,7 +35,7 @@ ConfigFlush::~ConfigFlush()
 
 OUString SAL_CALL ConfigFlush::getImplementationName()
 {
-    return "com.sun.star.comp.filter.config.ConfigFlush";
+    return u"com.sun.star.comp.filter.config.ConfigFlush"_ustr;
     // <- SAFE
 }
 
@@ -46,7 +46,7 @@ sal_Bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
 {
-    return  { "com.sun.star.document.FilterConfigRefresh" };
+    return  { u"com.sun.star.document.FilterConfigRefresh"_ustr };
 }
 
 void SAL_CALL ConfigFlush::refresh()

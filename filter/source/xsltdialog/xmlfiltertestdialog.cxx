@@ -118,7 +118,7 @@ static bool checkComponent( Reference< XComponent > const & rxComponent, const O
                 if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
                     // so if we want a draw we need to check if it's not an impress
-                    if( !xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
+                    if( !xInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr) )
                         return true;
                 }
                 else
@@ -138,22 +138,22 @@ static bool checkComponent( Reference< XComponent > const & rxComponent, const O
 
 XMLFilterTestDialog::XMLFilterTestDialog(weld::Window* pParent,
     const Reference<XComponentContext>& rxContext)
-    : GenericDialogController(pParent, "filter/ui/testxmlfilter.ui", "TestXMLFilterDialog")
+    : GenericDialogController(pParent, u"filter/ui/testxmlfilter.ui"_ustr, u"TestXMLFilterDialog"_ustr)
     , mxContext(rxContext)
-    , m_xExport(m_xBuilder->weld_widget("export"))
-    , m_xFTExportXSLTFile(m_xBuilder->weld_label("exportxsltfile"))
-    , m_xPBExportBrowse(m_xBuilder->weld_button("exportbrowse"))
-    , m_xPBCurrentDocument(m_xBuilder->weld_button("currentdocument"))
-    , m_xFTNameOfCurrentFile(m_xBuilder->weld_label("currentfilename"))
-    , m_xImport(m_xBuilder->weld_widget("import"))
-    , m_xFTImportXSLTFile(m_xBuilder->weld_label("importxsltfile"))
-    , m_xFTImportTemplate(m_xBuilder->weld_label("templateimport"))
-    , m_xFTImportTemplateFile(m_xBuilder->weld_label("importxslttemplate"))
-    , m_xCBXDisplaySource(m_xBuilder->weld_check_button("displaysource"))
-    , m_xPBImportBrowse(m_xBuilder->weld_button("importbrowse"))
-    , m_xPBRecentFile(m_xBuilder->weld_button("recentfile"))
-    , m_xFTNameOfRecentFile(m_xBuilder->weld_label("recentfilename"))
-    , m_xPBClose(m_xBuilder->weld_button("close"))
+    , m_xExport(m_xBuilder->weld_widget(u"export"_ustr))
+    , m_xFTExportXSLTFile(m_xBuilder->weld_label(u"exportxsltfile"_ustr))
+    , m_xPBExportBrowse(m_xBuilder->weld_button(u"exportbrowse"_ustr))
+    , m_xPBCurrentDocument(m_xBuilder->weld_button(u"currentdocument"_ustr))
+    , m_xFTNameOfCurrentFile(m_xBuilder->weld_label(u"currentfilename"_ustr))
+    , m_xImport(m_xBuilder->weld_widget(u"import"_ustr))
+    , m_xFTImportXSLTFile(m_xBuilder->weld_label(u"importxsltfile"_ustr))
+    , m_xFTImportTemplate(m_xBuilder->weld_label(u"templateimport"_ustr))
+    , m_xFTImportTemplateFile(m_xBuilder->weld_label(u"importxslttemplate"_ustr))
+    , m_xCBXDisplaySource(m_xBuilder->weld_check_button(u"displaysource"_ustr))
+    , m_xPBImportBrowse(m_xBuilder->weld_button(u"importbrowse"_ustr))
+    , m_xPBRecentFile(m_xBuilder->weld_button(u"recentfile"_ustr))
+    , m_xFTNameOfRecentFile(m_xBuilder->weld_label(u"recentfilename"_ustr))
+    , m_xPBClose(m_xBuilder->weld_button(u"close"_ustr))
 {
     m_xPBExportBrowse->connect_clicked(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
     m_xPBCurrentDocument->connect_clicked(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
@@ -290,8 +290,8 @@ void XMLFilterTestDialog::onExportBrowse()
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, m_xDialog.get());
 
-        Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
-        Reference< XNameAccess > xTypeDetection( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", mxContext ), UNO_QUERY );
+        Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.FilterFactory"_ustr, mxContext ), UNO_QUERY );
+        Reference< XNameAccess > xTypeDetection( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.TypeDetection"_ustr, mxContext ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
             const Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -389,9 +389,9 @@ void XMLFilterTestDialog::onExportBrowse()
 
             Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
             Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
-            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("InteractionHandler",
+            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"InteractionHandler"_ustr,
                                                                                 xInter) };
-            Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, "_default", 0, aArguments ) );
+            Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, u"_default"_ustr, 0, aArguments ) );
             if( xComp.is() )
             {
                 doExport( xComp );
@@ -447,7 +447,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                     pSourceData[i++].Value <<= m_xFilterInfo->maDocType;
                 }
 
-                Reference< XExportFilter > xExporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
+                Reference< XExportFilter > xExporter( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.documentconversion.XSLTFilter"_ustr, mxContext ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );
                 if( xHandler.is() )
                 {
@@ -463,8 +463,8 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                     {
                         try
                         {
-                            xGraphicStorageHandler.set(xDocFac->createInstance("com.sun.star.document.ExportGraphicStorageHandler"), UNO_QUERY);
-                            xObjectResolver.set( xDocFac->createInstance("com.sun.star.document.ExportEmbeddedObjectResolver"), UNO_QUERY );
+                            xGraphicStorageHandler.set(xDocFac->createInstance(u"com.sun.star.document.ExportGraphicStorageHandler"_ustr), UNO_QUERY);
+                            xObjectResolver.set( xDocFac->createInstance(u"com.sun.star.document.ExportEmbeddedObjectResolver"_ustr), UNO_QUERY );
                         }
                         catch( const Exception& )
                         {
@@ -491,7 +491,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                             xExporter2->setSourceDocument( xComp );
 
                             Sequence< PropertyValue > aDescriptor{comphelper::makePropertyValue(
-                                "FileName", aTempFileURL) };
+                                u"FileName"_ustr, aTempFileURL) };
 
                             if( xFilter->filter( aDescriptor ) )
                                 displayXMLFile( aTempFileURL );
@@ -569,18 +569,18 @@ void XMLFilterTestDialog::import( const OUString& rURL )
         Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
 
         Sequence< PropertyValue > aArguments{
-            comphelper::makePropertyValue("FilterName", m_xFilterInfo->maFilterName),
-            comphelper::makePropertyValue("InteractionHandler", xInter)
+            comphelper::makePropertyValue(u"FilterName"_ustr, m_xFilterInfo->maFilterName),
+            comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInter)
         };
 
-        xLoader->loadComponentFromURL( rURL, "_default", 0, aArguments );
+        xLoader->loadComponentFromURL( rURL, u"_default"_ustr, 0, aArguments );
 
         if( m_xCBXDisplaySource->get_active() )
         {
             TempFileNamed aTempFile(u"", true, u".xml");
             OUString aTempFileURL( aTempFile.GetURL() );
 
-            Reference< XImportFilter > xImporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
+            Reference< XImportFilter > xImporter( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.documentconversion.XSLTFilter"_ustr, mxContext ), UNO_QUERY );
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
@@ -589,9 +589,9 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
                 Sequence< PropertyValue > aSourceData{
-                    comphelper::makePropertyValue("InputStream", xIS),
-                    comphelper::makePropertyValue("FileName", rURL),
-                    comphelper::makePropertyValue("Indent", true)
+                    comphelper::makePropertyValue(u"InputStream"_ustr, xIS),
+                    comphelper::makePropertyValue(u"FileName"_ustr, rURL),
+                    comphelper::makePropertyValue(u"Indent"_ustr, true)
                 };
 
                 Reference< XWriter > xWriter = Writer::create( mxContext );

@@ -34,7 +34,7 @@ void CGM::ImplDoClass7()
         case 0x02 :
         {
             if (mpEndValidSource - mpSource < 12)
-                throw css::uno::Exception("attempt to read past end of input", nullptr);
+                throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
             sal_uInt16* pTemp = reinterpret_cast<sal_uInt16*>(mpSource);
             sal_uInt16 nOpcode = pTemp[ 4 ];
@@ -48,7 +48,7 @@ void CGM::ImplDoClass7()
                     case 0x000 : /*AppData - Beginning of File Opcodes*/
                     {
                         if (mpEndValidSource - pAppData < 4)
-                            throw css::uno::Exception("attempt to read past end of input", nullptr);
+                            throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                         if ( mpChart == nullptr )
                             mpChart.reset( new CGMChart );
@@ -79,7 +79,7 @@ void CGM::ImplDoClass7()
                     case 0x264 : /*AppData - DATANODE*/
                     {
                         if (o3tl::make_unsigned(mpEndValidSource - pAppData) < sizeof(DataNode))
-                            throw css::uno::Exception("attempt to read past end of input", nullptr);
+                            throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                         mpChart->mDataNode[ 0 ] = *reinterpret_cast<DataNode*>( pAppData );
                         sal_Int8 nZoneEnum = mpChart->mDataNode[ 0 ].nZoneEnum;
@@ -90,7 +90,7 @@ void CGM::ImplDoClass7()
                     case 0x2BE : /*AppData - SHWSLIDEREC*/
                     {
                         if (mpEndValidSource - pAppData < 17)
-                            throw css::uno::Exception("attempt to read past end of input", nullptr);
+                            throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                         if ( pAppData[ 16 ] == 0 )      // a blank template ?
                         {
@@ -118,7 +118,7 @@ void CGM::ImplDoClass7()
                     case 0x320 : /*AppData - TEXT*/
                     {
                         if (mpEndValidSource - pAppData < 9)
-                            throw css::uno::Exception("attempt to read past end of input", nullptr);
+                            throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
                         std::unique_ptr<TextEntry> pTextEntry(new TextEntry);
                         pTextEntry->nTypeOfText = *reinterpret_cast<sal_uInt16*>( pAppData );

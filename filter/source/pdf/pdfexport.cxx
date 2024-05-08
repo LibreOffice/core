@@ -95,7 +95,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
 
     mbIsRedactMode              ( false ),
     maWatermarkColor            ( COL_LIGHTGREEN ),
-    maWatermarkFontName         ( "Helvetica" )
+    maWatermarkFontName         ( u"Helvetica"_ustr )
 {
 }
 
@@ -271,15 +271,15 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
         return;
 
     std::vector<beans::PropertyValue> aArgs {
-        comphelper::makePropertyValue("FilterName", OUString()),
-        comphelper::makePropertyValue("OutputStream", xStream),
+        comphelper::makePropertyValue(u"FilterName"_ustr, OUString()),
+        comphelper::makePropertyValue(u"OutputStream"_ustr, xStream),
     };
     if (m_aPreparedPassword.hasElements())
-        aArgs.push_back(comphelper::makePropertyValue("EncryptionData", m_aPreparedPassword));
+        aArgs.push_back(comphelper::makePropertyValue(u"EncryptionData"_ustr, m_aPreparedPassword));
 
     try
     {
-        xStore->storeToURL("private:stream", comphelper::containerToSequence(aArgs));
+        xStore->storeToURL(u"private:stream"_ustr, comphelper::containerToSequence(aArgs));
     }
     catch( const IOException& )
     {
@@ -306,12 +306,12 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                     configuration::theDefaultProvider::get( xContext );
                 beans::NamedValue aPathProp;
                 aPathProp.Name = "nodepath";
-                aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/" );
+                aPathProp.Value <<= u"/org.openoffice.Setup/Office/Factories/"_ustr;
                 uno::Sequence< uno::Any > aArgs{ uno::Any(aPathProp) };
 
                 Reference< container::XNameAccess > xSOFConfig(
                     xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess", aArgs ),
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs ),
                     uno::UNO_QUERY );
 
                 Reference< container::XNameAccess > xApplConfig;
@@ -319,13 +319,13 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 if ( xApplConfig.is() )
                 {
                     OUString aFilterName;
-                    xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
+                    xApplConfig->getByName( u"ooSetupFactoryActualFilter"_ustr ) >>= aFilterName;
                     if( !aFilterName.isEmpty() )
                     {
                         // find the related type name
                         OUString aTypeName;
                         Reference< container::XNameAccess > xFilterFactory(
-                            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
+                            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, xContext),
                             uno::UNO_QUERY );
 
                         Sequence< beans::PropertyValue > aFilterData;
@@ -338,7 +338,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                         {
                             // find the mediatype
                             Reference< container::XNameAccess > xTypeDetection(
-                                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+                                xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
                                 UNO_QUERY );
 
                             Sequence< beans::PropertyValue > aTypeData;
@@ -464,15 +464,15 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
             {
-                if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
+                if ( xInfo->supportsService( u"com.sun.star.presentation.PresentationDocument"_ustr ) )
                     aCreator = u"Impress"_ustr;
-                else if ( xInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
+                else if ( xInfo->supportsService( u"com.sun.star.drawing.DrawingDocument"_ustr ) )
                     aCreator = u"Draw"_ustr;
-                else if ( xInfo->supportsService( "com.sun.star.text.TextDocument" ) )
+                else if ( xInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ) )
                     aCreator = u"Writer"_ustr;
-                else if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+                else if ( xInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
                     aCreator = u"Calc"_ustr;
-                else if ( xInfo->supportsService( "com.sun.star.formula.FormulaProperties"  ) )
+                else if ( xInfo->supportsService( u"com.sun.star.formula.FormulaProperties"_ustr  ) )
                     aCreator = u"Math"_ustr;
             }
 
@@ -504,7 +504,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             if (!comphelper::IsFuzzing())
             {
                 OUString arch;
-                auto const ok = rtl::Bootstrap::get("_ARCH", arch);
+                auto const ok = rtl::Bootstrap::get(u"_ARCH"_ustr, arch);
                 assert(ok); (void) ok;
                 // getting the string for the producer
                 OUString aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
@@ -1012,15 +1012,15 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aPDFExtOutDevData.SetIsExportNamedDestinations( bExportBmkToDest );
 
                 std::vector<PropertyValue> aRenderOptionsVector{
-                    comphelper::makePropertyValue("RenderDevice", uno::Reference<awt::XDevice>(xDevice)),
-                    comphelper::makePropertyValue("ExportNotesPages", false),
-                    comphelper::makePropertyValue("IsFirstPage", true),
-                    comphelper::makePropertyValue("IsLastPage", false),
-                    comphelper::makePropertyValue("IsSkipEmptyPages", mbSkipEmptyPages),
-                    comphelper::makePropertyValue("PageRange", aPageRange),
-                    comphelper::makePropertyValue("ExportPlaceholders", bExportPlaceholders),
-                    comphelper::makePropertyValue("SinglePageSheets", bSinglePageSheets),
-                    comphelper::makePropertyValue("ExportNotesInMargin", bExportNotesInMargin)
+                    comphelper::makePropertyValue(u"RenderDevice"_ustr, uno::Reference<awt::XDevice>(xDevice)),
+                    comphelper::makePropertyValue(u"ExportNotesPages"_ustr, false),
+                    comphelper::makePropertyValue(u"IsFirstPage"_ustr, true),
+                    comphelper::makePropertyValue(u"IsLastPage"_ustr, false),
+                    comphelper::makePropertyValue(u"IsSkipEmptyPages"_ustr, mbSkipEmptyPages),
+                    comphelper::makePropertyValue(u"PageRange"_ustr, aPageRange),
+                    comphelper::makePropertyValue(u"ExportPlaceholders"_ustr, bExportPlaceholders),
+                    comphelper::makePropertyValue(u"SinglePageSheets"_ustr, bSinglePageSheets),
+                    comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, bExportNotesInMargin)
                 };
                 if (oMathTitleRow)
                     aRenderOptionsVector.push_back(*oMathTitleRow);
@@ -1379,7 +1379,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     // Maximum number of characters in one line.
     // it is set to 21 to make it look like tiled watermarks as online in secure view
     const int lineLength = 21;
-    vcl::Font aFont( "Liberation Sans", Size( 0, 40 ) );
+    vcl::Font aFont( u"Liberation Sans"_ustr, Size( 0, 40 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );

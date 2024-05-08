@@ -55,8 +55,8 @@ FilterCache& GetTheFilterCache()
 FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
-    static const css::uno::Sequence<OUString> sServiceNames { "com.sun.star.document.FilterFactory" };
-    BaseContainer::init("com.sun.star.comp.filter.config.FilterFactory"   ,
+    static const css::uno::Sequence<OUString> sServiceNames { u"com.sun.star.document.FilterFactory"_ustr };
+    BaseContainer::init(u"com.sun.star.comp.filter.config.FilterFactory"_ustr   ,
                          sServiceNames,
                         FilterCache::E_FILTER                         );
 }
@@ -143,7 +143,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // reject old deprecated queries ...
     if (sQuery.startsWith("_filterquery_"))
         throw css::uno::RuntimeException(
-                    "Use of deprecated and now unsupported query!",
+                    u"Use of deprecated and now unsupported query!"_ustr,
                     static_cast< css::container::XContainerQuery* >(this));
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."

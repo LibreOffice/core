@@ -115,14 +115,14 @@ const uno::Reference< container::XIndexContainer >&
 
             uno::Reference< uno::XInterface >  xCreate =
                 rServiceFactory->createInstance(
-                    "com.sun.star.form.component.Form" );
+                    u"com.sun.star.form.component.Form"_ustr );
             if( xCreate.is() )
             {
                 uno::Reference< beans::XPropertySet > xFormPropSet( xCreate,
                     uno::UNO_QUERY );
 
                 uno::Any aTmp(&sName,cppu::UnoType<OUString>::get());
-                xFormPropSet->setPropertyValue( "Name", aTmp );
+                xFormPropSet->setPropertyValue( u"Name"_ustr, aTmp );
 
                 uno::Reference< form::XForm > xForm( xCreate, uno::UNO_QUERY );
                 OSL_ENSURE(xForm.is(), "no Form?");

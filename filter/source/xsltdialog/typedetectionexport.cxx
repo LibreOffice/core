@@ -97,10 +97,10 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
         xHandler->setOutputStream( xOS );
 
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( "xmlns:oor", "http://openoffice.org/2001/registry" );
-        pAttrList->AddAttribute ( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
-        pAttrList->AddAttribute ( sName, "TypeDetection" );
-        pAttrList->AddAttribute ( "oor:package", "org.openoffice.Office" );
+        pAttrList->AddAttribute ( u"xmlns:oor"_ustr, u"http://openoffice.org/2001/registry"_ustr );
+        pAttrList->AddAttribute ( u"xmlns:xs"_ustr, u"http://www.w3.org/2001/XMLSchema"_ustr );
+        pAttrList->AddAttribute ( sName, u"TypeDetection"_ustr );
+        pAttrList->AddAttribute ( u"oor:package"_ustr, u"org.openoffice.Office"_ustr );
 
         xHandler->startDocument();
         xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -109,7 +109,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
         // export types
         {
             pAttrList = new ::comphelper::AttributeList;
-            pAttrList->AddAttribute ( sName, "Types" );
+            pAttrList->AddAttribute ( sName, u"Types"_ustr );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, pAttrList );
 
@@ -140,7 +140,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
         // export filters
         {
             pAttrList = new ::comphelper::AttributeList;
-            pAttrList->AddAttribute ( sName, "Filters" );
+            pAttrList->AddAttribute ( sName, u"Filters"_ustr );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, pAttrList );
 
@@ -211,8 +211,8 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
         static constexpr OUString sWhiteSpace          ( u" "_ustr );
 
         rtl::Reference<::comphelper::AttributeList>pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( "oor:name", rName );
-        pAttrList->AddAttribute ( "oor:type", "xs:string" );
+        pAttrList->AddAttribute ( u"oor:name"_ustr, rName );
+        pAttrList->AddAttribute ( u"oor:type"_ustr, u"xs:string"_ustr );
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sProp, pAttrList );
@@ -238,13 +238,13 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
         static constexpr OUString sWhiteSpace          ( u" "_ustr );
 
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( "oor:name", rName );
-        pAttrList->AddAttribute ( "oor:type", "xs:string" );
+        pAttrList->AddAttribute ( u"oor:name"_ustr, rName );
+        pAttrList->AddAttribute ( u"oor:type"_ustr, u"xs:string"_ustr );
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sProp, pAttrList );
         pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( "xml:lang", "en-US" );
+        pAttrList->AddAttribute ( u"xml:lang"_ustr, u"en-US"_ustr );
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sValue, pAttrList );
         xHandler->characters( rValue );

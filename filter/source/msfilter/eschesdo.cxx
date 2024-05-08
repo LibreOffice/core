@@ -161,9 +161,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference< XPropertySetInfo > xPropInfo = xPropertySet->getPropertySetInfo();
-                if ( xPropInfo.is() && xPropInfo->hasPropertyByName( "InteropGrabBag" ) )
+                if ( xPropInfo.is() && xPropInfo->hasPropertyByName( u"InteropGrabBag"_ustr ) )
                 {
-                    xPropertySet->getPropertyValue( "InteropGrabBag" ) >>= aGrabBag;
+                    xPropertySet->getPropertyValue( u"InteropGrabBag"_ustr ) >>= aGrabBag;
                     for (const beans::PropertyValue& rProp : aGrabBag)
                     {
                         if (rProp.Name == "mso-edit-as")
@@ -202,13 +202,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             break;
         }
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( "RotateAngle" ));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( u"RotateAngle"_ustr ));
 
-        if( ( rObj.ImplGetPropertyValue( "IsFontwork" ) &&
+        if( ( rObj.ImplGetPropertyValue( u"IsFontwork"_ustr ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType() == "drawing.Measure" )
         {
-            rObj.SetType("drawing.dontknow");
+            rObj.SetType(u"drawing.dontknow"_ustr);
         }
 
         const css::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
@@ -242,7 +242,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
 
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"MetaFile"_ustr, false ) )
                 {
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
@@ -266,8 +266,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if(xPropSet.is())
                 {
                     uno::Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
-                    if ( xPropInfo.is() && xPropInfo->hasPropertyByName("FillStyle"))
-                        xPropSet->getPropertyValue("FillStyle") >>= eFS;
+                    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(u"FillStyle"_ustr))
+                        xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFS;
                 }
 
                 if (eFS == drawing::FillStyle_BITMAP && eShapeType == mso_sptMax)
@@ -275,7 +275,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     // We can't map this custom shape to a DOC preset and it has a bitmap fill.
                     // Make sure that at least the bitmap fill is not lost.
                     addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false, true, true, bOOxmlExport ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"Bitmap"_ustr, false, true, true, bOOxmlExport ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
                 else
@@ -296,7 +296,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.Rectangle" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            sal_Int32 nRadius = rObj.ImplGetInt32PropertyValue("CornerRadius");
+            sal_Int32 nRadius = rObj.ImplGetInt32PropertyValue(u"CornerRadius"_ustr);
             if( nRadius )
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();
@@ -325,7 +325,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             CircleKind  eCircleKind = CircleKind_FULL;
             PolyStyle   ePolyKind = PolyStyle();
-            if ( rObj.ImplGetPropertyValue( "CircleKind" ) )
+            if ( rObj.ImplGetPropertyValue( u"CircleKind"_ustr ) )
             {
                 eCircleKind = *o3tl::doAccess<CircleKind>(rObj.GetUsrAny());
                 switch ( eCircleKind )
@@ -360,10 +360,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             else
             {
                 sal_Int32 nStartAngle, nEndAngle;
-                if ( !rObj.ImplGetPropertyValue( "CircleStartAngle" ) )
+                if ( !rObj.ImplGetPropertyValue( u"CircleStartAngle"_ustr ) )
                     break;
                 nStartAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
-                if( !rObj.ImplGetPropertyValue( "CircleEndAngle" ) )
+                if( !rObj.ImplGetPropertyValue( u"CircleEndAngle"_ustr ) )
                     break;
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
@@ -422,10 +422,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if (xPropInfo.is() && bOOxmlExport)
             {
                 bool bInline = false;
-                if (xPropInfo->hasPropertyByName("AnchorType"))
+                if (xPropInfo->hasPropertyByName(u"AnchorType"_ustr))
                 {
                     text::TextContentAnchorType eAnchorType;
-                    xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
+                    xPropSet->getPropertyValue(u"AnchorType"_ustr) >>= eAnchorType;
                     bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
                 }
 
@@ -555,7 +555,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                        have to create a simple Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                     */
                     addShape( ESCHER_ShpInst_Rectangle, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Graphic", true, true, false ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"Graphic"_ustr, true, true, false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                         aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -571,7 +571,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 else
                 {
                     addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Graphic", false, true, true, bOOxmlExport ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"Graphic"_ustr, false, true, true, bOOxmlExport ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
@@ -640,13 +640,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                  'D' == rObj.GetType()[9] )   // drawing.3D
         {
             // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
-            if ( !rObj.ImplGetPropertyValue( "Bitmap" ) )
+            if ( !rObj.ImplGetPropertyValue( u"Bitmap"_ustr ) )
                 break;
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
 
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"Bitmap"_ustr, false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType() == "drawing.Caption" )
@@ -654,7 +654,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             addShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"MetaFile"_ustr, false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType() == "drawing.dontknow" )
@@ -662,7 +662,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, u"MetaFile"_ustr, false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else
@@ -672,7 +672,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         aPropOpt.CreateShadowProperties( rObj.mXPropSet );
 
         if( SDRLAYER_NOTFOUND != mpEscherEx->GetHellLayerId() &&
-            rObj.ImplGetPropertyValue( "LayerID" ) &&
+            rObj.ImplGetPropertyValue( u"LayerID"_ustr ) &&
             *o3tl::doAccess<sal_Int16>(rObj.GetUsrAny()) == mpEscherEx->GetHellLayerId().get() )
         {
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
@@ -734,7 +734,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj )
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( "RotateAngle" ));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( u"RotateAngle"_ustr ));
         sal_Int32 nAngle = rObj.GetAngle();
         if( rObj.GetType() == "drawing.Line" )
         {
@@ -1074,7 +1074,7 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
 
                 if(xPropSet.is())
                 {
-                    const Any aAny = xPropSet->getPropertyValue("Transformation");
+                    const Any aAny = xPropSet->getPropertyValue(u"Transformation"_ustr);
 
                     if(aAny.hasValue())
                     {
@@ -1179,10 +1179,10 @@ void ImplEESdrObject::Init()
         SetRect(ImplEESdrWriter::ImplMapPoint(aOldP), ImplEESdrWriter::ImplMapSize(aOldS));
     }
 
-    if( ImplGetPropertyValue( "IsPresentationObject" ) )
+    if( ImplGetPropertyValue( u"IsPresentationObject"_ustr ) )
         mbPresObj = ::cppu::any2bool( mAny );
 
-    if( mbPresObj && ImplGetPropertyValue( "IsEmptyPresentationObject" ) )
+    if( mbPresObj && ImplGetPropertyValue( u"IsEmptyPresentationObject"_ustr ) )
         mbEmptyPresObj = ::cppu::any2bool( mAny );
 
     mbValid = true;

@@ -74,7 +74,7 @@ ErrCode SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 
 OUString SvxImportMSVBasic::GetMSBasicStorageName()
 {
-    return "_MS_VBA_Macros";
+    return u"_MS_VBA_Macros"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

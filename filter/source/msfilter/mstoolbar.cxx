@@ -133,14 +133,14 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_SET_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
-        xProps->setPropertyValue("UIName", uno::Any( rName ) );
+        xProps->setPropertyValue(u"UIName"_ustr, uno::Any( rName ) );
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu{
-                comphelper::makePropertyValue("CommandURL", "vnd.openoffice.org:" + rName),
-                comphelper::makePropertyValue("Label", rName),
-                comphelper::makePropertyValue("ItemDescriptorContainer", xMenuDesc),
-                comphelper::makePropertyValue("Type", sal_Int32( 0 ))
+                comphelper::makePropertyValue(u"CommandURL"_ustr, "vnd.openoffice.org:" + rName),
+                comphelper::makePropertyValue(u"Label"_ustr, rName),
+                comphelper::makePropertyValue(u"ItemDescriptorContainer"_ustr, xMenuDesc),
+                comphelper::makePropertyValue(u"Type"_ustr, sal_Int32( 0 ))
             };
 
             xPopup->insertByIndex( xPopup->getCount(), uno::Any( aPopupMenu ) );

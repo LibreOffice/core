@@ -43,10 +43,10 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
         aAnsiUserType = "OLE Package"_ostr;
         aName = SvGlobalName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
     }
-    pStorage->SetClass(aName, SotClipboardFormatId::NONE, "");
+    pStorage->SetClass(aName, SotClipboardFormatId::NONE, u""_ustr);
 
     // [MS-OLEDS] 2.3.7 CompObjHeader
-    rtl::Reference<SotStorageStream> pCompObj = pStorage->OpenSotStream("\1CompObj");
+    rtl::Reference<SotStorageStream> pCompObj = pStorage->OpenSotStream(u"\1CompObj"_ustr);
     // Reserved1
     pCompObj->WriteUInt32(0xfffe0001);
     // Version
@@ -80,7 +80,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
     pCompObj.clear();
 
     // [MS-OLEDS] 2.3.6 OLENativeStream
-    rtl::Reference<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
+    rtl::Reference<SotStorageStream> pOleNative = pStorage->OpenSotStream(u"\1Ole10Native"_ustr);
     // NativeDataSize
     pOleNative->WriteUInt32(nOle1Size);
     pOleNative->WriteStream(rOle1, nOle1Size);

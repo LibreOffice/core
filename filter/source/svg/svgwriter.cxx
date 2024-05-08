@@ -212,10 +212,10 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
         }
     }
     else
-        AddColorAttr( aXMLAttrFill, "fill-opacity", rFillColor );
+        AddColorAttr( aXMLAttrFill, u"fill-opacity"_ustr, rFillColor );
 
     // Stroke
-    AddColorAttr( "stroke", "stroke-opacity", rLineColor );
+    AddColorAttr( u"stroke"_ustr, u"stroke-opacity"_ustr, rLineColor );
 }
 
 
@@ -260,7 +260,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
 
                 aLinePoly.Rotate( aObjRectCenter, nAngle );
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, "userSpaceOnUse" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, u"userSpaceOnUse"_ustr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::number( aLinePoly[ 0 ].X() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::number( aLinePoly[ 0 ].Y() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::number( aLinePoly[ 1 ].X() ) );
@@ -308,12 +308,12 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
                 const double    fCenterY = rObjRect.Top() + rObjRect.GetHeight() * rGradient.GetOfsY() * 0.01;
                 const double    fRadius = std::hypot(rObjRect.GetWidth(), rObjRect.GetHeight()) * 0.5;
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, "userSpaceOnUse" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, u"userSpaceOnUse"_ustr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, OUString::number( ImplRound( fCenterX ) ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCY, OUString::number( ImplRound( fCenterY ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "r", OUString::number( ImplRound( fRadius ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"r"_ustr, OUString::number( ImplRound( fRadius ) ) );
 
-                apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, "radialGradient", true, true ) );
+                apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, u"radialGradient"_ustr, true, true ) );
 
                 // write stop values
                 ImplGetColorStr( aEndColor, aColorStr );
@@ -980,30 +980,30 @@ bool SVGTextWriter::nextParagraph()
 #if OSL_DEBUG_LEVEL > 0
         OUString sInfo;
 #endif
-        if( xServiceInfo->supportsService( "com.sun.star.text.Paragraph" ) )
+        if( xServiceInfo->supportsService( u"com.sun.star.text.Paragraph"_ustr ) )
         {
             mrCurrentTextParagraph.set( xTextContent );
             Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-            if( xPropSetInfo->hasPropertyByName( "NumberingLevel" ) )
+            if( xPropSetInfo->hasPropertyByName( u"NumberingLevel"_ustr ) )
             {
                 sal_Int16 nListLevel = 0;
-                if( xPropSet->getPropertyValue( "NumberingLevel" ) >>= nListLevel )
+                if( xPropSet->getPropertyValue( u"NumberingLevel"_ustr ) >>= nListLevel )
                 {
                     mbIsNewListItem = true;
 #if OSL_DEBUG_LEVEL > 0
                     sInfo = "NumberingLevel: " + OUString::number( nListLevel );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", sInfo );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"style"_ustr, sInfo );
 #endif
                     Reference< XIndexReplace > xNumRules;
-                    if( xPropSetInfo->hasPropertyByName( "NumberingRules" ) )
+                    if( xPropSetInfo->hasPropertyByName( u"NumberingRules"_ustr ) )
                     {
-                        xPropSet->getPropertyValue( "NumberingRules" ) >>= xNumRules;
+                        xPropSet->getPropertyValue( u"NumberingRules"_ustr ) >>= xNumRules;
                     }
                     if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
                     {
                         bool bIsNumbered = true;
-                        OUString sNumberingIsNumber("NumberingIsNumber");
+                        OUString sNumberingIsNumber(u"NumberingIsNumber"_ustr);
                         if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
                         {
                             if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= bIsNumbered ) )
@@ -1015,7 +1015,7 @@ bool SVGTextWriter::nextParagraph()
                             if( bIsNumbered )
                             {
                                 sInfo = "true";
-                                mrExport.AddAttribute( XML_NAMESPACE_NONE, "is-numbered", sInfo );
+                                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"is-numbered"_ustr, sInfo );
                             }
 #endif
                         }
@@ -1060,7 +1060,7 @@ bool SVGTextWriter::nextParagraph()
                                         mcBulletChar = cBullet;
 #if OSL_DEBUG_LEVEL > 0
                                         sInfo = OUString::number( static_cast<sal_Int32>(cBullet) );
-                                        mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
+                                        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"bullet-char"_ustr, sInfo );
 #endif
                                     }
 
@@ -1082,7 +1082,7 @@ bool SVGTextWriter::nextParagraph()
             sInfo = "Paragraph";
 #endif
         }
-        else if( xServiceInfo->supportsService( "com.sun.star.text.Table" ) )
+        else if( xServiceInfo->supportsService( u"com.sun.star.text.Table"_ustr ) )
         {
             OSL_FAIL( "SVGTextWriter::nextParagraph: text tables are not handled." );
 #if OSL_DEBUG_LEVEL > 0
@@ -1095,8 +1095,8 @@ bool SVGTextWriter::nextParagraph()
             return false;
         }
 #if OSL_DEBUG_LEVEL > 0
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sInfo );
-        SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, sInfo );
+        SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, u"desc"_ustr, mbIWS, mbIWS );
 #endif
     }
     else
@@ -1113,13 +1113,13 @@ bool SVGTextWriter::nextParagraph()
             if ( xRange.is() && xRange->getString().isEmpty() )
             {
                 endTextParagraph();
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextParagraph" );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"TextParagraph"_ustr );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, rParagraphId );
                 mpTextParagraphElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS ));
             }
             else
             {
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, rParagraphId );
             }
     }
     return true;
@@ -1138,13 +1138,13 @@ bool SVGTextWriter::nextTextPortion()
     Reference< XPropertySetInfo > xPortionPropInfo( xPortionPropSet->getPropertySetInfo() );
     Reference < XTextRange > xPortionTextRange( xPortionPropSet, UNO_QUERY);
     if( !xPortionPropSet || !xPortionPropInfo
-            || !xPortionPropInfo->hasPropertyByName( "TextPortionType" ) )
+            || !xPortionPropInfo->hasPropertyByName( u"TextPortionType"_ustr ) )
         return true;
 
 #if OSL_DEBUG_LEVEL > 0
     OUString sInfo;
     OUString sPortionType;
-    if( xPortionPropSet->getPropertyValue( "TextPortionType" ) >>= sPortionType )
+    if( xPortionPropSet->getPropertyValue( u"TextPortionType"_ustr ) >>= sPortionType )
     {
         sInfo = "type: " + sPortionType + "; ";
     }
@@ -1160,9 +1160,9 @@ bool SVGTextWriter::nextTextPortion()
         mrCurrentTextPortion.set( xPortionTextRange );
 
         Reference < XPropertySet > xRangePropSet( xPortionTextRange, UNO_QUERY );
-        if( xRangePropSet.is() && xRangePropSet->getPropertySetInfo()->hasPropertyByName( "TextField" ) )
+        if( xRangePropSet.is() && xRangePropSet->getPropertySetInfo()->hasPropertyByName( u"TextField"_ustr ) )
         {
-            Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
+            Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( u"TextField"_ustr ), UNO_QUERY );
             if( xTextField.is() )
             {
                 static constexpr OUString sServicePrefix(u"com.sun.star.text.textfield."_ustr);
@@ -1213,10 +1213,10 @@ bool SVGTextWriter::nextTextPortion()
                             // Trying to get a property value on such field would cause a runtime exception.
                             // So the hasPropertyByName check is needed.
                             bool bIsFixed = true;
-                            if( xPropSetInfo->hasPropertyByName("IsFixed") && ( ( xTextFieldPropSet->getPropertyValue( "IsFixed" ) ) >>= bIsFixed ) && !bIsFixed )
+                            if( xPropSetInfo->hasPropertyByName(u"IsFixed"_ustr) && ( ( xTextFieldPropSet->getPropertyValue( u"IsFixed"_ustr ) ) >>= bIsFixed ) && !bIsFixed )
                             {
                                 bool bIsDate = true;
-                                if( xPropSetInfo->hasPropertyByName("IsDate") && ( ( xTextFieldPropSet->getPropertyValue( "IsDate" ) ) >>= bIsDate ) )
+                                if( xPropSetInfo->hasPropertyByName(u"IsDate"_ustr) && ( ( xTextFieldPropSet->getPropertyValue( u"IsDate"_ustr ) ) >>= bIsDate ) )
                                 {
                                     msDateTimeType = bIsDate ? u"Date"_ustr : u"Time"_ustr;
                                 }
@@ -1268,8 +1268,8 @@ bool SVGTextWriter::nextTextPortion()
         }
     }
 #if OSL_DEBUG_LEVEL > 0
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextPortion" );
-    SvXMLElementExport aPortionElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"TextPortion"_ustr );
+    SvXMLElementExport aPortionElem( mrExport, XML_NAMESPACE_NONE, u"desc"_ustr, mbIWS, mbIWS );
     mrExport.GetDocHandler()->characters( sInfo );
 #endif
     return true;
@@ -1286,7 +1286,7 @@ void SVGTextWriter::startTextShape()
     {
         mbIsTextShapeStarted = true;
         maParentFont = vcl::Font();
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "SVGTextShape" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"SVGTextShape"_ustr );
 
         // if text is rotated, set transform matrix at text element
         const vcl::Font& rFont = mpVDev->GetFont();
@@ -1342,12 +1342,12 @@ void SVGTextWriter::startTextParagraph()
                     sNumberingType = "number-style";
                     break;
         }
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "ooo:numbering-type", sNumberingType );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "ListItem" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"ooo:numbering-type"_ustr, sNumberingType );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"ListItem"_ustr );
     }
     else
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextParagraph" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"TextParagraph"_ustr );
     }
     maParentFont = vcl::Font();
     mpTextParagraphElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS ));
@@ -1374,7 +1374,7 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
 {
     endTextPosition();
     mnTextWidth = 0;
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextPosition" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"TextPosition"_ustr );
     if( bExportX )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( maTextPos.X() ) );
     if( bExportY )
@@ -1395,8 +1395,8 @@ void SVGTextWriter::implExportHyperlinkIds()
 {
     if( !msHyperlinkIdList.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "HyperlinkIdList" );
-        SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", true, false );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"HyperlinkIdList"_ustr );
+        SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, u"desc"_ustr, true, false );
         mrExport.GetDocHandler()->characters( msHyperlinkIdList.trim() );
         msHyperlinkIdList.clear();
     }
@@ -1408,7 +1408,7 @@ void SVGTextWriter::implWriteBulletChars()
     if( maBulletListItemMap.empty() )
         return;
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChars" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"BulletChars"_ustr );
     SvXMLElementExport aGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
     OUString sId, sPosition, sScaling, sRefId;
@@ -1418,8 +1418,8 @@ void SVGTextWriter::implWriteBulletChars()
         // As id we use the id of the text portion placeholder with prefix
         // bullet-char-*
         sId = "bullet-char-" + bulletListItem.first;
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, sId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"BulletChar"_ustr );
         SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
         // <g transform="translate(x,y)" >
@@ -1430,7 +1430,7 @@ void SVGTextWriter::implWriteBulletChars()
             sPosition = "translate(" +
                         OUString::number( rInfo.aPos.X() ) +
                         "," + OUString::number( rInfo.aPos.Y() ) + ")";
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, u"transform"_ustr, sPosition );
 
             mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
 
@@ -1442,14 +1442,14 @@ void SVGTextWriter::implWriteBulletChars()
                 // Add size attribute through a scaling
                 sScaling = "scale(" + OUString::number( rInfo.aFont.GetFontHeight() ) +
                            "," + OUString::number( rInfo.aFont.GetFontHeight() )+ ")";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"transform"_ustr, sScaling );
 
                 // Add ref attribute
                 sRefId = "#bullet-char-template-" +
                          OUString::number( rInfo.cBulletChar );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
-                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, u"use"_ustr, true, true );
             }
             else
             {
@@ -1461,8 +1461,8 @@ void SVGTextWriter::implWriteBulletChars()
                 if (mpVDev->GetTextOutline(aPolyPolygon, aStr))
                 {
                     OUString aPathString(SVGActionWriter::GetPathString(aPolyPolygon, false));
-                    mrExport.AddAttribute(XML_NAMESPACE_NONE, "d", aPathString);
-                    SvXMLElementExport aPath(mrExport, XML_NAMESPACE_NONE, "path", true, true);
+                    mrExport.AddAttribute(XML_NAMESPACE_NONE, u"d"_ustr, aPathString);
+                    SvXMLElementExport aPath(mrExport, XML_NAMESPACE_NONE, u"path"_ustr, true, true);
                 }
                 mpVDev->Pop();
             }
@@ -1494,8 +1494,8 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction 
                    OUString::number( nId ) + ")";
 
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BitmapPlaceholder" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, sId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"BitmapPlaceholder"_ustr );
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
     }
     endTextPosition();
@@ -1507,7 +1507,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
     if( !(mpTextEmbeddedBitmapMtf && mpTextEmbeddedBitmapMtf->GetActionSize()) )
         return;
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmaps" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"EmbeddedBitmaps"_ustr );
     SvXMLElementExport aEmbBitmapGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
     const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
@@ -1553,8 +1553,8 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             // embedded bitmap id
             nId = SVGActionWriter::GetChecksum( pAction );
             OUString sId = "embedded-bitmap(" + msShapeId + "." + OUString::number( nId ) + ")";
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmap" );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, sId );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"EmbeddedBitmap"_ustr );
 
             SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
@@ -1572,7 +1572,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPoint.Y() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
-                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, u"use"_ustr, true, true );
             }
         } // close aEmbBitmapElem
     }
@@ -1611,7 +1611,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
                     if( mbIsURLField && sContent.isEmpty() )
                     {
                         Reference < XPropertySet > xPropSet( mrCurrentTextPortion, UNO_QUERY );
-                        Reference < XTextField > xTextField( xPropSet->getPropertyValue( "TextField" ), UNO_QUERY );
+                        Reference < XTextField > xTextField( xPropSet->getPropertyValue( u"TextField"_ustr ), UNO_QUERY );
                         sContent = xTextField->getPresentation( /* show command: */ false );
                         if( sContent.isEmpty() )
                             OSL_FAIL( "SVGTextWriter::writeTextPortion: content of URL TextField is empty." );
@@ -1732,8 +1732,8 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
                 aBulletListItemInfo.cBulletChar = mcBulletChar;
 
                 // Make this text portion a bullet placeholder
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletPlaceholder" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, sId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"BulletPlaceholder"_ustr );
                 SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
                 return;
             }
@@ -1743,12 +1743,12 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     const OUString& rTextPortionId = implGetValidIDFromInterface( Reference<XInterface>(mrCurrentTextPortion, UNO_QUERY) );
     if( !rTextPortionId.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rTextPortionId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"id"_ustr, rTextPortionId );
     }
 
     if( mbIsPlaceholderShape )
     {
-        OUString sClass = "PlaceholderText";
+        OUString sClass = u"PlaceholderText"_ustr;
         // This case handles Date or Time text field inserted by the user
         // on both page/master page. It doesn't handle the standard DateTime field.
         if( !msDateTimeType.isEmpty() )
@@ -1759,14 +1759,14 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         {
             sClass += " " + msTextFieldType;
         }
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sClass );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, sClass );
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
 
     if (!maTextOpacity.isEmpty())
     {
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "fill-opacity", maTextOpacity);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"fill-opacity"_ustr, maTextOpacity);
     }
 
     mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, aTextColor );
@@ -1774,26 +1774,26 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     // <a> tag for link should be the innermost tag, inside <tspan>
     if( !mbIsPlaceholderShape && mbIsURLField && !msUrl.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "UrlField" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"UrlField"_ustr );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
 
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
         {
-            SvXMLElementExport aSVGAElem( mrExport, XML_NAMESPACE_NONE, "a", mbIWS, mbIWS );
+            SvXMLElementExport aSVGAElem( mrExport, XML_NAMESPACE_NONE, u"a"_ustr, mbIWS, mbIWS );
             mrExport.GetDocHandler()->characters( rText );
         }
     }
     else if ( !msPageCount.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PageCount" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"PageCount"_ustr );
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( msPageCount );
     }
     else
     {
         // Without the following attribute Google Chrome does not render leading spaces
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", "white-space: pre" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"style"_ustr, u"white-space: pre"_ustr );
 
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( rText );
@@ -1997,7 +1997,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
     }
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "line", true, true );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, u"line"_ustr, true, true );
     }
 }
 
@@ -2019,7 +2019,7 @@ void SVGActionWriter::ImplWriteRect( const tools::Rectangle& rRect, tools::Long 
     if( nRadY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::number( ImplMap( nRadY ) ) );
 
-    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "rect", true, true );
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, u"rect"_ustr, true, true );
 }
 
 
@@ -2035,7 +2035,7 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, tools::Long nRadX,
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::number( ImplMap( nRadY ) ) );
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "ellipse", true, true );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, u"ellipse"_ustr, true, true );
     }
 }
 
@@ -2054,17 +2054,17 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         case basegfx::B2DLineJoin::NONE:
         case basegfx::B2DLineJoin::Miter:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, u"miter"_ustr);
             break;
         }
         case basegfx::B2DLineJoin::Bevel:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, u"bevel"_ustr);
             break;
         }
         case basegfx::B2DLineJoin::Round:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, u"round"_ustr);
             break;
         }
     }
@@ -2081,12 +2081,12 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         }
         case css::drawing::LineCap_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, u"round"_ustr);
             break;
         }
         case css::drawing::LineCap_SQUARE:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, u"square"_ustr);
             break;
         }
     }
@@ -2105,11 +2105,11 @@ void SVGActionWriter::ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly,
         aPolyPoly = rPolyPoly;
 
     // add path data attribute
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", GetPathString( aPolyPoly, bLineOnly ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"d"_ustr, GetPathString( aPolyPoly, bLineOnly ) );
 
     {
         // write polyline/polygon element
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "path", true, true );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, u"path"_ustr, true, true );
     }
 }
 
@@ -2149,12 +2149,12 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
         }
         case basegfx::B2DLineJoin::Bevel:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, u"bevel"_ustr);
             break;
         }
         case basegfx::B2DLineJoin::Round:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, u"round"_ustr);
             break;
         }
     }
@@ -2171,12 +2171,12 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
         }
         case css::drawing::LineCap_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, u"round"_ustr);
             break;
         }
         case css::drawing::LineCap_SQUARE:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, u"square"_ustr);
             break;
         }
     }
@@ -2195,7 +2195,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
             aDashArrayStr.append( nDash );
         }
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "stroke-dasharray", aDashArrayStr.makeStringAndClear() );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"stroke-dasharray"_ustr, aDashArrayStr.makeStringAndClear() );
     }
 
     ImplWritePolyPolygon( aPolyPoly, bLineOnly, false );
@@ -2211,8 +2211,8 @@ void SVGActionWriter::ImplCreateClipPathDef( const tools::PolyPolygon& rPolyPoly
 
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aClipPathId );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
-        SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, "clipPath", true, true );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"clipPathUnits"_ustr, u"userSpaceOnUse"_ustr );
+        SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, u"clipPath"_ustr, true, true );
 
         ImplWritePolyPolygon(rPolyPoly, false);
     }
@@ -2226,7 +2226,7 @@ void SVGActionWriter::ImplStartClipRegion(sal_Int32 nClipPathId)
         return;
 
     OUString aUrl = OUString::Concat("url(#") + aPrefixClipPathId + OUString::number( nClipPathId ) + ")";
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "clip-path", aUrl );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, u"clip-path"_ustr, aUrl );
     mpCurrentClipRegionElem.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true ) );
 }
 
@@ -2275,10 +2275,10 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aRect.GetWidth() ) );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aRect.GetHeight() ) );
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "patternUnits", OUString( "userSpaceOnUse") );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, u"patternUnits"_ustr, u"userSpaceOnUse"_ustr );
 
         {
-            SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, "pattern", true, true );
+            SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, u"pattern"_ustr, true, true );
 
             // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
             // So we need to adjust the pattern coordinate.
@@ -2302,7 +2302,7 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                     aGradient.AddGradientActions( rPolyPoly.GetBoundRect(), aTmpMtf );
                 }
 
-                ImplWriteActions( aTmpMtf, nWriteFlags, "" );
+                ImplWriteActions( aTmpMtf, nWriteFlags, u""_ustr );
             }
         }
     }
@@ -2368,7 +2368,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::number( aPoly[ 1 ].Y() ) );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
-                                   OUString( "userSpaceOnUse" ) );
+                                   u"userSpaceOnUse"_ustr );
         }
 
         {
@@ -2487,7 +2487,7 @@ void SVGActionWriter::StartMask(const Point& rDestPt, const Size& rDestSize,
 
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrId, aMaskId);
             {
-                SvXMLElementExport aElemMask(mrExport, XML_NAMESPACE_NONE, "mask", true, true);
+                SvXMLElementExport aElemMask(mrExport, XML_NAMESPACE_NONE, u"mask"_ustr, true, true);
 
                 const tools::PolyPolygon aPolyPolygon(tools::PolyPolygon(tools::Rectangle(rDestPt, rDestSize)));
                 Gradient aGradient(rGradient);
@@ -2555,7 +2555,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
         }
 
         mpVDev->Push();
-        ImplWriteActions( rMtf, nWriteFlags, "" );
+        ImplWriteActions( rMtf, nWriteFlags, u""_ustr );
         mpVDev->Pop();
     }
 }
@@ -2713,7 +2713,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             {
                 sCleanTextContent = rText.copy( nFrom );
             }
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, u"class"_ustr, u"PlaceholderText"_ustr );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPos.X() ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPos.Y() ) );
             {
@@ -2843,9 +2843,9 @@ void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShap
     }
 
     uno::Reference<graphic::XGraphic> xGraphic;
-    if (xPropertySet->getPropertySetInfo()->hasPropertyByName("Graphic"))
+    if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
     {
-        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     }
     rGraphic= Graphic(xGraphic);
 }
@@ -2890,7 +2890,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
             OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
-            SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+            SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, u"use"_ustr, true, true );
             return;
         }
     }
@@ -2991,11 +2991,11 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     if (!embedVideo)
     {
         // the image must be scaled to aSz in a non-uniform way
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "preserveAspectRatio", "none");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"preserveAspectRatio"_ustr, u"none"_ustr);
 
         mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear());
 
-        SvXMLElementExport aElem(mrExport, XML_NAMESPACE_NONE, "image", true, true);
+        SvXMLElementExport aElem(mrExport, XML_NAMESPACE_NONE, u"image"_ustr, true, true);
     }
     else
     {
@@ -3006,25 +3006,25 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         //         </video>
         //     </body>
         // </foreignObject>
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/2000/svg");
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "overflow", "visible");
-        SvXMLElementExport aForeignObject(mrExport, XML_NAMESPACE_NONE, "foreignObject", true,
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"xmlns"_ustr, u"http://www.w3.org/2000/svg"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"overflow"_ustr, u"visible"_ustr);
+        SvXMLElementExport aForeignObject(mrExport, XML_NAMESPACE_NONE, u"foreignObject"_ustr, true,
                                           true);
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/1999/xhtml");
-        SvXMLElementExport aBody(mrExport, XML_NAMESPACE_NONE, "body", true, true);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"xmlns"_ustr, u"http://www.w3.org/1999/xhtml"_ustr);
+        SvXMLElementExport aBody(mrExport, XML_NAMESPACE_NONE, u"body"_ustr, true, true);
 
         mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number(aSz.Width()));
         mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number(aSz.Height()));
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "autoplay", "autoplay");
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "controls", "controls");
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "loop", "loop");
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "preload", "auto");
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "poster", aBuffer.makeStringAndClear());
-        SvXMLElementExport aVideo(mrExport, XML_NAMESPACE_NONE, "video", true, true);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"autoplay"_ustr, u"autoplay"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"controls"_ustr, u"controls"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"loop"_ustr, u"loop"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"preload"_ustr, u"auto"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"poster"_ustr, aBuffer.makeStringAndClear());
+        SvXMLElementExport aVideo(mrExport, XML_NAMESPACE_NONE, u"video"_ustr, true, true);
 
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "src", pMediaObj->getTempURL());
-        mrExport.AddAttribute(XML_NAMESPACE_NONE, "type", "video/mp4"); //FIXME: set mime type.
-        SvXMLElementExport aSource(mrExport, XML_NAMESPACE_NONE, "source", true, true);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"src"_ustr, pMediaObj->getTempURL());
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"type"_ustr, u"video/mp4"_ustr); //FIXME: set mime type.
+        SvXMLElementExport aSource(mrExport, XML_NAMESPACE_NONE, u"source"_ustr, true, true);
     }
 }
 
@@ -3069,7 +3069,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             try
             {
                 SvXMLElementExport aElem( mrExport,
-                        XML_NAMESPACE_NONE, "desc", false, false );
+                        XML_NAMESPACE_NONE, u"desc"_ustr, false, false );
                 OUStringBuffer sType(OUString::number(static_cast<sal_uInt16>(nType)));
                 if (pAction && (nType == MetaActionType::COMMENT))
                 {
@@ -3792,7 +3792,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     OUString sRefId = "#" + OUString::fromUtf8( o3tl::getToken(sComment, 1, ' ') );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
-                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, u"use"_ustr, true, true );
                 }
             }
             break;
@@ -4151,11 +4151,11 @@ sal_Bool SVGWriter::supportsService(const OUString& sServiceName)
 }
 OUString SVGWriter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.SVGWriter";
+    return u"com.sun.star.comp.Draw.SVGWriter"_ustr;
 }
 css::uno::Sequence< OUString > SVGWriter::getSupportedServiceNames()
 {
-    return { "com.sun.star.svg.SVGWriter" };
+    return { u"com.sun.star.svg.SVGWriter"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

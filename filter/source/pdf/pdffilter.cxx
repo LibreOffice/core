@@ -96,53 +96,53 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     if ( !aFilterData.hasElements() )
     {
         FilterConfigItem aCfgItem( u"Office.Common/Filter/PDF/Export/" );
-        aCfgItem.ReadBool(  "UseLosslessCompression", false );
-        aCfgItem.ReadInt32( "Quality", 90 );
-        aCfgItem.ReadBool(  "ReduceImageResolution", false );
-        aCfgItem.ReadInt32( "MaxImageResolution", 300 );
-        aCfgItem.ReadBool(  "UseTaggedPDF", false );
-        aCfgItem.ReadInt32( "SelectPdfVersion", 0 );
-        aCfgItem.ReadBool("PDFUACompliance", false);
-        aCfgItem.ReadBool(  "ExportNotes", false );
-        aCfgItem.ReadBool(  "ExportNotesInMargin", false );
-        aCfgItem.ReadBool( "ExportPlaceholders", false );
-        aCfgItem.ReadBool(  "ExportNotesPages", false );
-        aCfgItem.ReadBool(  "ExportOnlyNotesPages", false );
-        aCfgItem.ReadBool(  "UseTransitionEffects", true );
-        aCfgItem.ReadBool(  "IsSkipEmptyPages", false );
-        aCfgItem.ReadBool(  "ExportFormFields", true );
-        aCfgItem.ReadInt32( "FormsType", 0 );
-        aCfgItem.ReadBool(  "HideViewerToolbar", false );
-        aCfgItem.ReadBool(  "HideViewerMenubar", false );
-        aCfgItem.ReadBool(  "HideViewerWindowControls", false );
-        aCfgItem.ReadBool(  "ResizeWindowToInitialPage", false );
-        aCfgItem.ReadBool(  "CenterWindow", false );
-        aCfgItem.ReadBool(  "OpenInFullScreenMode", false );
-        aCfgItem.ReadBool(  "DisplayPDFDocumentTitle", true );
-        aCfgItem.ReadInt32( "InitialView", 0 );
-        aCfgItem.ReadInt32( "Magnification", 0 );
-        aCfgItem.ReadInt32( "Zoom", 100 );
-        aCfgItem.ReadInt32( "PageLayout", 0 );
-        aCfgItem.ReadBool(  "FirstPageOnLeft", false );
-        aCfgItem.ReadInt32( "InitialPage", 1 );
-        aCfgItem.ReadBool(  "IsAddStream", false );
+        aCfgItem.ReadBool(  u"UseLosslessCompression"_ustr, false );
+        aCfgItem.ReadInt32( u"Quality"_ustr, 90 );
+        aCfgItem.ReadBool(  u"ReduceImageResolution"_ustr, false );
+        aCfgItem.ReadInt32( u"MaxImageResolution"_ustr, 300 );
+        aCfgItem.ReadBool(  u"UseTaggedPDF"_ustr, false );
+        aCfgItem.ReadInt32( u"SelectPdfVersion"_ustr, 0 );
+        aCfgItem.ReadBool(u"PDFUACompliance"_ustr, false);
+        aCfgItem.ReadBool(  u"ExportNotes"_ustr, false );
+        aCfgItem.ReadBool(  u"ExportNotesInMargin"_ustr, false );
+        aCfgItem.ReadBool( u"ExportPlaceholders"_ustr, false );
+        aCfgItem.ReadBool(  u"ExportNotesPages"_ustr, false );
+        aCfgItem.ReadBool(  u"ExportOnlyNotesPages"_ustr, false );
+        aCfgItem.ReadBool(  u"UseTransitionEffects"_ustr, true );
+        aCfgItem.ReadBool(  u"IsSkipEmptyPages"_ustr, false );
+        aCfgItem.ReadBool(  u"ExportFormFields"_ustr, true );
+        aCfgItem.ReadInt32( u"FormsType"_ustr, 0 );
+        aCfgItem.ReadBool(  u"HideViewerToolbar"_ustr, false );
+        aCfgItem.ReadBool(  u"HideViewerMenubar"_ustr, false );
+        aCfgItem.ReadBool(  u"HideViewerWindowControls"_ustr, false );
+        aCfgItem.ReadBool(  u"ResizeWindowToInitialPage"_ustr, false );
+        aCfgItem.ReadBool(  u"CenterWindow"_ustr, false );
+        aCfgItem.ReadBool(  u"OpenInFullScreenMode"_ustr, false );
+        aCfgItem.ReadBool(  u"DisplayPDFDocumentTitle"_ustr, true );
+        aCfgItem.ReadInt32( u"InitialView"_ustr, 0 );
+        aCfgItem.ReadInt32( u"Magnification"_ustr, 0 );
+        aCfgItem.ReadInt32( u"Zoom"_ustr, 100 );
+        aCfgItem.ReadInt32( u"PageLayout"_ustr, 0 );
+        aCfgItem.ReadBool(  u"FirstPageOnLeft"_ustr, false );
+        aCfgItem.ReadInt32( u"InitialPage"_ustr, 1 );
+        aCfgItem.ReadBool(  u"IsAddStream"_ustr, false );
 
         // the encryption is not available when exporting directly, since the encryption is off by default and the selection
         // (encrypt or not) is not persistent; it's available through macro though,
         // provided the correct property values are set, see help
 
         // now, the relative link stuff
-        aCfgItem.ReadBool( "ExportLinksRelativeFsys", false );
-        aCfgItem.ReadInt32("PDFViewSelection", 0 );
-        aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
-        aCfgItem.ReadBool( "ExportBookmarksToPDFDestination", false );
+        aCfgItem.ReadBool( u"ExportLinksRelativeFsys"_ustr, false );
+        aCfgItem.ReadInt32(u"PDFViewSelection"_ustr, 0 );
+        aCfgItem.ReadBool( u"ConvertOOoTargetToPDFTarget"_ustr, false );
+        aCfgItem.ReadBool( u"ExportBookmarksToPDFDestination"_ustr, false );
 
-        aCfgItem.ReadBool(  "ExportBookmarks", true );
-        aCfgItem.ReadBool(  "ExportHiddenSlides", false );
-        aCfgItem.ReadBool(  "SinglePageSheets", false );
-        aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
+        aCfgItem.ReadBool(  u"ExportBookmarks"_ustr, true );
+        aCfgItem.ReadBool(  u"ExportHiddenSlides"_ustr, false );
+        aCfgItem.ReadBool(  u"SinglePageSheets"_ustr, false );
+        aCfgItem.ReadInt32( u"OpenBookmarkLevels"_ustr, -1 );
 
-        aCfgItem.ReadBool( "IsRedactMode", false);
+        aCfgItem.ReadBool( u"IsRedactMode"_ustr, false);
 
         aFilterData = aCfgItem.GetFilterData();
     }
@@ -269,7 +269,7 @@ void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& 
 
 OUString SAL_CALL PDFFilter::getImplementationName()
 {
-    return "com.sun.star.comp.PDF.PDFFilter";
+    return u"com.sun.star.comp.PDF.PDFFilter"_ustr;
 }
 
 
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.PDFFilter" };
+    return { u"com.sun.star.document.PDFFilter"_ustr };
 }
 
 

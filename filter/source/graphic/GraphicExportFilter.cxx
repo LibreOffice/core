@@ -49,11 +49,11 @@ sal_Bool GraphicExportFilter::supportsService(const OUString& sServiceName)
 }
 OUString GraphicExportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.GraphicExportFilter";
+    return u"com.sun.star.comp.GraphicExportFilter"_ustr;
 }
 css::uno::Sequence< OUString > GraphicExportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ExportFilter" };
+    return { u"com.sun.star.document.ExportFilter"_ustr };
 }
 
 void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::PropertyValue > & rProperties )

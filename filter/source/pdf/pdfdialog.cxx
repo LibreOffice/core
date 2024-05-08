@@ -46,13 +46,13 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 
 OUString SAL_CALL PDFDialog::getImplementationName()
 {
-    return "com.sun.star.comp.PDF.PDFDialog";
+    return u"com.sun.star.comp.PDF.PDFDialog"_ustr;
 }
 
 
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.PDFDialog" };
+    return { u"com.sun.star.document.PDFDialog"_ustr };
 }
 
 std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)

@@ -127,9 +127,9 @@ std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( No
     std::unique_ptr<filter_info_impl> pFilter(new filter_info_impl);
 
     pFilter->maFilterName = pNode->maName;
-    pFilter->maInterfaceName = pNode->maPropertyMap["UIName"];
+    pFilter->maInterfaceName = pNode->maPropertyMap[u"UIName"_ustr];
 
-    OUString aData = pNode->maPropertyMap["Data"];
+    OUString aData = pNode->maPropertyMap[u"Data"_ustr];
 
     sal_Unicode aComma(',');
 
@@ -158,7 +158,7 @@ std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( No
     Node* pTypeNode = findTypeNode( pFilter->maType );
     if( pTypeNode )
     {
-        OUString aTypeUserData( pTypeNode->maPropertyMap["Data"] );
+        OUString aTypeUserData( pTypeNode->maPropertyMap[u"Data"_ustr] );
 
         pFilter->maDocType = getSubdata( 2, aComma, aTypeUserData );
         pFilter->maExtension = getSubdata( 4, aComma, aTypeUserData );
@@ -221,7 +221,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     {
         if( aName == "node" )
         {
-            OUString aNodeName( xAttribs->getValueByName( "oor:name" ) );
+            OUString aNodeName( xAttribs->getValueByName( u"oor:name"_ustr ) );
 
             if( aNodeName == "Filters" )
             {
@@ -237,7 +237,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     {
         if( aName == "node" )
         {
-            maNodeName = xAttribs->getValueByName( "oor:name" );
+            maNodeName = xAttribs->getValueByName( u"oor:name"_ustr );
 
             eNewState = (maStack.top() == e_Filters) ? e_Filter : e_Type;
         }
@@ -246,7 +246,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     {
         if( aName == "prop" )
         {
-            maPropertyName = xAttribs->getValueByName( "oor:name" );
+            maPropertyName = xAttribs->getValueByName( u"oor:name"_ustr );
             eNewState = e_Property;
         }
     }

@@ -166,7 +166,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))
         return OUString();
 
-    return "writer_T602_Document";
+    return u"writer_T602_Document"_ustr;
 }
 
 // XFilter
@@ -207,9 +207,9 @@ void T602ImportFilter::inschr(unsigned char ch)
             pst.wasfdash = false;
         } else {
             if (mpAttrList)
-                mpAttrList->AddAttribute("text:c",OUString::number(pst.wasspace));
-            Start_("text:s");
-            End_("text:s");
+                mpAttrList->AddAttribute(u"text:c"_ustr,OUString::number(pst.wasspace));
+            Start_(u"text:s"_ustr);
+            End_(u"text:s"_ustr);
         }
     }
 
@@ -237,7 +237,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     }
 
     // An XML import service: what we push sax messages to...
-    mxHandler.set( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.Writer.XMLImporter", mxContext ), UNO_QUERY );
+    mxHandler.set( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.comp.Writer.XMLImporter"_ustr, mxContext ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to...
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);
@@ -252,172 +252,172 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     mxHandler->startDocument();
 
-    mpAttrList->AddAttribute("xmlns:office", "http://openoffice.org/2000/office");
-    mpAttrList->AddAttribute("xmlns:style", "http://openoffice.org/2000/style");
-    mpAttrList->AddAttribute("xmlns:text", "http://openoffice.org/2000/text");
-    mpAttrList->AddAttribute("xmlns:table", "http://openoffice.org/2000/table");
-    mpAttrList->AddAttribute("xmlns:draw", "http://openoffice.org/2000/draw");
-    mpAttrList->AddAttribute("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
-    mpAttrList->AddAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    mpAttrList->AddAttribute("xmlns:number", "http://openoffice.org/2000/datastyle");
-    mpAttrList->AddAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    mpAttrList->AddAttribute("xmlns:chart", "http://openoffice.org/2000/chart");
-    mpAttrList->AddAttribute("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
-    mpAttrList->AddAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
-    mpAttrList->AddAttribute("xmlns:form", "http://openoffice.org/2000/form");
-    mpAttrList->AddAttribute("xmlns:script", "http://openoffice.org/2000/script");
-    mpAttrList->AddAttribute("office:class", "text");
-    mpAttrList->AddAttribute("office:version", "1.0");
-    Start_("office:document-content");
+    mpAttrList->AddAttribute(u"xmlns:office"_ustr, u"http://openoffice.org/2000/office"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:style"_ustr, u"http://openoffice.org/2000/style"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:text"_ustr, u"http://openoffice.org/2000/text"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:table"_ustr, u"http://openoffice.org/2000/table"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:draw"_ustr, u"http://openoffice.org/2000/draw"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:fo"_ustr, u"http://www.w3.org/1999/XSL/Format"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:xlink"_ustr, u"http://www.w3.org/1999/xlink"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:number"_ustr, u"http://openoffice.org/2000/datastyle"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:svg"_ustr, u"http://www.w3.org/2000/svg"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:chart"_ustr, u"http://openoffice.org/2000/chart"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:dr3d"_ustr, u"http://openoffice.org/2000/dr3d"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:math"_ustr, u"http://www.w3.org/1998/Math/MathML"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:form"_ustr, u"http://openoffice.org/2000/form"_ustr);
+    mpAttrList->AddAttribute(u"xmlns:script"_ustr, u"http://openoffice.org/2000/script"_ustr);
+    mpAttrList->AddAttribute(u"office:class"_ustr, u"text"_ustr);
+    mpAttrList->AddAttribute(u"office:version"_ustr, u"1.0"_ustr);
+    Start_(u"office:document-content"_ustr);
 
-    Start_("office:font-decls");
-    mpAttrList->AddAttribute("style:name","Courier New");
-    mpAttrList->AddAttribute("fo:font-family","Courier New");
-    mpAttrList->AddAttribute("style:font-pitch","fixed");
-    Start_("style:font-decl");
-    End_("style:font-decl");
-    End_("office:font-decls");
+    Start_(u"office:font-decls"_ustr);
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"Courier New"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-family"_ustr,u"Courier New"_ustr);
+    mpAttrList->AddAttribute(u"style:font-pitch"_ustr,u"fixed"_ustr);
+    Start_(u"style:font-decl"_ustr);
+    End_(u"style:font-decl"_ustr);
+    End_(u"office:font-decls"_ustr);
 
-    Start_("office:automatic-styles");
+    Start_(u"office:automatic-styles"_ustr);
 
     // Standardni text
-    mpAttrList->AddAttribute("style:name","P1");
-    mpAttrList->AddAttribute("style:family","paragraph");
-    mpAttrList->AddAttribute("style:parent-style-name","Standard");
-    Start_("style:style");
-    mpAttrList->AddAttribute("style:font-name","Courier New");
-    mpAttrList->AddAttribute("fo:font-size",fs);
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"P1"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"paragraph"_ustr);
+    mpAttrList->AddAttribute(u"style:parent-style-name"_ustr,u"Standard"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"style:font-name"_ustr,u"Courier New"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-size"_ustr,fs);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // Standardni text - konec stranky
-    mpAttrList->AddAttribute("style:name","P2");
-    mpAttrList->AddAttribute("style:family","paragraph");
-    mpAttrList->AddAttribute("style:parent-style-name","Standard");
-    Start_("style:style");
-    mpAttrList->AddAttribute("style:font-name","Courier New");
-    mpAttrList->AddAttribute("fo:font-size",fs);
-    mpAttrList->AddAttribute("fo:break-before","page");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"P2"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"paragraph"_ustr);
+    mpAttrList->AddAttribute(u"style:parent-style-name"_ustr,u"Standard"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"style:font-name"_ustr,u"Courier New"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-size"_ustr,fs);
+    mpAttrList->AddAttribute(u"fo:break-before"_ustr,u"page"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T1 Normalni text
-    mpAttrList->AddAttribute("style:name","T1");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T1"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T2 Tucny text
-    mpAttrList->AddAttribute("style:name","T2");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-weight","bold");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T2"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-weight"_ustr,u"bold"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T3 Kurziva
-    mpAttrList->AddAttribute("style:name","T3");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-style","italic");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T3"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-style"_ustr,u"italic"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T4 Siroky text
-    mpAttrList->AddAttribute("style:name","T4");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-weight","bold");
-    mpAttrList->AddAttribute("style:text-scale","200%");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T4"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-weight"_ustr,u"bold"_ustr);
+    mpAttrList->AddAttribute(u"style:text-scale"_ustr,u"200%"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T5 Vysoky text
-    mpAttrList->AddAttribute("style:name","T5");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-size",fs2);
-    mpAttrList->AddAttribute("fo:font-weight","bold");
-    mpAttrList->AddAttribute("style:text-scale","50%");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T5"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-size"_ustr,fs2);
+    mpAttrList->AddAttribute(u"fo:font-weight"_ustr,u"bold"_ustr);
+    mpAttrList->AddAttribute(u"style:text-scale"_ustr,u"50%"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T6 Velky text
-    mpAttrList->AddAttribute("style:name","T6");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-size",fs2);
-    mpAttrList->AddAttribute("fo:font-weight","bold");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T6"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-size"_ustr,fs2);
+    mpAttrList->AddAttribute(u"fo:font-weight"_ustr,u"bold"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T7 Podtrzeny text
-    mpAttrList->AddAttribute("style:name","T7");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("style:text-underline","single");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T7"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"style:text-underline"_ustr,u"single"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T8 Podtrzena tucny text
-    mpAttrList->AddAttribute("style:name","T8");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-weight","bold");
-    mpAttrList->AddAttribute("style:text-underline","single");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T8"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-weight"_ustr,u"bold"_ustr);
+    mpAttrList->AddAttribute(u"style:text-underline"_ustr,u"single"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T9 Podtrzena kurziva
-    mpAttrList->AddAttribute("style:name","T9");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-style","italic");
-    mpAttrList->AddAttribute("style:text-underline","single");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T9"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"fo:font-style"_ustr,u"italic"_ustr);
+    mpAttrList->AddAttribute(u"style:text-underline"_ustr,u"single"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T10 Horni index
-    mpAttrList->AddAttribute("style:name","T10");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("style:text-position","27% 100%");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T10"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"style:text-position"_ustr,u"27% 100%"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
     // T11 Dolni index
-    mpAttrList->AddAttribute("style:name","T11");
-    mpAttrList->AddAttribute("style:family","text");
-    Start_("style:style");
-    mpAttrList->AddAttribute("style:text-position","-27% 100%");
-    Start_("style:properties");
-    End_("style:properties");
-    End_("style:style");
+    mpAttrList->AddAttribute(u"style:name"_ustr,u"T11"_ustr);
+    mpAttrList->AddAttribute(u"style:family"_ustr,u"text"_ustr);
+    Start_(u"style:style"_ustr);
+    mpAttrList->AddAttribute(u"style:text-position"_ustr,u"-27% 100%"_ustr);
+    Start_(u"style:properties"_ustr);
+    End_(u"style:properties"_ustr);
+    End_(u"style:style"_ustr);
 
-    End_("office:automatic-styles");
+    End_(u"office:automatic-styles"_ustr);
 
-    Start_("office:styles");
-    End_("office:styles");
+    Start_(u"office:styles"_ustr);
+    End_(u"office:styles"_ustr);
 
-    Start_("office:body");
+    Start_(u"office:body"_ustr);
 
     Read602();
 
-    End_("office:body");
-    End_("office:document-content");
+    End_(u"office:body"_ustr);
+    End_(u"office:document-content"_ustr);
 
     mxHandler->endDocument();
 
@@ -504,11 +504,11 @@ void T602ImportFilter::wrtfnt()
         default       : style = "T1"; break;
     }
 
-    End_("text:span");
+    End_(u"text:span"_ustr);
     if (mpAttrList)
         mpAttrList->AddAttribute(
-            "text:style-name", OUString::createFromAscii(style));
-    Start_("text:span");
+            u"text:style-name"_ustr, OUString::createFromAscii(style));
+    Start_(u"text:span"_ustr);
 }
 
 void T602ImportFilter::setfnt(fonts fnt,bool mustwrite)
@@ -542,16 +542,16 @@ void T602ImportFilter::par602(bool endofpage)
     if(!endofpage || !pst.waspar) {
         if(ini.showcomm||!pst.comment) {
             if(pst.waspar||ini.reformatpars) {
-                End_("text:span");
-                End_("text:p");
+                End_(u"text:span"_ustr);
+                End_(u"text:p"_ustr);
                 if (mpAttrList)
-                    mpAttrList->AddAttribute("text:style-name", "P1");
-                Start_("text:p");
-                Start_("text:span");
+                    mpAttrList->AddAttribute(u"text:style-name"_ustr, u"P1"_ustr);
+                Start_(u"text:p"_ustr);
+                Start_(u"text:span"_ustr);
                 wrtfnt();
             } else {
-                Start_("text:line-break");
-                End_("text:line-break");
+                Start_(u"text:line-break"_ustr);
+                End_(u"text:line-break"_ustr);
             }
         }
 
@@ -572,12 +572,12 @@ void T602ImportFilter::par602(bool endofpage)
 
     pst.pars = 0;
     if(!ini.reformatpars) {
-        End_("text:span");
-        End_("text:p");
+        End_(u"text:span"_ustr);
+        End_(u"text:p"_ustr);
         if (mpAttrList)
-            mpAttrList->AddAttribute("text:style-name", "P2");
-        Start_("text:p");
-        Start_("text:span");
+            mpAttrList->AddAttribute(u"text:style-name"_ustr, u"P2"_ustr);
+        Start_(u"text:p"_ustr);
+        Start_(u"text:span"_ustr);
         wrtfnt();
     }
 }
@@ -680,11 +680,11 @@ void T602ImportFilter::Read602()
     if (node==tnode::QUIT) return;
 
     if (mpAttrList)
-        mpAttrList->AddAttribute("text:style-name", "P1");
-    Start_("text:p");
+        mpAttrList->AddAttribute(u"text:style-name"_ustr, u"P1"_ustr);
+    Start_(u"text:p"_ustr);
     if (mpAttrList)
-        mpAttrList->AddAttribute("text:style-name", "T1");
-    Start_("text:span");
+        mpAttrList->AddAttribute(u"text:style-name"_ustr, u"T1"_ustr);
+    Start_(u"text:span"_ustr);
 
     if (node==tnode::START) { node = tnode::EOL; }
 
@@ -752,8 +752,8 @@ void T602ImportFilter::Read602()
         case tnode::SETCH :
             // warning: potentially uninitialized
             switch(ch) {
-            case '\t' : Start_("text:tab-stop");
-                    End_("text:tab-stop");
+            case '\t' : Start_(u"text:tab-stop"_ustr);
+                    End_(u"text:tab-stop"_ustr);
                     break;
             case 0x03 : break; //condensed
             case 0x01 : break; //elite
@@ -828,15 +828,15 @@ void T602ImportFilter::Read602()
         }
     }
 
-    End_("text:span");
-    End_("text:p");
+    End_(u"text:span"_ustr);
+    End_(u"text:p"_ustr);
     node = tnode::QUIT;
 }
 
 // XServiceInfo
 OUString SAL_CALL T602ImportFilter::getImplementationName(  )
 {
-    return "com.sun.star.comp.Writer.T602ImportFilter";
+    return u"com.sun.star.comp.Writer.T602ImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
@@ -846,7 +846,7 @@ sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog()
@@ -885,16 +885,16 @@ bool T602ImportFilterDialog::OptionsDlg()
 
     Reference < XComponentContext > rComponentContext = defaultBootstrap_InitialComponentContext();
     Reference < XMultiComponentFactory > rServiceManager = rComponentContext->getServiceManager();
-    Reference < XInterface > rInstance = rServiceManager->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", rComponentContext );
+    Reference < XInterface > rInstance = rServiceManager->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, rComponentContext );
 
     Reference <XMultiServiceFactory> xMultiServiceFactory (rInstance,UNO_QUERY);
 
     Reference < XPropertySet > xPSetDialog( rInstance, UNO_QUERY );
-    propInt_(xPSetDialog,"PositionX",100);
-    propInt_(xPSetDialog,"PositionY",100);
-    propInt_(xPSetDialog,"Width",130);
-    propInt_(xPSetDialog,"Height",90);
-    propStringFromResId_(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
+    propInt_(xPSetDialog,u"PositionX"_ustr,100);
+    propInt_(xPSetDialog,u"PositionY"_ustr,100);
+    propInt_(xPSetDialog,u"Width"_ustr,130);
+    propInt_(xPSetDialog,u"Height"_ustr,90);
+    propStringFromResId_(xPSetDialog,u"Title"_ustr, T602FILTER_STR_IMPORT_DIALOG_TITLE);
 
     static constexpr OUString T602DLG_OK_BUTTON = u"ok_button"_ustr;
     static constexpr OUString T602DLG_CANCEL_BUTTON = u"cancel_button"_ustr;
@@ -904,25 +904,25 @@ bool T602ImportFilterDialog::OptionsDlg()
     static constexpr OUString T602DLG_REFORMAT_CB = u"reformat_cb"_ustr;
     static constexpr OUString T602DLG_CODE_TXT = u"code_txt"_ustr;
 
-    Reference < XInterface > TextModel = Inst_("com.sun.star.awt.UnoControlFixedTextModel");
+    Reference < XInterface > TextModel = Inst_(u"com.sun.star.awt.UnoControlFixedTextModel"_ustr);
     Reference < XPropertySet > xPSetText( TextModel, UNO_QUERY );
-    propInt_(xPSetText,"PositionX",10);
-    propInt_(xPSetText,"PositionY",8);
-    propInt_(xPSetText,"Width",30);
-    propInt_(xPSetText,"Height",14);
-    propString_(xPSetText,"Name",T602DLG_CODE_TXT);
-    propStringFromResId_(xPSetText,"Label",T602FILTER_STR_ENCODING_LABEL);
+    propInt_(xPSetText,u"PositionX"_ustr,10);
+    propInt_(xPSetText,u"PositionY"_ustr,8);
+    propInt_(xPSetText,u"Width"_ustr,30);
+    propInt_(xPSetText,u"Height"_ustr,14);
+    propString_(xPSetText,u"Name"_ustr,T602DLG_CODE_TXT);
+    propStringFromResId_(xPSetText,u"Label"_ustr,T602FILTER_STR_ENCODING_LABEL);
 
-    Reference < XInterface > ListBoxModel = Inst_("com.sun.star.awt.UnoControlListBoxModel");
+    Reference < XInterface > ListBoxModel = Inst_(u"com.sun.star.awt.UnoControlListBoxModel"_ustr);
     Reference < XPropertySet > xPSetCodeLB( ListBoxModel, UNO_QUERY );
-    propInt_(xPSetCodeLB,"PositionX",40);
-    propInt_(xPSetCodeLB,"PositionY",5);
-    propInt_(xPSetCodeLB,"Width",85);
-    propInt_(xPSetCodeLB,"Height",14);
-    propString_(xPSetCodeLB,"Name",T602DLG_CODE_LB);
-    propShort_(xPSetCodeLB,"TabIndex",1);
-    propBool_(xPSetCodeLB,"Dropdown",true);
-    propBool_(xPSetCodeLB,"MultiSelection",false);
+    propInt_(xPSetCodeLB,u"PositionX"_ustr,40);
+    propInt_(xPSetCodeLB,u"PositionY"_ustr,5);
+    propInt_(xPSetCodeLB,u"Width"_ustr,85);
+    propInt_(xPSetCodeLB,u"Height"_ustr,14);
+    propString_(xPSetCodeLB,u"Name"_ustr,T602DLG_CODE_LB);
+    propShort_(xPSetCodeLB,u"TabIndex"_ustr,1);
+    propBool_(xPSetCodeLB,u"Dropdown"_ustr,true);
+    propBool_(xPSetCodeLB,u"MultiSelection"_ustr,false);
 
     Sequence< OUString > ous
     {
@@ -932,67 +932,67 @@ bool T602ImportFilterDialog::OptionsDlg()
         FilterResId(T602FILTER_STR_ENCODING_KOI8CS2)
     };
     any <<= ous;
-    xPSetCodeLB->setPropertyValue("StringItemList", any);
+    xPSetCodeLB->setPropertyValue(u"StringItemList"_ustr, any);
 
     Sequence < sal_Int16 > shr{ static_cast<sal_Int16>(ini.forcecode ? ini.xcode + 1 : 0) };
     any <<= shr;
-    xPSetCodeLB->setPropertyValue("SelectedItems", any);
+    xPSetCodeLB->setPropertyValue(u"SelectedItems"_ustr, any);
 
-    Reference < XInterface > AzbCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > AzbCheckBoxModel = Inst_(u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr);
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );
-    propInt_(xPSetAzbukaCB,"PositionX",10);
-    propInt_(xPSetAzbukaCB,"PositionY",25);
-    propInt_(xPSetAzbukaCB,"Width",100);
-    propInt_(xPSetAzbukaCB,"Height",14);
-    propString_(xPSetAzbukaCB,"Name",T602DLG_AZBUKA_CB);
-    propShort_(xPSetAzbukaCB,"TabIndex",2);
-    propStringFromResId_(xPSetAzbukaCB,"Label",T602FILTER_STR_CYRILLIC_MODE);
-    propShort_(xPSetAzbukaCB,"State",ini.ruscode);
+    propInt_(xPSetAzbukaCB,u"PositionX"_ustr,10);
+    propInt_(xPSetAzbukaCB,u"PositionY"_ustr,25);
+    propInt_(xPSetAzbukaCB,u"Width"_ustr,100);
+    propInt_(xPSetAzbukaCB,u"Height"_ustr,14);
+    propString_(xPSetAzbukaCB,u"Name"_ustr,T602DLG_AZBUKA_CB);
+    propShort_(xPSetAzbukaCB,u"TabIndex"_ustr,2);
+    propStringFromResId_(xPSetAzbukaCB,u"Label"_ustr,T602FILTER_STR_CYRILLIC_MODE);
+    propShort_(xPSetAzbukaCB,u"State"_ustr,ini.ruscode);
 
-    Reference < XInterface > RefCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > RefCheckBoxModel = Inst_(u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr);
     Reference < XPropertySet > xPSetRefCB( RefCheckBoxModel, UNO_QUERY );
-    propInt_(xPSetRefCB,"PositionX",10);
-    propInt_(xPSetRefCB,"PositionY",40);
-    propInt_(xPSetRefCB,"Width",100);
-    propInt_(xPSetRefCB,"Height",14);
-    propString_(xPSetRefCB,"Name",T602DLG_REFORMAT_CB);
-    propShort_(xPSetRefCB,"TabIndex",3);
-    propStringFromResId_(xPSetRefCB,"Label",T602FILTER_STR_REFORMAT_TEXT);
-    propShort_(xPSetRefCB,"State",ini.reformatpars);
+    propInt_(xPSetRefCB,u"PositionX"_ustr,10);
+    propInt_(xPSetRefCB,u"PositionY"_ustr,40);
+    propInt_(xPSetRefCB,u"Width"_ustr,100);
+    propInt_(xPSetRefCB,u"Height"_ustr,14);
+    propString_(xPSetRefCB,u"Name"_ustr,T602DLG_REFORMAT_CB);
+    propShort_(xPSetRefCB,u"TabIndex"_ustr,3);
+    propStringFromResId_(xPSetRefCB,u"Label"_ustr,T602FILTER_STR_REFORMAT_TEXT);
+    propShort_(xPSetRefCB,u"State"_ustr,ini.reformatpars);
 
-    Reference < XInterface > CommCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > CommCheckBoxModel = Inst_(u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr);
     Reference < XPropertySet > xPSetCommCB( CommCheckBoxModel, UNO_QUERY );
-    propInt_(xPSetCommCB,"PositionX",10);
-    propInt_(xPSetCommCB,"PositionY",55);
-    propInt_(xPSetCommCB,"Width",100);
-    propInt_(xPSetCommCB,"Height",14);
-    propString_(xPSetCommCB,"Name",T602DLG_COMMENT_CB);
-    propShort_(xPSetCommCB,"TabIndex",4);
-    propStringFromResId_(xPSetCommCB,"Label",T602FILTER_STR_DOT_COMMANDS);
-    propShort_(xPSetCommCB,"State",ini.showcomm);
+    propInt_(xPSetCommCB,u"PositionX"_ustr,10);
+    propInt_(xPSetCommCB,u"PositionY"_ustr,55);
+    propInt_(xPSetCommCB,u"Width"_ustr,100);
+    propInt_(xPSetCommCB,u"Height"_ustr,14);
+    propString_(xPSetCommCB,u"Name"_ustr,T602DLG_COMMENT_CB);
+    propShort_(xPSetCommCB,u"TabIndex"_ustr,4);
+    propStringFromResId_(xPSetCommCB,u"Label"_ustr,T602FILTER_STR_DOT_COMMANDS);
+    propShort_(xPSetCommCB,u"State"_ustr,ini.showcomm);
 
-    Reference < XInterface > CancelButtonModel = Inst_("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > CancelButtonModel = Inst_(u"com.sun.star.awt.UnoControlButtonModel"_ustr);
     Reference < XPropertySet > xPSetCancelButton( CancelButtonModel, UNO_QUERY );
-    propInt_(xPSetCancelButton,"PositionX",10);
-    propInt_(xPSetCancelButton,"PositionY",70);
-    propInt_(xPSetCancelButton,"Width",50);
-    propInt_(xPSetCancelButton,"Height",14);
-    propString_(xPSetCancelButton,"Name",T602DLG_CANCEL_BUTTON);
-    propShort_(xPSetCancelButton,"TabIndex",5);
-    propShort_(xPSetCancelButton,"PushButtonType",2);
-    propStringFromResId_(xPSetCancelButton,"Label",T602FILTER_STR_CANCEL_BUTTON);
+    propInt_(xPSetCancelButton,u"PositionX"_ustr,10);
+    propInt_(xPSetCancelButton,u"PositionY"_ustr,70);
+    propInt_(xPSetCancelButton,u"Width"_ustr,50);
+    propInt_(xPSetCancelButton,u"Height"_ustr,14);
+    propString_(xPSetCancelButton,u"Name"_ustr,T602DLG_CANCEL_BUTTON);
+    propShort_(xPSetCancelButton,u"TabIndex"_ustr,5);
+    propShort_(xPSetCancelButton,u"PushButtonType"_ustr,2);
+    propStringFromResId_(xPSetCancelButton,u"Label"_ustr,T602FILTER_STR_CANCEL_BUTTON);
 
-    Reference < XInterface > OkButtonModel = Inst_("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > OkButtonModel = Inst_(u"com.sun.star.awt.UnoControlButtonModel"_ustr);
     Reference < XPropertySet > xPSetOkButton( OkButtonModel, UNO_QUERY );
-    propInt_(xPSetOkButton,"PositionX",70);
-    propInt_(xPSetOkButton,"PositionY",70);
-    propInt_(xPSetOkButton,"Width",50);
-    propInt_(xPSetOkButton,"Height",14);
-    propString_(xPSetOkButton,"Name",T602DLG_OK_BUTTON);
-    propShort_(xPSetOkButton,"TabIndex",0);
-    propShort_(xPSetOkButton,"PushButtonType",1);
-    propStringFromResId_(xPSetOkButton,"Label",T602FILTER_STR_OK_BUTTON);
-    propBool_(xPSetOkButton,"DefaultButton",true);
+    propInt_(xPSetOkButton,u"PositionX"_ustr,70);
+    propInt_(xPSetOkButton,u"PositionY"_ustr,70);
+    propInt_(xPSetOkButton,u"Width"_ustr,50);
+    propInt_(xPSetOkButton,u"Height"_ustr,14);
+    propString_(xPSetOkButton,u"Name"_ustr,T602DLG_OK_BUTTON);
+    propShort_(xPSetOkButton,u"TabIndex"_ustr,0);
+    propShort_(xPSetOkButton,u"PushButtonType"_ustr,1);
+    propStringFromResId_(xPSetOkButton,u"Label"_ustr,T602FILTER_STR_OK_BUTTON);
+    propBool_(xPSetOkButton,u"DefaultButton"_ustr,true);
 
     Reference < XNameContainer > xNameCont (rInstance,UNO_QUERY);
 
@@ -1020,11 +1020,11 @@ bool T602ImportFilterDialog::OptionsDlg()
 
         sal_Int16 tt = 0;
 
-        any = propGet_(xPSetAzbukaCB, "State"); any >>= tt; ini.ruscode      = tt;
-        any = propGet_(xPSetRefCB,    "State"); any >>= tt; ini.reformatpars = tt;
-        any = propGet_(xPSetCommCB,   "State"); any >>= tt; ini.showcomm     = tt;
+        any = propGet_(xPSetAzbukaCB, u"State"_ustr); any >>= tt; ini.ruscode      = tt;
+        any = propGet_(xPSetRefCB,    u"State"_ustr); any >>= tt; ini.reformatpars = tt;
+        any = propGet_(xPSetCommCB,   u"State"_ustr); any >>= tt; ini.showcomm     = tt;
 
-        any = propGet_(xPSetCodeLB,   "SelectedItems"); any >>= shr;
+        any = propGet_(xPSetCodeLB,   u"SelectedItems"_ustr); any >>= shr;
 
         if( shr[0] > 0 ) {
             ini.xcode = static_cast<tcode>(shr[0]-1);
@@ -1064,7 +1064,7 @@ void SAL_CALL T602ImportFilterDialog::setPropertyValues( const uno::Sequence<bea
 // XServiceInfo
 OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
 {
-    return "com.sun.star.comp.Writer.T602ImportFilterDialog";
+    return u"com.sun.star.comp.Writer.T602ImportFilterDialog"_ustr;
 }
 
 sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
@@ -1074,7 +1074,7 @@ sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServ
 
 Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
+    return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }
 
 }

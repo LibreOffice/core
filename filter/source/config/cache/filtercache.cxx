@@ -629,7 +629,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception("Can not add item. Set is finalized or mandatory!",
+                    throw css::uno::Exception(u"Can not add item. Set is finalized or mandatory!"_ustr,
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
@@ -646,7 +646,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception("Can not change item. It's finalized or mandatory!",
+                    throw css::uno::Exception(u"Can not change item. It's finalized or mandatory!"_ustr,
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
@@ -732,7 +732,7 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     }
 
-    throw css::uno::RuntimeException("unknown sub container requested.",
+    throw css::uno::RuntimeException(u"unknown sub container requested."_ustr,
                                             css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
@@ -751,7 +751,7 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 
     }
 
-    throw css::uno::RuntimeException("unknown sub container requested.",
+    throw css::uno::RuntimeException(u"unknown sub container requested."_ustr,
                                             css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
@@ -807,7 +807,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::RuntimeException("These configuration node is not supported here for open!", nullptr);
+        default : throw css::uno::RuntimeException(u"These configuration node is not supported here for open!"_ustr, nullptr);
     }
 
     {
@@ -907,7 +907,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             if (bLocalesMode)
             {
                 aParam.Name = "locale";
-                aParam.Value <<= OUString("*");
+                aParam.Value <<= u"*"_ustr;
                 lParams.push_back(css::uno::Any(aParam));
             }
 
@@ -924,7 +924,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             // Let message empty. The normal exception text show enough information to the user.
             if (! xCfg.is())
                 throw css::uno::Exception(
-                        "Got NULL reference on opening configuration file ... but no exception.",
+                        u"Got NULL reference on opening configuration file ... but no exception."_ustr,
                         css::uno::Reference< css::uno::XInterface >());
         }
         catch(const css::uno::Exception& ex)
@@ -970,9 +970,9 @@ void FilterCache::impl_validateAndOptimize()
        )
     {
         throw css::document::CorruptedFilterConfigurationException(
-                "filter configuration: the list of types or filters is empty",
+                u"filter configuration: the list of types or filters is empty"_ustr,
                 css::uno::Reference< css::uno::XInterface >(),
-                "The list of types or filters is empty." );
+                u"The list of types or filters is empty."_ustr );
     }
 
     // Create a log for all detected problems, which
@@ -1238,7 +1238,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                 pList = &m_lChangedContentHandlers;
                 break;
 
-        default : throw css::uno::RuntimeException("unsupported item type", nullptr);
+        default : throw css::uno::RuntimeException(u"unsupported item type"_ustr, nullptr);
     }
 
     auto pItem = ::std::find(pList->cbegin(), pList->cend(), sItem);
@@ -1979,7 +1979,7 @@ void FilterCache::impl_readOldFormat()
         css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
         css::uno::Reference< css::container::XNameAccess > xCfg(xInt, css::uno::UNO_QUERY_THROW);
 
-        OUString TYPES_SET("Types");
+        OUString TYPES_SET(u"Types"_ustr);
 
         // May be there is no type set ...
         if (xCfg->hasByName(TYPES_SET))
@@ -1991,7 +1991,7 @@ void FilterCache::impl_readOldFormat()
                 m_lTypes[rName] = impl_readOldItem(xSet, E_TYPE, rName);
         }
 
-        OUString FILTER_SET("Filters");
+        OUString FILTER_SET(u"Filters"_ustr);
         // May be there is no filter set ...
         if (xCfg->hasByName(FILTER_SET))
         {
@@ -2018,7 +2018,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;
     if (!xItem.is())
-        throw css::uno::Exception("Can not read old item.", css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception(u"Can not read old item."_ustr, css::uno::Reference< css::uno::XInterface >());
 
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
@@ -2032,14 +2032,14 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     // Data
     OUString sData;
     std::vector<OUString>    lData;
-    xItem->getByName( "Data" ) >>= sData;
+    xItem->getByName( u"Data"_ustr ) >>= sData;
     lData = impl_tokenizeString(sData, ',');
     if (
         (sData.isEmpty()) ||
         (lData.empty()    )
        )
     {
-        throw css::uno::Exception( "Can not read old item property DATA.", css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception( u"Can not read old item property DATA."_ustr, css::uno::Reference< css::uno::XInterface >());
     }
 
     sal_Int32 nProp = 0;

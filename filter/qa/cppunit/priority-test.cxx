@@ -39,7 +39,7 @@ public:
 void PriorityFilterTest::testPriority()
 {
     uno::Reference<document::XTypeDetection> xDetection(
-        comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
+        comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.document.TypeDetection"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("No type detection component", xDetection.is());
 
     static struct {

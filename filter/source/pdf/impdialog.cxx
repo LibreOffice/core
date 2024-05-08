@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
  */
 ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
-    : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
+    : SfxTabDialogController(pParent, u"filter/ui/pdfoptionsdialog.ui"_ustr, u"PdfOptionsDialog"_ustr),
     mrDoc(rxDoc),
     maConfigItem( u"Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( u"Office.Common/I18N/CTL/" ),
@@ -164,11 +164,11 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
         Reference< XServiceInfo > xInfo( rxDoc, UNO_QUERY );
         if ( xInfo.is() )
         {
-            if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
+            if ( xInfo->supportsService( u"com.sun.star.presentation.PresentationDocument"_ustr ) )
                 mbIsPresentation = true;
-            if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            if ( xInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
                 mbIsSpreadsheet = true;
-            if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
+            if ( xInfo->supportsService( u"com.sun.star.text.GenericTextDocument"_ustr ) )
                 mbIsWriter = true;
         }
     }
@@ -177,99 +177,99 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     }
 
     // get the CTL (Complex Text Layout) from general options, returns sal_True if we have a CTL font on our hands.
-    mbUseCTLFont = maConfigI18N.ReadBool( "CTLFont", false );
+    mbUseCTLFont = maConfigI18N.ReadBool( u"CTLFont"_ustr, false );
 
-    mbUseLosslessCompression = maConfigItem.ReadBool( "UseLosslessCompression", false );
-    mnQuality = maConfigItem.ReadInt32( "Quality", 90 );
-    mbReduceImageResolution = maConfigItem.ReadBool( "ReduceImageResolution", false );
-    mnMaxImageResolution = maConfigItem.ReadInt32( "MaxImageResolution", 300 );
+    mbUseLosslessCompression = maConfigItem.ReadBool( u"UseLosslessCompression"_ustr, false );
+    mnQuality = maConfigItem.ReadInt32( u"Quality"_ustr, 90 );
+    mbReduceImageResolution = maConfigItem.ReadBool( u"ReduceImageResolution"_ustr, false );
+    mnMaxImageResolution = maConfigItem.ReadInt32( u"MaxImageResolution"_ustr, 300 );
 
     // this is always the user selection, independent from the PDF/A forced selection
-    mbUseTaggedPDF = maConfigItem.ReadBool( "UseTaggedPDF", false );
+    mbUseTaggedPDF = maConfigItem.ReadBool( u"UseTaggedPDF"_ustr, false );
     mbUseTaggedPDFUserSelection = mbUseTaggedPDF;
 
-    mnPDFTypeSelection =  maConfigItem.ReadInt32( "SelectPdfVersion", 0 );
-    mbPDFUACompliance = maConfigItem.ReadBool("PDFUACompliance", false);
+    mnPDFTypeSelection =  maConfigItem.ReadInt32( u"SelectPdfVersion"_ustr, 0 );
+    mbPDFUACompliance = maConfigItem.ReadBool(u"PDFUACompliance"_ustr, false);
 
     if ( mbIsPresentation )
     {
-        mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", false );
-        mbExportOnlyNotesPages = maConfigItem.ReadBool( "ExportOnlyNotesPages", false );
+        mbExportNotesPages = maConfigItem.ReadBool( u"ExportNotesPages"_ustr, false );
+        mbExportOnlyNotesPages = maConfigItem.ReadBool( u"ExportOnlyNotesPages"_ustr, false );
     }
-    mbExportNotes = maConfigItem.ReadBool( "ExportNotes", false );
+    mbExportNotes = maConfigItem.ReadBool( u"ExportNotes"_ustr, false );
     if (mbIsWriter)
-        mbExportNotesInMargin = maConfigItem.ReadBool( "ExportNotesInMargin", false );
-    mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
+        mbExportNotesInMargin = maConfigItem.ReadBool( u"ExportNotesInMargin"_ustr, false );
+    mbViewPDF = maConfigItem.ReadBool( u"ViewPDFAfterExport"_ustr, false );
 
-    mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
+    mbExportBookmarks = maConfigItem.ReadBool( u"ExportBookmarks"_ustr, true );
     mbExportBookmarksUserSelection = mbExportBookmarks;
     if ( mbIsPresentation )
-        mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", false );
+        mbExportHiddenSlides = maConfigItem.ReadBool( u"ExportHiddenSlides"_ustr, false );
     if ( mbIsSpreadsheet )
-        mbSinglePageSheets = maConfigItem.ReadBool( "SinglePageSheets", false );
-    mnOpenBookmarkLevels = maConfigItem.ReadInt32( "OpenBookmarkLevels", -1 );
-    mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", true );
-    mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", false );
-    mbIsExportPlaceholders = maConfigItem.ReadBool( "ExportPlaceholders", false );
-    mbAddStream = maConfigItem.ReadBool( "IsAddStream", false );
+        mbSinglePageSheets = maConfigItem.ReadBool( u"SinglePageSheets"_ustr, false );
+    mnOpenBookmarkLevels = maConfigItem.ReadInt32( u"OpenBookmarkLevels"_ustr, -1 );
+    mbUseTransitionEffects = maConfigItem.ReadBool( u"UseTransitionEffects"_ustr, true );
+    mbIsSkipEmptyPages = maConfigItem.ReadBool( u"IsSkipEmptyPages"_ustr, false );
+    mbIsExportPlaceholders = maConfigItem.ReadBool( u"ExportPlaceholders"_ustr, false );
+    mbAddStream = maConfigItem.ReadBool( u"IsAddStream"_ustr, false );
 
-    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", true );
-    mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
+    mbExportFormFields = maConfigItem.ReadBool( u"ExportFormFields"_ustr, true );
+    mnFormsType = maConfigItem.ReadInt32( u"FormsType"_ustr, 0 );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;
-    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( "AllowDuplicateFieldNames", false );
+    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( u"AllowDuplicateFieldNames"_ustr, false );
 
     // prepare values for the Viewer tab page
-    mbHideViewerToolbar = maConfigItem.ReadBool( "HideViewerToolbar", false );
-    mbHideViewerMenubar = maConfigItem.ReadBool( "HideViewerMenubar", false );
-    mbHideViewerWindowControls = maConfigItem.ReadBool( "HideViewerWindowControls", false );
-    mbResizeWinToInit = maConfigItem.ReadBool( "ResizeWindowToInitialPage", false );
-    mbCenterWindow = maConfigItem.ReadBool( "CenterWindow", false );
-    mbOpenInFullScreenMode = maConfigItem.ReadBool( "OpenInFullScreenMode", false );
-    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( "DisplayPDFDocumentTitle", true );
+    mbHideViewerToolbar = maConfigItem.ReadBool( u"HideViewerToolbar"_ustr, false );
+    mbHideViewerMenubar = maConfigItem.ReadBool( u"HideViewerMenubar"_ustr, false );
+    mbHideViewerWindowControls = maConfigItem.ReadBool( u"HideViewerWindowControls"_ustr, false );
+    mbResizeWinToInit = maConfigItem.ReadBool( u"ResizeWindowToInitialPage"_ustr, false );
+    mbCenterWindow = maConfigItem.ReadBool( u"CenterWindow"_ustr, false );
+    mbOpenInFullScreenMode = maConfigItem.ReadBool( u"OpenInFullScreenMode"_ustr, false );
+    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( u"DisplayPDFDocumentTitle"_ustr, true );
 
-    mnInitialView = maConfigItem.ReadInt32( "InitialView", 0 );
+    mnInitialView = maConfigItem.ReadInt32( u"InitialView"_ustr, 0 );
     mnInitialViewUserSelection = mnInitialView;
-    mnMagnification = maConfigItem.ReadInt32( "Magnification", 0 );
-    mnZoom = maConfigItem.ReadInt32( "Zoom", 100 );
-    mnPageLayout = maConfigItem.ReadInt32( "PageLayout", 0 );
-    mbFirstPageLeft = maConfigItem.ReadBool( "FirstPageOnLeft", false );
-    mnInitialPage = maConfigItem.ReadInt32( "InitialPage", 1 );
+    mnMagnification = maConfigItem.ReadInt32( u"Magnification"_ustr, 0 );
+    mnZoom = maConfigItem.ReadInt32( u"Zoom"_ustr, 100 );
+    mnPageLayout = maConfigItem.ReadInt32( u"PageLayout"_ustr, 0 );
+    mbFirstPageLeft = maConfigItem.ReadBool( u"FirstPageOnLeft"_ustr, false );
+    mnInitialPage = maConfigItem.ReadInt32( u"InitialPage"_ustr, 1 );
     if( mnInitialPage < 1 )
         mnInitialPage = 1;
 
     // prepare values for the security tab page
-    mnPrint = maConfigItem.ReadInt32( "Printing", 2 );
-    mnChangesAllowed = maConfigItem.ReadInt32( "Changes", 4 );
-    mbCanCopyOrExtract = maConfigItem.ReadBool( "EnableCopyingOfContent", true );
-    mbCanExtractForAccessibility = maConfigItem.ReadBool( "EnableTextAccessForAccessibilityTools", true );
+    mnPrint = maConfigItem.ReadInt32( u"Printing"_ustr, 2 );
+    mnChangesAllowed = maConfigItem.ReadInt32( u"Changes"_ustr, 4 );
+    mbCanCopyOrExtract = maConfigItem.ReadBool( u"EnableCopyingOfContent"_ustr, true );
+    mbCanExtractForAccessibility = maConfigItem.ReadBool( u"EnableTextAccessForAccessibilityTools"_ustr, true );
 
     // prepare values for relative links
-    mbExportRelativeFsysLinks = maConfigItem.ReadBool( "ExportLinksRelativeFsys", false );
+    mbExportRelativeFsysLinks = maConfigItem.ReadBool( u"ExportLinksRelativeFsys"_ustr, false );
 
-    mnViewPDFMode = maConfigItem.ReadInt32( "PDFViewSelection", 0 );
+    mnViewPDFMode = maConfigItem.ReadInt32( u"PDFViewSelection"_ustr, 0 );
 
-    mbConvertOOoTargets = maConfigItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
-    mbExportBmkToPDFDestination = maConfigItem.ReadBool( "ExportBookmarksToPDFDestination", false );
+    mbConvertOOoTargets = maConfigItem.ReadBool( u"ConvertOOoTargetToPDFTarget"_ustr, false );
+    mbExportBmkToPDFDestination = maConfigItem.ReadBool( u"ExportBookmarksToPDFDestination"_ustr, false );
 
     // prepare values for digital signatures
-    mbSignPDF = maConfigItem.ReadBool( "SignPDF", false );
+    mbSignPDF = maConfigItem.ReadBool( u"SignPDF"_ustr, false );
 
     // queue the tab pages for later creation (created when first shown)
-    AddTabPage("general", ImpPDFTabGeneralPage::Create, nullptr );
+    AddTabPage(u"general"_ustr, ImpPDFTabGeneralPage::Create, nullptr );
     if (comphelper::LibreOfficeKit::isActive())
-        m_xTabCtrl->remove_page("digitalsignatures");
+        m_xTabCtrl->remove_page(u"digitalsignatures"_ustr);
     else
-        AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, nullptr);
-    AddTabPage("security", ImpPDFTabSecurityPage::Create, nullptr);
-    AddTabPage("links", ImpPDFTabLinksPage::Create, nullptr);
-    AddTabPage("userinterface", ImpPDFTabViewerPage::Create, nullptr);
-    AddTabPage("initialview", ImpPDFTabOpnFtrPage::Create, nullptr);
+        AddTabPage(u"digitalsignatures"_ustr, ImpPDFTabSigningPage::Create, nullptr);
+    AddTabPage(u"security"_ustr, ImpPDFTabSecurityPage::Create, nullptr);
+    AddTabPage(u"links"_ustr, ImpPDFTabLinksPage::Create, nullptr);
+    AddTabPage(u"userinterface"_ustr, ImpPDFTabViewerPage::Create, nullptr);
+    AddTabPage(u"initialview"_ustr, ImpPDFTabOpnFtrPage::Create, nullptr);
 
-    SetCurPageId("general");
+    SetCurPageId(u"general"_ustr);
 
     // get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
-    OUString sOkButtonText = maConfigItem.ReadString( "_OkButtonString", OUString() );
+    OUString sOkButtonText = maConfigItem.ReadString( u"_OkButtonString"_ustr, OUString() );
 
     // change text on the Ok button: get the relevant string from resources, update it on the button
     // according to the exported pdf file destination: send as e-mail or write to file?
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
                     SfxDispatcher* pDispatcher = pShell->GetDispatcher();
                     if (pDispatcher)
                     {
-                        const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "A11yCheckDeck");
+                        const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"A11yCheckDeck"_ustr);
                         pDispatcher->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
                                                  { &sDeckName });
                     }
@@ -432,145 +432,145 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         pPage->GetFilterConfigItem(this);
 
     // prepare the items to be returned
-    maConfigItem.WriteBool( "UseLosslessCompression", mbUseLosslessCompression );
-    maConfigItem.WriteInt32("Quality", mnQuality );
-    maConfigItem.WriteBool( "ReduceImageResolution", mbReduceImageResolution );
-    maConfigItem.WriteInt32("MaxImageResolution", mnMaxImageResolution );
+    maConfigItem.WriteBool( u"UseLosslessCompression"_ustr, mbUseLosslessCompression );
+    maConfigItem.WriteInt32(u"Quality"_ustr, mnQuality );
+    maConfigItem.WriteBool( u"ReduceImageResolution"_ustr, mbReduceImageResolution );
+    maConfigItem.WriteInt32(u"MaxImageResolution"_ustr, mnMaxImageResolution );
 
     // always write the user selection, never the overridden value
     const bool bIsPDFUA = mbPDFUACompliance;
     const bool bIsPDFA = (1 == mnPDFTypeSelection) || (2 == mnPDFTypeSelection) || (3 == mnPDFTypeSelection);
     const bool bUserSelectionTags = bIsPDFA || bIsPDFUA;
-    maConfigItem.WriteBool("UseTaggedPDF", bUserSelectionTags ? mbUseTaggedPDFUserSelection : mbUseTaggedPDF);
-    maConfigItem.WriteInt32("SelectPdfVersion", mnPDFTypeSelection );
-    maConfigItem.WriteBool("PDFUACompliance", mbPDFUACompliance);
+    maConfigItem.WriteBool(u"UseTaggedPDF"_ustr, bUserSelectionTags ? mbUseTaggedPDFUserSelection : mbUseTaggedPDF);
+    maConfigItem.WriteInt32(u"SelectPdfVersion"_ustr, mnPDFTypeSelection );
+    maConfigItem.WriteBool(u"PDFUACompliance"_ustr, mbPDFUACompliance);
 
     if ( mbIsPresentation )
     {
-        maConfigItem.WriteBool( "ExportNotesPages", mbExportNotesPages );
-        maConfigItem.WriteBool( "ExportOnlyNotesPages", mbExportOnlyNotesPages );
+        maConfigItem.WriteBool( u"ExportNotesPages"_ustr, mbExportNotesPages );
+        maConfigItem.WriteBool( u"ExportOnlyNotesPages"_ustr, mbExportOnlyNotesPages );
     }
-    maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
+    maConfigItem.WriteBool( u"ExportNotes"_ustr, mbExportNotes );
     if (mbIsWriter)
-        maConfigItem.WriteBool( "ExportNotesInMargin", mbExportNotesInMargin );
-    maConfigItem.WriteBool( "ViewPDFAfterExport", mbViewPDF );
+        maConfigItem.WriteBool( u"ExportNotesInMargin"_ustr, mbExportNotesInMargin );
+    maConfigItem.WriteBool( u"ViewPDFAfterExport"_ustr, mbViewPDF );
 
-    maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
+    maConfigItem.WriteBool( u"ExportBookmarks"_ustr, mbExportBookmarks );
     if ( mbIsPresentation )
-        maConfigItem.WriteBool( "ExportHiddenSlides", mbExportHiddenSlides );
+        maConfigItem.WriteBool( u"ExportHiddenSlides"_ustr, mbExportHiddenSlides );
     if ( mbIsSpreadsheet )
-        maConfigItem.WriteBool( "SinglePageSheets", mbSinglePageSheets );
-    maConfigItem.WriteBool( "UseTransitionEffects", mbUseTransitionEffects );
-    maConfigItem.WriteBool( "IsSkipEmptyPages", mbIsSkipEmptyPages );
-    maConfigItem.WriteBool( "ExportPlaceholders", mbIsExportPlaceholders );
-    maConfigItem.WriteBool( "IsAddStream", mbAddStream );
+        maConfigItem.WriteBool( u"SinglePageSheets"_ustr, mbSinglePageSheets );
+    maConfigItem.WriteBool( u"UseTransitionEffects"_ustr, mbUseTransitionEffects );
+    maConfigItem.WriteBool( u"IsSkipEmptyPages"_ustr, mbIsSkipEmptyPages );
+    maConfigItem.WriteBool( u"ExportPlaceholders"_ustr, mbIsExportPlaceholders );
+    maConfigItem.WriteBool( u"IsAddStream"_ustr, mbAddStream );
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    maConfigItem.WriteInt32( "FormsType", mnFormsType );
-    maConfigItem.WriteBool( "ExportFormFields", mbExportFormFields );
-    maConfigItem.WriteBool( "AllowDuplicateFieldNames", mbAllowDuplicateFieldNames );
+    maConfigItem.WriteInt32( u"FormsType"_ustr, mnFormsType );
+    maConfigItem.WriteBool( u"ExportFormFields"_ustr, mbExportFormFields );
+    maConfigItem.WriteBool( u"AllowDuplicateFieldNames"_ustr, mbAllowDuplicateFieldNames );
 
-    maConfigItem.WriteBool( "HideViewerToolbar", mbHideViewerToolbar );
-    maConfigItem.WriteBool( "HideViewerMenubar", mbHideViewerMenubar );
-    maConfigItem.WriteBool( "HideViewerWindowControls", mbHideViewerWindowControls );
-    maConfigItem.WriteBool( "ResizeWindowToInitialPage", mbResizeWinToInit );
-    maConfigItem.WriteBool( "CenterWindow", mbCenterWindow );
-    maConfigItem.WriteBool( "OpenInFullScreenMode", mbOpenInFullScreenMode );
-    maConfigItem.WriteBool( "DisplayPDFDocumentTitle", mbDisplayPDFDocumentTitle );
-    maConfigItem.WriteInt32( "InitialView", mnInitialView );
-    maConfigItem.WriteInt32( "Magnification", mnMagnification);
-    maConfigItem.WriteInt32( "Zoom", mnZoom );
-    maConfigItem.WriteInt32( "InitialPage", mnInitialPage );
-    maConfigItem.WriteInt32( "PageLayout", mnPageLayout );
-    maConfigItem.WriteBool( "FirstPageOnLeft", mbFirstPageLeft );
-    maConfigItem.WriteInt32( "OpenBookmarkLevels", mnOpenBookmarkLevels );
+    maConfigItem.WriteBool( u"HideViewerToolbar"_ustr, mbHideViewerToolbar );
+    maConfigItem.WriteBool( u"HideViewerMenubar"_ustr, mbHideViewerMenubar );
+    maConfigItem.WriteBool( u"HideViewerWindowControls"_ustr, mbHideViewerWindowControls );
+    maConfigItem.WriteBool( u"ResizeWindowToInitialPage"_ustr, mbResizeWinToInit );
+    maConfigItem.WriteBool( u"CenterWindow"_ustr, mbCenterWindow );
+    maConfigItem.WriteBool( u"OpenInFullScreenMode"_ustr, mbOpenInFullScreenMode );
+    maConfigItem.WriteBool( u"DisplayPDFDocumentTitle"_ustr, mbDisplayPDFDocumentTitle );
+    maConfigItem.WriteInt32( u"InitialView"_ustr, mnInitialView );
+    maConfigItem.WriteInt32( u"Magnification"_ustr, mnMagnification);
+    maConfigItem.WriteInt32( u"Zoom"_ustr, mnZoom );
+    maConfigItem.WriteInt32( u"InitialPage"_ustr, mnInitialPage );
+    maConfigItem.WriteInt32( u"PageLayout"_ustr, mnPageLayout );
+    maConfigItem.WriteBool( u"FirstPageOnLeft"_ustr, mbFirstPageLeft );
+    maConfigItem.WriteInt32( u"OpenBookmarkLevels"_ustr, mnOpenBookmarkLevels );
 
-    maConfigItem.WriteBool( "ExportLinksRelativeFsys", mbExportRelativeFsysLinks );
-    maConfigItem.WriteInt32("PDFViewSelection", mnViewPDFMode );
-    maConfigItem.WriteBool( "ConvertOOoTargetToPDFTarget", mbConvertOOoTargets );
-    maConfigItem.WriteBool( "ExportBookmarksToPDFDestination", mbExportBmkToPDFDestination );
+    maConfigItem.WriteBool( u"ExportLinksRelativeFsys"_ustr, mbExportRelativeFsysLinks );
+    maConfigItem.WriteInt32(u"PDFViewSelection"_ustr, mnViewPDFMode );
+    maConfigItem.WriteBool( u"ConvertOOoTargetToPDFTarget"_ustr, mbConvertOOoTargets );
+    maConfigItem.WriteBool( u"ExportBookmarksToPDFDestination"_ustr, mbExportBmkToPDFDestination );
 
-    maConfigItem.WriteBool( "SignPDF", mbSignPDF );
+    maConfigItem.WriteBool( u"SignPDF"_ustr, mbSignPDF );
 
-    maConfigItem.WriteInt32( "Printing", mnPrint );
-    maConfigItem.WriteInt32( "Changes", mnChangesAllowed );
-    maConfigItem.WriteBool( "EnableCopyingOfContent", mbCanCopyOrExtract );
-    maConfigItem.WriteBool( "EnableTextAccessForAccessibilityTools", mbCanExtractForAccessibility );
+    maConfigItem.WriteInt32( u"Printing"_ustr, mnPrint );
+    maConfigItem.WriteInt32( u"Changes"_ustr, mnChangesAllowed );
+    maConfigItem.WriteBool( u"EnableCopyingOfContent"_ustr, mbCanCopyOrExtract );
+    maConfigItem.WriteBool( u"EnableTextAccessForAccessibilityTools"_ustr, mbCanExtractForAccessibility );
 
     std::vector<beans::PropertyValue> aRet
     {
-        comphelper::makePropertyValue("Watermark", maWatermarkText),
-        comphelper::makePropertyValue("EncryptFile", mbEncrypt),
-        comphelper::makePropertyValue("PreparedPasswords", mxPreparedPasswords),
-        comphelper::makePropertyValue("RestrictPermissions", mbRestrictPermissions),
-        comphelper::makePropertyValue("PreparedPermissionPassword", maPreparedOwnerPassword)
+        comphelper::makePropertyValue(u"Watermark"_ustr, maWatermarkText),
+        comphelper::makePropertyValue(u"EncryptFile"_ustr, mbEncrypt),
+        comphelper::makePropertyValue(u"PreparedPasswords"_ustr, mxPreparedPasswords),
+        comphelper::makePropertyValue(u"RestrictPermissions"_ustr, mbRestrictPermissions),
+        comphelper::makePropertyValue(u"PreparedPermissionPassword"_ustr, maPreparedOwnerPassword)
     };
     if( mbIsPageRangeChecked )
-        aRet.push_back(comphelper::makePropertyValue("PageRange", msPageRange));
+        aRet.push_back(comphelper::makePropertyValue(u"PageRange"_ustr, msPageRange));
     if( mbIsSheetRangeChecked )
-        aRet.push_back(comphelper::makePropertyValue("SheetRange", msSheetRange));
+        aRet.push_back(comphelper::makePropertyValue(u"SheetRange"_ustr, msSheetRange));
     else if( mbSelectionIsChecked )
-        aRet.push_back(comphelper::makePropertyValue("Selection", maSelection));
+        aRet.push_back(comphelper::makePropertyValue(u"Selection"_ustr, maSelection));
 
-    aRet.push_back(comphelper::makePropertyValue("SignatureLocation", msSignLocation));
-    aRet.push_back(comphelper::makePropertyValue("SignatureReason", msSignReason));
-    aRet.push_back(comphelper::makePropertyValue("SignatureContactInfo", msSignContact));
-    aRet.push_back(comphelper::makePropertyValue("SignaturePassword", msSignPassword));
-    aRet.push_back(comphelper::makePropertyValue("SignatureCertificate", maSignCertificate));
-    aRet.push_back(comphelper::makePropertyValue("SignatureTSA", msSignTSA));
-    aRet.push_back(comphelper::makePropertyValue("UseReferenceXObject", mbUseReferenceXObject));
+    aRet.push_back(comphelper::makePropertyValue(u"SignatureLocation"_ustr, msSignLocation));
+    aRet.push_back(comphelper::makePropertyValue(u"SignatureReason"_ustr, msSignReason));
+    aRet.push_back(comphelper::makePropertyValue(u"SignatureContactInfo"_ustr, msSignContact));
+    aRet.push_back(comphelper::makePropertyValue(u"SignaturePassword"_ustr, msSignPassword));
+    aRet.push_back(comphelper::makePropertyValue(u"SignatureCertificate"_ustr, maSignCertificate));
+    aRet.push_back(comphelper::makePropertyValue(u"SignatureTSA"_ustr, msSignTSA));
+    aRet.push_back(comphelper::makePropertyValue(u"UseReferenceXObject"_ustr, mbUseReferenceXObject));
 
     return comphelper::concatSequences(maConfigItem.GetFilterData(), comphelper::containerToSequence(aRet));
 }
 
 
 ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "filter/ui/pdfgeneralpage.ui", "PdfGeneralPage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"filter/ui/pdfgeneralpage.ui"_ustr, u"PdfGeneralPage"_ustr, &rCoreSet)
     , mbUseTaggedPDFUserSelection(false)
     , mbIsPresentation(false)
     , mbIsSpreadsheet(false)
     , mbIsWriter(false)
     , mpParent(nullptr)
-    , mxRbAll(m_xBuilder->weld_radio_button("all"))
-    , mxRbPageRange(m_xBuilder->weld_radio_button("pagerange"))
-    , mxRbSheetRange(m_xBuilder->weld_radio_button("sheetrange"))
-    , mxRbSelection(m_xBuilder->weld_radio_button("selection"))
-    , mxEdPages(m_xBuilder->weld_entry("pages"))
-    , mxEdSheets(m_xBuilder->weld_entry("sheets"))
-    , mxRbLosslessCompression(m_xBuilder->weld_radio_button("losslesscompress"))
-    , mxRbJPEGCompression(m_xBuilder->weld_radio_button("jpegcompress"))
-    , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))
-    , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FieldUnit::PERCENT))
-    , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
-    , mxCoReduceImageResolution(m_xBuilder->weld_combo_box("resolution"))
-    , mxCbPDFA(m_xBuilder->weld_check_button("pdfa"))
-    , mxCbPDFUA(m_xBuilder->weld_check_button("pdfua"))
-    , mxRbPDFAVersion(m_xBuilder->weld_combo_box("pdfaversion"))
-    , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
-    , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
-    , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
-    , mxLbFormsFormat(m_xBuilder->weld_combo_box("format"))
-    , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button("allowdups"))
-    , mxCbExportBookmarks(m_xBuilder->weld_check_button("bookmarks"))
-    , mxCbExportHiddenSlides(m_xBuilder->weld_check_button("hiddenpages"))
-    , mxCbSinglePageSheets(m_xBuilder->weld_check_button("singlepagesheets"))
-    , mxCbExportNotes(m_xBuilder->weld_check_button("comments"))
-    , mxCbExportNotesInMargin(m_xBuilder->weld_check_button("commentsinmargin"))
-    , mxCbViewPDF(m_xBuilder->weld_check_button("viewpdf"))
-    , mxCbUseReferenceXObject(m_xBuilder->weld_check_button("usereferencexobject"))
-    , mxCbExportNotesPages(m_xBuilder->weld_check_button("notes"))
-    , mxCbExportOnlyNotesPages(m_xBuilder->weld_check_button("onlynotes"))
-    , mxCbExportEmptyPages(m_xBuilder->weld_check_button("emptypages"))
-    , mxCbExportPlaceholders(m_xBuilder->weld_check_button("exportplaceholders"))
-    , mxCbAddStream(m_xBuilder->weld_check_button("embed"))
-    , mxCbWatermark(m_xBuilder->weld_check_button("watermark"))
-    , mxFtWatermark(m_xBuilder->weld_label("watermarklabel"))
-    , mxEdWatermark(m_xBuilder->weld_entry("watermarkentry"))
-    , mxSlidesFt(m_xBuilder->weld_label("slides"))
-    , mxSheetsSelectionFt(m_xBuilder->weld_label("selectedsheets"))
+    , mxRbAll(m_xBuilder->weld_radio_button(u"all"_ustr))
+    , mxRbPageRange(m_xBuilder->weld_radio_button(u"pagerange"_ustr))
+    , mxRbSheetRange(m_xBuilder->weld_radio_button(u"sheetrange"_ustr))
+    , mxRbSelection(m_xBuilder->weld_radio_button(u"selection"_ustr))
+    , mxEdPages(m_xBuilder->weld_entry(u"pages"_ustr))
+    , mxEdSheets(m_xBuilder->weld_entry(u"sheets"_ustr))
+    , mxRbLosslessCompression(m_xBuilder->weld_radio_button(u"losslesscompress"_ustr))
+    , mxRbJPEGCompression(m_xBuilder->weld_radio_button(u"jpegcompress"_ustr))
+    , mxQualityFrame(m_xBuilder->weld_widget(u"qualityframe"_ustr))
+    , mxNfQuality(m_xBuilder->weld_metric_spin_button(u"quality"_ustr, FieldUnit::PERCENT))
+    , mxCbReduceImageResolution(m_xBuilder->weld_check_button(u"reduceresolution"_ustr))
+    , mxCoReduceImageResolution(m_xBuilder->weld_combo_box(u"resolution"_ustr))
+    , mxCbPDFA(m_xBuilder->weld_check_button(u"pdfa"_ustr))
+    , mxCbPDFUA(m_xBuilder->weld_check_button(u"pdfua"_ustr))
+    , mxRbPDFAVersion(m_xBuilder->weld_combo_box(u"pdfaversion"_ustr))
+    , mxCbTaggedPDF(m_xBuilder->weld_check_button(u"tagged"_ustr))
+    , mxCbExportFormFields(m_xBuilder->weld_check_button(u"forms"_ustr))
+    , mxFormsFrame(m_xBuilder->weld_widget(u"formsframe"_ustr))
+    , mxLbFormsFormat(m_xBuilder->weld_combo_box(u"format"_ustr))
+    , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button(u"allowdups"_ustr))
+    , mxCbExportBookmarks(m_xBuilder->weld_check_button(u"bookmarks"_ustr))
+    , mxCbExportHiddenSlides(m_xBuilder->weld_check_button(u"hiddenpages"_ustr))
+    , mxCbSinglePageSheets(m_xBuilder->weld_check_button(u"singlepagesheets"_ustr))
+    , mxCbExportNotes(m_xBuilder->weld_check_button(u"comments"_ustr))
+    , mxCbExportNotesInMargin(m_xBuilder->weld_check_button(u"commentsinmargin"_ustr))
+    , mxCbViewPDF(m_xBuilder->weld_check_button(u"viewpdf"_ustr))
+    , mxCbUseReferenceXObject(m_xBuilder->weld_check_button(u"usereferencexobject"_ustr))
+    , mxCbExportNotesPages(m_xBuilder->weld_check_button(u"notes"_ustr))
+    , mxCbExportOnlyNotesPages(m_xBuilder->weld_check_button(u"onlynotes"_ustr))
+    , mxCbExportEmptyPages(m_xBuilder->weld_check_button(u"emptypages"_ustr))
+    , mxCbExportPlaceholders(m_xBuilder->weld_check_button(u"exportplaceholders"_ustr))
+    , mxCbAddStream(m_xBuilder->weld_check_button(u"embed"_ustr))
+    , mxCbWatermark(m_xBuilder->weld_check_button(u"watermark"_ustr))
+    , mxFtWatermark(m_xBuilder->weld_label(u"watermarklabel"_ustr))
+    , mxEdWatermark(m_xBuilder->weld_entry(u"watermarkentry"_ustr))
+    , mxSlidesFt(m_xBuilder->weld_label(u"slides"_ustr))
+    , mxSheetsSelectionFt(m_xBuilder->weld_label(u"selectedsheets"_ustr))
 {
 }
 
@@ -606,23 +606,23 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxRbLosslessCompression->set_active(true);
     else
         mxRbJPEGCompression->set_active(true);
-    const bool bReadOnlyCompression = !pParent->maConfigItem.IsReadOnly("UseLosslessCompression");
+    const bool bReadOnlyCompression = !pParent->maConfigItem.IsReadOnly(u"UseLosslessCompression"_ustr);
     mxRbLosslessCompression->set_sensitive(bReadOnlyCompression);
     mxRbJPEGCompression->set_sensitive(bReadOnlyCompression);
 
     mxNfQuality->set_value( pParent->mnQuality, FieldUnit::PERCENT );
     mxQualityFrame->set_sensitive(
-        !bUseLosslessCompression && !pParent->maConfigItem.IsReadOnly("Quality"));
+        !bUseLosslessCompression && !pParent->maConfigItem.IsReadOnly(u"Quality"_ustr));
 
     mxCbReduceImageResolution->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl));
     const bool  bReduceImageResolution = pParent->mbReduceImageResolution;
     mxCbReduceImageResolution->set_active( bReduceImageResolution );
     mxCbReduceImageResolution->set_sensitive(
-        !pParent->maConfigItem.IsReadOnly("ReduceImageResolution"));
+        !pParent->maConfigItem.IsReadOnly(u"ReduceImageResolution"_ustr));
     OUString aStrRes = OUString::number( pParent->mnMaxImageResolution ) + " DPI";
     mxCoReduceImageResolution->set_entry_text(aStrRes);
     mxCoReduceImageResolution->set_sensitive(
-        bReduceImageResolution && !pParent->maConfigItem.IsReadOnly("MaxImageResolution"));
+        bReduceImageResolution && !pParent->maConfigItem.IsReadOnly(u"MaxImageResolution"_ustr));
 
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
@@ -634,21 +634,21 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     switch( pParent->mnPDFTypeSelection )
     {
     case 1: // PDF/A-1
-        mxRbPDFAVersion->set_active_id("1");
+        mxRbPDFAVersion->set_active_id(u"1"_ustr);
         break;
     case 2: // PDF/A-2
-        mxRbPDFAVersion->set_active_id("2");
+        mxRbPDFAVersion->set_active_id(u"2"_ustr);
         break;
     case 3: // PDF/A-3
     default: // PDF 1.x
-        mxRbPDFAVersion->set_active_id("3");
+        mxRbPDFAVersion->set_active_id(u"3"_ustr);
         break;
     }
 
     const bool bIsPDFUA = pParent->mbPDFUACompliance;
     mxCbPDFUA->set_active(bIsPDFUA);
     mxCbPDFUA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle));
-    mxCbPDFUA->set_sensitive(!pParent->maConfigItem.IsReadOnly("PDFUACompliance"));
+    mxCbPDFUA->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"PDFUACompliance"_ustr));
 
     // the TogglePDFVersionOrUniversalAccessibilityHandle handler will read or write the *UserSelection based
     // on the mxCbPDFA (= bIsPDFA) state, so we have to prepare the correct input state.
@@ -662,7 +662,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxCbExportFormFields->set_active(pParent->mbExportFormFields);
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
-    mxCbExportFormFields->set_sensitive(!pParent->maConfigItem.IsReadOnly("ExportFormFields"));
+    mxCbExportFormFields->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"ExportFormFields"_ustr));
 
     mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
@@ -670,9 +670,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxFormsFrame->set_sensitive(pParent->mbExportFormFields);
     if (pParent->mbExportFormFields)
     {
-        if (pParent->maConfigItem.IsReadOnly("FormsType"))
+        if (pParent->maConfigItem.IsReadOnly(u"FormsType"_ustr))
             mxLbFormsFormat->set_sensitive(false);
-        if (pParent->maConfigItem.IsReadOnly("AllowDuplicateFieldNames"))
+        if (pParent->maConfigItem.IsReadOnly(u"AllowDuplicateFieldNames"_ustr))
             mxCbAllowDuplicateFieldNames->set_sensitive(false);
     }
 
@@ -680,7 +680,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbExportNotes->set_active( pParent->mbExportNotes );
     mxCbExportNotesInMargin->set_active(mbIsWriter && pParent->mbExportNotesInMargin);
     mxCbExportNotesInMargin->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportNotesInMargin"));
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly(u"ExportNotesInMargin"_ustr));
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -690,7 +690,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     else
     {
        mxCbViewPDF->set_active(pParent->mbViewPDF);
-       mxCbViewPDF->set_sensitive(!pParent->maConfigItem.IsReadOnly("ViewPDFAfterExport"));
+       mxCbViewPDF->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"ViewPDFAfterExport"_ustr));
     }
 
     if ( mbIsPresentation )
@@ -699,16 +699,16 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxCbExportNotesPages->show();
         mxCbExportNotesPages->set_active(pParent->mbExportNotesPages);
         mxCbExportNotesPages->connect_toggled( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
-        mxCbExportNotesPages->set_sensitive(!pParent->maConfigItem.IsReadOnly("ExportNotesPages"));
+        mxCbExportNotesPages->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"ExportNotesPages"_ustr));
         mxCbExportOnlyNotesPages->show();
         mxCbExportOnlyNotesPages->set_active(pParent->mbExportOnlyNotesPages);
         // tdf#116473 Initially enable Export only note pages option depending on the checked state of Export notes pages option
         mxCbExportOnlyNotesPages->set_sensitive(
-            mxCbExportNotesPages->get_active() && !pParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
+            mxCbExportNotesPages->get_active() && !pParent->maConfigItem.IsReadOnly(u"ExportOnlyNotesPages"_ustr));
         mxCbExportHiddenSlides->show();
         mxCbExportHiddenSlides->set_active(pParent->mbExportHiddenSlides);
         mxCbExportHiddenSlides->set_sensitive(
-            !pParent->maConfigItem.IsReadOnly("ExportHiddenSlides"));
+            !pParent->maConfigItem.IsReadOnly(u"ExportHiddenSlides"_ustr));
     }
     else
     {
@@ -731,7 +731,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
         mxCbSinglePageSheets->show();
         mxCbSinglePageSheets->set_active(pParent->mbSinglePageSheets);
-        mxCbSinglePageSheets->set_sensitive(!pParent->maConfigItem.IsReadOnly("SinglePageSheets"));
+        mxCbSinglePageSheets->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"SinglePageSheets"_ustr));
     }
     else
     {
@@ -744,16 +744,16 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxCbExportEmptyPages->set_active(!pParent->mbIsSkipEmptyPages);
     mxCbExportEmptyPages->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("IsSkipEmptyPages"));
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly(u"IsSkipEmptyPages"_ustr));
 
     mxCbExportPlaceholders->set_visible(mbIsWriter);
     mxCbExportPlaceholders->set_active(pParent->mbIsExportPlaceholders);
     mxCbExportPlaceholders->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportPlaceholders"));
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly(u"ExportPlaceholders"_ustr));
 
     mxCbAddStream->show();
     mxCbAddStream->set_active(pParent->mbAddStream);
-    mxCbAddStream->set_sensitive(!pParent->maConfigItem.IsReadOnly("IsAddStream"));
+    mxCbAddStream->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"IsAddStream"_ustr));
 
     mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
     ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
@@ -890,10 +890,10 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
     if ( mbIsPresentation )
     {
         mxCbExportNotesPages->set_sensitive(
-            !mxRbSelection->get_active() && !IsReadOnlyProperty("ExportNotesPages"));
+            !mxRbSelection->get_active() && !IsReadOnlyProperty(u"ExportNotesPages"_ustr));
         mxCbExportOnlyNotesPages->set_sensitive(
             !mxRbSelection->get_active() && mxCbExportNotesPages->get_active()
-            && !IsReadOnlyProperty("ExportOnlyNotesPages"));
+            && !IsReadOnlyProperty(u"ExportOnlyNotesPages"_ustr));
     }
 }
 
@@ -904,9 +904,9 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::Toggleabl
     mxFormsFrame->set_sensitive(bExportFormFields);
     if (bExportFormFields)
     {
-        if (IsReadOnlyProperty("FormsType"))
+        if (IsReadOnlyProperty(u"FormsType"_ustr))
             mxLbFormsFormat->set_sensitive(false);
-        if (IsReadOnlyProperty("AllowDuplicateFieldNames"))
+        if (IsReadOnlyProperty(u"AllowDuplicateFieldNames"_ustr))
             mxCbAllowDuplicateFieldNames->set_sensitive(false);
     }
 }
@@ -915,20 +915,20 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::Toggleabl
 {
     mxCbExportOnlyNotesPages->set_sensitive(
         mxCbExportNotesPages->get_active()
-        && !IsReadOnlyProperty("ExportOnlyNotesPages"));
+        && !IsReadOnlyProperty(u"ExportOnlyNotesPages"_ustr));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::Toggleable&, void)
 {
     mxQualityFrame->set_sensitive(
-        mxRbJPEGCompression->get_active() && !IsReadOnlyProperty("Quality"));
+        mxRbJPEGCompression->get_active() && !IsReadOnlyProperty(u"Quality"_ustr));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::Toggleable&, void)
 {
     mxCoReduceImageResolution->set_sensitive(
         mxCbReduceImageResolution->get_active()
-        && !IsReadOnlyProperty("MaxImageResolution"));
+        && !IsReadOnlyProperty(u"MaxImageResolution"_ustr));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::Toggleable&, void)
@@ -973,9 +973,9 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         pSecPage->ImplPDFASecurityControl();
 
     mxCbTaggedPDF->set_sensitive(
-        !bIsPDFA && !bIsPDFUA && !IsReadOnlyProperty("UseTaggedPDF"));
+        !bIsPDFA && !bIsPDFUA && !IsReadOnlyProperty(u"UseTaggedPDF"_ustr));
     mxRbPDFAVersion->set_sensitive(
-        bIsPDFA && !IsReadOnlyProperty("SelectPdfVersion"));
+        bIsPDFA && !IsReadOnlyProperty(u"SelectPdfVersion"_ustr));
 
     if (bIsPDFA || bIsPDFUA)
     {
@@ -1024,7 +1024,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         mxCbUseReferenceXObject->set_active(mpParent->mbUseReferenceXObjectUserSelection);
     }
     mxCbExportBookmarks->set_sensitive(
-        !bIsPDFUA && !IsReadOnlyProperty("ExportBookmarks"));
+        !bIsPDFUA && !IsReadOnlyProperty(u"ExportBookmarks"_ustr));
     mxCbUseReferenceXObject->set_sensitive(!bIsPDFUA);
 
     ImpPDFTabOpnFtrPage *const pOpenPage(mpParent ? mpParent->getOpenPage() : nullptr);
@@ -1041,23 +1041,23 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
 
 /// The option features tab page
 ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "filter/ui/pdfviewpage.ui", "PdfViewPage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"filter/ui/pdfviewpage.ui"_ustr, u"PdfViewPage"_ustr, &rCoreSet)
     , mbUseCTLFont(false)
-    , mxRbOpnPageOnly(m_xBuilder->weld_radio_button("pageonly"))
-    , mxRbOpnOutline(m_xBuilder->weld_radio_button("outline"))
-    , mxRbOpnThumbs(m_xBuilder->weld_radio_button("thumbs"))
-    , mxNumInitialPage(m_xBuilder->weld_spin_button("page"))
-    , mxRbMagnDefault(m_xBuilder->weld_radio_button("fitdefault"))
-    , mxRbMagnFitWin(m_xBuilder->weld_radio_button("fitwin"))
-    , mxRbMagnFitWidth(m_xBuilder->weld_radio_button("fitwidth"))
-    , mxRbMagnFitVisible(m_xBuilder->weld_radio_button("fitvis"))
-    , mxRbMagnZoom(m_xBuilder->weld_radio_button("fitzoom"))
-    , mxNumZoom(m_xBuilder->weld_spin_button("zoom"))
-    , mxRbPgLyDefault(m_xBuilder->weld_radio_button("defaultlayout"))
-    , mxRbPgLySinglePage(m_xBuilder->weld_radio_button("singlelayout"))
-    , mxRbPgLyContinue(m_xBuilder->weld_radio_button("contlayout"))
-    , mxRbPgLyContinueFacing(m_xBuilder->weld_radio_button("contfacinglayout"))
-    , mxCbPgLyFirstOnLeft(m_xBuilder->weld_check_button("firstonleft"))
+    , mxRbOpnPageOnly(m_xBuilder->weld_radio_button(u"pageonly"_ustr))
+    , mxRbOpnOutline(m_xBuilder->weld_radio_button(u"outline"_ustr))
+    , mxRbOpnThumbs(m_xBuilder->weld_radio_button(u"thumbs"_ustr))
+    , mxNumInitialPage(m_xBuilder->weld_spin_button(u"page"_ustr))
+    , mxRbMagnDefault(m_xBuilder->weld_radio_button(u"fitdefault"_ustr))
+    , mxRbMagnFitWin(m_xBuilder->weld_radio_button(u"fitwin"_ustr))
+    , mxRbMagnFitWidth(m_xBuilder->weld_radio_button(u"fitwidth"_ustr))
+    , mxRbMagnFitVisible(m_xBuilder->weld_radio_button(u"fitvis"_ustr))
+    , mxRbMagnZoom(m_xBuilder->weld_radio_button(u"fitzoom"_ustr))
+    , mxNumZoom(m_xBuilder->weld_spin_button(u"zoom"_ustr))
+    , mxRbPgLyDefault(m_xBuilder->weld_radio_button(u"defaultlayout"_ustr))
+    , mxRbPgLySinglePage(m_xBuilder->weld_radio_button(u"singlelayout"_ustr))
+    , mxRbPgLyContinue(m_xBuilder->weld_radio_button(u"contlayout"_ustr))
+    , mxRbPgLyContinueFacing(m_xBuilder->weld_radio_button(u"contfacinglayout"_ustr))
+    , mxCbPgLyFirstOnLeft(m_xBuilder->weld_check_button(u"firstonleft"_ustr))
 {
     mxRbMagnDefault->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
     mxRbMagnFitWin->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
@@ -1248,19 +1248,19 @@ IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, weld::Toggleable&, void )
 
 /// The Viewer preferences tab page
 ImpPDFTabViewerPage::ImpPDFTabViewerPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
-    : SfxTabPage(pPage, pController, "filter/ui/pdfuserinterfacepage.ui", "PdfUserInterfacePage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"filter/ui/pdfuserinterfacepage.ui"_ustr, u"PdfUserInterfacePage"_ustr, &rCoreSet)
     , mbIsPresentation(false)
-    , m_xCbResWinInit(m_xBuilder->weld_check_button("resize"))
-    , m_xCbCenterWindow(m_xBuilder->weld_check_button("center"))
-    , m_xCbOpenFullScreen(m_xBuilder->weld_check_button("open"))
-    , m_xCbDispDocTitle(m_xBuilder->weld_check_button("display"))
-    , m_xCbHideViewerMenubar(m_xBuilder->weld_check_button("menubar"))
-    , m_xCbHideViewerToolbar(m_xBuilder->weld_check_button("toolbar"))
-    , m_xCbHideViewerWindowControls(m_xBuilder->weld_check_button("window"))
-    , m_xCbTransitionEffects(m_xBuilder->weld_check_button("effects"))
-    , m_xRbAllBookmarkLevels(m_xBuilder->weld_radio_button("allbookmarks"))
-    , m_xRbVisibleBookmarkLevels(m_xBuilder->weld_radio_button("visiblebookmark"))
-    , m_xNumBookmarkLevels(m_xBuilder->weld_spin_button("visiblelevel"))
+    , m_xCbResWinInit(m_xBuilder->weld_check_button(u"resize"_ustr))
+    , m_xCbCenterWindow(m_xBuilder->weld_check_button(u"center"_ustr))
+    , m_xCbOpenFullScreen(m_xBuilder->weld_check_button(u"open"_ustr))
+    , m_xCbDispDocTitle(m_xBuilder->weld_check_button(u"display"_ustr))
+    , m_xCbHideViewerMenubar(m_xBuilder->weld_check_button(u"menubar"_ustr))
+    , m_xCbHideViewerToolbar(m_xBuilder->weld_check_button(u"toolbar"_ustr))
+    , m_xCbHideViewerWindowControls(m_xBuilder->weld_check_button(u"window"_ustr))
+    , m_xCbTransitionEffects(m_xBuilder->weld_check_button(u"effects"_ustr))
+    , m_xRbAllBookmarkLevels(m_xBuilder->weld_radio_button(u"allbookmarks"_ustr))
+    , m_xRbVisibleBookmarkLevels(m_xBuilder->weld_radio_button(u"visiblebookmark"_ustr))
+    , m_xNumBookmarkLevels(m_xBuilder->weld_spin_button(u"visiblelevel"_ustr))
 {
     m_xRbAllBookmarkLevels->connect_toggled(LINK(this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl));
     m_xRbVisibleBookmarkLevels->connect_toggled(LINK(this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl));
@@ -1323,33 +1323,33 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 
 /// The Security preferences tab page
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& i_rCoreSet)
-    : SfxTabPage(pPage, pController, "filter/ui/pdfsecuritypage.ui", "PdfSecurityPage", &i_rCoreSet)
+    : SfxTabPage(pPage, pController, u"filter/ui/pdfsecuritypage.ui"_ustr, u"PdfSecurityPage"_ustr, &i_rCoreSet)
     , msUserPwdTitle( FilterResId( STR_PDF_EXPORT_UDPWD ) )
     , mbHaveOwnerPassword( false )
     , mbHaveUserPassword( false )
     , msOwnerPwdTitle( FilterResId( STR_PDF_EXPORT_ODPWD ) )
-    , mxPbSetPwd(m_xBuilder->weld_button("setpassword"))
-    , mxUserPwdSet(m_xBuilder->weld_widget("userpwdset"))
-    , mxUserPwdUnset(m_xBuilder->weld_widget("userpwdunset"))
-    , mxUserPwdPdfa(m_xBuilder->weld_widget("userpwdpdfa"))
-    , mxOwnerPwdSet(m_xBuilder->weld_widget("ownerpwdset"))
-    , mxOwnerPwdUnset(m_xBuilder->weld_widget("ownerpwdunset"))
-    , mxOwnerPwdPdfa(m_xBuilder->weld_widget("ownerpwdpdfa"))
-    , mxPrintPermissions(m_xBuilder->weld_widget("printing"))
-    , mxRbPrintNone(m_xBuilder->weld_radio_button("printnone"))
-    , mxRbPrintLowRes(m_xBuilder->weld_radio_button("printlow"))
-    , mxRbPrintHighRes(m_xBuilder->weld_radio_button("printhigh"))
-    , mxChangesAllowed(m_xBuilder->weld_widget("changes"))
-    , mxRbChangesNone(m_xBuilder->weld_radio_button("changenone"))
-    , mxRbChangesInsDel(m_xBuilder->weld_radio_button("changeinsdel"))
-    , mxRbChangesFillForm(m_xBuilder->weld_radio_button("changeform"))
-    , mxRbChangesComment(m_xBuilder->weld_radio_button("changecomment"))
-    , mxRbChangesAnyNoCopy(m_xBuilder->weld_radio_button("changeany"))
-    , mxContent(m_xBuilder->weld_widget("content"))
-    , mxCbEnableCopy(m_xBuilder->weld_check_button("enablecopy"))
-    , mxCbEnableAccessibility(m_xBuilder->weld_check_button("enablea11y"))
-    , mxPasswordTitle(m_xBuilder->weld_label("setpasswordstitle"))
-    , mxPermissionTitle(m_xBuilder->weld_label("label2"))
+    , mxPbSetPwd(m_xBuilder->weld_button(u"setpassword"_ustr))
+    , mxUserPwdSet(m_xBuilder->weld_widget(u"userpwdset"_ustr))
+    , mxUserPwdUnset(m_xBuilder->weld_widget(u"userpwdunset"_ustr))
+    , mxUserPwdPdfa(m_xBuilder->weld_widget(u"userpwdpdfa"_ustr))
+    , mxOwnerPwdSet(m_xBuilder->weld_widget(u"ownerpwdset"_ustr))
+    , mxOwnerPwdUnset(m_xBuilder->weld_widget(u"ownerpwdunset"_ustr))
+    , mxOwnerPwdPdfa(m_xBuilder->weld_widget(u"ownerpwdpdfa"_ustr))
+    , mxPrintPermissions(m_xBuilder->weld_widget(u"printing"_ustr))
+    , mxRbPrintNone(m_xBuilder->weld_radio_button(u"printnone"_ustr))
+    , mxRbPrintLowRes(m_xBuilder->weld_radio_button(u"printlow"_ustr))
+    , mxRbPrintHighRes(m_xBuilder->weld_radio_button(u"printhigh"_ustr))
+    , mxChangesAllowed(m_xBuilder->weld_widget(u"changes"_ustr))
+    , mxRbChangesNone(m_xBuilder->weld_radio_button(u"changenone"_ustr))
+    , mxRbChangesInsDel(m_xBuilder->weld_radio_button(u"changeinsdel"_ustr))
+    , mxRbChangesFillForm(m_xBuilder->weld_radio_button(u"changeform"_ustr))
+    , mxRbChangesComment(m_xBuilder->weld_radio_button(u"changecomment"_ustr))
+    , mxRbChangesAnyNoCopy(m_xBuilder->weld_radio_button(u"changeany"_ustr))
+    , mxContent(m_xBuilder->weld_widget(u"content"_ustr))
+    , mxCbEnableCopy(m_xBuilder->weld_check_button(u"enablecopy"_ustr))
+    , mxCbEnableAccessibility(m_xBuilder->weld_check_button(u"enablea11y"_ustr))
+    , mxPasswordTitle(m_xBuilder->weld_label(u"setpasswordstitle"_ustr))
+    , mxPermissionTitle(m_xBuilder->weld_label(u"label2"_ustr))
 {
     msStrSetPwd = mxPasswordTitle->get_label();
     mxPbSetPwd->connect_clicked(LINK(this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl));
@@ -1577,16 +1577,16 @@ void ImpPDFTabSecurityPage::ImplPDFASecurityControl()
 
 /// The link preferences tab page (relative and other stuff)
 ImpPDFTabLinksPage::ImpPDFTabLinksPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "filter/ui/pdflinkspage.ui", "PdfLinksPage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"filter/ui/pdflinkspage.ui"_ustr, u"PdfLinksPage"_ustr, &rCoreSet)
     , mbOpnLnksDefaultUserState(false)
     , mbOpnLnksLaunchUserState(false)
     , mbOpnLnksBrowserUserState(false)
-    , m_xCbExprtBmkrToNmDst(m_xBuilder->weld_check_button("export"))
-    , m_xCbOOoToPDFTargets(m_xBuilder->weld_check_button("convert"))
-    , m_xCbExportRelativeFsysLinks(m_xBuilder->weld_check_button("exporturl"))
-    , m_xRbOpnLnksDefault(m_xBuilder->weld_radio_button("default"))
-    , m_xRbOpnLnksLaunch(m_xBuilder->weld_radio_button("openpdf"))
-    , m_xRbOpnLnksBrowser(m_xBuilder->weld_radio_button("openinternet"))
+    , m_xCbExprtBmkrToNmDst(m_xBuilder->weld_check_button(u"export"_ustr))
+    , m_xCbOOoToPDFTargets(m_xBuilder->weld_check_button(u"convert"_ustr))
+    , m_xCbExportRelativeFsysLinks(m_xBuilder->weld_check_button(u"exporturl"_ustr))
+    , m_xRbOpnLnksDefault(m_xBuilder->weld_radio_button(u"default"_ustr))
+    , m_xRbOpnLnksLaunch(m_xBuilder->weld_radio_button(u"openpdf"_ustr))
+    , m_xRbOpnLnksBrowser(m_xBuilder->weld_radio_button(u"openinternet"_ustr))
 {
 }
 
@@ -1706,9 +1706,9 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::Toggleable&,
 }
 
 ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrors)
-    : MessageDialogController(pParent, "filter/ui/warnpdfdialog.ui", "WarnPDFDialog", "grid")
-    , m_xErrors(m_xBuilder->weld_tree_view("errors"))
-    , m_xExplanation(m_xBuilder->weld_label("message"))
+    : MessageDialogController(pParent, u"filter/ui/warnpdfdialog.ui"_ustr, u"WarnPDFDialog"_ustr, u"grid"_ustr)
+    , m_xErrors(m_xBuilder->weld_tree_view(u"errors"_ustr))
+    , m_xExplanation(m_xBuilder->weld_label(u"message"_ustr))
 {
     int nWidth = m_xErrors->get_approximate_digit_width() * 26;
     int nHeight = m_xErrors->get_height_rows(9);
@@ -1720,19 +1720,19 @@ ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFW
         switch(error)
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
-            m_xErrors->append(FilterResId(STR_WARN_TRANSP_PDFA), FilterResId(STR_WARN_TRANSP_PDFA_SHORT), "dialog-warning");
+            m_xErrors->append(FilterResId(STR_WARN_TRANSP_PDFA), FilterResId(STR_WARN_TRANSP_PDFA_SHORT), u"dialog-warning"_ustr);
             break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
-            m_xErrors->append(FilterResId(STR_WARN_TRANSP_VERSION), FilterResId(STR_WARN_TRANSP_VERSION_SHORT), "dialog-warning");
+            m_xErrors->append(FilterResId(STR_WARN_TRANSP_VERSION), FilterResId(STR_WARN_TRANSP_VERSION_SHORT), u"dialog-warning"_ustr);
             break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
-            m_xErrors->append(FilterResId(STR_WARN_FORMACTION_PDFA), FilterResId(STR_WARN_FORMACTION_PDFA_SHORT), "dialog-warning");
+            m_xErrors->append(FilterResId(STR_WARN_FORMACTION_PDFA), FilterResId(STR_WARN_FORMACTION_PDFA_SHORT), u"dialog-warning"_ustr);
             break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
-            m_xErrors->append(FilterResId(STR_WARN_TRANSP_CONVERTED), FilterResId(STR_WARN_TRANSP_CONVERTED_SHORT), "dialog-warning");
+            m_xErrors->append(FilterResId(STR_WARN_TRANSP_CONVERTED), FilterResId(STR_WARN_TRANSP_CONVERTED_SHORT), u"dialog-warning"_ustr);
             break;
         case vcl::PDFWriter::Error_Signature_Failed:
-            m_xErrors->append(FilterResId(STR_ERR_PDF_EXPORT_ABORTED), FilterResId(STR_ERR_SIGNATURE_FAILED), "dialog-error");
+            m_xErrors->append(FilterResId(STR_ERR_PDF_EXPORT_ABORTED), FilterResId(STR_ERR_SIGNATURE_FAILED), u"dialog-error"_ustr);
             break;
         default:
             break;
@@ -1756,15 +1756,15 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)
 
 /// The digital signatures tab page
 ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "filter/ui/pdfsignpage.ui", "PdfSignPage", &rCoreSet)
-    , mxEdSignCert(m_xBuilder->weld_entry("cert"))
-    , mxPbSignCertSelect(m_xBuilder->weld_button("select"))
-    , mxPbSignCertClear(m_xBuilder->weld_button("clear"))
-    , mxEdSignPassword(m_xBuilder->weld_entry("password"))
-    , mxEdSignLocation(m_xBuilder->weld_entry("location"))
-    , mxEdSignContactInfo(m_xBuilder->weld_entry("contact"))
-    , mxEdSignReason(m_xBuilder->weld_entry("reason"))
-    , mxLBSignTSA(m_xBuilder->weld_combo_box("tsa"))
+    : SfxTabPage(pPage, pController, u"filter/ui/pdfsignpage.ui"_ustr, u"PdfSignPage"_ustr, &rCoreSet)
+    , mxEdSignCert(m_xBuilder->weld_entry(u"cert"_ustr))
+    , mxPbSignCertSelect(m_xBuilder->weld_button(u"select"_ustr))
+    , mxPbSignCertClear(m_xBuilder->weld_button(u"clear"_ustr))
+    , mxEdSignPassword(m_xBuilder->weld_entry(u"password"_ustr))
+    , mxEdSignLocation(m_xBuilder->weld_entry(u"location"_ustr))
+    , mxEdSignContactInfo(m_xBuilder->weld_entry(u"contact"_ustr))
+    , mxEdSignReason(m_xBuilder->weld_entry(u"reason"_ustr))
+    , mxLBSignTSA(m_xBuilder->weld_combo_box(u"tsa"_ustr))
 {
     mxPbSignCertSelect->set_sensitive(true);
     mxPbSignCertSelect->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect));
@@ -1822,7 +1822,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
 
 IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertClear, weld::Button&, void)
 {
-    mxEdSignCert->set_text("");
+    mxEdSignCert->set_text(u""_ustr);
     maSignCertificate.clear();
     mxPbSignCertClear->set_sensitive(false);
     mxEdSignLocation->set_sensitive(false);

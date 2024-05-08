@@ -83,7 +83,7 @@ sal_uInt32 CGM::ImplGetUI16()
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (mpEndValidSource - pSource < 2)
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
     mnParaSize += 2;
     return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
 };
@@ -97,7 +97,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (pSource > mpEndValidSource || o3tl::make_unsigned(mpEndValidSource - pSource) < nPrecision)
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -129,7 +129,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (pSource > mpEndValidSource || o3tl::make_unsigned(mpEndValidSource - pSource) < nPrecision)
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -184,7 +184,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 #endif
 
     if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nRealSize)
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
 
     if ( bCompatible )
     {
@@ -705,7 +705,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                 sal_uInt32  nAdd = nInSize / 20;
                 bool bProgressBar = aXStatInd.is();
                 if ( bProgressBar )
-                    aXStatInd->start( "CGM Import" , nInSize );
+                    aXStatInd->start( u"CGM Import"_ustr , nInSize );
 
                 while (aCGM.IsValid() && (rIn.Tell() < nInSize) && !aCGM.IsFinished())
                 {

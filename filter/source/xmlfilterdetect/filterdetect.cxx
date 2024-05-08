@@ -154,10 +154,10 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
                 ::ucbhelper::Content aContent(
                     sUrl, Reference< css::ucb::XCommandEnvironment >(),
                     mxCtx);
-                aContent.getPropertyValue("MediaType") >>= sMediaType;
+                aContent.getPropertyValue(u"MediaType"_ustr) >>= sMediaType;
                 if (sMediaType.isEmpty())
                 {
-                    aContent.getPropertyValue("Content-Type") >>= sMediaType;
+                    aContent.getPropertyValue(u"Content-Type"_ustr) >>= sMediaType;
                 }
             }
             catch (...) {}
@@ -171,7 +171,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
         }
 
         // test typedetect code
-        Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
+        Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, mxCtx), UNO_QUERY);
         Sequence < OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
 
@@ -222,7 +222,7 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
 // XServiceInfo
 OUString SAL_CALL FilterDetect::getImplementationName(  )
 {
-    return "com.sun.star.comp.filters.XMLFilterDetect";
+    return u"com.sun.star.comp.filters.XMLFilterDetect"_ustr;
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
@@ -232,7 +232,7 @@ sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

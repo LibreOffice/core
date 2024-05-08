@@ -23,13 +23,13 @@
 #include "xmlfiltertabpagebasic.hxx"
 
 XMLFilterTabPageBasic::XMLFilterTabPageBasic(weld::Widget* pPage)
-    : m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagegeneral.ui"))
-    , m_xContainer(m_xBuilder->weld_widget("XmlFilterTabPageGeneral"))
-    , m_xEDFilterName(m_xBuilder->weld_entry("filtername"))
-    , m_xCBApplication(m_xBuilder->weld_combo_box("application"))
-    , m_xEDInterfaceName(m_xBuilder->weld_entry("interfacename"))
-    , m_xEDExtension(m_xBuilder->weld_entry("extension"))
-    , m_xEDDescription(m_xBuilder->weld_text_view("description"))
+    : m_xBuilder(Application::CreateBuilder(pPage, u"filter/ui/xmlfiltertabpagegeneral.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_widget(u"XmlFilterTabPageGeneral"_ustr))
+    , m_xEDFilterName(m_xBuilder->weld_entry(u"filtername"_ustr))
+    , m_xCBApplication(m_xBuilder->weld_combo_box(u"application"_ustr))
+    , m_xEDInterfaceName(m_xBuilder->weld_entry(u"interfacename"_ustr))
+    , m_xEDExtension(m_xBuilder->weld_entry(u"extension"_ustr))
+    , m_xEDDescription(m_xBuilder->weld_text_view(u"description"_ustr))
 {
     m_xEDDescription->set_size_request(-1, m_xEDDescription->get_height_rows(4));
 

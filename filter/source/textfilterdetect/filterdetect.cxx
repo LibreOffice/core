@@ -213,12 +213,12 @@ void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /
 
 OUString PlainTextFilterDetect_getImplementationName()
 {
-    return "com.sun.star.comp.filters.PlainTextFilterDetect";
+    return u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr;
 }
 
 uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ExtendedTypeDetection", "com.sun.star.comp.filters.PlainTextFilterDetect" };
+    return { u"com.sun.star.document.ExtendedTypeDetection"_ustr, u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr };
 }
 
 // XServiceInfo

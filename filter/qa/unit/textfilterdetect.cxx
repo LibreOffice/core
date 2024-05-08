@@ -44,7 +44,7 @@ class TextFilterDetectTest : public UnoApiTest
 {
 public:
     TextFilterDetectTest()
-        : UnoApiTest("/filter/qa/unit/data/")
+        : UnoApiTest(u"/filter/qa/unit/data/"_ustr)
     {
     }
 };
@@ -52,21 +52,22 @@ public:
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 {
     uno::Reference<document::XExtendedFilterDetection> xDetect(
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.filters.PlainTextFilterDetect"),
+        getMultiServiceFactory()->createInstance(
+            u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr),
         uno::UNO_QUERY);
     OUString aURL = createFileURL(u"tdf114428.xhtml");
     SvFileStream aStream(aURL, StreamMode::READ);
     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor
-        = { comphelper::makePropertyValue("DocumentService",
-                                          OUString("com.sun.star.text.TextDocument")),
-            comphelper::makePropertyValue("InputStream", xStream),
-            comphelper::makePropertyValue("TypeName", OUString("generic_HTML")) };
+        = { comphelper::makePropertyValue(u"DocumentService"_ustr,
+                                          u"com.sun.star.text.TextDocument"_ustr),
+            comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+            comphelper::makePropertyValue(u"TypeName"_ustr, u"generic_HTML"_ustr) };
     xDetect->detect(aDescriptor);
     utl::MediaDescriptor aMediaDesc(aDescriptor);
-    OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault("FilterName", OUString());
+    OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
     // This was empty, XML declaration caused HTML detect to not handle XHTML.
-    CPPUNIT_ASSERT_EQUAL(OUString("HTML (StarWriter)"), aFilterName);
+    CPPUNIT_ASSERT_EQUAL(u"HTML (StarWriter)"_ustr, aFilterName);
 }
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
@@ -78,49 +79,51 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Then make sure it is opened in Impress.
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
-    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
+    CPPUNIT_ASSERT(
+        supportsService(mxComponent, u"com.sun.star.presentation.PresentationDocument"_ustr));
 
     // Now also test ODT
     loadFromFile(u"empty.odt");
     // Make sure it opens in Writer.
-    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+    CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.text.TextDocument"_ustr));
 
     // ... and ODS
     loadFromFile(u"empty.ods");
     // Make sure it opens in Calc.
-    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
+    CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.sheet.SpreadsheetDocument"_ustr));
 
     // ... and ODP
     loadFromFile(u"empty.odp");
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
-    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
+    CPPUNIT_ASSERT(
+        supportsService(mxComponent, u"com.sun.star.presentation.PresentationDocument"_ustr));
 
     // ... and DOC
     // Without the accompanying fix in place, this test would have failed, the import filter aborted
     // loading.
     loadFromFile(u"empty.doc");
-    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+    CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.text.TextDocument"_ustr));
     {
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aArgs = xModel->getArgs();
         comphelper::SequenceAsHashMap aMap(aArgs);
         OUString aFilterName;
-        aMap["FilterName"] >>= aFilterName;
+        aMap[u"FilterName"_ustr] >>= aFilterName;
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: MS Word 97
         // - Actual  : MS WinWord 6.0
         // i.e. opening worked, but saving back failed instead of producing a WW8 binary file.
-        CPPUNIT_ASSERT_EQUAL(OUString("MS Word 97"), aFilterName);
+        CPPUNIT_ASSERT_EQUAL(u"MS Word 97"_ustr, aFilterName);
     }
 
     // Now test with default templates set
 
-    SfxObjectFactory::SetStandardTemplate("com.sun.star.presentation.PresentationDocument",
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.presentation.PresentationDocument"_ustr,
                                           createFileURL(u"impress.otp"));
-    SfxObjectFactory::SetStandardTemplate("com.sun.star.text.TextDocument",
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.text.TextDocument"_ustr,
                                           createFileURL(u"writer.ott"));
-    SfxObjectFactory::SetStandardTemplate("com.sun.star.sheet.SpreadsheetDocument",
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
                                           createFileURL(u"calc.ots"));
 
     loadFromFile(u"empty.pptx");
@@ -131,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
-        CPPUNIT_ASSERT_EQUAL(OUString("Title of Impress template"), xBox->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());
     }
 
     loadFromFile(u"empty.odt");
@@ -163,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
-        CPPUNIT_ASSERT_EQUAL(OUString("Title of Impress template"), xBox->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());
     }
     loadFromFile(u"empty.doc");
     {
