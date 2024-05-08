@@ -697,6 +697,336 @@ Module.addOnPostRun(function() {
     test.passJobExecutor(css.task.XJobExecutor.reference(obj.implXJobExecutor));
     test.passInterface(css.uno.XInterface.reference(obj.implXTypeProvider));
     obj.release();
+
+    const args = new Module.uno_Sequence_any(
+        [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);
+    const invoke = css.script.XInvocation2.query(css.script.Invocation.create(
+        Module.getUnoComponentContext()).createInstanceWithArguments(args));
+    args.get(0).delete();
+    args.delete();
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getBoolean', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isBoolean', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getByte', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isByte', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getShort', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isShort', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getUnsignedShort', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isUnsignedShort', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getLong', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isLong', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getUnsignedLong', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isUnsignedLong', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getHyper', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isHyper', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getUnsignedHyper', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isUnsignedHyper', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getFloat', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isFloat', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getDouble', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isDouble', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getChar', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isChar', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getString', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isString', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getType', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isType', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getEnum', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isEnum', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getStruct', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isStruct', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getStructLong', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isStructLong', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getStructString', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isStructString', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getAnyLong', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isAnyLong', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
+    {
+        const params1 = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret1 = invoke.invoke('getSequenceLong', params1, outparamindex, outparam);
+        console.log(ret1.get());
+        const params2 = new Module.uno_Sequence_any([ret1]);
+        const ret2 = invoke.invoke('isSequenceLong', params2, outparamindex, outparam);
+        console.log(ret2.get());
+        console.assert(ret2.get());
+        ret1.delete();
+        params1.delete();
+        ret2.delete();
+        params2.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

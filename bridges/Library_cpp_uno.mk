@@ -84,6 +84,12 @@ bridge_noopt_objects := except
 else ifeq ($(OS),EMSCRIPTEN)
 bridges_SELECTED_BRIDGE := gcc3_wasm
 bridge_noopt_objects := cpp2uno except uno2cpp
+$(eval $(call gb_Library_add_generated_asmobjects,$(CPPU_ENV)_uno, \
+    CustomTarget/bridges/gcc3_wasm/callvirtualfunction-impls \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,$(CPPU_ENV)_uno, \
+    CustomTarget/bridges/gcc3_wasm/callvirtualfunction-wrapper \
+))
 endif
 
 else ifeq ($(CPUNAME),M68K)

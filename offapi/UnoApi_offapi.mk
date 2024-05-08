@@ -4444,6 +4444,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
     Enum \
     Exception \
     Struct \
+    StructLong \
+    StructString \
     XTest \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/libreoffice/embindtest, \

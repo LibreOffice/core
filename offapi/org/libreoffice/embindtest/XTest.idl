@@ -40,6 +40,10 @@ interface XTest {
     boolean isEnum([in] Enum value);
     Struct getStruct();
     boolean isStruct([in] Struct value);
+    StructLong getStructLong();
+    boolean isStructLong([in] StructLong value);
+    StructString getStructString();
+    boolean isStructString([in] StructString value);
     any getAnyVoid();
     boolean isAnyVoid([in] any value);
     any getAnyBoolean();
