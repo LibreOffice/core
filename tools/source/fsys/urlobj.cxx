@@ -308,8 +308,8 @@ struct INetURLObject::PrefixInfo
 {
     enum class Kind { Official, Internal, External }; // order is important!
 
-    char const * m_pPrefix;
-    char const * m_pTranslatedPrefix;
+    OUString     m_aPrefix;
+    OUString     m_aTranslatedPrefix;
     INetProtocol m_eScheme;
     Kind         m_eKind;
 };
@@ -745,11 +745,11 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
         pPos = p;
         m_eScheme = pPrefix->m_eScheme;
 
-        char const * pTemp = pPrefix->m_eKind >= PrefixInfo::Kind::External ?
-                                             pPrefix->m_pTranslatedPrefix :
-                                             pPrefix->m_pPrefix;
-        m_aAbsURIRef.appendAscii(pTemp);
-        m_aScheme = SubString( 0, strstr(pTemp, ":") - pTemp );
+        const OUString & rTemp = pPrefix->m_eKind >= PrefixInfo::Kind::External ?
+                                             pPrefix->m_aTranslatedPrefix :
+                                             pPrefix->m_aPrefix;
+        m_aAbsURIRef.append(rTemp);
+        m_aScheme = SubString( 0, rTemp.indexOf(':') );
     }
     else
     {
@@ -2152,7 +2152,7 @@ bool INetURLObject::convertIntToExt(std::u16string_view rTheIntURIRef,
     if (bConvert)
     {
         comphelper::string::replaceAt(aSynExtURIRef, 0, p - pBegin,
-                OUString::createFromAscii(pPrefix->m_pTranslatedPrefix));
+                pPrefix->m_aTranslatedPrefix);
     }
     rTheExtURIRef = decode(aSynExtURIRef, eDecodeMechanism, eCharset);
     return bConvert;
@@ -2175,7 +2175,7 @@ bool INetURLObject::convertExtToInt(std::u16string_view rTheExtURIRef,
     if (bConvert)
     {
         comphelper::string::replaceAt(aSynIntURIRef, 0, p - pBegin,
-            OUString::createFromAscii(pPrefix->m_pTranslatedPrefix));
+            pPrefix->m_aTranslatedPrefix);
     }
     rTheIntURIRef = decode(aSynIntURIRef, eDecodeMechanism, eCharset);
     return bConvert;
@@ -2185,83 +2185,83 @@ bool INetURLObject::convertExtToInt(std::u16string_view rTheExtURIRef,
 INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& rBegin,
                                                            sal_Unicode const * pEnd)
 {
-    static PrefixInfo const aMap[]
-        = { // dummy entry at front needed, because pLast may point here:
-            { nullptr, nullptr, INetProtocol::NotValid, PrefixInfo::Kind::Internal },
-            { ".component:", "staroffice.component:", INetProtocol::Component,
+    static PrefixInfo constexpr aMap[]
+          { // dummy entry at front needed, because pLast may point here:
+            { u""_ustr, u""_ustr, INetProtocol::NotValid, PrefixInfo::Kind::Internal },
+            { u".component:"_ustr, u"staroffice.component:"_ustr, INetProtocol::Component,
               PrefixInfo::Kind::Internal },
-            { ".uno:", "staroffice.uno:", INetProtocol::Uno,
+            { u".uno:"_ustr, u"staroffice.uno:"_ustr, INetProtocol::Uno,
               PrefixInfo::Kind::Internal },
-            { "cid:", nullptr, INetProtocol::Cid, PrefixInfo::Kind::Official },
-            { "data:", nullptr, INetProtocol::Data, PrefixInfo::Kind::Official },
-            { "db:", "staroffice.db:", INetProtocol::Db, PrefixInfo::Kind::Internal },
-            { "file:", nullptr, INetProtocol::File, PrefixInfo::Kind::Official },
-            { "ftp:", nullptr, INetProtocol::Ftp, PrefixInfo::Kind::Official },
-            { "hid:", "staroffice.hid:", INetProtocol::Hid,
+            { u"cid:"_ustr, u""_ustr, INetProtocol::Cid, PrefixInfo::Kind::Official },
+            { u"data:"_ustr, u""_ustr, INetProtocol::Data, PrefixInfo::Kind::Official },
+            { u"db:"_ustr, u"staroffice.db:"_ustr, INetProtocol::Db, PrefixInfo::Kind::Internal },
+            { u"file:"_ustr, u""_ustr, INetProtocol::File, PrefixInfo::Kind::Official },
+            { u"ftp:"_ustr, u""_ustr, INetProtocol::Ftp, PrefixInfo::Kind::Official },
+            { u"hid:"_ustr, u"staroffice.hid:"_ustr, INetProtocol::Hid,
               PrefixInfo::Kind::Internal },
-            { "http:", nullptr, INetProtocol::Http, PrefixInfo::Kind::Official },
-            { "https:", nullptr, INetProtocol::Https, PrefixInfo::Kind::Official },
-            { "javascript:", nullptr, INetProtocol::Javascript, PrefixInfo::Kind::Official },
-            { "ldap:", nullptr, INetProtocol::Ldap, PrefixInfo::Kind::Official },
-            { "macro:", "staroffice.macro:", INetProtocol::Macro,
+            { u"http:"_ustr, u""_ustr, INetProtocol::Http, PrefixInfo::Kind::Official },
+            { u"https:"_ustr, u""_ustr, INetProtocol::Https, PrefixInfo::Kind::Official },
+            { u"javascript:"_ustr, u""_ustr, INetProtocol::Javascript, PrefixInfo::Kind::Official },
+            { u"ldap:"_ustr, u""_ustr, INetProtocol::Ldap, PrefixInfo::Kind::Official },
+            { u"macro:"_ustr, u"staroffice.macro:"_ustr, INetProtocol::Macro,
               PrefixInfo::Kind::Internal },
-            { "mailto:", nullptr, INetProtocol::Mailto, PrefixInfo::Kind::Official },
-            { "private:", "staroffice.private:", INetProtocol::PrivSoffice,
+            { u"mailto:"_ustr, u""_ustr, INetProtocol::Mailto, PrefixInfo::Kind::Official },
+            { u"private:"_ustr, u"staroffice.private:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::Internal },
-            { "private:factory/", "staroffice.factory:",
+            { u"private:factory/"_ustr, u"staroffice.factory:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
-            { "private:helpid/", "staroffice.helpid:", INetProtocol::PrivSoffice,
+            { u"private:helpid/"_ustr, u"staroffice.helpid:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::Internal },
-            { "private:java/", "staroffice.java:", INetProtocol::PrivSoffice,
+            { u"private:java/"_ustr, u"staroffice.java:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::Internal },
-            { "private:searchfolder:", "staroffice.searchfolder:",
+            { u"private:searchfolder:"_ustr, u"staroffice.searchfolder:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
-            { "private:trashcan:", "staroffice.trashcan:",
+            { u"private:trashcan:"_ustr, u"staroffice.trashcan:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
-            { "sftp:", nullptr, INetProtocol::Sftp, PrefixInfo::Kind::Official },
-            { "slot:", "staroffice.slot:", INetProtocol::Slot,
+            { u"sftp:"_ustr, u""_ustr, INetProtocol::Sftp, PrefixInfo::Kind::Official },
+            { u"slot:"_ustr, u"staroffice.slot:"_ustr, INetProtocol::Slot,
               PrefixInfo::Kind::Internal },
-            { "smb:", nullptr, INetProtocol::Smb, PrefixInfo::Kind::Official },
-            { "staroffice.component:", ".component:", INetProtocol::Component,
+            { u"smb:"_ustr, u""_ustr, INetProtocol::Smb, PrefixInfo::Kind::Official },
+            { u"staroffice.component:"_ustr, u".component:"_ustr, INetProtocol::Component,
               PrefixInfo::Kind::External },
-            { "staroffice.db:", "db:", INetProtocol::Db, PrefixInfo::Kind::External },
-            { "staroffice.factory:", "private:factory/",
+            { u"staroffice.db:"_ustr, u"db:"_ustr, INetProtocol::Db, PrefixInfo::Kind::External },
+            { u"staroffice.factory:"_ustr, u"private:factory/"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
-            { "staroffice.helpid:", "private:helpid/", INetProtocol::PrivSoffice,
+            { u"staroffice.helpid:"_ustr, u"private:helpid/"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::External },
-            { "staroffice.hid:", "hid:", INetProtocol::Hid,
+            { u"staroffice.hid:"_ustr, u"hid:"_ustr, INetProtocol::Hid,
               PrefixInfo::Kind::External },
-            { "staroffice.java:", "private:java/", INetProtocol::PrivSoffice,
+            { u"staroffice.java:"_ustr, u"private:java/"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::External },
-            { "staroffice.macro:", "macro:", INetProtocol::Macro,
+            { u"staroffice.macro:"_ustr, u"macro:"_ustr, INetProtocol::Macro,
               PrefixInfo::Kind::External },
-            { "staroffice.private:", "private:", INetProtocol::PrivSoffice,
+            { u"staroffice.private:"_ustr, u"private:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::External },
-            { "staroffice.searchfolder:", "private:searchfolder:",
+            { u"staroffice.searchfolder:"_ustr, u"private:searchfolder:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
-            { "staroffice.slot:", "slot:", INetProtocol::Slot,
+            { u"staroffice.slot:"_ustr, u"slot:"_ustr, INetProtocol::Slot,
               PrefixInfo::Kind::External },
-            { "staroffice.trashcan:", "private:trashcan:",
+            { u"staroffice.trashcan:"_ustr, u"private:trashcan:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
-            { "staroffice.uno:", ".uno:", INetProtocol::Uno,
+            { u"staroffice.uno:"_ustr, u".uno:"_ustr, INetProtocol::Uno,
               PrefixInfo::Kind::External },
-            { "staroffice:", "private:", INetProtocol::PrivSoffice,
+            { u"staroffice:"_ustr, u"private:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::External },
-            { "telnet:", nullptr, INetProtocol::Telnet, PrefixInfo::Kind::Official },
-            { "vnd.libreoffice.cmis:", nullptr, INetProtocol::Cmis, PrefixInfo::Kind::Internal },
-            { "vnd.sun.star.cmd:", nullptr, INetProtocol::VndSunStarCmd,
+            { u"telnet:"_ustr, u""_ustr, INetProtocol::Telnet, PrefixInfo::Kind::Official },
+            { u"vnd.libreoffice.cmis:"_ustr, u""_ustr, INetProtocol::Cmis, PrefixInfo::Kind::Internal },
+            { u"vnd.sun.star.cmd:"_ustr, u""_ustr, INetProtocol::VndSunStarCmd,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.expand:", nullptr, INetProtocol::VndSunStarExpand,
+            { u"vnd.sun.star.expand:"_ustr, u""_ustr, INetProtocol::VndSunStarExpand,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.help:", nullptr, INetProtocol::VndSunStarHelp,
+            { u"vnd.sun.star.help:"_ustr, u""_ustr, INetProtocol::VndSunStarHelp,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.hier:", nullptr, INetProtocol::VndSunStarHier,
+            { u"vnd.sun.star.hier:"_ustr, u""_ustr, INetProtocol::VndSunStarHier,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.pkg:", nullptr, INetProtocol::VndSunStarPkg,
+            { u"vnd.sun.star.pkg:"_ustr, u""_ustr, INetProtocol::VndSunStarPkg,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.tdoc:", nullptr, INetProtocol::VndSunStarTdoc,
+            { u"vnd.sun.star.tdoc:"_ustr, u""_ustr, INetProtocol::VndSunStarTdoc,
               PrefixInfo::Kind::Official },
-            { "vnd.sun.star.webdav:", nullptr, INetProtocol::VndSunStarWebdav,
+            { u"vnd.sun.star.webdav:"_ustr, u""_ustr, INetProtocol::VndSunStarWebdav,
               PrefixInfo::Kind::Official }
         };
 /* This list needs to be sorted, or you'll introduce serious bugs */
@@ -2274,8 +2274,8 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
     sal_Int32 i = 0;
     for (; pFirst < pLast; ++i)
     {
-        assert(pFirst->m_pPrefix && "we start search after the dummy entry");
-        if (pFirst->m_pPrefix[i] == '\0')
+        assert(!pFirst->m_aPrefix.isEmpty() && "we start search after the dummy entry");
+        if (i == pFirst->m_aPrefix.getLength())
         {
             pMatch = pFirst++;
             pMatched = p;
@@ -2283,14 +2283,14 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
         if (p >= pEnd)
             break;
         sal_uInt32 nChar = rtl::toAsciiLowerCase(*p++);
-        while (pFirst <= pLast && static_cast<unsigned char>(pFirst->m_pPrefix[i]) < nChar)
+        while (pFirst <= pLast && static_cast<unsigned char>(pFirst->m_aPrefix[i]) < nChar)
             ++pFirst;
-        while (pFirst <= pLast && static_cast<unsigned char>(pLast->m_pPrefix[i]) > nChar)
+        while (pFirst <= pLast && static_cast<unsigned char>(pLast->m_aPrefix[i]) > nChar)
             --pLast;
     }
     if (pFirst == pLast)
     {
-        char const * q = pFirst->m_pPrefix + i;
+        sal_Unicode const * q = pFirst->m_aPrefix.getStr() + i;
         while (p < pEnd && *q != '\0'
                && rtl::toAsciiLowerCase(*p) == static_cast<unsigned char>(*q))
         {
