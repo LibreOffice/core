@@ -577,10 +577,9 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
 
     const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
     ScIconSetType eType = IconSet_3Arrows;
-    for(; pMap->pName; ++pMap)
+    for(; !pMap->aName.isEmpty(); ++pMap)
     {
-        OUString aName = OUString::createFromAscii(pMap->pName);
-        if(aName ==aIconSetType)
+        if(pMap->aName == aIconSetType)
         {
             eType = pMap->eType;
             break;

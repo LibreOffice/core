@@ -61,7 +61,7 @@ XclExpExtIcon::XclExpExtIcon(const XclExpRoot& rRoot, const std::pair<ScIconSetT
     XclExpRoot(rRoot),
     nIndex(rCustomEntry.second)
 {
-    pIconSetName = ScIconSetFormat::getIconSetName(rCustomEntry.first);
+    maIconSetName = ScIconSetFormat::getIconSetName(rCustomEntry.first);
 }
 
 void XclExpExtIcon::SaveXml(XclExpXmlStream& rStrm)
@@ -71,11 +71,11 @@ void XclExpExtIcon::SaveXml(XclExpXmlStream& rStrm)
     if (nIndex == -1)
     {
         nIndex = 0;
-        pIconSetName = "NoIcons";
+        maIconSetName = u"NoIcons"_ustr;
     }
 
     rWorksheet->singleElementNS(XML_x14, XML_cfIcon,
-            XML_iconSet, pIconSetName,
+            XML_iconSet, maIconSetName,
             XML_iconId, OString::number(nIndex));
 }
 
@@ -403,7 +403,7 @@ XclExpExtIconSet::XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetForma
     mbCustom = rData.mbCustom;
     mbReverse = rData.mbReverse;
     mbShowValue = rData.mbShowValue;
-    mpIconSetName = ScIconSetFormat::getIconSetName(rData.eIconSetType);
+    maIconSetName = ScIconSetFormat::getIconSetName(rData.eIconSetType);
 
     if (mbCustom)
     {
@@ -419,7 +419,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rWorksheet->startElementNS(XML_x14, XML_iconSet,
-            XML_iconSet, mpIconSetName,
+            XML_iconSet, maIconSetName,
             XML_custom, sax_fastparser::UseIf(ToPsz10(mbCustom), mbCustom),
             XML_reverse, ToPsz10(mbReverse),
             XML_showValue, ToPsz10(mbShowValue));

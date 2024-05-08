@@ -430,9 +430,9 @@ ScIconSetType getType(std::u16string_view rName)
 {
     ScIconSetType eIconSetType = IconSet_3TrafficLights1;
     const ScIconSetMap* pIconSetMap = ScIconSetFormat::g_IconSetMap;
-    for(size_t i = 0; pIconSetMap[i].pName; ++i)
+    for(size_t i = 0; !pIconSetMap[i].aName.isEmpty(); ++i)
     {
-        if(OUString::createFromAscii(pIconSetMap[i].pName) == rName)
+        if(pIconSetMap[i].aName == rName)
         {
             eIconSetType = pIconSetMap[i].eType;
             break;

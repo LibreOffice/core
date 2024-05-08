@@ -83,7 +83,7 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
-    const char* pIconSetName;
+    OUString maIconSetName;
     sal_Int32 nIndex;
 };
 
@@ -129,7 +129,7 @@ private:
     bool mbCustom;
     bool mbReverse;
     bool mbShowValue;
-    const char* mpIconSetName;
+    OUString maIconSetName;
 };
 
 

@@ -216,7 +216,7 @@ enum ScIconSetType
 };
 
 struct ScIconSetMap {
-    const char* pName;
+    OUString aName;
     ScIconSetType eType;
     sal_Int32 nElements;
 };
@@ -384,7 +384,7 @@ public:
     virtual Type GetType() const override;
 
     SC_DLLPUBLIC static const ScIconSetMap g_IconSetMap[];
-    SC_DLLPUBLIC static const char* getIconSetName( ScIconSetType eType );
+    SC_DLLPUBLIC static OUString getIconSetName( ScIconSetType eType );
     static sal_Int32 getIconSetElements( ScIconSetType eType );
     static OUString getIconName(ScIconSetType eType, sal_Int32 nIndex);
     static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);

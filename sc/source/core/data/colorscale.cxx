@@ -1331,30 +1331,30 @@ double ScIconSetFormat::CalcValue(double nMin, double nMax, const ScIconSetForma
     return (*itr)->GetValue();
 }
 
-const ScIconSetMap ScIconSetFormat::g_IconSetMap[] = {
-    { "3Arrows", IconSet_3Arrows, 3 },
-    { "3ArrowsGray", IconSet_3ArrowsGray, 3 },
-    { "3Flags", IconSet_3Flags, 3 },
-    { "3TrafficLights1", IconSet_3TrafficLights1, 3 },
-    { "3TrafficLights2", IconSet_3TrafficLights2, 3 },
-    { "3Signs", IconSet_3Signs, 3 },
-    { "3Symbols", IconSet_3Symbols, 3 },
-    { "3Symbols2", IconSet_3Symbols2, 3 },
-    { "3Smilies", IconSet_3Smilies, 3 },
-    { "3ColorSmilies", IconSet_3ColorSmilies, 3 },
-    { "3Stars", IconSet_3Stars, 3 },
-    { "3Triangles", IconSet_3Triangles, 3 },
-    { "4Arrows", IconSet_4Arrows, 4 },
-    { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
-    { "4RedToBlack", IconSet_4RedToBlack, 4 },
-    { "4Rating", IconSet_4Rating, 4 },
-    { "4TrafficLights", IconSet_4TrafficLights, 4 },
-    { "5Arrows", IconSet_5Arrows, 5 },
-    { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
-    { "5Rating", IconSet_5Ratings, 5 },
-    { "5Quarters", IconSet_5Quarters, 5 },
-    { "5Boxes", IconSet_5Boxes, 5 },
-    { nullptr, IconSet_3Arrows, 0 }
+constexpr ScIconSetMap ScIconSetFormat::g_IconSetMap[] = {
+    { u"3Arrows"_ustr, IconSet_3Arrows, 3 },
+    { u"3ArrowsGray"_ustr, IconSet_3ArrowsGray, 3 },
+    { u"3Flags"_ustr, IconSet_3Flags, 3 },
+    { u"3TrafficLights1"_ustr, IconSet_3TrafficLights1, 3 },
+    { u"3TrafficLights2"_ustr, IconSet_3TrafficLights2, 3 },
+    { u"3Signs"_ustr, IconSet_3Signs, 3 },
+    { u"3Symbols"_ustr, IconSet_3Symbols, 3 },
+    { u"3Symbols2"_ustr, IconSet_3Symbols2, 3 },
+    { u"3Smilies"_ustr, IconSet_3Smilies, 3 },
+    { u"3ColorSmilies"_ustr, IconSet_3ColorSmilies, 3 },
+    { u"3Stars"_ustr, IconSet_3Stars, 3 },
+    { u"3Triangles"_ustr, IconSet_3Triangles, 3 },
+    { u"4Arrows"_ustr, IconSet_4Arrows, 4 },
+    { u"4ArrowsGray"_ustr, IconSet_4ArrowsGray, 4 },
+    { u"4RedToBlack"_ustr, IconSet_4RedToBlack, 4 },
+    { u"4Rating"_ustr, IconSet_4Rating, 4 },
+    { u"4TrafficLights"_ustr, IconSet_4TrafficLights, 4 },
+    { u"5Arrows"_ustr, IconSet_5Arrows, 5 },
+    { u"5ArrowsGray"_ustr, IconSet_5ArrowsGray, 5 },
+    { u"5Rating"_ustr, IconSet_5Ratings, 5 },
+    { u"5Quarters"_ustr, IconSet_5Quarters, 5 },
+    { u"5Boxes"_ustr, IconSet_5Boxes, 5 },
+    { u""_ustr, IconSet_3Arrows, 0 }
 };
 
 size_t ScIconSetFormat::size() const
@@ -1491,7 +1491,7 @@ const ScIconSetBitmapMap aBitmapMap[] = {
 const ScIconSetMap* findIconSetType(ScIconSetType eType)
 {
     const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
-    for (; pMap->pName; ++pMap)
+    for (; !pMap->aName.isEmpty(); ++pMap)
     {
         if (pMap->eType == eType)
             return pMap;
@@ -1502,11 +1502,11 @@ const ScIconSetMap* findIconSetType(ScIconSetType eType)
 
 }
 
-const char* ScIconSetFormat::getIconSetName( ScIconSetType eType )
+OUString ScIconSetFormat::getIconSetName( ScIconSetType eType )
 {
     const ScIconSetMap* pMap = findIconSetType(eType);
     if (pMap)
-        return pMap->pName;
+        return pMap->aName;
 
     return "";
 }

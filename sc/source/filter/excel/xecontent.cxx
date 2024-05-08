@@ -1567,9 +1567,9 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
             XML_type, "iconSet",
             XML_priority, OString::number(mnPriority + 1) );
 
-    const char* pIconSetName = ScIconSetFormat::getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
+    OUString aIconSetName = ScIconSetFormat::getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
     rWorksheet->startElement( XML_iconSet,
-            XML_iconSet, pIconSetName,
+            XML_iconSet, aIconSetName,
             XML_showValue, sax_fastparser::UseIf("0", !mrFormat.GetIconSetData()->mbShowValue),
             XML_reverse, sax_fastparser::UseIf("1", mrFormat.GetIconSetData()->mbReverse));
 

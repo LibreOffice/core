@@ -4912,7 +4912,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
             else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
             {
                 const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
-                OUString aIconSetName = OUString::createFromAscii(ScIconSetFormat::getIconSetName(rIconSet.GetIconSetData()->eIconSetType));
+                OUString aIconSetName = ScIconSetFormat::getIconSetName(rIconSet.GetIconSetData()->eIconSetType);
                 AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
                 if (rIconSet.GetIconSetData()->mbCustom)
                     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
@@ -4923,7 +4923,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                 {
                     for (const auto& [rType, rIndex] : rIconSet.GetIconSetData()->maCustomVector)
                     {
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, OUString::createFromAscii(ScIconSetFormat::getIconSetName(rType)));
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, ScIconSetFormat::getIconSetName(rType));
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(rIndex));
                         SvXMLElementExport aCustomIcon(*this, XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET, true, true);
                     }
