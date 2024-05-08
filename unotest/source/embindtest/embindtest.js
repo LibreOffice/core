@@ -1044,6 +1044,58 @@ Module.addOnPostRun(function() {
         outparamindex.delete();
         outparam.delete();
     }
+    {
+        const params = new Module.uno_Sequence_any(18, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        const ret = invoke.invoke('getOut', params, outparamindex, outparam);
+        console.assert(ret.get() === undefined);
+        ret.delete();
+        params.delete();
+        console.assert(outparamindex.val.size() == 18);
+        outparamindex.val.delete();
+        outparamindex.delete();
+        console.assert(outparam.val.size() == 18);
+        console.assert(test.isBoolean(outparam.val.get(0).get()));
+        outparam.val.get(0).delete();
+        console.assert(test.isByte(outparam.val.get(1).get()));
+        outparam.val.get(1).delete();
+        console.assert(test.isShort(outparam.val.get(2).get()));
+        outparam.val.get(2).delete();
+        console.assert(test.isUnsignedShort(outparam.val.get(3).get()));
+        outparam.val.get(3).delete();
+        console.assert(test.isLong(outparam.val.get(4).get()));
+        outparam.val.get(4).delete();
+        console.assert(test.isUnsignedLong(outparam.val.get(5).get()));
+        outparam.val.get(5).delete();
+        console.assert(test.isHyper(outparam.val.get(6).get()));
+        outparam.val.get(6).delete();
+        console.assert(test.isUnsignedHyper(outparam.val.get(7).get()));
+        outparam.val.get(7).delete();
+        console.assert(test.isFloat(outparam.val.get(8).get()));
+        outparam.val.get(8).delete();
+        console.assert(test.isDouble(outparam.val.get(9).get()));
+        outparam.val.get(9).delete();
+        console.assert(test.isChar(outparam.val.get(10).get()));
+        outparam.val.get(10).delete();
+        console.assert(test.isString(outparam.val.get(11).get()));
+        outparam.val.get(11).delete();
+        console.assert(test.isType(outparam.val.get(12).get()));
+        outparam.val.get(12).delete();
+        console.assert(test.isAnyLong(outparam.val.get(13)));
+        outparam.val.get(13).delete();
+        console.assert(test.isSequenceString(outparam.val.get(14).get()));
+        outparam.val.get(14).get().delete();
+        outparam.val.get(14).delete();
+        console.assert(test.isEnum(outparam.val.get(15).get()));
+        outparam.val.get(15).delete();
+        console.assert(test.isStruct(outparam.val.get(16).get()));
+        outparam.val.get(16).delete();
+        console.assert(Module.sameUnoObject(outparam.val.get(17).get(), test));
+        outparam.val.get(17).delete();
+        outparam.val.delete();
+        outparam.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
