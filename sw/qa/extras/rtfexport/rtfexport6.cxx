@@ -47,25 +47,43 @@ public:
     }
 };
 
-DECLARE_RTFEXPORT_TEST(testFdo85889pc, "fdo85889-pc.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo85889pc)
 {
-    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2265\u2264"_ustr, xTextRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2265\u2264"_ustr, xTextRange->getString());
+    };
+    createSwDoc("fdo85889-pc.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo85889pca)
 {
-    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2017\u00BE"_ustr, xTextRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2017\u00BE"_ustr, xTextRange->getString());
+    };
+    createSwDoc("fdo85889-pca.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo85889mac)
 {
-    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(u"\u00D2\u00DA\u00DB"_ustr, xTextRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"\u00D2\u00DA\u00DB"_ustr, xTextRange->getString());
+    };
+    createSwDoc("fdo85889-mac.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo72031)
@@ -86,63 +104,111 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo72031)
     verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo86750, "fdo86750.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo86750)
 {
-    // This was 'HYPERLINK#anchor', the URL of the hyperlink had the field type as a prefix, leading to broken links.
-    CPPUNIT_ASSERT_EQUAL(OUString("#anchor"),
-                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    auto verify = [this]() {
+        // This was 'HYPERLINK#anchor', the URL of the hyperlink had the field type as a prefix, leading to broken links.
+        CPPUNIT_ASSERT_EQUAL(OUString("#anchor"),
+                             getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    };
+    createSwDoc("fdo86750.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf88811, "tdf88811.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf88811)
 {
-    // The problem was that shapes anchored to the paragraph that is moved into a textframe were lost, so this was 2.
-    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    auto verify = [this]() {
+        // The problem was that shapes anchored to the paragraph that is moved into a textframe were lost, so this was 2.
+        CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    };
+    createSwDoc("tdf88811.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo49893_2)
 {
-    // Ensure that header text exists on each page (especially on second page)
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
+    auto verify = [this]() {
+        // Ensure that header text exists on each page (especially on second page)
+        CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
+    };
+    createSwDoc("fdo49893-2.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo89496, "fdo89496.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo89496)
 {
-    // Just ensure that document is loaded and shape exists
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT(xShape.is());
+    auto verify = [this]() {
+        // Just ensure that document is loaded and shape exists
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        CPPUNIT_ASSERT(xShape.is());
+    };
+    createSwDoc("fdo89496.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo75614, "tdf75614.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo75614)
 {
-    // Text after the footnote was missing, so this resulted in a css::container::NoSuchElementException.
-    CPPUNIT_ASSERT_EQUAL(OUString("after."), getRun(getParagraph(1), 3)->getString());
+    auto verify = [this]() {
+        // Text after the footnote was missing, so this resulted in a css::container::NoSuchElementException.
+        CPPUNIT_ASSERT_EQUAL(OUString("after."), getRun(getParagraph(1), 3)->getString());
+    };
+    createSwDoc("tdf75614.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(mathtype, "mathtype.rtf")
+CPPUNIT_TEST_FIXTURE(Test, mathtype)
 {
-    OUString aFormula = getFormula(getRun(getParagraph(1), 1));
-    CPPUNIT_ASSERT(!aFormula.isEmpty());
+    auto verify = [this]() {
+        OUString aFormula = getFormula(getRun(getParagraph(1), 1));
+        CPPUNIT_ASSERT(!aFormula.isEmpty());
+    };
+    createSwDoc("mathtype.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf86182, "tdf86182.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf86182)
 {
-    // Writing mode was the default, i.e. text::WritingMode2::CONTEXT.
-    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB,
-                         getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
+    auto verify = [this]() {
+        // Writing mode was the default, i.e. text::WritingMode2::CONTEXT.
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB,
+                             getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
+    };
+    createSwDoc("tdf86182.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf91074, "tdf91074.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf91074)
 {
-    // The file failed to load, as the border color was imported using the LineColor UNO property.
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(
-        COL_LIGHTRED,
-        Color(ColorTransparency, getProperty<table::BorderLine2>(xShape, "TopBorder").Color));
+    auto verify = [this]() {
+        // The file failed to load, as the border color was imported using the LineColor UNO property.
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(
+            COL_LIGHTRED,
+            Color(ColorTransparency, getProperty<table::BorderLine2>(xShape, "TopBorder").Color));
+    };
+    createSwDoc("tdf91074.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90260Nopar)
@@ -155,200 +221,301 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90260Nopar)
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf86814, "tdf86814.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf86814)
 {
-    // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold (applied paragraph style with direct formatting).
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
-                         getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    auto verify = [this]() {
+        // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold (applied paragraph style with direct formatting).
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                             getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    };
+    createSwDoc("tdf86814.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108505_fieldCharFormat)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
 
-    // Character formatting can be defined inside the field for part of it. It wasn't being applied.
-    // Bold and green are specified. \fldrslt's "bogus result" (with italic/red) should be ignored.
-    uno::Reference<text::XTextRange> xRun = getRun(xPara, 3, u"MZ"_ustr);
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
+        // Character formatting can be defined inside the field for part of it. It wasn't being applied.
+        // Bold and green are specified. \fldrslt's "bogus result" (with italic/red) should be ignored.
+        uno::Reference<text::XTextRange> xRun = getRun(xPara, 3, u"MZ"_ustr);
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(xPara, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(xPara, "ParaStyleName"));
+    };
+    createSwDoc("tdf108505_fieldCharFormat.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat2, "tdf108505_fieldCharFormat2.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108505_fieldCharFormat2)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
 
-    const sal_Int32 nRun = isExported() ? 6 : 5;
-    const Color aColor = isExported() ? COL_BLACK : COL_AUTO;
+        const sal_Int32 nRun = isExported() ? 6 : 5;
+        const Color aColor = isExported() ? COL_BLACK : COL_AUTO;
 
-    // Character formatting should only be defined by the \fldrslt, and not by prior formatting.
-    // Prior formatting is italic, red, 20pt.
-    uno::Reference<text::XTextRange> xRun = getRun(xPara, nRun, u"xyz"_ustr);
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-    CPPUNIT_ASSERT_EQUAL(aColor, getProperty<Color>(xRun, "CharColor"));
+        // Character formatting should only be defined by the \fldrslt, and not by prior formatting.
+        // Prior formatting is italic, red, 20pt.
+        uno::Reference<text::XTextRange> xRun = getRun(xPara, nRun, u"xyz"_ustr);
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+        CPPUNIT_ASSERT_EQUAL(aColor, getProperty<Color>(xRun, "CharColor"));
+    };
+    createSwDoc("tdf108505_fieldCharFormat2.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 /** Make sure that the document variable "Unused", which is not referenced in the document,
     is imported and exported. */
-DECLARE_RTFEXPORT_TEST(testTdf150267, "tdf150267.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf150267)
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
-    CPPUNIT_ASSERT_EQUAL(sal_True,
-                         xTextFieldMasters->hasByName("com.sun.star.text.fieldmaster.User.Unused"));
+    auto verify = [this]() {
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
+        CPPUNIT_ASSERT_EQUAL(
+            sal_True, xTextFieldMasters->hasByName("com.sun.star.text.fieldmaster.User.Unused"));
 
-    auto xFieldMaster = xTextFieldMasters->getByName("com.sun.star.text.fieldmaster.User.Unused");
-    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), getProperty<OUString>(xFieldMaster, "Content"));
+        auto xFieldMaster
+            = xTextFieldMasters->getByName("com.sun.star.text.fieldmaster.User.Unused");
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello World"),
+                             getProperty<OUString>(xFieldMaster, "Content"));
+    };
+    createSwDoc("tdf150267.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf151370, "tdf151370.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf151370)
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
-    // Here we try to read/write docvar having non-ascii name and value. So it is encoded in Unicode
-    OUString sFieldName(u"com.sun.star.text.fieldmaster.User."
-                        "LocalChars\u00c1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0054"
-                        "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr);
-    CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(sFieldName));
+    auto verify = [this]() {
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
+        // Here we try to read/write docvar having non-ascii name and value. So it is encoded in Unicode
+        OUString sFieldName(
+            u"com.sun.star.text.fieldmaster.User."
+            "LocalChars\u00c1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0054"
+            "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(sFieldName));
 
-    auto xFieldMaster = xTextFieldMasters->getByName(sFieldName);
-    CPPUNIT_ASSERT_EQUAL(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"
-                         "\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr,
-                         getProperty<OUString>(xFieldMaster, "Content"));
+        auto xFieldMaster = xTextFieldMasters->getByName(sFieldName);
+        CPPUNIT_ASSERT_EQUAL(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"
+                             "\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr,
+                             getProperty<OUString>(xFieldMaster, "Content"));
+    };
+    createSwDoc("tdf151370.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf108416, "tdf108416.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108416)
 {
-    uno::Reference<container::XNameAccess> xCharacterStyles(getStyles("CharacterStyles"));
-    uno::Reference<beans::XPropertySet> xListLabel(xCharacterStyles->getByName("ListLabel 1"),
-                                                   uno::UNO_QUERY);
-    // This was awt::FontWeight::BOLD, list numbering got an unexpected bold formatting.
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xListLabel, "CharWeight"));
+    auto verify = [this]() {
+        uno::Reference<container::XNameAccess> xCharacterStyles(getStyles("CharacterStyles"));
+        uno::Reference<beans::XPropertySet> xListLabel(xCharacterStyles->getByName("ListLabel 1"),
+                                                       uno::UNO_QUERY);
+        // This was awt::FontWeight::BOLD, list numbering got an unexpected bold formatting.
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xListLabel, "CharWeight"));
+    };
+    createSwDoc("tdf108416.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testBinSkipping, "bin-skipping.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testBinSkipping)
 {
-    // before, it was importing '/nMUST NOT IMPORT'
-    CPPUNIT_ASSERT_EQUAL(OUString("text"), getRun(getParagraph(1), 1)->getString());
+    auto verify = [this]() {
+        // before, it was importing '/nMUST NOT IMPORT'
+        CPPUNIT_ASSERT_EQUAL(OUString("text"), getRun(getParagraph(1), 1)->getString());
+    };
+    createSwDoc("bin-skipping.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf92061, "tdf92061.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92061)
 {
-    // This was "C", i.e. part of the footnote ended up in the body text.
-    CPPUNIT_ASSERT_EQUAL(OUString("body-after"), getRun(getParagraph(1), 3)->getString());
+    auto verify = [this]() {
+        // This was "C", i.e. part of the footnote ended up in the body text.
+        CPPUNIT_ASSERT_EQUAL(OUString("body-after"), getRun(getParagraph(1), 3)->getString());
+    };
+    createSwDoc("tdf92061.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf92481, "tdf92481.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92481)
 {
-    // This was 0, RTF_WIDOWCTRL was not imported.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(2),
-                         getProperty<sal_Int8>(getParagraph(1), "ParaWidows"));
+    auto verify = [this]() {
+        // This was 0, RTF_WIDOWCTRL was not imported.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(2),
+                             getProperty<sal_Int8>(getParagraph(1), "ParaWidows"));
+    };
+    createSwDoc("tdf92481.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf94456, "tdf94456.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf94456)
 {
-    // Paragraph left margin and first line indent wasn't imported correctly.
+    auto verify = [this]() {
+        // Paragraph left margin and first line indent wasn't imported correctly.
 
-    // This was 1270.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(762),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    // This was -635.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-762),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+        // This was 1270.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(762),
+                             getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+        // This was -635.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-762),
+                             getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    };
+    createSwDoc("tdf94456.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf94435, "tdf94435.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf94435)
 {
-    // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc.
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_CENTER,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    auto verify = [this]() {
+        // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc.
+        CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
+                             static_cast<style::ParagraphAdjust>(
+                                 getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    };
+    createSwDoc("tdf94435.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf54584, "tdf54584.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf54584)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
-        xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    // \PAGE was ignored, so no fields were in document -> exception was thrown
-    CPPUNIT_ASSERT_NO_THROW_MESSAGE(
-        "No fields in document found: field \"\\PAGE\" was not properly read",
-        xFields->nextElement());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+            xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        // \PAGE was ignored, so no fields were in document -> exception was thrown
+        CPPUNIT_ASSERT_NO_THROW_MESSAGE(
+            "No fields in document found: field \"\\PAGE\" was not properly read",
+            xFields->nextElement());
+    };
+    createSwDoc("tdf54584.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf96308Deftab, "tdf96308-deftab.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf96308Deftab)
 {
-    uno::Reference<lang::XMultiServiceFactory> xTextFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefaults(
-        xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
-    // This was 1270 as \deftab was ignored on import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(284)),
-                         getProperty<sal_Int32>(xDefaults, "TabStopDistance"));
+    auto verify = [this]() {
+        uno::Reference<lang::XMultiServiceFactory> xTextFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xDefaults(
+            xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
+        // This was 1270 as \deftab was ignored on import.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(284)),
+                             getProperty<sal_Int32>(xDefaults, "TabStopDistance"));
+    };
+    createSwDoc("tdf96308-deftab.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testLandscape, "landscape.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testLandscape)
 {
-    // Check landscape flag.
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
+    auto verify = [this]() {
+        // Check landscape flag.
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
 
-    // All pages should have flag orientation
-    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+        // All pages should have flag orientation
+        uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
 
-    // get a page cursor
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
-                                              uno::UNO_QUERY);
+        // get a page cursor
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+            xModel->getCurrentController(), uno::UNO_QUERY);
+        uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                                  uno::UNO_QUERY);
 
-    // check that the first page has landscape flag
-    xCursor->jumpToFirstPage();
-    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
+        // check that the first page has landscape flag
+        xCursor->jumpToFirstPage();
+        OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName),
+                                                 uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
-    // check that the second page has landscape flag
-    xCursor->jumpToPage(2);
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
+        // check that the second page has landscape flag
+        xCursor->jumpToPage(2);
+        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
-    // check that the last page has landscape flag
-    xCursor->jumpToLastPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
+        // check that the last page has landscape flag
+        xCursor->jumpToLastPage();
+        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
+    };
+    createSwDoc("landscape.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf97035, "tdf97035.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf97035)
 {
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
-    // First cell width of the second row should be 2300
-    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2300), getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                              xTableRows->getByIndex(1), "TableColumnSeparators")[0]
-                                              .Position);
+        // First cell width of the second row should be 2300
+        uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2300),
+                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                 xTableRows->getByIndex(1), "TableColumnSeparators")[0]
+                                 .Position);
+    };
+    createSwDoc("tdf97035.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf87034, "tdf87034.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf87034)
 {
-    // This was A1BC34D, i.e. the first "super" text portion was mis-imported,
-    // and was inserted instead right before the second "super" text portion.
-    CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
+    auto verify = [this]() {
+        // This was A1BC34D, i.e. the first "super" text portion was mis-imported,
+        // and was inserted instead right before the second "super" text portion.
+        CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
+    };
+    createSwDoc("tdf87034.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClassificatonPasteLevels)
@@ -365,118 +532,191 @@ CPPUNIT_TEST_FIXTURE(Test, testClassificatonPasteLevels)
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf95707, "tdf95707.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf95707)
 {
-    // Graphic was replaced with a "Read-Error" placeholder.
-    uno::Reference<graphic::XGraphic> xGraphic
-        = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
-    CPPUNIT_ASSERT(xGraphic.is());
-    CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+    auto verify = [this]() {
+        // Graphic was replaced with a "Read-Error" placeholder.
+        uno::Reference<graphic::XGraphic> xGraphic
+            = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+        CPPUNIT_ASSERT(xGraphic.is());
+        CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+    };
+    createSwDoc("tdf95707.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf96275, "tdf96275.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf96275)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xCell->getText());
-    // This was text: the shape's frame was part of the 1st paragraph instead of the 3rd one.
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
-                         getProperty<OUString>(getRun(xParagraph, 1), "TextPortionType"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xCell->getText());
+        // This was text: the shape's frame was part of the 1st paragraph instead of the 3rd one.
+        CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                             getProperty<OUString>(getRun(xParagraph, 1), "TextPortionType"));
+    };
+    createSwDoc("tdf96275.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf82073, "tdf82073.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf82073)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    // This was -1: the background color was automatic, not black.
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xCell, "BackColor"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        // This was -1: the background color was automatic, not black.
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xCell, "BackColor"));
+    };
+    createSwDoc("tdf82073.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf74795, "tdf74795.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf74795)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    // This was 0, \trpaddl was ignored on import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635),
-                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        // This was 0, \trpaddl was ignored on import.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635),
+                             getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 
-    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    // Make sure that the scope of the default is only one row.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
-                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+        xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+        // Make sure that the scope of the default is only one row.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    };
+    createSwDoc("tdf74795.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf137085, "tdf137085.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137085)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    // \trpaddl0 overrides \trgaph600 (-1058 mm100) and built-in default of 190
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        // \trpaddl0 overrides \trgaph600 (-1058 mm100) and built-in default of 190
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             getProperty<sal_Int32>(xTable, "LeftMargin"));
 
-    // the \trpaddl0 is applied to all cells
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
-                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+        // the \trpaddl0 is applied to all cells
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 
-    xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
-                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+        xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    };
+    createSwDoc("tdf137085.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf77349, "tdf77349.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf77349)
 {
-    uno::Reference<container::XNamed> xImage(getShape(1), uno::UNO_QUERY);
-    // This was empty: imported image wasn't named automatically.
-    CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xImage->getName());
+    auto verify = [this]() {
+        uno::Reference<container::XNamed> xImage(getShape(1), uno::UNO_QUERY);
+        // This was empty: imported image wasn't named automatically.
+        CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xImage->getName());
+    };
+    createSwDoc("tdf77349.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf50821, "tdf50821.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf50821)
 {
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    // This was 0, \trpaddfl was mishandled on import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(191),
-                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        // This was 0, \trpaddfl was mishandled on import.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(191),
+                             getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+    };
+    createSwDoc("tdf50821.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf100507, "tdf100507.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf100507)
 {
-    // This was 0: left margin of the first paragraph was lost on import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6618),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    auto verify = [this]() {
+        // This was 0: left margin of the first paragraph was lost on import.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6618),
+                             getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    };
+    createSwDoc("tdf100507.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf44986, "tdf44986.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf44986)
 {
-    // Check that the table at the second paragraph.
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
-    // Check the first row of the table, it should have two cells (one separator).
-    // This was 0: the first row had no separators, so it had only one cell, which was too wide.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                           xTableRows->getByIndex(0), "TableColumnSeparators")
-                                           .getLength());
+    auto verify = [this]() {
+        // Check that the table at the second paragraph.
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+        uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
+        // Check the first row of the table, it should have two cells (one separator).
+        // This was 0: the first row had no separators, so it had only one cell, which was too wide.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                               xTableRows->getByIndex(0), "TableColumnSeparators")
+                                               .getLength());
+    };
+    createSwDoc("tdf44986.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf90697, "tdf90697.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf90697)
 {
-    // We want section breaks to be seen as section breaks, not as page breaks,
-    // so this document should have only one page, not three.
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    auto verify = [this]() {
+        // We want section breaks to be seen as section breaks, not as page breaks,
+        // so this document should have only one page, not three.
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+    };
+    createSwDoc("tdf90697.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf104317, "tdf104317.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104317)
 {
-    // This failed to load, we tried to set CustomShapeGeometry on a line shape.
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    auto verify = [this]() {
+        // This failed to load, we tried to set CustomShapeGeometry on a line shape.
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    };
+    createSwDoc("tdf104317.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf104744, "tdf104744.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104744)
 {
-    auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
-        getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
-    comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
-    // This was 0.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
+    auto verify = [this]() {
+        auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
+            getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+        comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
+        // This was 0.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
+    };
+    createSwDoc("tdf104744.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
@@ -510,65 +750,101 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf105852, "tdf105852.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105852)
 {
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
-    // All rows but last were merged -> there were only 2 rows
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTableRows->getCount());
-    // The first row must have 4 cells.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                           xTableRows->getByIndex(0), "TableColumnSeparators")
-                                           .getLength());
-    // The third row must have 1 merged cell.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                           xTableRows->getByIndex(2), "TableColumnSeparators")
-                                           .getLength());
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+        // All rows but last were merged -> there were only 2 rows
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTableRows->getCount());
+        // The first row must have 4 cells.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                               xTableRows->getByIndex(0), "TableColumnSeparators")
+                                               .getLength());
+        // The third row must have 1 merged cell.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                               xTableRows->getByIndex(2), "TableColumnSeparators")
+                                               .getLength());
+    };
+    createSwDoc("tdf105852.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf104287, "tdf104287.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104287)
 {
-    uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xShape.is());
-    // This failed, the bitmap had no valid anchor.
-    CPPUNIT_ASSERT(xShape->getAnchor().is());
+    auto verify = [this]() {
+        uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShape.is());
+        // This failed, the bitmap had no valid anchor.
+        CPPUNIT_ASSERT(xShape->getAnchor().is());
+    };
+    createSwDoc("tdf104287.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf105729, "tdf105729.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105729)
 {
-    // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc from style.
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_CENTER,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    auto verify = [this]() {
+        // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc from style.
+        CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
+                             static_cast<style::ParagraphAdjust>(
+                                 getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    };
+    createSwDoc("tdf105729.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf106694, "tdf106694.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106694)
 {
-    auto aTabs = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
-    // This was 0, tab position was incorrect, looked like it was missing.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14605), aTabs[0].Position);
+    auto verify = [this]() {
+        auto aTabs = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
+        // This was 0, tab position was incorrect, looked like it was missing.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14605), aTabs[0].Position);
+    };
+    createSwDoc("tdf106694.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf107116, "tdf107116.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107116)
 {
-    // This was 0, upper border around text (and its distance) was missing.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)),
-                         getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
+    auto verify = [this]() {
+        // This was 0, upper border around text (and its distance) was missing.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)),
+                             getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
+    };
+    createSwDoc("tdf107116.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf106950, "tdf106950.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106950)
 {
-    uno::Reference<text::XTextRange> xPara(getParagraph(1));
-    // This was ParagraphAdjust_LEFT, trying to set CharShadingValue on a
-    // paragraph style thrown an exception, and remaining properties were not
-    // set.
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_CENTER,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        // This was ParagraphAdjust_LEFT, trying to set CharShadingValue on a
+        // paragraph style thrown an exception, and remaining properties were not
+        // set.
+        CPPUNIT_ASSERT_EQUAL(
+            style::ParagraphAdjust_CENTER,
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    };
+    createSwDoc("tdf106950.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
@@ -583,20 +859,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133437)
 {
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
-    CPPUNIT_ASSERT_EQUAL(560, getShapes()); // 285 \shp + 275 \poswX
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
+        CPPUNIT_ASSERT_EQUAL(560, getShapes()); // 285 \shp + 275 \poswX
 
-    xmlDocUniquePtr pDump = parseLayoutDump();
-    // Count shapes on first page
-    assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject"_ostr, 79);
+        xmlDocUniquePtr pDump = parseLayoutDump();
+        // Count shapes on first page
+        assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject"_ostr, 79);
 
-    // Second page
-    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 120);
+        // Second page
+        assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 120);
 
-    // Third page
-    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 86);
+        // Third page
+        assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 86);
+    };
+    createSwDoc("tdf133437.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)
@@ -627,23 +909,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128320)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nPos);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf129513, "tdf129513.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129513)
 {
-    // \pagebb after \intbl must not reset the "in table" flag
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-    // Make sure the first paragraph is imported in table
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getCellNames().getLength());
-    uno::Reference<text::XText> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("In table"), xCell->getString());
+    auto verify = [this]() {
+        // \pagebb after \intbl must not reset the "in table" flag
+        CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+        // Make sure the first paragraph is imported in table
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getCellNames().getLength());
+        uno::Reference<text::XText> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(OUString("In table"), xCell->getString());
+    };
+    createSwDoc("tdf129513.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf138210, "tdf138210.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138210)
 {
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
-                                                         uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                             uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    };
+    createSwDoc("tdf138210.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137894)
@@ -692,80 +986,115 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144437)
     CPPUNIT_ASSERT_MESSAGE("Bookmark start & end are wrong", nBmkEndPos > nBmkStartPos);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf131234, "tdf131234.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131234)
 {
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"Hello"_ustr);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"Hello"_ustr);
 
-    // Ensure that text has default font attrs in spite of style referenced
-    // E.g. 12pt, Times New Roman, black, no bold, no italic, no underline
-    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xRun, "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xRun, "CharFontName"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xRun, "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+        // Ensure that text has default font attrs in spite of style referenced
+        // E.g. 12pt, Times New Roman, black, no bold, no italic, no underline
+        CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xRun, "CharColor"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"),
+                             getProperty<OUString>(xRun, "CharFontName"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xRun, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE,
+                             getProperty<sal_Int16>(xRun, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+    };
+    createSwDoc("tdf131234.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf118047, "tdf118047.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118047)
 {
-    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xPara = getParagraph(1);
 
-    // Ensure that default "Normal" style properties are not applied to text:
-    // text remains with fontsize 12pt and no huge margin below
-    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getRun(xPara, 1), "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+        // Ensure that default "Normal" style properties are not applied to text:
+        // text remains with fontsize 12pt and no huge margin below
+        CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getRun(xPara, 1), "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 
-    // Same for header, it should not derive props from "Normal" style
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), parseDump("/root/page[1]/header/txt/text()"_ostr));
-    sal_Int32 nHeight
-        = parseDump("/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
-    CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
+        // Same for header, it should not derive props from "Normal" style
+        CPPUNIT_ASSERT_EQUAL(OUString("Header"), parseDump("/root/page[1]/header/txt/text()"_ostr));
+        sal_Int32 nHeight
+            = parseDump("/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
+        CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
+    };
+    createSwDoc("tdf118047.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158950, "tdf158950.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158950)
 {
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2, u"style"_ustr);
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2, u"style"_ustr);
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: rgba[ff0000ff]
-    // - Actual  : rgba[000000ff]
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+        // Without the fix in place, this test would have failed with
+        // - Expected: rgba[ff0000ff]
+        // - Actual  : rgba[000000ff]
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, "CharColor"));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE,
+                             getProperty<sal_Int16>(xRun, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+    };
+    createSwDoc("tdf158950.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf104390, "tdf104390.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104390)
 {
-    uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    auto verify = [this]() {
+        uno::Reference<text::XTextRange> xPara = getParagraph(1);
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
 
-    // Check font in first run
-    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(36.f, getProperty<float>(xRun, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
+        // Check font in first run
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(36.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
 
-    // Ensure this run covers whole paragraph text (ignore possible empty "paragraph marker" run)
-    CPPUNIT_ASSERT_EQUAL(xPara->getString().getLength(), xRun->getString().getLength());
+        // Ensure this run covers whole paragraph text (ignore possible empty "paragraph marker" run)
+        CPPUNIT_ASSERT_EQUAL(xPara->getString().getLength(), xRun->getString().getLength());
+    };
+    createSwDoc("tdf104390.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf153681, "tdf153681.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf153681)
 {
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY_THROW);
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent,
+                                                                  uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY_THROW);
 
-    // This is outside table
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY_THROW);
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2
-    // - Actual  : 3
-    // Generates extra cell
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
+        // This is outside table
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY_THROW);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2
+        // - Actual  : 3
+        // Generates extra cell
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
+    };
+    createSwDoc("tdf153681.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 } // end of anonymous namespace
