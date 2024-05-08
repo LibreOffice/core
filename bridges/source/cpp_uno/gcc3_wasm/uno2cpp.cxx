@@ -11,12 +11,17 @@
 
 #include <vector>
 
+#include <alloca.h>
+
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
+#include <uno/any2.h>
+#include <uno/data.h>
 
 #include <bridge.hxx>
 #include <types.hxx>
@@ -86,9 +91,12 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
           sal_Int32 count, typelib_MethodParameter* parameters, void* returnValue, void** arguments,
           uno_Any** exception)
 {
+    css::uno::TypeDescription rtd(returnType);
+    auto const retConv = bridges::cpp_uno::shared::relatesToInterfaceType(rtd.get());
+    auto const ret = retConv ? alloca(rtd.get()->nSize) : returnValue;
     OStringBuffer sig;
     std::vector<sal_uInt64> args;
-    switch (returnType->eTypeClass)
+    switch (rtd.get()->eTypeClass)
     {
         case typelib_TypeClass_VOID:
             sig.append('v');
@@ -119,12 +127,11 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         case typelib_TypeClass_SEQUENCE:
         case typelib_TypeClass_INTERFACE:
             sig.append("vi");
-            args.push_back(reinterpret_cast<sal_uInt32>(returnValue));
+            args.push_back(reinterpret_cast<sal_uInt32>(ret));
             break;
         case typelib_TypeClass_STRUCT:
         {
-            css::uno::TypeDescription td(returnType);
-            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(td.get())))
+            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(rtd.get())))
             {
                 case StructKind::Empty:
                     break;
@@ -142,7 +149,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
                     break;
                 case StructKind::General:
                     sig.append("vi");
-                    args.push_back(reinterpret_cast<sal_uInt32>(returnValue));
+                    args.push_back(reinterpret_cast<sal_uInt32>(ret));
                     break;
             }
             break;
@@ -151,15 +158,14 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             O3TL_UNREACHABLE;
     }
     sig.append('i');
-    args.push_back(reinterpret_cast<sal_uInt32>(proxy->getCppI()));
+    sal_uInt32 const* const* thisPtr
+        = reinterpret_cast<sal_uInt32 const* const*>(proxy->getCppI()) + slot.offset;
+    args.push_back(reinterpret_cast<sal_uInt32>(thisPtr));
+    std::vector<void*> cppArgs(count);
+    std::vector<css::uno::TypeDescription> ptds(count);
     for (sal_Int32 i = 0; i != count; ++i)
     {
-        if (parameters[i].bOut)
-        {
-            sig.append('i');
-            args.push_back(reinterpret_cast<sal_uInt32>(arguments[i]));
-        }
-        else
+        if (!parameters[i].bOut && bridges::cpp_uno::shared::isSimpleType(parameters[i].pTypeRef))
         {
             switch (parameters[i].pTypeRef->eTypeClass)
             {
@@ -208,25 +214,38 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
                     sig.append('i');
                     args.push_back(*reinterpret_cast<sal_Unicode const*>(arguments[i]));
                     break;
-                case typelib_TypeClass_STRING:
-                case typelib_TypeClass_TYPE:
-                case typelib_TypeClass_ANY:
-                case typelib_TypeClass_SEQUENCE:
-                case typelib_TypeClass_STRUCT:
-                case typelib_TypeClass_INTERFACE:
-                    sig.append('i');
-                    args.push_back(reinterpret_cast<sal_uInt32>(arguments[i]));
-                    break;
                 default:
                     O3TL_UNREACHABLE;
+            }
+        }
+        else
+        {
+            sig.append('i');
+            css::uno::TypeDescription ptd(parameters[i].pTypeRef);
+            if (!parameters[i].bIn)
+            {
+                cppArgs[i] = alloca(ptd.get()->nSize);
+                uno_constructData(cppArgs[i], ptd.get());
+                ptds[i] = ptd;
+                args.push_back(reinterpret_cast<sal_uInt32>(cppArgs[i]));
+            }
+            else if (bridges::cpp_uno::shared::relatesToInterfaceType(ptd.get()))
+            {
+                cppArgs[i] = alloca(ptd.get()->nSize);
+                uno_copyAndConvertData(cppArgs[i], arguments[i], ptd.get(),
+                                       proxy->getBridge()->getUno2Cpp());
+                ptds[i] = ptd;
+                args.push_back(reinterpret_cast<sal_uInt32>(cppArgs[i]));
+            }
+            else
+            {
+                args.push_back(reinterpret_cast<sal_uInt32>(arguments[i]));
             }
         }
     }
     try
     {
-        callVirtualFunction(
-            sig, (*reinterpret_cast<sal_uInt32 const* const*>(proxy->getCppI()))[slot.index],
-            args.data(), returnValue);
+        callVirtualFunction(sig, (*thisPtr)[slot.index], args.data(), ret);
     }
     catch (...)
     {
@@ -234,9 +253,39 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         uno_type_any_construct(*exception, &TODO,
                                cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
                                nullptr);
+        for (sal_Int32 i = 0; i != count; ++i)
+        {
+            if (cppArgs[i] != nullptr)
+            {
+                uno_destructData(cppArgs[i], ptds[i].get(),
+                                 reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+            }
+        }
         return;
     }
     *exception = nullptr;
+    for (sal_Int32 i = 0; i != count; ++i)
+    {
+        if (cppArgs[i] != nullptr)
+        {
+            if (parameters[i].bOut)
+            {
+                if (parameters[i].bIn)
+                {
+                    uno_destructData(arguments[i], ptds[i].get(), nullptr);
+                }
+                uno_copyAndConvertData(arguments[i], cppArgs[i], ptds[i].get(),
+                                       proxy->getBridge()->getCpp2Uno());
+            }
+            uno_destructData(cppArgs[i], ptds[i].get(),
+                             reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+        }
+    }
+    if (retConv)
+    {
+        uno_copyAndConvertData(returnValue, ret, rtd.get(), proxy->getBridge()->getCpp2Uno());
+        uno_destructData(ret, rtd.get(), reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+    }
 }
 }
 
