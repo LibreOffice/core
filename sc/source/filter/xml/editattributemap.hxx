@@ -23,8 +23,8 @@ public:
     struct Entry
     {
         sal_uInt16 nmXMLNS;
-        const char* mpXMLName;
-        const char* mpAPIName;
+        OUString maXMLName;
+        OUString maAPIName;
         sal_uInt16 mnItemID;
         sal_uInt8 mnFlag;
     };
