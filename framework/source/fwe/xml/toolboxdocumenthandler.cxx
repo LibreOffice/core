@@ -217,7 +217,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                     {
                         try
                         {
-                            xPropSet->setPropertyValue("UIName", Any( aUIName ) );
+                            xPropSet->setPropertyValue(u"UIName"_ustr, Any( aUIName ) );
                         }
                         catch ( const UnknownPropertyException& )
                         {
@@ -575,7 +575,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
     {
         try
         {
-            xPropSet->getPropertyValue("UIName") >>= aUIName;
+            xPropSet->getPropertyValue(u"UIName"_ustr) >>= aUIName;
         }
         catch ( const UnknownPropertyException& )
         {
@@ -585,10 +585,10 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_TOOLBAR,
-                         XMLNS_TOOLBAR );
+                         u"" XMLNS_TOOLBAR ""_ustr );
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
-                         XMLNS_XLINK );
+                         u"" XMLNS_XLINK ""_ustr );
 
     if ( !aUIName.isEmpty() )
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_UINAME,

@@ -53,7 +53,7 @@ namespace framework
 
 OUString SAL_CALL HeaderMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.HeaderMenuController";
+    return u"com.sun.star.comp.framework.HeaderMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL HeaderMenuController::supportsService( const OUString& sServiceName )
@@ -89,8 +89,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
 
     Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
-    OUString aCmd( ".uno:InsertPageHeader" );
-    OUString aHeaderFooterIsOnStr( "HeaderIsOn" );
+    OUString aCmd( u".uno:InsertPageHeader"_ustr );
+    OUString aHeaderFooterIsOnStr( u"HeaderIsOn"_ustr );
     if ( m_bFooter )
     {
         aCmd = ".uno:InsertPageFooter";
@@ -102,7 +102,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
     try
     {
         Reference< XNameContainer > xNameContainer;
-        if ( xStyleFamilies->getByName("PageStyles") >>= xNameContainer )
+        if ( xStyleFamilies->getByName(u"PageStyles"_ustr) >>= xNameContainer )
         {
             Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 

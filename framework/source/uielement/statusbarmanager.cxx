@@ -302,23 +302,23 @@ void StatusBarManager::CreateControllers()
 
         std::vector< uno::Any > aPropVector
         {
-            uno::Any(comphelper::makePropertyValue("CommandURL", aCommandURL)),
-            uno::Any(comphelper::makePropertyValue("ModuleIdentifier", u""_ustr)),
-            uno::Any(comphelper::makePropertyValue("Frame", m_xFrame)),
+            uno::Any(comphelper::makePropertyValue(u"CommandURL"_ustr, aCommandURL)),
+            uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, u""_ustr)),
+            uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)),
 
             // TODO remove this
-            uno::Any(comphelper::makePropertyValue("ServiceManager", uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW))),
+            uno::Any(comphelper::makePropertyValue(u"ServiceManager"_ustr, uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW))),
 
-            uno::Any(comphelper::makePropertyValue("ParentWindow", xStatusbarWindow)),
-            uno::Any(comphelper::makePropertyValue("Identifier", nId)),
-            uno::Any(comphelper::makePropertyValue("StatusbarItem", xStatusbarItem))
+            uno::Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, xStatusbarWindow)),
+            uno::Any(comphelper::makePropertyValue(u"Identifier"_ustr, nId)),
+            uno::Any(comphelper::makePropertyValue(u"StatusbarItem"_ustr, xStatusbarItem))
         };
 
         uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
         // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
-             m_xStatusbarControllerFactory->hasController( aCommandURL, "" ))
+             m_xStatusbarControllerFactory->hasController( aCommandURL, u""_ustr ))
         {
             xController.set(m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
                                 aCommandURL, aArgs, m_xContext ),
@@ -417,7 +417,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, "");
+                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, u""_ustr);
                     OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
                     StatusBarItemBits nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
@@ -492,7 +492,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
         if ( xPropSet.is() )
-            xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+            xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             aGuard.clear();

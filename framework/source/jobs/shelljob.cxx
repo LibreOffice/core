@@ -42,7 +42,7 @@ namespace framework{
 
 OUString SAL_CALL ShellJob::getImplementationName()
 {
-    return "com.sun.star.comp.framework.ShellJob";
+    return u"com.sun.star.comp.framework.ShellJob"_ustr;
 }
 
 sal_Bool SAL_CALL ShellJob::supportsService( const OUString& sServiceName )
@@ -69,12 +69,12 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     /** address job configuration inside argument set provided on method execute(). */
-    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault("JobConfig", css::uno::Sequence< css::beans::NamedValue >()));
+    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(u"JobConfig"_ustr, css::uno::Sequence< css::beans::NamedValue >()));
 
-    const OUString                       sCommand               = lOwnCfg.getUnpackedValueOrDefault("Command"             , OUString());
-    const css::uno::Sequence< OUString > lCommandArguments      = lOwnCfg.getUnpackedValueOrDefault("Arguments"           , css::uno::Sequence< OUString >());
-    const bool                           bDeactivateJobIfDone   = lOwnCfg.getUnpackedValueOrDefault("DeactivateJobIfDone" , true );
-    const bool                           bCheckExitCode         = lOwnCfg.getUnpackedValueOrDefault("CheckExitCode"       , true );
+    const OUString                       sCommand               = lOwnCfg.getUnpackedValueOrDefault(u"Command"_ustr             , OUString());
+    const css::uno::Sequence< OUString > lCommandArguments      = lOwnCfg.getUnpackedValueOrDefault(u"Arguments"_ustr           , css::uno::Sequence< OUString >());
+    const bool                           bDeactivateJobIfDone   = lOwnCfg.getUnpackedValueOrDefault(u"DeactivateJobIfDone"_ustr , true );
+    const bool                           bCheckExitCode         = lOwnCfg.getUnpackedValueOrDefault(u"CheckExitCode"_ustr       , true );
 
     // replace all might existing place holder.
     OUString sRealCommand = impl_substituteCommandVariables(sCommand);

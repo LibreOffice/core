@@ -29,7 +29,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/framework/qa/cppunit/data/")
+        : UnoApiTest(u"/framework/qa/cppunit/data/"_ustr)
     {
     }
 };
@@ -58,11 +58,11 @@ void TestThread::execute()
 {
     sal_Int32 nSearchFlags = frame::FrameSearchFlag::AUTO;
     uno::Sequence<beans::PropertyValue> aArguments = {
-        comphelper::makePropertyValue("OnMainThread", true),
+        comphelper::makePropertyValue(u"OnMainThread"_ustr, true),
     };
     // Note how this is invoking loadComponentFromURL() on a frame, not on the desktop, as usual.
-    mrComponent = mxComponentLoader->loadComponentFromURL("private:factory/swriter", "_self",
-                                                          nSearchFlags, aArguments);
+    mrComponent = mxComponentLoader->loadComponentFromURL(u"private:factory/swriter"_ustr,
+                                                          u"_self"_ustr, nSearchFlags, aArguments);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLoadComponentFromURL)
@@ -85,7 +85,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLoadComponentFromURL)
         // Start the thread that will load the component, but hold the solar mutex for now, so we
         // can see if it blocks.
         SolarMutexGuard guard;
-        uno::Reference<frame::XFrame> xFrame = mxDesktop->findFrame("_blank", /*nSearchFlags=*/0);
+        uno::Reference<frame::XFrame> xFrame
+            = mxDesktop->findFrame(u"_blank"_ustr, /*nSearchFlags=*/0);
         uno::Reference<frame::XComponentLoader> xComponentLoader(xFrame, uno::UNO_QUERY);
         xThread = new TestThread(xComponentLoader, mxComponent);
         xThread->launch();
@@ -118,18 +119,18 @@ CPPUNIT_TEST_FIXTURE(Test, testURLTransformer_parseSmart)
     css::util::URL aURL;
     aURL.Complete = "www.example.com:8080/foo/bar?q=baz#F";
     css::uno::Reference xParser(css::util::URLTransformer::create(mxComponentContext));
-    CPPUNIT_ASSERT(xParser->parseSmart(aURL, "http:"));
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com:8080/foo/bar?q=baz#F"), aURL.Complete);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com:8080/foo/bar"), aURL.Main);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://"), aURL.Protocol);
+    CPPUNIT_ASSERT(xParser->parseSmart(aURL, u"http:"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"http://www.example.com:8080/foo/bar?q=baz#F"_ustr, aURL.Complete);
+    CPPUNIT_ASSERT_EQUAL(u"http://www.example.com:8080/foo/bar"_ustr, aURL.Main);
+    CPPUNIT_ASSERT_EQUAL(u"http://"_ustr, aURL.Protocol);
     CPPUNIT_ASSERT(aURL.User.isEmpty());
     CPPUNIT_ASSERT(aURL.Password.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(OUString("www.example.com"), aURL.Server);
+    CPPUNIT_ASSERT_EQUAL(u"www.example.com"_ustr, aURL.Server);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8080), aURL.Port);
-    CPPUNIT_ASSERT_EQUAL(OUString("/foo/"), aURL.Path);
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), aURL.Name);
-    CPPUNIT_ASSERT_EQUAL(OUString("q=baz"), aURL.Arguments);
-    CPPUNIT_ASSERT_EQUAL(OUString("F"), aURL.Mark);
+    CPPUNIT_ASSERT_EQUAL(u"/foo/"_ustr, aURL.Path);
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, aURL.Name);
+    CPPUNIT_ASSERT_EQUAL(u"q=baz"_ustr, aURL.Arguments);
+    CPPUNIT_ASSERT_EQUAL(u"F"_ustr, aURL.Mark);
 }
 }
 

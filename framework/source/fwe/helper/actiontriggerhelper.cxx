@@ -72,13 +72,13 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
     try
     {
         // mandatory properties
-        a = xActionTriggerPropertySet->getPropertyValue("Text");
+        a = xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr);
         a >>= aMenuLabel;
-        a = xActionTriggerPropertySet->getPropertyValue("CommandURL");
+        a = xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr);
         a >>= aCommandURL;
-        a = xActionTriggerPropertySet->getPropertyValue("Image");
+        a = xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr);
         a >>= xBitmap;
-        a = xActionTriggerPropertySet->getPropertyValue("SubContainer");
+        a = xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr);
         a >>= xSubContainer;
     }
     catch (const Exception&)
@@ -88,7 +88,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
     // optional properties
     try
     {
-        a = xActionTriggerPropertySet->getPropertyValue("HelpURL");
+        a = xActionTriggerPropertySet->getPropertyValue(u"HelpURL"_ustr);
         a >>= aHelpURL;
     }
     catch (const Exception&)
@@ -103,7 +103,7 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
         return;
 
     AddonsOptions aAddonOptions;
-    OUString aSlotURL( "slot:" );
+    OUString aSlotURL( u"slot:"_ustr );
 
     for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
     {
@@ -235,7 +235,7 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
     {
-        xPropSet.set( xMultiServiceFactory->createInstance( "com.sun.star.ui.ActionTrigger" ),
+        xPropSet.set( xMultiServiceFactory->createInstance( u"com.sun.star.ui.ActionTrigger"_ustr ),
                       UNO_QUERY );
 
         Any a;
@@ -245,7 +245,7 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
             // Retrieve the menu attributes and set them in our PropertySet
             OUString aLabel = rMenu->getItemText(nItemId);
             a <<= aLabel;
-            xPropSet->setPropertyValue("Text", a );
+            xPropSet->setPropertyValue(u"Text"_ustr, a );
 
             OUString aCommandURL = rMenu->getCommand(nItemId);
 
@@ -255,13 +255,13 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
             }
 
             a <<= aCommandURL;
-            xPropSet->setPropertyValue("CommandURL", a );
+            xPropSet->setPropertyValue(u"CommandURL"_ustr, a );
 
             Reference<XBitmap> xBitmap(rMenu->getItemImage(nItemId), UNO_QUERY);
             if (xBitmap.is())
             {
                 a <<= xBitmap;
-                xPropSet->setPropertyValue("Image", a );
+                xPropSet->setPropertyValue(u"Image"_ustr, a );
             }
         }
         catch (const Exception&)
@@ -279,7 +279,7 @@ static Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< 
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                "com.sun.star.ui.ActionTriggerSeparator" ),
+                                                u"com.sun.star.ui.ActionTriggerSeparator"_ustr ),
                                             UNO_QUERY );
     }
 
@@ -293,7 +293,7 @@ static Reference< XIndexContainer > CreateActionTriggerContainer( const Referenc
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XIndexContainer >( xMultiServiceFactory->createInstance(
-                                                "com.sun.star.ui.ActionTriggerContainer" ),
+                                                u"com.sun.star.ui.ActionTriggerContainer"_ustr ),
                                              UNO_QUERY );
     }
 
@@ -336,7 +336,7 @@ static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMen
                     Reference< XIndexContainer > xSubContainer = CreateActionTriggerContainer( rActionTriggerContainer );
 
                     a <<= xSubContainer;
-                    xPropSet->setPropertyValue("SubContainer", a );
+                    xPropSet->setPropertyValue(u"SubContainer"_ustr, a );
                     FillActionTriggerContainerWithMenu(xPopupMenu, xSubContainer);
                 }
             }

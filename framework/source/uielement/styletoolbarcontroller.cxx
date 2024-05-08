@@ -29,18 +29,18 @@ OUString MapFamilyToCommand( std::u16string_view rFamily )
     if ( rFamily == u"ParagraphStyles" ||
          rFamily == u"CellStyles" ||         // In sc
          rFamily == u"graphics" )            // In sd
-        return ".uno:ParaStyle";
+        return u".uno:ParaStyle"_ustr;
     else if ( rFamily == u"CharacterStyles" )
-        return ".uno:CharStyle";
+        return u".uno:CharStyle"_ustr;
     else if ( rFamily == u"PageStyles" )
-        return ".uno:PageStyle";
+        return u".uno:PageStyle"_ustr;
     else if ( rFamily == u"FrameStyles" ||
               rFamily == u"GraphicStyles" )  // In sc
-        return ".uno:FrameStyle";
+        return u".uno:FrameStyle"_ustr;
     else if ( rFamily == u"NumberingStyles" )
-        return ".uno:ListStyle";
+        return u".uno:ListStyle"_ustr;
     else if ( rFamily == u"TableStyles" )
-        return ".uno:TableStyle";
+        return u".uno:TableStyle"_ustr;
 
     return OUString();
 }
@@ -65,7 +65,7 @@ OUString GetDisplayFromInternalName( const css::uno::Reference< css::frame::XFra
 
         OUString aDisplayName;
         if ( xStyle.is() )
-            xStyle->getPropertyValue( "DisplayName" ) >>= aDisplayName;
+            xStyle->getPropertyValue( u"DisplayName"_ustr ) >>= aDisplayName;
         return aDisplayName;
     }
     catch ( const css::uno::Exception& )

@@ -72,7 +72,7 @@ enum PropHandle {
 
 OUString SAL_CALL Desktop::getImplementationName()
 {
-    return "com.sun.star.comp.framework.Desktop";
+    return u"com.sun.star.comp.framework.Desktop"_ustr;
 }
 
 sal_Bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.Desktop" };
+    return { u"com.sun.star.frame.Desktop"_ustr };
 }
 
 void Desktop::constructorInit()
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     if (!bRestartableMainLoop)
     {
-        CrashReporter::addKeyValue("ShutDown", OUString::boolean(true), CrashReporter::Write);
+        CrashReporter::addKeyValue(u"ShutDown"_ustr, OUString::boolean(true), CrashReporter::Write);
 
         // The clipboard listener needs to be the first. It can create copies of the
         // existing document which needs basically all the available infrastructure.
@@ -574,7 +574,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
     utl::MediaDescriptor aDescriptor(lArguments);
-    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)
     {
@@ -1429,22 +1429,22 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     static cppu::OPropertyArrayHelper HELPER =
         [] () {
             return cppu::OPropertyArrayHelper {
-                {{"ActiveFrame", PropHandle::ActiveFrame,
+                {{u"ActiveFrame"_ustr, PropHandle::ActiveFrame,
                   cppu::UnoType<css::lang::XComponent>::get(),
                   (css::beans::PropertyAttribute::TRANSIENT
                    | css::beans::PropertyAttribute::READONLY)},
-                 {"DispatchRecorderSupplier",
+                 {u"DispatchRecorderSupplier"_ustr,
                   PropHandle::DispatchRecorderSupplier,
                   cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
                   css::beans::PropertyAttribute::TRANSIENT},
-                 {"IsPlugged",
+                 {u"IsPlugged"_ustr,
                   PropHandle::IsPlugged, cppu::UnoType<bool>::get(),
                   (css::beans::PropertyAttribute::TRANSIENT
                    | css::beans::PropertyAttribute::READONLY)},
-                 {"SuspendQuickstartVeto", PropHandle::SuspendQuickstartVeto,
+                 {u"SuspendQuickstartVeto"_ustr, PropHandle::SuspendQuickstartVeto,
                   cppu::UnoType<bool>::get(),
                   css::beans::PropertyAttribute::TRANSIENT},
-                 {"Title", PropHandle::Title, cppu::UnoType<OUString>::get(),
+                 {u"Title"_ustr, PropHandle::Title, cppu::UnoType<OUString>::get(),
                   css::beans::PropertyAttribute::TRANSIENT}},
                 true};
         }();

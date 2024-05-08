@@ -587,7 +587,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString version(utl::ConfigManager::getProductVersion());
     sTitle.append(' ');
     sTitle.append(version);
-    OUString sVersion = ::utl::Bootstrap::getBuildIdData("development");
+    OUString sVersion = ::utl::Bootstrap::getBuildIdData(u"development"_ustr);
     sTitle.append(" [");
     sTitle.append(sVersion);
     sTitle.append("]");

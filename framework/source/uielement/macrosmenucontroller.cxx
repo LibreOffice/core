@@ -41,7 +41,7 @@ namespace framework
 
 OUString SAL_CALL MacrosMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.MacrosMenuController";
+    return u"com.sun.star.comp.framework.MacrosMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceName )
@@ -77,7 +77,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > cons
     assert(rPopupMenu->getItemCount() == 0);
 
     // insert basic
-    OUString aCommand(".uno:MacroDialog");
+    OUString aCommand(u".uno:MacroDialog"_ustr);
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, m_aModuleName);
     OUString aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
     rPopupMenu->insertItem(2, aDisplayName, 0, 0);
@@ -121,7 +121,7 @@ void MacrosMenuController::addScriptItems(const Reference<css::awt::XPopupMenu>&
     static constexpr OUString providerKey(u"com.sun.star.script.provider.ScriptProviderFor"_ustr);
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY_THROW );
-    Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );
+    Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( u"com.sun.star.script.provider.LanguageScriptProvider"_ustr );
 
     sal_Int16 nPos = rPopupMenu->getItemCount();
 

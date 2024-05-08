@@ -43,7 +43,7 @@ MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 
 OUString SAL_CALL MediaTypeDetectionHelper::getImplementationName()
 {
-    return "com.sun.star.comp.framework.MediaTypeDetectionHelper";
+    return u"com.sun.star.comp.framework.MediaTypeDetectionHelper"_ustr;
 }
 
 sal_Bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sServiceName )
@@ -53,7 +53,7 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sSe
 
 css::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.MediaTypeDetectionHelper" };
+    return { u"com.sun.star.frame.MediaTypeDetectionHelper"_ustr };
 }
 
 

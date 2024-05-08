@@ -80,10 +80,10 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
            // it's an old-style initialisation using properties
             ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-            m_xFrame             = lArgs.getUnpackedValueOrDefault("Frame"            , css::uno::Reference< css::frame::XFrame >());
-            m_xPluggWindow       = lArgs.getUnpackedValueOrDefault("Window"           , css::uno::Reference< css::awt::XWindow >() );
-            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , false );
-            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", false );
+            m_xFrame             = lArgs.getUnpackedValueOrDefault(u"Frame"_ustr            , css::uno::Reference< css::frame::XFrame >());
+            m_xPluggWindow       = lArgs.getUnpackedValueOrDefault(u"Window"_ustr           , css::uno::Reference< css::awt::XWindow >() );
+            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault(u"AllowParentShow"_ustr  , false );
+            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault(u"DisableReschedule"_ustr, false );
        }
     }
 

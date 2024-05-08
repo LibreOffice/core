@@ -156,9 +156,9 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         }
         else if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
         {
-            m_xBuilder = Application::CreateBuilder(pTunnel->getWidget(), "svt/ui/managedtoolbar.ui");
-            m_xTopLevel = m_xBuilder->weld_container("toolbarcontainer");
-            m_xWeldedToolbar = m_xBuilder->weld_toolbar("managedtoolbar");
+            m_xBuilder = Application::CreateBuilder(pTunnel->getWidget(), u"svt/ui/managedtoolbar.ui"_ustr);
+            m_xTopLevel = m_xBuilder->weld_container(u"toolbarcontainer"_ustr);
+            m_xWeldedToolbar = m_xBuilder->weld_toolbar(u"managedtoolbar"_ustr);
             if ( m_xWeldedToolbar )
             {
                 pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, m_xWeldedToolbar.get(), m_xBuilder.get() );
@@ -283,7 +283,7 @@ void SAL_CALL ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEvent
     Reference< XLayoutManager > xLayoutManager;
     Reference< XPropertySet > xPropSet( m_xWeakFrame.get(), UNO_QUERY );
     if ( xPropSet.is() )
-        xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+        xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if ( !xLayoutManager.is() )
         return;
 

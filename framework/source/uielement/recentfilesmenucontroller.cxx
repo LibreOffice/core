@@ -65,7 +65,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.RecentFilesMenuController";
+        return u"com.sun.star.comp.framework.RecentFilesMenuController"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -75,7 +75,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.frame.PopupMenuController"};
+        return {u"com.sun.star.frame.PopupMenuController"_ustr};
     }
 
     // XStatusListener
@@ -330,20 +330,20 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         return;
 
     Sequence< PropertyValue > aArgsList{
-        comphelper::makePropertyValue("Referer", OUString( "private:user" )),
+        comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr),
 
         // documents in the picklist will never be opened as templates
-        comphelper::makePropertyValue("AsTemplate", false),
+        comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
 
         // Type detection needs to know which app we are opening it from.
-        comphelper::makePropertyValue("DocumentService", m_aModuleName)
+        comphelper::makePropertyValue(u"DocumentService"_ustr, m_aModuleName)
     };
     if (m_aRecentFilesItems[nIndex].second) // tdf#149170 only add if true
     {
         aArgsList.realloc(aArgsList.size()+1);
-        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue("ReadOnly", true);
+        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue(u"ReadOnly"_ustr, true);
     }
-    dispatchCommand(m_aRecentFilesItems[nIndex].first, aArgsList, "_default");
+    dispatchCommand(m_aRecentFilesItems[nIndex].first, aArgsList, u"_default"_ustr);
 }
 
 // XEventListener
@@ -385,7 +385,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
     {
         SvtHistoryOptions::Clear( EHistoryType::PickList, false );
         dispatchCommand(
-            "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
+            u"vnd.org.libreoffice.recentdocs:ClearRecentFileList"_ustr,
             css::uno::Sequence< css::beans::PropertyValue >() );
     }
     else if ( aCommand == CMD_OPEN_REMOTE )

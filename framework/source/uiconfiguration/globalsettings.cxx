@@ -82,10 +82,10 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
 GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
-    m_aNodeRefStates( "States" ),
-    m_aPropStatesEnabled( "StatesEnabled" ),
-    m_aPropLocked( "Locked" ),
-    m_aPropDocked( "Docked" ),
+    m_aNodeRefStates( u"States"_ustr ),
+    m_aPropStatesEnabled( u"StatesEnabled"_ustr ),
+    m_aPropLocked( u"Locked"_ustr ),
+    m_aPropDocked( u"Docked"_ustr ),
     m_xContext(std::move( xContext ))
 {
 }
@@ -200,7 +200,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
             uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", uno::Any(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"))}
+                {"nodepath", uno::Any(u"/org.openoffice.Office.UI.GlobalSettings/Toolbars"_ustr)}
             }));
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),

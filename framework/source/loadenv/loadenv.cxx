@@ -181,7 +181,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                 throw css::lang::IllegalArgumentException(
-                    "Optional list of arguments seem to be corrupted.", xLoader, 4);
+                    u"Optional list of arguments seem to be corrupted."_ustr, xLoader, 4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                 throw css::lang::IllegalArgumentException(
@@ -261,7 +261,7 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
     // the load request. We take over the result then!
     m_eContentType = LoadEnv::classifyContent(aRealURL, lMediaDescriptor);
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
-        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::startLoading");
+        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, u"from LoadEnv::startLoading"_ustr);
 
     // make URL part of the MediaDescriptor
     // It doesn't matter if it is already an item of it.
@@ -382,7 +382,7 @@ void LoadEnv::start()
         // check "classifyContent()" failed before ...
         if (m_eContentType == E_UNSUPPORTED_CONTENT)
             throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT,
-                                   "from LoadEnv::start");
+                                   u"from LoadEnv::start"_ustr);
     }
     // <- SAFE
 
@@ -415,7 +415,7 @@ void LoadEnv::start()
     // We can't say - what was the reason for.
     if (!bStarted)
         throw LoadEnvException(
-            LoadEnvException::ID_GENERAL_ERROR, "not started");
+            LoadEnvException::ID_GENERAL_ERROR, u"not started"_ustr);
 }
 
 /*-----------------------------------------------
@@ -618,7 +618,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XTypeDetection > xDetect(
          xContext->getServiceManager()->createInstanceWithContext(
-             "com.sun.star.document.TypeDetection", xContext),
+             u"com.sun.star.document.TypeDetection"_ustr, xContext),
          css::uno::UNO_QUERY_THROW);
 
     OUString sType = xDetect->queryTypeByURL(sURL);
@@ -704,7 +704,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     }
 
     OUString aUseOrcus;
-    rtl::Bootstrap::get("LIBO_USE_ORCUS", aUseOrcus);
+    rtl::Bootstrap::get(u"LIBO_USE_ORCUS"_ustr, aUseOrcus);
     bool bUseOrcus = (aUseOrcus == "YES");
 
     if (!bUseOrcus)
@@ -761,22 +761,22 @@ void LoadEnv::impl_detectTypeAndFilter()
         m_lMediaDescriptor << lDescriptor;
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= sFilter;
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER] <<= OUString("orcus");
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER] <<= u"orcus"_ustr;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] <<= u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
         return;
         // <- SAFE
     }
 
     css::uno::Reference< css::document::XTypeDetection > xDetect(
         xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.document.TypeDetection", xContext),
+            u"com.sun.star.document.TypeDetection"_ustr, xContext),
         css::uno::UNO_QUERY_THROW);
     sType = xDetect->queryTypeByDescriptor(lDescriptor, true); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
     if (sType.isEmpty())
         throw LoadEnvException(
-            LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection failed");
+            LoadEnvException::ID_UNSUPPORTED_CONTENT, u"type detection failed"_ustr);
 
     // SAFE ->
     osl::ResettableMutexGuard aWriteLock(m_mutex);
@@ -794,7 +794,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // We do have potentially correct type, but the detection process was aborted.
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED, false))
         throw LoadEnvException(
-            LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection aborted");
+            LoadEnvException::ID_UNSUPPORTED_CONTENT, u"type detection aborted"_ustr);
 
     // But the type isn't enough. For loading sometimes we need more information.
     // E.g. for our "_default" feature, where we recycle any frame which contains
@@ -811,7 +811,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
-            sFilter = lTypeProps.getUnpackedValueOrDefault("PreferredFilter", OUString());
+            sFilter = lTypeProps.getUnpackedValueOrDefault(u"PreferredFilter"_ustr, OUString());
             if (!sFilter.isEmpty())
             {
                 // SAFE ->
@@ -840,7 +840,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
-            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault("Flags", sal_Int32(0));
+            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault(u"Flags"_ustr, sal_Int32(0));
             bIsOwnTemplate = ((nFlags & FILTERFLAG_TEMPLATEPATH) == FILTERFLAG_TEMPLATEPATH);
         }
         catch(const css::container::NoSuchElementException&)
@@ -1011,7 +1011,7 @@ bool LoadEnv::impl_filterHasInteractiveDialog() const
     try
     {
         ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
-        sUIComponent = lFilterProps.getUnpackedValueOrDefault("UIComponent", OUString());
+        sUIComponent = lFilterProps.getUnpackedValueOrDefault(u"UIComponent"_ustr, OUString());
     }
     catch(const css::container::NoSuchElementException&)
     {
@@ -1171,7 +1171,7 @@ bool LoadEnv::impl_loadContent()
         {
             // Set the URL on the frame itself, for the duration of the load, when it has no
             // controller.
-            xTargetFrameProps->setPropertyValue("URL", uno::Any(sURL));
+            xTargetFrameProps->setPropertyValue(u"URL"_ustr, uno::Any(sURL));
         }
         bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
@@ -1275,7 +1275,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     ::comphelper::SequenceAsHashMap lArgs;
-    lArgs[OUString("Bookmark")] <<= aURL.Mark;
+    lArgs[u"Bookmark"_ustr] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
@@ -1347,7 +1347,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
                 uno::Reference<beans::XPropertySet> xTaskProps(xTask, uno::UNO_QUERY);
                 if (xTaskProps.is())
                 {
-                    xTaskProps->getPropertyValue("URL") >>= sURL;
+                    xTaskProps->getPropertyValue(u"URL"_ustr) >>= sURL;
                 }
                 if (sURL.isEmpty())
                 {
@@ -1689,7 +1689,7 @@ void LoadEnv::impl_reactForLoadingState()
     {
         if  ( aRequest.isExtractableTo( ::cppu::UnoType< css::uno::Exception >::get() ) )
             throw LoadEnvException(
-                LoadEnvException::ID_GENERAL_ERROR, "interaction request",
+                LoadEnvException::ID_GENERAL_ERROR, u"interaction request"_ustr,
                 aRequest);
     }
 
@@ -1789,7 +1789,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
         // Don't look for persistent window attributes when used through LibreOfficeKit
         if( !comphelper::LibreOfficeKit::isActive() )
-            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, "ooSetupFactoryWindowAttributes") >>= sWindowState;
+            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, u"ooSetupFactoryWindowAttributes"_ustr) >>= sWindowState;
 
         if (!sWindowState.isEmpty())
         {

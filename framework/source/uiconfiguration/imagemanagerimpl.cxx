@@ -479,7 +479,7 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 ImageManagerImpl::ImageManagerImpl( uno::Reference< uno::XComponentContext > xContext, ::cppu::OWeakObject* pOwner, bool _bUseGlobal ) :
     m_xContext(std::move( xContext ))
     , m_pOwner(pOwner)
-    , m_aResourceString( "private:resource/images/moduleimages" )
+    , m_aResourceString( u"private:resource/images/moduleimages"_ustr )
     , m_bUseGlobal(_bUseGlobal)
     , m_bReadOnly( true )
     , m_bInitialized( false )
@@ -583,7 +583,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
         if ( xPropSet.is() )
         {
             tools::Long nOpenMode = 0;
-            if ( xPropSet->getPropertyValue("OpenMode") >>= nOpenMode )
+            if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode )
                 m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
         }
     }

@@ -57,7 +57,7 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
         Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            xPropSet->getPropertyValue("UIName") >>= m_aUIName;
+            xPropSet->getPropertyValue(u"UIName"_ustr) >>= m_aUIName;
         }
     }
     catch ( const Exception& )

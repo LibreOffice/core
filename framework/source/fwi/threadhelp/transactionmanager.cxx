@@ -173,13 +173,13 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode )
         {
             // Help programmer to find out, why this exception is thrown!
             SAL_WARN( "fwk", "TransactionManager...: Owner instance stand in close method. Call was rejected!" );
-            throw css::lang::DisposedException( "TransactionManager: Owner instance stand in close method. Call was rejected!" );
+            throw css::lang::DisposedException( u"TransactionManager: Owner instance stand in close method. Call was rejected!"_ustr );
         }
         break;
     case E_CLOSE:
         // Help programmer to find out, why this exception is thrown!
         SAL_WARN( "fwk", "TransactionManager...: Owner instance already closed. Call was rejected!" );
-        throw css::lang::DisposedException( "TransactionManager: Owner instance already closed. Call was rejected!" );
+        throw css::lang::DisposedException( u"TransactionManager: Owner instance already closed. Call was rejected!"_ustr );
     }
 
     // Register this new transaction.

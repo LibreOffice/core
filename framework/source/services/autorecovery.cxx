@@ -489,7 +489,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.AutoRecovery";
+        return u"com.sun.star.comp.framework.AutoRecovery"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -499,7 +499,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.frame.AutoRecovery"};
+        return {u"com.sun.star.frame.AutoRecovery"_ustr};
     }
 
     // XInterface
@@ -1201,7 +1201,7 @@ void CacheLockGuard::lock(bool bLockForAddRemoveVectorItems)
     {
         OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
-                "Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.",
+                u"Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."_ustr,
                 m_xOwner);
     }
 
@@ -1225,7 +1225,7 @@ void CacheLockGuard::unlock()
     {
         OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
-                "Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)",
+                u"Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)"_ustr,
                 m_xOwner);
     }
     /* SAFE */
@@ -1546,7 +1546,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
                                               const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -1574,7 +1574,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
                                                  const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
@@ -1769,7 +1769,7 @@ void AutoRecovery::implts_openConfig()
     // throws a RuntimeException if an error occurs!
     css::uno::Reference<css::container::XNameAccess> xCFG(
             xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     comphelper::containerToSequence(lParams)),
             css::uno::UNO_QUERY);
 
@@ -1913,7 +1913,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
-                "Can not find out the default filter and its extension, if no application module is known!",
+                u"Can not find out the default filter and its extension, if no application module is known!"_ustr,
                 static_cast< css::frame::XDispatch* >(this));
     }
 
@@ -1946,10 +1946,10 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.document.FilterFactory", m_xContext), css::uno::UNO_QUERY_THROW);
+                    u"com.sun.star.document.FilterFactory"_ustr, m_xContext), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xTypeCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.document.TypeDetection", m_xContext), css::uno::UNO_QUERY_THROW);
+                    u"com.sun.star.document.TypeDetection"_ustr, m_xContext), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(FILTER_PROP_TYPE, OUString());
@@ -3480,7 +3480,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                 // and store this info in media descriptor we will use for recoverFromFile call.
                 Reference< css::document::XExtendedFilterDetection > xDetection(
                     m_xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.comp.oox.FormatDetector", m_xContext),
+                        u"com.sun.star.comp.oox.FormatDetector"_ustr, m_xContext),
                     UNO_QUERY_THROW);
                 lDescriptor[utl::MediaDescriptor::PROP_URL] <<= sURL;
                 Sequence< css::beans::PropertyValue > aDescriptorSeq = lDescriptor.getAsConstPropertyValueList();
@@ -4306,7 +4306,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
-        aContent.executeCommand("delete", css::uno::Any(true));
+        aContent.executeCommand(u"delete"_ustr, css::uno::Any(true));
     }
     catch(const css::uno::Exception&)
     {

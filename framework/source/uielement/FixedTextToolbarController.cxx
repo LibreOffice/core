@@ -46,8 +46,8 @@ private:
 };
 
 FixedTextControl::FixedTextControl(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "svt/ui/fixedtextcontrol.ui", "FixedTextControl")
-    , m_xWidget(m_xBuilder->weld_label("label"))
+    : InterimItemWindow(pParent, u"svt/ui/fixedtextcontrol.ui"_ustr, u"FixedTextControl"_ustr)
+    , m_xWidget(m_xBuilder->weld_label(u"label"_ustr))
 {
     InitControlBase(m_xWidget.get());
 
@@ -90,8 +90,8 @@ Sequence<PropertyValue> FixedTextToolbarController::getExecuteArgs(sal_Int16 Key
     const OUString aSelectedText = m_pFixedTextControl->get_label();
 
     // Add key modifier to argument list
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier),
-                                   comphelper::makePropertyValue("Text", aSelectedText) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier),
+                                   comphelper::makePropertyValue(u"Text"_ustr, aSelectedText) };
     return aArgs;
 }
 

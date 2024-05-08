@@ -108,7 +108,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.frame.SessionListener";
+        return u"com.sun.star.comp.frame.SessionListener"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -118,7 +118,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.frame.SessionListener"};
+        return {u"com.sun.star.frame.SessionListener"_ustr};
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override;
@@ -180,7 +180,7 @@ void SessionListener::StoreSession( bool bAsync )
         if ( bAsync )
             xDispatch->addStatusListener(this, aURL);
 
-        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,Any(bAsync),
+        Sequence< PropertyValue > args{ PropertyValue(u"DispatchAsynchron"_ustr,-1,Any(bAsync),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {
@@ -208,7 +208,7 @@ void SessionListener::QuitSessionQuietly()
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionQuietQuit";
         xURLTransformer->parseStrict(aURL);
 
-        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,Any(false),
+        Sequence< PropertyValue > args{ PropertyValue(u"DispatchAsynchron"_ustr,-1,Any(false),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {
@@ -228,7 +228,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 {
     SAL_INFO("fwk.session", "SessionListener::initialize");
 
-    OUString aSMgr("com.sun.star.frame.SessionManagerClient");
+    OUString aSMgr(u"com.sun.star.frame.SessionManagerClient"_ustr);
     if ( (args.getLength() == 1) && (args[0] >>= m_bAllowUserInteractionOnQuit) )
        ;// do nothing
     else if (args.hasElements())

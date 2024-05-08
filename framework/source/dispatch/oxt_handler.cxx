@@ -32,7 +32,7 @@ namespace framework{
 
 OUString SAL_CALL Oxt_Handler::getImplementationName()
 {
-    return "com.sun.star.comp.framework.OXTFileHandler";
+    return u"com.sun.star.comp.framework.OXTFileHandler"_ustr;
 }
 
 sal_Bool SAL_CALL Oxt_Handler::supportsService( const OUString& sServiceName )
@@ -42,7 +42,7 @@ sal_Bool SAL_CALL Oxt_Handler::supportsService( const OUString& sServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL Oxt_Handler::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ContentHandler" };
+    return { u"com.sun.star.frame.ContentHandler"_ustr };
 }
 
 
@@ -96,7 +96,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
 
     css::uno::Sequence< css::uno::Any > lParams{ css::uno::Any(aURL.Main) };
 
-    css::uno::Reference< css::uno::XInterface > xService = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.deployment.ui.PackageManagerDialog", lParams, m_xContext );
+    css::uno::Reference< css::uno::XInterface > xService = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.deployment.ui.PackageManagerDialog"_ustr, lParams, m_xContext );
     css::uno::Reference< css::task::XJobExecutor > xExecutable( xService, css::uno::UNO_QUERY );
     if ( xExecutable.is() )
         xExecutable->trigger( OUString() );

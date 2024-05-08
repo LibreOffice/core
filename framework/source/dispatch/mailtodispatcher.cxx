@@ -34,7 +34,7 @@ namespace framework{
 
 OUString SAL_CALL MailToDispatcher::getImplementationName()
 {
-    return "com.sun.star.comp.framework.MailToDispatcher";
+    return u"com.sun.star.comp.framework.MailToDispatcher"_ustr;
 }
 
 sal_Bool SAL_CALL MailToDispatcher::supportsService( const OUString& sServiceName )

@@ -32,7 +32,7 @@ namespace framework
 
 OUString SAL_CALL UriAbbreviation::getImplementationName()
 {
-    return "com.sun.star.comp.framework.UriAbbreviation";
+    return u"com.sun.star.comp.framework.UriAbbreviation"_ustr;
 }
 
 sal_Bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName )
@@ -42,7 +42,7 @@ sal_Bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName
 
 css::uno::Sequence< OUString > SAL_CALL UriAbbreviation::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.UriAbbreviation" };
+    return { u"com.sun.star.util.UriAbbreviation"_ustr };
 }
 
 UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & )

@@ -72,7 +72,7 @@ namespace framework
             DECLARE_XTYPEPROVIDER()
             virtual OUString SAL_CALL getImplementationName() override
             {
-                return "com.sun.star.comp.framework.LayoutManager";
+                return u"com.sun.star.comp.framework.LayoutManager"_ustr;
             }
 
             virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -82,7 +82,7 @@ namespace framework
 
             virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
-                css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.LayoutManager" };
+                css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.LayoutManager"_ustr };
                 return aSeq;
             }
 

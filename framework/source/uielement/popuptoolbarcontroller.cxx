@@ -240,9 +240,9 @@ void PopupMenuToolbarController::createPopupMenuController()
     else
     {
         css::uno::Sequence<css::uno::Any> aArgs {
-            css::uno::Any(comphelper::makePropertyValue("Frame", m_xFrame)),
-            css::uno::Any(comphelper::makePropertyValue("ModuleIdentifier", m_sModuleName)),
-            css::uno::Any(comphelper::makePropertyValue("InToolbar", true))
+            css::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)),
+            css::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, m_sModuleName)),
+            css::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, true))
         };
 
         try
@@ -253,10 +253,10 @@ void PopupMenuToolbarController::createPopupMenuController()
             {
                 sal_Int32 nAppendIndex = aArgs.getLength();
                 aArgs.realloc(nAppendIndex + 1);
-                aArgs.getArray()[nAppendIndex] <<= comphelper::makePropertyValue("ResourceURL", m_aPopupCommand);
+                aArgs.getArray()[nAppendIndex] <<= comphelper::makePropertyValue(u"ResourceURL"_ustr, m_aPopupCommand);
 
                 m_xPopupMenuController.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
+                    u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
             }
             else
             {
@@ -323,7 +323,7 @@ GenericPopupToolbarController::GenericPopupToolbarController(
 
 OUString GenericPopupToolbarController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.GenericPopupToolbarController";
+    return u"com.sun.star.comp.framework.GenericPopupToolbarController"_ustr;
 }
 
 sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServiceName)
@@ -333,7 +333,7 @@ sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServic
 
 css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ToolbarController"};
+    return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
 void GenericPopupToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& rxArgs )
@@ -511,7 +511,7 @@ void SaveToolbarController::updateImage()
 
     if ( m_bReadOnly )
     {
-        aImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:SaveAs", m_xFrame, eImageType);
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(u".uno:SaveAs"_ustr, m_xFrame, eImageType);
     }
     else if ( m_bModified )
     {
@@ -541,7 +541,7 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     m_bReadOnly = m_xStorable.is() && m_xStorable->isReadonly();
     if ( bLastReadOnly != m_bReadOnly )
     {
-        OUString sCommand = m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL;
+        OUString sCommand = m_bReadOnly ? u".uno:SaveAs"_ustr : m_aCommandURL;
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand,
             vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
         pToolBox->SetQuickHelpText( nId,
@@ -587,7 +587,7 @@ void SaveToolbarController::dispose()
 
 OUString SaveToolbarController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.SaveToolbarController";
+    return u"com.sun.star.comp.framework.SaveToolbarController"_ustr;
 }
 
 sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
@@ -597,7 +597,7 @@ sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
 
 css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ToolbarController"};
+    return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
 class NewToolbarController : public cppu::ImplInheritanceHelper<PopupMenuToolbarController, css::frame::XSubToolbarController>
@@ -639,7 +639,7 @@ NewToolbarController::NewToolbarController(
 
 OUString NewToolbarController::getImplementationName()
 {
-    return "org.apache.openoffice.comp.framework.NewToolbarController";
+    return u"org.apache.openoffice.comp.framework.NewToolbarController"_ustr;
 }
 
 sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
@@ -649,7 +649,7 @@ sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
 
 css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ToolbarController"};
+    return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
 void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -704,7 +704,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
         aURL = m_aCommandURL;
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
-        "Referer", OUString( "private:user" )) };
+        u"Referer"_ustr, u"private:user"_ustr) };
 
     dispatchCommand( aURL, aArgs, aTarget );
 }

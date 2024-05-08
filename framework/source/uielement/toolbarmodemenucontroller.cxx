@@ -52,7 +52,7 @@ namespace framework
 
 OUString SAL_CALL ToolbarModeMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.ToolbarModeMenuController";
+    return u"com.sun.star.comp.framework.ToolbarModeMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServiceName )

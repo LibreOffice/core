@@ -55,7 +55,7 @@ namespace framework
 
 OUString SAL_CALL FontMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.FontMenuController";
+    return u"com.sun.star.comp.framework.FontMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL FontMenuController::supportsService( const OUString& sServiceName )

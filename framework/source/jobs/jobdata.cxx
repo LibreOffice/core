@@ -136,15 +136,15 @@ void JobData::setAlias( const OUString& sAlias )
         css::uno::Any aValue;
 
         // read uno implementation name
-        aValue   = xJobProperties->getPropertyValue("Service");
+        aValue   = xJobProperties->getPropertyValue(u"Service"_ustr);
         aValue >>= m_sService;
 
         // read module context list
-        aValue   = xJobProperties->getPropertyValue("Context");
+        aValue   = xJobProperties->getPropertyValue(u"Context"_ustr);
         aValue >>= m_sContext;
 
         // read whole argument list
-        aValue = xJobProperties->getPropertyValue("Arguments");
+        aValue = xJobProperties->getPropertyValue(u"Arguments"_ustr);
         css::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
@@ -330,9 +330,9 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
-        lConfig = { { "Alias", css::uno::Any(m_sAlias) },
-                    { "Service", css::uno::Any(m_sService) },
-                    { "Context", css::uno::Any(m_sContext) } };
+        lConfig = { { u"Alias"_ustr, css::uno::Any(m_sAlias) },
+                    { u"Service"_ustr, css::uno::Any(m_sService) },
+                    { u"Context"_ustr, css::uno::Any(m_sContext) } };
     }
     return lConfig;
 }
@@ -388,7 +388,7 @@ void JobData::disableJob()
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
         aValue <<= Converter::convert_DateTime2ISO8601(DateTime( DateTime::SYSTEM));
-        xPropSet->setPropertyValue("UserTime", aValue);
+        xPropSet->setPropertyValue(u"UserTime"_ustr, aValue);
     }
 
     aConfig.close();
@@ -456,7 +456,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
                                                                        std::u16string_view                                sEvent )
 {
     // create a config access to "/org.openoffice.Office.Jobs/Events"
-    ConfigAccess aConfig(rxContext, "/org.openoffice.Office.Jobs/Events");
+    ConfigAccess aConfig(rxContext, u"/org.openoffice.Office.Jobs/Events"_ustr);
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return std::vector< OUString >();
@@ -500,10 +500,10 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
         }
 
         OUString sAdminTime;
-        xJob->getPropertyValue("AdminTime") >>= sAdminTime;
+        xJob->getPropertyValue(u"AdminTime"_ustr) >>= sAdminTime;
 
         OUString sUserTime;
-        xJob->getPropertyValue("UserTime") >>= sUserTime;
+        xJob->getPropertyValue(u"UserTime"_ustr) >>= sUserTime;
 
         if (!isEnabled(sAdminTime, sUserTime))
             continue;

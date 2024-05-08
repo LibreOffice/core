@@ -75,8 +75,8 @@ private:
 };
 
 SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarController* pSpinfieldToolbarController)
-    : InterimItemWindow(pParent, "svt/ui/spinfieldcontrol.ui", "SpinFieldControl")
-    , m_xWidget(m_xBuilder->weld_formatted_spin_button("spinbutton"))
+    : InterimItemWindow(pParent, u"svt/ui/spinfieldcontrol.ui"_ustr, u"SpinFieldControl"_ustr)
+    , m_xWidget(m_xBuilder->weld_formatted_spin_button(u"spinbutton"_ustr))
     , m_pSpinfieldToolbarController(pSpinfieldToolbarController)
 {
     InitControlBase(m_xWidget.get());
@@ -209,8 +209,8 @@ Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 Key
 
     // Add key modifier to argument list
     return {
-        comphelper::makePropertyValue("KeyModifier", KeyModifier),
-        comphelper::makePropertyValue("Value", m_bFloat ? Any(aSpinfieldText.toDouble())
+        comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier),
+        comphelper::makePropertyValue(u"Value"_ustr, m_bFloat ? Any(aSpinfieldText.toDouble())
                                                         : Any(aSpinfieldText.toInt32()))
     };
 }

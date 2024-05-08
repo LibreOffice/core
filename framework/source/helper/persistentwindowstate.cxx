@@ -51,14 +51,14 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
     css::uno::Reference< css::frame::XFrame > xFrame;
     if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
-                "Empty argument list!",
+                u"Empty argument list!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
-                "No valid frame specified!",
+                u"No valid frame specified!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -170,9 +170,9 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(rxContext,
-            "org.openoffice.Setup/",
+            u"org.openoffice.Setup/"_ustr,
             OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
-            "ooSetupFactoryWindowAttributes",
+            u"ooSetupFactoryWindowAttributes"_ustr,
             ::comphelper::EConfigurationModes::ReadOnly) >>= sWindowState;
     }
     catch(const css::uno::RuntimeException&)
@@ -190,9 +190,9 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
     try
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(rxContext,
-            "org.openoffice.Setup/",
+            u"org.openoffice.Setup/"_ustr,
             OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
-            "ooSetupFactoryWindowAttributes",
+            u"ooSetupFactoryWindowAttributes"_ustr,
             css::uno::Any(sWindowState),
             ::comphelper::EConfigurationModes::Standard);
     }

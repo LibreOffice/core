@@ -139,7 +139,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.PathSubstitution";
+        return u"com.sun.star.comp.framework.PathSubstitution"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -149,7 +149,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.util.PathSubstitution"};
+        return {u"com.sun.star.util.PathSubstitution"_ustr};
     }
 
     // XStringSubstitution
@@ -243,7 +243,7 @@ OUString SubstitutePathVariables::GetWorkPath()
 {
     OUString aWorkPath;
     css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(), css::uno::UNO_QUERY_THROW);
-    if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= aWorkPath))
+    if (!(xPaths->getByHierarchicalName(u"['Work']/WritePath"_ustr) >>= aWorkPath))
         // fallback in case config layer does not return a usable work dir value.
         aWorkPath = GetWorkVariableValue();
 
@@ -476,7 +476,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             // recursion depth reached!
             if ( bSubstRequired )
             {
-                throw NoSuchElementException( "Endless recursion detected. Cannot substitute variables!", static_cast<cppu::OWeakObject *>(this) );
+                throw NoSuchElementException( u"Endless recursion detected. Cannot substitute variables!"_ustr, static_cast<cppu::OWeakObject *>(this) );
             }
             aResult = rText;
         }
@@ -485,7 +485,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             // variable in text but unknown!
             if ( bSubstRequired )
             {
-                throw NoSuchElementException( "Unknown variable found!", static_cast<cppu::OWeakObject *>(this) );
+                throw NoSuchElementException( u"Unknown variable found!"_ustr, static_cast<cppu::OWeakObject *>(this) );
             }
             aResult = aWorkText;
         }
@@ -590,7 +590,7 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
     // Fixed/Predefined variable
     if ( pNTOIIter == m_aPreDefVarMap.end() )
     {
-        throw NoSuchElementException("Unknown variable!", static_cast<cppu::OWeakObject *>(this));
+        throw NoSuchElementException(u"Unknown variable!"_ustr, static_cast<cppu::OWeakObject *>(this));
     }
     PreDefVariable nIndex = pNTOIIter->second;
     return m_aPreDefVars.m_FixedVar[static_cast<sal_Int32>(nIndex)];

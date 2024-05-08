@@ -136,7 +136,7 @@ namespace {
 
 OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 {
-    OUString sMessage("Unknown error.");
+    OUString sMessage(u"Unknown error."_ustr);
 
     switch(nID)
     {
@@ -328,7 +328,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         if (!xDocumentRoot.is())
             throw css::uno::RuntimeException(
-                    "There is valid root storage, where the UI configuration can work on.");
+                    u"There is valid root storage, where the UI configuration can work on."_ustr);
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;
         xUser  = xDocumentRoot;

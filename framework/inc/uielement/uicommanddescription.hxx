@@ -44,7 +44,7 @@ class UICommandDescription : public UICommandDescription_BASE
 
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return "com.sun.star.comp.framework.UICommandDescription";
+            return u"com.sun.star.comp.framework.UICommandDescription"_ustr;
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -54,7 +54,7 @@ class UICommandDescription : public UICommandDescription_BASE
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
-            css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.UICommandDescription" };
+            css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.UICommandDescription"_ustr };
             return aSeq;
         }
 

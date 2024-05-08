@@ -33,7 +33,7 @@ VCLStatusIndicator::VCLStatusIndicator(css::uno::Reference< css::awt::XWindow > 
 {
     if (!m_xParentWindow.is())
         throw css::uno::RuntimeException(
-                "Can't work without a parent window!",
+                u"Can't work without a parent window!"_ustr,
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 

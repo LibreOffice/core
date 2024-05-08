@@ -65,10 +65,10 @@ static OUString getHashKeyFromStrings( std::u16string_view aType, std::u16string
 }
 
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, OUString  _sRoot ) :
-    m_aPropType( "Type" ),
-    m_aPropName( "Name" ),
-    m_aPropModule( "Module" ),
-    m_aPropFactory( "FactoryImplementation" ),
+    m_aPropType( u"Type"_ustr ),
+    m_aPropName( u"Name"_ustr ),
+    m_aPropModule( u"Module"_ustr ),
+    m_aPropFactory( u"FactoryImplementation"_ustr ),
     m_sRoot(std::move(_sRoot)),
     m_bConfigAccessInitialized( false )
 {
@@ -272,7 +272,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         try
         {
             m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess", aArgs ), UNO_QUERY );
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs ), UNO_QUERY );
         }
         catch ( const WrappedTargetException& )
         {
@@ -353,7 +353,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.UIElementFactoryManager";
+        return u"com.sun.star.comp.framework.UIElementFactoryManager"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -363,7 +363,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.UIElementFactoryManager"};
+        return {u"com.sun.star.ui.UIElementFactoryManager"_ustr};
     }
 
     // XUIElementFactory
@@ -387,7 +387,7 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentCon
     m_pConfigAccess(
         new ConfigurationAccess_FactoryManager(
             rxContext,
-            "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories"))
+            u"/org.openoffice.Office.UI.Factories/Registered/UIElementFactories"_ustr))
 {}
 
 void UIElementFactoryManager::disposing(std::unique_lock<std::mutex>&)
@@ -406,7 +406,7 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
         std::unique_lock g(m_aMutex);
         if (m_bDisposed) {
             throw css::lang::DisposedException(
-                "disposed", static_cast<OWeakObject *>(this));
+                u"disposed"_ustr, static_cast<OWeakObject *>(this));
         }
 
         if ( !m_bConfigRead )
@@ -453,7 +453,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegis
     std::unique_lock g(m_aMutex);
     if (m_bDisposed) {
         throw css::lang::DisposedException(
-            "disposed", static_cast<OWeakObject *>(this));
+            u"disposed"_ustr, static_cast<OWeakObject *>(this));
     }
 
     if ( !m_bConfigRead )
@@ -472,7 +472,7 @@ Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( con
         std::unique_lock g(m_aMutex);
         if (m_bDisposed) {
             throw css::lang::DisposedException(
-                "disposed", static_cast<OWeakObject *>(this));
+                u"disposed"_ustr, static_cast<OWeakObject *>(this));
         }
 
         if ( !m_bConfigRead )
@@ -508,7 +508,7 @@ void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, c
     std::unique_lock g(m_aMutex);
     if (m_bDisposed) {
         throw css::lang::DisposedException(
-            "disposed", static_cast<OWeakObject *>(this));
+            u"disposed"_ustr, static_cast<OWeakObject *>(this));
     }
 
     if ( !m_bConfigRead )
@@ -527,7 +527,7 @@ void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType,
     std::unique_lock g(m_aMutex);
     if (m_bDisposed) {
         throw css::lang::DisposedException(
-            "disposed", static_cast<OWeakObject *>(this));
+            u"disposed"_ustr, static_cast<OWeakObject *>(this));
     }
 
     if ( !m_bConfigRead )

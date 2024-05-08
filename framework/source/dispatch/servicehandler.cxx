@@ -36,7 +36,7 @@ constexpr OUString PROTOCOL_VALUE = u"service:"_ustr;
 
 OUString SAL_CALL ServiceHandler::getImplementationName()
 {
-    return "com.sun.star.comp.framework.ServiceHandler";
+    return u"com.sun.star.comp.framework.ServiceHandler"_ustr;
 }
 
 sal_Bool SAL_CALL ServiceHandler::supportsService( const OUString& sServiceName )

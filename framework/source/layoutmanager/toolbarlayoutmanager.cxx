@@ -453,8 +453,8 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
         uno::Reference< ui::XUIElement > xUIElement;
 
         uno::Sequence< beans::PropertyValue > aPropSeq{
-            comphelper::makePropertyValue("Frame", xFrame),
-            comphelper::makePropertyValue("Persistent", true)
+            comphelper::makePropertyValue(u"Frame"_ustr, xFrame),
+            comphelper::makePropertyValue(u"Persistent"_ustr, true)
         };
         uno::Reference<ui::XUIElementFactory> xUIElementFactory;
         {
@@ -543,7 +543,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             {
                 ToolBox* pToolbar = static_cast<ToolBox *>(pWindow.get());
                 ToolBoxMenuType nMenuType = pToolbar->GetMenuType();
-                if ( aCmdOptions.LookupDisabled( "ConfigureDialog" ))
+                if ( aCmdOptions.LookupDisabled( u"ConfigureDialog"_ustr ))
                     pToolbar->SetMenuType( nMenuType & ~ToolBoxMenuType::Customize );
                 else
                     pToolbar->SetMenuType( nMenuType | ToolBoxMenuType::Customize );
@@ -1139,7 +1139,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                 else
                 {
                     // Create new UI element and try to read its state data
-                    UIElement aNewToolbar( aAddonToolBarName, "toolbar", xUIElement );
+                    UIElement aNewToolbar( aAddonToolBarName, u"toolbar"_ustr, xUIElement );
                     aNewToolbar.m_bFloating = true;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
@@ -1550,7 +1550,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue("Persistent") >>= bPersistent;
+            xPropSet->getPropertyValue(u"Persistent"_ustr) >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
@@ -3777,7 +3777,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
         if ( xPropSet.is() )
         {
             if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                xPropSet->setPropertyValue( "ConfigurationSource", css::uno::Any( m_xDocCfgMgr ));
+                xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, css::uno::Any( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
     }
@@ -3803,7 +3803,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
                     xPropSet.set( xCfgMgr->getSettings( rEvent.ResourceURL, false ), uno::UNO_QUERY );
 
                     if ( xPropSet.is() )
-                        xPropSet->getPropertyValue("UIName") >>= aUIName;
+                        xPropSet->getPropertyValue(u"UIName"_ustr) >>= aUIName;
                 }
                 catch (const container::NoSuchElementException&)
                 {
@@ -3842,7 +3842,7 @@ void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent
         return;
 
     bool                                  bNoSettings( false );
-    OUString                       aConfigSourcePropName( "ConfigurationSource" );
+    OUString                       aConfigSourcePropName( u"ConfigurationSource"_ustr );
     uno::Reference< uno::XInterface >     xElementCfgMgr;
     uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
 
@@ -3887,7 +3887,7 @@ void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEven
     uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
 
     if ( xPropSet.is() )
-        xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
+        xPropSet->getPropertyValue( u"ConfigurationSource"_ustr ) >>= xElementCfgMgr;
 
     if ( !xElementCfgMgr.is() )
         return;

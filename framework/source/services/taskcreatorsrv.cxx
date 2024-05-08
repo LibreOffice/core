@@ -66,7 +66,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.TaskCreator";
+        return u"com.sun.star.comp.framework.TaskCreator"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -76,7 +76,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.frame.TaskCreator"};
+        return {u"com.sun.star.frame.TaskCreator"_ustr};
     }
 
     // XSingleServiceFactory

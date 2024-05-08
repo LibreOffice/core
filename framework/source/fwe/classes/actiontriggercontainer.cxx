@@ -77,7 +77,7 @@ Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const O
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
         return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw css::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
+        throw css::uno::RuntimeException(u"Unknown service specifier!"_ustr, static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )

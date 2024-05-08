@@ -147,7 +147,7 @@ void DispatchDisabler::removeByName( const OUString& rName )
 
 OUString SAL_CALL DispatchDisabler::getImplementationName()
 {
-    return "com.sun.star.comp.framework.services.DispatchDisabler";
+    return u"com.sun.star.comp.framework.services.DispatchDisabler"_ustr;
 }
 
 sal_Bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceNam
 
 css::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.DispatchDisabler" };
+    return { u"com.sun.star.frame.DispatchDisabler"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

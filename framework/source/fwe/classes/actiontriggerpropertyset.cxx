@@ -256,11 +256,11 @@ Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor(
 {
     return
     {
-        Property( "CommandURL"   , HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( "HelpURL"      , HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( "Image"        , HANDLE_IMAGE        , cppu::UnoType<XBitmap>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( "SubContainer" , HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( "Text"         , HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
+        Property( u"CommandURL"_ustr   , HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( u"HelpURL"_ustr      , HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( u"Image"_ustr        , HANDLE_IMAGE        , cppu::UnoType<XBitmap>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( u"SubContainer"_ustr , HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( u"Text"_ustr         , HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
     };
 }
 

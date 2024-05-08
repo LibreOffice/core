@@ -816,7 +816,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                 if ( pMenu->GetUserValue( nCurItemId ) )
                 {
                     // addon menu item selected
-                    aArgs = { comphelper::makePropertyValue("Referer", OUString("private:user")) };
+                    aArgs = { comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr) };
                 }
 
                 xDispatch = pMenuItemHandler->xMenuItemDispatch;
@@ -1004,7 +1004,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if (!pMenu->GetHelpCommand(nItemId).isEmpty())
             {
                 aModuleIdentifier = pMenu->GetHelpCommand( nItemId );
-                pMenu->SetHelpCommand( nItemId, "" );
+                pMenu->SetHelpCommand( nItemId, u""_ustr );
             }
 
             // Retrieve possible attributes struct
@@ -1047,7 +1047,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
                         pPopup->InsertItem( ITEMID_ADDONLIST, OUString() );
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
-                        pPopup->SetItemCommand( ITEMID_ADDONLIST, ".uno:Addons" );
+                        pPopup->SetItemCommand( ITEMID_ADDONLIST, u".uno:Addons"_ustr );
                     }
                     else
                         pSubMenu.disposeAndClear();
@@ -1519,7 +1519,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
             if (( nSchemePart > 0 ) &&
                 ( aMenuURL.getLength() > ( nSchemePart+1 )))
             {
-                OUString aMainURL( "vnd.sun.star.popup:" );
+                OUString aMainURL( u"vnd.sun.star.popup:"_ustr );
                 sal_Int32 nQueryPart  = aMenuURL.indexOf( '?', nSchemePart );
                 if ( nQueryPart > 0 )
                     aMainURL += aMenuURL.subView( nSchemePart, nQueryPart-nSchemePart );

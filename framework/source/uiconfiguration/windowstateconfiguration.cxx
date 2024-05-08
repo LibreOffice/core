@@ -1117,7 +1117,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
 {
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
-    OUString                  aDelim( "," );
+    OUString                  aDelim( u","_ustr );
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1204,7 +1204,7 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             {"nodepath", Any(m_aConfigWindowAccess)}
         }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess", aArgs ), UNO_QUERY );
+                    u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArgs ), UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
             // Add as container listener
@@ -1235,7 +1235,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.WindowStateConfiguration";
+        return u"com.sun.star.comp.framework.WindowStateConfiguration"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -1245,7 +1245,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.WindowStateConfiguration"};
+        return {u"com.sun.star.ui.WindowStateConfiguration"_ustr};
     }
 
     // XNameAccess

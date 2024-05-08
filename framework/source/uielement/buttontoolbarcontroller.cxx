@@ -224,7 +224,7 @@ void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
     try
     {
         // Provide key modifier information to dispatch function
-        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
+        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier) };
 
         xDispatch->dispatch( aTargetURL, aArgs );
     }

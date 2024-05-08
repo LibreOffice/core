@@ -62,8 +62,8 @@ private:
 };
 
 EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController)
-    : InterimItemWindow(pParent, "svt/ui/editcontrol.ui", "EditControl")
-    , m_xWidget(m_xBuilder->weld_entry("entry"))
+    : InterimItemWindow(pParent, u"svt/ui/editcontrol.ui"_ustr, u"EditControl"_ustr)
+    , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     , m_pEditToolbarController(pEditToolbarController)
 {
     OUString sEmpty;
@@ -163,8 +163,8 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
     OUString aSelectedText = m_pEditControl->get_text();
 
     // Add key modifier to argument list
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier),
-                                   comphelper::makePropertyValue("Text", aSelectedText) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier),
+                                   comphelper::makePropertyValue(u"Text"_ustr, aSelectedText) };
     return aArgs;
 }
 

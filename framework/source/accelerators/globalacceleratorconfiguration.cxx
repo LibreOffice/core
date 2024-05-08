@@ -52,7 +52,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.GlobalAcceleratorConfiguration";
+        return u"com.sun.star.comp.framework.GlobalAcceleratorConfiguration"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -62,7 +62,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.GlobalAcceleratorConfiguration"};
+        return {u"com.sun.star.ui.GlobalAcceleratorConfiguration"_ustr};
     }
 
     /// This has to be called after when the instance is acquire()'d.

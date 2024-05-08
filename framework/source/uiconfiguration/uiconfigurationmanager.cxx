@@ -78,7 +78,7 @@ class UIConfigurationManager :   public ::cppu::WeakImplHelper<
 public:
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.UIConfigurationManager";
+        return u"com.sun.star.comp.framework.UIConfigurationManager"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -88,7 +88,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.UIConfigurationManager"};
+        return {u"com.sun.star.ui.UIConfigurationManager"_ustr};
     }
 
     explicit UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext );
@@ -675,7 +675,7 @@ UIConfigurationManager::UIConfigurationManager( css::uno::Reference< css::uno::X
       m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
-    , m_aPropUIName( "UIName" )
+    , m_aPropUIName( u"UIName"_ustr )
     , m_xContext(std::move( xContext ))
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
@@ -870,7 +870,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElem
     {
         aElementInfoSeq[n++] =
         {
-            comphelper::makePropertyValue("ResourceURL", elem.second.aResourceURL),
+            comphelper::makePropertyValue(u"ResourceURL"_ustr, elem.second.aResourceURL),
             comphelper::makePropertyValue(m_aPropUIName, elem.second.aUIName)
         };
     }
@@ -1203,7 +1203,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
             try
             {
                 tools::Long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue("OpenMode");
+                Any a = xPropSet->getPropertyValue(u"OpenMode"_ustr);
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }

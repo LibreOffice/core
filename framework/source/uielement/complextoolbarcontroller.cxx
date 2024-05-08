@@ -78,7 +78,7 @@ void SAL_CALL ComplexToolbarController::dispose()
 Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     // Add key modifier to argument list
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier) };
     return aArgs;
 }
 
@@ -297,7 +297,7 @@ void ComplexToolbarController::notifyFocusGet()
 {
     // send focus get notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( "FocusSet",
+    addNotifyInfo( u"FocusSet"_ustr,
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
@@ -306,7 +306,7 @@ void ComplexToolbarController::notifyFocusLost()
 {
     // send focus lost notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( "FocusLost",
+    addNotifyInfo( u"FocusLost"_ustr,
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
@@ -314,8 +314,8 @@ void ComplexToolbarController::notifyFocusLost()
 void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
-    uno::Sequence< beans::NamedValue > aInfo { { "Text", css::uno::Any(aText) } };
-    addNotifyInfo( "TextChanged",
+    uno::Sequence< beans::NamedValue > aInfo { { u"Text"_ustr, css::uno::Any(aText) } };
+    addNotifyInfo( u"TextChanged"_ustr,
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );
 }

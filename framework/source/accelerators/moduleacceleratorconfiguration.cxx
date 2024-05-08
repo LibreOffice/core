@@ -62,7 +62,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.ModuleAcceleratorConfiguration";
+        return u"com.sun.star.comp.framework.ModuleAcceleratorConfiguration"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -72,7 +72,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.ModuleAcceleratorConfiguration"};
+        return {u"com.sun.star.ui.ModuleAcceleratorConfiguration"_ustr};
     }
 
     /// This has to be called after when the instance is acquire()'d.
@@ -97,13 +97,13 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
     } else
     {
         ::comphelper::SequenceAsHashMap lArgs(lArguments);
-        m_sModule = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
+        m_sModule = lArgs.getUnpackedValueOrDefault(u"ModuleIdentifier"_ustr, OUString());
         // OUString sLocale = lArgs.getUnpackedValueOrDefault("Locale", OUString("x-default"));
     }
 
     if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(
-                "The module dependent accelerator configuration service was initialized with an empty module identifier!",
+                u"The module dependent accelerator configuration service was initialized with an empty module identifier!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this));
 }
 

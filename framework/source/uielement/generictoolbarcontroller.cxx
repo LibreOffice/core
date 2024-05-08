@@ -169,7 +169,7 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
     pExecuteInfo->xDispatch     = xDispatch;
     pExecuteInfo->aTargetURL    = aTargetURL;
     // Add key modifier to argument list
-    pExecuteInfo->aArgs = { comphelper::makePropertyValue("KeyModifier", KeyModifier) };
+    pExecuteInfo->aArgs = { comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier) };
 
     Application::PostUserEvent( LINK(nullptr, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
 }
@@ -339,7 +339,7 @@ ImageOrientationController::ImageOrientationController(const Reference<XComponen
                                                        const Reference<XFrame>& rFrame,
                                                        const Reference<css::awt::XWindow>& rParentWindow,
                                                        const OUString& rModuleName)
-    : ToolboxController(rContext, rFrame, ".uno:ImageOrientation")
+    : ToolboxController(rContext, rFrame, u".uno:ImageOrientation"_ustr)
     , m_nRotationAngle(0_deg10)
     , m_bMirrored(false)
 {

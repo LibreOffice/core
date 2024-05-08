@@ -211,7 +211,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
         eElement = E_ELEMENT_ITEM;
     else
         throw css::uno::RuntimeException(
-                "Unknown XML element detected!",
+                u"Unknown XML element detected!"_ustr,
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
 
     return eElement;
@@ -235,7 +235,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
         eAttribute = E_ATTRIBUTE_URL;
     else
         throw css::uno::RuntimeException(
-                "Unknown XML attribute detected!",
+                u"Unknown XML attribute detected!"_ustr,
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
 
     return eAttribute;
@@ -244,7 +244,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 OUString AcceleratorConfigurationReader::implts_getErrorLineString()
 {
     if (!m_xLocator.is())
-        return "Error during parsing XML. (No further info available ...)";
+        return u"Error during parsing XML. (No further info available ...)"_ustr;
 
     return "Error during parsing XML in\nline = " +
         OUString::number(m_xLocator->getLineNumber()) +

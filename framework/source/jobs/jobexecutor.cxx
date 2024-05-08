@@ -81,7 +81,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.JobExecutor";
+        return u"com.sun.star.comp.framework.JobExecutor"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -91,7 +91,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.task.JobExecutor"};
+        return {u"com.sun.star.task.JobExecutor"_ustr};
     }
 
     // task.XJobExecutor
@@ -121,7 +121,7 @@ public:
  */
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_xContext          (xContext                                                        )
-    , m_aConfig           (xContext, "/org.openoffice.Office.Jobs/Events")
+    , m_aConfig           (xContext, u"/org.openoffice.Office.Jobs/Events"_ustr)
 {
 }
 

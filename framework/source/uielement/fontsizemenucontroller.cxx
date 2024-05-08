@@ -53,7 +53,7 @@ namespace framework
 
 OUString SAL_CALL FontSizeMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.FontSizeMenuController";
+    return u"com.sun.star.comp.framework.FontSizeMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL FontSizeMenuController::supportsService( const OUString& sServiceName )

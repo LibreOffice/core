@@ -61,7 +61,7 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
 
 OUString SAL_CALL PopupMenuDispatcher::getImplementationName()
 {
-    return "com.sun.star.comp.framework.PopupMenuControllerDispatcher";
+    return u"com.sun.star.comp.framework.PopupMenuControllerDispatcher"_ustr;
 }
 
 sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
@@ -121,7 +121,7 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     {
         // Just use the main part of the URL for popup menu controllers
         sal_Int32 nSchemePart( 0 );
-        OUString aBaseURL( "vnd.sun.star.popup:" );
+        OUString aBaseURL( u"vnd.sun.star.popup:"_ustr );
         OUString aURL( rURL.Complete );
 
         nSchemePart = aURL.indexOf( ':' );
@@ -242,7 +242,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
         if ( xLayoutManager.is() )
         {
-            css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( "private:resource/menubar/menubar" );
+            css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( u"private:resource/menubar/menubar"_ustr );
 
             m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
         }

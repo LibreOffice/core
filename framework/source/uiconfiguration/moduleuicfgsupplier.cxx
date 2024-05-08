@@ -58,7 +58,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier";
+        return u"com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -68,7 +68,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.ModuleUIConfigurationManagerSupplier"};
+        return {u"com.sun.star.ui.ModuleUIConfigurationManagerSupplier"_ustr};
     }
 
     // XModuleUIConfigurationManagerSupplier

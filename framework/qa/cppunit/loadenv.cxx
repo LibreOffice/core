@@ -25,7 +25,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/framework/qa/cppunit/data/")
+        : UnoApiTest(u"/framework/qa/cppunit/data/"_ustr)
     {
     }
 };
@@ -43,7 +43,7 @@ IMPL_STATIC_LINK(DocumentOpener, OpenDocument, void*, pArg, void)
     uno::Reference<uno::XComponentContext> xComponentContext
         = comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xComponentContext);
-    xDesktop->loadComponentFromURL(*pURL, "_default", 0, {});
+    xDesktop->loadComponentFromURL(*pURL, u"_default"_ustr, 0, {});
     delete pURL;
 }
 

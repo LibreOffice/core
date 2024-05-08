@@ -103,7 +103,7 @@ static Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< X
 
     try
     {
-        xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+        xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     }
     catch ( const UnknownPropertyException& )
     {
@@ -126,7 +126,7 @@ struct ToolBarInfo
 
 OUString SAL_CALL ToolbarsMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.ToolBarsMenuController";
+    return u"com.sun.star.comp.framework.ToolBarsMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL ToolbarsMenuController::supportsService( const OUString& sServiceName )
@@ -249,8 +249,8 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
             {
                 OUString   aResName;
                 sal_Int16       nType( -1 );
-                xPropSet->getPropertyValue("Type") >>= nType;
-                xPropSet->getPropertyValue("ResourceURL") >>= aResName;
+                xPropSet->getPropertyValue(u"Type"_ustr) >>= nType;
+                xPropSet->getPropertyValue(u"ResourceURL"_ustr) >>= aResName;
 
                 if (( nType == css::ui::UIElementType::TOOLBAR ) &&
                     !aResName.isEmpty() )
@@ -411,7 +411,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     bool          bAddCommand( true );
     SvtCommandOptions aCmdOptions;
 
-    if ( aCmdOptions.HasEntriesDisabled() && aCmdOptions.LookupDisabled("ConfigureDialog"))
+    if ( aCmdOptions.HasEntriesDisabled() && aCmdOptions.LookupDisabled(u"ConfigureDialog"_ustr))
         bAddCommand = false;
 
     if ( bAddCommand )
@@ -423,7 +423,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
             m_xPopupMenu->insertSeparator( nItemCount+1 );
         }
 
-        addCommand( m_xPopupMenu, ".uno:ConfigureDialog", "" );
+        addCommand( m_xPopupMenu, u".uno:ConfigureDialog"_ustr, u""_ustr );
     }
 
     // Add separator if no configure has been added
@@ -589,7 +589,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                         {
                             try
                             {
-                                xPropSet->setPropertyValue("RefreshContextToolbarVisibility", Any( true ));
+                                xPropSet->setPropertyValue(u"RefreshContextToolbarVisibility"_ustr, Any( true ));
                             }
                             catch ( const RuntimeException& )
                             {

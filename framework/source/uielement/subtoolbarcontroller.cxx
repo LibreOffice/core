@@ -225,9 +225,9 @@ private:
 
 SubToolbarControl::SubToolbarControl(SubToolBarController& rController,
                                      weld::Widget* pParent)
-    : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svt/ui/subtoolbar.ui", "subtoolbar")
+    : WeldToolbarPopup(rController.getFrameInterface(), pParent, u"svt/ui/subtoolbar.ui"_ustr, u"subtoolbar"_ustr)
     , m_rController(rController)
-    , m_xTargetContainer(m_xBuilder->weld_container("container"))
+    , m_xTargetContainer(m_xBuilder->weld_container(u"container"_ustr))
 {
 }
 
@@ -420,7 +420,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
         {
             try
             {
-                xPropSet->getPropertyValue("ResourceURL") >>= aSubToolBarResName;
+                xPropSet->getPropertyValue(u"ResourceURL"_ustr) >>= aSubToolBarResName;
             }
             catch ( css::beans::UnknownPropertyException& )
             {}
@@ -456,7 +456,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
         VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
         if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
         {
-            OUString aPersistentString( "Persistent" );
+            OUString aPersistentString( u"Persistent"_ustr );
             css::uno::Any a = xProp->getPropertyValue( aPersistentString );
             xProp->setPropertyValue( aPersistentString, css::uno::Any( false ) );
 
@@ -466,7 +466,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
             xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
             xLayoutManager->showElement( aSubToolBarResName );
 
-            xProp->setPropertyValue("Persistent", a );
+            xProp->setPropertyValue(u"Persistent"_ustr, a );
         }
     }
     catch ( css::uno::RuntimeException& )
@@ -523,7 +523,7 @@ void SubToolBarController::dispose()
 
 OUString SubToolBarController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.SubToolBarController";
+    return u"com.sun.star.comp.framework.SubToolBarController"_ustr;
 }
 
 sal_Bool SubToolBarController::supportsService( const OUString& rServiceName )
@@ -533,7 +533,7 @@ sal_Bool SubToolBarController::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ToolbarController"};
+    return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

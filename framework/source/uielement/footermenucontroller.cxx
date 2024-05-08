@@ -35,7 +35,7 @@ namespace framework
 
 OUString SAL_CALL FooterMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.FooterMenuController";
+    return u"com.sun.star.comp.framework.FooterMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL FooterMenuController::supportsService( const OUString& sServiceName )

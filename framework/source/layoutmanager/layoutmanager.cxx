@@ -166,7 +166,7 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
 
     try
     {
-        m_xMenuBar->getPropertyValue("XMenuBar") >>= xMenuBar;
+        m_xMenuBar->getPropertyValue(u"XMenuBar"_ustr) >>= xMenuBar;
     }
     catch (const beans::UnknownPropertyException&)
     {
@@ -215,7 +215,7 @@ void LayoutManager::impl_clearUpMenuBar()
                 {
                     try
                     {
-                        m_xMenuBar->getPropertyValue("XMenuBar") >>= xMenuBar;
+                        m_xMenuBar->getPropertyValue(u"XMenuBar"_ustr) >>= xMenuBar;
                     }
                     catch (const beans::UnknownPropertyException&)
                     {
@@ -654,7 +654,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue("Persistent") >>= bPersistent;
+            xPropSet->getPropertyValue(u"Persistent"_ustr) >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
@@ -722,8 +722,8 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
     Reference< ui::XUIElement > xUIElement;
 
     SolarMutexGuard g;
-    Sequence< PropertyValue > aPropSeq{ comphelper::makePropertyValue("Frame", m_xFrame),
-                                        comphelper::makePropertyValue("Persistent", true) };
+    Sequence< PropertyValue > aPropSeq{ comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame),
+                                        comphelper::makePropertyValue(u"Persistent"_ustr, true) };
 
     try
     {
@@ -2359,7 +2359,7 @@ sal_Bool SAL_CALL LayoutManager::isVisible()
 {
     SolarMutexClearableGuard aReadLock;
     bool bStatusBarVisible( isElementVisible( STATUS_BAR_ALIAS ));
-    bool bProgressBarVisible( isElementVisible( "private:resource/progressbar/progressbar" ));
+    bool bProgressBarVisible( isElementVisible( u"private:resource/progressbar/progressbar"_ustr ));
     bool bVisible( m_bVisible );
     Reference< XUIElement > xStatusBar( m_aStatusBarElement.m_xUIElement );
     Reference< XUIElement > xProgressBar( m_aProgressBarElement.m_xUIElement );
@@ -2498,7 +2498,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     assert(nFormsMenu != -1);
 
     // Create the MS compatible Form menu
-    css::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( "private:resource/menubar/mscompatibleformsmenu" );
+    css::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( u"private:resource/menubar/mscompatibleformsmenu"_ustr );
     if(!xFormsMenu.is())
         return;
 
@@ -2534,8 +2534,8 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
 
     xDispatcher->executeDispatch(
         xProvider,
-        ".uno:CloseWin",
-        "_self",
+        u".uno:CloseWin"_ustr,
+        u"_self"_ustr,
         0,
         uno::Sequence< beans::PropertyValue >());
 }
@@ -2839,7 +2839,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
             if ( xPropSet.is() )
             {
                 if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                    xPropSet->setPropertyValue( "ConfigurationSource", Any( m_xDocCfgMgr ));
+                    xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, Any( m_xDocCfgMgr ));
             }
             xElementSettings->updateSettings();
         }
@@ -2883,7 +2883,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
         if ( xElementSettings.is() )
         {
             bool                      bNoSettings( false );
-            OUString           aConfigSourcePropName( "ConfigurationSource" );
+            OUString           aConfigSourcePropName( u"ConfigurationSource"_ustr );
             Reference< XInterface >   xElementCfgMgr;
             Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
 
@@ -2968,7 +2968,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
             Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
 
             if ( xPropSet.is() )
-                xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
+                xPropSet->getPropertyValue( u"ConfigurationSource"_ustr ) >>= xElementCfgMgr;
 
             if ( !xElementCfgMgr.is() )
                 return;

@@ -59,7 +59,7 @@ namespace framework
 
 OUString SAL_CALL NewMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.NewMenuController";
+    return u"com.sun.star.comp.framework.NewMenuController"_ustr;
 }
 
 sal_Bool SAL_CALL NewMenuController::supportsService( const OUString& sServiceName )
@@ -271,7 +271,7 @@ NewMenuController::NewMenuController( const css::uno::Reference< css::uno::XComp
     m_bNewMenu( false ),
     m_bModuleIdentified( false ),
     m_bAcceleratorCfg( false ),
-    m_aTargetFrame( "_default" ),
+    m_aTargetFrame( u"_default"_ustr ),
     m_xContext( xContext )
 {
 }
@@ -383,8 +383,8 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
             aTargetFrame = pAttributes->aTargetFrame;
     }
 
-    Sequence< PropertyValue > aArgsList{ comphelper::makePropertyValue("Referer",
-                                                                       OUString( "private:user" )) };
+    Sequence< PropertyValue > aArgsList{ comphelper::makePropertyValue(u"Referer"_ustr,
+                                                                       u"private:user"_ustr) };
 
     dispatchCommand( aURL, aArgsList, aTargetFrame );
 }

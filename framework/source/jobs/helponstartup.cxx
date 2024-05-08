@@ -44,7 +44,7 @@ namespace framework{
 
 OUString SAL_CALL HelpOnStartup::getImplementationName()
 {
-    return "com.sun.star.comp.framework.HelpOnStartup";
+    return u"com.sun.star.comp.framework.HelpOnStartup"_ustr;
 }
 
 sal_Bool SAL_CALL HelpOnStartup::supportsService( const OUString& sServiceName )
@@ -146,16 +146,16 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
-    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault("Environment", css::uno::Sequence< css::beans::NamedValue >());
+    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault(u"Environment"_ustr, css::uno::Sequence< css::beans::NamedValue >());
 
     // check for right environment.
     // If it's not a DocumentEvent, which triggered this job,
     // we can't work correctly! => return immediately and do nothing
-    OUString sEnvType = lEnvironment.getUnpackedValueOrDefault("EnvType", OUString());
+    OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(u"EnvType"_ustr, OUString());
     if (sEnvType != "DOCUMENTEVENT")
         return OUString();
 
-    css::uno::Reference< css::frame::XModel > xDoc = lEnvironment.getUnpackedValueOrDefault("Model", css::uno::Reference< css::frame::XModel >());
+    css::uno::Reference< css::frame::XModel > xDoc = lEnvironment.getUnpackedValueOrDefault(u"Model"_ustr, css::uno::Reference< css::frame::XModel >());
     if (!xDoc.is())
         return OUString();
 
@@ -266,7 +266,7 @@ bool HelpOnStartup::its_isHelpUrlADefaultOne(std::u16string_view sHelpURL)
                 continue;
 
             OUString sHelpBaseURL;
-            xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
+            xModuleConfig->getByName(u"ooSetupFactoryHelpBaseURL"_ustr) >>= sHelpBaseURL;
             OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
             if (sHelpURL == sHelpURLForModule)
                 return true;
@@ -300,12 +300,12 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 
         bool bHelpEnabled = false;
         if (xModuleConfig.is())
-            xModuleConfig->getByName("ooSetupFactoryHelpOnOpen") >>= bHelpEnabled;
+            xModuleConfig->getByName(u"ooSetupFactoryHelpOnOpen"_ustr) >>= bHelpEnabled;
 
         if (bHelpEnabled)
         {
             OUString sHelpBaseURL;
-            xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
+            xModuleConfig->getByName(u"ooSetupFactoryHelpBaseURL"_ustr) >>= sHelpBaseURL;
             sHelpURL = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
         }
     }

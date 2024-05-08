@@ -53,7 +53,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.WindowContentFactoryManager";
+        return u"com.sun.star.comp.framework.WindowContentFactoryManager"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -63,7 +63,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.WindowContentFactoryManager"};
+        return {u"com.sun.star.ui.WindowContentFactoryManager"_ustr};
     }
 
     // XSingleComponentFactory
@@ -84,7 +84,7 @@ WindowContentFactoryManager::WindowContentFactoryManager( uno::Reference< uno::X
     m_pConfigAccess(
         new ConfigurationAccess_FactoryManager(
             m_xContext,
-            "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories"))
+            u"/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories"_ustr))
 {}
 
 void WindowContentFactoryManager::disposing(std::unique_lock<std::mutex>&)
@@ -148,7 +148,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
             std::unique_lock g(m_aMutex);
             if (m_bDisposed) {
                 throw css::lang::DisposedException(
-                    "disposed", static_cast<OWeakObject *>(this));
+                    u"disposed"_ustr, static_cast<OWeakObject *>(this));
             }
             if ( !m_bConfigRead )
             {

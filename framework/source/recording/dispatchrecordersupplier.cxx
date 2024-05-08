@@ -30,7 +30,7 @@ namespace framework{
 
 OUString SAL_CALL DispatchRecorderSupplier::getImplementationName()
 {
-    return "com.sun.star.comp.framework.DispatchRecorderSupplier";
+    return u"com.sun.star.comp.framework.DispatchRecorderSupplier"_ustr;
 }
 
 sal_Bool SAL_CALL DispatchRecorderSupplier::supportsService( const OUString& sServiceName )
@@ -40,7 +40,7 @@ sal_Bool SAL_CALL DispatchRecorderSupplier::supportsService( const OUString& sSe
 
 css::uno::Sequence< OUString > SAL_CALL DispatchRecorderSupplier::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.DispatchRecorderSupplier" };
+    return { u"com.sun.star.frame.DispatchRecorderSupplier"_ustr };
 }
 
 
@@ -125,10 +125,10 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
 
     // clear unspecific situations
     if (!xDispatcher.is())
-        throw css::uno::RuntimeException("specification violation: dispatcher is NULL", static_cast< ::cppu::OWeakObject* >(this));
+        throw css::uno::RuntimeException(u"specification violation: dispatcher is NULL"_ustr, static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xRecorder.is())
-        throw css::uno::RuntimeException("specification violation: no valid dispatch recorder available", static_cast< ::cppu::OWeakObject* >(this));
+        throw css::uno::RuntimeException(u"specification violation: no valid dispatch recorder available"_ustr, static_cast< ::cppu::OWeakObject* >(this));
 
     // check, if given dispatch supports record functionality by itself ...
     // or must be wrapped.

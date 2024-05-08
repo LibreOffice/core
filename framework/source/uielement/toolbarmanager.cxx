@@ -106,7 +106,7 @@ static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFra
     {
         try
         {
-            xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+            xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
         }
         catch (const RuntimeException&)
         {
@@ -430,7 +430,7 @@ public:
 
     virtual void InsertSeparator() override
     {
-        m_pWeldedToolBar->append_separator("");
+        m_pWeldedToolBar->append_separator(u""_ustr);
     }
 
     virtual void InsertSpace() override {}
@@ -594,7 +594,7 @@ void ToolBarManager::Init()
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     ToolBoxMenuType nMenuType = ToolBoxMenuType::ClippedItems;
-    if ( !aCmdOptions.LookupDisabled( "CreateDialog"))
+    if ( !aCmdOptions.LookupDisabled( u"CreateDialog"_ustr))
          nMenuType |= ToolBoxMenuType::Customize;
 
     m_pImpl->SetMenuType( nMenuType );
@@ -702,7 +702,7 @@ void ToolBarManager::UpdateControllers()
         Reference< XLayoutManager > xLayoutManager;
         Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
         if ( xFramePropSet.is() )
-            a = xFramePropSet->getPropertyValue("LayoutManager");
+            a = xFramePropSet->getPropertyValue(u"LayoutManager"_ustr);
         a >>= xLayoutManager;
         Reference< XDockableWindow > xDockable( m_pImpl->GetInterface(), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
@@ -1096,7 +1096,7 @@ void ToolBarManager::CreateControllers()
                 else if ( aCommandURL.startsWith( "private:resource/" ) )
                 {
                     xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.comp.framework.GenericPopupToolbarController", m_xContext ), UNO_QUERY );
+                        u"com.sun.star.comp.framework.GenericPopupToolbarController"_ustr, m_xContext ), UNO_QUERY );
                 }
                 else if ( m_pToolBar && m_pToolBar->GetItemData( nId ) != nullptr )
                 {
@@ -1198,7 +1198,7 @@ void ToolBarManager::CreateControllers()
             try
             {
                 bool bSupportVisible = true;
-                Any a( xPropSet->getPropertyValue("SupportsVisible") );
+                Any a( xPropSet->getPropertyValue(u"SupportsVisible"_ustr) );
                 a >>= bSupportVisible;
                 if (bSupportVisible)
                 {
@@ -1345,7 +1345,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     try
     {
         OUString aUIName;
-        xPropSet->getPropertyValue("UIName") >>= aUIName;
+        xPropSet->getPropertyValue(u"UIName"_ustr) >>= aUIName;
         if ( !aUIName.isEmpty() )
             m_pImpl->SetName( aUIName );
     }
@@ -1855,7 +1855,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         if (m_pToolBar->IsCustomize())
         {
             pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FwkResId(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
-            pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, ".uno:ConfigureToolboxVisible");
+            pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, u".uno:ConfigureToolboxVisible"_ustr);
         }
         pMenu->InsertSeparator();
     }
@@ -2006,7 +2006,7 @@ void ToolBarManager::ToggleButton( const OUString& rResourceName, std::u16string
                     if ( xPropSet.is() )
                     {
                         Reference< XUIConfigurationPersistence > xUICfgMgr;
-                        if (( xPropSet->getPropertyValue("ConfigurationSource") >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                        if (( xPropSet->getPropertyValue(u"ConfigurationSource"_ustr) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
                             xUICfgMgr->store();
                     }
                 }
@@ -2107,7 +2107,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                 if ( xDisp.is() )
                 {
                     Sequence< PropertyValue > aPropSeq{ comphelper::makePropertyValue(
-                        "ResourceURL", m_aResourceName) };
+                        u"ResourceURL"_ustr, m_aResourceName) };
 
                     xDisp->dispatch( aURL, aPropSeq );
                 }

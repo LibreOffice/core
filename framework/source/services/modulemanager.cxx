@@ -131,7 +131,7 @@ ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext > 
     if (!comphelper::IsFuzzing())
     {
         m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
-                    m_xContext, "/org.openoffice.Setup/Office/Factories",
+                    m_xContext, u"/org.openoffice.Setup/Office/Factories"_ustr,
                     comphelper::EConfigurationModes::ReadOnly ),
                 css::uno::UNO_QUERY_THROW );
     }
@@ -139,7 +139,7 @@ ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext > 
 
 OUString ModuleManager::getImplementationName()
 {
-    return "com.sun.star.comp.framework.ModuleManager";
+    return u"com.sun.star.comp.framework.ModuleManager"_ustr;
 }
 
 sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
@@ -149,7 +149,7 @@ sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ModuleManager" };
+    return { u"com.sun.star.frame.ModuleManager"_ustr };
 }
 
 OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
@@ -168,7 +168,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
        )
     {
         throw css::lang::IllegalArgumentException(
-                "Given module is not a frame nor a window, controller or model.",
+                u"Given module is not a frame nor a window, controller or model."_ustr,
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -196,7 +196,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
 
     if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
-                "Can not find suitable module for the given component.",
+                u"Can not find suitable module for the given component."_ustr,
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;
@@ -209,7 +209,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                "No properties given to replace part of module.",
+                u"No properties given to replace part of module."_ustr,
                 static_cast< cppu::OWeakObject * >(this),
                 2);
     }
@@ -221,7 +221,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     // we can close it without a flush... and our read data won't be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         m_xContext,
-                                                                        "/org.openoffice.Setup/Office/Factories",
+                                                                        u"/org.openoffice.Setup/Office/Factories"_ustr,
                                                                         ::comphelper::EConfigurationModes::Standard);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameReplace > xModule  ;
@@ -230,7 +230,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                "Was not able to get write access to the requested module entry inside configuration.",
+                u"Was not able to get write access to the requested module entry inside configuration."_ustr,
                 static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -253,7 +253,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                "Was not able to get write access to the requested module entry inside configuration.",
+                u"Was not able to get write access to the requested module entry inside configuration."_ustr,
                 static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -261,7 +261,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     const css::uno::Sequence< OUString > lPropNames = xModule->getElementNames();
     comphelper::SequenceAsHashMap lProps;
 
-    lProps[OUString("ooSetupFactoryModuleIdentifier")] <<= sName;
+    lProps[u"ooSetupFactoryModuleIdentifier"_ustr] <<= sName;
     for (const OUString& sPropName : lPropNames)
     {
         lProps[sPropName] = xModule->getByName(sPropName);

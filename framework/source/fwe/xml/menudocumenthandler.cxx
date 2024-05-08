@@ -742,7 +742,7 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
 
     if ( m_bIsMenuBar ) //FIXME
         pList->AddAttribute( ATTRIBUTE_NS_ID,
-                             "menubar" );
+                             u"menubar"_ustr );
 
     OUString aRootElement;
     if ( m_bIsMenuBar )

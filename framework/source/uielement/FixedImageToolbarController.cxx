@@ -46,8 +46,8 @@ private:
 };
 
 FixedImageControl::FixedImageControl(vcl::Window* pParent, const OUString& rCommand)
-    : InterimItemWindow(pParent, "svt/ui/fixedimagecontrol.ui", "FixedImageControl")
-    , m_xWidget(m_xBuilder->weld_image("image"))
+    : InterimItemWindow(pParent, u"svt/ui/fixedimagecontrol.ui"_ustr, u"FixedImageControl"_ustr)
+    , m_xWidget(m_xBuilder->weld_image(u"image"_ustr))
 {
     InitControlBase(m_xWidget.get());
 

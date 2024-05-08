@@ -307,7 +307,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
     xDispatcher->executeDispatch(
         xProvider,
         aDockWinCommand,
-        "_self",
+        u"_self"_ustr,
         0,
         aArgs);
 }

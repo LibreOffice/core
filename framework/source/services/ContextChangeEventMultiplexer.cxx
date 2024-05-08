@@ -140,7 +140,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
-            "can not add an empty reference",
+            u"can not add an empty reference"_ustr,
             static_cast<XWeak*>(this),
             0);
 
@@ -152,7 +152,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
         {
             // The listener was added for the same event focus
             // previously.  That is an error.
-            throw css::lang::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
+            throw css::lang::IllegalArgumentException(u"listener added twice"_ustr, static_cast<XWeak*>(this), 0);
         }
         rContainer.push_back(rxListener);
     }
@@ -175,7 +175,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
-            "can not remove an empty reference",
+            u"can not remove an empty reference"_ustr,
             static_cast<XWeak*>(this), 0);
 
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
@@ -200,7 +200,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
-            "can not remove an empty reference",
+            u"can not remove an empty reference"_ustr,
             static_cast<XWeak*>(this), 0);
 
     for (auto& rContainer : maListeners)
@@ -279,7 +279,7 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
 
 OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
 {
-    return "org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer";
+    return u"org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"_ustr;
 }
 
 sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)

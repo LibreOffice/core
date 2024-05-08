@@ -354,14 +354,14 @@ void ResourceMenuController::disposing(std::unique_lock<std::mutex>& rGuard)
 OUString ResourceMenuController::getImplementationName()
 {
     if ( m_bToolbarContainer )
-        return "com.sun.star.comp.framework.ToolbarAsMenuController";
+        return u"com.sun.star.comp.framework.ToolbarAsMenuController"_ustr;
 
-    return "com.sun.star.comp.framework.ResourceMenuController";
+    return u"com.sun.star.comp.framework.ResourceMenuController"_ustr;
 }
 
 css::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.PopupMenuController" };
+    return { u"com.sun.star.frame.PopupMenuController"_ustr };
 }
 
 class SaveAsMenuController : public ResourceMenuController
@@ -395,17 +395,17 @@ void SaveAsMenuController::impl_setPopupMenu()
 {
     SolarMutexGuard aGuard;
 
-    InsertItem(m_xPopupMenu, ".uno:SaveAs");
-    InsertItem(m_xPopupMenu, ".uno:ExportTo");
-    InsertItem(m_xPopupMenu, ".uno:SaveACopy");
-    InsertItem(m_xPopupMenu, ".uno:SaveAsTemplate");
+    InsertItem(m_xPopupMenu, u".uno:SaveAs"_ustr);
+    InsertItem(m_xPopupMenu, u".uno:ExportTo"_ustr);
+    InsertItem(m_xPopupMenu, u".uno:SaveACopy"_ustr);
+    InsertItem(m_xPopupMenu, u".uno:SaveAsTemplate"_ustr);
     m_xPopupMenu->insertSeparator(-1);
-    InsertItem(m_xPopupMenu, ".uno:SaveAsRemote");
+    InsertItem(m_xPopupMenu, u".uno:SaveAsRemote"_ustr);
 }
 
 OUString SaveAsMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.SaveAsMenuController";
+    return u"com.sun.star.comp.framework.SaveAsMenuController"_ustr;
 }
 
 class WindowListMenuController : public ResourceMenuController
@@ -541,7 +541,7 @@ void WindowListMenuController::impl_setPopupMenu()
 
 OUString WindowListMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.framework.WindowListMenuController";
+    return u"com.sun.star.comp.framework.WindowListMenuController"_ustr;
 }
 
 }

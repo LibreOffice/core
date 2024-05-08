@@ -121,7 +121,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.Frame";
+        return u"com.sun.star.comp.framework.Frame"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -131,7 +131,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.frame.Frame"};
+        return {u"com.sun.star.frame.Frame"_ustr};
     }
 
     //  XComponentLoader
@@ -361,7 +361,7 @@ private:
     void checkDisposed() {
         osl::MutexGuard g(rBHelper.rMutex);
         if (rBHelper.bInDispose || rBHelper.bDisposed) {
-            throw css::lang::DisposedException("Frame disposed");
+            throw css::lang::DisposedException(u"Frame disposed"_ustr);
         }
     }
 
@@ -578,7 +578,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
     css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
     utl::MediaDescriptor aDescriptor(lArguments);
-    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)
     {
@@ -758,7 +758,7 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
         throw css::uno::RuntimeException(
-                    "XFrameImpl::initialize() called without a valid container window reference.",
+                    u"XFrameImpl::initialize() called without a valid container window reference."_ustr,
                     static_cast< css::frame::XFrame* >(this));
 
     checkDisposed();
@@ -770,7 +770,7 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
     // We should initialize our object and open it for working.
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                "XFrameImpl::initialized() is called more than once, which is not useful nor allowed.",
+                u"XFrameImpl::initialized() is called more than once, which is not useful nor allowed."_ustr,
                 static_cast< css::frame::XFrame* >(this));
 
     // Set the new window.
@@ -1700,11 +1700,11 @@ void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
             m_bSelfClose = true;
         }
 
-        throw css::util::CloseVetoException("Frame in use for loading document...",static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException(u"Frame in use for loading document..."_ustr,static_cast< ::cppu::OWeakObject*>(this));
     }
 
     if ( ! setComponent(nullptr,nullptr) )
-        throw css::util::CloseVetoException("Component couldn't be detached...",static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException(u"Component couldn't be detached..."_ustr,static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed... inform all listeners and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
@@ -2326,7 +2326,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL XFrameImpl::queryDispatch(
             disp = m_xDispatchHelper;
         }
         if (!disp.is()) {
-            throw css::lang::DisposedException("Frame disposed");
+            throw css::lang::DisposedException(u"Frame disposed"_ustr);
         }
         return disp->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
     }
@@ -2358,7 +2358,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL XFra
         disp = m_xDispatchHelper;
     }
     if (!disp.is()) {
-        throw css::lang::DisposedException("Frame disposed");
+        throw css::lang::DisposedException(u"Frame disposed"_ustr);
     }
     return disp->queryDispatches( lDescriptor );
 }
@@ -2615,7 +2615,7 @@ void SAL_CALL XFrameImpl::windowShown( const css::lang::EventObject& )
     {
         css::uno::Reference< css::task::XJobExecutor > xExecutor
             = css::task::theJobExecutor::get( m_xContext );
-        xExecutor->trigger( "onFirstVisibleTask" );
+        xExecutor->trigger( u"onFirstVisibleTask"_ustr );
     }
 }
 
@@ -2925,16 +2925,16 @@ void XFrameImpl::implts_sendFrameActionEvent( const css::frame::FrameAction& aAc
     // (only activated in debug version!)
     SAL_INFO( "fwk.frame",
               "[Frame] " << m_sName << " send event " <<
-              (aAction == css::frame::FrameAction_COMPONENT_ATTACHED ? OUString("COMPONENT ATTACHED") :
-               (aAction == css::frame::FrameAction_COMPONENT_DETACHING ? OUString("COMPONENT DETACHING") :
-                (aAction == css::frame::FrameAction_COMPONENT_REATTACHED ? OUString("COMPONENT REATTACHED") :
-                 (aAction == css::frame::FrameAction_FRAME_ACTIVATED ? OUString("FRAME ACTIVATED") :
-                  (aAction == css::frame::FrameAction_FRAME_DEACTIVATING ? OUString("FRAME DEACTIVATING") :
-                   (aAction == css::frame::FrameAction_CONTEXT_CHANGED ? OUString("CONTEXT CHANGED") :
-                    (aAction == css::frame::FrameAction_FRAME_UI_ACTIVATED ? OUString("FRAME UI ACTIVATED") :
-                     (aAction == css::frame::FrameAction_FRAME_UI_DEACTIVATING ? OUString("FRAME UI DEACTIVATING") :
-                      (aAction == css::frame::FrameAction::FrameAction_MAKE_FIXED_SIZE ? OUString("MAKE_FIXED_SIZE") :
-                       OUString("*invalid*")))))))))));
+              (aAction == css::frame::FrameAction_COMPONENT_ATTACHED ? u"COMPONENT ATTACHED"_ustr :
+               (aAction == css::frame::FrameAction_COMPONENT_DETACHING ? u"COMPONENT DETACHING"_ustr :
+                (aAction == css::frame::FrameAction_COMPONENT_REATTACHED ? u"COMPONENT REATTACHED"_ustr :
+                 (aAction == css::frame::FrameAction_FRAME_ACTIVATED ? u"FRAME ACTIVATED"_ustr :
+                  (aAction == css::frame::FrameAction_FRAME_DEACTIVATING ? u"FRAME DEACTIVATING"_ustr :
+                   (aAction == css::frame::FrameAction_CONTEXT_CHANGED ? u"CONTEXT CHANGED"_ustr :
+                    (aAction == css::frame::FrameAction_FRAME_UI_ACTIVATED ? u"FRAME UI ACTIVATED"_ustr :
+                     (aAction == css::frame::FrameAction_FRAME_UI_DEACTIVATING ? u"FRAME UI DEACTIVATING"_ustr :
+                      (aAction == css::frame::FrameAction::FrameAction_MAKE_FIXED_SIZE ? u"MAKE_FIXED_SIZE"_ustr :
+                       u"*invalid*"_ustr))))))))));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Send css::frame::FrameAction event to all listener.
@@ -3034,8 +3034,8 @@ void XFrameImpl::implts_setIconOnWindow()
         {
             css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(),
                                                                             css::uno::UNO_SET_THROW );
-            if ( xPSI->hasPropertyByName( "IconId" ) )
-                xSet->getPropertyValue( "IconId" ) >>= nIcon;
+            if ( xPSI->hasPropertyByName( u"IconId"_ustr ) )
+                xSet->getPropertyValue( u"IconId"_ustr ) >>= nIcon;
         }
         catch( css::uno::Exception& )
         {

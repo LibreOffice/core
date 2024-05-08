@@ -66,8 +66,8 @@ private:
 };
 
 ListBoxControl::ListBoxControl(vcl::Window* pParent, DropdownToolbarController* pListBoxListener)
-    : InterimItemWindow(pParent, "svt/ui/listcontrol.ui", "ListControl")
-    , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
+    : InterimItemWindow(pParent, u"svt/ui/listcontrol.ui"_ustr, u"ListControl"_ustr)
+    , m_xWidget(m_xBuilder->weld_combo_box(u"listbox"_ustr))
     , m_pListBoxListener( pListBoxListener )
 {
     InitControlBase(m_xWidget.get());
@@ -156,8 +156,8 @@ Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyM
     OUString aSelectedText = m_pListBoxControl->get_active_text();
 
     // Add key modifier to argument list
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier),
-                                   comphelper::makePropertyValue("Text", aSelectedText) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier),
+                                   comphelper::makePropertyValue(u"Text"_ustr, aSelectedText) };
     return aArgs;
 }
 
@@ -195,8 +195,8 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
                 m_pListBoxControl->set_active(0);
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::Any(aList) } };
-                addNotifyInfo( "ListChanged",
+                uno::Sequence< beans::NamedValue > aInfo { { u"List"_ustr, css::uno::Any(aList) } };
+                addNotifyInfo( u"ListChanged"_ustr,
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );
 

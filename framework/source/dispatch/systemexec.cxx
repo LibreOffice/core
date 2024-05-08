@@ -36,7 +36,7 @@ constexpr OUString PROTOCOL_VALUE = u"systemexecute:"_ustr;
 
 OUString SAL_CALL SystemExec::getImplementationName()
 {
-    return "com.sun.star.comp.framework.SystemExecute";
+    return u"com.sun.star.comp.framework.SystemExecute"_ustr;
 }
 
 sal_Bool SAL_CALL SystemExec::supportsService( const OUString& sServiceName )

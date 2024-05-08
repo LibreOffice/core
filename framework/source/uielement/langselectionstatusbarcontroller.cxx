@@ -118,8 +118,8 @@ void LangSelectionStatusbarController::LangMenu(
         return;
 
     const Reference<XServiceInfo> xService(m_xFrame->getController()->getModel(), UNO_QUERY);
-    bool bCalc   = xService.is() && xService->supportsService("com.sun.star.sheet.SpreadsheetDocument");
-    bool bWriter = xService.is() && xService->supportsService("com.sun.star.text.GenericTextDocument");
+    bool bCalc   = xService.is() && xService->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    bool bWriter = xService.is() && xService->supportsService(u"com.sun.star.text.GenericTextDocument"_ustr);
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph

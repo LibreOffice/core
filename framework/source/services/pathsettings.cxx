@@ -173,7 +173,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.PathSettings";
+        return u"com.sun.star.comp.framework.PathSettings"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -183,7 +183,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.util.PathSettings"};
+        return {u"com.sun.star.util.PathSettings"_ustr};
     }
 
     // XInterface
@@ -206,109 +206,109 @@ public:
      * XPathSettings attribute methods
      */
     virtual OUString SAL_CALL getAddin() override
-        { return getStringProperty("Addin"); }
+        { return getStringProperty(u"Addin"_ustr); }
     virtual void SAL_CALL setAddin(const OUString& p1) override
-        { setStringProperty("Addin", p1); }
+        { setStringProperty(u"Addin"_ustr, p1); }
     virtual OUString SAL_CALL getAutoCorrect() override
-        { return getStringProperty("AutoCorrect"); }
+        { return getStringProperty(u"AutoCorrect"_ustr); }
     virtual void SAL_CALL setAutoCorrect(const OUString& p1) override
-        { setStringProperty("AutoCorrect", p1); }
+        { setStringProperty(u"AutoCorrect"_ustr, p1); }
     virtual OUString SAL_CALL getAutoText() override
-        { return getStringProperty("AutoText"); }
+        { return getStringProperty(u"AutoText"_ustr); }
     virtual void SAL_CALL setAutoText(const OUString& p1) override
-        { setStringProperty("AutoText", p1); }
+        { setStringProperty(u"AutoText"_ustr, p1); }
     virtual OUString SAL_CALL getBackup() override
-        { return getStringProperty("Backup"); }
+        { return getStringProperty(u"Backup"_ustr); }
     virtual void SAL_CALL setBackup(const OUString& p1) override
-        { setStringProperty("Backup", p1); }
+        { setStringProperty(u"Backup"_ustr, p1); }
     virtual OUString SAL_CALL getBasic() override
-        { return getStringProperty("Basic"); }
+        { return getStringProperty(u"Basic"_ustr); }
     virtual void SAL_CALL setBasic(const OUString& p1) override
-        { setStringProperty("Basic", p1); }
+        { setStringProperty(u"Basic"_ustr, p1); }
     virtual OUString SAL_CALL getBitmap() override
-        { return getStringProperty("Bitmap"); }
+        { return getStringProperty(u"Bitmap"_ustr); }
     virtual void SAL_CALL setBitmap(const OUString& p1) override
-        { setStringProperty("Bitmap", p1); }
+        { setStringProperty(u"Bitmap"_ustr, p1); }
     virtual OUString SAL_CALL getConfig() override
-        { return getStringProperty("Config"); }
+        { return getStringProperty(u"Config"_ustr); }
     virtual void SAL_CALL setConfig(const OUString& p1) override
-        { setStringProperty("Config", p1); }
+        { setStringProperty(u"Config"_ustr, p1); }
     virtual OUString SAL_CALL getDictionary() override
-        { return getStringProperty("Dictionary"); }
+        { return getStringProperty(u"Dictionary"_ustr); }
     virtual void SAL_CALL setDictionary(const OUString& p1) override
-        { setStringProperty("Dictionary", p1); }
+        { setStringProperty(u"Dictionary"_ustr, p1); }
     virtual OUString SAL_CALL getFavorite() override
-        { return getStringProperty("Favorite"); }
+        { return getStringProperty(u"Favorite"_ustr); }
     virtual void SAL_CALL setFavorite(const OUString& p1) override
-        { setStringProperty("Favorite", p1); }
+        { setStringProperty(u"Favorite"_ustr, p1); }
     virtual OUString SAL_CALL getFilter() override
-        { return getStringProperty("Filter"); }
+        { return getStringProperty(u"Filter"_ustr); }
     virtual void SAL_CALL setFilter(const OUString& p1) override
-        { setStringProperty("Filter", p1); }
+        { setStringProperty(u"Filter"_ustr, p1); }
     virtual OUString SAL_CALL getGallery() override
-        { return getStringProperty("Gallery"); }
+        { return getStringProperty(u"Gallery"_ustr); }
     virtual void SAL_CALL setGallery(const OUString& p1) override
-        { setStringProperty("Gallery", p1); }
+        { setStringProperty(u"Gallery"_ustr, p1); }
     virtual OUString SAL_CALL getGraphic() override
-        { return getStringProperty("Graphic"); }
+        { return getStringProperty(u"Graphic"_ustr); }
     virtual void SAL_CALL setGraphic(const OUString& p1) override
-        { setStringProperty("Graphic", p1); }
+        { setStringProperty(u"Graphic"_ustr, p1); }
     virtual OUString SAL_CALL getHelp() override
-        { return getStringProperty("Help"); }
+        { return getStringProperty(u"Help"_ustr); }
     virtual void SAL_CALL setHelp(const OUString& p1) override
-        { setStringProperty("Help", p1); }
+        { setStringProperty(u"Help"_ustr, p1); }
     virtual OUString SAL_CALL getLinguistic() override
-        { return getStringProperty("Linguistic"); }
+        { return getStringProperty(u"Linguistic"_ustr); }
     virtual void SAL_CALL setLinguistic(const OUString& p1) override
-        { setStringProperty("Linguistic", p1); }
+        { setStringProperty(u"Linguistic"_ustr, p1); }
     virtual OUString SAL_CALL getModule() override
-        { return getStringProperty("Module"); }
+        { return getStringProperty(u"Module"_ustr); }
     virtual void SAL_CALL setModule(const OUString& p1) override
-        { setStringProperty("Module", p1); }
+        { setStringProperty(u"Module"_ustr, p1); }
     virtual OUString SAL_CALL getPalette() override
-        { return getStringProperty("Palette"); }
+        { return getStringProperty(u"Palette"_ustr); }
     virtual void SAL_CALL setPalette(const OUString& p1) override
-        { setStringProperty("Palette", p1); }
+        { setStringProperty(u"Palette"_ustr, p1); }
     virtual OUString SAL_CALL getPlugin() override
-        { return getStringProperty("Plugin"); }
+        { return getStringProperty(u"Plugin"_ustr); }
     virtual void SAL_CALL setPlugin(const OUString& p1) override
-        { setStringProperty("Plugin", p1); }
+        { setStringProperty(u"Plugin"_ustr, p1); }
     virtual OUString SAL_CALL getStorage() override
-        { return getStringProperty("Storage"); }
+        { return getStringProperty(u"Storage"_ustr); }
     virtual void SAL_CALL setStorage(const OUString& p1) override
-        { setStringProperty("Storage", p1); }
+        { setStringProperty(u"Storage"_ustr, p1); }
     virtual OUString SAL_CALL getTemp() override
-        { return getStringProperty("Temp"); }
+        { return getStringProperty(u"Temp"_ustr); }
     virtual void SAL_CALL setTemp(const OUString& p1) override
-        { setStringProperty("Temp", p1); }
+        { setStringProperty(u"Temp"_ustr, p1); }
     virtual OUString SAL_CALL getTemplate() override
-        { return getStringProperty("Template"); }
+        { return getStringProperty(u"Template"_ustr); }
     virtual void SAL_CALL setTemplate(const OUString& p1) override
-        { setStringProperty("Template", p1); }
+        { setStringProperty(u"Template"_ustr, p1); }
     virtual OUString SAL_CALL getUIConfig() override
-        { return getStringProperty("UIConfig"); }
+        { return getStringProperty(u"UIConfig"_ustr); }
     virtual void SAL_CALL setUIConfig(const OUString& p1) override
-        { setStringProperty("UIConfig", p1); }
+        { setStringProperty(u"UIConfig"_ustr, p1); }
     virtual OUString SAL_CALL getUserConfig() override
-        { return getStringProperty("UserConfig"); }
+        { return getStringProperty(u"UserConfig"_ustr); }
     virtual void SAL_CALL setUserConfig(const OUString& p1) override
-        { setStringProperty("UserConfig", p1); }
+        { setStringProperty(u"UserConfig"_ustr, p1); }
     virtual OUString SAL_CALL getUserDictionary() override
-        { return getStringProperty("UserDictionary"); }
+        { return getStringProperty(u"UserDictionary"_ustr); }
     virtual void SAL_CALL setUserDictionary(const OUString& p1) override
-        { setStringProperty("UserDictionary", p1); }
+        { setStringProperty(u"UserDictionary"_ustr, p1); }
     virtual OUString SAL_CALL getWork() override
-        { return getStringProperty("Work"); }
+        { return getStringProperty(u"Work"_ustr); }
     virtual void SAL_CALL setWork(const OUString& p1) override
-        { setStringProperty("Work", p1); }
+        { setStringProperty(u"Work"_ustr, p1); }
     virtual OUString SAL_CALL getBasePathShareLayer() override
-        { return getStringProperty("UIConfig"); }
+        { return getStringProperty(u"UIConfig"_ustr); }
     virtual void SAL_CALL setBasePathShareLayer(const OUString& p1) override
-        { setStringProperty("UIConfig", p1); }
+        { setStringProperty(u"UIConfig"_ustr, p1); }
     virtual OUString SAL_CALL getBasePathUserLayer() override
-        { return getStringProperty("UserConfig"); }
+        { return getStringProperty(u"UserConfig"_ustr); }
     virtual void SAL_CALL setBasePathUserLayer(const OUString& p1) override
-        { setStringProperty("UserConfig", p1); }
+        { setStringProperty(u"UserConfig"_ustr, p1); }
 
     /**
      * overrides to resolve inheritance ambiguity
@@ -583,7 +583,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
-    xPath->getByName("InternalPaths") >>= xIPath;
+    xPath->getByName(u"InternalPaths"_ustr) >>= xIPath;
     aPathVal.lInternalPaths = comphelper::sequenceToContainer<std::vector<OUString>>(xIPath->getElementNames());
 
     // read user defined path list
@@ -601,7 +601,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
         aPathVal.lUserPaths.erase(aI);
 
     // read state props
-    xPath->getByName("IsSinglePath") >>= aPathVal.bIsSinglePath;
+    xPath->getByName(u"IsSinglePath"_ustr) >>= aPathVal.bIsSinglePath;
 
     // analyze finalized/mandatory states
     aPathVal.bIsReadonly = false;
@@ -1368,7 +1368,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
     {
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
-                        "org.openoffice.Office.Common/Path/Current",
+                        u"org.openoffice.Office.Common/Path/Current"_ustr,
                         ::comphelper::EConfigurationModes::Standard), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
@@ -1393,7 +1393,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     {
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
-                        "org.openoffice.Office.Paths/Paths",
+                        u"org.openoffice.Office.Paths/Paths"_ustr,
                         ::comphelper::EConfigurationModes::Standard),
                    css::uno::UNO_QUERY_THROW);
 

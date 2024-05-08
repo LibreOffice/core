@@ -60,7 +60,7 @@ public:
 };
 
 MyInterceptor::MyInterceptor()
-    : m_aDisabledCommands{ ".uno:Bold" }
+    : m_aDisabledCommands{ u".uno:Bold"_ustr }
     , m_nExpected(0)
     , m_nUnexpected(0)
 {
@@ -144,14 +144,15 @@ class DispatchTest : public UnoApiTest
 {
 public:
     DispatchTest()
-        : UnoApiTest("/framework/qa/cppunit/data/")
+        : UnoApiTest(u"/framework/qa/cppunit/data/"_ustr)
     {
     }
 };
 
 CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
 
@@ -162,10 +163,10 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
     rtl::Reference<MyInterceptor> pInterceptor(new MyInterceptor());
     xRegistration->registerDispatchProviderInterceptor(pInterceptor);
 
-    dispatchCommand(mxComponent, ".uno:Bold", {});
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
     CPPUNIT_ASSERT_GREATER(0, pInterceptor->getExpected());
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
-    dispatchCommand(mxComponent, ".uno:Italic", {});
+    dispatchCommand(mxComponent, u".uno:Italic"_ustr, {});
     // This was 1: MyInterceptor::queryDispatch() was called for .uno:Italic.
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
 }
@@ -186,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
     url.Complete = xModel->getURL() + "#dummy";
     xParser->parseStrict(url);
 
-    uno::Reference<frame::XDispatch> xDisp(xFrame->queryDispatch(url, "", 0));
+    uno::Reference<frame::XDispatch> xDisp(xFrame->queryDispatch(url, u""_ustr, 0));
     CPPUNIT_ASSERT(xDisp.is());
 
     mxComponent->dispose();

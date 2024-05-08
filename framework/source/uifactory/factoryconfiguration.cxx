@@ -55,10 +55,10 @@ static OUString getHashKeyFromStrings(
 //  XInterface, XTypeProvider
 
 ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, OUString _sRoot ) :
-    m_aPropCommand( "Command" ),
-    m_aPropModule( "Module" ),
-    m_aPropController( "Controller" ),
-    m_aPropValue( "Value" ),
+    m_aPropCommand( u"Command"_ustr ),
+    m_aPropModule( u"Module"_ustr ),
+    m_aPropController( u"Controller"_ustr ),
+    m_aPropValue( u"Value"_ustr ),
     m_sRoot(std::move(_sRoot)),
     m_bConfigAccessInitialized( false )
 {

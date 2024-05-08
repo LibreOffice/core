@@ -129,7 +129,7 @@ void SAL_CALL GenericStatusbarController::paint(
     if ( xGraphicProps.is() && m_xGraphic->getType() != graphic::GraphicType::EMPTY )
     {
         awt::Size aGraphicSize;
-        xGraphicProps->getPropertyValue( "SizePixel" ) >>= aGraphicSize;
+        xGraphicProps->getPropertyValue( u"SizePixel"_ustr ) >>= aGraphicSize;
         OSL_ENSURE( aGraphicSize.Height > 0 && aGraphicSize.Width > 0, "Empty status bar graphic!" );
 
         sal_Int32 nOffset = m_xStatusbarItem->getOffset( );

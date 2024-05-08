@@ -176,7 +176,7 @@ namespace framework
         void cancel( const Reference< XInterface >& i_context )
         {
             m_caughtException <<= RuntimeException(
-                "Concurrency error: an earlier operation on the stack failed.",
+                u"Concurrency error: an earlier operation on the stack failed."_ustr,
                 i_context
             );
             m_finishCondition.set();
@@ -398,7 +398,7 @@ namespace framework
     {
         if ( !i_action.is() )
             throw IllegalArgumentException(
-                "illegal undo action object",
+                u"illegal undo action object"_ustr,
                 getXUndoManager(),
                 1
             );
@@ -452,7 +452,7 @@ namespace framework
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_nLockCount == 0 )
-            throw NotLockedException( "Undo manager is not locked", getXUndoManager() );
+            throw NotLockedException( u"Undo manager is not locked"_ustr, getXUndoManager() );
 
         if ( --m_nLockCount == 0 )
         {
@@ -535,7 +535,7 @@ namespace framework
 
         if ( i_hidden && ( rUndoManager.GetUndoActionCount() == 0 ) )
             throw EmptyUndoStackException(
-                "can't enter a hidden context without a previous Undo action",
+                u"can't enter a hidden context without a previous Undo action"_ustr,
                 m_rUndoManagerImplementation.getThis()
             );
 
@@ -569,7 +569,7 @@ namespace framework
 
         if ( !rUndoManager.IsInListAction() )
             throw InvalidStateException(
-                "no active undo context",
+                u"no active undo context"_ustr,
                 getXUndoManager()
             );
 
@@ -636,7 +636,7 @@ namespace framework
                                 ?   rUndoManager.GetUndoActionCount( SfxUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( SfxUndoManager::TopLevel );
         if ( nElements == 0 )
-            throw EmptyUndoStackException("stack is empty", getXUndoManager() );
+            throw EmptyUndoStackException(u"stack is empty"_ustr, getXUndoManager() );
 
         aGuard.clear();
         // <--- SYNCHRONIZED
@@ -977,8 +977,8 @@ namespace framework
                                     :   rUndoManager.GetRedoActionCount( SfxUndoManager::TopLevel );
             if ( nActionCount == 0 )
                 throw EmptyUndoStackException(
-                    i_undo ? OUString( "no action on the undo stack" )
-                           : OUString( "no action on the redo stack" ),
+                    i_undo ? u"no action on the undo stack"_ustr
+                           : u"no action on the redo stack"_ustr,
                     i_impl.getXUndoManager()
                 );
             return  i_undo

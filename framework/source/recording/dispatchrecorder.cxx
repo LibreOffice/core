@@ -40,7 +40,7 @@ constexpr OUString REM_AS_COMMENT = u"rem "_ustr;
 
 OUString SAL_CALL DispatchRecorder::getImplementationName()
 {
-    return "com.sun.star.comp.framework.DispatchRecorder";
+    return u"com.sun.star.comp.framework.DispatchRecorder"_ustr;
 }
 
 sal_Bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
@@ -50,7 +50,7 @@ sal_Bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceNam
 
 css::uno::Sequence< OUString > SAL_CALL DispatchRecorder::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.DispatchRecorder" };
+    return { u"com.sun.star.frame.DispatchRecorder"_ustr };
 }
 
 
@@ -389,7 +389,7 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount()
 css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
 {
     if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
-        throw css::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
+        throw css::lang::IndexOutOfBoundsException( u"Dispatch recorder out of bounds"_ustr  );
 
     Any element(&m_aStatements[idx],
         cppu::UnoType<css::frame::DispatchStatement>::get());
@@ -402,13 +402,13 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
     if (element.getValueType() !=
         cppu::UnoType<css::frame::DispatchStatement>::get()) {
                         throw css::lang::IllegalArgumentException(
-                          "Illegal argument in dispatch recorder",
+                          u"Illegal argument in dispatch recorder"_ustr,
                           Reference< XInterface >(), 2 );
     }
 
     if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
         throw css::lang::IndexOutOfBoundsException(
-                        "Dispatch recorder out of bounds"  );
+                        u"Dispatch recorder out of bounds"_ustr  );
 
     auto pStatement = o3tl::doAccess<css::frame::DispatchStatement>(element);
 

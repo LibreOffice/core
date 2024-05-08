@@ -57,14 +57,14 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
     css::uno::Reference< css::frame::XFrame > xFrame;
     if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
-                "Empty argument list!",
+                u"Empty argument list!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
-                "No valid frame specified!",
+                u"No valid frame specified!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -241,8 +241,8 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         try
         {
             css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
-            if ( xPSI->hasPropertyByName( "IconId" ) )
-                xSet->getPropertyValue( "IconId" ) >>= nIcon;
+            if ( xPSI->hasPropertyByName( u"IconId"_ustr ) )
+                xSet->getPropertyValue( u"IconId"_ustr ) >>= nIcon;
         }
         catch(const css::uno::Exception&)
         {

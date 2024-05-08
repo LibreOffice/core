@@ -432,7 +432,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
-    Sequence<OUString> aNotifySeq { "AddonUI" };
+    Sequence<OUString> aNotifySeq { u"AddonUI"_ustr };
     EnableNotification( aNotifySeq );
 }
 
@@ -647,7 +647,7 @@ BitmapEx AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, b
 void AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString             aAddonMenuNodeName( "AddonUI/AddonMenu" );
+    OUString             aAddonMenuNodeName( u"AddonUI/AddonMenu"_ustr );
     Sequence< OUString > aAddonMenuNodeSeq = GetNodeNames( aAddonMenuNodeName );
     OUString             aAddonMenuItemNode( aAddonMenuNodeName + m_aPathDelimiter );
 
@@ -681,7 +681,7 @@ void AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >
 void AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString             aAddonHelpMenuNodeName( "AddonUI/OfficeHelp" );
+    OUString             aAddonHelpMenuNodeName( u"AddonUI/OfficeHelp"_ustr );
     Sequence< OUString > aAddonHelpMenuNodeSeq = GetNodeNames( aAddonHelpMenuNodeName );
     OUString             aAddonHelpMenuItemNode( aAddonHelpMenuNodeName + m_aPathDelimiter );
 
@@ -715,7 +715,7 @@ void AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > 
 void AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
-    OUString             aAddonMenuBarNodeName( "AddonUI/OfficeMenuBar" );
+    OUString             aAddonMenuBarNodeName( u"AddonUI/OfficeMenuBar"_ustr );
     Sequence< OUString > aAddonMenuBarNodeSeq = GetNodeNames( aAddonMenuBarNodeName );
     OUString             aAddonMenuBarNode( aAddonMenuBarNodeName + m_aPathDelimiter );
 
@@ -767,7 +767,7 @@ void AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue
 void AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString             aAddonToolBarNodeName( "AddonUI/OfficeToolBar" );
+    OUString             aAddonToolBarNodeName( u"AddonUI/OfficeToolBar"_ustr );
     Sequence< OUString > aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
     OUString             aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
 
@@ -821,7 +821,7 @@ void AddonsOptions_Impl::ReadOfficeNotebookBarSet(
     std::vector<OUString>& rAddonOfficeNotebookBarResNames)
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString aAddonNotebookBarNodeName("AddonUI/OfficeNotebookBar");
+    OUString aAddonNotebookBarNodeName(u"AddonUI/OfficeNotebookBar"_ustr);
     Sequence<OUString> aAddonNotebookBarNodeSeq = GetNodeNames(aAddonNotebookBarNodeName);
     OUString aAddonNotebookBarNode(aAddonNotebookBarNodeName + m_aPathDelimiter);
 
@@ -878,7 +878,7 @@ bool AddonsOptions_Impl::ReadNotebookBarItemSet(
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
-    OUString                aAddonImagesNodeName( "AddonUI/Images" );
+    OUString                aAddonImagesNodeName( u"AddonUI/Images"_ustr );
     Sequence< OUString > aAddonImagesNodeSeq = GetNodeNames( aAddonImagesNodeName );
     OUString                aAddonImagesNode( aAddonImagesNodeName + m_aPathDelimiter );
 

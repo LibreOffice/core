@@ -202,7 +202,7 @@ Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDe
 {
     return
     {
-        Property( "SeparatorType", HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
+        Property( u"SeparatorType"_ustr, HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
     };
 }
 

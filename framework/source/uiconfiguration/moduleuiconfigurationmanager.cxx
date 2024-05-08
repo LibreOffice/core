@@ -92,7 +92,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.framework.ModuleUIConfigurationManager";
+        return u"com.sun.star.comp.framework.ModuleUIConfigurationManager"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -102,7 +102,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return {"com.sun.star.ui.ModuleUIConfigurationManager"};
+        return {u"com.sun.star.ui.ModuleUIConfigurationManager"_ustr};
     }
 
     // XComponent
@@ -283,7 +283,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
 
     UIElementDataHashMap& rUserElements = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
 
-    OUString aCustomUrlPrefix( "custom_" );
+    OUString aCustomUrlPrefix( u"custom_"_ustr );
     for (auto const& userElement : rUserElements)
     {
         sal_Int32 nIndex = userElement.second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX.size() );
@@ -831,8 +831,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     : m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
-    , m_aXMLPostfix( ".xml" )
-    , m_aPropUIName( "UIName" )
+    , m_aXMLPostfix( u".xml"_ustr )
+    , m_aPropUIName( u"UIName"_ustr )
     , m_xContext( xContext )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
@@ -849,8 +849,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     else
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        aModuleShortName  = lArgs.getUnpackedValueOrDefault("ModuleShortName", OUString());
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
+        aModuleShortName  = lArgs.getUnpackedValueOrDefault(u"ModuleShortName"_ustr, OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(u"ModuleIdentifier"_ustr, OUString());
     }
 
     for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
@@ -886,7 +886,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         if ( xPropSet.is() )
         {
             tools::Long nOpenMode = 0;
-            Any a = xPropSet->getPropertyValue("OpenMode");
+            Any a = xPropSet->getPropertyValue(u"OpenMode"_ustr);
             if ( a >>= nOpenMode )
                 m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
         }
@@ -1034,7 +1034,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
-                        "ModuleUIConfigurationManager::reset exception",
+                        u"ModuleUIConfigurationManager::reset exception"_ustr,
                         css::uno::Reference<css::uno::XInterface>(*this), anyEx);
             }
         }
@@ -1090,7 +1090,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     for (auto const& elem : aUIElementInfoCollection)
     {
         aElementInfoSeq[n++] = Sequence<PropertyValue> {
-            comphelper::makePropertyValue("ResourceURL", elem.second.aResourceURL),
+            comphelper::makePropertyValue(u"ResourceURL"_ustr, elem.second.aResourceURL),
             comphelper::makePropertyValue(m_aPropUIName, elem.second.aUIName)
         };
     }
