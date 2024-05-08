@@ -81,17 +81,19 @@ SlideSorterModule::SlideSorterModule (
 
     UpdateViewTabBar(nullptr);
 
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().has_value() && (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive()))
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().value_or(true)
+        && (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive()))
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::NotesView::get())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::NotesView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msNotesViewURL);
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::HandoutView::get())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::HandoutView::get().value_or(false))
         AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::SlideSorterView::get().has_value() && !comphelper::LibreOfficeKit::isActive())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::SlideSorterView::get().value_or(false)
+        && !comphelper::LibreOfficeKit::isActive())
         AddActiveMainView(FrameworkHelper::msSlideSorterURL);
-    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::DrawView::get())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::DrawView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msDrawViewURL);
 
     mxConfigurationController->addConfigurationChangeListener(
