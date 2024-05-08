@@ -1164,7 +1164,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
         }
     }
 
-    OSL_ENSURE( pCFormat, "No character style???" );
+    assert(pCFormat && "No character style???");
 
     // If a class exists, then search for the class style but don't
     // create one.
@@ -1262,9 +1262,9 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
         pColl = GetTextCollFromPool( nTextColl );
     }
 
-    OSL_ENSURE( pColl, "No paragraph style???" );
     if( !aClass.isEmpty() )
     {
+        assert(pColl && "No paragraph style???");
         OUString aTmp( pColl->GetName() );
         AddClassName( aTmp, aClass );
         SwTextFormatColl* pClassColl = m_pDoc->FindTextFormatCollByName( aTmp );

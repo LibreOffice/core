@@ -707,11 +707,8 @@ SwTextContentControl::CreateTextContentControl(SwDoc& rDoc, SwTextNode* pTargetT
     if (bIsCopy)
     {
         // the item in rHolder is already cloned, now call DoCopy to copy the SwContentControl
-        if (!pTargetTextNode)
-        {
-            SAL_WARN("sw.core",
-                     "SwTextContentControl ctor: cannot copy content control without target node");
-        }
+        assert(pTargetTextNode
+               && "SwTextContentControl ctor: cannot copy content control without target node");
         SwFormatContentControl* pSwFormatContentControl(
             static_cast<SwFormatContentControl*>(const_cast<SfxPoolItem*>(rHolder.getItem())));
         pSwFormatContentControl->DoCopy(*pTargetTextNode);

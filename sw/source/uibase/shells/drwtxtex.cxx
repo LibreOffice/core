@@ -335,8 +335,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     bRestoreSelection = true;
                 }
 
-                SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
+                SwView& rView = GetView();
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>(&rView) != nullptr);
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aDlgAttr(GetPool());
 
@@ -346,7 +346,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(pView->GetFrameWeld(), *pView, aDlgAttr, SwCharDlgMode::Draw));
+                VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, aDlgAttr, SwCharDlgMode::Draw));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
@@ -411,8 +411,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
             if (!pArgs)
             {
-                SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
+                SwView& rView = GetView();
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>(&rView) !=  nullptr);
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSetFixed<
                         EE_ITEMS_START, EE_ITEMS_END,

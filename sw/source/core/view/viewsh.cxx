@@ -205,7 +205,7 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
-        OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
+        assert(mpTargetPaintWindow && "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
         // #i74769# if prerender, save OutDev and redirect to PreRenderDevice
         if(mpTargetPaintWindow->GetPreRenderDevice())

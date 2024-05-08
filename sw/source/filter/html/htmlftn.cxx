@@ -367,7 +367,7 @@ void SwHTMLWriter::OutFootEndNotes()
         SetLFPossible(true);
         IncIndentLevel();   // indent content of <DIV>
 
-        OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote is missing" );
+        assert(pTextFootnote && "SwHTMLWriter::OutFootEndNotes: SwTextFootnote is missing");
         const SwNodeIndex *pSttNdIdx = pTextFootnote->GetStartNode();
         OSL_ENSURE( pSttNdIdx,
                 "SwHTMLWriter::OutFootEndNotes: StartNode-Index is missing" );

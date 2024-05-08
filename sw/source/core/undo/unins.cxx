@@ -593,7 +593,7 @@ SwUndoReplace::Impl::Impl(
     m_bSplitNext = m_nSttNd != pEnd->GetNodeIndex();
 
     SwTextNode* pNd = pStt->GetNode().GetTextNode();
-    OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
+    assert(pNd && "Dude, where's my TextNode?");
 
     m_pHistory.reset( new SwHistory );
     DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(), DelContentType::AllMask | DelContentType::Replace);
@@ -679,7 +679,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( m_bSplitNext )
     {
-        assert(m_nSttCnt + m_sOld.getLength() <= pNd->Len());
+        assert(pNd && m_nSttCnt + m_sOld.getLength() <= pNd->Len());
         SwPosition aPos(*pNd, m_nSttCnt + m_sOld.getLength());
         pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
         pNd->RestoreMetadata(m_pMetadataUndoEnd);

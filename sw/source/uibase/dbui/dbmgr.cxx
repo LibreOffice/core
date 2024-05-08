@@ -520,6 +520,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 
     lcl_InitNumberFormatter(*m_pImpl->pMergeData, xSource);
 
+    assert(pWorkShell);
     pWorkShell->ChgDBData(aData);
     m_bInMerge = true;
 

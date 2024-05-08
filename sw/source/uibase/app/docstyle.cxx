@@ -1506,7 +1506,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                 if( nFamily == SfxStyleFamily::Char )
                 {
-                    SAL_WARN_IF(!m_pCharFormat, "sw.ui", "Where's SwCharFormat");
+                    assert(m_pCharFormat && "Where's SwCharFormat");
                     m_aCoreSet.Put(m_pCharFormat->GetAttrSet());
                     m_aCoreSet.Put( aBoxInfo );
 
@@ -1515,7 +1515,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 }
                 else if ( nFamily == SfxStyleFamily::Para )
                 {
-                    OSL_ENSURE(m_pColl, "Where's Collection");
+                    assert(m_pColl && "Where's Collection");
                     m_aCoreSet.Put(m_pColl->GetAttrSet());
                     m_aCoreSet.Put( aBoxInfo );
                     m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pColl->IsAutoUpdateOnDirectFormat()));
@@ -1525,7 +1525,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 }
                 else
                 {
-                    OSL_ENSURE(m_pFrameFormat, "Where's FrameFormat");
+                    assert(m_pFrameFormat && "Where's FrameFormat");
                     m_aCoreSet.Put(m_pFrameFormat->GetAttrSet());
                     m_aCoreSet.Put( aBoxInfo );
                     m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pFrameFormat->IsAutoUpdateOnDirectFormat()));
@@ -1554,14 +1554,14 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                     m_aCoreSet.SetParent(&m_rDoc.GetDfltFrameFormat()->GetAttrSet());
                 }
 
-                OSL_ENSURE(m_pDesc, "No PageDescriptor");
+                assert(m_pDesc && "No PageDescriptor");
                 ::PageDescToItemSet(*const_cast<SwPageDesc*>(m_pDesc), m_aCoreSet);
             }
             break;
 
         case SfxStyleFamily::Pseudo:
             {
-                OSL_ENSURE(m_pNumRule, "No NumRule");
+                assert(m_pNumRule && "No NumRule");
                 SvxNumRule aRule = m_pNumRule->MakeSvxNumRule();
                 m_aCoreSet.Put(SvxNumBulletItem(std::move(aRule)));
             }
@@ -1583,7 +1583,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         return;
     }
 
-    OSL_ENSURE( m_pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
+    assert(m_pColl && "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
     ::sw::ListLevelIndents const indents(m_pColl->AreListLevelIndentsApplicable());
     if (indents == ::sw::ListLevelIndents::No)
         return;

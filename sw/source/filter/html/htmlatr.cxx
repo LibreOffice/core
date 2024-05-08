@@ -3174,7 +3174,7 @@ static SwHTMLWriter& OutHTML_SwTextCharFormat( SwHTMLWriter& rWrt, const SfxPool
         return rWrt;
 
     const SwHTMLFormatInfo *pFormatInfo = it->get();
-    OSL_ENSURE( pFormatInfo, "Why is there no information about the character style?" );
+    assert(pFormatInfo && "Why is there no information about the character style?");
 
     if( rWrt.m_bTagOn )
     {

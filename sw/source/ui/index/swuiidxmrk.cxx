@@ -833,12 +833,13 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, weld::Button&, void)
 // renew dialog view
 void SwIndexMarkPane::UpdateDialog()
 {
-    OSL_ENSURE(m_pSh && m_pTOXMgr, "no shell?");
+    assert(m_pTOXMgr && "no tox manager?");
     SwTOXMark* pMark = m_pTOXMgr->GetCurTOXMark();
     OSL_ENSURE(pMark, "no current marker");
     if(!pMark)
         return;
 
+    assert(m_pSh && "no shell?");
     SwViewShell::SetCareDialog(m_xDialog);
 
     m_aOrgStr = pMark->GetText(m_pSh->GetLayout());
@@ -1510,7 +1511,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEditAllowedHdl, weld::Entry&, rEdit, bool)
 
 void SwAuthorMarkPane::InitControls()
 {
-    OSL_ENSURE(m_pSh, "no shell?");
+    assert(m_pSh && "no shell?");
     SwField* pField = m_pSh->GetCurField();
     OSL_ENSURE(m_bNewEntry || pField, "no current marker");
     if(m_bNewEntry)

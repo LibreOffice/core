@@ -192,7 +192,7 @@ OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
 
 bool HTMLReader::SetStrmStgPtr()
 {
-    OSL_ENSURE( m_pMedium, "Where is the medium??" );
+    assert(m_pMedium && "Where is the medium??");
 
     if( m_pMedium->IsRemote() || !m_pMedium->IsStorage() )
     {

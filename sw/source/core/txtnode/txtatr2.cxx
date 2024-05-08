@@ -288,7 +288,7 @@ SwTextMeta::CreateTextMeta(
 {
     if (i_bIsCopy)
     {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
-        OSL_ENSURE(i_pTargetTextNode, "cannot copy Meta without target node");
+        assert(i_pTargetTextNode && "cannot copy Meta without target node");
         SwFormatMeta* pSwFormatMeta(static_cast<SwFormatMeta*>(const_cast<SfxPoolItem*>(i_rAttr.getItem())));
         pSwFormatMeta->DoCopy(i_rTargetDocManager, *i_pTargetTextNode);
     }

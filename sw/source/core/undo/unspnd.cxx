@@ -44,7 +44,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc& rDoc, const SwPosition& rPos,
         m_bTableFlag( false ), m_bCheckTableStart( bChkTable )
 {
     SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "only for TextNode" );
+    assert(pTextNd && "only for TextNode");
     if( pTextNd->GetpSwpHints() )
     {
         m_pHistory.reset(new SwHistory);

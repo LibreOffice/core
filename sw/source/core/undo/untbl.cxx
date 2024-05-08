@@ -850,7 +850,7 @@ SwUndoTableHeadline::SwUndoTableHeadline( const SwTable& rTable, sal_uInt16 nOld
 {
     OSL_ENSURE( !rTable.GetTabSortBoxes().empty(), "Table without content" );
     const SwStartNode *pSttNd = rTable.GetTabSortBoxes()[ 0 ]->GetSttNd();
-    OSL_ENSURE( pSttNd, "Box without content" );
+    assert(pSttNd && "Box without content");
 
     m_nTableNode = pSttNd->StartOfSectionIndex();
 }
@@ -1796,7 +1796,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     SwTableNode* pTableNd = rDoc.GetNodes()[ m_nSttNode ]->GetTableNode();
-    OSL_ENSURE( pTableNd, "no TableNode" );
+    assert(pTableNd && "no TableNode");
     CHECK_TABLE( pTableNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
@@ -1843,7 +1843,7 @@ SwUndoTableMerge::SwUndoTableMerge( const SwPaM& rTableSel )
     : SwUndo( SwUndoId::TABLE_MERGE, &rTableSel.GetDoc() ), SwUndRng( rTableSel )
 {
     const SwTableNode* pTableNd = rTableSel.GetPointNode().FindTableNode();
-    OSL_ENSURE( pTableNd, "Where is the TableNode?" );
+    assert(pTableNd && "Where is the TableNode?");
     m_pSaveTable.reset( new SaveTable( pTableNd->GetTable() ) );
     m_nTableNode = pTableNd->GetIndex();
 }
@@ -2128,10 +2128,10 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwStartNode* pSttNd = rDoc.GetNodes()[ m_nNode ]->
                             FindSttNodeByType( SwTableBoxStartNode );
-    OSL_ENSURE( pSttNd, "without StartNode no TableBox" );
+    assert(pSttNd && "without StartNode no TableBox");
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTableBox(
                                     pSttNd->GetIndex() );
-    OSL_ENSURE( pBox, "found no TableBox" );
+    assert(pBox && "found no TableBox");
 
     SwTableBoxFormat* pFormat = rDoc.MakeTableBoxFormat();
     pFormat->SetFormatAttr( *m_pBoxSet );

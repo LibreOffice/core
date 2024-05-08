@@ -101,7 +101,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
         else
             pPageDesc = &m_rSh.GetPageDesc(m_rSh.GetCurPageDesc());
 
-        OSL_ENSURE(pPageDesc, "Page description not found.");
+        assert(pPageDesc && "Page description not found.");
         const sal_uInt16 nUserPage = sal_uInt16(m_xPageNumEdit->get_value());
         bool bOk = true;
         switch(pPageDesc->GetUseOn())

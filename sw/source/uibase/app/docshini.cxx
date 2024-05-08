@@ -261,6 +261,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     aFont = pPrt->GetFontMetric( aFont );
 
                 pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
+                assert(pColl);
                 if( !bHTMLTemplSet ||
                     SfxItemState::SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )

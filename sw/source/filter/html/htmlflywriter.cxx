@@ -1658,7 +1658,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
-    OSL_ENSURE( pSttNd, "Where is the start node" );
+    assert(pSttNd && "Where is the start node");
 
     {
         // in a block, so that the old state can be restored in time
@@ -1741,7 +1741,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
     rWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
 
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
-    OSL_ENSURE( pSttNd, "Where is the start node" );
+    assert(pSttNd && "Where is the start node");
 
     {
         // in a block, so that the old state can be restored in time
@@ -2110,7 +2110,7 @@ SwHTMLWriter& OutHTML_HeaderFooter( SwHTMLWriter& rWrt, const SwFrameFormat& rFr
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
-    OSL_ENSURE( pSttNd, "Where is the start node" );
+    assert(pSttNd && "Where is the start node");
 
     if( !bHeader && !aSpacer.isEmpty() )
     {

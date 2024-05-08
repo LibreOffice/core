@@ -232,7 +232,7 @@ void SwDropCapsPict::UpdatePaintSettings()
             SwCharFormat *pFormat = rWrtShell.GetCharStyle(
                                     mpPage->m_xTemplateBox->get_active_text(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
-            OSL_ENSURE(pFormat, "character style doesn't exist!");
+            assert(pFormat && "character style doesn't exist!");
             const SvxFontItem &rFormatFont = pFormat->GetFont();
 
             aFont.SetFamily(rFormatFont.GetFamily());

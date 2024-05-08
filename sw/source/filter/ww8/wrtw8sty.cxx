@@ -2325,10 +2325,10 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                     else
                     {
                         const SwFrameFormat* pFormat = ::FindFrameFormat( &rObj );
-                        OSL_ENSURE( pFormat, "where is the format?" );
+                        assert(pFormat && "where is the format?");
 
                         const SwNodeIndex* pNdIdx = pFormat->GetContent().GetContentIdx();
-                        OSL_ENSURE( pNdIdx, "where is the StartNode of the Textbox?" );
+                        assert(pNdIdx && "where is the StartNode of the Textbox?");
                         rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
                                                pNdIdx->GetNode().EndOfSectionIndex(),
                                                nTTyp );
@@ -2382,7 +2382,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                 const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(m_aContent[ i ]);
                 rWrt.WriteFootnoteBegin( *pFootnote );
                 const SwNodeIndex* pIdx = pFootnote->GetTextFootnote()->GetStartNode();
-                OSL_ENSURE( pIdx, "Where is the start node of Foot-/Endnote?" );
+                assert(pIdx && "Where is the start node of Foot-/Endnote?");
                 rWrt.WriteSpecialText( pIdx->GetIndex() + 1,
                                        pIdx->GetNode().EndOfSectionIndex(),
                                        nTTyp );

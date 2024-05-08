@@ -350,7 +350,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     {
         const OUString aFormatName( m_xParaTemplBox->get_active_text() );
         SwTextFormatColl *pColl = m_pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
-        OSL_ENSURE(pColl, "paragraph style not found");
+        assert(pColl && "paragraph style not found");
         pInf->SetFootnoteTextColl(*pColl);
     }
 

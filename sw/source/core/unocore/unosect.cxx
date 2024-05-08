@@ -1450,8 +1450,9 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
             getXWeak());
     }
 
-    std::unique_ptr<SwSectionData> const pSectionData(
-        pFormat ? new SwSectionData(*pFormat->GetSection()) : nullptr);
+    std::unique_ptr<SwSectionData> pSectionData;
+    if (pFormat)
+        pSectionData.reset(new SwSectionData(*pFormat->GetSection()));
 
     std::optional<SfxItemSet> oNewAttrSet;
     bool bLinkModeChanged = false;

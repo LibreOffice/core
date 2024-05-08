@@ -1293,13 +1293,14 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
     }
     if (!xFrame.is())
     {
-        xFrame = pFrameFormat
-                ? new NameLookupIsHard(*pFrameFormat)
-                : new NameLookupIsHard(&rDoc);
         if (pFrameFormat)
         {
+            xFrame = new NameLookupIsHard(*pFrameFormat);
             pFrameFormat->SetXObject(cppu::getXWeak(xFrame.get()));
         }
+        else
+            xFrame = new NameLookupIsHard(&rDoc);
+
         // need a permanent Reference to initialize m_wThis
         xFrame->SwXFrame::m_pImpl->m_wThis = uno::Reference<XWeak>(xFrame.get());
     }

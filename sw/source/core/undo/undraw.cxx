@@ -114,7 +114,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
 
         // destroy TextAttribute
         SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
-        OSL_ENSURE( pTextNd, "No text node found!" );
+        assert(pTextNd && "No text node found!");
         SwTextFlyCnt* pAttr = static_cast<SwTextFlyCnt*>(
             pTextNd->GetTextAttrForCharAt( nContentPos, RES_TXTATR_FLYCNT ));
         // attribute still in text node, delete

@@ -244,7 +244,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         m_nNodePagePos = pAnchorNode->GetIndex();
         m_nContentPos = rAnchor.GetAnchorContentOffset();
         SwTextNode *const pTextNd = pAnchorNode->GetTextNode();
-        OSL_ENSURE( pTextNd, "No Textnode found" );
+        assert(pTextNd && "No Textnode found");
         SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
             pTextNd->GetTextAttrForCharAt( m_nContentPos, RES_TXTATR_FLYCNT ) );
         // attribute is still in TextNode, delete

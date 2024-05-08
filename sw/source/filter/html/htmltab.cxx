@@ -4727,7 +4727,7 @@ void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDo
     m_xCurrentTable->MakeTable(nullptr, nWidth);
 
     HTMLTableContext *pTCntxt = m_xCurrentTable->GetContext();
-    OSL_ENSURE( pTCntxt, "Where is the table context" );
+    assert(pTCntxt && "Where is the table context");
 
     SwTableNode *pTableNd = pTCntxt->GetTableNode();
     OSL_ENSURE( pTableNd, "Where is the table node" );

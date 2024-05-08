@@ -1459,6 +1459,8 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
         pTmpPage = static_cast<const SwPageFrame*>( pTmpPage->GetNext() );
     }
 
+    assert(pRet);
+
     return pRet->GetPhyPageNum();
 }
 

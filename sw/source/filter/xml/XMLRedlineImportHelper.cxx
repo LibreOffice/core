@@ -642,7 +642,7 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
-    OSL_ENSURE(nullptr != pRedlineInfo, "need redline info");
+    assert(pRedlineInfo && "need redline info");
     OSL_ENSURE(IsReady(pRedlineInfo), "redline info not complete yet!");
 
     // this method will modify the document directly -> lock SolarMutex

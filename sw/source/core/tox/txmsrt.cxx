@@ -361,7 +361,7 @@ bool SwTOXIndex::sort_lt(const SwTOXSortTabBase& rCmpBase)
 
 TextAndReading SwTOXIndex::GetText_Impl(SwRootFrame const*const pLayout) const
 {
-    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
+    assert(pTextMark && "pTextMark == 0, No keyword");
     const SwTOXMark& rTOXMark = pTextMark->GetTOXMark();
 
     TextAndReading aRet;
@@ -427,7 +427,7 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_u
 
 sal_uInt16 SwTOXIndex::GetLevel() const
 {
-    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
+    assert(pTextMark && "pTextMark == 0, No keyword");
 
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 

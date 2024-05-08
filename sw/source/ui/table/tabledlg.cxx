@@ -586,9 +586,10 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
-    OSL_ENSURE(m_pTableData, "table data not available?");
     if(SfxItemState::SET != rSet.GetItemState( FN_TABLE_REP ))
         return;
+
+    assert(m_pTableData && "table data not available?");
 
     SwTwips nCurWidth = text::HoriOrientation::FULL != m_pTableData->GetAlign() ?
                                     m_pTableData->GetWidth() :

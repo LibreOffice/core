@@ -464,7 +464,7 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
+    assert(pSdrView && "EnterDrawTextMode without DrawView?");
 
     bool bReturn = false;
 
@@ -609,7 +609,7 @@ bool SwView::IsTextTool() const
     SdrObjKind nId;
     SdrInventor nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
-    OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
+    assert(pSdrView && "IsTextTool without DrawView?");
 
     if (pSdrView->IsCreateMode())
         pSdrView->SetCreateMode(false);

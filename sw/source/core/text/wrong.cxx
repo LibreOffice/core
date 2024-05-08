@@ -849,6 +849,7 @@ sal_uInt16 WrongListIteratorCounter::GetElementCount()
                 InCurrentNode = 0;
                 pNode = rExtent.pNode;
             }
+            assert(rExtent.pNode);
             SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
             for (; pWrongList && InCurrentNode < pWrongList->Count(); ++InCurrentNode)
             {
@@ -893,6 +894,7 @@ WrongListIteratorCounter::GetElementAt(sal_uInt16 nIndex)
                 InCurrentNode = 0;
                 pNode = rExtent.pNode;
             }
+            assert(rExtent.pNode);
             SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
             for (; pWrongList && InCurrentNode < pWrongList->Count(); ++InCurrentNode)
             {

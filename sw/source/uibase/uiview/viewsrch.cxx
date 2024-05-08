@@ -153,8 +153,12 @@ void SwView::ExecSearch(SfxRequest& rReq)
     // for now do nothing
     case SID_SEARCH_ITEM:
     {
-        delete s_pSrchItem;
-        s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
+        OSL_ENSURE(pArgs, "Args missing");
+        if (pArgs)
+        {
+            delete s_pSrchItem;
+            s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
+        }
     }
     break;
 

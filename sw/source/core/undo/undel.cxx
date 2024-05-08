@@ -410,8 +410,20 @@ SwUndoDelete::SwUndoDelete(
             }
         }
         if( m_nSectDiff || m_nReplaceDummy )
-            lcl_MakeAutoFrames( *rDoc.GetSpzFrameFormats(),
-                m_bJoinNext ? pEndTextNd->GetIndex() : pSttTextNd->GetIndex() );
+        {
+            SwNodeOffset nIndex;
+            if (m_bJoinNext)
+            {
+                assert(pEndTextNd);
+                nIndex = pEndTextNd->GetIndex();
+            }
+            else
+            {
+                assert(pSttTextNd);
+                nIndex = pSttTextNd->GetIndex();
+            }
+            lcl_MakeAutoFrames( *rDoc.GetSpzFrameFormats(), nIndex);
+        }
     }
     else
         m_nNode = SwNodeOffset(0);      // moved no node -> no difference at the end

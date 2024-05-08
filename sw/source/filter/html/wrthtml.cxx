@@ -833,7 +833,7 @@ static SwHTMLWriter& OutHTML_Section( SwHTMLWriter& rWrt, const SwSectionNode& r
 
     const SwSection& rSection = rSectNd.GetSection();
     const SwSectionFormat *pFormat = rSection.GetFormat();
-    OSL_ENSURE( pFormat, "Section without a format?" );
+    assert(pFormat && "Section without a format?");
 
     bool bStartTag = true;
     bool bEndTag = true;
@@ -1263,12 +1263,15 @@ void SwHTMLWriter::OutBookmarks()
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     if(m_nBkmkTabPos != -1)
         pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
+
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
     SwNodeOffset nNode = m_pCurrentPam->GetPoint()->GetNodeIndex();
-    while( m_nBkmkTabPos != -1
-           && pBookmark->GetMarkPos().GetNodeIndex() == nNode )
+    while (m_nBkmkTabPos != -1)
     {
+        assert(pBookmark);
+        if (pBookmark->GetMarkPos().GetNodeIndex() != nNode)
+            break;
         // The area of bookmarks is first ignored, because it's not read.
 
         // first the SWG specific data:

@@ -510,7 +510,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFormatHeader &rHeaderFormat = rMaster.GetHeader();
         const SwFrameFormat *pHeaderFormat = rHeaderFormat.GetHeaderFormat();
-        OSL_ENSURE(pHeaderFormat != nullptr, "no header format");
+        assert(pHeaderFormat && "no header format");
 
         // HeaderInfo, margins, background, border
         SfxItemSetFixed<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
@@ -559,7 +559,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFormatFooter &rFooterFormat = rMaster.GetFooter();
         const SwFrameFormat *pFooterFormat = rFooterFormat.GetFooterFormat();
-        OSL_ENSURE(pFooterFormat != nullptr, "no footer format");
+        assert(pFooterFormat && "no footer format");
 
         // FooterInfo, margins, background, border
         SfxItemSetFixed<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82

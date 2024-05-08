@@ -115,11 +115,13 @@ rtl::Reference<SwXLineBreak> SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* p
     }
     if (!xLineBreak.is())
     {
-        xLineBreak = pLineBreakFormat ? new SwXLineBreak(*pLineBreakFormat) : new SwXLineBreak;
         if (pLineBreakFormat)
         {
+            xLineBreak = new SwXLineBreak(*pLineBreakFormat);
             pLineBreakFormat->SetXLineBreak(xLineBreak);
         }
+        else
+            xLineBreak = new SwXLineBreak;
     }
     return xLineBreak;
 }

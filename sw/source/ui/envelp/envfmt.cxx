@@ -172,11 +172,11 @@ IMPL_LINK(SwEnvFormatPage, SendEditHdl, const OUString&, rIdent, void)
 void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->m_pSh;
-    OSL_ENSURE(pSh, "Shell missing");
+    assert(pSh && "Shell missing");
 
     SwTextFormatColl* pColl = pSh->GetTextCollFromPool( static_cast< sal_uInt16 >(
         bSender ? RES_POOLCOLL_SEND_ADDRESS : RES_POOLCOLL_ENVELOPE_ADDRESS));
-    OSL_ENSURE(pColl, "Text collection missing");
+    assert(pColl && "Text collection missing");
 
     if (o3tl::starts_with(rIdent, u"character"))
     {

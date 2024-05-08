@@ -2185,7 +2185,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
 
     // At last there is the background of the page, and as the final rescue
     // the value of the Config.
-    OSL_ENSURE( m_pCurrPageDesc, "no page template found" );
+    assert(m_pCurrPageDesc && "no page template found");
     if( OutCSS1_FrameFormatBrush( *this,
                               *m_pCurrPageDesc->GetMaster().makeBackgroundBrushItem() ) )
         return;

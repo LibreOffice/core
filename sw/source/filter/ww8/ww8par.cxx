@@ -5955,7 +5955,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
         if (nErrRet == ERRCODE_NONE)
         {
             m_pStrm = pDecryptMain;
-
+            assert(m_pStrm);
             m_xWwFib = std::make_shared<WW8Fib>(*m_pStrm, m_nWantedVersion);
             if (m_xWwFib->m_nFibError)
                 nErrRet = ERR_SWG_READ_ERROR;

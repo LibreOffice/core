@@ -986,7 +986,7 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
                                  const SvxCSS1Parser& rParser )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uLong nHeight = 0;
     sal_uInt16 nPropHeight = 100;
@@ -1118,7 +1118,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     switch( pExpr->GetType() )
     {
@@ -1249,7 +1249,7 @@ static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& /*rPropInfo*/,
                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     // none | capitalize | uppercase | lowercase
 
@@ -1276,7 +1276,7 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& /*rPropInfo*/,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     switch( pExpr->GetType() )
     {
@@ -1541,7 +1541,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     Color aColor;
 
@@ -1587,7 +1587,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nHeight = 0;
     sal_uInt16 nPropHeight = 0;
@@ -1652,7 +1652,7 @@ static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
                                        SvxCSS1PropertyInfo& rPropInfo,
                                        const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     if( pExpr->GetType() != CSS1_IDENT )
         return;
@@ -1771,7 +1771,7 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
                                       SvxCSS1PropertyInfo& /*rPropInfo*/,
                                       const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     switch( pExpr->GetType() )
     {
@@ -1925,7 +1925,7 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     if( CSS1_IDENT==pExpr->GetType() ||
         CSS1_STRING==pExpr->GetType() ) // MS-IE, again
@@ -1945,7 +1945,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     short nIndent = 0;
     bool bSet = false;
@@ -1997,7 +1997,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     tools::Long nLeft = 0;
     bool bSet = false;
@@ -2056,7 +2056,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& rPropInfo,
                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     tools::Long nRight = 0;
     bool bSet = false;
@@ -2170,7 +2170,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
                                      SvxCSS1PropertyInfo& rPropInfo,
                                      const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nLower = 0;
     bool bSet = false;
@@ -2365,7 +2365,7 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    SvxBoxItemLine nWhichLine )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     bool bSet = false;
     sal_uInt16 nDist = 0;
@@ -2484,7 +2484,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                                   const SvxCSS1Parser& /*rParser*/,
                                   SvxBoxItemLine nWhichLine, bool bAll )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nWidth = USHRT_MAX;      // line thickness
     sal_uInt16 nNWidth = 1;             // named line thickness (and default)
@@ -2580,7 +2580,7 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
                                         const SvxCSS1Parser& /*rParser*/,
                                         SvxBoxItemLine nWhichLine )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nWidth = USHRT_MAX;      // line thickness
     sal_uInt16 nNWidth = 1;             // named line thickness (and default)
@@ -2773,7 +2773,7 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& rPropInfo,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     if( CSS1_IDENT==pExpr->GetType() )
     {
@@ -2788,7 +2788,7 @@ static void ParseCSS1_position( const CSS1Expression *pExpr,
                                 SvxCSS1PropertyInfo& rPropInfo,
                                 const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     if( CSS1_IDENT==pExpr->GetType() )
     {
@@ -3140,7 +3140,7 @@ static bool CSS1PropEntryFindCompare(CSS1PropEntry const & lhs, OUString const &
 void SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
                                        std::unique_ptr<CSS1Expression> pExpr )
 {
-    OSL_ENSURE( m_pItemSet, "DeclarationParsed() without ItemSet" );
+    assert(m_pItemSet && "DeclarationParsed() without ItemSet");
 
     auto it = std::lower_bound( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab), rProperty,
                                 CSS1PropEntryFindCompare );

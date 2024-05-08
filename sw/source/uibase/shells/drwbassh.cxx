@@ -608,7 +608,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
             {
                 // #i68101#
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                assert(pSelected && "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aOrigName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -648,7 +648,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
             if(1 == pSdrView->GetMarkedObjectCount())
             {
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                assert(pSelected && "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
                 bool isDecorative(pSelected->IsDecorative());

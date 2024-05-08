@@ -1218,11 +1218,11 @@ void SwXMLTextParagraphExport::exportTable(
         if( pXTable )
         {
             SwFrameFormat *const pFormat = pXTable->GetFrameFormat();
-            OSL_ENSURE( pFormat, "table format missing" );
+            assert(pFormat && "table format missing");
             const SwTable *pTable = SwTable::FindTable( pFormat );
-            OSL_ENSURE( pTable, "table missing" );
+            assert(pTable && "table missing");
             const SwTableNode *pTableNd = pTable->GetTableNode();
-            OSL_ENSURE( pTableNd, "table node missing" );
+            assert(pTableNd && "table node missing");
             if( bAutoStyles )
             {
                 // AUTOSTYLES: Optimization: Do not export table autostyle if

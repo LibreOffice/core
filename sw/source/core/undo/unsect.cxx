@@ -281,7 +281,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "Where is my TextNode?" );
+    assert(pTextNd && "Where is my TextNode?");
 
     {
         RemoveIdxRel(

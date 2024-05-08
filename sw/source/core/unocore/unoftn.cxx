@@ -150,13 +150,14 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
     }
     if (!xNote.is())
     {
-        xNote = pFootnoteFormat
-                ? new SwXFootnote(rDoc, *pFootnoteFormat)
-                : new SwXFootnote(isEndnote);
         if (pFootnoteFormat)
         {
+            xNote = new SwXFootnote(rDoc, *pFootnoteFormat);
             pFootnoteFormat->SetXFootnote(xNote);
         }
+        else
+            xNote = new SwXFootnote(isEndnote);
+
         // need a permanent Reference to initialize m_wThis
         xNote->m_pImpl->m_wThis = xNote.get();
     }
@@ -253,7 +254,7 @@ SwXFootnote::setLabel(const OUString& aLabel)
     if(pFormat)
     {
         const SwTextFootnote* pTextFootnote = pFormat->GetTextFootnote();
-        OSL_ENSURE(pTextFootnote, "No TextNode?");
+        assert(pTextFootnote && "No TextNode?");
         SwTextNode& rTextNode = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
 
         SwPaM aPam(rTextNode, pTextFootnote->GetStart());
@@ -347,7 +348,7 @@ void SAL_CALL SwXFootnote::dispose()
     SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
-    OSL_ENSURE(pTextFootnote, "no TextNode?");
+    assert(pTextFootnote && "no TextNode?");
     SwTextNode& rTextNode = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
     const sal_Int32 nPos = pTextFootnote->GetStart();
     SwPaM aPam(rTextNode, nPos, rTextNode, nPos+1);
@@ -491,7 +492,7 @@ SwXFootnote::getPropertyValue(const OUString& rPropertyName)
             if (pFormat)
             {
                 SwTextFootnote const*const pTextFootnote = pFormat->GetTextFootnote();
-                OSL_ENSURE(pTextFootnote, "no TextNode?");
+                assert(pTextFootnote && "no TextNode?");
                 aRet <<= static_cast<sal_Int16>(pTextFootnote->GetSeqRefNo());
             }
         }

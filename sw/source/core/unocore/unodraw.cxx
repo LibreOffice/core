@@ -316,6 +316,7 @@ uno::Reference<drawing::XShapeGroup> SwFmDrawPage::GetShapeGroup(SdrObject* pObj
 
 uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
 {
+    assert(pObj);
     uno::Reference< drawing::XShape >  xRet;
     if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
     {

@@ -1952,13 +1952,18 @@ SwXTextTable::~SwXTextTable()
 rtl::Reference<SwXTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* const pFrameFormat)
 {
     rtl::Reference<SwXTextTable> xTable;
-    if(pFrameFormat)
+    if (pFrameFormat)
         xTable = dynamic_cast<SwXTextTable*>(pFrameFormat->GetXObject().get().get()); // cached?
-    if(xTable.is())
+    if (xTable.is())
         return xTable;
-    xTable = pFrameFormat ? new SwXTextTable(*pFrameFormat) : new SwXTextTable();
-    if(pFrameFormat)
+    if (pFrameFormat)
+    {
+        xTable = new SwXTextTable(*pFrameFormat);
         pFrameFormat->SetXObject(xTable->getXWeak());
+    }
+    else
+        xTable = new SwXTextTable();
+
     // need a permanent Reference to initialize m_wThis
     xTable->m_pImpl->m_wThis = xTable.get();
     return xTable;

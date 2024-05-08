@@ -1812,7 +1812,7 @@ uno::Reference<text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pC
     else
     {
         const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-        OSL_ENSURE(pIdx, "where is the index?");
+        assert(pIdx && "where is the index?");
         SwNode const* const pNd = pIdx->GetNodes()[pIdx->GetIndex() + 1];
 
         if (!pNd->IsNoTextNode())

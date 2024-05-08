@@ -152,7 +152,7 @@ std::shared_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld
 
 void SwDocShell::ToggleLayoutMode(SwView* pView)
 {
-    OSL_ENSURE( pView, "SwDocShell::ToggleLayoutMode, pView is null." );
+    assert(pView && "SwDocShell::ToggleLayoutMode, pView is null.");
 
     const SwViewOption& rViewOptions = *pView->GetWrtShell().GetViewOptions();
 
@@ -1557,10 +1557,12 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // The HTML template still has to be set
     SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
 
-    SfxViewShell* pViewShell = GetView() ? static_cast<SfxViewShell*>(GetView())
-                                         : SfxViewShell::Current();
-    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-    rViewFrame.GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON );
+    if (SfxViewShell* pViewShell = GetView() ? static_cast<SfxViewShell*>(GetView())
+                                             : SfxViewShell::Current())
+    {
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        rViewFrame.GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON );
+    }
 
     SubInitNew();
 

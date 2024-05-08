@@ -411,13 +411,14 @@ SwXDocumentIndex::CreateXDocumentIndex(
     }
     if (!xIndex.is())
     {
-        xIndex = pSection
-                ? new SwXDocumentIndex(*pSection, rDoc)
-                : new SwXDocumentIndex(eTypes, rDoc);
         if (pSection)
         {
+            xIndex = new SwXDocumentIndex(*pSection, rDoc);
             pSection->GetFormat()->SetXObject(xIndex->getXWeak());
         }
+        else
+            xIndex = new SwXDocumentIndex(eTypes, rDoc);
+
         // need a permanent Reference to initialize m_wThis
         xIndex->m_pImpl->m_wThis = xIndex.get();
     }
@@ -1647,14 +1648,15 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
     }
     if (!xTOXMark.is())
     {
-        xTOXMark = pMark
-            ? new SwXDocumentIndexMark(rDoc,
-                    *const_cast<SwTOXType*>(pMark->GetTOXType()), *pMark)
-            : new SwXDocumentIndexMark(eType);
         if (pMark)
         {
+            xTOXMark = new SwXDocumentIndexMark(rDoc,
+                    *const_cast<SwTOXType*>(pMark->GetTOXType()), *pMark);
             pMark->SetXTOXMark(xTOXMark);
         }
+        else
+            xTOXMark = new SwXDocumentIndexMark(eType);
+
         // need a permanent Reference to initialize m_wThis
         xTOXMark->m_pImpl->m_wThis = xTOXMark.get();
     }

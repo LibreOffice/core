@@ -420,7 +420,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     SwFrameFormat *pHdFtFormat =
         bHeader ? const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat())
                 : const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
-    OSL_ENSURE( pHdFtFormat, "No header or footer" );
+    assert(pHdFtFormat && "No header or footer");
 
     const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
     const SwNodeIndex& rContentStIdx = *rFlyContent.GetContentIdx();

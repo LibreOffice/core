@@ -1923,7 +1923,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
             // the Owner will be the "MagicNumber"
             SwCacheAccess::m_pOwner = pOwn;
             pFntObj = Get(); // will create via NewObj() and lock
-            OSL_ENSURE(pFntObj, "No Font, no Fun.");
+            assert(pFntObj && "No Font, no Fun.");
         }
         else  // Font has been found, so we lock it.
         {
@@ -1931,6 +1931,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
             if (pFntObj->m_pPrinter.get() != pOut) // if no printer is known by now
             {
                 OSL_ENSURE( !pFntObj->m_pPrinter, "SwFntAccess: Printer Changed" );
+                assert(pOut);
                 pFntObj->CreatePrtFont( *pOut );
                 pFntObj->m_pPrinter = pOut;
                 pFntObj->m_pScrFont = nullptr;

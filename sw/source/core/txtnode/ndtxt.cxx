@@ -2015,7 +2015,7 @@ static void lcl_CopyHint(
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
         OSL_ENSURE( pNewHt, "copying Meta should not fail!" );
-        OSL_ENSURE( pDest
+        OSL_ENSURE( pDest && pNewHt
                     && (CH_TXTATR_INWORD == pDest->GetText()[pNewHt->GetStart()]),
             "missing CH_TXTATR?");
         break;

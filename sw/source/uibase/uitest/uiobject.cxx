@@ -124,7 +124,7 @@ void SwEditWinUIObject::execute(const OUString& rAction,
     else if (rAction == "SIDEBAR")
     {
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-        DBG_ASSERT(pViewFrm, "SwEditWinUIObject::execute: no viewframe");
+        assert(pViewFrm && "SwEditWinUIObject::execute: no viewframe");
         pViewFrm->ShowChildWindow(SID_SIDEBAR);
 
         if (rParameters.find("PANEL") != rParameters.end())

@@ -2047,8 +2047,8 @@ void SwHTMLParser::NewTextArea()
 void SwHTMLParser::EndTextArea()
 {
     OSL_ENSURE( m_bTextArea, "no TextArea or wrong type" );
-    OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
-            "TextArea missing" );
+    assert(m_pFormImpl && m_pFormImpl->GetFCompPropSet().is() &&
+            "TextArea missing");
 
     const uno::Reference< beans::XPropertySet > & rPropSet =
         m_pFormImpl->GetFCompPropSet();
@@ -2320,8 +2320,8 @@ void SwHTMLParser::EndSelect()
     assert(m_vPendingStack.empty());
 
     OSL_ENSURE( m_bSelect, "no Select" );
-    OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
-            "no select control" );
+    assert(m_pFormImpl && m_pFormImpl->GetFCompPropSet().is() &&
+            "no select control");
 
     const uno::Reference< beans::XPropertySet > & rPropSet =
         m_pFormImpl->GetFCompPropSet();

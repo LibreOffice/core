@@ -135,7 +135,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                 if (HasConvertibleTextPortion( m_nSourceLang ))
                 {
                     SdrView *pSdrView = m_pView->GetWrtShell().GetDrawView();
-                    OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
+                    assert(pSdrView && "SdrHHCWrapper without DrawView?");
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     m_nDocIndex = n;
                     bNextDoc = true;

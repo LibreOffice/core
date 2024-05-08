@@ -175,7 +175,7 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
     for( const auto& rNode : m_aNodes )
     {
         SwTextNode* pNd = rDoc.GetNodes()[ rNode.index ]->GetTextNode();
-        OSL_ENSURE( pNd, "Where has the TextNode gone?" );
+        assert(pNd && "Where has the TextNode gone?");
         pNd->SetAttrListLevel( rNode.level );
 
         if( pNd->GetCondFormatColl() )
