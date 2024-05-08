@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <config_features.h>
+#include <config_cairo_rgba.h>
 #include <config_fonts.h>
 #include <vcl/skia/SkiaHelper.hxx>
 
@@ -943,7 +944,11 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 #if defined OSL_BIGENDIAN
         "5e01ddcc"
 #else
-        "469f0820"
+#if !ENABLE_CAIRO_RGBA
+        "469f0820"  // typical BGRA little-endian config
+#else
+        "3789377b"  // atypical RGBA little-endian config
+#endif
 #endif
         }});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]"_ostr, {
@@ -956,7 +961,11 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 #if defined OSL_BIGENDIAN
          "b8dee5da"
 #else
-         "3789377b"
+#if !ENABLE_CAIRO_RGBA
+         "3789377b"  // typical BGRA little-endian config
+#else
+         "469f0820"  // atypical RGBA little-endian config
+#endif
 #endif
         }
     });
@@ -1018,9 +1027,17 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         "33b4a07c",
         "742c3e35",
 #else
-        "ac936607",
+#if !ENABLE_CAIRO_RGBA
+        "ac936607", // typical BGRA little-endian config
+#else
+        "ecd75a28", // atypical RGBA little-endian config
+#endif
         "4937e32d",
-        "3789377b",
+#if !ENABLE_CAIRO_RGBA
+        "3789377b", // typical BGRA little-endian config
+#else
+        "469f0820", // atypical RGBA little-endian config
+#endif
         "839e8cce",
         "236aaf55", // 1-bit
         "2949ccc7", // 4-bit color bitmap - same as 8-bit color bitmap
