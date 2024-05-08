@@ -74,6 +74,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/editview.hxx>
@@ -1039,7 +1040,7 @@ void ViewShellBase::afterCallbackRegistered()
         svx::theme::notifyLOK(pThemeColors, aDocumentColors);
     }
 
-    if (mpDocument && mpDocument->GetStartWithPresentation())
+    if (comphelper::LibreOfficeKit::isActive() && mpDocument && mpDocument->GetStartWithPresentation())
     {
         // Be consistent with SidebarController, emit JSON.
         boost::property_tree::ptree aTree;
