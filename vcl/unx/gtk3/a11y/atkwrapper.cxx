@@ -630,17 +630,13 @@ wrapper_ref_state_set( AtkObject *atk_obj )
     {
         try {
             sal_Int64 nStateSet = obj->mpContext->getAccessibleStateSet();
-
-            if( nStateSet )
+            for (int i = 0; i < 63; ++i)
             {
-                for (int i=0; i<63; ++i)
-                {
-                    // ATK_STATE_LAST_DEFINED is used to check if the state
-                    // is unmapped, do not report it to Atk
-                    sal_Int64 nState = sal_Int64(1) << i;
-                    if ( (nStateSet & nState) && mapAtkState( nState ) != ATK_STATE_LAST_DEFINED )
-                        atk_state_set_add_state( pSet, mapAtkState( nState ) );
-                }
+                // ATK_STATE_LAST_DEFINED is used to check if the state
+                // is unmapped, do not report it to Atk
+                sal_Int64 nState = sal_Int64(1) << i;
+                if ((nStateSet & nState) && mapAtkState(nState) != ATK_STATE_LAST_DEFINED)
+                    atk_state_set_add_state(pSet, mapAtkState(nState));
             }
         }
 
