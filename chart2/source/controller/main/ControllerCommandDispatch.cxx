@@ -601,7 +601,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // format objects
     bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
     m_aCommandAvailability[ ".uno:FormatSelection" ] = bFormatObjectAvailable && !bIsTextEdit;
-    m_aCommandAvailability[ ".uno:FontDialog" ] = bFormatObjectAvailable && bIsTextEdit;
+    m_aCommandAvailability[ ".uno:FontDialog" ] = (bShapeContext ? isShapeControllerCommandAvailable(".uno:FontDialog") :
+                                                   bFormatObjectAvailable) && bIsTextEdit;
     m_aCommandAvailability[ ".uno:FormatAxis" ] = bFormatObjectAvailable;
     m_aCommandAvailability[ ".uno:FormatTitle" ] = bFormatObjectAvailable && !bIsTextEdit;
     m_aCommandAvailability[ ".uno:FormatDataSeries" ] = bFormatObjectAvailable;

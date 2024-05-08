@@ -591,9 +591,9 @@ bool ChartController::isShapeContext() const
 
 bool ChartController::IsTextEdit() const
 {
-    // only Title objects are editable textshapes
-    return m_aSelection.isTitleObjectSelected() &&
-        m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit();
+    // only Title objects and additional shapes are editable textshapes in chart
+    return m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() &&
+        (m_aSelection.isTitleObjectSelected() || m_aSelection.isAdditionalShapeSelected());
 }
 
 void ChartController::impl_ClearSelection()
