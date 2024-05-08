@@ -81,11 +81,6 @@ namespace utl
         */
         OConfigurationNode  openNode(const OUString& _rPath) const noexcept;
 
-        OConfigurationNode  openNode( const char* _pAsciiPath ) const
-        {
-            return openNode( OUString::createFromAscii( _pAsciiPath ) );
-        }
-
         /** create a new child node
 
             If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the

@@ -950,7 +950,7 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
         aReportEngines.getNodeValue("DefaultReportEngine") >>= sDefaultReportEngineName;
         if ( !sDefaultReportEngineName.isEmpty() )
         {
-            ::utl::OConfigurationNode aReportEngineNames = aReportEngines.openNode("ReportEngineNames");
+            ::utl::OConfigurationNode aReportEngineNames = aReportEngines.openNode(u"ReportEngineNames"_ustr);
             if ( aReportEngineNames.isValid() )
             {
                 ::utl::OConfigurationNode aReportEngine = aReportEngineNames.openNode(sDefaultReportEngineName);

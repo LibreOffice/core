@@ -258,7 +258,7 @@ Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNot
     const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
                                                false);
 
-    const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
+    const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
     const Any aValue = aModeNode.getNodeValue("UIItemProperties");
     Sequence<OUString> aValues;
@@ -272,7 +272,7 @@ void CustomNotebookbarGenerator::setCustomizedUIItem(const Sequence<OUString>& r
     OUString aPath = getAppNameRegistryPath();
     const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
                                                true);
-    const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
+    const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(rNotebookbarConfigType));
 
     css::uno::Any aUIItemProperties(rUIItemProperties);

@@ -254,7 +254,7 @@ namespace sfx2
 
         // go for all the single class entries
         OConfigurationNode aFilterClassesNode =
-            _rFilterClassification.openNode( "GlobalFilters/Classes" );
+            _rFilterClassification.openNode( u"GlobalFilters/Classes"_ustr );
         const Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
             aFilterClasses.begin(),
@@ -298,7 +298,7 @@ namespace sfx2
 
         // the node for the local classes
         OConfigurationNode aFilterClassesNode =
-            _rFilterClassification.openNode( "LocalFilters/Classes" );
+            _rFilterClassification.openNode( u"LocalFilters/Classes"_ustr );
         const Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(

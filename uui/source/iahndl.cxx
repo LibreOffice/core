@@ -334,7 +334,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
     for ( auto const & handlerName : aRegisteredHandlers )
     {
         const ::utl::OConfigurationNode aHandlerNode( aConfigRoot.openNode( handlerName ) );
-        const ::utl::OConfigurationNode aTypesNode( aHandlerNode.openNode( "HandledRequestTypes" ) );
+        const ::utl::OConfigurationNode aTypesNode( aHandlerNode.openNode( u"HandledRequestTypes"_ustr ) );
 
         // loop through all the types which the current handler is registered for
         const Sequence< OUString > aHandledTypes( aTypesNode.getNodeNames() );

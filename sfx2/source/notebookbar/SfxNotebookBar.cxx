@@ -354,7 +354,7 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     if (comphelper::LibreOfficeKit::isActive() && aActive == "notebookbar_online.ui")
         return true;
 
-    const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
+    const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
 
     for ( const auto& rModeNodeName : aModeNodeNames )
