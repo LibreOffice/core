@@ -790,7 +790,7 @@ include $(BUILDDIR)/config_$(gb_Side)_lang.mk
 # does use some of the variables defined above
 include @SRC_ROOT@/download.lst
 
-KEEP_AWAKE_CMD=@KEEP_AWAKE_CMD@
+KEEP_AWAKE_CMD:=@KEEP_AWAKE_CMD@
 
 # used for WSL-as-helper-builds where the build runs from within git-bash/MSYS that otherwise would
 # mess with anything that looks like a path (starts with a /) but cannot be resolved to a target
