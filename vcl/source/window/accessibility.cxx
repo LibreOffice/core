@@ -23,6 +23,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/wrkwin.hxx>
+#include <comphelper/lok.hxx>
 
 #include <window.h>
 #include <brdwin.hxx>
@@ -497,7 +498,8 @@ vcl::Window* Window::GetAccessibleRelationLabelFor() const
     if (pWindow)
         return pWindow;
 
-    if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
+    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
+    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabelFor();
 
     return nullptr;
@@ -508,7 +510,7 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
 
-    std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
+    auto const& aMnemonicLabels = list_mnemonic_labels();
     if (!aMnemonicLabels.empty())
     {
         //if we have multiple labels, then prefer the first that is visible
@@ -520,7 +522,8 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
         return aMnemonicLabels[0];
     }
 
-    if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
+    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
+    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabeledBy();
 
     return nullptr;
