@@ -2675,6 +2675,11 @@ void SdrObject::SetResizeProtect(bool bProt)
     }
 }
 
+bool SdrObject::IsPrintable() const
+{
+    return !m_bNoPrint;
+}
+
 void SdrObject::SetPrintable(bool bPrn)
 {
     if( bPrn == m_bNoPrint )
@@ -2687,6 +2692,11 @@ void SdrObject::SetPrintable(bool bPrn)
             getSdrModelFromSdrObject().Broadcast(aHint);
         }
     }
+}
+
+bool SdrObject::IsVisible() const
+{
+    return mbVisible;
 }
 
 void SdrObject::SetVisible(bool bVisible)

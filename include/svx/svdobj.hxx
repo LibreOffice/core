@@ -752,10 +752,10 @@ public:
     bool IsMoveProtect() const { return m_bMovProt;}
     void SetResizeProtect(bool bProt);
     bool IsResizeProtect() const { return m_bSizProt;}
-    void SetPrintable(bool bPrn);
-    bool IsPrintable() const { return !m_bNoPrint;}
-    void SetVisible(bool bVisible);
-    bool IsVisible() const { return mbVisible;}
+    virtual void SetPrintable(bool isPrintable);
+    virtual bool IsPrintable() const;
+    virtual void SetVisible(bool isVisible);
+    virtual bool IsVisible() const;
     void SetMarkProtect(bool bProt);
     bool IsMarkProtect() const { return m_bMarkProt;}
     virtual bool IsSdrTextObj() const { return false; }

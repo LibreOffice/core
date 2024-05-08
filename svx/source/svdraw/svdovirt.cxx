@@ -97,6 +97,26 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
     m_aAnchor=rAnchorPos;
 }
 
+bool SdrVirtObj::IsPrintable() const
+{
+    return mxRefObj->IsPrintable();
+}
+
+void SdrVirtObj::SetPrintable(bool const isPrintable)
+{
+    mxRefObj->SetPrintable(isPrintable);
+}
+
+bool SdrVirtObj::IsVisible() const
+{
+    return mxRefObj->IsVisible();
+}
+
+void SdrVirtObj::SetVisible(bool const isVisible)
+{
+    mxRefObj->SetVisible(isVisible);
+}
+
 void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     mxRefObj->TakeObjInfo(rInfo);

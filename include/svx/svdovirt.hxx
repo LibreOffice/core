@@ -61,6 +61,10 @@ public:
     const SdrObject& GetReferencedObj() const;
     virtual void NbcSetAnchorPos(const Point& rAnchorPos) override;
 
+    virtual void SetPrintable(bool isPrintable) override;
+    virtual bool IsPrintable() const override;
+    virtual void SetVisible(bool isVisible) override;
+    virtual bool IsVisible() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrInventor GetObjInventor() const override;
     virtual SdrObjKind GetObjIdentifier() const override;
