@@ -67,18 +67,18 @@ const sal_Int16 MAX_IMAGETYPE_VALUE       = css::ui::ImageType::SIZE_32;
 constexpr OUString IMAGE_FOLDER = u"images"_ustr;
 constexpr OUString BITMAPS_FOLDER = u"Bitmaps"_ustr;
 
-const o3tl::enumarray<vcl::ImageType, const char*> IMAGELIST_XML_FILE =
+constexpr o3tl::enumarray<vcl::ImageType, OUString> IMAGELIST_XML_FILE
 {
-    "sc_imagelist.xml",
-    "lc_imagelist.xml",
-    "xc_imagelist.xml"
+    u"sc_imagelist.xml"_ustr,
+    u"lc_imagelist.xml"_ustr,
+    u"xc_imagelist.xml"_ustr
 };
 
-const o3tl::enumarray<vcl::ImageType, const char*> BITMAP_FILE_NAMES =
+constexpr o3tl::enumarray<vcl::ImageType, OUString> BITMAP_FILE_NAMES
 {
-    "sc_userimages.png",
-    "lc_userimages.png",
-    "xc_userimages.png"
+    u"sc_userimages.png"_ustr,
+    u"lc_userimages.png"_ustr,
+    u"xc_userimages.png"_ustr
 };
 
 namespace framework
@@ -300,7 +300,7 @@ void ImageManagerImpl::implts_loadUserImages(
     {
         try
         {
-            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
+            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( IMAGELIST_XML_FILE[nImageType],
                                                                                       ElementModes::READ );
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
@@ -320,7 +320,7 @@ void ImageManagerImpl::implts_loadUserImages(
                 }
 
                 uno::Reference< XStream > xBitmapStream = xUserBitmapsStorage->openStreamElement(
-                                                        OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
+                                                        BITMAP_FILE_NAMES[nImageType],
                                                         ElementModes::READ );
 
                 if ( xBitmapStream.is() )
@@ -385,12 +385,12 @@ bool ImageManagerImpl::implts_storeUserImages(
 
         uno::Reference< XTransactedObject > xTransaction;
         uno::Reference< XOutputStream >     xOutputStream;
-        uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
+        uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( IMAGELIST_XML_FILE[nImageType],
                                                                                   ElementModes::WRITE|ElementModes::TRUNCATE );
         if ( xStream.is() )
         {
             uno::Reference< XStream > xBitmapStream =
-                xUserBitmapsStorage->openStreamElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
+                xUserBitmapsStorage->openStreamElement( BITMAP_FILE_NAMES[nImageType],
                                                         ElementModes::WRITE|ElementModes::TRUNCATE );
             if ( xBitmapStream.is() )
             {
@@ -425,7 +425,7 @@ bool ImageManagerImpl::implts_storeUserImages(
         // the NoSuchElementException as it can be possible that there is no stream at all!
         try
         {
-            xUserImageStorage->removeElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
+            xUserImageStorage->removeElement( IMAGELIST_XML_FILE[nImageType] );
         }
         catch ( const css::container::NoSuchElementException& )
         {
@@ -433,7 +433,7 @@ bool ImageManagerImpl::implts_storeUserImages(
 
         try
         {
-            xUserBitmapsStorage->removeElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
+            xUserBitmapsStorage->removeElement( BITMAP_FILE_NAMES[nImageType] );
         }
         catch ( const css::container::NoSuchElementException& )
         {
