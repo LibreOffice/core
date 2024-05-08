@@ -648,6 +648,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                         BufferNode* pTempCurrentBlockingBufferNode = m_pCurrentBlockingBufferNode;
 
                         m_pCurrentBufferNode = pBufferNode;
+                        assert(pBufferNode);
                         m_pCurrentBlockingBufferNode = nullptr;
 
                         m_bIsForwarding = true;

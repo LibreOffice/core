@@ -301,7 +301,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     const SwNode* pReturn = nullptr;
 
     // the current position
-    OSL_ENSURE( pCurrentPos != nullptr, "Strange, we have no position!" );
+    assert(pCurrentPos && "Strange, we have no position!");
     const SwNode& rCurrentNode = pCurrentPos->GetNode();
 
     // find innermost section or table.  At the end of this scope,
