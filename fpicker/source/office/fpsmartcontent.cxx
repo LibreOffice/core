@@ -208,7 +208,7 @@ namespace svt
         try
         {
             OUString sTitle;
-            m_oContent->getPropertyValue("Title") >>= sTitle;
+            m_oContent->getPropertyValue(u"Title"_ustr) >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definitely know that the content is valid
@@ -304,7 +304,7 @@ namespace svt
             if ( !sFolderType.isEmpty() )
             {
                 ucbhelper::Content aCreated;
-                Sequence< OUString > aNames { "Title" };
+                Sequence< OUString > aNames { u"Title"_ustr };
                 Sequence< Any > aValues { Any(_rTitle) };
                 m_oContent->insertNewContent( sFolderType, aNames, aValues, aCreated );
 

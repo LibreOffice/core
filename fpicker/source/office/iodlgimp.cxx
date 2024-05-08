@@ -53,7 +53,7 @@ SvtUpButton_Impl::SvtUpButton_Impl(std::unique_ptr<weld::Toolbar> xToolbar,
     , m_xMenu(std::move(xMenu))
     , m_pDlg(pDlg)
 {
-    m_xToolbar->set_item_menu("up_btn", m_xMenu.get());
+    m_xToolbar->set_item_menu(u"up_btn"_ustr, m_xMenu.get());
     m_xToolbar->connect_clicked(LINK(this, SvtUpButton_Impl, ClickHdl));
     m_xMenu->connect_activate(LINK(this, SvtUpButton_Impl, SelectHdl));
 }

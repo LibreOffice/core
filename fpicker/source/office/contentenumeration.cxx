@@ -136,18 +136,18 @@ namespace svt
         {
 
             Reference< XResultSet > xResultSet;
-            Sequence< OUString > aProps{ "Title",
-                                         "Size",
-                                         "DateModified",
-                                         "DateCreated",
-                                         "IsFolder",
-                                         "TargetURL",
-                                         "IsHidden",
-                                         "IsVolume",
-                                         "IsRemote",
-                                         "IsRemoveable",
-                                         "IsFloppy",
-                                         "IsCompactDisc" };
+            Sequence< OUString > aProps{ u"Title"_ustr,
+                                         u"Size"_ustr,
+                                         u"DateModified"_ustr,
+                                         u"DateCreated"_ustr,
+                                         u"IsFolder"_ustr,
+                                         u"TargetURL"_ustr,
+                                         u"IsHidden"_ustr,
+                                         u"IsVolume"_ustr,
+                                         u"IsRemote"_ustr,
+                                         u"IsRemoveable"_ustr,
+                                         u"IsFloppy"_ustr,
+                                         u"IsCompactDisc"_ustr };
 
             Reference< XCommandEnvironment > xEnvironment;
             try
@@ -235,8 +235,8 @@ namespace svt
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment, comphelper::getProcessComponentContext() );
                                 try
                                 {
-                                aCnt.getPropertyValue("Size") >>= pData->maSize;
-                                aCnt.getPropertyValue("DateModified") >>= aDT;
+                                aCnt.getPropertyValue(u"Size"_ustr) >>= pData->maSize;
+                                aCnt.getPropertyValue(u"DateModified"_ustr) >>= aDT;
                                 }
                                 catch (...) {}
                             }

@@ -525,7 +525,7 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
             {
                 Reference< XCommandInfo > aCommands = aCnt.getCommands();
                 if ( aCommands.is() )
-                    bEnableDelete = aCommands->hasCommandByName( "delete" );
+                    bEnableDelete = aCommands->hasCommandByName( u"delete"_ustr );
                 else
                     bEnableDelete = false;
             }
@@ -542,7 +542,7 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
                 Reference< XPropertySetInfo > aProps = aCnt.getProperties();
                 if ( aProps.is() )
                 {
-                    Property aProp = aProps->getPropertyByName("Title");
+                    Property aProp = aProps->getPropertyByName(u"Title"_ustr);
                     bEnableRename
                         = !( aProp.Attributes & PropertyAttribute::READONLY );
                 }
@@ -566,10 +566,10 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bEnableDelete || bEnableRename)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), "svt/ui/fileviewmenu.ui"));
-        auto xContextMenu = xBuilder->weld_menu("menu");
-        xContextMenu->set_visible("delete", bEnableDelete);
-        xContextMenu->set_visible("rename", bEnableRename);
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), u"svt/ui/fileviewmenu.ui"_ustr));
+        auto xContextMenu = xBuilder->weld_menu(u"menu"_ustr);
+        xContextMenu->set_visible(u"delete"_ustr, bEnableDelete);
+        xContextMenu->set_visible(u"rename"_ustr, bEnableRename);
         OUString sCommand(xContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
         ExecuteContextMenuAction(sCommand);
     }
@@ -616,7 +616,7 @@ void ViewTabListBox_Impl::DeleteEntries()
             ::ucbhelper::Content aCnt( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
             Reference< XCommandInfo > aCommands = aCnt.getCommands();
             if ( aCommands.is() )
-                canDelete = aCommands->hasCommandByName( "delete" );
+                canDelete = aCommands->hasCommandByName( u"delete"_ustr );
             else
                 canDelete = false;
         }
@@ -688,7 +688,7 @@ IMPL_LINK(ViewTabListBox_Impl, EditedEntryHdl, const IterString&, rIterString, b
 
     try
     {
-        OUString aPropName( "Title" );
+        OUString aPropName( u"Title"_ustr );
         bool canRename = true;
         ::ucbhelper::Content aContent( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
 
@@ -771,7 +771,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     try
     {
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( "delete", Any( true ) );
+        aCnt.executeCommand( u"delete"_ustr, Any( true ) );
     }
     catch( css::ucb::CommandAbortedException const & )
     {

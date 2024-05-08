@@ -274,14 +274,14 @@ namespace
 
 // SvtFileDialog
 SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
-    : SvtFileDialog_Base(pParent, "fps/ui/explorerfiledialog.ui", "ExplorerFileDialog")
-    , m_xCbReadOnly(m_xBuilder->weld_check_button("readonly"))
-    , m_xCbLinkBox(m_xBuilder->weld_check_button("link"))
-    , m_xCbPreviewBox(m_xBuilder->weld_check_button("cb_preview"))
-    , m_xCbSelection(m_xBuilder->weld_check_button("selection"))
-    , m_xPbPlay(m_xBuilder->weld_button("play"))
-    , m_xPreviewFrame(m_xBuilder->weld_widget("previewframe"))
-    , m_xPrevBmp(m_xBuilder->weld_image("preview"))
+    : SvtFileDialog_Base(pParent, u"fps/ui/explorerfiledialog.ui"_ustr, u"ExplorerFileDialog"_ustr)
+    , m_xCbReadOnly(m_xBuilder->weld_check_button(u"readonly"_ustr))
+    , m_xCbLinkBox(m_xBuilder->weld_check_button(u"link"_ustr))
+    , m_xCbPreviewBox(m_xBuilder->weld_check_button(u"cb_preview"_ustr))
+    , m_xCbSelection(m_xBuilder->weld_check_button(u"selection"_ustr))
+    , m_xPbPlay(m_xBuilder->weld_button(u"play"_ustr))
+    , m_xPreviewFrame(m_xBuilder->weld_widget(u"previewframe"_ustr))
+    , m_xPrevBmp(m_xBuilder->weld_image(u"preview"_ustr))
     , m_pFileNotifier(nullptr)
     , m_xImpl(new SvtExpFileDlg_Impl)
     , m_nPickerFlags(nStyle)
@@ -289,22 +289,22 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     , m_bInExecuteAsync(false)
     , m_bHasFilename(false)
 {
-    m_xImpl->m_xCbOptions = m_xBuilder->weld_check_button("options");
-    m_xImpl->m_xFtFileName = m_xBuilder->weld_label("file_name_label");
-    m_xImpl->m_xEdFileName.reset(new SvtURLBox(m_xBuilder->weld_combo_box("file_name")));
-    m_xImpl->m_xFtFileType = m_xBuilder->weld_label("file_type_label");
-    m_xImpl->m_xLbFilter = m_xBuilder->weld_combo_box("file_type");
-    m_xImpl->m_xEdCurrentPath.reset(new SvtURLBox(m_xBuilder->weld_combo_box("current_path")));
-    m_xImpl->m_xBtnFileOpen = m_xBuilder->weld_button("open");
-    m_xImpl->m_xBtnCancel = m_xBuilder->weld_button("cancel");
-    m_xImpl->m_xBtnHelp = m_xBuilder->weld_button("help");
-    m_xImpl->m_xBtnConnectToServer = m_xBuilder->weld_button("connect_to_server");
-    m_xImpl->m_xBtnNewFolder = m_xBuilder->weld_button("new_folder");
-    m_xImpl->m_xCbPassword = m_xBuilder->weld_check_button("password");
-    m_xImpl->m_xCbGPGEncrypt = m_xBuilder->weld_check_button("gpgencrypt");
-    m_xImpl->m_xCbAutoExtension = m_xBuilder->weld_check_button("extension");
-    m_xImpl->m_xSharedLabel = m_xBuilder->weld_label("shared_label");
-    m_xImpl->m_xSharedListBox = m_xBuilder->weld_combo_box("shared");
+    m_xImpl->m_xCbOptions = m_xBuilder->weld_check_button(u"options"_ustr);
+    m_xImpl->m_xFtFileName = m_xBuilder->weld_label(u"file_name_label"_ustr);
+    m_xImpl->m_xEdFileName.reset(new SvtURLBox(m_xBuilder->weld_combo_box(u"file_name"_ustr)));
+    m_xImpl->m_xFtFileType = m_xBuilder->weld_label(u"file_type_label"_ustr);
+    m_xImpl->m_xLbFilter = m_xBuilder->weld_combo_box(u"file_type"_ustr);
+    m_xImpl->m_xEdCurrentPath.reset(new SvtURLBox(m_xBuilder->weld_combo_box(u"current_path"_ustr)));
+    m_xImpl->m_xBtnFileOpen = m_xBuilder->weld_button(u"open"_ustr);
+    m_xImpl->m_xBtnCancel = m_xBuilder->weld_button(u"cancel"_ustr);
+    m_xImpl->m_xBtnHelp = m_xBuilder->weld_button(u"help"_ustr);
+    m_xImpl->m_xBtnConnectToServer = m_xBuilder->weld_button(u"connect_to_server"_ustr);
+    m_xImpl->m_xBtnNewFolder = m_xBuilder->weld_button(u"new_folder"_ustr);
+    m_xImpl->m_xCbPassword = m_xBuilder->weld_check_button(u"password"_ustr);
+    m_xImpl->m_xCbGPGEncrypt = m_xBuilder->weld_check_button(u"gpgencrypt"_ustr);
+    m_xImpl->m_xCbAutoExtension = m_xBuilder->weld_check_button(u"extension"_ustr);
+    m_xImpl->m_xSharedLabel = m_xBuilder->weld_label(u"shared_label"_ustr);
+    m_xImpl->m_xSharedListBox = m_xBuilder->weld_combo_box(u"shared"_ustr);
 
     // because the "<All Formats> (*.bmp,*...)" entry is too wide,
     // we need to disable the auto width feature of the filter box
@@ -312,8 +312,8 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     m_xImpl->m_xSharedListBox->set_size_request(nWidth, -1);
     m_xImpl->m_xLbFilter->set_size_request(nWidth, -1);
 
-    m_xImpl->m_xBtnUp.reset(new SvtUpButton_Impl(m_xBuilder->weld_toolbar("up_bar"),
-                                                 m_xBuilder->weld_menu("up_menu"),
+    m_xImpl->m_xBtnUp.reset(new SvtUpButton_Impl(m_xBuilder->weld_toolbar(u"up_bar"_ustr),
+                                                 m_xBuilder->weld_menu(u"up_menu"_ustr),
                                                  this));
     m_xImpl->m_xBtnUp->set_help_id(HID_FILEOPEN_LEVELUP);
     m_xImpl->m_xBtnUp->show();
@@ -344,12 +344,12 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     if (nStyle & PickerFlags::MultiSelection)
         m_xImpl->m_bMultiSelection = true;
 
-    m_xContainer = m_xBuilder->weld_container("container");
+    m_xContainer = m_xBuilder->weld_container(u"container"_ustr);
     m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 95, -1);
 
     m_xFileView.reset(new SvtFileView(m_xDialog.get(),
-                                      m_xBuilder->weld_tree_view("fileview"),
-                                      m_xBuilder->weld_icon_view("iconview"),
+                                      m_xBuilder->weld_tree_view(u"fileview"_ustr),
+                                      m_xBuilder->weld_icon_view(u"iconview"_ustr),
                                       FILEDLG_TYPE_PATHDLG == m_xImpl->m_eDlgType,
                                       m_xImpl->m_bMultiSelection));
     m_xFileView->set_help_id( HID_FILEDLG_STANDARD );
@@ -451,7 +451,7 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     /// read our settings from the configuration
     m_aConfiguration = OConfigurationTreeRoot::createWithComponentContext(
         ::comphelper::getProcessComponentContext(),
-        "/org.openoffice.Office.UI/FilePicker"
+        u"/org.openoffice.Office.UI/FilePicker"_ustr
     );
 
     m_xDialog->connect_size_allocate(LINK(this, SvtFileDialog, SizeAllocHdl));
@@ -468,7 +468,7 @@ SvtFileDialog::~SvtFileDialog()
         SvtViewOptions aDlgOpt( EViewType::Dialog, m_xImpl->m_aIniKey );
         aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::All));
         OUString sUserData = m_xFileView->GetConfigString();
-        aDlgOpt.SetUserItem( "UserData",
+        aDlgOpt.SetUserItem( u"UserData"_ustr,
                              Any( sUserData ) );
     }
 
@@ -1392,7 +1392,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
         aException.Arguments =
         { css::uno::Any(sDisplayPath),
           css::uno::Any(PropertyValue(
-            "Uri",
+            u"Uri"_ustr,
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
           )) };
             // (formerly, it was sufficient to put the URL first parameter. Nowadays,
@@ -1463,7 +1463,7 @@ bool SvtFileDialog::PrepareExecute()
                                                     INetURLObject::DecodeMechanism::NONE ),
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            Sequence< OUString > aProps { "IsVolume", "IsRemoveable" };
+            Sequence< OUString > aProps { u"IsVolume"_ustr, u"IsRemoveable"_ustr };
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
@@ -1620,12 +1620,12 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action eAction,
     m_pCurrentAsyncAction = new AsyncPickerAction( this, m_xFileView.get(), eAction );
 
     bool bReallyAsync = true;
-    m_aConfiguration.getNodeValue( OUString( "FillAsynchronously" ) ) >>= bReallyAsync;
+    m_aConfiguration.getNodeValue( u"FillAsynchronously"_ustr ) >>= bReallyAsync;
 
     sal_Int32 nMinTimeout = 0;
-    m_aConfiguration.getNodeValue( OUString( "Timeout/Min" ) ) >>= nMinTimeout;
+    m_aConfiguration.getNodeValue( u"Timeout/Min"_ustr ) >>= nMinTimeout;
     sal_Int32 nMaxTimeout = 0;
-    m_aConfiguration.getNodeValue( OUString( "Timeout/Max" ) ) >>= nMaxTimeout;
+    m_aConfiguration.getNodeValue( u"Timeout/Max"_ustr ) >>= nMaxTimeout;
 
     m_bInExecuteAsync = true;
     m_pCurrentAsyncAction->execute(rURL, rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout, GetDenyList());
@@ -1784,7 +1784,7 @@ void SvtFileDialog::InitSize()
     {
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
-        Any aUserData = aDlgOpt.GetUserItem( "UserData");
+        Any aUserData = aDlgOpt.GetUserItem( u"UserData"_ustr);
         OUString sCfgStr;
         if ( aUserData >>= sCfgStr )
             m_xFileView->SetConfigString( sCfgStr );
@@ -2130,11 +2130,11 @@ void SvtFileDialog::AddControls_Impl( )
         m_xImpl->m_xSharedListBox->show();
     }
 
-    m_xImpl->m_xPlaces.reset(new PlacesListBox(m_xBuilder->weld_tree_view("places"),
-                                               m_xBuilder->weld_button("add"),
-                                               m_xBuilder->weld_button("del"),
+    m_xImpl->m_xPlaces.reset(new PlacesListBox(m_xBuilder->weld_tree_view(u"places"_ustr),
+                                               m_xBuilder->weld_button(u"add"_ustr),
+                                               m_xBuilder->weld_button(u"del"_ustr),
                                                this));
-    m_xImpl->m_xPlaces->set_help_id("SVT_HID_FILESAVE_PLACES_LISTBOX");
+    m_xImpl->m_xPlaces->set_help_id(u"SVT_HID_FILESAVE_PLACES_LISTBOX"_ustr);
     m_xImpl->m_xPlaces->SetAddHdl( LINK ( this, SvtFileDialog, AddPlacePressed_Hdl ) );
     m_xImpl->m_xPlaces->SetDelHdl( LINK ( this, SvtFileDialog, RemovePlacePressed_Hdl ) );
 
@@ -2298,9 +2298,9 @@ void SvtFileDialog::initDefaultPlaces( )
 
 QueryFolderNameDialog::QueryFolderNameDialog(weld::Window* _pParent,
     const OUString& rTitle, const OUString& rDefaultText)
-    : GenericDialogController(_pParent, "fps/ui/foldernamedialog.ui", "FolderNameDialog")
-    , m_xNameEdit(m_xBuilder->weld_entry("entry"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(_pParent, u"fps/ui/foldernamedialog.ui"_ustr, u"FolderNameDialog"_ustr)
+    , m_xNameEdit(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xDialog->set_title(rTitle);
     m_xNameEdit->set_text(rDefaultText);

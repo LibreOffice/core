@@ -149,7 +149,7 @@ void SvtFolderPicker::cancel()
 /* XServiceInfo */
 OUString SAL_CALL SvtFolderPicker::getImplementationName()
 {
-    return "com.sun.star.svtools.OfficeFolderPicker";
+    return u"com.sun.star.svtools.OfficeFolderPicker"_ustr;
 }
 
 /* XServiceInfo */
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.OfficeFolderPicker" };
+    return { u"com.sun.star.ui.dialogs.OfficeFolderPicker"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -57,7 +57,7 @@ void Breadcrumb::SetRootName( const OUString& rURL )
     // we changed root - clear all fields
     for (size_t i = 1; i < m_aSegments.size(); ++i)
     {
-        m_aSegments[i]->m_xLink->set_label("");
+        m_aSegments[i]->m_xLink->set_label(u""_ustr);
 
         m_aSegments[i]->m_xLink->hide();
         m_aSegments[i]->m_xSeparator->hide();
@@ -115,7 +115,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
     for (size_t i = nSegments + 1; i < m_aSegments.size(); i++ )
     {
         if( bClear )
-            m_aSegments[i]->m_xLink->set_label( "" );
+            m_aSegments[i]->m_xLink->set_label( u""_ustr );
 
         m_aSegments[i]->m_xLink->hide();
         m_aSegments[i]->m_xSeparator->hide();
@@ -151,7 +151,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
                 // label is too long
                 if( nSegments != 0 )
                 {
-                    m_aSegments[0]->m_xLink->set_label("...");
+                    m_aSegments[0]->m_xLink->set_label(u"..."_ustr);
                     m_aSegments[0]->m_xLink->set_sensitive(false);
                 }
                 bLeft = false;
@@ -202,7 +202,7 @@ void Breadcrumb::appendField()
     size_t nIndex = m_aSegments.size() - 1;
     m_aSegments[nIndex]->m_xLink->hide();
     m_aSegments[nIndex]->m_xLink->connect_activate_link(LINK(this, Breadcrumb, ClickLinkHdl));
-    m_aSegments[nIndex]->m_xSeparator->set_label( ">" );
+    m_aSegments[nIndex]->m_xSeparator->set_label( u">"_ustr );
     m_aSegments[nIndex]->m_xSeparator->hide();
 }
 
@@ -236,10 +236,10 @@ IMPL_LINK(Breadcrumb, ClickLinkHdl, weld::LinkButton&, rLink, bool)
 }
 
 BreadcrumbPath::BreadcrumbPath(weld::Container* pContainer)
-    : m_xBuilder(Application::CreateBuilder(pContainer, "fps/ui/breadcrumb.ui"))
-    , m_xContainer(m_xBuilder->weld_container("container"))
-    , m_xLink(m_xBuilder->weld_link_button("link"))
-    , m_xSeparator(m_xBuilder->weld_label("label"))
+    : m_xBuilder(Application::CreateBuilder(pContainer, u"fps/ui/breadcrumb.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
+    , m_xLink(m_xBuilder->weld_link_button(u"link"_ustr))
+    , m_xSeparator(m_xBuilder->weld_label(u"label"_ustr))
 {
 }
 

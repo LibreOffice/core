@@ -879,7 +879,7 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
     // check the names
     if ( FilterNameExists( aFilters ) )
         throw IllegalArgumentException(
-            "filter name exists",
+            u"filter name exists"_ustr,
             getXWeak(), 1);
 
     // ensure that we have a filter list
@@ -1029,7 +1029,7 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
 /* XServiceInfo */
 OUString SAL_CALL SvtFilePicker::getImplementationName()
 {
-    return "com.sun.star.svtools.OfficeFilePicker";
+    return u"com.sun.star.svtools.OfficeFilePicker"_ustr;
 }
 
 /* XServiceInfo */
@@ -1041,7 +1041,7 @@ sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.OfficeFilePicker" };
+    return { u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -1081,7 +1081,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::
 /* XServiceInfo */
 OUString SAL_CALL SvtRemoteFilePicker::getImplementationName()
 {
-    return "com.sun.star.svtools.RemoteFilePicker";
+    return u"com.sun.star.svtools.RemoteFilePicker"_ustr;
 }
 
 /* XServiceInfo */
@@ -1093,7 +1093,7 @@ sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sService
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.RemoteFilePicker" };
+    return { u"com.sun.star.ui.dialogs.RemoteFilePicker"_ustr };
 }
 
 

@@ -27,20 +27,20 @@
 using namespace ::svt;
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
-    : SvtFileDialog_Base( pParent, "fps/ui/remotefilesdialog.ui", "RemoteFilesDialog" )
+    : SvtFileDialog_Base( pParent, u"fps/ui/remotefilesdialog.ui"_ustr, u"RemoteFilesDialog"_ustr )
     , m_xContext( comphelper::getProcessComponentContext() )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
     , m_bIsInExecute( false )
-    , m_xOk_btn(m_xBuilder->weld_button("ok"))
-    , m_xCancel_btn(m_xBuilder->weld_button("cancel"))
-    , m_xManageServices(m_xBuilder->weld_menu_button("add_service_btn"))
-    , m_xServices_lb(m_xBuilder->weld_combo_box("services_lb"))
-    , m_xPathContainer(m_xBuilder->weld_container("breadcrumb_container"))
-    , m_xNewFolder(m_xBuilder->weld_button("new_folder"))
-    , m_xListView_btn(m_xBuilder->weld_toggle_button("list_view"))
-    , m_xIconView_btn(m_xBuilder->weld_toggle_button("icon_view"))
-    , m_xFilter_lb(m_xBuilder->weld_combo_box("filter_lb"))
-    , m_xName_ed(new AutocompleteEdit(m_xBuilder->weld_entry("filename")))
+    , m_xOk_btn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancel_btn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xManageServices(m_xBuilder->weld_menu_button(u"add_service_btn"_ustr))
+    , m_xServices_lb(m_xBuilder->weld_combo_box(u"services_lb"_ustr))
+    , m_xPathContainer(m_xBuilder->weld_container(u"breadcrumb_container"_ustr))
+    , m_xNewFolder(m_xBuilder->weld_button(u"new_folder"_ustr))
+    , m_xListView_btn(m_xBuilder->weld_toggle_button(u"list_view"_ustr))
+    , m_xIconView_btn(m_xBuilder->weld_toggle_button(u"icon_view"_ustr))
+    , m_xFilter_lb(m_xBuilder->weld_combo_box(u"filter_lb"_ustr))
+    , m_xName_ed(new AutocompleteEdit(m_xBuilder->weld_entry(u"filename"_ustr)))
 {
     m_eMode = ( nBits & PickerFlags::SaveAs ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & PickerFlags::PathDialog ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -83,12 +83,12 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     m_xPath->connect_clicked( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
     m_xPath->SetMode( SvtBreadcrumbMode::ALL_VISITED );
 
-    m_xContainer = m_xBuilder->weld_container("container");
+    m_xContainer = m_xBuilder->weld_container(u"container"_ustr);
     m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 82, -1);
 
     m_xFileView.reset(new SvtFileView(m_xDialog.get(),
-                                      m_xBuilder->weld_tree_view("fileview"),
-                                      m_xBuilder->weld_icon_view("iconview"),
+                                      m_xBuilder->weld_tree_view(u"fileview"_ustr),
+                                      m_xBuilder->weld_icon_view(u"iconview"_ustr),
                                       REMOTEDLG_TYPE_PATHDLG == m_eType,
                                       bMultiselection, false));
 
@@ -96,7 +96,7 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     m_xFileView->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectHdl ) );
     m_xFileView->EnableDelete( true );
 
-    m_xTreeView.reset(new FolderTree(m_xBuilder->weld_tree_view("foldertree"), m_xDialog.get()));
+    m_xTreeView.reset(new FolderTree(m_xBuilder->weld_tree_view(u"foldertree"_ustr), m_xDialog.get()));
     m_xTreeView->connect_changed(LINK(this, RemoteFilesDialog, TreeSelectHdl));
 
     m_xContainer->set_sensitive(false);
@@ -132,7 +132,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
         sSize = sSize + OUString::number( aSize.Height() ) + "|";
 
         OUString sUserData = m_xFileView->GetConfigString();
-        aDlgOpt.SetUserItem( "UserData",
+        aDlgOpt.SetUserItem( u"UserData"_ustr,
                              Any( sSize + sUserData ) );
     }
 
@@ -165,10 +165,10 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
 void RemoteFilesDialog::EnableExtraMenuItems(bool bEnable)
 {
-    m_xManageServices->set_item_visible("change_password", bEnable);
-    m_xManageServices->set_item_visible("edit_service", bEnable);
-    m_xManageServices->set_item_visible("delete_service", bEnable);
-    m_xManageServices->set_item_visible("change_password", bEnable);
+    m_xManageServices->set_item_visible(u"change_password"_ustr, bEnable);
+    m_xManageServices->set_item_visible(u"edit_service"_ustr, bEnable);
+    m_xManageServices->set_item_visible(u"delete_service"_ustr, bEnable);
+    m_xManageServices->set_item_visible(u"change_password"_ustr, bEnable);
 }
 
 short RemoteFilesDialog::run()
@@ -200,24 +200,24 @@ static OUString lcl_GetServiceType( const ServicePtr& pService )
             OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DecodeMechanism::WithCharset );
 
             if( sHost.startsWith( GDRIVE_BASE_URL ) )
-                return "Google Drive";
+                return u"Google Drive"_ustr;
             else if( sHost.startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                return "Alfresco Cloud";
+                return u"Alfresco Cloud"_ustr;
             else if( sHost.startsWith( ONEDRIVE_BASE_URL ) )
-                return "OneDrive";
+                return u"OneDrive"_ustr;
 
-            return "CMIS";
+            return u"CMIS"_ustr;
         }
         case INetProtocol::Smb:
-            return "Windows Share";
+            return u"Windows Share"_ustr;
         case INetProtocol::File:
-            return "SSH";
+            return u"SSH"_ustr;
         case INetProtocol::Http:
-            return "WebDAV";
+            return u"WebDAV"_ustr;
         case INetProtocol::Https:
-            return "WebDAV";
+            return u"WebDAV"_ustr;
         case INetProtocol::Generic:
-            return "SSH";
+            return u"SSH"_ustr;
         default:
             return OUString();
     }
@@ -236,7 +236,7 @@ void RemoteFilesDialog::InitSize()
 
     m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
-    Any aUserData = aDlgOpt.GetUserItem( "UserData" );
+    Any aUserData = aDlgOpt.GetUserItem( u"UserData"_ustr );
     OUString sCfgStr;
     if( aUserData >>= sCfgStr )
     {
@@ -327,7 +327,7 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
 
     m_aFilters.emplace_back( rFilter, rType );
     if (rType.isEmpty())
-        m_xFilter_lb->append_separator("");
+        m_xFilter_lb->append_separator(u""_ustr);
     else
         m_xFilter_lb->append_text(sName);
 
@@ -363,7 +363,7 @@ void RemoteFilesDialog::OpenURL( OUString const & sURL )
         m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetDenyList() );
 
         if( m_eMode != REMOTEDLG_MODE_SAVE )
-            m_xName_ed->set_text( "" );
+            m_xName_ed->set_text( u""_ustr );
 
         m_xFileView->grab_focus();
     }
@@ -400,7 +400,7 @@ void RemoteFilesDialog::EnableControls()
 
         if (m_xServices_lb->get_active() != -1)
         {
-            m_xManageServices->set_item_sensitive("change_password", false);
+            m_xManageServices->set_item_sensitive(u"change_password"_ustr, false);
 
             try
             {
@@ -416,7 +416,7 @@ void RemoteFilesDialog::EnableControls()
 
                         if( aURLEntries.UserList.hasElements() )
                         {
-                            m_xManageServices->set_item_sensitive("change_password", true);
+                            m_xManageServices->set_item_sensitive(u"change_password"_ustr, true);
                         }
                     }
                 }
@@ -739,7 +739,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SelectHdl, SvtFileView*, void )
         if( m_eMode == REMOTEDLG_MODE_OPEN )
         {
             m_sPath.clear();
-            m_xName_ed->set_text( "" );
+            m_xName_ed->set_text( u""_ustr );
         }
     }
 
