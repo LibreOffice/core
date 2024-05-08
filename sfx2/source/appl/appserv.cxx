@@ -905,7 +905,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
 
                 // Save new toolbar mode for a current module
-                aAppNode.setNodeValue( "Active", Any( aNewName ) );
+                aAppNode.setNodeValue( u"Active"_ustr, Any( aNewName ) );
                 aAppNode.commit();
             }
 
@@ -1082,7 +1082,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                             if ( aCommandArg == aCurrentMode )
                             {
-                                aModeNode.setNodeValue( "UserToolbars", Any( aBackup ) );
+                                aModeNode.setNodeValue( u"UserToolbars"_ustr, Any( aBackup ) );
                                 break;
                             }
                         }
@@ -1210,7 +1210,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if (aAppNode.isValid())
                 {
                     bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue(u"Locked"_ustr));
-                    aAppNode.setNodeValue("Locked", Any(!isLocked));
+                    aAppNode.setNodeValue(u"Locked"_ustr, Any(!isLocked));
                     aAppNode.commit();
                     //TODO: apply immediately w/o restart needed
                     SolarMutexGuard aGuard;

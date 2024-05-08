@@ -389,7 +389,7 @@ void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Applicati
     if ( !aAppNode.isValid() )
         return;
 
-    aAppNode.setNodeValue( "Active", Any( u"Default"_ustr ) );
+    aAppNode.setNodeValue( u"Active"_ustr, Any( u"Default"_ustr ) );
     aAppNode.commit();
 }
 
@@ -668,7 +668,7 @@ void SfxNotebookBar::ToggleMenubar()
     {
         utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
         utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
-        aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
+        aModeNode.setNodeValue( u"HasMenubar"_ustr, toAny<bool>( bShow ) );
         aRoot.commit();
     }
 }

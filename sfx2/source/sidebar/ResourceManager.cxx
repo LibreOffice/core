@@ -329,17 +329,17 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
     bool bChanged = false;
     if (aTitle != aDeckNode.getNodeValue(u"Title"_ustr))
     {
-        aDeckNode.setNodeValue("Title", aTitle);
+        aDeckNode.setNodeValue(u"Title"_ustr, aTitle);
         bChanged = true;
     }
     if (aOrder != aDeckNode.getNodeValue(u"OrderIndex"_ustr))
     {
-        aDeckNode.setNodeValue("OrderIndex", aOrder);
+        aDeckNode.setNodeValue(u"OrderIndex"_ustr, aOrder);
         bChanged = true;
     }
     if (aContextList != aDeckNode.getNodeValue(u"ContextList"_ustr))
     {
-        aDeckNode.setNodeValue("ContextList", aContextList);
+        aDeckNode.setNodeValue(u"ContextList"_ustr, aContextList);
         bChanged = true;
     }
 
@@ -377,17 +377,17 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
         if (aTitle != aPanelNode.getNodeValue(u"Title"_ustr))
         {
-            aPanelNode.setNodeValue("Title", aTitle);
+            aPanelNode.setNodeValue(u"Title"_ustr, aTitle);
             bChanged = true;
         }
         if (aOrder != aPanelNode.getNodeValue(u"OrderIndex"_ustr))
         {
-            aPanelNode.setNodeValue("OrderIndex", aOrder);
+            aPanelNode.setNodeValue(u"OrderIndex"_ustr, aOrder);
             bChanged = true;
         }
         if (aContextList != aPanelNode.getNodeValue(u"ContextList"_ustr))
         {
-            aPanelNode.setNodeValue("ContextList", aContextList);
+            aPanelNode.setNodeValue(u"ContextList"_ustr, aContextList);
             bChanged = true;
         }
     }

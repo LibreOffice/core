@@ -115,11 +115,6 @@ namespace utl
         */
         bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const noexcept;
 
-        bool            setNodeValue( const char* _pAsciiPath, const css::uno::Any& _rValue ) const
-        {
-            return setNodeValue( OUString::createFromAscii( _pAsciiPath ), _rValue );
-        }
-
         /// return the names of the existing children
         css::uno::Sequence< OUString >
                             getNodeNames() const noexcept;
