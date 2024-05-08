@@ -47,6 +47,7 @@ typedef comphelper::WeakComponentImplHelper <
         private:resource/pane/CenterPane
         private:resource/pane/FullScreenPane
         private:resource/pane/LeftImpressPane
+        private:resource/pane/BottomImpressPane
         private:resource/pane/LeftDrawPane
     There are two left panes because this is (seems to be) the only way to
     show different titles for the left pane in Draw and Impress.
