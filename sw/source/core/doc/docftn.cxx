@@ -35,6 +35,8 @@
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
+#include <fmtftntx.hxx>
+#include <unoprnms.hxx>
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
@@ -128,6 +130,23 @@ void SwEndNoteInfo::ChgPageDesc(SwPageDesc* pDesc)
     m_aDepends.EndListening(m_pPageDesc);
     m_pPageDesc = pDesc;
     m_aDepends.StartListening(m_pPageDesc);
+}
+
+SwSection* SwEndNoteInfo::GetSwSection(SwDoc& rDoc) const
+{
+    if (!m_pSwSection)
+    {
+        SwSectionFormat* pFormat = rDoc.MakeSectionFormat();
+        pFormat->SetFormatName(UNO_NAME_ENDNOTE);
+        pFormat->SetFormatAttr(SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
+        m_pSwSection.reset(new SwSection(SectionType::Content, pFormat->GetName(), *pFormat));
+    }
+    return m_pSwSection.get();
+}
+
+void SwEndNoteInfo::ResetSwSection()
+{
+    m_pSwSection.reset();
 }
 
 void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)

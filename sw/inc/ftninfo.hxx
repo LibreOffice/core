@@ -28,12 +28,14 @@ class SwTextFormatColl;
 class SwPageDesc;
 class SwCharFormat;
 class SwDoc;
+class SwSection;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     mutable sw::WriterMultiListener m_aDepends;
     mutable SwTextFormatColl* m_pTextFormatColl;
     mutable SwPageDesc* m_pPageDesc;
+    mutable std::unique_ptr<SwSection> m_pSwSection;
     mutable SwCharFormat* m_pCharFormat;
     mutable SwCharFormat* m_pAnchorFormat;
     OUString m_sPrefix;
@@ -50,6 +52,9 @@ public:
     SwPageDesc* GetPageDesc(SwDoc& rDoc) const;
     bool KnowsPageDesc() const;
     bool DependsOn(const SwPageDesc*) const;
+
+    SwSection* GetSwSection(SwDoc& rDoc) const;
+    void ResetSwSection();
 
     void SetFootnoteTextColl(SwTextFormatColl& rColl);
     SwTextFormatColl* GetFootnoteTextColl() const { return m_pTextFormatColl; } // can be 0.

@@ -503,6 +503,7 @@ SwDoc::~SwDoc()
     // do not have any dependencies anymore.
     m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
     rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
+    mpEndNoteInfo->ResetSwSection();
 
     // clear TOX after nodes - TOXMarks are gone now so SwTOXType has no clients
     for (const auto& pType : *mpTOXTypes)
