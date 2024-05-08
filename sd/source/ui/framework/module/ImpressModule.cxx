@@ -22,6 +22,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include "ViewTabBarModule.hxx"
 #include "CenterViewFocusModule.hxx"
+#include "NotesPaneModule.hxx"
 #include "SlideSorterModule.hxx"
 #include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
@@ -42,6 +43,7 @@ void ImpressModule::Initialize (rtl::Reference<sd::DrawController> const & rxCon
     new SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
+    new NotesPaneModule(rxController);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }

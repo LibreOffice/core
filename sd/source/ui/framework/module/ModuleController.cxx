@@ -52,6 +52,7 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
         "com.sun.star.drawing.framework.BasicPaneFactory",
         { "private:resource/pane/CenterPane",
           "private:resource/pane/LeftImpressPane",
+          "private:resource/pane/BottomImpressPane",
           "private:resource/pane/LeftDrawPane" });
     ProcessFactory(
         "com.sun.star.drawing.framework.BasicViewFactory",
@@ -59,6 +60,7 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
           "private:resource/view/GraphicView",
           "private:resource/view/OutlineView",
           "private:resource/view/NotesView",
+          "private:resource/view/NotesPanelView",
           "private:resource/view/HandoutView",
           "private:resource/view/SlideSorter",
         "private:resource/view/PresentationView" });
