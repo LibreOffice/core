@@ -80,6 +80,165 @@ StructKind getKind(typelib_CompoundTypeDescription const* type)
             return StructKind::General;
     }
 }
+
+void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
+          bridges::cpp_uno::shared::VtableSlot slot, typelib_TypeDescriptionReference* returnType,
+          sal_Int32 count, typelib_MethodParameter* parameters, void* returnValue, void** arguments,
+          uno_Any** exception)
+{
+    OStringBuffer sig;
+    std::vector<sal_uInt64> args;
+    switch (returnType->eTypeClass)
+    {
+        case typelib_TypeClass_VOID:
+            sig.append('v');
+            break;
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_ENUM:
+            sig.append('i');
+            break;
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            sig.append('j');
+            break;
+        case typelib_TypeClass_FLOAT:
+            sig.append('f');
+            break;
+        case typelib_TypeClass_DOUBLE:
+            sig.append('d');
+            break;
+        case typelib_TypeClass_STRING:
+        case typelib_TypeClass_TYPE:
+        case typelib_TypeClass_ANY:
+        case typelib_TypeClass_SEQUENCE:
+        case typelib_TypeClass_INTERFACE:
+            sig.append("vi");
+            args.push_back(reinterpret_cast<sal_uInt32>(returnValue));
+            break;
+        case typelib_TypeClass_STRUCT:
+        {
+            typelib_TypeDescription* td = nullptr;
+            css::uno::Type(returnType).getDescription(&td);
+            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(td)))
+            {
+                case StructKind::Empty:
+                    break;
+                case StructKind::I32:
+                    sig.append('i');
+                    break;
+                case StructKind::I64:
+                    sig.append('j');
+                    break;
+                case StructKind::F32:
+                    sig.append('f');
+                    break;
+                case StructKind::F64:
+                    sig.append('d');
+                    break;
+                case StructKind::General:
+                    sig.append("vi");
+                    args.push_back(reinterpret_cast<sal_uInt32>(returnValue));
+                    break;
+            }
+            break;
+        }
+        default:
+            O3TL_UNREACHABLE;
+    }
+    sig.append('i');
+    args.push_back(reinterpret_cast<sal_uInt32>(proxy->getCppI()));
+    for (sal_Int32 i = 0; i != count; ++i)
+    {
+        if (parameters[i].bOut)
+        {
+            sig.append('i');
+            args.push_back(reinterpret_cast<sal_uInt32>(arguments[i]));
+        }
+        else
+        {
+            switch (parameters[i].pTypeRef->eTypeClass)
+            {
+                case typelib_TypeClass_BOOLEAN:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_Bool const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_BYTE:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_Int8 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_SHORT:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_Int16 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_UNSIGNED_SHORT:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_uInt16 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_LONG:
+                case typelib_TypeClass_ENUM:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_Int32 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_UNSIGNED_LONG:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_uInt32 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_HYPER:
+                    sig.append('j');
+                    args.push_back(*reinterpret_cast<sal_Int64 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_UNSIGNED_HYPER:
+                    sig.append('j');
+                    args.push_back(*reinterpret_cast<sal_uInt64 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_FLOAT:
+                    sig.append('f');
+                    args.push_back(*reinterpret_cast<sal_uInt32 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_DOUBLE:
+                    sig.append('d');
+                    args.push_back(*reinterpret_cast<sal_uInt64 const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_CHAR:
+                    sig.append('i');
+                    args.push_back(*reinterpret_cast<sal_Unicode const*>(arguments[i]));
+                    break;
+                case typelib_TypeClass_STRING:
+                case typelib_TypeClass_TYPE:
+                case typelib_TypeClass_ANY:
+                case typelib_TypeClass_SEQUENCE:
+                case typelib_TypeClass_STRUCT:
+                case typelib_TypeClass_INTERFACE:
+                    sig.append('i');
+                    args.push_back(reinterpret_cast<sal_uInt32>(arguments[i]));
+                    break;
+                default:
+                    O3TL_UNREACHABLE;
+            }
+        }
+    }
+    try
+    {
+        callVirtualFunction(
+            sig, (*reinterpret_cast<sal_uInt32 const* const*>(proxy->getCppI()))[slot.index],
+            args.data(), returnValue);
+    }
+    catch (...)
+    {
+        css::uno::RuntimeException TODO("Wasm bridge TODO");
+        uno_type_any_construct(*exception, &TODO,
+                               cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
+                               nullptr);
+        return;
+    }
+    *exception = nullptr;
+}
 }
 
 namespace bridges::cpp_uno::shared
@@ -141,160 +300,8 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                     auto const mtd
                         = reinterpret_cast<typelib_InterfaceMethodTypeDescription const*>(
                             pMemberDescr);
-                    OStringBuffer sig;
-                    std::vector<sal_uInt64> args;
-                    switch (mtd->pReturnTypeRef->eTypeClass)
-                    {
-                        case typelib_TypeClass_VOID:
-                            sig.append('v');
-                            break;
-                        case typelib_TypeClass_BOOLEAN:
-                        case typelib_TypeClass_BYTE:
-                        case typelib_TypeClass_SHORT:
-                        case typelib_TypeClass_UNSIGNED_SHORT:
-                        case typelib_TypeClass_LONG:
-                        case typelib_TypeClass_UNSIGNED_LONG:
-                        case typelib_TypeClass_CHAR:
-                        case typelib_TypeClass_ENUM:
-                            sig.append('i');
-                            break;
-                        case typelib_TypeClass_HYPER:
-                        case typelib_TypeClass_UNSIGNED_HYPER:
-                            sig.append('j');
-                            break;
-                        case typelib_TypeClass_FLOAT:
-                            sig.append('f');
-                            break;
-                        case typelib_TypeClass_DOUBLE:
-                            sig.append('d');
-                            break;
-                        case typelib_TypeClass_STRING:
-                        case typelib_TypeClass_TYPE:
-                        case typelib_TypeClass_ANY:
-                        case typelib_TypeClass_SEQUENCE:
-                        case typelib_TypeClass_INTERFACE:
-                            sig.append("vi");
-                            args.push_back(reinterpret_cast<sal_uInt32>(pReturn));
-                            break;
-                        case typelib_TypeClass_STRUCT:
-                        {
-                            typelib_TypeDescription* td = nullptr;
-                            css::uno::Type(mtd->pReturnTypeRef).getDescription(&td);
-                            switch (getKind(
-                                reinterpret_cast<typelib_CompoundTypeDescription const*>(td)))
-                            {
-                                case StructKind::Empty:
-                                    break;
-                                case StructKind::I32:
-                                    sig.append('i');
-                                    break;
-                                case StructKind::I64:
-                                    sig.append('j');
-                                    break;
-                                case StructKind::F32:
-                                    sig.append('f');
-                                    break;
-                                case StructKind::F64:
-                                    sig.append('d');
-                                    break;
-                                case StructKind::General:
-                                    sig.append("vi");
-                                    args.push_back(reinterpret_cast<sal_uInt32>(pReturn));
-                                    break;
-                            }
-                            break;
-                        }
-                        default:
-                            O3TL_UNREACHABLE;
-                    }
-                    sig.append('i');
-                    args.push_back(reinterpret_cast<sal_uInt32>(pThis->pCppI));
-                    for (sal_Int32 i = 0; i != mtd->nParams; ++i)
-                    {
-                        if (mtd->pParams[i].bOut)
-                        {
-                            sig.append('i');
-                            args.push_back(reinterpret_cast<sal_uInt32>(pArgs[i]));
-                        }
-                        else
-                        {
-                            switch (mtd->pParams[i].pTypeRef->eTypeClass)
-                            {
-                                case typelib_TypeClass_BOOLEAN:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_Bool const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_BYTE:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_Int8 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_SHORT:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_Int16 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_UNSIGNED_SHORT:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_uInt16 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_LONG:
-                                case typelib_TypeClass_ENUM:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_Int32 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_UNSIGNED_LONG:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_uInt32 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_HYPER:
-                                    sig.append('j');
-                                    args.push_back(*reinterpret_cast<sal_Int64 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_UNSIGNED_HYPER:
-                                    sig.append('j');
-                                    args.push_back(*reinterpret_cast<sal_uInt64 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_FLOAT:
-                                    sig.append('f');
-                                    args.push_back(*reinterpret_cast<sal_uInt32 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_DOUBLE:
-                                    sig.append('d');
-                                    args.push_back(*reinterpret_cast<sal_uInt64 const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_CHAR:
-                                    sig.append('i');
-                                    args.push_back(*reinterpret_cast<sal_Unicode const*>(pArgs[i]));
-                                    break;
-                                case typelib_TypeClass_STRING:
-                                case typelib_TypeClass_TYPE:
-                                case typelib_TypeClass_ANY:
-                                case typelib_TypeClass_SEQUENCE:
-                                case typelib_TypeClass_STRUCT:
-                                case typelib_TypeClass_INTERFACE:
-                                    sig.append('i');
-                                    args.push_back(reinterpret_cast<sal_uInt32>(pArgs[i]));
-                                    break;
-                                default:
-                                    O3TL_UNREACHABLE;
-                            }
-                        }
-                    }
-                    try
-                    {
-                        callVirtualFunction(sig,
-                                            (*reinterpret_cast<sal_uInt32 const* const*>(
-                                                pThis->pCppI))[aVtableSlot.index],
-                                            args.data(), pReturn);
-                        *ppException = nullptr;
-                    }
-                    catch (...)
-                    {
-                        css::uno::RuntimeException TODO("Wasm bridge TODO");
-                        uno_type_any_construct(
-                            *ppException, &TODO,
-                            cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
-                            nullptr);
-                    }
+                    call(pThis, aVtableSlot, mtd->pReturnTypeRef, mtd->nParams, mtd->pParams,
+                         pReturn, pArgs, ppException);
                 }
             }
             break;
