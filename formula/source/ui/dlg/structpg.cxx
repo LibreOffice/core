@@ -33,9 +33,9 @@ void StructPage::SetActiveFlag(bool bFlag)
 }
 
 StructPage::StructPage(weld::Container* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/structpage.ui"))
-    , m_xContainer(m_xBuilder->weld_container("StructPage"))
-    , m_xTlbStruct(m_xBuilder->weld_tree_view("struct"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/structpage.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"StructPage"_ustr))
+    , m_xTlbStruct(m_xBuilder->weld_tree_view(u"struct"_ustr))
     , maImgEnd(BMP_STR_END)
     , maImgError(BMP_STR_ERROR)
     , pSelectedToken(nullptr)

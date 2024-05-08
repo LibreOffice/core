@@ -40,41 +40,41 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     , pMyParent(_pDlg)
     , m_sOptional(ForResId(STR_OPTIONAL))
     , m_sRequired(ForResId(STR_REQUIRED))
-    , m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/parameter.ui"))
-    , m_xContainer(m_xBuilder->weld_container("ParameterPage"))
-    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar", true))
-    , m_xParamGrid(m_xBuilder->weld_widget("paramgrid"))
-    , m_xGrid(m_xBuilder->weld_widget("grid"))
-    , m_xFtEditDesc(m_xBuilder->weld_label("editdesc"))
-    , m_xFtArgName(m_xBuilder->weld_label("parname"))
-    , m_xFtArgDesc(m_xBuilder->weld_label("pardesc"))
-    , m_xBtnFx1(m_xBuilder->weld_button("FX1"))
-    , m_xBtnFx2(m_xBuilder->weld_button("FX2"))
-    , m_xBtnFx3(m_xBuilder->weld_button("FX3"))
-    , m_xBtnFx4(m_xBuilder->weld_button("FX4"))
-    , m_xFtArg1(m_xBuilder->weld_label("FT_ARG1"))
-    , m_xFtArg2(m_xBuilder->weld_label("FT_ARG2"))
-    , m_xFtArg3(m_xBuilder->weld_label("FT_ARG3"))
-    , m_xFtArg4(m_xBuilder->weld_label("FT_ARG4"))
-    , m_xEdArg1(new ArgEdit(m_xBuilder->weld_entry("ED_ARG1")))
-    , m_xEdArg2(new ArgEdit(m_xBuilder->weld_entry("ED_ARG2")))
-    , m_xEdArg3(new ArgEdit(m_xBuilder->weld_entry("ED_ARG3")))
-    , m_xEdArg4(new ArgEdit(m_xBuilder->weld_entry("ED_ARG4")))
-    , m_xRefBtn1(new RefButton(m_xBuilder->weld_button("RB_ARG1")))
-    , m_xRefBtn2(new RefButton(m_xBuilder->weld_button("RB_ARG2")))
-    , m_xRefBtn3(new RefButton(m_xBuilder->weld_button("RB_ARG3")))
-    , m_xRefBtn4(new RefButton(m_xBuilder->weld_button("RB_ARG4")))
+    , m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/parameter.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"ParameterPage"_ustr))
+    , m_xSlider(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
+    , m_xParamGrid(m_xBuilder->weld_widget(u"paramgrid"_ustr))
+    , m_xGrid(m_xBuilder->weld_widget(u"grid"_ustr))
+    , m_xFtEditDesc(m_xBuilder->weld_label(u"editdesc"_ustr))
+    , m_xFtArgName(m_xBuilder->weld_label(u"parname"_ustr))
+    , m_xFtArgDesc(m_xBuilder->weld_label(u"pardesc"_ustr))
+    , m_xBtnFx1(m_xBuilder->weld_button(u"FX1"_ustr))
+    , m_xBtnFx2(m_xBuilder->weld_button(u"FX2"_ustr))
+    , m_xBtnFx3(m_xBuilder->weld_button(u"FX3"_ustr))
+    , m_xBtnFx4(m_xBuilder->weld_button(u"FX4"_ustr))
+    , m_xFtArg1(m_xBuilder->weld_label(u"FT_ARG1"_ustr))
+    , m_xFtArg2(m_xBuilder->weld_label(u"FT_ARG2"_ustr))
+    , m_xFtArg3(m_xBuilder->weld_label(u"FT_ARG3"_ustr))
+    , m_xFtArg4(m_xBuilder->weld_label(u"FT_ARG4"_ustr))
+    , m_xEdArg1(new ArgEdit(m_xBuilder->weld_entry(u"ED_ARG1"_ustr)))
+    , m_xEdArg2(new ArgEdit(m_xBuilder->weld_entry(u"ED_ARG2"_ustr)))
+    , m_xEdArg3(new ArgEdit(m_xBuilder->weld_entry(u"ED_ARG3"_ustr)))
+    , m_xEdArg4(new ArgEdit(m_xBuilder->weld_entry(u"ED_ARG4"_ustr)))
+    , m_xRefBtn1(new RefButton(m_xBuilder->weld_button(u"RB_ARG1"_ustr)))
+    , m_xRefBtn2(new RefButton(m_xBuilder->weld_button(u"RB_ARG2"_ustr)))
+    , m_xRefBtn3(new RefButton(m_xBuilder->weld_button(u"RB_ARG3"_ustr)))
+    , m_xRefBtn4(new RefButton(m_xBuilder->weld_button(u"RB_ARG4"_ustr)))
 {
     // Space for three lines of text in function description.
-    m_xFtEditDesc->set_label("X\nX\nX\n");
+    m_xFtEditDesc->set_label(u"X\nX\nX\n"_ustr);
     auto nEditHeight = m_xFtEditDesc->get_preferred_size().Height();
     m_xFtEditDesc->set_size_request(-1, nEditHeight);
-    m_xFtEditDesc->set_label("");
+    m_xFtEditDesc->set_label(u""_ustr);
     // Space for two lines of text in parameter description.
-    m_xFtArgDesc->set_label("X\nX\n");
+    m_xFtArgDesc->set_label(u"X\nX\n"_ustr);
     auto nArgHeight = m_xFtArgDesc->get_preferred_size().Height();
     m_xFtArgDesc->set_size_request(-1, nArgHeight);
-    m_xFtArgDesc->set_label("");
+    m_xFtArgDesc->set_label(u""_ustr);
 
     m_xBtnFx1->set_from_icon_name(BMP_FX);
     m_xBtnFx2->set_from_icon_name(BMP_FX);

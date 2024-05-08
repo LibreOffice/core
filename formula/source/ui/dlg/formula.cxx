@@ -225,39 +225,39 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     , m_nSelectionEnd(-1)
     , m_pTheRefEdit(nullptr)
     , m_pTheRefButton(nullptr)
-    , m_xTabCtrl(rBuilder.weld_notebook("tabcontrol"))
-    , m_xParaWinBox(rBuilder.weld_container("BOX"))
-    , m_xFtHeadLine(rBuilder.weld_label("headline"))
-    , m_xFtFuncName(rBuilder.weld_label("funcname"))
-    , m_xFtFuncDesc(rBuilder.weld_label("funcdesc"))
-    , m_xFtEditName(rBuilder.weld_label("editname"))
-    , m_xFtResult(rBuilder.weld_label("label2"))
-    , m_xWndResult(rBuilder.weld_entry("result"))
-    , m_xFtFormula(rBuilder.weld_label("formula"))
-    , m_xMEdit(rBuilder.weld_text_view("ed_formula"))
-    , m_xBtnMatrix(rBuilder.weld_check_button("array"))
-    , m_xBtnCancel(rBuilder.weld_button("cancel"))
-    , m_xBtnBackward(rBuilder.weld_button("back"))
-    , m_xBtnForward(rBuilder.weld_button("next"))
-    , m_xBtnEnd(rBuilder.weld_button("ok"))
-    , m_xFtFormResult(rBuilder.weld_label("label1"))
-    , m_xWndFormResult(rBuilder.weld_entry("formula_result"))
-    , m_xEdRef(new RefEdit(rBuilder.weld_entry("ED_REF")))
-    , m_xRefBtn(new RefButton(rBuilder.weld_button("RB_REF")))
+    , m_xTabCtrl(rBuilder.weld_notebook(u"tabcontrol"_ustr))
+    , m_xParaWinBox(rBuilder.weld_container(u"BOX"_ustr))
+    , m_xFtHeadLine(rBuilder.weld_label(u"headline"_ustr))
+    , m_xFtFuncName(rBuilder.weld_label(u"funcname"_ustr))
+    , m_xFtFuncDesc(rBuilder.weld_label(u"funcdesc"_ustr))
+    , m_xFtEditName(rBuilder.weld_label(u"editname"_ustr))
+    , m_xFtResult(rBuilder.weld_label(u"label2"_ustr))
+    , m_xWndResult(rBuilder.weld_entry(u"result"_ustr))
+    , m_xFtFormula(rBuilder.weld_label(u"formula"_ustr))
+    , m_xMEdit(rBuilder.weld_text_view(u"ed_formula"_ustr))
+    , m_xBtnMatrix(rBuilder.weld_check_button(u"array"_ustr))
+    , m_xBtnCancel(rBuilder.weld_button(u"cancel"_ustr))
+    , m_xBtnBackward(rBuilder.weld_button(u"back"_ustr))
+    , m_xBtnForward(rBuilder.weld_button(u"next"_ustr))
+    , m_xBtnEnd(rBuilder.weld_button(u"ok"_ustr))
+    , m_xFtFormResult(rBuilder.weld_label(u"label1"_ustr))
+    , m_xWndFormResult(rBuilder.weld_entry(u"formula_result"_ustr))
+    , m_xEdRef(new RefEdit(rBuilder.weld_entry(u"ED_REF"_ustr)))
+    , m_xRefBtn(new RefButton(rBuilder.weld_button(u"RB_REF"_ustr)))
 {
     auto nWidth = m_xMEdit->get_approximate_digit_width() * 62;
 
     //Space for two lines of text
-    m_xFtHeadLine->set_label("X\nX\n");
+    m_xFtHeadLine->set_label(u"X\nX\n"_ustr);
     auto nHeight = m_xFtHeadLine->get_preferred_size().Height();
     m_xFtHeadLine->set_size_request(nWidth, nHeight);
-    m_xFtHeadLine->set_label("");
+    m_xFtHeadLine->set_label(u""_ustr);
 
-    m_xFtFuncName->set_label("X\nX\n");
+    m_xFtFuncName->set_label(u"X\nX\n"_ustr);
     nHeight = m_xFtFuncName->get_preferred_size().Height();
     m_xFtFuncName->set_size_request(nWidth, nHeight);
     m_xFtFuncDesc->set_size_request(nWidth, nHeight);
-    m_xFtFuncName->set_label("");
+    m_xFtFuncName->set_label(u""_ustr);
 
     m_xMEdit->set_size_request(nWidth,
                                m_xMEdit->get_height_rows(5));
@@ -281,9 +281,9 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xParaWin->SetArgModifiedHdl( LINK( this, FormulaDlg_Impl, ModifyHdl ) );
     m_xParaWin->SetFxHdl( LINK( this, FormulaDlg_Impl, FxHdl ) );
 
-    m_xFuncPage.reset(new FuncPage(m_xTabCtrl->get_page("functiontab"), _pFunctionMgr));
-    m_xStructPage.reset(new StructPage(m_xTabCtrl->get_page("structtab")));
-    m_xTabCtrl->set_current_page("functiontab");
+    m_xFuncPage.reset(new FuncPage(m_xTabCtrl->get_page(u"functiontab"_ustr), _pFunctionMgr));
+    m_xStructPage.reset(new StructPage(m_xTabCtrl->get_page(u"structtab"_ustr)));
+    m_xTabCtrl->set_current_page(u"functiontab"_ustr);
 
     m_aOldHelp = m_rDialog.get_help_id();                // HelpId from resource always for "Page 1"
 
@@ -318,8 +318,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
 
 FormulaDlg_Impl::~FormulaDlg_Impl()
 {
-    m_xTabCtrl->remove_page("functiontab");
-    m_xTabCtrl->remove_page("structtab");
+    m_xTabCtrl->remove_page(u"functiontab"_ustr);
+    m_xTabCtrl->remove_page(u"structtab"_ustr);
 
     DeleteArgs();
 }
@@ -355,7 +355,7 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
 
     // 0:TOKEN_OPEN, 1:TOKEN_CLOSE, 2:TOKEN_SEP
-    uno::Sequence< OUString > aArgs { "(", ")", ";" };
+    uno::Sequence< OUString > aArgs { u"("_ustr, u")"_ustr, u";"_ustr };
     m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings( aArgs, sheet::FormulaLanguage::ODFF);
 
     m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::SPECIAL);
@@ -931,7 +931,7 @@ void FormulaDlg_Impl::FillControls( bool &rbNext, bool &rbPrev)
     }
     else
     {
-        m_xFtEditName->set_label("");
+        m_xFtEditName->set_label(u""_ustr);
         m_xMEdit->set_help_id(m_aEditHelpId);
     }
         //  test if before/after are anymore functions
@@ -1255,7 +1255,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         return;
 
     m_xBtnForward->set_sensitive(true); //@ In order to be able to input another function.
-    m_xTabCtrl->set_current_page("functiontab");
+    m_xTabCtrl->set_current_page(u"functiontab"_ustr);
 
     OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1464,7 +1464,7 @@ void FormulaDlg_Impl::UpdateSelection()
     }
     else
     {
-        m_pHelper->setCurrentFormula("");
+        m_pHelper->setCurrentFormula(u""_ustr);
         m_nArgs = 0;
     }
 
@@ -1589,9 +1589,9 @@ void FormulaDlg_Impl::Update()
     FormulaCursor();
     CalcStruct(sExpression);
     if (pData->GetMode() == FormulaDlgMode::Formula)
-        m_xTabCtrl->set_current_page("functiontab");
+        m_xTabCtrl->set_current_page(u"functiontab"_ustr);
     else
-        m_xTabCtrl->set_current_page("structtab");
+        m_xTabCtrl->set_current_page(u"structtab"_ustr);
     m_xBtnMatrix->set_active(pData->GetMatrixFlag());
 }
 
@@ -1649,7 +1649,7 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
         m_xBtnMatrix->set_sensitive(false);
     } // if ( bMatrix )
 
-    m_xTabCtrl->set_current_page("structtab");
+    m_xTabCtrl->set_current_page(u"structtab"_ustr);
     return bMatrix;
 }
 
@@ -1752,7 +1752,7 @@ void FormulaDlg_Impl::SetEdSelection()
 FormulaModalDialog::FormulaModalDialog(weld::Window* pParent,
                                        IFunctionManager const * _pFunctionMgr,
                                        IControlReferenceHandler* _pDlg)
-    : GenericDialogController(pParent, "formula/ui/formuladialog.ui", "FormulaDialog")
+    : GenericDialogController(pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, false/*_bSupportFunctionResult*/,
                                   false/*_bSupportResult*/, false/*_bSupportMatrix*/,
                                   this, _pFunctionMgr, _pDlg))
@@ -1806,7 +1806,7 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
 FormulaDlg::FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                        weld::Window* pParent,
                        IFunctionManager const * _pFunctionMgr, IControlReferenceHandler* _pDlg)
-    : SfxModelessDialogController( pB, pCW, pParent, "formula/ui/formuladialog.ui", "FormulaDialog")
+    : SfxModelessDialogController( pB, pCW, pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, true/*_bSupportFunctionResult*/
                                              , true/*_bSupportResult*/
                                              , true/*_bSupportMatrix*/

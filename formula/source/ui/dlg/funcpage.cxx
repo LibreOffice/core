@@ -41,11 +41,11 @@ IMPL_LINK(FuncPage, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 sal_Int32 FuncPage::m_nRememberedFunctionCategory = 1;
 
 FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionManager)
-    : m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/functionpage.ui"))
-    , m_xContainer(m_xBuilder->weld_container("FunctionPage"))
-    , m_xLbCategory(m_xBuilder->weld_combo_box("category"))
-    , m_xLbFunction(m_xBuilder->weld_tree_view("function"))
-    , m_xLbFunctionSearchString(m_xBuilder->weld_entry("search"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/functionpage.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"FunctionPage"_ustr))
+    , m_xLbCategory(m_xBuilder->weld_combo_box(u"category"_ustr))
+    , m_xLbFunction(m_xBuilder->weld_tree_view(u"function"_ustr))
+    , m_xLbFunctionSearchString(m_xBuilder->weld_entry(u"search"_ustr))
     , m_pFunctionManager(_pFunctionManager)
 {
     m_xLbFunction->make_sorted();

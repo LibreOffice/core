@@ -44,7 +44,7 @@ namespace formula
             virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& ) const override {}
             virtual void initArgumentInfo()  const override {}
             virtual OUString getSignature() const override { return OUString(); }
-            virtual OUString getHelpId() const override { return ""; }
+            virtual OUString getHelpId() const override { return u""_ustr; }
             virtual bool isHidden() const override { return false; }
             virtual sal_uInt32 getParameterCount() const override { return 0; }
             virtual sal_uInt32 getVarArgsStart() const override { return 0; }
