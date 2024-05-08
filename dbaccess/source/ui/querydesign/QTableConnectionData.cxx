@@ -87,8 +87,8 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     // convert Information in rDrag into parameters for the base class init
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft->GetTabWindow());
     OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());
-    OSL_ENSURE(pSourceWin,"NO Source window found!");
-    OSL_ENSURE(pDestWin,"NO Dest window found!");
+    assert(pSourceWin && "NO Source window found!");
+    assert(pDestWin && "NO Dest window found!");
     m_pReferencingTable = pSourceWin->GetData();
     m_pReferencedTable  = pDestWin->GetData();
 

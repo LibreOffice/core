@@ -431,9 +431,9 @@ Reference< XPropertySet > const & ODbDataSourceAdministrationHelper::getCurrentD
 OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     const SfxStringItem* pConnectURL = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
-    OSL_ENSURE( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
+    assert(pConnectURL && "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     const DbuTypeCollectionItem* pTypeCollection = _rSet.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
-    OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
+    assert(pTypeCollection && "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     return pCollection->getType(pConnectURL->GetValue());
 }
@@ -452,10 +452,10 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
     const SfxStringItem* pUrlItem = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_CONNECTURL);
     const DbuTypeCollectionItem* pTypeCollection = m_pItemSetHelper->getOutputSet()->GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
 
-    OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
-    OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
+    assert(pUrlItem && "Connection URL is NULL. -> GPF!");
+    assert(pTypeCollection && "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    OSL_ENSURE(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
+    assert(pCollection && "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
 
     switch( pCollection->determineType(eType) )
     {
@@ -961,7 +961,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 TypeDescription aTD(_rValue.getValueType());
                 typelib_IndirectTypeDescription* pSequenceTD =
                     reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
-                OSL_ENSURE(pSequenceTD && pSequenceTD->pType, "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid sequence type!");
+                assert(pSequenceTD && pSequenceTD->pType && "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid sequence type!");
 
                 Type aElementType(pSequenceTD->pType);
                 switch (aElementType.getTypeClass())
@@ -996,7 +996,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
 OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet const & _rDest)
 {
     const SfxStringItem* pUrlItem = _rDest.GetItem<SfxStringItem>(DSID_DOCUMENT_URL);
-    OSL_ENSURE(pUrlItem,"Document URL is NULL. -> GPF!");
+    assert(pUrlItem && "Document URL is NULL. -> GPF!");
     return pUrlItem->GetValue();
 }
 
@@ -1007,10 +1007,10 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     const SfxStringItem* pUrlItem = _rDest.GetItem<SfxStringItem>(DSID_CONNECTURL);
     const DbuTypeCollectionItem* pTypeCollection = _rDest.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
 
-    OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
-    OSL_ENSURE(pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
+    assert(pUrlItem && "Connection URL is NULL. -> GPF!");
+    assert(pTypeCollection && "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    OSL_ENSURE(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
+    assert(pCollection && "ODbAdminDialog::getDatasourceType: invalid type collection!");
 
     TypedWhichId<SfxInt32Item> nPortNumberId(0);
     sal_Int32 nPortNumber   = -1;

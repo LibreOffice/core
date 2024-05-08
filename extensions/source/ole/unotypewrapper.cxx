@@ -25,7 +25,7 @@
 bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 {
     bool ret = false;
-    OSL_ASSERT(sTypeName && pVar);
+    assert(sTypeName && pVar);
     CComObject< UnoTypeWrapper>* pObj;
     VariantClear(pVar);
     if( SUCCEEDED( CComObject<UnoTypeWrapper>::CreateInstance( &pObj)))

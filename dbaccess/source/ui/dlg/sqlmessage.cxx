@@ -207,7 +207,7 @@ namespace
             iter.next( aCurrentElement );
 
             const SQLException* pCurrentError = aCurrentElement;
-            OSL_ENSURE( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
+            assert(pCurrentError && "lcl_buildExceptionChain: iterator failure!");
                 // hasMoreElements should not have returned <TRUE/> in this case
 
             ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );

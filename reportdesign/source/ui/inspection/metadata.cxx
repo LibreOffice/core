@@ -192,7 +192,10 @@ namespace rptui
     {
         // initialization
         if(!s_pPropertyInfos)
+        {
             getPropertyInfo();
+            assert(s_pPropertyInfos);
+        }
 
         // TODO: a real structure which allows quick access by name as well as by id
         for (sal_uInt16 i = 0; i < s_nCount; i++)

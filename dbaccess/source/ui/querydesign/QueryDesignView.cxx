@@ -309,7 +309,7 @@ namespace
                     const OQueryTableWindow* _pEntryTabTo,
                     OUString& _rJoin )
     {
-        OSL_ENSURE(_pEntryConn,"TableConnection can not be null!");
+        assert(_pEntryConn && "TableConnection can not be null!");
 
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pEntryConn->GetData().get());
         if ( !(pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn()) )

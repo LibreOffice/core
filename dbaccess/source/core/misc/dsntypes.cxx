@@ -509,7 +509,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pConta
     :m_pContainer(_pContainer)
     ,m_nPosition(_nInitialPos)
 {
-    OSL_ENSURE(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
+    assert(m_pContainer && "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
 #if OSL_DEBUG_LEVEL > 0
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif

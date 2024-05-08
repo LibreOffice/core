@@ -273,6 +273,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
     for(size_t i=0; i<nMarkCount; ++i)
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
+        assert(pCurrent);
 
         ::std::optional<SdrObjListIter> oGroupIterator;
         if (pCurrent->IsGroupObject())

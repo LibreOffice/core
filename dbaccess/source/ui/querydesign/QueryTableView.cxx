@@ -496,7 +496,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                         if ( pTabWinTmp->GetData()->isQuery() )
                             continue;
 
-                        OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
+                        assert(pTabWinTmp && "TableWindow is null!");
                         Reference< XPropertySet > xFKKey = getKeyReferencedTo( pTabWinTmp->GetData()->getKeys(), pNewTabWin->GetComposedName() );
                         if ( !xFKKey.is() )
                             continue;
@@ -751,7 +751,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
     {
         VclPtr<OTableConnection> xTmpEntry = *aIter2;
         OQueryTableConnection* pTmpEntry = static_cast<OQueryTableConnection*>(xTmpEntry.get());
-        OSL_ENSURE(pTmpEntry,"OQueryTableConnection is null!");
+        assert(pTmpEntry && "OQueryTableConnection is null!");
         if( pTmpEntry->GetAliasName(JTCS_FROM) == pTabWin->GetAliasName() ||
             pTmpEntry->GetAliasName(JTCS_TO) == pTabWin->GetAliasName() )
         {

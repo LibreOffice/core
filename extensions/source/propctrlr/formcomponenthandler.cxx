@@ -2687,7 +2687,7 @@ namespace pcr
             Reference< XUnoTunnel > xTunnel( xSupplier, UNO_QUERY_THROW );
             SvNumberFormatsSupplierObj* pSupplier =
                 reinterpret_cast< SvNumberFormatsSupplierObj* >( xTunnel->getSomething( SvNumberFormatsSupplierObj::getUnoTunnelId() ) );
-            DBG_ASSERT( pSupplier != nullptr, "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: invalid call !" );
+            assert(pSupplier && "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: invalid call !");
 
             sal_Int32 nFormatKey = 0;
             impl_getPropertyValue_throw( PROPERTY_FORMATKEY ) >>= nFormatKey;

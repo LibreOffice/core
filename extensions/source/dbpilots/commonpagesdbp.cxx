@@ -397,7 +397,7 @@ namespace dbp
     {
         OControlWizardPage::Activate();
 
-        DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::Activate: no controls announced!");
+        assert(m_pYes && "OMaybeListSelectionPage::Activate: no controls announced!");
         if (m_pYes->get_active())
             m_pList->grab_focus();
         else

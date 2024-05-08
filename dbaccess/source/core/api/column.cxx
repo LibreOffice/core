@@ -186,7 +186,7 @@ void OColumns::append( const OUString& _rName, OColumn* _pColumn )
 {
     MutexGuard aGuard(m_rMutex);
 
-    OSL_ENSURE( _pColumn, "OColumns::append: invalid column!" );
+    assert(_pColumn && "OColumns::append: invalid column!");
     OSL_ENSURE( !m_pElements->exists( _rName ),"OColumns::append: Column already exists");
 
     _pColumn->m_sName = _rName;

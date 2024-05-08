@@ -1055,7 +1055,7 @@ OUString SbaTableQueryBrowser::getDataSourceAccessor(const weld::TreeIter& rData
 {
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     DBTreeListUserData* pData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(rDataSourceEntry));
-    OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAccessor: invalid entry data!" );
+    assert(pData && "SbaTableQueryBrowser::getDataSourceAccessor: invalid entry data!");
     OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAccessor: entry does not denote a data source!" );
     return !pData->sAccessor.isEmpty() ? pData->sAccessor : GetEntryText(rDataSourceEntry);
 }
@@ -2253,7 +2253,7 @@ bool SbaTableQueryBrowser::ensureEntryObject(const weld::TreeIter& rEntry)
     // the user data of the entry
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     DBTreeListUserData* pEntryData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(rEntry));
-    OSL_ENSURE(pEntryData,"ensureEntryObject: user data should already be set!");
+    assert(pEntryData && "ensureEntryObject: user data should already be set!");
 
     std::unique_ptr<weld::TreeIter> xDataSourceEntry = m_pTreeView->GetRootLevelParent(&rEntry);
 
@@ -2759,7 +2759,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent
 
         // insert the new entry into the tree
         DBTreeListUserData* pContainerData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(*xEntry));
-        OSL_ENSURE(pContainerData, "elementInserted: There must be user data for this type!");
+        assert(pContainerData && "elementInserted: There must be user data for this type!");
 
         DBTreeListUserData* pNewData = new DBTreeListUserData;
         bool bIsTable = etTableContainer == pContainerData->eType;

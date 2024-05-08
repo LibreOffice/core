@@ -64,7 +64,7 @@ IMPL_LINK(OTableWindowTitle, MousePressHdl, const MouseEvent&, rEvt, bool)
                 m_pTabWin->SetSizePixel(aSize);
 
                 OJoinTableView* pView = m_pTabWin->getTableView();
-                OSL_ENSURE(pView,"No OJoinTableView!");
+                assert(pView && "No OJoinTableView!");
                 for (auto& conn : pView->getTableConnections())
                     conn->RecalcLines();
 
