@@ -204,10 +204,10 @@ namespace utl
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, std::mutex& _rAccessSafety,
-            const char* _pConfigLocation, const sal_Int32 _nLevels )
+            const OUString& _rConfigLocation, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
-        implConstruct( OUString::createFromAscii( _pConfigLocation ), _nLevels );
+        implConstruct( _rConfigLocation, _nLevels );
     }
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
@@ -229,7 +229,7 @@ namespace utl
             "Could not access the configuration node located at " << _rConfigLocation);
     }
 
-    void OConfigurationValueContainer::registerExchangeLocation( const char* _pRelativePath,
+    void OConfigurationValueContainer::registerExchangeLocation( const OUString& _rRelativePath,
         void* _pContainer, const Type& _rValueType )
     {
         // checks...
@@ -247,7 +247,7 @@ namespace utl
             "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
 
         // build an accessor for this container
-        NodeValueAccessor aNewAccessor( OUString::createFromAscii( _pRelativePath ) );
+        NodeValueAccessor aNewAccessor( _rRelativePath );
         aNewAccessor.bind( _pContainer, _rValueType );
 
         // insert it into our structure

@@ -73,7 +73,7 @@ namespace utl
                 As this class is intended to manipulate objects it does not hold itself (see the various
                 registerXXX methods), it needs to guard these access for multi threading safety.<br/>
                 The mutex given here is locked whenever such an access occurs.
-            @param _pConfigLocation
+            @param _rConfigLocation
                 is an ASCII string describing the configurations node path
             @param _nAccessFlags
                 specifies different aspects of the configuration aspect to be created, e.g. it's update mode etc.<br/>
@@ -84,7 +84,7 @@ namespace utl
         OConfigurationValueContainer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             std::mutex& _rAccessSafety,
-            const char* _pConfigLocation,
+            const OUString& _rConfigLocation,
             const sal_Int32 _nLevels
         );
 
@@ -98,7 +98,7 @@ namespace utl
             <p>Usually, in your derived class you simply add a member of the correct type of the configuration
             value, and then call this method with the address of this member.</p>
 
-            @param _pRelativePathAscii
+            @param _rRelativePathAscii
                 is a relative (ASCII) path of the node which should be "mirrored" into the accessor.
             @param _pContainer
                 points to the accessors location in memory. Usually, this is simply an address of your derived class
@@ -106,7 +106,7 @@ namespace utl
                 is the type of your accessor. This type must be supported by the configuration.
         */
         void    registerExchangeLocation(
-            const char* _pRelativePathAscii,
+            const OUString& _rRelativePathAscii,
             void* _pContainer,
             const css::uno::Type& _rValueType
         );
