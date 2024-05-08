@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <!-- n-columns=2 n-rows=12 -->
@@ -247,7 +247,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="contributor-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|contributor">Enter information about persons or organizations contributing to the document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|contributor">Enter the names of the people, organizations, or other entities that have made contributions to the document.</property>
           </object>
         </child>
       </object>
@@ -264,7 +264,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="coverage-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|coverage">Enter information about geographic coverage of the document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|coverage">Enter the time, place, or jurisdiction that the document is relevant to.</property>
           </object>
         </child>
       </object>
@@ -281,7 +281,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="identifier-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|identifier">Enter information to unambiguously identify the document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|identifier">Enter a unique and unambiguous identifier for the document.</property>
           </object>
         </child>
       </object>
@@ -298,7 +298,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="publisher-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|publisher">Enter information about the publisher of the document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|publisher">Enter the name of the entity that is making the document available.</property>
           </object>
         </child>
       </object>
@@ -349,7 +349,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="source-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|source">Enter information about a related resource from which the document is derived from.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|source">Enter information about other resources from which the document is derived.</property>
           </object>
         </child>
       </object>
@@ -366,7 +366,7 @@
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="type-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|type">Enter information about the nature or genre of the document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|type">Enter information about the category or format of the document.</property>
           </object>
         </child>
       </object>
