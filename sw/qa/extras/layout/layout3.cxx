@@ -350,6 +350,105 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
                 "portion"_ostr, u"ent to any other "_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_same_page_no_hyphenation)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("tdf132599_frames_on_same_page_no_hyphenation.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // loext:hyphenation-keep-type="column"
+    // 2nd frame: shifted hyphenated line (no hyphenation at the end of the first frame)
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/fly[2]/txt/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"space, ex"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_same_page_hyphenation)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("tdf132599_frames_on_same_page_hyphenation.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // loext:hyphenation-keep-type="page"
+    // 2nd frame: not shifted hyphenated line (hyphenation at the end of the first frame),
+    // This was "space, ex" (bad shifting)
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/fly[2]/txt/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"cept that it "_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_right_pages_no_hyphenation)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("tdf132599_frames_on_right_pages_no_hyphenation.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // loext:hyphenation-keep-type="spread"
+    // 2nd frame: shifted hyphenated line
+    // This was "cept that it" (missing shifting)
+    assertXPath(pXmlDoc,
+                "/root/page[3]/body/txt/anchored/fly/txt/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"space, ex"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_spread_hyphenation)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc("tdf132599_frames_on_spread_hyphenation.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // loext:hyphenation-keep-type="spread"
+    // 2nd frame on left page and 3rd frame on right page -> not shifted hyphenated line
+    // 2nd frame: not shifted hyphenated line (hyphenation at the end of the first frame),
+    assertXPath(pXmlDoc,
+                "/root/page[3]/body/txt/anchored/fly/txt/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"cept that it "_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");

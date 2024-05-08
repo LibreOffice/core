@@ -472,27 +472,20 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
         bool bKeep = rAttr.IsHyphen() && rAttr.IsKeep() && rAttr.GetKeepType();
 
-        // if PAGE or SPREAD, allow hyphenation at bottom of the non-last columns
-        if( bKeep && pFrame->IsInSct() && (
+        // if PAGE or SPREAD, allow hyphenation in the not last column or in the
+        // not last linked frame on the same page
+        if( bKeep && (
                 rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD ||
-                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::PAGE ) )
+                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::PAGE ) &&
+            pMaster->FindPageFrame() == pFrame->FindPageFrame() )
         {
-            const SwSectionFrame* const pSct = pFrame->FindSctFrame();
-            // multi-column section
-            if ( pSct->Lower()->IsColumnFrame() && pSct->Lower()->GetNext() )
-            {
-                const SwFrame *pCol = pFrame->FindColFrame();
-                // and not in the last column
-                if (pCol && !pCol->GetNext())
-                {
-                    bKeep = false;
-                }
-            }
+            bKeep = false;
         }
 
-        // if SPREAD, allow hyphenation at bottom of left pages
+        // if SPREAD, allow hyphenation at bottom of left page on the same spread
         if ( bKeep && rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD &&
-                   pFrame->FindPageFrame()->OnRightPage() )
+                   pFrame->FindPageFrame()->OnRightPage() &&
+                   pMaster->FindPageFrame() == pFrame->FindPageFrame()->GetPrev() )
         {
             bKeep = false;
         }
