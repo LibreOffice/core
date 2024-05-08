@@ -195,17 +195,6 @@ interface NotesPanelView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SID_SAVEDOC // ole : no, status : ?
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetMenuState ;
-        GroupId = SfxGroupId::Document ;
-    ]
-    SID_SAVEASDOC // ole : no, status : ?
-    [
-        ExecMethod = Execute ;
-        GroupId = SfxGroupId::Document ;
-    ]
     SID_RULER // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

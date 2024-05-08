@@ -1338,11 +1338,6 @@ void NotesPanelViewShell::Execute(SfxRequest& rReq)
 
     switch (rReq.GetSlot())
     {
-        case SID_SAVEDOC:
-        case SID_SAVEASDOC:
-            PrepareClose();
-            break;
-
         case SID_SEARCH_ITEM:
             // Forward this request to the common (old) code of the
             // document shell.
