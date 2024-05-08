@@ -8,7 +8,9 @@ Part of the SDK; to build you need to add `--enable-odk`.
 
 ## Testing the Examples:
 
-* Go to `instdir/sdk` (Don't try directly in `odk/`)
+* The easiest way on Linux and macOS is to run `make odk.subsequentcheck`
+
+* The way that also works on Windows is to go to `instdir/sdk` (don't try directly in `odk/`)
 
 * See <https://api.libreoffice.org/docs/install.html> how to set up the SDK.
 
