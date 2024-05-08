@@ -1010,7 +1010,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 for (const rtl::Reference<SdrObject>& pTemp : *pPage)
                 {
                     // #i51726# - all drawing objects can be named now
-                    if (!pTemp->GetName().isEmpty())
+                    if (!pTemp->IsVirtualObj() && !pTemp->GetName().isEmpty())
                     {
                         tools::Long nYPos = LONG_MIN;
                         const bool bIsVisible = rIDDMA.IsVisibleLayerId(pTemp->GetLayer());
