@@ -233,7 +233,7 @@ namespace frm
             case FormButtonType_SUBMIT:
             {
                 // if some outer component can provide an interaction handler, use it
-                Reference< XInteractionHandler > xHandler( m_aFeatureInterception.queryDispatch( "private:/InteractionHandler" ), UNO_QUERY );
+                Reference< XInteractionHandler > xHandler( m_aFeatureInterception.queryDispatch( u"private:/InteractionHandler"_ustr ), UNO_QUERY );
                 try
                 {
                     implSubmit( rEvt, xHandler );

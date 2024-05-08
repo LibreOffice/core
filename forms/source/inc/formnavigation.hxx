@@ -28,7 +28,7 @@
 #include <vector>
 #include <map>
 #include <memory>
-
+#include <optional>
 
 namespace frm
 {
@@ -185,7 +185,7 @@ namespace frm
             @complexity O(log n)
             @return NULL if the given id is not a known feature id (which is a valid usage)
         */
-        static const char* getFeatureURLAscii( sal_Int16 _nFeatureId );
+        static std::optional<OUString> getFeatureURL( sal_Int16 _nFeatureId );
 
         /** retrieves the feature URL belonging to a feature id
 

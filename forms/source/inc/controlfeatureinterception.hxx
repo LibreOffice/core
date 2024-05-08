@@ -77,7 +77,7 @@ namespace frm
             with a blank target frame and no frame search flags
         */
         css::uno::Reference< css::frame::XDispatch >
-            queryDispatch( const char* _pAsciiURL );
+            queryDispatch( const OUString& _rURL );
     };
 
 

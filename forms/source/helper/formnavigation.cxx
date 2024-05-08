@@ -364,11 +364,11 @@ namespace frm
     bool OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId, URL& /* [out] */ _rURL )
     {
         // get the ascii version of the URL
-        const char* pAsciiURL = getFeatureURLAscii( _nFeatureId );
+        std::optional<OUString> pAsciiURL = getFeatureURL( _nFeatureId );
         if ( pAsciiURL )
-            _rURL = m_pUrlTransformer->getStrictURLFromAscii( pAsciiURL );
+            _rURL = m_pUrlTransformer->getStrictURL( *pAsciiURL );
 
-        return ( pAsciiURL != nullptr );
+        return pAsciiURL.has_value();
     }
 
 
@@ -377,65 +377,50 @@ namespace frm
         struct FeatureURL
         {
             const sal_Int16 nFormFeature;
-            const char*     pAsciiURL;
-
-            FeatureURL( const sal_Int16 _nFormFeature, const char* _pAsciiURL )
-                :nFormFeature( _nFormFeature )
-                ,pAsciiURL( _pAsciiURL )
-            {
-            }
+            OUString   aAsciiURL;
         };
-        const FeatureURL* lcl_getFeatureTable()
+        constexpr FeatureURL s_aFeatureURLs[]
         {
-            static const FeatureURL s_aFeatureURLs[] =
-            {
-                FeatureURL( FormFeature::MoveAbsolute,            URL_FORM_POSITION ),
-                FeatureURL( FormFeature::TotalRecords,            URL_FORM_RECORDCOUNT ),
-                FeatureURL( FormFeature::MoveToFirst,             URL_RECORD_FIRST ),
-                FeatureURL( FormFeature::MoveToPrevious,          URL_RECORD_PREV ),
-                FeatureURL( FormFeature::MoveToNext,              URL_RECORD_NEXT ),
-                FeatureURL( FormFeature::MoveToLast,              URL_RECORD_LAST ),
-                FeatureURL( FormFeature::SaveRecordChanges,       URL_RECORD_SAVE ),
-                FeatureURL( FormFeature::UndoRecordChanges,       URL_RECORD_UNDO ),
-                FeatureURL( FormFeature::MoveToInsertRow,         URL_RECORD_NEW ),
-                FeatureURL( FormFeature::DeleteRecord,            URL_RECORD_DELETE ),
-                FeatureURL( FormFeature::ReloadForm,              URL_FORM_REFRESH ),
-                FeatureURL( FormFeature::RefreshCurrentControl,   URL_FORM_REFRESH_CURRENT_CONTROL ),
-                FeatureURL( FormFeature::SortAscending,           URL_FORM_SORT_UP ),
-                FeatureURL( FormFeature::SortDescending,          URL_FORM_SORT_DOWN ),
-                FeatureURL( FormFeature::InteractiveSort,         URL_FORM_SORT ),
-                FeatureURL( FormFeature::AutoFilter,              URL_FORM_AUTO_FILTER ),
-                FeatureURL( FormFeature::InteractiveFilter,       URL_FORM_FILTER ),
-                FeatureURL( FormFeature::ToggleApplyFilter,       URL_FORM_APPLY_FILTER ),
-                FeatureURL( FormFeature::RemoveFilterAndSort,     URL_FORM_REMOVE_FILTER ),
-                FeatureURL( 0, nullptr )
-            };
-            return s_aFeatureURLs;
-        }
+            { FormFeature::MoveAbsolute,            u".uno:FormController/positionForm"_ustr },
+            { FormFeature::TotalRecords,            u".uno:FormController/RecordCount"_ustr },
+            { FormFeature::MoveToFirst,             u".uno:FormController/moveToFirst"_ustr },
+            { FormFeature::MoveToPrevious,          u".uno:FormController/moveToPrev"_ustr },
+            { FormFeature::MoveToNext,              u".uno:FormController/moveToNext"_ustr },
+            { FormFeature::MoveToLast,              u".uno:FormController/moveToLast"_ustr },
+            { FormFeature::SaveRecordChanges,       u".uno:FormController/saveRecord"_ustr },
+            { FormFeature::UndoRecordChanges,       u".uno:FormController/undoRecord"_ustr },
+            { FormFeature::MoveToInsertRow,         u".uno:FormController/moveToNew"_ustr },
+            { FormFeature::DeleteRecord,            u".uno:FormController/deleteRecord"_ustr },
+            { FormFeature::ReloadForm,              u".uno:FormController/refreshForm"_ustr },
+            { FormFeature::RefreshCurrentControl,   u".uno:FormController/refreshCurrentControl"_ustr },
+            { FormFeature::SortAscending,           u".uno:FormController/sortUp"_ustr },
+            { FormFeature::SortDescending,          u".uno:FormController/sortDown"_ustr },
+            { FormFeature::InteractiveSort,         u".uno:FormController/sort"_ustr },
+            { FormFeature::AutoFilter,              u".uno:FormController/autoFilter"_ustr },
+            { FormFeature::InteractiveFilter,       u".uno:FormController/filter"_ustr },
+            { FormFeature::ToggleApplyFilter,       u".uno:FormController/applyFilter"_ustr },
+            { FormFeature::RemoveFilterAndSort,     u".uno:FormController/removeFilterOrder"_ustr },
+        };
     }
 
 
-    const char* OFormNavigationMapper::getFeatureURLAscii( sal_Int16 _nFeatureId )
+    std::optional<OUString> OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId )
     {
-        const FeatureURL* pFeatures = lcl_getFeatureTable();
-        while ( pFeatures->pAsciiURL )
+        for (const FeatureURL& rFeature : s_aFeatureURLs)
         {
-            if ( pFeatures->nFormFeature == _nFeatureId )
-                return pFeatures->pAsciiURL;
-            ++pFeatures;
+            if ( rFeature.nFormFeature == _nFeatureId )
+                return rFeature.aAsciiURL;
         }
-        return nullptr;
+        return std::nullopt;
     }
 
 
     sal_Int16 OFormNavigationMapper::getFeatureId( std::u16string_view _rCompleteURL )
     {
-        const FeatureURL* pFeatures = lcl_getFeatureTable();
-        while ( pFeatures->pAsciiURL )
+        for (const FeatureURL& rFeature : s_aFeatureURLs)
         {
-            if ( o3tl::equalsAscii( _rCompleteURL, pFeatures->pAsciiURL ) )
-                return pFeatures->nFormFeature;
-            ++pFeatures;
+            if ( rFeature.aAsciiURL == _rCompleteURL )
+                return rFeature.nFormFeature;
         }
         return -1;
     }

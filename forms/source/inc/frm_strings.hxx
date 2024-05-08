@@ -260,28 +260,4 @@ inline constexpr OUString PROPERTY_CONTROL_TYPE_IN_MSO = u"ControlTypeinMSO"_ust
 inline constexpr OUString PROPERTY_OBJ_ID_IN_MSO = u"ObjIDinMSO"_ustr;
 
 
-//- URLs
-
-#define URL_FORM_POSITION     ".uno:FormController/positionForm"
-#define URL_FORM_RECORDCOUNT  ".uno:FormController/RecordCount"
-#define URL_RECORD_FIRST      ".uno:FormController/moveToFirst"
-#define URL_RECORD_PREV       ".uno:FormController/moveToPrev"
-#define URL_RECORD_NEXT       ".uno:FormController/moveToNext"
-#define URL_RECORD_LAST       ".uno:FormController/moveToLast"
-#define URL_RECORD_SAVE       ".uno:FormController/saveRecord"
-#define URL_RECORD_UNDO       ".uno:FormController/undoRecord"
-#define URL_RECORD_NEW        ".uno:FormController/moveToNew"
-#define URL_RECORD_DELETE     ".uno:FormController/deleteRecord"
-#define URL_FORM_REFRESH      ".uno:FormController/refreshForm"
-#define URL_FORM_REFRESH_CURRENT_CONTROL ".uno:FormController/refreshCurrentControl"
-
-#define URL_FORM_SORT_UP      ".uno:FormController/sortUp"
-#define URL_FORM_SORT_DOWN    ".uno:FormController/sortDown"
-#define URL_FORM_SORT         ".uno:FormController/sort"
-#define URL_FORM_AUTO_FILTER  ".uno:FormController/autoFilter"
-#define URL_FORM_FILTER       ".uno:FormController/filter"
-#define URL_FORM_APPLY_FILTER ".uno:FormController/applyFilter"
-#define URL_FORM_REMOVE_FILTER ".uno:FormController/removeFilterOrder"
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

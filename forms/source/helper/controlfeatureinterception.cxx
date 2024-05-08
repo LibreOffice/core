@@ -133,9 +133,9 @@ namespace frm
     }
 
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const char* _pAsciiURL )
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const OUString& _rURL )
     {
-        return queryDispatch( m_pUrlTransformer->getStrictURLFromAscii( _pAsciiURL ) );
+        return queryDispatch( m_pUrlTransformer->getStrictURL( _rURL ) );
     }
 
 

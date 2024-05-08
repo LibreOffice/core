@@ -65,12 +65,6 @@ namespace frm
     }
 
 
-    URL UrlTransformer::getStrictURLFromAscii( const char* _pAsciiURL ) const
-    {
-        return getStrictURL( OUString::createFromAscii( _pAsciiURL ) );
-    }
-
-
     void UrlTransformer::parseSmartWithProtocol( css::util::URL& _rURL, const OUString& _rProtocol ) const
     {
         if ( implEnsureTransformer() )

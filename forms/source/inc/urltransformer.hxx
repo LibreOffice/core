@@ -44,11 +44,6 @@ namespace frm
         css::util::URL
             getStrictURL( const OUString& _rURL ) const;
 
-        /** returns a URL object for the given URL ASCII string
-        */
-        css::util::URL
-            getStrictURLFromAscii( const char* _pAsciiURL ) const;
-
         /** parses a given URL smartly, with a given protocol
         */
         void
