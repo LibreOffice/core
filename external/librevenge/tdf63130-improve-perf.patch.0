@@ -18,7 +18,7 @@
  	/** Create a new string from \a s as escaped XML.
 --- src/lib/RVNGBinaryData.cpp	2023-05-17 15:48:15.373159469 +0200
 +++ src/lib/RVNGBinaryData.cpp	2023-05-17 15:49:00.773411873 +0200
-@@ -67,9 +67,9 @@
+@@ -68,9 +68,9 @@
  	boost::archive::iterators::transform_width<std::vector<unsigned char>::const_iterator, 6, 8 > > base64_encoder;
  
  	// Encode the buffer and create a string
@@ -30,14 +30,14 @@
  
  	result.append(numPadding, '=');  // add '=' for each padded character
  }
-@@ -150,10 +150,10 @@
+@@ -153,10 +153,10 @@
  {
  	m_binaryDataImpl->makeUnique();
  
 -	unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
 -	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_ptr->m_buf.size());
--	for (unsigned long i = 0; i < data.m_binaryDataImpl->m_ptr->m_buf.size(); i++)
--		m_binaryDataImpl->m_ptr->m_buf.push_back(data.m_binaryDataImpl->m_ptr->m_buf[i]);
+-	const auto &src = data.m_binaryDataImpl->m_ptr->m_buf;
+-	std::copy(src.begin(), src.end(), std::back_inserter(m_binaryDataImpl->m_ptr->m_buf));
 +	m_binaryDataImpl->m_ptr->m_buf.insert(
 +		m_binaryDataImpl->m_ptr->m_buf.end(),
 +		data.m_binaryDataImpl->m_ptr->m_buf.begin(),
@@ -45,7 +45,7 @@
  }
  
  void RVNGBinaryData::appendBase64Data(const RVNGString &base64)
-@@ -231,8 +231,9 @@
+@@ -234,8 +234,9 @@
  const RVNGString RVNGBinaryData::getBase64Data() const
  {
  	std::string base64;
@@ -58,7 +58,7 @@
  RVNGInputStream *RVNGBinaryData::getDataStream() const
 --- src/lib/RVNGString.cpp	2023-05-17 15:48:15.373159469 +0200
 +++ src/lib/RVNGString.cpp	2023-05-17 15:49:00.773411873 +0200
-@@ -73,6 +73,7 @@
+@@ -76,6 +76,7 @@
  {
  public:
  	RVNGStringImpl() : m_buf() {}
@@ -66,8 +66,8 @@
  	bool empty() const
  	{
  		return m_buf.empty();
-@@ -157,6 +158,11 @@
- 		m_stringImpl->m_buf = str;
+@@ -200,6 +201,11 @@
+ 		m_stringImpl->append(str);
  }
  
 +RVNGString::RVNGString(std::string&& str) :

@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,librevenge,0))
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/rpath.patch \
     external/librevenge/tdf63130-improve-perf.patch.0 \
+    external/librevenge/C2039-unique-shared_ptr.patch.0 \
 ))
 
 ifneq ($(OS),MACOSX)
