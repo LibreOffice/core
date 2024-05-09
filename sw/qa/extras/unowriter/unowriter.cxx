@@ -805,6 +805,97 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
+{
+    // Unit test for tdf#62603
+    // Test to see if font style is retained when performing find/replace on strings
+    // containing mixed font styles/sizes
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+
+    // Set up test by inserting strings with different font style/sizes
+    // Inserts 1st string containing quotation marks (") with no font style
+    xText->insertString(xCursor, "\"", false);
+    xCursor->gotoStart(true); // selects full string
+    CPPUNIT_ASSERT_EQUAL(OUString("\""), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+    xCursor->collapseToEnd();
+
+    // Inserts 2nd string 'test' with italic font style
+    xCursorProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    xText->insertString(xCursor, "test", false);
+    xCursor->goLeft(4, true); // selects 2nd string
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+    xCursor->collapseToEnd();
+
+    // Insert 3rd string '? ' with 28 pt font height
+    xCursorProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_NONE)); // no font style
+    xCursorProps->setPropertyValue("CharHeight", uno::Any(float(28.0)));
+    xText->insertString(xCursor, "? ", false);
+    xCursor->goLeft(2, true); // selects 3rd string
+    CPPUNIT_ASSERT_EQUAL(float(28.0), getProperty<float>(xCursorProps, "CharHeight"));
+    xCursor->collapseToEnd();
+
+    // Insert 4th string 'who' with default 12 pt font height
+    xCursorProps->setPropertyValue("CharHeight", uno::Any(float(12.0)));
+    xText->insertString(xCursor, "who", false);
+    xCursor->goLeft(3, true); // selects 4rd string
+    CPPUNIT_ASSERT_EQUAL(float(12.0), getProperty<float>(xCursorProps, "CharHeight"));
+    xCursor->collapseToEnd();
+
+    // Asserts that full string is properly inserted as: '"test? who'
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("\"test? who"), getParagraph(1)->getString());
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDesc(xReplace->createReplaceDescriptor());
+
+    // Searches for "t and replaces with "gu
+    // Note: Search string contains both no font style and italic font style
+    xReplaceDesc->setSearchString("\"t");
+    xReplaceDesc->setReplaceString("\"gu");
+    xReplace->replaceAll(xReplaceDesc);
+
+    // Search/replace adds extra space between ? and w
+    // Note: Search string contains both 28 pt and 12 pt font sizes
+    xReplaceDesc->setSearchString("? w");
+    xReplaceDesc->setReplaceString("?  w");
+    xReplace->replaceAll(xReplaceDesc);
+
+    // Asserts that '"test? who' is replaced with '"guest?  who'
+    CPPUNIT_ASSERT_EQUAL(OUString("\"guest?  who"), getParagraph(1)->getString());
+
+    // Asserts no font style is on double quote mark (")
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_NONE,
+        getProperty<awt::FontSlant>(getRun(getParagraph(1), 1, u"\""_ustr), "CharPosture"));
+
+    // Asserts font style for 'guest' is italic
+    // Without the test, 'g' and 'u' in 'guest' will change to no font style
+    // - Expected: 2 // ITALIC
+    // - Actual: 0 // NONE
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(1), 2, u"guest"_ustr), "CharPosture"));
+
+    // Asserts font size is 28 pt
+    CPPUNIT_ASSERT_EQUAL(float(28.0),
+                         getProperty<float>(getRun(getParagraph(1), 3, u"? "_ustr), "CharHeight"));
+
+    // Asserts font size is 12 pt
+    // Without the test, the space ' ' and 'w' will change to 28 pt font size
+    // - Expected: 12
+    // - Actual: 28
+    CPPUNIT_ASSERT_EQUAL(
+        float(12.0), getProperty<float>(getRun(getParagraph(1), 4, u" who"_ustr), "CharHeight"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 {
     createSwDoc("renderable-page-position.odt");
