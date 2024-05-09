@@ -541,7 +541,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     // the dispatch container will return "this" for all commands returned by
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
-    m_aDispatchContainer.setChartDispatch( pDispatch, o3tl::sorted_vector(impl_getAvailableCommands()) );
+    m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
 
     rtl::Reference<DrawCommandDispatch> pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
     pDrawDispatch->initialize();
@@ -1576,73 +1576,73 @@ void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartV
 void ChartController::impl_initializeAccessible( AccessibleChartView& /* rAccChartView */) {}
 #endif
 
-const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommands()
+const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvailableCommands()
 {
-    static const o3tl::sorted_vector< OUString > s_AvailableCommands {
+    static const o3tl::sorted_vector< std::u16string_view > s_AvailableCommands {
         // commands for container forward
-        u"AddDirect"_ustr,           u"NewDoc"_ustr,                u"Open"_ustr,
-        u"Save"_ustr,                u"SaveAs"_ustr,                u"SendMail"_ustr,
-        u"EditDoc"_ustr,             u"ExportDirectToPDF"_ustr,     u"PrintDefault"_ustr,
+        u"AddDirect",           u"NewDoc",                u"Open",
+        u"Save",                u"SaveAs",                u"SendMail",
+        u"EditDoc",             u"ExportDirectToPDF",     u"PrintDefault",
 
         // own commands
-        u"Cut"_ustr,                u"Copy"_ustr,                 u"Paste"_ustr,
-        u"DataRanges"_ustr,         u"DiagramData"_ustr,
+        u"Cut",                u"Copy",                 u"Paste",
+        u"DataRanges",         u"DiagramData",
         // insert objects
-        u"InsertMenuTitles"_ustr,   u"InsertTitles"_ustr,
-        u"InsertMenuLegend"_ustr,   u"InsertLegend"_ustr,         u"DeleteLegend"_ustr,
-        u"InsertMenuDataLabels"_ustr,
-        u"InsertMenuAxes"_ustr,     u"InsertRemoveAxes"_ustr,         u"InsertMenuGrids"_ustr,
-        u"InsertSymbol"_ustr,
-        u"InsertTrendlineEquation"_ustr,  u"InsertTrendlineEquationAndR2"_ustr,
-        u"InsertR2Value"_ustr,      u"DeleteR2Value"_ustr,
-        u"InsertMenuTrendlines"_ustr,  u"InsertTrendline"_ustr,
-        u"InsertMenuMeanValues"_ustr, u"InsertMeanValue"_ustr,
-        u"InsertMenuXErrorBars"_ustr,  u"InsertXErrorBars"_ustr,
-        u"InsertMenuYErrorBars"_ustr,   u"InsertYErrorBars"_ustr,
-        u"InsertDataLabels"_ustr,   u"InsertDataLabel"_ustr,
-        u"DeleteTrendline"_ustr,    u"DeleteMeanValue"_ustr,      u"DeleteTrendlineEquation"_ustr,
-        u"DeleteXErrorBars"_ustr,   u"DeleteYErrorBars"_ustr,
-        u"DeleteDataLabels"_ustr,   u"DeleteDataLabel"_ustr,
-        u"InsertMenuDataTable"_ustr,
-        u"InsertDataTable"_ustr, u"DeleteDataTable"_ustr,
+        u"InsertMenuTitles",   u"InsertTitles",
+        u"InsertMenuLegend",   u"InsertLegend",         u"DeleteLegend",
+        u"InsertMenuDataLabels",
+        u"InsertMenuAxes",     u"InsertRemoveAxes",         u"InsertMenuGrids",
+        u"InsertSymbol",
+        u"InsertTrendlineEquation",  u"InsertTrendlineEquationAndR2",
+        u"InsertR2Value",      u"DeleteR2Value",
+        u"InsertMenuTrendlines",  u"InsertTrendline",
+        u"InsertMenuMeanValues", u"InsertMeanValue",
+        u"InsertMenuXErrorBars",  u"InsertXErrorBars",
+        u"InsertMenuYErrorBars",   u"InsertYErrorBars",
+        u"InsertDataLabels",   u"InsertDataLabel",
+        u"DeleteTrendline",    u"DeleteMeanValue",      u"DeleteTrendlineEquation",
+        u"DeleteXErrorBars",   u"DeleteYErrorBars",
+        u"DeleteDataLabels",   u"DeleteDataLabel",
+        u"InsertMenuDataTable",
+        u"InsertDataTable", u"DeleteDataTable",
         //format objects
-        u"FormatSelection"_ustr,    u"FontDialog"_ustr,           u"TransformDialog"_ustr,
-        u"DiagramType"_ustr,        u"View3D"_ustr,
-        u"Forward"_ustr,            u"Backward"_ustr,
-        u"MainTitle"_ustr,          u"SubTitle"_ustr,
-        u"XTitle"_ustr,             u"YTitle"_ustr,               u"ZTitle"_ustr,
-        u"SecondaryXTitle"_ustr,    u"SecondaryYTitle"_ustr,
-        u"AllTitles"_ustr,          u"Legend"_ustr,
-        u"DiagramAxisX"_ustr,       u"DiagramAxisY"_ustr,         u"DiagramAxisZ"_ustr,
-        u"DiagramAxisA"_ustr,       u"DiagramAxisB"_ustr,         u"DiagramAxisAll"_ustr,
-        u"DiagramGridXMain"_ustr,   u"DiagramGridYMain"_ustr,     u"DiagramGridZMain"_ustr,
-        u"DiagramGridXHelp"_ustr,   u"DiagramGridYHelp"_ustr,     u"DiagramGridZHelp"_ustr,
-        u"DiagramGridAll"_ustr,
-        u"DiagramWall"_ustr,        u"DiagramFloor"_ustr,         u"DiagramArea"_ustr,
+        u"FormatSelection",    u"FontDialog",           u"TransformDialog",
+        u"DiagramType",        u"View3D",
+        u"Forward",            u"Backward",
+        u"MainTitle",          u"SubTitle",
+        u"XTitle",             u"YTitle",               u"ZTitle",
+        u"SecondaryXTitle",    u"SecondaryYTitle",
+        u"AllTitles",          u"Legend",
+        u"DiagramAxisX",       u"DiagramAxisY",         u"DiagramAxisZ",
+        u"DiagramAxisA",       u"DiagramAxisB",         u"DiagramAxisAll",
+        u"DiagramGridXMain",   u"DiagramGridYMain",     u"DiagramGridZMain",
+        u"DiagramGridXHelp",   u"DiagramGridYHelp",     u"DiagramGridZHelp",
+        u"DiagramGridAll",
+        u"DiagramWall",        u"DiagramFloor",         u"DiagramArea",
 
         //context menu - format objects entries
-        u"FormatWall"_ustr,        u"FormatFloor"_ustr,         u"FormatChartArea"_ustr,
-        u"FormatLegend"_ustr,
+        u"FormatWall",        u"FormatFloor",         u"FormatChartArea",
+        u"FormatLegend",
 
-        u"FormatAxis"_ustr,           u"FormatTitle"_ustr,
-        u"FormatDataSeries"_ustr,     u"FormatDataPoint"_ustr,
-        u"ResetAllDataPoints"_ustr,   u"ResetDataPoint"_ustr,
-        u"FormatDataLabels"_ustr,     u"FormatDataLabel"_ustr,
-        u"FormatMeanValue"_ustr,      u"FormatTrendline"_ustr,      u"FormatTrendlineEquation"_ustr,
-        u"FormatXErrorBars"_ustr,     u"FormatYErrorBars"_ustr,
-        u"FormatStockLoss"_ustr,      u"FormatStockGain"_ustr,
+        u"FormatAxis",           u"FormatTitle",
+        u"FormatDataSeries",     u"FormatDataPoint",
+        u"ResetAllDataPoints",   u"ResetDataPoint",
+        u"FormatDataLabels",     u"FormatDataLabel",
+        u"FormatMeanValue",      u"FormatTrendline",      u"FormatTrendlineEquation",
+        u"FormatXErrorBars",     u"FormatYErrorBars",
+        u"FormatStockLoss",      u"FormatStockGain",
 
-        u"FormatMajorGrid"_ustr,      u"InsertMajorGrid"_ustr,      u"DeleteMajorGrid"_ustr,
-        u"FormatMinorGrid"_ustr,      u"InsertMinorGrid"_ustr,      u"DeleteMinorGrid"_ustr,
-        u"InsertAxis"_ustr,           u"DeleteAxis"_ustr,           u"InsertAxisTitle"_ustr,
+        u"FormatMajorGrid",      u"InsertMajorGrid",      u"DeleteMajorGrid",
+        u"FormatMinorGrid",      u"InsertMinorGrid",      u"DeleteMinorGrid",
+        u"InsertAxis",           u"DeleteAxis",           u"InsertAxisTitle",
 
         // toolbar commands
-        u"ToggleGridHorizontal"_ustr, u"ToggleGridVertical"_ustr, u"ToggleLegend"_ustr,         u"ScaleText"_ustr,
-        u"NewArrangement"_ustr,     u"Update"_ustr,
-        u"DefaultColors"_ustr,      u"BarWidth"_ustr,             u"NumberOfLines"_ustr,
-        u"ArrangeRow"_ustr,
-        u"StatusBarVisible"_ustr,
-        u"ChartElementSelector"_ustr};
+        u"ToggleGridHorizontal", u"ToggleGridVertical", u"ToggleLegend",         u"ScaleText",
+        u"NewArrangement",     u"Update",
+        u"DefaultColors",      u"BarWidth",             u"NumberOfLines",
+        u"ArrangeRow",
+        u"StatusBarVisible",
+        u"ChartElementSelector"};
     return s_AvailableCommands;
 }
 

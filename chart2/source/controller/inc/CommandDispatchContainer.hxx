@@ -80,7 +80,7 @@ public:
      */
     void setChartDispatch(
         const css::uno::Reference< css::frame::XDispatch >& rChartDispatch,
-        o3tl::sorted_vector< OUString > && rChartCommands );
+        const o3tl::sorted_vector< std::u16string_view > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
         implemented here.  If the URL is not implemented here, it should be
@@ -125,7 +125,7 @@ private:
     unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
     css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
-    o3tl::sorted_vector< OUString >                       m_aChartCommands;
+    o3tl::sorted_vector< std::u16string_view >            m_aChartCommands;
 
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;

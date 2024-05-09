@@ -541,7 +541,7 @@ private:
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( std::u16string_view rCID, double fOffset );
 
-    static const o3tl::sorted_vector< OUString >& impl_getAvailableCommands();
+    static const o3tl::sorted_vector< std::u16string_view >& impl_getAvailableCommands();
 
     void impl_PasteGraphic( css::uno::Reference< css::graphic::XGraphic > const & xGraphic,
                             const ::Point & aPosition );
