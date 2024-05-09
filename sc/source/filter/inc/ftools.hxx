@@ -193,11 +193,12 @@ public:
 // *** style sheet handling *** -----------------------------------------------
 
     /** Creates and returns a cell style sheet and inserts it into the pool.
-        @descr  If the style sheet is already in the pool, return the existing style.
-    */
+        @descr  If the style sheet is already in the pool, another unused style name is used.
+        @param bForceName  Controls behaviour, if the style already exists:
+        true = Old existing style will be renamed; false = New style gets another name. */
     static ScStyleSheet& MakeCellStyleSheet(
                             ScStyleSheetPool& rPool,
-                            const OUString& rStyleName );
+                            const OUString& rStyleName, bool bForceName );
     /** Creates and returns a page style sheet and inserts it into the pool.
         @descr  If the style sheet is already in the pool, another unused style name is used.
         @param bForceName  Controls behaviour, if the style already exists:
