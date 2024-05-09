@@ -653,17 +653,17 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                     {
                         if (nResult == RET_OK)
                         {
-                            OUString aTitle;
-                            OUString aDescription;
-                            bool isDecorative;
+                            OUString aNewTitle;
+                            OUString aNewDescription;
+                            bool newIsDecorative;
 
-                            pDlg->GetTitle(aTitle);
-                            pDlg->GetDescription(aDescription);
-                            pDlg->IsDecorative(isDecorative);
+                            pDlg->GetTitle(aNewTitle);
+                            pDlg->GetDescription(aNewDescription);
+                            pDlg->IsDecorative(newIsDecorative);
 
-                            pSelected->SetTitle(aTitle);
-                            pSelected->SetDescription(aDescription);
-                            pSelected->SetDecorative(isDecorative);
+                            pSelected->SetTitle(aNewTitle);
+                            pSelected->SetDescription(aNewDescription);
+                            pSelected->SetDecorative(newIsDecorative);
 
                             pSh->SetModified();
                         }
