@@ -107,7 +107,9 @@ bool MergeClasses::VisitVarDecl( const VarDecl* pVarDecl )
     if (ignoreLocation(pVarDecl)) {
         return true;
     }
-    std::string s = pVarDecl->getType().getAsString();
+    if (pVarDecl->getType()->isReferenceType())
+        return true;
+    std::string s = pVarDecl->getType().getUnqualifiedType().getAsString();
     if (!ignoreClass(s))
         instantiatedSet.insert(s);
     return true;
@@ -119,7 +121,9 @@ bool MergeClasses::VisitFieldDecl( const FieldDecl* pFieldDecl )
     if (ignoreLocation(pFieldDecl)) {
         return true;
     }
-    std::string s = pFieldDecl->getType().getAsString();
+    if (pFieldDecl->getType()->isReferenceType())
+        return true;
+    std::string s = pFieldDecl->getType().getUnqualifiedType().getAsString();
     if (!ignoreClass(s))
         instantiatedSet.insert(s);
     return true;
