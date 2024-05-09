@@ -41,10 +41,10 @@ namespace
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
-        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.comp.hwpimport.HwpImportFilter"),
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance(u"com.sun.comp.hwpimport.HwpImportFilter"_ustr),
                                                   uno::UNO_QUERY_THROW);
 
-        return xFilter->filter({ comphelper::makePropertyValue("URL", rURL) });
+        return xFilter->filter({ comphelper::makePropertyValue(u"URL"_ustr, rURL) });
     }
 
     void HwpFilterTest::test()

@@ -50,10 +50,10 @@ void Formula::makeMathML(Node *res)
      inds;
      fprintf(stderr,"<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">\n");
 #else
-     padd("xmlns:math", "CDATA", "http://www.w3.org/1998/Math/MathML");
-     rstartEl("math:math", mxList);
+     padd(u"xmlns:math"_ustr, u"CDATA"_ustr, u"http://www.w3.org/1998/Math/MathML"_ustr);
+     rstartEl(u"math:math"_ustr, mxList);
      mxList->clear();
-     rstartEl("math:semantics", mxList);
+     rstartEl(u"math:semantics"_ustr, mxList);
 #endif
      if( tmp->child )
           makeLines( tmp->child );
@@ -65,8 +65,8 @@ void Formula::makeMathML(Node *res)
      inde;
      fprintf(stderr,"</math:math>\n");
 #else
-     rendEl("math:semantics");
-     rendEl("math:math");
+     rendEl(u"math:semantics"_ustr);
+     rendEl(u"math:math"_ustr);
 #endif
 }
 
@@ -91,14 +91,14 @@ void Formula::makeLine(Node *res)
 #if OSL_DEBUG_LEVEL >= 2
     inds; fprintf(stderr,"<math:mrow>\n");
 #else
-    rstartEl("math:mrow", mxList);
+    rstartEl(u"math:mrow"_ustr, mxList);
 #endif
     if( res->child )
          makeExprList( res->child );
 #if OSL_DEBUG_LEVEL >= 2
     inde; fprintf(stderr,"</math:mrow>\n");
 #else
-    rendEl("math:mrow");
+    rendEl(u"math:mrow"_ustr);
 #endif
 }
 
@@ -130,7 +130,7 @@ void Formula::makeExpr(Node *res)
                  inds;
                  fprintf(stderr,"<math:mrow>\n");
 #else
-                 rstartEl("math:mrow", mxList);
+                 rstartEl(u"math:mrow"_ustr, mxList);
 #endif
              }
 
@@ -140,7 +140,7 @@ void Formula::makeExpr(Node *res)
 #if OSL_DEBUG_LEVEL >= 2
                  inde; fprintf(stderr,"</math:mrow>\n");
 #else
-                 rendEl("math:mrow");
+                 rendEl(u"math:mrow"_ustr);
 #endif
              }
             break;
@@ -193,18 +193,18 @@ void Formula::makeIdentifier(Node *res)
           fprintf(stderr,"<math:mi>%s</math:mi>\n",tmp->value.get());
           indo;
 #else
-          rstartEl("math:mi", mxList);
+          rstartEl(u"math:mi"_ustr, mxList);
           rchars(OUString::createFromAscii(tmp->value.get()));
-          rendEl("math:mi");
+          rendEl(u"math:mi"_ustr);
 #endif
           break;
      case ID_STRING :
           {
 #if OSL_DEBUG_LEVEL >= 2
 #else
-                rstartEl("math:mi", mxList);
+                rstartEl(u"math:mi"_ustr, mxList);
                 reucstr(tmp->value.get(), strlen(tmp->value.get()));
-                rendEl("math:mi");
+                rendEl(u"math:mi"_ustr);
 #endif
           }
           break;
@@ -215,9 +215,9 @@ void Formula::makeIdentifier(Node *res)
                   getMathMLEntity(tmp->value.get()).c_str());
           indo;
 #else
-          rstartEl("math:mi", mxList);
+          rstartEl(u"math:mi"_ustr, mxList);
           runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
-          rendEl("math:mi");
+          rendEl(u"math:mi"_ustr);
 #endif
           break;
      case ID_NUMBER :
@@ -226,9 +226,9 @@ void Formula::makeIdentifier(Node *res)
           fprintf(stderr,"<math:mn>%s</math:mn>\n",tmp->value.get());
           indo;
 #else
-          rstartEl("math:mn", mxList);
+          rstartEl(u"math:mn"_ustr, mxList);
           rchars(OUString::createFromAscii(tmp->value.get()));
-          rendEl("math:mn");
+          rendEl(u"math:mn"_ustr);
 #endif
           break;
      case ID_OPERATOR :
@@ -237,9 +237,9 @@ void Formula::makeIdentifier(Node *res)
 #if OSL_DEBUG_LEVEL >= 2
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value.get()); indo;
 #else
-          rstartEl("math:mo", mxList);
+          rstartEl(u"math:mo"_ustr, mxList);
           runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
-          rendEl("math:mo");
+          rendEl(u"math:mo"_ustr);
 #endif
           break;
         }
@@ -277,11 +277,11 @@ void Formula::makeSubSup(Node *res)
           fprintf(stderr,"<math:msubsup>\n");
 #else
      if( res->id == ID_SUBEXPR )
-          rstartEl("math:msub", mxList);
+          rstartEl(u"math:msub"_ustr, mxList);
      else if( res->id == ID_SUPEXPR )
-          rstartEl("math:msup", mxList);
+          rstartEl(u"math:msup"_ustr, mxList);
      else
-          rstartEl("math:msubsup", mxList);
+          rstartEl(u"math:msubsup"_ustr, mxList);
 #endif
 
      tmp = tmp->child;
@@ -305,11 +305,11 @@ void Formula::makeSubSup(Node *res)
           fprintf(stderr,"</math:msubsup>\n");
 #else
      if( res->id == ID_SUBEXPR )
-          rendEl("math:msub");
+          rendEl(u"math:msub"_ustr);
      else if( res->id == ID_SUPEXPR )
-          rendEl("math:msup");
+          rendEl(u"math:msup"_ustr);
      else
-          rendEl("math:msubsup");
+          rendEl(u"math:msubsup"_ustr);
 #endif
 }
 
@@ -322,7 +322,7 @@ void Formula::makeFraction(Node *res)
      inds;
      fprintf(stderr,"<math:mfrac>\n");
 #else
-     rstartEl("math:mfrac", mxList);
+     rstartEl(u"math:mfrac"_ustr, mxList);
 #endif
 
      tmp = tmp->child;
@@ -330,7 +330,7 @@ void Formula::makeFraction(Node *res)
      inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
-     rstartEl("math:mrow", mxList);
+     rstartEl(u"math:mrow"_ustr, mxList);
 #endif
 
      if( res->id == ID_FRACTIONEXPR )
@@ -344,8 +344,8 @@ void Formula::makeFraction(Node *res)
      inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
-     rendEl("math:mrow");
-     rstartEl("math:mrow", mxList);
+     rendEl(u"math:mrow"_ustr);
+     rstartEl(u"math:mrow"_ustr, mxList);
 #endif
 
      if( res->id == ID_FRACTIONEXPR )
@@ -359,8 +359,8 @@ void Formula::makeFraction(Node *res)
      inde;
      fprintf(stderr,"</math:mfrac>\n");
 #else
-     rendEl("math:mrow");
-     rendEl("math:mfrac");
+     rendEl(u"math:mrow"_ustr);
+     rendEl(u"math:mfrac"_ustr);
 #endif
 }
 
@@ -380,12 +380,12 @@ void Formula::makeDecoration(Node *res)
 #else
      /* FIXME: no idea when 'accent' is true or false. */
      if( isover ){
-          padd("accent","CDATA","true");
-          rstartEl("math:mover", mxList);
+          padd(u"accent"_ustr,u"CDATA"_ustr,u"true"_ustr);
+          rstartEl(u"math:mover"_ustr, mxList);
      }
      else{
-          padd("accentunder","CDATA","true");
-          rstartEl("math:munder", mxList);
+          padd(u"accentunder"_ustr,u"CDATA"_ustr,u"true"_ustr);
+          rstartEl(u"math:munder"_ustr, mxList);
      }
      mxList->clear();
 #endif
@@ -398,9 +398,9 @@ void Formula::makeDecoration(Node *res)
              getMathMLEntity(tmp->value.get()).c_str());
      indo;
 #else
-     rstartEl("math:mo", mxList);
+     rstartEl(u"math:mo"_ustr, mxList);
      runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
-     rendEl("math:mo");
+     rendEl(u"math:mo"_ustr);
 #endif
 
 #if OSL_DEBUG_LEVEL >= 2
@@ -411,9 +411,9 @@ void Formula::makeDecoration(Node *res)
           fprintf(stderr,"</math:munder>\n");
 #else
      if( isover )
-          rendEl("math:mover");
+          rendEl(u"math:mover"_ustr);
      else
-          rendEl("math:munder");
+          rendEl(u"math:munder"_ustr);
 #endif
 }
 
@@ -429,9 +429,9 @@ void Formula::makeRoot(Node *res)
           fprintf(stderr,"<math:mroot>\n");
 #else
      if( tmp->id == ID_SQRTEXPR )
-          rstartEl("math:msqrt", mxList);
+          rstartEl(u"math:msqrt"_ustr, mxList);
      else
-          rstartEl("math:mroot", mxList);
+          rstartEl(u"math:mroot"_ustr, mxList);
 #endif
 
      if( tmp->id == ID_SQRTEXPR ){
@@ -450,9 +450,9 @@ void Formula::makeRoot(Node *res)
           fprintf(stderr,"</math:mroot>\n");
 #else
      if( tmp->id == ID_SQRTEXPR )
-          rendEl("math:msqrt");
+          rendEl(u"math:msqrt"_ustr);
      else
-          rendEl("math:mroot");
+          rendEl(u"math:mroot"_ustr);
 #endif
 }
 void Formula::makeAccent(Node *res)
@@ -475,14 +475,14 @@ void Formula::makeParenth(Node *res)
      indo; inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
-     rstartEl("math:mrow", mxList);
-     rstartEl("math:mo", mxList);
+     rstartEl(u"math:mrow"_ustr, mxList);
+     rstartEl(u"math:mo"_ustr, mxList);
      if( tmp->id == ID_PARENTH )
-          rchars("(");
+          rchars(u"("_ustr);
      else
-          rchars("|");
-     rendEl("math:mo");
-     rstartEl("math:mrow", mxList);
+          rchars(u"|"_ustr);
+     rendEl(u"math:mo"_ustr);
+     rstartEl(u"math:mrow"_ustr, mxList);
 #endif
 
      if( tmp->child )
@@ -500,14 +500,14 @@ void Formula::makeParenth(Node *res)
      inde;
      fprintf(stderr,"</math:mrow>\n");
 #else
-     rendEl("math:mrow");
-     rstartEl("math:mo", mxList);
+     rendEl(u"math:mrow"_ustr);
+     rstartEl(u"math:mo"_ustr, mxList);
      if( tmp->id == ID_PARENTH )
-          rchars(")");
+          rchars(u")"_ustr);
      else
-          rchars("|");
-     rendEl("math:mo");
-     rendEl("math:mrow");
+          rchars(u"|"_ustr);
+     rendEl(u"math:mo"_ustr);
+     rendEl(u"math:mrow"_ustr);
 #endif
 }
 
@@ -520,11 +520,11 @@ void Formula::makeFence(Node *res)
                 getMathMLEntity(tmp->value.get()).c_str(),
                 getMathMLEntity(tmp->next->next->value.get()).c_str());
 #else
-     padd("open", "CDATA",
+     padd(u"open"_ustr, u"CDATA"_ustr,
              OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value.get()).c_str())));
-     padd("close", "CDATA",
+     padd(u"close"_ustr, u"CDATA"_ustr,
              OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value.get()).c_str())));
-     rstartEl("math:mfenced", mxList);
+     rstartEl(u"math:mfenced"_ustr, mxList);
      mxList->clear();
 #endif
 
@@ -534,7 +534,7 @@ void Formula::makeFence(Node *res)
      inde;
      fprintf(stderr,"</math:mfenced>\n");
 #else
-     rendEl("math:mfenced");
+     rendEl(u"math:mfenced"_ustr);
 #endif
 }
 
@@ -549,7 +549,7 @@ void Formula::makeBlock(Node *res)
      inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
-     rstartEl("math:mrow", mxList);
+     rstartEl(u"math:mrow"_ustr, mxList);
 #endif
 
      if( res->child )
@@ -559,7 +559,7 @@ void Formula::makeBlock(Node *res)
      inde;
      fprintf(stderr,"</math:mrow>\n");
 #else
-     rendEl("math:mrow");
+     rendEl(u"math:mrow"_ustr);
 #endif
 }
 

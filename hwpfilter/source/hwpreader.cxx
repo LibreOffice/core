@@ -120,27 +120,27 @@ bool HwpReader::importHStream(std::unique_ptr<HStream> stream)
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->startDocument();
 
-    mxList->addAttribute("office:class", sXML_CDATA, "text");
-    mxList->addAttribute("office:version", sXML_CDATA, "0.9");
+    mxList->addAttribute(u"office:class"_ustr, sXML_CDATA, u"text"_ustr);
+    mxList->addAttribute(u"office:version"_ustr, sXML_CDATA, u"0.9"_ustr);
 
-    mxList->addAttribute("xmlns:office", "CDATA", "http://openoffice.org/2000/office");
-    mxList->addAttribute("xmlns:style", "CDATA", "http://openoffice.org/2000/style");
-    mxList->addAttribute("xmlns:text", "CDATA", "http://openoffice.org/2000/text");
-    mxList->addAttribute("xmlns:table", "CDATA", "http://openoffice.org/2000/table");
-    mxList->addAttribute("xmlns:draw", "CDATA", "http://openoffice.org/2000/drawing");
-    mxList->addAttribute("xmlns:fo", "CDATA", "http://www.w3.org/1999/XSL/Format");
-    mxList->addAttribute("xmlns:xlink", "CDATA", "http://www.w3.org/1999/xlink");
-    mxList->addAttribute("xmlns:dc", "CDATA", "http://purl.org/dc/elements/1.1/");
-    mxList->addAttribute("xmlns:meta", "CDATA", "http://openoffice.org/2000/meta");
-    mxList->addAttribute("xmlns:number", "CDATA", "http://openoffice.org/2000/datastyle");
-    mxList->addAttribute("xmlns:svg", "CDATA", "http://www.w3.org/2000/svg");
-    mxList->addAttribute("xmlns:chart", "CDATA", "http://openoffice.org/2000/chart");
-    mxList->addAttribute("xmlns:dr3d", "CDATA", "http://openoffice.org/2000/dr3d");
-    mxList->addAttribute("xmlns:math", "CDATA", "http://www.w3.org/1998/Math/MathML");
-    mxList->addAttribute("xmlns:form", "CDATA", "http://openoffice.org/2000/form");
-    mxList->addAttribute("xmlns:script", "CDATA", "http://openoffice.org/2000/script");
+    mxList->addAttribute(u"xmlns:office"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/office"_ustr);
+    mxList->addAttribute(u"xmlns:style"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/style"_ustr);
+    mxList->addAttribute(u"xmlns:text"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/text"_ustr);
+    mxList->addAttribute(u"xmlns:table"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/table"_ustr);
+    mxList->addAttribute(u"xmlns:draw"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/drawing"_ustr);
+    mxList->addAttribute(u"xmlns:fo"_ustr, u"CDATA"_ustr, u"http://www.w3.org/1999/XSL/Format"_ustr);
+    mxList->addAttribute(u"xmlns:xlink"_ustr, u"CDATA"_ustr, u"http://www.w3.org/1999/xlink"_ustr);
+    mxList->addAttribute(u"xmlns:dc"_ustr, u"CDATA"_ustr, u"http://purl.org/dc/elements/1.1/"_ustr);
+    mxList->addAttribute(u"xmlns:meta"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/meta"_ustr);
+    mxList->addAttribute(u"xmlns:number"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/datastyle"_ustr);
+    mxList->addAttribute(u"xmlns:svg"_ustr, u"CDATA"_ustr, u"http://www.w3.org/2000/svg"_ustr);
+    mxList->addAttribute(u"xmlns:chart"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/chart"_ustr);
+    mxList->addAttribute(u"xmlns:dr3d"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/dr3d"_ustr);
+    mxList->addAttribute(u"xmlns:math"_ustr, u"CDATA"_ustr, u"http://www.w3.org/1998/Math/MathML"_ustr);
+    mxList->addAttribute(u"xmlns:form"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/form"_ustr);
+    mxList->addAttribute(u"xmlns:script"_ustr, u"CDATA"_ustr, u"http://openoffice.org/2000/script"_ustr);
 
-    startEl("office:document");
+    startEl(u"office:document"_ustr);
     mxList->clear();
 
     makeMeta();
@@ -149,7 +149,7 @@ bool HwpReader::importHStream(std::unique_ptr<HStream> stream)
     makeMasterStyles();
     makeBody();
 
-    endEl("office:document");
+    endEl(u"office:document"_ustr);
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->endDocument();
@@ -186,12 +186,12 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
  */
 void HwpReader::makeBody()
 {
-    startEl("office:body");
+    startEl(u"office:body"_ustr);
     makeTextDecls();
     HWPPara *hwppara = hwpfile.GetFirstPara();
     d->bInBody = true;
     parsePara(hwppara);
-    endEl("office:body");
+    endEl(u"office:body"_ustr);
     d->bInBody = false;
 }
 
@@ -201,28 +201,28 @@ void HwpReader::makeBody()
  */
 void HwpReader::makeTextDecls()
 {
-    startEl("text:sequence-decls");
-    mxList->addAttribute("text:display-outline-level", sXML_CDATA, "0");
-    mxList->addAttribute("text:name", sXML_CDATA, "Illustration");
-    startEl("text:sequence-decl");
+    startEl(u"text:sequence-decls"_ustr);
+    mxList->addAttribute(u"text:display-outline-level"_ustr, sXML_CDATA, u"0"_ustr);
+    mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, u"Illustration"_ustr);
+    startEl(u"text:sequence-decl"_ustr);
     mxList->clear();
-    endEl("text:sequence-decl");
-    mxList->addAttribute("text:display-outline-level", sXML_CDATA, "0");
-    mxList->addAttribute("text:name", sXML_CDATA, "Table");
-    startEl("text:sequence-decl");
+    endEl(u"text:sequence-decl"_ustr);
+    mxList->addAttribute(u"text:display-outline-level"_ustr, sXML_CDATA, u"0"_ustr);
+    mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, u"Table"_ustr);
+    startEl(u"text:sequence-decl"_ustr);
     mxList->clear();
-    endEl("text:sequence-decl");
-    mxList->addAttribute("text:display-outline-level", sXML_CDATA, "0");
-    mxList->addAttribute("text:name", sXML_CDATA, "Text");
-    startEl("text:sequence-decl");
+    endEl(u"text:sequence-decl"_ustr);
+    mxList->addAttribute(u"text:display-outline-level"_ustr, sXML_CDATA, u"0"_ustr);
+    mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, u"Text"_ustr);
+    startEl(u"text:sequence-decl"_ustr);
     mxList->clear();
-    endEl("text:sequence-decl");
-    mxList->addAttribute("text:display-outline-level", sXML_CDATA, "0");
-    mxList->addAttribute("text:name", sXML_CDATA, "Drawing");
-    startEl("text:sequence-decl");
+    endEl(u"text:sequence-decl"_ustr);
+    mxList->addAttribute(u"text:display-outline-level"_ustr, sXML_CDATA, u"0"_ustr);
+    mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, u"Drawing"_ustr);
+    startEl(u"text:sequence-decl"_ustr);
     mxList->clear();
-    endEl("text:sequence-decl");
-    endEl("text:sequence-decls");
+    endEl(u"text:sequence-decl"_ustr);
+    endEl(u"text:sequence-decls"_ustr);
 }
 
 
@@ -234,27 +234,27 @@ void HwpReader::makeMeta()
 {
     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
-    startEl("office:meta");
+    startEl(u"office:meta"_ustr);
 
     if (hwpinfo.summary.title[0])
     {
-        startEl("dc:title");
+        startEl(u"dc:title"_ustr);
         chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.title)));
-        endEl("dc:title");
+        endEl(u"dc:title"_ustr);
     }
 
     if (hwpinfo.summary.subject[0])
     {
-        startEl("dc:subject");
+        startEl(u"dc:subject"_ustr);
         chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.subject)));
-        endEl("dc:subject");
+        endEl(u"dc:subject"_ustr);
     }
 
     if (hwpinfo.summary.author[0])
     {
-        startEl("meta:initial-creator");
+        startEl(u"meta:initial-creator"_ustr);
         chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.author)));
-        endEl("meta:initial-creator");
+        endEl(u"meta:initial-creator"_ustr);
     }
 
     if (hwpinfo.summary.date[0])
@@ -316,47 +316,47 @@ void HwpReader::makeMeta()
         }
         o3tl::sprintf(d->buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
-        startEl("meta:creation-date");
+        startEl(u"meta:creation-date"_ustr);
         chars( OUString::createFromAscii(d->buf));
-        endEl("meta:creation-date");
+        endEl(u"meta:creation-date"_ustr);
     }
 
     if (hwpinfo.summary.keyword[0][0] || hwpinfo.summary.etc[0][0])
     {
-        startEl("meta:keywords");
+        startEl(u"meta:keywords"_ustr);
         if (hwpinfo.summary.keyword[0][0])
         {
-            startEl("meta:keyword");
+            startEl(u"meta:keyword"_ustr);
             chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.keyword[0])));
-            endEl("meta:keyword");
+            endEl(u"meta:keyword"_ustr);
         }
         if (hwpinfo.summary.keyword[1][0])
         {
-            startEl("meta:keyword");
+            startEl(u"meta:keyword"_ustr);
             chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.keyword[1])));
-            endEl("meta:keyword");
+            endEl(u"meta:keyword"_ustr);
         }
         if (hwpinfo.summary.etc[0][0])
         {
-            startEl("meta:keyword");
+            startEl(u"meta:keyword"_ustr);
             chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[0])));
-            endEl("meta:keyword");
+            endEl(u"meta:keyword"_ustr);
         }
         if (hwpinfo.summary.etc[1][0])
         {
-            startEl("meta:keyword");
+            startEl(u"meta:keyword"_ustr);
             chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[1])));
-            endEl("meta:keyword");
+            endEl(u"meta:keyword"_ustr);
         }
         if (hwpinfo.summary.etc[2][0])
         {
-            startEl("meta:keyword");
+            startEl(u"meta:keyword"_ustr);
             chars(hstr2OUString(reinterpret_cast<hchar *>(hwpinfo.summary.etc[2])));
-            endEl("meta:keyword");
+            endEl(u"meta:keyword"_ustr);
         }
-        endEl("meta:keywords");
+        endEl(u"meta:keywords"_ustr);
     }
-    endEl("office:meta");
+    endEl(u"office:meta"_ustr);
 }
 
 
@@ -410,24 +410,24 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( prop->line_pstyle > 0 && prop->line_pstyle < 5 && prop->line_color <= 0xffffff)
         {
-            mxList->addAttribute( "draw:name", sXML_CDATA, "LineType" + OUString::number(hdo->index));
-            mxList->addAttribute( "draw:style", sXML_CDATA, "round");
-            mxList->addAttribute( "draw:dots1", sXML_CDATA, "1");
-            mxList->addAttribute( "draw:dots1-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
+            mxList->addAttribute( u"draw:name"_ustr, sXML_CDATA, "LineType" + OUString::number(hdo->index));
+            mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"round"_ustr);
+            mxList->addAttribute( u"draw:dots1"_ustr, sXML_CDATA, u"1"_ustr);
+            mxList->addAttribute( u"draw:dots1-length"_ustr, sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
             if( prop->line_pstyle == 3 )
             {
-                mxList->addAttribute( "draw:dots2", sXML_CDATA, "1");
-                mxList->addAttribute( "draw:dots2-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + "cm");
+                mxList->addAttribute( u"draw:dots2"_ustr, sXML_CDATA, u"1"_ustr);
+                mxList->addAttribute( u"draw:dots2-length"_ustr, sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + "cm");
             }
             else if( prop->line_pstyle == 4 )
             {
-                mxList->addAttribute( "draw:dots2", sXML_CDATA, "2");
-                mxList->addAttribute( "draw:dots2-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + "cm");
+                mxList->addAttribute( u"draw:dots2"_ustr, sXML_CDATA, u"2"_ustr);
+                mxList->addAttribute( u"draw:dots2-length"_ustr, sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + "cm");
             }
-            mxList->addAttribute( "draw:distance", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + "cm");
-            startEl("draw:stroke-dash");
+            mxList->addAttribute( u"draw:distance"_ustr, sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + "cm");
+            startEl(u"draw:stroke-dash"_ustr);
             mxList->clear();
-            endEl("draw:stroke-dash");
+            endEl(u"draw:stroke-dash"_ustr);
         }
 
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
@@ -438,52 +438,52 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = true;
-                mxList->addAttribute("draw:name", sXML_CDATA,
+                mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA,
                     OUString::createFromAscii(ArrowShape[prop->line_tstyle].name));
                 if( prop->line_tstyle == 1 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 20 30");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m10 0-10 30h20z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 20 30"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m10 0-10 30h20z"_ustr);
                 }
                 else if( prop->line_tstyle == 2 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 1122 2243");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 1122 2243"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"_ustr);
                 }
                 else if( prop->line_tstyle == 3 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 30 30");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m0 0h30v30h-30z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 30 30"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m0 0h30v30h-30z"_ustr);
                 }
-                startEl("draw:marker");
+                startEl(u"draw:marker"_ustr);
                 mxList->clear();
-                endEl("draw:marker");
+                endEl(u"draw:marker"_ustr);
             }
             if (prop->line_hstyle > 0 &&
                 o3tl::make_unsigned(prop->line_hstyle) < std::size(ArrowShape) &&
                 !ArrowShape[prop->line_hstyle].bMade)
             {
                 ArrowShape[prop->line_hstyle].bMade = true;
-                mxList->addAttribute("draw:name", sXML_CDATA,
+                mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA,
                     OUString::createFromAscii(ArrowShape[prop->line_hstyle].name));
                 if( prop->line_hstyle == 1 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 20 30");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m10 0-10 30h20z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 20 30"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m10 0-10 30h20z"_ustr);
                 }
                 else if( prop->line_hstyle == 2 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 1122 2243");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 1122 2243"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"_ustr);
                 }
                 else if( prop->line_hstyle == 3 )
                 {
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 20 20");
-                    mxList->addAttribute("svg:d", sXML_CDATA, "m0 0h20v20h-20z");
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, u"0 0 20 20"_ustr);
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, u"m0 0h20v20h-20z"_ustr);
                 }
-                startEl("draw:marker");
+                startEl(u"draw:marker"_ustr);
                 mxList->clear();
-                endEl("draw:marker");
+                endEl(u"draw:marker"_ustr);
             }
         }
 
@@ -491,55 +491,55 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         {
             if( prop->flag >> 18  & 0x01 )
             {
-                mxList->addAttribute( "draw:name", sXML_CDATA, "fillimage" + OUString::number(hdo->index));
+                mxList->addAttribute( u"draw:name"_ustr, sXML_CDATA, "fillimage" + OUString::number(hdo->index));
 
                 EmPicture *emp = nullptr;
                 if (prop->pictype && strlen(prop->szPatternFile) > 3)
                     emp = hwpfile.GetEmPictureByName(prop->szPatternFile);
                 if (!emp)
                 {
-                    mxList->addAttribute( "xlink:href", sXML_CDATA,
+                    mxList->addAttribute( u"xlink:href"_ustr, sXML_CDATA,
                         hstr2OUString(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str()));
-                    mxList->addAttribute( "xlink:type", sXML_CDATA, "simple");
-                    mxList->addAttribute( "xlink:show", sXML_CDATA, "embed");
-                    mxList->addAttribute( "xlink:actuate", sXML_CDATA, "onLoad");
+                    mxList->addAttribute( u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
+                    mxList->addAttribute( u"xlink:show"_ustr, sXML_CDATA, u"embed"_ustr);
+                    mxList->addAttribute( u"xlink:actuate"_ustr, sXML_CDATA, u"onLoad"_ustr);
                 }
 
-                startEl("draw:fill-image");
+                startEl(u"draw:fill-image"_ustr);
                 mxList->clear();
                 if (emp)
                 {
-                    startEl("office:binary-data");
+                    startEl(u"office:binary-data"_ustr);
                     chars(base64_encode_string(emp->data.data(), emp->size));
-                    endEl("office:binary-data");
+                    endEl(u"office:binary-data"_ustr);
                 }
-                endEl("draw:fill-image");
+                endEl(u"draw:fill-image"_ustr);
             }
 /*  If there is a gradient, when a bitmap file is present, this is the first. */
             else if( prop->flag >> 16  & 0x01 )   /* existence gradient */
             {
-                mxList->addAttribute( "draw:name", sXML_CDATA, "Grad" + OUString::number(hdo->index));
+                mxList->addAttribute( u"draw:name"_ustr, sXML_CDATA, "Grad" + OUString::number(hdo->index));
                 switch( prop->gstyle )
                 {
                     case 1 :
                         if( prop->center_y == 50 )
-                            mxList->addAttribute( "draw:style", sXML_CDATA, "axial");
+                            mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"axial"_ustr);
                         else
-                            mxList->addAttribute( "draw:style", sXML_CDATA, "linear");
+                            mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"linear"_ustr);
                         break;
                     case 2:
                     case 3:
-                        mxList->addAttribute( "draw:style", sXML_CDATA, "radial");
+                        mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"radial"_ustr);
                         break;
                     case 4:
-                        mxList->addAttribute( "draw:style", sXML_CDATA, "square");
+                        mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"square"_ustr);
                         break;
                     default:
-                        mxList->addAttribute( "draw:style", sXML_CDATA, "linear");
+                        mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"linear"_ustr);
                         break;
                 }
-                mxList->addAttribute( "draw:cx", sXML_CDATA, OUString::number(prop->center_x) + "%");
-                mxList->addAttribute( "draw:cy", sXML_CDATA, OUString::number(prop->center_y) + "%");
+                mxList->addAttribute( u"draw:cx"_ustr, sXML_CDATA, OUString::number(prop->center_x) + "%");
+                mxList->addAttribute( u"draw:cy"_ustr, sXML_CDATA, OUString::number(prop->center_y) + "%");
 
                 HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                 int default_color = 0xffffff;
@@ -560,61 +560,61 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 {
                     if( prop->center_y == 100 )
                     {
-                        mxList->addAttribute( "draw:start-color", sXML_CDATA, rgb2str( prop->tocolor ));
-                        mxList->addAttribute( "draw:end-color", sXML_CDATA, rgb2str( prop->fromcolor ));
+                        mxList->addAttribute( u"draw:start-color"_ustr, sXML_CDATA, rgb2str( prop->tocolor ));
+                        mxList->addAttribute( u"draw:end-color"_ustr, sXML_CDATA, rgb2str( prop->fromcolor ));
                     }
                     else
                     {
-                        mxList->addAttribute( "draw:start-color", sXML_CDATA, rgb2str( prop->fromcolor ));
-                        mxList->addAttribute( "draw:end-color", sXML_CDATA, rgb2str( prop->tocolor ));
+                        mxList->addAttribute( u"draw:start-color"_ustr, sXML_CDATA, rgb2str( prop->fromcolor ));
+                        mxList->addAttribute( u"draw:end-color"_ustr, sXML_CDATA, rgb2str( prop->tocolor ));
                     }
                 }
                 else
                 {
-                    mxList->addAttribute( "draw:start-color", sXML_CDATA,rgb2str( prop->tocolor ));
-                    mxList->addAttribute( "draw:end-color", sXML_CDATA,rgb2str( prop->fromcolor ));
+                    mxList->addAttribute( u"draw:start-color"_ustr, sXML_CDATA,rgb2str( prop->tocolor ));
+                    mxList->addAttribute( u"draw:end-color"_ustr, sXML_CDATA,rgb2str( prop->fromcolor ));
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
                     auto normangle = prop->angle % 360;
                     int angle = 1800 - normangle * 10;
-                    mxList->addAttribute( "draw:angle", sXML_CDATA, OUString::number(angle));
+                    mxList->addAttribute( u"draw:angle"_ustr, sXML_CDATA, OUString::number(angle));
                 }
-                startEl("draw:gradient");
+                startEl(u"draw:gradient"_ustr);
                 mxList->clear();
-                endEl("draw:gradient");
+                endEl(u"draw:gradient"_ustr);
             }
                                                   /* hatch */
             else if( prop->pattern_type >> 24 & 0x01 )
             {
                 int type = prop->pattern_type & 0xffffff;
-                mxList->addAttribute( "draw:name", sXML_CDATA, "Hatch" + OUString::number(hdo->index));
+                mxList->addAttribute( u"draw:name"_ustr, sXML_CDATA, "Hatch" + OUString::number(hdo->index));
                 if( type < 4 )
-                    mxList->addAttribute( "draw:style", sXML_CDATA, "single" );
+                    mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"single"_ustr );
                 else
-                    mxList->addAttribute( "draw:style", sXML_CDATA, "double" );
-                mxList->addAttribute( "draw:color", sXML_CDATA, rgb2str( static_cast<int32_t>(prop->pattern_color) ));
-                mxList->addAttribute( "draw:distance", sXML_CDATA, "0.12cm");
+                    mxList->addAttribute( u"draw:style"_ustr, sXML_CDATA, u"double"_ustr );
+                mxList->addAttribute( u"draw:color"_ustr, sXML_CDATA, rgb2str( static_cast<int32_t>(prop->pattern_color) ));
+                mxList->addAttribute( u"draw:distance"_ustr, sXML_CDATA, u"0.12cm"_ustr);
                 switch( type )
                 {
                     case 0 :
                     case 4 :
-                        mxList->addAttribute( "draw:rotation", sXML_CDATA, "0");
+                        mxList->addAttribute( u"draw:rotation"_ustr, sXML_CDATA, u"0"_ustr);
                         break;
                     case 1 :
-                        mxList->addAttribute( "draw:rotation", sXML_CDATA, "900");
+                        mxList->addAttribute( u"draw:rotation"_ustr, sXML_CDATA, u"900"_ustr);
                         break;
                     case 2 :
-                        mxList->addAttribute( "draw:rotation", sXML_CDATA, "1350");
+                        mxList->addAttribute( u"draw:rotation"_ustr, sXML_CDATA, u"1350"_ustr);
                         break;
                     case 3 :
                     case 5 :
-                        mxList->addAttribute( "draw:rotation", sXML_CDATA, "450");
+                        mxList->addAttribute( u"draw:rotation"_ustr, sXML_CDATA, u"450"_ustr);
                         break;
                 }
-                startEl("draw:hatch");
+                startEl(u"draw:hatch"_ustr);
                 mxList->clear();
-                endEl("draw:hatch");
+                endEl(u"draw:hatch"_ustr);
             }
         }
         hdo = hdo->next.get();
@@ -626,7 +626,7 @@ void HwpReader::makeStyles()
 {
     HWPStyle& hwpstyle = hwpfile.GetHWPStyle();
 
-    startEl("office:styles");
+    startEl(u"office:styles"_ustr);
 
     int i;
     for (i = 0; i < hwpfile.getFBoxStyleCount(); i++)
@@ -637,107 +637,107 @@ void HwpReader::makeStyles()
         }
     }
 
-    mxList->addAttribute("style:name", sXML_CDATA, "Standard");
-    mxList->addAttribute("style:family", sXML_CDATA, "paragraph");
-    mxList->addAttribute("style:class", sXML_CDATA, "text");
-    startEl("style:style");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, u"Standard"_ustr);
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+    mxList->addAttribute(u"style:class"_ustr, sXML_CDATA, u"text"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
 
-    mxList->addAttribute("fo:line-height", sXML_CDATA, "160%");
-    mxList->addAttribute("fo:text-align", sXML_CDATA, "justify");
-    startEl("style:properties");
+    mxList->addAttribute(u"fo:line-height"_ustr, sXML_CDATA, u"160%"_ustr);
+    mxList->addAttribute(u"fo:text-align"_ustr, sXML_CDATA, u"justify"_ustr);
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    startEl("style:tab-stops");
+    startEl(u"style:tab-stops"_ustr);
 
     for( i = 1 ; i < 40 ; i++)
     {
-        mxList->addAttribute("style:position", sXML_CDATA,
+        mxList->addAttribute(u"style:position"_ustr, sXML_CDATA,
             OUString::number( WTI(1000 * i)) + "inch");
-        startEl("style:tab-stop");
+        startEl(u"style:tab-stop"_ustr);
         mxList->clear();
-        endEl("style:tab-stop");
+        endEl(u"style:tab-stop"_ustr);
     }
-    endEl("style:tab-stops");
-    endEl("style:properties");
+    endEl(u"style:tab-stops"_ustr);
+    endEl(u"style:properties"_ustr);
 
-    endEl("style:style");
+    endEl(u"style:style"_ustr);
 
     for (int ii = 0; ii < hwpstyle.Num(); ii++)
     {
         unsigned char *stylename = reinterpret_cast<unsigned char *>(hwpstyle.GetName(ii));
-        mxList->addAttribute("style:name", sXML_CDATA, hstr2OUString(kstr2hstr(stylename).c_str()));
-        mxList->addAttribute("style:family", sXML_CDATA, "paragraph");
-        mxList->addAttribute("style:parent-style-name", sXML_CDATA, "Standard");
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, hstr2OUString(kstr2hstr(stylename).c_str()));
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute(u"style:parent-style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
 
-        startEl("style:style");
+        startEl(u"style:style"_ustr);
 
         mxList->clear();
 
         parseCharShape(hwpstyle.GetCharShape(ii));
         parseParaShape(hwpstyle.GetParaShape(ii));
 
-        startEl("style:properties");
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
+        endEl(u"style:properties"_ustr);
 
-        endEl("style:style");
+        endEl(u"style:style"_ustr);
     }
 
     {
-        mxList->addAttribute( "style:name", sXML_CDATA, "Header");
-        mxList->addAttribute( "style:family", sXML_CDATA, "paragraph");
-        mxList->addAttribute( "style:parent-style-name", sXML_CDATA, "Standard");
-        mxList->addAttribute( "style:class", sXML_CDATA, "extra");
-        startEl("style:style");
+        mxList->addAttribute( u"style:name"_ustr, sXML_CDATA, u"Header"_ustr);
+        mxList->addAttribute( u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute( u"style:parent-style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+        mxList->addAttribute( u"style:class"_ustr, sXML_CDATA, u"extra"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
-        endEl("style:style");
+        endEl(u"style:style"_ustr);
     }
 
     {
-        mxList->addAttribute( "style:name", sXML_CDATA, "Footer");
-        mxList->addAttribute( "style:family", sXML_CDATA, "paragraph");
-        mxList->addAttribute( "style:parent-style-name", sXML_CDATA, "Standard");
-        mxList->addAttribute( "style:class", sXML_CDATA, "extra");
-        startEl("style:style");
+        mxList->addAttribute( u"style:name"_ustr, sXML_CDATA, u"Footer"_ustr);
+        mxList->addAttribute( u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute( u"style:parent-style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+        mxList->addAttribute( u"style:class"_ustr, sXML_CDATA, u"extra"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
 
-        endEl("style:style");
+        endEl(u"style:style"_ustr);
     }
 
     if( hwpfile.linenumber > 0)
     {
-        mxList->addAttribute( "style:name", sXML_CDATA, "Horizontal Line");
-        mxList->addAttribute( "style:family", sXML_CDATA, "paragraph");
-        mxList->addAttribute( "style:parent-style-name", sXML_CDATA, "Standard");
-        mxList->addAttribute( "style:class", sXML_CDATA, "html");
-        startEl("style:style");
+        mxList->addAttribute( u"style:name"_ustr, sXML_CDATA, u"Horizontal Line"_ustr);
+        mxList->addAttribute( u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute( u"style:parent-style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+        mxList->addAttribute( u"style:class"_ustr, sXML_CDATA, u"html"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
-        mxList->addAttribute( "fo:font-size", sXML_CDATA, "6pt");
-        mxList->addAttribute( "fo:margin-top", sXML_CDATA, "0cm");
-        mxList->addAttribute( "fo:margin-bottom", sXML_CDATA, "0cm");
-        mxList->addAttribute( "style:border-line-width-bottom", sXML_CDATA, "0.02cm 0.035cm 0.002cm");
-        mxList->addAttribute( "fo:padding", sXML_CDATA, "0cm");
-        mxList->addAttribute( "fo:border-bottom", sXML_CDATA, "0.039cm double #808080");
-        mxList->addAttribute( "text:number-lines", sXML_CDATA, "false");
-        mxList->addAttribute( "text:line-number", sXML_CDATA, "0");
-        mxList->addAttribute("fo:line-height", sXML_CDATA, "100%");
-        startEl("style:properties");
+        mxList->addAttribute( u"fo:font-size"_ustr, sXML_CDATA, u"6pt"_ustr);
+        mxList->addAttribute( u"fo:margin-top"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute( u"fo:margin-bottom"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute( u"style:border-line-width-bottom"_ustr, sXML_CDATA, u"0.02cm 0.035cm 0.002cm"_ustr);
+        mxList->addAttribute( u"fo:padding"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute( u"fo:border-bottom"_ustr, sXML_CDATA, u"0.039cm double #808080"_ustr);
+        mxList->addAttribute( u"text:number-lines"_ustr, sXML_CDATA, u"false"_ustr);
+        mxList->addAttribute( u"text:line-number"_ustr, sXML_CDATA, u"0"_ustr);
+        mxList->addAttribute(u"fo:line-height"_ustr, sXML_CDATA, u"100%"_ustr);
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
     }
 
     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
-    mxList->addAttribute("text:num-suffix", sXML_CDATA, ")");
-    mxList->addAttribute("text:num-format", sXML_CDATA, "1");
+    mxList->addAttribute(u"text:num-suffix"_ustr, sXML_CDATA, u")"_ustr);
+    mxList->addAttribute(u"text:num-format"_ustr, sXML_CDATA, u"1"_ustr);
     if( hwpinfo.beginfnnum != 1)
-        mxList->addAttribute("text:offset", sXML_CDATA, OUString::number(hwpinfo.beginfnnum - 1));
-    startEl("text:footnotes-configuration");
+        mxList->addAttribute(u"text:offset"_ustr, sXML_CDATA, OUString::number(hwpinfo.beginfnnum - 1));
+    startEl(u"text:footnotes-configuration"_ustr);
     mxList->clear();
-    endEl("text:footnotes-configuration");
+    endEl(u"text:footnotes-configuration"_ustr);
 
-    endEl("office:styles");
+    endEl(u"office:styles"_ustr);
 }
 
 
@@ -750,7 +750,7 @@ void HwpReader::makeAutoStyles()
 {
     int i;
 
-    startEl("office:automatic-styles");
+    startEl(u"office:automatic-styles"_ustr);
 
     for (i = 0; i < hwpfile.getParaShapeCount(); i++)
         makePStyle(hwpfile.getParaShape(i));
@@ -800,46 +800,46 @@ void HwpReader::makeAutoStyles()
             continue;
         if( i == 3 && !bIsRight )
             continue;
-        mxList->addAttribute("style:name", sXML_CDATA, "PNPara" + OUString::number(i));
-        mxList->addAttribute("style:family", sXML_CDATA, "paragraph");
-        mxList->addAttribute("style:parent-style-name", sXML_CDATA, "Standard");
-        startEl("style:style");
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "PNPara" + OUString::number(i));
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute(u"style:parent-style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
         if( i == 1 )
-            mxList->addAttribute("fo:text-align", sXML_CDATA, "start");
+            mxList->addAttribute(u"fo:text-align"_ustr, sXML_CDATA, u"start"_ustr);
         else if ( i == 2 )
-            mxList->addAttribute("fo:text-align", sXML_CDATA, "center");
+            mxList->addAttribute(u"fo:text-align"_ustr, sXML_CDATA, u"center"_ustr);
         else if ( i == 3 )
-            mxList->addAttribute("fo:text-align", sXML_CDATA, "end");
-        startEl("style:properties");
+            mxList->addAttribute(u"fo:text-align"_ustr, sXML_CDATA, u"end"_ustr);
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
 
-        mxList->addAttribute("style:name", sXML_CDATA, "PNBox" + OUString::number(i));
-        mxList->addAttribute("style:family", sXML_CDATA, "graphics");
-        startEl("style:style");
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "PNBox" + OUString::number(i));
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
 
-        mxList->addAttribute("fo:margin-top", sXML_CDATA, "0cm");
-        mxList->addAttribute("fo:margin-bottom", sXML_CDATA, "0cm");
-        mxList->addAttribute("style:wrap", sXML_CDATA, "run-through");
-        mxList->addAttribute("style:vertical-pos", sXML_CDATA, "from-top");
-        mxList->addAttribute("style:vertical-rel", sXML_CDATA, "paragraph");
+        mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"run-through"_ustr);
+        mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"from-top"_ustr);
+        mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
 
         if( i == 1 )
-            mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "left");
+            mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"left"_ustr);
         else if ( i == 2 )
-            mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "center");
+            mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"center"_ustr);
         else if ( i == 3 )
-            mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "right");
-        mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
-        mxList->addAttribute("fo:padding", sXML_CDATA, "0cm");
-        mxList->addAttribute("stylefamily", sXML_CDATA, "graphics");
-        startEl("style:properties");
+            mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"right"_ustr);
+        mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
+        mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA, u"0cm"_ustr);
+        mxList->addAttribute(u"stylefamily"_ustr, sXML_CDATA, u"graphics"_ustr);
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
     }
 
     for (i = 0; i < hwpfile.getDateFormatCount(); i++)
@@ -847,7 +847,7 @@ void HwpReader::makeAutoStyles()
 
     makePageStyle();
 
-    endEl("office:automatic-styles");
+    endEl(u"office:automatic-styles"_ustr);
 }
 
 namespace {
@@ -879,7 +879,7 @@ struct PageSetting
 
 void HwpReader::makeMasterStyles()
 {
-    startEl("office:master-styles");
+    startEl(u"office:master-styles"_ustr);
 
     int i;
     int nMax = hwpfile.getMaxSettedPage();
@@ -967,15 +967,15 @@ void HwpReader::makeMasterStyles()
     for( i = 1; i <= nMax ; i++ )
     {
         if( i == 1 )
-            mxList->addAttribute("style:name", sXML_CDATA, "Standard");
+            mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, u"Standard"_ustr);
         else
-            mxList->addAttribute("style:name", sXML_CDATA, "p" + OUString::number(i));
-        mxList->addAttribute("style:page-master-name", sXML_CDATA,
+            mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "p" + OUString::number(i));
+        mxList->addAttribute(u"style:page-master-name"_ustr, sXML_CDATA,
                 "pm" + OUString::number(hwpfile.GetPageMasterNum(i)));
         if( i < nMax )
-            mxList->addAttribute("style:next-style-name", sXML_CDATA, "p" + OUString::number(i + 1));
-        mxList->addAttribute("draw:style-name", sXML_CDATA, "master" + OUString::number(i));
-        startEl("style:master-page");
+            mxList->addAttribute(u"style:next-style-name"_ustr, sXML_CDATA, "p" + OUString::number(i + 1));
+        mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "master" + OUString::number(i));
+        startEl(u"style:master-page"_ustr);
         mxList->clear();
 
         if( aSet[i].bIsSet )                      /* If you've changed the current setting */
@@ -1026,28 +1026,28 @@ void HwpReader::makeMasterStyles()
         }
         else                                      /* If the previous settings doesn't exist, set to the default settings */
         {
-            startEl("style:header");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:header"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
-            endEl("text:p");
-            endEl("style:header");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:header"_ustr);
 
-            startEl("style:footer");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:footer"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
-            endEl("text:p");
-            endEl("style:footer");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:footer"_ustr);
 
-            endEl("style:master-page");
+            endEl(u"style:master-page"_ustr);
 
             continue;
         }
 // header
         if( pPage->header )
         {
-            startEl("style:header");
+            startEl(u"style:header"_ustr);
             if( pPage->pagenumber && pPage->pagenumber->where < 4 )
             {
                 d->bInHeader = true;
@@ -1057,11 +1057,11 @@ void HwpReader::makeMasterStyles()
                 parsePara(pPage->header->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
-            endEl("style:header");
+            endEl(u"style:header"_ustr);
         }
         if( pPage->header_even )
         {
-            startEl("style:header");
+            startEl(u"style:header"_ustr);
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
@@ -1074,14 +1074,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
-            endEl("style:header");
+            endEl(u"style:header"_ustr);
         }
                                                   /* Will be the default. */
         else if (pPage->header_odd)
         {
-            startEl("style:header");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:header"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1092,12 +1092,12 @@ void HwpReader::makeMasterStyles()
                 d->pPn = nullptr;
                 d->nPnPos = 0;
             }
-            endEl("text:p");
-            endEl("style:header");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:header"_ustr);
         }
         if( pPage->header_odd )
         {
-            startEl("style:header-left");
+            startEl(u"style:header-left"_ustr);
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
@@ -1110,14 +1110,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
-            endEl("style:header-left");
+            endEl(u"style:header-left"_ustr);
         }
                                                   /* Will be the default.  */
         else if (pPage->header_even)
         {
-            startEl("style:header-left");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:header-left"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1128,14 +1128,14 @@ void HwpReader::makeMasterStyles()
                 d->pPn = nullptr;
                 d->nPnPos = 0;
             }
-            endEl("text:p");
-            endEl("style:header-left");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:header-left"_ustr);
         }
         if( !pPage->header && !pPage->header_even && !pPage->header_odd )
         {
-            startEl("style:header");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:header"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && (pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1144,13 +1144,13 @@ void HwpReader::makeMasterStyles()
                 makeShowPageNum();
                 d->pPn = nullptr;
             }
-            endEl("text:p");
-            endEl("style:header");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:header"_ustr);
         }
 // footer
         if( pPage->footer )
         {
-            startEl("style:footer");
+            startEl(u"style:footer"_ustr);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1161,11 +1161,11 @@ void HwpReader::makeMasterStyles()
                 parsePara(pPage->footer->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
-            endEl("style:footer");
+            endEl(u"style:footer"_ustr);
         }
         if( pPage->footer_even )
         {
-            startEl("style:footer");
+            startEl(u"style:footer"_ustr);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1178,14 +1178,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
-            endEl("style:footer");
+            endEl(u"style:footer"_ustr);
         }
                                                   /* Will be the default. */
         else if (pPage->footer_odd)
         {
-            startEl("style:footer");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:footer"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1196,12 +1196,12 @@ void HwpReader::makeMasterStyles()
                 d->pPn = nullptr;
                 d->nPnPos = 0;
             }
-            endEl("text:p");
-            endEl("style:footer");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:footer"_ustr);
         }
         if( pPage->footer_odd )
         {
-            startEl("style:footer-left");
+            startEl(u"style:footer-left"_ustr);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1214,14 +1214,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
-            endEl("style:footer-left");
+            endEl(u"style:footer-left"_ustr);
         }
                                                   /* Will be the default. */
         else if (pPage->footer_even)
         {
-            startEl("style:footer-left");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:footer-left"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1232,14 +1232,14 @@ void HwpReader::makeMasterStyles()
                 d->pPn = nullptr;
                 d->nPnPos = 0;
             }
-            endEl("text:p");
-            endEl("style:footer-left");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:footer-left"_ustr);
         }
         if( !pPage->footer && !pPage->footer_even && !pPage->footer_odd )
         {
-            startEl("style:footer");
-            mxList->addAttribute("text:style-name", sXML_CDATA, "Standard");
-            startEl("text:p");
+            startEl(u"style:footer"_ustr);
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+            startEl(u"text:p"_ustr);
             mxList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1248,13 +1248,13 @@ void HwpReader::makeMasterStyles()
                 makeShowPageNum();
                 d->pPn = nullptr;
             }
-            endEl("text:p");
-            endEl("style:footer");
+            endEl(u"text:p"_ustr);
+            endEl(u"style:footer"_ustr);
         }
 
-        endEl("style:master-page");
+        endEl(u"style:master-page"_ustr);
     }
-    endEl("office:master-styles");
+    endEl(u"office:master-styles"_ustr);
 }
 
 
@@ -1269,63 +1269,63 @@ void HwpReader::parseCharShape(CharShape const * cshape)
 {
     HWPFont& hwpfont = hwpfile.GetHWPFont();
 
-    mxList->addAttribute("fo:font-size", sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
-    mxList->addAttribute("style:font-size-asian", sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
+    mxList->addAttribute(u"fo:font-size"_ustr, sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
+    mxList->addAttribute(u"style:font-size-asian"_ustr, sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
         reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font))).c_str());
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), d->buf, fRatio);
 
-    mxList->addAttribute("fo:font-family", sXML_CDATA,
+    mxList->addAttribute(u"fo:font-family"_ustr, sXML_CDATA,
         OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
-    mxList->addAttribute("style:font-family-asian", sXML_CDATA,
+    mxList->addAttribute(u"style:font-family-asian"_ustr, sXML_CDATA,
         OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
 
-    mxList->addAttribute("style:text-scale", sXML_CDATA,
+    mxList->addAttribute(u"style:text-scale"_ustr, sXML_CDATA,
         OUString::number(static_cast<int>(cshape->ratio * fRatio)) + "%");
 
     double sspace = (cshape->size / 25) * cshape->space / 100.;
 
     if (sspace != 0.)
     {
-        mxList->addAttribute("fo:letter-spacing", sXML_CDATA,
+        mxList->addAttribute(u"fo:letter-spacing"_ustr, sXML_CDATA,
             OUString::number(sspace) + "pt");
     }
     if (cshape->color[1] != 0)
-        mxList->addAttribute("fo:color", sXML_CDATA,
+        mxList->addAttribute(u"fo:color"_ustr, sXML_CDATA,
             hcolor2str(cshape->color[1], 100, true));
     if (cshape->shade != 0)
-        mxList->addAttribute("style:text-background-color", sXML_CDATA,
+        mxList->addAttribute(u"style:text-background-color"_ustr, sXML_CDATA,
             hcolor2str(cshape->color[0], cshape->shade));
     if (cshape->attr & 0x01)
     {
-        mxList->addAttribute("fo:font-style", sXML_CDATA, "italic");
-        mxList->addAttribute("style:font-style-asian", sXML_CDATA, "italic");
+        mxList->addAttribute(u"fo:font-style"_ustr, sXML_CDATA, u"italic"_ustr);
+        mxList->addAttribute(u"style:font-style-asian"_ustr, sXML_CDATA, u"italic"_ustr);
     }
     else{
-        mxList->addAttribute("fo:font-style", sXML_CDATA, "normal");
-        mxList->addAttribute("style:font-style-asian", sXML_CDATA, "normal");
+        mxList->addAttribute(u"fo:font-style"_ustr, sXML_CDATA, u"normal"_ustr);
+        mxList->addAttribute(u"style:font-style-asian"_ustr, sXML_CDATA, u"normal"_ustr);
     }
     if (cshape->attr >> 1 & 0x01)
     {
-        mxList->addAttribute("fo:font-weight", sXML_CDATA, "bold");
-        mxList->addAttribute("style:font-weight-asian", sXML_CDATA, "bold");
+        mxList->addAttribute(u"fo:font-weight"_ustr, sXML_CDATA, u"bold"_ustr);
+        mxList->addAttribute(u"style:font-weight-asian"_ustr, sXML_CDATA, u"bold"_ustr);
     }
     else{
-        mxList->addAttribute("fo:font-weight", sXML_CDATA, "normal");
-        mxList->addAttribute("style:font-weight-asian", sXML_CDATA, "normal");
+        mxList->addAttribute(u"fo:font-weight"_ustr, sXML_CDATA, u"normal"_ustr);
+        mxList->addAttribute(u"style:font-weight-asian"_ustr, sXML_CDATA, u"normal"_ustr);
     }
     if (cshape->attr >> 2 & 0x01)
-        mxList->addAttribute("style:text-underline", sXML_CDATA, "single");
+        mxList->addAttribute(u"style:text-underline"_ustr, sXML_CDATA, u"single"_ustr);
     if (cshape->attr >> 3 & 0x01)
-        mxList->addAttribute("style:text-outline", sXML_CDATA, "true");
+        mxList->addAttribute(u"style:text-outline"_ustr, sXML_CDATA, u"true"_ustr);
     if (cshape->attr >> 4 & 0x01)
-        mxList->addAttribute("fo:text-shadow", sXML_CDATA, "1pt 1pt");
+        mxList->addAttribute(u"fo:text-shadow"_ustr, sXML_CDATA, u"1pt 1pt"_ustr);
     if (cshape->attr >> 5 & 0x01)
-        mxList->addAttribute("style:text-position", sXML_CDATA, "super 58%");
+        mxList->addAttribute(u"style:text-position"_ustr, sXML_CDATA, u"super 58%"_ustr);
     if (cshape->attr >> 6 & 0x01)
-        mxList->addAttribute("style:text-position", sXML_CDATA, "sub 58%");
+        mxList->addAttribute(u"style:text-position"_ustr, sXML_CDATA, u"sub 58%"_ustr);
 
 }
 
@@ -1341,22 +1341,22 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 {
 
     if (pshape->left_margin != 0)
-        mxList->addAttribute("fo:margin-left", sXML_CDATA, OUString::number
+        mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA, OUString::number
             (WTI(pshape->left_margin )) + "inch");
     if (pshape->right_margin != 0)
-        mxList->addAttribute("fo:margin-right", sXML_CDATA, OUString::number
+        mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA, OUString::number
             (WTI(pshape->right_margin)) + "inch");
     if (pshape->pspacing_prev != 0)
-        mxList->addAttribute("fo:margin-top", sXML_CDATA, OUString::number
+        mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA, OUString::number
             (WTI(pshape->pspacing_prev)) + "inch");
     if (pshape->pspacing_next != 0)
-        mxList->addAttribute("fo:margin-bottom", sXML_CDATA, OUString::number
+        mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA, OUString::number
             (WTI(pshape->pspacing_next)) + "inch");
     if (pshape->indent != 0)
-        mxList->addAttribute("fo:text-indent", sXML_CDATA, OUString::number
+        mxList->addAttribute(u"fo:text-indent"_ustr, sXML_CDATA, OUString::number
             (WTI(pshape->indent)) + "inch");
     if (pshape->lspacing != 0)
-        mxList->addAttribute("fo:line-height", sXML_CDATA, OUString::number(pshape->lspacing) + "%");
+        mxList->addAttribute(u"fo:line-height"_ustr, sXML_CDATA, OUString::number(pshape->lspacing) + "%");
 
     const char* align = nullptr;
 
@@ -1379,20 +1379,20 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
     }
 
     if (align)
-        mxList->addAttribute("fo:text-align", sXML_CDATA, OUString::createFromAscii(align));
+        mxList->addAttribute(u"fo:text-align"_ustr, sXML_CDATA, OUString::createFromAscii(align));
 
     if (pshape->outline)
-        mxList->addAttribute("fo:border", sXML_CDATA, "0.002cm solid #000000");
+        mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA, u"0.002cm solid #000000"_ustr);
     if( pshape->shade > 0 )
     {
-        mxList->addAttribute("fo:background-color", sXML_CDATA,
+        mxList->addAttribute(u"fo:background-color"_ustr, sXML_CDATA,
             hcolor2str(0, pshape->shade));
     }
 
     if( pshape->pagebreak & 0x02 || pshape->pagebreak & 0x04)
-        mxList->addAttribute("fo:break-before", sXML_CDATA, "page");
+        mxList->addAttribute(u"fo:break-before"_ustr, sXML_CDATA, u"page"_ustr);
     else if( pshape->pagebreak & 0x01 )
-        mxList->addAttribute("fo:break-before", sXML_CDATA, "column");
+        mxList->addAttribute(u"fo:break-before"_ustr, sXML_CDATA, u"column"_ustr);
 
 }
 
@@ -1403,20 +1403,20 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 void HwpReader::makePStyle(ParaShape const * pshape)
 {
     int nscount = pshape->tabs[MAXTABS -1].type;
-    mxList->addAttribute("style:name", sXML_CDATA, "P" + OUString::number(pshape->index));
-    mxList->addAttribute("style:family", sXML_CDATA, "paragraph");
-    startEl("style:style");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "P" + OUString::number(pshape->index));
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"paragraph"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
     parseParaShape(pshape);
     if (pshape->cshape)
         parseCharShape(pshape->cshape.get());
-    startEl("style:properties");
+    startEl(u"style:properties"_ustr);
     mxList->clear();
 
     if( nscount )
     {
         unsigned char tf = 0;
-        startEl("style:tab-stops");
+        startEl(u"style:tab-stops"_ustr);
 
         int tab_margin = pshape->left_margin + pshape->indent;
         if( tab_margin < 0 )
@@ -1427,7 +1427,7 @@ void HwpReader::makePStyle(ParaShape const * pshape)
                 break;
             if( pshape->tabs[i].position <= tab_margin )
                 continue;
-            mxList->addAttribute("style:position", sXML_CDATA,
+            mxList->addAttribute(u"style:position"_ustr, sXML_CDATA,
                 OUString::number(WTMM(pshape->tabs[i].position - tab_margin )) + "mm");
             if( pshape->tabs[i].type )
             {
@@ -1435,35 +1435,35 @@ void HwpReader::makePStyle(ParaShape const * pshape)
                 switch(pshape->tabs[i].type)
                 {
                     case 1 :
-                        mxList->addAttribute("style:type", sXML_CDATA, "right");
+                        mxList->addAttribute(u"style:type"_ustr, sXML_CDATA, u"right"_ustr);
                         break;
                     case 2:
-                        mxList->addAttribute("style:type", sXML_CDATA, "center");
+                        mxList->addAttribute(u"style:type"_ustr, sXML_CDATA, u"center"_ustr);
                         break;
                     case 3:
-                        mxList->addAttribute("style:type", sXML_CDATA, "char");
-                        mxList->addAttribute("style:char", sXML_CDATA, ".");
+                        mxList->addAttribute(u"style:type"_ustr, sXML_CDATA, u"char"_ustr);
+                        mxList->addAttribute(u"style:char"_ustr, sXML_CDATA, u"."_ustr);
                         break;
                 }
             }
             if( pshape->tabs[i].dot_continue )
             {
                 tf = 1;
-                mxList->addAttribute("style:leader-char", sXML_CDATA, ".");
+                mxList->addAttribute(u"style:leader-char"_ustr, sXML_CDATA, u"."_ustr);
             }
-            startEl("style:tab-stop");
+            startEl(u"style:tab-stop"_ustr);
             mxList->clear();
-            endEl("style:tab-stop");
+            endEl(u"style:tab-stop"_ustr);
 
             if( (pshape->tabs[i].position != 1000 * i ) || tf )
             {
                 if( !--nscount ) break;
             }
         }
-        endEl("style:tab-stops");
+        endEl(u"style:tab-stops"_ustr);
     }
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
 }
 
 
@@ -1483,8 +1483,8 @@ void HwpReader::makePageStyle()
      }
 
      for( int i = 0 ; i < pmCount ; i++ ){
-         mxList->addAttribute("style:name", sXML_CDATA, "pm" + OUString::number(i + 1));
-         startEl("style:page-master");
+         mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "pm" + OUString::number(i + 1));
+         startEl(u"style:page-master"_ustr);
          mxList->clear();
 
 
@@ -1493,73 +1493,73 @@ void HwpReader::makePageStyle()
               case 3:                                   // A4
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "210mm");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "297mm");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"210mm"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"297mm"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "210mm");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "297mm");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"210mm"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"297mm"_ustr);
                     }
                     break;
               case 4:                                   // 80 column
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "8.5inch");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "11inch");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"8.5inch"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"11inch"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "8.5inch");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "11inch");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"8.5inch"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"11inch"_ustr);
                     }
                     break;
               case 5:                                   // B5
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "176mm");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "250mm");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"176mm"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"250mm"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "176mm");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "250mm");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"176mm"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"250mm"_ustr);
                     }
                     break;
               case 6:                                   // B4
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "250mm");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "353mm");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"250mm"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"353mm"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "250mm");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "353mm");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"250mm"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"353mm"_ustr);
                     }
                     break;
               case 7:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "8.5inch");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "14inch");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"8.5inch"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"14inch"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "8.5inch");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "14inch");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"8.5inch"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"14inch"_ustr);
                     }
                     break;
               case 8:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "297mm");
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "420mm");
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"297mm"_ustr);
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"420mm"_ustr);
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA, "297mm");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA, "420mm");
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA, u"297mm"_ustr);
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA, u"420mm"_ustr);
                     }
                     break;
               case 0:
@@ -1568,72 +1568,72 @@ void HwpReader::makePageStyle()
               default:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA,
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA,
                               OUString::number(WTI(hwpinfo.paper.paper_height)) + "inch");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA,
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA,
                               OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
                     }
                     else
                     {
-                         mxList->addAttribute("fo:page-width",sXML_CDATA,
+                         mxList->addAttribute(u"fo:page-width"_ustr,sXML_CDATA,
                               OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
-                         mxList->addAttribute("fo:page-height",sXML_CDATA,
+                         mxList->addAttribute(u"fo:page-height"_ustr,sXML_CDATA,
                               OUString::number(WTI(hwpinfo.paper.paper_height)) + "inch");
                     }
                     break;
 
          }
 
-         mxList->addAttribute("style:print-orientation",sXML_CDATA,
+         mxList->addAttribute(u"style:print-orientation"_ustr,sXML_CDATA,
               OUString::createFromAscii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
          if( hwpinfo.beginpagenum != 1)
-              mxList->addAttribute("style:first-page-number",sXML_CDATA, OUString::number(hwpinfo.beginpagenum));
+              mxList->addAttribute(u"style:first-page-number"_ustr,sXML_CDATA, OUString::number(hwpinfo.beginpagenum));
 
          if( hwpinfo.borderline ){
-             mxList->addAttribute("fo:margin-left",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-left"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + "inch");
-             mxList->addAttribute("fo:margin-right",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-right"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + "inch");
-             mxList->addAttribute("fo:margin-top",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-top"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + "inch");
-             mxList->addAttribute("fo:margin-bottom",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-bottom"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + "inch");
          }
          else{
-             mxList->addAttribute("fo:margin-left",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-left"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + "inch");
-             mxList->addAttribute("fo:margin-right",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-right"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.right_margin)) + "inch");
-             mxList->addAttribute("fo:margin-top",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-top"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.top_margin)) + "inch");
-             mxList->addAttribute("fo:margin-bottom",sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-bottom"_ustr,sXML_CDATA,
                   OUString::number(WTI(hwpinfo.paper.bottom_margin)) + "inch");
          }
 
          switch( hwpinfo.borderline )
          {
               case 1:
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
               case 3:
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.002cm dotted #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.002cm dotted #000000"_ustr);
                     break;
               case 2:
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
               case 4:
-                    mxList->addAttribute("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
          }
 
-         mxList->addAttribute("fo:padding-left", sXML_CDATA,
+         mxList->addAttribute(u"fo:padding-left"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.bordermargin[0])) + "inch");
-         mxList->addAttribute("fo:padding-right", sXML_CDATA,
+         mxList->addAttribute(u"fo:padding-right"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.bordermargin[1])) + "inch");
-         mxList->addAttribute("fo:padding-top", sXML_CDATA,
+         mxList->addAttribute(u"fo:padding-top"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.bordermargin[2])) + "inch");
-         mxList->addAttribute("fo:padding-bottom", sXML_CDATA,
+         mxList->addAttribute(u"fo:padding-bottom"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.bordermargin[3])) + "inch");
 
      /* background color */
@@ -1641,14 +1641,14 @@ void HwpReader::makePageStyle()
          {
              if( hwpinfo.back_info.color[0] > 0 || hwpinfo.back_info.color[1] > 0
                      || hwpinfo.back_info.color[2] > 0 ){
-                 mxList->addAttribute("fo:background-color", sXML_CDATA,
+                 mxList->addAttribute(u"fo:background-color"_ustr, sXML_CDATA,
                                       rgb2str(hwpinfo.back_info.color[0],
                                               hwpinfo.back_info.color[1],
                                               hwpinfo.back_info.color[2]));
              }
          }
 
-         startEl("style:properties");
+         startEl(u"style:properties"_ustr);
          mxList->clear();
 
      /* background image */
@@ -1659,144 +1659,144 @@ void HwpReader::makePageStyle()
                  mxList->addAttribute("xlink:href", sXML_CDATA,
                       hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltowin(hwpinfo.back_info.filename).c_str())).c_str()));
 #else
-                 mxList->addAttribute("xlink:href", sXML_CDATA,
+                 mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                     hstr2OUString(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str()));
 #endif
-                 mxList->addAttribute("xlink:type", sXML_CDATA, "simple");
-                 mxList->addAttribute("xlink:actuate", sXML_CDATA, "onLoad");
+                 mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
+                 mxList->addAttribute(u"xlink:actuate"_ustr, sXML_CDATA, u"onLoad"_ustr);
              }
              if( hwpinfo.back_info.flag >= 2)
-                 mxList->addAttribute("style:repeat", sXML_CDATA, "stretch");
+                 mxList->addAttribute(u"style:repeat"_ustr, sXML_CDATA, u"stretch"_ustr);
              else if( hwpinfo.back_info.flag == 1 ){
-                 mxList->addAttribute("style:repeat", sXML_CDATA, "no-repeat");
-                 mxList->addAttribute("style:position", sXML_CDATA, "center");
+                 mxList->addAttribute(u"style:repeat"_ustr, sXML_CDATA, u"no-repeat"_ustr);
+                 mxList->addAttribute(u"style:position"_ustr, sXML_CDATA, u"center"_ustr);
              }
-             startEl("style:background-image");
+             startEl(u"style:background-image"_ustr);
 
              if( hwpinfo.back_info.type == 2 ){
-                 startEl("office:binary-data");
+                 startEl(u"office:binary-data"_ustr);
                  mxList->clear();
                  chars(base64_encode_string(reinterpret_cast<unsigned char*>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size));
-                 endEl("office:binary-data");
+                 endEl(u"office:binary-data"_ustr);
              }
-             endEl("style:background-image");
+             endEl(u"style:background-image"_ustr);
          }
 
          makeColumns( hwpfile.GetColumnDef(i) );
 
-         endEl("style:properties");
+         endEl(u"style:properties"_ustr);
 
     /* header style */
-         startEl("style:header-style");
-         mxList->addAttribute("svg:height", sXML_CDATA,
+         startEl(u"style:header-style"_ustr);
+         mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.paper.header_length)) + "inch");
-         mxList->addAttribute("fo:margin-bottom", sXML_CDATA, "0mm");
+         mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA, u"0mm"_ustr);
 
-         startEl("style:properties");
+         startEl(u"style:properties"_ustr);
          mxList->clear();
-         endEl("style:properties");
-         endEl("style:header-style");
+         endEl(u"style:properties"_ustr);
+         endEl(u"style:header-style"_ustr);
 
     /* footer style */
-         startEl("style:footer-style");
-         mxList->addAttribute("svg:height", sXML_CDATA,
+         startEl(u"style:footer-style"_ustr);
+         mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.paper.footer_length)) + "inch");
-         mxList->addAttribute("fo:margin-top", sXML_CDATA, "0mm");
-         startEl("style:properties");
+         mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA, u"0mm"_ustr);
+         startEl(u"style:properties"_ustr);
          mxList->clear();
-         endEl("style:properties");
-         endEl("style:footer-style");
+         endEl(u"style:properties"_ustr);
+         endEl(u"style:footer-style"_ustr);
 
     /* Footnote style */
-         startEl("style:page-layout-properties");
+         startEl(u"style:page-layout-properties"_ustr);
 
-         mxList->addAttribute("style:distance-before-sep", sXML_CDATA,
+         mxList->addAttribute(u"style:distance-before-sep"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.splinetext)) + "inch");
-         mxList->addAttribute("style:distance-after-sep", sXML_CDATA,
+         mxList->addAttribute(u"style:distance-after-sep"_ustr, sXML_CDATA,
               OUString::number(WTI(hwpinfo.splinefn)) + "inch");
-         startEl("style:properties");
+         startEl(u"style:properties"_ustr);
          mxList->clear();
-         endEl("style:properties");
+         endEl(u"style:properties"_ustr);
          if ( hwpinfo.fnlinetype == 2 )
-              mxList->addAttribute("style:width", sXML_CDATA, "15cm");
+              mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"15cm"_ustr);
          else if ( hwpinfo.fnlinetype == 1)
-              mxList->addAttribute("style:width", sXML_CDATA, "2cm");
+              mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"2cm"_ustr);
          else if ( hwpinfo.fnlinetype == 3)
-              mxList->addAttribute("style:width", sXML_CDATA, "0cm");
+              mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"0cm"_ustr);
          else
-              mxList->addAttribute("style:width", sXML_CDATA, "5cm");
+              mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"5cm"_ustr);
 
-         startEl("style:footnote-sep");
+         startEl(u"style:footnote-sep"_ustr);
          mxList->clear();
-         endEl("style:footnote-sep");
+         endEl(u"style:footnote-sep"_ustr);
 
-         endEl("style:page-layout-properties");
+         endEl(u"style:page-layout-properties"_ustr);
 
-         endEl("style:page-master");
+         endEl(u"style:page-master"_ustr);
      }
 }
 
 void HwpReader::makeColumns(ColumnDef const *coldef)
 {
     if( !coldef ) return;
-    mxList->addAttribute("fo:column-count", sXML_CDATA, OUString::number(coldef->ncols));
-    startEl("style:columns");
+    mxList->addAttribute(u"fo:column-count"_ustr, sXML_CDATA, OUString::number(coldef->ncols));
+    startEl(u"style:columns"_ustr);
     mxList->clear();
     if( coldef->separator != 0 )
     {
         switch( coldef->separator )
         {
              case 1:                           /* thin line */
-                  mxList->addAttribute("style:width", sXML_CDATA, "0.02mm");
+                  mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"0.02mm"_ustr);
                   [[fallthrough]];
              case 3:                           /* dotted line */
-                  mxList->addAttribute("style:style", sXML_CDATA, "dotted");
-                  mxList->addAttribute("style:width", sXML_CDATA, "0.02mm");
+                  mxList->addAttribute(u"style:style"_ustr, sXML_CDATA, u"dotted"_ustr);
+                  mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"0.02mm"_ustr);
                   break;
              case 2:                           /* thick line */
              case 4:                           /* double line */
-                  mxList->addAttribute("style:width", sXML_CDATA, "0.35mm");
+                  mxList->addAttribute(u"style:width"_ustr, sXML_CDATA, u"0.35mm"_ustr);
                   break;
              case 0:                           /* None */
              default:
-                  mxList->addAttribute("style:style", sXML_CDATA, "none");
+                  mxList->addAttribute(u"style:style"_ustr, sXML_CDATA, u"none"_ustr);
                   break;
         }
-        startEl("style:column-sep");
+        startEl(u"style:column-sep"_ustr);
         mxList->clear();
-        endEl("style:column-sep");
+        endEl(u"style:column-sep"_ustr);
     }
     double spacing = WTI(coldef->spacing)/ 2. ;
     for(int ii = 0 ; ii < coldef->ncols ; ii++)
     {
         if( ii == 0 )
-             mxList->addAttribute("fo:margin-left", sXML_CDATA, "0mm");
+             mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA, u"0mm"_ustr);
         else
-             mxList->addAttribute("fo:margin-left", sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA,
                   OUString::number( spacing) + "inch");
         if( ii == ( coldef->ncols -1) )
-             mxList->addAttribute("fo:margin-right", sXML_CDATA,"0mm");
+             mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA,u"0mm"_ustr);
         else
-             mxList->addAttribute("fo:margin-right", sXML_CDATA,
+             mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA,
                   OUString::number( spacing) + "inch");
-        startEl("style:column");
+        startEl(u"style:column"_ustr);
         mxList->clear();
-        endEl("style:column");
+        endEl(u"style:column"_ustr);
     }
-    endEl("style:columns");
+    endEl(u"style:columns"_ustr);
 }
 
 void HwpReader::makeTStyle(CharShape const * cshape)
 {
-    mxList->addAttribute("style:name", sXML_CDATA, "T" + OUString::number(cshape->index));
-    mxList->addAttribute("style:family", sXML_CDATA, "text");
-    startEl("style:style");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "T" + OUString::number(cshape->index));
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"text"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
     parseCharShape(cshape);
-    startEl("style:properties");
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
 }
 
 
@@ -1805,68 +1805,68 @@ void HwpReader::makeTableStyle(Table *tbl)
 // table
     TxtBox *hbox = tbl->box;
 
-    mxList->addAttribute("style:name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
-    mxList->addAttribute("style:family", sXML_CDATA,"table");
-    startEl("style:style");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA,u"table"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
-    mxList->addAttribute("style:width", sXML_CDATA,
+    mxList->addAttribute(u"style:width"_ustr, sXML_CDATA,
         OUString::number(WTMM(hbox->box_xs)) + "mm");
-    mxList->addAttribute("table:align", sXML_CDATA,"left");
-    mxList->addAttribute("fo:keep-with-next", sXML_CDATA,"false");
-    startEl("style:properties");
+    mxList->addAttribute(u"table:align"_ustr, sXML_CDATA,u"left"_ustr);
+    mxList->addAttribute(u"fo:keep-with-next"_ustr, sXML_CDATA,u"false"_ustr);
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
 
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         mxList->addAttribute(
-            "style:name", sXML_CDATA,
+            u"style:name"_ustr, sXML_CDATA,
             "Table" + OUString::number(hbox->style.boxnum) + "."
                 + OUStringChar(static_cast<char>('A'+i)));
-        mxList->addAttribute("style:family", sXML_CDATA,"table-column");
-        startEl("style:style");
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA,u"table-column"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
-        mxList->addAttribute("style:column-width", sXML_CDATA,
+        mxList->addAttribute(u"style:column-width"_ustr, sXML_CDATA,
             OUString::number(WTMM(tbl->columns.data[i+1] - tbl->columns.data[i])) + "mm");
-        startEl("style:properties");
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
     }
 
 // row
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         mxList->addAttribute(
-            "style:name", sXML_CDATA,
+            u"style:name"_ustr, sXML_CDATA,
             "Table" + OUString::number(hbox->style.boxnum) + ".row" + OUString::number(i + 1));
-        mxList->addAttribute("style:family", sXML_CDATA,"table-row");
-        startEl("style:style");
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA,u"table-row"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
-        mxList->addAttribute("style:row-height", sXML_CDATA,
+        mxList->addAttribute(u"style:row-height"_ustr, sXML_CDATA,
             OUString::number(WTMM(tbl->rows.data[i+1] - tbl->rows.data[i])) + "mm");
-        startEl("style:properties");
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
     }
 
 // cell
     for (auto const& tcell : tbl->cells)
     {
         mxList->addAttribute(
-            "style:name", sXML_CDATA,
+            u"style:name"_ustr, sXML_CDATA,
             "Table" + OUString::number(hbox->style.boxnum) + "."
                 + OUStringChar(char('A'+ tcell->nColumnIndex))
                 + OUString::number(tcell->nRowIndex +1));
-        mxList->addAttribute("style:family", sXML_CDATA,"table-cell");
-        startEl("style:style");
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA,u"table-cell"_ustr);
+        startEl(u"style:style"_ustr);
         mxList->clear();
         Cell *cl = tcell->pCell;
         if( cl->ver_align == 1 )
-            mxList->addAttribute("fo:vertical-align", sXML_CDATA,"middle");
+            mxList->addAttribute(u"fo:vertical-align"_ustr, sXML_CDATA,u"middle"_ustr);
 
         if(cl->linetype[2] == cl->linetype[3] && cl->linetype[2] == cl->linetype[0]
             && cl->linetype[2] == cl->linetype[1])
@@ -1875,14 +1875,14 @@ void HwpReader::makeTableStyle(Table *tbl)
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
@@ -1892,69 +1892,69 @@ void HwpReader::makeTableStyle(Table *tbl)
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-left"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cl->linetype[1] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-right"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cl->linetype[2] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-top"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cl->linetype[3] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-bottom"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
         if(cl->shade != 0)
-            mxList->addAttribute("fo:background-color", sXML_CDATA,
+            mxList->addAttribute(u"fo:background-color"_ustr, sXML_CDATA,
                 hcolor2str(sal::static_int_cast<uchar>(cl->color),
                                 sal::static_int_cast<uchar>(cl->shade)));
 
-        startEl("style:properties");
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
+        endEl(u"style:properties"_ustr);
 
-        endEl("style:style");
+        endEl(u"style:style"_ustr);
     }
 }
 
@@ -1963,10 +1963,10 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 {
     while( hdo )
     {
-        mxList->addAttribute("style:name", sXML_CDATA, "Draw" + OUString::number(hdo->index));
-        mxList->addAttribute("style:family", sXML_CDATA, "graphics");
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "Draw" + OUString::number(hdo->index));
+        mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
 
-        startEl("style:style");
+        startEl(u"style:style"_ustr);
         mxList->clear();
 
         switch (fstyle->txtflow)
@@ -1974,31 +1974,31 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             case 0:
                 break;
             case 1:
-                mxList->addAttribute("style:wrap", sXML_CDATA, "run-through");
+                mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"run-through"_ustr);
                 break;
             case 2:
-                mxList->addAttribute("style:wrap", sXML_CDATA, "dynamic");
+                mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"dynamic"_ustr);
                 break;
         }
         tools::Long color;
 // invisible line
         if( hdo->property.line_color > 0xffffff )
         {
-            mxList->addAttribute("draw:stroke", sXML_CDATA, "none" );
+            mxList->addAttribute(u"draw:stroke"_ustr, sXML_CDATA, u"none"_ustr );
         }
         else
         {
 
             if( hdo->property.line_pstyle == 0 )
-                mxList->addAttribute("draw:stroke", sXML_CDATA, "solid" );
+                mxList->addAttribute(u"draw:stroke"_ustr, sXML_CDATA, u"solid"_ustr );
             else if( hdo->property.line_pstyle < 5 )
             {
-                mxList->addAttribute("draw:stroke", sXML_CDATA, "dash" );
-                mxList->addAttribute("draw:stroke-dash", sXML_CDATA, "LineType" + OUString::number(hdo->index));
+                mxList->addAttribute(u"draw:stroke"_ustr, sXML_CDATA, u"dash"_ustr );
+                mxList->addAttribute(u"draw:stroke-dash"_ustr, sXML_CDATA, "LineType" + OUString::number(hdo->index));
             }
-            mxList->addAttribute("svg:stroke-width", sXML_CDATA,
+            mxList->addAttribute(u"svg:stroke-width"_ustr, sXML_CDATA,
                 OUString::number( WTMM(hdo->property.line_width)) + "mm");
-            mxList->addAttribute("svg:stroke-color", sXML_CDATA,
+            mxList->addAttribute(u"svg:stroke-color"_ustr, sXML_CDATA,
                                  rgb2str(static_cast<int32_t>(hdo->property.line_color)));
         }
 
@@ -2009,44 +2009,44 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             if( hdo->property.line_tstyle > 0 &&
                 o3tl::make_unsigned(hdo->property.line_tstyle) < std::size(ArrowShape) )
             {
-                mxList->addAttribute("draw:marker-start", sXML_CDATA,
+                mxList->addAttribute(u"draw:marker-start"_ustr, sXML_CDATA,
                     OUString::createFromAscii(ArrowShape[hdo->property.line_tstyle].name) );
                 if( hdo->property.line_width > 100 )
-                         mxList->addAttribute("draw:marker-start-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
                 else if( hdo->property.line_width > 80 )
-                         mxList->addAttribute("draw:marker-start-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
                 else if( hdo->property.line_width > 60 )
-                         mxList->addAttribute("draw:marker-start-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
                 else if( hdo->property.line_width > 40 )
-                         mxList->addAttribute("draw:marker-start-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
                 else
-                         mxList->addAttribute("draw:marker-start-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
             }
 
             if( hdo->property.line_hstyle > 0 &&
                 o3tl::make_unsigned(hdo->property.line_hstyle) < std::size(ArrowShape) )
             {
-                mxList->addAttribute("draw:marker-end", sXML_CDATA,
+                mxList->addAttribute(u"draw:marker-end"_ustr, sXML_CDATA,
                     OUString::createFromAscii(ArrowShape[hdo->property.line_hstyle].name) );
                 if( hdo->property.line_width > 100 )
-                         mxList->addAttribute("draw:marker-end-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
                 else if( hdo->property.line_width > 80 )
-                         mxList->addAttribute("draw:marker-end-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
                 else if( hdo->property.line_width > 60 )
-                         mxList->addAttribute("draw:marker-end-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
                 else if( hdo->property.line_width > 40 )
-                         mxList->addAttribute("draw:marker-end-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
                 else
-                         mxList->addAttribute("draw:marker-end-width", sXML_CDATA,
+                         mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
             }
         }
@@ -2055,31 +2055,31 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
         {
             if( hdo->property.flag >> 19 & 0x01 )
             {
-                mxList->addAttribute( "draw:textarea-horizontal-align", sXML_CDATA, "center");
+                mxList->addAttribute( u"draw:textarea-horizontal-align"_ustr, sXML_CDATA, u"center"_ustr);
             }
 
             color = hdo->property.fill_color;
 
             if( hdo->property.flag >> 18 & 0x01 ) // bitmap pattern
             {
-                mxList->addAttribute("draw:fill", sXML_CDATA, "bitmap");
-                mxList->addAttribute("draw:fill-image-name", sXML_CDATA,
+                mxList->addAttribute(u"draw:fill"_ustr, sXML_CDATA, u"bitmap"_ustr);
+                mxList->addAttribute(u"draw:fill-image-name"_ustr, sXML_CDATA,
                     "fillimage" + OUString::number(hdo->index));
                                                   // bitmap resizing
                 if( hdo->property.flag >> 3 & 0x01 )
                 {
-                    mxList->addAttribute("style:repeat", sXML_CDATA, "stretch");
+                    mxList->addAttribute(u"style:repeat"_ustr, sXML_CDATA, u"stretch"_ustr);
                 }
                 else
                 {
-                    mxList->addAttribute("style:repeat", sXML_CDATA, "repeat");
-                    mxList->addAttribute("draw:fill-image-ref-point", sXML_CDATA, "top-left");
+                    mxList->addAttribute(u"style:repeat"_ustr, sXML_CDATA, u"repeat"_ustr);
+                    mxList->addAttribute(u"draw:fill-image-ref-point"_ustr, sXML_CDATA, u"top-left"_ustr);
                 }
                 if( hdo->property.flag >> 20 & 0x01 )
                 {
                     if( hdo->property.luminance > 0 )
                     {
-                        mxList->addAttribute("draw:transparency", sXML_CDATA,
+                        mxList->addAttribute(u"draw:transparency"_ustr, sXML_CDATA,
                             OUString::number(hdo->property.luminance) + "%");
                     }
                 }
@@ -2088,43 +2088,43 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                                                   // Gradation
             else if( hdo->property.flag >> 16 & 0x01 )
             {
-                mxList->addAttribute("draw:fill", sXML_CDATA, "gradient");
-                mxList->addAttribute("draw:fill-gradient-name", sXML_CDATA, "Grad" + OUString::number(hdo->index));
-                mxList->addAttribute("draw:gradient-step-count", sXML_CDATA, OUString::number(hdo->property.nstep));
+                mxList->addAttribute(u"draw:fill"_ustr, sXML_CDATA, u"gradient"_ustr);
+                mxList->addAttribute(u"draw:fill-gradient-name"_ustr, sXML_CDATA, "Grad" + OUString::number(hdo->index));
+                mxList->addAttribute(u"draw:gradient-step-count"_ustr, sXML_CDATA, OUString::number(hdo->property.nstep));
 
             }
                                                   // Hatching
             else if( hdo->property.pattern_type >> 24 & 0x01 )
             {
-                mxList->addAttribute("draw:fill", sXML_CDATA, "hatch");
-                mxList->addAttribute("draw:fill-hatch-name", sXML_CDATA, "Hatch" + OUString::number(hdo->index));
+                mxList->addAttribute(u"draw:fill"_ustr, sXML_CDATA, u"hatch"_ustr);
+                mxList->addAttribute(u"draw:fill-hatch-name"_ustr, sXML_CDATA, "Hatch" + OUString::number(hdo->index));
                 if( color < 0xffffff )
                 {
-                    mxList->addAttribute("draw:fill-color", sXML_CDATA,
+                    mxList->addAttribute(u"draw:fill-color"_ustr, sXML_CDATA,
                                          rgb2str(static_cast<int32_t>(color)));
-                    mxList->addAttribute("draw:fill-hatch-solid", sXML_CDATA, "true");
+                    mxList->addAttribute(u"draw:fill-hatch-solid"_ustr, sXML_CDATA, u"true"_ustr);
                 }
             }
             else if( color <= 0xffffff )
             {
-                mxList->addAttribute("draw:fill", sXML_CDATA, "solid");
-                mxList->addAttribute("draw:fill-color", sXML_CDATA,
+                mxList->addAttribute(u"draw:fill"_ustr, sXML_CDATA, u"solid"_ustr);
+                mxList->addAttribute(u"draw:fill-color"_ustr, sXML_CDATA,
                                      rgb2str(static_cast<int32_t>(color)));
             }
             else
-                mxList->addAttribute("draw:fill", sXML_CDATA, "none");
+                mxList->addAttribute(u"draw:fill"_ustr, sXML_CDATA, u"none"_ustr);
         }
 
         if( fstyle->anchor_type == CHAR_ANCHOR )
         {
-            mxList->addAttribute("style:vertical-pos", sXML_CDATA, "top");
-            mxList->addAttribute("style:vertical-rel", sXML_CDATA, "baseline");
+            mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"top"_ustr);
+            mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"baseline"_ustr);
         }
 
-        startEl("style:properties");
+        startEl(u"style:properties"_ustr);
         mxList->clear();
-        endEl("style:properties");
-        endEl("style:style");
+        endEl(u"style:properties"_ustr);
+        endEl(u"style:style"_ustr);
 
         if( hdo->type == 0 )
         {
@@ -2137,35 +2137,35 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
 void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 {
-    mxList->addAttribute("style:name", sXML_CDATA, "CapBox" + OUString::number(fstyle->boxnum));
-    mxList->addAttribute("style:family", sXML_CDATA, "graphics");
-    startEl("style:style");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "CapBox" + OUString::number(fstyle->boxnum));
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
-    mxList->addAttribute("fo:margin-left", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-right", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-top", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-bottom", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:padding", sXML_CDATA, "0cm");
+    mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA, u"0cm"_ustr);
     switch (fstyle->txtflow)
     {
         case 0:
-            mxList->addAttribute("style:wrap", sXML_CDATA, "none");
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"none"_ustr);
             break;
         case 1:
             if( fstyle->boxtype == 'G' )
-                mxList->addAttribute("style:run-through", sXML_CDATA, "background");
-            mxList->addAttribute("style:wrap", sXML_CDATA, "run-through");
+                mxList->addAttribute(u"style:run-through"_ustr, sXML_CDATA, u"background"_ustr);
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"run-through"_ustr);
             break;
         case 2:
-            mxList->addAttribute("style:wrap", sXML_CDATA, "dynamic");
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"dynamic"_ustr);
             break;
     }
     if (fstyle->anchor_type == CHAR_ANCHOR)
     {
-        mxList->addAttribute("style:vertical-pos", sXML_CDATA, "top");
-        mxList->addAttribute("style:vertical-rel", sXML_CDATA, "baseline");
-        mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "center");
-        mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
+        mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"top"_ustr);
+        mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"baseline"_ustr);
+        mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"center"_ustr);
+        mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
     }
     else
     {
@@ -2173,78 +2173,78 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         switch (-(fstyle->xpos))
         {
             case 2:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "right");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"right"_ustr);
                 break;
             case 3:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "center");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"center"_ustr);
                 break;
             case 1:
             default:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "from-left");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"from-left"_ustr);
                 break;
         }
         switch (-(fstyle->ypos))
         {
             case 2:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "bottom");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"bottom"_ustr);
                 break;
             case 3:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "middle");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"middle"_ustr);
                 break;
             case 1:
             default:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "from-top");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"from-top"_ustr);
                 break;
         }
         if ( fstyle->anchor_type == PARA_ANCHOR )
         {
-            mxList->addAttribute("style:vertical-rel", sXML_CDATA, "paragraph");
-            mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
+            mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
+            mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
         }
         else
         {
-            mxList->addAttribute("style:vertical-rel", sXML_CDATA, "page-content");
-            mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "page-content");
+            mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"page-content"_ustr);
+            mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"page-content"_ustr);
         }
     }
-    startEl("style:properties");
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
     if( fstyle->boxtype == 'G' )
     {
-        mxList->addAttribute("style:name", sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
     }
     else
     {
-        mxList->addAttribute("style:name", sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
+        mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
     }
 
-    mxList->addAttribute("style:family", sXML_CDATA, "graphics");
-    startEl("style:style");
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
+    startEl(u"style:style"_ustr);
     mxList->clear();
 
-    mxList->addAttribute("fo:margin-left", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-right", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-top", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:margin-bottom", sXML_CDATA, "0cm");
-    mxList->addAttribute("fo:padding", sXML_CDATA, "0cm");
-    mxList->addAttribute("style:wrap", sXML_CDATA, "none");
-    mxList->addAttribute("style:vertical-pos", sXML_CDATA, "from-top");
-    mxList->addAttribute("style:vertical-rel", sXML_CDATA, "paragraph");
-    mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "from-left");
-    mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
+    mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"none"_ustr);
+    mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"from-top"_ustr);
+    mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
+    mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"from-left"_ustr);
+    mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
     if (fstyle->boxtype == 'G' && fstyle->cell)
     {
         char *cell = static_cast<char *>(fstyle->cell);
-        mxList->addAttribute("draw:luminance", sXML_CDATA, OUString::number(cell[0]) + "%");
-        mxList->addAttribute("draw:contrast", sXML_CDATA, OUString::number(cell[1]) + "%");
+        mxList->addAttribute(u"draw:luminance"_ustr, sXML_CDATA, OUString::number(cell[0]) + "%");
+        mxList->addAttribute(u"draw:contrast"_ustr, sXML_CDATA, OUString::number(cell[1]) + "%");
         if( cell[2] == 0 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "standard");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"standard"_ustr);
         else if( cell[2] == 1 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "greyscale");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"greyscale"_ustr);
         else if( cell[2] == 2 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "mono");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"mono"_ustr);
     }
     else if (fstyle->cell)
     {
@@ -2256,18 +2256,18 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
             switch( cell->linetype[0] )
             {
                 case 0:
-                    mxList->addAttribute("fo:padding", sXML_CDATA,"0mm");
+                    mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA,u"0mm"_ustr);
                     break;
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
@@ -2277,68 +2277,68 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-left"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[1] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-right"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[2] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-top"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[3] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-bottom"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
         if(cell->shade != 0)
-            mxList->addAttribute("fo:background-color", sXML_CDATA, hcolor2str(
+            mxList->addAttribute(u"fo:background-color"_ustr, sXML_CDATA, hcolor2str(
             sal::static_int_cast<uchar>(cell->color),
             sal::static_int_cast<uchar>(cell->shade)));
     }
-    startEl("style:properties");
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
 }
 
 
@@ -2360,59 +2360,59 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         case 'B' :                                // button
         case 'O' :                                // other
         case 'T' :                                // table
-            mxList->addAttribute("style:name", sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
-            mxList->addAttribute("style:family", sXML_CDATA, "graphics");
+            mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
+            mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
             break;
         case 'G' :                                // graphics
-            mxList->addAttribute("style:name", sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
-            mxList->addAttribute("style:family", sXML_CDATA, "graphics");
+            mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
+            mxList->addAttribute(u"style:family"_ustr, sXML_CDATA, u"graphics"_ustr);
             break;
         case 'L' :                                // line TODO : all
-            mxList->addAttribute("style:name", sXML_CDATA, "L" + OUString::number(fstyle->boxnum));
-            mxList->addAttribute( "style:family" , sXML_CDATA , "paragraph" );
+            mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "L" + OUString::number(fstyle->boxnum));
+            mxList->addAttribute( u"style:family"_ustr , sXML_CDATA , u"paragraph"_ustr );
             break;
     }
 
-    startEl("style:style");
+    startEl(u"style:style"_ustr);
     mxList->clear();
 
     if ( fstyle->boxtype == 'T')
     {
-        mxList->addAttribute("fo:padding", sXML_CDATA, "0cm");
+        mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA, u"0cm"_ustr);
     }
 
     if( fstyle->boxtype != 'G' || fstyle->cap_len <= 0 )
     {
-        mxList->addAttribute("fo:margin-left", sXML_CDATA,
+        mxList->addAttribute(u"fo:margin-left"_ustr, sXML_CDATA,
             OUString::number(WTMM(fstyle->margin[0][0]) ) + "mm");
-        mxList->addAttribute("fo:margin-right", sXML_CDATA,
+        mxList->addAttribute(u"fo:margin-right"_ustr, sXML_CDATA,
             OUString::number(WTMM(fstyle->margin[0][1])) + "mm");
-        mxList->addAttribute("fo:margin-top", sXML_CDATA,
+        mxList->addAttribute(u"fo:margin-top"_ustr, sXML_CDATA,
             OUString::number(WTMM(fstyle->margin[0][2])) + "mm");
-        mxList->addAttribute("fo:margin-bottom", sXML_CDATA,
+        mxList->addAttribute(u"fo:margin-bottom"_ustr, sXML_CDATA,
             OUString::number(WTMM(fstyle->margin[0][3])) + "mm");
     }
 
     switch (fstyle->txtflow)
     {
         case 0:
-            mxList->addAttribute("style:wrap", sXML_CDATA, "none");
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"none"_ustr);
             break;
         case 1:
             if( fstyle->boxtype == 'G' || fstyle->boxtype == 'B' || fstyle->boxtype == 'O')
-                mxList->addAttribute("style:run-through", sXML_CDATA, "background");
-            mxList->addAttribute("style:wrap", sXML_CDATA, "run-through");
+                mxList->addAttribute(u"style:run-through"_ustr, sXML_CDATA, u"background"_ustr);
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"run-through"_ustr);
             break;
         case 2:
-            mxList->addAttribute("style:wrap", sXML_CDATA, "dynamic");
+            mxList->addAttribute(u"style:wrap"_ustr, sXML_CDATA, u"dynamic"_ustr);
             break;
     }
     if (fstyle->anchor_type == CHAR_ANCHOR)
     {
-        mxList->addAttribute("style:vertical-pos", sXML_CDATA, "top");
-        mxList->addAttribute("style:vertical-rel", sXML_CDATA, "baseline");
-        mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "center");
-        mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
+        mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"top"_ustr);
+        mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"baseline"_ustr);
+        mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"center"_ustr);
+        mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
     }
     else
     {
@@ -2420,38 +2420,38 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         switch (-(fstyle->xpos))
         {
             case 2:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "right");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"right"_ustr);
                 break;
             case 3:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "center");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"center"_ustr);
                 break;
             case 1:
             default:
-                mxList->addAttribute("style:horizontal-pos", sXML_CDATA, "from-left");
+                mxList->addAttribute(u"style:horizontal-pos"_ustr, sXML_CDATA, u"from-left"_ustr);
                 break;
         }
         switch (-(fstyle->ypos))
         {
             case 2:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "bottom");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"bottom"_ustr);
                 break;
             case 3:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "middle");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"middle"_ustr);
                 break;
             case 1:
             default:
-                mxList->addAttribute("style:vertical-pos", sXML_CDATA, "from-top");
+                mxList->addAttribute(u"style:vertical-pos"_ustr, sXML_CDATA, u"from-top"_ustr);
                 break;
         }
         if ( fstyle->anchor_type == PARA_ANCHOR )
         {
-            mxList->addAttribute("style:vertical-rel", sXML_CDATA, "paragraph");
-            mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "paragraph");
+            mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
+            mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"paragraph"_ustr);
         }
         else
         {
-            mxList->addAttribute("style:vertical-rel", sXML_CDATA, "page-content");
-            mxList->addAttribute("style:horizontal-rel", sXML_CDATA, "page-content");
+            mxList->addAttribute(u"style:vertical-rel"_ustr, sXML_CDATA, u"page-content"_ustr);
+            mxList->addAttribute(u"style:horizontal-rel"_ustr, sXML_CDATA, u"page-content"_ustr);
         }
     }
     if (fstyle->cell && (fstyle->boxtype == 'X' || fstyle->boxtype == 'B'))
@@ -2464,18 +2464,18 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             switch( cell->linetype[0] )
             {
                 case 0:
-                          mxList->addAttribute("fo:border", sXML_CDATA, "none");
+                          mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA, u"none"_ustr);
                     break;
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
@@ -2485,88 +2485,88 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-left", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-left"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-left"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[1] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-right", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-right"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-right"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[2] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-top", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-top"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-top"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
             switch( cell->linetype[3] )
             {
                 case 1:                           /* A thin solid line */
                 case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.002cm solid #000000"_ustr);
                     break;
                 case 2:                           /* Bold lines */
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.035cm solid #000000"_ustr);
                     break;
                 case 4:                           /* Double line */
-                    mxList->addAttribute("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
-                    mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
+                    mxList->addAttribute(u"style:border-line-width-bottom"_ustr, sXML_CDATA,u"0.002cm 0.035cm 0.002cm"_ustr);
+                    mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.039cm double #000000"_ustr);
                     break;
             }
         }
 
         if( cell->linetype[0] == 0 && cell->linetype[1] == 0 &&
                   cell->linetype[2] == 0 && cell->linetype[3] == 0 ){
-              mxList->addAttribute("fo:padding", sXML_CDATA,"0mm");
+              mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA,u"0mm"_ustr);
         }
         else{
-              mxList->addAttribute("fo:padding-left", sXML_CDATA,
+              mxList->addAttribute(u"fo:padding-left"_ustr, sXML_CDATA,
                       OUString::number(WTMM(fstyle->margin[1][0])) + "mm");
-              mxList->addAttribute("fo:padding-right", sXML_CDATA,
+              mxList->addAttribute(u"fo:padding-right"_ustr, sXML_CDATA,
                       OUString::number(WTMM(fstyle->margin[1][1])) + "mm");
-              mxList->addAttribute("fo:padding-top", sXML_CDATA,
+              mxList->addAttribute(u"fo:padding-top"_ustr, sXML_CDATA,
                       OUString::number(WTMM(fstyle->margin[1][2])) + "mm");
-              mxList->addAttribute("fo:padding-bottom", sXML_CDATA,
+              mxList->addAttribute(u"fo:padding-bottom"_ustr, sXML_CDATA,
                       OUString::number(WTMM(fstyle->margin[1][3])) + "mm");
         }
         if(cell->shade != 0)
-            mxList->addAttribute("fo:background-color", sXML_CDATA,
+            mxList->addAttribute(u"fo:background-color"_ustr, sXML_CDATA,
             hcolor2str(
                 sal::static_int_cast<uchar>(cell->color),
                 sal::static_int_cast<uchar>(cell->shade)));
     }
     else if( fstyle->boxtype == 'E' )
      {
-          mxList->addAttribute("fo:padding", sXML_CDATA,"0mm");
+          mxList->addAttribute(u"fo:padding"_ustr, sXML_CDATA,u"0mm"_ustr);
      }
     else if( fstyle->boxtype == 'L' )
     {
-        mxList->addAttribute( "style:border-line-width-bottom", sXML_CDATA, "0.02mm 0.35mm 0.02mm");
-        mxList->addAttribute("fo:border-bottom", sXML_CDATA,"0.039cm double #808080");
+        mxList->addAttribute( u"style:border-line-width-bottom"_ustr, sXML_CDATA, u"0.02mm 0.35mm 0.02mm"_ustr);
+        mxList->addAttribute(u"fo:border-bottom"_ustr, sXML_CDATA,u"0.039cm double #808080"_ustr);
     }
     else if( fstyle->boxtype == 'G' && fstyle->cell )
     {
@@ -2576,24 +2576,24 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                 OUString::number(WTMM(-fstyle->margin[1][1]) ) + "mm " +
                 OUString::number(WTMM(-fstyle->margin[1][2]) ) + "mm " +
                 OUString::number(WTMM(-fstyle->margin[1][3]) ) + "mm)";
-             mxList->addAttribute("style:mirror", sXML_CDATA, "none");
-             mxList->addAttribute("fo:clip", sXML_CDATA, clip);
+             mxList->addAttribute(u"style:mirror"_ustr, sXML_CDATA, u"none"_ustr);
+             mxList->addAttribute(u"fo:clip"_ustr, sXML_CDATA, clip);
         }
         char *cell = static_cast<char *>(fstyle->cell);
-        mxList->addAttribute("draw:luminance", sXML_CDATA, OUString::number(cell[0]) + "%");
-        mxList->addAttribute("draw:contrast", sXML_CDATA, OUString::number(cell[1]) + "%");
+        mxList->addAttribute(u"draw:luminance"_ustr, sXML_CDATA, OUString::number(cell[0]) + "%");
+        mxList->addAttribute(u"draw:contrast"_ustr, sXML_CDATA, OUString::number(cell[1]) + "%");
         if( cell[2] == 0 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "standard");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"standard"_ustr);
         else if( cell[2] == 1 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "greyscale");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"greyscale"_ustr);
         else if( cell[2] == 2 )
-            mxList->addAttribute("draw:color-mode", sXML_CDATA, "mono");
+            mxList->addAttribute(u"draw:color-mode"_ustr, sXML_CDATA, u"mono"_ustr);
 
     }
-    startEl("style:properties");
+    startEl(u"style:properties"_ustr);
     mxList->clear();
-    endEl("style:properties");
-    endEl("style:style");
+    endEl(u"style:properties"_ustr);
+    endEl(u"style:style"_ustr);
 }
 
 
@@ -2627,17 +2627,17 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     unsigned char firstspace = 0;
     if( !bParaStart)
     {
-        mxList->addAttribute("text:style-name", sXML_CDATA,
+        mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
             getPStyleName(para->GetParaShape().index));
-        startEl("text:p");
+        startEl(u"text:p"_ustr);
         mxList->clear();
     }
     if( d->bFirstPara && d->bInBody )
     {
-        mxList->addAttribute("text:name", sXML_CDATA, sBeginOfDoc);
-        startEl("text:bookmark");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, sBeginOfDoc);
+        startEl(u"text:bookmark"_ustr);
         mxList->clear();
-        endEl("text:bookmark");
+        endEl(u"text:bookmark"_ustr);
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2645,9 +2645,9 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         makeShowPageNum();
         d->bInHeader = false;
     }
-    mxList->addAttribute("text:style-name", sXML_CDATA,
+    mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
         getTStyleName(para->cshape->index));
-    startEl("text:span");
+    startEl(u"text:span"_ustr);
     mxList->clear();
 
     for (const auto& box : para->hhstr)
@@ -2658,14 +2658,14 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         if (box->hh == CH_SPACE && !firstspace)
         {
             makeChars(str);
-            startEl("text:s");
-            endEl("text:s");
+            startEl(u"text:s"_ustr);
+            endEl(u"text:s"_ustr);
         }
         else if (box->hh == CH_END_PARA)
         {
             makeChars(str);
-            endEl("text:span");
-            endEl("text:p");
+            endEl(u"text:span"_ustr);
+            endEl(u"text:p"_ustr);
             break;
         }
         else
@@ -2697,18 +2697,18 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 
     if( !bParaStart )
     {
-        mxList->addAttribute("text:style-name", sXML_CDATA,
+        mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
             getPStyleName(para->GetParaShape().index));
-        startEl("text:p");
+        startEl(u"text:p"_ustr);
         mxList->clear();
     }
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
-        mxList->addAttribute("text:name", sXML_CDATA, sBeginOfDoc);
-        startEl("text:bookmark");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, sBeginOfDoc);
+        startEl(u"text:bookmark"_ustr);
         mxList->clear();
-        endEl("text:bookmark");
+        endEl(u"text:bookmark"_ustr);
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2716,9 +2716,9 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         makeShowPageNum();
         d->bInHeader = false;
     }
-    mxList->addAttribute("text:style-name", sXML_CDATA,
+    mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
         getTStyleName(curr));
-    startEl("text:span");
+    startEl(u"text:span"_ustr);
     mxList->clear();
 
     int n = 0;
@@ -2730,24 +2730,24 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         if (para->GetCharShape(n)->index != curr)
         {
             makeChars(str);
-            endEl("text:span");
+            endEl(u"text:span"_ustr);
             curr = para->GetCharShape(n)->index;
-            mxList->addAttribute("text:style-name", sXML_CDATA,
+            mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
                 getTStyleName(curr));
-            startEl("text:span");
+            startEl(u"text:span"_ustr);
             mxList->clear();
         }
         if (box->hh == CH_SPACE && !firstspace)
         {
             makeChars(str);
-            startEl("text:s");
-            endEl("text:s");
+            startEl(u"text:s"_ustr);
+            endEl(u"text:s"_ustr);
         }
         else if (box->hh == CH_END_PARA)
         {
             makeChars(str);
-            endEl("text:span");
-            endEl("text:p");
+            endEl(u"text:span"_ustr);
+            endEl(u"text:p"_ustr);
             break;
         }
         else
@@ -2784,28 +2784,28 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 
     const auto STARTP = [this, para, &pstart]()
     {
-        mxList->addAttribute("text:style-name", "CDATA",
+        mxList->addAttribute(u"text:style-name"_ustr, u"CDATA"_ustr,
                              getPStyleName(para->GetParaShape().index));
-        startEl("text:p");
+        startEl(u"text:p"_ustr);
         mxList->clear();
         pstart = true;
     };
     const auto STARTT = [this, para, &tstart](int pos)
     {
         auto curr = para->GetCharShape(pos > 0 ? pos - 1 : 0)->index;
-        mxList->addAttribute("text:style-name", "CDATA", getTStyleName(curr));
-        startEl("text:span");
+        mxList->addAttribute(u"text:style-name"_ustr, u"CDATA"_ustr, getTStyleName(curr));
+        startEl(u"text:span"_ustr);
         mxList->clear();
         tstart = true;
     };
     const auto ENDP = [this, &pstart]()
     {
-        endEl("text:p");
+        endEl(u"text:p"_ustr);
         pstart = false;
     };
     const auto ENDT = [this, &tstart]()
     {
-        endEl("text:span");
+        endEl(u"text:span"_ustr);
         tstart = false;
     };
 
@@ -2814,10 +2814,10 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         if ( !pstart ) {
             STARTP();
         }
-        mxList->addAttribute("text:name", sXML_CDATA, sBeginOfDoc);
-        startEl("text:bookmark");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, sBeginOfDoc);
+        startEl(u"text:bookmark"_ustr);
         mxList->clear();
-        endEl("text:bookmark");
+        endEl(u"text:bookmark"_ustr);
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2853,9 +2853,9 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             if( !pstart ) {STARTP(); }
             if( !tstart ) {STARTT(n);}
             makeChars(str);
-            startEl("text:s");
+            startEl(u"text:s"_ustr);
             mxList->clear();
-            endEl("text:s");
+            endEl(u"text:s"_ustr);
         }
         else if (box->hh >= CH_SPACE)
         {
@@ -3069,13 +3069,13 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
 /* Push frame */
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
-        mxList->addAttribute("text:placeholder-type", sXML_CDATA, "text");
+        mxList->addAttribute(u"text:placeholder-type"_ustr, sXML_CDATA, u"text"_ustr);
         if (d->pField)
-            mxList->addAttribute("text:description", sXML_CDATA, hstr2OUString(d->pField));
-        startEl("text:placeholder");
+            mxList->addAttribute(u"text:description"_ustr, sXML_CDATA, hstr2OUString(d->pField));
+        startEl(u"text:placeholder"_ustr);
         mxList->clear();
         chars( fromHcharStringToOUString(rStr) );
-        endEl("text:placeholder");
+        endEl(u"text:placeholder"_ustr);
     }
 /* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
@@ -3083,27 +3083,27 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
         const OUString uStr3 = hstr2OUString(hbox->str3.get());
         if (uStr3 == "title")
         {
-            startEl("text:title");
+            startEl(u"text:title"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:title");
+            endEl(u"text:title"_ustr);
         }
         else if (uStr3 == "subject")
         {
-            startEl("text:subject");
+            startEl(u"text:subject"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:subject");
+            endEl(u"text:subject"_ustr);
         }
         else if (uStr3 == "author")
         {
-            startEl("text:author-name");
+            startEl(u"text:author-name"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:author-name");
+            endEl(u"text:author-name"_ustr);
         }
         else if (uStr3 == "keywords")
         {
-            startEl("text:keywords");
+            startEl(u"text:keywords"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:keywords");
+            endEl(u"text:keywords"_ustr);
         }
     }
 /* Personal Information */
@@ -3112,74 +3112,74 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
         const OUString uStr3 = hstr2OUString(hbox->str3.get());
         if (uStr3 == "User")
         {
-            startEl("text:sender-lastname");
+            startEl(u"text:sender-lastname"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-lastname");
+            endEl(u"text:sender-lastname"_ustr);
         }
         else if (uStr3 == "Company")
         {
-            startEl("text:sender-company");
+            startEl(u"text:sender-company"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-company");
+            endEl(u"text:sender-company"_ustr);
         }
         else if (uStr3 == "Position")
         {
-            startEl("text:sender-title");
+            startEl(u"text:sender-title"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-title");
+            endEl(u"text:sender-title"_ustr);
         }
         else if (uStr3 == "Division")
         {
-            startEl("text:sender-position");
+            startEl(u"text:sender-position"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-position");
+            endEl(u"text:sender-position"_ustr);
         }
         else if (uStr3 == "Fax")
         {
-            startEl("text:sender-fax");
+            startEl(u"text:sender-fax"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-fax");
+            endEl(u"text:sender-fax"_ustr);
         }
         else if (uStr3 == "Pager")
         {
-            startEl("text:phone-private");
+            startEl(u"text:phone-private"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:phone-private");
+            endEl(u"text:phone-private"_ustr);
         }
         else if (uStr3 == "E-mail")
         {
-            startEl("text:sender-email");
+            startEl(u"text:sender-email"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-email");
+            endEl(u"text:sender-email"_ustr);
         }
         else if (uStr3 == "Zipcode(office)")
         {
-            startEl("text:sender-postal-code");
+            startEl(u"text:sender-postal-code"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-postal-code");
+            endEl(u"text:sender-postal-code"_ustr);
         }
         else if (uStr3 == "Phone(office)")
         {
-            startEl("text:sender-phone-work");
+            startEl(u"text:sender-phone-work"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-phone-work");
+            endEl(u"text:sender-phone-work"_ustr);
         }
         else if (uStr3 == "Address(office)")
         {
-            startEl("text:sender-street");
+            startEl(u"text:sender-street"_ustr);
             chars( hstr2OUString(hbox->str2.get()) );
-            endEl("text:sender-street");
+            endEl(u"text:sender-street"_ustr);
         }
 
     }
     else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* creation date */
      {
          if( hbox->m_pDate )
-             mxList->addAttribute("style:data-style-name", sXML_CDATA, "N" + OUString::number(hbox->m_pDate->key));
-         startEl("text:creation-date");
+             mxList->addAttribute(u"style:data-style-name"_ustr, sXML_CDATA, "N" + OUString::number(hbox->m_pDate->key));
+         startEl(u"text:creation-date"_ustr);
          mxList->clear();
          chars( hstr2OUString(hbox->str2.get()) );
-         endEl("text:creation-date");
+         endEl(u"text:creation-date"_ustr);
      }
 }
 
@@ -3192,36 +3192,36 @@ void HwpReader::makeBookmark(Bookmark const * hbox)
 {
     if (hbox->type == 0)
     {
-        mxList->addAttribute("text:name", sXML_CDATA, hstr2OUString(hbox->id));
-        startEl("text:bookmark");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, hstr2OUString(hbox->id));
+        startEl(u"text:bookmark"_ustr);
         mxList->clear();
-        endEl("text:bookmark");
+        endEl(u"text:bookmark"_ustr);
     }
     else if (hbox->type == 1)                     /* Block bookmarks days begin and end there if */
     {
-        mxList->addAttribute("text:name", sXML_CDATA, hstr2OUString(hbox->id));
-        startEl("text:bookmark-start");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, hstr2OUString(hbox->id));
+        startEl(u"text:bookmark-start"_ustr);
         mxList->clear();
-        endEl("text:bookmark-start");
+        endEl(u"text:bookmark-start"_ustr);
     }
     else if (hbox->type == 2)
     {
-        mxList->addAttribute("text:name", sXML_CDATA, hstr2OUString(hbox->id));
-        startEl("text:bookmark-end");
+        mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, hstr2OUString(hbox->id));
+        startEl(u"text:bookmark-end"_ustr);
         mxList->clear();
-        endEl("text:bookmark-end");
+        endEl(u"text:bookmark-end"_ustr);
     }
 }
 
 
 void HwpReader::makeDateFormat(DateCode * hbox)
 {
-    mxList->addAttribute("style:name", sXML_CDATA, "N" + OUString::number(hbox->key));
-    mxList->addAttribute("style:family", sXML_CDATA,"data-style");
-    mxList->addAttribute("number:language", sXML_CDATA,"ko");
-    mxList->addAttribute("number:country", sXML_CDATA,"KR");
+    mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "N" + OUString::number(hbox->key));
+    mxList->addAttribute(u"style:family"_ustr, sXML_CDATA,u"data-style"_ustr);
+    mxList->addAttribute(u"number:language"_ustr, sXML_CDATA,u"ko"_ustr);
+    mxList->addAttribute(u"number:country"_ustr, sXML_CDATA,u"KR"_ustr);
 
-    startEl("number:date-style");
+    startEl(u"number:date-style"_ustr);
     mxList->clear();
 
     bool add_zero = false;
@@ -3246,104 +3246,104 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 add_zero = true;
                 break;
             case '1':
-                mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:year");
+                mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:year"_ustr);
                 mxList->clear();
-                endEl("number:year");
+                endEl(u"number:year"_ustr);
                 break;
             case '!':
-                startEl("number:year");
+                startEl(u"number:year"_ustr);
                 mxList->clear();
-                endEl("number:year");
+                endEl(u"number:year"_ustr);
                 break;
             case '2':
                 if( add_zero )
-                    mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:month");
+                    mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:month"_ustr);
                 mxList->clear();
-                endEl("number:month");
+                endEl(u"number:month"_ustr);
                 break;
             case '@':
-                mxList->addAttribute("number:textual", sXML_CDATA, "true");
-                startEl("number:month");
+                mxList->addAttribute(u"number:textual"_ustr, sXML_CDATA, u"true"_ustr);
+                startEl(u"number:month"_ustr);
                 mxList->clear();
-                endEl("number:month");
+                endEl(u"number:month"_ustr);
                 break;
             case '*':
-                mxList->addAttribute("number:textual", sXML_CDATA, "true");
-                mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:month");
+                mxList->addAttribute(u"number:textual"_ustr, sXML_CDATA, u"true"_ustr);
+                mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:month"_ustr);
                 mxList->clear();
-                endEl("number:month");
+                endEl(u"number:month"_ustr);
                 break;
             case '3':
                 if( add_zero )
-                    mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:day");
+                    mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:day"_ustr);
                 mxList->clear();
-                endEl("number:day");
+                endEl(u"number:day"_ustr);
                 break;
             case '#':
                 if( add_zero )
-                    mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:day");
+                    mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:day"_ustr);
                 mxList->clear();
-                endEl("number:day");
+                endEl(u"number:day"_ustr);
                 switch( hbox->date[DateCode::DAY]  % 10)
                 {
                     case 1:
-                        startEl("number:text");
-                        chars("st");
-                        endEl("number:text");
+                        startEl(u"number:text"_ustr);
+                        chars(u"st"_ustr);
+                        endEl(u"number:text"_ustr);
                         break;
                     case 2:
-                        startEl("number:text");
-                        chars("nd");
-                        endEl("number:text");
+                        startEl(u"number:text"_ustr);
+                        chars(u"nd"_ustr);
+                        endEl(u"number:text"_ustr);
                         break;
                     case 3:
-                        startEl("number:text");
-                        chars("rd");
-                        endEl("number:text");
+                        startEl(u"number:text"_ustr);
+                        chars(u"rd"_ustr);
+                        endEl(u"number:text"_ustr);
                         break;
                     default:
-                        startEl("number:text");
-                        chars("th");
-                        endEl("number:text");
+                        startEl(u"number:text"_ustr);
+                        chars(u"th"_ustr);
+                        endEl(u"number:text"_ustr);
                         break;
                 }
                 break;
             case '4':
             case '$':
                 if( add_zero )
-                    mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:hours");
+                    mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:hours"_ustr);
                 mxList->clear();
-                endEl("number:hours");
+                endEl(u"number:hours"_ustr);
                 break;
             case '5':
             case '%':
                 if( add_zero )
-                    mxList->addAttribute("number:style", sXML_CDATA, "long");
-                startEl("number:minutes");
+                    mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
+                startEl(u"number:minutes"_ustr);
                 mxList->clear();
-                endEl("number:minutes");
+                endEl(u"number:minutes"_ustr);
                 break;
             case '_':
-                mxList->addAttribute("number:style", sXML_CDATA, "long");
+                mxList->addAttribute(u"number:style"_ustr, sXML_CDATA, u"long"_ustr);
                 [[fallthrough]];
             case '6':
             case '^':
-                startEl("number:day-of-week");
+                startEl(u"number:day-of-week"_ustr);
                 mxList->clear();
-                endEl("number:day-of-week");
+                endEl(u"number:day-of-week"_ustr);
                 break;
             case '7':
             case '&':
             case '+':
-                startEl("number:am-pm");
+                startEl(u"number:am-pm"_ustr);
                 mxList->clear();
-                endEl("number:am-pm");
+                endEl(u"number:am-pm"_ustr);
                 break;
             case '~':                             // Chinese Locale
                 break;
@@ -3351,40 +3351,40 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 hchar sbuf[2];
                 sbuf[0] = *fmt;
                 sbuf[1] = 0;
-                startEl("number:text");
+                startEl(u"number:text"_ustr);
                 chars(hstr2OUString(sbuf));
-                endEl("number:text");
+                endEl(u"number:text"_ustr);
                 break;
         }
     }
     mxList->clear();
-    endEl("number:date-style");
+    endEl(u"number:date-style"_ustr);
 }
 
 
 void HwpReader::makeDateCode(DateCode * hbox)
 {
-    mxList->addAttribute("style:data-style-name", sXML_CDATA, "N" + OUString::number(hbox->key));
-    startEl("text:date");
+    mxList->addAttribute(u"style:data-style-name"_ustr, sXML_CDATA, "N" + OUString::number(hbox->key));
+    startEl(u"text:date"_ustr);
     mxList->clear();
     hchar_string const boxstr = hbox->GetString();
     chars(hstr2OUString(boxstr.c_str()));
-    endEl("text:date");
+    endEl(u"text:date"_ustr);
 }
 
 
 void HwpReader::makeTab()
 {
-    startEl("text:tab-stop");
-    endEl("text:tab-stop");
+    startEl(u"text:tab-stop"_ustr);
+    endEl(u"text:tab-stop"_ustr);
 }
 
 
 void HwpReader::makeTable(TxtBox * hbox)
 {
-    mxList->addAttribute("table:name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
-    mxList->addAttribute("table:style-name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
-    startEl("table:table");
+    mxList->addAttribute(u"table:name"_ustr, sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
+    mxList->addAttribute(u"table:style-name"_ustr, sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
+    startEl(u"table:table"_ustr);
     mxList->clear();
 
     Table *tbl = hbox->m_pTable;
@@ -3392,12 +3392,12 @@ void HwpReader::makeTable(TxtBox * hbox)
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         mxList->addAttribute(
-            "table:style-name", sXML_CDATA,
+            u"table:style-name"_ustr, sXML_CDATA,
             "Table" + OUString::number(hbox->style.boxnum) + "."
                 + OUStringChar(static_cast<char>('A'+i)));
-        startEl("table:table-column");
+        startEl(u"table:table-column"_ustr);
         mxList->clear();
-        endEl("table:table-column");
+        endEl(u"table:table-column"_ustr);
     }
 
 // cell
@@ -3408,40 +3408,40 @@ void HwpReader::makeTable(TxtBox * hbox)
         {
             if( j > k )
             {
-                endEl("table:table-row");
+                endEl(u"table:table-row"_ustr);
                 k = j;
             }
 // row
             mxList->addAttribute(
-                "table:style-name", sXML_CDATA,
+                u"table:style-name"_ustr, sXML_CDATA,
                 "Table" + OUString::number(hbox->style.boxnum) + ".row"
                     + OUString::number(tcell->nRowIndex + 1));
-            startEl("table:table-row");
+            startEl(u"table:table-row"_ustr);
             mxList->clear();
             j = tcell->nRowIndex;
         }
 
         mxList->addAttribute(
-            "table:style-name", sXML_CDATA,
+            u"table:style-name"_ustr, sXML_CDATA,
             "Table" + OUString::number(hbox->style.boxnum) + "."
                 + OUStringChar(char('A'+ tcell->nColumnIndex))
                 + OUString::number(tcell->nRowIndex +1));
         if( tcell->nColumnSpan > 1 )
-            mxList->addAttribute("table:number-columns-spanned", sXML_CDATA, OUString::number(tcell->nColumnSpan));
+            mxList->addAttribute(u"table:number-columns-spanned"_ustr, sXML_CDATA, OUString::number(tcell->nColumnSpan));
         if( tcell->nRowSpan > 1 )
-            mxList->addAttribute("table:number-rows-spanned", sXML_CDATA, OUString::number(tcell->nRowSpan));
-        mxList->addAttribute("table:value-type", sXML_CDATA,"string");
+            mxList->addAttribute(u"table:number-rows-spanned"_ustr, sXML_CDATA, OUString::number(tcell->nRowSpan));
+        mxList->addAttribute(u"table:value-type"_ustr, sXML_CDATA,u"string"_ustr);
         if( tcell->pCell->protect )
-            mxList->addAttribute("table:protected", sXML_CDATA,"true");
-        startEl("table:table-cell");
+            mxList->addAttribute(u"table:protected"_ustr, sXML_CDATA,u"true"_ustr);
+        startEl(u"table:table-cell"_ustr);
         mxList->clear();
         TxtBox::plist_t& rVec = hbox->plists[tcell->pCell->key];
         if (!rVec.empty())
             parsePara(rVec.front().get());
-        endEl("table:table-cell");
+        endEl(u"table:table-cell"_ustr);
     }
-    endEl("table:table-row");
-    endEl("table:table");
+    endEl(u"table:table-row"_ustr);
+    endEl(u"table:table"_ustr);
 }
 
 
@@ -3455,52 +3455,52 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 {
     if( hbox->style.cap_len > 0  && hbox->type == TXT_TYPE)
     {
-        mxList->addAttribute("draw:style-name", sXML_CDATA, "CapBox" + OUString::number(hbox->style.boxnum));
-        mxList->addAttribute("draw:name", sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
-        mxList->addAttribute("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
+        mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "CapBox" + OUString::number(hbox->style.boxnum));
+        mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
+        mxList->addAttribute(u"draw:z-index"_ustr, sXML_CDATA, OUString::number(hbox->zorder));
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
                 break;
             case PARA_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "page");
-                mxList->addAttribute("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"page"_ustr);
+                mxList->addAttribute(u"text:anchor-page-number"_ustr, sXML_CDATA, OUString::number(hbox->pgno + 1));
                 break;
             }
         }
         if (hbox->style.anchor_type != CHAR_ANCHOR)
         {
-            mxList->addAttribute("svg:x", sXML_CDATA,
+            mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                 OUString::number(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
-            mxList->addAttribute("svg:y", sXML_CDATA,
+            mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                 OUString::number(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
         }
-        mxList->addAttribute("svg:width", sXML_CDATA,
+        mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
             OUString::number(WTMM( hbox->box_xs + hbox->cap_xs )) + "mm");
-        mxList->addAttribute("fo:min-height", sXML_CDATA,
+        mxList->addAttribute(u"fo:min-height"_ustr, sXML_CDATA,
             OUString::number(WTMM( hbox->box_ys + hbox->cap_ys )) + "mm");
-        startEl("draw:text-box");
+        startEl(u"draw:text-box"_ustr);
         mxList->clear();
         if (!hbox->caption.empty() && hbox->cap_pos % 2)  /* The caption is on the top */
         {
             parsePara(hbox->caption.front().get());
         }
-        mxList->addAttribute( "text:style-name", sXML_CDATA, "Standard");
-        startEl("text:p");
+        mxList->addAttribute( u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+        startEl(u"text:p"_ustr);
         mxList->clear();
     }
     else{
-         mxList->addAttribute("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
+         mxList->addAttribute(u"draw:z-index"_ustr, sXML_CDATA, OUString::number(hbox->zorder));
     }
 
-    mxList->addAttribute("draw:style-name", sXML_CDATA, "Txtbox" + OUString::number(hbox->style.boxnum));
-    mxList->addAttribute("draw:name", sXML_CDATA, "Frame" + OUString::number(hbox->style.boxnum));
+    mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "Txtbox" + OUString::number(hbox->style.boxnum));
+    mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA, "Frame" + OUString::number(hbox->style.boxnum));
 
     if( hbox->style.cap_len <= 0 || hbox->type != TXT_TYPE )
     {
@@ -3509,16 +3509,16 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
                 break;
             case PARA_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "page");
-                mxList->addAttribute("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"page"_ustr);
+                mxList->addAttribute(u"text:anchor-page-number"_ustr, sXML_CDATA, OUString::number(hbox->pgno + 1));
                 break;
             }
         }
@@ -3527,28 +3527,28 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             x += hbox->style.margin[0][0];
             y += hbox->style.margin[0][2];
         }
-        mxList->addAttribute("svg:x", sXML_CDATA,
+        mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
             OUString::number(WTMM( hbox->pgx + x )) + "mm");
-        mxList->addAttribute("svg:y", sXML_CDATA,
+        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
             OUString::number(WTMM( hbox->pgy + y )) + "mm");
     }
     else
     {
-        mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
-        mxList->addAttribute("svg:y", sXML_CDATA, "0cm");
+        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
+        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA, u"0cm"_ustr);
     }
-    mxList->addAttribute("svg:width", sXML_CDATA,
+    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
         OUString::number(WTMM( hbox->box_xs )) + "mm");
     if( hbox->style.cap_len > 0 && hbox->type != TXT_TYPE)
-        mxList->addAttribute("fo:min-height", sXML_CDATA,
+        mxList->addAttribute(u"fo:min-height"_ustr, sXML_CDATA,
             OUString::number(WTMM( hbox->box_ys + hbox->cap_ys)) + "mm");
     else
-        mxList->addAttribute("svg:height", sXML_CDATA,
+        mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
             OUString::number(WTMM(hbox->box_ys )) + "mm");
 
     if( hbox->type != EQU_TYPE )
     {
-        startEl("draw:text-box");
+        startEl(u"draw:text-box"_ustr);
         mxList->clear();
 /* If captions are present and it is on the top */
         if (hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE && !hbox->caption.empty())
@@ -3568,24 +3568,24 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             parsePara(hbox->caption.front().get());
         }
-        endEl("draw:text-box");
+        endEl(u"draw:text-box"_ustr);
 // Caption exist and it is text-box
         if( hbox->style.cap_len > 0 && hbox->type == TXT_TYPE)
         {
-            endEl("text:p");
+            endEl(u"text:p"_ustr);
             if (!(hbox->cap_pos % 2) && !hbox->caption.empty())
             {
                 parsePara(hbox->caption.front().get());
             }
-            endEl("draw:text-box");
+            endEl(u"draw:text-box"_ustr);
         }
     }
     else                                          // is Formula
     {
-        startEl("draw:object");
+        startEl(u"draw:object"_ustr);
         mxList->clear();
         makeFormula(hbox);
-        endEl("draw:object");
+        endEl(u"draw:object"_ustr);
     }
 }
 
@@ -3657,33 +3657,33 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 #else
               reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #endif
-          mxList->addAttribute("xlink:type", sXML_CDATA, "simple");
+          mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
           if (!tmp.empty() && strcmp(tmp.c_str(), "[HTML]")) {
               ::std::string tmp3(tmp2);
               tmp3.push_back('#');
               tmp3.append(tmp);
-              mxList->addAttribute("xlink:href", sXML_CDATA,
+              mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                   OUString(tmp3.c_str(), tmp3.size()+1, RTL_TEXTENCODING_EUC_KR));
           }
           else{
-              mxList->addAttribute("xlink:href", sXML_CDATA,
+              mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                   OUString(tmp2.c_str(), tmp2.size()+1, RTL_TEXTENCODING_EUC_KR));
 
           }
     }
     else
     {
-        mxList->addAttribute("xlink:type", sXML_CDATA, "simple");
+        mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
         ::std::string tmp;
         tmp.push_back('#');
         tmp.append(hstr2ksstr(hypert->bookmark));
-        mxList->addAttribute("xlink:href", sXML_CDATA,
+        mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                 OUString(tmp.c_str(), tmp.size()+1, RTL_TEXTENCODING_EUC_KR));
     }
-    startEl("draw:a");
+    startEl(u"draw:a"_ustr);
     mxList->clear();
     makeTextBox(hbox);
-    endEl("draw:a");
+    endEl(u"draw:a"_ustr);
 }
 
 
@@ -3702,51 +3702,51 @@ void HwpReader::makePicture(Picture * hbox)
         {
             if( hbox->style.cap_len > 0 )
             {
-                mxList->addAttribute("draw:style-name", sXML_CDATA,
+                mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA,
                     "CapBox" + OUString::number(hbox->style.boxnum));
-                mxList->addAttribute("draw:name", sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
-                mxList->addAttribute("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
+                mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
+                mxList->addAttribute(u"draw:z-index"_ustr, sXML_CDATA, OUString::number(hbox->zorder));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
                         break;
                     case PARA_ANCHOR:
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
                         break;
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "page");
-                        mxList->addAttribute("text:anchor-page-number", sXML_CDATA,
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"page"_ustr);
+                        mxList->addAttribute(u"text:anchor-page-number"_ustr, sXML_CDATA,
                             OUString::number(hbox->pgno + 1));
                         break;
                     }
                 }
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
-                    mxList->addAttribute("svg:x", sXML_CDATA,
+                    mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                         OUString::number(WTMM(  hbox->pgx + hbox->style.margin[0][0] )) + "mm");
-                    mxList->addAttribute("svg:y", sXML_CDATA,
+                    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                         OUString::number(WTMM(  hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
-                mxList->addAttribute("svg:width", sXML_CDATA,
+                mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                     OUString::number(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1] )) + "mm");
-                mxList->addAttribute("fo:min-height", sXML_CDATA,
+                mxList->addAttribute(u"fo:min-height"_ustr, sXML_CDATA,
                     OUString::number(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
-                startEl("draw:text-box");
+                startEl(u"draw:text-box"_ustr);
                 mxList->clear();
                 if (!hbox->caption.empty() && hbox->cap_pos % 2)           /* Caption is on the top */
                 {
                     parsePara(hbox->caption.front().get());
                 }
-                mxList->addAttribute( "text:style-name", sXML_CDATA, "Standard");
-                startEl("text:p");
+                mxList->addAttribute( u"text:style-name"_ustr, sXML_CDATA, u"Standard"_ustr);
+                startEl(u"text:p"_ustr);
                 mxList->clear();
             }
             if( hbox->ishyper )
             {
-                mxList->addAttribute("xlink:type", sXML_CDATA, "simple");
+                mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
                     mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 4).c_str()));
@@ -3754,54 +3754,54 @@ void HwpReader::makePicture(Picture * hbox)
                     mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 5).c_str()));
 #else
                 if( hbox->follow[4] != 0 )
-                    mxList->addAttribute("xlink:href", sXML_CDATA,
+                    mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                         hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str()));
                 else
-                    mxList->addAttribute("xlink:href", sXML_CDATA,
+                    mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                         hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str()));
 #endif
-                startEl("draw:a");
+                startEl(u"draw:a"_ustr);
                 mxList->clear();
             }
-            mxList->addAttribute("draw:style-name", sXML_CDATA, "G" + OUString::number(hbox->style.boxnum));
-            mxList->addAttribute("draw:name", sXML_CDATA, "Image" + OUString::number(hbox->style.boxnum));
+            mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "G" + OUString::number(hbox->style.boxnum));
+            mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA, "Image" + OUString::number(hbox->style.boxnum));
 
             if( hbox->style.cap_len <= 0 )
             {
-                mxList->addAttribute("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
+                mxList->addAttribute(u"draw:z-index"_ustr, sXML_CDATA, OUString::number(hbox->zorder));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
                         break;
                     case PARA_ANCHOR:
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
                         break;
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        mxList->addAttribute("text:anchor-type", sXML_CDATA, "page");
-                        mxList->addAttribute("text:anchor-page-number", sXML_CDATA,
+                        mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"page"_ustr);
+                        mxList->addAttribute(u"text:anchor-page-number"_ustr, sXML_CDATA,
                             OUString::number(hbox->pgno + 1));
                         break;
                     }
                 }
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
-                    mxList->addAttribute("svg:x", sXML_CDATA,
+                    mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                         OUString::number(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
-                    mxList->addAttribute("svg:y", sXML_CDATA,
+                    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                         OUString::number(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
             }
             else
             {
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
-                mxList->addAttribute("svg:y", sXML_CDATA, "0cm");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
+                mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA, u"0cm"_ustr);
             }
-            mxList->addAttribute("svg:width", sXML_CDATA,
+            mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                 OUString::number(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1])) + "mm");
-            mxList->addAttribute("svg:height", sXML_CDATA,
+            mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                 OUString::number(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3])) + "mm");
 
             if ( hbox->pictype == PICTYPE_FILE ){
@@ -3809,22 +3809,22 @@ void HwpReader::makePicture(Picture * hbox)
                 sprintf(d->buf, "file:///%s", hbox->picinfo.picun.path );
                 mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(d->buf)).c_str()));
 #else
-                mxList->addAttribute("xlink:href", sXML_CDATA,
+                mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                     hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str()));
 #endif
-                mxList->addAttribute("xlink:type", sXML_CDATA, "simple");
-                mxList->addAttribute("xlink:show", sXML_CDATA, "embed");
-                mxList->addAttribute("xlink:actuate", sXML_CDATA, "onLoad");
+                mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
+                mxList->addAttribute(u"xlink:show"_ustr, sXML_CDATA, u"embed"_ustr);
+                mxList->addAttribute(u"xlink:actuate"_ustr, sXML_CDATA, u"onLoad"_ustr);
             }
 
             if( hbox->pictype == PICTYPE_OLE )
-                    startEl("draw:object-ole");
+                    startEl(u"draw:object-ole"_ustr);
             else
-                    startEl("draw:image");
+                    startEl(u"draw:image"_ustr);
             mxList->clear();
             if (hbox->pictype == PICTYPE_EMBED || hbox->pictype == PICTYPE_OLE)
             {
-                startEl("office:binary-data");
+                startEl(u"office:binary-data"_ustr);
                 mxList->clear();
                 if( hbox->pictype == PICTYPE_EMBED ){
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
@@ -3859,34 +3859,34 @@ void HwpReader::makePicture(Picture * hbox)
                                  }
                              }
 #else
-                             chars("");
+                             chars(u""_ustr);
 #endif
                          }
                 }
-                endEl("office:binary-data");
+                endEl(u"office:binary-data"_ustr);
             }
             if( hbox->pictype == PICTYPE_OLE )
-                    endEl("draw:object-ole");
+                    endEl(u"draw:object-ole"_ustr);
             else
-                    endEl("draw:image");
+                    endEl(u"draw:image"_ustr);
             if( hbox->ishyper )
             {
-                endEl("draw:a");
+                endEl(u"draw:a"_ustr);
             }
             if( hbox->style.cap_len > 0 )
             {
-                endEl("text:p");
+                endEl(u"text:p"_ustr);
                 if (!hbox->caption.empty() && !(hbox->cap_pos % 2))         /* Caption is at the bottom, */
                 {
                     parsePara(hbox->caption.front().get());
                 }
-                endEl("draw:text-box");
+                endEl(u"draw:text-box"_ustr);
             }
             break;
         }
         case PICTYPE_DRAW:
               if( hbox->picinfo.picdraw.zorder > 0 )
-                 mxList->addAttribute("draw:z-index", sXML_CDATA,
+                 mxList->addAttribute(u"draw:z-index"_ustr, sXML_CDATA,
                       OUString::number(hbox->picinfo.picdraw.zorder + 10000));
             makePictureDRAW(hbox->picinfo.picdraw.hdo, hbox);
             break;
@@ -3901,24 +3901,24 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
     while (drawobj)
     {
-        mxList->addAttribute("draw:style-name", sXML_CDATA, "Draw" + OUString::number(drawobj->index));
+        mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "Draw" + OUString::number(drawobj->index));
         int a = 0;
         int b = 0;
 
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "as-char");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"as-char"_ustr);
                 break;
             case PARA_ANCHOR:
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
                 HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
-                mxList->addAttribute("text:anchor-type", sXML_CDATA, "page");
-                mxList->addAttribute("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
+                mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"page"_ustr);
+                mxList->addAttribute(u"text:anchor-page-number"_ustr, sXML_CDATA, OUString::number(hbox->pgno + 1));
                 a = hwpinfo.paper.left_margin;
                 b = hwpinfo.paper.top_margin + hwpinfo.paper.header_length;
                 break;
@@ -3927,10 +3927,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
         if (drawobj->type == HWPDO_CONTAINER)
         {
-            startEl("draw:g");
+            startEl(u"draw:g"_ustr);
             mxList->clear();
             makePictureDRAW(drawobj->child.get(), hbox);
-            endEl("draw:g");
+            endEl(u"draw:g"_ustr);
         }
         else
         {
@@ -3999,7 +3999,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                 if( bIsRotate ){
                     drawobj->extent.w = static_cast<int>(std::hypot(pt[1].getX() - pt[0].getX(), pt[1].getY() - pt[0].getY()));
                     drawobj->extent.h = static_cast<int>(std::hypot(pt[2].getX() - pt[1].getX(), pt[2].getY() - pt[1].getY()));
-                    mxList->addAttribute("draw:transform", sXML_CDATA, trans);
+                    mxList->addAttribute(u"draw:transform"_ustr, sXML_CDATA, trans);
                 }
             }
             switch (drawobj->type)
@@ -4007,65 +4007,65 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                 case HWPDO_LINE:                  /* Line-starting coordinates, ending coordinates. */
                     if( drawobj->u.line_arc.flip & 0x01 )
                     {
-                        mxList->addAttribute("svg:x1", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x1"_ustr, sXML_CDATA,
                             OUString::number (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
-                        mxList->addAttribute("svg:x2", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x2"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x )) + "mm");
                     }
                     else
                     {
-                        mxList->addAttribute("svg:x1", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x1"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x )) + "mm");
-                        mxList->addAttribute("svg:x2", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x2"_ustr, sXML_CDATA,
                             OUString::number (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
                     }
                     if( drawobj->u.line_arc.flip & 0x02 )
                     {
-                        mxList->addAttribute("svg:y1", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y1"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b + drawobj->offset2.y + drawobj->extent.h ) ) + "mm");
-                        mxList->addAttribute("svg:y2", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y2"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b  + drawobj->offset2.y )) + "mm");
                     }
                     else
                     {
-                        mxList->addAttribute("svg:y1", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y1"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b  + drawobj->offset2.y)) + "mm");
-                        mxList->addAttribute("svg:y2", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y2"_ustr, sXML_CDATA,
                             OUString::number (WTMM(y + b + drawobj->offset2.y + drawobj->extent.h)) + "mm");
                     }
 
-                    startEl("draw:line");
+                    startEl(u"draw:line"_ustr);
                     mxList->clear();
-                    endEl("draw:line");
+                    endEl(u"draw:line"_ustr);
                     break;
                 case HWPDO_RECT:                  /* rectangle - the starting position, vertical/horizontal  */
                     if( !bIsRotate )
                     {
-                        mxList->addAttribute("svg:x", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                        mxList->addAttribute("svg:y", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        mxList->addAttribute("draw:corner-radius", sXML_CDATA,
+                        mxList->addAttribute(u"draw:corner-radius"_ustr, sXML_CDATA,
                             OUString::number (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        mxList->addAttribute("draw:corner-radius", sXML_CDATA,
+                        mxList->addAttribute(u"draw:corner-radius"_ustr, sXML_CDATA,
                             OUString::number (WTMM( value / 2)) + "mm");
                     }
 
-                    startEl("draw:rect");
+                    startEl(u"draw:rect"_ustr);
                     mxList->clear();
                     if( (drawobj->property.flag & HWPDO_FLAG_AS_TEXTBOX) &&
                         drawobj->property.pPara ) // As Textbox
@@ -4078,22 +4078,22 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    endEl("draw:rect");
+                    endEl(u"draw:rect"_ustr);
                     break;
                 case HWPDO_ELLIPSE:               /* Ellipse - the starting position, vertical/horizontal */
                 case HWPDO_ADVANCED_ELLIPSE:      /* modified ellipse */
                 {
                     if( !bIsRotate )
                     {
-                        mxList->addAttribute("svg:x", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                        mxList->addAttribute("svg:y", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( drawobj->extent.w )) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
                         if (drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x ||
@@ -4109,15 +4109,15 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                 double start_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[0].x, drawobj->u.arc.radial[0].y );
                                 double end_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[1].x, drawobj->u.arc.radial[1].y );
                                 if( drawobj->property.fill_color < 0xffffff )
-                                    mxList->addAttribute("draw:kind", sXML_CDATA, "section");
+                                    mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"section"_ustr);
                                 else
-                                    mxList->addAttribute("draw:kind", sXML_CDATA, "arc");
-                                mxList->addAttribute("draw:start-angle", sXML_CDATA, OUString::number(start_angle ));
-                                mxList->addAttribute("draw:end-angle", sXML_CDATA, OUString::number(end_angle));
+                                    mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"arc"_ustr);
+                                mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, OUString::number(start_angle ));
+                                mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, OUString::number(end_angle));
                             }
                         }
                     }
-                    startEl("draw:ellipse");
+                    startEl(u"draw:ellipse"_ustr);
                     mxList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
                         drawobj->property.pPara ) // As Textbox
@@ -4130,7 +4130,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    endEl("draw:ellipse");
+                    endEl(u"draw:ellipse"_ustr);
                     break;
 
                 }
@@ -4142,28 +4142,28 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     if( !bIsRotate )
                     {
                               if( ( flip == 0 || flip == 2 ) && drawobj->type == HWPDO_ARC)
-                                    mxList->addAttribute("svg:x", sXML_CDATA,
+                                    mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                                          OUString::number (WTMM( x + a + drawobj->offset2.x - drawobj->extent.w)) + "mm");
                               else
-                                    mxList->addAttribute("svg:x", sXML_CDATA,
+                                    mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                                          OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                               if( ( flip == 0 || flip == 1 ) && drawobj->type == HWPDO_ARC)
-                                    mxList->addAttribute("svg:y", sXML_CDATA,
+                                    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                                          OUString::number (WTMM( y + b + drawobj->offset2.y - drawobj->extent.h)) + "mm");
                               else
-                                    mxList->addAttribute("svg:y", sXML_CDATA,
+                                    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                                          OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( drawobj->extent.w * 2)) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( drawobj->extent.h * 2)) + "mm");
                     if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
                                      drawobj->property.fill_color < 0xffffff )
-                                mxList->addAttribute("draw:kind", sXML_CDATA, "section");
+                                mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"section"_ustr);
                     else
-                                mxList->addAttribute("draw:kind", sXML_CDATA, "arc");
+                                mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"arc"_ustr);
 
                     if( drawobj->type == HWPDO_ADVANCED_ARC ){
                                 double start_angle, end_angle;
@@ -4174,34 +4174,34 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
                                 if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI ))
                                     std::swap( start_angle, end_angle );
-                                mxList->addAttribute("draw:start-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(start_angle)));
-                                mxList->addAttribute("draw:end-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(end_angle)));
+                                mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, OUString::number(basegfx::rad2deg(start_angle)));
+                                mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, OUString::number(basegfx::rad2deg(end_angle)));
 
                     }
                     else
                     {
                             if( drawobj->u.line_arc.flip == 0 )
                             {
-                                 mxList->addAttribute("draw:start-angle", sXML_CDATA, "270");
-                                 mxList->addAttribute("draw:end-angle", sXML_CDATA, "0");
+                                 mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, u"270"_ustr);
+                                 mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, u"0"_ustr);
                             }
                             else if( drawobj->u.line_arc.flip == 1 )
                             {
-                                 mxList->addAttribute("draw:start-angle", sXML_CDATA, "180");
-                                 mxList->addAttribute("draw:end-angle", sXML_CDATA, "270");
+                                 mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, u"180"_ustr);
+                                 mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, u"270"_ustr);
                             }
                             else if( drawobj->u.line_arc.flip == 2 )
                             {
-                                 mxList->addAttribute("draw:start-angle", sXML_CDATA, "0");
-                                 mxList->addAttribute("draw:end-angle", sXML_CDATA, "90");
+                                 mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, u"0"_ustr);
+                                 mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, u"90"_ustr);
                             }
                             else
                             {
-                                 mxList->addAttribute("draw:start-angle", sXML_CDATA, "90");
-                                 mxList->addAttribute("draw:end-angle", sXML_CDATA, "180");
+                                 mxList->addAttribute(u"draw:start-angle"_ustr, sXML_CDATA, u"90"_ustr);
+                                 mxList->addAttribute(u"draw:end-angle"_ustr, sXML_CDATA, u"180"_ustr);
                             }
                             }
-                    startEl("draw:ellipse");
+                    startEl(u"draw:ellipse"_ustr);
                     mxList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
                         drawobj->property.pPara ) // As Textbox
@@ -4214,7 +4214,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    endEl("draw:ellipse");
+                    endEl(u"draw:ellipse"_ustr);
                     break;
 
                 }
@@ -4226,17 +4226,17 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     }
                     if( !bIsRotate )
                     {
-                        mxList->addAttribute("svg:x", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                        mxList->addAttribute("svg:y", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     mxList->addAttribute(
-                        "svg:viewBox", sXML_CDATA,
+                        u"svg:viewBox"_ustr, sXML_CDATA,
                         "0 0 " + OUString::number(WTSM(drawobj->extent.w)) + " "
                             + OUString::number(WTSM(drawobj->extent.h)));
 
@@ -4310,9 +4310,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                               }
                     }
 
-                    mxList->addAttribute("svg:d", sXML_CDATA, oustr.makeStringAndClear());
+                    mxList->addAttribute(u"svg:d"_ustr, sXML_CDATA, oustr.makeStringAndClear());
 
-                    startEl("draw:path");
+                    startEl(u"draw:path"_ustr);
                     mxList->clear();
                                                   // As Textbox
                     if( drawobj->property.flag >> 19 & 0x01 && drawobj->property.pPara )
@@ -4324,7 +4324,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    endEl("draw:path");
+                    endEl(u"draw:path"_ustr);
                     break;
                 }
                 case HWPDO_CLOSED_FREEFORM:
@@ -4332,17 +4332,17 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                 {
                     bool bIsPolygon = false;
 
-                    mxList->addAttribute("svg:x", sXML_CDATA,
+                    mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                    mxList->addAttribute("svg:y", sXML_CDATA,
+                    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                                  OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
 
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
 
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 " + OUString::number(WTSM(drawobj->extent.w)) + " " + OUString::number(WTSM(drawobj->extent.h)));
+                    mxList->addAttribute(u"svg:viewBox"_ustr, sXML_CDATA, "0 0 " + OUString::number(WTSM(drawobj->extent.w)) + " " + OUString::number(WTSM(drawobj->extent.h)));
 
                     OUStringBuffer oustr;
 
@@ -4364,7 +4364,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                             bIsPolygon = true;
                         }
                     }
-                    mxList->addAttribute("draw:points", sXML_CDATA, oustr.makeStringAndClear());
+                    mxList->addAttribute(u"draw:points"_ustr, sXML_CDATA, oustr.makeStringAndClear());
 
                     if( drawobj->property.fill_color <=  0xffffff ||
                         drawobj->property.pattern_type != 0)
@@ -4374,7 +4374,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
                     if(bIsPolygon)
                     {
-                        startEl("draw:polygon");
+                        startEl(u"draw:polygon"_ustr);
                         mxList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
                                                   // As Textbox
@@ -4388,11 +4388,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                 pPara = pPara->Next();
                             }
                         }
-                        endEl("draw:polygon");
+                        endEl(u"draw:polygon"_ustr);
                     }
                     else
                     {
-                        startEl("draw:polyline");
+                        startEl(u"draw:polyline"_ustr);
                         mxList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
                                                   // As Textbox
@@ -4406,38 +4406,38 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                 pPara = pPara->Next();
                             }
                         }
-                        endEl("draw:polyline");
+                        endEl(u"draw:polyline"_ustr);
                     }
                     break;
                 }
                 case HWPDO_TEXTBOX:
                     if( !bIsRotate )
                     {
-                        mxList->addAttribute("svg:x", sXML_CDATA,
+                        mxList->addAttribute(u"svg:x"_ustr, sXML_CDATA,
                             OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                        mxList->addAttribute("svg:y", sXML_CDATA,
+                        mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA,
                             OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    mxList->addAttribute("svg:width", sXML_CDATA,
+                    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
-                    mxList->addAttribute("svg:height", sXML_CDATA,
+                    mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        mxList->addAttribute("draw:corner-radius", sXML_CDATA,
+                        mxList->addAttribute(u"draw:corner-radius"_ustr, sXML_CDATA,
                             OUString::number (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        mxList->addAttribute("draw:corner-radius", sXML_CDATA,
+                        mxList->addAttribute(u"draw:corner-radius"_ustr, sXML_CDATA,
                             OUString::number (WTMM( value / 2)) + "mm");
                     }
 
-                    startEl("draw:text-box");
+                    startEl(u"draw:text-box"_ustr);
                     mxList->clear();
 
                     HWPPara *pPara = drawobj->u.textbox.h;
@@ -4448,7 +4448,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                         pPara = pPara->Next();
                     }
 
-                    endEl("draw:text-box");
+                    endEl(u"draw:text-box"_ustr);
                     break;
             }
         }
@@ -4459,8 +4459,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
 void HwpReader::makeLine()
 {
-    mxList->addAttribute("text:style-name", sXML_CDATA, "Horizontal Line");
-    startEl("text:p");
+    mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, u"Horizontal Line"_ustr);
+    startEl(u"text:p"_ustr);
     mxList->clear();
 }
 
@@ -4474,9 +4474,9 @@ void HwpReader::makeHidden(Hidden * hbox)
     int res;
     hchar dest[3];
 
-    mxList->addAttribute("text:condition", sXML_CDATA, "");
-    mxList->addAttribute("text:string-value", sXML_CDATA, "");
-    startEl("text:hidden-text");
+    mxList->addAttribute(u"text:condition"_ustr, sXML_CDATA, u""_ustr);
+    mxList->addAttribute(u"text:string-value"_ustr, sXML_CDATA, u""_ustr);
+    startEl(u"text:hidden-text"_ustr);
     mxList->clear();
     HWPPara *para = !hbox->plist.empty() ? hbox->plist.front().get() : nullptr;
 
@@ -4496,7 +4496,7 @@ void HwpReader::makeHidden(Hidden * hbox)
         para = para->Next();
     }
     makeChars(str);
-    endEl("text:hidden-text");
+    endEl(u"text:hidden-text"_ustr);
 }
 
 
@@ -4507,35 +4507,35 @@ void HwpReader::makeFootnote(Footnote * hbox)
 {
     if (hbox->type)
     {
-        mxList->addAttribute("text:id", sXML_CDATA, "edn" + OUString::number(hbox->number));
-        startEl("text:endnote");
+        mxList->addAttribute(u"text:id"_ustr, sXML_CDATA, "edn" + OUString::number(hbox->number));
+        startEl(u"text:endnote"_ustr);
         mxList->clear();
-        mxList->addAttribute("text:label", sXML_CDATA, OUString::number(hbox->number));
-        startEl("text:endnote-citation");
+        mxList->addAttribute(u"text:label"_ustr, sXML_CDATA, OUString::number(hbox->number));
+        startEl(u"text:endnote-citation"_ustr);
         mxList->clear();
         chars(OUString::number(hbox->number));
-        endEl("text:endnote-citation");
-        startEl("text:endnote-body");
+        endEl(u"text:endnote-citation"_ustr);
+        startEl(u"text:endnote-body"_ustr);
         if (!hbox->plist.empty())
             parsePara(hbox->plist.front().get());
-        endEl("text:endnote-body");
-        endEl("text:endnote");
+        endEl(u"text:endnote-body"_ustr);
+        endEl(u"text:endnote"_ustr);
     }
     else
     {
-        mxList->addAttribute("text:id", sXML_CDATA, "ftn" + OUString::number(hbox->number));
-        startEl("text:footnote");
+        mxList->addAttribute(u"text:id"_ustr, sXML_CDATA, "ftn" + OUString::number(hbox->number));
+        startEl(u"text:footnote"_ustr);
         mxList->clear();
-        mxList->addAttribute("text:label", sXML_CDATA, OUString::number(hbox->number));
-        startEl("text:footnote-citation");
+        mxList->addAttribute(u"text:label"_ustr, sXML_CDATA, OUString::number(hbox->number));
+        startEl(u"text:footnote-citation"_ustr);
         mxList->clear();
         chars(OUString::number(hbox->number));
-        endEl("text:footnote-citation");
-        startEl("text:footnote-body");
+        endEl(u"text:footnote-citation"_ustr);
+        startEl(u"text:footnote-body"_ustr);
         if (!hbox->plist.empty())
             parsePara(hbox->plist.front().get());
-        endEl("text:footnote-body");
-        endEl("text:footnote");
+        endEl(u"text:footnote-body"_ustr);
+        endEl(u"text:footnote"_ustr);
     }
 }
 
@@ -4548,9 +4548,9 @@ void HwpReader::makeAutoNum(AutoNum const * hbox)
     switch (hbox->type)
     {
         case PGNUM_AUTO:
-            startEl("text:page-number");
+            startEl(u"text:page-number"_ustr);
             chars(OUString::number(hbox->number));
-            endEl("text:page-number");
+            endEl(u"text:page-number"_ustr);
             break;
         case FNNUM_AUTO:
             break;
@@ -4558,20 +4558,20 @@ void HwpReader::makeAutoNum(AutoNum const * hbox)
             break;
         case EQUNUM_AUTO:
         case PICNUM_AUTO:
-            mxList->addAttribute("text:ref-name",sXML_CDATA, "refIllustration" + OUString::number(hbox->number));
-            mxList->addAttribute("text:name",sXML_CDATA, "Illustration");
-            mxList->addAttribute("style:num-format",sXML_CDATA, "1");
-            startEl("text:sequence");
+            mxList->addAttribute(u"text:ref-name"_ustr,sXML_CDATA, "refIllustration" + OUString::number(hbox->number));
+            mxList->addAttribute(u"text:name"_ustr,sXML_CDATA, u"Illustration"_ustr);
+            mxList->addAttribute(u"style:num-format"_ustr,sXML_CDATA, u"1"_ustr);
+            startEl(u"text:sequence"_ustr);
             chars(OUString::number(hbox->number));
-            endEl("text:sequence");
+            endEl(u"text:sequence"_ustr);
             break;
         case TBLNUM_AUTO:
-            mxList->addAttribute("text:ref-name",sXML_CDATA, "refTable" + OUString::number(hbox->number));
-            mxList->addAttribute("text:name",sXML_CDATA, "Table");
-            mxList->addAttribute("style:num-format",sXML_CDATA, "1");
-            startEl("text:sequence");
+            mxList->addAttribute(u"text:ref-name"_ustr,sXML_CDATA, "refTable" + OUString::number(hbox->number));
+            mxList->addAttribute(u"text:name"_ustr,sXML_CDATA, u"Table"_ustr);
+            mxList->addAttribute(u"style:num-format"_ustr,sXML_CDATA, u"1"_ustr);
+            startEl(u"text:sequence"_ustr);
             chars(OUString::number(hbox->number));
-            endEl("text:sequence");
+            endEl(u"text:sequence"_ustr);
             break;
     }
 }
@@ -4595,35 +4595,35 @@ void HwpReader::makeShowPageNum()
             nPos = 3;
     }
 
-    mxList->addAttribute("draw:style-name", sXML_CDATA, "PNBox" + OUString::number(nPos));
-    mxList->addAttribute("draw:name", sXML_CDATA, "PageNumber" + OUString::number(nPos));
-    mxList->addAttribute("text:anchor-type", sXML_CDATA, "paragraph");
-    mxList->addAttribute("svg:y", sXML_CDATA, "0cm");
-    mxList->addAttribute("svg:width", sXML_CDATA, "2.0cm");
-    mxList->addAttribute("fo:min-height", sXML_CDATA, "0.5cm");
-    startEl("draw:text-box");
+    mxList->addAttribute(u"draw:style-name"_ustr, sXML_CDATA, "PNBox" + OUString::number(nPos));
+    mxList->addAttribute(u"draw:name"_ustr, sXML_CDATA, "PageNumber" + OUString::number(nPos));
+    mxList->addAttribute(u"text:anchor-type"_ustr, sXML_CDATA, u"paragraph"_ustr);
+    mxList->addAttribute(u"svg:y"_ustr, sXML_CDATA, u"0cm"_ustr);
+    mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA, u"2.0cm"_ustr);
+    mxList->addAttribute(u"fo:min-height"_ustr, sXML_CDATA, u"0.5cm"_ustr);
+    startEl(u"draw:text-box"_ustr);
     mxList->clear();
 
-    mxList->addAttribute("text:style-name", sXML_CDATA, "PNPara" + OUString::number(nPos));
-    startEl("text:p");
+    mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA, "PNPara" + OUString::number(nPos));
+    startEl(u"text:p"_ustr);
     mxList->clear();
     if( hbox->shape > 2 )
-        chars("- ");
+        chars(u"- "_ustr);
     if( hbox->shape % 3 == 0 )
-        mxList->addAttribute("style:num-format", sXML_CDATA, "1");
+        mxList->addAttribute(u"style:num-format"_ustr, sXML_CDATA, u"1"_ustr);
     else if( hbox->shape % 3 == 1 )
-        mxList->addAttribute("style:num-format", sXML_CDATA, "I");
+        mxList->addAttribute(u"style:num-format"_ustr, sXML_CDATA, u"I"_ustr);
     else
-        mxList->addAttribute("style:num-format", sXML_CDATA, "i");
-    mxList->addAttribute("text:select-page", sXML_CDATA, "current");
-    startEl("text:page-number");
+        mxList->addAttribute(u"style:num-format"_ustr, sXML_CDATA, u"i"_ustr);
+    mxList->addAttribute(u"text:select-page"_ustr, sXML_CDATA, u"current"_ustr);
+    startEl(u"text:page-number"_ustr);
     mxList->clear();
-    chars("2");
-    endEl("text:page-number");
+    chars(u"2"_ustr);
+    endEl(u"text:page-number"_ustr);
     if( hbox->shape > 2 )
-        chars(" -");
-    endEl("text:p");
-    endEl("draw:text-box");
+        chars(u" -"_ustr);
+    endEl(u"text:p"_ustr);
+    endEl(u"draw:text-box"_ustr);
 }
 
 
@@ -4654,18 +4654,18 @@ void HwpReader::parsePara(HWPPara * para)
         {
             if( !bParaStart )
             {
-                mxList->addAttribute("text:style-name", sXML_CDATA,
+                mxList->addAttribute(u"text:style-name"_ustr, sXML_CDATA,
                     getPStyleName(para->GetParaShape().index));
-                startEl("text:p");
+                startEl(u"text:p"_ustr);
                 mxList->clear();
             }
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
-                mxList->addAttribute("text:name", sXML_CDATA, sBeginOfDoc);
-                startEl("text:bookmark");
+                mxList->addAttribute(u"text:name"_ustr, sXML_CDATA, sBeginOfDoc);
+                startEl(u"text:bookmark"_ustr);
                 mxList->clear();
-                endEl("text:bookmark");
+                endEl(u"text:bookmark"_ustr);
                 d->bFirstPara = false;
             }
             if( d->bInHeader )
@@ -4674,7 +4674,7 @@ void HwpReader::parsePara(HWPPara * para)
                 d->bInHeader = false;
             }
 
-            endEl("text:p");
+            endEl(u"text:p"_ustr);
         }
         else
         {
