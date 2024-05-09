@@ -94,7 +94,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
-            OUString java_env_name = UNO_LB_JAVA;
+            OUString java_env_name = u"" UNO_LB_JAVA ""_ustr;
             uno_getEnvironment(
                 reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
@@ -184,7 +184,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
-            OUString java_env_name = UNO_LB_JAVA;
+            OUString java_env_name = u"" UNO_LB_JAVA ""_ustr;
             uno_getEnvironment(
                 reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 

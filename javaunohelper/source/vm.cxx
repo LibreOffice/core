@@ -65,9 +65,9 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     css::uno::Reference< css::uno::XComponentContext > const & xContext )
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
-    css::uno::Any arg( css::beans::NamedValue( "UnoVirtualMachine", css::uno::Any( handle ) ) );
+    css::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, css::uno::Any( handle ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.java.JavaVirtualMachine",
+        u"com.sun.star.java.JavaVirtualMachine"_ustr,
         css::uno::Sequence< css::uno::Any >( &arg, 1 ), xContext );
 }
 
@@ -75,7 +75,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     css::uno::Sequence< css::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.java.JavaVirtualMachine",
+        u"com.sun.star.java.JavaVirtualMachine"_ustr,
         args, xContext );
 }
 
@@ -94,7 +94,7 @@ namespace javaunohelper {
                 vm, JNI_VERSION_1_2, false, jni_env ),
             loader );
     } catch ( ::jvmaccess::UnoVirtualMachine::CreationException & ) {
-        throw css::uno::RuntimeException( "jvmaccess::UnoVirtualMachine::CreationException occurred" );
+        throw css::uno::RuntimeException( u"jvmaccess::UnoVirtualMachine::CreationException occurred"_ustr );
     }
 }
 
@@ -104,7 +104,7 @@ css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
 {
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
-        "/singletons/com.sun.star.java.theJavaVirtualMachine",
+        u"/singletons/com.sun.star.java.theJavaVirtualMachine"_ustr,
         css::uno::Any( xFac ), true );
     return ::cppu::createComponentContext( &entry, 1, xContext );
 }

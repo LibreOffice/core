@@ -68,7 +68,7 @@ static bool inited_juhx( JNIEnv * jni_env )
     else
     {
         OUString symbol =
-              "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
+              u"Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo"_ustr;
         s_writeInfo = reinterpret_cast<javaunohelper::detail::Func_writeInfo *>(aModule.getFunctionSymbol(symbol));
         symbol =
             "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";

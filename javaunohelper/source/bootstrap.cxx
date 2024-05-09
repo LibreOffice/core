@@ -88,7 +88,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                 if (jni_env->ExceptionCheck())
                 {
                     jni_env->ExceptionClear();
-                    throw RuntimeException( "index out of bounds?!" );
+                    throw RuntimeException( u"index out of bounds?!"_ustr );
                 }
                 if (nullptr != jstr)
                 {
@@ -98,7 +98,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     if (jni_env->ExceptionCheck())
                     {
                         jni_env->ExceptionClear();
-                        throw RuntimeException( "index out of bounds?!" );
+                        throw RuntimeException( u"index out of bounds?!"_ustr );
                     }
                     if (nullptr != jstr)
                     {
@@ -132,7 +132,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
 
         // get uno envs
         OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-        OUString java_env_name = UNO_LB_JAVA;
+        OUString java_env_name = u"" UNO_LB_JAVA ""_ustr;
         Environment java_env, cpp_env;
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&cpp_env), cpp_env_name.pData, nullptr);
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
@@ -144,7 +144,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
             if (xComp.is())
                 xComp->dispose();
-            throw RuntimeException("cannot get mapping C++ <-> Java!" );
+            throw RuntimeException(u"cannot get mapping C++ <-> Java!"_ustr );
         }
 
         jobject jret = static_cast<jobject>(mapping.mapInterface( xContext.get(), cppu::UnoType<decltype(xContext)>::get() ));
