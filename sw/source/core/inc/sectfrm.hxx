@@ -52,6 +52,8 @@ class SAL_DLLPUBLIC_RTTI SwSectionFrame final: public SwLayoutFrame, public SwFl
     SwSection* m_pSection;
     bool m_bFootnoteAtEnd; // footnotes at the end of section
     bool m_bEndnAtEnd; // endnotes at the end of section
+    /// If this is a section for endnotes, then the SwSection is not backed by an SwSectionNode.
+    bool m_bEndNoteSection = false;
     bool m_bContentLock; // content locked
     bool m_bOwnFootnoteNum; // special numbering of footnotes
     bool m_bFootnoteLock; // ftn, don't leave this section bwd
@@ -171,6 +173,8 @@ public:
 
     void SetFootnoteLock( bool bNew ) { m_bFootnoteLock = bNew; }
     bool IsFootnoteLock() const { return m_bFootnoteLock; }
+    void SetEndNoteSection(bool bEndNoteSection) { m_bEndNoteSection = bEndNoteSection; }
+    bool IsEndNoteSection() const { return m_bEndNoteSection; }
 };
 
 inline const SwSectionFrame *SwSectionFrame::GetFollow() const

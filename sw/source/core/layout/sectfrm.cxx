@@ -94,6 +94,7 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
     m_bOwnFootnoteNum( false ),
     m_bFootnoteLock( false )
 {
+    m_bEndNoteSection = rSect.m_bEndNoteSection;
     StartListening(rSect.GetFormat()->GetNotifier());
 
     mnFrameType = SwFrameType::Section;

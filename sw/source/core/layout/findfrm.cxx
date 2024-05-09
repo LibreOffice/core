@@ -65,6 +65,29 @@ SwContentFrame *SwPageFrame::FindLastBodyContent()
     return pRet;
 }
 
+SwSectionFrame* SwPageFrame::GetEndNoteSection()
+{
+    SwLayoutFrame* pBody = FindBodyCont();
+    if (!pBody)
+    {
+        return nullptr;
+    }
+
+    SwFrame* pLast = pBody->GetLastLower();
+    if (!pLast || !pLast->IsSctFrame())
+    {
+        return nullptr;
+    }
+
+    auto pLastSection = static_cast<SwSectionFrame*>(pLast);
+    if (!pLastSection->IsEndNoteSection())
+    {
+        return nullptr;
+    }
+
+    return pLastSection;
+}
+
 /**
  * Checks if the frame contains one or more ContentFrame's anywhere in his
  * subsidiary structure; if so the first found ContentFrame is returned.
