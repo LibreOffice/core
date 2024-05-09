@@ -37,6 +37,7 @@
 #include <sortparam.hxx>
 #include <columnspanset.hxx>
 #include <undomanager.hxx>
+#include <sizedev.hxx>
 
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
@@ -286,18 +287,26 @@ bool ScBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    ScopedVclPtrInstance< VirtualDevice > pVirtDev;
+    ScSizeDeviceProvider aProv(pDocShell);
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ScViewData& rData = pViewShell->GetViewData();
-        nPPTX = rData.GetPPTX();
-        nPPTY = rData.GetPPTY();
-        aZoomX = rData.GetZoomX();
-        aZoomY = rData.GetZoomY();
+        if (aProv.IsPrinter())
+        {
+            nPPTX = aProv.GetPPTX();
+            nPPTY = aProv.GetPPTY();
+        }
+        else
+        {
+            ScViewData& rData = pViewShell->GetViewData();
+            nPPTX = rData.GetPPTX();
+            nPPTY = rData.GetPPTY();
+            aZoomX = rData.GetZoomX();
+            aZoomY = rData.GetZoomY();
+        }
     }
     else
     {
@@ -306,7 +315,7 @@ bool ScBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
-    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
     bool bRet = rDoc.SetOptimalHeight(
         aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab(), true);
 
