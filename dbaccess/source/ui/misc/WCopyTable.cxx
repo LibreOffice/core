@@ -133,7 +133,7 @@ bool ObjectCopySource::isView() const
 
 void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObject ) const
 {
-    const OUString aCopyProperties[] = {
+    static constexpr OUString aCopyProperties[] {
         PROPERTY_FONT, PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR,PROPERTY_TEXTLINECOLOR,PROPERTY_TEXTEMPHASIS,PROPERTY_TEXTRELIEF
     };
     for (const auto & aCopyProperty : aCopyProperties)
@@ -145,7 +145,7 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
 
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
-    std::pair< OUString, OUString > aProperties[] = {
+    static constexpr std::pair< OUString, OUString > aProperties[] {
                  std::pair< OUString, OUString >(PROPERTY_FILTER,u" AND "_ustr)
                 ,std::pair< OUString, OUString >(PROPERTY_ORDER,u" ORDER BY "_ustr)
     };
