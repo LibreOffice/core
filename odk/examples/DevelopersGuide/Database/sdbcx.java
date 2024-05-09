@@ -180,7 +180,7 @@ public class sdbcx
     public static void printColumns(XColumnsSupplier xColumnsSup)
     {
         System.out.println("Example printColumns");
-        // the table must be at least support a XColumnsSupplier interface
+        // the table must at least support a XColumnsSupplier interface
         System.out.println("--- Columns ---");
         XNameAccess xColumns = xColumnsSup.getColumns();
         String [] aColumnNames = xColumns.getElementNames();
@@ -189,7 +189,7 @@ public class sdbcx
     }
 
     // 16. example
-    // print all keys inclusive the columns of a key
+    // print all keys including the columns of a key
 
     public static void printKeys(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception
     {
@@ -211,7 +211,7 @@ public class sdbcx
     }
 
     // 17. example
-    // print all keys inclusive the columns of a key
+    // print all indexes including the columns of an index
 
     public static void printIndexes(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception
     {
@@ -346,29 +346,29 @@ public class sdbcx
             xCol.setPropertyValue("Type",Integer.valueOf(DataType.INTEGER));
             xCol.setPropertyValue("IsNullable",Integer.valueOf(ColumnValue.NO_NULLS));
             xAppend.appendByDescriptor(xCol);
-            // 2nd only set the properties which differs
+            // 2nd only set the properties which differ
             xCol.setPropertyValue("Name","FIRSTNAME");
             xCol.setPropertyValue("Type",Integer.valueOf(DataType.VARCHAR));
             xCol.setPropertyValue("IsNullable",Integer.valueOf(ColumnValue.NULLABLE));
             xCol.setPropertyValue("Precision",Integer.valueOf(50));
             xAppend.appendByDescriptor(xCol);
-            // 3nd only set the properties which differs
+            // 3rd only set the properties which differ
             xCol.setPropertyValue("Name","LASTNAME");
             xCol.setPropertyValue("Precision",Integer.valueOf(100));
             xAppend.appendByDescriptor(xCol);
-            // 4nd only set the properties which differs
+            // 4th only set the properties which differ
             xCol.setPropertyValue("Name","STREET");
             xCol.setPropertyValue("Precision",Integer.valueOf(50));
             xAppend.appendByDescriptor(xCol);
-            // 5nd only set the properties which differs
+            // 5th only set the properties which differ
             xCol.setPropertyValue("Name","STATE");
             xAppend.appendByDescriptor(xCol);
-            // 6nd only set the properties which differs
+            // 6th only set the properties which differ
             xCol.setPropertyValue("Name","ZIP");
             xCol.setPropertyValue("Type",Integer.valueOf(DataType.INTEGER));
             xCol.setPropertyValue("Precision",Integer.valueOf(10)); // default value integer
             xAppend.appendByDescriptor(xCol);
-            // 7nd only set the properties which differs
+            // 7th only set the properties which differ
             xCol.setPropertyValue("Name","BIRTHDATE");
             xCol.setPropertyValue("Type",Integer.valueOf(DataType.DATE));
             xCol.setPropertyValue("Precision",Integer.valueOf(10)); // default value integer
