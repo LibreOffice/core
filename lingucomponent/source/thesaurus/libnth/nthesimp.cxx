@@ -106,8 +106,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         // get list of dictionaries-to-use
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
-                "org.openoffice.lingu.new.Thesaurus", aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( u"Thesauri"_ustr,
+                u"org.openoffice.lingu.new.Thesaurus"_ustr, aFormatList );
         for (const auto& rFormat : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
@@ -547,7 +547,7 @@ void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >&
 // Service specific part
 OUString SAL_CALL Thesaurus::getImplementationName()
 {
-    return "org.openoffice.lingu.new.Thesaurus";
+    return u"org.openoffice.lingu.new.Thesaurus"_ustr;
 }
 
 sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )

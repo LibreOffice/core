@@ -123,8 +123,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         // new configuration entries).
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( "Hyphenators",
-                "org.openoffice.lingu.LibHnjHyphenator", aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( u"Hyphenators"_ustr,
+                u"org.openoffice.lingu.LibHnjHyphenator"_ustr, aFormatList );
         for (const auto& rFormat : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
@@ -961,7 +961,7 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
 // Service specific part
 OUString SAL_CALL Hyphenator::getImplementationName()
 {
-    return "org.openoffice.lingu.LibHnjHyphenator";
+    return u"org.openoffice.lingu.LibHnjHyphenator"_ustr;
 }
 
 sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )

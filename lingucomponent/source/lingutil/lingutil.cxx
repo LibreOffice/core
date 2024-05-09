@@ -207,7 +207,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 #ifndef IOS
     // follow the hunspell tool's example and check DICPATH for preferred dictionaries
     rtl_uString * pSearchPath = nullptr;
-    osl_getEnvironment(OUString("DICPATH").pData, &pSearchPath);
+    osl_getEnvironment(u"DICPATH"_ustr.pData, &pSearchPath);
 
     if (pSearchPath)
     {

@@ -118,8 +118,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         // new configuration entries).
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
-                "org.openoffice.lingu.MySpellSpellChecker", aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( u"SpellCheckers"_ustr,
+                u"org.openoffice.lingu.MySpellSpellChecker"_ustr, aFormatList );
         for (auto const& format : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
@@ -141,7 +141,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         if (!aDics.empty())
         {
             uno::Reference< lang::XMultiServiceFactory > xServiceFactory(comphelper::getProcessServiceFactory());
-            uno::Reference< ucb::XSimpleFileAccess > xAccess(xServiceFactory->createInstance("com.sun.star.ucb.SimpleFileAccess"), uno::UNO_QUERY);
+            uno::Reference< ucb::XSimpleFileAccess > xAccess(xServiceFactory->createInstance(u"com.sun.star.ucb.SimpleFileAccess"_ustr), uno::UNO_QUERY);
             // get supported locales from the dictionaries-to-use...
             std::set<OUString> aLocaleNamesSet;
             for (auto const& dict : aDics)
@@ -621,7 +621,7 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
 // Service specific part
 OUString SAL_CALL SpellChecker::getImplementationName()
 {
-    return "org.openoffice.lingu.MySpellSpellChecker";
+    return u"org.openoffice.lingu.MySpellSpellChecker"_ustr;
 }
 
 sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )

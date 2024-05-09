@@ -145,7 +145,7 @@ uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
 
 OUString SAL_CALL NumberText_Impl::getImplementationName()
 {
-    return "com.sun.star.lingu2.NumberText";
+    return u"com.sun.star.lingu2.NumberText"_ustr;
 }
 
 sal_Bool SAL_CALL NumberText_Impl::supportsService(const OUString& ServiceName)
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL NumberText_Impl::supportsService(const OUString& ServiceName)
 
 Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
 {
-    return { "com.sun.star.linguistic2.NumberText" };
+    return { u"com.sun.star.linguistic2.NumberText"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

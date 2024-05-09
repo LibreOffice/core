@@ -83,7 +83,7 @@ PropertyValue lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
         constexpr Color COL_ORANGE(0xD1, 0x68, 0x20);
         aColor = COL_ORANGE;
     }
-    return comphelper::makePropertyValue("LineColor", aColor);
+    return comphelper::makePropertyValue(u"LineColor"_ustr, aColor);
 }
 
 OString encodeTextForLT(const OUString& text)
@@ -346,8 +346,9 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
         aLocaleList.getArray()[2] = "en-GB";
     }
     else
-        aLinguCfg.GetLocaleListFor("GrammarCheckers",
-                                   "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList);
+        aLinguCfg.GetLocaleListFor(u"GrammarCheckers"_ustr,
+                                   u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr,
+                                   aLocaleList);
 
     auto nLength = aLocaleList.getLength();
     m_aSuppLocales.realloc(nLength);
@@ -494,7 +495,7 @@ OUString SAL_CALL LanguageToolGrammarChecker::getServiceDisplayName(const Locale
 
 OUString SAL_CALL LanguageToolGrammarChecker::getImplementationName()
 {
-    return "org.openoffice.lingu.LanguageToolGrammarChecker";
+    return u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr;
 }
 
 sal_Bool SAL_CALL LanguageToolGrammarChecker::supportsService(const OUString& ServiceName)
