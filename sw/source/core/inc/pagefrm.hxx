@@ -204,6 +204,7 @@ public:
     bool IsEndNotePage() const                      { return m_bEndNotePage; }
     void SetFootnotePage( bool b )                       { m_bFootnotePage = b; }
     void SetEndNotePage( bool b )                   { m_bEndNotePage = b; }
+    SwSectionFrame* GetEndNoteSection();
 
     sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
     void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}
