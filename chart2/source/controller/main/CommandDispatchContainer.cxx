@@ -71,10 +71,10 @@ void CommandDispatchContainer::setChartDispatch(
 Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
-    static const o3tl::sorted_vector< OUString >  s_aContainerDocumentCommands {
-        u"AddDirect"_ustr,    u"NewDoc"_ustr,             u"Open"_ustr,
-        u"Save"_ustr,         u"SaveAs"_ustr,             u"SendMail"_ustr,
-        u"EditDoc"_ustr,      u"ExportDirectToPDF"_ustr,  u"PrintDefault"_ustr};
+    static const o3tl::sorted_vector< std::u16string_view >  s_aContainerDocumentCommands {
+        u"AddDirect",    u"NewDoc",             u"Open",
+        u"Save",         u"SaveAs",             u"SendMail",
+        u"EditDoc",      u"ExportDirectToPDF",  u"PrintDefault"};
 
     Reference< frame::XDispatch > xResult;
     tDispatchMap::const_iterator aIt( m_aCachedDispatches.find( rURL.Complete ));
@@ -109,7 +109,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() &&
-                 (s_aContainerDocumentCommands.find( rURL.Path ) != s_aContainerDocumentCommands.end()) )
+                 (s_aContainerDocumentCommands.find( std::u16string_view(rURL.Path) ) != s_aContainerDocumentCommands.end()) )
         {
             xResult.set( getContainerDispatchForURL( xModel->getCurrentController(), rURL ));
             // ToDo: can those dispatches be cached?
