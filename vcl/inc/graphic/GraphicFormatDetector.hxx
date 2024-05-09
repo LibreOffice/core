@@ -27,105 +27,105 @@ namespace vcl
 {
 static inline OUString getImportFormatShortName(GraphicFileFormat nFormat)
 {
-    const char* pKeyName = nullptr;
+    OUString aKeyName;
 
     switch (nFormat)
     {
         case GraphicFileFormat::BMP:
-            pKeyName = "BMP";
+            aKeyName = u"BMP"_ustr;
             break;
         case GraphicFileFormat::GIF:
-            pKeyName = "GIF";
+            aKeyName = u"GIF"_ustr;
             break;
         case GraphicFileFormat::JPG:
-            pKeyName = "JPG";
+            aKeyName = u"JPG"_ustr;
             break;
         case GraphicFileFormat::PCD:
-            pKeyName = "PCD";
+            aKeyName = u"PCD"_ustr;
             break;
         case GraphicFileFormat::PCX:
-            pKeyName = "PCX";
+            aKeyName = u"PCX"_ustr;
             break;
         case GraphicFileFormat::PNG:
-            pKeyName = "PNG";
+            aKeyName = u"PNG"_ustr;
             break;
         case GraphicFileFormat::APNG:
-            pKeyName = "APNG";
+            aKeyName = u"APNG"_ustr;
             break;
         case GraphicFileFormat::XBM:
-            pKeyName = "XBM";
+            aKeyName = u"XBM"_ustr;
             break;
         case GraphicFileFormat::XPM:
-            pKeyName = "XPM";
+            aKeyName = u"XPM"_ustr;
             break;
         case GraphicFileFormat::PBM:
-            pKeyName = "PBM";
+            aKeyName = u"PBM"_ustr;
             break;
         case GraphicFileFormat::PGM:
-            pKeyName = "PGM";
+            aKeyName = u"PGM"_ustr;
             break;
         case GraphicFileFormat::PPM:
-            pKeyName = "PPM";
+            aKeyName = u"PPM"_ustr;
             break;
         case GraphicFileFormat::RAS:
-            pKeyName = "RAS";
+            aKeyName = u"RAS"_ustr;
             break;
         case GraphicFileFormat::TGA:
-            pKeyName = "TGA";
+            aKeyName = u"TGA"_ustr;
             break;
         case GraphicFileFormat::PSD:
-            pKeyName = "PSD";
+            aKeyName = u"PSD"_ustr;
             break;
         case GraphicFileFormat::EPS:
-            pKeyName = "EPS";
+            aKeyName = u"EPS"_ustr;
             break;
         case GraphicFileFormat::TIF:
-            pKeyName = "TIF";
+            aKeyName = u"TIF"_ustr;
             break;
         case GraphicFileFormat::DXF:
-            pKeyName = "DXF";
+            aKeyName = u"DXF"_ustr;
             break;
         case GraphicFileFormat::MET:
-            pKeyName = "MET";
+            aKeyName = u"MET"_ustr;
             break;
         case GraphicFileFormat::PCT:
-            pKeyName = "PCT";
+            aKeyName = u"PCT"_ustr;
             break;
         case GraphicFileFormat::SVM:
-            pKeyName = "SVM";
+            aKeyName = u"SVM"_ustr;
             break;
         case GraphicFileFormat::WMF:
-            pKeyName = "WMF";
+            aKeyName = u"WMF"_ustr;
             break;
         case GraphicFileFormat::EMF:
-            pKeyName = "EMF";
+            aKeyName = u"EMF"_ustr;
             break;
         case GraphicFileFormat::SVG:
-            pKeyName = "SVG";
+            aKeyName = u"SVG"_ustr;
             break;
         case GraphicFileFormat::WMZ:
-            pKeyName = "WMZ";
+            aKeyName = u"WMZ"_ustr;
             break;
         case GraphicFileFormat::EMZ:
-            pKeyName = "EMZ";
+            aKeyName = u"EMZ"_ustr;
             break;
         case GraphicFileFormat::SVGZ:
-            pKeyName = "SVGZ";
+            aKeyName = u"SVGZ"_ustr;
             break;
         case GraphicFileFormat::WEBP:
-            pKeyName = "WEBP";
+            aKeyName = u"WEBP"_ustr;
             break;
         case GraphicFileFormat::MOV:
-            pKeyName = "MOV";
+            aKeyName = u"MOV"_ustr;
             break;
         case GraphicFileFormat::PDF:
-            pKeyName = "PDF";
+            aKeyName = u"PDF"_ustr;
             break;
         default:
             assert(false);
     }
 
-    return OUString::createFromAscii(pKeyName);
+    return aKeyName;
 }
 /***
  * This function is has two modes:
