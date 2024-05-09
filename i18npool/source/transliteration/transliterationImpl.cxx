@@ -184,7 +184,7 @@ TransliterationImpl::getName()
     if (numCascade == 1 && bodyCascade[0].is())
         return bodyCascade[0]->getName();
     if (numCascade < 1)
-        return ( OUString("Not Loaded"));
+        return ( u"Not Loaded"_ustr);
     throw RuntimeException();
 }
 

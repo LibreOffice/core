@@ -207,7 +207,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
         // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
-        css::lang::Locale jaLocale("ja", OUString(), OUString());
+        css::lang::Locale jaLocale(u"ja"_ustr, OUString(), OUString());
         if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
         else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
         else throw RuntimeException();
@@ -227,7 +227,7 @@ Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
         // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
-        css::lang::Locale jaLocale("ja", OUString(), OUString());
+        css::lang::Locale jaLocale(u"ja"_ustr, OUString(), OUString());
         if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
         else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
         else throw RuntimeException();

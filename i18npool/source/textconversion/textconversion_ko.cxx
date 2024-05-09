@@ -45,7 +45,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
     : TextConversionService("com.sun.star.i18n.TextConversion_ko")
 {
     Reference < XInterface > xI = xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.i18n.ConversionDictionary_ko", xContext);
+        u"com.sun.star.i18n.ConversionDictionary_ko"_ustr, xContext);
 
     if ( xI.is() )
         xCD.set( xI, UNO_QUERY );
@@ -56,7 +56,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
 
     // get maximum length of word in dictionary
     if (xCDL.is()) {
-        Locale loc("ko", "KR", OUString());
+        Locale loc(u"ko"_ustr, u"KR"_ustr, OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
                         ConversionDictionaryType::HANGUL_HANJA,
                         ConversionDirection_FROM_LEFT);

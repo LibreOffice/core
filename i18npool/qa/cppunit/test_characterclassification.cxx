@@ -34,13 +34,13 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTitleCase)
 
     {
         //basic example
-        OUString sTest("Some text");
+        OUString sTest(u"Some text"_ustr);
         OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString("Some Text"), sTitleCase);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", u"Some Text"_ustr, sTitleCase);
         OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString("SOME TEXT"), sUpperCase);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", u"SOME TEXT"_ustr, sUpperCase);
         OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower ", OUString("some text"), sLowerCase);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower ", u"some text"_ustr, sLowerCase);
     }
 
     {
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testStringType)
 
     {
         //simple case
-        OUString sTest("Some text");
+        OUString sTest(u"Some text"_ustr);
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(230), nResult);
     }
@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testAdlam)
 void TestCharacterClassification::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xCC.set(m_xSFactory->createInstance("com.sun.star.i18n.CharacterClassification"), uno::UNO_QUERY_THROW);
+    m_xCC.set(m_xSFactory->createInstance(u"com.sun.star.i18n.CharacterClassification"_ustr), uno::UNO_QUERY_THROW);
 }
 
 void TestCharacterClassification::tearDown()

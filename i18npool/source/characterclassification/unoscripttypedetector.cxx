@@ -45,19 +45,19 @@ UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPo
 sal_Int16 SAL_CALL
 UnoScriptTypeDetector::getCTLScriptType( const OUString&, sal_Int32 )
 {
-    throw css::uno::RuntimeException("not implemented");
+    throw css::uno::RuntimeException(u"not implemented"_ustr);
 }
 
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::beginOfCTLScriptType( const OUString&, sal_Int32 )
 {
-    throw css::uno::RuntimeException("not implemented");
+    throw css::uno::RuntimeException(u"not implemented"_ustr);
 }
 
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::endOfCTLScriptType( const OUString&, sal_Int32 )
 {
-    throw css::uno::RuntimeException("not implemented");
+    throw css::uno::RuntimeException(u"not implemented"_ustr);
 }
 
 OUString SAL_CALL

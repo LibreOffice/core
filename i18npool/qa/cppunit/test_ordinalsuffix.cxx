@@ -34,7 +34,7 @@ public:
 void TestOrdinalSuffix::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xOrdinal.set(m_xSFactory->createInstance("com.sun.star.i18n.OrdinalSuffix"), uno::UNO_QUERY_THROW);
+    m_xOrdinal.set(m_xSFactory->createInstance(u"com.sun.star.i18n.OrdinalSuffix"_ustr), uno::UNO_QUERY_THROW);
 }
 
 void TestOrdinalSuffix::tearDown()
@@ -45,36 +45,36 @@ void TestOrdinalSuffix::tearDown()
 
 void TestOrdinalSuffix::testFrench()
 {
-    lang::Locale aLocale("fr", "LU", "");
+    lang::Locale aLocale(u"fr"_ustr, u"LU"_ustr, u""_ustr);
 
     //1er
     uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("er"));
+    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"er"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //2e, 3e, etc.
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("e"));
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"e"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 }
 
 void TestOrdinalSuffix::testEnglish()
 {
-    lang::Locale aLocale("en", "US", "");
+    lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
 
     //1st
     uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("st"));
+    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"st"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //2nd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("nd"));
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"nd"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //3rd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(3, aLocale);
-    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("rd"));
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"rd"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 }
 

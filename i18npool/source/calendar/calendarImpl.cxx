@@ -37,7 +37,7 @@ CalendarImpl::CalendarImpl() : m_xContext(comphelper::getProcessComponentContext
 CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_xContext(rxContext)
 {
     if (!m_xContext.is())
-        throw RuntimeException("CalendarImpl::CalendarImpl: empty m_xContext");
+        throw RuntimeException(u"CalendarImpl::CalendarImpl: empty m_xContext"_ustr);
 }
 
 CalendarImpl::~CalendarImpl()
@@ -50,7 +50,7 @@ CalendarImpl::loadDefaultCalendarTZ( const css::lang::Locale& rLocale, const OUS
     const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     auto pCal = std::find_if(xC.begin(), xC.end(), [](const Calendar2& rCal) { return rCal.Default; });
     if (pCal == xC.end())
-        throw RuntimeException("CalendarImpl::loadDefaultCalendarTZ: no default calendar found for this locale");
+        throw RuntimeException(u"CalendarImpl::loadDefaultCalendarTZ: no default calendar found for this locale"_ustr);
     loadCalendarTZ(pCal->Name, rLocale, rTimeZone);
 }
 
@@ -78,11 +78,11 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
             // check if the calendar is defined in localedata, load gregorian calendar service.
             const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
             if (std::any_of(xC.begin(), xC.end(), [&uniqueID](const Calendar2& rCal) { return uniqueID == rCal.Name; }))
-                xI = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Calendar_gregorian", m_xContext);
+                xI = m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.i18n.Calendar_gregorian"_ustr, m_xContext);
         }
 
         if ( !xI.is() )
-            throw RuntimeException("CalendarImpl::loadCalendarTZ: no calendar found for this locale");
+            throw RuntimeException(u"CalendarImpl::loadCalendarTZ: no calendar found for this locale"_ustr);
         xCalendar.set(xI, UNO_QUERY);
 
         if (!rTimeZone.isEmpty())
@@ -100,7 +100,7 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
     if ( !xCalendar.is() )
     {
         xCalendar = xOldCalendar;
-        throw RuntimeException("CalendarImpl::loadCalendarTZ: no calendar found for this locale, should use old one?");
+        throw RuntimeException(u"CalendarImpl::loadCalendarTZ: no calendar found for this locale, should use old one?"_ustr);
     }
 
     try
@@ -115,14 +115,14 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
 
     if (!bTimeZone)
         // The calendar is usable but is not in the expected time zone.
-        throw RuntimeException("CalendarImpl::loadCalendarTZ: the calendar is usable but is not in the expected time zone");
+        throw RuntimeException(u"CalendarImpl::loadCalendarTZ: the calendar is usable but is not in the expected time zone"_ustr);
 }
 
 Calendar2 SAL_CALL
 CalendarImpl::getLoadedCalendar2()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getLoadedCalendar2: no calendar");
+        throw RuntimeException(u"CalendarImpl::getLoadedCalendar2: no calendar"_ustr);
     return xCalendar->getLoadedCalendar2();
 }
 
@@ -130,7 +130,7 @@ CalendarImpl::getLoadedCalendar2()
 CalendarImpl::getLoadedCalendar()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getLoadedCalendar: no calendar");
+        throw RuntimeException(u"CalendarImpl::getLoadedCalendar: no calendar"_ustr);
     return xCalendar->getLoadedCalendar();
 }
 
@@ -148,7 +148,7 @@ void SAL_CALL
 CalendarImpl::setDateTime( double fTimeInDays )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setDateTime: no calendar");
+        throw RuntimeException(u"CalendarImpl::setDateTime: no calendar"_ustr);
     xCalendar->setDateTime( fTimeInDays );
 }
 
@@ -156,7 +156,7 @@ double SAL_CALL
 CalendarImpl::getDateTime()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getDateTime: no calendar");
+        throw RuntimeException(u"CalendarImpl::getDateTime: no calendar"_ustr);
     return xCalendar->getDateTime();
 }
 
@@ -164,7 +164,7 @@ void SAL_CALL
 CalendarImpl::setLocalDateTime( double fTimeInDays )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setLocalDateTime: no calendar");
+        throw RuntimeException(u"CalendarImpl::setLocalDateTime: no calendar"_ustr);
     xCalendar->setLocalDateTime( fTimeInDays );
 }
 
@@ -172,7 +172,7 @@ double SAL_CALL
 CalendarImpl::getLocalDateTime()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getLocalDateTime: no calendar");
+        throw RuntimeException(u"CalendarImpl::getLocalDateTime: no calendar"_ustr);
     return xCalendar->getLocalDateTime();
 }
 
@@ -190,7 +190,7 @@ OUString SAL_CALL
 CalendarImpl::getUniqueID()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getUniqueID: no calendar");
+        throw RuntimeException(u"CalendarImpl::getUniqueID: no calendar"_ustr);
     return xCalendar->getUniqueID();
 }
 
@@ -198,7 +198,7 @@ void SAL_CALL
 CalendarImpl::setValue( sal_Int16 fieldIndex, sal_Int16 value )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setValue: no calendar");
+        throw RuntimeException(u"CalendarImpl::setValue: no calendar"_ustr);
     xCalendar->setValue( fieldIndex, value );
 }
 
@@ -206,7 +206,7 @@ sal_Int16 SAL_CALL
 CalendarImpl::getValue( sal_Int16 fieldIndex )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getValue: no calendar");
+        throw RuntimeException(u"CalendarImpl::getValue: no calendar"_ustr);
     return xCalendar->getValue( fieldIndex );
 }
 
@@ -214,7 +214,7 @@ void SAL_CALL
 CalendarImpl::addValue( sal_Int16 fieldIndex, sal_Int32 amount )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::addValue: no calendar");
+        throw RuntimeException(u"CalendarImpl::addValue: no calendar"_ustr);
     xCalendar->addValue( fieldIndex, amount);
 }
 
@@ -222,7 +222,7 @@ sal_Int16 SAL_CALL
 CalendarImpl::getFirstDayOfWeek()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getFirstDayOfWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::getFirstDayOfWeek: no calendar"_ustr);
     return xCalendar->getFirstDayOfWeek();
 }
 
@@ -230,7 +230,7 @@ void SAL_CALL
 CalendarImpl::setFirstDayOfWeek( sal_Int16 day )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setFirstDayOfWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::setFirstDayOfWeek: no calendar"_ustr);
     xCalendar->setFirstDayOfWeek(day);
 }
 
@@ -238,7 +238,7 @@ void SAL_CALL
 CalendarImpl::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setMinimumNumberOfDaysForFirstWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::setMinimumNumberOfDaysForFirstWeek: no calendar"_ustr);
     xCalendar->setMinimumNumberOfDaysForFirstWeek(days);
 }
 
@@ -246,7 +246,7 @@ sal_Int16 SAL_CALL
 CalendarImpl::getMinimumNumberOfDaysForFirstWeek()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getMinimumNumberOfDaysForFirstWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::getMinimumNumberOfDaysForFirstWeek: no calendar"_ustr);
     return xCalendar->getMinimumNumberOfDaysForFirstWeek();
 }
 
@@ -255,7 +255,7 @@ OUString SAL_CALL
 CalendarImpl::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getDisplayName: no calendar");
+        throw RuntimeException(u"CalendarImpl::getDisplayName: no calendar"_ustr);
     return xCalendar->getDisplayName( displayIndex, idx, nameType );
 }
 
@@ -263,7 +263,7 @@ sal_Int16 SAL_CALL
 CalendarImpl::getNumberOfMonthsInYear()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setDisplayName: no calendar");
+        throw RuntimeException(u"CalendarImpl::setDisplayName: no calendar"_ustr);
     return xCalendar->getNumberOfMonthsInYear();
 }
 
@@ -272,7 +272,7 @@ sal_Int16 SAL_CALL
 CalendarImpl::getNumberOfDaysInWeek()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getNumberOfDaysInWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::getNumberOfDaysInWeek: no calendar"_ustr);
     return xCalendar->getNumberOfDaysInWeek();
 }
 
@@ -281,7 +281,7 @@ Sequence< CalendarItem > SAL_CALL
 CalendarImpl::getDays()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::setNumberOfDaysInWeek: no calendar");
+        throw RuntimeException(u"CalendarImpl::setNumberOfDaysInWeek: no calendar"_ustr);
     return xCalendar->getDays();
 }
 
@@ -290,7 +290,7 @@ Sequence< CalendarItem > SAL_CALL
 CalendarImpl::getMonths()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getMonths: no calendar");
+        throw RuntimeException(u"CalendarImpl::getMonths: no calendar"_ustr);
     return xCalendar->getMonths();
 }
 
@@ -299,7 +299,7 @@ Sequence< CalendarItem2 > SAL_CALL
 CalendarImpl::getDays2()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getDays2: no calendar");
+        throw RuntimeException(u"CalendarImpl::getDays2: no calendar"_ustr);
     return xCalendar->getDays2();
 }
 
@@ -308,7 +308,7 @@ Sequence< CalendarItem2 > SAL_CALL
 CalendarImpl::getMonths2()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getMonths2: no calendar");
+        throw RuntimeException(u"CalendarImpl::getMonths2: no calendar"_ustr);
     return xCalendar->getMonths2();
 }
 
@@ -317,7 +317,7 @@ Sequence< CalendarItem2 > SAL_CALL
 CalendarImpl::getGenitiveMonths2()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getGenitiveMonths2: no calendar");
+        throw RuntimeException(u"CalendarImpl::getGenitiveMonths2: no calendar"_ustr);
     return xCalendar->getGenitiveMonths2();
 }
 
@@ -326,7 +326,7 @@ Sequence< CalendarItem2 > SAL_CALL
 CalendarImpl::getPartitiveMonths2()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getPartitiveMonths2: no calendar");
+        throw RuntimeException(u"CalendarImpl::getPartitiveMonths2: no calendar"_ustr);
     return xCalendar->getPartitiveMonths2();
 }
 
@@ -335,7 +335,7 @@ sal_Bool SAL_CALL
 CalendarImpl::isValid()
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::isValid: no calendar");
+        throw RuntimeException(u"CalendarImpl::isValid: no calendar"_ustr);
     return xCalendar->isValid();
 }
 
@@ -343,7 +343,7 @@ OUString SAL_CALL
 CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
     if (!xCalendar.is())
-        throw RuntimeException("CalendarImpl::getDisplayString: no calendar");
+        throw RuntimeException(u"CalendarImpl::getDisplayString: no calendar"_ustr);
     return xCalendar->getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
 }
 

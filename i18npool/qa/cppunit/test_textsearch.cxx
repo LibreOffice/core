@@ -58,8 +58,8 @@ void TestTextSearch::testICU()
     UErrorCode nErr = U_ZERO_ERROR;
     sal_uInt32 nSearchFlags = UREGEX_UWORD | UREGEX_CASE_INSENSITIVE;
 
-    OUString aString( "abcdefgh" );
-    OUString aPattern( "e" );
+    OUString aString( u"abcdefgh"_ustr );
+    OUString aPattern( u"e"_ustr );
     icu::UnicodeString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
 
     std::unique_ptr<icu::RegexMatcher> pRegexMatcher(new icu::RegexMatcher( aSearchPat, nSearchFlags, nErr ));
@@ -74,8 +74,8 @@ void TestTextSearch::testICU()
     CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(5), pRegexMatcher->end( nErr ) );
     CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
 
-    OUString aString2( "acababaabcababadcdaa" );
-    OUString aPattern2( "a" );
+    OUString aString2( u"acababaabcababadcdaa"_ustr );
+    OUString aPattern2( u"a"_ustr );
 
     icu::UnicodeString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
     pRegexMatcher.reset(new icu::RegexMatcher( aSearchPat2, nSearchFlags, nErr ));
@@ -93,7 +93,7 @@ void TestTextSearch::testICU()
 
 void TestTextSearch::testSearches()
 {
-    OUString str( "acababaabcababadcdaa" );
+    OUString str( u"acababaabcababadcdaa"_ustr );
     sal_Int32 startPos = 2, endPos = 20 ;
     sal_Int32 const fStartRes = 10, fEndRes = 18 ;
     sal_Int32 const bStartRes = 18, bEndRes = 10 ;
@@ -123,7 +123,7 @@ void TestTextSearch::testSearches()
                                 | TransliterationFlags::IGNORE_WIDTH);
     aOptions.searchString = "([^ ]*)[ ]*([^ ]*)";
     m_xSearch->setOptions(aOptions);
-    aRes = m_xSearch->searchForward("11 22 33", 2, 7);
+    aRes = m_xSearch->searchForward(u"11 22 33"_ustr, 2, 7);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aRes.subRegExpressions);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.endOffset[0]);
@@ -526,8 +526,8 @@ void TestTextSearch::testTdf138410()
 void TestTextSearch::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xSearch.set(m_xSFactory->createInstance("com.sun.star.util.TextSearch"), uno::UNO_QUERY_THROW);
-    m_xSearch2.set(m_xSFactory->createInstance("com.sun.star.util.TextSearch2"), uno::UNO_QUERY_THROW);
+    m_xSearch.set(m_xSFactory->createInstance(u"com.sun.star.util.TextSearch"_ustr), uno::UNO_QUERY_THROW);
+    m_xSearch2.set(m_xSFactory->createInstance(u"com.sun.star.util.TextSearch2"_ustr), uno::UNO_QUERY_THROW);
 }
 
 void TestTextSearch::tearDown()

@@ -646,12 +646,12 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
                  // load service with name <base>_<lang>
                  createLocaleSpecificBreakIterator(rLocale.Language)) ||
                 // load default service with name <base>_Unicode
-                createLocaleSpecificBreakIterator("Unicode")) {
+                createLocaleSpecificBreakIterator(u"Unicode"_ustr)) {
             lookupTable.emplace_back( aLocale, xBI );
             return xBI;
         }
     }
-    throw RuntimeException("getLocaleSpecificBreakIterator: iterator not found");
+    throw RuntimeException(u"getLocaleSpecificBreakIterator: iterator not found"_ustr);
 }
 
 OUString SAL_CALL

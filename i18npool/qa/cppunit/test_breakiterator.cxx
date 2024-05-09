@@ -89,7 +89,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=31271
     {
-        OUString aTest("(some text here)");
+        OUString aTest(u"(some text here)"_ustr);
 
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -129,7 +129,7 @@ void TestBreakIterator::testLineBreaking()
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
-            i18n::LineBreakResults aResult = m_xBreak->getLineBreak("foo /bar/baz", strlen("foo /bar/ba"), aLocale, 0,
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(u"foo /bar/baz"_ustr, strlen("foo /bar/ba"), aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break at the first slash", static_cast<sal_Int32>(4), aResult.breakIndex);
         }
@@ -143,7 +143,7 @@ void TestBreakIterator::testLineBreaking()
         {
             //Here we want the line break to leave ./bar/baz clumped together on the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "foo ./bar/baz", strlen("foo ./bar/ba"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"foo ./bar/baz"_ustr, strlen("foo ./bar/ba"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break at the first period",
                                          static_cast<sal_Int32>(4), aResult.breakIndex);
         }
@@ -159,7 +159,7 @@ void TestBreakIterator::testLineBreaking()
             // However, the current behavior does not wrap the string at all. This test asserts the
             // current behavior as a point of reference.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "THIS... ...BE", strlen("THIS... ...B"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"THIS... ...BE"_ustr, strlen("THIS... ...B"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aResult.breakIndex);
         }
     }
@@ -172,7 +172,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // The line break should leave /BE clumped together on the next line.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "THIS... /BE", strlen("THIS... /B"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"THIS... /BE"_ustr, strlen("THIS... /B"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aResult.breakIndex);
         }
     }
@@ -186,7 +186,7 @@ void TestBreakIterator::testLineBreaking()
             // Per the bug, the line break should leave -bar clumped together on the next line.
             // However, this change was reverted at some point. This test asserts the new behavior.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "foo -bar", strlen("foo -ba"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"foo -bar"_ustr, strlen("foo -ba"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break at the first dash",
                                          static_cast<sal_Int32>(5), aResult.breakIndex);
         }
@@ -200,7 +200,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // Here we want the line break to leave C:\Program Files\ on the first line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "C:\\Program Files\\LibreOffice", strlen("C:\\Program Files\\Libre"), aLocale, 0,
+                u"C:\\Program Files\\LibreOffice"_ustr, strlen("C:\\Program Files\\Libre"), aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
         }
@@ -214,7 +214,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // Here we want the line break to leave toll- on the first line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "toll-free", strlen("toll-fr"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"toll-free"_ustr, strlen("toll-fr"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aResult.breakIndex);
         }
     }
@@ -227,7 +227,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // Here we want the line break to leave US$ clumped on the next line.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "word US$ 123", strlen("word U"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"word US$ 123"_ustr, strlen("word U"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aResult.breakIndex);
         }
     }
@@ -240,7 +240,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // Here we want the line break to leave US$ clumped on the next line.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "word L.5 word", strlen("word L"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"word L.5 word"_ustr, strlen("word L"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aResult.breakIndex);
         }
     }
@@ -253,7 +253,7 @@ void TestBreakIterator::testLineBreaking()
         {
             // Here we want the line break to leave 100- clumped on the first line.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                "word 100-199 word", strlen("word 100-1"), aLocale, 0, aHyphOptions, aUserOptions);
+                u"word 100-199 word"_ustr, strlen("word 100-1"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aResult.breakIndex);
         }
     }
@@ -308,7 +308,7 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
-            OUString aTest("aaa]aaa");
+            OUString aTest(u"aaa]aaa"_ustr);
             //Here we want the line break to move the whole lot to the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
                 aHyphOptions, aUserOptions);
@@ -352,7 +352,7 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "DE";
 
         {
-            auto res = m_xBreak->getLineBreak("Wort -prinzessinnen, wort",
+            auto res = m_xBreak->getLineBreak(u"Wort -prinzessinnen, wort"_ustr,
                                               strlen("Wort -prinzessinnen,"), aLocale, 0,
                                               aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{ 6 }, res.breakIndex);
@@ -371,7 +371,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=11993
     {
-        OUString aTest("abcd ef  ghi??? KLM");
+        OUString aTest(u"abcd ef  ghi??? KLM"_ustr);
 
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
@@ -407,7 +407,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=21907
     {
-        OUString aTest("b a?");
+        OUString aTest(u"b a?"_ustr);
 
         CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 1, aLocale, i18n::WordType::ANY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 2, aLocale, i18n::WordType::ANY_WORD));
@@ -621,7 +621,7 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "ca";
         aLocale.Country = "ES";
 
-        OUString aTest("mirar-se comprar-vos donem-nos les mans aneu-vos-en!");
+        OUString aTest(u"mirar-se comprar-vos donem-nos les mans aneu-vos-en!"_ustr);
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {8, 20, 30, 34, 39, 51, 52};
@@ -723,7 +723,7 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "fi";
         aLocale.Country = "FI";
 
-        OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi USA:n 90:n %:n");
+        OUString aTest(u"Kuorma-auto kaakkois- ja Keski-Suomi USA:n 90:n %:n"_ustr);
 
         {
             sal_Int32 nPos = 0;
@@ -956,7 +956,7 @@ void TestBreakIterator::testSentenceBoundaries()
 
     // Trivial characteristic test for sentence boundary detection
     {
-        OUString aTest("This is a sentence. This is a different sentence.");
+        OUString aTest(u"This is a sentence. This is a different sentence."_ustr);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 5, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), m_xBreak->endOfSentence(aTest, 5, aLocale));
@@ -967,7 +967,7 @@ void TestBreakIterator::testSentenceBoundaries()
     // i#24098: i18n API beginOfSentence/endOfSentence
     // fix beginOfSentence, ... when cursor is on the beginning of the sentence
     {
-        OUString aTest("This is a sentence. This is a different sentence.");
+        OUString aTest(u"This is a sentence. This is a different sentence."_ustr);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(20), m_xBreak->beginOfSentence(aTest, 20, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(49), m_xBreak->endOfSentence(aTest, 20, aLocale));
@@ -976,7 +976,7 @@ void TestBreakIterator::testSentenceBoundaries()
     // i#24098: i18n API beginOfSentence/endOfSentence
     // "skip preceding space for beginOfSentence"
     {
-        OUString aTest("This is a sentence.     This is a different sentence.");
+        OUString aTest(u"This is a sentence.     This is a different sentence."_ustr);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 20, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), m_xBreak->endOfSentence(aTest, 20, aLocale));
@@ -1447,7 +1447,7 @@ void TestBreakIterator::testJapanese()
 
     // fdo#78479 - test second / cached instantiation of xdictionary
     uno::Reference< i18n::XBreakIterator > xTmpBreak(m_xSFactory->createInstance(
-        "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
+        u"com.sun.star.i18n.BreakIterator"_ustr), uno::UNO_QUERY_THROW);
 
     doTestJapanese(xTmpBreak);
 }
@@ -1683,7 +1683,7 @@ void TestBreakIterator::testWordCount()
 void TestBreakIterator::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xBreak.set(m_xSFactory->createInstance("com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
+    m_xBreak.set(m_xSFactory->createInstance(u"com.sun.star.i18n.BreakIterator"_ustr), uno::UNO_QUERY_THROW);
 }
 
 void TestBreakIterator::tearDown()

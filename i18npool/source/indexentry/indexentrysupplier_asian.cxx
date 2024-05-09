@@ -47,7 +47,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     sal_uInt32 ch = rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
 
     const sal_uInt16** (*func)(sal_Int16&)=nullptr;
-    if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 ) {
+    if ( rLocale.Language == "zh" && u"TW HK MO"_ustr.indexOf(rLocale.Country) >= 0 ) {
         if ( rAlgorithm == "radical" )
             func = get_indexdata_zh_TW_radical;
         else if ( rAlgorithm == "stroke" )
@@ -117,7 +117,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
 {
     sal_uInt16 const **(*func)(sal_Int16&)=nullptr;
     if ( rLocale.Language == "zh" )
-        func = (OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  get_zh_zhuyin : get_zh_pinyin;
+        func = (u"TW HK MO"_ustr.indexOf(rLocale.Country) >= 0) ?  get_zh_zhuyin : get_zh_pinyin;
     else if ( rLocale.Language == "ko" )
         func = get_ko_phonetic;
 

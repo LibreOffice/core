@@ -196,7 +196,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     if (!bLoaded)
     {
         // load default service with name <base>_Unicode
-        bLoaded = createCollator( rLocale, "Unicode", rSortAlgorithm);
+        bLoaded = createCollator( rLocale, u"Unicode"_ustr, rSortAlgorithm);
         if (!bLoaded)
         {
             cachedItem.reset();

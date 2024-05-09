@@ -1577,17 +1577,17 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     // Of course there must be an implementation for new to be added
     // identifiers.. see data/locale.dtd
     std::map< OUString, bool > aCalendars;
-    aCalendars["buddhist"]   = false;
-    aCalendars["gengou"]     = false;
-    aCalendars["gregorian"]  = false;
-    aCalendars["hanja"]      = false;
-    aCalendars["hanja_yoil"] = false;
-    aCalendars["hijri"]      = false;
-    aCalendars["jewish"]     = false;
-    aCalendars["ROC"]        = false;
+    aCalendars[u"buddhist"_ustr]   = false;
+    aCalendars[u"gengou"_ustr]     = false;
+    aCalendars[u"gregorian"_ustr]  = false;
+    aCalendars[u"hanja"_ustr]      = false;
+    aCalendars[u"hanja_yoil"_ustr] = false;
+    aCalendars[u"hijri"_ustr]      = false;
+    aCalendars[u"jewish"_ustr]     = false;
+    aCalendars[u"ROC"_ustr]        = false;
     // Not in ODF:
-    aCalendars["dangi"]      = false;
-    aCalendars["persian"]    = false;
+    aCalendars[u"dangi"_ustr]      = false;
+    aCalendars[u"persian"_ustr]    = false;
 
     sal_Int16 j;
     sal_Int16 i;

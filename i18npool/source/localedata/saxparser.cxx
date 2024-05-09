@@ -164,7 +164,7 @@ public: // Error handler
         ++nError;
         printf( "Error !\n" );
         throw  SAXException(
-            "error from error handler",
+            u"error from error handler"_ustr,
             Reference < XInterface >() ,
             aSAXParseException );
     }

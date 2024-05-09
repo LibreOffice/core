@@ -1166,7 +1166,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
     else {
         OUStringBuffer result;
-        Locale aLocale("en", OUString(), OUString());
+        Locale aLocale(u"en"_ustr, OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
         auto aPropertiesRange = asNonConstRange(aProperties);
         aPropertiesRange[0].Name = "NumberingType";
@@ -1210,11 +1210,11 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
 
         uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/I18N"))}
+            {"nodepath", uno::Any(u"/org.openoffice.Office.Common/I18N"_ustr)}
         }));
 
         Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", aArgs);
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs);
 
         xHierarchicalNameAccess.set(xInterface, UNO_QUERY_THROW);
     }
@@ -1233,8 +1233,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
     Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
     sal_Int16* pArray = aRet.getArray();
 
-    bool cjkEnabled = isScriptFlagEnabled("CJK/CJKFont");
-    bool ctlEnabled = isScriptFlagEnabled("CTL/CTLFont");
+    bool cjkEnabled = isScriptFlagEnabled(u"CJK/CJKFont"_ustr);
+    bool ctlEnabled = isScriptFlagEnabled(u"CTL/CTLFont"_ustr);
 
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
         if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
@@ -1283,7 +1283,7 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
 
 OUString DefaultNumberingProvider::getImplementationName()
 {
-    return "com.sun.star.text.DefaultNumberingProvider";
+    return u"com.sun.star.text.DefaultNumberingProvider"_ustr;
 }
 
 sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
@@ -1293,7 +1293,7 @@ sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.text.DefaultNumberingProvider" };
+    Sequence< OUString > aRet { u"com.sun.star.text.DefaultNumberingProvider"_ustr };
     return aRet;
 }
 

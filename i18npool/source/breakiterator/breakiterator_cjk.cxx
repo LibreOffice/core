@@ -96,7 +96,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 BreakIterator_zh::BreakIterator_zh()
 {
     assert(hangingCharacters.pData);
-    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "CN"));
+    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE(u"zh"_ustr, u"CN"_ustr));
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_zh"_ustr;
 }
 
@@ -106,7 +106,7 @@ BreakIterator_zh::BreakIterator_zh()
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
     assert(hangingCharacters.pData);
-    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "TW"));
+    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE(u"zh"_ustr, u"TW"_ustr));
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_zh_TW"_ustr;
 }
 
@@ -116,7 +116,7 @@ BreakIterator_zh_TW::BreakIterator_zh_TW()
 BreakIterator_ja::BreakIterator_ja()
 {
     assert(hangingCharacters.pData);
-    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ja", "JP"));
+    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE(u"ja"_ustr, u"JP"_ustr));
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_ja"_ustr;
 }
 
@@ -126,7 +126,7 @@ BreakIterator_ja::BreakIterator_ja()
 BreakIterator_ko::BreakIterator_ko()
 {
     assert(hangingCharacters.pData);
-    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ko", "KR"));
+    hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE(u"ko"_ustr, u"KR"_ustr));
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_ko"_ustr;
 }
 

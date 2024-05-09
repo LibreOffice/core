@@ -290,7 +290,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
             } while (false);
         if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) {
-            throw uno::RuntimeException("ICU BreakIterator is not properly initialized");
+            throw uno::RuntimeException(u"ICU BreakIterator is not properly initialized"_ustr);
         }
         icuBI->maBIMapKey = aBIMapGlobalKey;
         if (!bInMap)

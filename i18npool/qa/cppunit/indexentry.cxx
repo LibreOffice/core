@@ -33,7 +33,7 @@ public:
 
     void testJapanese()
     {
-        css::lang::Locale loc("ja", "JP", "");
+        css::lang::Locale loc(u"ja"_ustr, u"JP"_ustr, u""_ustr);
         auto const s = supplier_->getAlgorithmList(loc);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), s.getLength());
         CPPUNIT_ASSERT(
@@ -45,13 +45,13 @@ public:
         CPPUNIT_ASSERT(
             comphelper::findValue(s, "phonetic (alphanumeric last) (grouped by syllable)") != -1);
         CPPUNIT_ASSERT(supplier_->loadAlgorithm(
-            loc, "phonetic (alphanumeric first) (grouped by consonant)", 0));
+            loc, u"phonetic (alphanumeric first) (grouped by consonant)"_ustr, 0));
         CPPUNIT_ASSERT(supplier_->loadAlgorithm(
-            loc, "phonetic (alphanumeric first) (grouped by syllable)", 0));
+            loc, u"phonetic (alphanumeric first) (grouped by syllable)"_ustr, 0));
         CPPUNIT_ASSERT(supplier_->loadAlgorithm(
-            loc, "phonetic (alphanumeric last) (grouped by consonant)", 0));
-        CPPUNIT_ASSERT(
-            supplier_->loadAlgorithm(loc, "phonetic (alphanumeric last) (grouped by syllable)", 0));
+            loc, u"phonetic (alphanumeric last) (grouped by consonant)"_ustr, 0));
+        CPPUNIT_ASSERT(supplier_->loadAlgorithm(
+            loc, u"phonetic (alphanumeric last) (grouped by syllable)"_ustr, 0));
     }
 
     CPPUNIT_TEST_SUITE(IndexEntry);

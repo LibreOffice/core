@@ -165,13 +165,13 @@ public:
     void testTextToChuyin_zh_TW()
     {
         // Verify that loading succeeds:
-        transliteration_->loadModuleByImplName("TextToChuyin_zh_TW", {});
+        transliteration_->loadModuleByImplName(u"TextToChuyin_zh_TW"_ustr, {});
     }
 
     void testTextToPinyin_zh_CN()
     {
         // Verify that loading succeeds:
-        transliteration_->loadModuleByImplName("TextToPinyin_zh_CN", {});
+        transliteration_->loadModuleByImplName(u"TextToPinyin_zh_CN"_ustr, {});
     }
 
     CPPUNIT_TEST_SUITE(Transliteration);

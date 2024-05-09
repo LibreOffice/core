@@ -670,7 +670,7 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
             ref_cal = *pCal;
         else {
             // Referred locale not found, return name for en_US locale.
-            cals = getAllCalendars2( Locale("en", "US", OUString()) );
+            cals = getAllCalendars2( Locale(u"en"_ustr, u"US"_ustr, OUString()) );
             if (!cals.hasElements())
                 throw RuntimeException();
             ref_cal = cals.getConstArray()[0];
@@ -1433,7 +1433,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     if (!pSymbol)
     {
         // load default function with name <func>_en_US
-        pSymbol = rLookupTable.getFunctionSymbolByName("en_US", pFunction, oCachedItem);
+        pSymbol = rLookupTable.getFunctionSymbolByName(u"en_US"_ustr, pFunction, oCachedItem);
     }
 
     if (!pSymbol)

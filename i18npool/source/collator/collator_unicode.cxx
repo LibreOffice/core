@@ -162,7 +162,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 OUStringBuffer aBuf("get_collator_data_" + rLocale.Language + "_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
-                    if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
+                    if (u"TW HK MO"_ustr.indexOf(rLocale.Country) >= 0)
                     {
                         func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule,
                                     OUString(func_base + "TW_" + rAlgorithm).pData));
@@ -385,7 +385,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 uppercase itself, so we don't have to bother with that.
             */
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale),
-                        u"", rAlgorithm.isEmpty() ? OUString("") : "collation=" + rAlgorithm));
+                        u"", rAlgorithm.isEmpty() ? u""_ustr : "collation=" + rAlgorithm));
 
             // FIXME: apparently we get here in LOKit case only. When the language is Japanese, we pass "ja@collation=phonetic (alphanumeric first)" to ICU
             // and ICU does not like this (U_ILLEGAL_ARGUMENT_ERROR). Subsequently LOKit crashes, because collator is nullptr.
