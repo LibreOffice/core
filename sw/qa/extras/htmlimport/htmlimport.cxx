@@ -9,6 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -592,6 +595,18 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
     // Without the accompanying fix in place, this test would have failed, the background
     // color was not imported at all, when it was in hex RGBA format in HTML.
     CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf154581)
+{
+    createSwWebDoc("tdf154581.html");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 150
+    // - Actual  : 100
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE), getProperty<sal_Int16>(getRun(getParagraph(2), 1), "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(getParagraph(3), 1), "CharPosture"));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
