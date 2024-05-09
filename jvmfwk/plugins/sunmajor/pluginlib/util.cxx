@@ -388,9 +388,9 @@ bool getJavaProps(const OUString & exePath,
 
     //prepare the arguments
     sal_Int32 const cArgs = 3;
-    OUString arg1 = "-classpath";// + sClassPath;
+    OUString arg1 = u"-classpath"_ustr;// + sClassPath;
     OUString arg2 = sClassPath;
-    OUString arg3("JREProperties");
+    OUString arg3(u"JREProperties"_ustr);
     rtl_uString *args[cArgs] = {arg1.pData, arg2.pData, arg3.pData};
 
     oslProcess javaProcess= nullptr;
@@ -1161,8 +1161,8 @@ void addJavaInfosDirScan(
         aDir.close();
     }
 #else // MACOSX
-    OUString excMessage = "[Java framework] sunjavaplugin: "
-                          "Error in function addJavaInfosDirScan in util.cxx.";
+    OUString excMessage = u"[Java framework] sunjavaplugin: "
+                          "Error in function addJavaInfosDirScan in util.cxx."_ustr;
     int cJavaNames= SAL_N_ELEMENTS(g_arJavaNames);
     std::unique_ptr<OUString[]> sarJavaNames(new OUString[cJavaNames]);
     OUString *arNames = sarJavaNames.get();

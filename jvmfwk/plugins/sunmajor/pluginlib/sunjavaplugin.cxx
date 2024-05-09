@@ -106,8 +106,8 @@ OString getPluginJarPath(
     std::u16string_view sVersion)
 {
     OString ret;
-    OUString sName1("javaplugin.jar");
-    OUString sName2("plugin.jar");
+    OUString sName1(u"javaplugin.jar"_ustr);
+    OUString sName2(u"plugin.jar"_ustr);
     OUString sPath;
     if ( sVendor == u"Sun Microsystems Inc." )
     {
@@ -667,10 +667,10 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     //Setting the JAVA_HOME is needed for awt
     OUString sPathLocation;
     osl::FileBase::getSystemPathFromFileURL(pInfo->sLocation, sPathLocation);
-    osl_setEnvironment(OUString("JAVA_HOME").pData, sPathLocation.pData);
+    osl_setEnvironment(u"JAVA_HOME"_ustr.pData, sPathLocation.pData);
 #endif
 
-    OUString sSymbolCreateJava("JNI_CreateJavaVM");
+    OUString sSymbolCreateJava(u"JNI_CreateJavaVM"_ustr);
 
     JNI_CreateVM_Type * pCreateJavaVM =
         reinterpret_cast<JNI_CreateVM_Type *>(moduleRt.getFunctionSymbol(sSymbolCreateJava));

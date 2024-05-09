@@ -137,9 +137,9 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
 #if defined MACOSX && defined __aarch64__
             "17",
 #else
-            "1.8.0",
+            u"1.8.0"_ustr,
 #endif
-            ""};
+            u""_ustr};
     }
 
     VersionInfo aVersionInfo;
@@ -233,19 +233,19 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
 
 OUString BootParams::getUserData()
 {
-    return getParamFirstUrl("UNO_JAVA_JFW_USER_DATA");
+    return getParamFirstUrl(u"UNO_JAVA_JFW_USER_DATA"_ustr);
 }
 
 OUString BootParams::getSharedData()
 {
-    return getParamFirstUrl("UNO_JAVA_JFW_SHARED_DATA");
+    return getParamFirstUrl(u"UNO_JAVA_JFW_SHARED_DATA"_ustr);
 }
 
 OString BootParams::getClasspath()
 {
     OString sClassPath;
     OUString sCP;
-    if (Bootstrap()->getFrom( UNO_JAVA_JFW_CLASSPATH, sCP ))
+    if (Bootstrap()->getFrom( u"" UNO_JAVA_JFW_CLASSPATH ""_ustr, sCP ))
     {
         sClassPath = OUStringToOString(sCP, PathEncoding());
         SAL_INFO(
@@ -255,7 +255,7 @@ OString BootParams::getClasspath()
     }
 
     OUString sEnvCP;
-    if (Bootstrap()->getFrom( UNO_JAVA_JFW_ENV_CLASSPATH, sEnvCP ))
+    if (Bootstrap()->getFrom( u"" UNO_JAVA_JFW_ENV_CLASSPATH ""_ustr, sEnvCP ))
     {
         char * pCp = getenv("CLASSPATH");
         if (pCp)
@@ -274,7 +274,7 @@ OString BootParams::getClasspath()
 OUString BootParams::getVendorSettings()
 {
     OUString sVendor;
-    if (Bootstrap()->getFrom(UNO_JAVA_JFW_VENDOR_SETTINGS, sVendor))
+    if (Bootstrap()->getFrom(u"" UNO_JAVA_JFW_VENDOR_SETTINGS ""_ustr, sVendor))
     {
         //check the value of the bootstrap variable
         jfw::FileStatus s = checkFileURL(sVendor);
@@ -311,8 +311,8 @@ OUString BootParams::getJREHome()
 {
     OUString sJRE;
     OUString sEnvJRE;
-    bool bJRE = Bootstrap()->getFrom(UNO_JAVA_JFW_JREHOME, sJRE);
-    bool bEnvJRE = Bootstrap()->getFrom(UNO_JAVA_JFW_ENV_JREHOME, sEnvJRE);
+    bool bJRE = Bootstrap()->getFrom(u"" UNO_JAVA_JFW_JREHOME ""_ustr, sJRE);
+    bool bEnvJRE = Bootstrap()->getFrom(u"" UNO_JAVA_JFW_ENV_JREHOME ""_ustr, sEnvJRE);
 
     if (bJRE && bEnvJRE)
     {
@@ -365,7 +365,7 @@ OUString BootParams::getJREHome()
 OUString BootParams::getClasspathUrls()
 {
     OUString sParams;
-    Bootstrap()->getFrom( UNO_JAVA_JFW_CLASSPATH_URLS, sParams);
+    Bootstrap()->getFrom( u"" UNO_JAVA_JFW_CLASSPATH_URLS ""_ustr, sParams);
     SAL_INFO(
         "jfw.level2",
         "Using bootstrap parameter " UNO_JAVA_JFW_CLASSPATH_URLS " = "
@@ -384,13 +384,13 @@ JFW_MODE getMode()
         bool bDirectMode = true;
         OUString sValue;
         const rtl::Bootstrap * aBoot = Bootstrap();
-        if (!aBoot->getFrom(UNO_JAVA_JFW_JREHOME, sValue))
+        if (!aBoot->getFrom(u"" UNO_JAVA_JFW_JREHOME ""_ustr, sValue))
         {
-            if (!aBoot->getFrom(UNO_JAVA_JFW_ENV_JREHOME, sValue))
+            if (!aBoot->getFrom(u"" UNO_JAVA_JFW_ENV_JREHOME ""_ustr, sValue))
             {
-                if (!aBoot->getFrom(UNO_JAVA_JFW_CLASSPATH, sValue))
+                if (!aBoot->getFrom(u"" UNO_JAVA_JFW_CLASSPATH ""_ustr, sValue))
                 {
-                    if (!aBoot->getFrom(UNO_JAVA_JFW_ENV_CLASSPATH, sValue))
+                    if (!aBoot->getFrom(u"" UNO_JAVA_JFW_ENV_CLASSPATH ""_ustr, sValue))
                     {
                         OUString sParams = UNO_JAVA_JFW_PARAMETER +
                             OUString::number(1);
