@@ -787,11 +787,11 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                     OUString aName( aIter.toString() );
 
                     const struct ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
-                    while( p->mpAPIName )
+                    while( !p->maAPIName.isEmpty() )
                     {
                         if( IsXMLToken( aIter, p->meXMLToken ) )
                         {
-                            aName = OUString::createFromAscii( p->mpAPIName );
+                            aName = p->maAPIName;
                             meAttributeName = p->meXMLToken;
                             break;
                         }

@@ -396,29 +396,29 @@ const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Command[] =
 
 const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
 {
-    static const struct ImplAttributeNameConversion gImplConversionList[] =
+    static constexpr struct ImplAttributeNameConversion gImplConversionList[]
     {
-        { XML_X,                        "X" },
-        { XML_Y,                        "Y" },
-        { XML_WIDTH,                    "Width" },
-        { XML_HEIGHT,                   "Height" },
-        { XML_ROTATE,                   "Rotate" },
-        { XML_SKEWX,                    "SkewX" },
-        { XML_FILL_COLOR,               "FillColor" },
-        { XML_FILL,                     "FillStyle" },
-        { XML_STROKE_COLOR,             "LineColor" },
-        { XML_STROKE,                   "LineStyle" },
-        { XML_COLOR,                    "CharColor" },
-        { XML_TEXT_ROTATION_ANGLE,      "CharRotation" },
-        { XML_FONT_WEIGHT,              "CharWeight" },
-        { XML_TEXT_UNDERLINE,           "CharUnderline" },
-        { XML_FONT_FAMILY,              "CharFontName" },
-        { XML_FONT_SIZE,                "CharHeight" },
-        { XML_FONT_STYLE,               "CharPosture" },
-        { XML_VISIBILITY,               "Visibility" },
-        { XML_OPACITY,                  "Opacity" },
-        { XML_DIM,                      "DimColor" },
-        { XML_TOKEN_INVALID,            nullptr }
+        { XML_X,                        u"X"_ustr },
+        { XML_Y,                        u"Y"_ustr },
+        { XML_WIDTH,                    u"Width"_ustr },
+        { XML_HEIGHT,                   u"Height"_ustr },
+        { XML_ROTATE,                   u"Rotate"_ustr },
+        { XML_SKEWX,                    u"SkewX"_ustr },
+        { XML_FILL_COLOR,               u"FillColor"_ustr },
+        { XML_FILL,                     u"FillStyle"_ustr },
+        { XML_STROKE_COLOR,             u"LineColor"_ustr },
+        { XML_STROKE,                   u"LineStyle"_ustr },
+        { XML_COLOR,                    u"CharColor"_ustr },
+        { XML_TEXT_ROTATION_ANGLE,      u"CharRotation"_ustr },
+        { XML_FONT_WEIGHT,              u"CharWeight"_ustr },
+        { XML_TEXT_UNDERLINE,           u"CharUnderline"_ustr },
+        { XML_FONT_FAMILY,              u"CharFontName"_ustr },
+        { XML_FONT_SIZE,                u"CharHeight"_ustr },
+        { XML_FONT_STYLE,               u"CharPosture"_ustr },
+        { XML_VISIBILITY,               u"Visibility"_ustr },
+        { XML_OPACITY,                  u"Opacity"_ustr },
+        { XML_DIM,                      u"DimColor"_ustr },
+        { XML_TOKEN_INVALID,            u""_ustr }
     };
 
     return gImplConversionList;
@@ -1104,9 +1104,9 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             if( !sTemp.isEmpty() )
             {
                 const struct ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
-                while( p->mpAPIName )
+                while( !p->maAPIName.isEmpty() )
                 {
-                    if( sTemp.equalsAscii( p->mpAPIName ) )
+                    if( sTemp == p->maAPIName )
                     {
                         sTemp = GetXMLToken( p->meXMLToken );
                         eAttributeName = p->meXMLToken;
