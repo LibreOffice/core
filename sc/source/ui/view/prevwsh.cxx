@@ -668,19 +668,16 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             }
             break;
         case SID_ZOOM_IN:
-            {
-                sal_uInt16 nNew = pPreview->GetZoom() + 20 ;
-                nNew -= nNew % 20;
-                pPreview->SetZoom( nNew );
-                eZoom = SvxZoomType::PERCENT;
-                rReq.Done();
-            }
-            break;
         case SID_ZOOM_OUT:
             {
-                sal_uInt16 nNew = pPreview->GetZoom() - 1;
-                nNew -= nNew % 20;
-                pPreview->SetZoom( nNew );
+                sal_uInt16 nNewZoom;
+                const sal_uInt16 nOldZoom {pPreview->GetZoom()};
+                if(SID_ZOOM_OUT == nSlot)
+                    nNewZoom = basegfx::zoomtools::zoomOut(nOldZoom);
+                else
+                    nNewZoom = basegfx::zoomtools::zoomIn(nOldZoom);
+
+                pPreview->SetZoom(nNewZoom);
                 eZoom = SvxZoomType::PERCENT;
                 rReq.Done();
             }
