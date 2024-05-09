@@ -51,8 +51,6 @@ class FilterConfigCache
     std::vector< FilterConfigCacheEntry >         aImport;
     std::vector< FilterConfigCacheEntry >         aExport;
 
-    static const char*  InternalFilterListForSvxLight[];
-
     void             ImplInit();
     void             ImplInitSmart();
 

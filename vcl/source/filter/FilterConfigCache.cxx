@@ -192,66 +192,66 @@ void FilterConfigCache::ImplInit()
     }
 };
 
-const char* FilterConfigCache::InternalFilterListForSvxLight[] =
+namespace {
+struct FilterEntry
 {
-    "bmp","1","SVBMP",
-    "bmp","2","SVBMP",
-    "dxf","1","SVDXF",
-    "eps","1","SVIEPS",
-    "eps","2","SVEEPS",
-    "gif","1","SVIGIF",
-    "gif","2","SVEGIF",
-    "jpg","1","SVIJPEG",
-    "jpg","2","SVEJPEG",
-    "mov","1","SVMOV",
-    "mov","2","SVMOV",
-    "met","1","SVMET",
-    "png","1","SVIPNG",
-    "png","2","SVEPNG",
-    "pct","1","SVPICT",
-    "pcd","1","SVPCD",
-    "psd","1","SVPSD",
-    "pcx","1","SVPCX",
-    "pbm","1","SVPBM",
-    "pgm","1","SVPBM",
-    "ppm","1","SVPBM",
-    "ras","1","SVRAS",
-    "svm","1","SVMETAFILE",
-    "svm","2","SVMETAFILE",
-    "tga","1","SVTGA",
-    "tif","1","SVTIFF",
-    "tif","2","SVTIFF",
-    "emf","1","SVEMF",
-    "emf","2","SVEMF",
-    "wmf","1","SVWMF",
-    "wmf","2","SVWMF",
-    "xbm","1","SVIXBM",
-    "xpm","1","SVIXPM",
-    "svg","1","SVISVG",
-    "svg","2","SVESVG",
-    "webp","1","SVIWEBP",
-    "webp","2","SVEWEBP",
-    nullptr
+    OUString sExtension;
+    sal_Int32 nFlags;
+    OUString sUserData;
+};
+}
+constexpr FilterEntry InternalFilterListForSvxLight[]
+{
+    { u"bmp"_ustr, 1, u"SVBMP"_ustr },
+    { u"bmp"_ustr, 2, u"SVBMP"_ustr },
+    { u"dxf"_ustr, 1, u"SVDXF"_ustr },
+    { u"eps"_ustr, 1, u"SVIEPS"_ustr },
+    { u"eps"_ustr, 2, u"SVEEPS"_ustr },
+    { u"gif"_ustr, 1, u"SVIGIF"_ustr },
+    { u"gif"_ustr, 2, u"SVEGIF"_ustr },
+    { u"jpg"_ustr, 1, u"SVIJPEG"_ustr },
+    { u"jpg"_ustr, 2, u"SVEJPEG"_ustr },
+    { u"mov"_ustr, 1, u"SVMOV"_ustr },
+    { u"mov"_ustr, 2, u"SVMOV"_ustr },
+    { u"met"_ustr, 1, u"SVMET"_ustr },
+    { u"png"_ustr, 1, u"SVIPNG"_ustr },
+    { u"png"_ustr, 2, u"SVEPNG"_ustr },
+    { u"pct"_ustr, 1, u"SVPICT"_ustr },
+    { u"pcd"_ustr, 1, u"SVPCD"_ustr },
+    { u"psd"_ustr, 1, u"SVPSD"_ustr },
+    { u"pcx"_ustr, 1, u"SVPCX"_ustr },
+    { u"pbm"_ustr, 1, u"SVPBM"_ustr },
+    { u"pgm"_ustr, 1, u"SVPBM"_ustr },
+    { u"ppm"_ustr, 1, u"SVPBM"_ustr },
+    { u"ras"_ustr, 1, u"SVRAS"_ustr },
+    { u"svm"_ustr, 1, u"SVMETAFILE"_ustr },
+    { u"svm"_ustr, 2, u"SVMETAFILE"_ustr },
+    { u"tga"_ustr, 1, u"SVTGA"_ustr },
+    { u"tif"_ustr, 1, u"SVTIFF"_ustr },
+    { u"tif"_ustr, 2, u"SVTIFF"_ustr },
+    { u"emf"_ustr, 1, u"SVEMF"_ustr },
+    { u"emf"_ustr, 2, u"SVEMF"_ustr },
+    { u"wmf"_ustr, 1, u"SVWMF"_ustr },
+    { u"wmf"_ustr, 2, u"SVWMF"_ustr },
+    { u"xbm"_ustr, 1, u"SVIXBM"_ustr },
+    { u"xpm"_ustr, 1, u"SVIXPM"_ustr },
+    { u"svg"_ustr, 1, u"SVISVG"_ustr },
+    { u"svg"_ustr, 2, u"SVESVG"_ustr },
+    { u"webp"_ustr, 1, u"SVIWEBP"_ustr },
+    { u"webp"_ustr, 2, u"SVEWEBP"_ustr },
 };
 
 void FilterConfigCache::ImplInitSmart()
 {
-    const char** pPtr;
-    for ( pPtr = InternalFilterListForSvxLight; *pPtr; pPtr++ )
+    for ( const FilterEntry& rEntry : InternalFilterListForSvxLight )
     {
         FilterConfigCacheEntry  aEntry;
 
-        OUString    sExtension( OUString::createFromAscii( *pPtr++ ) );
-
-        aEntry.lExtensionList.push_back(sExtension);
-
-        aEntry.sType = sExtension;
-        aEntry.sUIName = sExtension;
-
-        aEntry.nFlags = o3tl::toInt32(std::string_view(*pPtr++));
-
-        OUString    sUserData( OUString::createFromAscii( *pPtr ) );
-        aEntry.CreateFilterName( sUserData );
+        aEntry.lExtensionList.push_back(rEntry.sExtension);
+        aEntry.sType = rEntry.sExtension;
+        aEntry.sUIName = rEntry.sExtension;
+        aEntry.nFlags = rEntry.nFlags;
+        aEntry.CreateFilterName( rEntry.sUserData );
 
         if ( aEntry.nFlags & 1 )
             aImport.push_back( aEntry );
