@@ -150,7 +150,7 @@ void OTextOutputStream::writeString( const OUString& aString )
     checkOutputStream();
     if( !mbEncodingInitialized )
     {
-        setEncoding( "utf8" );
+        setEncoding( u"utf8"_ustr );
     }
     if( !mbEncodingInitialized )
         return;
@@ -195,7 +195,7 @@ void OTextOutputStream::closeOutput(  )
 void OTextOutputStream::checkOutputStream() const
 {
     if (! mxStream.is() )
-        throw IOException("output stream is not initialized, you have to use setOutputStream first");
+        throw IOException(u"output stream is not initialized, you have to use setOutputStream first"_ustr);
 }
 
 
@@ -213,7 +213,7 @@ Reference< XOutputStream > OTextOutputStream::getOutputStream()
 
 OUString OTextOutputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.TextOutputStream";
+    return u"com.sun.star.comp.io.TextOutputStream"_ustr;
 }
 
 sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
@@ -223,7 +223,7 @@ sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextOutputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.TextOutputStream" };
+    return { u"com.sun.star.io.TextOutputStream"_ustr };
 }
 
 

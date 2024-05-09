@@ -77,7 +77,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
         Reference< XConnection > r;
         if ( aDesc.getName() == "pipe" )
         {
-            OUString aName(aDesc.getParameter("name"));
+            OUString aName(aDesc.getParameter(u"name"_ustr));
 
             rtl::Reference<stoc_connector::PipeConnection> pConn(new stoc_connector::PipeConnection( sConnectionDescription ));
 
@@ -97,22 +97,22 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
         else if ( aDesc.getName() == "socket" )
         {
             OUString aHost;
-            if (aDesc.hasParameter("host"))
-                aHost = aDesc.getParameter("host");
+            if (aDesc.hasParameter(u"host"_ustr))
+                aHost = aDesc.getParameter(u"host"_ustr);
             else
                 aHost = "localhost";
             sal_uInt16 nPort = static_cast< sal_uInt16 >(
-                aDesc.getParameter("port").
+                aDesc.getParameter(u"port"_ustr).
                 toInt32());
             bool bTcpNoDelay
-                = aDesc.getParameter("tcpnodelay").toInt32() != 0;
+                = aDesc.getParameter(u"tcpnodelay"_ustr).toInt32() != 0;
 
             rtl::Reference<stoc_connector::SocketConnection> pConn(new stoc_connector::SocketConnection( sConnectionDescription));
 
             SocketAddr AddrTarget( aHost.pData, nPort );
             if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
             {
-                OUString sMessage("Connector : couldn't connect to socket (");
+                OUString sMessage(u"Connector : couldn't connect to socket ("_ustr);
                 OUString sError = pConn->m_socket.getErrorAsString();
                 sMessage += sError + ")";
                 throw NoConnectException( sMessage );
@@ -152,7 +152,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
 
 OUString OConnector::getImplementationName()
 {
-    return "com.sun.star.comp.io.Connector";
+    return u"com.sun.star.comp.io.Connector"_ustr;
 }
 
 sal_Bool OConnector::supportsService(const OUString& ServiceName)
@@ -162,7 +162,7 @@ sal_Bool OConnector::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OConnector::getSupportedServiceNames()
 {
-    return { "com.sun.star.connection.Connector" };
+    return { u"com.sun.star.connection.Connector"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

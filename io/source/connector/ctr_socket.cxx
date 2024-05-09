@@ -143,7 +143,7 @@ namespace stoc_connector {
         }
         else
         {
-            IOException ioException("ctr_socket.cxx:SocketConnection::read: error - connection already closed", static_cast<XConnection *>(this));
+            IOException ioException(u"ctr_socket.cxx:SocketConnection::read: error - connection already closed"_ustr, static_cast<XConnection *>(this));
 
             Any any;
             any <<= ioException;
@@ -175,7 +175,7 @@ namespace stoc_connector {
         }
         else
         {
-            IOException ioException("ctr_socket.cxx:SocketConnection::write: error - connection already closed", static_cast<XConnection *>(this));
+            IOException ioException(u"ctr_socket.cxx:SocketConnection::write: error - connection already closed"_ustr, static_cast<XConnection *>(this));
 
             Any any;
             any <<= ioException;

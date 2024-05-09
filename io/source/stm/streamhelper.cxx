@@ -74,7 +74,7 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
     auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen));
     if (!p)
         throw css::io::BufferSizeExceededException(
-            "MemRingBuffer::resizeBuffer BufferSizeExceededException");
+            u"MemRingBuffer::resizeBuffer BufferSizeExceededException"_ustr);
 
     m_p = p;
 
@@ -91,7 +91,7 @@ void MemRingBuffer::readAt( sal_Int32 nPos, Sequence<sal_Int8> &seq , sal_Int32 
 {
     if( nPos + nBytesToRead > m_nOccupiedBuffer ) {
         throw css::io::BufferSizeExceededException(
-            "MemRingBuffer::readAt BufferSizeExceededException");
+            u"MemRingBuffer::readAt BufferSizeExceededException"_ustr);
     }
 
     sal_Int32 nStartReadingPos = nPos + m_nStart;
@@ -120,7 +120,7 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
     if( nPos < 0 || nPos > std::numeric_limits< sal_Int32 >::max() - nLen )
     {
         throw css::io::BufferSizeExceededException(
-            "MemRingBuffer::writeAt BufferSizeExceededException");
+            u"MemRingBuffer::writeAt BufferSizeExceededException"_ustr);
     }
 
     if( nPos + nLen - m_nOccupiedBuffer > 0 ) {
@@ -157,7 +157,7 @@ void MemRingBuffer::forgetFromStart( sal_Int32 nBytesToForget )
     checkInvariants();
     if( nBytesToForget > m_nOccupiedBuffer ) {
         throw css::io::BufferSizeExceededException(
-            "MemRingBuffer::forgetFromStart BufferSizeExceededException");
+            u"MemRingBuffer::forgetFromStart BufferSizeExceededException"_ustr);
     }
     m_nStart += nBytesToForget;
     if( m_nStart >= m_nBufferLen ) {

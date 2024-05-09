@@ -342,7 +342,7 @@ void OMarkableOutputStream::checkMarksAndFlush()
 // XServiceInfo
 OUString OMarkableOutputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.MarkableOutputStream";
+    return u"com.sun.star.comp.io.stm.MarkableOutputStream"_ustr;
 }
 
 // XServiceInfo
@@ -354,7 +354,7 @@ sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.MarkableOutputStream" };
+    return { u"com.sun.star.io.MarkableOutputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -449,7 +449,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
 
     if( !m_bValidStream ) {
         throw NotConnectedException(
-            "MarkableInputStream::readBytes NotConnectedException",
+            u"MarkableInputStream::readBytes NotConnectedException"_ustr,
             *this );
     }
     std::unique_lock guard( m_mutex );
@@ -493,7 +493,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     sal_Int32 nBytesRead;
     if( !m_bValidStream )    {
         throw NotConnectedException(
-            "MarkableInputStream::readSomeBytes NotConnectedException",
+            u"MarkableInputStream::readSomeBytes NotConnectedException"_ustr,
             *this );
     }
 
@@ -540,7 +540,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
-            "precondition not met: XInputStream::skipBytes: non-negative integer required!",
+            u"precondition not met: XInputStream::skipBytes: non-negative integer required!"_ustr,
             *this
         );
 
@@ -553,7 +553,7 @@ sal_Int32 OMarkableInputStream::available()
 {
     if( !m_bValidStream )    {
         throw NotConnectedException(
-            "MarkableInputStream::available NotConnectedException",
+            u"MarkableInputStream::available NotConnectedException"_ustr,
             *this );
     }
 
@@ -567,7 +567,7 @@ void OMarkableInputStream::closeInput()
 {
     if( !m_bValidStream ) {
         throw NotConnectedException(
-            "MarkableInputStream::closeInput NotConnectedException",
+            u"MarkableInputStream::closeInput NotConnectedException"_ustr,
             *this );
     }
     std::unique_lock guard( m_mutex );
@@ -737,7 +737,7 @@ void OMarkableInputStream::checkMarksAndFlush()
 // XServiceInfo
 OUString OMarkableInputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.MarkableInputStream";
+    return u"com.sun.star.comp.io.stm.MarkableInputStream"_ustr;
 }
 
 // XServiceInfo
@@ -749,7 +749,7 @@ sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OMarkableInputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.MarkableInputStream" };
+    return { u"com.sun.star.io.MarkableInputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -262,14 +262,14 @@ void Pump::run()
 
             if( ! rInput.is() )
             {
-                throw NotConnectedException( "no input stream set", getXWeak() );
+                throw NotConnectedException( u"no input stream set"_ustr, getXWeak() );
             }
             Sequence< sal_Int8 > aData;
             while( rInput->readSomeBytes( aData, 65536 ) )
             {
                 if( ! rOutput.is() )
                 {
-                    throw NotConnectedException( "no output stream set", getXWeak() );
+                    throw NotConnectedException( u"no output stream set"_ustr, getXWeak() );
                 }
                 rOutput->writeBytes( aData );
                 osl_yieldThread();
@@ -357,7 +357,7 @@ void Pump::start()
     if( !m_aThread )
     {
         throw RuntimeException(
-            "Pump::start Couldn't create worker thread",
+            u"Pump::start Couldn't create worker thread"_ustr,
             *this);
     }
 
@@ -426,7 +426,7 @@ Reference< XOutputStream > Pump::getOutputStream()
 // XServiceInfo
 OUString Pump::getImplementationName()
 {
-    return "com.sun.star.comp.io.Pump";
+    return u"com.sun.star.comp.io.Pump"_ustr;
 }
 
 // XServiceInfo
@@ -438,7 +438,7 @@ sal_Bool Pump::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > Pump::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.Pump" };
+    return { u"com.sun.star.io.Pump"_ustr };
 }
 
 }

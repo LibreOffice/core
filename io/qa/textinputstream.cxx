@@ -86,7 +86,7 @@ private:
     void checkClosed() {
         if (!open_) {
             throw css::io::NotConnectedException(
-                "test input stream already closed");
+                u"test input stream already closed"_ustr);
         }
     }
 
@@ -114,7 +114,7 @@ void Test::testReadLine() {
         css::io::TextInputStream::create(getComponentContext()));
     s->setInputStream(new Input);
     OUString l(s->readLine());
-    CPPUNIT_ASSERT_EQUAL(OUString("123456789"), l);
+    CPPUNIT_ASSERT_EQUAL(u"123456789"_ustr, l);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

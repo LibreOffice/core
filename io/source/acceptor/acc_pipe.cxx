@@ -74,7 +74,7 @@ namespace io_acceptor
     {
         if( m_nStatus )
         {
-            throw IOException("pipe already closed");
+            throw IOException(u"pipe already closed"_ustr);
         }
         if( aReadBytes.getLength() < nBytesToRead )
         {
@@ -94,11 +94,11 @@ namespace io_acceptor
     {
         if( m_nStatus )
         {
-            throw IOException("pipe already closed");
+            throw IOException(u"pipe already closed"_ustr);
         }
         if( m_pipe.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
         {
-            throw IOException("short write");
+            throw IOException(u"short write"_ustr);
         }
     }
 

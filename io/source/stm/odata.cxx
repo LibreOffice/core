@@ -388,7 +388,7 @@ Reference < XConnectable > ODataInputStream::getPredecessor()
 // XServiceInfo
 OUString ODataInputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.DataInputStream";
+    return u"com.sun.star.comp.io.stm.DataInputStream"_ustr;
 }
 
 // XServiceInfo
@@ -400,7 +400,7 @@ sal_Bool ODataInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > ODataInputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.DataInputStream" };
+    return { u"com.sun.star.io.DataInputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -682,7 +682,7 @@ Reference < XConnectable > ODataOutputStream::getPredecessor()
 // XServiceInfo
 OUString ODataOutputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.DataOutputStream";
+    return u"com.sun.star.comp.io.stm.DataOutputStream"_ustr;
 }
 
 // XServiceInfo
@@ -694,7 +694,7 @@ sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > ODataOutputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.DataOutputStream" };
+    return { u"com.sun.star.io.DataOutputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -942,7 +942,7 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
 // XServiceInfo
 OUString OObjectOutputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.ObjectOutputStream";
+    return u"com.sun.star.comp.io.stm.ObjectOutputStream"_ustr;
 }
 
 // XServiceInfo
@@ -954,7 +954,7 @@ sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OObjectOutputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.ObjectOutputStream" };
+    return { u"com.sun.star.io.ObjectOutputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -1200,7 +1200,7 @@ sal_Int32 OObjectInputStream::offsetToMark(sal_Int32 nMark)
 // XServiceInfo
 OUString OObjectInputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.ObjectInputStream";
+    return u"com.sun.star.comp.io.stm.ObjectInputStream"_ustr;
 }
 
 // XServiceInfo
@@ -1212,7 +1212,7 @@ sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OObjectInputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.ObjectInputStream" };
+    return { u"com.sun.star.io.ObjectInputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

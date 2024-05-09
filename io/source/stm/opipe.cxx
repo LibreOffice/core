@@ -118,7 +118,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
             if( m_bInputStreamClosed )
             {
                 throw NotConnectedException(
-                    "Pipe::readBytes NotConnectedException",
+                    u"Pipe::readBytes NotConnectedException"_ustr,
                     *this );
             }
             sal_Int32 nOccupiedBufferLen = m_oFIFO->getSize();
@@ -154,7 +154,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
             if( m_bInputStreamClosed )
             {
                 throw NotConnectedException(
-                    "Pipe::readSomeBytes NotConnectedException",
+                    u"Pipe::readSomeBytes NotConnectedException"_ustr,
                     *this );
             }
             if( m_oFIFO->getSize() )
@@ -183,7 +183,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            "Pipe::skipBytes NotConnectedException",
+            u"Pipe::skipBytes NotConnectedException"_ustr,
             *this );
     }
 
@@ -192,7 +192,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
             > std::numeric_limits< sal_Int32 >::max() - m_nBytesToSkip) )
     {
         throw BufferSizeExceededException(
-            "Pipe::skipBytes BufferSizeExceededException",
+            u"Pipe::skipBytes BufferSizeExceededException"_ustr,
             *this );
     }
     m_nBytesToSkip += nBytesToSkip;
@@ -209,7 +209,7 @@ sal_Int32 OPipeImpl::available()
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            "Pipe::available NotConnectedException",
+            u"Pipe::available NotConnectedException"_ustr,
             *this );
     }
     return m_oFIFO->getSize();
@@ -237,14 +237,14 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     if( m_bOutputStreamClosed )
     {
         throw NotConnectedException(
-            "Pipe::writeBytes NotConnectedException (outputstream)",
+            u"Pipe::writeBytes NotConnectedException (outputstream)"_ustr,
             *this );
     }
 
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            "Pipe::writeBytes NotConnectedException (inputstream)",
+            u"Pipe::writeBytes NotConnectedException (inputstream)"_ustr,
             *this );
     }
 
@@ -331,7 +331,7 @@ Reference < XConnectable > OPipeImpl::getPredecessor()
 // XServiceInfo
 OUString OPipeImpl::getImplementationName()
 {
-    return "com.sun.star.comp.io.stm.Pipe";
+    return u"com.sun.star.comp.io.stm.Pipe"_ustr;
 }
 
 // XServiceInfo
@@ -343,7 +343,7 @@ sal_Bool OPipeImpl::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OPipeImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.Pipe" };
+    return { u"com.sun.star.io.Pipe"_ustr };
 }
 
 }

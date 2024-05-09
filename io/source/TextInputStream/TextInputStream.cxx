@@ -128,7 +128,7 @@ OTextInputStream::~OTextInputStream()
 void OTextInputStream::checkNull()
 {
     if (mxStream==nullptr){
-        throw RuntimeException("Uninitialized object");
+        throw RuntimeException(u"Uninitialized object"_ustr);
     }
 }
 
@@ -163,7 +163,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     OUString aRetStr;
     if( !mbEncodingInitialized )
     {
-        setEncoding( "utf8" );
+        setEncoding( u"utf8"_ustr );
     }
     if( !mbEncodingInitialized )
         return aRetStr;
@@ -323,12 +323,12 @@ sal_Int32 OTextInputStream::implReadNext()
     }
     catch( NotConnectedException& )
     {
-        throw IOException("Not connected");
+        throw IOException(u"Not connected"_ustr);
         //throw IOException( L"OTextInputStream::implReadString failed" );
     }
     catch( BufferSizeExceededException& )
     {
-        throw IOException("Buffer size exceeded");
+        throw IOException(u"Buffer size exceeded"_ustr);
     }
 }
 
@@ -392,7 +392,7 @@ Reference< XInputStream > OTextInputStream::getInputStream()
 
 OUString OTextInputStream::getImplementationName()
 {
-    return "com.sun.star.comp.io.TextInputStream";
+    return u"com.sun.star.comp.io.TextInputStream"_ustr;
 }
 
 sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
@@ -402,7 +402,7 @@ sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextInputStream::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.TextInputStream" };
+    return { u"com.sun.star.io.TextInputStream"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -111,7 +111,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
         m_sLastDescription != sConnectionDescription )
     {
         // instantiate another acceptor for different ports
-        throw ConnectionSetupException( "acceptor::accept called multiple times with different connection strings\n" );
+        throw ConnectionSetupException( u"acceptor::accept called multiple times with different connection strings\n"_ustr );
     }
 
     if( m_sLastDescription.isEmpty() )
@@ -124,7 +124,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
             {
                 OUString aName(
                     aDesc.getParameter(
-                        "name"));
+                        u"name"_ustr));
 
                 m_pPipe.reset(new io_acceptor::PipeAcceptor(aName, sConnectionDescription));
 
@@ -145,18 +145,18 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
             {
                 OUString aHost;
                 if (aDesc.hasParameter(
-                        "host"))
+                        u"host"_ustr))
                     aHost = aDesc.getParameter(
-                        "host");
+                        u"host"_ustr);
                 else
                     aHost = "localhost";
                 sal_uInt16 nPort = static_cast< sal_uInt16 >(
                     aDesc.getParameter(
-                        "port").
+                        u"port"_ustr).
                     toInt32());
                 bool bTcpNoDelay
                     = aDesc.getParameter(
-                        "tcpnodelay").toInt32() != 0;
+                        u"tcpnodelay"_ustr).toInt32() != 0;
 
                 m_pSocket.reset(new io_acceptor::SocketAcceptor(
                     aHost, nPort, bTcpNoDelay, sConnectionDescription));
@@ -230,7 +230,7 @@ void SAL_CALL OAcceptor::stopAccepting(  )
 
 OUString OAcceptor::getImplementationName()
 {
-    return "com.sun.star.comp.io.Acceptor";
+    return u"com.sun.star.comp.io.Acceptor"_ustr;
 }
 
 sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
@@ -240,7 +240,7 @@ sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OAcceptor::getSupportedServiceNames()
 {
-    return { "com.sun.star.connection.Acceptor" };
+    return { u"com.sun.star.connection.Acceptor"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
