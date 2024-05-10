@@ -179,9 +179,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     // - Expected: 0
     // - Actual  : 1
     // i.e. there were unexpected endnotes on page 1.
-    assertXPath(pLayout, "/root/page[1]/ftncont"_ostr, 0);
+    assertXPath(pLayout, "/root/page[1]//ftncont"_ostr, 0);
     // All endnotes are in a container on page 2.
-    assertXPath(pLayout, "/root/page[2]/ftncont"_ostr, 1);
+    assertXPath(pLayout, "/root/page[2]//ftncont"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
