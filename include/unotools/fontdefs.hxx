@@ -49,7 +49,7 @@ class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ConvertChar
 {
 public:
     const sal_Unicode*  mpCvtTab;
-    const char*         mpSubsFontName;
+    OUString            maSubsFontName;
     sal_Unicode         (*mpCvtFunc)( sal_Unicode );
     sal_Unicode         RecodeChar( sal_Unicode c ) const;
     void                RecodeString( OUString& rStra, sal_Int32 nIndex, sal_Int32 nLen ) const;

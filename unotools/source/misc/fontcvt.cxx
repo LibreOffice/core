@@ -1256,9 +1256,9 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
         {
             cRetVal = mpCvtTab[ cIndex - 0x0020 ];
 
-            if (!cRetVal && mpSubsFontName)
+            if (!cRetVal && !maSubsFontName.isEmpty())
             {
-                if ( IsOpenSymbol( OUString::createFromAscii(mpSubsFontName) ) )
+                if ( IsOpenSymbol( maSubsFontName ) )
                 {
                     cRetVal = 0xE12C;
                     SAL_WARN( "unotools.misc", "Forcing a bullet substitution from 0x" <<
@@ -1308,31 +1308,31 @@ const RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: see CreateFontToSubsFontConverter method
-    {"starbats",        {aStarBatsTab,  "StarSymbol", nullptr}},
-    {"starmath",        {aStarMathTab,  "StarSymbol", nullptr}},
+    {"starbats",        {aStarBatsTab,  u"StarSymbol"_ustr, nullptr}},
+    {"starmath",        {aStarMathTab,  u"StarSymbol"_ustr, nullptr}},
 
-    {"symbol",          {aAdobeSymbolTab, "StarSymbol", nullptr}},
-    {"standardsymbols", {aAdobeSymbolTab, "StarSymbol", nullptr}},
-    {"standardsymbolsl",{aAdobeSymbolTab, "StarSymbol", nullptr}},
+    {"symbol",          {aAdobeSymbolTab, u"StarSymbol"_ustr, nullptr}},
+    {"standardsymbols", {aAdobeSymbolTab, u"StarSymbol"_ustr, nullptr}},
+    {"standardsymbolsl",{aAdobeSymbolTab, u"StarSymbol"_ustr, nullptr}},
 
-    {"monotypesorts",   {aMonotypeSortsTab, "StarSymbol", nullptr}},
-//  {"monotypesorts2",  {aMonotypeSorts2Tab, "StarSymbol", NULL}}
-    {"zapfdingbats",    {aMonotypeSortsTab, "StarSymbol", nullptr}},  //ZapfDingbats=MonotypeSorts-X?
-    {"itczapfdingbats", {aMonotypeSortsTab, "StarSymbol", nullptr}},
-    {"dingbats",        {aMonotypeSortsTab, "StarSymbol", nullptr}},
+    {"monotypesorts",   {aMonotypeSortsTab, u"StarSymbol"_ustr, nullptr}},
+//  {"monotypesorts2",  {aMonotypeSorts2Tab, u"StarSymbol"_ustr, NULL}}
+    {"zapfdingbats",    {aMonotypeSortsTab, u"StarSymbol"_ustr, nullptr}},  //ZapfDingbats=MonotypeSorts-X?
+    {"itczapfdingbats", {aMonotypeSortsTab, u"StarSymbol"_ustr, nullptr}},
+    {"dingbats",        {aMonotypeSortsTab, u"StarSymbol"_ustr, nullptr}},
 
-    {"webdings",        {aWebDingsTab,   "StarSymbol", nullptr}},
-    {"wingdings",       {aWingDingsTab,  "StarSymbol", nullptr}},
-    {"wingdings2",      {aWingDings2Tab, "StarSymbol", nullptr}},
-    {"wingdings3",      {aWingDings3Tab, "StarSymbol", nullptr}},
-    {"mtextra",         {aMTExtraTab, "StarSymbol", nullptr}}
+    {"webdings",        {aWebDingsTab,   u"StarSymbol"_ustr, nullptr}},
+    {"wingdings",       {aWingDingsTab,  u"StarSymbol"_ustr, nullptr}},
+    {"wingdings2",      {aWingDings2Tab, u"StarSymbol"_ustr, nullptr}},
+    {"wingdings3",      {aWingDings3Tab, u"StarSymbol"_ustr, nullptr}},
+    {"mtextra",         {aMTExtraTab, u"StarSymbol"_ustr, nullptr}}
 };
 
 const RecodeTable aAppleSymbolRecodeTable[] = {
-    {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", nullptr}}
+    {"symbol",         {aAdobeSymbolToAppleSymbolTab, u"AppleSymbol"_ustr, nullptr}}
 };
 
-static ConvertChar aImplStarSymbolCvt = { nullptr, "StarBats", ImplStarSymbolToStarBats };
+static ConvertChar aImplStarSymbolCvt = { nullptr, u"StarBats"_ustr, ImplStarSymbolToStarBats };
 
 const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName, std::u16string_view rMapFontName )
 {
@@ -1424,8 +1424,7 @@ OUString GetFontToSubsFontName( FontToSubsFontConverter hConverter )
     if ( !hConverter )
         return OUString();
 
-    const char* pName = static_cast<ConvertChar*>(hConverter)->mpSubsFontName;
-    return OUString::createFromAscii( pName );
+    return static_cast<ConvertChar*>(hConverter)->maSubsFontName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
