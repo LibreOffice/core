@@ -286,6 +286,7 @@ IMPL_LINK(NotesPanelView, EventMultiplexerListener, tools::EventMultiplexerEvent
         case EventMultiplexerEventId::MainViewRemoved:
         case EventMultiplexerEventId::MainViewAdded:
             FillOutliner();
+            onResize();
             break;
         default:
             break;
