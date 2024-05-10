@@ -982,7 +982,7 @@ static beans::PropertyValue lcl_createTextpathProps()
 
 void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape, const GraphicHelper& rGraphicHelper) const
 {
-    OUString sFont = "";
+    OUString sFont = u""_ustr;
 
     if (moString.has_value())
     {
@@ -990,7 +990,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         xTextRange->setString(moString.value());
 
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+        uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< uno::Sequence<beans::PropertyValue> >();
         bool bFound = false;
         for (beans::PropertyValue& rProp : asNonConstRange(aGeomPropSeq))
         {
@@ -1025,7 +1025,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                         aValue = aValue.substr(1, aValue.size() - 2);
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharFontName", uno::Any(OUString(aValue)));
+                    xPropertySet->setPropertyValue(u"CharFontName"_ustr, uno::Any(OUString(aValue)));
                     sFont = aValue;
                 }
                 else if (aName == u"font-size")
@@ -1034,7 +1034,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                     float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharHeight", uno::Any(nSize));
+                    xPropertySet->setPropertyValue(u"CharHeight"_ustr, uno::Any(nSize));
                 }
             }
         }

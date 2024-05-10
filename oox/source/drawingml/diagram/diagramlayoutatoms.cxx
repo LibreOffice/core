@@ -130,7 +130,7 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
     double fSpaceFromConstraint = 1.0;
     LayoutPropertyMap aPropertiesByName;
     std::map<sal_Int32, LayoutProperty> aPropertiesByType;
-    LayoutProperty& rParent = aPropertiesByName[""];
+    LayoutProperty& rParent = aPropertiesByName[u""_ustr];
     rParent[XML_w] = fShapeWidth;
     rParent[XML_h] = fShapeHeight;
     for (const auto& rConstr : rConstraints)
@@ -551,7 +551,7 @@ void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
                                        const std::vector<Constraint>& rConstraints)
 {
     LayoutPropertyMap aProperties;
-    LayoutProperty& rParent = aProperties[""];
+    LayoutProperty& rParent = aProperties[u""_ustr];
 
     sal_Int32 nParentXOffset = 0;
 
@@ -1164,7 +1164,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             }
 
             LayoutPropertyMap aProperties;
-            LayoutProperty& rParent = aProperties[""];
+            LayoutProperty& rParent = aProperties[u""_ustr];
             rParent[XML_w] = rShape->getSize().Width;
             rParent[XML_h] = rShape->getSize().Height;
             rParent[XML_l] = 0;

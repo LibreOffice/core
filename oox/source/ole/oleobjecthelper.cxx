@@ -65,7 +65,7 @@ OleObjectHelper::OleObjectHelper(
     assert(m_xModel.is());
     if( rxModelFactory.is() ) try
     {
-        mxResolver.set( rxModelFactory->createInstance( "com.sun.star.document.ImportEmbeddedObjectResolver" ), UNO_QUERY );
+        mxResolver.set( rxModelFactory->createInstance( u"com.sun.star.document.ImportEmbeddedObjectResolver"_ustr ), UNO_QUERY );
     }
     catch(const Exception& )
     {
@@ -96,7 +96,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
 
     // get interop grab bag from document
     uno::Reference<beans::XPropertySet> const xDocProps(xModel, uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+    comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
 
     // get EmbeddedObjects property inside grab bag
     comphelper::SequenceAsHashMap objectsList;
@@ -104,7 +104,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     if (grabIt != aGrabBag.end())
         objectsList << grabIt->second;
 
-    uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue("ProgID",
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue(u"ProgID"_ustr,
                                                                                            rProgId) };
 
     // If we got an "old name", erase that first.
@@ -121,7 +121,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     aGrabBag[sEmbeddingsPropName] <<= objectsList.getAsConstPropertyValueList();
 
     // put grab bag back into the document
-    xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
 }
 
 bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInfo& rOleObject, const awt::Size& rObjSize )

@@ -375,25 +375,25 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(std::string_view rValue)
                 if (o3tl::starts_with(aToken, "Name = \"Position\""))
                     lcl_parseHandlePosition(aRet, aToken);
                 else if (o3tl::starts_with(aToken, "Name = \"RangeXMaximum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RangeXMaximum");
+                    lcl_parseHandleRange(aRet, aToken, u"RangeXMaximum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RangeXMinimum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RangeXMinimum");
+                    lcl_parseHandleRange(aRet, aToken, u"RangeXMinimum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RangeYMaximum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RangeYMaximum");
+                    lcl_parseHandleRange(aRet, aToken, u"RangeYMaximum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RangeYMinimum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RangeYMinimum");
+                    lcl_parseHandleRange(aRet, aToken, u"RangeYMinimum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RadiusRangeMaximum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RadiusRangeMaximum");
+                    lcl_parseHandleRange(aRet, aToken, u"RadiusRangeMaximum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RadiusRangeMinimum\""))
-                    lcl_parseHandleRange(aRet, aToken, "RadiusRangeMinimum");
+                    lcl_parseHandleRange(aRet, aToken, u"RadiusRangeMinimum"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RefX\""))
-                    lcl_parseHandleRef(aRet, aToken, "RefX");
+                    lcl_parseHandleRef(aRet, aToken, u"RefX"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RefY\""))
-                    lcl_parseHandleRef(aRet, aToken, "RefY");
+                    lcl_parseHandleRef(aRet, aToken, u"RefY"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RefR\""))
-                    lcl_parseHandleRef(aRet, aToken, "RefR");
+                    lcl_parseHandleRef(aRet, aToken, u"RefR"_ustr);
                 else if (o3tl::starts_with(aToken, "Name = \"RefAngle\""))
-                    lcl_parseHandleRef(aRet, aToken, "RefAngle");
+                    lcl_parseHandleRef(aRet, aToken, u"RefAngle"_ustr);
                 else
                     SAL_WARN("oox", "lcl_parseHandle: unexpected token: " << aToken);
             }
@@ -822,7 +822,7 @@ namespace oox::drawingml
 {
 void CustomShapeProperties::initializePresetDataMap()
 {
-    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-cs-presets");
+    OUString aPath(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-cs-presets"_ustr);
     rtl::Bootstrap::expandMacros(aPath);
     SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)

@@ -230,7 +230,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
         Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs{ Any(xInStrm),
                                Any(true) };// true = do not create a copy of the input stream
-        mxStorage.set( xFactory->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", aArgs ), UNO_QUERY_THROW );
+        mxStorage.set( xFactory->createInstanceWithArguments(u"com.sun.star.embed.OLESimpleStorage"_ustr, aArgs ), UNO_QUERY_THROW );
     }
     catch(const Exception& )
     {
@@ -245,7 +245,7 @@ void OleStorage::initStorage( const Reference< XStream >& rxOutStream )
         Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs{ Any(rxOutStream),
                                Any(true) }; // true = do not create a copy of the stream
-        mxStorage.set( xFactory->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", aArgs ), UNO_QUERY_THROW );
+        mxStorage.set( xFactory->createInstanceWithArguments(u"com.sun.star.embed.OLESimpleStorage"_ustr, aArgs ), UNO_QUERY_THROW );
     }
     catch(const Exception& )
     {

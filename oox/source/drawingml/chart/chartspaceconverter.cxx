@@ -122,7 +122,7 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
                 continue;
 
             OUString aRoleName;
-            xPropSet->getPropertyValue("Role") >>= aRoleName;
+            xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
                 const uno::Sequence<uno::Any> aData = xValues->getData();

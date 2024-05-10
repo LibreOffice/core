@@ -73,7 +73,7 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
 
     bool bDateCategories = (mrModel.meFormatType == SvNumFormatType::DATE) && (rRole == "categories");
     xDataSeq = getChartConverter().createDataSequence(getChartDocument()->getDataProvider(), mrModel,
-        rRole, bDateCategories ? OUString("date") : OUString(""));
+        rRole, bDateCategories ? u"date"_ustr : u""_ustr);
 
     // set sequence role
     PropertySet aSeqProp( xDataSeq );

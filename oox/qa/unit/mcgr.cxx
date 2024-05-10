@@ -18,7 +18,7 @@ class TestMCGR : public UnoApiXmlTest
 {
 public:
     TestMCGR()
-        : UnoApiXmlTest("/oox/qa/unit/data/")
+        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };
@@ -28,20 +28,20 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradient)
     // Given a document with three-color gradient on a Fontwork.
     loadFromFile(u"MCGR_FontworkColorGradient.fodp");
     // Save it to PPTX
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
     // And make sure a multi-color gradient fill is exported.
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // linear gradient with 30deg angle
-    assertXPath(pXmlDoc, "//a:r/a:rPr/a:gradFill/a:lin"_ostr, "ang"_ostr, "3600000");
+    assertXPath(pXmlDoc, "//a:r/a:rPr/a:gradFill/a:lin"_ostr, "ang"_ostr, u"3600000"_ustr);
     // three color stops, no transparency
     static constexpr OString sPath = "//a:r/a:rPr/a:gradFill/a:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
-    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, "0");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, "ff1493");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, "30000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, "ffff00");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, "100000");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, u"ff1493"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, u"30000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, u"ffff00"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, u"100000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, u"00ffff"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
@@ -51,20 +51,20 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     // Given a document with three-color gradient on a Fontwork.
     loadFromFile(u"MCGR_FontworkColorGradient.fodt");
     // Save it to DOCX
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
     // And make sure a multi-color gradient fill is exported.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // linear gradient with 30deg angle
-    assertXPath(pXmlDoc, "//w14:lin"_ostr, "ang"_ostr, "3600000");
+    assertXPath(pXmlDoc, "//w14:lin"_ostr, "ang"_ostr, u"3600000"_ustr);
     // three color stops, no transparency
     static constexpr OString sPath = "//w14:gradFill/w14:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "w14:gs", 3);
-    assertXPath(pXmlDoc, sPath + "w14:gs[1]", "pos"_ostr, "0");
-    assertXPath(pXmlDoc, sPath + "w14:gs[1]/w14:srgbClr", "val"_ostr, "ff1493");
-    assertXPath(pXmlDoc, sPath + "w14:gs[2]", "pos"_ostr, "30000");
-    assertXPath(pXmlDoc, sPath + "w14:gs[2]/w14:srgbClr", "val"_ostr, "ffff00");
-    assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos"_ostr, "100000");
-    assertXPath(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val"_ostr, "00ffff");
+    assertXPath(pXmlDoc, sPath + "w14:gs[1]", "pos"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sPath + "w14:gs[1]/w14:srgbClr", "val"_ostr, u"ff1493"_ustr);
+    assertXPath(pXmlDoc, sPath + "w14:gs[2]", "pos"_ostr, u"30000"_ustr);
+    assertXPath(pXmlDoc, sPath + "w14:gs[2]/w14:srgbClr", "val"_ostr, u"ffff00"_ustr);
+    assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos"_ostr, u"100000"_ustr);
+    assertXPath(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val"_ostr, u"00ffff"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
     // Save it to PPTX
     // Without fix, a debug-build would have crashed in oox/source/export/drawingml.cxx from
     // assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
@@ -82,8 +82,8 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     // Given a document with two-color gradient with StepCount 4.
     loadFromFile(u"tdf155852_MCGR_StepCount4.fodp");
     // Save it to PPTX
-    save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    save(u"Impress Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Without the fix the colors in the sections were wrong. And when opening a file with StepCount
     // and saving it immediately to pptx, a continuous gradient might be produced.
@@ -97,9 +97,9 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='50000']", 2);
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000']", 2);
     // Without fix the color was 808080.
-    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][1]/a:srgbClr", "val"_ostr, "55aaaa");
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][1]/a:srgbClr", "val"_ostr, u"55aaaa"_ustr);
     // Without fix the color was 40bfbf, producing a gradient in the last segment.
-    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val"_ostr, "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val"_ostr, u"00ffff"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
@@ -108,23 +108,23 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
     // two-stop linear transparency gradient from start 80% to end 0%.
     loadFromFile(u"tdf155827_MCGR_AxialColorLinearTrans.fodp");
     // Save it to PPTX
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
     // OOXML has transparency together with color. Transparency is stored as opacity.
     // Expected: pos 0 #00ffff 20000, pos 50000 #ff0000 60000, pos 100000 #00ffff 100000.
     // Because of conversion through gray color the opacity values are not exact. If rounding
     // method will be changed, the test needs to be adjusted.
 
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr OString sPath = "//a:gradFill/a:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
-    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, "0");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, "00ffff");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "20000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, "50000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, "ff0000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "60396");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, "100000");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, u"00ffff"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, u"20000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, u"50000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, u"ff0000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, u"60396"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, u"100000"_ustr);
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, u"00ffff"_ustr);
     // no <a:alpha> element for default val="100000"
     assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr/a:alpha", 0);
 }

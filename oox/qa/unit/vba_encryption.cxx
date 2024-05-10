@@ -71,7 +71,8 @@ void TestVbaEncryption::testSimple2()
 
 void TestVbaEncryption::testProjKey1()
 {
-    sal_uInt8 nProjKey = VBAEncryption::calculateProjKey("{917DED54-440B-4FD1-A5C1-74ACF261E600}");
+    sal_uInt8 nProjKey
+        = VBAEncryption::calculateProjKey(u"{917DED54-440B-4FD1-A5C1-74ACF261E600}"_ustr);
     CPPUNIT_ASSERT_EQUAL(int(0xdf), static_cast<int>(nProjKey));
 }
 

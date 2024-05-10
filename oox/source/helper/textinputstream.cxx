@@ -81,7 +81,7 @@ void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL UnoBinaryInputStream::available()
 {
     ensureConnected();
-    throw RuntimeException( "Functionality not supported", Reference< XInputStream >() );
+    throw RuntimeException( u"Functionality not supported"_ustr, Reference< XInputStream >() );
 }
 
 void SAL_CALL UnoBinaryInputStream::closeInput()
@@ -94,7 +94,7 @@ void SAL_CALL UnoBinaryInputStream::closeInput()
 void UnoBinaryInputStream::ensureConnected() const
 {
     if( !mpInStrm )
-        throw NotConnectedException( "Stream closed" );
+        throw NotConnectedException( u"Stream closed"_ustr );
 }
 
 } // namespace

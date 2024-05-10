@@ -65,10 +65,10 @@ sal_Int32 TextRun::insertAt(
         PropertySet aPropSet( xStart );
 
         Reference<XPropertyState> xState(xStart, UNO_QUERY);
-        Any aOldFontName = xState->getPropertyDefault("CharFontName");
-        Any aOldFontPitch = xState->getPropertyDefault("CharFontPitch");
-        Any aOldFontFamily = xState->getPropertyDefault("CharFontFamily");
-        Any aOldFontCharSet = xState->getPropertyDefault("CharFontCharSet");
+        Any aOldFontName = xState->getPropertyDefault(u"CharFontName"_ustr);
+        Any aOldFontPitch = xState->getPropertyDefault(u"CharFontPitch"_ustr);
+        Any aOldFontFamily = xState->getPropertyDefault(u"CharFontFamily"_ustr);
+        Any aOldFontCharSet = xState->getPropertyDefault(u"CharFontCharSet"_ustr);
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
 
@@ -146,7 +146,7 @@ sal_Int32 TextRun::insertAt(
         {
             SAL_WARN("oox",  "OOX: URL field" );
             Reference< XMultiServiceFactory > xFactory( rFilterBase.getModel(), UNO_QUERY );
-            Reference< XTextField > xField( xFactory->createInstance( "com.sun.star.text.TextField.URL" ), UNO_QUERY );
+            Reference< XTextField > xField( xFactory->createInstance( u"com.sun.star.text.TextField.URL"_ustr ), UNO_QUERY );
             if( xField.is() )
             {
                 Reference< XTextCursor > xTextFieldCursor = xText->createTextCursor();

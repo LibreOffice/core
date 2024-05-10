@@ -106,7 +106,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
         // ST_PositiveCoordinate32
         const sal_Int32 nSpacing = o3tl::convert(rAttribs.getInteger(XML_spcCol, 0),
                                                  o3tl::Length::emu, o3tl::Length::mm100);
-        xProps->setPropertyValue("AutomaticDistance", css::uno::Any(nSpacing));
+        xProps->setPropertyValue(u"AutomaticDistance"_ustr, css::uno::Any(nSpacing));
         mrTextBodyProp.maPropertyMap.setAnyProperty(PROP_TextColumns, css::uno::Any(xCols));
     }
 

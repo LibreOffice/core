@@ -103,7 +103,7 @@ bool lcl_getAttributeAsString(const uno::Sequence<beans::PropertyValue>& aProper
 {
     comphelper::SequenceAsHashMap aPropertyValueAsMap(aPropertyValueAsSeq);
     uno::Sequence<beans::PropertyValue> aAttributesSeq;
-    if (!((aPropertyValueAsMap.getValue("attributes") >>= aAttributesSeq)
+    if (!((aPropertyValueAsMap.getValue(u"attributes"_ustr) >>= aAttributesSeq)
           && aAttributesSeq.hasElements()))
         return false;
     comphelper::SequenceAsHashMap aAttributesMap(aAttributesSeq);
@@ -120,7 +120,7 @@ bool lcl_getAttributeAsNumber(const uno::Sequence<beans::PropertyValue>& rProper
 {
     comphelper::SequenceAsHashMap aPropertyValueAsMap(rPropertyValueAsSeq);
     uno::Sequence<beans::PropertyValue> aAttributesSeq;
-    if (!((aPropertyValueAsMap.getValue("attributes") >>= aAttributesSeq)
+    if (!((aPropertyValueAsMap.getValue(u"attributes"_ustr) >>= aAttributesSeq)
           && aAttributesSeq.hasElements()))
         return false;
     comphelper::SequenceAsHashMap aAttributesMap(aAttributesSeq);
@@ -225,7 +225,7 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
         // First get stop colors
         comphelper::SequenceAsHashMap aPropMap(aPropSeq);
         uno::Sequence<beans::PropertyValue> aGsLstSeq;
-        if (aPropMap.getValue("gsLst") >>= aGsLstSeq)
+        if (aPropMap.getValue(u"gsLst"_ustr) >>= aGsLstSeq)
         {
             for (auto it = aGsLstSeq.begin(); it < aGsLstSeq.end(); ++it)
             {
@@ -248,30 +248,30 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
         }
         // Now determine kind of gradient.
         uno::Sequence<beans::PropertyValue> aKindSeq;
-        if (aPropMap.getValue("lin") >>= aKindSeq)
+        if (aPropMap.getValue(u"lin"_ustr) >>= aKindSeq)
         {
             // aKindSeq contains the attributes "ang" and "scaled"
             sal_Int32 nAngle; // in 1/60000 deg
-            if (lcl_getAttributeAsNumber(aKindSeq, "ang", nAngle))
+            if (lcl_getAttributeAsNumber(aKindSeq, u"ang"_ustr, nAngle))
                 rFillProperties.maGradientProps.moShadeAngle = nAngle;
             OUString sScaledString;
-            if (lcl_getAttributeAsString(aKindSeq, "scaled", sScaledString))
+            if (lcl_getAttributeAsString(aKindSeq, u"scaled"_ustr, sScaledString))
                 rFillProperties.maGradientProps.moShadeScaled
                     = sScaledString == u"1" || sScaledString == u"true";
             return;
         }
-        if (aPropMap.getValue("path") >>= aKindSeq)
+        if (aPropMap.getValue(u"path"_ustr) >>= aKindSeq)
         {
             // aKindSeq contains the attribute "path" for the kind of path and a property "fillToRect"
             // which defines the center rectangle of the gradient. The property "a:tileRect" known from
             // fill of shapes does not exist in w14 namespace.
             OUString sKind;
-            if (lcl_getAttributeAsString(aKindSeq, "path", sKind))
+            if (lcl_getAttributeAsString(aKindSeq, u"path"_ustr, sKind))
                 rFillProperties.maGradientProps.moGradientPath
                     = oox::AttributeConversion::decodeToken(sKind);
             comphelper::SequenceAsHashMap aKindMap(aKindSeq);
             uno::Sequence<beans::PropertyValue> aFillToRectSeq;
-            if (aKindMap.getValue("fillToRect") >>= aFillToRectSeq)
+            if (aKindMap.getValue(u"fillToRect"_ustr) >>= aFillToRectSeq)
             {
                 // The values l, t, r and b are not coordinates, but determine an offset from the
                 // edge of the bounding box of the shape. This unusual meaning of X1, Y1, X2 and
@@ -316,7 +316,8 @@ void lcl_getLineDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
     {
         // LineProperties has no member to store a miter limit. Therefore some heuristic is
         // added here. 0 is default for attribute "lim" in MS Office. It is rendered same as bevel.
-        sal_Int32 nMiterLimit = aTextOutlineMap.getUnpackedValueOrDefault("lim", sal_Int32(0));
+        sal_Int32 nMiterLimit
+            = aTextOutlineMap.getUnpackedValueOrDefault(u"lim"_ustr, sal_Int32(0));
         if (nMiterLimit == 0)
             rLineProperties.moLineJoint = oox::XML_bevel;
         else
@@ -406,13 +407,13 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
         // no textFill, look for theme color, tint and shade
         bool bColorFound(false);
         OUString sColorString;
-        if (aCharInteropGrabBagMap.getValue("CharThemeOriginalColor") >>= sColorString)
+        if (aCharInteropGrabBagMap.getValue(u"CharThemeOriginalColor"_ustr) >>= sColorString)
         {
             sal_Int32 nThemeOrigColor = oox::AttributeConversion::decodeIntegerHex(sColorString);
             aFillProperties.maFillColor.setSrgbClr(nThemeOrigColor);
             bColorFound = true;
         }
-        if (aCharInteropGrabBagMap.getValue("CharThemeColor") >>= sColorString)
+        if (aCharInteropGrabBagMap.getValue(u"CharThemeColor"_ustr) >>= sColorString)
         {
             sal_Int32 nColorToken = oox::AttributeConversion::decodeToken(sColorString);
             aFillProperties.maFillColor.setSchemeClr(nColorToken);
@@ -420,7 +421,7 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
             bColorFound = true;
             // A character color has shade or tint, a shape color has lumMod and lumOff.
             OUString sTransformString;
-            if (aCharInteropGrabBagMap.getValue("CharThemeColorTint") >>= sTransformString)
+            if (aCharInteropGrabBagMap.getValue(u"CharThemeColorTint"_ustr) >>= sTransformString)
             {
                 double fTint = oox::AttributeConversion::decodeIntegerHex(sTransformString);
                 fTint = fTint / 255.0 * oox::drawingml::MAX_PERCENT;
@@ -430,7 +431,8 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
                 aFillProperties.maFillColor.addTransformation(OOX_TOKEN(w14, lumOff),
                                                               static_cast<sal_Int32>(fOff + 0.5));
             }
-            else if (aCharInteropGrabBagMap.getValue("CharThemeColorShade") >>= sTransformString)
+            else if (aCharInteropGrabBagMap.getValue(u"CharThemeColorShade"_ustr)
+                     >>= sTransformString)
             {
                 double fShade = oox::AttributeConversion::decodeIntegerHex(sTransformString);
                 fShade = fShade / 255.0 * oox::drawingml::MAX_PERCENT;
@@ -466,7 +468,7 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
     // Fontwork does not evaluate paragraph alignment but uses text anchor instead
     auto eHorzAdjust(drawing::TextHorizontalAdjust_CENTER);
     sal_Int16 nParaAlign = sal_Int16(drawing::TextHorizontalAdjust_CENTER);
-    aTextPropMap.getValue("ParaAdjust") >>= nParaAlign;
+    aTextPropMap.getValue(u"ParaAdjust"_ustr) >>= nParaAlign;
     switch (nParaAlign)
     {
         case sal_Int16(style::ParagraphAdjust_LEFT):
@@ -478,8 +480,8 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
         default:
             eHorzAdjust = drawing::TextHorizontalAdjust_CENTER;
     }
-    xShapePropertySet->setPropertyValue("TextHorizontalAdjust", uno::Any(eHorzAdjust));
-    xShapePropertySet->setPropertyValue("TextVerticalAdjust",
+    xShapePropertySet->setPropertyValue(u"TextHorizontalAdjust"_ustr, uno::Any(eHorzAdjust));
+    xShapePropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
                                         uno::Any(drawing::TextVerticalAdjust_TOP));
 }
 
@@ -609,14 +611,14 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
                 if (nVert == XML_eaVert)
                 {
-                    xPropertySet->setPropertyValue("TextWritingMode",
+                    xPropertySet->setPropertyValue(u"TextWritingMode"_ustr,
                                                    uno::Any(text::WritingMode_TB_RL));
-                    xPropertySet->setPropertyValue("WritingMode",
+                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                    uno::Any(text::WritingMode2::TB_RL));
                 }
                 else if (nVert == XML_mongolianVert)
                 {
-                    xPropertySet->setPropertyValue("WritingMode",
+                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                    uno::Any(text::WritingMode2::TB_LR));
                 }
                 else if (nVert == XML_wordArtVert || nVert == XML_wordArtVertRtl)
@@ -624,7 +626,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     // Multiline wordArtVert is not implemented yet.
                     // It will render all the text in 1 line.
                     // Map 'wordArtVertRtl' to 'wordArtVert', as they are the same now.
-                    xPropertySet->setPropertyValue("WritingMode",
+                    xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                    uno::Any(text::WritingMode2::STACKED));
                 }
                 else if (nVert != XML_horz) // cases XML_vert and XML_vert270
@@ -635,7 +637,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                     // Need transformation matrix since RotateAngle does not contain flip.
                     drawing::HomogenMatrix3 aMatrix;
-                    xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+                    xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
                     basegfx::B2DHomMatrix aTransformation;
                     aTransformation.set(0, 0, aMatrix.Line1.Column1);
                     aTransformation.set(0, 1, aMatrix.Line1.Column2);
@@ -656,28 +658,28 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     if ((nVert == XML_vert && nRotate == 270)
                         || (nVert == XML_vert270 && nRotate == 90))
                     {
-                        xPropertySet->setPropertyValue("WritingMode",
+                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                        uno::Any(text::WritingMode2::LR_TB));
                         // ToDo: Remember original vert value and remove hack on export.
                     }
                     else if (nVert == XML_vert)
-                        xPropertySet->setPropertyValue("WritingMode",
+                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                        uno::Any(text::WritingMode2::TB_RL90));
                     else // nVert == XML_vert270
-                        xPropertySet->setPropertyValue("WritingMode",
+                        xPropertySet->setPropertyValue(u"WritingMode"_ustr,
                                                        uno::Any(text::WritingMode2::BT_LR));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
-                    xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc(length + 1);
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = "Upright";
                     pGrabBag[length].Value <<= bUpright;
-                    xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag));
+                    xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
                 }
 
                 if (xServiceInfo.is())
@@ -696,8 +698,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                                 = (aInsets[i] == XML_lIns || aInsets[i] == XML_rIns) ? 254 : 127;
                     }
                     const OUString aShapeProps[]
-                        = { OUString("TextLeftDistance"), OUString("TextUpperDistance"),
-                            OUString("TextRightDistance"), OUString("TextLowerDistance") };
+                        = { u"TextLeftDistance"_ustr, u"TextUpperDistance"_ustr,
+                            u"TextRightDistance"_ustr, u"TextLowerDistance"_ustr };
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aShapeProps); ++i)
                         if (oInsets[i])
                             xPropertySet->setPropertyValue(aShapeProps[i], uno::Any(*oInsets[i]));
@@ -708,12 +710,12 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 {
                     drawing::TextVerticalAdjust eAdjust
                         = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
-                    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(eAdjust));
+                    xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr, uno::Any(eAdjust));
                 }
 
                 // Apply character color of the shape to the shape's textbox.
                 uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
-                uno::Any xCharColor = xPropertySet->getPropertyValue("CharColor");
+                uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
                 Color aColor = COL_AUTO;
                 if ((xCharColor >>= aColor) && aColor != COL_AUTO)
                 {
@@ -736,7 +738,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                                 continue;
                             if (uno::Reference<beans::XPropertySet> xParaPropSet{ xParagraph,
                                                                                   uno::UNO_QUERY })
-                                if ((xParaPropSet->getPropertyValue("ParaBackColor") >>= aColor)
+                                if ((xParaPropSet->getPropertyValue(u"ParaBackColor"_ustr)
+                                     >>= aColor)
                                     && aColor != COL_AUTO)
                                     continue;
 
@@ -750,19 +753,22 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                                 const uno::Reference<beans::XPropertyState> xRunState(
                                     xRun, uno::UNO_QUERY);
                                 if (!xRunState
-                                    || xRunState->getPropertyState("CharColor")
+                                    || xRunState->getPropertyState(u"CharColor"_ustr)
                                            == beans::PropertyState_DEFAULT_VALUE)
                                 {
                                     uno::Reference<beans::XPropertySet> xRunPropSet(xRun,
                                                                                     uno::UNO_QUERY);
                                     if (!xRunPropSet)
                                         continue;
-                                    if ((xRunPropSet->getPropertyValue("CharBackColor") >>= aColor)
+                                    if ((xRunPropSet->getPropertyValue(u"CharBackColor"_ustr)
+                                         >>= aColor)
                                         && aColor != COL_AUTO)
                                         continue;
-                                    if (!(xRunPropSet->getPropertyValue("CharColor") >>= aColor)
+                                    if (!(xRunPropSet->getPropertyValue(u"CharColor"_ustr)
+                                          >>= aColor)
                                         || aColor == COL_AUTO)
-                                        xRunPropSet->setPropertyValue("CharColor", xCharColor);
+                                        xRunPropSet->setPropertyValue(u"CharColor"_ustr,
+                                                                      xCharColor);
                                 }
                             }
                         }
@@ -770,7 +776,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
 
                 auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
-                xPropertySet->setPropertyValue("TextWordWrap",
+                xPropertySet->setPropertyValue(u"TextWordWrap"_ustr,
                                                uno::Any(nWrappingType == XML_square));
 
                 return this;
@@ -820,13 +826,13 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
             if (xPropertySet.is())
             {
-                if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                     xPropertySet->setPropertyValue(
-                        "FrameIsAutomaticHeight",
+                        u"FrameIsAutomaticHeight"_ustr,
                         uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                 else
                     xPropertySet->setPropertyValue(
-                        "TextAutoGrowHeight",
+                        u"TextAutoGrowHeight"_ustr,
                         uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
             }
         }
@@ -840,10 +846,10 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     std::optional<OUString> presetShapeName = rAttribs.getString(XML_prst);
                     const OUString& preset = presetShapeName.value();
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                        xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                    aCustomShapeGeometry["PresetTextWarp"] <<= preset;
+                        xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+                    aCustomShapeGeometry[u"PresetTextWarp"_ustr] <<= preset;
                     xPropertySet->setPropertyValue(
-                        "CustomShapeGeometry",
+                        u"CustomShapeGeometry"_ustr,
                         uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
             }
@@ -916,8 +922,8 @@ void WpsContext::onEndElement()
 
     OUString sMSPresetType;
     comphelper::SequenceAsHashMap aCustomShapeGeometry(
-        xShapePropertySet->getPropertyValue("CustomShapeGeometry"));
-    aCustomShapeGeometry["PresetTextWarp"] >>= sMSPresetType;
+        xShapePropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    aCustomShapeGeometry[u"PresetTextWarp"_ustr] >>= sMSPresetType;
     if (sMSPresetType.isEmpty() || sMSPresetType == u"textNoShape")
         return;
 
@@ -925,7 +931,7 @@ void WpsContext::onEndElement()
     // the old kind WordArt, which is based on a rectangle. In case of non rectangular shape we keep
     // the shape and do not convert the text to Fontwork.
     OUString sType;
-    aCustomShapeGeometry["Type"] >>= sType;
+    aCustomShapeGeometry[u"Type"_ustr] >>= sType;
     if (sType != u"ooxml-rect")
         return;
 
@@ -941,7 +947,7 @@ void WpsContext::onEndElement()
     pCustomShape->NbcSetText(sFrameContent);
 
     // Setting the property "TextBox" to false includes removing the attached frame from the shape.
-    xShapePropertySet->setPropertyValue("TextBox", uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextBox"_ustr, uno::Any(false));
 
     // Set the shape into text path mode, so that the text is drawn as Fontwork. Word renders a legacy
     // "text on path" without the legacy stretching, therefore use false for bFromWordArt.
@@ -980,8 +986,8 @@ void WpsContext::onEndElement()
         lcl_applyUsedTextPropsToAllTextRuns(xNewText, aTextPropVec);
 
     // Fontwork stretches the text to the given path. So adapt shape size to text is nonsensical.
-    xShapePropertySet->setPropertyValue("TextAutoGrowHeight", uno::Any(false));
-    xShapePropertySet->setPropertyValue("TextAutoGrowWidth", uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextAutoGrowWidth"_ustr, uno::Any(false));
 }
 }
 

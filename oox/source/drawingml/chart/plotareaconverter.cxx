@@ -320,7 +320,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     Reference< XDiagram > xDiagram;
     try
     {
-        xDiagram.set( createInstance( "com.sun.star.chart2.Diagram" ), UNO_QUERY_THROW );
+        xDiagram.set( createInstance( u"com.sun.star.chart2.Diagram"_ustr ), UNO_QUERY_THROW );
         getChartDocument()->setFirstDiagram( xDiagram );
     }
     catch( Exception& )

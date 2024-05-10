@@ -233,7 +233,7 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
                 if (isMCEStateEmpty() || getMCEState() != MCE_STATE::Started)
                     return false;
 
-                OUString aRequires = rAttribs.getString( XML_Requires, "none" );
+                OUString aRequires = rAttribs.getString( XML_Requires, u"none"_ustr );
 
                 // At this point we can't access namespaces as the correct xml filter
                 // is long gone. For now let's decide depending on a list of supported
@@ -241,15 +241,15 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
 
                 std::vector<OUString> aSupportedNS =
                 {
-                    "a14", // Impress needs this to import math formulas.
-                    "p14",
-                    "p15",
-                    "x12ac",
-                    "v"
+                    u"a14"_ustr, // Impress needs this to import math formulas.
+                    u"p14"_ustr,
+                    u"p15"_ustr,
+                    u"x12ac"_ustr,
+                    u"v"_ustr
                 };
 
                 Reference<XServiceInfo> xModel(getDocFilter().getModel(), UNO_QUERY);
-                if (xModel.is() && xModel->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+                if (xModel.is() && xModel->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
                 {
                     // No a14 for Calc documents, it would cause duplicated shapes as-is.
                     auto it = std::find(aSupportedNS.begin(), aSupportedNS.end(), "a14");

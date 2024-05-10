@@ -163,7 +163,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     {
          // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
          // keep the XUriReference implementation happy )
-         Reference< XUriReference > xBase = xFactory->parse( "file:///" );
+         Reference< XUriReference > xBase = xFactory->parse( u"file:///"_ustr );
 
          Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getStringDefaulted( XML_Target) );
          Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, true, RelativeUriExcessParentSegments_RETAIN );
@@ -186,14 +186,14 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_vi
         {
             case OOXMLVariant::ISO_Transitional:
             case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
-                return "writer_OOXML";
+                return u"writer_OOXML"_ustr;
             case OOXMLVariant::ECMA_Transitional:
-                return "writer_MS_Word_2007";
+                return u"writer_MS_Word_2007"_ustr;
         }
     }
 
     if( rContentType == u"application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
-        return "writer_MS_Word_2007_VBA";
+        return u"writer_MS_Word_2007_VBA"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
         rContentType == u"application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
@@ -202,38 +202,38 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_vi
         {
             case OOXMLVariant::ISO_Transitional:
             case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
-                return "writer_OOXML_Text_Template";
+                return u"writer_OOXML_Text_Template"_ustr;
             case OOXMLVariant::ECMA_Transitional:
-                return "writer_MS_Word_2007_Template";
+                return u"writer_MS_Word_2007_Template"_ustr;
         }
     }
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
-        return "MS Excel 2007 XML";
+        return u"MS Excel 2007 XML"_ustr;
 
     if (rContentType == u"application/vnd.ms-excel.sheet.macroEnabled.main+xml")
-        return "MS Excel 2007 VBA XML";
+        return u"MS Excel 2007 VBA XML"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == u"application/vnd.ms-excel.template.macroEnabled.main+xml" )
-        return "MS Excel 2007 XML Template";
+        return u"MS Excel 2007 XML Template"_ustr;
 
     if ( rContentType == u"application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
-        return "MS Excel 2007 Binary";
+        return u"MS Excel 2007 Binary"_ustr;
 
     if (rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")
-        return "MS PowerPoint 2007 XML";
+        return u"MS PowerPoint 2007 XML"_ustr;
 
     if (rContentType == u"application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")
-        return "MS PowerPoint 2007 XML VBA";
+        return u"MS PowerPoint 2007 XML VBA"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ||
         rContentType == u"application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" )
-        return "MS PowerPoint 2007 XML AutoPlay";
+        return u"MS PowerPoint 2007 XML AutoPlay"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ||
         rContentType == u"application/vnd.ms-powerpoint.template.macroEnabled.main+xml" )
-        return "MS PowerPoint 2007 XML Template";
+        return u"MS PowerPoint 2007 XML Template"_ustr;
 
     return OUString();
 }
@@ -316,14 +316,14 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
-    const bool bRepairPackage(rMediaDescriptor.getUnpackedValueOrDefault("RepairPackage", false));
+    const bool bRepairPackage(rMediaDescriptor.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false));
     // try the plain input stream
     Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
     if (!xInputStream.is() || lclIsZipPackage(mxContext, xInputStream, bRepairPackage))
         return xInputStream;
 
     // check if a temporary file is passed in the 'ComponentData' property
-    Reference<XStream> xDecrypted( rMediaDescriptor.getComponentDataEntry( "DecryptedPackage" ), UNO_QUERY );
+    Reference<XStream> xDecrypted( rMediaDescriptor.getComponentDataEntry( u"DecryptedPackage"_ustr ), UNO_QUERY );
     if( xDecrypted.is() )
     {
         Reference<XInputStream> xDecryptedInputStream = xDecrypted->getInputStream();
@@ -367,7 +367,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     // create MemoryStream for unencrypted package - rather not put this in a tempfile
                     Reference<XStream> const xTempStream(
                         mxContext->getServiceManager()->createInstanceWithContext(
-                            "com.sun.star.comp.MemoryStream", mxContext),
+                            u"com.sun.star.comp.MemoryStream"_ustr, mxContext),
                         UNO_QUERY_THROW);
 
                     // if decryption was unsuccessful (corrupted file or any other reason)
@@ -378,7 +378,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     else
                     {
                         // store temp file in media descriptor to keep it alive
-                        rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempStream ) );
+                        rMediaDescriptor.setComponentDataEntry( u"DecryptedPackage"_ustr, Any( xTempStream ) );
 
                         Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
                         if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))
@@ -398,7 +398,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 
 OUString SAL_CALL FilterDetect::getImplementationName()
 {
-    return "com.sun.star.comp.oox.FormatDetector";
+    return u"com.sun.star.comp.oox.FormatDetector"_ustr;
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
@@ -408,7 +408,7 @@ sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 // com.sun.star.document.XExtendedFilterDetection interface -------------------
@@ -430,7 +430,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
         // stream must be a ZIP package
         ZipStorage aZipStorage(mxContext, xInputStream,
-                               aMediaDescriptor.getUnpackedValueOrDefault("RepairPackage", false));
+                               aMediaDescriptor.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false));
         if( aZipStorage.isStorage() )
         {
             // create the fast parser, register the XML namespaces, set document handler
@@ -446,8 +446,8 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
-            aParser.parseStream( aZipStorage, "_rels/.rels" );
-            aParser.parseStream( aZipStorage, "[Content_Types].xml" );
+            aParser.parseStream( aZipStorage, u"_rels/.rels"_ustr );
+            aParser.parseStream( aZipStorage, u"[Content_Types].xml"_ustr );
         }
     }
     catch( const Exception& )

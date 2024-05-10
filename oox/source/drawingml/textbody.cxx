@@ -60,7 +60,7 @@ void TextBody::insertAt(
     TextListStyle aMasterTextStyle(*pMasterTextListStylePtr);
 
     Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
-    float nCharHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
+    float nCharHeight = xPropertySet->getPropertyValue(u"CharHeight"_ustr).get<float>();
     size_t nIndex = 0;
     for (auto const& paragraph : maParagraphs)
     {
@@ -145,7 +145,7 @@ void TextBody::ApplyStyleEmpty(
         Reference< XPropertySet > xProps(xText, UNO_QUERY);
         PropertyMap aioBulletList;
         aioBulletList.setProperty< sal_Int32 >(PROP_LeftMargin, 0); // Init bullets left margin to 0 (no bullets).
-        float nCharHeight = xProps->getPropertyValue("CharHeight").get<float>();
+        float nCharHeight = xProps->getPropertyValue(u"CharHeight"_ustr).get<float>();
         TextParagraphProperties aParaProp;
         aParaProp.apply(*pTextParagraphStyle);
         aParaProp.pushToPropSet(&rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(),

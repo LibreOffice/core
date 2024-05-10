@@ -166,7 +166,7 @@ void PresentationFragmentHandler::importSlideNames(XmlFilterBase& rFilter, const
                 Reference<container::XNamed> xName(rSlidePersist[nPage]->getPage(), UNO_QUERY_THROW);
                 xName->setName(
                     aTitleText
-                    + (nCount == 1 ? OUString("") : " (" + OUString::number(nCount) + ")"));
+                    + (nCount == 1 ? u""_ustr : " (" + OUString::number(nCount) + ")"));
             }
         }
     }
@@ -288,7 +288,7 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         pMasterPersistPtr->createXShapes( rFilter );
 
         uno::Reference< beans::XPropertySet > xSet(pMasterPersistPtr->getPage(), uno::UNO_QUERY_THROW);
-        xSet->setPropertyValue("SlideLayout", Any(pMasterPersistPtr->getLayoutFromValueToken()));
+        xSet->setPropertyValue(u"SlideLayout"_ustr, Any(pMasterPersistPtr->getLayoutFromValueToken()));
 
         oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
         if (pTheme)
@@ -346,7 +346,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                     comphelper::makePropertyValue(
                         "ppt/theme/theme" + OUString::number(nThemeIdx) + ".xml", aCurrentTheme),
                     // store DOM fragment for SmartArt re-generation
-                    comphelper::makePropertyValue("OOXTheme", pThemePtr->getFragment())
+                    comphelper::makePropertyValue(u"OOXTheme"_ustr, pThemePtr->getFragment())
                 };
 
                 aThemesHashMap << aTheme;
@@ -483,7 +483,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                       mpTextListStyle );
                 FragmentHandlerRef xCommentAuthorsFragmentHandler(
                     new SlideFragmentHandler( getFilter(),
-                                              "ppt/commentAuthors.xml",
+                                              u"ppt/commentAuthors.xml"_ustr,
                                               pCommentAuthorsPersistPtr,
                                               Slide ) );
 
@@ -520,7 +520,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                     // crash (back() on empty vector is undefined) and losing other
                     // comment data that might be there (author, position, timestamp etc.)
                     pCommentsPersistPtr->getCommentsList().cmLst.back().setText(
-                            comment_handler->getCharVector().empty() ? "" :
+                            comment_handler->getCharVector().empty() ? u""_ustr :
                             comment_handler->getCharVector().back() );
                 }
                 pCommentsPersistPtr->getCommentAuthors().setValues(maAuthorList);
@@ -564,9 +564,9 @@ void PresentationFragmentHandler::finalizeImport()
 
     // writing back the original PageCount of this document, it can be accessed from the XModel
     // via getArgs after the import.
-    rFilterData["OriginalPageCount"] <<= nPageCount;
-    bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault("ImportNotesPages", true);
-    OUString aPageRange = rFilterData.getUnpackedValueOrDefault("PageRange", OUString());
+    rFilterData[u"OriginalPageCount"_ustr] <<= nPageCount;
+    bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault(u"ImportNotesPages"_ustr, true);
+    OUString aPageRange = rFilterData.getUnpackedValueOrDefault(u"PageRange"_ustr, OUString());
 
     if( !aPageRange.getLength() )
     {
@@ -699,18 +699,18 @@ void PresentationFragmentHandler::finalizeImport()
             if (!sAlgorithmName.isEmpty())
             {
                 uno::Sequence<beans::PropertyValue> aResult{
-                    comphelper::makePropertyValue("algorithm-name", sAlgorithmName),
-                    comphelper::makePropertyValue("salt", sSalt),
-                    comphelper::makePropertyValue("iteration-count", nSpinCount),
-                    comphelper::makePropertyValue("hash", sHash)
+                    comphelper::makePropertyValue(u"algorithm-name"_ustr, sAlgorithmName),
+                    comphelper::makePropertyValue(u"salt"_ustr, sSalt),
+                    comphelper::makePropertyValue(u"iteration-count"_ustr, nSpinCount),
+                    comphelper::makePropertyValue(u"hash"_ustr, sHash)
                 };
                 try
                 {
                     uno::Reference<beans::XPropertySet> xDocSettings(
                         getFilter().getModelFactory()->createInstance(
-                            "com.sun.star.document.Settings"),
+                            u"com.sun.star.document.Settings"_ustr),
                         uno::UNO_QUERY);
-                    xDocSettings->setPropertyValue("ModifyPasswordInfo", uno::Any(aResult));
+                    xDocSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, uno::Any(aResult));
                 }
                 catch (const uno::Exception&)
                 {
@@ -734,7 +734,7 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         const int nCount = xMasterSlide->getCount();
 
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-        xSet->setPropertyValue( "Layout", Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+        xSet->setPropertyValue( u"Layout"_ustr, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
 
         while( nCount < xMasterSlide->getCount())
         {
@@ -754,8 +754,8 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     if ( xPropertySet.is() )
     {
         awt::Size& rPageSize( rSlidePersistPtr->isNotesPage() ? maNotesSize : maSlideSize );
-        xPropertySet->setPropertyValue( "Width", Any( rPageSize.Width ) );
-        xPropertySet->setPropertyValue( "Height", Any( rPageSize.Height ) );
+        xPropertySet->setPropertyValue( u"Width"_ustr, Any( rPageSize.Width ) );
+        xPropertySet->setPropertyValue( u"Height"_ustr, Any( rPageSize.Height ) );
 
         oox::ppt::HeaderFooter aHeaderFooter( rSlidePersistPtr->getHeaderFooter() );
         if ( !rSlidePersistPtr->isMasterPage() )
@@ -763,10 +763,10 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         try
         {
             if ( rSlidePersistPtr->isNotesPage() )
-                xPropertySet->setPropertyValue( "IsHeaderVisible", Any( aHeaderFooter.mbHeader ) );
-            xPropertySet->setPropertyValue( "IsFooterVisible", Any( aHeaderFooter.mbFooter ) );
-            xPropertySet->setPropertyValue( "IsDateTimeVisible", Any( aHeaderFooter.mbDateTime ) );
-            xPropertySet->setPropertyValue( "IsPageNumberVisible", Any( aHeaderFooter.mbSlideNumber ) );
+                xPropertySet->setPropertyValue( u"IsHeaderVisible"_ustr, Any( aHeaderFooter.mbHeader ) );
+            xPropertySet->setPropertyValue( u"IsFooterVisible"_ustr, Any( aHeaderFooter.mbFooter ) );
+            xPropertySet->setPropertyValue( u"IsDateTimeVisible"_ustr, Any( aHeaderFooter.mbDateTime ) );
+            xPropertySet->setPropertyValue( u"IsPageNumberVisible"_ustr, Any( aHeaderFooter.mbSlideNumber ) );
         }
         catch( uno::Exception& )
         {

@@ -599,7 +599,7 @@ namespace oox::ppt {
             case AnimationNodeType::SEQ:
             {
                 sal_Int16 nEnum = 0;
-                if( maUserData[ "node-type" ] >>= nEnum )
+                if( maUserData[ u"node-type"_ustr ] >>= nEnum )
                 {
                     if( nEnum == EffectNodeType::MAIN_SEQUENCE )
                     {

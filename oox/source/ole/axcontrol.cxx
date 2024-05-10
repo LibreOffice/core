@@ -208,8 +208,8 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
     {
         Reference< XMultiServiceFactory > xModelFactory( rxDocModel, UNO_QUERY_THROW );
         OUString aServiceName = bRange ?
-            OUString( "com.sun.star.table.CellRangeAddressConversion" ) :
-            OUString( "com.sun.star.table.CellAddressConversion" );
+            u"com.sun.star.table.CellRangeAddressConversion"_ustr :
+            u"com.sun.star.table.CellAddressConversion"_ustr;
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
     catch (const Exception&)
@@ -345,11 +345,11 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         }
 
         // create argument sequence
-        Sequence< Any > aArgs{ Any(NamedValue("BoundCell", Any(aAddress))) };
+        Sequence< Any > aArgs{ Any(NamedValue(u"BoundCell"_ustr, Any(aAddress))) };
 
         // create the CellValueBinding instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), UNO_QUERY_THROW );
+        Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr, aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
     catch (const Exception&)
@@ -376,11 +376,11 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         }
 
         // create argument sequence
-        Sequence< Any > aArgs{ Any(NamedValue("CellRange", Any(aRangeAddr))) };
+        Sequence< Any > aArgs{ Any(NamedValue(u"CellRange"_ustr, Any(aRangeAddr))) };
 
         // create the EntrySource instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments("com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY_THROW );
+        Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments(u"com.sun.star.table.CellRangeListSource"_ustr, aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
     catch (const Exception&)
@@ -593,39 +593,39 @@ OUString ControlModelBase::getServiceName() const
     ApiControlType eCtrlType = getControlType();
     if( mbAwtModel ) switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return "com.sun.star.awt.UnoControlButtonModel";
-        case API_CONTROL_FIXEDTEXT:     return "com.sun.star.awt.UnoControlFixedTextModel";
-        case API_CONTROL_IMAGE:         return "com.sun.star.awt.UnoControlImageControlModel";
-        case API_CONTROL_CHECKBOX:      return "com.sun.star.awt.UnoControlCheckBoxModel";
-        case API_CONTROL_RADIOBUTTON:   return "com.sun.star.form.component.RadioButton";
-        case API_CONTROL_EDIT:          return "com.sun.star.awt.UnoControlEditModel";
-        case API_CONTROL_NUMERIC:       return "com.sun.star.awt.UnoControlNumericFieldModel";
-        case API_CONTROL_LISTBOX:       return "com.sun.star.form.component.ListBox";
-        case API_CONTROL_COMBOBOX:      return "com.sun.star.form.component.ComboBox";
-        case API_CONTROL_SPINBUTTON:    return "com.sun.star.form.component.SpinButton";
-        case API_CONTROL_SCROLLBAR:     return "com.sun.star.form.component.ScrollBar";
-        case API_CONTROL_PROGRESSBAR:   return "com.sun.star.awt.UnoControlProgressBarModel";
-        case API_CONTROL_GROUPBOX:      return "com.sun.star.form.component.GroupBox";
-        case API_CONTROL_FRAME:         return "com.sun.star.awt.UnoFrameModel";
-        case API_CONTROL_PAGE:          return "com.sun.star.awt.UnoPageModel";
-        case API_CONTROL_MULTIPAGE:     return "com.sun.star.awt.UnoMultiPageModel";
-        case API_CONTROL_DIALOG:        return "com.sun.star.awt.UnoControlDialogModel";
+        case API_CONTROL_BUTTON:        return u"com.sun.star.awt.UnoControlButtonModel"_ustr;
+        case API_CONTROL_FIXEDTEXT:     return u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
+        case API_CONTROL_IMAGE:         return u"com.sun.star.awt.UnoControlImageControlModel"_ustr;
+        case API_CONTROL_CHECKBOX:      return u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr;
+        case API_CONTROL_RADIOBUTTON:   return u"com.sun.star.form.component.RadioButton"_ustr;
+        case API_CONTROL_EDIT:          return u"com.sun.star.awt.UnoControlEditModel"_ustr;
+        case API_CONTROL_NUMERIC:       return u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr;
+        case API_CONTROL_LISTBOX:       return u"com.sun.star.form.component.ListBox"_ustr;
+        case API_CONTROL_COMBOBOX:      return u"com.sun.star.form.component.ComboBox"_ustr;
+        case API_CONTROL_SPINBUTTON:    return u"com.sun.star.form.component.SpinButton"_ustr;
+        case API_CONTROL_SCROLLBAR:     return u"com.sun.star.form.component.ScrollBar"_ustr;
+        case API_CONTROL_PROGRESSBAR:   return u"com.sun.star.awt.UnoControlProgressBarModel"_ustr;
+        case API_CONTROL_GROUPBOX:      return u"com.sun.star.form.component.GroupBox"_ustr;
+        case API_CONTROL_FRAME:         return u"com.sun.star.awt.UnoFrameModel"_ustr;
+        case API_CONTROL_PAGE:          return u"com.sun.star.awt.UnoPageModel"_ustr;
+        case API_CONTROL_MULTIPAGE:     return u"com.sun.star.awt.UnoMultiPageModel"_ustr;
+        case API_CONTROL_DIALOG:        return u"com.sun.star.awt.UnoControlDialogModel"_ustr;
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return "com.sun.star.form.component.CommandButton";
-        case API_CONTROL_FIXEDTEXT:     return "com.sun.star.form.component.FixedText";
-        case API_CONTROL_IMAGE:         return "com.sun.star.form.component.DatabaseImageControl";
-        case API_CONTROL_CHECKBOX:      return "com.sun.star.form.component.CheckBox";
-        case API_CONTROL_RADIOBUTTON:   return "com.sun.star.form.component.RadioButton";
-        case API_CONTROL_EDIT:          return "com.sun.star.form.component.TextField";
-        case API_CONTROL_NUMERIC:       return "com.sun.star.form.component.NumericField";
-        case API_CONTROL_LISTBOX:       return "com.sun.star.form.component.ListBox";
-        case API_CONTROL_COMBOBOX:      return "com.sun.star.form.component.ComboBox";
-        case API_CONTROL_SPINBUTTON:    return "com.sun.star.form.component.SpinButton";
-        case API_CONTROL_SCROLLBAR:     return "com.sun.star.form.component.ScrollBar";
-        case API_CONTROL_GROUPBOX:      return "com.sun.star.form.component.GroupBox";
+        case API_CONTROL_BUTTON:        return u"com.sun.star.form.component.CommandButton"_ustr;
+        case API_CONTROL_FIXEDTEXT:     return u"com.sun.star.form.component.FixedText"_ustr;
+        case API_CONTROL_IMAGE:         return u"com.sun.star.form.component.DatabaseImageControl"_ustr;
+        case API_CONTROL_CHECKBOX:      return u"com.sun.star.form.component.CheckBox"_ustr;
+        case API_CONTROL_RADIOBUTTON:   return u"com.sun.star.form.component.RadioButton"_ustr;
+        case API_CONTROL_EDIT:          return u"com.sun.star.form.component.TextField"_ustr;
+        case API_CONTROL_NUMERIC:       return u"com.sun.star.form.component.NumericField"_ustr;
+        case API_CONTROL_LISTBOX:       return u"com.sun.star.form.component.ListBox"_ustr;
+        case API_CONTROL_COMBOBOX:      return u"com.sun.star.form.component.ComboBox"_ustr;
+        case API_CONTROL_SPINBUTTON:    return u"com.sun.star.form.component.SpinButton"_ustr;
+        case API_CONTROL_SCROLLBAR:     return u"com.sun.star.form.component.ScrollBar"_ustr;
+        case API_CONTROL_GROUPBOX:      return u"com.sun.star.form.component.GroupBox"_ustr;
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();
@@ -654,7 +654,7 @@ void ControlModelBase::convertSize( PropertyMap& rPropMap, const ControlConverte
 
 ComCtlModelBase::ComCtlModelBase( sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6,
         sal_uInt16 nVersion ) :
-    maFontData( "Tahoma", 82500 ),
+    maFontData( u"Tahoma"_ustr, 82500 ),
     mnFlags( 0 ),
     mnVersion( nVersion ),
     mnDataPartId5( nDataPartId5 ),
@@ -1569,7 +1569,7 @@ void AxMorphDataModelBase::convertProperties( PropertyMap& rPropMap, const Contr
     {
         // If unspecified, radio buttons autoGroup in the same document/sheet
         // NOTE: form controls should not autoGroup with ActiveX controls - see drawingfragment.cxx
-        OUString sGroupName = !maGroupName.isEmpty() ? maGroupName : "autoGroup_";
+        OUString sGroupName = !maGroupName.isEmpty() ? maGroupName : u"autoGroup_"_ustr;
         rPropMap.setProperty( PROP_GroupName, sGroupName );
     }
     AxFontDataModel::convertProperties( rPropMap, rConv );
@@ -2760,14 +2760,14 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
         try
         {
             Reference< XNameContainer > xFormsNC( mxFormsSupp->getForms(), UNO_SET_THROW );
-            OUString aFormName = "Standard";
+            OUString aFormName = u"Standard"_ustr;
             if( xFormsNC->hasByName( aFormName ) )
             {
                 mxFormIC.set( xFormsNC->getByName( aFormName ), UNO_QUERY_THROW );
             }
             else if( mxModelFactory.is() )
             {
-                Reference< XForm > xForm( mxModelFactory->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY_THROW );
+                Reference< XForm > xForm( mxModelFactory->createInstance( u"com.sun.star.form.component.Form"_ustr ), UNO_QUERY_THROW );
                 xFormsNC->insertByName( aFormName, Any( xForm ) );
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }

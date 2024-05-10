@@ -222,7 +222,7 @@ void CustomShapeProperties::pushToPropSet(
     else
     {
         PropertyMap aPropertyMap;
-        aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
+        aPropertyMap.setProperty( PROP_Type, u"ooxml-non-primitive"_ustr);
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         if( mnTextPreRotateAngle )

@@ -165,19 +165,19 @@ void Drawing::convertAndInsert() const
             Reference< XPropertySet >  aProps( xCtrlModel, UNO_QUERY_THROW );
 
             OUString sName;
-            aProps->getPropertyValue("Name") >>= sName;
+            aProps->getPropertyValue(u"Name"_ustr) >>= sName;
             const ::Point aPoint( xCtrlShape->getPosition().X, xCtrlShape->getPosition().Y );
             const ::Size aSize( xCtrlShape->getSize().Width, xCtrlShape->getSize().Height );
             const tools::Rectangle aRect( aPoint, aSize );
             if ( !sName.isEmpty()
-                 && xModelSI->supportsService("com.sun.star.awt.UnoControlGroupBoxModel") )
+                 && xModelSI->supportsService(u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr) )
             {
                 GroupBoxMap[sName] = aRect;
             }
-            else if ( xModelSI->supportsService("com.sun.star.awt.UnoControlRadioButtonModel") )
+            else if ( xModelSI->supportsService(u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr) )
             {
                 OUString sGroupName;
-                aProps->getPropertyValue("GroupName") >>= sGroupName;
+                aProps->getPropertyValue(u"GroupName"_ustr) >>= sGroupName;
                 // only Form Controls are affected by Group Boxes - see drawingfragment.cxx
                 if ( sGroupName == "autoGroup_formControl" )
                     RadioButtonMap[aProps] = aRect;
@@ -195,7 +195,7 @@ void Drawing::convertAndInsert() const
         {
             if ( BoxItr.second.Contains(RadioItr->second) )
             {
-                RadioItr->first->setPropertyValue("GroupName", aGroup );
+                RadioItr->first->setPropertyValue(u"GroupName"_ustr, aGroup );
                 // If conflict, first created GroupBox wins
                 RadioItr = RadioButtonMap.erase(RadioItr);
             }
@@ -276,12 +276,12 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         else
         {
             Reference< XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
-            xPropSet->setPropertyValue( "HoriOrient", Any( HoriOrientation::NONE ) );
-            xPropSet->setPropertyValue( "VertOrient", Any( VertOrientation::NONE ) );
-            xPropSet->setPropertyValue( "HoriOrientPosition", Any( rShapeRect.X ) );
-            xPropSet->setPropertyValue( "VertOrientPosition", Any( rShapeRect.Y ) );
-            xPropSet->setPropertyValue( "HoriOrientRelation", Any( RelOrientation::FRAME ) );
-            xPropSet->setPropertyValue( "VertOrientRelation", Any( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( u"HoriOrient"_ustr, Any( HoriOrientation::NONE ) );
+            xPropSet->setPropertyValue( u"VertOrient"_ustr, Any( VertOrientation::NONE ) );
+            xPropSet->setPropertyValue( u"HoriOrientPosition"_ustr, Any( rShapeRect.X ) );
+            xPropSet->setPropertyValue( u"VertOrientPosition"_ustr, Any( rShapeRect.Y ) );
+            xPropSet->setPropertyValue( u"HoriOrientRelation"_ustr, Any( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( u"VertOrientRelation"_ustr, Any( RelOrientation::FRAME ) );
         }
         xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     }
@@ -303,7 +303,7 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
         Reference< XControlModel > xCtrlModel( getControlForm().convertAndInsert( rControl, rnCtrlIndex ), UNO_SET_THROW );
 
         // create the control shape
-        xShape = createAndInsertXShape( "com.sun.star.drawing.ControlShape", rxShapes, rShapeRect );
+        xShape = createAndInsertXShape( u"com.sun.star.drawing.ControlShape"_ustr, rxShapes, rShapeRect );
 
         // set the control model at the shape
         Reference< XControlShape >( xShape, UNO_QUERY_THROW )->setControl( xCtrlModel );

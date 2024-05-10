@@ -47,7 +47,7 @@ ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase,
 void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 {
     mpFS = mpFilterBase->openFragmentStreamWithSerializer(
-        rPath, "application/vnd.openxmlformats-officedocument.theme+xml");
+        rPath, u"application/vnd.openxmlformats-officedocument.theme+xml"_ustr);
 
     OUString aThemeName = rTheme.GetName();
 

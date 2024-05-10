@@ -206,7 +206,7 @@ static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>&
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
         css::uno::Reference<css::container::XNameAccess> xNameAccess(
-            xFact->createInstance("com.sun.star.drawing.DashTable"),
+            xFact->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
             css::uno::UNO_QUERY );
         if(xNameAccess.is())
         {
@@ -445,7 +445,7 @@ void DrawingML::WriteSolidFill( const ::Color nColor, const Sequence< PropertyVa
 void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
 {
     // get fill color
-    if ( !GetProperty( rXPropSet, "FillColor" ) )
+    if ( !GetProperty( rXPropSet, u"FillColor"_ustr ) )
         return;
     sal_uInt32 nFillColor = mAny.get<sal_uInt32>();
 
@@ -453,7 +453,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     OUString sColorFillScheme;
     sal_uInt32 nOriginalColor = 0;
     Sequence< PropertyValue > aStyleProperties, aTransformations;
-    if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    if ( GetProperty( rXPropSet, u"InteropGrabBag"_ustr ) )
     {
         Sequence< PropertyValue > aGrabBag;
         mAny >>= aGrabBag;
@@ -471,7 +471,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
 
     sal_Int32 nAlpha = MAX_PERCENT;
-    if( GetProperty( rXPropSet, "FillTransparence" ) )
+    if( GetProperty( rXPropSet, u"FillTransparence"_ustr ) )
     {
         sal_Int32 nTransparency = 0;
         mAny >>= nTransparency;
@@ -485,10 +485,10 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     OUString sFillTransparenceGradientName;
     bool bNeedGradientFill(false);
 
-    if (GetProperty(rXPropSet, "FillTransparenceGradientName")
+    if (GetProperty(rXPropSet, u"FillTransparenceGradientName"_ustr)
         && (mAny >>= sFillTransparenceGradientName)
         && !sFillTransparenceGradientName.isEmpty()
-        && GetProperty(rXPropSet, "FillTransparenceGradient"))
+        && GetProperty(rXPropSet, u"FillTransparenceGradient"_ustr))
     {
         aTransparenceGradient = model::gradient::getFromAny(mAny);
         basegfx::BColor aSingleColor;
@@ -576,9 +576,9 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     }
     // Alpha is actually not contained in maTransformations although possible (as of Mar 2023).
     sal_Int16 nAPITransparency(0);
-    if ((rPropertyName == u"FillComplexColor" && GetProperty(xPropertySet, "FillTransparence"))
-        || (rPropertyName == u"LineComplexColor" && GetProperty(xPropertySet, "LineTransparence"))
-        || (rPropertyName == u"CharComplexColor" && GetProperty(xPropertySet, "CharTransparence")))
+    if ((rPropertyName == u"FillComplexColor" && GetProperty(xPropertySet, u"FillTransparence"_ustr))
+        || (rPropertyName == u"LineComplexColor" && GetProperty(xPropertySet, u"LineTransparence"_ustr))
+        || (rPropertyName == u"CharComplexColor" && GetProperty(xPropertySet, u"CharTransparence"_ustr)))
     {
         mAny >>= nAPITransparency;
     }
@@ -610,7 +610,7 @@ void DrawingML::WriteGradientStop(double fOffset, const basegfx::BColor& rColor,
 
 void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
 {
-    if (!GetProperty(rXPropSet, "FillGradient"))
+    if (!GetProperty(rXPropSet, u"FillGradient"_ustr))
         return;
 
     // use BGradient constructor directly, it will take care of Gradient/Gradient2
@@ -619,7 +619,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     // get InteropGrabBag and search the relevant attributes
     basegfx::BGradient aOriginalGradient;
     Sequence< PropertyValue > aGradientStops;
-    if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    if ( GetProperty( rXPropSet, u"InteropGrabBag"_ustr ) )
     {
         Sequence< PropertyValue > aGrabBag;
         mAny >>= aGrabBag;
@@ -652,16 +652,16 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         double fTransparency(0.0);
         OUString sFillTransparenceGradientName;
 
-        if (GetProperty(rXPropSet, "FillTransparenceGradientName")
+        if (GetProperty(rXPropSet, u"FillTransparenceGradientName"_ustr)
             && (mAny >>= sFillTransparenceGradientName)
             && !sFillTransparenceGradientName.isEmpty()
-            && GetProperty(rXPropSet, "FillTransparenceGradient"))
+            && GetProperty(rXPropSet, u"FillTransparenceGradient"_ustr))
         {
             // TransparenceGradient is only used when name is not empty
             aTransparenceGradient = model::gradient::getFromAny(mAny);
             pTransparenceGradient = &aTransparenceGradient;
         }
-        else if (GetProperty(rXPropSet, "FillTransparence"))
+        else if (GetProperty(rXPropSet, u"FillTransparence"_ustr))
         {
             // no longer create PseudoTransparencyGradient, use new API of
             // WriteGradientFill to express fix transparency
@@ -674,7 +674,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         // tdf#155852 The gradient might wrongly have StepCount==0, as the draw:gradient-step-count
         // attribute in ODF does not belong to the gradient definition but is an attribute in
         // the graphic style of the shape.
-        if (GetProperty(rXPropSet, "FillGradientStepCount"))
+        if (GetProperty(rXPropSet, u"FillGradientStepCount"_ustr))
         {
             sal_Int16 nStepCount = 0;
             mAny >>= nStepCount;
@@ -945,10 +945,10 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
 void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
-    if (GetProperty(rXPropSet, "LineStyle"))
+    if (GetProperty(rXPropSet, u"LineStyle"_ustr))
         mAny >>= aLineStyle;
 
-    const LineCap aLineCap = GetProperty(rXPropSet, "LineCap") ? mAny.get<drawing::LineCap>() : LineCap_BUTT;
+    const LineCap aLineCap = GetProperty(rXPropSet, u"LineCap"_ustr) ? mAny.get<drawing::LineCap>() : LineCap_BUTT;
 
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nEmuLineWidth = 0;
@@ -975,7 +975,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     drawing::LineStyle aStyleLineStyle(drawing::LineStyle_NONE);
     drawing::LineJoint aStyleLineJoint(drawing::LineJoint_NONE);
 
-    if (GetProperty(rXPropSet, "InteropGrabBag"))
+    if (GetProperty(rXPropSet, u"InteropGrabBag"_ustr))
     {
         Sequence<PropertyValue> aGrabBag;
         mAny >>= aGrabBag;
@@ -1008,7 +1008,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
     }
 
-    if (GetProperty(rXPropSet, "LineWidth"))
+    if (GetProperty(rXPropSet, u"LineWidth"_ustr))
         mAny >>= nLineWidth;
 
     switch (aLineStyle)
@@ -1017,13 +1017,13 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             bNoFill = true;
             break;
         case drawing::LineStyle_DASH:
-            if (GetProperty(rXPropSet, "LineDash"))
+            if (GetProperty(rXPropSet, u"LineDash"_ustr))
             {
                 aLineDash = mAny.get<drawing::LineDash>();
                 //this query is good for shapes, but in the case of charts it returns 0 values
                 if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 0) {
                     OUString aLineDashName;
-                    if (GetProperty(rXPropSet, "LineDashName"))
+                    if (GetProperty(rXPropSet, u"LineDashName"_ustr))
                         mAny >>= aLineDashName;
                     if (!aLineDashName.isEmpty() && xModel) {
                         css::uno::Any aAny = getLineDash(xModel, aLineDashName);
@@ -1035,7 +1035,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             {
                 //export the linestyle of chart wall (plot area) and chart page
                 OUString aLineDashName;
-                if (GetProperty(rXPropSet, "LineDashName"))
+                if (GetProperty(rXPropSet, u"LineDashName"_ustr))
                     mAny >>= aLineDashName;
                 if (!aLineDashName.isEmpty() && xModel) {
                     css::uno::Any aAny = getLineDash(xModel, aLineDashName);
@@ -1054,12 +1054,12 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             [[fallthrough]];
         case drawing::LineStyle_SOLID:
         default:
-            if (GetProperty(rXPropSet, "LineColor"))
+            if (GetProperty(rXPropSet, u"LineColor"_ustr))
             {
                 nColor = ::Color(ColorTransparency, mAny.get<sal_uInt32>() & 0xffffff);
                 bColorSet = true;
             }
-            if (GetProperty(rXPropSet, "LineTransparence"))
+            if (GetProperty(rXPropSet, u"LineTransparence"_ustr))
             {
                 nColorAlpha = MAX_PERCENT - (mAny.get<sal_Int16>() * PER_PERCENT);
             }
@@ -1241,7 +1241,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
     }
 
-    if (!bNoFill && nLineWidth > 1 && GetProperty(rXPropSet, "LineJoint"))
+    if (!bNoFill && nLineWidth > 1 && GetProperty(rXPropSet, u"LineJoint"_ustr))
     {
         LineJoint eLineJoint = mAny.get<LineJoint>();
 
@@ -1741,18 +1741,18 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
     sal_Int32 nContrast = 0;
     sal_Int32 nTransparence = 0;
 
-    if (GetProperty(rXPropSet, "AdjustLuminance"))
+    if (GetProperty(rXPropSet, u"AdjustLuminance"_ustr))
         nBright = mAny.get<sal_Int16>();
-    if (GetProperty(rXPropSet, "AdjustContrast"))
+    if (GetProperty(rXPropSet, u"AdjustContrast"_ustr))
         nContrast = mAny.get<sal_Int32>();
     // Used for shapes with picture fill
-    if (GetProperty(rXPropSet, "FillTransparence"))
+    if (GetProperty(rXPropSet, u"FillTransparence"_ustr))
         nTransparence = mAny.get<sal_Int32>();
     // Used for pictures
-    if (nTransparence == 0 && GetProperty(rXPropSet, "Transparency"))
+    if (nTransparence == 0 && GetProperty(rXPropSet, u"Transparency"_ustr))
         nTransparence = static_cast<sal_Int32>(mAny.get<sal_Int16>());
 
-    if (GetProperty(rXPropSet, "GraphicColorMode"))
+    if (GetProperty(rXPropSet, u"GraphicColorMode"_ustr))
     {
         drawing::ColorMode aColorMode;
         mAny >>= aColorMode;
@@ -1821,7 +1821,7 @@ void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const 
                                       css::awt::Size const& rSize)
 {
     BitmapMode eBitmapMode(BitmapMode_NO_REPEAT);
-    if (GetProperty(rXPropSet, "FillBitmapMode"))
+    if (GetProperty(rXPropSet, u"FillBitmapMode"_ustr))
         mAny >>= eBitmapMode;
 
     SAL_INFO("oox.shape", "fill bitmap mode: " << int(eBitmapMode));
@@ -1909,7 +1909,7 @@ void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const 
     {
         WriteXGraphicBlipMode(rXPropSet, rxGraphic, rSize);
     }
-    else if(GetProperty(rXPropSet, "FillBitmapStretch"))
+    else if(GetProperty(rXPropSet, u"FillBitmapStretch"_ustr))
     {
             bool bStretch = mAny.get<bool>();
 
@@ -1923,7 +1923,7 @@ void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const 
 
 void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
 {
-    if ( GetProperty( rXPropSet, "FillHatch" ) )
+    if ( GetProperty( rXPropSet, u"FillHatch"_ustr ) )
     {
         drawing::Hatch aHatch;
         mAny >>= aHatch;
@@ -1936,7 +1936,7 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         mpFS->startElementNS(XML_a, XML_pattFill, XML_prst, GetHatchPattern(rHatch));
 
         sal_Int32 nAlpha = MAX_PERCENT;
-        if (GetProperty(rXPropSet, "FillTransparence"))
+        if (GetProperty(rXPropSet, u"FillTransparence"_ustr))
         {
             sal_Int32 nTransparency = 0;
             mAny >>= nTransparency;
@@ -1949,13 +1949,13 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
 
         ::Color nColor = COL_WHITE;
 
-        if ( GetProperty( rXPropSet, "FillBackground" ) )
+        if ( GetProperty( rXPropSet, u"FillBackground"_ustr ) )
         {
             bool isBackgroundFilled = false;
             mAny >>= isBackgroundFilled;
             if( isBackgroundFilled )
             {
-                if( GetProperty( rXPropSet, "FillColor" ) )
+                if( GetProperty( rXPropSet, u"FillColor"_ustr ) )
                 {
                     mAny >>= nColor;
                 }
@@ -1975,13 +1975,13 @@ void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> c
                                            Size const & rOriginalSize,
                                            MapMode const & rMapMode)
 {
-    if (!GetProperty(rXPropSet, "GraphicCrop"))
+    if (!GetProperty(rXPropSet, u"GraphicCrop"_ustr))
         return;
 
     css::text::GraphicCrop aGraphicCropStruct;
     mAny >>= aGraphicCropStruct;
 
-    if(GetProperty(rXPropSet, "CustomShapeGeometry"))
+    if(GetProperty(rXPropSet, u"CustomShapeGeometry"_ustr))
     {
     // tdf#134210 GraphicCrop property is handled in import filter because of LibreOffice has not core
     // feature. We cropped the bitmap physically and MSO shouldn't crop bitmap one more time. When we
@@ -2030,7 +2030,7 @@ void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const &
     mpFS->startElementNS(XML_a, XML_stretch);
 
     bool bCrop = false;
-    if (GetProperty(rXPropSet, "GraphicCrop"))
+    if (GetProperty(rXPropSet, u"GraphicCrop"_ustr))
     {
         css::text::GraphicCrop aGraphicCropStruct;
         mAny >>= aGraphicCropStruct;
@@ -2110,10 +2110,10 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
                                                                       MapMode(MapUnit::Map100thMM));
     sal_Int32 nSizeX = 0;
     sal_Int32 nOffsetX = 0;
-    if (GetProperty(rXPropSet, "FillBitmapSizeX"))
+    if (GetProperty(rXPropSet, u"FillBitmapSizeX"_ustr))
     {
         mAny >>= nSizeX;
-        if (GetProperty(rXPropSet, "FillBitmapPositionOffsetX"))
+        if (GetProperty(rXPropSet, u"FillBitmapPositionOffsetX"_ustr))
         {
             sal_Int32 nX = (nSizeX != 0) ? nSizeX : aOriginalSize.Width();
             if (nX < 0 && rSize.Width > 0)
@@ -2132,10 +2132,10 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
 
     sal_Int32 nSizeY = 0;
     sal_Int32 nOffsetY = 0;
-    if (GetProperty(rXPropSet, "FillBitmapSizeY"))
+    if (GetProperty(rXPropSet, u"FillBitmapSizeY"_ustr))
     {
         mAny >>= nSizeY;
-        if (GetProperty(rXPropSet, "FillBitmapPositionOffsetY"))
+        if (GetProperty(rXPropSet, u"FillBitmapPositionOffsetY"_ustr))
         {
             sal_Int32 nY = (nSizeY != 0) ? nSizeY : aOriginalSize.Height();
             if (nY < 0 && rSize.Height > 0)
@@ -2168,7 +2168,7 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
     }
 
     OUString sRectanglePoint;
-    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint"))
+    if (GetProperty(rXPropSet, u"FillBitmapRectanglePoint"_ustr))
         sRectanglePoint = lclConvertRectanglePointToToken(*o3tl::doAccess<RectanglePoint>(mAny));
 
     mpFS->singleElementNS(XML_a, XML_tile, XML_tx, OUString::number(nOffsetX), XML_ty,
@@ -2188,7 +2188,7 @@ void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> 
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
                                                                       MapMode(MapUnit::Map100thMM));
     double nSizeX = 0;
-    if (GetProperty(rXPropSet, "FillBitmapSizeX"))
+    if (GetProperty(rXPropSet, u"FillBitmapSizeX"_ustr))
     {
         mAny >>= nSizeX;
         if (nSizeX <= 0)
@@ -2201,7 +2201,7 @@ void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> 
     }
 
     double nSizeY = 0;
-    if (GetProperty(rXPropSet, "FillBitmapSizeY"))
+    if (GetProperty(rXPropSet, u"FillBitmapSizeY"_ustr))
     {
         mAny >>= nSizeY;
         if (nSizeY <= 0)
@@ -2220,7 +2220,7 @@ void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> 
     }
 
     sal_Int32 nL = 0, nT = 0, nR = 0, nB = 0;
-    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint") && rSize.Width != 0 && rSize.Height != 0)
+    if (GetProperty(rXPropSet, u"FillBitmapRectanglePoint"_ustr) && rSize.Width != 0 && rSize.Height != 0)
     {
         sal_Int32 nWidth = (1 - (nSizeX / rSize.Width)) * 100000;
         sal_Int32 nHeight = (1 - (nSizeY / rSize.Height)) * 100000;
@@ -2356,10 +2356,10 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
         uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-        if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
+        if (xPropertySetInfo->hasPropertyByName(u"RotateAngle"_ustr))
         {
             sal_Int32 nTmp;
-            if (xPropertySet->getPropertyValue("RotateAngle") >>= nTmp)
+            if (xPropertySet->getPropertyValue(u"RotateAngle"_ustr) >>= nTmp)
                 nRotation = Degree100(nTmp);
         }
 
@@ -2481,7 +2481,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     {
         nSize = rnCharHeight;
     }
-    else if (GetProperty(rXPropSet, "CharHeight"))
+    else if (GetProperty(rXPropSet, u"CharHeight"_ustr))
     {
         nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
         if ( nElement == XML_rPr || nElement == XML_defRPr )
@@ -2491,7 +2491,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if (GetProperty(rXPropSet, "CharKerning"))
+    if (GetProperty(rXPropSet, u"CharKerning"_ustr))
         nCharKerning = static_cast<sal_Int32>(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
@@ -2501,15 +2501,15 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     **/
     nCharKerning = toTextSpacingPoint(nCharKerning);
 
-    if ((bComplex && GetProperty(rXPropSet, "CharWeightComplex"))
-        || GetProperty(rXPropSet, "CharWeight"))
+    if ((bComplex && GetProperty(rXPropSet, u"CharWeightComplex"_ustr))
+        || GetProperty(rXPropSet, u"CharWeight"_ustr))
     {
         if ( *o3tl::doAccess<float>(mAny) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
     }
 
-    if ((bComplex && GetProperty(rXPropSet, "CharPostureComplex"))
-        || GetProperty(rXPropSet, "CharPosture"))
+    if ((bComplex && GetProperty(rXPropSet, u"CharPostureComplex"_ustr))
+        || GetProperty(rXPropSet, u"CharPosture"_ustr))
         switch ( *o3tl::doAccess<awt::FontSlant>(mAny) )
         {
             case awt::FontSlant_OBLIQUE :
@@ -2520,9 +2520,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 break;
         }
 
-    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharUnderline", eState)
+    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, u"CharUnderline"_ustr, eState)
          && eState == beans::PropertyState_DIRECT_VALUE)
-        || GetProperty(rXPropSet, "CharUnderline"))
+        || GetProperty(rXPropSet, u"CharUnderline"_ustr))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -2580,9 +2580,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharStrikeout", eState)
+    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, u"CharStrikeout"_ustr, eState)
          && eState == beans::PropertyState_DIRECT_VALUE)
-        || GetProperty(rXPropSet, "CharStrikeout"))
+        || GetProperty(rXPropSet, u"CharStrikeout"_ustr))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -2612,11 +2612,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     switch(nScriptType)
     {
         case css::i18n::ScriptType::ASIAN:
-            bLang = GetProperty(rXPropSet, "CharLocaleAsian"); break;
+            bLang = GetProperty(rXPropSet, u"CharLocaleAsian"_ustr); break;
         case css::i18n::ScriptType::COMPLEX:
-            bLang = GetProperty(rXPropSet, "CharLocaleComplex"); break;
+            bLang = GetProperty(rXPropSet, u"CharLocaleComplex"_ustr); break;
         default:
-            bLang = GetProperty(rXPropSet, "CharLocale"); break;
+            bLang = GetProperty(rXPropSet, u"CharLocale"_ustr); break;
     }
 
     if (bLang)
@@ -2628,11 +2628,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             usLanguage = aLanguageTag.getBcp47MS();
     }
 
-    if (GetPropertyAndState(rXPropSet, rXPropState, "CharEscapement", eState)
+    if (GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapement"_ustr, eState)
         && eState == beans::PropertyState_DIRECT_VALUE)
         mAny >>= nCharEscapement;
 
-    if (GetPropertyAndState(rXPropSet, rXPropState, "CharEscapementHeight", eState)
+    if (GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapementHeight"_ustr, eState)
         && eState == beans::PropertyState_DIRECT_VALUE)
         mAny >>= nCharEscapementHeight;
 
@@ -2658,7 +2658,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         nSize = (nSize / 0.58);
     }
 
-    if (GetProperty(rXPropSet, "CharCaseMap"))
+    if (GetProperty(rXPropSet, u"CharCaseMap"_ustr))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -2688,31 +2688,31 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     if (IsFontworkShape(rXShapePropSet))
     {
         WriteOutline(rXShapePropSet);
-        WriteBlipOrNormalFill(rXShapePropSet, "Graphic");
+        WriteBlipOrNormalFill(rXShapePropSet, u"Graphic"_ustr);
         WriteShapeEffects(rXShapePropSet);
     }
     else
     {
         // mso doesn't like text color to be placed after typeface
-        if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharColor", eState)
+        if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, u"CharColor"_ustr, eState)
             && eState == beans::PropertyState_DIRECT_VALUE)
-            || GetProperty(rXPropSet, "CharColor"))
+            || GetProperty(rXPropSet, u"CharColor"_ustr))
         {
             ::Color color( ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny) );
             SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
 
             // WriteSolidFill() handles MAX_PERCENT as "no transparency".
             sal_Int32 nTransparency = MAX_PERCENT;
-            if (rXPropSet->getPropertySetInfo()->hasPropertyByName("CharTransparence"))
+            if (rXPropSet->getPropertySetInfo()->hasPropertyByName(u"CharTransparence"_ustr))
             {
-                rXPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
+                rXPropSet->getPropertyValue(u"CharTransparence"_ustr) >>= nTransparency;
                 // UNO scale is 0..100, OOXML scale is 0..100000; also UNO tracks transparency, OOXML
                 // tracks opacity.
                 nTransparency = MAX_PERCENT - (nTransparency * PER_PERCENT);
             }
 
             bool bContoured = false;
-            if (GetProperty(rXPropSet, "CharContoured"))
+            if (GetProperty(rXPropSet, u"CharContoured"_ustr))
                 bContoured = *o3tl::doAccess<bool>(mAny);
 
             // tdf#127696 If the CharContoured is true, then the text color is white and the outline color is the CharColor.
@@ -2748,9 +2748,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
                 bool bIsTextBackgroundDark = mbIsBackgroundDark;
-                if (rXShapePropSet.is() && GetProperty(rXShapePropSet, "FillStyle")
+                if (rXShapePropSet.is() && GetProperty(rXShapePropSet, u"FillStyle"_ustr)
                     && mAny.get<FillStyle>() != FillStyle_NONE
-                    && GetProperty(rXShapePropSet, "FillColor"))
+                    && GetProperty(rXShapePropSet, u"FillColor"_ustr))
                 {
                     ::Color aShapeFillColor(ColorTransparency, mAny.get<sal_uInt32>());
                     bIsTextBackgroundDark = aShapeFillColor.IsDark();
@@ -2768,7 +2768,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     // so make sure this code is only run when exporting to pptx, just in case
     if (GetDocumentType() == DOCUMENT_PPTX)
     {
-        if (GetProperty(rXPropSet, "CharBackColor"))
+        if (GetProperty(rXPropSet, u"CharBackColor"_ustr))
         {
             ::Color color(ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny));
             if( color != COL_AUTO )
@@ -2782,9 +2782,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if (underline
         && ((bCheckDirect
-             && GetPropertyAndState(rXPropSet, rXPropState, "CharUnderlineColor", eState)
+             && GetPropertyAndState(rXPropSet, rXPropState, u"CharUnderlineColor"_ustr, eState)
              && eState == beans::PropertyState_DIRECT_VALUE)
-            || GetProperty(rXPropSet, "CharUnderlineColor")))
+            || GetProperty(rXPropSet, u"CharUnderlineColor"_ustr)))
     {
         ::Color color(ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
@@ -2800,7 +2800,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if (GetProperty(rXPropSet, "CharFontName"))
+    if (GetProperty(rXPropSet, u"CharFontName"_ustr))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -2818,10 +2818,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     }
 
     if ((bComplex
-         && (GetPropertyAndState(rXPropSet, rXPropState, "CharFontNameComplex", eState)
+         && (GetPropertyAndState(rXPropSet, rXPropState, u"CharFontNameComplex"_ustr, eState)
              && eState == beans::PropertyState_DIRECT_VALUE))
         || (!bComplex
-            && (GetPropertyAndState(rXPropSet, rXPropState, "CharFontNameAsian", eState)
+            && (GetPropertyAndState(rXPropSet, rXPropState, u"CharFontNameAsian"_ustr, eState)
                 && eState == beans::PropertyState_DIRECT_VALUE)))
     {
         const char* const pitch = nullptr;
@@ -2842,14 +2842,14 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     if( bIsField )
     {
         Reference< XTextField > rXTextField;
-        if (GetProperty(rXPropSet, "TextField"))
+        if (GetProperty(rXPropSet, u"TextField"_ustr))
             mAny >>= rXTextField;
         if( rXTextField.is() )
             rXPropSet.set( rXTextField, UNO_QUERY );
     }
 
     // field properties starts here
-    if (GetProperty(rXPropSet, "URL"))
+    if (GetProperty(rXPropSet, u"URL"_ustr))
     {
         OUString sURL;
 
@@ -2890,7 +2890,7 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     OUString aFieldType, aFieldValue;
 
-    if (GetProperty(rXPropSet, "TextPortionType"))
+    if (GetProperty(rXPropSet, u"TextPortionType"_ustr))
     {
         aFieldType = *o3tl::doAccess<OUString>(mAny);
         SAL_INFO("oox.shape", "field type: " << aFieldType);
@@ -2899,7 +2899,7 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
     if( aFieldType == "TextField" )
     {
         Reference< XTextField > rXTextField;
-        if (GetProperty(rXPropSet, "TextField"))
+        if (GetProperty(rXPropSet, u"TextField"_ustr))
             mAny >>= rXTextField;
         if( rXTextField.is() )
         {
@@ -2923,7 +2923,7 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 else if( aFieldKind == "URL" )
                 {
                     bIsURLField = true;
-                    if (GetProperty(rXPropSet, "Representation"))
+                    if (GetProperty(rXPropSet, u"Representation"_ustr))
                         mAny >>= aFieldValue;
 
                 }
@@ -3034,13 +3034,13 @@ OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeForm
     {
         if (aTimeField == "datetime11" || aTimeField == "datetime13")
             // only datetime format that has Date and HH:MM:SS
-            return "datetime9"; // dd/mm/yyyy H:MM:SS
+            return u"datetime9"_ustr; // dd/mm/yyyy H:MM:SS
         else
             // only datetime format that has Date and HH:MM
-            return "datetime8"; // dd/mm/yyyy H:MM
+            return u"datetime8"_ustr; // dd/mm/yyyy H:MM
     }
     else
-        return "";
+        return u""_ustr;
 }
 
 void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
@@ -3049,15 +3049,15 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     sal_Int16 nLevel = -1;
-    if (GetProperty(rXPropSet, "NumberingLevel"))
+    if (GetProperty(rXPropSet, u"NumberingLevel"_ustr))
         mAny >>= nLevel;
 
     bool bNumberingIsNumber = true;
-    if (GetProperty(rXPropSet, "NumberingIsNumber"))
+    if (GetProperty(rXPropSet, u"NumberingIsNumber"_ustr))
         mAny >>= bNumberingIsNumber;
 
     float nFontSize = -1;
-    if (GetProperty(rXPropSet, "CharHeight"))
+    if (GetProperty(rXPropSet, u"CharHeight"_ustr))
         mAny >>= nFontSize;
 
     bool bIsURLField = false;
@@ -3079,7 +3079,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
         try
         {
-            if( !xPropSet.is() || !( xPropSet->getPropertyValue( "PlaceholderText" ) >>= sText ) )
+            if( !xPropSet.is() || !( xPropSet->getPropertyValue( u"PlaceholderText"_ustr ) >>= sText ) )
                 return;
             if( sText.isEmpty() )
                 return;
@@ -3161,7 +3161,7 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
         case SVX_NUM_ARABIC :
         {
             if (sPrefixSuffix.isEmpty())
-                return "arabicPlain";
+                return u"arabicPlain"_ustr;
             else
                 return "arabic" + sPrefixSuffix;
         }
@@ -3174,7 +3174,7 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
 
 void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
 {
-    if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
+    if (nLevel < 0 || !GetProperty(rXPropSet, u"NumberingRules"_ustr))
         return;
 
     Reference< XIndexAccess > rXIndexAccess;
@@ -3352,7 +3352,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
 {
     css::uno::Sequence<css::style::TabStop> aTabStops;
-    if (GetProperty(rXPropSet, "ParaTabStops"))
+    if (GetProperty(rXPropSet, u"ParaTabStops"_ustr))
         aTabStops = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
 
     if (aTabStops.getLength() > 0)
@@ -3389,14 +3389,14 @@ bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
     if ( rXShape.is() )
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
-        bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
+        bRet = xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr);
     }
     return bRet;
 }
 
 sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName)
 {
-    if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
+    if (nLevel < 0 || !GetProperty(rXPropSet, u"NumberingRules"_ustr))
         return 0;
 
     Reference< XIndexAccess > rXIndexAccess;
@@ -3476,7 +3476,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         return false;
 
     sal_Int16 nLevel = -1;
-    if (GetProperty(rXPropSet, "NumberingLevel"))
+    if (GetProperty(rXPropSet, u"NumberingLevel"_ustr))
         mAny >>= nLevel;
 
     bool bWriteNumbering = true;
@@ -3489,14 +3489,14 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
             bool bNumberingOnThisLevel = false;
             if (nLevel > -1)
             {
-                Reference< XIndexAccess > xNumberingRules(rXPropSet->getPropertyValue("NumberingRules"), UNO_QUERY);
+                Reference< XIndexAccess > xNumberingRules(rXPropSet->getPropertyValue(u"NumberingRules"_ustr), UNO_QUERY);
                 const PropertyValues& rNumRuleOfLevel = xNumberingRules->getByIndex(nLevel).get<PropertyValues>();
                 for (const PropertyValue& rRule : rNumRuleOfLevel)
                     if (rRule.Name == "NumberingType" && rRule.Value.hasValue())
                         bNumberingOnThisLevel = rRule.Value.get<sal_uInt16>() != style::NumberingType::NUMBER_NONE;
             }
 
-            const bool bIsNumberingVisible = rXPropSet->getPropertyValue("NumberingIsNumber").get<bool>();
+            const bool bIsNumberingVisible = rXPropSet->getPropertyValue(u"NumberingIsNumber"_ustr).get<bool>();
             const bool bIsLineEmpty = !xParaText->getString().getLength();
 
             bWriteNumbering = !bIsLineEmpty && bIsNumberingVisible && (nLevel != -1);
@@ -3506,13 +3506,13 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     }
 
     sal_Int16 nTmp = sal_Int16(style::ParagraphAdjust_LEFT);
-    if (GetProperty(rXPropSet, "ParaAdjust"))
+    if (GetProperty(rXPropSet, u"ParaAdjust"_ustr))
         mAny >>= nTmp;
     style::ParagraphAdjust nAlignment = static_cast<style::ParagraphAdjust>(nTmp);
 
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
-    if (GetPropertyAndState(rXPropSet, rXPropState, "ParaLineSpacing", eState)
+    if (GetPropertyAndState(rXPropSet, rXPropState, u"ParaLineSpacing"_ustr, eState)
         && (mAny >>= aLineSpacing)
         && (eState == beans::PropertyState_DIRECT_VALUE ||
             // only export if it differs from the default 100% line spacing
@@ -3520,7 +3520,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         bHasLinespacing = true;
 
     bool bRtl = false;
-    if (GetProperty(rXPropSet, "WritingMode"))
+    if (GetProperty(rXPropSet, u"WritingMode"_ustr))
     {
         sal_Int16 nWritingMode;
         if( ( mAny >>= nWritingMode ) && nWritingMode == text::WritingMode2::RL_TB )
@@ -3532,17 +3532,17 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     sal_Int32 nParaLeftMargin = 0;
     sal_Int32 nParaFirstLineIndent = 0;
 
-    if (GetProperty(rXPropSet, "ParaLeftMargin"))
+    if (GetProperty(rXPropSet, u"ParaLeftMargin"_ustr))
         mAny >>= nParaLeftMargin;
-    if (GetProperty(rXPropSet, "ParaFirstLineIndent"))
+    if (GetProperty(rXPropSet, u"ParaFirstLineIndent"_ustr))
         mAny >>= nParaFirstLineIndent;
 
     sal_Int32 nParaTopMargin = 0;
     sal_Int32 nParaBottomMargin = 0;
 
-    if (GetProperty(rXPropSet, "ParaTopMargin"))
+    if (GetProperty(rXPropSet, u"ParaTopMargin"_ustr))
         mAny >>= nParaTopMargin;
-    if (GetProperty(rXPropSet, "ParaBottomMargin"))
+    if (GetProperty(rXPropSet, u"ParaBottomMargin"_ustr))
         mAny >>= nParaBottomMargin;
 
     sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,u"LeftMargin");
@@ -3557,7 +3557,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     }
 
     sal_Int32 nParaDefaultTabSize = 0;
-    if (GetProperty(rXPropSet, "ParaTabStopDefaultDistance"))
+    if (GetProperty(rXPropSet, u"ParaTabStopDefaultDistance"_ustr))
         mAny >>= nParaDefaultTabSize;
 
     if (nParaLeftMargin) // For Paragraph
@@ -3645,8 +3645,8 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
         Reference<XPropertySetInfo> xFirstRunPropSetInfo
             = xFirstRunPropSet->getPropertySetInfo();
 
-        if (xFirstRunPropSetInfo->hasPropertyByName("CharHeight"))
-            fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+        if (xFirstRunPropSetInfo->hasPropertyByName(u"CharHeight"_ustr))
+            fFirstCharHeight = xFirstRunPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();
 
         mpFS->startElementNS(XML_a, XML_lstStyle);
         if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
@@ -3685,9 +3685,9 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                 float fFirstCharHeight = rnCharHeight / 1000.;
                 Reference< XPropertySet > xFirstRunPropSet (run, UNO_QUERY);
                 Reference< XPropertySetInfo > xFirstRunPropSetInfo = xFirstRunPropSet->getPropertySetInfo();
-                if( xFirstRunPropSetInfo->hasPropertyByName("CharHeight") )
+                if( xFirstRunPropSetInfo->hasPropertyByName(u"CharHeight"_ustr) )
                 {
-                    fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+                    fFirstCharHeight = xFirstRunPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();
                     rnCharHeight = 100 * fFirstCharHeight;
                     rbOverridingCharHeight = true;
                 }
@@ -3711,7 +3711,7 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
     if (rXShapePropSet.is())
     {
         Sequence<PropertyValue> aCustomShapeGeometryProps;
-        if (GetProperty(rXShapePropSet, "CustomShapeGeometry"))
+        if (GetProperty(rXShapePropSet, u"CustomShapeGeometry"_ustr))
         {
             mAny >>= aCustomShapeGeometryProps;
             uno::Sequence<beans::PropertyValue> aTextPathSeq;
@@ -3756,13 +3756,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     // top inset looks a bit different compared to ppt export
     // check if something related doesn't work as expected
-    if (GetProperty(rXPropSet, "TextLeftDistance"))
+    if (GetProperty(rXPropSet, u"TextLeftDistance"_ustr))
         mAny >>= nLeft;
-    if (GetProperty(rXPropSet, "TextRightDistance"))
+    if (GetProperty(rXPropSet, u"TextRightDistance"_ustr))
         mAny >>= nRight;
-    if (GetProperty(rXPropSet, "TextUpperDistance"))
+    if (GetProperty(rXPropSet, u"TextUpperDistance"_ustr))
         mAny >>= nTop;
-    if (GetProperty(rXPropSet, "TextLowerDistance"))
+    if (GetProperty(rXPropSet, u"TextLowerDistance"_ustr))
         mAny >>= nBottom;
 
     // Transform the text distance values so they are compatible with OOXML insets
@@ -3793,13 +3793,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     }
 
     std::optional<OString> sWritingMode;
-    if (GetProperty(rXPropSet, "TextWritingMode"))
+    if (GetProperty(rXPropSet, u"TextWritingMode"_ustr))
     {
         WritingMode eMode;
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL )
             sWritingMode = "eaVert";
     }
-    if (GetProperty(rXPropSet, "WritingMode"))
+    if (GetProperty(rXPropSet, u"WritingMode"_ustr))
     {
         sal_Int16 nWritingMode;
         if (mAny >>= nWritingMode)
@@ -3821,12 +3821,12 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
     uno::Sequence<beans::PropertyValue> aTextPathSeq;
     bool bScaleX(false);
-    OUString sShapeType("non-primitive");
+    OUString sShapeType(u"non-primitive"_ustr);
     OUString sMSWordPresetTextWarp;
     sal_Int32 nTextPreRotateAngle = 0; // degree
     std::optional<Degree100> nTextRotateAngleDeg100; // text area rotation
 
-    if (GetProperty(rXPropSet, "CustomShapeGeometry"))
+    if (GetProperty(rXPropSet, u"CustomShapeGeometry"_ustr))
     {
         Sequence< PropertyValue > aProps;
         if ( mAny >>= aProps )
@@ -3869,7 +3869,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 if (xTextFrame)
                 {
                     uno::Reference<beans::XPropertySet> xPropSet(xTextFrame, uno::UNO_QUERY);
-                    auto aAny = xPropSet->getPropertyValue("WritingMode");
+                    auto aAny = xPropSet->getPropertyValue(u"WritingMode"_ustr);
                     sal_Int16 nWritingMode;
                     if (aAny >>= nWritingMode)
                     {
@@ -3901,10 +3901,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     std::optional<OUString> sVertOverflow;
     bool bUpright = false;
     std::optional<OString> isUpright;
-    if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (rXPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
-        rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         for (const auto& aProp : aGrabBag)
         {
             if (aProp.Name == "Upright")
@@ -3949,7 +3949,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (bUpright)
     {
         Degree100 nShapeRotateAngleDeg100(0_deg100);
-        if (GetProperty(rXPropSet, "RotateAngle"))
+        if (GetProperty(rXPropSet, u"RotateAngle"_ustr))
             nShapeRotateAngleDeg100 = Degree100(mAny.get<sal_Int32>());
         // Depending on shape rotation, the import has made 90deg changes to properties
         // "TextPreRotateAngle" and "TextRotateAngle". Revert it.
@@ -4057,10 +4057,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     // LibreOffice has 12 value sets, MS Office only 6. We map them so, that it reverses the
     // 6 mappings from import, and we assign the others approximately.
     TextVerticalAdjust eVerticalAlignment(TextVerticalAdjust_TOP);
-    if (GetProperty(rXPropSet, "TextVerticalAdjust"))
+    if (GetProperty(rXPropSet, u"TextVerticalAdjust"_ustr))
         mAny >>= eVerticalAlignment;
     TextHorizontalAdjust eHorizontalAlignment(TextHorizontalAdjust_CENTER);
-    if (GetProperty(rXPropSet, "TextHorizontalAdjust"))
+    if (GetProperty(rXPropSet, u"TextHorizontalAdjust"_ustr))
         mAny >>= eHorizontalAlignment;
 
     const char* sAnchor = nullptr;
@@ -4095,7 +4095,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     bool bHasWrap = false;
     bool bWrap = false;
     // Only custom shapes obey the TextWordWrap option, normal text always wraps.
-    if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, "TextWordWrap"))
+    if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextWordWrap"_ustr))
     {
         mAny >>= bWrap;
         bHasWrap = true;
@@ -4126,14 +4126,14 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             // TextShape's automatic word wrapping, then we need to set
             // wrapping to square.
             uno::Reference<lang::XServiceInfo> xServiceInfo(rXIface, uno::UNO_QUERY);
-            if ((xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
+            if ((xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.drawing.TextShape"_ustr))
                 || bIsFontworkShape)
                 pWrap = "square";
         }
 
         sal_Int16 nCols = 0;
         sal_Int32 nColSpacing = -1;
-        if (GetProperty(rXPropSet, "TextColumns"))
+        if (GetProperty(rXPropSet, u"TextColumns"_ustr))
         {
             if (css::uno::Reference<css::text::XTextColumns> xCols{ mAny, css::uno::UNO_QUERY })
             {
@@ -4141,19 +4141,19 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 if (css::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
                                                                           css::uno::UNO_QUERY })
                 {
-                    if (GetProperty(xProps, "AutomaticDistance"))
+                    if (GetProperty(xProps, u"AutomaticDistance"_ustr))
                         mAny >>= nColSpacing;
                 }
             }
         }
 
-        if (!sVertOverflow && GetProperty(rXPropSet, "TextClipVerticalOverflow") && mAny.get<bool>())
+        if (!sVertOverflow && GetProperty(rXPropSet, u"TextClipVerticalOverflow"_ustr) && mAny.get<bool>())
         {
             sVertOverflow = "clip";
         }
 
         // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
-        bool bRequireInset = GetProperty(rXPropSet, "IsPresentationObject") && rXPropSet->getPropertyValue("IsPresentationObject").get<bool>();
+        bool bRequireInset = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && rXPropSet->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
 
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
@@ -4256,7 +4256,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
             auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
-            if (pSdrObjCustomShape && GetProperty(rXPropSet, "TextAutoGrowHeight"))
+            if (pSdrObjCustomShape && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
             {
                 mAny >>= bTextAutoGrowHeight;
             }
@@ -4265,7 +4265,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if (GetDocumentType() == DOCUMENT_PPTX)
         {
             TextFitToSizeType eFit = TextFitToSizeType_NONE;
-            if (GetProperty(rXPropSet, "TextFitToSize"))
+            if (GetProperty(rXPropSet, u"TextFitToSize"_ustr))
                 mAny >>= eFit;
 
             if (eFit == TextFitToSizeType_AUTOFIT)
@@ -4300,7 +4300,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             {
                 // tdf#127030: Only custom shapes obey the TextAutoGrowHeight option.
                 bool bTextAutoGrowHeight = false;
-                if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, "TextAutoGrowHeight"))
+                if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
                     mAny >>= bTextAutoGrowHeight;
                 mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
             }
@@ -4440,7 +4440,7 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
 {
     std::map< OString, std::vector<OString> > aRet;
 
-    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-adj-names");
+    OUString aPath(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-adj-names"_ustr);
     rtl::Bootstrap::expandMacros(aPath);
     SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
@@ -4679,7 +4679,7 @@ bool DrawingML::WriteCustomGeometry(
 
     try
     {
-        aAny = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
+        aAny = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
         if ( !aAny.hasValue() )
             return false;
     }
@@ -5314,10 +5314,10 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
     awt::Point aPos = rXShape->getPosition();
     Reference<XPropertySet> xPropertySet(rXShape, UNO_QUERY);
     uno::Reference<XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-    if (xPropertySetInfo->hasPropertyByName("AnchorPosition"))
+    if (xPropertySetInfo->hasPropertyByName(u"AnchorPosition"_ustr))
     {
         awt::Point aAnchorPosition;
-        xPropertySet->getPropertyValue("AnchorPosition") >>= aAnchorPosition;
+        xPropertySet->getPropertyValue(u"AnchorPosition"_ustr) >>= aAnchorPosition;
         aPos.X += aAnchorPosition.X;
         aPos.Y += aAnchorPosition.Y;
     }
@@ -5436,20 +5436,20 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
 
 void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Size& rSize)
 {
-    if ( !GetProperty( xPropSet, "FillStyle" ) )
+    if ( !GetProperty( xPropSet, u"FillStyle"_ustr ) )
         return;
     FillStyle aFillStyle( FillStyle_NONE );
-    xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
+    xPropSet->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle;
 
     // map full transparent background to no fill
     if (aFillStyle == FillStyle_SOLID)
     {
         OUString sFillTransparenceGradientName;
 
-        if (GetProperty(xPropSet, "FillTransparenceGradientName")
+        if (GetProperty(xPropSet, u"FillTransparenceGradientName"_ustr)
             && (mAny >>= sFillTransparenceGradientName)
             && !sFillTransparenceGradientName.isEmpty()
-            && GetProperty(xPropSet, "FillTransparenceGradient"))
+            && GetProperty(xPropSet, u"FillTransparenceGradient"_ustr))
         {
             // check if a fully transparent TransparenceGradient is used
             // use BGradient constructor & tooling here now
@@ -5463,19 +5463,19 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
                 aFillStyle = FillStyle_NONE;
             }
         }
-        else if ( GetProperty( xPropSet, "FillTransparence" ) )
+        else if ( GetProperty( xPropSet, u"FillTransparence"_ustr ) )
         {
             // check if a fully transparent FillTransparence is used
             sal_Int16 nVal = 0;
-            xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
+            xPropSet->getPropertyValue( u"FillTransparence"_ustr ) >>= nVal;
             if ( nVal == 100 )
                 aFillStyle = FillStyle_NONE;
         }
     }
 
     bool bUseBackground(false);
-    if (GetProperty(xPropSet, "FillUseSlideBackground"))
-        xPropSet->getPropertyValue("FillUseSlideBackground") >>= bUseBackground;
+    if (GetProperty(xPropSet, u"FillUseSlideBackground"_ustr))
+        xPropSet->getPropertyValue(u"FillUseSlideBackground"_ustr) >>= bUseBackground;
 
     switch( aFillStyle )
     {
@@ -5486,7 +5486,7 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
         WriteGradientFill( xPropSet );
         break;
     case FillStyle_BITMAP :
-        WriteBlipFill( xPropSet, "FillBitmap", rSize );
+        WriteBlipFill( xPropSet, u"FillBitmap"_ustr, rSize );
         break;
     case FillStyle_HATCH :
         WritePattFill( xPropSet );
@@ -5530,7 +5530,7 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< Proper
 void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
 {
     // check existence of the grab bag
-    if ( !GetProperty( xPropSet, "InteropGrabBag" ) )
+    if ( !GetProperty( xPropSet, u"InteropGrabBag"_ustr ) )
         return;
 
     // extract the relevant properties from the grab bag
@@ -5747,8 +5747,8 @@ static sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
     Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
-    bool bHasInteropGrabBag = rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag");
-    if (bHasInteropGrabBag && GetProperty(rXPropSet, "InteropGrabBag"))
+    bool bHasInteropGrabBag = rXPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr);
+    if (bHasInteropGrabBag && GetProperty(rXPropSet, u"InteropGrabBag"_ustr))
     {
         mAny >>= aGrabBag;
         auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
@@ -5769,16 +5769,16 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
     if( !aEffects.hasElements() )
     {
         bool bHasShadow = false;
-        if( GetProperty( rXPropSet, "Shadow" ) )
+        if( GetProperty( rXPropSet, u"Shadow"_ustr ) )
             mAny >>= bHasShadow;
         bool bHasEffects = bHasShadow;
-        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffectRadius"))
+        if (!bHasEffects && GetProperty(rXPropSet, u"GlowEffectRadius"_ustr))
         {
             sal_Int32 rad = 0;
             mAny >>= rad;
             bHasEffects = rad > 0;
         }
-        if (!bHasEffects && GetProperty(rXPropSet, "SoftEdgeRadius"))
+        if (!bHasEffects && GetProperty(rXPropSet, u"SoftEdgeRadius"_ustr))
         {
             sal_Int32 rad = 0;
             mAny >>= rad;
@@ -5793,21 +5793,21 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             {
                 double dX = +0.0, dY = +0.0;
                 sal_Int32 nBlur =0;
-                rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
-                rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
-                rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
+                rXPropSet->getPropertyValue( u"ShadowXDistance"_ustr ) >>= dX;
+                rXPropSet->getPropertyValue( u"ShadowYDistance"_ustr ) >>= dY;
+                rXPropSet->getPropertyValue( u"ShadowBlur"_ustr ) >>= nBlur;
 
                 Sequence< PropertyValue > aShadowAttribsGrabBag{
-                    comphelper::makePropertyValue("dist", lcl_CalculateDist(dX, dY)),
-                    comphelper::makePropertyValue("dir", lcl_CalculateDir(dX, dY)),
-                    comphelper::makePropertyValue("blurRad", oox::drawingml::convertHmmToEmu(nBlur)),
-                    comphelper::makePropertyValue("rotWithShape", false) //ooxml default is 'true', so must write it
+                    comphelper::makePropertyValue(u"dist"_ustr, lcl_CalculateDist(dX, dY)),
+                    comphelper::makePropertyValue(u"dir"_ustr, lcl_CalculateDir(dX, dY)),
+                    comphelper::makePropertyValue(u"blurRad"_ustr, oox::drawingml::convertHmmToEmu(nBlur)),
+                    comphelper::makePropertyValue(u"rotWithShape"_ustr, false) //ooxml default is 'true', so must write it
                 };
 
                 Sequence< PropertyValue > aShadowGrabBag{
-                    comphelper::makePropertyValue("Attribs", aShadowAttribsGrabBag),
-                    comphelper::makePropertyValue("RgbClr", rXPropSet->getPropertyValue( "ShadowColor" )),
-                    comphelper::makePropertyValue("RgbClrTransparency", rXPropSet->getPropertyValue( "ShadowTransparence" ))
+                    comphelper::makePropertyValue(u"Attribs"_ustr, aShadowAttribsGrabBag),
+                    comphelper::makePropertyValue(u"RgbClr"_ustr, rXPropSet->getPropertyValue( u"ShadowColor"_ustr )),
+                    comphelper::makePropertyValue(u"RgbClrTransparency"_ustr, rXPropSet->getPropertyValue( u"ShadowTransparence"_ustr ))
                 };
 
                 WriteShapeEffect( u"outerShdw", aShadowGrabBag );
@@ -5827,9 +5827,9 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
                 double dX = +0.0, dY = +0.0;
                 sal_Int32 nBlur =0;
-                rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
-                rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
-                rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
+                rXPropSet->getPropertyValue( u"ShadowXDistance"_ustr ) >>= dX;
+                rXPropSet->getPropertyValue( u"ShadowYDistance"_ustr ) >>= dY;
+                rXPropSet->getPropertyValue( u"ShadowBlur"_ustr ) >>= nBlur;
 
 
                 for( auto& rAttribsProp : asNonConstRange(aAttribsProps) )
@@ -5852,11 +5852,11 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             }
             else if( rOuterShdwProp.Name == "RgbClr" )
             {
-                rOuterShdwProp.Value = rXPropSet->getPropertyValue( "ShadowColor" );
+                rOuterShdwProp.Value = rXPropSet->getPropertyValue( u"ShadowColor"_ustr );
             }
             else if( rOuterShdwProp.Name == "RgbClrTransparency" )
             {
-                rOuterShdwProp.Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
+                rOuterShdwProp.Value = rXPropSet->getPropertyValue( u"ShadowTransparence"_ustr );
             }
         }
 
@@ -5894,22 +5894,22 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
 void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 {
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName("GlowEffectRadius"))
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"GlowEffectRadius"_ustr))
     {
         return;
     }
 
     sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue("GlowEffectRadius") >>= nRad;
+    rXPropSet->getPropertyValue(u"GlowEffectRadius"_ustr) >>= nRad;
     if (!nRad)
         return;
 
     Sequence< PropertyValue > aGlowAttribs{ comphelper::makePropertyValue(
-        "rad", oox::drawingml::convertHmmToEmu(nRad)) };
+        u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
     Sequence< PropertyValue > aGlowProps{
-        comphelper::makePropertyValue("Attribs", aGlowAttribs),
-        comphelper::makePropertyValue("RgbClr", rXPropSet->getPropertyValue("GlowEffectColor")),
-        comphelper::makePropertyValue("RgbClrTransparency", rXPropSet->getPropertyValue("GlowEffectTransparency"))
+        comphelper::makePropertyValue(u"Attribs"_ustr, aGlowAttribs),
+        comphelper::makePropertyValue(u"RgbClr"_ustr, rXPropSet->getPropertyValue(u"GlowEffectColor"_ustr)),
+        comphelper::makePropertyValue(u"RgbClrTransparency"_ustr, rXPropSet->getPropertyValue(u"GlowEffectTransparency"_ustr))
     };
     // TODO other stuff like saturation or luminance
 
@@ -5918,19 +5918,19 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 
 void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
 {
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName("SoftEdgeRadius"))
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"SoftEdgeRadius"_ustr))
     {
         return;
     }
 
     sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue("SoftEdgeRadius") >>= nRad;
+    rXPropSet->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRad;
     if (!nRad)
         return;
 
     css::uno::Sequence<css::beans::PropertyValue> aAttribs{ comphelper::makePropertyValue(
-        "rad", oox::drawingml::convertHmmToEmu(nRad)) };
-    css::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue("Attribs",
+        u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
+    css::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(u"Attribs"_ustr,
                                                                                         aAttribs) };
 
     WriteShapeEffect(u"softEdge", aProps);
@@ -5939,7 +5939,7 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
 void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool bIsText )
 {
     // check existence of the grab bag
-    if( !GetProperty( xPropSet, "InteropGrabBag" ) )
+    if( !GetProperty( xPropSet, u"InteropGrabBag"_ustr ) )
         return;
 
     // extract the relevant properties from the grab bag
@@ -6217,7 +6217,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
 
 void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet )
 {
-    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+    if( !GetProperty( rXPropSet, u"InteropGrabBag"_ustr ) )
         return;
 
     PropertyValue aEffect;
@@ -6288,7 +6288,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     sal_Int32 nWdpImageCount = rGraphicExportCache.nextWdpImageCount();
     OUString sFileName = u"media/hdphoto"_ustr + OUString::number(nWdpImageCount) + u".wdp"_ustr;
     OUString sFragment = GetComponentDir() + u"/"_ustr + sFileName;
-    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream(sFragment, "image/vnd.ms-photo");
+    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream(sFragment, u"image/vnd.ms-photo"_ustr);
     xOutStream->writeBytes( rPictureData );
     xOutStream->closeOutput();
 
@@ -6438,7 +6438,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
         // Get the dsp:damaModelExt node from the dom
         uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
-            "http://schemas.microsoft.com/office/drawing/2008/diagram", "dataModelExt");
+            u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
 
         // There must be one element only so get it
         uno::Reference<xml::dom::XNode> node = nodeList->item(0);
@@ -6447,7 +6447,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
 
         // Get the node with the relId attribute and set its new value
-        uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem("relId");
+        uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
         relIdNode->setNodeValue(drawingRelId);
     }
 
@@ -6470,7 +6470,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer.set(dataDom, uno::UNO_QUERY);
     uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
         sDir + "/" + dataFileName,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
     writer->setOutputStream(xDataOutputStream);
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
@@ -6482,7 +6482,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer.set(layoutDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
         sDir + "/" + layoutFileName,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"));
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
 
@@ -6490,7 +6490,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer.set(styleDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
         sDir + "/" + styleFileName,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"));
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
 
@@ -6498,7 +6498,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer.set(colorDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
         sDir + "/" + colorFileName,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"));
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
 
@@ -6508,7 +6508,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
     serializer.set(drawingDom, uno::UNO_QUERY);
     uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + drawingFileName, "application/vnd.ms-office.drawingml.diagramDrawing+xml");
+        sDir + "/" + drawingFileName, u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
     writer->setOutputStream(xDrawingOutputStream);
     serializer->serialize(
         uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),

@@ -367,7 +367,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
 
         if( attribs.hasAttribute( XML_afterEffect ) )
         {
-            aUserData[ "after-effect" ]
+            aUserData[ u"after-effect"_ustr ]
                 <<= attribs.getBool( XML_afterEffect, false );
         }
         aProps[ NP_AUTOREVERSE ] <<= attribs.getBool( XML_autoRev, false );
@@ -485,7 +485,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 nEnum = EffectNodeType::DEFAULT;
                 break;
             }
-            aUserData[ "node-type" ] <<= nEnum;
+            aUserData[ u"node-type"_ustr ] <<= nEnum;
         }
 
         // ST_TLTimeNodePresetClassType
@@ -519,7 +519,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 nEffectPresetClass = 0;
                 break;
             }
-            aUserData[ "preset-class" ] <<= nEffectPresetClass;
+            aUserData[ u"preset-class"_ustr ] <<= nEffectPresetClass;
             if( attribs.hasAttribute( XML_presetID ) )
             {
                 sal_Int32 nPresetId = attribs.getInteger( XML_presetID, 0 );
@@ -527,12 +527,12 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
                     p++;
 
-                aUserData[ "preset-id" ]
+                aUserData[ u"preset-id"_ustr ]
                     <<= OUString::createFromAscii( p->mpStrPresetId );
                 sal_Int32 nPresetSubType = attribs.getInteger( XML_presetSubtype, 0 );
                 if( nPresetSubType )
                 {
-                    aUserData[ "preset-sub-type" ] <<= getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
+                    aUserData[ u"preset-sub-type"_ustr ] <<= getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
                 }
             }
         }

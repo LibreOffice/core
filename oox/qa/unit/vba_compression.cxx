@@ -54,7 +54,7 @@ public:
 private:
     static OUString const & getDebugDirUrl() {
         struct DebugDirUrl {
-            DebugDirUrl() : url("$UserInstallation/debug/") {
+            DebugDirUrl() : url(u"$UserInstallation/debug/"_ustr) {
                 rtl::Bootstrap::expandMacros(url);
                     //TODO: provide an OUString -> OUString expansion function, and which throws on
                     // failure

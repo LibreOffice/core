@@ -702,11 +702,11 @@ bool AgileEngine::encryptEncryptionKey(OUString const & rPassword)
 bool AgileEngine::setupEncryption(OUString const & rPassword)
 {
     if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA1)
-        setupEncryptionParameters({ 100000, 16, 128, 20, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA1") });
+        setupEncryptionParameters({ 100000, 16, 128, 20, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA1"_ustr });
     else if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA384)
-        setupEncryptionParameters({ 100000, 16, 128, 48, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA384") });
+        setupEncryptionParameters({ 100000, 16, 128, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
     else
-        setupEncryptionParameters({ 100000, 16, 256, 64, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA512") });
+        setupEncryptionParameters({ 100000, 16, 256, 64, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA512"_ustr });
 
     return setupEncryptionKey(rPassword);
 }

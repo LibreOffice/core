@@ -132,7 +132,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                         // Try to import as a parent control
                         bool bImportedAsParent = false;
                         OleStorage aStorage( getFilter().getComponentContext(), xStrgStrm, false );
-                        BinaryXInputStream aInStrm( aStorage.openInputStream( "f" ), true );
+                        BinaryXInputStream aInStrm( aStorage.openInputStream( u"f"_ustr ), true );
                         if( !aInStrm.isEof() )
                         {
                             if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )
@@ -144,7 +144,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                         // Import it as a non-parent control
                         if(!bImportedAsParent)
                         {
-                            BinaryXInputStream aInStrm2(aStorage.openInputStream("contents"), true);
+                            BinaryXInputStream aInStrm2(aStorage.openInputStream(u"contents"_ustr), true);
                             if (!aInStrm2.isEof())
                             {
                                 if (ControlModelBase* pModel = mrControl.createModelFromGuid(aClassId))

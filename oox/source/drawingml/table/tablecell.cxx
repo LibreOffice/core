@@ -244,10 +244,10 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
 static void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, const TableCell& rTableCell )
 {
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
-    xPropSet->setPropertyValue( "TextUpperDistance", Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( "TextRightDistance", Any( static_cast< sal_Int32 >( rTableCell.getRightMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( "TextLeftDistance", Any( static_cast< sal_Int32 >( rTableCell.getLeftMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( "TextLowerDistance", Any( static_cast< sal_Int32 >( rTableCell.getBottomMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( u"TextUpperDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( u"TextRightDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getRightMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( u"TextLeftDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getLeftMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( u"TextLowerDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getBottomMargin() / 360 ) ) );
 
     drawing::TextVerticalAdjust eVA;
     switch( rTableCell.getAnchorToken() )
@@ -259,7 +259,7 @@ static void applyTableCellProperties( const Reference < css::table::XCell >& rxC
         default:
         case XML_t:     eVA = drawing::TextVerticalAdjust_TOP; break;
     }
-    xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
+    xPropSet->setPropertyValue( u"TextVerticalAdjust"_ustr, Any( eVA ) );
 }
 
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
@@ -575,7 +575,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
 
     if ( getVertToken() == XML_eaVert )
     {
-        xPropSet->setPropertyValue("TextWritingMode", Any(css::text::WritingMode_TB_RL));
+        xPropSet->setPropertyValue(u"TextWritingMode"_ustr, Any(css::text::WritingMode_TB_RL));
     }
 
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
@@ -596,19 +596,19 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
 
     if ( getVertToken() == XML_vert )
     {
-        xPropSet->setPropertyValue("RotateAngle", Any(short(27000)));
+        xPropSet->setPropertyValue(u"RotateAngle"_ustr, Any(short(27000)));
     }
     else if ( getVertToken() == XML_vert270 )
     {
-        xPropSet->setPropertyValue("RotateAngle", Any(short(9000)));
+        xPropSet->setPropertyValue(u"RotateAngle"_ustr, Any(short(9000)));
     }
     else if ( getVertToken() != XML_horz && getVertToken() != XML_eaVert )
     {
         // put the vert value in the grab bag for roundtrip
         const OUString aTokenName(StaticTokenMap().getUnicodeTokenName(getVertToken()));
         Sequence<PropertyValue> aGrabBag;
-        xPropSet->getPropertyValue("CellInteropGrabBag") >>= aGrabBag;
-        PropertyValue aPropertyValue = comphelper::makePropertyValue("mso-tcPr-vert-value", aTokenName);
+        xPropSet->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aGrabBag;
+        PropertyValue aPropertyValue = comphelper::makePropertyValue(u"mso-tcPr-vert-value"_ustr, aTokenName);
         if (aGrabBag.hasElements())
         {
             sal_Int32 nLength = aGrabBag.getLength();
@@ -619,7 +619,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         {
             aGrabBag = { aPropertyValue };
         }
-        xPropSet->setPropertyValue("CellInteropGrabBag", Any(aGrabBag));
+        xPropSet->setPropertyValue(u"CellInteropGrabBag"_ustr, Any(aGrabBag));
     }
 }
 

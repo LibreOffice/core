@@ -301,7 +301,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
         {
             // Get Target for Type = "officeDocument" from _rels/.rels file
             // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
-            FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxShapeFilterBase, "/"));
+            FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxShapeFilterBase, u"/"_ustr));
             OUString aOfficeDocumentFragmentPath = rFragmentHandlerRef->getFragmentPathFromFirstTypeFromOfficeDoc( u"officeDocument" );
 
             // Get the theme DO NOT  use msRelationFragmentPath for getting theme as for a document there is a single theme in document.xml.rels
@@ -363,13 +363,13 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
         return;
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
-    bool bTextFrame = xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+    bool bTextFrame = xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr);
     bool bTextBox = false;
     if (!bTextFrame)
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxSavedShape, uno::UNO_QUERY);
         if (xPropertySet.is())
-            xPropertySet->getPropertyValue("TextBox") >>= bTextBox;
+            xPropertySet->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
     }
     if (bTextFrame || bTextBox)
         mxWpsContext.clear();
@@ -559,7 +559,7 @@ ShapeContextHandler::getShape()
             basegfx::B2DHomMatrix aMatrix;
             oox::drawingml::ShapePtr xShapePtr( mxChartShapeContext->getShape());
             // See SwXTextDocument::createInstance(), ODF import uses the same hack.
-            xShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
+            xShapePtr->setServiceName(u"com.sun.star.drawing.temporaryForXMLImportOLE2Shape"_ustr);
             xShapePtr->addShape( *mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, xShapePtr->getFillProperties() );
             xResult = xShapePtr->getXShape();
             mxChartShapeContext.clear();

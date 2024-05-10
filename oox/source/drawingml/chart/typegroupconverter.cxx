@@ -286,7 +286,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         if( elem->maSources.has( SeriesModel::CATEGORIES ) )
         {
             SeriesConverter aSeriesConv(*this, *elem);
-            xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
+            xLabeledSeq = aSeriesConv.createCategorySequence( u"categories"_ustr );
             if (xLabeledSeq.is())
                 break;
         }
@@ -311,7 +311,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
                 aSeq.maData[ i ] <<= OUString::number( i + 1 );
         }
         SeriesConverter aSeriesConv( *this,  aModel );
-        xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
+        xLabeledSeq = aSeriesConv.createCategorySequence( u"categories"_ustr );
     }
     return xLabeledSeq;
 }
@@ -383,7 +383,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         if( maTypeInfo.meTypeId == TYPEID_STOCK )
         {
             // create the data series object
-            Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
+            Reference< XDataSeries > xDataSeries( createInstance( u"com.sun.star.chart2.DataSeries"_ustr ), UNO_QUERY );
             Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
             if( xDataSink.is() )
             {

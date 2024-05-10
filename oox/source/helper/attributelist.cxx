@@ -357,7 +357,7 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
 std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
 {
     std::vector<sal_Int32> aValues;
-    OUString sValue = getString(nAttrToken, "");
+    OUString sValue = getString(nAttrToken, u""_ustr);
     sal_Int32 nIndex = 0;
     do
     {

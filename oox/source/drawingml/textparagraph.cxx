@@ -179,7 +179,7 @@ void TextParagraph::insertAt(
 
             // If the shape is Stacked then set Stacked into the TextParagraphProperties
             Reference<XPropertySet> xProps2(xText, UNO_QUERY);
-            sal_Int16 nWritingMode = xProps2->getPropertyValue("WritingMode").get<sal_Int16>();
+            sal_Int16 nWritingMode = xProps2->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>();
             if (nWritingMode == text::WritingMode2::STACKED)
             {
                 aParaProp.getTextParagraphPropertyMap().setProperty(PROP_WritingMode, nWritingMode);
@@ -192,7 +192,7 @@ void TextParagraph::insertAt(
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
         {
-            xProps->setPropertyValue( "NumberingLevel", Any( static_cast< sal_Int16 >( -1 ) ) );
+            xProps->setPropertyValue( u"NumberingLevel"_ustr, Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 
 // FIXME this is causing a lot of disruption (ie does not work). I wonder what to do -- Hub

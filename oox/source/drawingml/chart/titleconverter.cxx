@@ -166,7 +166,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
     try
     {
         // create the title object and set the string data
-        Reference< XTitle > xTitle( createInstance( "com.sun.star.chart2.Title" ), UNO_QUERY_THROW );
+        Reference< XTitle > xTitle( createInstance( u"com.sun.star.chart2.Title"_ustr ), UNO_QUERY_THROW );
         xTitle->setText( aStringSeq );
         rxTitled->setTitleObject( xTitle );
 
@@ -207,7 +207,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         namespace cssc2 = ::com::sun::star::chart2;
 
         // create the legend
-        Reference< XLegend > xLegend( createInstance( "com.sun.star.chart2.Legend" ), UNO_QUERY_THROW );
+        Reference< XLegend > xLegend( createInstance( u"com.sun.star.chart2.Legend"_ustr ), UNO_QUERY_THROW );
         rxDiagram->setLegend( xLegend );
         PropertySet aPropSet( xLegend );
         aPropSet.setProperty( PROP_Show, true );

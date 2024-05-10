@@ -29,7 +29,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 {
     if (rtl_random_getBytes(nullptr, aArray, aSize) != rtl_Random_E_None)
     {
-        throw css::uno::RuntimeException("rtl_random_getBytes failed");
+        throw css::uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
     }
 }
 

@@ -99,7 +99,7 @@ bool DocumentDecryption::readEncryptionInfo()
 
     // Read 0x6DataSpaces/DataSpaceMap
     uno::Reference<io::XInputStream> xDataSpaceMap
-        = mrOleStorage.openInputStream("\006DataSpaces/DataSpaceMap");
+        = mrOleStorage.openInputStream(u"\006DataSpaces/DataSpaceMap"_ustr);
     OUString sDataSpaceName;
 
     if (xDataSpaceMap.is())
@@ -202,7 +202,7 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
 
     // open the required input streams in the encrypted package
     uno::Reference<io::XInputStream> xEncryptedPackage
-        = mrOleStorage.openInputStream("EncryptedPackage");
+        = mrOleStorage.openInputStream(u"EncryptedPackage"_ustr);
 
     // create temporary file for unencrypted package
     uno::Reference<io::XOutputStream> xDecryptedPackage = xDocumentStream->getOutputStream();

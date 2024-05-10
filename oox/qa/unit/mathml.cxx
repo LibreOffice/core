@@ -18,7 +18,7 @@ class OoxMathmlTest : public UnoApiTest
 {
 public:
     OoxMathmlTest()
-        : UnoApiTest("/oox/qa/unit/data/")
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };

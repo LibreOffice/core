@@ -130,8 +130,8 @@ sal_Bool StrongEncryptionDataSpace::setupEncryption(const Sequence<NamedValue>& 
 Sequence<NamedValue> StrongEncryptionDataSpace::createEncryptionData(const OUString& rPassword)
 {
     comphelper::SequenceAsHashMap aEncryptionData;
-    aEncryptionData["OOXPassword"] <<= rPassword;
-    aEncryptionData["CryptoType"] <<= OUString("StrongEncryptionDataSpace");
+    aEncryptionData[u"OOXPassword"_ustr] <<= rPassword;
+    aEncryptionData[u"CryptoType"_ustr] <<= u"StrongEncryptionDataSpace"_ustr;
 
     return aEncryptionData.getAsConstNamedValueList();
 }
@@ -150,7 +150,7 @@ StrongEncryptionDataSpace::encrypt(const Reference<XInputStream>& rxInputStream)
 
     Reference<XOutputStream> xOutputStream(
         mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.io.SequenceOutputStream", mxContext),
+            u"com.sun.star.io.SequenceOutputStream"_ustr, mxContext),
         UNO_QUERY);
 
     mCryptoEngine->encrypt(rxInputStream, xOutputStream, aLength);
@@ -158,11 +158,11 @@ StrongEncryptionDataSpace::encrypt(const Reference<XInputStream>& rxInputStream)
     comphelper::SequenceAsHashMap aStreams;
 
     Reference<XSequenceOutputStream> xEncodedFileSequenceStream(xOutputStream, UNO_QUERY);
-    aStreams["EncryptedPackage"] <<= xEncodedFileSequenceStream->getWrittenBytes();
+    aStreams[u"EncryptedPackage"_ustr] <<= xEncodedFileSequenceStream->getWrittenBytes();
 
     Reference<XOutputStream> aEncryptionInfoStream(
         mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.io.SequenceOutputStream", mxContext),
+            u"com.sun.star.io.SequenceOutputStream"_ustr, mxContext),
         UNO_QUERY);
     BinaryXOutputStream rStream(aEncryptionInfoStream, false);
     mCryptoEngine->writeEncryptionInfo(rStream);
@@ -170,14 +170,14 @@ StrongEncryptionDataSpace::encrypt(const Reference<XInputStream>& rxInputStream)
     Reference<XSequenceOutputStream> aEncryptionInfoSequenceStream(aEncryptionInfoStream,
                                                                    UNO_QUERY);
 
-    aStreams["EncryptionInfo"] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
+    aStreams[u"EncryptionInfo"_ustr] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
 
     return aStreams.getAsConstNamedValueList();
 }
 
 OUString SAL_CALL StrongEncryptionDataSpace::getImplementationName()
 {
-    return "com.sun.star.comp.oox.crypto.StrongEncryptionDataSpace";
+    return u"com.sun.star.comp.oox.crypto.StrongEncryptionDataSpace"_ustr;
 }
 
 sal_Bool SAL_CALL StrongEncryptionDataSpace::supportsService(const OUString& rServiceName)
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL StrongEncryptionDataSpace::supportsService(const OUString& rSe
 
 css::uno::Sequence<OUString> SAL_CALL StrongEncryptionDataSpace::getSupportedServiceNames()
 {
-    Sequence<OUString> aServices{ "com.sun.star.packages.PackageEncryption" };
+    Sequence<OUString> aServices{ u"com.sun.star.packages.PackageEncryption"_ustr };
     return aServices;
 }
 

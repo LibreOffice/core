@@ -96,12 +96,12 @@ constexpr OUStringLiteral gaBitmapUrlNameBase( u"msFillBitmap " );    ///< Base 
 constexpr OUStringLiteral gaHatchNameBase(     u"msFillHatch " );     ///< Base name for all named fill hatches.
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
-    maDashContainer(      rxModelFactory, "com.sun.star.drawing.DashTable" ),
-    maGradientContainer(  rxModelFactory, "com.sun.star.drawing.GradientTable" ),
-    maTransGradContainer( rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
-    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" ),
-    maHatchContainer(     rxModelFactory, "com.sun.star.drawing.HatchTable" )
+    maMarkerContainer(    rxModelFactory, u"com.sun.star.drawing.MarkerTable"_ustr ),
+    maDashContainer(      rxModelFactory, u"com.sun.star.drawing.DashTable"_ustr ),
+    maGradientContainer(  rxModelFactory, u"com.sun.star.drawing.GradientTable"_ustr ),
+    maTransGradContainer( rxModelFactory, u"com.sun.star.drawing.TransparencyGradientTable"_ustr ),
+    maBitmapUrlContainer( rxModelFactory, u"com.sun.star.drawing.BitmapTable"_ustr ),
+    maHatchContainer(     rxModelFactory, u"com.sun.star.drawing.HatchTable"_ustr )
 {
 }
 

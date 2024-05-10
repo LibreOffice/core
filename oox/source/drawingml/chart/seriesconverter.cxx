@@ -84,7 +84,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     if( pTitle )
     {
         TextConverter aTextConv( rParent, *pTitle );
-        xTitleSeq = aTextConv.createDataSequence( "label" );
+        xTitleSeq = aTextConv.createDataSequence( u"label"_ustr );
     }
 
     // create the labeled data sequence, if values or title are present
@@ -384,7 +384,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 {
                     css::uno::Reference< XDataPointCustomLabelField > xCustomLabel = DataPointCustomLabelField::create( xContext );
                     xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE );
-                    xCustomLabel->setString("\n");
+                    xCustomLabel->setString(u"\n"_ustr);
                     aSequenceRange[ nPos++ ] = xCustomLabel;
                 }
             }
@@ -497,7 +497,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
 
     try
     {
-        Reference< XPropertySet > xErrorBar( createInstance( "com.sun.star.chart2.ErrorBar" ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xErrorBar( createInstance( u"com.sun.star.chart2.ErrorBar"_ustr ), UNO_QUERY_THROW );
         PropertySet aBarProp( xErrorBar );
 
         // plus/minus bars
@@ -778,7 +778,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
     // create the data series object
-    Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
+    Reference< XDataSeries > xDataSeries( createInstance( u"com.sun.star.chart2.DataSeries"_ustr ), UNO_QUERY );
     PropertySet aSeriesProp( xDataSeries );
 
     // attach data and title sequences to series
@@ -789,7 +789,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         // create vector of all value sequences
         ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
         // add Y values
-        Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( "values-y" );
+        Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( u"values-y"_ustr );
         if( xYValueSeq.is() )
         {
             aLabeledSeqVec.push_back( xYValueSeq );
@@ -804,13 +804,13 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         // add X values of scatter and bubble charts
         if( !rTypeInfo.mbCategoryAxis )
         {
-            Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( "values-x" );
+            Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( u"values-x"_ustr );
             if( xXValueSeq.is() )
                 aLabeledSeqVec.push_back( xXValueSeq );
             // add size values of bubble charts
             if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
             {
-                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, "values-size", true );
+                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, u"values-size"_ustr, true );
                 if( xSizeValueSeq.is() )
                     aLabeledSeqVec.push_back( xSizeValueSeq );
             }

@@ -89,19 +89,19 @@ void BulletList::setNone( )
 
 void BulletList::setSuffixParenBoth()
 {
-    msNumberingSuffix <<= OUString( ")" );
-    msNumberingPrefix <<= OUString( "(" );
+    msNumberingSuffix <<= u")"_ustr;
+    msNumberingPrefix <<= u"("_ustr;
 }
 
 void BulletList::setSuffixParenRight()
 {
-    msNumberingSuffix <<= OUString( ")" );
+    msNumberingSuffix <<= u")"_ustr;
     msNumberingPrefix <<= OUString();
 }
 
 void BulletList::setSuffixPeriod()
 {
-    msNumberingSuffix <<= OUString( "." );
+    msNumberingSuffix <<= u"."_ustr;
     msNumberingPrefix <<= OUString();
 }
 
@@ -113,7 +113,7 @@ void BulletList::setSuffixNone()
 
 void BulletList::setSuffixMinusRight()
 {
-    msNumberingSuffix <<= OUString( "-" );
+    msNumberingSuffix <<= u"-"_ustr;
     msNumberingPrefix <<= OUString();
 }
 
@@ -535,7 +535,7 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 // debugging pptx import problems.
 void TextParagraphProperties::dump() const
 {
-    Reference< css::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );
+    Reference< css::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( u"com.sun.star.presentation.TitleTextShape"_ustr ), UNO_QUERY );
     Reference< css::text::XText > xText( xShape, UNO_QUERY );
 
     Reference< css::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
@@ -544,7 +544,7 @@ void TextParagraphProperties::dump() const
 
     PropertyMap emptyMap;
 
-    xText->setString( "debug" );
+    xText->setString( u"debug"_ustr );
     Reference< css::text::XTextCursor > xStart = xText->createTextCursor();
     xStart->gotoEnd( true );
     Reference< XPropertySet > xPropSet( xStart, UNO_QUERY );

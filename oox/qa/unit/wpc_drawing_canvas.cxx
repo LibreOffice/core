@@ -39,7 +39,7 @@ class TestWPC : public UnoApiXmlTest
 {
 public:
     TestWPC()
-        : UnoApiXmlTest("/oox/qa/unit/data/")
+        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };
@@ -146,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_BentConnector)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInfo->supportsService("com.sun.star.drawing.ConnectorShape"));
+    CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
     uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(2), uno::UNO_QUERY);
     com::sun::star::drawing::ConnectorType eEdgeKind;
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf104671_Cloud)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInfo->supportsService("com.sun.star.drawing.CustomShape"));
+    CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Shadow)
@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)
     uno::Reference<css::text::XTextFrame> xTextFrame;
     xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
     CPPUNIT_ASSERT(xTextFrame.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("Group"), xTextFrame->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Group"_ustr, xTextFrame->getText()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
@@ -303,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(
         xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     // The string had started with "Inside shape" without fix.
     CPPUNIT_ASSERT(xCellA1->getString().startsWith("Inside table"));
 }
@@ -321,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInfo->supportsService("com.sun.star.drawing.ConnectorShape"));
+    CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
     uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(3), uno::UNO_QUERY);
     com::sun::star::drawing::ConnectorType eEdgeKind;
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
 
     // Make sure the path is OOXML compatible
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    xShapeProps->getPropertyValue("PolyPolygonBezier") >>= aPolyPolygonBezierCoords;
+    xShapeProps->getPropertyValue(u"PolyPolygonBezier"_ustr) >>= aPolyPolygonBezierCoords;
     drawing::PointSequence aPolygon = aPolyPolygonBezierCoords.Coordinates[0];
     // First control point. LO routing would generate point (4372|5584).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5149), aPolygon[1].Y);

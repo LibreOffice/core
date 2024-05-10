@@ -39,8 +39,8 @@ void PresPropsFragmentHandler::finalizeImport()
         getFilter().getModel(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySet> xPresentationProps(
         xPresentationSupplier->getPresentation(), css::uno::UNO_QUERY_THROW);
-    xPresentationProps->setPropertyValue("IsEndless", css::uno::Any(m_bLoop));
-    xPresentationProps->setPropertyValue("IsAutomatic", css::uno::Any(!m_bTiming));
+    xPresentationProps->setPropertyValue(u"IsEndless"_ustr, css::uno::Any(m_bLoop));
+    xPresentationProps->setPropertyValue(u"IsAutomatic"_ustr, css::uno::Any(!m_bTiming));
 
     if (!m_sId.isEmpty())
     {
@@ -49,7 +49,7 @@ void PresPropsFragmentHandler::finalizeImport()
         css::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = XCustPresentationSupplier->getCustomPresentations();
         const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
-        xPresentationProps->setPropertyValue("CustomShow",
+        xPresentationProps->setPropertyValue(u"CustomShow"_ustr,
                                              css::uno::Any(aNameSeq[m_sId.toInt32()]));
     }
 
@@ -60,7 +60,7 @@ void PresPropsFragmentHandler::finalizeImport()
         Reference<drawing::XDrawPage> xDrawPage;
         xDrawPages->getByIndex(m_sSt.toInt32() - 1) >>= xDrawPage;
         Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
-        xPresentationProps->setPropertyValue("FirstPage", uno::Any(xNamed->getName()));
+        xPresentationProps->setPropertyValue(u"FirstPage"_ustr, uno::Any(xNamed->getName()));
     }
 }
 

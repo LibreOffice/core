@@ -127,12 +127,12 @@ void TextEffectsContext::pushAttributeToGrabBag (sal_Int32 aAttributeId, const O
 
 void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
 {
-    mpGrabBagStack->push("attributes");
+    mpGrabBagStack->push(u"attributes"_ustr);
     switch(mnCurrentElement)
     {
         case OOX_TOKEN(w14, glow):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, rad),  "rad",  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, rad),  u"rad"_ustr,  rAttribs);
         }
         break;
         case OOX_TOKEN(w14, srgbClr):
@@ -148,129 +148,129 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
         case OOX_TOKEN(w14, lumOff):
         case OOX_TOKEN(w14, lumMod):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, val),  "val",  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, val),  u"val"_ustr,  rAttribs);
         }
         break;
         case OOX_TOKEN(w14, shadow):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, blurRad),  "blurRad",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, dist),     "dist",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, dir),      "dir",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, sx),       "sx",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, sy),       "sy",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, kx),       "kx",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       "ky",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     "algn",  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, blurRad),  u"blurRad"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, dist),     u"dist"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, dir),      u"dir"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, sx),       u"sx"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, sy),       u"sy"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, kx),       u"kx"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       u"ky"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     u"algn"_ustr,  rAttribs);
         }
         break;
         case OOX_TOKEN(w14, reflection):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, blurRad),  "blurRad",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, stA),      "stA",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, stPos),    "stPos",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, endA),     "endA",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, endPos),   "endPos",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, dist),     "dist",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, dir),      "dir",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, fadeDir),  "fadeDir",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, sx),       "sx",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, sy),       "sy",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, kx),       "kx",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       "ky",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     "algn",  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, blurRad),  u"blurRad"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, stA),      u"stA"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, stPos),    u"stPos"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, endA),     u"endA"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, endPos),   u"endPos"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, dist),     u"dist"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, dir),      u"dir"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, fadeDir),  u"fadeDir"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, sx),       u"sx"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, sy),       u"sy"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, kx),       u"kx"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       u"ky"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     u"algn"_ustr,  rAttribs);
         }
         break;
         case OOX_TOKEN(w14, textOutline):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, w),     "w",   rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, cap),  "cap",  rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, cmpd), "cmpd", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, algn), "algn", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, w),     u"w"_ustr,   rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, cap),  u"cap"_ustr,  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, cmpd), u"cmpd"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, algn), u"algn"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, prstDash):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, val),  "val",  rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, val),  u"val"_ustr,  rAttribs);
         }
         break;
         case OOX_TOKEN(w14, gs):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, pos),  "pos", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, pos),  u"pos"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, lin):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, ang),    "ang", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, scaled), "scaled", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, ang),    u"ang"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, scaled), u"scaled"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, path):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, path), "path", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, path), u"path"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, fillToRect):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, l), "l", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, t), "t", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, r), "r", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, b), "b", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, l), u"l"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, t), u"t"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, r), u"r"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, b), u"b"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, miter):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, lim), "lim", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, lim), u"lim"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, camera):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, prst), "prst", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, prst), u"prst"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, lightRig):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, rig), "rig", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, dir), "dir", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, rig), u"rig"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, dir), u"dir"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, rot):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, lat), "lat", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, lon), "lon", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, rev), "rev", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, lat), u"lat"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, lon), u"lon"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, rev), u"rev"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, props3d):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, extrusionH),   "extrusionH", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, contourW),     "contourW", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, prstMaterial), "prstMaterial", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, extrusionH),   u"extrusionH"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, contourW),     u"contourW"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, prstMaterial), u"prstMaterial"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, bevelT):
         case OOX_TOKEN(w14, bevelB):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, w),    "w", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, h),    "h", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, prst), "prst", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, w),    u"w"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, h),    u"h"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, prst), u"prst"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, ligatures):
         case OOX_TOKEN(w14, numForm):
         case OOX_TOKEN(w14, numSpacing):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, val), "val", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, val), u"val"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, styleSet):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, id), "id", rAttribs);
-            pushAttributeToGrabBag(OOX_TOKEN(w14, val), "val", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, id), u"id"_ustr, rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, val), u"val"_ustr, rAttribs);
         }
         break;
         case OOX_TOKEN(w14, cntxtAlts):
         {
-            pushAttributeToGrabBag(OOX_TOKEN(w14, val), "val", rAttribs);
+            pushAttributeToGrabBag(OOX_TOKEN(w14, val), u"val"_ustr, rAttribs);
         }
         break;
         default:

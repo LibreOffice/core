@@ -34,68 +34,68 @@ OUString Generic3DProperties::getCameraPrstName( sal_Int32 nElement )
 {
     switch( nElement )
     {
-        case XML_legacyObliqueTopLeft:          return "legacyObliqueTopLeft";
-        case XML_legacyObliqueTop:              return "legacyObliqueTop";
-        case XML_legacyObliqueTopRight:         return "legacyObliqueTopRight";
-        case XML_legacyObliqueLeft:             return "legacyObliqueLeft";
-        case XML_legacyObliqueFront:            return "legacyObliqueFront";
-        case XML_legacyObliqueRight:            return "legacyObliqueRight";
-        case XML_legacyObliqueBottomLeft:       return "legacyObliqueBottomLeft";
-        case XML_legacyObliqueBottom:           return "legacyObliqueBottom";
-        case XML_legacyObliqueBottomRight:      return "legacyObliqueBottomRight";
-        case XML_legacyPerspectiveTopLeft:      return "legacyPerspectiveTopLeft";
-        case XML_legacyPerspectiveTop:          return "legacyPerspectiveTop";
-        case XML_legacyPerspectiveTopRight:     return "legacyPerspectiveTopRight";
-        case XML_legacyPerspectiveLeft:         return "legacyPerspectiveLeft";
-        case XML_legacyPerspectiveFront:        return "legacyPerspectiveFront";
-        case XML_legacyPerspectiveRight:        return "legacyPerspectiveRight";
-        case XML_legacyPerspectiveBottomLeft:   return "legacyPerspectiveBottomLeft";
-        case XML_legacyPerspectiveBottom:       return "legacyPerspectiveBottom";
-        case XML_legacyPerspectiveBottomRight:  return "legacyPerspectiveBottomRight";
-        case XML_orthographicFront:             return "orthographicFront";
-        case XML_isometricTopUp:                return "isometricTopUp";
-        case XML_isometricTopDown:              return "isometricTopDown";
-        case XML_isometricBottomUp:             return "isometricBottomUp";
-        case XML_isometricBottomDown:           return "isometricBottomDown";
-        case XML_isometricLeftUp:               return "isometricLeftUp";
-        case XML_isometricLeftDown:             return "isometricLeftDown";
-        case XML_isometricRightUp:              return "isometricRightUp";
-        case XML_isometricRightDown:            return "isometricRightDown";
-        case XML_isometricOffAxis1Left:         return "isometricOffAxis1Left";
-        case XML_isometricOffAxis1Right:        return "isometricOffAxis1Right";
-        case XML_isometricOffAxis1Top:          return "isometricOffAxis1Top";
-        case XML_isometricOffAxis2Left:         return "isometricOffAxis2Left";
-        case XML_isometricOffAxis2Right:        return "isometricOffAxis2Right";
-        case XML_isometricOffAxis2Top:          return "isometricOffAxis2Top";
-        case XML_isometricOffAxis3Left:         return "isometricOffAxis3Left";
-        case XML_isometricOffAxis3Right:        return "isometricOffAxis3Right";
-        case XML_isometricOffAxis3Bottom:       return "isometricOffAxis3Bottom";
-        case XML_isometricOffAxis4Left:         return "isometricOffAxis4Left";
-        case XML_isometricOffAxis4Right:        return "isometricOffAxis4Right";
-        case XML_isometricOffAxis4Bottom:       return "isometricOffAxis4Bottom";
-        case XML_obliqueTopLeft:                return "obliqueTopLeft";
-        case XML_obliqueTop:                    return "obliqueTop";
-        case XML_obliqueTopRight:               return "obliqueTopRight";
-        case XML_obliqueLeft:                   return "obliqueLeft";
-        case XML_obliqueRight:                  return "obliqueRight";
-        case XML_obliqueBottomLeft:             return "obliqueBottomLeft";
-        case XML_obliqueBottom:                 return "obliqueBottom";
-        case XML_obliqueBottomRight:            return "obliqueBottomRight";
-        case XML_perspectiveFront:              return "perspectiveFront";
-        case XML_perspectiveLeft:               return "perspectiveLeft";
-        case XML_perspectiveRight:              return "perspectiveRight";
-        case XML_perspectiveAbove:              return "perspectiveAbove";
-        case XML_perspectiveBelow:              return "perspectiveBelow";
-        case XML_perspectiveAboveLeftFacing:        return "perspectiveAboveLeftFacing";
-        case XML_perspectiveAboveRightFacing:       return "perspectiveAboveRightFacing";
-        case XML_perspectiveContrastingLeftFacing:  return "perspectiveContrastingLeftFacing";
-        case XML_perspectiveContrastingRightFacing: return "perspectiveContrastingRightFacing";
-        case XML_perspectiveHeroicLeftFacing:       return "perspectiveHeroicLeftFacing";
-        case XML_perspectiveHeroicRightFacing:      return "perspectiveHeroicRightFacing";
-        case XML_perspectiveHeroicExtremeLeftFacing:    return "perspectiveHeroicExtremeLeftFacing";
-        case XML_perspectiveHeroicExtremeRightFacing:   return "perspectiveHeroicExtremeRightFacing";
-        case XML_perspectiveRelaxed:                    return "perspectiveRelaxed";
-        case XML_perspectiveRelaxedModerately:          return "perspectiveRelaxedModerately";
+        case XML_legacyObliqueTopLeft:          return u"legacyObliqueTopLeft"_ustr;
+        case XML_legacyObliqueTop:              return u"legacyObliqueTop"_ustr;
+        case XML_legacyObliqueTopRight:         return u"legacyObliqueTopRight"_ustr;
+        case XML_legacyObliqueLeft:             return u"legacyObliqueLeft"_ustr;
+        case XML_legacyObliqueFront:            return u"legacyObliqueFront"_ustr;
+        case XML_legacyObliqueRight:            return u"legacyObliqueRight"_ustr;
+        case XML_legacyObliqueBottomLeft:       return u"legacyObliqueBottomLeft"_ustr;
+        case XML_legacyObliqueBottom:           return u"legacyObliqueBottom"_ustr;
+        case XML_legacyObliqueBottomRight:      return u"legacyObliqueBottomRight"_ustr;
+        case XML_legacyPerspectiveTopLeft:      return u"legacyPerspectiveTopLeft"_ustr;
+        case XML_legacyPerspectiveTop:          return u"legacyPerspectiveTop"_ustr;
+        case XML_legacyPerspectiveTopRight:     return u"legacyPerspectiveTopRight"_ustr;
+        case XML_legacyPerspectiveLeft:         return u"legacyPerspectiveLeft"_ustr;
+        case XML_legacyPerspectiveFront:        return u"legacyPerspectiveFront"_ustr;
+        case XML_legacyPerspectiveRight:        return u"legacyPerspectiveRight"_ustr;
+        case XML_legacyPerspectiveBottomLeft:   return u"legacyPerspectiveBottomLeft"_ustr;
+        case XML_legacyPerspectiveBottom:       return u"legacyPerspectiveBottom"_ustr;
+        case XML_legacyPerspectiveBottomRight:  return u"legacyPerspectiveBottomRight"_ustr;
+        case XML_orthographicFront:             return u"orthographicFront"_ustr;
+        case XML_isometricTopUp:                return u"isometricTopUp"_ustr;
+        case XML_isometricTopDown:              return u"isometricTopDown"_ustr;
+        case XML_isometricBottomUp:             return u"isometricBottomUp"_ustr;
+        case XML_isometricBottomDown:           return u"isometricBottomDown"_ustr;
+        case XML_isometricLeftUp:               return u"isometricLeftUp"_ustr;
+        case XML_isometricLeftDown:             return u"isometricLeftDown"_ustr;
+        case XML_isometricRightUp:              return u"isometricRightUp"_ustr;
+        case XML_isometricRightDown:            return u"isometricRightDown"_ustr;
+        case XML_isometricOffAxis1Left:         return u"isometricOffAxis1Left"_ustr;
+        case XML_isometricOffAxis1Right:        return u"isometricOffAxis1Right"_ustr;
+        case XML_isometricOffAxis1Top:          return u"isometricOffAxis1Top"_ustr;
+        case XML_isometricOffAxis2Left:         return u"isometricOffAxis2Left"_ustr;
+        case XML_isometricOffAxis2Right:        return u"isometricOffAxis2Right"_ustr;
+        case XML_isometricOffAxis2Top:          return u"isometricOffAxis2Top"_ustr;
+        case XML_isometricOffAxis3Left:         return u"isometricOffAxis3Left"_ustr;
+        case XML_isometricOffAxis3Right:        return u"isometricOffAxis3Right"_ustr;
+        case XML_isometricOffAxis3Bottom:       return u"isometricOffAxis3Bottom"_ustr;
+        case XML_isometricOffAxis4Left:         return u"isometricOffAxis4Left"_ustr;
+        case XML_isometricOffAxis4Right:        return u"isometricOffAxis4Right"_ustr;
+        case XML_isometricOffAxis4Bottom:       return u"isometricOffAxis4Bottom"_ustr;
+        case XML_obliqueTopLeft:                return u"obliqueTopLeft"_ustr;
+        case XML_obliqueTop:                    return u"obliqueTop"_ustr;
+        case XML_obliqueTopRight:               return u"obliqueTopRight"_ustr;
+        case XML_obliqueLeft:                   return u"obliqueLeft"_ustr;
+        case XML_obliqueRight:                  return u"obliqueRight"_ustr;
+        case XML_obliqueBottomLeft:             return u"obliqueBottomLeft"_ustr;
+        case XML_obliqueBottom:                 return u"obliqueBottom"_ustr;
+        case XML_obliqueBottomRight:            return u"obliqueBottomRight"_ustr;
+        case XML_perspectiveFront:              return u"perspectiveFront"_ustr;
+        case XML_perspectiveLeft:               return u"perspectiveLeft"_ustr;
+        case XML_perspectiveRight:              return u"perspectiveRight"_ustr;
+        case XML_perspectiveAbove:              return u"perspectiveAbove"_ustr;
+        case XML_perspectiveBelow:              return u"perspectiveBelow"_ustr;
+        case XML_perspectiveAboveLeftFacing:        return u"perspectiveAboveLeftFacing"_ustr;
+        case XML_perspectiveAboveRightFacing:       return u"perspectiveAboveRightFacing"_ustr;
+        case XML_perspectiveContrastingLeftFacing:  return u"perspectiveContrastingLeftFacing"_ustr;
+        case XML_perspectiveContrastingRightFacing: return u"perspectiveContrastingRightFacing"_ustr;
+        case XML_perspectiveHeroicLeftFacing:       return u"perspectiveHeroicLeftFacing"_ustr;
+        case XML_perspectiveHeroicRightFacing:      return u"perspectiveHeroicRightFacing"_ustr;
+        case XML_perspectiveHeroicExtremeLeftFacing:    return u"perspectiveHeroicExtremeLeftFacing"_ustr;
+        case XML_perspectiveHeroicExtremeRightFacing:   return u"perspectiveHeroicExtremeRightFacing"_ustr;
+        case XML_perspectiveRelaxed:                    return u"perspectiveRelaxed"_ustr;
+        case XML_perspectiveRelaxedModerately:          return u"perspectiveRelaxedModerately"_ustr;
     }
     SAL_WARN( "oox.drawingml", "Generic3DProperties::getCameraPrstName - unexpected prst type" );
     return OUString();
@@ -105,33 +105,33 @@ OUString Generic3DProperties::getLightRigName( sal_Int32 nElement )
 {
     switch( nElement )
     {
-        case XML_legacyFlat1:       return "legacyFlat1";
-        case XML_legacyFlat2:       return "legacyFlat2";
-        case XML_legacyFlat3:       return "legacyFlat3";
-        case XML_legacyFlat4:       return "legacyFlat4";
-        case XML_legacyNormal1:     return "legacyNormal1";
-        case XML_legacyNormal2:     return "legacyNormal2";
-        case XML_legacyNormal3:     return "legacyNormal3";
-        case XML_legacyNormal4:     return "legacyNormal4";
-        case XML_legacyHarsh1:      return "legacyHarsh1";
-        case XML_legacyHarsh2:      return "legacyHarsh2";
-        case XML_legacyHarsh3:      return "legacyHarsh3";
-        case XML_legacyHarsh4:      return "legacyHarsh4";
-        case XML_threePt:           return "threePt";
-        case XML_balanced:          return "balanced";
-        case XML_soft:              return "soft";
-        case XML_harsh:             return "harsh";
-        case XML_flood:             return "flood";
-        case XML_contrasting:       return "contrasting";
-        case XML_morning:           return "morning";
-        case XML_sunrise:           return "sunrise";
-        case XML_sunset:            return "sunset";
-        case XML_chilly:            return "chilly";
-        case XML_freezing:          return "freezing";
-        case XML_flat:              return "flat";
-        case XML_twoPt:             return "twoPt";
-        case XML_glow:              return "glow";
-        case XML_brightRoom:        return "brightRoom";
+        case XML_legacyFlat1:       return u"legacyFlat1"_ustr;
+        case XML_legacyFlat2:       return u"legacyFlat2"_ustr;
+        case XML_legacyFlat3:       return u"legacyFlat3"_ustr;
+        case XML_legacyFlat4:       return u"legacyFlat4"_ustr;
+        case XML_legacyNormal1:     return u"legacyNormal1"_ustr;
+        case XML_legacyNormal2:     return u"legacyNormal2"_ustr;
+        case XML_legacyNormal3:     return u"legacyNormal3"_ustr;
+        case XML_legacyNormal4:     return u"legacyNormal4"_ustr;
+        case XML_legacyHarsh1:      return u"legacyHarsh1"_ustr;
+        case XML_legacyHarsh2:      return u"legacyHarsh2"_ustr;
+        case XML_legacyHarsh3:      return u"legacyHarsh3"_ustr;
+        case XML_legacyHarsh4:      return u"legacyHarsh4"_ustr;
+        case XML_threePt:           return u"threePt"_ustr;
+        case XML_balanced:          return u"balanced"_ustr;
+        case XML_soft:              return u"soft"_ustr;
+        case XML_harsh:             return u"harsh"_ustr;
+        case XML_flood:             return u"flood"_ustr;
+        case XML_contrasting:       return u"contrasting"_ustr;
+        case XML_morning:           return u"morning"_ustr;
+        case XML_sunrise:           return u"sunrise"_ustr;
+        case XML_sunset:            return u"sunset"_ustr;
+        case XML_chilly:            return u"chilly"_ustr;
+        case XML_freezing:          return u"freezing"_ustr;
+        case XML_flat:              return u"flat"_ustr;
+        case XML_twoPt:             return u"twoPt"_ustr;
+        case XML_glow:              return u"glow"_ustr;
+        case XML_brightRoom:        return u"brightRoom"_ustr;
     }
     SAL_WARN( "oox.drawingml", "Generic3DProperties::getLightRigName - unexpected token" );
     return OUString();
@@ -141,14 +141,14 @@ OUString Generic3DProperties::getLightRigDirName( sal_Int32 nElement )
 {
     switch( nElement )
     {
-        case XML_tl:    return "tl";
-        case XML_t:     return "t";
-        case XML_tr:    return "tr";
-        case XML_l:     return "l";
-        case XML_r:     return "r";
-        case XML_bl:    return "bl";
-        case XML_b:     return "b";
-        case XML_br:    return "br";
+        case XML_tl:    return u"tl"_ustr;
+        case XML_t:     return u"t"_ustr;
+        case XML_tr:    return u"tr"_ustr;
+        case XML_l:     return u"l"_ustr;
+        case XML_r:     return u"r"_ustr;
+        case XML_bl:    return u"bl"_ustr;
+        case XML_b:     return u"b"_ustr;
+        case XML_br:    return u"br"_ustr;
     }
     SAL_WARN( "oox.drawingml", "Generic3DProperties::getLightRigDirName - unexpected token" );
     return OUString();
@@ -158,18 +158,18 @@ OUString Generic3DProperties::getBevelPresetTypeString( sal_Int32 nType )
 {
     switch (nType)
     {
-        case XML_relaxedInset:  return "relaxedInset";
-        case XML_circle:        return "circle";
-        case XML_slope:         return "slope";
-        case XML_cross:         return "cross";
-        case XML_angle:         return "angle";
-        case XML_softRound:     return "softRound";
-        case XML_convex:        return "convex";
-        case XML_coolSlant:     return "coolSlant";
-        case XML_divot:         return "divot";
-        case XML_riblet:        return "riblet";
-        case XML_hardEdge:      return "hardEdge";
-        case XML_artDeco:       return "artDeco";
+        case XML_relaxedInset:  return u"relaxedInset"_ustr;
+        case XML_circle:        return u"circle"_ustr;
+        case XML_slope:         return u"slope"_ustr;
+        case XML_cross:         return u"cross"_ustr;
+        case XML_angle:         return u"angle"_ustr;
+        case XML_softRound:     return u"softRound"_ustr;
+        case XML_convex:        return u"convex"_ustr;
+        case XML_coolSlant:     return u"coolSlant"_ustr;
+        case XML_divot:         return u"divot"_ustr;
+        case XML_riblet:        return u"riblet"_ustr;
+        case XML_hardEdge:      return u"hardEdge"_ustr;
+        case XML_artDeco:       return u"artDeco"_ustr;
     }
     SAL_WARN( "oox.drawingml", "Generic3DProperties::getBevelPresetTypeString - unexpected token" );
     return OUString();
@@ -179,22 +179,22 @@ OUString Generic3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
 {
     switch (nType)
     {
-        case XML_legacyMatte:       return "legacyMatte";
-        case XML_legacyPlastic:     return "legacyPlastic";
-        case XML_legacyMetal:       return "legacyMetal";
-        case XML_legacyWireframe:   return "legacyWireframe";
-        case XML_matte:             return "matte";
-        case XML_plastic:           return "plastic";
-        case XML_metal:             return "metal";
-        case XML_warmMatte:         return "warmMatte";
-        case XML_translucentPowder: return "translucentPowder";
-        case XML_powder:            return "powder";
-        case XML_dkEdge:            return "dkEdge";
-        case XML_softEdge:          return "softEdge";
-        case XML_clear:             return "clear";
-        case XML_flat:              return "flat";
-        case XML_softmetal:         return "softmetal";
-        case XML_none:              return "none";
+        case XML_legacyMatte:       return u"legacyMatte"_ustr;
+        case XML_legacyPlastic:     return u"legacyPlastic"_ustr;
+        case XML_legacyMetal:       return u"legacyMetal"_ustr;
+        case XML_legacyWireframe:   return u"legacyWireframe"_ustr;
+        case XML_matte:             return u"matte"_ustr;
+        case XML_plastic:           return u"plastic"_ustr;
+        case XML_metal:             return u"metal"_ustr;
+        case XML_warmMatte:         return u"warmMatte"_ustr;
+        case XML_translucentPowder: return u"translucentPowder"_ustr;
+        case XML_powder:            return u"powder"_ustr;
+        case XML_dkEdge:            return u"dkEdge"_ustr;
+        case XML_softEdge:          return u"softEdge"_ustr;
+        case XML_clear:             return u"clear"_ustr;
+        case XML_flat:              return u"flat"_ustr;
+        case XML_softmetal:         return u"softmetal"_ustr;
+        case XML_none:              return u"none"_ustr;
     }
     SAL_WARN( "oox.drawingml", "Generic3DProperties::getPresetMaterialTypeString - unexpected token" );
     return OUString();
@@ -318,12 +318,12 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAtt
     if( sColorScheme.isEmpty() )
     {
         // RGB color and transparency value
-        return { comphelper::makePropertyValue("rgbClr", rColor.getColor( rGraphicHelper, rPhClr )),
-                 comphelper::makePropertyValue("rgbClrTransparency", rColor.getTransparency()) };
+        return { comphelper::makePropertyValue(u"rgbClr"_ustr, rColor.getColor( rGraphicHelper, rPhClr )),
+                 comphelper::makePropertyValue(u"rgbClrTransparency"_ustr, rColor.getTransparency()) };
     }
     // scheme color with name and transformations
-    return { comphelper::makePropertyValue("schemeClr", sColorScheme),
-             comphelper::makePropertyValue("schemeClrTransformations",
+    return { comphelper::makePropertyValue(u"schemeClr"_ustr, sColorScheme),
+             comphelper::makePropertyValue(u"schemeClrTransformations"_ustr,
                                            rColor.getTransformations()) };
 }
 

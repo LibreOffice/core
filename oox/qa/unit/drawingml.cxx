@@ -63,7 +63,7 @@ class OoxDrawingmlTest : public UnoApiTest
 {
 public:
     OoxDrawingmlTest()
-        : UnoApiTest("/oox/qa/unit/data/")
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };
@@ -71,7 +71,7 @@ public:
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {
     loadFromFile(u"transparent-text.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
                                                  uno::UNO_QUERY);
 
     sal_Int16 nTransparency = 0;
-    xPortion->getPropertyValue("CharTransparence") >>= nTransparency;
+    xPortion->getPropertyValue(u"CharTransparence"_ustr) >>= nTransparency;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 75
@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
     loadFromFile(u"tdf131082.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
                                                  uno::UNO_QUERY);
 
     drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
-    XPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+    XPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
 
     // Without the accompanying fix in place, this test would have failed with:
     // with drawing::FillStyle_NONE - 0
@@ -123,10 +123,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
-    aGeoPropMap.getValue("AdjustmentValues") >>= aAdjustmentSeq;
+    aGeoPropMap.getValue(u"AdjustmentValues"_ustr) >>= aAdjustmentSeq;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aAdjustmentSeq.getLength());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 11587
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue("Model"),
+    uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue(u"Model"_ustr),
                                                   uno::UNO_QUERY);
     uno::Reference<chart2::XCoordinateSystemContainer> xDiagram(xModel->getFirstDiagram(),
                                                                 uno::UNO_QUERY);
@@ -159,11 +159,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     uno::Reference<beans::XPropertySet> xDataPoint = xDataSeries->getDataPointByIndex(0);
 
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aLabels;
-    xDataPoint->getPropertyValue("CustomLabelFields") >>= aLabels;
+    xDataPoint->getPropertyValue(u"CustomLabelFields"_ustr) >>= aLabels;
     uno::Reference<beans::XPropertySet> xLabel = aLabels[0];
 
     Color nCharColor;
-    xLabel->getPropertyValue("CharColor") >>= nCharColor;
+    xLabel->getPropertyValue(u"CharColor"_ustr) >>= nCharColor;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16777215
     // - Actual  : -1
@@ -181,10 +181,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Rectangle 4"), xShape->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Rectangle 4"_ustr, xShape->getName());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     awt::Gradient2 aTransparence;
-    xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
+    xShapeProps->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransparence;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16777215 (COL_WHITE)
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     sal_Int16 nParaAdjust = -1;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ParaAdjust"_ustr) >>= nParaAdjust);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 3
@@ -239,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
     // - Expected: 3 (center)
     // - Actual  : 1 (block)
     // i.e. text was center-adjusted, not default-adjusted (~left).
-    CPPUNIT_ASSERT(xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust);
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
 }
 
@@ -256,8 +256,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     sal_Int32 nRotateAngle0;
     sal_Int32 nRotateAngle1;
-    xShapeProps0->getPropertyValue("RotateAngle") >>= nRotateAngle0;
-    xShapeProps1->getPropertyValue("RotateAngle") >>= nRotateAngle1;
+    xShapeProps0->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle0;
+    xShapeProps1->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle1;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 8000
@@ -280,8 +280,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNon
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     sal_Int32 nRotateAngle0;
     sal_Int32 nRotateAngle1;
-    xShapeProps0->getPropertyValue("RotateAngle") >>= nRotateAngle0;
-    xShapeProps1->getPropertyValue("RotateAngle") >>= nRotateAngle1;
+    xShapeProps0->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle0;
+    xShapeProps1->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle1;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 9000
@@ -299,11 +299,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
             xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         bool bShadow = false;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("Shadow") >>= bShadow);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"Shadow"_ustr) >>= bShadow);
 
         CPPUNIT_ASSERT(bShadow);
         Color nColor;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"ShadowColor"_ustr) >>= nColor);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
     };
     loadFromFile(u"table-shadow.pptx");
@@ -311,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     // was lost on import.
     verify(mxComponent);
 
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on export.
@@ -340,7 +340,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     // rectangle of the shape. Error was, that the export uses a path size which included the
     // control points.
     loadFromFile(u"tdf142605_CurveSize.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     auto xPage = xDrawPagesSupplier->getDrawPages()->getByIndex(0);
@@ -354,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     CPPUNIT_ASSERT_EQUAL(u"Bézier curve 1"_ustr, xShapeNamed->getName());
 
     css::awt::Rectangle aBoundRect;
-    xShapeProps->getPropertyValue("BoundRect") >>= aBoundRect;
+    xShapeProps->getPropertyValue(u"BoundRect"_ustr) >>= aBoundRect;
     // Without fix, size was 6262 x 3509, and position was 10037|6790.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8601), aBoundRect.Width, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4601), aBoundRect.Height, 1);
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
     Color nActual{ 0 };
-    xPortion->getPropertyValue("CharColor") >>= nActual;
+    xPortion->getPropertyValue(u"CharColor"_ustr) >>= nActual;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4485828 (0x4472c4)
     // - Actual  : 16711680 (0xff0000)
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
-    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+    xMasterpage->getPropertyValue(u"Theme"_ustr) >>= xTheme;
 
     // We expect the theme to be set on the master page
     CPPUNIT_ASSERT(xTheme.is());
@@ -408,8 +408,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     CPPUNIT_ASSERT(pUnoTheme);
     auto pTheme = pUnoTheme->getTheme();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getColorSet()->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Office Theme"_ustr, pTheme->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Office"_ustr, pTheme->getColorSet()->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
                          pTheme->getColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     // Check the theme colors are as expected
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xPortion->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
@@ -450,19 +450,16 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
 
     // Test if we were able to import the footer shapes with CustomShape service.
     uno::Reference<drawing::XShape> xShapeDateTime(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
-                         xShapeDateTime->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeDateTime->getShapeType());
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.lang.IndexOutOfBoundsException
     // i.e. the shape wasn't on the slide there since it was imported as a property, not a shape.
 
     uno::Reference<drawing::XShape> xShapeFooter(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
-                         xShapeFooter->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeFooter->getShapeType());
 
     uno::Reference<drawing::XShape> xShapeSlideNum(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
-                         xShapeSlideNum->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeSlideNum->getShapeType());
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
@@ -475,13 +472,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCellRange> xTable;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("Model") >>= xTable);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Model"_ustr) >>= xTable);
     uno::Reference<beans::XPropertySet> xA1(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
 
     // check theme color
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xA1->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xA1->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
@@ -494,7 +491,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
     {
         uno::Reference<beans::XPropertySet> xA2(xTable->getCellByPosition(0, 1), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xA2->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xA2->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
@@ -522,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
     {
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
@@ -536,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans[1].mnValue);
         }
 
-        CPPUNIT_ASSERT(xShape->getPropertyValue("LineComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"LineComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
@@ -552,7 +549,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
     {
         uno::Reference<util::XComplexColor> xComplexColor;
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
@@ -562,7 +559,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
         }
 
-        CPPUNIT_ASSERT(xShape->getPropertyValue("LineComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"LineComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
@@ -589,11 +586,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
     // Without the fix the property "TextRotateAngle" does not exist.
-    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find("TextRotateAngle");
+    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find(u"TextRotateAngle"_ustr);
     CPPUNIT_ASSERT(it != aGeoPropMap.end());
     sal_Int32 nAngle;
     // MS 720000 clockwise -> ODF -12deg counter-clockwise
@@ -614,11 +611,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
     // Without the fix the property "TextRotateAngle" does not exist.
-    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find("TextRotateAngle");
+    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find(u"TextRotateAngle"_ustr);
     CPPUNIT_ASSERT(it != aGeoPropMap.end());
     sal_Int32 nAngle;
     // MS 720000 clockwise -> ODF -12deg counter-clockwise
@@ -627,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
 
     // Because writing mode is LR_TB, the property "TextPreRotateAngle" may missing, or in case it
     // exists, its value must be 0. Without fix it had value -12.
-    it = aGeoPropMap.find("TextPreRotateAngle");
+    it = aGeoPropMap.find(u"TextPreRotateAngle"_ustr);
     if (it != aGeoPropMap.end())
     {
         it->second >>= nAngle;
@@ -646,11 +643,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
     // Without the fix width and height of the ViewBox were 0 and thus the shape was not shown.
-    auto aViewBox = aGeoPropMap["ViewBox"].get<css::awt::Rectangle>();
+    auto aViewBox = aGeoPropMap[u"ViewBox"_ustr].get<css::awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Height);
 }
@@ -670,10 +667,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
     // Make sure shape has correct font and local.
     // Without the fix some application defaults were used.
     OUString sFontName;
-    xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
+    xShapeProps->getPropertyValue(u"CharFontNameComplex"_ustr) >>= sFontName;
     CPPUNIT_ASSERT_EQUAL(u"Noto Serif Hebrew"_ustr, sFontName);
     css::lang::Locale aLocal;
-    xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
+    xShapeProps->getPropertyValue(u"CharLocaleComplex"_ustr) >>= aLocal;
     CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocal.Country);
     CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocal.Language);
 }
@@ -693,10 +690,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
     // Make sure shape has correct font and local.
     // Without the fix some application defaults were used.
     OUString sFontName;
-    xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
+    xShapeProps->getPropertyValue(u"CharFontNameComplex"_ustr) >>= sFontName;
     CPPUNIT_ASSERT_EQUAL(u"Noto Serif Hebrew"_ustr, sFontName);
     css::lang::Locale aLocal;
-    xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
+    xShapeProps->getPropertyValue(u"CharLocaleComplex"_ustr) >>= aLocal;
     CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocal.Country);
     CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocal.Language);
 }

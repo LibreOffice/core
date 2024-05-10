@@ -150,8 +150,8 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     // Set attributes in CustomShapeGeometry
     xDefaulter->createCustomShapeDefaults(sFontworkType);
 
-    auto aGeomPropSeq
-        = xSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropSeq = xSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
+                            .get<uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
@@ -1102,25 +1102,25 @@ void lcl_addColorTransformationToGrabBagStack(const model::ComplexColor& rComple
         switch (rColorTransform.meType)
         {
             case model::TransformationType::LumMod:
-                pGrabBagStack->push("lumMod");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addInt32("val", rColorTransform.mnValue * 10);
+                pGrabBagStack->push(u"lumMod"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addInt32(u"val"_ustr, rColorTransform.mnValue * 10);
                 pGrabBagStack->pop();
                 pGrabBagStack->pop();
                 break;
             case model::TransformationType::LumOff:
-                pGrabBagStack->push("lumOff");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addInt32("val", rColorTransform.mnValue * 10);
+                pGrabBagStack->push(u"lumOff"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addInt32(u"val"_ustr, rColorTransform.mnValue * 10);
                 pGrabBagStack->pop();
                 pGrabBagStack->pop();
                 break;
             case model::TransformationType::Alpha:
-                pGrabBagStack->push("alpha");
-                pGrabBagStack->push("attributes");
+                pGrabBagStack->push(u"alpha"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
                 // model::TransformationType::Alpha is designed to be used with a:alpha, which has
                 // opacity. But w14:alpha uses transparency. So convert it here.
-                pGrabBagStack->addInt32("val",
+                pGrabBagStack->addInt32(u"val"_ustr,
                                         oox::drawingml::MAX_PERCENT - rColorTransform.mnValue * 10);
                 pGrabBagStack->pop();
                 pGrabBagStack->pop();
@@ -1185,7 +1185,7 @@ ColorMapType lcl_createColorMapFromShapeProps(
     else
     {
         sal_Int32 nFillColor(0);
-        if (rXPropSetInfo->hasPropertyByName("FillColor"))
+        if (rXPropSetInfo->hasPropertyByName(u"FillColor"_ustr))
             rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
         aSingleColor = ::Color(ColorTransparency, nFillColor).getBColor().clamp();
     }
@@ -1222,8 +1222,8 @@ ColorMapType lcl_createColorMapFromShapeProps(
     // it instead of the color from the color stop.
     GradientStopColor aFixColor;
     bool bUseThemeColor(!rbHasColorGradient
-                        && FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
-                                                                   aFixColor.TTColor));
+                        && FontworkHelpers::getThemeColorFromShape(u"FillComplexColor"_ustr,
+                                                                   rXPropSet, aFixColor.TTColor));
 
     for (auto itC = aColorStops.begin(), itT = aTransStops.begin();
          itC != aColorStops.end() && itT != aTransStops.end(); ++itC, ++itT)
@@ -1269,7 +1269,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     std::unique_ptr<oox::GrabBagStack> pGrabBagStack;
 
     // CharTextFillTextEffect
-    pGrabBagStack.reset(new oox::GrabBagStack("textFill"));
+    pGrabBagStack.reset(new oox::GrabBagStack(u"textFill"_ustr));
     drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
     if (xPropSetInfo->hasPropertyByName(u"FillStyle"_ustr))
         rXPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
@@ -1289,7 +1289,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     {
         case drawing::FillStyle_NONE:
         {
-            pGrabBagStack->appendElement("noFill", uno::Any());
+            pGrabBagStack->appendElement(u"noFill"_ustr, uno::Any());
             break;
         }
         case drawing::FillStyle_GRADIENT:
@@ -1304,27 +1304,27 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             ColorMapType aColorMap = lcl_createColorMapFromShapeProps(
                 rXPropSet, xPropSetInfo, aColorGradient, bHasColorGradient, aTransparenceGradient,
                 bHasTransparenceGradient);
-            pGrabBagStack->push("gradFill");
-            pGrabBagStack->push("gsLst");
+            pGrabBagStack->push(u"gradFill"_ustr);
+            pGrabBagStack->push(u"gsLst"_ustr);
             for (auto it = aColorMap.begin(); it != aColorMap.end(); ++it)
             {
-                pGrabBagStack->push("gs");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addInt32("pos", (*it).first);
+                pGrabBagStack->push(u"gs"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addInt32(u"pos"_ustr, (*it).first);
                 pGrabBagStack->pop();
                 if ((*it).second.TTColor.getThemeColorType() == model::ThemeColorType::Unknown)
                 {
-                    pGrabBagStack->push("srgbClr");
-                    pGrabBagStack->push("attributes");
-                    pGrabBagStack->addString("val", (*it).second.RGBColor.AsRGBHexString());
+                    pGrabBagStack->push(u"srgbClr"_ustr);
+                    pGrabBagStack->push(u"attributes"_ustr);
+                    pGrabBagStack->addString(u"val"_ustr, (*it).second.RGBColor.AsRGBHexString());
                     pGrabBagStack->pop(); // maCurrentElement:'srgbClr', maPropertyList:'attributes'
                 }
                 else
                 {
-                    pGrabBagStack->push("schemeClr");
-                    pGrabBagStack->push("attributes");
+                    pGrabBagStack->push(u"schemeClr"_ustr);
+                    pGrabBagStack->push(u"attributes"_ustr);
                     pGrabBagStack->addString(
-                        "val", lcl_getW14MarkupStringForThemeColor((*it).second.TTColor));
+                        u"val"_ustr, lcl_getW14MarkupStringForThemeColor((*it).second.TTColor));
                     pGrabBagStack->pop();
                     // maCurrentElement:'schemeClr', maPropertyList:'attributes'
                 }
@@ -1354,11 +1354,11 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                     nAngleOOX = ((3600 - aColorGradient.Angle + 900) % 3600) * 6000;
                 else if (bHasTransparenceGradient)
                     nAngleOOX = ((3600 - aTransparenceGradient.Angle + 900) % 3600) * 6000;
-                pGrabBagStack->push("lin");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addInt32("ang", nAngleOOX);
+                pGrabBagStack->push(u"lin"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addInt32(u"ang"_ustr, nAngleOOX);
                 // LibreOffice cannot scale a gradient to the shape size.
-                pGrabBagStack->addString("scaled", "0");
+                pGrabBagStack->addString(u"scaled"_ustr, u"0"_ustr);
             }
             else
             {
@@ -1367,39 +1367,40 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                 // (2) To get the same size of gradient area, the element 'tileRect' is needed, but
                 // that is not available for <w14:textFill> element.
                 // So we can only set a reasonably suitable focus point.
-                pGrabBagStack->push("path");
-                pGrabBagStack->push("attributes");
+                pGrabBagStack->push(u"path"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
                 if (eGradientStyle == awt::GradientStyle_RADIAL
                     || eGradientStyle == awt::GradientStyle_ELLIPTICAL)
-                    pGrabBagStack->addString("path", "circle");
+                    pGrabBagStack->addString(u"path"_ustr, u"circle"_ustr);
                 else
-                    pGrabBagStack->addString("path", "rect");
+                    pGrabBagStack->addString(u"path"_ustr, u"rect"_ustr);
                 pGrabBagStack->pop();
-                pGrabBagStack->push("fillToRect");
-                pGrabBagStack->push("attributes");
+                pGrabBagStack->push(u"fillToRect"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
                 sal_Int32 nLeftPercent
                     = bHasColorGradient ? aColorGradient.XOffset : aTransparenceGradient.XOffset;
                 sal_Int32 nTopPercent
                     = bHasColorGradient ? aColorGradient.YOffset : aTransparenceGradient.YOffset;
-                pGrabBagStack->addInt32("l", nLeftPercent * 1000);
-                pGrabBagStack->addInt32("t", nTopPercent * 1000);
-                pGrabBagStack->addInt32("r", (100 - nLeftPercent) * 1000);
-                pGrabBagStack->addInt32("b", (100 - nTopPercent) * 1000);
+                pGrabBagStack->addInt32(u"l"_ustr, nLeftPercent * 1000);
+                pGrabBagStack->addInt32(u"t"_ustr, nTopPercent * 1000);
+                pGrabBagStack->addInt32(u"r"_ustr, (100 - nLeftPercent) * 1000);
+                pGrabBagStack->addInt32(u"b"_ustr, (100 - nTopPercent) * 1000);
             }
             // all remaining pop() calls are in the final getRootProperty() method
             break;
         }
         case drawing::FillStyle_SOLID:
         {
-            pGrabBagStack->push("solidFill");
+            pGrabBagStack->push(u"solidFill"_ustr);
             model::ComplexColor aComplexColor;
             // It is either "schemeClr" or "srgbClr".
-            if (FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
+            if (FontworkHelpers::getThemeColorFromShape(u"FillComplexColor"_ustr, rXPropSet,
                                                         aComplexColor))
             {
-                pGrabBagStack->push("schemeClr");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aComplexColor));
+                pGrabBagStack->push(u"schemeClr"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addString(u"val"_ustr,
+                                         lcl_getW14MarkupStringForThemeColor(aComplexColor));
                 pGrabBagStack->pop(); // maCurrentElement:'schemeClr', maPropertyList:'attributes'
                 lcl_addColorTransformationToGrabBagStack(aComplexColor, pGrabBagStack);
                 // maCurrentElement:'schemeClr', maPropertyList:'attributes', maybe 'lumMod' and
@@ -1407,13 +1408,13 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             }
             else
             {
-                pGrabBagStack->push("srgbClr");
+                pGrabBagStack->push(u"srgbClr"_ustr);
                 sal_Int32 nFillColor(0);
                 if (xPropSetInfo->hasPropertyByName(u"FillColor"_ustr))
                     rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
-                pGrabBagStack->push("attributes");
+                pGrabBagStack->push(u"attributes"_ustr);
                 ::Color aColor(ColorTransparency, nFillColor);
-                pGrabBagStack->addString("val", aColor.AsRGBHexString());
+                pGrabBagStack->addString(u"val"_ustr, aColor.AsRGBHexString());
                 pGrabBagStack->pop();
                 // maCurrentElement:'srgbClr', maPropertyList:'attributes'
             }
@@ -1423,9 +1424,9 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                 rXPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nFillTransparence;
             if (nFillTransparence != 0)
             {
-                pGrabBagStack->push("alpha");
-                pGrabBagStack->push("attributes");
-                pGrabBagStack->addInt32("val", nFillTransparence * 1000);
+                pGrabBagStack->push(u"alpha"_ustr);
+                pGrabBagStack->push(u"attributes"_ustr);
+                pGrabBagStack->addInt32(u"val"_ustr, nFillTransparence * 1000);
             }
             // all remaining pop() calls are in the final getRootProperty() method
             break;
@@ -1441,15 +1442,15 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     rUpdatePropVec.push_back(aCharTextFillTextEffect);
 
     // CharTextOutlineTextEffect
-    pGrabBagStack.reset(new oox::GrabBagStack("textOutline"));
+    pGrabBagStack.reset(new oox::GrabBagStack(u"textOutline"_ustr));
 
     // attributes
-    pGrabBagStack->push("attributes");
+    pGrabBagStack->push(u"attributes"_ustr);
     // line width
     sal_Int32 nLineWidth(0);
     if (xPropSetInfo->hasPropertyByName(u"LineWidth"_ustr))
         rXPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nLineWidth;
-    pGrabBagStack->addInt32("w", nLineWidth * 360);
+    pGrabBagStack->addInt32(u"w"_ustr, nLineWidth * 360);
     // cap for dashes
     drawing::LineCap eLineCap = drawing::LineCap_BUTT;
     if (xPropSetInfo->hasPropertyByName(u"LineCap"_ustr))
@@ -1459,10 +1460,10 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         sCap = u"rnd"_ustr;
     else if (eLineCap == drawing::LineCap_SQUARE)
         sCap = u"sq"_ustr;
-    pGrabBagStack->addString("cap", sCap);
+    pGrabBagStack->addString(u"cap"_ustr, sCap);
     // LO has no compound lines and always centers the lines
-    pGrabBagStack->addString("cmpd", u"sng"_ustr);
-    pGrabBagStack->addString("alng", u"ctr"_ustr);
+    pGrabBagStack->addString(u"cmpd"_ustr, u"sng"_ustr);
+    pGrabBagStack->addString(u"alng"_ustr, u"ctr"_ustr);
     pGrabBagStack->pop();
     // maCurrentElement:'textOutline', maPropertyList:'attributes'
 
@@ -1474,31 +1475,33 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // implemented in LO. So only 'noFill' and 'solidFill'.
     if (eLineStyle == drawing::LineStyle_NONE)
     {
-        pGrabBagStack->appendElement("noFill", uno::Any());
+        pGrabBagStack->appendElement(u"noFill"_ustr, uno::Any());
     }
     else
     {
-        pGrabBagStack->push("solidFill");
+        pGrabBagStack->push(u"solidFill"_ustr);
         // It is either "schemeClr" or "srgbClr".
         model::ComplexColor aComplexColor;
-        if (FontworkHelpers::getThemeColorFromShape("LineComplexColor", rXPropSet, aComplexColor))
+        if (FontworkHelpers::getThemeColorFromShape(u"LineComplexColor"_ustr, rXPropSet,
+                                                    aComplexColor))
         {
-            pGrabBagStack->push("schemeClr");
-            pGrabBagStack->push("attributes");
-            pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aComplexColor));
+            pGrabBagStack->push(u"schemeClr"_ustr);
+            pGrabBagStack->push(u"attributes"_ustr);
+            pGrabBagStack->addString(u"val"_ustr,
+                                     lcl_getW14MarkupStringForThemeColor(aComplexColor));
             pGrabBagStack->pop();
             lcl_addColorTransformationToGrabBagStack(aComplexColor, pGrabBagStack);
             // maCurrentElement:'schemeClr', maPropertylist:'attributes'
         }
         else // not a theme color
         {
-            pGrabBagStack->push("srgbClr");
-            pGrabBagStack->push("attributes");
+            pGrabBagStack->push(u"srgbClr"_ustr);
+            pGrabBagStack->push(u"attributes"_ustr);
             sal_Int32 nLineColor(0);
             if (xPropSetInfo->hasPropertyByName(u"LineColor"_ustr))
                 rXPropSet->getPropertyValue(u"LineColor"_ustr) >>= nLineColor;
             ::Color aColor(ColorTransparency, nLineColor);
-            pGrabBagStack->addString("val", aColor.AsRGBHexString());
+            pGrabBagStack->addString(u"val"_ustr, aColor.AsRGBHexString());
             pGrabBagStack->pop();
             // maCurrentElement:'srgbClr', maPropertylist:'attributes'
         }
@@ -1508,9 +1511,9 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             rXPropSet->getPropertyValue(u"LineTransparence"_ustr) >>= nLineTransparence;
         if (nLineTransparence != 0)
         {
-            pGrabBagStack->push("alpha");
-            pGrabBagStack->push("attributes");
-            pGrabBagStack->addInt32("val", nLineTransparence * 1000);
+            pGrabBagStack->push(u"alpha"_ustr);
+            pGrabBagStack->push(u"attributes"_ustr);
+            pGrabBagStack->addInt32(u"val"_ustr, nLineTransparence * 1000);
             pGrabBagStack->pop(); // maCurrentElement: 'alpha'
             pGrabBagStack->pop(); // maCurrentElement: 'srgbClr' or 'schemeClr'
         }
@@ -1523,7 +1526,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // prstDash
     if (eLineStyle == drawing::LineStyle_DASH)
     {
-        pGrabBagStack->push("prstDash");
+        pGrabBagStack->push(u"prstDash"_ustr);
         OUString sPrstDash = u"sysDot"_ustr;
         drawing::LineDash aLineDash;
         if (xPropSetInfo->hasPropertyByName(u"LineDash"_ustr)
@@ -1538,8 +1541,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             // ToDo: There may be a named dash style, but that is unlikely for Fontwork shapes. So
             // I skip it for now and use the "sysDot" fallback.
         }
-        pGrabBagStack->push("attributes");
-        pGrabBagStack->addString("val", sPrstDash);
+        pGrabBagStack->push(u"attributes"_ustr);
+        pGrabBagStack->addString(u"val"_ustr, sPrstDash);
         pGrabBagStack->pop(); // maCurrentElement:'prstDash'
         pGrabBagStack->pop(); // maCurrentElement:'textOutline'
     }
@@ -1551,14 +1554,14 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     if (xPropSetInfo->hasPropertyByName(u"LineJoint"_ustr))
         rXPropSet->getPropertyValue(u"LineJoint"_ustr) >>= eLineJoint;
     if (eLineJoint == drawing::LineJoint_NONE || eLineJoint == drawing::LineJoint_BEVEL)
-        pGrabBagStack->appendElement("bevel", uno::Any());
+        pGrabBagStack->appendElement(u"bevel"_ustr, uno::Any());
     else if (eLineJoint == drawing::LineJoint_ROUND)
-        pGrabBagStack->appendElement("round", uno::Any());
+        pGrabBagStack->appendElement(u"round"_ustr, uno::Any());
     else // MITER or deprecated MIDDLE
     {
-        pGrabBagStack->push("miter");
-        pGrabBagStack->push("attributes");
-        pGrabBagStack->addInt32("lim", 0); // As of Feb. 2023 LO cannot render other values.
+        pGrabBagStack->push(u"miter"_ustr);
+        pGrabBagStack->push(u"attributes"_ustr);
+        pGrabBagStack->addInt32(u"lim"_ustr, 0); // As of Feb. 2023 LO cannot render other values.
         pGrabBagStack->pop(); // maCurrentElement:'attributes'
         pGrabBagStack->pop(); // maCurrentElement:'miter'
     }
@@ -1575,7 +1578,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // used for <w:color> element. That is evaluated by applications, which do not understand w14
     // namespace, or if w14:textFill is omitted.
     model::ComplexColor aComplexColor;
-    if (FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet, aComplexColor))
+    if (FontworkHelpers::getThemeColorFromShape(u"FillComplexColor"_ustr, rXPropSet, aComplexColor))
     {
         // CharThemeColor
         beans::PropertyValue aCharThemeColor;
@@ -1653,14 +1656,15 @@ void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
 
             // Now apply the updates to the CharInteropGrabBag of this run
             uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
-            if (xRunPropSetInfo->hasPropertyByName("CharInteropGrabBag"))
-                xRunPropSet->getPropertyValue("CharInteropGrabBag") >>= aCharInteropGrabBagSeq;
+            if (xRunPropSetInfo->hasPropertyByName(u"CharInteropGrabBag"_ustr))
+                xRunPropSet->getPropertyValue(u"CharInteropGrabBag"_ustr)
+                    >>= aCharInteropGrabBagSeq;
             comphelper::SequenceAsHashMap aGrabBagMap(aCharInteropGrabBagSeq);
             for (const auto& rProp : rUpdatePropVec)
             {
                 aGrabBagMap[rProp.Name] = rProp.Value; // [] inserts if not exists
             }
-            xRunPropSet->setPropertyValue("CharInteropGrabBag",
+            xRunPropSet->setPropertyValue(u"CharInteropGrabBag"_ustr,
                                           uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
         }
     }

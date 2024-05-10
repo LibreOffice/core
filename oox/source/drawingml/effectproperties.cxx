@@ -71,23 +71,23 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
                                                                 // Default values of sx, sy should be 100000 in this case.
             sal_Int32 nAttrBlur = 0;
 
-            std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( "dir" );
+            std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( u"dir"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDir;
 
-            attribIt = it->maAttribs.find( "dist" );
+            attribIt = it->maAttribs.find( u"dist"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDist;
 
-            attribIt = it->maAttribs.find( "sx" );
+            attribIt = it->maAttribs.find( u"sx"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrSizeX;
 
-            attribIt = it->maAttribs.find( "sy" );
+            attribIt = it->maAttribs.find( u"sy"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrSizeY;
 
-            attribIt = it->maAttribs.find( "blurRad" );
+            attribIt = it->maAttribs.find( u"blurRad"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrBlur;
 

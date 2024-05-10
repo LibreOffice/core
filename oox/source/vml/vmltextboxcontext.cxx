@@ -128,7 +128,7 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
             maFont.monSize = rAttribs.getInteger( W_TOKEN(val) );
         break;
         case W_TOKEN(br):
-            mrTextBox.appendPortion( maParagraph, maFont, "\n" );
+            mrTextBox.appendPortion( maParagraph, maFont, u"\n"_ustr );
         break;
         case W_TOKEN(color):
             maFont.moColor = rAttribs.getString( W_TOKEN(val) );
@@ -278,7 +278,7 @@ void TextBoxContext::onEndElement()
 {
     if (getCurrentElement() == W_TOKEN(p))
     {
-        mrTextBox.appendPortion( maParagraph, TextFontModel(), "\n" );
+        mrTextBox.appendPortion( maParagraph, TextFontModel(), u"\n"_ustr );
         maParagraph = TextParagraphModel();
     }
 }

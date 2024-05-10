@@ -1200,7 +1200,7 @@ static std::vector<OString> lcl_getShapeTypes()
 {
     std::vector<OString> aRet;
 
-    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/vml-shape-types");
+    OUString aPath(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/vml-shape-types"_ustr);
     rtl::Bootstrap::expandMacros(aPath);
     SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
@@ -1223,9 +1223,9 @@ static bool lcl_isTextBox(const SdrObject* pSdrObject)
     if (!xPropertySet.is())
         return false;
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-    if (!xPropertySetInfo->hasPropertyByName("TextBox"))
+    if (!xPropertySetInfo->hasPropertyByName(u"TextBox"_ustr))
        return false;
-    css::uno::Any aTextBox(xPropertySet->getPropertyValue("TextBox"));
+    css::uno::Any aTextBox(xPropertySet->getPropertyValue(u"TextBox"_ustr));
     if (!aTextBox.hasValue())
        return false;
     return aTextBox.get<bool>();
@@ -1236,10 +1236,10 @@ static OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
     OUString aResult;
 
     uno::Reference<beans::XPropertySet> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
-    if (xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (xShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
-        comphelper::SequenceAsHashMap aInteropGrabBag(xShape->getPropertyValue("InteropGrabBag"));
-        auto it = aInteropGrabBag.find("AnchorId");
+        comphelper::SequenceAsHashMap aInteropGrabBag(xShape->getPropertyValue(u"InteropGrabBag"_ustr));
+        auto it = aInteropGrabBag.find(u"AnchorId"_ustr);
         if (it != aInteropGrabBag.end())
             it->second >>= aResult;
     }
@@ -1530,10 +1530,10 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         bool bBottomToTop = false;
-        if (xPropertySetInfo->hasPropertyByName("CustomShapeGeometry"))
+        if (xPropertySetInfo->hasPropertyByName(u"CustomShapeGeometry"_ustr))
         {
             // In this case a DrawingML DOCX was imported.
-            auto aAny = xPropertySet->getPropertyValue("WritingMode");
+            auto aAny = xPropertySet->getPropertyValue(u"WritingMode"_ustr);
             sal_Int16 nWritingMode;
             if ((aAny >>= nWritingMode) && nWritingMode == text::WritingMode2::BT_LR)
                 bBottomToTop = true;
@@ -1547,7 +1547,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
             {
                 auto xTextFrame = pTextExport->GetUnoTextFrame(xShape);
                 uno::Reference<beans::XPropertySet> xPropSet(xTextFrame, uno::UNO_QUERY);
-                auto aAny = xPropSet->getPropertyValue("WritingMode");
+                auto aAny = xPropSet->getPropertyValue(u"WritingMode"_ustr);
                 sal_Int16 nWritingMode;
                 if (aAny >>= nWritingMode)
                 {

@@ -153,7 +153,7 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
 
     mxCtrlModel = std::make_shared<AxLabelModel>();
     mxCtrlModel->setAwtModelMode();
-    mxCtrlModel->importProperty( XML_Size, "10;10" );
+    mxCtrlModel->importProperty( XML_Size, u"10;10"_ustr );
 }
 
 } // namespace
@@ -393,7 +393,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
 
     /*  Open the 'f' stream containing the model of this control and a list
         of site models for all child controls. */
-    BinaryXInputStream aFStrm( rStrg.openInputStream( "f" ), true );
+    BinaryXInputStream aFStrm( rStrg.openInputStream( u"f"_ustr ), true );
     OSL_ENSURE( !aFStrm.isEof(), "VbaFormControl::importStorage - missing 'f' stream" );
 
     /*  Read the properties of this container control and the class table
@@ -409,7 +409,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
     /*  Open the 'o' stream containing models of embedded simple
         controls. Stream may be empty or missing, if this control
         contains no controls or only container controls. */
-    BinaryXInputStream aOStrm( rStrg.openInputStream( "o" ), true );
+    BinaryXInputStream aOStrm( rStrg.openInputStream( u"o"_ustr ), true );
 
     /*  Iterate over all embedded controls, import model from 'o'
         stream (for embedded simple controls) or from the substorage
@@ -424,7 +424,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
         AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
         assert(pMultiPage);
         {
-            BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
+            BinaryXInputStream aXStrm( rStrg.openInputStream( u"x"_ustr ), true );
             pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
         }
         typedef std::unordered_map< sal_uInt32, std::shared_ptr< VbaFormControl > > IdToPageMap;
@@ -796,7 +796,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         return;
 
     // check that the '03VBFrame' stream exists, this is required for forms
-    BinaryXInputStream aInStrm( rVbaFormStrg.openInputStream( "\003VBFrame" ), true );
+    BinaryXInputStream aInStrm( rVbaFormStrg.openInputStream( u"\003VBFrame"_ustr ), true );
     OSL_ENSURE( !aInStrm.isEof(), "VbaUserForm::importForm - missing \\003VBFrame stream" );
     if( aInStrm.isEof() )
         return;

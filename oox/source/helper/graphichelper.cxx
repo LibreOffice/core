@@ -233,17 +233,17 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
     {
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream", rxInStrm),
-                                         comphelper::makePropertyValue("LazyRead", bLazyLoad) };
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"InputStream"_ustr, rxInStrm),
+                                         comphelper::makePropertyValue(u"LazyRead"_ustr, bLazyLoad) };
 
         if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             auto pArgs = aArgs.getArray();
             Sequence< PropertyValue > aFilterData{
-                comphelper::makePropertyValue("ExternalWidth", pExtHeader->xExt),
-                comphelper::makePropertyValue("ExternalHeight", pExtHeader->yExt),
-                comphelper::makePropertyValue("ExternalMapMode", pExtHeader->mapMode)
+                comphelper::makePropertyValue(u"ExternalWidth"_ustr, pExtHeader->xExt),
+                comphelper::makePropertyValue(u"ExternalHeight"_ustr, pExtHeader->yExt),
+                comphelper::makePropertyValue(u"ExternalMapMode"_ustr, pExtHeader->mapMode)
             };
             pArgs[ 2 ].Name = "FilterData";
             pArgs[ 2 ].Value <<= aFilterData;

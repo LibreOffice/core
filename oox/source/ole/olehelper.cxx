@@ -351,7 +351,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
         Reference< XServiceInfo > xInfo( xCntrlModel,
             UNO_QUERY);
         if (xInfo->
-            supportsService( "com.sun.star.form.component.FormattedField" ) )
+            supportsService( u"com.sun.star.form.component.FormattedField"_ustr ) )
             nClassId = FORMULAFIELD;
     }
     else if ( nClassId == FormComponentType::COMMANDBUTTON )
@@ -364,7 +364,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
     {
         Reference< XServiceInfo > xInfo( xCntrlModel,
             UNO_QUERY);
-        if (xInfo->supportsService("com.sun.star.form.component.ImageControl" ) )
+        if (xInfo->supportsService(u"com.sun.star.form.component.ImageControl"_ustr ) )
             nClassId = FormComponentType::IMAGECONTROL;
     }
 
@@ -424,7 +424,7 @@ MSConvertOCXControls::~MSConvertOCXControls()
 bool
 MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, std::u16string_view rGuidString )
 {
-    ::oox::ole::EmbeddedControl aControl( "Unknown" );
+    ::oox::ole::EmbeddedControl aControl( u"Unknown"_ustr );
     if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )
     {
         pModel->importBinaryModel( rInStrm );
@@ -491,13 +491,13 @@ bool MSConvertOCXControls::ReadOCXStorage( rtl::Reference<SotStorage> const & xO
 {
     if ( xOleStg.is() )
     {
-        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
+        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream(u"\3OCXNAME"_ustr, StreamMode::READ);
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
 
-        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
+        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream(u"contents"_ustr, StreamMode::READ);
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
 
-        rtl::Reference<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
+        rtl::Reference<SotStorageStream> pClsStrm = xOleStg->OpenSotStream(u"\1CompObj"_ustr, StreamMode::READ);
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
 
@@ -550,17 +550,17 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, r
     rName = exportHelper.getTypeName();
     xOleStg->SetClass( aName, SotClipboardFormatId::EMBEDDED_OBJ_OLE, sFullName);
     {
-        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME");
+        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream(u"\3OCXNAME"_ustr);
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );
         exportHelper.exportName( xOut );
     }
     {
-        rtl::Reference<SotStorageStream> pObjStream = xOleStg->OpenSotStream("\1CompObj");
+        rtl::Reference<SotStorageStream> pObjStream = xOleStg->OpenSotStream(u"\1CompObj"_ustr);
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pObjStream );
         exportHelper.exportCompObj( xOut );
     }
     {
-        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream("contents");
+        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream(u"contents"_ustr);
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
         exportHelper.exportControl( xOut, rSize );
     }

@@ -630,8 +630,8 @@ void writeREFERENCE(SvStream& rStrm, const OUString& name, std::u16string_view l
 void writePROJECTREFERENCES(SvStream& rStrm, const rtl_TextEncoding eTextEncoding)
 {
     // TODO: find out where these references are coming from
-    writeREFERENCE(rStrm, "stdole", u"*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation", eTextEncoding);
-    writeREFERENCE(rStrm, "Office", u"*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library", eTextEncoding);
+    writeREFERENCE(rStrm, u"stdole"_ustr, u"*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation", eTextEncoding);
+    writeREFERENCE(rStrm, u"Office"_ustr, u"*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library", eTextEncoding);
 }
 
 // section 2.3.4.2.3.1
@@ -1040,12 +1040,12 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     getCorrectExportOrder(xNameContainer, aLibraryMap);
 
     // start here with the VBA export
-    rtl::Reference<SotStorage> xVBAStream = pRootStorage->OpenSotStorage("VBA", StreamMode::READWRITE);
-    rtl::Reference<SotStorageStream> pDirStream = xVBAStream->OpenSotStream("dir", StreamMode::READWRITE);
+    rtl::Reference<SotStorage> xVBAStream = pRootStorage->OpenSotStorage(u"VBA"_ustr, StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pDirStream = xVBAStream->OpenSotStream(u"dir"_ustr, StreamMode::READWRITE);
 
-    rtl::Reference<SotStorageStream> pVBAProjectStream = xVBAStream->OpenSotStream("_VBA_PROJECT", StreamMode::READWRITE);
-    rtl::Reference<SotStorageStream> pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", StreamMode::READWRITE);
-    rtl::Reference<SotStorageStream> pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pVBAProjectStream = xVBAStream->OpenSotStream(u"_VBA_PROJECT"_ustr, StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pPROJECTStream = pRootStorage->OpenSotStream(u"PROJECT"_ustr, StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pPROJECTwmStream = pRootStorage->OpenSotStream(u"PROJECTwm"_ustr, StreamMode::READWRITE);
 
     const rtl_TextEncoding eTextEncoding = getVBATextEncoding();
 
@@ -1182,7 +1182,7 @@ rtl_TextEncoding VbaExport::getVBATextEncoding() const
     if (xProps.is())
         try
         {
-            xProps->getPropertyValue("VBATextEncoding") >>= aTextEncoding;
+            xProps->getPropertyValue(u"VBATextEncoding"_ustr) >>= aTextEncoding;
         }
         catch (const css::uno::Exception&)
         {

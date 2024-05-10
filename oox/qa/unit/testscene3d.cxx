@@ -34,7 +34,7 @@ class TestScene3d : public UnoApiXmlTest
 {
 public:
     TestScene3d()
-        : UnoApiXmlTest("/oox/qa/unit/data/")
+        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 
@@ -69,7 +69,7 @@ void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex)
     uno::Reference<drawing::XShape> xShape3D(getShape(nShapeIndex, 0));
     SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape3D));
     pSdrView->MarkObj(pSdrShape, pSdrView->GetSdrPageView());
-    dispatchCommand(mxComponent, ".uno:ConvertIntoBitmap", {});
+    dispatchCommand(mxComponent, u".uno:ConvertIntoBitmap"_ustr, {});
     pSdrView->UnmarkAll();
 
     // Get graphic
@@ -534,25 +534,25 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_wireframe)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0));
 
     // Make sure the export to ODF has the corresponding attributes.
-    save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"impress8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "extrusion-origin"_ostr, "-0.5 -0.5");
+                "extrusion-origin"_ostr, u"-0.5 -0.5"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "extrusion-skew"_ostr, "30 -45");
+                "extrusion-skew"_ostr, u"30 -45"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "projection"_ostr, "parallel");
+                "projection"_ostr, u"parallel"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "shade-mode"_ostr, "draft");
+                "shade-mode"_ostr, u"draft"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
@@ -630,9 +630,9 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_shape_rotation)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0));
 
     // Make sure that the immediate export to pptx has the same shape rotation
-    save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//p:spPr/a:xfrm"_ostr, "rot"_ostr, "300000");
+    save(u"Impress Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:spPr/a:xfrm"_ostr, "rot"_ostr, u"300000"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

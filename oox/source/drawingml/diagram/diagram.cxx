@@ -194,8 +194,8 @@ void Diagram::syncDiagramFontHeights()
             {
                 double fFontScale = 0.0;
                 double fSpacingScale = 0.0;
-                xPropertySet->getPropertyValue("TextFitToSizeFontScale") >>= fFontScale;
-                xPropertySet->getPropertyValue("TextFitToSizeSpacingScale") >>= fSpacingScale;
+                xPropertySet->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFontScale;
+                xPropertySet->getPropertyValue(u"TextFitToSizeSpacingScale"_ustr) >>= fSpacingScale;
 
                 if (fFontScale > 0 && fSpacingScale > 0
                     && (fFontScale < fMinFontScale || (fFontScale == fMinFontScale && fSpacingScale < fMinSpacingScale)))
@@ -214,8 +214,8 @@ void Diagram::syncDiagramFontHeights()
                 uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
                 if (xPropertySet.is())
                 {
-                    xPropertySet->setPropertyValue("TextFitToSizeFontScale", uno::Any(fMinFontScale));
-                    xPropertySet->setPropertyValue("TextFitToSizeSpacingScale", uno::Any(fMinSpacingScale));
+                    xPropertySet->setPropertyValue(u"TextFitToSizeFontScale"_ustr, uno::Any(fMinFontScale));
+                    xPropertySet->setPropertyValue(u"TextFitToSizeSpacingScale"_ustr, uno::Any(fMinSpacingScale));
                 }
             }
         }
@@ -330,7 +330,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                            loadFragment(rFilter,xRefDataModel),
-                           "OOXData",
+                           u"OOXData"_ustr,
                            pDiagram,
                            xRefDataModel);
 
@@ -368,7 +368,7 @@ void loadDiagram( ShapePtr const & pShape,
 
                 importFragment(rFilter,
                         loadFragment(rFilter,xRefLayout),
-                        "OOXLayout",
+                        u"OOXLayout"_ustr,
                         pDiagram,
                         xRefLayout);
             }
@@ -381,7 +381,7 @@ void loadDiagram( ShapePtr const & pShape,
 
                 importFragment(rFilter,
                         loadFragment(rFilter,xRefQStyle),
-                        "OOXStyle",
+                        u"OOXStyle"_ustr,
                         pDiagram,
                         xRefQStyle);
             }
@@ -390,8 +390,8 @@ void loadDiagram( ShapePtr const & pShape,
         {
             // We still want to add the XDocuments to the DiagramDomMap
             DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-            rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
-            rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
+            rMainDomMap[u"OOXLayout"_ustr] = loadFragment(rFilter,rLayoutPath);
+            rMainDomMap[u"OOXStyle"_ustr] = loadFragment(rFilter,rQStylePath);
         }
 
         // colors
@@ -402,14 +402,14 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                 loadFragment(rFilter,xRefColorStyle),
-                "OOXColor",
+                u"OOXColor"_ustr,
                 pDiagram,
                 xRefColorStyle);
         }
 
         if( !pData->getExtDrawings().empty() )
         {
-            const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find("node0");
+            const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find(u"node0"_ustr);
             if( aColor != pDiagram->getColors().end() && !aColor->second.maTextFillColors.empty())
             {
                 // TODO(F1): well, actually, there might be *several* color

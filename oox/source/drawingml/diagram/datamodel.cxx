@@ -207,7 +207,7 @@ void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShap
 
     // text properties
     if(!bIsBackgroundShape
-        && xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
+        && xServiceInfo->supportsService(u"com.sun.star.drawing.TextProperties"_ustr))
     {
         addProperty(UNO_NAME_CHAR_COLOR, xInfo, pTarget->maProperties, xPropSet);
         addProperty(UNO_NAME_CHAR_HEIGHT, xInfo, pTarget->maProperties, xPropSet);
@@ -216,7 +216,7 @@ void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShap
     }
 
     // fill properties
-    if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
+    if(xServiceInfo->supportsService(u"com.sun.star.drawing.FillProperties"_ustr))
     {
         css::drawing::FillStyle eFillStyle(css::drawing::FillStyle_NONE);
         if (xInfo->hasPropertyByName(UNO_NAME_FILLSTYLE))
@@ -245,7 +245,7 @@ void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShap
 
     // line properties
     if(!bIsBackgroundShape
-        && xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
+        && xServiceInfo->supportsService(u"com.sun.star.drawing.LineProperties"_ustr))
     {
         css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
         if (xInfo->hasPropertyByName(UNO_NAME_LINESTYLE))

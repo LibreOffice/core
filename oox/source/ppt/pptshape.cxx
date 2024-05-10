@@ -245,9 +245,9 @@ void PPTShape::addShape(
                                     // and looks for time format in the 4 bits after that
                                     sal_Int32 nDateTimeFormat = static_cast<sal_Int32>(eDateFormat) |
                                                                 static_cast<sal_Int32>(eTimeFormat) << 4;
-                                    xPropertySet->setPropertyValue( "IsDateTimeVisible", Any(true) );
-                                    xPropertySet->setPropertyValue( "IsDateTimeFixed", Any(false) );
-                                    xPropertySet->setPropertyValue( "DateTimeFormat", Any(nDateTimeFormat) );
+                                    xPropertySet->setPropertyValue( u"IsDateTimeVisible"_ustr, Any(true) );
+                                    xPropertySet->setPropertyValue( u"IsDateTimeFixed"_ustr, Any(false) );
+                                    xPropertySet->setPropertyValue( u"DateTimeFormat"_ustr, Any(nDateTimeFormat) );
                                     return;
                                 }
                             }
@@ -270,8 +270,8 @@ void PPTShape::addShape(
                             // if it is possible to get the footer as a property the LO way,
                             // get it and discard the shape
                             Reference< XPropertySet > xPropertySet( rSlidePersist.getPage(), UNO_QUERY );
-                            xPropertySet->setPropertyValue( "IsFooterVisible", Any( true ) );
-                            xPropertySet->setPropertyValue( "FooterText", Any(rFooterText) );
+                            xPropertySet->setPropertyValue( u"IsFooterVisible"_ustr, Any( true ) );
+                            xPropertySet->setPropertyValue( u"FooterText"_ustr, Any(rFooterText) );
                             return;
                         }
                     }
@@ -291,7 +291,7 @@ void PPTShape::addShape(
                             // do that and discard the shape
                             Reference<XPropertySet> xPropertySet(rSlidePersist.getPage(),
                                                                  UNO_QUERY);
-                            xPropertySet->setPropertyValue("IsPageNumberVisible", Any(true));
+                            xPropertySet->setPropertyValue(u"IsPageNumberVisible"_ustr, Any(true));
                             return;
                         }
                     }
@@ -414,7 +414,7 @@ void PPTShape::addShape(
             } else if (!mpPlaceholder) {
                 aMasterTextListStyle.reset();
             }
-            SAL_INFO("oox.ppt","placeholder id: " << (pPlaceholder ? pPlaceholder->getId() : "not found"));
+            SAL_INFO("oox.ppt","placeholder id: " << (pPlaceholder ? pPlaceholder->getId() : u"not found"_ustr));
         }
 
         if (!sServiceName.isEmpty())
@@ -489,7 +489,7 @@ void PPTShape::addShape(
                 Reference < XText > xText(mxShape, UNO_QUERY);
                 if(xText.is())
                 {
-                    xText->setString("");
+                    xText->setString(u""_ustr);
                     Reference < XTextCursor > xTextCursor = xText->createTextCursor();
                     xText->insertTextContent( xTextCursor, xField, false);
                 }
@@ -590,7 +590,7 @@ void PPTShape::addShape(
 
                     pProperties->Name = "EventType";
                     pProperties->Handle = -1;
-                    pProperties->Value <<= OUString("Presentation");
+                    pProperties->Value <<= u"Presentation"_ustr;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 

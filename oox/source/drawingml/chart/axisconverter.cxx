@@ -156,7 +156,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         ObjectFormatter& rFormatter = getFormatter();
 
         // create the axis object (always)
-        xAxis.set( createInstance( "com.sun.star.chart2.Axis" ), UNO_QUERY_THROW );
+        xAxis.set( createInstance( u"com.sun.star.chart2.Axis"_ustr ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
         aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted );

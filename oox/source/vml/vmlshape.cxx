@@ -390,36 +390,36 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 if( s_mso_next_textbox.startsWith("#") )
                     s_mso_next_textbox = s_mso_next_textbox.copy(1);
 
-                if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
+                if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                 {
                     uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                    uno::Any aAny = propertySet->getPropertyValue("FrameInteropGrabBag");
+                    uno::Any aAny = propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr);
                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
 
-                    aGrabBag.push_back(comphelper::makePropertyValue("VML-Z-ORDER", maTypeModel.maZIndex.toInt32()));
+                    aGrabBag.push_back(comphelper::makePropertyValue(u"VML-Z-ORDER"_ustr, maTypeModel.maZIndex.toInt32()));
 
                     if( !s_mso_next_textbox.isEmpty() )
-                        aGrabBag.push_back(comphelper::makePropertyValue("mso-next-textbox", s_mso_next_textbox));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"mso-next-textbox"_ustr, s_mso_next_textbox));
 
                     if( !sLinkChainName.isEmpty() )
                     {
-                        aGrabBag.push_back(comphelper::makePropertyValue("TxbxHasLink", true));
-                        aGrabBag.push_back(comphelper::makePropertyValue("Txbx-Id", id));
-                        aGrabBag.push_back(comphelper::makePropertyValue("Txbx-Seq", seq));
-                        aGrabBag.push_back(comphelper::makePropertyValue("LinkChainName", sLinkChainName));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"TxbxHasLink"_ustr, true));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"Txbx-Id"_ustr, id));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"Txbx-Seq"_ustr, seq));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"LinkChainName"_ustr, sLinkChainName));
                     }
 
                     if(!maTypeModel.maRotation.isEmpty())
-                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
-                    propertySet->setPropertyValue("FrameInteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
+                        aGrabBag.push_back(comphelper::makePropertyValue(u"mso-rotation-angle"_ustr, ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
+                    propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
-                    propertySet->getPropertyValue("BackColorTransparency")
+                    propertySet->getPropertyValue(u"BackColorTransparency"_ustr)
                         >>= backColorTransparency;
-                    if (propertySet->getPropertyValue("FillStyle") == FillStyle_NONE &&
+                    if (propertySet->getPropertyValue(u"FillStyle"_ustr) == FillStyle_NONE &&
                         backColorTransparency == 100)
                     {
                         // If there is no fill, the Word default is 100% transparency.
-                        propertySet->setPropertyValue("FillTransparence", Any(sal_Int16(100)));
+                        propertySet->setPropertyValue(u"FillTransparence"_ustr, Any(sal_Int16(100)));
                     }
                 }
                 else
@@ -428,7 +428,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     {
                         uno::Sequence<beans::PropertyValue> aGrabBag;
                         uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                        propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                        propertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                         sal_Int32 length;
 
                         length = aGrabBag.getLength();
@@ -460,7 +460,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             pGrabBag[length+3].Name = "LinkChainName";
                             pGrabBag[length+3].Value <<= sLinkChainName;
                         }
-                        propertySet->setPropertyValue( "InteropGrabBag", uno::Any(aGrabBag) );
+                        propertySet->setPropertyValue( u"InteropGrabBag"_ustr, uno::Any(aGrabBag) );
                     }
                 }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
@@ -522,7 +522,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     ::oox::drawingml::ShapePropertyMap aPropMap(makeShapePropertyMap());
 
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
-    if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
+    if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
     {
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         // Any other service supporting the ShadowFormat property?
@@ -561,7 +561,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             aPropMap.erase(PROP_LineColor);
         }
     }
-    else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
+    else if (xSInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
     {
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
@@ -870,7 +870,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         {
             aPropertySet.setAnyProperty(PROP_RotateAngle, Any((*oRotation).get()));
             uno::Reference<lang::XServiceInfo> xServiceInfo(rxShapes, uno::UNO_QUERY);
-            if (!xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+            if (!xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
             {
                 // If rotation is used, simple setPosition() is not enough.
                 aPropertySet.setAnyProperty(PROP_HoriOrientPosition, Any(aShapeRect.X));
@@ -885,9 +885,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // It might occur internally in SdrObject of "sw" module, not here.
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX)
-            aPropVec.push_back(comphelper::makePropertyValue("MirroredX", true));
+            aPropVec.push_back(comphelper::makePropertyValue(u"MirroredX"_ustr, true));
         if (bFlipY)
-            aPropVec.push_back(comphelper::makePropertyValue("MirroredY", true));
+            aPropVec.push_back(comphelper::makePropertyValue(u"MirroredY"_ustr, true));
 
         if (!maTypeModel.maAdjustments.isEmpty())
         {
@@ -957,7 +957,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
                                                      const awt::Rectangle& rShapeRect,
                                                      uno::Reference<graphic::XGraphic> const & rxGraphic) const
 {
-    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
+    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( u"com.sun.star.drawing.GraphicObjectShape"_ustr, rxShapes, rShapeRect );
     if( xShape.is() )
     {
         PropertySet aPropSet(xShape);
@@ -967,7 +967,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         }
         uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
         // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
-        if ( maTypeModel.maPosition == "absolute" && !xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        if ( maTypeModel.maPosition == "absolute" && !xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
         {
             aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
             aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
@@ -1016,7 +1016,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
 }
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, "com.sun.star.drawing.RectangleShape" )
+    SimpleShape( rDrawing, u"com.sun.star.drawing.RectangleShape"_ustr )
 {
 }
 
@@ -1048,12 +1048,12 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
 }
 
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, "com.sun.star.drawing.EllipseShape" )
+    SimpleShape( rDrawing, u"com.sun.star.drawing.EllipseShape"_ustr )
 {
 }
 
 PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, "com.sun.star.drawing.PolyLineShape" )
+    SimpleShape( rDrawing, u"com.sun.star.drawing.PolyLineShape"_ustr )
 {
 }
 
@@ -1070,7 +1070,7 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
         if (aAbsPoints.size() > 2 && aAbsPoints.front().X == aAbsPoints.back().X
             && aAbsPoints.front().Y == aAbsPoints.back().Y)
         {
-            const_cast<PolyLineShape*>(this)->setService("com.sun.star.drawing.PolyPolygonShape");
+            const_cast<PolyLineShape*>(this)->setService(u"com.sun.star.drawing.PolyPolygonShape"_ustr);
         }
     }
 
@@ -1135,7 +1135,7 @@ namespace
 }
 
 LineShape::LineShape(Drawing& rDrawing)
-    : SimpleShape(rDrawing, "com.sun.star.drawing.LineShape")
+    : SimpleShape(rDrawing, u"com.sun.star.drawing.LineShape"_ustr)
 {
 }
 
@@ -1179,7 +1179,7 @@ awt::Rectangle LineShape::getRelRectangle() const
 }
 
 BezierShape::BezierShape(Drawing& rDrawing)
-    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
+    : SimpleShape(rDrawing, u"com.sun.star.drawing.OpenBezierShape"_ustr)
 {
 }
 
@@ -1189,7 +1189,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     sal_Int32 nPos = maShapeModel.maVmlPath.lastIndexOf(',');
     if ( nPos != -1 && maShapeModel.maVmlPath.indexOf('x', nPos) != -1 )
     {
-        const_cast<BezierShape*>( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
+        const_cast<BezierShape*>( this )->setService( u"com.sun.star.drawing.ClosedBezierShape"_ustr );
     }
 
     awt::Rectangle aCoordSys = getCoordSystem();
@@ -1261,7 +1261,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
             && aCoordLists.front().front().Y == aCoordLists.back().back().Y )
         { // HACK: If the shape is in fact closed, which can be found out only when the path is known,
           // force to closed bezier shape (otherwise e.g. fill won't work).
-            const_cast< BezierShape* >( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
+            const_cast< BezierShape* >( this )->setService( u"com.sun.star.drawing.ClosedBezierShape"_ustr );
         }
     }
 
@@ -1284,7 +1284,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 }
 
 CustomShape::CustomShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, "com.sun.star.drawing.CustomShape" )
+    SimpleShape( rDrawing, u"com.sun.star.drawing.CustomShape"_ustr )
 {
 }
 
@@ -1332,7 +1332,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
         if( rFilter.getOleObjectHelper().importOleObject( aOleProps, *pOleObjectInfo, aOleSize ) )
         {
-            Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.OLE2Shape", rxShapes, rShapeRect );
+            Reference< XShape > xShape = mrDrawing.createAndInsertXShape( u"com.sun.star.drawing.OLE2Shape"_ustr, rxShapes, rShapeRect );
             if( xShape.is() )
             {
                 // set the replacement graphic
@@ -1457,33 +1457,33 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
         // Store signature line properties
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("IsSignatureLine", uno::Any(true));
-        xPropertySet->setPropertyValue("SignatureLineId",
+        xPropertySet->setPropertyValue(u"IsSignatureLine"_ustr, uno::Any(true));
+        xPropertySet->setPropertyValue(u"SignatureLineId"_ustr,
                                         uno::Any(getShapeModel().maSignatureId));
         xPropertySet->setPropertyValue(
-            "SignatureLineSuggestedSignerName",
+            u"SignatureLineSuggestedSignerName"_ustr,
             uno::Any(getShapeModel().maSignatureLineSuggestedSignerName));
         xPropertySet->setPropertyValue(
-            "SignatureLineSuggestedSignerTitle",
+            u"SignatureLineSuggestedSignerTitle"_ustr,
             uno::Any(getShapeModel().maSignatureLineSuggestedSignerTitle));
         xPropertySet->setPropertyValue(
-            "SignatureLineSuggestedSignerEmail",
+            u"SignatureLineSuggestedSignerEmail"_ustr,
             uno::Any(getShapeModel().maSignatureLineSuggestedSignerEmail));
         xPropertySet->setPropertyValue(
-            "SignatureLineSigningInstructions",
+            u"SignatureLineSigningInstructions"_ustr,
             uno::Any(getShapeModel().maSignatureLineSigningInstructions));
         xPropertySet->setPropertyValue(
-            "SignatureLineShowSignDate",
+            u"SignatureLineShowSignDate"_ustr,
             uno::Any(getShapeModel().mbSignatureLineShowSignDate));
         xPropertySet->setPropertyValue(
-            "SignatureLineCanAddComment",
+            u"SignatureLineCanAddComment"_ustr,
             uno::Any(getShapeModel().mbSignatureLineCanAddComment));
-        xPropertySet->setPropertyValue("SignatureLineIsSigned", uno::Any(bIsSigned));
+        xPropertySet->setPropertyValue(u"SignatureLineIsSigned"_ustr, uno::Any(bIsSigned));
 
         if (!aGraphicPath.isEmpty())
         {
             xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
-            xPropertySet->setPropertyValue("SignatureLineUnsignedImage", uno::Any(xGraphic));
+            xPropertySet->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, uno::Any(xGraphic));
         }
         return xShape;
     }
@@ -1548,7 +1548,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     aParentAnchor.maCoordSys = getCoordSystem();
     if( !mxChildren->empty() && (aParentAnchor.maCoordSys.Width > 0) && (aParentAnchor.maCoordSys.Height > 0) ) try
     {
-        xGroupShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GroupShape", rxShapes, rShapeRect );
+        xGroupShape = mrDrawing.createAndInsertXShape( u"com.sun.star.drawing.GroupShape"_ustr, rxShapes, rShapeRect );
         Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
         mxChildren->convertAndInsert( xChildShapes, &aParentAnchor );
         if( !xChildShapes->hasElements() )
@@ -1568,11 +1568,11 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     if (xPropertySet.is())
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
-        xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         sal_Int32 nLength = aGrabBag.getLength();
         aGrabBag.realloc(nLength + 1);
-        aGrabBag.getArray()[nLength] = comphelper::makePropertyValue("mso-edit-as", maTypeModel.maEditAs);
-        xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag));
+        aGrabBag.getArray()[nLength] = comphelper::makePropertyValue(u"mso-edit-as"_ustr, maTypeModel.maEditAs);
+        xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);

@@ -118,7 +118,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
 
     if ((getNamespace( aElementToken ) == NMSP_vml) && mpShapePtr)
     {
-        mpShapePtr->setServiceName("com.sun.star.drawing.CustomShape");
+        mpShapePtr->setServiceName(u"com.sun.star.drawing.CustomShape"_ustr);
         CustomShapePropertiesPtr pCstmShpProps
             (mpShapePtr->getCustomShapeProperties());
 

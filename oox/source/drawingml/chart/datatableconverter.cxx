@@ -43,7 +43,7 @@ void DataTableConverter::convertFromModel(uno::Reference<chart2::XDiagram> const
     try
     {
         uno::Reference<chart2::XDataTable> xDataTable(
-            createInstance("com.sun.star.chart2.DataTable"), uno::UNO_QUERY_THROW);
+            createInstance(u"com.sun.star.chart2.DataTable"_ustr), uno::UNO_QUERY_THROW);
         rxDiagram->setDataTable(xDataTable);
 
         PropertySet aPropSet(xDataTable);

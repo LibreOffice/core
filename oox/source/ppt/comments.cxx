@@ -74,7 +74,7 @@ OUString Comment::getAuthor(const CommentAuthorList& list)
         if (author.id.toInt32() == nId)
             return author.name;
     }
-    return "Anonymous";
+    return u"Anonymous"_ustr;
 }
 
 const Comment& CommentList::getCommentAtIndex(int index)

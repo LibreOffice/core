@@ -65,7 +65,7 @@ class OoxShapeTest : public UnoApiTest
 {
 public:
     OoxShapeTest()
-        : UnoApiTest("/oox/qa/unit/data/")
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
     uno::Reference<drawing::XShape> getShapeByName(std::u16string_view aName);
@@ -104,13 +104,13 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
     // Without the accompanying fix in place, this test would have failed in several properties.
 
     sal_Int32 nAngle;
-    xPropSet->getPropertyValue("ShearAngle") >>= nAngle;
+    xPropSet->getPropertyValue(u"ShearAngle"_ustr) >>= nAngle;
     // Failed with - Expected: 0
     //             - Actual  : -810
     // i.e. the shape was sheared although shearing does not exist in oox
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAngle);
 
-    xPropSet->getPropertyValue("RotateAngle") >>= nAngle;
+    xPropSet->getPropertyValue(u"RotateAngle"_ustr) >>= nAngle;
     // Failed with - Expected: 26000 (is in 1/100deg)
     //             - Actual  : 26481 (is in 1/100deg)
     // 100deg in PowerPoint UI = 360deg - 100deg in LO.
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     sal_Int32 nY{};
-    xShape->getPropertyValue("VertOrientPosition") >>= nY;
+    xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nY;
     // <wp:posOffset>581025</wp:posOffset> in the document.
     sal_Int32 nExpected = rtl::math::round(581025.0 / 360);
     // Without the accompanying fix in place, this test would have failed with:
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     }
 
     drawing::TextVerticalAdjust eAdjust;
-    xPropSet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
+    xPropSet->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextVerticalAdjust", drawing::TextVerticalAdjust_BOTTOM, eAdjust);
 }
 
@@ -218,9 +218,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
         uno::Reference<beans::XPropertySet> xShape(getShapeByName(aExpected[i].sShapeName),
                                                    uno::UNO_QUERY);
         drawing::TextHorizontalAdjust eHori;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("TextHorizontalAdjust") >>= eHori);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
         drawing::TextVerticalAdjust eVert;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("TextVerticalAdjust") >>= eVert);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eVert);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorHori, eHori);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorVert, eVert);
     }
@@ -263,8 +263,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
             xDiagramShape->getByIndex(aExpected[i].nSubShapeIndex), uno::UNO_QUERY);
         sal_Int32 nLower;
         sal_Int32 nUpper;
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("TextLowerDistance") >>= nLower);
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("TextUpperDistance") >>= nUpper);
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextLowerDistance"_ustr) >>= nLower);
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextUpperDistance"_ustr) >>= nUpper);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nLowerDistance, nLower);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nUpperDistance, nUpper);
     }
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
     Color nActualColor{ 0 };
-    xPortion->getPropertyValue("CharColor") >>= nActualColor;
+    xPortion->getPropertyValue(u"CharColor"_ustr) >>= nActualColor;
     // Without fix the test would have failed with:
     // - Expected: rgba[1f497dff]
     // - Actual  : rgba[ffffffff], that is text was white
@@ -320,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     // oox::drawingml::Color::getSchemeColorIndex()
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
     uno::Reference<util::XComplexColor> xComplexColor;
-    xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
+    xPortion->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor;
     CPPUNIT_ASSERT(xComplexColor.is());
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aComplexColor.getThemeColorType());
@@ -398,12 +398,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
                          xShapeProps->getPropertyValue(u"CharFontName"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(float(awt::FontWeight::BOLD)),
-                         xShapeProps->getPropertyValue("CharWeight"));
+                         xShapeProps->getPropertyValue(u"CharWeight"_ustr));
 
     lang::Locale aCharLocale;
     xShapeProps->getPropertyValue(u"CharLocale"_ustr) >>= aCharLocale;
-    CPPUNIT_ASSERT_EQUAL(OUString("en"), aCharLocale.Language);
-    CPPUNIT_ASSERT_EQUAL(OUString("US"), aCharLocale.Country);
+    CPPUNIT_ASSERT_EQUAL(u"en"_ustr, aCharLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"US"_ustr, aCharLocale.Country);
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::TextHorizontalAdjust_RIGHT),
                          xShapeProps->getPropertyValue(u"TextHorizontalAdjust"_ustr));
@@ -790,10 +790,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
     xGraphic.set(xBitmap, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
     OUString sMimeType;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("MimeType") >>= sMimeType);
-    CPPUNIT_ASSERT_EQUAL(OUString("image/jpeg"), sMimeType);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"MimeType"_ustr) >>= sMimeType);
+    CPPUNIT_ASSERT_EQUAL(u"image/jpeg"_ustr, sMimeType);
     awt::Size aSize100thMM;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Size100thMM") >>= aSize100thMM);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Size100thMM"_ustr) >>= aSize100thMM);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Height);
 }

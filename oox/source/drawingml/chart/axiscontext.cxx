@@ -50,7 +50,7 @@ ContextHandlerRef AxisDispUnitsContext::onCreateContext( sal_Int32 nElement, con
             switch( nElement )
             {
                 case C_TOKEN( builtInUnit ):
-                    mrModel.mnBuiltInUnit = rAttribs.getString( XML_val, "thousands" );
+                    mrModel.mnBuiltInUnit = rAttribs.getString( XML_val, u"thousands"_ustr );
                     return nullptr;
                 case C_TOKEN( custUnit ):
                     mrModel.mfCustomUnit = rAttribs.getDouble( XML_val, 0.0 );

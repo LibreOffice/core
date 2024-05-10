@@ -167,9 +167,9 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         // Track the style in a grabBag for use later when style details are known.
         comphelper::SequenceAsHashMap aGrabBag;
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
-        aGrabBag.update( xPropertySet->getPropertyValue("CharInteropGrabBag") );
-        aGrabBag["mso-pStyle"] <<= sParaStyle;
-        xPropertySet->setPropertyValue("CharInteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        aGrabBag.update( xPropertySet->getPropertyValue(u"CharInteropGrabBag"_ustr) );
+        aGrabBag[u"mso-pStyle"_ustr] <<= sParaStyle;
+        xPropertySet->setPropertyValue(u"CharInteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
     catch (const uno::Exception&)
     {
@@ -181,7 +181,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     xCursor->gotoEnd(false);
     xCursor->goLeft(1, true);
     if (xCursor->getString() == "\n")
-        xCursor->setString("");
+        xCursor->setString(u""_ustr);
 
     if ( maLayoutFlow != "vertical" )
         return;
@@ -195,9 +195,9 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     // As a result, we need to set horizontal adjustment here to 'right',
     // that will result in vertical 'top' after writing mode is applied,
     // which matches the VML behavior.
-    xProperties->setPropertyValue("TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_RIGHT));
+    xProperties->setPropertyValue(u"TextHorizontalAdjust"_ustr, uno::Any(drawing::TextHorizontalAdjust_RIGHT));
 
-    xProperties->setPropertyValue( "TextWritingMode", uno::Any( text::WritingMode_TB_RL ) );
+    xProperties->setPropertyValue( u"TextWritingMode"_ustr, uno::Any( text::WritingMode_TB_RL ) );
 }
 
 } // namespace oox::vml

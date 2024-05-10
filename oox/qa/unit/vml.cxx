@@ -29,7 +29,7 @@ class OoxVmlTest : public UnoApiTest
 {
 public:
     OoxVmlTest()
-        : UnoApiTest("/oox/qa/unit/data/")
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6879), aPolygon[3].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(487), aPolygon[3].Y, 1);
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1926), xShape->getSize().Height, 1);
         // After the fix the shape has still to be PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_PLIN, ePolygonKind);
     }
     {
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5062), aPolygon[2].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), aPolygon[2].Y, 1);
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), xShape->getSize().Height, 1);
         // Without fix in place the shape was not closed, it had PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
     }
     {
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
-        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        xShapeProps->getPropertyValue(u"Geometry"_ustr) >>= aGeometry;
         drawing::PointSequence aPolygon = aGeometry[0];
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2095), aPolygon[3].X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(608), aPolygon[3].Y, 1);
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2485), xShape->getSize().Height, 1);
         // Without fix in place the shape was not closed, it had PolygonKind_PLIN
         drawing::PolygonKind ePolygonKind;
-        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        xShapeProps->getPropertyValue(u"PolygonKind"_ustr) >>= ePolygonKind;
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
     }
 }
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    xShapeProps->getPropertyValue("PolyPolygonBezier") >>= aPolyPolygonBezierCoords;
+    xShapeProps->getPropertyValue(u"PolyPolygonBezier"_ustr) >>= aPolyPolygonBezierCoords;
     drawing::PointSequence aPolygon = aPolyPolygonBezierCoords.Coordinates[1];
     // Without fix in place, the vector was -1441|1490.
     // [1] and [2] are Bezier-curve control points.
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
     // - Actual  : com.sun.star.drawing.CustomShape
     // and then the size of the group shape was incorrect, e.g. its right edge was outside the page
     // boundaries.
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShape->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.TextShape"_ustr, xShape->getShapeType());
 }
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
@@ -167,13 +167,13 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
 
     uno::Reference<beans::XPropertySet> xShape;
     uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    if (xInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
+    if (xInfo->supportsService(u"com.sun.star.drawing.OLE2Shape"_ustr))
         xShape.set(xInfo, uno::UNO_QUERY);
 
     CPPUNIT_ASSERT(xShape.is());
 
     drawing::LineStyle eLineStyle{};
-    xShape->getPropertyValue("LineStyle") >>= eLineStyle;
+    xShape->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};
-    xShape->getPropertyValue("GraphicColorMode") >>= eMode;
+    xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3
     // - Actual  : 0
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
     skipValidation();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),

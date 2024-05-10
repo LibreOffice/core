@@ -308,12 +308,12 @@ awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const Referen
     try
     {
         Reference< beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
-        if( xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSizeHmm )
+        if( xGraphicPropertySet->getPropertyValue( u"Size100thMM"_ustr ) >>= aSizeHmm )
         {
             if( !aSizeHmm.Width && !aSizeHmm.Height )
             {   // MAPMODE_PIXEL USED :-(
                 awt::Size aSourceSizePixel( 0, 0 );
-                if( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel )
+                if( xGraphicPropertySet->getPropertyValue( u"SizePixel"_ustr ) >>= aSourceSizePixel )
                     aSizeHmm = rGraphicHelper.convertScreenPixelToHmm( aSourceSizePixel );
             }
         }
@@ -924,8 +924,8 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
     if( mrOleObjectInfo.maEmbeddedData.hasElements() )
     {
         css::uno::Sequence< css::beans::PropertyValue > aGraphicSeq{
-            comphelper::makePropertyValue("Id", mrOleObjectInfo.maProgId),
-            comphelper::makePropertyValue("Data", mrOleObjectInfo.maEmbeddedData)
+            comphelper::makePropertyValue(u"Id"_ustr, mrOleObjectInfo.maProgId),
+            comphelper::makePropertyValue(u"Data"_ustr, mrOleObjectInfo.maEmbeddedData)
         };
 
         pSeq[i].Name = "OriginalGraphic";
@@ -952,53 +952,53 @@ OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
     switch( nToken )
     {
         // effects
-        case OOX_TOKEN( a14, artisticBlur ):                return "artisticBlur";
-        case OOX_TOKEN( a14, artisticCement ):              return "artisticCement";
-        case OOX_TOKEN( a14, artisticChalkSketch ):         return "artisticChalkSketch";
-        case OOX_TOKEN( a14, artisticCrisscrossEtching ):   return "artisticCrisscrossEtching";
-        case OOX_TOKEN( a14, artisticCutout ):              return "artisticCutout";
-        case OOX_TOKEN( a14, artisticFilmGrain ):           return "artisticFilmGrain";
-        case OOX_TOKEN( a14, artisticGlass ):               return "artisticGlass";
-        case OOX_TOKEN( a14, artisticGlowDiffused ):        return "artisticGlowDiffused";
-        case OOX_TOKEN( a14, artisticGlowEdges ):           return "artisticGlowEdges";
-        case OOX_TOKEN( a14, artisticLightScreen ):         return "artisticLightScreen";
-        case OOX_TOKEN( a14, artisticLineDrawing ):         return "artisticLineDrawing";
-        case OOX_TOKEN( a14, artisticMarker ):              return "artisticMarker";
-        case OOX_TOKEN( a14, artisticMosiaicBubbles ):      return "artisticMosiaicBubbles";
-        case OOX_TOKEN( a14, artisticPaintStrokes ):        return "artisticPaintStrokes";
-        case OOX_TOKEN( a14, artisticPaintBrush ):          return "artisticPaintBrush";
-        case OOX_TOKEN( a14, artisticPastelsSmooth ):       return "artisticPastelsSmooth";
-        case OOX_TOKEN( a14, artisticPencilGrayscale ):     return "artisticPencilGrayscale";
-        case OOX_TOKEN( a14, artisticPencilSketch ):        return "artisticPencilSketch";
-        case OOX_TOKEN( a14, artisticPhotocopy ):           return "artisticPhotocopy";
-        case OOX_TOKEN( a14, artisticPlasticWrap ):         return "artisticPlasticWrap";
-        case OOX_TOKEN( a14, artisticTexturizer ):          return "artisticTexturizer";
-        case OOX_TOKEN( a14, artisticWatercolorSponge ):    return "artisticWatercolorSponge";
-        case OOX_TOKEN( a14, brightnessContrast ):          return "brightnessContrast";
-        case OOX_TOKEN( a14, colorTemperature ):            return "colorTemperature";
-        case OOX_TOKEN( a14, saturation ):                  return "saturation";
-        case OOX_TOKEN( a14, sharpenSoften ):               return "sharpenSoften";
+        case OOX_TOKEN( a14, artisticBlur ):                return u"artisticBlur"_ustr;
+        case OOX_TOKEN( a14, artisticCement ):              return u"artisticCement"_ustr;
+        case OOX_TOKEN( a14, artisticChalkSketch ):         return u"artisticChalkSketch"_ustr;
+        case OOX_TOKEN( a14, artisticCrisscrossEtching ):   return u"artisticCrisscrossEtching"_ustr;
+        case OOX_TOKEN( a14, artisticCutout ):              return u"artisticCutout"_ustr;
+        case OOX_TOKEN( a14, artisticFilmGrain ):           return u"artisticFilmGrain"_ustr;
+        case OOX_TOKEN( a14, artisticGlass ):               return u"artisticGlass"_ustr;
+        case OOX_TOKEN( a14, artisticGlowDiffused ):        return u"artisticGlowDiffused"_ustr;
+        case OOX_TOKEN( a14, artisticGlowEdges ):           return u"artisticGlowEdges"_ustr;
+        case OOX_TOKEN( a14, artisticLightScreen ):         return u"artisticLightScreen"_ustr;
+        case OOX_TOKEN( a14, artisticLineDrawing ):         return u"artisticLineDrawing"_ustr;
+        case OOX_TOKEN( a14, artisticMarker ):              return u"artisticMarker"_ustr;
+        case OOX_TOKEN( a14, artisticMosiaicBubbles ):      return u"artisticMosiaicBubbles"_ustr;
+        case OOX_TOKEN( a14, artisticPaintStrokes ):        return u"artisticPaintStrokes"_ustr;
+        case OOX_TOKEN( a14, artisticPaintBrush ):          return u"artisticPaintBrush"_ustr;
+        case OOX_TOKEN( a14, artisticPastelsSmooth ):       return u"artisticPastelsSmooth"_ustr;
+        case OOX_TOKEN( a14, artisticPencilGrayscale ):     return u"artisticPencilGrayscale"_ustr;
+        case OOX_TOKEN( a14, artisticPencilSketch ):        return u"artisticPencilSketch"_ustr;
+        case OOX_TOKEN( a14, artisticPhotocopy ):           return u"artisticPhotocopy"_ustr;
+        case OOX_TOKEN( a14, artisticPlasticWrap ):         return u"artisticPlasticWrap"_ustr;
+        case OOX_TOKEN( a14, artisticTexturizer ):          return u"artisticTexturizer"_ustr;
+        case OOX_TOKEN( a14, artisticWatercolorSponge ):    return u"artisticWatercolorSponge"_ustr;
+        case OOX_TOKEN( a14, brightnessContrast ):          return u"brightnessContrast"_ustr;
+        case OOX_TOKEN( a14, colorTemperature ):            return u"colorTemperature"_ustr;
+        case OOX_TOKEN( a14, saturation ):                  return u"saturation"_ustr;
+        case OOX_TOKEN( a14, sharpenSoften ):               return u"sharpenSoften"_ustr;
 
         // attributes
-        case XML_visible:           return "visible";
-        case XML_trans:             return "trans";
-        case XML_crackSpacing:      return "crackSpacing";
-        case XML_pressure:          return "pressure";
-        case XML_numberOfShades:    return "numberOfShades";
-        case XML_grainSize:         return "grainSize";
-        case XML_intensity:         return "intensity";
-        case XML_smoothness:        return "smoothness";
-        case XML_gridSize:          return "gridSize";
-        case XML_pencilSize:        return "pencilSize";
-        case XML_size:              return "size";
-        case XML_brushSize:         return "brushSize";
-        case XML_scaling:           return "scaling";
-        case XML_detail:            return "detail";
-        case XML_bright:            return "bright";
-        case XML_contrast:          return "contrast";
-        case XML_colorTemp:         return "colorTemp";
-        case XML_sat:               return "sat";
-        case XML_amount:            return "amount";
+        case XML_visible:           return u"visible"_ustr;
+        case XML_trans:             return u"trans"_ustr;
+        case XML_crackSpacing:      return u"crackSpacing"_ustr;
+        case XML_pressure:          return u"pressure"_ustr;
+        case XML_numberOfShades:    return u"numberOfShades"_ustr;
+        case XML_grainSize:         return u"grainSize"_ustr;
+        case XML_intensity:         return u"intensity"_ustr;
+        case XML_smoothness:        return u"smoothness"_ustr;
+        case XML_gridSize:          return u"gridSize"_ustr;
+        case XML_pencilSize:        return u"pencilSize"_ustr;
+        case XML_size:              return u"size"_ustr;
+        case XML_brushSize:         return u"brushSize"_ustr;
+        case XML_scaling:           return u"scaling"_ustr;
+        case XML_detail:            return u"detail"_ustr;
+        case XML_bright:            return u"bright"_ustr;
+        case XML_contrast:          return u"contrast"_ustr;
+        case XML_colorTemp:         return u"colorTemp"_ustr;
+        case XML_sat:               return u"sat"_ustr;
+        case XML_amount:            return u"amount"_ustr;
     }
     SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectString: unexpected token " << nToken );
     return OUString();

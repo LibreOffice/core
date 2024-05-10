@@ -986,7 +986,7 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
 ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mrFilter( rFilter ),
     maModelObjHelper( Reference< XMultiServiceFactory >( rxChartDoc, UNO_QUERY ) ),
-    maEnUsLocale( "en", "US", OUString() ),
+    maEnUsLocale( u"en"_ustr, u"US"_ustr, OUString() ),
     mnMaxSeriesIdx( -1 )
 {
     for(auto const &rEntry : spObjTypeFormatEntries)
