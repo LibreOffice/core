@@ -216,7 +216,7 @@ $CAN_CM $CM*  $SY;
 #
 # LB 14  Do not break after OP, even after spaces
 #        Note subtle interaction with "SP IS /" rules in LB14a.
-#        This rule consumes the SP, chaining happens on the IS, effectivley overriding the  SP IS rules,
+#        This rule consumes the SP, chaining happens on the IS, effectively overriding the  SP IS rules,
 #        which is the desired behavior.
 #
 $OP $CM* $SP* .;
