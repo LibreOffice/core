@@ -117,7 +117,7 @@ RecoveryUI::RecoveryUI(css::uno::Reference< css::uno::XComponentContext >  xCont
 
 OUString SAL_CALL RecoveryUI::getImplementationName()
 {
-    return "com.sun.star.comp.svx.RecoveryUI";
+    return u"com.sun.star.comp.svx.RecoveryUI"_ustr;
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
 {
-    return { "com.sun.star.dialog.RecoveryUI" };
+    return { u"com.sun.star.dialog.RecoveryUI"_ustr };
 }
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,
@@ -183,7 +183,7 @@ OUString GetCrashConfigDir()
 #elif defined(MACOSX)
     OUString    ustrValue = "~";
 #else
-    OUString    ustrValue = "$SYSUSERCONFIG";
+    OUString    ustrValue = u"$SYSUSERCONFIG"_ustr;
 #endif
     rtl::Bootstrap::expandMacros( ustrValue );
 

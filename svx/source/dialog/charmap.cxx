@@ -242,15 +242,15 @@ bool SvxShowCharSet::isFavChar(std::u16string_view sTitle, std::u16string_view r
 
 void SvxShowCharSet::createContextMenu(const Point& rPosition)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/charsetmenu.ui"));
-    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charsetmenu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), u"svx/ui/charsetmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu(u"charsetmenu"_ustr));
 
     sal_UCS4 cChar = GetSelectCharacter();
     OUString aOUStr( &cChar, 1 );
     if (isFavChar(aOUStr, mxVirDev->GetFont().GetFamilyName()) || maFavCharList.size() >= 16)
-        xItemMenu->set_visible("add", false);
+        xItemMenu->set_visible(u"add"_ustr, false);
     else
-        xItemMenu->set_visible("remove", false);
+        xItemMenu->set_visible(u"remove"_ustr, false);
 
     ContextMenuSelect(xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPosition, Size(1,1))));
     GrabFocus();

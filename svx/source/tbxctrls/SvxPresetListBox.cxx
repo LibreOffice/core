@@ -53,8 +53,8 @@ bool SvxPresetListBox::Command(const CommandEvent& rEvent)
     if (nIndex > 0)
     {
         std::unique_ptr<weld::Builder> xBuilder(
-            Application::CreateBuilder(GetDrawingArea(), "svx/ui/presetmenu.ui"));
-        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+            Application::CreateBuilder(GetDrawingArea(), u"svx/ui/presetmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
         OnMenuItemSelected(xMenu->popup_at_rect(
             GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1))));
         return true;

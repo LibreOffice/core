@@ -570,10 +570,10 @@ void SAL_CALL PluginProgress::reset()
 }
 
 SaveDialog::SaveDialog(weld::Window* pParent, RecoveryCore* pCore)
-    : GenericDialogController(pParent, "svx/ui/docrecoverysavedialog.ui", "DocRecoverySaveDialog")
+    : GenericDialogController(pParent, u"svx/ui/docrecoverysavedialog.ui"_ustr, u"DocRecoverySaveDialog"_ustr)
     , m_pCore(pCore)
-    , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    , m_xFileListLB(m_xBuilder->weld_tree_view(u"filelist"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xFileListLB->set_size_request(-1, m_xFileListLB->get_height_rows(10));
 
@@ -590,7 +590,7 @@ SaveDialog::SaveDialog(weld::Window* pParent, RecoveryCore* pCore)
 
     for (const TURLInfo& rInfo : rURLs)
     {
-        m_xFileListLB->append("", rInfo.DisplayName, rInfo.StandardImageId);
+        m_xFileListLB->append(u""_ustr, rInfo.DisplayName, rInfo.StandardImageId);
     }
 }
 
@@ -614,9 +614,9 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, weld::Button&, void)
 }
 
 SaveProgressDialog::SaveProgressDialog(weld::Window* pParent, RecoveryCore* pCore)
-    : GenericDialogController(pParent, "svx/ui/docrecoveryprogressdialog.ui", "DocRecoveryProgressDialog")
+    : GenericDialogController(pParent, u"svx/ui/docrecoveryprogressdialog.ui"_ustr, u"DocRecoveryProgressDialog"_ustr)
     , m_pCore(pCore)
-    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
 {
     m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
     m_xProgress = new PluginProgress(m_xProgressBar.get());
@@ -671,7 +671,7 @@ static short impl_askUserForWizardCancel(weld::Widget* pParent, TranslateId pRes
 }
 
 RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
-    : GenericDialogController(pParent, "svx/ui/docrecoveryrecoverdialog.ui", "DocRecoveryRecoverDialog")
+    : GenericDialogController(pParent, u"svx/ui/docrecoveryrecoverdialog.ui"_ustr, u"DocRecoveryRecoverDialog"_ustr)
     , m_aTitleRecoveryInProgress(SvxResId(RID_SVXSTR_RECOVERY_INPROGRESS))
     , m_aRecoveryOnlyFinish (SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH))
     , m_aRecoveryOnlyFinishDescr(SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH_DESCR))
@@ -687,11 +687,11 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     , m_aRecovInProgrStr(SvxResId(RID_SVXSTR_RECOVINPROGR))
     , m_aNotRecovYetStr(SvxResId(RID_SVXSTR_NOTRECOVYET))
     , m_aWillBeDiscStr(SvxResId(RID_SVXSTR_WILLDISCARD))
-    , m_xDescrFT(m_xBuilder->weld_label("desc"))
-    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
-    , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
-    , m_xNextBtn(m_xBuilder->weld_button("next"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xDescrFT(m_xBuilder->weld_label(u"desc"_ustr))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
+    , m_xFileListLB(m_xBuilder->weld_tree_view(u"filelist"_ustr))
+    , m_xNextBtn(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     const auto nWidth = m_xFileListLB->get_approximate_digit_width() * 80;
     m_xFileListLB->set_size_request(nWidth, m_xFileListLB->get_height_rows(10));
@@ -1128,15 +1128,15 @@ void RecoveryDialog::impl_updateItemDescription(int row, const TriState& rState)
 BrokenRecoveryDialog::BrokenRecoveryDialog(weld::Window* pParent,
                                            RecoveryCore* pCore,
                                            bool bBeforeRecovery)
-    : GenericDialogController(pParent, "svx/ui/docrecoverybrokendialog.ui", "DocRecoveryBrokenDialog")
+    : GenericDialogController(pParent, u"svx/ui/docrecoverybrokendialog.ui"_ustr, u"DocRecoveryBrokenDialog"_ustr)
     , m_pCore(pCore)
     , m_bBeforeRecovery(bBeforeRecovery)
     , m_bExecutionNeeded(false)
-    , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
-    , m_xSaveDirED(m_xBuilder->weld_entry("savedir"))
-    , m_xSaveDirBtn(m_xBuilder->weld_button("change"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xFileListLB(m_xBuilder->weld_tree_view(u"filelist"_ustr))
+    , m_xSaveDirED(m_xBuilder->weld_entry(u"savedir"_ustr))
+    , m_xSaveDirBtn(m_xBuilder->weld_button(u"change"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xSaveDirBtn->connect_clicked( LINK( this, BrokenRecoveryDialog, SaveButtonHdl ) );
     m_xOkBtn->connect_clicked( LINK( this, BrokenRecoveryDialog, OkButtonHdl ) );

@@ -801,37 +801,37 @@ OUString SdrFormatter::GetUnitStr(MapUnit eUnit)
     {
         // metrically
         case MapUnit::Map100thMM   :
-            return "/100mm";
+            return u"/100mm"_ustr;
         case MapUnit::Map10thMM    :
-            return "/10mm";
+            return u"/10mm"_ustr;
         case MapUnit::MapMM         :
-            return "mm";
+            return u"mm"_ustr;
         case MapUnit::MapCM         :
-            return "cm";
+            return u"cm"_ustr;
 
         // Inch
         case MapUnit::Map1000thInch:
-            return "/1000\"";
+            return u"/1000\""_ustr;
         case MapUnit::Map100thInch :
-            return "/100\"";
+            return u"/100\""_ustr;
         case MapUnit::Map10thInch  :
-            return "/10\"";
+            return u"/10\""_ustr;
         case MapUnit::MapInch       :
-            return "\"";
+            return u"\""_ustr;
         case MapUnit::MapPoint      :
-            return "pt";
+            return u"pt"_ustr;
         case MapUnit::MapTwip       :
-            return "twip";
+            return u"twip"_ustr;
 
         // others
         case MapUnit::MapPixel      :
-            return "pixel";
+            return u"pixel"_ustr;
         case MapUnit::MapSysFont    :
-            return "sysfont";
+            return u"sysfont"_ustr;
         case MapUnit::MapAppFont    :
-            return "appfont";
+            return u"appfont"_ustr;
         case MapUnit::MapRelative   :
-            return "%";
+            return u"%"_ustr;
         default:
             return OUString();
     }
@@ -848,33 +848,33 @@ OUString SdrFormatter::GetUnitStr(FieldUnit eUnit)
 
         // metrically
         case FieldUnit::MM_100TH:
-            return "/100mm";
+            return u"/100mm"_ustr;
         case FieldUnit::MM     :
-            return "mm";
+            return u"mm"_ustr;
         case FieldUnit::CM     :
-            return "cm";
+            return u"cm"_ustr;
         case FieldUnit::M      :
-            return "m";
+            return u"m"_ustr;
         case FieldUnit::KM     :
-            return "km";
+            return u"km"_ustr;
 
         // Inch
         case FieldUnit::TWIP   :
-            return "twip";
+            return u"twip"_ustr;
         case FieldUnit::POINT  :
-            return "pt";
+            return u"pt"_ustr;
         case FieldUnit::PICA   :
-            return "pica";
+            return u"pica"_ustr;
         case FieldUnit::INCH   :
-            return "\"";
+            return u"\""_ustr;
         case FieldUnit::FOOT   :
-            return "ft";
+            return u"ft"_ustr;
         case FieldUnit::MILE   :
-            return "mile(s)";
+            return u"mile(s)"_ustr;
 
         // others
         case FieldUnit::PERCENT:
-            return "%";
+            return u"%"_ustr;
     }
 }
 

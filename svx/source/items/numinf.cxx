@@ -26,7 +26,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Undefined ),
-    aStringVal      ( "" ),
+    aStringVal      ( u""_ustr ),
     nDoubleVal      ( 0 )
 {
 }
@@ -48,7 +48,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Number ),
-    aStringVal      ( "" ),
+    aStringVal      ( u""_ustr ),
     nDoubleVal      ( rVal )
 {
 }

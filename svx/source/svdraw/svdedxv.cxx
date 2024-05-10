@@ -2418,9 +2418,9 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             {
                 std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
                     nullptr, VclMessageType::Info, VclButtonsType::Ok,
-                    "SdrObjEditView::SetAttributes(): Setting EE_FEATURE items "
+                    u"SdrObjEditView::SetAttributes(): Setting EE_FEATURE items "
                     "at the SdrView does not make sense! It only leads to "
-                    "overhead and unreadable documents."));
+                    "overhead and unreadable documents."_ustr));
                 xInfoBox->run();
             }
         }

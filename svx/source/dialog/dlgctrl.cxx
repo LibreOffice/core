@@ -945,7 +945,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
         const Size aBmpSize(aBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
         pVD->DrawBitmapEx(Point(), aBitmap);
-        m_xControl->append("", pList->GetStringForUiSolidLine(), *pVD);
+        m_xControl->append(u""_ustr, pList->GetStringForUiSolidLine(), *pVD);
     }
 
     // entries for dashed lines
@@ -962,7 +962,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
             pVD->DrawBitmapEx(Point(), aBitmap);
-            m_xControl->append("", pEntry->GetName(), *pVD);
+            m_xControl->append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
         {
@@ -982,7 +982,7 @@ void SvxLineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
         pVD->DrawBitmapEx(Point(), rBitmap);
-        m_xControl->append("", rEntry.GetName(), *pVD);
+        m_xControl->append(u""_ustr, rEntry.GetName(), *pVD);
     }
     else
     {
@@ -1032,7 +1032,7 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
             pVD->DrawBitmapEx(bStart ? Point() : Point(-aBmpSize.Width() / 2, 0), aBitmap);
-            m_xControl->append("", pEntry->GetName(), *pVD);
+            m_xControl->append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
             m_xControl->append_text(pEntry->GetName());
@@ -1050,7 +1050,7 @@ void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
         pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
-        m_xControl->append("", rEntry.GetName(), *pVD);
+        m_xControl->append(u""_ustr, rEntry.GetName(), *pVD);
     }
     else
     {
@@ -1447,10 +1447,10 @@ void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::
     {
         // use the, filled-in by dispatcher, width of measurewidth as the width
         // of a "standard" column in a two column panel
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rToolbar, "svx/ui/measurewidthbar.ui"));
-        std::unique_ptr<weld::Toolbar> xToolbar1(xBuilder->weld_toolbar("measurewidth1"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rToolbar, u"svx/ui/measurewidthbar.ui"_ustr));
+        std::unique_ptr<weld::Toolbar> xToolbar1(xBuilder->weld_toolbar(u"measurewidth1"_ustr));
         ToolbarUnoDispatcher aDispatcher1(*xToolbar1, *xBuilder, rFrame);
-        std::unique_ptr<weld::Toolbar> xToolbar2(xBuilder->weld_toolbar("measurewidth2"));
+        std::unique_ptr<weld::Toolbar> xToolbar2(xBuilder->weld_toolbar(u"measurewidth2"_ustr));
         ToolbarUnoDispatcher aDispatcher2(*xToolbar2, *xBuilder, rFrame);
         nColumnWidth = std::max(xToolbar1->get_preferred_size().Width(), xToolbar2->get_preferred_size().Width());
         eSize = rToolbar.get_icon_size();

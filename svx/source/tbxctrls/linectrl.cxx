@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
-    addStatusListener(".uno:LineDash");
+    addStatusListener(u".uno:LineDash"_ustr);
 }
 
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
@@ -205,12 +205,12 @@ VclPtr<vcl::Window> SvxLineStyleToolBoxControl::createVclPopupWindow( vcl::Windo
 
 OUString SvxLineStyleToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.LineStyleToolBoxControl";
+    return u"com.sun.star.comp.svx.LineStyleToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -271,10 +271,10 @@ public:
 constexpr sal_uInt16 gnCols = 2;
 
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatinglineend.ui"_ustr, u"FloatingLineEnd"_ustr)
     , mxControl(pControl)
-    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
-    , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
+    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxLineEndSet))
     , mnLines(12)
 {
     mxLineEndSet->SetStyle(mxLineEndSet->GetStyle() | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
@@ -296,7 +296,7 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     // ValueSet fill with entries of LineEndList
     FillValueSet();
 
-    AddStatusListener( ".uno:LineEndListState");
+    AddStatusListener( u".uno:LineEndListState"_ustr);
 }
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
@@ -490,12 +490,12 @@ VclPtr<vcl::Window> SvxLineEndToolBoxControl::createVclPopupWindow( vcl::Window*
 
 OUString SvxLineEndToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.LineEndToolBoxControl";
+    return u"com.sun.star.comp.svx.LineEndToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -507,10 +507,10 @@ com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
 }
 
 SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglinestyle.ui", "FloatingLineStyle")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatinglinestyle.ui"_ustr, u"FloatingLineStyle"_ustr)
     , mxControl(pControl)
-    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
-    , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineStyleSet))
+    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxLineStyleSet))
 {
     mxLineStyleSet->SetStyle(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
 
@@ -605,8 +605,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
 
                 Any a;
                 aLineDashItem.QueryValue ( a );
-                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("LineDash", a) };
-                mxControl->dispatchLineStyleCommand(".uno:LineDash", aArgs);
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"LineDash"_ustr, a) };
+                mxControl->dispatchLineStyleCommand(u".uno:LineDash"_ustr, aArgs);
 
                 // set also cap style using the toolbar line style selection popup
                 css::drawing::DashStyle eStyle = pEntry->GetDash().GetDashStyle();
@@ -615,8 +615,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
                                 ? css::drawing::LineCap_BUTT
                                 : css::drawing::LineCap_ROUND );
                 aLineCapItem.QueryValue ( a );
-                Sequence< PropertyValue > aArgs2{ comphelper::makePropertyValue("LineCap", a) };
-                mxControl->dispatchLineStyleCommand(".uno:LineCap", aArgs2);
+                Sequence< PropertyValue > aArgs2{ comphelper::makePropertyValue(u"LineCap"_ustr, a) };
+                mxControl->dispatchLineStyleCommand(u".uno:LineCap"_ustr, aArgs2);
             }
         }
         break;
@@ -625,8 +625,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
     XLineStyleItem aLineStyleItem( eXLS );
     Any a;
     aLineStyleItem.QueryValue ( a );
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("XLineStyle", a) };
-    mxControl->dispatchLineStyleCommand(".uno:XLineStyle", aArgs);
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"XLineStyle"_ustr, a) };
+    mxControl->dispatchLineStyleCommand(u".uno:XLineStyle"_ustr, aArgs);
 
     mxControl->EndPopupMode();
 }

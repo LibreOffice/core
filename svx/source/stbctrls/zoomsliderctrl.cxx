@@ -164,7 +164,7 @@ void SvxZoomSliderControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, 
 {
     if (SfxItemState::DEFAULT != eState || SfxItemState::DISABLED == eState)
     {
-        GetStatusBar().SetItemText( GetId(), "" );
+        GetStatusBar().SetItemText( GetId(), u""_ustr );
         mxImpl->mbValuesSet   = false;
     }
     else
@@ -364,7 +364,7 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOM_IN));
     else
         // don't hide the slider and its handle with a tooltip during zooming
-        GetStatusBar().SetQuickHelpText(GetId(), "");
+        GetStatusBar().SetQuickHelpText(GetId(), u""_ustr);
 
     return true;
 }
@@ -384,7 +384,7 @@ void SvxZoomSliderControl::repaintAndExecute()
     css::uno::Any any;
     aZoomSliderItem.QueryValue(any);
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue("ZoomSlider",
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(u"ZoomSlider"_ustr,
                                                                                        any) };
     execute(aArgs);
 }

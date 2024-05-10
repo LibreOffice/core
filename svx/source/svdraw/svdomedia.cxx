@@ -252,7 +252,7 @@ void SdrMediaObj::setURL(const OUString& rURL, const OUString& rReferer)
 {
     ::avmedia::MediaItem aURLItem;
 #if HAVE_FEATURE_AVMEDIA
-    aURLItem.setURL( rURL, "", rReferer );
+    aURLItem.setURL( rURL, u""_ustr, rReferer );
 #else
     (void) rURL;
     (void) rReferer;
@@ -330,7 +330,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     {
         m_xImpl->m_pTempFile = std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
         m_xImpl->m_MediaProperties.setURL(
-            m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
+            m_xImpl->m_LastFailedPkgURL, tempFileURL, u""_ustr);
     }
     m_xImpl->m_LastFailedPkgURL.clear(); // once only
 #endif
@@ -418,12 +418,12 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 {
                     m_xImpl->m_pTempFile =
                             std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
-                    m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
+                    m_xImpl->m_MediaProperties.setURL(url, tempFileURL, u""_ustr);
                 }
                 else // this case is for Clone via operator=
                 {
                     m_xImpl->m_pTempFile.reset();
-                    m_xImpl->m_MediaProperties.setURL("", "", "");
+                    m_xImpl->m_MediaProperties.setURL(u""_ustr, u""_ustr, u""_ustr);
                     // UGLY: oox import also gets here, because unlike ODF
                     // getDocumentStorage() is not the imported file...
                     m_xImpl->m_LastFailedPkgURL = url;
@@ -432,13 +432,13 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             else
             {
                 m_xImpl->m_MediaProperties.setURL(url,
-                        rNewProperties.getTempURL(), "");
+                        rNewProperties.getTempURL(), u""_ustr);
             }
         }
         else
         {
             m_xImpl->m_pTempFile.reset();
-            m_xImpl->m_MediaProperties.setURL(url, "", rNewProperties.getReferer());
+            m_xImpl->m_MediaProperties.setURL(url, u""_ustr, rNewProperties.getReferer());
         }
         bBroadcastChanged = true;
     }

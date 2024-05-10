@@ -13,33 +13,35 @@
 namespace svx
 {
 ThemeColorEditDialog::ThemeColorEditDialog(weld::Window* pParent, model::ColorSet& rColorSet)
-    : GenericDialogController(pParent, "svx/ui/themecoloreditdialog.ui", "ThemeColorEditDialog")
+    : GenericDialogController(pParent, u"svx/ui/themecoloreditdialog.ui"_ustr,
+                              u"ThemeColorEditDialog"_ustr)
     , maColorSet(rColorSet)
-    , mxThemeColorsNameEntry(m_xBuilder->weld_entry("entryThemeColorsName"))
-    , mxDark1(new ColorListBox(m_xBuilder->weld_menu_button("buttonDark1"),
+    , mxThemeColorsNameEntry(m_xBuilder->weld_entry(u"entryThemeColorsName"_ustr))
+    , mxDark1(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonDark1"_ustr),
                                [pParent] { return pParent; }))
-    , mxLight1(new ColorListBox(m_xBuilder->weld_menu_button("buttonLight1"),
+    , mxLight1(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonLight1"_ustr),
                                 [pParent] { return pParent; }))
-    , mxDark2(new ColorListBox(m_xBuilder->weld_menu_button("buttonDark2"),
+    , mxDark2(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonDark2"_ustr),
                                [pParent] { return pParent; }))
-    , mxLight2(new ColorListBox(m_xBuilder->weld_menu_button("buttonLight2"),
+    , mxLight2(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonLight2"_ustr),
                                 [pParent] { return pParent; }))
-    , mxAccent1(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent1"),
+    , mxAccent1(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent1"_ustr),
                                  [pParent] { return pParent; }))
-    , mxAccent2(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent2"),
+    , mxAccent2(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent2"_ustr),
                                  [pParent] { return pParent; }))
-    , mxAccent3(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent3"),
+    , mxAccent3(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent3"_ustr),
                                  [pParent] { return pParent; }))
-    , mxAccent4(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent4"),
+    , mxAccent4(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent4"_ustr),
                                  [pParent] { return pParent; }))
-    , mxAccent5(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent5"),
+    , mxAccent5(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent5"_ustr),
                                  [pParent] { return pParent; }))
-    , mxAccent6(new ColorListBox(m_xBuilder->weld_menu_button("buttonAccent6"),
+    , mxAccent6(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonAccent6"_ustr),
                                  [pParent] { return pParent; }))
-    , mxHyperlink(new ColorListBox(m_xBuilder->weld_menu_button("buttonHyperlink"),
+    , mxHyperlink(new ColorListBox(m_xBuilder->weld_menu_button(u"buttonHyperlink"_ustr),
                                    [pParent] { return pParent; }))
-    , mxFollowHyperlink(new ColorListBox(m_xBuilder->weld_menu_button("buttonFollowHyperlink"),
-                                         [pParent] { return pParent; }))
+    , mxFollowHyperlink(
+          new ColorListBox(m_xBuilder->weld_menu_button(u"buttonFollowHyperlink"_ustr),
+                           [pParent] { return pParent; }))
 {
     mxThemeColorsNameEntry->set_text(rColorSet.getName());
     mxDark1->SelectEntry(rColorSet.getColor(model::ThemeColorType::Dark1));

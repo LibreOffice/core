@@ -51,7 +51,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.graphic.PrimitiveFactory2D";
+        return u"com.sun.star.comp.graphic.PrimitiveFactory2D"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
@@ -61,7 +61,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.graphic.PrimitiveFactory2D" };
+        return { u"com.sun.star.graphic.PrimitiveFactory2D"_ustr };
     }
 };
 

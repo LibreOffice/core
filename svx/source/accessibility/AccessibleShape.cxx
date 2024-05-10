@@ -190,7 +190,7 @@ void AccessibleShape::UpdateStates()
                 try
                 {
                     drawing::FillStyle aFillStyle;
-                    bShapeIsOpaque =  ( xSet->getPropertyValue ("FillStyle") >>= aFillStyle)
+                    bShapeIsOpaque =  ( xSet->getPropertyValue (u"FillStyle"_ustr) >>= aFillStyle)
                                         && aFillStyle == drawing::FillStyle_SOLID;
                 }
                 catch (css::beans::UnknownPropertyException&)
@@ -290,7 +290,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
     if( m_pShape && !m_pShape->GetDescription().isEmpty())
         return m_pShape->GetDescription() ;
     else
-        return " ";
+        return u" "_ustr;
 }
 
 // XAccessibleContext
@@ -533,7 +533,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
             throw uno::RuntimeException (
-                "AccessibleShape has no valid view forwarder",
+                u"AccessibleShape has no valid view forwarder"_ustr,
                 getXWeak());
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Size (aBoundingBox.Width, aBoundingBox.Height));
@@ -624,7 +624,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue ("LineColor");
+            aColor = aSet->getPropertyValue (u"LineColor"_ustr);
             aColor >>= nColor;
         }
     }
@@ -647,9 +647,9 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue ("FillColor");
+            aColor = aSet->getPropertyValue (u"FillColor"_ustr);
             aColor >>= nColor;
-            aColor = aSet->getPropertyValue ("FillTransparence");
+            aColor = aSet->getPropertyValue (u"FillTransparence"_ustr);
             short nTrans=0;
             aColor >>= nTrans;
             Color crBk(nColor);
@@ -832,7 +832,7 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
 OUString SAL_CALL
     AccessibleShape::getImplementationName()
 {
-    return "AccessibleShape";
+    return u"AccessibleShape"_ustr;
 }
 
 
@@ -840,7 +840,7 @@ uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
-    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleShape" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
@@ -1043,20 +1043,20 @@ void AccessibleShape::UpdateNameAndDescription()
         Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY_THROW);
 
         // Get the accessible name.
-        OUString sString = GetOptionalProperty(xSet, "Title");
+        OUString sString = GetOptionalProperty(xSet, u"Title"_ustr);
         if (!sString.isEmpty())
         {
             SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
         else
         {
-            sString = GetOptionalProperty(xSet, "Name");
+            sString = GetOptionalProperty(xSet, u"Name"_ustr);
             if (!sString.isEmpty())
                 SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
 
         // Get the accessible description.
-        sString = GetOptionalProperty(xSet, "Description");
+        sString = GetOptionalProperty(xSet, u"Description"_ustr);
         if (!sString.isEmpty())
             SetAccessibleDescription(sString, AccessibleContextBase::FromShape);
     }

@@ -88,14 +88,14 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mnLastPosBitmap(0)
     , mnLastPosPattern(0)
 {
-    addStatusListener( ".uno:FillColor");
-    addStatusListener( ".uno:FillGradient");
-    addStatusListener( ".uno:FillHatch");
-    addStatusListener( ".uno:FillBitmap");
-    addStatusListener( ".uno:ColorTableState");
-    addStatusListener( ".uno:GradientListState");
-    addStatusListener( ".uno:HatchListState");
-    addStatusListener( ".uno:BitmapListState");
+    addStatusListener( u".uno:FillColor"_ustr);
+    addStatusListener( u".uno:FillGradient"_ustr);
+    addStatusListener( u".uno:FillHatch"_ustr);
+    addStatusListener( u".uno:FillBitmap"_ustr);
+    addStatusListener( u".uno:ColorTableState"_ustr);
+    addStatusListener( u".uno:GradientListState"_ustr);
+    addStatusListener( u".uno:HatchListState"_ustr);
+    addStatusListener( u".uno:BitmapListState"_ustr);
 }
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
@@ -405,7 +405,7 @@ void SvxFillToolBoxControl::Update()
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        rtl::Reference<XGradientList> xGradientList = new XGradientList( "", ""/*TODO?*/ );
+                        rtl::Reference<XGradientList> xGradientList = new XGradientList( u""_ustr, u""_ustr/*TODO?*/ );
                         xGradientList->Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
                         xGradientList->SetDirty( false );
                         const BitmapEx aBmp = xGradientList->GetUiBitmap( 0 );
@@ -416,7 +416,7 @@ void SvxFillToolBoxControl::Update()
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
                             pVD->DrawBitmapEx(Point(), aBmp);
-                            mpLbFillAttr->append("", xGradientList->Get(0)->GetName(), *pVD);
+                            mpLbFillAttr->append(u""_ustr, xGradientList->Get(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }
                     }
@@ -468,7 +468,7 @@ void SvxFillToolBoxControl::Update()
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        rtl::Reference<XHatchList> xHatchList = new XHatchList( "", ""/*TODO?*/ );
+                        rtl::Reference<XHatchList> xHatchList = new XHatchList( u""_ustr, u""_ustr/*TODO?*/ );
                         xHatchList->Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                         xHatchList->SetDirty( false );
                         const BitmapEx & aBmp = xHatchList->GetUiBitmap( 0 );
@@ -479,7 +479,7 @@ void SvxFillToolBoxControl::Update()
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
                             pVD->DrawBitmapEx(Point(), aBmp);
-                            mpLbFillAttr->append("", xHatchList->GetHatch(0)->GetName(), *pVD);
+                            mpLbFillAttr->append(u""_ustr, xHatchList->GetHatch(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }
                     }
@@ -534,7 +534,7 @@ void SvxFillToolBoxControl::Update()
                         XBitmapListRef xBitmapList =
                             XPropertyList::AsBitmapList(
                                 XPropertyList::CreatePropertyList(
-                                    XPropertyListType::Bitmap, "TmpList", ""/*TODO?*/));
+                                    XPropertyListType::Bitmap, u"TmpList"_ustr, u""_ustr/*TODO?*/));
                         xBitmapList->Insert(std::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
                         xBitmapList->SetDirty( false );
                         SvxFillAttrBox::Fill(*mpLbFillAttr, xBitmapList);
@@ -590,11 +590,11 @@ VclPtr<InterimItemWindow> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *p
 }
 
 FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
-    : InterimItemWindow(pParent, "svx/ui/fillctrlbox.ui", "FillCtrlBox")
-    , mxLbFillType(m_xBuilder->weld_combo_box("type"))
-    , mxToolBoxColor(m_xBuilder->weld_toolbar("color"))
+    : InterimItemWindow(pParent, u"svx/ui/fillctrlbox.ui"_ustr, u"FillCtrlBox"_ustr)
+    , mxLbFillType(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , mxToolBoxColor(m_xBuilder->weld_toolbar(u"color"_ustr))
     , mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, *m_xBuilder, rFrame))
-    , mxLbFillAttr(m_xBuilder->weld_combo_box("attr"))
+    , mxLbFillAttr(m_xBuilder->weld_combo_box(u"attr"_ustr))
     , mnTypeCurPos(0)
     , mnAttrCurPos(0)
 {
@@ -735,7 +735,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             if (pSh)
             {
                 const ::Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
-                const XFillColorItem aXFillColorItem( "", aColor );
+                const XFillColorItem aXFillColorItem( u""_ustr, aColor );
 
                 // #i122676# change FillStyle and Color in one call
                 pSh->GetDispatcher()->ExecuteList(
@@ -1087,7 +1087,7 @@ void FillControl::GetFocus()
 {
     // tdf#148047 if the dropdown is active then leave the focus
     // there and don't grab back to a different widget
-    if (mxToolBoxColor->get_menu_item_active(".uno:FillColor"))
+    if (mxToolBoxColor->get_menu_item_active(u".uno:FillColor"_ustr))
         return;
     InterimItemWindow::GetFocus();
 }

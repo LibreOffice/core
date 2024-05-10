@@ -66,7 +66,7 @@ GalleryTheme::~GalleryTheme()
 
 OUString SAL_CALL GalleryTheme::getImplementationName()
 {
-    return "com.sun.star.comp.gallery.GalleryTheme";
+    return u"com.sun.star.comp.gallery.GalleryTheme"_ustr;
 }
 
 sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
@@ -76,7 +76,7 @@ sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
 {
-    return { "com.sun.star.gallery.GalleryTheme" };
+    return { u"com.sun.star.gallery.GalleryTheme"_ustr };
 }
 
 uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()

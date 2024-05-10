@@ -64,12 +64,12 @@ VclPtr<vcl::Window> TextUnderlinePopup::createVclPopupWindow(vcl::Window* pParen
 
 OUString TextUnderlinePopup::getImplementationName()
 {
-    return "com.sun.star.comp.svx.UnderlineToolBoxControl";
+    return u"com.sun.star.comp.svx.UnderlineToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> TextUnderlinePopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

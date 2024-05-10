@@ -55,9 +55,9 @@ FormatPaintBrushToolBoxControl::~FormatPaintBrushToolBoxControl()
 
 void FormatPaintBrushToolBoxControl::impl_executePaintBrush()
 {
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("PersistentCopy",
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr,
                                                                    m_bPersistentCopy) };
-    Dispatch( ".uno:FormatPaintbrush"
+    Dispatch( u".uno:FormatPaintbrush"_ustr
         , aArgs );
 }
 

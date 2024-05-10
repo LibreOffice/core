@@ -200,7 +200,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         if (pMediaType)
             if (auto xGraphic = rGraphic.GetXGraphic().query<css::beans::XPropertySet>())
-                xGraphic->getPropertyValue("MimeType") >>= *pMediaType;
+                xGraphic->getPropertyValue(u"MimeType"_ustr) >>= *pMediaType;
 
         SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
         SvStream* pOStm = aMedium.GetOutStream();
@@ -229,7 +229,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if (pMediaType)
                 if (auto xGraphic = rGraphic.GetXGraphic().query<css::beans::XPropertySet>())
-                    xGraphic->getPropertyValue("MimeType") >>= *pMediaType;
+                    xGraphic->getPropertyValue(u"MimeType"_ustr) >>= *pMediaType;
 
             SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
             SvStream*   pOStm = aMedium.GetOutStream();

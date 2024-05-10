@@ -104,7 +104,7 @@ namespace
             size_t lhsCount = FormComponentInfo::childCount( _components.first );
             size_t rhsCount = FormComponentInfo::childCount( _components.second );
             if  ( lhsCount != rhsCount )
-                throw RuntimeException( "Found inconsistent form component hierarchies (1)!" );
+                throw RuntimeException( u"Found inconsistent form component hierarchies (1)!"_ustr );
             return lhsCount;
         }
 
@@ -132,7 +132,7 @@ namespace
             Reference< XControlModel > lhsControlModel( _component.first, UNO_QUERY );
             Reference< XControlModel > rhsControlModel( _component.second, UNO_QUERY );
             if ( lhsControlModel.is() != rhsControlModel.is() )
-                throw RuntimeException( "Found inconsistent form component hierarchies (2)!" );
+                throw RuntimeException( u"Found inconsistent form component hierarchies (2)!"_ustr );
 
             if ( lhsControlModel.is() )
                 m_rControlModelMap[ lhsControlModel ] = rhsControlModel;

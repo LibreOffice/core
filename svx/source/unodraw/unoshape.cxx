@@ -1418,9 +1418,9 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             {
                 const basegfx::B2DPolyPolygon aEmptyPoly;
                 if( nWID == sal_uInt16(XATTR_LINEEND) )
-                    rSet.Put( XLineEndItem( "", aEmptyPoly ) );
+                    rSet.Put( XLineEndItem( u""_ustr, aEmptyPoly ) );
                 else
-                    rSet.Put( XLineStartItem( "", aEmptyPoly ) );
+                    rSet.Put( XLineStartItem( u""_ustr, aEmptyPoly ) );
 
                 return true;
             }
@@ -1659,7 +1659,7 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
 
     const sal_Int32 nCount = aPropertyNames.getLength();
     if (nCount != aValues.getLength())
-        throw css::lang::IllegalArgumentException("lengths do not match",
+        throw css::lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                                   getXWeak(), -1);
 
     const OUString* pNames = aPropertyNames.getConstArray();
@@ -2477,7 +2477,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                 if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xTextColumns,
                                                                             css::uno::UNO_QUERY })
                 {
-                    auto aVal = xPropSet->getPropertyValue("AutomaticDistance");
+                    auto aVal = xPropSet->getPropertyValue(u"AutomaticDistance"_ustr);
                     if (sal_Int32 nSpacing; aVal >>= nSpacing)
                         pTextObj->SetTextColumnsSpacing(nSpacing);
                 }
@@ -2517,7 +2517,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         " Property Type: "
         + pProperty->aType.getTypeName() + " Property Name: " + pProperty->aName
         + " Property nWID: " + OUString::number(pProperty->nWID)
-        + " Value Type: " + (rValue.hasValue() ? rValue.getValueTypeName() : "void (no value)"));
+        + " Value Type: " + (rValue.hasValue() ? rValue.getValueTypeName() : u"void (no value)"_ustr));
 
     throw lang::IllegalArgumentException(sExceptionMessage, nullptr, 1);
 }
@@ -2944,7 +2944,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                 css::uno::Reference<css::text::XTextColumns> xCols(xIf, css::uno::UNO_QUERY_THROW);
                 xCols->setColumnCount(pTextObj->GetTextColumnsNumber());
                 css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
-                xProp->setPropertyValue("AutomaticDistance",
+                xProp->setPropertyValue(u"AutomaticDistance"_ustr,
                                         css::uno::Any(pTextObj->GetTextColumnsSpacing()));
                 rValue <<= xIf;
             }
@@ -3147,7 +3147,7 @@ uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
 
 OUString SAL_CALL SvxShape::getImplementationName()
 {
-    return "SvxShape";
+    return u"SvxShape"_ustr;
 }
 
 constexpr OUString sUNO_service_style_ParagraphProperties = u"com.sun.star.style.ParagraphProperties"_ustr;
@@ -3837,7 +3837,7 @@ uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
 
 OUString SAL_CALL SvxShapeText::getImplementationName()
 {
-    return "SvxShapeText";
+    return u"SvxShapeText"_ustr;
 }
 
 

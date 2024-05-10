@@ -129,7 +129,7 @@ void Svx3DPreviewControl::Construct()
         XATTR_FILL_FIRST, XATTR_FILLBITMAP> aSet( mpModel->GetItemPool() );
     aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    aSet.Put( XFillColorItem( "", COL_WHITE ) );
+    aSet.Put( XFillColorItem( u""_ustr, COL_WHITE ) );
 
     mpScene->SetMergedItemSet(aSet);
 

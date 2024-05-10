@@ -37,14 +37,14 @@ namespace svx::sidebar
 std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to InspectorTextPanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            u"no parent Window given to InspectorTextPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<InspectorTextPanel>(pParent);
 }
 
 InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui")
-    , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
+    : PanelLayout(pParent, u"InspectorTextPanel"_ustr, u"svx/ui/inspectortextpanel.ui"_ustr)
+    , mpListBoxStyles(m_xBuilder->weld_tree_view(u"listbox_fonts"_ustr))
 {
     mpListBoxStyles->set_size_request(MinimumPanelWidth, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
@@ -116,7 +116,7 @@ static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurren
     else
     {
         // Necessary, without this the selection line will be truncated.
-        rListBoxStyles.set_text(*pResult, "", 1);
+        rListBoxStyles.set_text(*pResult, u""_ustr, 1);
     }
 
     for (const TreeNode& rChildNode : rCurrent.children)

@@ -67,7 +67,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         SfxItemSet aSet(pModel->GetItemPool());
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-        aSet.Put(XFillColorItem("", TRANSCOL));
+        aSet.Put(XFillColorItem(u""_ustr, TRANSCOL));
         aSet.Put(XFillTransparenceItem(50) );
 
         pPathObj->SetMergedItemSetAndBroadcast(aSet);
@@ -113,7 +113,7 @@ void ContourWindow::InitSdrModel()
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
-    aSet.Put( XFillColorItem( "", TRANSCOL ) );
+    aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
     pView->SetFrameDragSingles();

@@ -58,12 +58,12 @@ namespace svx
         static SotClipboardFormatId s_nFormFormat = static_cast<SotClipboardFormatId>(-1);
         if ( _bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nFormFormat )
         {
-            s_nFormFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"");
+            s_nFormFormat = SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\""_ustr);
             OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         else if ( !_bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nReportFormat)
         {
-            s_nReportFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\"");
+            s_nReportFormat = SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""_ustr);
             OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return _bExtractForm ? s_nFormFormat : s_nReportFormat;
@@ -78,7 +78,7 @@ namespace svx
             Reference<XPropertySet> xProp;
             m_aDescriptor[DataAccessDescriptorProperty::Component] >>= xProp;
             if ( xProp.is() )
-                xProp->getPropertyValue("IsForm") >>= bForm;
+                xProp->getPropertyValue(u"IsForm"_ustr) >>= bForm;
         }
         catch(const Exception&)
         {}

@@ -25,18 +25,18 @@ namespace svx::sidebar {
 
 AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
                                             AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
-    : WeldToolbarPopup(rFrame, pParent, "svx/ui/floatingareastyle.ui", "FloatingAreaStyle")
+    : WeldToolbarPopup(rFrame, pParent, u"svx/ui/floatingareastyle.ui"_ustr, u"FloatingAreaStyle"_ustr)
     , mrAreaPropertyPanel(rPanel)
-    , mxCenterGrid(m_xBuilder->weld_widget("centergrid"))
-    , mxAngleGrid(m_xBuilder->weld_widget("anglegrid"))
-    , mxMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("centerx", FieldUnit::PERCENT))
-    , mxMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button("centery", FieldUnit::PERCENT))
-    , mxMtrTrgrAngle(m_xBuilder->weld_metric_spin_button("angle", FieldUnit::DEGREE))
-    , mxBtnLeft45(m_xBuilder->weld_toolbar("lefttoolbox"))
-    , mxBtnRight45(m_xBuilder->weld_toolbar("righttoolbox"))
-    , mxMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button("start", FieldUnit::PERCENT))
-    , mxMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("end", FieldUnit::PERCENT))
-    , mxMtrTrgrBorder(m_xBuilder->weld_metric_spin_button("border", FieldUnit::PERCENT))
+    , mxCenterGrid(m_xBuilder->weld_widget(u"centergrid"_ustr))
+    , mxAngleGrid(m_xBuilder->weld_widget(u"anglegrid"_ustr))
+    , mxMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button(u"centerx"_ustr, FieldUnit::PERCENT))
+    , mxMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button(u"centery"_ustr, FieldUnit::PERCENT))
+    , mxMtrTrgrAngle(m_xBuilder->weld_metric_spin_button(u"angle"_ustr, FieldUnit::DEGREE))
+    , mxBtnLeft45(m_xBuilder->weld_toolbar(u"lefttoolbox"_ustr))
+    , mxBtnRight45(m_xBuilder->weld_toolbar(u"righttoolbox"_ustr))
+    , mxMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button(u"start"_ustr, FieldUnit::PERCENT))
+    , mxMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button(u"end"_ustr, FieldUnit::PERCENT))
+    , mxMtrTrgrBorder(m_xBuilder->weld_metric_spin_button(u"border"_ustr, FieldUnit::PERCENT))
 {
     Link<weld::MetricSpinButton&,void> aLink = LINK(this, AreaTransparencyGradientPopup, ModifiedTrgrHdl_Impl);
     mxMtrTrgrCenterX->connect_value_changed(aLink);

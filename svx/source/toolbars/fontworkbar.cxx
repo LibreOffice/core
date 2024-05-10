@@ -151,7 +151,7 @@ static void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSe
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem & rGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-            const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+            const Any* pAny = rGeometryItem.GetPropertyValueByName( u"Type"_ustr );
             if( pAny )
             {
                 OUString aType;
@@ -177,7 +177,7 @@ static void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSe
 // we enter something which never occurs here (hopefully).)
 static SfxSlot aFontworkBarSlots_Impl[] =
 {
-    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, "" }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell)
@@ -240,7 +240,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     {
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
-            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
+            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
 
             bool bOn = false;
             if( pAny )
@@ -249,7 +249,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = "SameLetterHeights";
             aPropValue.Value <<= bOn;
-            rGeometryItem.SetPropertyValue("TextPath", aPropValue);
+            rGeometryItem.SetPropertyValue(u"TextPath"_ustr, aPropValue);
         }
         break;
 

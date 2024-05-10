@@ -25,7 +25,7 @@
 namespace svx::sidebar {
 
 GalleryControl::GalleryControl(weld::Widget* pParent)
-    : PanelLayout(pParent, "GalleryPanel", "svx/ui/sidebargallery.ui")
+    : PanelLayout(pParent, u"GalleryPanel"_ustr, u"svx/ui/sidebargallery.ui"_ustr)
     , mpGallery(Gallery::GetGalleryInstance())
     , mxBrowser1(new GalleryBrowser1(
               *m_xBuilder,

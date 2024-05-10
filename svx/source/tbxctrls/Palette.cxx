@@ -109,7 +109,7 @@ void PaletteASE::LoadPalette()
         aFile.ReadUInt16(nChunkSize);
         aFile.ReadUInt16(nChars);
 
-        OUString aPaletteName("");
+        OUString aPaletteName(u""_ustr);
         if (nChars > 1)
             aPaletteName = read_uInt16s_ToOUString(aFile, nChars);
         else
@@ -304,7 +304,7 @@ Palette* PaletteGPL::Clone() const
 static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index)
 {
     sal_Int32 substart, toklen = 0;
-    OUString aWhitespaceChars( " \n\t" );
+    OUString aWhitespaceChars( u" \n\t"_ustr );
 
     while(index < rStr.getLength() &&
             aWhitespaceChars.indexOf( rStr[index] ) != -1)

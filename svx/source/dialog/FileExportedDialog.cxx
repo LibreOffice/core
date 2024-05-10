@@ -17,9 +17,10 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 
 FileExportedDialog::FileExportedDialog(weld::Window* pParent, OUString atitle)
-    : GenericDialogController(pParent, "svx/ui/fileexporteddialog.ui", "FileExportedDialog")
-    , m_xFileLabel(m_xBuilder->weld_label("Filelabel"))
-    , m_xButton(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"svx/ui/fileexporteddialog.ui"_ustr,
+                              u"FileExportedDialog"_ustr)
+    , m_xFileLabel(m_xBuilder->weld_label(u"Filelabel"_ustr))
+    , m_xButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xFileLabel->set_label(atitle);
     m_xButton->connect_clicked(LINK(this, FileExportedDialog, OpenHdl));

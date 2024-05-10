@@ -177,23 +177,23 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
                                      SfxChildWindow *pCW,
                                      vcl::Window* _pParent)
-    : SfxDockingWindow(pBindinx, pCW, _pParent, "DockingFontwork", "svx/ui/dockingfontwork.ui")
+    : SfxDockingWindow(pBindinx, pCW, _pParent, u"DockingFontwork"_ustr, u"svx/ui/dockingfontwork.ui"_ustr)
     , rBindings(*pBindinx)
     , aInputIdle("SvxFontWorkDialog Input")
     , nSaveShadowX(0)
     , nSaveShadowY(0)
     , nSaveShadowAngle(450)
     , nSaveShadowSize (100)
-    , m_xTbxStyle(m_xBuilder->weld_toolbar("style"))
-    , m_xTbxAdjust(m_xBuilder->weld_toolbar("adjust"))
-    , m_xMtrFldDistance(m_xBuilder->weld_metric_spin_button("distance", FieldUnit::CM))
-    , m_xMtrFldTextStart(m_xBuilder->weld_metric_spin_button("indent", FieldUnit::CM))
-    , m_xTbxShadow(m_xBuilder->weld_toolbar("shadow"))
-    , m_xFbShadowX(m_xBuilder->weld_image("shadowx"))
-    , m_xMtrFldShadowX(m_xBuilder->weld_metric_spin_button("distancex", FieldUnit::CM))
-    , m_xFbShadowY(m_xBuilder->weld_image("shadowy"))
-    , m_xMtrFldShadowY(m_xBuilder->weld_metric_spin_button("distancey", FieldUnit::CM))
-    , m_xShadowColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), [this]{ return GetFrameWeld(); } ))
+    , m_xTbxStyle(m_xBuilder->weld_toolbar(u"style"_ustr))
+    , m_xTbxAdjust(m_xBuilder->weld_toolbar(u"adjust"_ustr))
+    , m_xMtrFldDistance(m_xBuilder->weld_metric_spin_button(u"distance"_ustr, FieldUnit::CM))
+    , m_xMtrFldTextStart(m_xBuilder->weld_metric_spin_button(u"indent"_ustr, FieldUnit::CM))
+    , m_xTbxShadow(m_xBuilder->weld_toolbar(u"shadow"_ustr))
+    , m_xFbShadowX(m_xBuilder->weld_image(u"shadowx"_ustr))
+    , m_xMtrFldShadowX(m_xBuilder->weld_metric_spin_button(u"distancex"_ustr, FieldUnit::CM))
+    , m_xFbShadowY(m_xBuilder->weld_image(u"shadowy"_ustr))
+    , m_xMtrFldShadowY(m_xBuilder->weld_metric_spin_button(u"distancey"_ustr, FieldUnit::CM))
+    , m_xShadowColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"color"_ustr), [this]{ return GetFrameWeld(); } ))
 {
     SetText(SvxResId(RID_SVXSTR_FONTWORK));
 
@@ -316,7 +316,7 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 {
     if ( pItem )
     {
-        OUString sId = "off";
+        OUString sId = u"off"_ustr;
 
         switch ( pItem->GetValue() )
         {
@@ -331,16 +331,16 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         // Make sure that there is always exactly one checked toolbox item.
         if ( pItem->GetValue() == XFormTextStyle::NONE )
         {
-            m_xTbxStyle->set_item_active("rotate", false);
-            m_xTbxStyle->set_item_active("upright", false);
-            m_xTbxStyle->set_item_active("hori", false);
-            m_xTbxStyle->set_item_active("vert", false);
+            m_xTbxStyle->set_item_active(u"rotate"_ustr, false);
+            m_xTbxStyle->set_item_active(u"upright"_ustr, false);
+            m_xTbxStyle->set_item_active(u"hori"_ustr, false);
+            m_xTbxStyle->set_item_active(u"vert"_ustr, false);
 
-            m_xTbxStyle->set_item_active("off", true);
+            m_xTbxStyle->set_item_active(u"off"_ustr, true);
         }
         else
         {
-            m_xTbxStyle->set_item_active("off", false);
+            m_xTbxStyle->set_item_active(u"off"_ustr, false);
             m_xTbxStyle->set_item_active(sId, true);
         }
 
@@ -416,7 +416,7 @@ void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 {
     if ( pItem )
-        m_xTbxAdjust->set_item_active("orientation", pItem->GetValue());
+        m_xTbxAdjust->set_item_active(u"orientation"_ustr, pItem->GetValue());
 }
 
 // Set button for contour display
@@ -424,7 +424,7 @@ void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 {
     if ( pItem )
-        m_xTbxShadow->set_item_active("contour", !pItem->GetValue());
+        m_xTbxShadow->set_item_active(u"contour"_ustr, !pItem->GetValue());
 }
 
 // Set button for text border
@@ -432,7 +432,7 @@ void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
 {
     if ( pItem )
-        m_xTbxShadow->set_item_active("textcontour", pItem->GetValue());
+        m_xTbxShadow->set_item_active(u"textcontour"_ustr, pItem->GetValue());
 }
 
 // Set shadow buttons
@@ -564,7 +564,7 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
     // The two involved fields/items are used double and contain/give different
     // values regarding to the access method. Thus, here we need to separate the access
     // methods regarding to the kind of value accessed.
-    if (m_xTbxShadow->get_item_active("slant"))
+    if (m_xTbxShadow->get_item_active(u"slant"_ustr))
     {
         // #i19251#
         // There is no value correction necessary at all, i think this
@@ -590,7 +590,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     // The two involved fields/items are used double and contain/give different
     // values regarding to the access method. Thus, here we need to separate the access
     // methods regarding to the kind of value accessed.
-    if (m_xTbxShadow->get_item_active("slant"))
+    if (m_xTbxShadow->get_item_active(u"slant"_ustr))
     {
         m_xMtrFldShadowY->set_value(pItem->GetValue(), FieldUnit::NONE);
     }
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
         }
     }
     if( eDlgUnit != m_xMtrFldShadowX->get_unit() &&
-        m_xTbxShadow->get_item_active("vertical") )
+        m_xTbxShadow->get_item_active(u"vertical"_ustr) )
     {
         SetFieldUnit(*m_xMtrFldShadowX, eDlgUnit, true);
         SetFieldUnit(*m_xMtrFldShadowY, eDlgUnit, true);
@@ -773,7 +773,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl, ColorListBox&, void)
 {
-    XFormTextShadowColorItem aItem( "", m_xShadowColorLB->GetSelectEntryColor() );
+    XFormTextShadowColorItem aItem( u""_ustr, m_xShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHDWCOLOR,
             SfxCallMode::RECORD, { &aItem });
 }

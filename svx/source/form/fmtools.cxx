@@ -84,7 +84,7 @@ void displayException(const Any& _rExcept, const css::uno::Reference<css::awt::X
 
     try
     {
-        Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", rParent, _rExcept);
+        Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), u""_ustr, rParent, _rExcept);
         xErrorDialog->execute();
     }
     catch(const Exception&)

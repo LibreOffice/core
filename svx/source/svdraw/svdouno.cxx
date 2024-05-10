@@ -172,7 +172,7 @@ SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
+        uno::Any aValue( xSet->getPropertyValue(u"DefaultControl"_ustr) );
         OUString aStr;
 
         if( aValue >>= aStr )
@@ -250,7 +250,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     try
     {
         uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
-        xModelProperties->setPropertyValue( "ContextWritingMode", uno::Any( _nContextWritingMode ) );
+        xModelProperties->setPropertyValue( u"ContextWritingMode"_ustr, uno::Any( _nContextWritingMode ) );
     }
     catch( const uno::Exception& )
     {
@@ -420,7 +420,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
         uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
         if (xSet.is())
         {
-            uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
+            uno::Any aValue( xSet->getPropertyValue(u"DefaultControl"_ustr) );
             OUString aStr;
             if( aValue >>= aStr )
                 aUnoControlTypeName = aStr;

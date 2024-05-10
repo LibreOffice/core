@@ -406,12 +406,12 @@ void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
         comphelper::SequenceAsHashMap aMap(aDescriptor);
         Sequence<PropertyValue> aFilterData;
         OUString aFilterOptions;
-        auto it = aMap.find("FilterData");
+        auto it = aMap.find(u"FilterData"_ustr);
         if (it != aMap.end())
         {
             it->second >>= aFilterData;
         }
-        it = aMap.find("FilterOptions");
+        it = aMap.find(u"FilterOptions"_ustr);
         if (it != aMap.end())
         {
             it->second >>= aFilterOptions;
@@ -424,7 +424,7 @@ void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
             aFilterData = comphelper::containerToSequence(aData);
             if (aFilterData.hasElements())
             {
-                aMap["FilterData"] <<= aFilterData;
+                aMap[u"FilterData"_ustr] <<= aFilterData;
                 aDescriptor = aMap.getAsConstPropertyValueList();
             }
         }
@@ -1148,7 +1148,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
                 if (!xPropertySet.is())
                     break;
                 uno::Reference<graphic::XGraphic> xGraphic(
-                    xPropertySet->getPropertyValue("Graphic"), uno::UNO_QUERY);
+                    xPropertySet->getPropertyValue(u"Graphic"_ustr), uno::UNO_QUERY);
                 if (!xGraphic.is())
                     break;
 
@@ -1230,7 +1230,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 // XServiceInfo
 OUString SAL_CALL GraphicExporter::getImplementationName(  )
 {
-    return "com.sun.star.comp.Draw.GraphicExporter";
+    return u"com.sun.star.comp.Draw.GraphicExporter"_ustr;
 }
 
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
@@ -1240,7 +1240,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName 
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupportedServiceNames { "com.sun.star.drawing.GraphicExportFilter" };
+    Sequence< OUString > aSupportedServiceNames { u"com.sun.star.drawing.GraphicExportFilter"_ustr };
     return aSupportedServiceNames;
 }
 

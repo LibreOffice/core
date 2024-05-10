@@ -605,7 +605,7 @@ FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex
 
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE("Office.Common/Misc", ConfigItemMode::NONE)
+        ,FmXFormShell_CFGBASE(u"Office.Common/Misc"_ustr, ConfigItemMode::NONE)
         ,m_aMarkTimer("svx::FmXFormShell m_aMarkTimer")
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( nullptr )
@@ -641,7 +641,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     // cache the current configuration settings we're interested in
     implAdjustConfigCache_Lock();
     // and register for changes on this settings
-    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
+    Sequence< OUString > aNames { u"FormControlPilotsEnabled"_ustr };
     EnableNotification(aNames);
 }
 
@@ -1579,7 +1579,7 @@ bool FmXFormShell::GetY2KState_Lock(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue("TwoDigitDateStart") );
+                Any aVal( xSet->getPropertyValue(u"TwoDigitDateStart"_ustr) );
                 aVal >>= n;
                 return true;
             }
@@ -1610,7 +1610,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
             {
                 try
                 {
-                    xSet->setPropertyValue("TwoDigitDateStart", Any(sal_uInt16(n)));
+                    xSet->setPropertyValue(u"TwoDigitDateStart"_ustr, Any(sal_uInt16(n)));
                 }
                 catch(Exception&)
                 {
@@ -1649,7 +1649,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
             {
                 try
                 {
-                    xSet->setPropertyValue("TwoDigitDateStart", Any(sal_uInt16(n)));
+                    xSet->setPropertyValue(u"TwoDigitDateStart"_ustr, Any(sal_uInt16(n)));
                 }
                 catch(Exception&)
                 {
@@ -2908,7 +2908,7 @@ void FmXFormShell::startFiltering_Lock()
         {
             Reference< XModeSelector> xModeSelector(rpController, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( "FilterMode" );
+                xModeSelector->setMode( u"FilterMode"_ustr );
         }
     }
 
@@ -3008,7 +3008,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
 
             Reference< XModeSelector> xModeSelector(rController, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( "DataMode" );
+                xModeSelector->setMode( u"DataMode"_ustr );
         }
         if (bSave)  // execute the filter
         {
@@ -3104,7 +3104,7 @@ void FmXFormShell::CreateExternalView_Lock()
     // load the component for external form views
     if (!bAlreadyExistent)
     {
-        OUString sFrameName("_beamer");
+        OUString sFrameName(u"_beamer"_ustr);
         URL aWantToDispatch;
         aWantToDispatch.Complete = FMURL_COMPONENT_FORMGRIDVIEW;
 
@@ -3396,7 +3396,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                 // column type : listbox
                 pDispatchArgs->Name = FMARG_ADDCOL_COLUMNTYPE;
-                pDispatchArgs->Value <<= OUString(FM_COL_LISTBOX);
+                pDispatchArgs->Value <<= u"" FM_COL_LISTBOX ""_ustr;
 //              pDispatchArgs->Value <<= (OUString)FM_COL_LISTBOX;
                 ++pDispatchArgs;
 
@@ -3466,7 +3466,7 @@ void FmXFormShell::implAdjustConfigCache_Lock()
         return;
 
     // get (cache) the wizard usage flag
-    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
+    Sequence< OUString > aNames { u"FormControlPilotsEnabled"_ustr };
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3496,7 +3496,7 @@ void FmXFormShell::SetWizardUsing_Lock(bool _bUseThem)
 {
     m_bUseWizards = _bUseThem;
 
-    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
+    Sequence< OUString > aNames { u"FormControlPilotsEnabled"_ustr };
     Sequence< Any > aValues{ Any(m_bUseWizards) };
     PutProperties(aNames, aValues);
 }

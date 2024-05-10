@@ -1853,7 +1853,7 @@ double SdrTextObj::GetCameraZRotation() const
     const SfxItemSet& rSet = GetObjectItemSet();
     const SdrCustomShapeGeometryItem& rGeometryItem(rSet.Get(SDRATTR_CUSTOMSHAPE_GEOMETRY));
 
-    pAny = rGeometryItem.GetPropertyValueByName("TextCameraZRotateAngle");
+    pAny = rGeometryItem.GetPropertyValueByName(u"TextCameraZRotateAngle"_ustr);
 
     if ( pAny )
         *pAny >>= fTextCameraZRotateAngle;

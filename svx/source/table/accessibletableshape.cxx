@@ -333,7 +333,7 @@ void AccessibleTableShape::Init()
     try
     {
         Reference< XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
-        Reference< XTable > xTable( xSet->getPropertyValue("Model"), UNO_QUERY_THROW );
+        Reference< XTable > xTable( xSet->getPropertyValue(u"Model"_ustr), UNO_QUERY_THROW );
 
         mxImpl->init( this, xTable );
     }
@@ -390,13 +390,13 @@ void SAL_CALL AccessibleTableShape::release(  ) noexcept
 
 OUString SAL_CALL AccessibleTableShape::getImplementationName()
 {
-    return "com.sun.star.comp.accessibility.AccessibleTableShape";
+    return u"com.sun.star.comp.accessibility.AccessibleTableShape"_ustr;
 }
 
 
 OUString AccessibleTableShape::CreateAccessibleBaseName()
 {
-    return "TableShape";
+    return u"TableShape"_ustr;
 }
 
 

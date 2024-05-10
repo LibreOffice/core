@@ -345,7 +345,7 @@ void DialControl::SetNoRotation()
         mpImpl->mbNoRot = true;
         InvalidateControl();
         if (mpImpl->mpLinkField)
-            mpImpl->mpLinkField->set_text("");
+            mpImpl->mpLinkField->set_text(u""_ustr);
     }
 }
 

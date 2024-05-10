@@ -2964,7 +2964,7 @@ bool DbFilterField::commitControl()
                                                     m_rColumn.GetField(),
                                                     OUString(),
                                                     aAppLocale,
-                                                    ".",
+                                                    u"."_ustr,
                                                     getParseContext());
                 m_aText = aPreparedText;
             }
@@ -3052,7 +3052,7 @@ void DbFilterField::Update()
 
     Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
     Reference< XTablesSupplier > xSupTab;
-    xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
+    xFormProp->getPropertyValue(u"SingleSelectQueryComposer"_ustr) >>= xSupTab;
 
     Reference< XConnection >  xConnection(getConnection(xForm));
     if (!xSupTab.is())

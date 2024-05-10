@@ -62,7 +62,7 @@ FmFormObj::FmFormObj(
 }
 
 FmFormObj::FmFormObj(SdrModel& rSdrModel)
-:   SdrUnoObj(rSdrModel, "")
+:   SdrUnoObj(rSdrModel, u""_ustr)
     ,m_nPos(-1)
     ,m_pLastKnownRefDevice(nullptr)
 {
@@ -521,7 +521,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {
                     // create and insert (into the destination) a copy of the form
                     xCurrentDestForm.set(
-                        ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.form.component.DataForm"),
+                        ::comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.form.component.DataForm"_ustr),
                         UNO_QUERY_THROW );
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 

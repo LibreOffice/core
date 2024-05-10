@@ -25,7 +25,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 };
@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, test3DObjectFallback)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
-    xShape->getPropertyValue("Graphic") >>= xGraphic;
+    xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     // Without the accompanying fix in place, this test would have failed, we could not read
     // Models/Fallbacks/duck.png, as we assumed a format like Pictures/something.png, i.e. a single
     // slash in the path.

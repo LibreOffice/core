@@ -27,7 +27,7 @@ class XOutdevTest : public UnoApiTest
 {
 public:
     XOutdevTest()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 };
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;
     OUString aTempURL = maTempFile.GetURL();
-    XOutBitmap::WriteGraphic(aGraphic, aTempURL, "pdf", eFlags);
+    XOutBitmap::WriteGraphic(aGraphic, aTempURL, u"pdf"_ustr, eFlags);
 
     // Assert that the output looks like a PDF.
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;
     OUString aTempURL = maTempFile.GetURL();
-    XOutBitmap::WriteGraphic(aGraphic, aTempURL, "png", eFlags);
+    XOutBitmap::WriteGraphic(aGraphic, aTempURL, u"png"_ustr, eFlags);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream->TellEnd() > 4);
@@ -93,8 +93,8 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
 {
     // Given an empty Impress document with a (title) shape:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
+                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
 
     // When setting the theme index of the shape's fill color:
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -107,14 +107,14 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
         aComplexColor.setThemeColor(model::ThemeColorType::Accent1);
         aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
         aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
-        xShape->setPropertyValue("FillComplexColor",
+        xShape->setPropertyValue(u"FillComplexColor"_ustr,
                                  uno::Any(model::color::createXComplexColor(aComplexColor)));
     }
 
     // Then make sure the value we read back is the expected one:
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());

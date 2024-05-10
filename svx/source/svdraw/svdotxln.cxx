@@ -164,7 +164,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
             ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            css::uno::Any aAny( aCnt.getPropertyValue("DateModified") );
+            css::uno::Any aAny( aCnt.getPropertyValue(u"DateModified"_ustr) );
             css::util::DateTime aDateTime;
 
             aAny >>= aDateTime;

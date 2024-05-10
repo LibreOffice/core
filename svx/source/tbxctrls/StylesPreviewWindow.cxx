@@ -133,7 +133,7 @@ StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
-    : SfxStatusListener(xDispatchProvider, SID_STYLE_FAMILY2, ".uno:ParaStyle")
+    : SfxStatusListener(xDispatchProvider, SID_STYLE_FAMILY2, u".uno:ParaStyle"_ustr)
     , m_pPreviewControl(pPreviewControl)
 {
     ReBind();
@@ -201,8 +201,8 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
         return false;
 
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(m_xStylesView.get(), "svx/ui/stylemenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+        Application::CreateBuilder(m_xStylesView.get(), u"svx/ui/stylemenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
     OUString rIdent = xMenu->popup_at_rect(m_xStylesView.get(),
                                            tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1)));
     if (rIdent == "update" || rIdent == "edit")
@@ -211,10 +211,9 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
 
         const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                            css::uno::UNO_QUERY);
-        SfxToolBoxControl::Dispatch(xProvider,
-                                    rIdent == "update" ? OUString(".uno:StyleUpdateByExample")
-                                                       : OUString(".uno:EditStyle"),
-                                    aArgs);
+        SfxToolBoxControl::Dispatch(
+            xProvider,
+            rIdent == "update" ? u".uno:StyleUpdateByExample"_ustr : u".uno:EditStyle"_ustr, aArgs);
 
         return true;
     }
@@ -447,7 +446,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : m_xFrame(xFrame)
-    , m_xStylesView(xBuilder.weld_icon_view("stylesview"))
+    , m_xStylesView(xBuilder.weld_icon_view(u"stylesview"_ustr))
     , m_aUpdateTask(*this)
     , m_aDefaultStyles(std::move(aDefaultStyles))
 {
@@ -473,12 +472,12 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
     OUString sStyleName = rIconView.get_selected_text();
 
     css::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue("Template", sStyleName),
-        comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+        comphelper::makePropertyValue(u"Template"_ustr, sStyleName),
+        comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
     };
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
-    SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleApply", aArgs);
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleApply"_ustr, aArgs);
 }
 
 IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, bool)
@@ -486,12 +485,12 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
     OUString sStyleName = rIconView.get_selected_text();
 
     css::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue("Param", sStyleName),
-        comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+        comphelper::makePropertyValue(u"Param"_ustr, sStyleName),
+        comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
     };
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
-    SfxToolBoxControl::Dispatch(xProvider, ".uno:EditStyle", aArgs);
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:EditStyle"_ustr, aArgs);
 
     return true;
 }
@@ -552,7 +551,7 @@ static OString extractPngString(const BitmapEx& rBitmap)
     SvMemoryStream aOStm(65535, 65535);
     // Use fastest compression "1"
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("Compression", sal_Int32(1)),
+        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
     };
     vcl::PngImageWriter aPNGWriter(aOStm);
     aPNGWriter.setParameters(aFilterData);
@@ -661,7 +660,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
-    : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox", true,
+    : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, std::move(aDefaultStyles), xFrame)
 {

@@ -36,7 +36,7 @@ using namespace ::com::sun::star::container;
 SvxTableShape::SvxTableShape(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_TABLE), getSvxMapProvider().GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( "com.sun.star.drawing.TableShape" );
+    SetShapeType( u"com.sun.star.drawing.TableShape"_ustr );
 }
 
 SvxTableShape::~SvxTableShape() noexcept

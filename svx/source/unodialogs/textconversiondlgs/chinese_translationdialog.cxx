@@ -31,12 +31,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "svx/ui/chineseconversiondialog.ui", "ChineseConversionDialog")
-    , m_xBP_OK(m_xBuilder->weld_button("ok"))
-    , m_xPB_Editterms(m_xBuilder->weld_button("editterms"))
-    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button("tosimplified"))
-    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button("totraditional"))
-    , m_xCB_Translate_Commonterms(m_xBuilder->weld_check_button("commonterms"))
+    : GenericDialogController(pParent, u"svx/ui/chineseconversiondialog.ui"_ustr, u"ChineseConversionDialog"_ustr)
+    , m_xBP_OK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xPB_Editterms(m_xBuilder->weld_button(u"editterms"_ustr))
+    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button(u"tosimplified"_ustr))
+    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button(u"totraditional"_ustr))
+    , m_xCB_Translate_Commonterms(m_xBuilder->weld_check_button(u"commonterms"_ustr))
 {
     SvtLinguConfig  aLngCfg;
     bool bValue = false;

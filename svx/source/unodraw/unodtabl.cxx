@@ -52,11 +52,11 @@ SvxUnoDashTable::SvxUnoDashTable(SdrModel* pModel) noexcept
 {
 }
 
-OUString SAL_CALL SvxUnoDashTable::getImplementationName() { return "SvxUnoDashTable"; }
+OUString SAL_CALL SvxUnoDashTable::getImplementationName() { return u"SvxUnoDashTable"_ustr; }
 
 uno::Sequence<OUString> SAL_CALL SvxUnoDashTable::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.DashTable" };
+    return { u"com.sun.star.drawing.DashTable"_ustr };
 }
 
 NameOrIndex* SvxUnoDashTable::createItem() const

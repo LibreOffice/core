@@ -53,7 +53,7 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
 // lang::XServiceInfo
 OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName()
 {
-    return "com.sun.star.comp.linguistic2.ChineseTranslationDialog";
+    return u"com.sun.star.comp.linguistic2.ChineseTranslationDialog"_ustr;
 }
 
 sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString& ServiceName )
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString&
 
 uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.linguistic2.ChineseTranslationDialog" };
+    return { u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr };
 }
 
 // ui::dialogs::XExecutableDialog

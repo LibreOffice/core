@@ -36,7 +36,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("svx/qa/unit/data/")
+        : UnoApiXmlTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 
@@ -81,36 +81,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     //- Actual  : 2
     //- In <>, XPath contents of child does not match
     // i.e. the shadow's transparency was miscalculated.
-    assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)"_ostr, "0");
+    assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)"_ostr, u"0"_ustr);
 
-    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "blur"_ostr, "141");
-    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "blur"_ostr, "141");
-    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "blur"_ostr, "141");
-    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "blur"_ostr, "141");
-    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "blur"_ostr, "141");
+    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "blur"_ostr, u"141"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "blur"_ostr, u"141"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "blur"_ostr, u"141"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "blur"_ostr, u"141"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "blur"_ostr, u"141"_ustr);
 
     assertXPath(pDocument, "//objectinfo/group/sdrCell[1]/unifiedtransparence"_ostr, 0);
     assertXPath(pDocument, "//objectinfo/group/sdrCell[2]/unifiedtransparence"_ostr, 0);
     assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/group/unifiedtransparence"_ostr,
-                "transparence"_ostr, "80");
+                "transparence"_ostr, u"80"_ustr);
     assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/group/unifiedtransparence"_ostr,
-                "transparence"_ostr, "80");
+                "transparence"_ostr, u"80"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
 {
     // Given a document with a table shape, editing cell text:
-    mxComponent = loadFromDesktop("private:factory/simpress",
-                                  "com.sun.star.presentation.PresentationDocument");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
+                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
     uno::Sequence<beans::PropertyValue> aArgs
-        = { comphelper::makePropertyValue("Rows", sal_Int32(2)),
-            comphelper::makePropertyValue("Columns", sal_Int32(2)) };
-    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+        = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(2)),
+            comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

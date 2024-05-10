@@ -62,37 +62,37 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
-:   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui"),
+:   PanelLayout(pParent, u"PosSizePropertyPanel"_ustr, u"svx/ui/sidebarpossize.ui"_ustr),
     m_aRatioTop(ConnectorType::Top),
     m_aRatioBottom(ConnectorType::Bottom),
-    mxFtPosX(m_xBuilder->weld_label("horizontallabel")),
-    mxMtrPosX(m_xBuilder->weld_metric_spin_button("horizontalpos", FieldUnit::CM)),
-    mxFtPosY(m_xBuilder->weld_label("verticallabel")),
-    mxMtrPosY(m_xBuilder->weld_metric_spin_button("verticalpos", FieldUnit::CM)),
-    mxFtWidth(m_xBuilder->weld_label("widthlabel")),
-    mxMtrWidth(m_xBuilder->weld_metric_spin_button("selectwidth", FieldUnit::CM)),
-    mxFtHeight(m_xBuilder->weld_label("heightlabel")),
-    mxMtrHeight(m_xBuilder->weld_metric_spin_button("selectheight", FieldUnit::CM))
-    , mxCbxScale(m_xBuilder->weld_check_button("ratio"))
-    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
-    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
-    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
-    , mxFtAngle(m_xBuilder->weld_label("rotationlabel"))
-    , mxMtrAngle(m_xBuilder->weld_metric_spin_button("rotation", FieldUnit::DEGREE)),
+    mxFtPosX(m_xBuilder->weld_label(u"horizontallabel"_ustr)),
+    mxMtrPosX(m_xBuilder->weld_metric_spin_button(u"horizontalpos"_ustr, FieldUnit::CM)),
+    mxFtPosY(m_xBuilder->weld_label(u"verticallabel"_ustr)),
+    mxMtrPosY(m_xBuilder->weld_metric_spin_button(u"verticalpos"_ustr, FieldUnit::CM)),
+    mxFtWidth(m_xBuilder->weld_label(u"widthlabel"_ustr)),
+    mxMtrWidth(m_xBuilder->weld_metric_spin_button(u"selectwidth"_ustr, FieldUnit::CM)),
+    mxFtHeight(m_xBuilder->weld_label(u"heightlabel"_ustr)),
+    mxMtrHeight(m_xBuilder->weld_metric_spin_button(u"selectheight"_ustr, FieldUnit::CM))
+    , mxCbxScale(m_xBuilder->weld_check_button(u"ratio"_ustr))
+    , m_xCbxScaleImg(m_xBuilder->weld_image(u"imRatio"_ustr))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, u"daRatioTop"_ustr, m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, u"daRatioBottom"_ustr, m_aRatioBottom))
+    , mxFtAngle(m_xBuilder->weld_label(u"rotationlabel"_ustr))
+    , mxMtrAngle(m_xBuilder->weld_metric_spin_button(u"rotation"_ustr, FieldUnit::DEGREE)),
     mxCtrlDial(new DialControl),
-    mxDial(new weld::CustomWeld(*m_xBuilder, "orientationcontrol", *mxCtrlDial)),
-    mxFtFlip(m_xBuilder->weld_label("fliplabel")),
-    mxFlipTbx(m_xBuilder->weld_toolbar("selectrotationtype")),
+    mxDial(new weld::CustomWeld(*m_xBuilder, u"orientationcontrol"_ustr, *mxCtrlDial)),
+    mxFtFlip(m_xBuilder->weld_label(u"fliplabel"_ustr)),
+    mxFlipTbx(m_xBuilder->weld_toolbar(u"selectrotationtype"_ustr)),
     mxFlipDispatch(new ToolbarUnoDispatcher(*mxFlipTbx, *m_xBuilder, rxFrame)),
-    mxArrangeTbx(m_xBuilder->weld_toolbar("arrangetoolbar")),
+    mxArrangeTbx(m_xBuilder->weld_toolbar(u"arrangetoolbar"_ustr)),
     mxArrangeDispatch(new ToolbarUnoDispatcher(*mxArrangeTbx, *m_xBuilder, rxFrame)),
-    mxArrangeTbx2(m_xBuilder->weld_toolbar("arrangetoolbar2")),
+    mxArrangeTbx2(m_xBuilder->weld_toolbar(u"arrangetoolbar2"_ustr)),
     mxArrangeDispatch2(new ToolbarUnoDispatcher(*mxArrangeTbx2, *m_xBuilder, rxFrame)),
-    mxAlignTbx(m_xBuilder->weld_toolbar("aligntoolbar")),
+    mxAlignTbx(m_xBuilder->weld_toolbar(u"aligntoolbar"_ustr)),
     mxAlignDispatch(new ToolbarUnoDispatcher(*mxAlignTbx, *m_xBuilder, rxFrame)),
-    mxAlignTbx2(m_xBuilder->weld_toolbar("aligntoolbar2")),
+    mxAlignTbx2(m_xBuilder->weld_toolbar(u"aligntoolbar2"_ustr)),
     mxAlignDispatch2(new ToolbarUnoDispatcher(*mxAlignTbx2, *m_xBuilder, rxFrame)),
-    mxBtnEditOLEObject(m_xBuilder->weld_button("btnEditObject")),
+    mxBtnEditOLEObject(m_xBuilder->weld_button(u"btnEditObject"_ustr)),
     mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
@@ -271,11 +271,11 @@ std::unique_ptr<PanelLayout> PosSizePropertyPanel::Create (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to PosSizePropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to PosSizePropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to PosSizePropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to PosSizePropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to PosSizePropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<PosSizePropertyPanel>(pParent, rxFrame, pBindings, rxSidebar);
 }
@@ -456,7 +456,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
     }
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
-    SvtViewOptions aPageOpt(EViewType::TabPage, "cui/ui/possizetabpage/PositionAndSize");
+    SvtViewOptions aPageOpt(EViewType::TabPage, u"cui/ui/possizetabpage/PositionAndSize"_ustr);
     aPageOpt.SetUserItem( USERITEM_NAME, css::uno::Any( OUString::number( int(mxCbxScale->get_active()) ) ) );
 }
 
@@ -543,7 +543,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mxMtrWidth->set_text( "" );
+            mxMtrWidth->set_text( u""_ustr );
             break;
 
         case SID_ATTR_TRANSFORM_HEIGHT:
@@ -563,7 +563,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mxMtrHeight->set_text( "");
+            mxMtrHeight->set_text( u""_ustr);
             break;
 
         case SID_ATTR_TRANSFORM_POS_X:
@@ -582,7 +582,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mxMtrPosX->set_text( "" );
+            mxMtrPosX->set_text( u""_ustr );
             break;
 
         case SID_ATTR_TRANSFORM_POS_Y:
@@ -601,7 +601,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mxMtrPosY->set_text( "" );
+            mxMtrPosY->set_text( u""_ustr );
             break;
 
         case SID_ATTR_TRANSFORM_ROT_X:
@@ -702,7 +702,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mxMtrAngle->set_text( "" );
+            mxMtrAngle->set_text( u""_ustr );
             mxCtrlDial->SetRotation( 0_deg100 );
             break;
 
@@ -787,7 +787,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     DisableControls();
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
-    SvtViewOptions aPageOpt(EViewType::TabPage, "cui/ui/possizetabpage/PositionAndSize");
+    SvtViewOptions aPageOpt(EViewType::TabPage, u"cui/ui/possizetabpage/PositionAndSize"_ustr);
     OUString  sUserData;
     css::uno::Any  aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
     OUString aTemp;

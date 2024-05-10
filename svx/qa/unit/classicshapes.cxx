@@ -27,7 +27,7 @@ class ClassicshapesTest : public UnoApiTest
 {
 public:
     ClassicshapesTest()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 
@@ -173,8 +173,8 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("CircleStartAngle") >>= nAngle1);
-        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue("CircleStartAngle") >>= nAngle2);
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle1);
+        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue(u"CircleStartAngle"_ustr) >>= nAngle2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect vertical flip starting angle on page "
                                               + OUString::number(nPageIndex))
                                          .toUtf8()

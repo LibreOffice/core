@@ -51,7 +51,7 @@ static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static vcl::Font aDefBulletFont = []()
     {
-        static vcl::Font tmp("OpenSymbol", "", Size(0, 14));
+        static vcl::Font tmp(u"OpenSymbol"_ustr, u""_ustr, Size(0, 14));
         tmp.SetCharSet( RTL_TEXTENCODING_SYMBOL );
         tmp.SetFamily( FAMILY_DONTKNOW );
         tmp.SetPitch( PITCH_DONTKNOW );

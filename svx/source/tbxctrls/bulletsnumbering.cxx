@@ -65,12 +65,12 @@ public:
 
 NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
                                weld::Widget* pParent, NumberingPageType ePageType)
-    : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svx/ui/numberingwindow.ui", "NumberingWindow")
+    : WeldToolbarPopup(rController.getFrameInterface(), pParent, u"svx/ui/numberingwindow.ui"_ustr, u"NumberingWindow"_ustr)
     , mePageType(ePageType)
     , mrController(rController)
-    , mxValueSet(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
-    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
-    , mxMoreButton(m_xBuilder->weld_button("more"))
+    , mxValueSet(new SvxNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxValueSet))
+    , mxMoreButton(m_xBuilder->weld_button(u"more"_ustr))
 {
     mxValueSet->SetStyle(WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT);
     mxValueSet->init(mePageType);
@@ -108,13 +108,13 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
 
     if ( mePageType == NumberingPageType::BULLET )
-        AddStatusListener( ".uno:CurrentBulletListType" );
+        AddStatusListener( u".uno:CurrentBulletListType"_ustr );
     else if ( mePageType == NumberingPageType::SINGLENUM )
-        AddStatusListener( ".uno:CurrentNumListType" );
+        AddStatusListener( u".uno:CurrentNumListType"_ustr );
     else
-        AddStatusListener( ".uno:CurrentOutlineType" );
+        AddStatusListener( u".uno:CurrentOutlineType"_ustr );
 
-    auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:OutlineBullet", mrController.getFrameInterface());
+    auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:OutlineBullet"_ustr, mrController.getFrameInterface());
     mxMoreButton->set_image(xImage);
     mxMoreButton->connect_clicked(LINK(this, NumberingPopup, VSButtonClickSetHdl));
 
@@ -136,17 +136,17 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
     if ( mePageType == NumberingPageType::BULLET )
     {
         auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::Any( nSelItem ) } } ) );
-        mrController.dispatchCommand( ".uno:SetBullet", aArgs );
+        mrController.dispatchCommand( u".uno:SetBullet"_ustr, aArgs );
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
     {
         auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::Any( nSelItem ) } } ) );
-        mrController.dispatchCommand( ".uno:SetNumber", aArgs );
+        mrController.dispatchCommand( u".uno:SetNumber"_ustr, aArgs );
     }
     else
     {
         auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::Any( nSelItem ) } } ) );
-        mrController.dispatchCommand( ".uno:SetOutline", aArgs );
+        mrController.dispatchCommand( u".uno:SetOutline"_ustr, aArgs );
     }
     mrController.EndPopupMode();
 }
@@ -158,8 +158,8 @@ void NumberingPopup::GrabFocus()
 
 IMPL_LINK_NOARG(NumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
 {
-    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::Any( OUString("customize") ) } } ) );
-    mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
+    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::Any( u"customize"_ustr ) } } ) );
+    mrController.dispatchCommand( u".uno:OutlineBullet"_ustr, aArgs );
 
     mrController.EndPopupMode();
 }
@@ -214,12 +214,12 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
 
 OUString SAL_CALL NumberingToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.NumberingToolBoxControl";
+    return u"com.sun.star.comp.svx.NumberingToolBoxControl"_ustr;
 }
 
 css::uno::Sequence< OUString > SAL_CALL NumberingToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

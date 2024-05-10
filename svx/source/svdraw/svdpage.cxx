@@ -577,7 +577,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     auto it = std::find_if( sortOrder.begin(), sortOrder.end(), [this](const sal_Int32& rIt)
          { return ( rIt < 0 || o3tl::make_unsigned(rIt) >= maList.size() ); } );
     if ( it != sortOrder.end())
-        throw css::lang::IllegalArgumentException("negative index of shape", nullptr, 1);
+        throw css::lang::IllegalArgumentException(u"negative index of shape"_ustr, nullptr, 1);
 
     // no duplicates
     std::vector<bool> aNoDuplicates(sortOrder.size(), false);
@@ -586,7 +586,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
         size_t idx =  static_cast<size_t>( sortOrder[i] );
 
         if ( aNoDuplicates[idx] )
-            throw css::lang::IllegalArgumentException("duplicate index of shape", nullptr, 2);
+            throw css::lang::IllegalArgumentException(u"duplicate index of shape"_ustr, nullptr, 2);
 
         aNoDuplicates[idx] = true;
     }
@@ -615,7 +615,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
     if (aShapesWithTextbox.size() != maList.size() - sortOrder.size())
     {
-        throw lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+        throw lang::IllegalArgumentException(u"mismatch of no. of shapes"_ustr, nullptr, 0);
     }
 
     for (size_t i = 0; i< sortOrder.size(); ++i)

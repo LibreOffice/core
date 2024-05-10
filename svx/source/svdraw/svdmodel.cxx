@@ -98,7 +98,7 @@ struct SdrModelImpl
         , mbLegacyFontwork(false)
         , mbConnectorUseSnapRect(false)
         , mbIgnoreBreakAfterMultilineField(false)
-        , mpTheme(new model::Theme("Office"))
+        , mpTheme(new model::Theme(u"Office"_ustr))
     {}
 
     void initTheme()
@@ -392,7 +392,7 @@ void SdrModel::BegUndo()
         ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
-        mpImpl->mpUndoManager->EnterListAction("","",0,nViewShellId);
+        mpImpl->mpUndoManager->EnterListAction(u""_ustr,u""_ustr,0,nViewShellId);
         m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -416,7 +416,7 @@ void SdrModel::BegUndo(const OUString& rComment)
         ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
-        mpImpl->mpUndoManager->EnterListAction( rComment, "", 0, nViewShellId );
+        mpImpl->mpUndoManager->EnterListAction( rComment, u""_ustr, 0, nViewShellId );
         m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -441,7 +441,7 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
-        mpImpl->mpUndoManager->EnterListAction( aComment,"",0,nViewShellId );
+        mpImpl->mpUndoManager->EnterListAction( aComment,u""_ustr,0,nViewShellId );
         m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -565,11 +565,11 @@ bool SdrModel::IsUndoEnabled() const
 void SdrModel::ImpCreateTables(bool bDisablePropertyFiles)
 {
     // use standard path for initial construction
-    const OUString aTablePath(!bDisablePropertyFiles ? SvtPathOptions().GetPalettePath() : "");
+    const OUString aTablePath(!bDisablePropertyFiles ? SvtPathOptions().GetPalettePath() : u""_ustr);
 
     for( auto i : o3tl::enumrange<XPropertyListType>() )
     {
-        maProperties[i] = XPropertyList::CreatePropertyList(i, aTablePath, ""/*TODO?*/ );
+        maProperties[i] = XPropertyList::CreatePropertyList(i, aTablePath, u""_ustr/*TODO?*/ );
     }
 }
 
@@ -943,29 +943,29 @@ OUString SdrModel::GetUnitString(FieldUnit eUnit)
         case FieldUnit::CUSTOM :
             return OUString();
         case FieldUnit::MM_100TH:
-            return OUString{"/100mm"};
+            return u"/100mm"_ustr;
         case FieldUnit::MM     :
-            return OUString{"mm"};
+            return u"mm"_ustr;
         case FieldUnit::CM     :
-            return OUString{"cm"};
+            return u"cm"_ustr;
         case FieldUnit::M      :
-            return OUString{"m"};
+            return u"m"_ustr;
         case FieldUnit::KM     :
-            return OUString{"km"};
+            return u"km"_ustr;
         case FieldUnit::TWIP   :
-            return OUString{"twip"};
+            return u"twip"_ustr;
         case FieldUnit::POINT  :
-            return OUString{"pt"};
+            return u"pt"_ustr;
         case FieldUnit::PICA   :
-            return OUString{"pica"};
+            return u"pica"_ustr;
         case FieldUnit::INCH   :
-            return OUString{"\""};
+            return u"\""_ustr;
         case FieldUnit::FOOT   :
-            return OUString{"ft"};
+            return u"ft"_ustr;
         case FieldUnit::MILE   :
-            return OUString{"mile(s)"};
+            return u"mile(s)"_ustr;
         case FieldUnit::PERCENT:
-            return OUString{"%"};
+            return u"%"_ustr;
     }
 }
 

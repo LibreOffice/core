@@ -283,7 +283,7 @@ namespace svxform
     SotClipboardFormatId OControlExchange::getControlPathFormatId()
     {
         static SotClipboardFormatId s_nFormat =
-            SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\"");
+            SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\""_ustr);
         DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
         return s_nFormat;
     }
@@ -291,7 +291,7 @@ namespace svxform
     SotClipboardFormatId OControlExchange::getHiddenControlModelsFormatId()
     {
         static SotClipboardFormatId s_nFormat =
-            SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\"");
+            SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\""_ustr);
         DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
         return s_nFormat;
     }
@@ -300,7 +300,7 @@ namespace svxform
     SotClipboardFormatId OControlExchange::getFieldExchangeFormatId()
     {
         static SotClipboardFormatId s_nFormat =
-            SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\"");
+            SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\""_ustr);
         DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
         return s_nFormat;
     }

@@ -287,7 +287,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
-            throw uno::RuntimeException ("AccessibleCell has no valid view forwarder", getXWeak());
+            throw uno::RuntimeException (u"AccessibleCell has no valid view forwarder"_ustr, getXWeak());
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));
@@ -441,14 +441,14 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
 
 OUString SAL_CALL AccessibleCell::getImplementationName()
 {
-    return "AccessibleCell";
+    return u"AccessibleCell"_ustr;
 }
 
 
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
-    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleCell" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

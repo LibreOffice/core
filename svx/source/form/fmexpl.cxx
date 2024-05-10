@@ -439,9 +439,9 @@ namespace svxform
 
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                   vcl::Window* _pParent )
-      : SfxDockingWindow(_pBindings, _pMgr, _pParent, "FormNavigator", "svx/ui/formnavigator.ui")
+      : SfxDockingWindow(_pBindings, _pMgr, _pParent, u"FormNavigator"_ustr, u"svx/ui/formnavigator.ui"_ustr)
       , SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
-      , m_xNavigatorTree(new NavigatorTree(m_xBuilder->weld_tree_view("treeview")))
+      , m_xNavigatorTree(new NavigatorTree(m_xBuilder->weld_tree_view(u"treeview"_ustr)))
     {
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
 

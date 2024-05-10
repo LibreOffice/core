@@ -186,33 +186,33 @@ void SvxRubyData_Impl::AssertOneEntry()
 }
 
 SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Window* pParent)
-    : SfxModelessDialogController(pBind, pCW, pParent, "svx/ui/asianphoneticguidedialog.ui",
-                                  "AsianPhoneticGuideDialog")
+    : SfxModelessDialogController(pBind, pCW, pParent, u"svx/ui/asianphoneticguidedialog.ui"_ustr,
+                                  u"AsianPhoneticGuideDialog"_ustr)
     , nLastPos(0)
     , nCurrentEdit(0)
     , bModified(false)
     , pBindings(pBind)
     , m_pImpl(new SvxRubyData_Impl)
-    , m_xLeft1ED(m_xBuilder->weld_entry("Left1ED"))
-    , m_xRight1ED(m_xBuilder->weld_entry("Right1ED"))
-    , m_xLeft2ED(m_xBuilder->weld_entry("Left2ED"))
-    , m_xRight2ED(m_xBuilder->weld_entry("Right2ED"))
-    , m_xLeft3ED(m_xBuilder->weld_entry("Left3ED"))
-    , m_xRight3ED(m_xBuilder->weld_entry("Right3ED"))
-    , m_xLeft4ED(m_xBuilder->weld_entry("Left4ED"))
-    , m_xRight4ED(m_xBuilder->weld_entry("Right4ED"))
-    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
-    , m_xAdjustLB(m_xBuilder->weld_combo_box("adjustlb"))
-    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
-    , m_xCharStyleFT(m_xBuilder->weld_label("styleft"))
-    , m_xCharStyleLB(m_xBuilder->weld_combo_box("stylelb"))
-    , m_xStylistPB(m_xBuilder->weld_button("styles"))
-    , m_xApplyPB(m_xBuilder->weld_button("ok"))
-    , m_xClosePB(m_xBuilder->weld_button("close"))
+    , m_xLeft1ED(m_xBuilder->weld_entry(u"Left1ED"_ustr))
+    , m_xRight1ED(m_xBuilder->weld_entry(u"Right1ED"_ustr))
+    , m_xLeft2ED(m_xBuilder->weld_entry(u"Left2ED"_ustr))
+    , m_xRight2ED(m_xBuilder->weld_entry(u"Right2ED"_ustr))
+    , m_xLeft3ED(m_xBuilder->weld_entry(u"Left3ED"_ustr))
+    , m_xRight3ED(m_xBuilder->weld_entry(u"Right3ED"_ustr))
+    , m_xLeft4ED(m_xBuilder->weld_entry(u"Left4ED"_ustr))
+    , m_xRight4ED(m_xBuilder->weld_entry(u"Right4ED"_ustr))
+    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true))
+    , m_xAdjustLB(m_xBuilder->weld_combo_box(u"adjustlb"_ustr))
+    , m_xPositionLB(m_xBuilder->weld_combo_box(u"positionlb"_ustr))
+    , m_xCharStyleFT(m_xBuilder->weld_label(u"styleft"_ustr))
+    , m_xCharStyleLB(m_xBuilder->weld_combo_box(u"stylelb"_ustr))
+    , m_xStylistPB(m_xBuilder->weld_button(u"styles"_ustr))
+    , m_xApplyPB(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xContentArea(m_xDialog->weld_content_area())
-    , m_xGrid(m_xBuilder->weld_widget("grid"))
+    , m_xGrid(m_xBuilder->weld_widget(u"grid"_ustr))
     , m_xPreviewWin(new RubyPreview)
-    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", *m_xPreviewWin))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, *m_xPreviewWin))
 {
     m_xCharStyleLB->make_sorted();
     m_xPreviewWin->setRubyDialog(this);
@@ -301,13 +301,13 @@ void SvxRubyDialog::Activate()
             try
             {
                 Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
-                Any aChar = xFam->getByName("CharacterStyles");
+                Any aChar = xFam->getByName(u"CharacterStyles"_ustr);
                 Reference<XNameContainer> xChar;
                 aChar >>= xChar;
                 Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
                 if (xCharIdx.is())
                 {
-                    OUString sUIName("DisplayName");
+                    OUString sUIName(u"DisplayName"_ustr);
                     for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
                     {
                         Any aStyle = xCharIdx->getByIndex(nStyle);
@@ -796,7 +796,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             break;
         case RubyAdjust_INDENT_BLOCK:
         {
-            tools::Long nCharWidth = rRenderContext.GetTextWidth("X");
+            tools::Long nCharWidth = rRenderContext.GetTextWidth(u"X"_ustr);
             if (nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;

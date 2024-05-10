@@ -578,7 +578,7 @@ OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return "select";
+    return u"select"_ustr;
 }
 
 

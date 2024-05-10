@@ -170,7 +170,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             ,m_bHasForms(false)
 {
     SetPool( &SfxGetpApp()->GetPool() );
-    SetName( "Form" );
+    SetName( u"Form"_ustr );
 
     SetView(m_pFormView);
 }
@@ -225,8 +225,8 @@ bool FmFormShell::PrepareClose(bool bUI)
                         SfxViewShell* pShell = GetViewShell();
                         vcl::Window* pShellWnd = pShell ? pShell->GetWindow() : nullptr;
                         weld::Widget* pFrameWeld = pShellWnd ? pShellWnd->GetFrameWeld() : nullptr;
-                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pFrameWeld, "svx/ui/savemodifieddialog.ui"));
-                        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog("SaveModifiedDialog"));
+                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pFrameWeld, u"svx/ui/savemodifieddialog.ui"_ustr));
+                        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog(u"SaveModifiedDialog"_ustr));
                         switch (xQry->run())
                         {
                             case RET_YES:
@@ -713,7 +713,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, "Position", Any( nRecord ) );
+                rController->execute( nSlot, u"Position"_ustr, Any( nRecord ) );
 
             rReq.Done();
         }   break;

@@ -109,7 +109,7 @@ void SAL_CALL GalleryItem::release()
 
 OUString SAL_CALL GalleryItem::getImplementationName()
 {
-    return "com.sun.star.comp.gallery.GalleryItem";
+    return u"com.sun.star.comp.gallery.GalleryItem"_ustr;
 }
 
 sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
 {
-    return { "com.sun.star.gallery.GalleryItem" };
+    return { u"com.sun.star.gallery.GalleryItem"_ustr };
 }
 
 uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
@@ -171,22 +171,22 @@ rtl::Reference<::comphelper::PropertySetInfo> GalleryItem::createPropertySetInfo
 {
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("GalleryItemType"), UNOGALLERY_GALLERYITEMTYPE, cppu::UnoType<sal_Int8>::get(),
+        { u"GalleryItemType"_ustr, UNOGALLERY_GALLERYITEMTYPE, cppu::UnoType<sal_Int8>::get(),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("URL"), UNOGALLERY_URL, ::cppu::UnoType<OUString>::get(),
+        { u"URL"_ustr, UNOGALLERY_URL, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("Title"), UNOGALLERY_TITLE, ::cppu::UnoType<OUString>::get(),
+        { u"Title"_ustr, UNOGALLERY_TITLE, ::cppu::UnoType<OUString>::get(),
           0, 0 },
 
-        { OUString("Thumbnail"), UNOGALLERY_THUMBNAIL, cppu::UnoType<graphic::XGraphic>::get(),
+        { u"Thumbnail"_ustr, UNOGALLERY_THUMBNAIL, cppu::UnoType<graphic::XGraphic>::get(),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("Graphic"), UNOGALLERY_GRAPHIC, cppu::UnoType<graphic::XGraphic>::get(),
+        { u"Graphic"_ustr, UNOGALLERY_GRAPHIC, cppu::UnoType<graphic::XGraphic>::get(),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("Drawing"), UNOGALLERY_DRAWING, cppu::UnoType<lang::XComponent>::get(),
+        { u"Drawing"_ustr, UNOGALLERY_DRAWING, cppu::UnoType<lang::XComponent>::get(),
           beans::PropertyAttribute::READONLY, 0 },
     };
 

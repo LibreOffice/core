@@ -147,7 +147,7 @@ void GalleryFileStorage::insertObject(const SgaObject& rObj, GalleryObject* pFou
             }
         }
         else if (rObj.GetTitle() == "__<empty>__")
-            const_cast<SgaObject&>(rObj).SetTitle("");
+            const_cast<SgaObject&>(rObj).SetTitle(u""_ustr);
 
         implWriteSgaObject(rObj, nInsertPos, &aNewEntry);
         pFoundEntry->nOffset = aNewEntry.nOffset;
@@ -651,11 +651,11 @@ void GalleryFileStorage::insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
                                   comphelper::getProcessComponentContext());
         bool bFolder = false;
 
-        aCnt.getPropertyValue("IsFolder") >>= bFolder;
+        aCnt.getPropertyValue(u"IsFolder"_ustr) >>= bFolder;
 
         if (bFolder)
         {
-            uno::Sequence<OUString> aProps{ "Url" };
+            uno::Sequence<OUString> aProps{ u"Url"_ustr };
             uno::Reference<sdbc::XResultSet> xResultSet(
                 aCnt.createCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
             uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY);
@@ -800,7 +800,7 @@ DateTime GalleryFileStorage::getModificationDate() const
     util::DateTime aDateTimeModified;
     DateTime aDateTime(DateTime::EMPTY);
 
-    aCnt.getPropertyValue("DateModified") >>= aDateTimeModified;
+    aCnt.getPropertyValue(u"DateModified"_ustr) >>= aDateTimeModified;
     ::utl::typeConvert(aDateTimeModified, aDateTime);
 
     return aDateTime;

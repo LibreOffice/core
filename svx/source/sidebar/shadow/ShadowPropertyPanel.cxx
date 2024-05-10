@@ -32,7 +32,7 @@ namespace svx::sidebar {
 ShadowPropertyPanel::ShadowPropertyPanel(
     weld::Widget* pParent,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui"),
+:   PanelLayout(pParent, u"ShadowPropertyPanel"_ustr, u"svx/ui/sidebarshadow.ui"_ustr),
     maShadowController(SID_ATTR_FILL_SHADOW, *pBindings, *this),
     maShadowTransController(SID_ATTR_SHADOW_TRANSPARENCE, *pBindings, *this),
     maShadowBlurController(SID_ATTR_SHADOW_BLUR, *pBindings, *this),
@@ -43,18 +43,18 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     nX(0),
     nY(0),
     nXY(0),
-    mxShowShadow(m_xBuilder->weld_check_button("SHOW_SHADOW")),
-    mxShadowDistance(m_xBuilder->weld_metric_spin_button("LB_DISTANCE", FieldUnit::POINT)),
-    mxLBShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), [this]{ return GetFrameWeld(); })),
-    mxShadowAngle(m_xBuilder->weld_combo_box("LB_ANGLE")),
-    mxFTAngle(m_xBuilder->weld_label("angle")),
-    mxFTDistance(m_xBuilder->weld_label("distance")),
-    mxFTTransparency(m_xBuilder->weld_label("transparency_label")),
-    mxFTBlur(m_xBuilder->weld_label("blur_label")),
-    mxFTColor(m_xBuilder->weld_label("shadowcolorlabel")),
-    mxShadowTransSlider(m_xBuilder->weld_scale("transparency_slider")),
-    mxShadowTransMetric(m_xBuilder->weld_metric_spin_button("FIELD_TRANSPARENCY", FieldUnit::PERCENT)),
-    mxShadowBlurMetric(m_xBuilder->weld_metric_spin_button("LB_SHADOW_BLUR", FieldUnit::POINT))
+    mxShowShadow(m_xBuilder->weld_check_button(u"SHOW_SHADOW"_ustr)),
+    mxShadowDistance(m_xBuilder->weld_metric_spin_button(u"LB_DISTANCE"_ustr, FieldUnit::POINT)),
+    mxLBShadowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_SHADOW_COLOR"_ustr), [this]{ return GetFrameWeld(); })),
+    mxShadowAngle(m_xBuilder->weld_combo_box(u"LB_ANGLE"_ustr)),
+    mxFTAngle(m_xBuilder->weld_label(u"angle"_ustr)),
+    mxFTDistance(m_xBuilder->weld_label(u"distance"_ustr)),
+    mxFTTransparency(m_xBuilder->weld_label(u"transparency_label"_ustr)),
+    mxFTBlur(m_xBuilder->weld_label(u"blur_label"_ustr)),
+    mxFTColor(m_xBuilder->weld_label(u"shadowcolorlabel"_ustr)),
+    mxShadowTransSlider(m_xBuilder->weld_scale(u"transparency_slider"_ustr)),
+    mxShadowTransMetric(m_xBuilder->weld_metric_spin_button(u"FIELD_TRANSPARENCY"_ustr, FieldUnit::PERCENT)),
+    mxShadowBlurMetric(m_xBuilder->weld_metric_spin_button(u"LB_SHADOW_BLUR"_ustr, FieldUnit::POINT))
 {
     Initialize();
 }
@@ -352,9 +352,9 @@ std::unique_ptr<PanelLayout> ShadowPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if(pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ShadowPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to ShadowPropertyPanel::Create"_ustr, nullptr, 0);
     if(pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to ShadowPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to ShadowPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<ShadowPropertyPanel>(pParent, pBindings);
 }

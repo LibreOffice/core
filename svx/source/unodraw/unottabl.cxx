@@ -53,12 +53,12 @@ SvxUnoTransGradientTable::SvxUnoTransGradientTable(SdrModel* pModel) noexcept
 
 OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName()
 {
-    return "SvxUnoTransGradientTable";
+    return u"SvxUnoTransGradientTable"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.TransparencyGradientTable" };
+    return { u"com.sun.star.drawing.TransparencyGradientTable"_ustr };
 }
 
 NameOrIndex* SvxUnoTransGradientTable::createItem() const

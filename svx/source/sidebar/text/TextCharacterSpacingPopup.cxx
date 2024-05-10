@@ -64,12 +64,12 @@ VclPtr<vcl::Window> TextCharacterSpacingPopup::createVclPopupWindow(vcl::Window*
 
 OUString TextCharacterSpacingPopup::getImplementationName()
 {
-    return "com.sun.star.comp.svx.CharacterSpacingToolBoxControl";
+    return u"com.sun.star.comp.svx.CharacterSpacingToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> TextCharacterSpacingPopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

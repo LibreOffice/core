@@ -185,7 +185,7 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements()
 // XServiceInfo
 OUString SAL_CALL SvxShapeCollection::getImplementationName()
 {
-    return "com.sun.star.drawing.SvxShapeCollection";
+    return u"com.sun.star.drawing.SvxShapeCollection"_ustr;
 }
 
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.Shapes", "com.sun.star.drawing.ShapeCollection" };
+    return { u"com.sun.star.drawing.Shapes"_ustr, u"com.sun.star.drawing.ShapeCollection"_ustr };
 }
 
 void SvxShapeCollection::getAllShapes(std::vector<css::uno::Reference<css::drawing::XShape>>& rShapes) const

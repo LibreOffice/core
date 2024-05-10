@@ -34,7 +34,7 @@ XColorListRef XColorList::CreateStdColorList()
         XPropertyList::CreatePropertyList(
             XPropertyListType::Color, !comphelper::IsFuzzing() ?
                                           SvtPathOptions().GetPalettePath() :
-                                          "", ""));
+                                          u""_ustr, u""_ustr));
 }
 
 XColorListRef XColorList::GetStdColorList()

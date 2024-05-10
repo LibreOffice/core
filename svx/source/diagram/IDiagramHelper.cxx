@@ -352,7 +352,7 @@ void DiagramFrameHdl::clicked(const Point& /*rPnt*/)
     // and only then take action. That would require
     // to evaluate & keep that (maybe during creation).
     // For now, just trigger to open the Dialog
-    comphelper::dispatchCommand(".uno:EditDiagram", {});
+    comphelper::dispatchCommand(u".uno:EditDiagram"_ustr, {});
 }
 
 void DiagramFrameHdl::CreateB2dIAObject()

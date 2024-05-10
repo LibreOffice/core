@@ -265,7 +265,7 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_XMLATTRIBUTES, new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
             { SDRATTR_TEXT_USEFIXEDCELLHEIGHT, new SdrTextFixedCellHeightItem, 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_TEXT_WORDWRAP, new SdrOnOffItem(SDRATTR_TEXT_WORDWRAP, true), 0, SFX_ITEMINFOFLAG_NONE },
-            { SDRATTR_TEXT_CHAINNEXTNAME, new SfxStringItem(SDRATTR_TEXT_CHAINNEXTNAME, ""), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_CHAINNEXTNAME, new SfxStringItem(SDRATTR_TEXT_CHAINNEXTNAME, u""_ustr), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_TEXT_CLIPVERTOVERFLOW, new SdrOnOffItem(SDRATTR_TEXT_CLIPVERTOVERFLOW, false), 0, SFX_ITEMINFOFLAG_NONE },
 
             { SDRATTR_EDGEKIND, new SdrEdgeKindItem, 0, SFX_ITEMINFOFLAG_NONE },
@@ -412,8 +412,8 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_3DSCENE_SHADOW_SLANT, new SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, 0), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_3DSCENE_SHADE_MODE, new Svx3DShadeModeItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-            { SDRATTR_CUSTOMSHAPE_ENGINE, new SfxStringItem(SDRATTR_CUSTOMSHAPE_ENGINE, ""), 0, SFX_ITEMINFOFLAG_NONE },
-            { SDRATTR_CUSTOMSHAPE_DATA, new SfxStringItem(SDRATTR_CUSTOMSHAPE_DATA, ""), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CUSTOMSHAPE_ENGINE, new SfxStringItem(SDRATTR_CUSTOMSHAPE_ENGINE, u""_ustr), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CUSTOMSHAPE_DATA, new SfxStringItem(SDRATTR_CUSTOMSHAPE_DATA, u""_ustr), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_CUSTOMSHAPE_GEOMETRY, new SdrCustomShapeGeometryItem, 0, SFX_ITEMINFOFLAG_NONE },
 
             { SDRATTR_TABLE_BORDER, nullptr, SID_ATTR_BORDER_OUTER, SFX_ITEMINFOFLAG_NONE },
@@ -484,7 +484,7 @@ static ItemInfoPackage& getItemInfoPackageSdr()
 }
 
 SdrItemPool::SdrItemPool(SfxItemPool* _pMaster)
-: SfxItemPool("SdrItemPool")
+: SfxItemPool(u"SdrItemPool"_ustr)
 {
     // registerItemInfoPackage(getItemInfoPackageXOutdev());
     registerItemInfoPackage(getItemInfoPackageSdr());
@@ -1738,10 +1738,10 @@ const OUString & SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static std::array<OUString, 4> aMeasureTextHPosItem
     {
-        "automatic",
-        "left outside",
-        "inside (centered)",
-        "right outside"
+        u"automatic"_ustr,
+        u"left outside"_ustr,
+        u"inside (centered)"_ustr,
+        u"right outside"_ustr
     };
     assert(nPos < aMeasureTextHPosItem.size() && "wrong pos!");
     return aMeasureTextHPosItem[nPos];
@@ -1836,7 +1836,7 @@ sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
 OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     if(static_cast<FieldUnit>(nPos) == FieldUnit::NONE)
-        return "default";
+        return u"default"_ustr;
     else
         return SdrFormatter::GetUnitStr(static_cast<FieldUnit>(nPos));
 }

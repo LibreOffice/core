@@ -519,7 +519,7 @@ sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex )
 OUString SvxShowCharSetItemAcc::getAccessibleActionDescription ( sal_Int32 nIndex )
 {
     if( nIndex == 0 )
-        return "press";
+        return u"press"_ustr;
     throw IndexOutOfBoundsException();
 }
 

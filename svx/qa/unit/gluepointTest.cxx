@@ -28,7 +28,7 @@ class GluePointTest : public UnoApiTest
 {
 public:
     GluePointTest()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 
@@ -57,7 +57,7 @@ bool lcl_getGeometryGluePoints(
     const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
-    uno::Any anotherAny = xShapeProps->getPropertyValue("CustomShapeGeometry");
+    uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
     uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;

@@ -61,11 +61,11 @@ std::unique_ptr<PanelLayout> LinePropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to LinePropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to LinePropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to LinePropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to LinePropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to LinePropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<LinePropertyPanel>(pParent, rxFrame, pBindings);
 }

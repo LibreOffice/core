@@ -450,8 +450,8 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr{
-        comphelper::makePropertyValue("URL", aLinkURL),
-        comphelper::makePropertyValue("Referer", referer_)
+        comphelper::makePropertyValue(u"URL"_ustr, aLinkURL),
+        comphelper::makePropertyValue(u"Referer"_ustr, referer_)
     };
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
@@ -564,7 +564,7 @@ OUString SvxOle2Shape::GetAndClearInitialFrameURL()
 SvxAppletShape::SvxAppletShape(SdrObject* pObject, OUString referer)
     : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool()))
 {
-    SetShapeType( "com.sun.star.drawing.AppletShape" );
+    SetShapeType( u"com.sun.star.drawing.AppletShape"_ustr );
 }
 
 SvxAppletShape::~SvxAppletShape() noexcept
@@ -576,7 +576,7 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
     createObject(aAppletClassId);
-    SetShapeType( "com.sun.star.drawing.AppletShape" );
+    SetShapeType( u"com.sun.star.drawing.AppletShape"_ustr );
 }
 
 void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue )
@@ -635,7 +635,7 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 SvxPluginShape::SvxPluginShape(SdrObject* pObject, OUString referer)
     : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()))
 {
-    SetShapeType( "com.sun.star.drawing.PluginShape" );
+    SetShapeType( u"com.sun.star.drawing.PluginShape"_ustr );
 }
 
 SvxPluginShape::~SvxPluginShape() noexcept
@@ -647,7 +647,7 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
     createObject(aPluginClassId);
-    SetShapeType( "com.sun.star.drawing.PluginShape" );
+    SetShapeType( u"com.sun.star.drawing.PluginShape"_ustr );
 }
 
 void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue )
@@ -706,7 +706,7 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 SvxFrameShape::SvxFrameShape(SdrObject* pObject, OUString referer)
     : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool()))
 {
-    SetShapeType( "com.sun.star.drawing.FrameShape" );
+    SetShapeType( u"com.sun.star.drawing.FrameShape"_ustr );
 }
 
 SvxFrameShape::~SvxFrameShape() noexcept
@@ -724,12 +724,12 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     uno::Reference<beans::XPropertySet> xSet(static_cast<OWeakObject *>(this), uno::UNO_QUERY);
     if (xSet)
-        xSet->getPropertyValue("FrameURL") >>= m_sInitialFrameURL;
+        xSet->getPropertyValue(u"FrameURL"_ustr) >>= m_sInitialFrameURL;
 
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
-    SetShapeType( "com.sun.star.drawing.FrameShape" );
+    SetShapeType( u"com.sun.star.drawing.FrameShape"_ustr );
 }
 
 void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue )
@@ -790,7 +790,7 @@ SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString referer)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
     referer_(std::move(referer))
 {
-    SetShapeType( "com.sun.star.drawing.MediaShape" );
+    SetShapeType( u"com.sun.star.drawing.MediaShape"_ustr );
 }
 
 
@@ -822,7 +822,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             if( rValue >>= aURL )
             {
                 bOk = true;
-                aItem.setURL( aURL, "", referer_ );
+                aItem.setURL( aURL, u""_ustr, referer_ );
             }
         }
 #endif
@@ -937,7 +937,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             {
                 css::uno::Any exc = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
-                        "ContentCreationException Setting InputStream!",
+                        u"ContentCreationException Setting InputStream!"_ustr,
                         getXWeak(),
                         exc);
             }
@@ -945,7 +945,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
-                        "CommandFailedException Setting InputStream!",
+                        u"CommandFailedException Setting InputStream!"_ustr,
                         getXWeak(),
                         anyEx);
             }
@@ -1030,14 +1030,14 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 {
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
-                            "ContentCreationException Getting InputStream!",
+                            u"ContentCreationException Getting InputStream!"_ustr,
                             getXWeak(), anyEx );
                 }
                 catch (const css::ucb::CommandFailedException&)
                 {
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
-                            "CommandFailedException Getting InputStream!",
+                            u"CommandFailedException Getting InputStream!"_ustr,
                             getXWeak(), anyEx );
                 }
 

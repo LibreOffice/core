@@ -85,7 +85,7 @@ GalleryThemeProvider::GalleryThemeProvider() :
 
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
 {
-    return "com.sun.star.comp.gallery.GalleryThemeProvider";
+    return u"com.sun.star.comp.gallery.GalleryThemeProvider"_ustr;
 }
 
 sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& Service
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { "com.sun.star.gallery.GalleryThemeProvider" };
+    uno::Sequence<OUString> aSeq { u"com.sun.star.gallery.GalleryThemeProvider"_ustr };
     return aSeq;
 }
 

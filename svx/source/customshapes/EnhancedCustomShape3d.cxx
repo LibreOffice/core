@@ -68,7 +68,7 @@ namespace {
 void GetOrigin( const SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
 {
     css::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Origin" );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, u"Origin"_ustr );
     if ( ! ( pAny && ( *pAny >>= aOriginParaPair ) && ( aOriginParaPair.First.Value >>= rOriginX ) && ( aOriginParaPair.Second.Value >>= rOriginY ) ) )
     {
         rOriginX = 0.50;
@@ -79,7 +79,7 @@ void GetOrigin( const SdrCustomShapeGeometryItem& rItem, double& rOriginX, doubl
 void GetRotateAngle( const SdrCustomShapeGeometryItem& rItem, double& rAngleX, double& rAngleY )
 {
     css::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "RotateAngle" );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, u"RotateAngle"_ustr );
     if ( ! ( pAny && ( *pAny >>= aRotateAngleParaPair ) && ( aRotateAngleParaPair.First.Value >>= rAngleX ) && ( aRotateAngleParaPair.Second.Value >>= rAngleY ) ) )
     {
         rAngleX = 0.0;
@@ -92,7 +92,7 @@ void GetRotateAngle( const SdrCustomShapeGeometryItem& rItem, double& rAngleX, d
 void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
 {
     css::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Skew" );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, u"Skew"_ustr );
     if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
     {
         rSkewAmount = 50;
@@ -108,7 +108,7 @@ void GetExtrusionDepth( const SdrCustomShapeGeometryItem& rItem, const double* p
 {
     css::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
     double fDepth = 0, fFraction = 0;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Depth" );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, u"Depth"_ustr );
     if ( pAny && ( *pAny >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
     {
         rForwardDepth = fDepth * fFraction;
@@ -130,7 +130,7 @@ void GetExtrusionDepth( const SdrCustomShapeGeometryItem& rItem, const double* p
 double GetDouble( const SdrCustomShapeGeometryItem& rItem, const OUString& rPropertyName, double fDefault )
 {
     double fRetValue = fDefault;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, rPropertyName );
     if ( pAny )
         *pAny >>= fRetValue;
     return fRetValue;
@@ -139,7 +139,7 @@ double GetDouble( const SdrCustomShapeGeometryItem& rItem, const OUString& rProp
 drawing::ShadeMode GetShadeMode( const SdrCustomShapeGeometryItem& rItem, const drawing::ShadeMode eDefault )
 {
     drawing::ShadeMode eRet( eDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "ShadeMode" );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, u"ShadeMode"_ustr );
     if ( pAny )
     {
         if (!(*pAny >>= eRet))
@@ -157,7 +157,7 @@ drawing::ShadeMode GetShadeMode( const SdrCustomShapeGeometryItem& rItem, const 
 bool GetBool( const SdrCustomShapeGeometryItem& rItem, const OUString& rPropertyName, const bool bDefault )
 {
     bool bRetValue = bDefault;
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, rPropertyName );
     if ( pAny )
         *pAny >>= bRetValue;
     return bRetValue;
@@ -167,7 +167,7 @@ drawing::Position3D GetPosition3D( const SdrCustomShapeGeometryItem& rItem, cons
                                     const drawing::Position3D& rDefault, const double* pMap )
 {
     drawing::Position3D aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, rPropertyName );
     if ( pAny )
         *pAny >>= aRetValue;
     if ( pMap )
@@ -182,7 +182,7 @@ drawing::Position3D GetPosition3D( const SdrCustomShapeGeometryItem& rItem, cons
 drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, const OUString& rPropertyName, const drawing::Direction3D& rDefault )
 {
     drawing::Direction3D aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( u"Extrusion"_ustr, rPropertyName );
     if ( pAny )
         *pAny >>= aRetValue;
     return aRetValue;
@@ -191,7 +191,7 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 sal_Int16 GetMetalType(const SdrCustomShapeGeometryItem& rItem, const sal_Int16 eDefault)
 {
     sal_Int16 aRetValue(eDefault);
-    const Any* pAny = rItem.GetPropertyValueByName("Extrusion", "MetalType");
+    const Any* pAny = rItem.GetPropertyValueByName(u"Extrusion"_ustr, u"MetalType"_ustr);
     if (pAny)
         *pAny >>= aRetValue;
     return aRetValue;
@@ -256,7 +256,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
         pMap = &fMap;
     }
 
-    if ( GetBool( rGeometryItem, "Extrusion", false ) )
+    if ( GetBool( rGeometryItem, u"Extrusion"_ustr, false ) )
     {
         bool bIsMirroredX(rSdrObjCustomShape.IsMirroredX());
         bool bIsMirroredY(rSdrObjCustomShape.IsMirroredY());
@@ -340,7 +340,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             fDepth = 1.0;
 
         drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PARALLEL );
-        const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
+        const Any* pAny = rGeometryItem.GetPropertyValueByName( u"Extrusion"_ustr, u"ProjectionMode"_ustr );
         if (pAny)
         {
             if(!(*pAny >>= eProjectionMode))
@@ -363,7 +363,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
         bool bUseTwoFillStyles( false );
 
         drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
-        bool bUseExtrusionColor = GetBool( rGeometryItem, "Color", false );
+        bool bUseExtrusionColor = GetBool( rGeometryItem, u"Color"_ustr, false );
 
         drawing::FillStyle eFillStyle( aSet.Get(XATTR_FILLSTYLE).GetValue() );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem(static_cast<sal_uInt16>(eShadeMode)));
@@ -578,7 +578,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( "", rSdrObjCustomShape.GetMergedItem( XATTR_SECONDARYFILLCOLOR ).GetColorValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( u""_ustr, rSdrObjCustomShape.GetMergedItem( XATTR_SECONDARYFILLCOLOR ).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
@@ -606,7 +606,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                 else if ( aLocalFillStyle == drawing::FillStyle_NONE )
                 {
                     const XLineColorItem& rLineColor = p3DObj->GetMergedItem( XATTR_LINECOLOR );
-                    p3DObj->SetMergedItem( XFillColorItem( "", rLineColor.GetColorValue() ) );
+                    p3DObj->SetMergedItem( XFillColorItem( u""_ustr, rLineColor.GetColorValue() ) );
                     p3DObj->SetMergedItem( makeSvx3DDoubleSidedItem( true ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
@@ -674,7 +674,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             double fXRotate, fYRotate;
             GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
             drawing::Direction3D aRotationCenterDefault( 0, 0, 0 );
-            drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, "RotationCenter", aRotationCenterDefault ) );
+            drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, u"RotationCenter"_ustr, aRotationCenterDefault ) );
             aRotationCenter.DirectionX *= aSnapRect.getOpenWidth();
             aRotationCenter.DirectionY *= aSnapRect.getOpenHeight();
             if (pMap)
@@ -741,7 +741,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                 // ToDo: These default ViewPoint values are used as default by MS Office. But ODF
                 // default is (3500, -3500, 25000), details in tdf#146192.
                 drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
-                drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, "ViewPoint", aViewPointDefault, pMap ) );
+                drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, u"ViewPoint"_ustr, aViewPointDefault, pMap ) );
                 fViewPointX = aViewPoint.PositionX + fOriginX;
                 fViewPointY = - aViewPoint.PositionY + fOriginY;
                 fViewPointZ = aViewPoint.PositionZ;
@@ -818,12 +818,12 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             // light and material
 
             // "LightFace" has nothing corresponding in 3D rendering engine.
-            /* bool bLightFace = */ GetBool(rGeometryItem, "LightFace", true); // default in ODF
+            /* bool bLightFace = */ GetBool(rGeometryItem, u"LightFace"_ustr, true); // default in ODF
 
             // Light directions
 
             drawing::Direction3D aFirstLightDirectionDefault(50000.0, 0.0, 10000.0);
-            drawing::Direction3D aFirstLightDirection(GetDirection3D( rGeometryItem, "FirstLightDirection", aFirstLightDirectionDefault));
+            drawing::Direction3D aFirstLightDirection(GetDirection3D( rGeometryItem, u"FirstLightDirection"_ustr, aFirstLightDirectionDefault));
             if (aFirstLightDirection.DirectionX == 0.0 && aFirstLightDirection.DirectionY == 0.0
                 && aFirstLightDirection.DirectionZ == 0.0)
                 aFirstLightDirection.DirectionZ = 1.0;
@@ -831,7 +831,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             aLight1Vector.normalize();
 
             drawing::Direction3D aSecondLightDirectionDefault(-50000.0, 0.0, 10000.0);
-            drawing::Direction3D aSecondLightDirection(GetDirection3D( rGeometryItem, "SecondLightDirection", aSecondLightDirectionDefault));
+            drawing::Direction3D aSecondLightDirection(GetDirection3D( rGeometryItem, u"SecondLightDirection"_ustr, aSecondLightDirectionDefault));
             if (aSecondLightDirection.DirectionX == 0.0 && aSecondLightDirection.DirectionY == 0.0
                 && aSecondLightDirection.DirectionZ == 0.0)
                 aSecondLightDirection.DirectionZ = 1.0;
@@ -855,16 +855,16 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             // The 3D-Scene light "3" is currently not used.
 
             // ODF default 66%. MS Office default 38000/65536=0.579 is set in import filter.
-            double fLight1Intensity = GetDouble(rGeometryItem, "FirstLightLevel", 66) / 100.0;
+            double fLight1Intensity = GetDouble(rGeometryItem, u"FirstLightLevel"_ustr, 66) / 100.0;
             // ODF and MS Office have both default 'true'.
-            bool bFirstLightHarsh = GetBool(rGeometryItem, "FirstLightHarsh", true);
+            bool bFirstLightHarsh = GetBool(rGeometryItem, u"FirstLightHarsh"_ustr, true);
             // ODF default 66%. MS Office default 38000/65536=0.579 is set in import filter
-            double fLight2Intensity = GetDouble(rGeometryItem, "SecondLightLevel", 66) / 100.0;
+            double fLight2Intensity = GetDouble(rGeometryItem, u"SecondLightLevel"_ustr, 66) / 100.0;
             // ODF has default 'true'. MS Office default 'false' is set in import.
-            bool bSecondLightHarsh = GetBool(rGeometryItem, "SecondLightHarsh", true);
+            bool bSecondLightHarsh = GetBool(rGeometryItem, u"SecondLightHarsh"_ustr, true);
 
             // ODF default 33%. MS Office default 20000/65536=0.305 is set in import filter.
-            double fAmbientIntensity = GetDouble(rGeometryItem, "Brightness", 33) / 100.0;
+            double fAmbientIntensity = GetDouble(rGeometryItem, u"Brightness"_ustr, 33) / 100.0;
 
             double fLight1IntensityForSpecular(fLight1Intensity); // remember original value
             if (!bFirstLightHarsh || !bSecondLightHarsh) // might need softing lights
@@ -981,7 +981,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             // default 65536 (100%), if the user sets surface 'Metal' in the UI of MS Office.
             // We will change the material color of the 3D object as ersatz.
             // ODF data type is percent with default 0%. MSO default is set in import filter.
-            double fDiffusion = GetDouble(rGeometryItem, "Diffusion", 0.0) / 100.0;
+            double fDiffusion = GetDouble(rGeometryItem, u"Diffusion"_ustr, 0.0) / 100.0;
 
             // ODF standard specifies for value true: "the specular color for the shading of an
             // extruded shape is gray (red, green and blue values of 200) instead of white and 15% is
@@ -991,14 +991,14 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             // MS Office uses current material color in case 'Metal' is set. To detect, whether
             // rendering similar to MS Office has to be used the property 'MetalType' is used. It is
             // set on import and in the extrusion bar.
-            bool bMetal = GetBool(rGeometryItem, "Metal", false);
+            bool bMetal = GetBool(rGeometryItem, u"Metal"_ustr, false);
             sal_Int16 eMetalType(
                 GetMetalType(rGeometryItem, drawing::EnhancedCustomShapeMetalType::MetalODF));
             bool bMetalMSCompatible
                 = eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible;
 
             // Property "Specularity" corresponds to 3D object style attribute dr3d:specular-color.
-            double fSpecularity = GetDouble(rGeometryItem, "Specularity", 0) / 100.0;
+            double fSpecularity = GetDouble(rGeometryItem, u"Specularity"_ustr, 0) / 100.0;
 
             if (bMetal && !bMetalMSCompatible)
             {
@@ -1013,7 +1013,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             // Shininess ODF default 50 (unit %). MS Office default 5, import filter makes *10.
             // Shininess corresponds to "Specular Intensity" with the nonlinear relationship
             // "Specular Intensity" = 2^c3DShininess = 2^("Shininess" / 10)
-            double fShininess = GetDouble(rGeometryItem, "Shininess", 50) / 10.0;
+            double fShininess = GetDouble(rGeometryItem, u"Shininess"_ustr, 50) / 10.0;
             fShininess = std::clamp<double>(pow(2, fShininess), 0.0, 100.0);
             sal_uInt16 nIntensity = static_cast<sal_uInt16>(basegfx::fround(fShininess));
             if (bMetal && !bMetalMSCompatible)
@@ -1046,7 +1046,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                         = static_cast<sal_uInt16>(static_cast<double>(nBrightness) * fDiffusion);
                     nBrightness = std::clamp<sal_uInt16>(nBrightness, 0, 100);
                     Color aNewMatColor = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
-                    pNext->GetProperties().SetObjectItem(XFillColorItem("", aNewMatColor));
+                    pNext->GetProperties().SetObjectItem(XFillColorItem(u""_ustr, aNewMatColor));
                 }
 
                 // Using material color instead of gray in case of MS Office compatible rendering.

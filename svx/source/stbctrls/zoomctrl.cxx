@@ -69,24 +69,24 @@ private:
 
 ZoomPopup_Impl::ZoomPopup_Impl(weld::Window* pPopupParent, sal_uInt16 nZ, SvxZoomEnableFlags nValueSet)
     : m_pPopupParent(pPopupParent)
-    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, "svx/ui/zoommenu.ui"))
-    , m_xMenu(m_xBuilder->weld_menu("menu"))
+    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, u"svx/ui/zoommenu.ui"_ustr))
+    , m_xMenu(m_xBuilder->weld_menu(u"menu"_ustr))
     , nZoom(nZ)
 {
     if ( !(SvxZoomEnableFlags::N50 & nValueSet) )
-        m_xMenu->set_sensitive("50", false);
+        m_xMenu->set_sensitive(u"50"_ustr, false);
     if ( !(SvxZoomEnableFlags::N100 & nValueSet) )
-        m_xMenu->set_sensitive("100", false);
+        m_xMenu->set_sensitive(u"100"_ustr, false);
     if ( !(SvxZoomEnableFlags::N150 & nValueSet) )
-        m_xMenu->set_sensitive("150", false);
+        m_xMenu->set_sensitive(u"150"_ustr, false);
     if ( !(SvxZoomEnableFlags::N200 & nValueSet) )
-        m_xMenu->set_sensitive("200", false);
+        m_xMenu->set_sensitive(u"200"_ustr, false);
     if ( !(SvxZoomEnableFlags::OPTIMAL & nValueSet) )
-        m_xMenu->set_sensitive("optimal", false);
+        m_xMenu->set_sensitive(u"optimal"_ustr, false);
     if ( !(SvxZoomEnableFlags::WHOLEPAGE & nValueSet) )
-        m_xMenu->set_sensitive("page", false);
+        m_xMenu->set_sensitive(u"page"_ustr, false);
     if ( !(SvxZoomEnableFlags::PAGEWIDTH & nValueSet) )
-        m_xMenu->set_sensitive("width", false);
+        m_xMenu->set_sensitive(u"width"_ustr, false);
 }
 
 sal_uInt16 ZoomPopup_Impl::GetZoom(std::u16string_view ident) const
@@ -126,7 +126,7 @@ void SvxZoomStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxIte
 {
     if( SfxItemState::DEFAULT != eState )
     {
-        GetStatusBar().SetItemText( GetId(), "" );
+        GetStatusBar().SetItemText( GetId(), u""_ustr );
         nValueSet = SvxZoomEnableFlags::NONE;
     }
     else if ( auto pItem = dynamic_cast< const SfxUInt16Item* >(pState) )

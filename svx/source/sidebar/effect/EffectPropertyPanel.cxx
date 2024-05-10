@@ -23,20 +23,21 @@
 namespace svx::sidebar
 {
 EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBindings)
-    : PanelLayout(pParent, "EffectPropertyPanel", "svx/ui/sidebareffect.ui")
+    : PanelLayout(pParent, u"EffectPropertyPanel"_ustr, u"svx/ui/sidebareffect.ui"_ustr)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
     , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
-    , mxFTTransparency(m_xBuilder->weld_label("transparency"))
+    , mxFTTransparency(m_xBuilder->weld_label(u"transparency"_ustr))
     , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
     , mpBindings(pBindings)
-    , mxGlowRadius(m_xBuilder->weld_metric_spin_button("LB_GLOW_RADIUS", FieldUnit::POINT))
-    , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"),
+    , mxGlowRadius(m_xBuilder->weld_metric_spin_button(u"LB_GLOW_RADIUS"_ustr, FieldUnit::POINT))
+    , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_GLOW_COLOR"_ustr),
                                      [this] { return GetFrameWeld(); }))
     , mxGlowTransparency(
-          m_xBuilder->weld_metric_spin_button("LB_GLOW_TRANSPARENCY", FieldUnit::PERCENT))
-    , mxFTColor(m_xBuilder->weld_label("glowcolorlabel"))
-    , mxSoftEdgeRadius(m_xBuilder->weld_metric_spin_button("SB_SOFTEDGE_RADIUS", FieldUnit::POINT))
+          m_xBuilder->weld_metric_spin_button(u"LB_GLOW_TRANSPARENCY"_ustr, FieldUnit::PERCENT))
+    , mxFTColor(m_xBuilder->weld_label(u"glowcolorlabel"_ustr))
+    , mxSoftEdgeRadius(
+          m_xBuilder->weld_metric_spin_button(u"SB_SOFTEDGE_RADIUS"_ustr, FieldUnit::POINT))
 {
     Initialize();
 }
@@ -163,10 +164,10 @@ std::unique_ptr<PanelLayout> EffectPropertyPanel::Create(weld::Widget* pParent,
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no parent Window given to EffectPropertyPanel::Create", nullptr, 0);
+            u"no parent Window given to EffectPropertyPanel::Create"_ustr, nullptr, 0);
     if (pBindings == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no SfxBindings given to EffectPropertyPanel::Create", nullptr, 2);
+            u"no SfxBindings given to EffectPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<EffectPropertyPanel>(pParent, pBindings);
 }

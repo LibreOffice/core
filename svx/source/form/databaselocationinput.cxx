@@ -139,26 +139,26 @@ namespace svx
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_xContext,
-                    "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument"
+                    u"/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument"_ustr
             ) );
             OUString sDatabaseFilter;
             OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );
 
             // get the type this filter is responsible for
             Reference< XNameAccess > xFilterFactory(
-                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
+                m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, m_xContext),
                 UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aFilterProperties( xFilterFactory->getByName( sDatabaseFilter ) );
-            OUString sDocumentType = aFilterProperties.getOrDefault( "Type", OUString() );
+            OUString sDocumentType = aFilterProperties.getOrDefault( u"Type"_ustr, OUString() );
 
             // get the extension(s) for this type
             Reference< XNameAccess > xTypeDetection(
-                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
+                m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, m_xContext),
                 UNO_QUERY_THROW );
 
             ::comphelper::NamedValueCollection aTypeProperties( xTypeDetection->getByName( sDocumentType ) );
-            m_aFilterExtensions = aTypeProperties.getOrDefault( "Extensions", m_aFilterExtensions );
-            m_sFilterUIName = aTypeProperties.getOrDefault( "UIName", m_sFilterUIName );
+            m_aFilterExtensions = aTypeProperties.getOrDefault( u"Extensions"_ustr, m_aFilterExtensions );
+            m_sFilterUIName = aTypeProperties.getOrDefault( u"UIName"_ustr, m_sFilterUIName );
         }
         catch( const Exception& )
         {
@@ -170,7 +170,7 @@ namespace svx
             "DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow: unable to determine the file extension(s)!" );
         if ( !m_aFilterExtensions.hasElements() )
         {
-            m_aFilterExtensions = { "*.odb" };
+            m_aFilterExtensions = { u"*.odb"_ustr };
         }
     }
 

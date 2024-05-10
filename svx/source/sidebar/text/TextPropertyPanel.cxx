@@ -32,34 +32,34 @@ std::unique_ptr<PanelLayout> TextPropertyPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to TextPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to TextPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to TextPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to TextPropertyPanel::Create"_ustr, nullptr, 1);
 
     return std::make_unique<TextPropertyPanel>(pParent, rxFrame);
 }
 
 TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui")
-    , mxFont(m_xBuilder->weld_toolbar("font"))
+    : PanelLayout(pParent, u"SidebarTextPanel"_ustr, u"svx/ui/sidebartextpanel.ui"_ustr)
+    , mxFont(m_xBuilder->weld_toolbar(u"font"_ustr))
     , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
-    , mxFontHeight(m_xBuilder->weld_toolbar("fontheight"))
+    , mxFontHeight(m_xBuilder->weld_toolbar(u"fontheight"_ustr))
     , mxFontHeightDispatch(new ToolbarUnoDispatcher(*mxFontHeight, *m_xBuilder, rxFrame))
-    , mxFontEffects(m_xBuilder->weld_toolbar("fonteffects"))
+    , mxFontEffects(m_xBuilder->weld_toolbar(u"fonteffects"_ustr))
     , mxFontEffectsDispatch(new ToolbarUnoDispatcher(*mxFontEffects, *m_xBuilder, rxFrame))
-    , mxFontAdjust(m_xBuilder->weld_toolbar("fontadjust"))
+    , mxFontAdjust(m_xBuilder->weld_toolbar(u"fontadjust"_ustr))
     , mxFontAdjustDispatch(new ToolbarUnoDispatcher(*mxFontAdjust, *m_xBuilder, rxFrame))
-    , mxToolBoxFontColor(m_xBuilder->weld_toolbar("colorbar"))
+    , mxToolBoxFontColor(m_xBuilder->weld_toolbar(u"colorbar"_ustr))
     , mxToolBoxFontColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxFontColor, *m_xBuilder, rxFrame))
-    , mxToolBoxBackgroundColor(m_xBuilder->weld_toolbar("colorbar_background"))
+    , mxToolBoxBackgroundColor(m_xBuilder->weld_toolbar(u"colorbar_background"_ustr))
     , mxToolBoxBackgroundColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxBackgroundColor, *m_xBuilder, rxFrame))
-    , mxResetBar(m_xBuilder->weld_toolbar("resetattr"))
+    , mxResetBar(m_xBuilder->weld_toolbar(u"resetattr"_ustr))
     , mxResetBarDispatch(new ToolbarUnoDispatcher(*mxResetBar, *m_xBuilder, rxFrame))
-    , mxDefaultBar(m_xBuilder->weld_toolbar("defaultattr"))
+    , mxDefaultBar(m_xBuilder->weld_toolbar(u"defaultattr"_ustr))
     , mxDefaultBarDispatch(new ToolbarUnoDispatcher(*mxDefaultBar, *m_xBuilder, rxFrame))
-    , mxPositionBar(m_xBuilder->weld_toolbar("position"))
+    , mxPositionBar(m_xBuilder->weld_toolbar(u"position"_ustr))
     , mxPositionBarDispatch(new ToolbarUnoDispatcher(*mxPositionBar, *m_xBuilder, rxFrame))
-    , mxSpacingBar(m_xBuilder->weld_toolbar("spacingbar"))
+    , mxSpacingBar(m_xBuilder->weld_toolbar(u"spacingbar"_ustr))
     , mxSpacingBarDispatch(new ToolbarUnoDispatcher(*mxSpacingBar, *m_xBuilder, rxFrame))
 {
     bool isMobilePhone = false;

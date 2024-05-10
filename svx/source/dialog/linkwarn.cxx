@@ -22,8 +22,9 @@
 #include <officecfg/Office/Common.hxx>
 
 SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName)
-    : MessageDialogController(pParent, "svx/ui/linkwarndialog.ui", "LinkWarnDialog", "ask")
-    , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+    : MessageDialogController(pParent, u"svx/ui/linkwarndialog.ui"_ustr, u"LinkWarnDialog"_ustr,
+                              u"ask"_ustr)
+    , m_xWarningOnBox(m_xBuilder->weld_check_button(u"ask"_ustr))
 {
     // replace filename
     OUString sInfoText = m_xDialog->get_primary_text();

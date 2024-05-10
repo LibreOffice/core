@@ -29,12 +29,12 @@ SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(
     const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
-    addStatusListener(".uno:CTLFontState");
+    addStatusListener(u".uno:CTLFontState"_ustr);
 }
 
 OUString SvxCTLTextTbxCtrl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.CTLToolBoxControl";
+    return u"com.sun.star.comp.svx.CTLToolBoxControl"_ustr;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -48,12 +48,12 @@ SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(
     const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
-    addStatusListener(".uno:VerticalTextState");
+    addStatusListener(u".uno:VerticalTextState"_ustr);
 }
 
 OUString SvxVertTextTbxCtrl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.VertTextToolBoxControl";
+    return u"com.sun.star.comp.svx.VertTextToolBoxControl"_ustr;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService(const OUString& Service
 
 css::uno::Sequence<OUString> SvxVertCTLTextTbxCtrl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -67,7 +67,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow(vcl::Window* _pParent, sal_uI
 
 SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
                              weld::Window* _pParent)
-    : SfxModelessDialogController(_pBindings, pCW, _pParent, "svx/ui/floatingcontour.ui", "FloatingContour")
+    : SfxModelessDialogController(_pBindings, pCW, _pParent, u"svx/ui/floatingcontour.ui"_ustr, u"FloatingContour"_ustr)
     , m_xImpl(std::make_unique<SvxSuperContourDlg>(*m_xBuilder, *m_xDialog, _pBindings))
 {
 }
@@ -204,13 +204,13 @@ SvxSuperContourDlg::SvxSuperContourDlg(weld::Builder& rBuilder,
     , m_rDialog(rDialog)
     , m_xContourWnd(new ContourWindow(&rDialog))
     , m_xStbStatusColor(new StatusColor(*m_xContourWnd))
-    , m_xTbx1(rBuilder.weld_toolbar("toolbar"))
-    , m_xMtfTolerance(rBuilder.weld_metric_spin_button("spinbutton", FieldUnit::PERCENT))
-    , m_xStbStatus2(rBuilder.weld_label("statuspos"))
-    , m_xStbStatus3(rBuilder.weld_label("statussize"))
-    , m_xCancelBtn(rBuilder.weld_button("cancel"))
-    , m_xStbStatusColorWeld(new weld::CustomWeld(rBuilder, "statuscolor", *m_xStbStatusColor))
-    , m_xContourWndWeld(new weld::CustomWeld(rBuilder, "container", *m_xContourWnd))
+    , m_xTbx1(rBuilder.weld_toolbar(u"toolbar"_ustr))
+    , m_xMtfTolerance(rBuilder.weld_metric_spin_button(u"spinbutton"_ustr, FieldUnit::PERCENT))
+    , m_xStbStatus2(rBuilder.weld_label(u"statuspos"_ustr))
+    , m_xStbStatus3(rBuilder.weld_label(u"statussize"_ustr))
+    , m_xCancelBtn(rBuilder.weld_button(u"cancel"_ustr))
+    , m_xStbStatusColorWeld(new weld::CustomWeld(rBuilder, u"statuscolor"_ustr, *m_xStbStatusColor))
+    , m_xContourWndWeld(new weld::CustomWeld(rBuilder, u"container"_ustr, *m_xContourWnd))
 {
     m_xCancelBtn->connect_clicked(LINK(this, SvxSuperContourDlg, CancelHdl));
 
@@ -241,10 +241,10 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CancelHdl, weld::Button&, void)
 {
     bool bRet = true;
 
-    if (m_xTbx1->get_item_sensitive("TBI_APPLY"))
+    if (m_xTbx1->get_item_sensitive(u"TBI_APPLY"_ustr))
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, "svx/ui/querysavecontchangesdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QuerySaveContourChangesDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, u"svx/ui/querysavecontchangesdialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"QuerySaveContourChangesDialog"_ustr));
         const short nRet = xQBox->run();
 
         if ( nRet == RET_YES )
@@ -361,15 +361,15 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
     }
     else if (rId == "TBI_WORKPLACE")
     {
-        if (m_xTbx1->get_item_active("TBI_WORKPLACE"))
+        if (m_xTbx1->get_item_active(u"TBI_WORKPLACE"_ustr))
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, "svx/ui/querydeletecontourdialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryDeleteContourDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, u"svx/ui/querydeletecontourdialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"QueryDeleteContourDialog"_ustr));
 
             if (!m_xContourWnd->IsContourChanged() || (xQBox->run() == RET_YES))
                 m_xContourWnd->SetWorkplaceMode( true );
             else
-                m_xTbx1->set_item_active("TBI_WORKPLACE", false);
+                m_xTbx1->set_item_active(u"TBI_WORKPLACE"_ustr, false);
         }
         else
             m_xContourWnd->SetWorkplaceMode( false );
@@ -396,7 +396,7 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
     }
     else if (rId == "TBI_POLYEDIT")
     {
-        m_xContourWnd->SetPolyEditMode(m_xTbx1->get_item_active("TBI_POLYEDIT") ? SID_BEZIER_MOVE : 0);
+        m_xContourWnd->SetPolyEditMode(m_xTbx1->get_item_active(u"TBI_POLYEDIT"_ustr) ? SID_BEZIER_MOVE : 0);
     }
     else if (rId == "TBI_POLYMOVE")
     {
@@ -434,19 +434,19 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
     }
     else if (rId == "TBI_PIPETTE")
     {
-        bool bPipette = m_xTbx1->get_item_active("TBI_PIPETTE");
+        bool bPipette = m_xTbx1->get_item_active(u"TBI_PIPETTE"_ustr);
 
         if ( !bPipette )
             m_xStbStatusColor->Invalidate();
         else if ( bGraphicLinked )
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, "svx/ui/queryunlinkgraphicsdialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryUnlinkGraphicsDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, u"svx/ui/queryunlinkgraphicsdialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"QueryUnlinkGraphicsDialog"_ustr));
 
             if (xQBox->run() != RET_YES)
             {
                 bPipette = false;
-                m_xTbx1->set_item_active("TBI_PIPETTE", bPipette);
+                m_xTbx1->set_item_active(u"TBI_PIPETTE"_ustr, bPipette);
                 m_xStbStatusColor->Invalidate();
             }
         }
@@ -458,16 +458,16 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
 
 void SvxSuperContourDlg::SetActiveTool(std::u16string_view rId)
 {
-    m_xTbx1->set_item_active("TBI_SELECT", rId == u"TBI_SELECT");
-    m_xTbx1->set_item_active("TBI_RECT", rId == u"TBI_RECT");
-    m_xTbx1->set_item_active("TBI_CIRCLE", rId == u"TBI_CIRCLE");
-    m_xTbx1->set_item_active("TBI_POLY", rId == u"TBI_POLY");
+    m_xTbx1->set_item_active(u"TBI_SELECT"_ustr, rId == u"TBI_SELECT");
+    m_xTbx1->set_item_active(u"TBI_RECT"_ustr, rId == u"TBI_RECT");
+    m_xTbx1->set_item_active(u"TBI_CIRCLE"_ustr, rId == u"TBI_CIRCLE");
+    m_xTbx1->set_item_active(u"TBI_POLY"_ustr, rId == u"TBI_POLY");
 }
 
 void SvxSuperContourDlg::SetActivePoly(std::u16string_view rId)
 {
-    m_xTbx1->set_item_active("TBI_POLYMOVE", rId == u"TBI_POLYMOVE");
-    m_xTbx1->set_item_active("TBI_POLYINSERT", rId == u"TBI_POLYINSERT");
+    m_xTbx1->set_item_active(u"TBI_POLYMOVE"_ustr, rId == u"TBI_POLYMOVE");
+    m_xTbx1->set_item_active(u"TBI_POLYINSERT"_ustr, rId == u"TBI_POLYINSERT");
 }
 
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
@@ -544,31 +544,31 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
     const bool          bPolyEdit = ( pObj != nullptr ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
-    const bool          bDrawEnabled = !(bPolyEdit && m_xTbx1->get_item_active("TBI_POLYEDIT"));
-    const bool          bPipette = m_xTbx1->get_item_active("TBI_PIPETTE");
-    const bool          bWorkplace = m_xTbx1->get_item_active("TBI_WORKPLACE");
+    const bool          bDrawEnabled = !(bPolyEdit && m_xTbx1->get_item_active(u"TBI_POLYEDIT"_ustr));
+    const bool          bPipette = m_xTbx1->get_item_active(u"TBI_PIPETTE"_ustr);
+    const bool          bWorkplace = m_xTbx1->get_item_active(u"TBI_WORKPLACE"_ustr);
     const bool          bDontHide = !( bPipette || bWorkplace );
     const bool          bBitmap = pWnd->GetGraphic().GetType() == GraphicType::Bitmap;
 
-    m_xTbx1->set_item_sensitive("TBI_APPLY", bDontHide && bExecState && pWnd->IsChanged());
+    m_xTbx1->set_item_sensitive(u"TBI_APPLY"_ustr, bDontHide && bExecState && pWnd->IsChanged());
 
-    m_xTbx1->set_item_sensitive("TBI_WORKPLACE", !bPipette && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_WORKPLACE"_ustr, !bPipette && bDrawEnabled);
 
-    m_xTbx1->set_item_sensitive("TBI_SELECT", bDontHide && bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_RECT", bDontHide && bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_CIRCLE", bDontHide && bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_POLY", bDontHide && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_SELECT"_ustr, bDontHide && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_RECT"_ustr, bDontHide && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_CIRCLE"_ustr, bDontHide && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_POLY"_ustr, bDontHide && bDrawEnabled);
 
-    m_xTbx1->set_item_sensitive("TBI_POLYEDIT", bDontHide && bPolyEdit);
-    m_xTbx1->set_item_sensitive("TBI_POLYMOVE", bDontHide && !bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_POLYINSERT", bDontHide && !bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_POLYDELETE", bDontHide && !bDrawEnabled && pView->IsDeleteMarkedPointsPossible());
+    m_xTbx1->set_item_sensitive(u"TBI_POLYEDIT"_ustr, bDontHide && bPolyEdit);
+    m_xTbx1->set_item_sensitive(u"TBI_POLYMOVE"_ustr, bDontHide && !bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_POLYINSERT"_ustr, bDontHide && !bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_POLYDELETE"_ustr, bDontHide && !bDrawEnabled && pView->IsDeleteMarkedPointsPossible());
 
-    m_xTbx1->set_item_sensitive("TBI_AUTOCONTOUR", bDontHide && bDrawEnabled);
-    m_xTbx1->set_item_sensitive("TBI_PIPETTE", !bWorkplace && bDrawEnabled && bBitmap);
+    m_xTbx1->set_item_sensitive(u"TBI_AUTOCONTOUR"_ustr, bDontHide && bDrawEnabled);
+    m_xTbx1->set_item_sensitive(u"TBI_PIPETTE"_ustr, !bWorkplace && bDrawEnabled && bBitmap);
 
-    m_xTbx1->set_item_sensitive("TBI_UNDO", bDontHide && aUndoGraphic.GetType() != GraphicType::NONE);
-    m_xTbx1->set_item_sensitive("TBI_REDO", bDontHide && aRedoGraphic.GetType() != GraphicType::NONE);
+    m_xTbx1->set_item_sensitive(u"TBI_UNDO"_ustr, bDontHide && aUndoGraphic.GetType() != GraphicType::NONE);
+    m_xTbx1->set_item_sensitive(u"TBI_REDO"_ustr, bDontHide && aRedoGraphic.GetType() != GraphicType::NONE);
 
     if ( bPolyEdit )
     {
@@ -586,7 +586,7 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     }
     else
     {
-        m_xTbx1->set_item_active("TBI_POLYEDIT", false);
+        m_xTbx1->set_item_active(u"TBI_POLYEDIT"_ustr, false);
         SetActivePoly(u"TBI_POLYMOVE");
         pWnd->SetPolyEditMode( 0 );
     }
@@ -638,8 +638,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
             if( !aMask.IsEmpty() )
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, "svx/ui/querynewcontourdialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryNewContourDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, u"svx/ui/querynewcontourdialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"QueryNewContourDialog"_ustr));
 
                 bool        bNewContour;
 
@@ -658,15 +658,15 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
         }
     }
 
-    m_xTbx1->set_item_active("TBI_PIPETTE", false);
+    m_xTbx1->set_item_active(u"TBI_PIPETTE"_ustr, false);
     rWnd.SetPipetteMode( false );
     m_xStbStatusColor->Invalidate();
 }
 
 IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, void )
 {
-    m_xTbx1->set_item_active("TBI_WORKPLACE", false);
-    m_xTbx1->set_item_active("TBI_SELECT", true);
+    m_xTbx1->set_item_active(u"TBI_WORKPLACE"_ustr, false);
+    m_xTbx1->set_item_active(u"TBI_SELECT"_ustr, true);
     rWnd.SetWorkplaceMode( false );
 
     m_xContourWnd->QueueIdleUpdate();

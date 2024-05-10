@@ -487,7 +487,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
 // XServiceInfo
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName()
 {
-    return "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext";
+    return u"com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext"_ustr;
 }
 
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
@@ -497,9 +497,9 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString
 
 Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
 {
-    return { "com.sun.star.accessibility.Accessible",
-             "com.sun.star.accessibility.AccessibleContext",
-             "com.sun.star.drawing.AccessibleGraphControl" };
+    return { u"com.sun.star.accessibility.Accessible"_ustr,
+             u"com.sun.star.accessibility.AccessibleContext"_ustr,
+             u"com.sun.star.drawing.AccessibleGraphControl"_ustr };
 }
 
 // XTypeProvider
@@ -511,7 +511,7 @@ Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId()
 // XServiceName
 OUString SvxGraphCtrlAccessibleContext::getServiceName()
 {
-    return "com.sun.star.accessibility.AccessibleContext";
+    return u"com.sun.star.accessibility.AccessibleContext"_ustr;
 }
 
 // XAccessibleSelection

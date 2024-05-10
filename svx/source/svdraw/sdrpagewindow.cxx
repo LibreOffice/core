@@ -97,8 +97,8 @@ uno::Reference<awt::XControlContainer> const & SdrPageWindow::GetControlContaine
         {
             // Printer and VirtualDevice, or rather: no OutDev
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer.set(xFactory->createInstance("com.sun.star.awt.UnoControlContainer"), uno::UNO_QUERY);
-            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance("com.sun.star.awt.UnoControlContainerModel"), uno::UNO_QUERY);
+            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer.set(xFactory->createInstance(u"com.sun.star.awt.UnoControlContainer"_ustr), uno::UNO_QUERY);
+            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(u"com.sun.star.awt.UnoControlContainerModel"_ustr), uno::UNO_QUERY);
             uno::Reference< awt::XControl > xControl(mpImpl->mxControlContainer, uno::UNO_QUERY);
             if (xControl.is())
                 xControl->setModel(xModel);

@@ -54,27 +54,27 @@ using namespace css;
 
 SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
                                  css::uno::Reference<css::frame::XFrame> xFrame)
-    : SfxDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
+    : SfxDialogController(pParent, u"cui/ui/specialcharacters.ui"_ustr, u"SpecialCharactersDialog"_ustr)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , isSearchMode(true)
     , m_xFrame(std::move(xFrame))
     , m_aCharmapContents(*m_xBuilder, m_xVirDev, true)
     , m_aShowChar(m_xVirDev)
-    , m_xOKBtn(m_xFrame.is() ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
-    , m_xFontText(m_xBuilder->weld_label("fontft"))
-    , m_xFontLB(m_xBuilder->weld_combo_box("fontlb"))
-    , m_xSubsetText(m_xBuilder->weld_label("subsetft"))
-    , m_xSubsetLB(m_xBuilder->weld_combo_box("subsetlb"))
-    , m_xSearchText(m_xBuilder->weld_entry("search"))
-    , m_xHexCodeText(m_xBuilder->weld_entry("hexvalue"))
-    , m_xDecimalCodeText(m_xBuilder->weld_entry("decimalvalue"))
-    , m_xFavouritesBtn(m_xBuilder->weld_button("favbtn"))
-    , m_xCharName(m_xBuilder->weld_label("charname"))
-    , m_xShowChar(new weld::CustomWeld(*m_xBuilder, "showchar", m_aShowChar))
-    , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll", true), m_xVirDev))
-    , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, "showcharset", *m_xShowSet))
-    , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll", true), m_xVirDev))
-    , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, "searchcharset", *m_xSearchSet))
+    , m_xOKBtn(m_xFrame.is() ? m_xBuilder->weld_button(u"insert"_ustr) : m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xFontText(m_xBuilder->weld_label(u"fontft"_ustr))
+    , m_xFontLB(m_xBuilder->weld_combo_box(u"fontlb"_ustr))
+    , m_xSubsetText(m_xBuilder->weld_label(u"subsetft"_ustr))
+    , m_xSubsetLB(m_xBuilder->weld_combo_box(u"subsetlb"_ustr))
+    , m_xSearchText(m_xBuilder->weld_entry(u"search"_ustr))
+    , m_xHexCodeText(m_xBuilder->weld_entry(u"hexvalue"_ustr))
+    , m_xDecimalCodeText(m_xBuilder->weld_entry(u"decimalvalue"_ustr))
+    , m_xFavouritesBtn(m_xBuilder->weld_button(u"favbtn"_ustr))
+    , m_xCharName(m_xBuilder->weld_label(u"charname"_ustr))
+    , m_xShowChar(new weld::CustomWeld(*m_xBuilder, u"showchar"_ustr, m_aShowChar))
+    , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window(u"showscroll"_ustr, true), m_xVirDev))
+    , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, u"showcharset"_ustr, *m_xShowSet))
+    , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window(u"searchscroll"_ustr, true), m_xVirDev))
+    , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, u"searchcharset"_ustr, *m_xSearchSet))
 {
     m_aShowChar.SetCentered(true);
     m_xFontLB->make_sorted();
@@ -308,7 +308,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     {
         //if for some reason, like font in an old document, StarSymbol is requested and it's not available, then
         //try OpenSymbol instead
-        aTmp.SetFamilyName("OpenSymbol");
+        aTmp.SetFamilyName(u"OpenSymbol"_ustr);
     }
 
     if (m_xFontLB->find_text(sFontFamilyName) == -1)
@@ -337,10 +337,10 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 
     if (m_xFrame.is()) {
         uno::Sequence<beans::PropertyValue> aArgs{
-            comphelper::makePropertyValue("Symbols", sGlyph),
-            comphelper::makePropertyValue("FontName", aFont.GetFamilyName())
+            comphelper::makePropertyValue(u"Symbols"_ustr, sGlyph),
+            comphelper::makePropertyValue(u"FontName"_ustr, aFont.GetFamilyName())
         };
-        comphelper::dispatchCommand(".uno:InsertSymbol", m_xFrame, aArgs);
+        comphelper::dispatchCommand(u".uno:InsertSymbol"_ustr, m_xFrame, aArgs);
 
         m_aCharmapContents.updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 
@@ -706,7 +706,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         SetChar(cChar);
     else {
         m_xCharName->set_label(SvxResId(RID_SVXSTR_MISSING_CHAR));
-        m_aShowChar.SetText(" ");
+        m_aShowChar.SetText(u" "_ustr);
         switch(radix)
         {
             case Radix::decimal:

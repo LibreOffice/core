@@ -230,12 +230,12 @@ bool SmartTagMenuController::MenuSelect(sal_uInt16 nMyId)
 
 OUString SmartTagMenuController::getImplementationName()
 {
-    return "com.sun.star.comp.svx.SmartTagMenuController";
+    return u"com.sun.star.comp.svx.SmartTagMenuController"_ustr;
 }
 
 css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.PopupMenuController" };
+    return { u"com.sun.star.frame.PopupMenuController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

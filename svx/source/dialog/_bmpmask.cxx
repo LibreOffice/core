@@ -227,8 +227,8 @@ IMPL_LINK( MaskData, CbxHdl, weld::Toggleable&, rCbx, void )
     pSet->SelectItem( 1 );
     pSet->Select();
 
-    pMask->m_xTbxPipette->set_item_active("pipette", true);
-    PipetteHdl("pipette");
+    pMask->m_xTbxPipette->set_item_active(u"pipette"_ustr, true);
+    PipetteHdl(u"pipette"_ustr);
 }
 
 IMPL_LINK( MaskData, CbxTransHdl, weld::Toggleable&, rCbx, void )
@@ -346,34 +346,34 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 n
 }
 
 SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent)
-    : SfxDockingWindow(pBindinx, pCW, pParent, "DockingColorReplace",
-                       "svx/ui/dockingcolorreplace.ui")
-    , m_xTbxPipette(m_xBuilder->weld_toolbar("toolbar"))
+    : SfxDockingWindow(pBindinx, pCW, pParent, u"DockingColorReplace"_ustr,
+                       u"svx/ui/dockingcolorreplace.ui"_ustr)
+    , m_xTbxPipette(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xCtlPipette(new BmpColorWindow)
-    , m_xCtlPipetteWin(new weld::CustomWeld(*m_xBuilder, "toolcolor", *m_xCtlPipette))
-    , m_xBtnExec(m_xBuilder->weld_button("replace"))
-    , m_xCbx1(m_xBuilder->weld_check_button("cbx1"))
+    , m_xCtlPipetteWin(new weld::CustomWeld(*m_xBuilder, u"toolcolor"_ustr, *m_xCtlPipette))
+    , m_xBtnExec(m_xBuilder->weld_button(u"replace"_ustr))
+    , m_xCbx1(m_xBuilder->weld_check_button(u"cbx1"_ustr))
     , m_xQSet1(new MaskSet(this))
-    , m_xQSetWin1(new weld::CustomWeld(*m_xBuilder, "qset1", *m_xQSet1))
-    , m_xSp1(m_xBuilder->weld_metric_spin_button("tol1", FieldUnit::PERCENT))
-    , m_xLbColor1(new ColorListBox(m_xBuilder->weld_menu_button("color1"), [this]{ return GetFrameWeld(); }))
-    , m_xCbx2(m_xBuilder->weld_check_button("cbx2"))
+    , m_xQSetWin1(new weld::CustomWeld(*m_xBuilder, u"qset1"_ustr, *m_xQSet1))
+    , m_xSp1(m_xBuilder->weld_metric_spin_button(u"tol1"_ustr, FieldUnit::PERCENT))
+    , m_xLbColor1(new ColorListBox(m_xBuilder->weld_menu_button(u"color1"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xCbx2(m_xBuilder->weld_check_button(u"cbx2"_ustr))
     , m_xQSet2(new MaskSet(this))
-    , m_xQSetWin2(new weld::CustomWeld(*m_xBuilder, "qset2", *m_xQSet2))
-     , m_xSp2(m_xBuilder->weld_metric_spin_button("tol2", FieldUnit::PERCENT))
-    , m_xLbColor2(new ColorListBox(m_xBuilder->weld_menu_button("color2"), [this]{ return GetFrameWeld(); }))
-    , m_xCbx3(m_xBuilder->weld_check_button("cbx3"))
+    , m_xQSetWin2(new weld::CustomWeld(*m_xBuilder, u"qset2"_ustr, *m_xQSet2))
+     , m_xSp2(m_xBuilder->weld_metric_spin_button(u"tol2"_ustr, FieldUnit::PERCENT))
+    , m_xLbColor2(new ColorListBox(m_xBuilder->weld_menu_button(u"color2"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xCbx3(m_xBuilder->weld_check_button(u"cbx3"_ustr))
     , m_xQSet3(new MaskSet(this))
-    , m_xQSetWin3(new weld::CustomWeld(*m_xBuilder, "qset3", *m_xQSet3))
-    , m_xSp3(m_xBuilder->weld_metric_spin_button("tol3", FieldUnit::PERCENT))
-    , m_xLbColor3(new ColorListBox(m_xBuilder->weld_menu_button("color3"), [this]{ return GetFrameWeld(); }))
-    , m_xCbx4(m_xBuilder->weld_check_button("cbx4"))
+    , m_xQSetWin3(new weld::CustomWeld(*m_xBuilder, u"qset3"_ustr, *m_xQSet3))
+    , m_xSp3(m_xBuilder->weld_metric_spin_button(u"tol3"_ustr, FieldUnit::PERCENT))
+    , m_xLbColor3(new ColorListBox(m_xBuilder->weld_menu_button(u"color3"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xCbx4(m_xBuilder->weld_check_button(u"cbx4"_ustr))
     , m_xQSet4(new MaskSet(this))
-    , m_xQSetWin4(new weld::CustomWeld(*m_xBuilder, "qset4", *m_xQSet4))
-    , m_xSp4(m_xBuilder->weld_metric_spin_button("tol4", FieldUnit::PERCENT))
-    , m_xLbColor4(new ColorListBox(m_xBuilder->weld_menu_button("color4"), [this]{ return GetFrameWeld(); }))
-    , m_xCbxTrans(m_xBuilder->weld_check_button("cbx5"))
-    , m_xLbColorTrans(new ColorListBox(m_xBuilder->weld_menu_button("color5"), [this]{ return GetFrameWeld(); }))
+    , m_xQSetWin4(new weld::CustomWeld(*m_xBuilder, u"qset4"_ustr, *m_xQSet4))
+    , m_xSp4(m_xBuilder->weld_metric_spin_button(u"tol4"_ustr, FieldUnit::PERCENT))
+    , m_xLbColor4(new ColorListBox(m_xBuilder->weld_menu_button(u"color4"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xCbxTrans(m_xBuilder->weld_check_button(u"cbx5"_ustr))
+    , m_xLbColorTrans(new ColorListBox(m_xBuilder->weld_menu_button(u"color5"_ustr), [this]{ return GetFrameWeld(); }))
     , m_xData(new MaskData(this, *pBindinx))
     , aPipetteColor(COL_WHITE)
     , aSelItem(*this, *pBindinx)
@@ -546,8 +546,8 @@ void SvxBmpMask::PipetteClicked()
         m_xQSet4->SetFormat();
     }
 
-    m_xTbxPipette->set_item_active("pipette", false);
-    m_xData->PipetteHdl("pipette");
+    m_xTbxPipette->set_item_active(u"pipette"_ustr, false);
+    m_xData->PipetteHdl(u"pipette"_ustr);
 }
 
 void SvxBmpMask::SetExecState( bool bEnable )
@@ -1030,7 +1030,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
 bool SvxBmpMask::IsEyedropping() const
 {
-    return m_xTbxPipette->get_item_active("pipette");
+    return m_xTbxPipette->get_item_active(u"pipette"_ustr);
 }
 
 /** Set an accessible name for the source color check boxes.  Without this

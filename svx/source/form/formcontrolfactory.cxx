@@ -194,7 +194,7 @@ namespace svxform
                 if ( !sDataSourceName.isEmpty() )
                     xDsProperties.set(getDataSource( sDataSourceName, _rContext ), css::uno::UNO_QUERY);
                 if ( xDsProperties.is() )
-                    xDsProperties->getPropertyValue("Info") >>= aInfo;
+                    xDsProperties->getPropertyValue(u"Info"_ustr) >>= aInfo;
             }
             catch( const Exception& )
             {
@@ -377,7 +377,7 @@ namespace svxform
             switch ( nClassId )
             {
                 case FormComponentType::SCROLLBAR:
-                    _rxControlModel->setPropertyValue("LiveScroll", Any( true ) );
+                    _rxControlModel->setPropertyValue(u"LiveScroll"_ustr, Any( true ) );
                     [[fallthrough]];
                 case FormComponentType::SPINBUTTON:
                 {
@@ -417,7 +417,7 @@ namespace svxform
                 case FormComponentType::CHECKBOX:
                 case FormComponentType::FIXEDTEXT:
                 {
-                    OUString sVertAlignPropertyName( "VerticalAlign" );
+                    OUString sVertAlignPropertyName( u"VerticalAlign"_ustr );
                     if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                         _rxControlModel->setPropertyValue( sVertAlignPropertyName, Any( VerticalAlignment_MIDDLE ) );
                 }

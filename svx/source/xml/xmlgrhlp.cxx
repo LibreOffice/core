@@ -473,7 +473,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     if (aRet.xStream.is() && (SvXMLGraphicHelperMode::Write == meCreateMode))
     {
         uno::Reference<beans::XPropertySet> xProps(aRet.xStream, uno::UNO_QUERY);
-        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any(true));
+        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any(true));
     }
 
     return aRet;
@@ -561,7 +561,7 @@ void splitUserDataFromURL(OUString const & rWholeURL, OUString & rJustURL, OUStr
 // XGraphicObjectResolver
 OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& /*rURL*/ )
 {
-    throw uno::RuntimeException("XGraphicObjectResolver has been removed in LibreOffice 6.1");
+    throw uno::RuntimeException(u"XGraphicObjectResolver has been removed in LibreOffice 6.1"_ustr);
 }
 
 // XGraphicStorageHandler
@@ -737,7 +737,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             // set stream properties (MediaType/Compression)
             if (!aMimeType.isEmpty())
             {
-                xProps->setPropertyValue("MediaType", uno::Any(aMimeType));
+                xProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aMimeType));
             }
 
             // picture formats that actually _do_ benefit from zip
@@ -770,7 +770,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 }
             }
 
-            xProps->setPropertyValue("Compressed", Any(bCompressed));
+            xProps->setPropertyValue(u"Compressed"_ustr, Any(bCompressed));
 
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
@@ -1060,8 +1060,8 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Ref
 OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
 {
     if( m_eGraphicHelperMode == SvXMLGraphicHelperMode::Read )
-        return "com.sun.star.comp.Svx.GraphicImportHelper";
-    return "com.sun.star.comp.Svx.GraphicExportHelper";
+        return u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr;
+    return u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr;
 }
 
 sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
@@ -1071,9 +1071,9 @@ sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUStrin
 
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.GraphicObjectResolver",
-             "com.sun.star.document.GraphicStorageHandler",
-             "com.sun.star.document.BinaryStreamResolver" };
+    return { u"com.sun.star.document.GraphicObjectResolver"_ustr,
+             u"com.sun.star.document.GraphicStorageHandler"_ustr,
+             u"com.sun.star.document.BinaryStreamResolver"_ustr };
 }
 
 }
@@ -1126,7 +1126,7 @@ namespace svx {
         try
         {
             uno::Reference<util::XCancellable> const xGradient(
-                xModelFactory->createInstance("com.sun.star.drawing.GradientTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.GradientTable"_ustr),
                 uno::UNO_QUERY );
             if (xGradient.is())
             {
@@ -1134,7 +1134,7 @@ namespace svx {
             }
 
             uno::Reference<util::XCancellable> const xHatch(
-                xModelFactory->createInstance("com.sun.star.drawing.HatchTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.HatchTable"_ustr),
                 uno::UNO_QUERY );
             if (xHatch.is())
             {
@@ -1142,7 +1142,7 @@ namespace svx {
             }
 
             uno::Reference<util::XCancellable> const xBitmap(
-                xModelFactory->createInstance("com.sun.star.drawing.BitmapTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr),
                 uno::UNO_QUERY );
             if (xBitmap.is())
             {
@@ -1150,7 +1150,7 @@ namespace svx {
             }
 
             uno::Reference<util::XCancellable> const xTransGradient(
-                xModelFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr),
                 uno::UNO_QUERY );
             if (xTransGradient.is())
             {
@@ -1158,7 +1158,7 @@ namespace svx {
             }
 
             uno::Reference<util::XCancellable> const xMarker(
-                xModelFactory->createInstance("com.sun.star.drawing.MarkerTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.MarkerTable"_ustr),
                 uno::UNO_QUERY );
             if (xMarker.is())
             {
@@ -1166,7 +1166,7 @@ namespace svx {
             }
 
             uno::Reference<util::XCancellable> const xDashes(
-                xModelFactory->createInstance("com.sun.star.drawing.DashTable"),
+                xModelFactory->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
                 uno::UNO_QUERY );
             if (xDashes.is())
             {

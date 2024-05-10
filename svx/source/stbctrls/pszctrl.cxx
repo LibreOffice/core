@@ -140,28 +140,28 @@ OUString FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc)
     switch (nFunc)
     {
         case PSZ_FUNC_AVG:
-            return "avg";
+            return u"avg"_ustr;
         case PSZ_FUNC_COUNT2:
-            return "counta";
+            return u"counta"_ustr;
         case PSZ_FUNC_COUNT:
-            return "count";
+            return u"count"_ustr;
         case PSZ_FUNC_MAX:
-            return "max";
+            return u"max"_ustr;
         case PSZ_FUNC_MIN:
-            return "min";
+            return u"min"_ustr;
         case PSZ_FUNC_SUM:
-            return "sum";
+            return u"sum"_ustr;
         case PSZ_FUNC_SELECTION_COUNT:
-            return "selection";
+            return u"selection"_ustr;
         case PSZ_FUNC_NONE:
-            return "none";
+            return u"none"_ustr;
     }
     return {};
 }
 
 FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
-    : m_xBuilder(Application::CreateBuilder(nullptr, "svx/ui/functionmenu.ui"))
-    , m_xMenu(m_xBuilder->weld_menu("menu"))
+    : m_xBuilder(Application::CreateBuilder(nullptr, u"svx/ui/functionmenu.ui"_ustr))
+    , m_xMenu(m_xBuilder->weld_menu(u"menu"_ustr))
     , m_nSelected(nCheckEncoded)
 {
     for ( sal_uInt16 nCheck = 1; nCheck < 32; ++nCheck )
@@ -235,9 +235,9 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImpl->aPosImage = Image(StockImage::Yes, RID_SVXBMP_POSITION);
     pImpl->aSizeImage = Image(StockImage::Yes, RID_SVXBMP_SIZE);
 
-    addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
-    addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL
-    addStatusListener( STR_FUNC);    // SID_PSZ_FUNCTION
+    addStatusListener( u"" STR_POSITION ""_ustr);         // SID_ATTR_POSITION
+    addStatusListener( u"" STR_TABLECELL ""_ustr);   // SID_TABLE_CELL
+    addStatusListener( u"" STR_FUNC ""_ustr);    // SID_PSZ_FUNCTION
     ImplUpdateItemText();
 }
 
@@ -273,13 +273,13 @@ void SvxPosSizeStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16 nSID
 {
     // Because the combi-controller, always sets the current Id as HelpId
     // first clean the cached HelpText
-    GetStatusBar().SetHelpText( GetId(), "" );
+    GetStatusBar().SetHelpText( GetId(), u""_ustr );
 
     switch ( nSID )
     {
-        case SID_ATTR_POSITION : GetStatusBar().SetHelpId( GetId(), STR_POSITION ); break;
-        case SID_TABLE_CELL: GetStatusBar().SetHelpId( GetId(), STR_TABLECELL ); break;
-        case SID_PSZ_FUNCTION: GetStatusBar().SetHelpId( GetId(), STR_FUNC ); break;
+        case SID_ATTR_POSITION : GetStatusBar().SetHelpId( GetId(), u"" STR_POSITION ""_ustr ); break;
+        case SID_TABLE_CELL: GetStatusBar().SetHelpId( GetId(), u"" STR_TABLECELL ""_ustr ); break;
+        case SID_PSZ_FUNCTION: GetStatusBar().SetHelpId( GetId(), u"" STR_FUNC ""_ustr ); break;
         default: break;
     }
 
@@ -414,8 +414,8 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 SfxUInt32Item aItem( SID_PSZ_FUNCTION, nSelect );
                 aItem.QueryValue( a );
                 css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
-                    "StatusBarFunc", a) };
-                execute( ".uno:StatusBarFunc", aArgs );
+                    u"StatusBarFunc"_ustr, a) };
+                execute( u".uno:StatusBarFunc"_ustr, aArgs );
             }
         }
     }

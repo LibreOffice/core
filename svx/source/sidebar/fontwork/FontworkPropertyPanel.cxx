@@ -32,12 +32,12 @@ namespace sidebar
 {
 FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
                                              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "FontworkPropertyPanel", "svx/ui/sidebarfontwork.ui")
-    , m_pToolbar(m_xBuilder->weld_toolbar("fontwork-toolbox"))
+    : PanelLayout(pParent, u"FontworkPropertyPanel"_ustr, u"svx/ui/sidebarfontwork.ui"_ustr)
+    , m_pToolbar(m_xBuilder->weld_toolbar(u"fontwork-toolbox"_ustr))
     , m_xToolbar(new ToolbarUnoDispatcher(*m_pToolbar, *m_xBuilder, rxFrame))
 {
     if (comphelper::LibreOfficeKit::isActive())
-        m_pToolbar->set_item_visible(".uno:ExtrusionToggle", false);
+        m_pToolbar->set_item_visible(u".uno:ExtrusionToggle"_ustr, false);
 }
 
 std::unique_ptr<PanelLayout>
@@ -46,10 +46,10 @@ FontworkPropertyPanel::Create(weld::Widget* pParent,
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
-            "no parent Window given to FontworkPropertyPanel::Create", nullptr, 0);
+            u"no parent Window given to FontworkPropertyPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to FontworkPropertyPanel::Create",
-                                             nullptr, 1);
+        throw lang::IllegalArgumentException(
+            u"no XFrame given to FontworkPropertyPanel::Create"_ustr, nullptr, 1);
 
     return std::make_unique<FontworkPropertyPanel>(pParent, rxFrame);
 }

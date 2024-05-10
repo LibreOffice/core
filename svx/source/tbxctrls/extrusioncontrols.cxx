@@ -114,12 +114,12 @@ static TranslateId aDirectionStrs[] =
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::PopupWindowController* pControl,
     weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/directionwindow.ui", "DirectionWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/directionwindow.ui"_ustr, u"DirectionWindow"_ustr)
     , mxControl(pControl)
     , mxDirectionSet(new ValueSet(nullptr))
-    , mxDirectionSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxDirectionSet))
-    , mxPerspective(m_xBuilder->weld_radio_button("perspective"))
-    , mxParallel(m_xBuilder->weld_radio_button("parallel"))
+    , mxDirectionSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxDirectionSet))
+    , mxPerspective(m_xBuilder->weld_radio_button(u"perspective"_ustr))
+    , mxParallel(m_xBuilder->weld_radio_button(u"parallel"_ustr))
 {
     mxDirectionSet->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
 
@@ -249,7 +249,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 )   : svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        ".uno:ExtrusionDirectionFloater"
+        u".uno:ExtrusionDirectionFloater"_ustr
     )
 {
 }
@@ -285,13 +285,13 @@ void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< c
 
 OUString ExtrusionDirectionControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ExtrusionDirectionController";
+    return u"com.sun.star.comp.svx.ExtrusionDirectionController"_ustr;
 }
 
 
 Sequence< OUString > ExtrusionDirectionControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 
@@ -305,8 +305,8 @@ com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation(
 
 
 ExtrusionDepthDialog::ExtrusionDepthDialog(weld::Window* pParent, double fDepth, FieldUnit eDefaultUnit)
-    : GenericDialogController(pParent, "svx/ui/extrustiondepthdialog.ui", "ExtrustionDepthDialog")
-    , m_xMtrDepth(m_xBuilder->weld_metric_spin_button("depth", eDefaultUnit))
+    : GenericDialogController(pParent, u"svx/ui/extrustiondepthdialog.ui"_ustr, u"ExtrustionDepthDialog"_ustr)
+    , m_xMtrDepth(m_xBuilder->weld_metric_spin_button(u"depth"_ustr, eDefaultUnit))
 {
     m_xMtrDepth->set_value(static_cast<int>(fDepth) * 100, FieldUnit::MM_100TH);
 }
@@ -327,15 +327,15 @@ constexpr OUString gsExtrusionDepth( u".uno:ExtrusionDepth"_ustr );
 constexpr OUString gsMetricUnit(     u".uno:MetricUnit"_ustr     );
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/depthwindow.ui"_ustr, u"DepthWindow"_ustr)
     , mxControl(pControl)
-    , mxDepth0(m_xBuilder->weld_radio_button("depth0"))
-    , mxDepth1(m_xBuilder->weld_radio_button("depth1"))
-    , mxDepth2(m_xBuilder->weld_radio_button("depth2"))
-    , mxDepth3(m_xBuilder->weld_radio_button("depth3"))
-    , mxDepth4(m_xBuilder->weld_radio_button("depth4"))
-    , mxInfinity(m_xBuilder->weld_radio_button("infinity"))
-    , mxCustom(m_xBuilder->weld_radio_button("custom"))
+    , mxDepth0(m_xBuilder->weld_radio_button(u"depth0"_ustr))
+    , mxDepth1(m_xBuilder->weld_radio_button(u"depth1"_ustr))
+    , mxDepth2(m_xBuilder->weld_radio_button(u"depth2"_ustr))
+    , mxDepth3(m_xBuilder->weld_radio_button(u"depth3"_ustr))
+    , mxDepth4(m_xBuilder->weld_radio_button(u"depth4"_ustr))
+    , mxInfinity(m_xBuilder->weld_radio_button(u"infinity"_ustr))
+    , mxCustom(m_xBuilder->weld_radio_button(u"custom"_ustr))
     , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
     , mbSettingValue(false)
@@ -446,13 +446,13 @@ void ExtrusionDepthWindow::statusChanged(
 void ExtrusionDepthWindow::DispatchDepthDialog()
 {
     Sequence< PropertyValue > aArgs{
-        comphelper::makePropertyValue("Depth", mfDepth),
-        comphelper::makePropertyValue("Metric", static_cast<sal_Int32>( meUnit ))
+        comphelper::makePropertyValue(u"Depth"_ustr, mfDepth),
+        comphelper::makePropertyValue(u"Metric"_ustr, static_cast<sal_Int32>( meUnit ))
     };
 
     rtl::Reference<svt::PopupWindowController> xControl(mxControl);
     xControl->EndPopupMode();
-    xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
+    xControl->dispatchCommand(u".uno:ExtrusionDepthDialog"_ustr, aArgs);
     mbCommandDispatched = true;
 }
 
@@ -529,7 +529,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 )   : svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        ".uno:ExtrusionDepthFloater"
+        u".uno:ExtrusionDepthFloater"_ustr
     )
 {
 }
@@ -565,13 +565,13 @@ void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cs
 
 OUString ExtrusionDepthController::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ExtrusionDepthController";
+    return u"com.sun.star.comp.svx.ExtrusionDepthController"_ustr;
 }
 
 
 Sequence< OUString > ExtrusionDepthController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 
@@ -589,13 +589,13 @@ constexpr OUString g_sExtrusionLightingIntensity = u".uno:ExtrusionLightingInten
 
 ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pControl,
                                                  weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/lightingwindow.ui", "LightingWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/lightingwindow.ui"_ustr, u"LightingWindow"_ustr)
     , mxControl(pControl)
     , mxLightingSet(new ValueSet(nullptr))
-    , mxLightingSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLightingSet))
-    , mxBright(m_xBuilder->weld_radio_button("bright"))
-    , mxNormal(m_xBuilder->weld_radio_button("normal"))
-    , mxDim(m_xBuilder->weld_radio_button("dim"))
+    , mxLightingSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxLightingSet))
+    , mxBright(m_xBuilder->weld_radio_button(u"bright"_ustr))
+    , mxNormal(m_xBuilder->weld_radio_button(u"normal"_ustr))
+    , mxDim(m_xBuilder->weld_radio_button(u"dim"_ustr))
 {
     mxLightingSet->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
 
@@ -762,7 +762,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController( rxContext,
                 Reference< css::frame::XFrame >(),
-                ".uno:ExtrusionDirectionFloater"
+                u".uno:ExtrusionDirectionFloater"_ustr
     )
 {
 }
@@ -798,13 +798,13 @@ void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cs
 
 OUString ExtrusionLightingControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ExtrusionLightingController";
+    return u"com.sun.star.comp.svx.ExtrusionLightingController"_ustr;
 }
 
 
 Sequence< OUString > ExtrusionLightingControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 
@@ -820,13 +820,13 @@ com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
 constexpr OUString g_sExtrusionSurface = u".uno:ExtrusionSurface"_ustr;
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/surfacewindow.ui", "SurfaceWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/surfacewindow.ui"_ustr, u"SurfaceWindow"_ustr)
     , mxControl(pControl)
-    , mxWireFrame(m_xBuilder->weld_radio_button("wireframe"))
-    , mxMatt(m_xBuilder->weld_radio_button("matt"))
-    , mxPlastic(m_xBuilder->weld_radio_button("plastic"))
-    , mxMetal(m_xBuilder->weld_radio_button("metal"))
-    , mxMetalMSO(m_xBuilder->weld_radio_button("metalMSO"))
+    , mxWireFrame(m_xBuilder->weld_radio_button(u"wireframe"_ustr))
+    , mxMatt(m_xBuilder->weld_radio_button(u"matt"_ustr))
+    , mxPlastic(m_xBuilder->weld_radio_button(u"plastic"_ustr))
+    , mxMetal(m_xBuilder->weld_radio_button(u"metal"_ustr))
+    , mxMetalMSO(m_xBuilder->weld_radio_button(u"metalMSO"_ustr))
 {
     mxWireFrame->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
     mxMatt->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
@@ -908,7 +908,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 :   svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        ".uno:ExtrusionSurfaceFloater"
+        u".uno:ExtrusionSurfaceFloater"_ustr
     )
 {
 }
@@ -944,13 +944,13 @@ void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css
 
 OUString ExtrusionSurfaceControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ExtrusionSurfaceController";
+    return u"com.sun.star.comp.svx.ExtrusionSurfaceController"_ustr;
 }
 
 
 Sequence< OUString > ExtrusionSurfaceControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 

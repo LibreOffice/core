@@ -783,7 +783,7 @@ static std::span<comphelper::PropertyMapEntry const> ImplGetAdditionalWriterDraw
 {
     static comphelper::PropertyMapEntry const aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
-        { "IsFollowingTextFlow", SID_SW_FOLLOW_TEXT_FLOW, cppu::UnoType<bool>::get(), 0, 0},
+        { u"IsFollowingTextFlow"_ustr, SID_SW_FOLLOW_TEXT_FLOW, cppu::UnoType<bool>::get(), 0, 0},
     };
 
     return aSvxAdditionalDefaultsPropertyMap_Impl;

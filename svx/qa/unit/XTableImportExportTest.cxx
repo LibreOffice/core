@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
     BitmapChecksum aChecksum(0);
 
     {
-        rtl::Reference<XBitmapList> xBitmapList = new XBitmapList(aTempURL, "REF");
+        rtl::Reference<XBitmapList> xBitmapList = new XBitmapList(aTempURL, u"REF"_ustr);
         uno::Reference<container::XNameContainer> xNameContainer(xBitmapList->createInstance());
         CPPUNIT_ASSERT(xNameContainer.is());
 
@@ -51,20 +51,20 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         Graphic aGraphic(aBitmapEx);
         uno::Reference<awt::XBitmap> xBitmap(aGraphic.GetXGraphic(), css::uno::UNO_QUERY);
 
-        xNameContainer->insertByName("SomeBitmap", uno::Any(xBitmap));
+        xNameContainer->insertByName(u"SomeBitmap"_ustr, uno::Any(xBitmap));
         xBitmapList->Save();
 
         aChecksum = aBitmap.GetChecksum();
     }
 
     {
-        rtl::Reference<XBitmapList> xBitmapList = new XBitmapList(aTempURL, "REF");
+        rtl::Reference<XBitmapList> xBitmapList = new XBitmapList(aTempURL, u"REF"_ustr);
         bool bResult = xBitmapList->Load();
         CPPUNIT_ASSERT(bResult);
         uno::Reference<container::XNameContainer> xNameContainer(xBitmapList->createInstance());
         CPPUNIT_ASSERT(xNameContainer.is());
 
-        uno::Any aAny = xNameContainer->getByName("SomeBitmap");
+        uno::Any aAny = xNameContainer->getByName(u"SomeBitmap"_ustr);
         CPPUNIT_ASSERT(aAny.has<uno::Reference<awt::XBitmap>>());
         auto xBitmap = aAny.get<uno::Reference<awt::XBitmap>>();
         CPPUNIT_ASSERT(xBitmap.is());

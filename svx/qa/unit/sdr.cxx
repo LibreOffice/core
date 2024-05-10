@@ -31,7 +31,7 @@ class SdrTest : public UnoApiXmlTest
 {
 public:
     SdrTest()
-        : UnoApiXmlTest("svx/qa/unit/data/")
+        : UnoApiXmlTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 
@@ -101,32 +101,32 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Actual  : 162
         // - In <>, attribute 'xy13' of '(//shadow/transform)[1]' incorrect value.
         // i.e. shadow alignment was ignored while scaling the shadow.
-        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy13"_ostr, "-568");
-        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy23"_ostr, "162");
+        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy13"_ostr, u"-568"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy23"_ostr, u"162"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy13"_ostr, "-1795");
-        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy23"_ostr, "162");
+        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy13"_ostr, u"-1795"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy23"_ostr, u"162"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy13"_ostr, "-3021");
-        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy23"_ostr, "161");
+        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy13"_ostr, u"-3021"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy23"_ostr, u"161"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy13"_ostr, "-568");
-        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy23"_ostr, "-749");
+        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy13"_ostr, u"-568"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy23"_ostr, u"-749"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy13"_ostr, "-3021");
-        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy23"_ostr, "-750");
+        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy13"_ostr, u"-3021"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy23"_ostr, u"-750"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy13"_ostr, "-567");
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy23"_ostr, "-1692");
+        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy13"_ostr, u"-567"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy23"_ostr, u"-1692"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy13"_ostr, "-1795");
-        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy23"_ostr, "-1693");
+        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy13"_ostr, u"-1795"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy23"_ostr, u"-1693"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy13"_ostr, "-3023");
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy23"_ostr, "-1692");
+        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy13"_ostr, u"-3023"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy23"_ostr, u"-1692"_ustr);
 
-        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy13"_ostr, "-1795");
-        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy23"_ostr, "-750");
+        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy13"_ostr, u"-1795"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy23"_ostr, u"-750"_ustr);
     }
     {
         // Page 2 contains a table with shadow alignment center
@@ -143,8 +143,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Expected: -5196
         // - Actual  : 0
         // - In<>, attribute 'xy13' of '//shadow/transform' incorrect value.
-        assertXPath(pDocument, "//shadow/transform"_ostr, "xy13"_ostr, "-5196");
-        assertXPath(pDocument, "//shadow/transform"_ostr, "xy23"_ostr, "-2290");
+        assertXPath(pDocument, "//shadow/transform"_ostr, "xy13"_ostr, u"-5196"_ustr);
+        assertXPath(pDocument, "//shadow/transform"_ostr, "xy23"_ostr, u"-2290"_ustr);
     }
 }
 

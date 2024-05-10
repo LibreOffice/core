@@ -116,8 +116,8 @@ void insertCreationOrigin(uno::Reference<beans::XPropertyContainer> const& rxPro
         return;
 
     OUString sValue = (eOrigin == sfx::ClassificationCreationOrigin::BAF_POLICY)
-                          ? OUString("BAF_POLICY")
-                          : OUString("MANUAL");
+                          ? u"BAF_POLICY"_ustr
+                          : u"MANUAL"_ustr;
     addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeCreationOriginKey(), sValue);
 }
 } // end svx::classification namespace

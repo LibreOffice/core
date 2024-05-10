@@ -32,7 +32,8 @@
 namespace svx::sidebar
 {
 LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent)
-    : WeldToolbarPopup(nullptr, pParent, "svx/ui/floatinglineproperty.ui", "FloatingLineProperty")
+    : WeldToolbarPopup(nullptr, pParent, u"svx/ui/floatinglineproperty.ui"_ustr,
+                       u"FloatingLineProperty"_ustr)
     , m_rParent(rParent)
     , m_sPt(SvxResId(RID_SVXSTR_PT))
     , m_eMapUnit(MapUnit::MapTwip)
@@ -41,9 +42,9 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     , m_nCustomWidth(0)
     , m_aIMGCus(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM)
     , m_aIMGCusGray(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM_GRAY)
-    , m_xMFWidth(m_xBuilder->weld_metric_spin_button("spin", FieldUnit::POINT))
+    , m_xMFWidth(m_xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::POINT))
     , m_xVSWidth(new LineWidthValueSet())
-    , m_xVSWidthWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xVSWidth))
+    , m_xVSWidthWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xVSWidth))
 {
     m_xVSWidth->SetStyle(m_xVSWidth->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT);
 
@@ -153,7 +154,7 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);
     m_eMapUnit = eMapUnit;
-    SvtViewOptions aWinOpt(EViewType::Window, "PopupPanel_LineWidth");
+    SvtViewOptions aWinOpt(EViewType::Window, u"PopupPanel_LineWidth"_ustr);
     if (aWinOpt.Exists())
     {
         css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
@@ -186,7 +187,7 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     }
     else
     {
-        m_xMFWidth->set_text("");
+        m_xMFWidth->set_text(u""_ustr);
     }
 
     OUString strCurrValue = m_xMFWidth->get_text();

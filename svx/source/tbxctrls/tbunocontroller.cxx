@@ -176,7 +176,7 @@ SvxFontSizeBox_Base::SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     , m_xWidget(new FontSizeBox(std::move(xWidget)))
 {
     m_xWidget->set_value(0);
-    m_xWidget->set_active_or_entry_text("");
+    m_xWidget->set_active_or_entry_text(u""_ustr);
     m_xWidget->disable_entry_completion();
 
     m_xWidget->connect_changed(LINK(this, SvxFontSizeBox_Base, SelectHdl));
@@ -215,7 +215,7 @@ void SvxFontSizeBox_Base::Select()
     sal_Int64 nSelVal = m_xWidget->get_value();
     float fSelVal     = float( nSelVal ) / 10;
 
-    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("FontHeight.Height",
+    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"FontHeight.Height"_ustr,
                                                                                fSelVal) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -241,7 +241,7 @@ void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
     {
         // delete value in the display
         m_xWidget->set_value(-1L);
-        m_xWidget->set_active_or_entry_text("");
+        m_xWidget->set_active_or_entry_text(u""_ustr);
     }
     m_aCurText = m_xWidget->get_active_text();
 }
@@ -308,8 +308,8 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(vcl::Window* pParent,
                                          const uno::Reference<frame::XFrame>& rFrame,
                                          FontHeightToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, "svx/ui/fontsizebox.ui", "FontSizeBox", true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , SvxFontSizeBox_Base(m_xBuilder->weld_combo_box("fontsizecombobox"), rFrame, rCtrl)
+    : InterimItemWindow(pParent, u"svx/ui/fontsizebox.ui"_ustr, u"FontSizeBox"_ustr, true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    , SvxFontSizeBox_Base(m_xBuilder->weld_combo_box(u"fontsizecombobox"_ustr), rFrame, rCtrl)
 {
 }
 
@@ -353,7 +353,7 @@ FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::X
                            ".uno:FontHeight" ),
    m_pBox( nullptr )
 {
-    addStatusListener( ".uno:CharFontName");
+    addStatusListener( u".uno:CharFontName"_ustr);
 }
 
 // XServiceInfo
@@ -364,12 +364,12 @@ sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& Ser
 
 OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.svx.FontHeightToolBoxController";
+    return u"com.sun.star.svx.FontHeightToolBoxController"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 // XComponent
@@ -455,7 +455,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box("fontsizecombobox"));
+        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"fontsizecombobox"_ustr));
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 

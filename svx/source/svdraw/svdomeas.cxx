@@ -584,7 +584,7 @@ void SdrMeasureObj::UndirtyText() const
     {
         rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD), ESelection(0,0));
         rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Value), EE_FEATURE_FIELD),ESelection(0,1));
-        rOutliner.QuickInsertText(" ", ESelection(0,2));
+        rOutliner.QuickInsertText(u" "_ustr, ESelection(0,2));
         rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Unit), EE_FEATURE_FIELD),ESelection(0,3));
         rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD),ESelection(0,4));
 

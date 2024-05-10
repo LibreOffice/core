@@ -45,7 +45,7 @@ void SvxInsertStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16 , Sfx
                                               const SfxPoolItem* pState )
 {
     if ( SfxItemState::DEFAULT != eState )
-        GetStatusBar().SetItemText( GetId(), "" );
+        GetStatusBar().SetItemText( GetId(), u""_ustr );
     else
     {
         DBG_ASSERT( dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr, "invalid item type" );
@@ -67,7 +67,7 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    OUString aText = "";
+    OUString aText = u""_ustr;
     // tdf#107918 on macOS without an Insert key it's hard to figure out how to switch modes
     // so we show both Insert and Overwrite
 #ifdef MACOSX

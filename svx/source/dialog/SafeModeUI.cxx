@@ -43,7 +43,7 @@ SafeModeUI::SafeModeUI()
 
 OUString SAL_CALL SafeModeUI::getImplementationName()
 {
-    return "com.sun.star.comp.svx.SafeModeUI";
+    return u"com.sun.star.comp.svx.SafeModeUI"_ustr;
 }
 
 sal_Bool SAL_CALL SafeModeUI::supportsService(const OUString& sServiceName)
@@ -53,7 +53,7 @@ sal_Bool SAL_CALL SafeModeUI::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL SafeModeUI::getSupportedServiceNames()
 {
-    return { "com.sun.star.dialog.SafeModeUI" };
+    return { u"com.sun.star.dialog.SafeModeUI"_ustr };
 }
 
 css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&,

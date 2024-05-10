@@ -96,7 +96,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleGraphicShape::getImplementationName()
 {
-    return "AccessibleGraphicShape";
+    return u"AccessibleGraphicShape"_ustr;
 }
 
 
@@ -104,7 +104,7 @@ css::uno::Sequence< OUString> SAL_CALL
     AccessibleGraphicShape::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
-    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleGraphicShape" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleGraphicShape"_ustr };
     return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
 }
 

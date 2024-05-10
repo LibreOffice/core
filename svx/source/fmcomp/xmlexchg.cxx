@@ -42,7 +42,7 @@ namespace svx
         const SotClipboardFormatId nFormatId = SotExchange::GetFormat( _rFlavor );
         if ( SotClipboardFormatId::XFORMS == nFormatId )
         {
-            return SetString("XForms-Transferable");
+            return SetString(u"XForms-Transferable"_ustr);
         }
         return false;
     }

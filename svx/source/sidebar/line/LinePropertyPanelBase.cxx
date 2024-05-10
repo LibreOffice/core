@@ -57,7 +57,7 @@ namespace
 {
     SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
     {
-        css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
+        css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
         SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
         return pToolBoxLineStyleControl;
     }
@@ -67,18 +67,18 @@ namespace
 LinePropertyPanelBase::LinePropertyPanelBase(
     weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame)
-:   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui"),
-    mxTBColor(m_xBuilder->weld_toolbar("color")),
+:   PanelLayout(pParent, u"LinePropertyPanel"_ustr, u"svx/ui/sidebarline.ui"_ustr),
+    mxTBColor(m_xBuilder->weld_toolbar(u"color"_ustr)),
     mxColorDispatch(new ToolbarUnoDispatcher(*mxTBColor, *m_xBuilder, rxFrame)),
-    mxLineStyleTB(m_xBuilder->weld_toolbar("linestyle")),
+    mxLineStyleTB(m_xBuilder->weld_toolbar(u"linestyle"_ustr)),
     mxLineStyleDispatch(new ToolbarUnoDispatcher(*mxLineStyleTB, *m_xBuilder, rxFrame)),
     mnWidthCoreValue(0),
-    mxFTWidth(m_xBuilder->weld_label("widthlabel")),
-    mxTBWidth(m_xBuilder->weld_toolbar("width")),
-    mxFTTransparency(m_xBuilder->weld_label("translabel")),
-    mxMFTransparent(m_xBuilder->weld_metric_spin_button("linetransparency", FieldUnit::PERCENT)),
-    mxArrowHeadStyleFT(m_xBuilder->weld_label("arrowlabel")),
-    mxArrowHeadStyleTB(m_xBuilder->weld_toolbar("arrowheadstyle")),
+    mxFTWidth(m_xBuilder->weld_label(u"widthlabel"_ustr)),
+    mxTBWidth(m_xBuilder->weld_toolbar(u"width"_ustr)),
+    mxFTTransparency(m_xBuilder->weld_label(u"translabel"_ustr)),
+    mxMFTransparent(m_xBuilder->weld_metric_spin_button(u"linetransparency"_ustr, FieldUnit::PERCENT)),
+    mxArrowHeadStyleFT(m_xBuilder->weld_label(u"arrowlabel"_ustr)),
+    mxArrowHeadStyleTB(m_xBuilder->weld_toolbar(u"arrowheadstyle"_ustr)),
     mxArrowHeadStyleDispatch(new ToolbarUnoDispatcher(*mxArrowHeadStyleTB, *m_xBuilder, rxFrame)),
     mxLineWidthPopup(new LineWidthPopup(mxTBWidth.get(), *this)),
     mxLineStyleNoneChange(new LineStyleNoneChange(*this)),
@@ -256,10 +256,10 @@ void LinePropertyPanelBase::SetWidth(tools::Long nWidth)
 
 void LinePropertyPanelBase::ActivateControls()
 {
-    mxArrowHeadStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
+    mxArrowHeadStyleTB->set_item_sensitive(u".uno:LineEndStyle"_ustr, !mbNoneLineStyle);
 
     mxArrowHeadStyleFT->set_visible(mbArrowSupported);
-    mxArrowHeadStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
+    mxArrowHeadStyleTB->set_item_visible(u".uno:LineEndStyle"_ustr, mbArrowSupported);
 }
 
 void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)

@@ -510,7 +510,7 @@ bool GalleryTheme::InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos)
             pNewObj.reset(new SgaObjectBmp( aGraphic, rURL ));
     }
 #if HAVE_FEATURE_AVMEDIA
-    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO?*/ ) )
+    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), u""_ustr/*TODO?*/ ) )
         pNewObj.reset(new SgaObjectSound( rURL ));
 #endif
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )

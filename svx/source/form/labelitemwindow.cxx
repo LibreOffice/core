@@ -10,10 +10,10 @@
 #include <svx/labelitemwindow.hxx>
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
-    : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
-    , m_xBox(m_xBuilder->weld_box("LabelBox"))
-    , m_xLabel(m_xBuilder->weld_label("label"))
-    , m_xImage(m_xBuilder->weld_image("image"))
+    : InterimItemWindow(pParent, u"svx/ui/labelbox.ui"_ustr, u"LabelBox"_ustr)
+    , m_xBox(m_xBuilder->weld_box(u"LabelBox"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xImage(m_xBuilder->weld_image(u"image"_ustr))
 {
     InitControlBase(m_xLabel.get());
 

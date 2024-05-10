@@ -297,19 +297,19 @@ void ChineseDictionaryDialog::initDictionaryControl(DictionaryList *pList,
 }
 
 ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "svx/ui/chinesedictionary.ui", "ChineseDictionaryDialog")
+    : GenericDialogController(pParent, u"svx/ui/chinesedictionary.ui"_ustr, u"ChineseDictionaryDialog"_ustr)
     , m_nTextConversionOptions(i18n::TextConversionOption::NONE)
-    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button("tradtosimple"))
-    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button("simpletotrad"))
-    , m_xCB_Reverse(m_xBuilder->weld_check_button("reverse"))
-    , m_xED_Term(m_xBuilder->weld_entry("term"))
-    , m_xED_Mapping(m_xBuilder->weld_entry("mapping"))
-    , m_xLB_Property(m_xBuilder->weld_combo_box("property"))
-    , m_xCT_DictionaryToSimplified(new DictionaryList(m_xBuilder->weld_tree_view("tradtosimpleview")))
-    , m_xCT_DictionaryToTraditional(new DictionaryList(m_xBuilder->weld_tree_view("simpletotradview")))
-    , m_xPB_Add(m_xBuilder->weld_button("add"))
-    , m_xPB_Modify(m_xBuilder->weld_button("modify"))
-    , m_xPB_Delete(m_xBuilder->weld_button("delete"))
+    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button(u"tradtosimple"_ustr))
+    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button(u"simpletotrad"_ustr))
+    , m_xCB_Reverse(m_xBuilder->weld_check_button(u"reverse"_ustr))
+    , m_xED_Term(m_xBuilder->weld_entry(u"term"_ustr))
+    , m_xED_Mapping(m_xBuilder->weld_entry(u"mapping"_ustr))
+    , m_xLB_Property(m_xBuilder->weld_combo_box(u"property"_ustr))
+    , m_xCT_DictionaryToSimplified(new DictionaryList(m_xBuilder->weld_tree_view(u"tradtosimpleview"_ustr)))
+    , m_xCT_DictionaryToTraditional(new DictionaryList(m_xBuilder->weld_tree_view(u"simpletotradview"_ustr)))
+    , m_xPB_Add(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xPB_Modify(m_xBuilder->weld_button(u"modify"_ustr))
+    , m_xPB_Delete(m_xBuilder->weld_button(u"delete"_ustr))
 {
     m_xCT_DictionaryToSimplified->set_size_request(-1, m_xCT_DictionaryToSimplified->get_height_rows(8));
     m_xCT_DictionaryToTraditional->set_size_request(-1, m_xCT_DictionaryToTraditional->get_height_rows(8));
@@ -336,8 +336,8 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
             {
                 try
                 {
-                    OUString aNameTo_Simplified("ChineseT2S");
-                    OUString aNameTo_Traditional("ChineseS2T");
+                    OUString aNameTo_Simplified(u"ChineseT2S"_ustr);
+                    OUString aNameTo_Traditional(u"ChineseS2T"_ustr);
                     lang::Locale aLocale;
                     aLocale.Language = "zh";
 

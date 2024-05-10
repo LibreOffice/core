@@ -36,7 +36,7 @@ public:
     OUString msIdentifier;      //< The identifier of this entry (from example.xml).
 
     ClassificationResult(ClassificationType eType, OUString sName,
-                         OUString sAbbreviatedName, OUString sIdentifier = "")
+                         OUString sAbbreviatedName, OUString sIdentifier = u""_ustr)
         : meType(eType)
         , msName(std::move(sName))
         , msAbbreviatedName(std::move(sAbbreviatedName))

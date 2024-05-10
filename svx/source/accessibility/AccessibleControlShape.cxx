@@ -282,7 +282,7 @@ void SAL_CALL AccessibleControlShape::grabFocus()
 
 OUString SAL_CALL AccessibleControlShape::getImplementationName()
 {
-    return "com.sun.star.comp.accessibility.AccessibleControlShape";
+    return u"com.sun.star.comp.accessibility.AccessibleControlShape"_ustr;
 }
 
 OUString AccessibleControlShape::CreateAccessibleBaseName()
@@ -318,8 +318,8 @@ OUString
             if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty ("ControlBackground", DescriptionGenerator::PropertyType::Color);
-                aDG.AddProperty ( "ControlBorder", DescriptionGenerator::PropertyType::Integer);
+                aDG.AddProperty (u"ControlBackground"_ustr, DescriptionGenerator::PropertyType::Color);
+                aDG.AddProperty ( u"ControlBorder"_ustr, DescriptionGenerator::PropertyType::Integer);
             }
             // ensure that we are listening to the Name property
             m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, true, DESC_PROPERTY_NAME );

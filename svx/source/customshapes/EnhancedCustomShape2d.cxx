@@ -1506,9 +1506,9 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 
     // For ooxml-foo shapes, the way to calculate the adjustment value from the handle position depends on
     // the type of the shape, therefore need 'Type'.
-    OUString sShapeType("non-primitive"); // default for ODF
+    OUString sShapeType(u"non-primitive"_ustr); // default for ODF
     const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+    const Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
     if (pAny)
         *pAny >>= sShapeType;
 
@@ -2174,7 +2174,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                     // Some shapes will need special handling, decide on property 'Type'.
                     OUString sShpType;
                     SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(mrSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-                    Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+                    Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
                     if (pAny)
                         *pAny >>= sShpType;
                     // User defined shapes in MS binary format, which contain command U or T after import
@@ -2183,8 +2183,8 @@ void EnhancedCustomShape2d::CreateSubPath(
                     // The only own or imported preset shapes with U command are those listed below.
                     // Command T is not used in preset shapes.
                     const std::unordered_set<OUString> aPresetShapesWithU =
-                        { "ellipse",  "ring", "smiley", "sun", "forbidden", "flowchart-connector",
-                          "flowchart-summing-junction", "flowchart-or", "cloud-callout"};
+                        { u"ellipse"_ustr,  u"ring"_ustr, u"smiley"_ustr, u"sun"_ustr, u"forbidden"_ustr, u"flowchart-connector"_ustr,
+                          u"flowchart-summing-junction"_ustr, u"flowchart-or"_ustr, u"cloud-callout"_ustr};
                     std::unordered_set<OUString>::const_iterator aIter = aPresetShapesWithU.find(sShpType);
                     const bool bIsPresetShapeWithU(aIter != aPresetShapesWithU.end());
 
@@ -2805,7 +2805,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                     rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
                     std::min(nColorIndex, nColorCount-1),
                     dBrightness );
-                rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
+                rObj.SetMergedItem( XFillColorItem( u""_ustr, aFillColor ) );
             }
             break;
         }
@@ -2828,7 +2828,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                 aBGradient.SetColorStops(aColorStops);
             }
 
-            rObj.SetMergedItem( XFillGradientItem( "", aBGradient ) );
+            rObj.SetMergedItem( XFillGradientItem( u""_ustr, aBGradient ) );
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -2844,7 +2844,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                         dBrightness ));
             }
 
-            rObj.SetMergedItem( XFillHatchItem( "", aXHatch ) );
+            rObj.SetMergedItem( XFillHatchItem( u""_ustr, aXHatch ) );
             break;
         }
         case drawing::FillStyle_BITMAP:

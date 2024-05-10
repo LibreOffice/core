@@ -227,7 +227,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         Size aDrawSize(0,aRect.GetHeight() / 6);
         aFont.SetFontSize(aDrawSize);
         rRenderContext.SetFont(aFont);
-        OUString sText("ABC");
+        OUString sText(u"ABC"_ustr);
         Point aMove(1, rRenderContext.GetTextHeight());
         sal_Unicode cArrow = 0x2193;
         tools::Long nAWidth = rRenderContext.GetTextWidth(sText.copy(0,1));

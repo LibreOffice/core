@@ -158,20 +158,20 @@ namespace svx
         // the properties we know
         static MapString2PropertyEntry s_aProperties
             {
-                { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,            },
-                { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,     },
-                { OUString("Column"),             DataAccessDescriptorProperty::ColumnObject,          },
-                { OUString("ColumnName"),         DataAccessDescriptorProperty::ColumnName,            },
-                { OUString("Command"),            DataAccessDescriptorProperty::Command,               },
-                { OUString("CommandType"),        DataAccessDescriptorProperty::CommandType,           },
-                { OUString("Component"),          DataAccessDescriptorProperty::Component,             },
-                { OUString("ConnectionResource"), DataAccessDescriptorProperty::ConnectionResource,    },
-                { OUString("Cursor"),             DataAccessDescriptorProperty::Cursor,                },
-                { OUString("DataSourceName"),     DataAccessDescriptorProperty::DataSource,            },
-                { OUString("DatabaseLocation"),   DataAccessDescriptorProperty::DatabaseLocation,      },
-                { OUString("EscapeProcessing"),   DataAccessDescriptorProperty::EscapeProcessing,      },
-                { OUString("Filter"),             DataAccessDescriptorProperty::Filter,                },
-                { OUString("Selection"),          DataAccessDescriptorProperty::Selection,             }
+                { u"ActiveConnection"_ustr,   DataAccessDescriptorProperty::Connection,            },
+                { u"BookmarkSelection"_ustr,  DataAccessDescriptorProperty::BookmarkSelection,     },
+                { u"Column"_ustr,             DataAccessDescriptorProperty::ColumnObject,          },
+                { u"ColumnName"_ustr,         DataAccessDescriptorProperty::ColumnName,            },
+                { u"Command"_ustr,            DataAccessDescriptorProperty::Command,               },
+                { u"CommandType"_ustr,        DataAccessDescriptorProperty::CommandType,           },
+                { u"Component"_ustr,          DataAccessDescriptorProperty::Component,             },
+                { u"ConnectionResource"_ustr, DataAccessDescriptorProperty::ConnectionResource,    },
+                { u"Cursor"_ustr,             DataAccessDescriptorProperty::Cursor,                },
+                { u"DataSourceName"_ustr,     DataAccessDescriptorProperty::DataSource,            },
+                { u"DatabaseLocation"_ustr,   DataAccessDescriptorProperty::DatabaseLocation,      },
+                { u"EscapeProcessing"_ustr,   DataAccessDescriptorProperty::EscapeProcessing,      },
+                { u"Filter"_ustr,             DataAccessDescriptorProperty::Filter,                },
+                { u"Selection"_ustr,          DataAccessDescriptorProperty::Selection,             }
             };
 
         return s_aProperties;

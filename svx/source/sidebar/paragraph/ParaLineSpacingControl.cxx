@@ -56,17 +56,17 @@
 using namespace svx;
 
 ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/paralinespacingcontrol.ui", "ParaLineSpacingControl")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/paralinespacingcontrol.ui"_ustr, u"ParaLineSpacingControl"_ustr)
     , mxControl(pControl)
     , meLNSpaceUnit(MapUnit::Map100thMM)
-    , mxSpacing1Button(m_xBuilder->weld_button("spacing_1"))
-    , mxSpacing115Button(m_xBuilder->weld_button("spacing_115"))
-    , mxSpacing15Button(m_xBuilder->weld_button("spacing_15"))
-    , mxSpacing2Button(m_xBuilder->weld_button("spacing_2"))
-    , mxLineDist(m_xBuilder->weld_combo_box("line_dist"))
-    , mxLineDistLabel(m_xBuilder->weld_label("value_label"))
-    , mxLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("percent_box", FieldUnit::PERCENT))
-    , mxLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("metric_box", FieldUnit::CM))
+    , mxSpacing1Button(m_xBuilder->weld_button(u"spacing_1"_ustr))
+    , mxSpacing115Button(m_xBuilder->weld_button(u"spacing_115"_ustr))
+    , mxSpacing15Button(m_xBuilder->weld_button(u"spacing_15"_ustr))
+    , mxSpacing2Button(m_xBuilder->weld_button(u"spacing_2"_ustr))
+    , mxLineDist(m_xBuilder->weld_combo_box(u"line_dist"_ustr))
+    , mxLineDistLabel(m_xBuilder->weld_label(u"value_label"_ustr))
+    , mxLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button(u"percent_box"_ustr, FieldUnit::PERCENT))
+    , mxLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button(u"metric_box"_ustr, FieldUnit::CM))
     , mpActLineDistFld(mxLineDistAtPercentBox.get())
 {
     Link<weld::Button&,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
@@ -215,14 +215,14 @@ void ParaLineSpacingControl::Initialize()
         mxLineDist->set_sensitive(false);
         mxLineDistLabel->set_sensitive(false);
         mpActLineDistFld->set_sensitive(false);
-        mpActLineDistFld->set_text("");
+        mpActLineDistFld->set_text(u""_ustr);
 
     }
     else // !bItemStateSet || eState == SfxItemState::INVALID || eState == SfxItemState::UNKNOWN
     {
         mxLineDistLabel->set_sensitive(false);
         mpActLineDistFld->set_sensitive(false);
-        mpActLineDistFld->set_text("");
+        mpActLineDistFld->set_text(u""_ustr);
         mxLineDist->set_active(-1);
     }
 
@@ -245,7 +245,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mxLineDistLabel->set_sensitive(false);
             mpActLineDistFld->show();
             mpActLineDistFld->set_sensitive(false);
-            mpActLineDistFld->set_text("");
+            mpActLineDistFld->set_text(u""_ustr);
             break;
 
         case LLINESPACE_DURCH:

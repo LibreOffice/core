@@ -359,43 +359,43 @@ namespace svxform
                 FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
                 if( pFormShell && pFormModel )
                 {
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "svx/ui/formnavimenu.ui"));
-                    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
-                    std::unique_ptr<weld::Menu> xSubMenuNew(xBuilder->weld_menu("submenu"));
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"svx/ui/formnavimenu.ui"_ustr));
+                    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
+                    std::unique_ptr<weld::Menu> xSubMenuNew(xBuilder->weld_menu(u"submenu"_ustr));
 
                     // menu 'New' only exists, if only the root or only one form is selected
                     bool bShowNew = bSingleSelection && (m_nFormsSelected || m_bRootSelected);
                     if (!bShowNew)
-                        xContextMenu->remove("new");
+                        xContextMenu->remove(u"new"_ustr);
 
                     // 'New'\'Form' under the same terms
                     bool bShowForm = bSingleSelection && (m_nFormsSelected || m_bRootSelected);
                     if (bShowForm)
-                        xSubMenuNew->append("form", SvxResId(RID_STR_FORM), RID_SVXBMP_FORM);
+                        xSubMenuNew->append(u"form"_ustr, SvxResId(RID_STR_FORM), RID_SVXBMP_FORM);
 
                     // 'New'\'hidden...', if exactly one form is selected
                     bool bShowHidden = bSingleSelection && m_nFormsSelected;
                     if (bShowHidden)
-                        xSubMenuNew->append("hidden", SvxResId(RID_STR_HIDDEN), RID_SVXBMP_HIDDEN);
+                        xSubMenuNew->append(u"hidden"_ustr, SvxResId(RID_STR_HIDDEN), RID_SVXBMP_HIDDEN);
 
                     // 'Delete': everything which is not root can be removed
                     if (m_bRootSelected)
-                        xContextMenu->remove("delete");
+                        xContextMenu->remove(u"delete"_ustr);
 
                     // 'Cut', 'Copy' and 'Paste'
                     bool bShowCut = !m_bRootSelected && implAllowExchange(DND_ACTION_MOVE);
                     if (!bShowCut)
-                        xContextMenu->remove("cut");
+                        xContextMenu->remove(u"cut"_ustr);
                     bool bShowCopy = !m_bRootSelected && implAllowExchange(DND_ACTION_COPY);
                     if (!bShowCopy)
-                        xContextMenu->remove("copy");
+                        xContextMenu->remove(u"copy"_ustr);
                     if (!implAcceptPaste())
-                        xContextMenu->remove("paste");
+                        xContextMenu->remove(u"paste"_ustr);
 
                     // TabDialog, if exactly one form
                     bool bShowTabOrder = bSingleSelection && m_nFormsSelected;
                     if (!bShowTabOrder)
-                        xContextMenu->remove("taborder");
+                        xContextMenu->remove(u"taborder"_ustr);
 
                     bool bShowProps = true;
                     // in XML forms, we don't allow for the properties of a form
@@ -412,22 +412,22 @@ namespace svxform
                             (m_nControlsSelected && !m_nFormsSelected) || (!m_nControlsSelected && m_nFormsSelected);
 
                     if (!bShowProps)
-                        xContextMenu->remove("props");
+                        xContextMenu->remove(u"props"_ustr);
 
                     // rename, if one element and no root
                     bool bShowRename = bSingleSelection && !m_bRootSelected;
                     if (!bShowRename)
-                        xContextMenu->remove("rename");
+                        xContextMenu->remove(u"rename"_ustr);
 
                     if (!m_bRootSelected)
                     {
                         // Readonly-entry is only for root
-                        xContextMenu->remove("designmode");
+                        xContextMenu->remove(u"designmode"_ustr);
                         // the same for automatic control focus
-                        xContextMenu->remove("controlfocus");
+                        xContextMenu->remove(u"controlfocus"_ustr);
                     }
 
-                    std::unique_ptr<weld::Menu> xConversionMenu(xBuilder->weld_menu("changemenu"));
+                    std::unique_ptr<weld::Menu> xConversionMenu(xBuilder->weld_menu(u"changemenu"_ustr));
                     // ConvertTo-Slots are enabled, if one control is selected
                     // the corresponding slot is disabled
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
@@ -443,13 +443,13 @@ namespace svxform
                         pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection_Lock(*xConversionMenu);
                     }
                     else
-                        xContextMenu->remove("change");
+                        xContextMenu->remove(u"change"_ustr);
 
                     if (m_bRootSelected)
                     {
                         // set OpenReadOnly
-                        xContextMenu->set_active("designmode", pFormModel->GetOpenInDesignMode());
-                        xContextMenu->set_active("controlfocus", pFormModel->GetAutoControlFocus());
+                        xContextMenu->set_active(u"designmode"_ustr, pFormModel->GetOpenInDesignMode());
+                        xContextMenu->set_active(u"controlfocus"_ustr, pFormModel->GetAutoControlFocus());
                     }
 
                     OUString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(ptWhere, ::Size(1, 1)));

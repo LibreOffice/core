@@ -108,7 +108,7 @@ namespace svx
         if (aIterator != aSlotNamedColorMap.end())
         {
             NamedColor aNamedColor(aIterator->second);
-            SvtViewOptions aViewOpt(EViewType::Dialog, "ToolboxButtonColor");
+            SvtViewOptions aViewOpt(EViewType::Dialog, u"ToolboxButtonColor"_ustr);
             if (aViewOpt.Exists())
             {
                 css::uno::Any aUserItem = aViewOpt.GetUserItem(OUString::number(nSlotId));
@@ -143,7 +143,7 @@ namespace svx
                 const OUString aUserData
                     = oColor->m_aName + ";"
                       + OUString::number(static_cast<sal_uInt32>(oColor->m_aColor));
-                SvtViewOptions(EViewType::Dialog, "ToolboxButtonColor")
+                SvtViewOptions(EViewType::Dialog, u"ToolboxButtonColor"_ustr)
                     .SetUserItem(OUString::number(mnSlotId), css::uno::Any(aUserData));
             }
         }
@@ -217,7 +217,7 @@ namespace svx
         Update(rNamedColor.m_aColor);
 
         // Also show the current color as QuickHelpText
-        OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.m_aName);
+        OUString colorSuffix = u" (%1)"_ustr.replaceFirst("%1", rNamedColor.m_aName);
         OUString colorHelpText = maCommandLabel + colorSuffix;
         SetQuickHelpText(colorHelpText);
     }

@@ -45,7 +45,7 @@ SvxClipBoardControl::SvxClipBoardControl(
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bDisabled( false )
 {
-    addStatusListener( ".uno:ClipboardFormatItems");
+    addStatusListener( u".uno:ClipboardFormatItems"_ustr);
     ToolBox& rBox = GetToolBox();
     rBox.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rBox.GetItemBits( nId ) );
     rBox.Invalidate();
@@ -59,8 +59,8 @@ void SvxClipBoardControl::CreatePopupWindow()
 {
     if ( pClipboardFmtItem )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/clipboardmenu.ui"));
-        std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"svx/ui/clipboardmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
         sal_uInt16 nCount = pClipboardFmtItem->Count();
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
@@ -86,8 +86,8 @@ void SvxClipBoardControl::CreatePopupWindow()
 
         Any a;
         aItem.QueryValue( a );
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("SelectedFormat", a) };
-        Dispatch( ".uno:ClipboardFormatItems",
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"SelectedFormat"_ustr, a) };
+        Dispatch( u".uno:ClipboardFormatItems"_ustr,
                   aArgs );
     }
 

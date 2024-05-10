@@ -45,7 +45,7 @@ SFX_IMPL_TOOLBOX_CONTROL(ParaFirstLineSpacingControl, SvxLRSpaceItem);
 ParaULSpacingControl::ParaULSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    addStatusListener(".uno:MetricUnit");
+    addStatusListener(u".uno:MetricUnit"_ustr);
 }
 
 ParaULSpacingControl::~ParaULSpacingControl()
@@ -115,7 +115,7 @@ VclPtr<InterimItemWindow> ParaBelowSpacingControl::CreateItemWindow(vcl::Window*
 ParaLRSpacingControl::ParaLRSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    addStatusListener(".uno:MetricUnit");
+    addStatusListener(u".uno:MetricUnit"_ustr);
 }
 
 ParaLRSpacingControl::~ParaLRSpacingControl()

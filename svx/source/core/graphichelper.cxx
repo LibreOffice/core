@@ -145,7 +145,7 @@ bool lcl_ExecuteFilterDialog(const uno::Sequence<beans::PropertyValue>& rPropsFo
     try
     {
         uno::Reference<ui::dialogs::XExecutableDialog> xFilterDialog(
-                comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.svtools.SvFilterOptionsDialog" ), uno::UNO_QUERY);
+                comphelper::getProcessServiceFactory()->createInstance( u"com.sun.star.svtools.SvFilterOptionsDialog"_ustr ), uno::UNO_QUERY);
         uno::Reference<beans::XPropertyAccess> xFilterProperties( xFilterDialog, uno::UNO_QUERY);
 
         if( xFilterDialog.is() && xFilterProperties.is() )
@@ -280,8 +280,8 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 
                 uno::Sequence<beans::PropertyValue> aPropsForDialog
                 {
-                    comphelper::makePropertyValue("Graphic", xGraphic),
-                    comphelper::makePropertyValue("FilterName", aExportFilter)
+                    comphelper::makePropertyValue(u"Graphic"_ustr, xGraphic),
+                    comphelper::makePropertyValue(u"FilterName"_ustr, aExportFilter)
                 };
 
                 uno::Sequence<beans::PropertyValue> aFilterData;
@@ -353,21 +353,21 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
     {
         uno::Reference<lang::XMultiServiceFactory> xMSF(xContext->getServiceManager(), uno::UNO_QUERY);
         uno::Reference<document::XExporter> xExporter(
-            xMSF->createInstance("com.sun.star.comp.PDF.PDFFilter"), uno::UNO_QUERY);
+            xMSF->createInstance(u"com.sun.star.comp.PDF.PDFFilter"_ustr), uno::UNO_QUERY);
         xExporter->setSourceDocument(xComponent);
 
         uno::Reference<drawing::XShapes> xShapes
             = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
         xShapes->add(xShape);
         uno::Sequence<beans::PropertyValue> aFilterData{
-            comphelper::makePropertyValue("Selection", xShapes),
+            comphelper::makePropertyValue(u"Selection"_ustr, xShapes),
         };
         SvFileStream aStream(sPath, StreamMode::READWRITE | StreamMode::TRUNC);
         uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
         uno::Sequence<beans::PropertyValue> aDescriptor
         {
-            comphelper::makePropertyValue("FilterData", aFilterData),
-            comphelper::makePropertyValue("OutputStream", xStream)
+            comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+            comphelper::makePropertyValue(u"OutputStream"_ustr, xStream)
         };
         uno::Reference<document::XFilter> xFilter(xExporter, uno::UNO_QUERY);
         xFilter->filter(aDescriptor);
@@ -376,9 +376,9 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
     {
         uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
 
-        uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue("MediaType",
+        uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue(u"MediaType"_ustr,
                                                                            aExportMimeType),
-                                             comphelper::makePropertyValue("URL", sPath) };
+                                             comphelper::makePropertyValue(u"URL"_ustr, sPath) };
 
         uno::Reference<lang::XComponent> xSourceDocument(xShape, uno::UNO_QUERY_THROW);
         xGraphicExporter->setSourceDocument(xSourceDocument);

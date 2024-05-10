@@ -86,110 +86,110 @@ namespace {
 
 Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pInBindings, pCW, pParent,
-        "Docking3DEffects", "svx/ui/docking3deffects.ui")
+        u"Docking3DEffects"_ustr, u"svx/ui/docking3deffects.ui"_ustr)
 
-    , m_xBtnGeo(m_xBuilder->weld_toggle_button("geometry"))
-    , m_xBtnRepresentation(m_xBuilder->weld_toggle_button("representation"))
-    , m_xBtnLight(m_xBuilder->weld_toggle_button("light"))
-    , m_xBtnTexture(m_xBuilder->weld_toggle_button("texture"))
-    , m_xBtnMaterial(m_xBuilder->weld_toggle_button("material"))
-    , m_xBtnUpdate(m_xBuilder->weld_toggle_button("update"))
-    , m_xBtnAssign(m_xBuilder->weld_button("assign"))
+    , m_xBtnGeo(m_xBuilder->weld_toggle_button(u"geometry"_ustr))
+    , m_xBtnRepresentation(m_xBuilder->weld_toggle_button(u"representation"_ustr))
+    , m_xBtnLight(m_xBuilder->weld_toggle_button(u"light"_ustr))
+    , m_xBtnTexture(m_xBuilder->weld_toggle_button(u"texture"_ustr))
+    , m_xBtnMaterial(m_xBuilder->weld_toggle_button(u"material"_ustr))
+    , m_xBtnUpdate(m_xBuilder->weld_toggle_button(u"update"_ustr))
+    , m_xBtnAssign(m_xBuilder->weld_button(u"assign"_ustr))
 
-    , m_xFLGeometrie(m_xBuilder->weld_container("geoframe"))
-    , m_xFtPercentDiagonal(m_xBuilder->weld_label("diagonalft"))
-    , m_xMtrPercentDiagonal(m_xBuilder->weld_metric_spin_button("diagonal", FieldUnit::PERCENT))
-    , m_xFtBackscale(m_xBuilder->weld_label("scaleddepthft"))
-    , m_xMtrBackscale(m_xBuilder->weld_metric_spin_button("scaleddepth", FieldUnit::PERCENT))
-    , m_xFtEndAngle(m_xBuilder->weld_label("angleft"))
-    , m_xMtrEndAngle(m_xBuilder->weld_metric_spin_button("angle", FieldUnit::DEGREE))
-    , m_xFtDepth(m_xBuilder->weld_label("depthft"))
-    , m_xMtrDepth(m_xBuilder->weld_metric_spin_button("depth", FieldUnit::CM))
+    , m_xFLGeometrie(m_xBuilder->weld_container(u"geoframe"_ustr))
+    , m_xFtPercentDiagonal(m_xBuilder->weld_label(u"diagonalft"_ustr))
+    , m_xMtrPercentDiagonal(m_xBuilder->weld_metric_spin_button(u"diagonal"_ustr, FieldUnit::PERCENT))
+    , m_xFtBackscale(m_xBuilder->weld_label(u"scaleddepthft"_ustr))
+    , m_xMtrBackscale(m_xBuilder->weld_metric_spin_button(u"scaleddepth"_ustr, FieldUnit::PERCENT))
+    , m_xFtEndAngle(m_xBuilder->weld_label(u"angleft"_ustr))
+    , m_xMtrEndAngle(m_xBuilder->weld_metric_spin_button(u"angle"_ustr, FieldUnit::DEGREE))
+    , m_xFtDepth(m_xBuilder->weld_label(u"depthft"_ustr))
+    , m_xMtrDepth(m_xBuilder->weld_metric_spin_button(u"depth"_ustr, FieldUnit::CM))
 
-    , m_xFLSegments(m_xBuilder->weld_container("segmentsframe"))
-    , m_xNumHorizontal(m_xBuilder->weld_spin_button("hori"))
-    , m_xNumVertical(m_xBuilder->weld_spin_button("veri"))
+    , m_xFLSegments(m_xBuilder->weld_container(u"segmentsframe"_ustr))
+    , m_xNumHorizontal(m_xBuilder->weld_spin_button(u"hori"_ustr))
+    , m_xNumVertical(m_xBuilder->weld_spin_button(u"veri"_ustr))
 
-    , m_xFLNormals(m_xBuilder->weld_container("normals"))
-    , m_xBtnNormalsObj(m_xBuilder->weld_toggle_button("objspecific"))
-    , m_xBtnNormalsFlat(m_xBuilder->weld_toggle_button("flat"))
-    , m_xBtnNormalsSphere(m_xBuilder->weld_toggle_button("spherical"))
-    , m_xBtnNormalsInvert(m_xBuilder->weld_toggle_button("invertnormals"))
-    , m_xBtnTwoSidedLighting(m_xBuilder->weld_toggle_button("doublesidedillum"))
-    , m_xBtnDoubleSided(m_xBuilder->weld_toggle_button("doublesided"))
+    , m_xFLNormals(m_xBuilder->weld_container(u"normals"_ustr))
+    , m_xBtnNormalsObj(m_xBuilder->weld_toggle_button(u"objspecific"_ustr))
+    , m_xBtnNormalsFlat(m_xBuilder->weld_toggle_button(u"flat"_ustr))
+    , m_xBtnNormalsSphere(m_xBuilder->weld_toggle_button(u"spherical"_ustr))
+    , m_xBtnNormalsInvert(m_xBuilder->weld_toggle_button(u"invertnormals"_ustr))
+    , m_xBtnTwoSidedLighting(m_xBuilder->weld_toggle_button(u"doublesidedillum"_ustr))
+    , m_xBtnDoubleSided(m_xBuilder->weld_toggle_button(u"doublesided"_ustr))
 
-    , m_xFLRepresentation(m_xBuilder->weld_container("shadingframe"))
-    , m_xLbShademode(m_xBuilder->weld_combo_box("mode"))
+    , m_xFLRepresentation(m_xBuilder->weld_container(u"shadingframe"_ustr))
+    , m_xLbShademode(m_xBuilder->weld_combo_box(u"mode"_ustr))
 
-    , m_xFLShadow(m_xBuilder->weld_container("shadowframe"))
-    , m_xBtnShadow3d(m_xBuilder->weld_toggle_button("shadow"))
-    , m_xFtSlant(m_xBuilder->weld_label("slantft"))
-    , m_xMtrSlant(m_xBuilder->weld_metric_spin_button("slant", FieldUnit::DEGREE))
+    , m_xFLShadow(m_xBuilder->weld_container(u"shadowframe"_ustr))
+    , m_xBtnShadow3d(m_xBuilder->weld_toggle_button(u"shadow"_ustr))
+    , m_xFtSlant(m_xBuilder->weld_label(u"slantft"_ustr))
+    , m_xMtrSlant(m_xBuilder->weld_metric_spin_button(u"slant"_ustr, FieldUnit::DEGREE))
 
-    , m_xFLCamera(m_xBuilder->weld_container("cameraframe"))
-    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distance", FieldUnit::CM))
-    , m_xMtrFocalLength(m_xBuilder->weld_metric_spin_button("focal", FieldUnit::CM))
+    , m_xFLCamera(m_xBuilder->weld_container(u"cameraframe"_ustr))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button(u"distance"_ustr, FieldUnit::CM))
+    , m_xMtrFocalLength(m_xBuilder->weld_metric_spin_button(u"focal"_ustr, FieldUnit::CM))
 
-    , m_xFLLight(m_xBuilder->weld_container("illumframe"))
-    , m_xBtnLight1(new LightButton(m_xBuilder->weld_toggle_button("light1")))
-    , m_xBtnLight2(new LightButton(m_xBuilder->weld_toggle_button("light2")))
-    , m_xBtnLight3(new LightButton(m_xBuilder->weld_toggle_button("light3")))
-    , m_xBtnLight4(new LightButton(m_xBuilder->weld_toggle_button("light4")))
-    , m_xBtnLight5(new LightButton(m_xBuilder->weld_toggle_button("light5")))
-    , m_xBtnLight6(new LightButton(m_xBuilder->weld_toggle_button("light6")))
-    , m_xBtnLight7(new LightButton(m_xBuilder->weld_toggle_button("light7")))
-    , m_xBtnLight8(new LightButton(m_xBuilder->weld_toggle_button("light8")))
-    , m_xLbLight1(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor1"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight2(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor2"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight3(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor3"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight4(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor4"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight5(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor5"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight6(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor6"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight7(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor7"), [this]{ return GetFrameWeld(); }))
-    , m_xLbLight8(new ColorListBox(m_xBuilder->weld_menu_button("lightcolor8"), [this]{ return GetFrameWeld(); }))
-    , m_xBtnLightColor(m_xBuilder->weld_button("colorbutton1"))
-    , m_xLbAmbientlight(new ColorListBox(m_xBuilder->weld_menu_button("ambientcolor"), [this]{ return GetFrameWeld(); }))
-    , m_xBtnAmbientColor(m_xBuilder->weld_button("colorbutton2"))
+    , m_xFLLight(m_xBuilder->weld_container(u"illumframe"_ustr))
+    , m_xBtnLight1(new LightButton(m_xBuilder->weld_toggle_button(u"light1"_ustr)))
+    , m_xBtnLight2(new LightButton(m_xBuilder->weld_toggle_button(u"light2"_ustr)))
+    , m_xBtnLight3(new LightButton(m_xBuilder->weld_toggle_button(u"light3"_ustr)))
+    , m_xBtnLight4(new LightButton(m_xBuilder->weld_toggle_button(u"light4"_ustr)))
+    , m_xBtnLight5(new LightButton(m_xBuilder->weld_toggle_button(u"light5"_ustr)))
+    , m_xBtnLight6(new LightButton(m_xBuilder->weld_toggle_button(u"light6"_ustr)))
+    , m_xBtnLight7(new LightButton(m_xBuilder->weld_toggle_button(u"light7"_ustr)))
+    , m_xBtnLight8(new LightButton(m_xBuilder->weld_toggle_button(u"light8"_ustr)))
+    , m_xLbLight1(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor1"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight2(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor2"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight3(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor3"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight4(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor4"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight5(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor5"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight6(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor6"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight7(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor7"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xLbLight8(new ColorListBox(m_xBuilder->weld_menu_button(u"lightcolor8"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xBtnLightColor(m_xBuilder->weld_button(u"colorbutton1"_ustr))
+    , m_xLbAmbientlight(new ColorListBox(m_xBuilder->weld_menu_button(u"ambientcolor"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xBtnAmbientColor(m_xBuilder->weld_button(u"colorbutton2"_ustr))
 
-    , m_xFLTexture(m_xBuilder->weld_container("textureframe"))
-    , m_xBtnTexLuminance(m_xBuilder->weld_toggle_button("textype"))
-    , m_xBtnTexColor(m_xBuilder->weld_toggle_button("texcolor"))
-    , m_xBtnTexReplace(m_xBuilder->weld_toggle_button("texreplace"))
-    , m_xBtnTexModulate(m_xBuilder->weld_toggle_button("texmodulate"))
-    , m_xBtnTexObjectX(m_xBuilder->weld_toggle_button("texobjx"))
-    , m_xBtnTexParallelX(m_xBuilder->weld_toggle_button("texparallelx"))
-    , m_xBtnTexCircleX(m_xBuilder->weld_toggle_button("texcirclex"))
-    , m_xBtnTexObjectY(m_xBuilder->weld_toggle_button("texobjy"))
-    , m_xBtnTexParallelY(m_xBuilder->weld_toggle_button("texparallely"))
-    , m_xBtnTexCircleY(m_xBuilder->weld_toggle_button("texcircley"))
-    , m_xBtnTexFilter(m_xBuilder->weld_toggle_button("texfilter"))
+    , m_xFLTexture(m_xBuilder->weld_container(u"textureframe"_ustr))
+    , m_xBtnTexLuminance(m_xBuilder->weld_toggle_button(u"textype"_ustr))
+    , m_xBtnTexColor(m_xBuilder->weld_toggle_button(u"texcolor"_ustr))
+    , m_xBtnTexReplace(m_xBuilder->weld_toggle_button(u"texreplace"_ustr))
+    , m_xBtnTexModulate(m_xBuilder->weld_toggle_button(u"texmodulate"_ustr))
+    , m_xBtnTexObjectX(m_xBuilder->weld_toggle_button(u"texobjx"_ustr))
+    , m_xBtnTexParallelX(m_xBuilder->weld_toggle_button(u"texparallelx"_ustr))
+    , m_xBtnTexCircleX(m_xBuilder->weld_toggle_button(u"texcirclex"_ustr))
+    , m_xBtnTexObjectY(m_xBuilder->weld_toggle_button(u"texobjy"_ustr))
+    , m_xBtnTexParallelY(m_xBuilder->weld_toggle_button(u"texparallely"_ustr))
+    , m_xBtnTexCircleY(m_xBuilder->weld_toggle_button(u"texcircley"_ustr))
+    , m_xBtnTexFilter(m_xBuilder->weld_toggle_button(u"texfilter"_ustr))
 
-    , m_xFLMaterial(m_xBuilder->weld_container("materialframe"))
-    , m_xLbMatFavorites(m_xBuilder->weld_combo_box("favorites"))
-    , m_xLbMatColor(new ColorListBox(m_xBuilder->weld_menu_button("objcolor"), [this]{ return GetFrameWeld(); }))
-    , m_xBtnMatColor(m_xBuilder->weld_button("colorbutton3"))
-    , m_xLbMatEmission(new ColorListBox(m_xBuilder->weld_menu_button("illumcolor"), [this]{ return GetFrameWeld(); }))
-    , m_xBtnEmissionColor(m_xBuilder->weld_button("colorbutton4"))
+    , m_xFLMaterial(m_xBuilder->weld_container(u"materialframe"_ustr))
+    , m_xLbMatFavorites(m_xBuilder->weld_combo_box(u"favorites"_ustr))
+    , m_xLbMatColor(new ColorListBox(m_xBuilder->weld_menu_button(u"objcolor"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xBtnMatColor(m_xBuilder->weld_button(u"colorbutton3"_ustr))
+    , m_xLbMatEmission(new ColorListBox(m_xBuilder->weld_menu_button(u"illumcolor"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xBtnEmissionColor(m_xBuilder->weld_button(u"colorbutton4"_ustr))
 
-    , m_xFLMatSpecular(m_xBuilder->weld_container("specframe"))
-    , m_xLbMatSpecular(new ColorListBox(m_xBuilder->weld_menu_button("speccolor"), [this]{ return GetFrameWeld(); }))
-    , m_xBtnSpecularColor(m_xBuilder->weld_button("colorbutton5"))
-    , m_xMtrMatSpecularIntensity(m_xBuilder->weld_metric_spin_button("intensity", FieldUnit::PERCENT))
+    , m_xFLMatSpecular(m_xBuilder->weld_container(u"specframe"_ustr))
+    , m_xLbMatSpecular(new ColorListBox(m_xBuilder->weld_menu_button(u"speccolor"_ustr), [this]{ return GetFrameWeld(); }))
+    , m_xBtnSpecularColor(m_xBuilder->weld_button(u"colorbutton5"_ustr))
+    , m_xMtrMatSpecularIntensity(m_xBuilder->weld_metric_spin_button(u"intensity"_ustr, FieldUnit::PERCENT))
 
     , m_xCtlPreview(new Svx3DPreviewControl)
-    , m_xCtlPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", *m_xCtlPreview))
+    , m_xCtlPreviewWin(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, *m_xCtlPreview))
 
-    , m_xLightPreviewGrid(m_xBuilder->weld_container("lightpreviewgrid"))
-    , m_xHoriScale(m_xBuilder->weld_scale("horiscale"))
-    , m_xVertScale(m_xBuilder->weld_scale("vertscale"))
-    , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
+    , m_xLightPreviewGrid(m_xBuilder->weld_container(u"lightpreviewgrid"_ustr))
+    , m_xHoriScale(m_xBuilder->weld_scale(u"horiscale"_ustr))
+    , m_xVertScale(m_xBuilder->weld_scale(u"vertscale"_ustr))
+    , m_xBtn_Corner(m_xBuilder->weld_button(u"corner"_ustr))
     , m_xLightPreview(new Svx3DLightControl)
-    , m_xCtlLightPreviewWin(new weld::CustomWeld(*m_xBuilder, "lightpreview", *m_xLightPreview))
+    , m_xCtlLightPreviewWin(new weld::CustomWeld(*m_xBuilder, u"lightpreview"_ustr, *m_xLightPreview))
     , m_xCtlLightPreview(new SvxLightCtl3D(*m_xLightPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner)) // TODO might be other body widget as arg 1
 
-    , m_xBtnConvertTo3D(m_xBuilder->weld_button("to3d"))
-    , m_xBtnLatheObject(m_xBuilder->weld_button("tolathe"))
-    , m_xBtnPerspective(m_xBuilder->weld_toggle_button("perspective"))
+    , m_xBtnConvertTo3D(m_xBuilder->weld_button(u"to3d"_ustr))
+    , m_xBtnLatheObject(m_xBuilder->weld_button(u"tolathe"_ustr))
+    , m_xBtnPerspective(m_xBuilder->weld_toggle_button(u"perspective"_ustr))
 
     , bUpdate(false)
     , eViewType(ViewType3D::Geo)
@@ -521,40 +521,40 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xMtrDepth->set_sensitive( !bCube && !bSphere );
             if( bCube )
             {
-                m_xNumHorizontal->set_text("");
-                m_xNumVertical->set_text("");
+                m_xNumHorizontal->set_text(u""_ustr);
+                m_xNumVertical->set_text(u""_ustr);
             }
             if( bCube || bSphere )
             {
-                m_xMtrPercentDiagonal->set_text("");
-                m_xMtrBackscale->set_text("");
-                m_xMtrDepth->set_text("");
+                m_xMtrPercentDiagonal->set_text(u""_ustr);
+                m_xMtrBackscale->set_text(u""_ustr);
+                m_xMtrDepth->set_text(u""_ustr);
             }
 
             // There is a final angle only for Lathe objects.
             m_xFtEndAngle->set_sensitive( !bExtrude && !bCube && !bSphere );
             m_xMtrEndAngle->set_sensitive( !bExtrude && !bCube && !bSphere );
             if( bExtrude || bCube || bSphere )
-                m_xMtrEndAngle->set_text("");
+                m_xMtrEndAngle->set_text(u""_ustr);
         }
         else
         {
             // Geometry
-            m_xNumHorizontal->set_text("");
-            m_xNumVertical->set_text("");
+            m_xNumHorizontal->set_text(u""_ustr);
+            m_xNumVertical->set_text(u""_ustr);
             m_xFLSegments->set_sensitive( false );
             m_xFtEndAngle->set_sensitive( false );
             m_xMtrEndAngle->set_sensitive( false );
-            m_xMtrEndAngle->set_text("");
+            m_xMtrEndAngle->set_text(u""_ustr);
             m_xFtDepth->set_sensitive( false );
             m_xMtrDepth->set_sensitive( false );
-            m_xMtrDepth->set_text("");
+            m_xMtrDepth->set_text(u""_ustr);
 
             // Representation
             m_xFLShadow->set_sensitive(false);
 
-            m_xMtrDistance->set_text("");
-            m_xMtrFocalLength->set_text("");
+            m_xMtrDistance->set_text(u""_ustr);
+            m_xMtrFocalLength->set_text(u""_ustr);
             m_xFLCamera->set_sensitive( false );
 
             //Lower Range
@@ -593,7 +593,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xNumHorizontal->get_text().isEmpty() )
             {
-                m_xNumHorizontal->set_text("");
+                m_xNumHorizontal->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -618,7 +618,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xNumVertical->get_text().isEmpty() )
             {
-                m_xNumVertical->set_text("");
+                m_xNumVertical->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -647,7 +647,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xMtrDepth->get_text().isEmpty() )
             {
-                m_xMtrDepth->set_text("");
+                m_xMtrDepth->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -694,7 +694,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xMtrPercentDiagonal->get_text().isEmpty() )
             {
-                m_xMtrPercentDiagonal->set_text("");
+                m_xMtrPercentDiagonal->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -719,7 +719,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xMtrBackscale->get_text().isEmpty() )
             {
-                m_xMtrBackscale->set_text("");
+                m_xMtrBackscale->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -742,7 +742,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         {
             if( !m_xMtrEndAngle->get_text().isEmpty() )
             {
-                m_xMtrEndAngle->set_text("");
+                m_xMtrEndAngle->set_text(u""_ustr);
                 bUpdate = true;
             }
         }
@@ -881,7 +881,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     {
         if( !m_xMtrSlant->get_text().isEmpty() )
         {
-            m_xMtrSlant->set_text("");
+            m_xMtrSlant->set_text(u""_ustr);
             bUpdate = true;
         }
     }
@@ -905,7 +905,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     {
         if( !m_xMtrDepth->get_text().isEmpty() )
         {
-            m_xMtrDepth->set_text("");
+            m_xMtrDepth->set_text(u""_ustr);
             bUpdate = true;
         }
     }
@@ -929,7 +929,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     {
         if( !m_xMtrFocalLength->get_text().isEmpty() )
         {
-            m_xMtrFocalLength->set_text("");
+            m_xMtrFocalLength->set_text(u""_ustr);
             bUpdate = true;
         }
     }
@@ -1559,7 +1559,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     {
         if( !m_xMtrMatSpecularIntensity->get_text().isEmpty() )
         {
-            m_xMtrMatSpecularIntensity->set_text("");
+            m_xMtrMatSpecularIntensity->set_text(u""_ustr);
             bUpdate = true;
         }
     }
@@ -2122,7 +2122,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbMatColor->IsNoSelection())
     {
         aColor = m_xLbMatColor->GetSelectEntryColor();
-        rAttrs.Put( XFillColorItem( "", aColor) );
+        rAttrs.Put( XFillColorItem( u""_ustr, aColor) );
     }
     else
     {

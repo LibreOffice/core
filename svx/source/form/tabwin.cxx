@@ -110,10 +110,10 @@ IMPL_LINK(FmFieldWin, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 }
 
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, weld::Window* _pParent)
-    : SfxModelessDialogController(_pBindings, _pMgr, _pParent, "svx/ui/formfielddialog.ui", "FormFieldDialog")
+    : SfxModelessDialogController(_pBindings, _pMgr, _pParent, u"svx/ui/formfielddialog.ui"_ustr, u"FormFieldDialog"_ustr)
     , SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
     , comphelper::OPropertyChangeListener2()
-    , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
+    , m_xListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr))
     , m_nObjectType(0)
 {
     m_xDialog->set_help_id(HID_FIELD_SEL_WIN);

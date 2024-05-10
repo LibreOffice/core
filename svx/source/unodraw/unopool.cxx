@@ -182,7 +182,7 @@ void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** pp
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( nullptr == pPool )
-        throw beans::UnknownPropertyException( "no pool, no properties..", getXWeak());
+        throw beans::UnknownPropertyException( u"no pool, no properties.."_ustr, getXWeak());
 
     while( *ppEntries )
         putAny( pPool, *ppEntries++, *pValues++ );
@@ -196,7 +196,7 @@ void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** pp
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( nullptr == pPool )
-        throw beans::UnknownPropertyException( "no pool, no properties..", getXWeak());
+        throw beans::UnknownPropertyException( u"no pool, no properties.."_ustr, getXWeak());
 
     while( *ppEntries )
         getAny( pPool, *ppEntries++, *pValue++ );
@@ -349,12 +349,12 @@ sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName 
 
 OUString SAL_CALL SvxUnoDrawPool::getImplementationName()
 {
-    return "SvxUnoDrawPool";
+    return u"SvxUnoDrawPool"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.Defaults" };
+    uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.Defaults"_ustr };
     return aSNS;
 }
 

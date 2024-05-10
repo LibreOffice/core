@@ -157,7 +157,7 @@ void GalApp::Init()
             OUString baseBinDir = fileName.copy( 0, lastSlash );
             OUString installPrefix = baseBinDir + "/../..";
 
-            OUString envVar( "OOO_INSTALL_PREFIX");
+            OUString envVar( u"OOO_INSTALL_PREFIX"_ustr);
             osl_setEnvironment(envVar.pData, installPrefix.pData);
         }
         SAL_INFO("svx", "OOO_INSTALL_PREFIX=" << getenv( "OOO_INSTALL_PREFIX" ) );
@@ -254,7 +254,7 @@ int GalApp::Main()
         SfxApplication::GetOrCreate();
 
         OUString aPath, aDestDir;
-        OUString aName( "Default name" );
+        OUString aName( u"Default name"_ustr );
         std::vector<INetURLObject> aFiles;
 
         for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i )

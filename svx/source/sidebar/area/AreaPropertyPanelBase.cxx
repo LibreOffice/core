@@ -65,28 +65,28 @@ const sal_Int32 AreaPropertyPanelBase::DEFAULT_BORDER = 0;
 AreaPropertyPanelBase::AreaPropertyPanelBase(
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui"),
+    : PanelLayout(pParent, u"AreaPropertyPanel"_ustr, u"svx/ui/sidebararea.ui"_ustr),
       mxFrame(rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
       mnLastPosPattern(0),
       mnLastTransSolid(50),
-      mxColorTextFT(m_xBuilder->weld_label("filllabel")),
-      mxLbFillType(m_xBuilder->weld_combo_box("fillstylearea")),
-      mxLbFillAttr(m_xBuilder->weld_combo_box("fillattrhb")),
-      mxLbFillGradFrom(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad1"), [this]{ return GetFrameWeld(); })),
-      mxLbFillGradTo(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad2"), [this]{ return GetFrameWeld(); })),
-      mxToolBoxColor(m_xBuilder->weld_toolbar("selectcolor")),
+      mxColorTextFT(m_xBuilder->weld_label(u"filllabel"_ustr)),
+      mxLbFillType(m_xBuilder->weld_combo_box(u"fillstylearea"_ustr)),
+      mxLbFillAttr(m_xBuilder->weld_combo_box(u"fillattrhb"_ustr)),
+      mxLbFillGradFrom(new ColorListBox(m_xBuilder->weld_menu_button(u"fillgrad1"_ustr), [this]{ return GetFrameWeld(); })),
+      mxLbFillGradTo(new ColorListBox(m_xBuilder->weld_menu_button(u"fillgrad2"_ustr), [this]{ return GetFrameWeld(); })),
+      mxToolBoxColor(m_xBuilder->weld_toolbar(u"selectcolor"_ustr)),
       mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, *m_xBuilder, rxFrame)),
-      mxTrspTextFT(m_xBuilder->weld_label("transparencylabel")),
-      mxLBTransType(m_xBuilder->weld_combo_box("transtype")),
-      mxMTRTransparent(m_xBuilder->weld_metric_spin_button("settransparency", FieldUnit::PERCENT)),
-      mxSldTransparent(m_xBuilder->weld_scale("transparencyslider")),
-      mxBTNGradient(m_xBuilder->weld_toolbar("selectgradient")),
-      mxMTRAngle(m_xBuilder->weld_metric_spin_button("gradangle", FieldUnit::DEGREE)),
-      mxGradientStyle(m_xBuilder->weld_combo_box("gradientstyle")),
-      mxBmpImport(m_xBuilder->weld_button("bmpimport")),
+      mxTrspTextFT(m_xBuilder->weld_label(u"transparencylabel"_ustr)),
+      mxLBTransType(m_xBuilder->weld_combo_box(u"transtype"_ustr)),
+      mxMTRTransparent(m_xBuilder->weld_metric_spin_button(u"settransparency"_ustr, FieldUnit::PERCENT)),
+      mxSldTransparent(m_xBuilder->weld_scale(u"transparencyslider"_ustr)),
+      mxBTNGradient(m_xBuilder->weld_toolbar(u"selectgradient"_ustr)),
+      mxMTRAngle(m_xBuilder->weld_metric_spin_button(u"gradangle"_ustr, FieldUnit::DEGREE)),
+      mxGradientStyle(m_xBuilder->weld_combo_box(u"gradientstyle"_ustr)),
+      mxBmpImport(m_xBuilder->weld_button(u"bmpimport"_ustr)),
       maImgAxial(BMP_AXIAL),
       maImgElli(BMP_ELLI),
       maImgQuad(BMP_QUAD),
@@ -192,7 +192,7 @@ void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, weld::Button&, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", GetFrameWeld());
+    SvxOpenGraphicDialog aDlg(u"Import"_ustr, GetFrameWeld());
     aDlg.EnableLink(false);
     if( aDlg.Execute() != ERRCODE_NONE )
         return;
@@ -445,7 +445,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             if (bUpdateModel)
             {
                 const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
-                const XFillColorItem aXFillColorItem("", aColor);
+                const XFillColorItem aXFillColorItem(u""_ustr, aColor);
 
                 // #i122676# change FillStyle and Color in one call
                 XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);

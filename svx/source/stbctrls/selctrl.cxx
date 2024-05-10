@@ -84,17 +84,17 @@ OUString SelectionTypePopup::state_to_id(sal_uInt16 nState)
     switch (nState)
     {
         default: // fall through
-        case 0: return "standard";
-        case 1: return "extending";
-        case 2: return "adding";
-        case 3: return "block";
+        case 0: return u"standard"_ustr;
+        case 1: return u"extending"_ustr;
+        case 2: return u"adding"_ustr;
+        case 3: return u"block"_ustr;
     }
 }
 
 SelectionTypePopup::SelectionTypePopup(weld::Window* pPopupParent, sal_uInt16 nCurrent)
     : m_pPopupParent(pPopupParent)
-    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, "svx/ui/selectionmenu.ui"))
-    , m_xMenu(m_xBuilder->weld_menu("menu"))
+    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, u"svx/ui/selectionmenu.ui"_ustr))
+    , m_xMenu(m_xBuilder->weld_menu(u"menu"_ustr))
 {
     m_xMenu->set_active(state_to_id(nCurrent), true);
 }
@@ -144,9 +144,9 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     css::uno::Reference< css::lang::XServiceInfo > xServices( xModel, css::uno::UNO_QUERY );
     if ( xServices.is() )
     {
-        bool bSpecModeCalc = xServices->supportsService("com.sun.star.sheet.SpreadsheetDocument");
+        bool bSpecModeCalc = xServices->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
         if (bSpecModeCalc)
-            aPop.HideSelectionType("block");
+            aPop.HideSelectionType(u"block"_ustr);
     }
 
     OUString sIdent = aPop.popup_at_rect(aRect);

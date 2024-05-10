@@ -61,7 +61,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
-    GenericDialogController( pParent, "svx/ui/compressgraphicdialog.ui", "CompressGraphicDialog" ),
+    GenericDialogController( pParent, u"svx/ui/compressgraphicdialog.ui"_ustr, u"CompressGraphicDialog"_ustr ),
     m_xGraphicObj     ( pGraphicObj ),
     m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
     m_aViewSize100mm  ( pGraphicObj->GetLogicRect().GetSize() ),
@@ -76,7 +76,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafOb
 }
 
 CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic aGraphic, Size rViewSize100mm, tools::Rectangle const & rCropRectangle, SfxBindings& rBindings ) :
-    GenericDialogController( pParent, "svx/ui/compressgraphicdialog.ui", "CompressGraphicDialog" ),
+    GenericDialogController( pParent, u"svx/ui/compressgraphicdialog.ui"_ustr, u"CompressGraphicDialog"_ustr ),
     m_xGraphicObj     ( nullptr ),
     m_aGraphic        (std::move( aGraphic )),
     m_aViewSize100mm  ( rViewSize100mm ),
@@ -114,26 +114,26 @@ void CompressGraphicsDialog::recallParameter()
 
 void CompressGraphicsDialog::Initialize()
 {
-    m_xLabelGraphicType = m_xBuilder->weld_label("label-graphic-type");
-    m_xFixedText2 = m_xBuilder->weld_label("label-original-size");
-    m_xFixedText3 = m_xBuilder->weld_label("label-view-size");
-    m_xFixedText5 = m_xBuilder->weld_label("label-image-capacity");
-    m_xFixedText6 = m_xBuilder->weld_label("label-new-capacity");
-    m_xJpegCompRB = m_xBuilder->weld_radio_button("radio-jpeg");
-    m_xCompressionMF = m_xBuilder->weld_spin_button("spin-compression");
-    m_xCompressionSlider = m_xBuilder->weld_scale("scale-compression");
-    m_xLosslessRB = m_xBuilder->weld_radio_button("radio-lossless");
-    m_xQualityMF = m_xBuilder->weld_spin_button("spin-quality");
-    m_xQualitySlider = m_xBuilder->weld_scale("scale-quality");
-    m_xReduceResolutionCB = m_xBuilder->weld_check_button("checkbox-reduce-resolution");
-    m_xMFNewWidth = m_xBuilder->weld_spin_button("spin-new-width");
-    m_xMFNewHeight = m_xBuilder->weld_spin_button("spin-new-height");
-    m_xResolutionLB = m_xBuilder->weld_combo_box("combo-resolution");
-    m_xBtnCalculate = m_xBuilder->weld_button("calculate");
-    m_xInterpolationCombo = m_xBuilder->weld_combo_box("interpolation-method-combo");
-    m_xBtnOkay = m_xBuilder->weld_button("ok");
+    m_xLabelGraphicType = m_xBuilder->weld_label(u"label-graphic-type"_ustr);
+    m_xFixedText2 = m_xBuilder->weld_label(u"label-original-size"_ustr);
+    m_xFixedText3 = m_xBuilder->weld_label(u"label-view-size"_ustr);
+    m_xFixedText5 = m_xBuilder->weld_label(u"label-image-capacity"_ustr);
+    m_xFixedText6 = m_xBuilder->weld_label(u"label-new-capacity"_ustr);
+    m_xJpegCompRB = m_xBuilder->weld_radio_button(u"radio-jpeg"_ustr);
+    m_xCompressionMF = m_xBuilder->weld_spin_button(u"spin-compression"_ustr);
+    m_xCompressionSlider = m_xBuilder->weld_scale(u"scale-compression"_ustr);
+    m_xLosslessRB = m_xBuilder->weld_radio_button(u"radio-lossless"_ustr);
+    m_xQualityMF = m_xBuilder->weld_spin_button(u"spin-quality"_ustr);
+    m_xQualitySlider = m_xBuilder->weld_scale(u"scale-quality"_ustr);
+    m_xReduceResolutionCB = m_xBuilder->weld_check_button(u"checkbox-reduce-resolution"_ustr);
+    m_xMFNewWidth = m_xBuilder->weld_spin_button(u"spin-new-width"_ustr);
+    m_xMFNewHeight = m_xBuilder->weld_spin_button(u"spin-new-height"_ustr);
+    m_xResolutionLB = m_xBuilder->weld_combo_box(u"combo-resolution"_ustr);
+    m_xBtnCalculate = m_xBuilder->weld_button(u"calculate"_ustr);
+    m_xInterpolationCombo = m_xBuilder->weld_combo_box(u"interpolation-method-combo"_ustr);
+    m_xBtnOkay = m_xBuilder->weld_button(u"ok"_ustr);
 
-    m_xInterpolationCombo->set_active_text("Lanczos");
+    m_xInterpolationCombo->set_active_text(u"Lanczos"_ustr);
 
     m_xInterpolationCombo->connect_changed(LINK(this, CompressGraphicsDialog, NewInterpolationModifiedHdl));
 
@@ -206,7 +206,7 @@ void CompressGraphicsDialog::Update()
     aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number( m_aNativeSize  / 1024 ));
     m_xFixedText5->set_label(aNativeSizeString);
 
-    m_xFixedText6->set_label("??");
+    m_xFixedText6->set_label(u"??"_ustr);
 }
 
 void CompressGraphicsDialog::UpdateSensitivity(const bool bSensitive)
@@ -274,12 +274,12 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
     Sequence< PropertyValue > aFilterData{
-        comphelper::makePropertyValue("Interlaced", sal_Int32(0)),
-        comphelper::makePropertyValue("Compression", static_cast<sal_Int32>(m_xCompressionMF->get_value())),
-        comphelper::makePropertyValue("Quality", static_cast<sal_Int32>(m_xQualityMF->get_value()))
+        comphelper::makePropertyValue(u"Interlaced"_ustr, sal_Int32(0)),
+        comphelper::makePropertyValue(u"Compression"_ustr, static_cast<sal_Int32>(m_xCompressionMF->get_value())),
+        comphelper::makePropertyValue(u"Quality"_ustr, static_cast<sal_Int32>(m_xQualityMF->get_value()))
     };
 
-    OUString aGraphicFormatName = m_xLosslessRB->get_active() ? OUString( "png" ) : OUString( "jpg" );
+    OUString aGraphicFormatName = m_xLosslessRB->get_active() ? u"png"_ustr : u"jpg"_ustr;
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
     rFilter.ExportGraphic( aScaledGraphic, u"none", aStream, nFilterFormat, &aFilterData );

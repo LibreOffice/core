@@ -73,11 +73,11 @@ std::unique_ptr<PanelLayout> AreaPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to AreaPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to AreaPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to AreaPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to AreaPropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to AreaPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<AreaPropertyPanel>(pParent, rxFrame, pBindings);
 }

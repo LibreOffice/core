@@ -22,18 +22,18 @@ std::unique_ptr<PanelLayout> StylesPropertyPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to StylesPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to StylesPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to StylesPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to StylesPropertyPanel::Create"_ustr, nullptr, 1);
 
     return std::make_unique<StylesPropertyPanel>(pParent, rxFrame);
 }
 
 StylesPropertyPanel::StylesPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "SidebarStylesPanel", "svx/ui/sidebarstylespanel.ui")
-    , m_xFontStyle(m_xBuilder->weld_toolbar("fontstyletoolbox"))
+    : PanelLayout(pParent, u"SidebarStylesPanel"_ustr, u"svx/ui/sidebarstylespanel.ui"_ustr)
+    , m_xFontStyle(m_xBuilder->weld_toolbar(u"fontstyletoolbox"_ustr))
     , m_xFontStyleDispatch(new ToolbarUnoDispatcher(*m_xFontStyle, *m_xBuilder, rxFrame))
-    , m_xStyle(m_xBuilder->weld_toolbar("style"))
+    , m_xStyle(m_xBuilder->weld_toolbar(u"style"_ustr))
     , m_xStyleDispatch(new ToolbarUnoDispatcher(*m_xStyle, *m_xBuilder, rxFrame))
 {
 }

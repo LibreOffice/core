@@ -167,8 +167,8 @@ bool SvxColorValueSet_docking::StartDrag()
     color.QueryValue(c, 0);
     style.QueryValue(s, 0);
 
-    uno::Sequence<beans::NamedValue> props{ { "FillColor", std::move(c) },
-                                            { "FillStyle", std::move(s) } };
+    uno::Sequence<beans::NamedValue> props{ { u"FillColor"_ustr, std::move(c) },
+                                            { u"FillStyle"_ustr, std::move(s) } };
     m_xHelper->SetData(props);
 
     return false;
@@ -179,9 +179,9 @@ constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
 
 SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* _pParent)
     : SfxDockingWindow(_pBindings, pCW, _pParent,
-        "DockingColorWindow", "svx/ui/dockingcolorwindow.ui")
-    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
-    , xColorSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *xColorSet))
+        u"DockingColorWindow"_ustr, u"svx/ui/dockingcolorwindow.ui"_ustr)
+    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , xColorSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *xColorSet))
 {
     SetText(SvxResId(STR_COLORTABLE));
     SetQuickHelpText(SvxResId(RID_SVXSTR_COLORBAR));

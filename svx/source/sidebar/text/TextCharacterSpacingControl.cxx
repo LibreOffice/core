@@ -40,16 +40,16 @@
 namespace svx {
 
 TextCharacterSpacingControl::TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/textcharacterspacingcontrol.ui", "TextCharacterSpacingControl")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/textcharacterspacingcontrol.ui"_ustr, u"TextCharacterSpacingControl"_ustr)
     , mnCustomKern(0)
     , mnLastCus(SPACING_NOCUSTOM)
-    , mxEditKerning(m_xBuilder->weld_metric_spin_button("kerning", FieldUnit::POINT))
-    , mxTight(m_xBuilder->weld_button("tight"))
-    , mxVeryTight(m_xBuilder->weld_button("very_tight"))
-    , mxNormal(m_xBuilder->weld_button("normal"))
-    , mxLoose(m_xBuilder->weld_button("loose"))
-    , mxVeryLoose(m_xBuilder->weld_button("very_loose"))
-    , mxLastCustom(m_xBuilder->weld_button("last_custom"))
+    , mxEditKerning(m_xBuilder->weld_metric_spin_button(u"kerning"_ustr, FieldUnit::POINT))
+    , mxTight(m_xBuilder->weld_button(u"tight"_ustr))
+    , mxVeryTight(m_xBuilder->weld_button(u"very_tight"_ustr))
+    , mxNormal(m_xBuilder->weld_button(u"normal"_ustr))
+    , mxLoose(m_xBuilder->weld_button(u"loose"_ustr))
+    , mxVeryLoose(m_xBuilder->weld_button(u"very_loose"_ustr))
+    , mxLastCustom(m_xBuilder->weld_button(u"last_custom"_ustr))
     , mxControl(pControl)
 {
     mxEditKerning->connect_value_changed(LINK(this, TextCharacterSpacingControl, KerningModifyHdl));
@@ -100,7 +100,7 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
     {
         SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
         css::uno::Sequence<css::beans::NamedValue> aSeq
-            { { "Spacing", css::uno::Any(OUString::number(mnCustomKern)) } };
+            { { u"Spacing"_ustr, css::uno::Any(OUString::number(mnCustomKern)) } };
         aWinOpt.SetUserData(aSeq);
     }
 }

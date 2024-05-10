@@ -1250,7 +1250,7 @@ void SdrEditView::CombineMarkedTextObjects()
             // if the last paragraph does not end in paragraph-end punctuation (ignoring whitespace),
             // assume this text should be added to the end of the last paragraph, instead of starting a new paragraph.
             const sal_Int32 nPara = rDrawOutliner.GetParagraphCount();
-            const OUString sLastPara = nPara ? rDrawOutliner.GetText( rDrawOutliner.GetParagraph( nPara - 1 ) ) : "";
+            const OUString sLastPara = nPara ? rDrawOutliner.GetText( rDrawOutliner.GetParagraph( nPara - 1 ) ) : u""_ustr;
             sal_Int32 n = sLastPara.getLength();
             while ( n && unicode::isWhiteSpace( sLastPara[--n] ) )
                 ;
@@ -1294,7 +1294,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
     // Undo-String will be set later
     if( bUndo )
-        BegUndo("", "", bNoPolyPoly ? SdrRepeatFunc::CombineOnePoly : SdrRepeatFunc::CombinePolyPoly);
+        BegUndo(u""_ustr, u""_ustr, bNoPolyPoly ? SdrRepeatFunc::CombineOnePoly : SdrRepeatFunc::CombinePolyPoly);
 
     // #105899# First, guarantee that all objects are converted to polyobjects,
     // especially for SdrGrafObj with bitmap filling this is necessary to not
@@ -1731,7 +1731,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     if( bUndo )
     {
         // comment is constructed later
-        BegUndo("", "", bMakeLines ? SdrRepeatFunc::DismantleLines : SdrRepeatFunc::DismantlePolys);
+        BegUndo(u""_ustr, u""_ustr, bMakeLines ? SdrRepeatFunc::DismantleLines : SdrRepeatFunc::DismantlePolys);
     }
 
     SdrObjList* pOL0=nullptr;
@@ -1886,7 +1886,7 @@ void SdrEditView::UnGroupMarked()
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
-        BegUndo("", "", SdrRepeatFunc::Ungroup);
+        BegUndo(u""_ustr, u""_ustr, SdrRepeatFunc::Ungroup);
 
     size_t nCount=0;
     OUString aName1;
@@ -2112,7 +2112,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo("", "", SdrRepeatFunc::ImportMtf);
+        BegUndo(u""_ustr, u""_ustr, SdrRepeatFunc::ImportMtf);
 
     SortMarkedObjects();
     SdrMarkList aForTheDescription;

@@ -177,7 +177,7 @@ namespace svxform
 
     OUString SAL_CALL LegacyFormController::getImplementationName(  )
     {
-        return "org.openoffice.comp.svx.LegacyFormController";
+        return u"org.openoffice.comp.svx.LegacyFormController"_ustr;
     }
 
     sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName )
@@ -187,7 +187,7 @@ namespace svxform
 
     Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.form.FormController", "com.sun.star.awt.control.TabController" };
+        return { u"com.sun.star.form.FormController"_ustr, u"com.sun.star.awt.control.TabController"_ustr };
     }
 
 }

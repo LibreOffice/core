@@ -538,7 +538,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
     if (aSelection.eType == RulerType::DontKnow)
     {
-        SetQuickHelpText("");
+        SetQuickHelpText(u""_ustr);
         return;
     }
 
@@ -624,7 +624,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         }
         default:
         {
-            SetQuickHelpText("");
+            SetQuickHelpText(u""_ustr);
             break;
         }
     }
@@ -3313,8 +3313,8 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
 
         tools::Rectangle aRect(rCommandEvent.GetMousePosPixel(), Size(1, 1));
         weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/rulermenu.ui"));
-        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"svx/ui/rulermenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
         if ( !mpTabs.empty() &&

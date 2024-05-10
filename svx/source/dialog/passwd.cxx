@@ -33,8 +33,8 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, weld::Button&, void)
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  m_aRepeatPasswdErrStr));
         xBox->run();
-        m_xNewPasswdED->set_text("");
-        m_xRepeatPasswdED->set_text("");
+        m_xNewPasswdED->set_text(u""_ustr);
+        m_xRepeatPasswdED->set_text(u""_ustr);
         m_xNewPasswdED->grab_focus();
         bOK = false;
     }
@@ -45,7 +45,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, weld::Button&, void)
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  m_aOldPasswdErrStr));
         xBox->run();
-        m_xOldPasswdED->set_text("");
+        m_xOldPasswdED->set_text(u""_ustr);
         m_xOldPasswdED->grab_focus();
         bOK = false;
     }
@@ -61,15 +61,15 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 }
 
 SvxPasswordDialog::SvxPasswordDialog(weld::Window* pParent, bool bDisableOldPassword)
-    : SfxDialogController(pParent, "svx/ui/passwd.ui", "PasswordDialog")
+    : SfxDialogController(pParent, u"svx/ui/passwd.ui"_ustr, u"PasswordDialog"_ustr)
     , m_aOldPasswdErrStr(SvxResId(RID_SVXSTR_ERR_OLD_PASSWD))
     , m_aRepeatPasswdErrStr(SvxResId(RID_SVXSTR_ERR_REPEAT_PASSWD ))
-    , m_xOldFL(m_xBuilder->weld_label("oldpass"))
-    , m_xOldPasswdFT(m_xBuilder->weld_label("oldpassL"))
-    , m_xOldPasswdED(m_xBuilder->weld_entry("oldpassEntry"))
-    , m_xNewPasswdED(m_xBuilder->weld_entry("newpassEntry"))
-    , m_xRepeatPasswdED(m_xBuilder->weld_entry("confirmpassEntry"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xOldFL(m_xBuilder->weld_label(u"oldpass"_ustr))
+    , m_xOldPasswdFT(m_xBuilder->weld_label(u"oldpassL"_ustr))
+    , m_xOldPasswdED(m_xBuilder->weld_entry(u"oldpassEntry"_ustr))
+    , m_xNewPasswdED(m_xBuilder->weld_entry(u"newpassEntry"_ustr))
+    , m_xRepeatPasswdED(m_xBuilder->weld_entry(u"confirmpassEntry"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xOKBtn->connect_clicked(LINK(this, SvxPasswordDialog, ButtonHdl));
     m_xRepeatPasswdED->connect_changed(LINK(this, SvxPasswordDialog, EditModifyHdl));

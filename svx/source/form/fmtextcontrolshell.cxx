@@ -496,7 +496,7 @@ namespace svx
                 Reference< XPropertySetInfo > xPSI;
                 if ( xModelProps.is() )
                     xPSI = xModelProps->getPropertySetInfo();
-                OUString sRichTextPropertyName = "RichText";
+                OUString sRichTextPropertyName = u"RichText"_ustr;
                 if ( xPSI.is() && xPSI->hasPropertyByName( sRichTextPropertyName ) )
                 {
                     OSL_VERIFY( xModelProps->getPropertyValue( sRichTextPropertyName ) >>= bIsRichText );
@@ -687,7 +687,7 @@ namespace svx
                             DBG_ASSERT( pBoolItem, "FmTextControlShell::executeAttributeDialog: no bool item?!" );
                             if ( pBoolItem )
                             {
-                                aArgs = { comphelper::makePropertyValue("Enable",
+                                aArgs = { comphelper::makePropertyValue(u"Enable"_ustr,
                                                                         pBoolItem->GetValue()) };
                             }
                         }
@@ -1297,7 +1297,7 @@ namespace svx
 
     void FmTextControlShell::contextMenuRequested()
     {
-        m_rBindings.GetDispatcher()->ExecutePopup( "formrichtext" );
+        m_rBindings.GetDispatcher()->ExecutePopup( u"formrichtext"_ustr );
     }
 
 

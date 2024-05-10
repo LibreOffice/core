@@ -350,7 +350,7 @@ protected:
     {
         Sequence< PropertyValue > aArgs;
         const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
-        SfxToolBoxControl::Dispatch(xProvider, ".uno:CharEndPreviewFontName", aArgs);
+        SfxToolBoxControl::Dispatch(xProvider, u".uno:CharEndPreviewFontName"_ustr, aArgs);
     }
 
     bool            CheckFontIsAvailable(std::u16string_view fontname);
@@ -870,8 +870,8 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
                                    OUString _aMoreKey,
                                    bool bInSpec, SvxStyleToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
-    , m_xMenuBuilder(Application::CreateBuilder(nullptr, "svx/ui/stylemenu.ui"))
-    , m_xMenu(m_xMenuBuilder->weld_menu("menu"))
+    , m_xMenuBuilder(Application::CreateBuilder(nullptr, u"svx/ui/stylemenu.ui"_ustr))
+    , m_xMenu(m_xMenuBuilder->weld_menu(u"menu"_ustr))
     , m_xWidget(std::move(xWidget))
     , eStyleFamily( eFamily )
     , m_nMaxUserDrawFontWidth(0)
@@ -914,13 +914,13 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
                                    const OUString& rClearFormatKey,
                                    const OUString& rMoreKey,
                                    bool bInSpec, SvxStyleToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, "svx/ui/applystylebox.ui", "ApplyStyleBox")
-    , SvxStyleBox_Base(m_xBuilder->weld_combo_box("applystyle"), rCommand, eFamily, _xFrame,
+    : InterimItemWindow(pParent, u"svx/ui/applystylebox.ui"_ustr, u"ApplyStyleBox"_ustr)
+    , SvxStyleBox_Base(m_xBuilder->weld_combo_box(u"applystyle"_ustr), rCommand, eFamily, _xFrame,
                        rClearFormatKey, rMoreKey, bInSpec, rCtrl)
 {
     InitControlBase(m_xWidget.get());
 
-    set_id("applystyle");
+    set_id(u"applystyle"_ustr);
     SetOptimalSize();
 }
 
@@ -943,18 +943,18 @@ IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OUString&, rMenuIdent, void)
     OUString sEntry = m_xWidget->get_text(m_nLastItemWithMenu);
 
     ReleaseFocus(); // It must be after getting entry pos!
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("Param", sEntry),
-                                   comphelper::makePropertyValue("Family",
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"Param"_ustr, sEntry),
+                                   comphelper::makePropertyValue(u"Family"_ustr,
                                                                  sal_Int16( eStyleFamily )) };
 
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
     if (rMenuIdent == "update")
     {
-        SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleUpdateByExample", aArgs);
+        SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleUpdateByExample"_ustr, aArgs);
     }
     else if (rMenuIdent == "edit")
     {
-        SfxToolBoxControl::Dispatch(xProvider, ".uno:EditStyle", aArgs);
+        SfxToolBoxControl::Dispatch(xProvider, u".uno:EditStyle"_ustr, aArgs);
     }
 }
 
@@ -995,7 +995,7 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
             //not only apply default style but also call 'ClearFormatting'
             Sequence< PropertyValue > aEmptyVals;
             const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
-            SfxToolBoxControl::Dispatch(xProvider, ".uno:ResetAttributes", aEmptyVals);
+            SfxToolBoxControl::Dispatch(xProvider, u".uno:ResetAttributes"_ustr, aEmptyVals);
         }
         else if (aSearchEntry == aMoreKey && m_xWidget->get_active() == (m_xWidget->get_count() - 1))
         {
@@ -1052,7 +1052,7 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     if( bCreateNew )
     {
         pArgs[0].Name   = "Param";
-        SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleNewByExample", aArgs);
+        SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleNewByExample"_ustr, aArgs);
     }
     else
     {
@@ -1718,9 +1718,9 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
 SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
                                          const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
-    : m_xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Common/Font/View"))
-    , m_aWYSIWYG(m_xListener, "ShowFontBoxWYSIWYG", *this)
-    , m_aHistory(m_xListener, "History", *this)
+    : m_xListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Common/Font/View"_ustr))
+    , m_aWYSIWYG(m_xListener, u"ShowFontBoxWYSIWYG"_ustr, *this)
+    , m_aHistory(m_xListener, u"History"_ustr, *this)
     , m_rCtrl(rCtrl)
     , m_xWidget(new FontNameBox(std::move(xWidget)))
     , pFontList(nullptr)
@@ -1746,10 +1746,10 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl(vcl::Window* pParent, const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, "svx/ui/fontnamebox.ui", "FontNameBox", true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , SvxFontNameBox_Base(m_xBuilder->weld_combo_box("fontnamecombobox"), rFrame, rCtrl)
+    : InterimItemWindow(pParent, u"svx/ui/fontnamebox.ui"_ustr, u"FontNameBox"_ustr, true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    , SvxFontNameBox_Base(m_xBuilder->weld_combo_box(u"fontnamecombobox"_ustr), rFrame, rCtrl)
 {
-    set_id("fontnamecombobox");
+    set_id(u"fontnamecombobox"_ustr);
     SetOptimalSize();
 }
 
@@ -1889,7 +1889,7 @@ IMPL_LINK(SvxFontNameBox_Base, LivePreviewHdl, const FontMetric&, rFontMetric, v
     aFontItem.QueryValue(pArgs[0].Value);
     pArgs[0].Name = "CharPreviewFontName";
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
-    SfxToolBoxControl::Dispatch(xProvider, ".uno:CharPreviewFontName", aArgs);
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:CharPreviewFontName"_ustr, aArgs);
 }
 
 IMPL_LINK_NOARG(SvxFontNameBox_Base, PopupToggledHdl, weld::ComboBox&, void)
@@ -2004,7 +2004,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
         if (pFontItem)
         {
             pArgs[0].Name   = "CharFontName";
-            SfxToolBoxControl::Dispatch(xProvider, ".uno:CharFontName", aArgs);
+            SfxToolBoxControl::Dispatch(xProvider, u".uno:CharFontName"_ustr, aArgs);
         }
     }
     else
@@ -2012,7 +2012,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
         if (pFontItem)
         {
             pArgs[0].Name   = "CharPreviewFontName";
-            SfxToolBoxControl::Dispatch(xProvider, ".uno:CharPreviewFontName", aArgs);
+            SfxToolBoxControl::Dispatch(xProvider, u".uno:CharPreviewFontName"_ustr, aArgs);
         }
     }
 }
@@ -2051,7 +2051,7 @@ ColorWindow::ColorWindow(OUString  rCommand,
                          const MenuOrToolMenuButton& rMenuButton,
                          TopLevelParentFunction  aTopLevelParentFunction,
                          ColorSelectFunction  aColorSelectFunction)
-    : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), "svx/ui/colorwindow.ui", "palette_popup_window")
+    : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), u"svx/ui/colorwindow.ui"_ustr, u"palette_popup_window"_ustr)
     , theSlotId(nSlotId)
     , maCommand(std::move(rCommand))
     , maMenuButton(rMenuButton)
@@ -2059,15 +2059,15 @@ ColorWindow::ColorWindow(OUString  rCommand,
     , mrColorStatus(rColorStatus)
     , maTopLevelParentFunction(std::move(aTopLevelParentFunction))
     , maColorSelectFunction(std::move(aColorSelectFunction))
-    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
+    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
     , mxRecentColorSet(new SvxColorValueSet(nullptr))
-    , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
-    , mxButtonAutoColor(m_xBuilder->weld_button("auto_color_button"))
-    , mxButtonNoneColor(m_xBuilder->weld_button("none_color_button"))
-    , mxButtonPicker(m_xBuilder->weld_button("color_picker_button"))
-    , mxAutomaticSeparator(m_xBuilder->weld_widget("separator4"))
-    , mxColorSetWin(new weld::CustomWeld(*m_xBuilder, "colorset", *mxColorSet))
-    , mxRecentColorSetWin(new weld::CustomWeld(*m_xBuilder, "recent_colorset", *mxRecentColorSet))
+    , mxPaletteListBox(m_xBuilder->weld_combo_box(u"palette_listbox"_ustr))
+    , mxButtonAutoColor(m_xBuilder->weld_button(u"auto_color_button"_ustr))
+    , mxButtonNoneColor(m_xBuilder->weld_button(u"none_color_button"_ustr))
+    , mxButtonPicker(m_xBuilder->weld_button(u"color_picker_button"_ustr))
+    , mxAutomaticSeparator(m_xBuilder->weld_widget(u"separator4"_ustr))
+    , mxColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *mxColorSet))
+    , mxRecentColorSetWin(new weld::CustomWeld(*m_xBuilder, u"recent_colorset"_ustr, *mxRecentColorSet))
     , mpDefaultButton(nullptr)
 {
     mxColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
@@ -2143,12 +2143,12 @@ ColorWindow::ColorWindow(OUString  rCommand,
     aSize = mxRecentColorSet->layoutAllVisible(mxPaletteManager->GetRecentColorCount());
     mxRecentColorSet->set_size_request(aSize.Width(), aSize.Height());
 
-    AddStatusListener( ".uno:ColorTableState" );
+    AddStatusListener( u".uno:ColorTableState"_ustr );
     AddStatusListener( maCommand );
     if ( maCommand == ".uno:FrameLineColor" )
     {
-        AddStatusListener( ".uno:BorderTLBR" );
-        AddStatusListener( ".uno:BorderBLTR" );
+        AddStatusListener( u".uno:BorderTLBR"_ustr );
+        AddStatusListener( u".uno:BorderBLTR"_ustr );
     }
 }
 
@@ -2457,20 +2457,20 @@ Color ColorStatus::GetColor()
 
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatingframeborder.ui", "FloatingFrameBorder")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatingframeborder.ui"_ustr, u"FloatingFrameBorder"_ustr)
     , mxControl(pControl)
     , mxFrameSet(new SvxFrmValueSet_Impl)
-    , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxFrameSet))
+    , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxFrameSet))
     , bParagraphMode(false)
     , m_bIsWriter(false)
 {
 
     // check whether the document is Writer or not
     if (Reference<lang::XServiceInfo> xSI{ m_xFrame->getController()->getModel(), UNO_QUERY })
-        m_bIsWriter = xSI->supportsService("com.sun.star.text.TextDocument");
+        m_bIsWriter = xSI->supportsService(u"com.sun.star.text.TextDocument"_ustr);
 
     mxFrameSet->SetStyle(WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
-    AddStatusListener(".uno:BorderReducedMode");
+    AddStatusListener(u".uno:BorderReducedMode"_ustr);
     InitImageList();
 
     /*
@@ -2674,10 +2674,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         Any a1, a2;
         aBorderOuter.QueryValue( a1 );
         aBorderInner.QueryValue( a2 );
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("OuterBorder", a1),
-                                         comphelper::makePropertyValue("InnerBorder", a2) };
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, a1),
+                                         comphelper::makePropertyValue(u"InnerBorder"_ustr, a2) };
 
-        mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+        mxControl->dispatchCommand( u".uno:SetBorderStyle"_ustr, aArgs );
     }
 
     // coverity[ check_after_deref : FALSE]
@@ -2697,9 +2697,9 @@ void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem
     // apply diagonal down border
     Any a;
     dDownLineItem.QueryValue(a);
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("BorderTLBR", a) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderTLBR"_ustr, a) };
 
-    mxControl->dispatchCommand(".uno:BorderTLBR", aArgs);
+    mxControl->dispatchCommand(u".uno:BorderTLBR"_ustr, aArgs);
 }
 
 void SvxFrameWindow_Impl::SetDiagonalUpBorder(const SvxLineItem& dUpLineItem)
@@ -2707,9 +2707,9 @@ void SvxFrameWindow_Impl::SetDiagonalUpBorder(const SvxLineItem& dUpLineItem)
     // apply diagonal up border
     Any a;
     dUpLineItem.QueryValue(a);
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("BorderBLTR", a) };
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderBLTR"_ustr, a) };
 
-    mxControl->dispatchCommand(".uno:BorderBLTR", aArgs);
+    mxControl->dispatchCommand(u".uno:BorderBLTR"_ustr, aArgs);
 }
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2816,16 +2816,16 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 }
 
 SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatingframeborder.ui", "FloatingFrameBorder")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatingframeborder.ui"_ustr, u"FloatingFrameBorder"_ustr)
     , m_xControl(pControl)
     , m_xLineStyleLb(new LineListBox)
-    , m_xLineStyleLbWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xLineStyleLb))
+    , m_xLineStyleLbWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xLineStyleLb))
     , m_bIsWriter(false)
 {
     try
     {
         Reference< lang::XServiceInfo > xServices(m_xFrame->getController()->getModel(), UNO_QUERY_THROW);
-        m_bIsWriter = xServices->supportsService("com.sun.star.text.TextDocument");
+        m_bIsWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
     }
     catch(const uno::Exception& )
     {
@@ -2893,9 +2893,9 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
 
     Any a;
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("LineStyle", a) };
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"LineStyle"_ustr, a) };
 
-    m_xControl->dispatchCommand( ".uno:LineStyle", aArgs );
+    m_xControl->dispatchCommand( u".uno:LineStyle"_ustr, aArgs );
 
     m_xControl->EndPopupMode();
 }
@@ -2968,24 +2968,24 @@ struct SvxStyleToolBoxControl::Impl
         {
             Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xModel, UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServices( xModel, UNO_QUERY_THROW );
-            bSpecModeWriter = xServices->supportsService("com.sun.star.text.TextDocument");
+            bSpecModeWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
+                xStylesSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>=
                     xParaStyles;
                 static const std::vector<OUString> aWriterStyles =
                 {
-                    "Standard",
-                    "Text body",
-                    "Title",
-                    "Subtitle",
-                    "Heading 1",
-                    "Heading 2",
-                    "Heading 3",
-                    "Heading 4",
-                    "Quotations",
-                    "Preformatted Text"
+                    u"Standard"_ustr,
+                    u"Text body"_ustr,
+                    u"Title"_ustr,
+                    u"Subtitle"_ustr,
+                    u"Heading 1"_ustr,
+                    u"Heading 2"_ustr,
+                    u"Heading 3"_ustr,
+                    u"Heading 4"_ustr,
+                    u"Quotations"_ustr,
+                    u"Preformatted Text"_ustr
                 };
                 for( const OUString& aStyle: aWriterStyles )
                 {
@@ -2994,7 +2994,7 @@ struct SvxStyleToolBoxControl::Impl
                         Reference< beans::XPropertySet > xStyle;
                         xParaStyles->getByName( aStyle ) >>= xStyle;
                         OUString sName;
-                        xStyle->getPropertyValue("DisplayName") >>= sName;
+                        xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                         if( !sName.isEmpty() )
                             aDefaultStyles.push_back(
                                 std::pair<OUString, OUString>(aStyle, sName) );
@@ -3006,7 +3006,7 @@ struct SvxStyleToolBoxControl::Impl
             }
             else if( (
                 bSpecModeCalc = xServices->supportsService(
-                    "com.sun.star.sheet.SpreadsheetDocument")))
+                    u"com.sun.star.sheet.SpreadsheetDocument"_ustr)))
             {
                 static const char* aCalcStyles[] =
                 {
@@ -3019,7 +3019,7 @@ struct SvxStyleToolBoxControl::Impl
                     "Result"
                 };
                 Reference<container::XNameAccess> xCellStyles;
-                xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
+                xStylesSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr) >>= xCellStyles;
                 for(const char* pCalcStyle : aCalcStyles)
                 {
                     try
@@ -3029,7 +3029,7 @@ struct SvxStyleToolBoxControl::Impl
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
                             OUString sName;
-                            xStyle->getPropertyValue("DisplayName") >>= sName;
+                            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                             if( !sName.isEmpty() )
                                 aDefaultStyles.push_back(
                                     std::pair<OUString, OUString>(sStyleName, sName) );
@@ -3136,7 +3136,7 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
 
 OUString SvxStyleToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.StyleToolBoxControl";
+    return u"com.sun.star.comp.svx.StyleToolBoxControl"_ustr;
 }
 
 sal_Bool SvxStyleToolBoxControl::supportsService( const OUString& rServiceName )
@@ -3146,7 +3146,7 @@ sal_Bool SvxStyleToolBoxControl::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SvxStyleToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3236,7 +3236,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
     {
         pBox->append_text(pImpl->aClearForm);
-        pBox->insert_separator(1, "separator");
+        pBox->insert_separator(1, u"separator"_ustr);
 
         // add default styles if less than 12 items
         for( const auto &rStyle : pImpl->aDefaultStyles )
@@ -3368,12 +3368,12 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box("applystyle"));
+        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"applystyle"_ustr));
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
         pImpl->m_xWeldBox.reset(new SvxStyleBox_Base(std::move(xWidget),
-                                                     ".uno:StyleApply",
+                                                     u".uno:StyleApply"_ustr,
                                                      SfxStyleFamily::Para,
                                                      m_xFrame,
                                                      pImpl->aClearForm,
@@ -3428,7 +3428,7 @@ void SvxFontNameBox_Base::statusChanged_Impl( const css::frame::FeatureStateEven
         else {
             // no active element; delete value in the display
             m_xWidget->set_active(-1);
-            set_active_or_entry_text("");
+            set_active_or_entry_text(u""_ustr);
         }
         m_xWidget->save_value();
     }
@@ -3459,7 +3459,7 @@ css::uno::Reference<css::awt::XWindow> SvxFontNameToolBoxControl::createItemWind
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box("fontnamecombobox"));
+        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"fontnamecombobox"_ustr));
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
@@ -3493,7 +3493,7 @@ void SvxFontNameToolBoxControl::dispose()
 
 OUString SvxFontNameToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.FontNameToolBoxControl";
+    return u"com.sun.star.comp.svx.FontNameToolBoxControl"_ustr;
 }
 
 sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
@@ -3503,7 +3503,7 @@ sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceNam
 
 css::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3593,17 +3593,17 @@ void SvxColorToolBoxControl::update()
     switch( m_nSlotId )
     {
         case SID_ATTR_CHAR_COLOR2:
-            addStatusListener( ".uno:CharColorExt");
+            addStatusListener( u".uno:CharColorExt"_ustr);
             break;
 
         case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-            addStatusListener( ".uno:CharBackgroundExt");
+            addStatusListener( u".uno:CharBackgroundExt"_ustr);
             break;
 
         case SID_FRAME_LINECOLOR:
-            addStatusListener( ".uno:BorderTLBR");
-            addStatusListener( ".uno:BorderBLTR");
+            addStatusListener( u".uno:BorderTLBR"_ustr);
+            addStatusListener( u".uno:BorderBLTR"_ustr);
             break;
     }
 }
@@ -3775,12 +3775,12 @@ void SvxColorToolBoxControl::functionSelected( const OUString& /*rCommand*/ )
 
 OUString SvxColorToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ColorToolBoxControl";
+    return u"com.sun.star.comp.svx.ColorToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3859,12 +3859,12 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* p
 
 OUString SvxFrameToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.FrameToolBoxControl";
+    return u"com.sun.star.comp.svx.FrameToolBoxControl"_ustr;
 }
 
 css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3906,11 +3906,11 @@ namespace
 
     public:
         SvxCurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
-            : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
+            : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/currencywindow.ui"_ustr, u"CurrencyWindow"_ustr)
             , m_xControl(pControl)
-            , m_xLabel(m_xBuilder->weld_label("label"))
-            , m_xCurrencyLb(m_xBuilder->weld_tree_view("currency"))
-            , m_xOkBtn(m_xBuilder->weld_button("ok"))
+            , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+            , m_xCurrencyLb(m_xBuilder->weld_tree_view(u"currency"_ustr))
+            , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
             , m_rSelectedFormat(rSelectedFormat)
             , m_eSelectedLanguage(eSelectedLanguage)
         {
@@ -4084,7 +4084,7 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
 
     if( nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("NumberFormatCurrency",
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"NumberFormatCurrency"_ustr,
                                                                        nFormatKey) };
         dispatchCommand( m_aCommandURL, aArgs );
         m_nFormatKey = nFormatKey;
@@ -4095,12 +4095,12 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
 
 OUString SvxCurrencyToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.CurrencyToolBoxControl";
+    return u"com.sun.star.comp.svx.CurrencyToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxCurrencyToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

@@ -377,12 +377,12 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName)
 
 OUString SAL_CALL FmXGridControl::getImplementationName()
 {
-    return "com.sun.star.form.FmXGridControl";
+    return u"com.sun.star.form.FmXGridControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames()
 {
-    return { FM_SUN_CONTROL_GRIDCONTROL, "com.sun.star.awt.UnoControl" };
+    return { FM_SUN_CONTROL_GRIDCONTROL, u"com.sun.star.awt.UnoControl"_ustr };
 }
 
 
@@ -402,7 +402,7 @@ void SAL_CALL FmXGridControl::dispose()
 
 OUString FmXGridControl::GetComponentServiceName() const
 {
-    return "DBGrid";
+    return u"DBGrid"_ustr;
 }
 
 
@@ -1037,7 +1037,7 @@ void FmXGridPeer::columnChanged()
 
 FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             :m_xContext(_rxContext)
-            ,m_aMode("DataMode")
+            ,m_aMode(u"DataMode"_ustr)
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
 {
@@ -2370,8 +2370,8 @@ css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 {
     static css::uno::Sequence<OUString> const aModes
     {
-        "DataMode",
-        "FilterMode"
+        u"DataMode"_ustr,
+        u"FilterMode"_ustr
     };
     return aModes;
 }

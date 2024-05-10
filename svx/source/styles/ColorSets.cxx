@@ -36,7 +36,7 @@ ColorSets& ColorSets::get()
 void ColorSets::init()
 {
     {
-        model::ColorSet aColorSet("LibreOffice");
+        model::ColorSet aColorSet(u"LibreOffice"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
@@ -52,7 +52,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Rainbow");
+        model::ColorSet aColorSet(u"Rainbow"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x1C1C1C);
@@ -68,7 +68,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Beach");
+        model::ColorSet aColorSet(u"Beach"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0xFFBF00);
@@ -84,7 +84,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Sunset");
+        model::ColorSet aColorSet(u"Sunset"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x492300);
@@ -100,7 +100,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Ocean");
+        model::ColorSet aColorSet(u"Ocean"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x2A6099);
@@ -116,7 +116,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Forest");
+        model::ColorSet aColorSet(u"Forest"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
         aColorSet.add(model::ThemeColorType::Light1, 0xFFFFFF);
         aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
@@ -132,7 +132,7 @@ void ColorSets::init()
         maColorSets.push_back(aColorSet);
     }
     {
-        model::ColorSet aColorSet("Breeze");
+        model::ColorSet aColorSet(u"Breeze"_ustr);
         aColorSet.add(model::ThemeColorType::Dark1, 0x232629);
         aColorSet.add(model::ThemeColorType::Light1, 0xFCFCFC);
         aColorSet.add(model::ThemeColorType::Dark2, 0x31363B);

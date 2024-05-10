@@ -126,7 +126,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
 // XServiceInfo
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
 {
-    return "com.sun.star.drawing.EnhancedCustomShapeEngine";
+    return u"com.sun.star.drawing.EnhancedCustomShapeEngine"_ustr;
 }
 sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
 {
@@ -134,7 +134,7 @@ sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rS
 }
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.CustomShapeEngine" };
+    return { u"com.sun.star.drawing.CustomShapeEngine"_ustr };
 }
 
 // XCustomShapeEngine
@@ -260,7 +260,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     // retrieving the TextPath property to check if feature is enabled
     const SdrCustomShapeGeometryItem& rGeometryItem(pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     bool bTextPathOn = false;
-    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"TextPath"_ustr );
     if ( pAny )
         *pAny >>= bTextPathOn;
 

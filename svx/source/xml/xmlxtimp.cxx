@@ -376,7 +376,7 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference<XGraphicStorageHandler> const & xGraphicStorageHandler)
-:   SvXMLImport(rContext, "", SvXMLImportFlags::NONE),
+:   SvXMLImport(rContext, u""_ustr, SvXMLImportFlags::NONE),
     mrTable( rTable )
 {
     SetGraphicStorageHandler(xGraphicStorageHandler);
@@ -386,17 +386,17 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW);
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK);
 
-    GetNamespaceMap().Add( "__ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-    GetNamespaceMap().Add( "__xlink", GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap().Add( u"__ooo"_ustr, GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    GetNamespaceMap().Add( u"__xlink"_ustr, GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
 
     // OOo namespaces for reading OOo 1.1 files
-    GetNamespaceMap().Add( "___office",
+    GetNamespaceMap().Add( u"___office"_ustr,
                         GetXMLToken(XML_N_OFFICE_OOO),
                         XML_NAMESPACE_OFFICE );
-    GetNamespaceMap().Add( "___draw",
+    GetNamespaceMap().Add( u"___draw"_ustr,
                         GetXMLToken(XML_N_DRAW_OOO),
                         XML_NAMESPACE_DRAW );
-    GetNamespaceMap().Add( "___loext",
+    GetNamespaceMap().Add( u"___loext"_ustr,
                         GetXMLToken(XML_N_LO_EXT),
                         XML_NAMESPACE_LO_EXT);
 }
@@ -409,7 +409,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
                                rtl::Reference<SvXMLGraphicHelper>& rxGraphicHelper,
                                const uno::Reference < embed::XStorage >& xStorage )
 {
-    uno::Reference < io::XStream > xIStm( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_SET_THROW );
+    uno::Reference < io::XStream > xIStm( xStorage->openStreamElement( u"Content.xml"_ustr, embed::ElementModes::READ ), uno::UNO_SET_THROW );
     pParserInput->aInputStream = xIStm->getInputStream();
     rxGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
 }

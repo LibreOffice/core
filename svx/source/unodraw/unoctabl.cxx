@@ -65,7 +65,7 @@ public:
 SvxUnoColorTable::SvxUnoColorTable()
   : pList(XPropertyList::AsColorList(
             XPropertyList::CreatePropertyList(
-              XPropertyListType::Color, SvtPathOptions().GetPalettePath(), "")))
+              XPropertyListType::Color, SvtPathOptions().GetPalettePath(), u""_ustr)))
 {
 }
 
@@ -76,12 +76,12 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName()
 {
-    return "com.sun.star.drawing.SvxUnoColorTable";
+    return u"com.sun.star.drawing.SvxUnoColorTable"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.ColorTable" };
+    uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.ColorTable"_ustr };
     return aSNS;
 }
 

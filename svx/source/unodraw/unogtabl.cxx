@@ -52,11 +52,14 @@ SvxUnoGradientTable::SvxUnoGradientTable(SdrModel* pModel) noexcept
 {
 }
 
-OUString SAL_CALL SvxUnoGradientTable::getImplementationName() { return "SvxUnoGradientTable"; }
+OUString SAL_CALL SvxUnoGradientTable::getImplementationName()
+{
+    return u"SvxUnoGradientTable"_ustr;
+}
 
 uno::Sequence<OUString> SAL_CALL SvxUnoGradientTable::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.GradientTable" };
+    return { u"com.sun.star.drawing.GradientTable"_ustr };
 }
 
 // XNameContainer

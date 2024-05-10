@@ -586,7 +586,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if (aStr.isEmpty())
             {
                 // its empty, so we have to force the outliner to initialise itself
-                mpOutliner->SetText( "", mpOutliner->GetParagraph( 0 ) );
+                mpOutliner->SetText( u""_ustr, mpOutliner->GetParagraph( 0 ) );
 
                 auto pCell = dynamic_cast<sdr::table::Cell*>(mpText);
                 if (pCell && pCell->GetStyleSheet())

@@ -209,7 +209,7 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     }
 
     if (pFloater)
-        pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "", true );
+        pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), u""_ustr, true );
 #else
     (void) rURL;
 #endif
@@ -231,7 +231,7 @@ bool DialogGalleryPreview::SetGraphic( const INetURLObject& _aURL )
     bool bRet = true;
     Graphic aGraphic;
 #if HAVE_FEATURE_AVMEDIA
-    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
+    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), u""_ustr ) )
     {
         aGraphic = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
     }

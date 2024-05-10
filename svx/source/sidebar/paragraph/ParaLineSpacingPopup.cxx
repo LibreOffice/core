@@ -81,12 +81,12 @@ VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createVclPopupWindow(vcl::Wind
 
 OUString SvxLineSpacingToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.LineSpacingToolBoxControl";
+    return u"com.sun.star.comp.svx.LineSpacingToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxLineSpacingToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

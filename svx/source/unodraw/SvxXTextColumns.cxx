@@ -124,7 +124,10 @@ private:
     sal_Int16 m_nSepLineStyle = css::text::ColumnSeparatorStyle::NONE;
 };
 
-OUString SvxXTextColumns::getImplementationName() { return "com.sun.star.comp.svx.TextColumns"; }
+OUString SvxXTextColumns::getImplementationName()
+{
+    return u"com.sun.star.comp.svx.TextColumns"_ustr;
+}
 
 sal_Bool SvxXTextColumns::supportsService(const OUString& rServiceName)
 {
@@ -133,7 +136,7 @@ sal_Bool SvxXTextColumns::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> SvxXTextColumns::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextColumns" };
+    return { u"com.sun.star.text.TextColumns"_ustr };
 }
 
 sal_Int32 SvxXTextColumns::getReferenceValue()

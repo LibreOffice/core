@@ -84,7 +84,7 @@ void XmlSecStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItem
 
     GetStatusBar().SetItemData( GetId(), nullptr ); // necessary ?
 
-    GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
+    GetStatusBar().SetItemText( GetId(), u""_ustr );    // necessary ?
 
     TranslateId pResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SignatureState::OK )
@@ -105,8 +105,8 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
     {
         tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
         weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/xmlsecstatmenu.ui"));
-        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"svx/ui/xmlsecstatmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu(u"menu"_ustr));
         if (!xPopMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
         {
             css::uno::Any a;

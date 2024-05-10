@@ -325,7 +325,7 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     }
 
     if (bAddSeparator)
-        m_xControl->append_separator("");
+        m_xControl->append_separator(u""_ustr);
 
     bool bAddAvailable = (!(nLangList & SvxLanguageListFlags::ONLY_KNOWN) &&
             ((nLangList & SvxLanguageListFlags::ALL) ||
@@ -423,7 +423,7 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     {
         int nAt = find_id( nLang );
         if (nAt != -1)
-            return weld::ComboBoxEntry("");
+            return weld::ComboBoxEntry(u""_ustr);
     }
 
     OUString aStrEntry = (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)

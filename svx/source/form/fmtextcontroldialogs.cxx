@@ -32,12 +32,12 @@ namespace svx
 {
 
     TextControlCharAttribDialog::TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, SvxFontListItem aFontList)
-        : SfxTabDialogController(pParent, "svx/ui/textcontrolchardialog.ui", "TextControlCharacterPropertiesDialog", &rCoreSet)
+        : SfxTabDialogController(pParent, u"svx/ui/textcontrolchardialog.ui"_ustr, u"TextControlCharacterPropertiesDialog"_ustr, &rCoreSet)
         , m_aFontList(std::move(aFontList))
     {
-        AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-        AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
-        AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
+        AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
+        AddTabPage(u"fonteffects"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
+        AddTabPage(u"position"_ustr, RID_SVXPAGE_CHAR_POSITION);
     }
 
     void TextControlCharAttribDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
@@ -62,17 +62,17 @@ namespace svx
     }
 
     TextControlParaAttribDialog::TextControlParaAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
-        : SfxTabDialogController(pParent, "svx/ui/textcontrolparadialog.ui", "TextControlParagraphPropertiesDialog", &rCoreSet)
+        : SfxTabDialogController(pParent, u"svx/ui/textcontrolparadialog.ui"_ustr, u"TextControlParagraphPropertiesDialog"_ustr, &rCoreSet)
     {
-        AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
-        AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
+        AddTabPage(u"labelTP_PARA_STD"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+        AddTabPage(u"labelTP_PARA_ALIGN"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
 
         if( SvtCJKOptions::IsAsianTypographyEnabled() )
-            AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
+            AddTabPage(u"labelTP_PARA_ASIAN"_ustr, RID_SVXPAGE_PARA_ASIAN);
         else
-            RemoveTabPage("labelTP_PARA_ASIAN");
+            RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
 
-        AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+        AddTabPage(u"labelTP_TABULATOR"_ustr, RID_SVXPAGE_TABULATOR);
     }
 }
 

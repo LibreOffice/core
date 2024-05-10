@@ -39,7 +39,7 @@ namespace svxform
         // the layout manager
         Reference< XPropertySet > xFrameProps( _rxFrame, UNO_QUERY );
         if ( xFrameProps.is() )
-            xFrameProps->getPropertyValue("LayoutManager") >>= m_xLayouter;
+            xFrameProps->getPropertyValue(u"LayoutManager"_ustr) >>= m_xLayouter;
     }
 
 
@@ -83,7 +83,7 @@ namespace svxform
         OSL_ENSURE( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ,
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );
 
-        return "private:resource/toolbar/formdesign";
+        return u"private:resource/toolbar/formdesign"_ustr;
     }
 
 

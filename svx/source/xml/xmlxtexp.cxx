@@ -145,7 +145,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicStorageHandler> const & xGraphicStorageHandler)
-:   SvXMLExport(rContext, "", /*rFileName*/"", rHandler, nullptr, FieldUnit::MM_100TH, SvXMLExportFlags::NONE),
+:   SvXMLExport(rContext, u""_ustr, /*rFileName*/u""_ustr, rHandler, nullptr, FieldUnit::MM_100TH, SvXMLExportFlags::NONE),
     mxTable( xTable )
 {
 
@@ -173,10 +173,10 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
     try
     {
-        xProps->setPropertyValue("MediaType",  uno::Any( OUString( "text/xml" ) ) );
+        xProps->setPropertyValue(u"MediaType"_ustr,  uno::Any( u"text/xml"_ustr ) );
 
         // use stock encryption
-        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
+        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
     } catch ( const uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("svx", "exception setting stream metadata");
@@ -188,7 +188,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
                                  const uno::Reference < embed::XStorage >& xSubStorage )
 {
     uno::Reference < io::XStream > xStream = xSubStorage->openStreamElement(
-                        "Content.xml",
+                        u"Content.xml"_ustr,
                         embed::ElementModes::WRITE );
     rxGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, SvXMLGraphicHelperMode::Write );
     initializeStreamMetadata( xStream );

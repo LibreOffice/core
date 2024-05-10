@@ -113,13 +113,13 @@ void WeldEditView::makeEditEngine()
     vcl::Font aAppFont(Application::GetSettings().GetStyleSettings().GetAppFont());
 
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO));
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CJK));
     pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CTL));
 
     pItemPool->SetUserDefaultItem(
@@ -829,7 +829,10 @@ public:
         m_xTextHelper->RemoveEventListener(rListener);
     }
 
-    virtual OUString SAL_CALL getImplementationName() override { return "WeldEditAccessible"; }
+    virtual OUString SAL_CALL getImplementationName() override
+    {
+        return u"WeldEditAccessible"_ustr;
+    }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
@@ -838,8 +841,9 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "css::accessibility::Accessible", "css::accessibility::AccessibleComponent",
-                 "css::accessibility::AccessibleContext" };
+        return { u"css::accessibility::Accessible"_ustr,
+                 u"css::accessibility::AccessibleComponent"_ustr,
+                 u"css::accessibility::AccessibleContext"_ustr };
     }
 };
 
@@ -1705,12 +1709,12 @@ public:
     virtual StringMap get_state() override
     {
         StringMap aMap = WindowUIObject::get_state();
-        aMap["Text"] = mpEditView->GetText();
+        aMap[u"Text"_ustr] = mpEditView->GetText();
         return aMap;
     }
 
 private:
-    virtual OUString get_name() const override { return "WeldEditViewUIObject"; }
+    virtual OUString get_name() const override { return u"WeldEditViewUIObject"_ustr; }
 };
 }
 

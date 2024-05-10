@@ -32,17 +32,17 @@ namespace svx::sidebar {
 MediaPlaybackPanel::MediaPlaybackPanel (
     weld::Widget* pParent,
     SfxBindings* pBindings)
-    : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui"),
+    : PanelLayout(pParent, u"MediaPlaybackPanel"_ustr, u"svx/ui/mediaplayback.ui"_ustr),
     maMediaController(SID_AVMEDIA_TOOLBOX, *pBindings, *this),
     maIdle("MediaPlaybackPanel"),
     mpBindings(pBindings)
 {
-    mxTimeEdit = m_xBuilder->weld_entry("timeedit");
-    mxPlayToolBox = m_xBuilder->weld_toolbar("playtoolbox");
-    mxMuteToolBox = m_xBuilder->weld_toolbar("mutetoolbox");
-    mxTimeSlider = m_xBuilder->weld_scale("timeslider");
-    mxVolumeSlider = m_xBuilder->weld_scale("volumeslider");
-    mxZoomListBox = m_xBuilder->weld_combo_box("zoombox");
+    mxTimeEdit = m_xBuilder->weld_entry(u"timeedit"_ustr);
+    mxPlayToolBox = m_xBuilder->weld_toolbar(u"playtoolbox"_ustr);
+    mxMuteToolBox = m_xBuilder->weld_toolbar(u"mutetoolbox"_ustr);
+    mxTimeSlider = m_xBuilder->weld_scale(u"timeslider"_ustr);
+    mxVolumeSlider = m_xBuilder->weld_scale(u"volumeslider"_ustr);
+    mxZoomListBox = m_xBuilder->weld_combo_box(u"zoombox"_ustr);
 
     Initialize();
 }
@@ -52,9 +52,9 @@ std::unique_ptr<PanelLayout> MediaPlaybackPanel::Create(
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to MediaPlaybackPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to MediaPlaybackPanel::Create"_ustr, nullptr, 0);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to MediaPlaybackPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to MediaPlaybackPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<MediaPlaybackPanel>(pParent, pBindings);
 }
@@ -157,11 +157,11 @@ IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, const OUString&, rId, void)
     }
     else if (rId == "mute")
     {
-        aItem.setMute( mxMuteToolBox->get_item_active("mute") );
+        aItem.setMute( mxMuteToolBox->get_item_active(u"mute"_ustr) );
     }
     else if (rId == "loop")
     {
-        aItem.setLoop( mxPlayToolBox->get_item_active("loop") );
+        aItem.setLoop( mxPlayToolBox->get_item_active(u"loop"_ustr) );
     }
 
     if(aItem.getMaskSet() != AVMediaSetMask::NONE)

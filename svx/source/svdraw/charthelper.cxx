@@ -39,7 +39,7 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel 
     try
     {
         const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
-        const uno::Reference< util::XUpdatable2 > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
+        const uno::Reference< util::XUpdatable2 > xChartView(xChartFact->createInstance(u"com.sun.star.chart2.ChartView"_ustr), uno::UNO_QUERY_THROW);
 
         xChartView->updateHard();
     }
@@ -119,9 +119,9 @@ void ChartHelper::AdaptDefaultsForChart(
         if (uno::Reference< beans::XPropertySet > xPageProp = xChartDoc->getPageBackground())
         {
             // set background to transparent (none)
-            xPageProp->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
+            xPageProp->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
             // set no border
-            xPageProp->setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_NONE));
+            xPageProp->setPropertyValue(u"LineStyle"_ustr, uno::Any(drawing::LineStyle_NONE));
         }
     }
     catch( const uno::Exception & )

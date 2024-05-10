@@ -25,11 +25,11 @@ namespace svx
 {
 GotoPageDlg::GotoPageDlg(weld::Window* pParent, const OUString& title, const OUString& label,
                          sal_uInt16 curPagePos, sal_uInt16 pageCnt)
-    : GenericDialogController(pParent, "svx/ui/gotopagedialog.ui", "GotoPageDialog")
+    : GenericDialogController(pParent, u"svx/ui/gotopagedialog.ui"_ustr, u"GotoPageDialog"_ustr)
     , mnMaxPageCnt(1)
-    , mxMtrPageCtrl(m_xBuilder->weld_spin_button("page"))
-    , mxPageNumberLbl(m_xBuilder->weld_label("page_count"))
-    , mxPageLbl(m_xBuilder->weld_label("page_label"))
+    , mxMtrPageCtrl(m_xBuilder->weld_spin_button(u"page"_ustr))
+    , mxPageNumberLbl(m_xBuilder->weld_label(u"page_count"_ustr))
+    , mxPageLbl(m_xBuilder->weld_label(u"page_label"_ustr))
 {
     set_title(title);
     mxPageLbl->set_label(label);

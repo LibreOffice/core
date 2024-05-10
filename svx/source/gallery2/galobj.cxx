@@ -240,7 +240,7 @@ void SgaObject::SetTitle( const OUString& rTitle )
 
 SvStream& WriteSgaObject( SvStream& rOut, const SgaObject& rObj )
 {
-    rObj.WriteData( rOut, "" );
+    rObj.WriteData( rOut, u""_ustr );
     return rOut;
 }
 
@@ -405,7 +405,7 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
 SvxGalleryDrawModel::SvxGalleryDrawModel()
 : mpFormModel( nullptr )
 {
-    mxDoc = SfxObjectShell::CreateObjectByFactoryName( "sdraw" );
+    mxDoc = SfxObjectShell::CreateObjectByFactoryName( u"sdraw"_ustr );
 
     if( !mxDoc.Is() )
         return;

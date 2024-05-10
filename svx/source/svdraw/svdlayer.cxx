@@ -101,14 +101,14 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     m_pParent(pNewParent),
     m_pModel(nullptr),
-    maControlLayerName("controls")
+    maControlLayerName(u"controls"_ustr)
 {
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     m_pParent(nullptr),
     m_pModel(nullptr),
-    maControlLayerName("controls")
+    maControlLayerName(u"controls"_ustr)
 {
     *this = rSrcLayerAdmin;
 }

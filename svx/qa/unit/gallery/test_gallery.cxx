@@ -309,7 +309,8 @@ void GalleryObjTest::TestInsertGalleryObject()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
-    std::vector<OUString> imageList{ "galtest1.png", "galtest2.png", "galtest3.jpg" };
+    std::vector<OUString> imageList{ u"galtest1.png"_ustr, u"galtest2.png"_ustr,
+                                     u"galtest3.jpg"_ustr };
 
     for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
     {
@@ -354,7 +355,8 @@ void GalleryObjTest::TestRemoveGalleryObject()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
-    std::vector<OUString> imageList{ "galtest1.png", "galtest2.png", "galtest3.jpg" };
+    std::vector<OUString> imageList{ u"galtest1.png"_ustr, u"galtest2.png"_ustr,
+                                     u"galtest3.jpg"_ustr };
 
     for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
     {
@@ -409,7 +411,7 @@ void GalleryObjTest::TestChangePositionGalleryObject()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
-    OUString imageList[] = { "galtest1.png", "galtest2.png", "galtest3.jpg" };
+    OUString imageList[] = { u"galtest1.png"_ustr, u"galtest2.png"_ustr, u"galtest3.jpg"_ustr };
 
     for (sal_uInt32 i = 0; i < (sizeof(imageList) / sizeof(imageList[0])); i++)
     {

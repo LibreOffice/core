@@ -78,7 +78,7 @@ IMapWindow::IMapWindow(const Reference< XFrame >& rxDocumentFrame, weld::Dialog*
     : GraphCtrl(pDialog)
     , mxDocumentFrame(rxDocumentFrame)
 {
-    pIMapPool = new SfxItemPool("IMapItemPool");
+    pIMapPool = new SfxItemPool(u"IMapItemPool"_ustr);
     pIMapPool->registerItemInfoPackage(getItemInfoPackageIMapWindow());
 }
 
@@ -282,17 +282,17 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
         SfxItemSet aSet( pModel->GetItemPool() );
 
         aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-        aSet.Put( XFillColorItem( "", TRANSCOL ) );
+        aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
 
         if ( !pIMapObj->IsActive() )
         {
             aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( "", COL_RED ) );
+            aSet.Put( XLineColorItem( u""_ustr, COL_RED ) );
         }
         else
         {
             aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( "", COL_BLACK ) );
+            aSet.Put( XLineColorItem( u""_ustr, COL_BLACK ) );
         }
 
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
@@ -310,7 +310,7 @@ void IMapWindow::InitSdrModel()
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
-    aSet.Put( XFillColorItem( "", TRANSCOL ) );
+    aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
     pView->SetFrameDragSingles();
@@ -496,20 +496,20 @@ bool IMapWindow::Command(const CommandEvent& rCEvt)
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/imapmenu.ui"));
-        mxPopupMenu = xBuilder->weld_menu("menu");
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), u"svx/ui/imapmenu.ui"_ustr));
+        mxPopupMenu = xBuilder->weld_menu(u"menu"_ustr);
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
         const size_t nMarked = rMarkList.GetMarkCount();
 
-        mxPopupMenu->set_sensitive("url", false);
-        mxPopupMenu->set_sensitive("active", false);
-        mxPopupMenu->set_sensitive("macro", false);
-        mxPopupMenu->set_sensitive("selectall", pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectCount());
+        mxPopupMenu->set_sensitive(u"url"_ustr, false);
+        mxPopupMenu->set_sensitive(u"active"_ustr, false);
+        mxPopupMenu->set_sensitive(u"macro"_ustr, false);
+        mxPopupMenu->set_sensitive(u"selectall"_ustr, pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectCount());
 
         if ( !nMarked )
         {
-            mxPopupMenu->set_sensitive("arrange", false);
-            mxPopupMenu->set_sensitive("delete", false);
+            mxPopupMenu->set_sensitive(u"arrange"_ustr, false);
+            mxPopupMenu->set_sensitive(u"delete"_ustr, false);
         }
         else
         {
@@ -517,14 +517,14 @@ bool IMapWindow::Command(const CommandEvent& rCEvt)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-                mxPopupMenu->set_sensitive("url", true);
-                mxPopupMenu->set_sensitive("active", true);
-                mxPopupMenu->set_sensitive("macro", true);
-                mxPopupMenu->set_active("active", GetIMapObj(pSdrObj)->IsActive());
+                mxPopupMenu->set_sensitive(u"url"_ustr, true);
+                mxPopupMenu->set_sensitive(u"active"_ustr, true);
+                mxPopupMenu->set_sensitive(u"macro"_ustr, true);
+                mxPopupMenu->set_active(u"active"_ustr, GetIMapObj(pSdrObj)->IsActive());
             }
 
-            mxPopupMenu->set_sensitive("arrange", true);
-            mxPopupMenu->set_sensitive("delete", true);
+            mxPopupMenu->set_sensitive(u"arrange"_ustr, true);
+            mxPopupMenu->set_sensitive(u"delete"_ustr, true);
         }
 
         MenuSelectHdl(mxPopupMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
@@ -563,7 +563,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if (mxDropTargetHelper->IsDropFormatSupported(SotClipboardFormatId::NETSCAPE_BOOKMARK))
     {
-        INetBookmark    aBookMark( "", "" );
+        INetBookmark    aBookMark( u""_ustr, u""_ustr );
         SdrObject*      pSdrObj = GetHitSdrObj( rEvt.maPosPixel );
 
         if( pSdrObj && TransferableDataHelper( rEvt.maDropEvent.Transferable ).GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aBookMark ) )
@@ -619,17 +619,17 @@ void IMapWindow::SetCurrentObjState( bool bActive )
 
     GetIMapObj( pObj )->SetActive( bActive );
 
-    aSet.Put( XFillColorItem( "", TRANSCOL ) );
+    aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
 
     if ( !bActive )
     {
         aSet.Put( XFillTransparenceItem( 100 ) );
-        aSet.Put( XLineColorItem( "", COL_RED ) );
+        aSet.Put( XLineColorItem( u""_ustr, COL_RED ) );
     }
     else
     {
         aSet.Put( XFillTransparenceItem( 50 ) );
-        aSet.Put( XLineColorItem( "", COL_BLACK ) );
+        aSet.Put( XLineColorItem( u""_ustr, COL_BLACK ) );
     }
 
     pView->SetAttributes( aSet );
@@ -677,8 +677,8 @@ void IMapWindow::DoMacroAssign()
         aSet(*pIMapPool);
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-    aNamesItem.AddEvent( "MouseOver", "", SvMacroItemId::OnMouseOver );
-    aNamesItem.AddEvent( "MouseOut", "", SvMacroItemId::OnMouseOut );
+    aNamesItem.AddEvent( u"MouseOver"_ustr, u""_ustr, SvMacroItemId::OnMouseOver );
+    aNamesItem.AddEvent( u"MouseOut"_ustr, u""_ustr, SvMacroItemId::OnMouseOut );
     aSet.Put( aNamesItem );
 
     SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);

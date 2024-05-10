@@ -17,13 +17,13 @@
 namespace svx
 {
 ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
-    : GenericDialogController(pParent, "svx/ui/themedialog.ui", "ThemeDialog")
+    : GenericDialogController(pParent, u"svx/ui/themedialog.ui"_ustr, u"ThemeDialog"_ustr)
     , mpWindow(pParent)
     , mpTheme(pTheme)
     , mxValueSetThemeColors(new svx::ThemeColorValueSet)
     , mxValueSetThemeColorsWindow(
-          new weld::CustomWeld(*m_xBuilder, "valueset_theme_colors", *mxValueSetThemeColors))
-    , mxAdd(m_xBuilder->weld_button("button_add"))
+          new weld::CustomWeld(*m_xBuilder, u"valueset_theme_colors"_ustr, *mxValueSetThemeColors))
+    , mxAdd(m_xBuilder->weld_button(u"button_add"_ustr))
 {
     mxValueSetThemeColors->SetColCount(3);
     mxValueSetThemeColors->SetLineCount(4);

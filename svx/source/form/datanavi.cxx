@@ -146,28 +146,28 @@ namespace svxform
             ItemSelectHdl(*m_xItemList);
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xItemList.get(), "svx/ui/formdatamenu.ui"));
-        m_xMenu = xBuilder->weld_menu("menu");
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xItemList.get(), u"svx/ui/formdatamenu.ui"_ustr));
+        m_xMenu = xBuilder->weld_menu(u"menu"_ustr);
         m_aRemovedMenuEntries.clear();
 
         if (DGTInstance == m_eGroup)
-            m_aRemovedMenuEntries.insert("additem");
+            m_aRemovedMenuEntries.insert(u"additem"_ustr);
         else
         {
-            m_aRemovedMenuEntries.insert("addelement");
-            m_aRemovedMenuEntries.insert("addattribute");
+            m_aRemovedMenuEntries.insert(u"addelement"_ustr);
+            m_aRemovedMenuEntries.insert(u"addattribute"_ustr);
 
             if (DGTSubmission == m_eGroup)
             {
-                m_xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
-                m_xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
-                m_xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
+                m_xMenu->set_label(u"additem"_ustr, SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xMenu->set_label(u"edit"_ustr, SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xMenu->set_label(u"delete"_ustr, SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                m_xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_BINDING));
-                m_xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_BINDING));
-                m_xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
+                m_xMenu->set_label(u"additem"_ustr, SvxResId(RID_STR_DATANAV_ADD_BINDING));
+                m_xMenu->set_label(u"edit"_ustr, SvxResId(RID_STR_DATANAV_EDIT_BINDING));
+                m_xMenu->set_label(u"delete"_ustr, SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
         for (const auto& rRemove : m_aRemovedMenuEntries)
@@ -199,10 +199,10 @@ namespace svxform
     }
 
     XFormsPage::XFormsPage(weld::Container* pPage, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup)
-        : BuilderPage(pPage, nullptr, "svx/ui/xformspage.ui", "XFormsPage")
+        : BuilderPage(pPage, nullptr, u"svx/ui/xformspage.ui"_ustr, u"XFormsPage"_ustr)
         , m_pParent(pPage)
-        , m_xToolBox(m_xBuilder->weld_toolbar("toolbar"))
-        , m_xItemList(m_xBuilder->weld_tree_view("items"))
+        , m_xToolBox(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
+        , m_xItemList(m_xBuilder->weld_tree_view(u"items"_ustr))
         , m_xScratchIter(m_xItemList->make_iterator())
         , m_aDropHelper(*m_xItemList)
         , m_pNaviWin(_pNaviWin)
@@ -213,23 +213,23 @@ namespace svxform
         m_xItemList->set_show_expanders(DGTInstance == m_eGroup || DGTSubmission == m_eGroup);
 
         if ( DGTInstance == m_eGroup )
-            m_xToolBox->set_item_visible("additem", false);
+            m_xToolBox->set_item_visible(u"additem"_ustr, false);
         else
         {
-            m_xToolBox->set_item_visible("addelement", false);
-            m_xToolBox->set_item_visible("addattribute", false);
+            m_xToolBox->set_item_visible(u"addelement"_ustr, false);
+            m_xToolBox->set_item_visible(u"addattribute"_ustr, false);
 
             if ( DGTSubmission == m_eGroup )
             {
-                m_xToolBox->set_item_label("additem", SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
-                m_xToolBox->set_item_label("edit", SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
-                m_xToolBox->set_item_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
+                m_xToolBox->set_item_label(u"additem"_ustr, SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xToolBox->set_item_label(u"edit"_ustr, SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xToolBox->set_item_label(u"delete"_ustr, SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                m_xToolBox->set_item_label("additem", SvxResId(RID_STR_DATANAV_ADD_BINDING));
-                m_xToolBox->set_item_label("edit", SvxResId(RID_STR_DATANAV_EDIT_BINDING));
-                m_xToolBox->set_item_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
+                m_xToolBox->set_item_label(u"additem"_ustr, SvxResId(RID_STR_DATANAV_ADD_BINDING));
+                m_xToolBox->set_item_label(u"edit"_ustr, SvxResId(RID_STR_DATANAV_EDIT_BINDING));
+                m_xToolBox->set_item_label(u"delete"_ustr, SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
 
@@ -1239,19 +1239,19 @@ namespace svxform
         else if ( m_eGroup != DGTInstance )
             bEnableAdd = true;
 
-        m_xToolBox->set_item_sensitive("additem", bEnableAdd);
-        m_xToolBox->set_item_sensitive("addelement", bEnableAdd);
-        m_xToolBox->set_item_sensitive("addattribute", bEnableAdd);
-        m_xToolBox->set_item_sensitive("edit", bEnableEdit);
-        m_xToolBox->set_item_sensitive("delete", bEnableRemove);
+        m_xToolBox->set_item_sensitive(u"additem"_ustr, bEnableAdd);
+        m_xToolBox->set_item_sensitive(u"addelement"_ustr, bEnableAdd);
+        m_xToolBox->set_item_sensitive(u"addattribute"_ustr, bEnableAdd);
+        m_xToolBox->set_item_sensitive(u"edit"_ustr, bEnableEdit);
+        m_xToolBox->set_item_sensitive(u"delete"_ustr, bEnableRemove);
 
         if (m_xMenu)
         {
-            SetMenuEntrySensitive("additem", bEnableAdd);
-            SetMenuEntrySensitive("addelement", bEnableAdd);
-            SetMenuEntrySensitive("addattribute", bEnableAdd);
-            SetMenuEntrySensitive("edit", bEnableEdit);
-            SetMenuEntrySensitive("delete", bEnableRemove);
+            SetMenuEntrySensitive(u"additem"_ustr, bEnableAdd);
+            SetMenuEntrySensitive(u"addelement"_ustr, bEnableAdd);
+            SetMenuEntrySensitive(u"addattribute"_ustr, bEnableAdd);
+            SetMenuEntrySensitive(u"edit"_ustr, bEnableEdit);
+            SetMenuEntrySensitive(u"delete"_ustr, bEnableRemove);
         }
         if ( DGTInstance != m_eGroup )
             return;
@@ -1278,21 +1278,21 @@ namespace svxform
                 }
             }
         }
-        m_xToolBox->set_item_label("edit", SvxResId(pResId1));
-        m_xToolBox->set_item_label("delete", SvxResId(pResId2));
+        m_xToolBox->set_item_label(u"edit"_ustr, SvxResId(pResId1));
+        m_xToolBox->set_item_label(u"delete"_ustr, SvxResId(pResId2));
         if (m_xMenu)
         {
-            m_xMenu->set_label("edit", SvxResId( pResId1 ) );
-            m_xMenu->set_label("delete", SvxResId( pResId2 ) );
+            m_xMenu->set_label(u"edit"_ustr, SvxResId( pResId1 ) );
+            m_xMenu->set_label(u"delete"_ustr, SvxResId( pResId2 ) );
         }
     }
 
     DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, weld::Builder& rBuilder, SfxBindings const * pBindings)
         : m_xParent(pParent)
-        , m_xModelsBox(rBuilder.weld_combo_box("modelslist"))
-        , m_xModelBtn(rBuilder.weld_menu_button("modelsbutton"))
-        , m_xTabCtrl(rBuilder.weld_notebook("tabcontrol"))
-        , m_xInstanceBtn(rBuilder.weld_menu_button("instances"))
+        , m_xModelsBox(rBuilder.weld_combo_box(u"modelslist"_ustr))
+        , m_xModelBtn(rBuilder.weld_menu_button(u"modelsbutton"_ustr))
+        , m_xTabCtrl(rBuilder.weld_notebook(u"tabcontrol"_ustr))
+        , m_xInstanceBtn(rBuilder.weld_menu_button(u"instances"_ustr))
         , m_nLastSelectedPos(-1)
         , m_bShowDetails(false)
         , m_bIsNotifyDisabled(false)
@@ -1312,7 +1312,7 @@ namespace svxform
         m_aUpdateTimer.SetInvokeHandler( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
         // init tabcontrol
-        OUString sPageId("instance");
+        OUString sPageId(u"instance"_ustr);
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
         {
@@ -1322,7 +1322,7 @@ namespace svxform
             aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
         }
 
-        m_xInstanceBtn->set_item_active("instancesdetails", m_bShowDetails);
+        m_xInstanceBtn->set_item_active(u"instancesdetails"_ustr, m_bShowDetails);
 
         m_xTabCtrl->set_current_page(sPageId);
         ActivatePageHdl(sPageId);
@@ -1436,7 +1436,7 @@ namespace svxform
                                 xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
 
                             Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
-                            xModelProps->setPropertyValue("ExternalData", Any( !bDocumentData ) );
+                            xModelProps->setPropertyValue(u"ExternalData"_ustr, Any( !bDocumentData ) );
 
                             m_xModelsBox->append_text(sNewName);
                             m_xModelsBox->set_active(m_xModelsBox->get_count() - 1);
@@ -1463,7 +1463,7 @@ namespace svxform
                 Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                 Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                 bool bExternalData = false;
-                OSL_VERIFY( xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
+                OSL_VERIFY( xModelProps->getPropertyValue( u"ExternalData"_ustr ) >>= bExternalData );
                 bDocumentData = !bExternalData;
             }
             catch( const Exception& )
@@ -1482,7 +1482,7 @@ namespace svxform
                         Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
                         Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                         Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                        xModelProps->setPropertyValue( "ExternalData", Any( !bDocumentData ) );
+                        xModelProps->setPropertyValue( u"ExternalData"_ustr, Any( !bDocumentData ) );
                         bIsDocModified = true;
                     }
                     catch( const Exception& )
@@ -1650,7 +1650,7 @@ namespace svxform
                             TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
                         }
                         m_xTabCtrl->remove_page(sIdent);
-                        m_xTabCtrl->set_current_page("instance");
+                        m_xTabCtrl->set_current_page(u"instance"_ustr);
                         ModelSelectHdl( nullptr );
                         bIsDocModified = true;
                     }
@@ -1660,7 +1660,7 @@ namespace svxform
         else if (rIdent == "instancesdetails")
         {
             m_bShowDetails = !m_bShowDetails;
-            m_xInstanceBtn->set_item_active("instancesdetails", m_bShowDetails);
+            m_xInstanceBtn->set_item_active(u"instancesdetails"_ustr, m_bShowDetails);
             ModelSelectHdl(m_xModelsBox.get());
         }
         else
@@ -1685,15 +1685,15 @@ namespace svxform
         {
             OUString sIdent(m_xTabCtrl->get_current_page_ident());
             bool bIsInstPage = (IsAdditionalPage(sIdent) || sIdent == "instance");
-            m_xInstanceBtn->set_item_sensitive( "instancesedit", bIsInstPage );
-            m_xInstanceBtn->set_item_sensitive( "instancesremove",
+            m_xInstanceBtn->set_item_sensitive( u"instancesedit"_ustr, bIsInstPage );
+            m_xInstanceBtn->set_item_sensitive( u"instancesremove"_ustr,
                 bIsInstPage && m_xTabCtrl->get_n_pages() > MIN_PAGE_COUNT );
-            m_xInstanceBtn->set_item_sensitive( "instancesdetails", bIsInstPage );
+            m_xInstanceBtn->set_item_sensitive( u"instancesdetails"_ustr, bIsInstPage );
         }
         else if (m_xModelBtn.get() == &rBtn)
         {
             // we need at least one model!
-            m_xModelBtn->set_item_sensitive("modelsremove", m_xModelsBox->get_count() > 1 );
+            m_xModelBtn->set_item_sensitive(u"modelsremove"_ustr, m_xModelsBox->get_count() > 1 );
         }
         else
         {
@@ -2023,7 +2023,7 @@ namespace svxform
     }
 
     DataNavigator::DataNavigator(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
-        : SfxDockingWindow(_pBindings, _pMgr, _pParent, "DataNavigator", "svx/ui/datanavigator.ui")
+        : SfxDockingWindow(_pBindings, _pMgr, _pParent, u"DataNavigator"_ustr, u"svx/ui/datanavigator.ui"_ustr)
         , SfxControllerItem(SID_FM_DATANAVIGATOR_CONTROL, *_pBindings)
         , m_xDataWin(new DataNavigatorWindow(this, *m_xBuilder, _pBindings))
     {
@@ -2088,7 +2088,7 @@ namespace svxform
 
     AddDataItemDialog::AddDataItemDialog(weld::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
-        : GenericDialogController(pParent, "svx/ui/adddataitemdialog.ui", "AddDataItemDialog")
+        : GenericDialogController(pParent, u"svx/ui/adddataitemdialog.ui"_ustr, u"AddDataItemDialog"_ustr)
         , m_xUIHelper(_rUIHelper)
         , m_pItemNode(_pNode)
         , m_eItemType(DITNone)
@@ -2096,25 +2096,25 @@ namespace svxform
         , m_sFL_Attribute(SvxResId(RID_STR_ATTRIBUTE))
         , m_sFL_Binding(SvxResId(RID_STR_BINDING))
         , m_sFT_BindingExp(SvxResId(RID_STR_BINDING_EXPR))
-        , m_xItemFrame(m_xBuilder->weld_frame("itemframe"))
-        , m_xNameFT(m_xBuilder->weld_label("nameft"))
-        , m_xNameED(m_xBuilder->weld_entry("name"))
-        , m_xDefaultFT(m_xBuilder->weld_label("valueft"))
-        , m_xDefaultED(m_xBuilder->weld_entry("value"))
-        , m_xDefaultBtn(m_xBuilder->weld_button("browse"))
-        , m_xSettingsFrame(m_xBuilder->weld_widget("settingsframe"))
-        , m_xDataTypeLB(m_xBuilder->weld_combo_box("datatype"))
-        , m_xRequiredCB(m_xBuilder->weld_check_button("required"))
-        , m_xRequiredBtn(m_xBuilder->weld_button("requiredcond"))
-        , m_xRelevantCB(m_xBuilder->weld_check_button("relevant"))
-        , m_xRelevantBtn(m_xBuilder->weld_button("relevantcond"))
-        , m_xConstraintCB(m_xBuilder->weld_check_button("constraint"))
-        , m_xConstraintBtn(m_xBuilder->weld_button("constraintcond"))
-        , m_xReadonlyCB(m_xBuilder->weld_check_button("readonly"))
-        , m_xReadonlyBtn(m_xBuilder->weld_button("readonlycond"))
-        , m_xCalculateCB(m_xBuilder->weld_check_button("calculate"))
-        , m_xCalculateBtn(m_xBuilder->weld_button("calculatecond"))
-        , m_xOKBtn(m_xBuilder->weld_button("ok"))
+        , m_xItemFrame(m_xBuilder->weld_frame(u"itemframe"_ustr))
+        , m_xNameFT(m_xBuilder->weld_label(u"nameft"_ustr))
+        , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xDefaultFT(m_xBuilder->weld_label(u"valueft"_ustr))
+        , m_xDefaultED(m_xBuilder->weld_entry(u"value"_ustr))
+        , m_xDefaultBtn(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xSettingsFrame(m_xBuilder->weld_widget(u"settingsframe"_ustr))
+        , m_xDataTypeLB(m_xBuilder->weld_combo_box(u"datatype"_ustr))
+        , m_xRequiredCB(m_xBuilder->weld_check_button(u"required"_ustr))
+        , m_xRequiredBtn(m_xBuilder->weld_button(u"requiredcond"_ustr))
+        , m_xRelevantCB(m_xBuilder->weld_check_button(u"relevant"_ustr))
+        , m_xRelevantBtn(m_xBuilder->weld_button(u"relevantcond"_ustr))
+        , m_xConstraintCB(m_xBuilder->weld_check_button(u"constraint"_ustr))
+        , m_xConstraintBtn(m_xBuilder->weld_button(u"constraintcond"_ustr))
+        , m_xReadonlyCB(m_xBuilder->weld_check_button(u"readonly"_ustr))
+        , m_xReadonlyBtn(m_xBuilder->weld_button(u"readonlycond"_ustr))
+        , m_xCalculateCB(m_xBuilder->weld_check_button(u"calculate"_ustr))
+        , m_xCalculateBtn(m_xBuilder->weld_button(u"calculatecond"_ustr))
+        , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     {
         InitDialog();
         InitFromNode();
@@ -2553,14 +2553,14 @@ namespace svxform
     AddConditionDialog::AddConditionDialog(weld::Window* pParent,
         OUString _aPropertyName,
         const Reference< XPropertySet >& _rPropSet)
-        : GenericDialogController(pParent, "svx/ui/addconditiondialog.ui", "AddConditionDialog")
+        : GenericDialogController(pParent, u"svx/ui/addconditiondialog.ui"_ustr, u"AddConditionDialog"_ustr)
         , m_aResultIdle("svx AddConditionDialog m_aResultIdle")
         , m_sPropertyName(std::move(_aPropertyName))
         , m_xBinding(_rPropSet)
-        , m_xConditionED(m_xBuilder->weld_text_view("condition"))
-        , m_xResultWin(m_xBuilder->weld_text_view("result"))
-        , m_xEditNamespacesBtn(m_xBuilder->weld_button("edit"))
-        , m_xOKBtn(m_xBuilder->weld_button("ok"))
+        , m_xConditionED(m_xBuilder->weld_text_view(u"condition"_ustr))
+        , m_xResultWin(m_xBuilder->weld_text_view(u"result"_ustr))
+        , m_xEditNamespacesBtn(m_xBuilder->weld_button(u"edit"_ustr))
+        , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     {
         DBG_ASSERT( m_xBinding.is(), "AddConditionDialog::Ctor(): no Binding" );
 
@@ -2661,14 +2661,14 @@ namespace svxform
     }
 
     NamespaceItemDialog::NamespaceItemDialog(AddConditionDialog* pCondDlg, Reference<XNameContainer>& rContainer)
-        : GenericDialogController(pCondDlg->getDialog(), "svx/ui/namespacedialog.ui", "NamespaceDialog")
+        : GenericDialogController(pCondDlg->getDialog(), u"svx/ui/namespacedialog.ui"_ustr, u"NamespaceDialog"_ustr)
         , m_pConditionDlg(pCondDlg)
         , m_rNamespaces(rContainer)
-        , m_xNamespacesList(m_xBuilder->weld_tree_view("namespaces"))
-        , m_xAddNamespaceBtn(m_xBuilder->weld_button("add"))
-        , m_xEditNamespaceBtn(m_xBuilder->weld_button("edit"))
-        , m_xDeleteNamespaceBtn(m_xBuilder->weld_button("delete"))
-        , m_xOKBtn(m_xBuilder->weld_button("ok"))
+        , m_xNamespacesList(m_xBuilder->weld_tree_view(u"namespaces"_ustr))
+        , m_xAddNamespaceBtn(m_xBuilder->weld_button(u"add"_ustr))
+        , m_xEditNamespaceBtn(m_xBuilder->weld_button(u"edit"_ustr))
+        , m_xDeleteNamespaceBtn(m_xBuilder->weld_button(u"delete"_ustr))
+        , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xNamespacesList->set_size_request(m_xNamespacesList->get_approximate_digit_width() * 80,
                                             m_xNamespacesList->get_height_rows(8));
@@ -2803,12 +2803,12 @@ namespace svxform
     }
 
     ManageNamespaceDialog::ManageNamespaceDialog(weld::Window* pParent, AddConditionDialog* pCondDlg, bool bIsEdit)
-        : GenericDialogController(pParent, "svx/ui/addnamespacedialog.ui", "AddNamespaceDialog")
+        : GenericDialogController(pParent, u"svx/ui/addnamespacedialog.ui"_ustr, u"AddNamespaceDialog"_ustr)
         , m_pConditionDlg(pCondDlg)
-        , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
-        , m_xUrlED(m_xBuilder->weld_entry("url"))
-        , m_xOKBtn(m_xBuilder->weld_button("ok"))
-        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
+        , m_xPrefixED(m_xBuilder->weld_entry(u"prefix"_ustr))
+        , m_xUrlED(m_xBuilder->weld_entry(u"url"_ustr))
+        , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
     {
         if (bIsEdit)
             m_xDialog->set_title(m_xAltTitle->get_label());
@@ -2848,17 +2848,17 @@ namespace svxform
     AddSubmissionDialog::AddSubmissionDialog(
         weld::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
-        : GenericDialogController(pParent, "svx/ui/addsubmissiondialog.ui", "AddSubmissionDialog")
+        : GenericDialogController(pParent, u"svx/ui/addsubmissiondialog.ui"_ustr, u"AddSubmissionDialog"_ustr)
         , m_pItemNode(_pNode)
         , m_xUIHelper(_rUIHelper)
-        , m_xNameED(m_xBuilder->weld_entry("name"))
-        , m_xActionED(m_xBuilder->weld_entry("action"))
-        , m_xMethodLB(m_xBuilder->weld_combo_box("method"))
-        , m_xRefED(m_xBuilder->weld_entry("expression"))
-        , m_xRefBtn(m_xBuilder->weld_button("browse"))
-        , m_xBindLB(m_xBuilder->weld_combo_box("binding"))
-        , m_xReplaceLB(m_xBuilder->weld_combo_box("replace"))
-        , m_xOKBtn(m_xBuilder->weld_button("ok"))
+        , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xActionED(m_xBuilder->weld_entry(u"action"_ustr))
+        , m_xMethodLB(m_xBuilder->weld_combo_box(u"method"_ustr))
+        , m_xRefED(m_xBuilder->weld_entry(u"expression"_ustr))
+        , m_xRefBtn(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xBindLB(m_xBuilder->weld_combo_box(u"binding"_ustr))
+        , m_xReplaceLB(m_xBuilder->weld_combo_box(u"replace"_ustr))
+        , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     {
         FillAllBoxes();
 
@@ -3064,10 +3064,10 @@ namespace svxform
     }
 
     AddModelDialog::AddModelDialog(weld::Window* pParent, bool bIsEdit)
-        : GenericDialogController(pParent, "svx/ui/addmodeldialog.ui", "AddModelDialog")
-        , m_xNameED(m_xBuilder->weld_entry("name"))
-        , m_xModifyCB(m_xBuilder->weld_check_button("modify"))
-        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
+        : GenericDialogController(pParent, u"svx/ui/addmodeldialog.ui"_ustr, u"AddModelDialog"_ustr)
+        , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xModifyCB(m_xBuilder->weld_check_button(u"modify"_ustr))
+        , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
     {
         if (bIsEdit)
             m_xDialog->set_title(m_xAltTitle->get_label());
@@ -3078,12 +3078,12 @@ namespace svxform
     }
 
     AddInstanceDialog::AddInstanceDialog(weld::Window* pParent, bool _bEdit)
-        : GenericDialogController(pParent, "svx/ui/addinstancedialog.ui", "AddInstanceDialog")
-        , m_xNameED(m_xBuilder->weld_entry("name"))
-        , m_xURLED(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
-        , m_xFilePickerBtn(m_xBuilder->weld_button("browse"))
-        , m_xLinkInstanceCB(m_xBuilder->weld_check_button("link"))
-        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
+        : GenericDialogController(pParent, u"svx/ui/addinstancedialog.ui"_ustr, u"AddInstanceDialog"_ustr)
+        , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+        , m_xURLED(new SvtURLBox(m_xBuilder->weld_combo_box(u"url"_ustr)))
+        , m_xFilePickerBtn(m_xBuilder->weld_button(u"browse"_ustr))
+        , m_xLinkInstanceCB(m_xBuilder->weld_check_button(u"link"_ustr))
+        , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
     {
         if (_bEdit)
             m_xDialog->set_title(m_xAltTitle->get_label());
@@ -3107,8 +3107,8 @@ namespace svxform
         aDlg.SetContext(sfx2::FileDialogHelper::FormsAddInstance);
 
         aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );
-        OUString sFilterName( "XML" );
-        aDlg.AddFilter( sFilterName, "*.xml" );
+        OUString sFilterName( u"XML"_ustr );
+        aDlg.AddFilter( sFilterName, u"*.xml"_ustr );
         aDlg.SetCurrentFilter( sFilterName );
 
         if (aDlg.Execute() == ERRCODE_NONE)
@@ -3116,8 +3116,8 @@ namespace svxform
     }
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox(weld::Widget* pParent)
-        : MessageDialogController(pParent, "svx/ui/formlinkwarndialog.ui",
-                "FormLinkWarnDialog")
+        : MessageDialogController(pParent, u"svx/ui/formlinkwarndialog.ui"_ustr,
+                u"FormLinkWarnDialog"_ustr)
     {
     }
 

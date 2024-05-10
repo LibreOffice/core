@@ -277,12 +277,12 @@ uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  )
 {
-    return "SvxUnoXColorTable";
+    return u"SvxUnoXColorTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.ColorTable" };
+    return { u"com.sun.star.drawing.ColorTable"_ustr };
 }
 
 namespace {
@@ -345,12 +345,12 @@ uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  )
 {
-    return "SvxUnoXLineEndTable";
+    return u"SvxUnoXLineEndTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.LineEndTable" };
+    return { u"com.sun.star.drawing.LineEndTable"_ustr };
 }
 
 namespace {
@@ -423,12 +423,12 @@ uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  )
 {
-    return "SvxUnoXDashTable";
+    return u"SvxUnoXDashTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.DashTable" };
+    return { u"com.sun.star.drawing.DashTable"_ustr };
 }
 
 namespace {
@@ -496,12 +496,12 @@ uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  )
 {
-    return "SvxUnoXHatchTable";
+    return u"SvxUnoXHatchTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.HatchTable" };
+    return { u"com.sun.star.drawing.HatchTable"_ustr };
 }
 
 namespace {
@@ -559,12 +559,12 @@ uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  )
 {
-    return "SvxUnoXGradientTable";
+    return u"SvxUnoXGradientTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.GradientTable" };
+    return { u"com.sun.star.drawing.GradientTable"_ustr };
 }
 
 namespace {
@@ -631,12 +631,12 @@ uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  )
 {
-    return "SvxUnoXBitmapTable";
+    return u"SvxUnoXBitmapTable"_ustr;
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.BitmapTable" };
+    return { u"com.sun.star.drawing.BitmapTable"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -377,7 +377,7 @@ public:
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) = 0;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName) = 0;
     virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
-                                            const OUString& rName, const OUString& rDesc, const OUString& rTitle = "" ) = 0;
+                                            const OUString& rName, const OUString& rDesc, const OUString& rTitle = u""_ustr ) = 0;
 
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) = 0;

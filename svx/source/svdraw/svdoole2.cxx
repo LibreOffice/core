@@ -423,7 +423,7 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Imp
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue("LayoutManager"),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue(u"LayoutManager"_ustr),uno::UNO_QUERY);
     }
     catch ( uno::Exception& ex )
     {
@@ -930,7 +930,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
 
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                         uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
-                            "URL", aNewLinkURL) };
+                            u"URL"_ustr, aNewLinkURL) };
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;
@@ -1020,7 +1020,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
             {
                 uno::Reference<beans::XPropertySet> xSet(xObject->getComponent(), uno::UNO_QUERY);
                 if (xSet.is())
-                    xSet->getPropertyValue("FrameURL") >>= aLinkURL;
+                    xSet->getPropertyValue(u"FrameURL"_ustr) >>= aLinkURL;
                 bIFrame = true;
             }
         }
@@ -1100,7 +1100,7 @@ void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
             {
                 uno::Reference<beans::XPropertySet> xSet(mpImpl->mxObjRef->getComponent(), uno::UNO_QUERY);
                 if (xSet.is())
-                    xSet->setPropertyValue("FrameURL", uno::Any(sFrameURL));
+                    xSet->setPropertyValue(u"FrameURL"_ustr, uno::Any(sFrameURL));
             }
         }
 

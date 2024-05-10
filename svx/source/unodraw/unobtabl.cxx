@@ -72,12 +72,12 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
 
 OUString SAL_CALL SvxUnoBitmapTable::getImplementationName()
 {
-    return "SvxUnoBitmapTable";
+    return u"SvxUnoBitmapTable"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.BitmapTable" };
+    return { u"com.sun.star.drawing.BitmapTable"_ustr };
 }
 
 NameOrIndex* SvxUnoBitmapTable::createItem() const

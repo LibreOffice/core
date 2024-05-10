@@ -74,7 +74,7 @@ constexpr OUString constRecentlyUsedFileName(u"recentlyUsed.xml"_ustr);
 
 OUString lcl_getClassificationUserPath()
 {
-    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
+    OUString sPath(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/"_ustr);
     rtl::Bootstrap::expandMacros(sPath);
     return sPath;
 }
@@ -118,15 +118,15 @@ OUString classificationTypeToString(svx::ClassificationType const & reType)
     switch(reType)
     {
         case svx::ClassificationType::CATEGORY:
-            return "CATEGORY"; break;
+            return u"CATEGORY"_ustr; break;
         case svx::ClassificationType::MARKING:
-            return "MARKING"; break;
+            return u"MARKING"_ustr; break;
         case svx::ClassificationType::TEXT:
-            return "TEXT"; break;
+            return u"TEXT"_ustr; break;
         case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-            return "INTELLECTUAL_PROPERTY_PART"; break;
+            return u"INTELLECTUAL_PROPERTY_PART"_ustr; break;
         case svx::ClassificationType::PARAGRAPH:
-            return "PARAGRAPH"; break;
+            return u"PARAGRAPH"_ustr; break;
     }
     return OUString();
 }
@@ -156,27 +156,27 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
 
 ClassificationDialog::ClassificationDialog(weld::Window* pParent, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps,
                                            const bool bPerParagraph, std::function<void()> aParagraphSignHandler)
-    : GenericDialogController(pParent, "svx/ui/classificationdialog.ui", "AdvancedDocumentClassificationDialog")
+    : GenericDialogController(pParent, u"svx/ui/classificationdialog.ui"_ustr, u"AdvancedDocumentClassificationDialog"_ustr)
     , maHelper(rDocProps)
     , maInternationalHelper(rDocProps, /*bUseLocalizedPolicy*/ false)
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(std::move(aParagraphSignHandler))
     , m_nCurrentSelectedCategory(-1)
-    , m_xOkButton(m_xBuilder->weld_button("ok"))
-    , m_xSignButton(m_xBuilder->weld_button("signButton"))
-    , m_xToolBox(m_xBuilder->weld_toggle_button("toolbox"))
-    , m_xRecentlyUsedListBox(m_xBuilder->weld_combo_box("recentlyUsedCB"))
-    , m_xClassificationListBox(m_xBuilder->weld_combo_box("classificationCB"))
-    , m_xInternationalClassificationListBox(m_xBuilder->weld_combo_box("internationalClassificationCB"))
-    , m_xMarkingLabel(m_xBuilder->weld_label("markingLabel"))
-    , m_xMarkingListBox(m_xBuilder->weld_tree_view("markingLB"))
-    , m_xIntellectualPropertyPartListBox(m_xBuilder->weld_tree_view("intellectualPropertyPartLB"))
-    , m_xIntellectualPropertyPartNumberListBox(m_xBuilder->weld_tree_view("intellectualPropertyPartNumberLB"))
-    , m_xIntellectualPropertyPartAddButton(m_xBuilder->weld_button("intellectualPropertyPartAddButton"))
-    , m_xIntellectualPropertyPartEdit(m_xBuilder->weld_entry("intellectualPropertyPartEntry"))
-    , m_xIntellectualPropertyExpander(m_xBuilder->weld_expander("intellectualPropertyExpander"))
+    , m_xOkButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xSignButton(m_xBuilder->weld_button(u"signButton"_ustr))
+    , m_xToolBox(m_xBuilder->weld_toggle_button(u"toolbox"_ustr))
+    , m_xRecentlyUsedListBox(m_xBuilder->weld_combo_box(u"recentlyUsedCB"_ustr))
+    , m_xClassificationListBox(m_xBuilder->weld_combo_box(u"classificationCB"_ustr))
+    , m_xInternationalClassificationListBox(m_xBuilder->weld_combo_box(u"internationalClassificationCB"_ustr))
+    , m_xMarkingLabel(m_xBuilder->weld_label(u"markingLabel"_ustr))
+    , m_xMarkingListBox(m_xBuilder->weld_tree_view(u"markingLB"_ustr))
+    , m_xIntellectualPropertyPartListBox(m_xBuilder->weld_tree_view(u"intellectualPropertyPartLB"_ustr))
+    , m_xIntellectualPropertyPartNumberListBox(m_xBuilder->weld_tree_view(u"intellectualPropertyPartNumberLB"_ustr))
+    , m_xIntellectualPropertyPartAddButton(m_xBuilder->weld_button(u"intellectualPropertyPartAddButton"_ustr))
+    , m_xIntellectualPropertyPartEdit(m_xBuilder->weld_entry(u"intellectualPropertyPartEntry"_ustr))
+    , m_xIntellectualPropertyExpander(m_xBuilder->weld_expander(u"intellectualPropertyExpander"_ustr))
     , m_xEditWindow(new ClassificationEditView)
-    , m_xEditWindowWeld(new weld::CustomWeld(*m_xBuilder, "classificationEditWindow", *m_xEditWindow))
+    , m_xEditWindowWeld(new weld::CustomWeld(*m_xBuilder, u"classificationEditWindow"_ustr, *m_xEditWindow))
 {
     m_xOkButton->connect_clicked(LINK(this, ClassificationDialog, OkHdl));
     m_xSignButton->connect_clicked(LINK(this, ClassificationDialog, ButtonClicked));
@@ -535,7 +535,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
                     eFontWeight = WEIGHT_BOLD;
             }
             // Font weight to string
-            OUString sWeightProperty = "NORMAL";
+            OUString sWeightProperty = u"NORMAL"_ustr;
             if (eFontWeight == WEIGHT_BOLD)
                 sWeightProperty = "BOLD";
             // Insert into collection

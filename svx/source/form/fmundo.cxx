@@ -119,13 +119,13 @@ private:
                 comphelper::getProcessComponentContext());
             Reference< XScriptListener > const xScriptListener(
                 context->getServiceManager()->createInstanceWithContext(
-                    "ooo.vba.EventListener", context),
+                    u"ooo.vba.EventListener"_ustr, context),
                 UNO_QUERY_THROW);
             Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
             // SfxObjectShellRef is good here since the model controls the lifetime of the shell
             SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
             ENSURE_OR_THROW( xObjectShell.is(), "no object shell!" );
-            xListenerProps->setPropertyValue("Model", Any( xObjectShell->GetModel() ) );
+            xListenerProps->setPropertyValue(u"Model"_ustr, Any( xObjectShell->GetModel() ) );
 
             m_vbaListener = xScriptListener;
         }

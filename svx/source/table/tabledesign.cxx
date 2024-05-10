@@ -214,16 +214,16 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 {
     static CellStyleNameMap const aMap
     {
-         { OUString( "first-row" )    , first_row_style },
-         { OUString( "last-row" )     , last_row_style },
-         { OUString( "first-column" ) , first_column_style },
-         { OUString( "last-column" )  , last_column_style },
-         { OUString( "body" )         , body_style },
-         { OUString( "even-rows" )    , even_rows_style },
-         { OUString( "odd-rows" )     , odd_rows_style },
-         { OUString( "even-columns" ) , even_columns_style },
-         { OUString( "odd-columns" )  , odd_columns_style },
-         { OUString( "background" )   , background_style },
+         { u"first-row"_ustr    , first_row_style },
+         { u"last-row"_ustr     , last_row_style },
+         { u"first-column"_ustr , first_column_style },
+         { u"last-column"_ustr  , last_column_style },
+         { u"body"_ustr         , body_style },
+         { u"even-rows"_ustr    , even_rows_style },
+         { u"odd-rows"_ustr     , odd_rows_style },
+         { u"even-columns"_ustr , even_columns_style },
+         { u"odd-columns"_ustr  , odd_columns_style },
+         { u"background"_ustr   , background_style },
     };
 
     return aMap;
@@ -232,7 +232,7 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 // XServiceInfo
 OUString SAL_CALL TableDesignStyle::getImplementationName()
 {
-    return "TableDesignStyle";
+    return u"TableDesignStyle"_ustr;
 }
 
 sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName )
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames()
 {
-    return { "com.sun.star.style.Style" };
+    return { u"com.sun.star.style.Style"_ustr };
 }
 
 // XStyle
@@ -547,7 +547,7 @@ void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& )
 // XServiceInfo
 OUString SAL_CALL TableDesignFamily::getImplementationName()
 {
-    return "TableDesignFamily";
+    return u"TableDesignFamily"_ustr;
 }
 
 sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName )
@@ -557,13 +557,13 @@ sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames()
 {
-    return { "com.sun.star.style.StyleFamily" };
+    return { u"com.sun.star.style.StyleFamily"_ustr };
 }
 
 // XNamed
 OUString SAL_CALL TableDesignFamily::getName()
 {
-    return "table";
+    return u"table"_ustr;
 }
 
 void SAL_CALL TableDesignFamily::setName( const OUString& )

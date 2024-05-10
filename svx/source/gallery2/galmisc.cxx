@@ -209,7 +209,7 @@ bool FileExists( const INetURLObject& rURL )
             ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             OUString    aTitle;
 
-            aCnt.getPropertyValue("Title") >>= aTitle;
+            aCnt.getPropertyValue(u"Title"_ustr) >>= aTitle;
             bRet = ( !aTitle.isEmpty() );
         }
         catch( const ucb::ContentCreationException& )
@@ -238,11 +238,11 @@ bool CreateDir( const INetURLObject& rURL )
             INetURLObject                           aParentURL( rURL );
             aParentURL.removeSegment();
             ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
-            uno::Sequence< OUString >               aProps{ "Title" };
+            uno::Sequence< OUString >               aProps{ u"Title"_ustr };
             uno::Sequence< uno::Any >               aValues{ uno::Any(rURL.GetLastName()) };
 
             ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
-            bRet = aParent.insertNewContent( "application/vnd.sun.staroffice.fsys-folder", aProps, aValues, aContent );
+            bRet = aParent.insertNewContent( u"application/vnd.sun.staroffice.fsys-folder"_ustr, aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -266,7 +266,7 @@ bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     {
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
-        aDestPath.executeCommand( "transfer",
+        aDestPath.executeCommand( u"transfer"_ustr,
                                   uno::Any( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                 rDstURL.GetLastName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = true;
@@ -293,7 +293,7 @@ bool KillFile( const INetURLObject& rURL )
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( "delete", uno::Any( true ) );
+            aCnt.executeCommand( u"delete"_ustr, uno::Any( true ) );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -318,7 +318,7 @@ GalleryProgress::GalleryProgress( const GraphicFilter* pFilter )
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
-    uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance( "com.sun.star.awt.XProgressMonitor" ),
+    uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance( u"com.sun.star.awt.XProgressMonitor"_ustr ),
                                                       uno::UNO_QUERY );
 
     if ( !xMonitor.is() )
@@ -338,7 +338,7 @@ GalleryProgress::GalleryProgress( const GraphicFilter* pFilter )
     else
         aProgressText = "Gallery";
 
-    xMonitor->addText( "Gallery", aProgressText, false ) ;
+    xMonitor->addText( u"Gallery"_ustr, aProgressText, false ) ;
     mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
 }
 
@@ -396,7 +396,7 @@ void GalleryTransferable::InitData( bool bLazy )
 
                 if( !mxModelStream )
                 {
-                    mxModelStream = SotTempStream::Create( "" );
+                    mxModelStream = SotTempStream::Create( u""_ustr );
                     mxModelStream->SetBufferSize( 16348 );
 
                     if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, *mxModelStream))

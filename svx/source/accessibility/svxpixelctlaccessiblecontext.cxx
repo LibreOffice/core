@@ -86,13 +86,13 @@ OUString SvxPixelCtlAccessible::getAccessibleDescription(  )
 {
 
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return mpPixelCtl ? mpPixelCtl->GetAccessibleDescription() : "";
+    return mpPixelCtl ? mpPixelCtl->GetAccessibleDescription() : u""_ustr;
 }
 
 OUString SvxPixelCtlAccessible::getAccessibleName(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return mpPixelCtl ? mpPixelCtl->GetAccessibleName() : "";
+    return mpPixelCtl ? mpPixelCtl->GetAccessibleName() : u""_ustr;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL SvxPixelCtlAccessible::getAccessibleRelationSet()

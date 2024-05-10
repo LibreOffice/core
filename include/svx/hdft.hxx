@@ -113,8 +113,8 @@ class SVX_DLLPUBLIC DeleteHeaderDialog final : public weld::MessageDialogControl
 {
 public:
     DeleteHeaderDialog(weld::Widget* pParent)
-        : MessageDialogController(pParent, "svx/ui/deleteheaderdialog.ui",
-                "DeleteHeaderDialog")
+        : MessageDialogController(pParent, u"svx/ui/deleteheaderdialog.ui"_ustr,
+                u"DeleteHeaderDialog"_ustr)
     {
     }
 };
@@ -123,8 +123,8 @@ class SVX_DLLPUBLIC DeleteFooterDialog final : public weld::MessageDialogControl
 {
 public:
     DeleteFooterDialog(weld::Widget* pParent)
-        : MessageDialogController(pParent, "svx/ui/deletefooterdialog.ui",
-                "DeleteFooterDialog")
+        : MessageDialogController(pParent, u"svx/ui/deletefooterdialog.ui"_ustr,
+                u"DeleteFooterDialog"_ustr)
     {
     }
 };

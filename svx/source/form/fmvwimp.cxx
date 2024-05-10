@@ -1053,8 +1053,8 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
     {
         // build the argument list
         ::comphelper::NamedValueCollection aWizardArgs;
-        aWizardArgs.put("ObjectModel", m_xLastCreatedControlModel);
-        aWizardArgs.put("ParentWindow", GetParentWindow());
+        aWizardArgs.put(u"ObjectModel"_ustr, m_xLastCreatedControlModel);
+        aWizardArgs.put(u"ParentWindow"_ustr, GetParentWindow());
 
         // create the wizard object
         Reference< XExecutableDialog > xWizard;
@@ -1402,7 +1402,7 @@ rtl::Reference<SdrObject> FmXFormView::implCreateXFormsControl( const svx::OXFor
             rtl::Reference<SdrUnoObj> pLabel;
             rtl::Reference<SdrUnoObj> pControl;
             if  (   !createControlLabelPair( *pOutDev, 0, 0, nullptr, xNumberFormats, nOBJID, sLabelPostfix,
-                        pLabel, pControl, nullptr, "", "", -1 )
+                        pLabel, pControl, nullptr, u""_ustr, u""_ustr, -1 )
                 )
             {
                 return nullptr;

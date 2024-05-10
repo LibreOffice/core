@@ -51,20 +51,20 @@ namespace svxform
 
     Sequence< OUString > OAddConditionDialog_GetSupportedServiceNames()
     {
-        return { "com.sun.star.xforms.ui.dialogs.AddCondition" };
+        return { u"com.sun.star.xforms.ui.dialogs.AddCondition"_ustr };
     }
 
 
     OUString OAddConditionDialog_GetImplementationName()
     {
-        return "org.openoffice.comp.svx.OAddConditionDialog";
+        return u"org.openoffice.comp.svx.OAddConditionDialog"_ustr;
     }
 
     OAddConditionDialog::OAddConditionDialog( const Reference< XComponentContext >& _rxORB )
         :OAddConditionDialogBase( _rxORB )
     {
         registerProperty(
-            "Binding",
+            u"Binding"_ustr,
             PROPERTY_ID_BINDING,
             PropertyAttribute::TRANSIENT,
             &m_xBinding,
@@ -72,7 +72,7 @@ namespace svxform
         );
 
         registerProperty(
-            "FacetName",
+            u"FacetName"_ustr,
             PROPERTY_ID_FACET_NAME,
             PropertyAttribute::TRANSIENT,
             &m_sFacetName,
@@ -80,7 +80,7 @@ namespace svxform
         );
 
         registerProperty(
-            "ConditionValue",
+            u"ConditionValue"_ustr,
             PROPERTY_ID_CONDITION_VALUE,
             PropertyAttribute::TRANSIENT,
             &m_sConditionValue,
@@ -88,7 +88,7 @@ namespace svxform
         );
 
         registerProperty(
-            "FormModel",
+            u"FormModel"_ustr,
             PROPERTY_ID_FORM_MODEL,
             PropertyAttribute::TRANSIENT,
             &m_xWorkModel,

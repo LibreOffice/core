@@ -324,7 +324,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     SolarMutexGuard aGuard;
 
     if( (mpModel == nullptr) || (mpPage == nullptr) )
-        throw lang::DisposedException("Model or Page was already disposed!");
+        throw lang::DisposedException(u"Model or Page was already disposed!"_ustr);
 
     if ( Index < 0 || o3tl::make_unsigned(Index) >= mpPage->GetObjCount() )
         throw lang::IndexOutOfBoundsException("Index (" + OUString::number(Index)
@@ -834,7 +834,7 @@ rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject( const Reference< drawing
 // css::lang::XServiceInfo
 OUString SAL_CALL SvxDrawPage::getImplementationName()
 {
-    return "SvxDrawPage";
+    return u"SvxDrawPage"_ustr;
 }
 
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
@@ -844,7 +844,7 @@ sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { "com.sun.star.drawing.ShapeCollection" };
+    uno::Sequence<OUString> aSeq { u"com.sun.star.drawing.ShapeCollection"_ustr };
     return aSeq;
 }
 

@@ -546,7 +546,7 @@ void SdrGrafObj::ReleaseGraphicLink()
     aFilterName.clear();
 
     auto aGraphic = mpGraphicObject->GetGraphic();
-    aGraphic.setOriginURL("");
+    aGraphic.setOriginURL(u""_ustr);
     SetGraphic(aGraphic);
 }
 

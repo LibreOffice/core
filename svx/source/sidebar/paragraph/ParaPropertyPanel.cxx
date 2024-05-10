@@ -52,11 +52,11 @@ std::unique_ptr<PanelLayout> ParaPropertyPanel::Create (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ParaPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to ParaPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ParaPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to ParaPropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to ParaPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<ParaPropertyPanel>(pParent, rxFrame, pBindings, rxSidebar);
 }
@@ -314,9 +314,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
     }
     else if (eState != SfxItemState::DISABLED )
     {
-        mxLeftIndent->set_text("");
-        mxRightIndent->set_text("");
-        mxFLineIndent->set_text("");
+        mxLeftIndent->set_text(u""_ustr);
+        mxRightIndent->set_text(u""_ustr);
+        mxFLineIndent->set_text(u""_ustr);
     }
 
     limitMetricWidths();
@@ -351,8 +351,8 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
     }
     else if (eState != SfxItemState::DISABLED )
     {
-        mxTopDist->set_text("");
-        mxBottomDist->set_text("");
+        mxTopDist->set_text(u""_ustr);
+        mxBottomDist->set_text(u""_ustr);
     }
     limitMetricWidths();
 }
@@ -390,31 +390,31 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
-    : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui"),
+    : PanelLayout(pParent, u"ParaPropertyPanel"_ustr, u"svx/ui/sidebarparagraph.ui"_ustr),
       //Alignment
-      mxTBxHorzAlign(m_xBuilder->weld_toolbar("horizontalalignment")),
+      mxTBxHorzAlign(m_xBuilder->weld_toolbar(u"horizontalalignment"_ustr)),
       mxHorzAlignDispatch(new ToolbarUnoDispatcher(*mxTBxHorzAlign, *m_xBuilder, rxFrame)),
-      mxTBxVertAlign(m_xBuilder->weld_toolbar("verticalalignment")),
+      mxTBxVertAlign(m_xBuilder->weld_toolbar(u"verticalalignment"_ustr)),
       mxVertAlignDispatch(new ToolbarUnoDispatcher(*mxTBxVertAlign, *m_xBuilder, rxFrame)),
       //NumBullet&Backcolor
-      mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet")),
+      mxTBxNumBullet(m_xBuilder->weld_toolbar(u"numberbullet"_ustr)),
       mxNumBulletDispatch(new ToolbarUnoDispatcher(*mxTBxNumBullet, *m_xBuilder, rxFrame)),
-      mxTBxBackColor(m_xBuilder->weld_toolbar("backgroundcolor")),
+      mxTBxBackColor(m_xBuilder->weld_toolbar(u"backgroundcolor"_ustr)),
       mxBackColorDispatch(new ToolbarUnoDispatcher(*mxTBxBackColor, *m_xBuilder, rxFrame)),
-      mxTBxWriteDirection(m_xBuilder->weld_toolbar("writedirection")),
+      mxTBxWriteDirection(m_xBuilder->weld_toolbar(u"writedirection"_ustr)),
       mxWriteDirectionDispatch(new ToolbarUnoDispatcher(*mxTBxWriteDirection, *m_xBuilder, rxFrame)),
-      mxTBxParaSpacing(m_xBuilder->weld_toolbar("paraspacing")),
+      mxTBxParaSpacing(m_xBuilder->weld_toolbar(u"paraspacing"_ustr)),
       mxParaSpacingDispatch(new ToolbarUnoDispatcher(*mxTBxParaSpacing, *m_xBuilder, rxFrame)),
-      mxTBxLineSpacing(m_xBuilder->weld_toolbar("linespacing")),
+      mxTBxLineSpacing(m_xBuilder->weld_toolbar(u"linespacing"_ustr)),
       mxLineSpacingDispatch(new ToolbarUnoDispatcher(*mxTBxLineSpacing, *m_xBuilder, rxFrame)),
-      mxTBxIndent(m_xBuilder->weld_toolbar("indent")),
+      mxTBxIndent(m_xBuilder->weld_toolbar(u"indent"_ustr)),
       mxIndentDispatch(new ToolbarUnoDispatcher(*mxTBxIndent, *m_xBuilder, rxFrame)),
       //Paragraph spacing
-      mxTopDist(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM)),
-      mxBottomDist(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM)),
-      mxLeftIndent(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM)),
-      mxRightIndent(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM)),
-      mxFLineIndent(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM)),
+      mxTopDist(m_xBuilder->weld_metric_spin_button(u"aboveparaspacing"_ustr, FieldUnit::CM)),
+      mxBottomDist(m_xBuilder->weld_metric_spin_button(u"belowparaspacing"_ustr, FieldUnit::CM)),
+      mxLeftIndent(m_xBuilder->weld_metric_spin_button(u"beforetextindent"_ustr, FieldUnit::CM)),
+      mxRightIndent(m_xBuilder->weld_metric_spin_button(u"aftertextindent"_ustr, FieldUnit::CM)),
+      mxFLineIndent(m_xBuilder->weld_metric_spin_button(u"firstlineindent"_ustr, FieldUnit::CM)),
       maTxtLeft (0),
       maUpper (0),
       maLower (0),

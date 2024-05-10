@@ -998,8 +998,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
 
     css::uno::Reference<lang::XServiceInfo> xServices(GetModel().getUnoModel(),
                                                       css::uno::UNO_QUERY);
-    if (xServices.is() && (xServices->supportsService("com.sun.star.sheet.SpreadsheetDocument") ||
-                           xServices->supportsService("com.sun.star.text.TextDocument")))
+    if (xServices.is() && (xServices->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr) ||
+                           xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr)))
     {
         const bool bUndo(IsUndoEnabled());
         GetModel().EnableUndo(false);

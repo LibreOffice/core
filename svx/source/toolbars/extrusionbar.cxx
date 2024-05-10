@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 // we enter something which never occurs here (hopefully).)
 static SfxSlot aExtrusionBarSlots_Impl[] =
 {
-    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, "" }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell)
@@ -330,7 +330,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             }
             else
             {
-                pObj->SetMergedItem( XSecondaryFillColorItem( "", aColor ) );
+                pObj->SetMergedItem( XSecondaryFillColorItem( u""_ustr, aColor ) );
             }
             pObj->BroadcastObjectChange();
         }
@@ -714,7 +714,7 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
             Position3D  aViewPoint( 3472, -3472, 25000 ); // MSO default
             double      fSkewAngle = -135; // MSO default
 
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"ProjectionMode"_ustr );
             sal_Int16 nProjectionMode = sal_Int16();
             if( pAny && ( *pAny >>= nProjectionMode ) )
                 bParallel = static_cast<ProjectionMode>(nProjectionMode) == ProjectionMode_PARALLEL;
@@ -723,7 +723,7 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
             {
                 double      fSkew = 50.0;
                 EnhancedCustomShapeParameterPair aSkewPropPair;
-                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Skew" );
+                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Skew"_ustr );
                 if( pAny && ( *pAny >>= aSkewPropPair ) )
                 {
                     aSkewPropPair.First.Value >>= fSkew;
@@ -738,12 +738,12 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
             {
                 double      fOriginX = 0.50;
                 double      fOriginY = -0.50;
-                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "ViewPoint" );
+                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"ViewPoint"_ustr );
                 if( pAny )
                     *pAny >>= aViewPoint;
 
                 EnhancedCustomShapeParameterPair aOriginPropPair;
-                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Origin" );
+                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Origin"_ustr );
                 if( pAny && ( *pAny >>= aOriginPropPair ) )
                 {
                     aOriginPropPair.First.Value >>= fOriginX;
@@ -859,7 +859,7 @@ static void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& r
             const SdrCustomShapeGeometryItem & rGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
             bool    bParallel = true;
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"ProjectionMode"_ustr );
             ProjectionMode eProjectionMode;
             if( pAny && ( *pAny >>= eProjectionMode ) )
                 bParallel = eProjectionMode == ProjectionMode_PARALLEL;
@@ -1006,7 +1006,7 @@ static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
             }
 
             double fDepth = 1270.0; // =36pt ODF default
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Depth" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Depth"_ustr );
             if( pAny )
             {
                 EnhancedCustomShapeParameterPair aDepthPropPair;
@@ -1090,11 +1090,11 @@ static void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxIte
             Direction3D aFirstLightDirection( 50000, 0, 10000 );
             Direction3D aSecondLightDirection( -50000, 0, 10000 );
 
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "FirstLightDirection" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"FirstLightDirection"_ustr );
             if( pAny )
                 *pAny >>= aFirstLightDirection;
 
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "SecondLightDirection" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"SecondLightDirection"_ustr );
             if( pAny )
                 *pAny >>= aSecondLightDirection;
 
@@ -1162,7 +1162,7 @@ static void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxIte
             }
 
             double fBrightness = 22178.0 / 655.36;
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Brightness" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Brightness"_ustr );
             if( pAny )
                 *pAny >>= fBrightness;
 
@@ -1233,7 +1233,7 @@ static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
             Color aColor;
 
             bool bUseColor = false;
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Color" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Color"_ustr );
             if( pAny )
                 *pAny >>= bUseColor;
 

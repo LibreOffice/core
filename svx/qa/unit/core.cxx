@@ -27,7 +27,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 };
@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // When exporting that chart to PDF:
-    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "application/pdf",
+    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, u"application/pdf"_ustr,
                                             maTempFile.GetURL());
 
     // Then make sure we get a valid, non-empty PDF:
@@ -71,14 +71,15 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
 
     // Test name in root folder
     {
-        uno::Reference<graphic::XGraphic> xGraphic = xGraphicHelper->loadGraphic("SomeImage.png");
+        uno::Reference<graphic::XGraphic> xGraphic
+            = xGraphicHelper->loadGraphic(u"SomeImage.png"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, xGraphic.is());
     }
 
     // Test name in sub-folder
     {
         uno::Reference<graphic::XGraphic> xGraphic
-            = xGraphicHelper->loadGraphic("Pictures/SomeOtherImage.png");
+            = xGraphicHelper->loadGraphic(u"Pictures/SomeOtherImage.png"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, xGraphic.is());
     }
 
@@ -87,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
         uno::Reference<graphic::XGraphic> xGraphic;
         try
         {
-            xGraphic = xGraphicHelper->loadGraphic("NoneExistent.png");
+            xGraphic = xGraphicHelper->loadGraphic(u"NoneExistent.png"_ustr);
         }
         catch (const uno::Exception&)
         {

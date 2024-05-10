@@ -171,13 +171,13 @@ static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 
 FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
                      SfxChildWindow* _pMgr, weld::Window* _pParent, const SfxChildWinInfo* _pInfo)
-    : SfxModelessDialogController(_pBindings, _pMgr, _pParent, "svx/ui/formpropertydialog.ui", "FormPropertyDialog")
+    : SfxModelessDialogController(_pBindings, _pMgr, _pParent, u"svx/ui/formpropertydialog.ui"_ustr, u"FormPropertyDialog"_ustr)
     , SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
     , m_bInitialStateChange(true)
     , m_pParent(_pParent)
     , m_nAsyncGetFocusId(nullptr)
-    , m_xDialogBox(m_xBuilder->weld_box("dialog-vbox1"))
-    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xDialogBox(m_xBuilder->weld_box(u"dialog-vbox1"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
     , m_xORB(_xORB)
 {
     m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 72, m_xContainer->get_text_height() * 20);
@@ -190,7 +190,7 @@ FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _
         // transport the container area of this dialog to be the container window of the frame
         css::uno::Reference<css::awt::XWindow> xFrameContainerWindow(new weld::TransportAsXWindow(m_xContainer.get()));
         m_xMeAsFrame->initialize(xFrameContainerWindow);
-        m_xMeAsFrame->setName("form property browser");
+        m_xMeAsFrame->setName(u"form property browser"_ustr);
     }
     catch (const Exception&)
     {
@@ -220,10 +220,10 @@ FmPropBrw::~FmPropBrw()
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const OUString pProps[] = { OUString( "ContextDocument" )
-                                             , OUString( "DialogParentWindow" )
-                                             , OUString( "ControlContext" )
-                                             , OUString( "ControlShapeAccess" ) };
+            const OUString pProps[] = { u"ContextDocument"_ustr
+                                             , u"DialogParentWindow"_ustr
+                                             , u"ControlContext"_ustr
+                                             , u"ControlShapeAccess"_ustr };
             for (const auto & i : pProps)
                 xName->removeByName( i );
         }
@@ -405,7 +405,7 @@ namespace
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext,
-                "/org.openoffice.Office.Common/Forms/PropertyBrowser/" ) );
+                u"/org.openoffice.Office.Common/Forms/PropertyBrowser/"_ustr ) );
 
         bool bEnabled = false;
         OSL_VERIFY( aConfiguration.getNodeValue( "DirectHelp" ) >>= bEnabled );
@@ -451,10 +451,10 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // a ComponentContext for the
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( "ContextDocument", Any( xDocument ) ),
-        ::cppu::ContextEntry_Init( "DialogParentWindow", Any( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( "ControlContext", Any( xControlContext ) ),
-        ::cppu::ContextEntry_Init( "ControlShapeAccess", Any( xControlMap ) )
+        ::cppu::ContextEntry_Init( u"ContextDocument"_ustr, Any( xDocument ) ),
+        ::cppu::ContextEntry_Init( u"DialogParentWindow"_ustr, Any( xParentWindow ) ),
+        ::cppu::ContextEntry_Init( u"ControlContext"_ustr, Any( xControlContext ) ),
+        ::cppu::ContextEntry_Init( u"ControlShapeAccess"_ustr, Any( xControlMap ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),

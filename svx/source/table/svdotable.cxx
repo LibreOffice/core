@@ -382,7 +382,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         const OUString sStyleName( Reference< XNamed >( rSource.mxTableStyle, UNO_QUERY_THROW )->getName() );
         Reference< XStyleFamiliesSupplier > xSFS(rTargetSdrModel.getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), css::uno::UNO_SET_THROW );
-        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( "table" ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( u"table"_ustr ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( sStyleName ) )
         {
@@ -706,8 +706,8 @@ void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& Source )
     try
     {
         Reference<XStyleFamiliesSupplier> xSupplier(mpTableObj->getSdrModelFromSdrObject().getUnoModel(), UNO_QUERY_THROW);
-        Reference<XNameAccess> xTableFamily(xSupplier->getStyleFamilies()->getByName("table"), UNO_QUERY_THROW);
-        xDefaultStyle.set(xTableFamily->getByName("default"), UNO_QUERY_THROW);
+        Reference<XNameAccess> xTableFamily(xSupplier->getStyleFamilies()->getByName(u"table"_ustr), UNO_QUERY_THROW);
+        xDefaultStyle.set(xTableFamily->getByName(u"default"_ustr), UNO_QUERY_THROW);
     }
     catch( Exception& )
     {

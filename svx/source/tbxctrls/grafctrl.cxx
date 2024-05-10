@@ -193,11 +193,11 @@ ImplGrafControl::ImplGrafControl(
     vcl::Window* pParent,
     const OUString& rCmd,
     const Reference< XFrame >& rFrame)
-    : InterimItemWindow(pParent, "svx/ui/grafctrlbox.ui", "GrafCtrlBox")
+    : InterimItemWindow(pParent, u"svx/ui/grafctrlbox.ui"_ustr, u"GrafCtrlBox"_ustr)
     , maCommand(rCmd)
     , mxFrame(rFrame)
-    , mxImage(m_xBuilder->weld_image("image"))
-    , mxField(m_xBuilder->weld_metric_spin_button("spinfield", FieldUnit::NONE))
+    , mxImage(m_xBuilder->weld_image(u"image"_ustr))
+    , mxField(m_xBuilder->weld_metric_spin_button(u"spinfield"_ustr, FieldUnit::NONE))
 {
     InitControlBase(&mxField->get_widget());
 
@@ -286,10 +286,10 @@ public:
 }
 
 ImplGrafModeControl::ImplGrafModeControl(vcl::Window* pParent, const Reference<XFrame>& rFrame)
-    : InterimItemWindow(pParent, "svx/ui/grafmodebox.ui", "GrafModeBox")
+    : InterimItemWindow(pParent, u"svx/ui/grafmodebox.ui"_ustr, u"GrafModeBox"_ustr)
     , mnCurPos(0)
     , mxFrame(rFrame)
-    , m_xWidget(m_xBuilder->weld_combo_box("grafmode"))
+    , m_xWidget(m_xBuilder->weld_combo_box(u"grafmode"_ustr))
 {
     InitControlBase(m_xWidget.get());
 
@@ -318,7 +318,7 @@ ImplGrafModeControl::~ImplGrafModeControl()
 
 IMPL_LINK(ImplGrafModeControl, SelectHdl, weld::ComboBox&, rBox, void)
 {
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("GrafMode",
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"GrafMode"_ustr,
                                                                    sal_Int16(rBox.get_active())) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -328,7 +328,7 @@ IMPL_LINK(ImplGrafModeControl, SelectHdl, weld::ComboBox&, rBox, void)
 
     SfxToolBoxControl::Dispatch(
         Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-        ".uno:GrafMode",
+        u".uno:GrafMode"_ustr,
         aArgs );
 }
 

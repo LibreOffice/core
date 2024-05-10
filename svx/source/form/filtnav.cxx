@@ -99,7 +99,7 @@ void OFilterItemExchange::AddSupportedFormats()
 SotClipboardFormatId OFilterItemExchange::getFormatId()
 {
     static SotClipboardFormatId s_nFormat =
-         SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\"");
+         SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""_ustr);
     DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
     return s_nFormat;
 }
@@ -796,7 +796,7 @@ bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OU
             OUString aPreparedText;
             Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             pParseNode->parseNodeToPredicateStr(
-                aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, ".", getParseContext() );
+                aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, u"."_ustr, getParseContext() );
             rText = aPreparedText;
             return true;
         }
@@ -1495,15 +1495,15 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
                     aSelectList.clear();
             }
 
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "svx/ui/filtermenu.ui"));
-            std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"svx/ui/filtermenu.ui"_ustr));
+            std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
 
             // every condition could be deleted except the first one if it's the only one
             bool bNoDelete = false;
             if (aSelectList.empty())
             {
                 bNoDelete = true;
-                xContextMenu->remove("delete");
+                xContextMenu->remove(u"delete"_ustr);
             }
 
             FmFilterData* pFilterEntry = weld::fromId<FmFilterData*>(m_xTreeView->get_id(*xClicked));
@@ -1519,9 +1519,9 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
 
             if (!bEdit)
             {
-                xContextMenu->remove("edit");
-                xContextMenu->remove("isnull");
-                xContextMenu->remove("isnotnull");
+                xContextMenu->remove(u"edit"_ustr);
+                xContextMenu->remove(u"isnull"_ustr);
+                xContextMenu->remove(u"isnotnull"_ustr);
             }
 
             OUString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(aWhere, ::Size(1, 1)));
@@ -1532,7 +1532,7 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             else if (sIdent == "isnull")
             {
                 OUString aErrorMsg;
-                OUString aText = "IS NULL";
+                OUString aText = u"IS NULL"_ustr;
                 assert(pFilterItem && "if item is null this menu entry was removed and unavailable");
                 m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
                 m_pModel->SetTextForItem(pFilterItem, aText);
@@ -1540,7 +1540,7 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             else if (sIdent == "isnotnull")
             {
                 OUString aErrorMsg;
-                OUString aText = "IS NOT NULL";
+                OUString aText = u"IS NOT NULL"_ustr;
 
                 assert(pFilterItem && "if item is null this menu entry was removed and unavailable");
                 m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
@@ -1723,9 +1723,9 @@ void FmFilterNavigator::DeleteSelection()
 
 FmFilterNavigatorWin::FmFilterNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                            vcl::Window* _pParent)
-    : SfxDockingWindow(_pBindings, _pMgr, _pParent, "FilterNavigator", "svx/ui/filternavigator.ui")
+    : SfxDockingWindow(_pBindings, _pMgr, _pParent, u"FilterNavigator"_ustr, u"svx/ui/filternavigator.ui"_ustr)
     , SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
-    , m_xNavigatorTree(new FmFilterNavigator(this, m_xBuilder->weld_tree_view("treeview")))
+    , m_xNavigatorTree(new FmFilterNavigator(this, m_xBuilder->weld_tree_view(u"treeview"_ustr)))
 {
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 

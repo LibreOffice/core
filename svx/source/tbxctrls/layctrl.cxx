@@ -110,10 +110,10 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl, weld::Button&, void)
 }
 
 TableWindow::TableWindow(SvxTableToolBoxControl* pControl, weld::Widget* pParent, const OUString& rCmd)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/tablewindow.ui", "TableWindow")
-    , mxTableButton(m_xBuilder->weld_button("moreoptions"))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/tablewindow.ui"_ustr, u"TableWindow"_ustr)
+    , mxTableButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
     , mxTableWidget(new TableWidget(pControl, rCmd))
-    , mxTableWidgetWin(new weld::CustomWeld(*m_xBuilder, "table", *mxTableWidget))
+    , mxTableWidgetWin(new weld::CustomWeld(*m_xBuilder, u"table"_ustr, *mxTableWidget))
     , mxControl(pControl)
 {
     mxTableButton->set_label( SvxResId( RID_SVXSTR_MORE ) );
@@ -337,8 +337,8 @@ void TableWidget::InsertTable()
 {
     if (nCol && nLine)
     {
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Columns", sal_Int16( nCol )),
-                                         comphelper::makePropertyValue("Rows", sal_Int16( nLine )) };
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"Columns"_ustr, sal_Int16( nCol )),
+                                         comphelper::makePropertyValue(u"Rows"_ustr, sal_Int16( nLine )) };
 
         mxControl->TableDialog( aArgs );
     }
@@ -442,10 +442,10 @@ public:
 }
 
 ColumnsWindow::ColumnsWindow(SvxColumnsToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/columnswindow.ui", "ColumnsWindow")
-    , mxSpinButton(m_xBuilder->weld_spin_button("spinbutton"))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/columnswindow.ui"_ustr, u"ColumnsWindow"_ustr)
+    , mxSpinButton(m_xBuilder->weld_spin_button(u"spinbutton"_ustr))
     , mxColumnsWidget(new ColumnsWidget(pControl, *mxSpinButton))
-    , mxColumnsWidgetWin(new weld::CustomWeld(*m_xBuilder, "columns", *mxColumnsWidget))
+    , mxColumnsWidgetWin(new weld::CustomWeld(*m_xBuilder, u"columns"_ustr, *mxColumnsWidget))
     , mxControl(pControl)
 {
 }
@@ -672,8 +672,8 @@ void ColumnsWidget::InsertColumns()
     if (nCol)
     {
         Sequence< PropertyValue > aArgs{
-            comphelper::makePropertyValue("Columns", sal_Int16( nCol )),
-            comphelper::makePropertyValue("Modifier", sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ))
+            comphelper::makePropertyValue(u"Columns"_ustr, sal_Int16( nCol )),
+            comphelper::makePropertyValue(u"Modifier"_ustr, sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ))
         };
         mxControl->InsertColumns(aArgs);
     }
@@ -721,12 +721,12 @@ VclPtr<vcl::Window> SvxTableToolBoxControl::createVclPopupWindow( vcl::Window* p
 
 OUString SvxTableToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.TableToolBoxControl";
+    return u"com.sun.star.comp.svx.TableToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxTableToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -779,12 +779,12 @@ VclPtr<vcl::Window> SvxColumnsToolBoxControl::createVclPopupWindow(vcl::Window* 
 
 OUString SvxColumnsToolBoxControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.ColumnsToolBoxControl";
+    return u"com.sun.star.comp.svx.ColumnsToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> SvxColumnsToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

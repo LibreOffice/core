@@ -1097,8 +1097,8 @@ namespace sdr::contact {
             // tdf#150886 for calc/writer/impress make forms ignore the platform theme
             Reference<XPropertySet> xModelProperties(xControlModel, UNO_QUERY);
             Reference<XPropertySetInfo> xInfo = xModelProperties ? xModelProperties->getPropertySetInfo() : nullptr;
-            if (xInfo && xInfo->hasPropertyByName("StandardTheme"))
-                xModelProperties->setPropertyValue("StandardTheme", Any(!_rUnoObject.getSdrModelFromSdrObject().AreControlsThemed()));
+            if (xInfo && xInfo->hasPropertyByName(u"StandardTheme"_ustr))
+                xModelProperties->setPropertyValue(u"StandardTheme"_ustr, Any(!_rUnoObject.getSdrModelFromSdrObject().AreControlsThemed()));
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );
@@ -1290,7 +1290,7 @@ namespace sdr::contact {
         try
         {
             Reference< XPropertySet > xModelProperties( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
-            OSL_VERIFY( xModelProperties->getPropertyValue( "Printable" ) >>= bIsPrintable );
+            OSL_VERIFY( xModelProperties->getPropertyValue( u"Printable"_ustr ) >>= bIsPrintable );
         }
         catch( const Exception& )
         {

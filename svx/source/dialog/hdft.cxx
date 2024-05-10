@@ -121,50 +121,50 @@ SvxFooterPage::SvxFooterPage(weld::Container* pPage, weld::DialogController* pCo
 }
 
 SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
-    : SfxTabPage(pPage, pController, "svx/ui/headfootformatpage.ui", "HFFormatPage", &rSet)
+    : SfxTabPage(pPage, pController, u"svx/ui/headfootformatpage.ui"_ustr, u"HFFormatPage"_ustr, &rSet)
     , nId(nSetId)
     , mbDisableQueryBox(false)
     , mbEnableDrawingLayerFillStyles(false)
-    , m_xCntSharedBox(m_xBuilder->weld_check_button("checkSameLR"))
-    , m_xCntSharedFirstBox(m_xBuilder->weld_check_button("checkSameFP"))
-    , m_xLMLbl(m_xBuilder->weld_label("labelLeftMarg"))
-    , m_xLMEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FieldUnit::CM))
-    , m_xRMLbl(m_xBuilder->weld_label("labelRightMarg"))
-    , m_xRMEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FieldUnit::CM))
-    , m_xDistFT(m_xBuilder->weld_label("labelSpacing"))
-    , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spinSpacing", FieldUnit::CM))
-    , m_xDynSpacingCB(m_xBuilder->weld_check_button("checkDynSpacing"))
-    , m_xHeightFT(m_xBuilder->weld_label("labelHeight"))
-    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FieldUnit::CM))
-    , m_xHeightDynBtn(m_xBuilder->weld_check_button("checkAutofit"))
-    , m_xBackgroundBtn(m_xBuilder->weld_button("buttonMore"))
-    , m_xBspWin(new weld::CustomWeld(*m_xBuilder, "drawingareaPageHF", m_aBspWin))
+    , m_xCntSharedBox(m_xBuilder->weld_check_button(u"checkSameLR"_ustr))
+    , m_xCntSharedFirstBox(m_xBuilder->weld_check_button(u"checkSameFP"_ustr))
+    , m_xLMLbl(m_xBuilder->weld_label(u"labelLeftMarg"_ustr))
+    , m_xLMEdit(m_xBuilder->weld_metric_spin_button(u"spinMargLeft"_ustr, FieldUnit::CM))
+    , m_xRMLbl(m_xBuilder->weld_label(u"labelRightMarg"_ustr))
+    , m_xRMEdit(m_xBuilder->weld_metric_spin_button(u"spinMargRight"_ustr, FieldUnit::CM))
+    , m_xDistFT(m_xBuilder->weld_label(u"labelSpacing"_ustr))
+    , m_xDistEdit(m_xBuilder->weld_metric_spin_button(u"spinSpacing"_ustr, FieldUnit::CM))
+    , m_xDynSpacingCB(m_xBuilder->weld_check_button(u"checkDynSpacing"_ustr))
+    , m_xHeightFT(m_xBuilder->weld_label(u"labelHeight"_ustr))
+    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button(u"spinHeight"_ustr, FieldUnit::CM))
+    , m_xHeightDynBtn(m_xBuilder->weld_check_button(u"checkAutofit"_ustr))
+    , m_xBackgroundBtn(m_xBuilder->weld_button(u"buttonMore"_ustr))
+    , m_xBspWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaPageHF"_ustr, m_aBspWin))
 {
     //swap header <-> footer in UI
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
-        m_xContainer->set_help_id("svx/ui/headfootformatpage/FFormatPage");
-        m_xPageLbl = m_xBuilder->weld_label("labelFooterFormat");
-        m_xTurnOnBox = m_xBuilder->weld_check_button("checkFooterOn");
+        m_xContainer->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
+        m_xPageLbl = m_xBuilder->weld_label(u"labelFooterFormat"_ustr);
+        m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkFooterOn"_ustr);
 
         /* Set custom HIDs for the Footer help page (shared/01/05040400.xhp)
         otherwise it would display the same extended help
         on both the Header and Footer tabs */
-        m_xCntSharedBox->set_help_id( "SVX_HID_FOOTER_CHECKSAMELR" );
-        m_xCntSharedFirstBox->set_help_id( "SVX_HID_FOOTER_CHECKSAMEFP" );
-        m_xLMEdit->set_help_id( "SVX_HID_FOOTER_SPINMARGLEFT" );
-        m_xRMEdit->set_help_id( "SVX_HID_FOOTER_SPINMARGRIGHT" );
-        m_xDistEdit->set_help_id( "SVX_HID_FOOTER_SPINSPACING" );
-        m_xDynSpacingCB->set_help_id( "SVX_HID_FOOTER_CHECKDYNSPACING" );
-        m_xHeightEdit->set_help_id( "SVX_HID_FOOTER_SPINHEIGHT" );
-        m_xHeightDynBtn->set_help_id( "SVX_HID_FOOTER_CHECKAUTOFIT" );
-        m_xBackgroundBtn->set_help_id( "SVX_HID_FOOTER_BUTTONMORE" );
+        m_xCntSharedBox->set_help_id( u"SVX_HID_FOOTER_CHECKSAMELR"_ustr );
+        m_xCntSharedFirstBox->set_help_id( u"SVX_HID_FOOTER_CHECKSAMEFP"_ustr );
+        m_xLMEdit->set_help_id( u"SVX_HID_FOOTER_SPINMARGLEFT"_ustr );
+        m_xRMEdit->set_help_id( u"SVX_HID_FOOTER_SPINMARGRIGHT"_ustr );
+        m_xDistEdit->set_help_id( u"SVX_HID_FOOTER_SPINSPACING"_ustr );
+        m_xDynSpacingCB->set_help_id( u"SVX_HID_FOOTER_CHECKDYNSPACING"_ustr );
+        m_xHeightEdit->set_help_id( u"SVX_HID_FOOTER_SPINHEIGHT"_ustr );
+        m_xHeightDynBtn->set_help_id( u"SVX_HID_FOOTER_CHECKAUTOFIT"_ustr );
+        m_xBackgroundBtn->set_help_id( u"SVX_HID_FOOTER_BUTTONMORE"_ustr );
     }
     else //Header
     {
-        m_xContainer->set_help_id("svx/ui/headfootformatpage/HFormatPage");
-        m_xPageLbl = m_xBuilder->weld_label("labelHeaderFormat");
-        m_xTurnOnBox = m_xBuilder->weld_check_button("checkHeaderOn");
+        m_xContainer->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
+        m_xPageLbl = m_xBuilder->weld_label(u"labelHeaderFormat"_ustr);
+        m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
     }
     m_xTurnOnBox->show();
     m_xPageLbl->show();

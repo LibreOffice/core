@@ -139,7 +139,7 @@ namespace sdr::overlay
             // Set Property 'ReducedDisplayQuality' to true to allow simpler interaction
             // visualisations. Note: Currently will use reduced quality for 3d scene soft renderer
             uno::Sequence< beans::PropertyValue > xProperties{
-                comphelper::makePropertyValue("ReducedDisplayQuality", true)
+                comphelper::makePropertyValue(u"ReducedDisplayQuality"_ustr, true)
             };
             maViewInformation2D = drawinglayer::geometry::createViewInformation2D(xProperties);
         }

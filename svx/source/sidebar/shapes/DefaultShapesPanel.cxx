@@ -30,27 +30,27 @@ namespace svx::sidebar {
 DefaultShapesPanel::DefaultShapesPanel (
     weld::Widget* pParent,
     css::uno::Reference<css::frame::XFrame> xFrame)
-    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui")
+    : PanelLayout(pParent, u"DefaultShapesPanel"_ustr, u"svx/ui/defaultshapespanel.ui"_ustr)
     , mxLineArrowSet(new ValueSet(nullptr))
-    , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))
+    , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, u"LinesArrows"_ustr, *mxLineArrowSet))
     , mxCurveSet(new ValueSet(nullptr))
-    , mxCurveSetWin(new weld::CustomWeld(*m_xBuilder, "Curves", *mxCurveSet))
+    , mxCurveSetWin(new weld::CustomWeld(*m_xBuilder, u"Curves"_ustr, *mxCurveSet))
     , mxConnectorSet(new ValueSet(nullptr))
-    , mxConnectorSetWin(new weld::CustomWeld(*m_xBuilder, "Connectors", *mxConnectorSet))
+    , mxConnectorSetWin(new weld::CustomWeld(*m_xBuilder, u"Connectors"_ustr, *mxConnectorSet))
     , mxBasicShapeSet(new ValueSet(nullptr))
-    , mxBasicShapeSetWin(new weld::CustomWeld(*m_xBuilder, "BasicShapes", *mxBasicShapeSet))
+    , mxBasicShapeSetWin(new weld::CustomWeld(*m_xBuilder, u"BasicShapes"_ustr, *mxBasicShapeSet))
     , mxSymbolShapeSet(new ValueSet(nullptr))
-    , mxSymbolShapeSetWin(new weld::CustomWeld(*m_xBuilder, "SymbolShapes", *mxSymbolShapeSet))
+    , mxSymbolShapeSetWin(new weld::CustomWeld(*m_xBuilder, u"SymbolShapes"_ustr, *mxSymbolShapeSet))
     , mxBlockArrowSet(new ValueSet(nullptr))
-    , mxBlockArrowSetWin(new weld::CustomWeld(*m_xBuilder, "BlockArrows", *mxBlockArrowSet))
+    , mxBlockArrowSetWin(new weld::CustomWeld(*m_xBuilder, u"BlockArrows"_ustr, *mxBlockArrowSet))
     , mxFlowchartSet(new ValueSet(nullptr))
-    , mxFlowchartSetWin(new weld::CustomWeld(*m_xBuilder, "Flowcharts", *mxFlowchartSet))
+    , mxFlowchartSetWin(new weld::CustomWeld(*m_xBuilder, u"Flowcharts"_ustr, *mxFlowchartSet))
     , mxCalloutSet(new ValueSet(nullptr))
-    , mxCalloutSetWin(new weld::CustomWeld(*m_xBuilder, "Callouts", *mxCalloutSet))
+    , mxCalloutSetWin(new weld::CustomWeld(*m_xBuilder, u"Callouts"_ustr, *mxCalloutSet))
     , mxStarSet(new ValueSet(nullptr))
-    , mxStarSetWin(new weld::CustomWeld(*m_xBuilder, "Stars", *mxStarSet))
+    , mxStarSetWin(new weld::CustomWeld(*m_xBuilder, u"Stars"_ustr, *mxStarSet))
     , mx3DObjectSet(new ValueSet(nullptr))
-    , mx3DObjectSetWin(new weld::CustomWeld(*m_xBuilder, "3DObjects", *mx3DObjectSet))
+    , mx3DObjectSetWin(new weld::CustomWeld(*m_xBuilder, u"3DObjects"_ustr, *mx3DObjectSet))
     , mxFrame(std::move(xFrame))
 {
     Initialize();
@@ -63,9 +63,9 @@ std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
     const Reference< XFrame >& rxFrame)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to DefaultShapesPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to DefaultShapesPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to DefaultShapesPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to DefaultShapesPanel::Create"_ustr, nullptr, 1);
 
     return std::make_unique<DefaultShapesPanel>(pParent, rxFrame);
 }

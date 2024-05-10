@@ -194,7 +194,7 @@ css::uno::Reference<css::uno::XInterface> create(
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
 {
-    return create(rServiceSpecifier, "");
+    return create(rServiceSpecifier, u""_ustr);
 }
 
 uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16string_view ServiceSpecifier )
@@ -447,7 +447,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         }
 
         // create the API wrapper
-        rtl::Reference<SvxShape> xNewShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, "" );
+        rtl::Reference<SvxShape> xNewShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, u""_ustr );
         pShape = xNewShape.get();
 
         // set shape type
@@ -469,28 +469,28 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
     uno::Sequence< OUString > aSNS{
-        "com.sun.star.drawing.DashTable",
-        "com.sun.star.drawing.GradientTable",
-        "com.sun.star.drawing.HatchTable",
-        "com.sun.star.drawing.BitmapTable",
-        "com.sun.star.drawing.TransparencyGradientTable",
-        "com.sun.star.drawing.MarkerTable",
-        "com.sun.star.text.NumberingRules",
-        "com.sun.star.image.ImageMapRectangleObject",
-        "com.sun.star.image.ImageMapCircleObject",
-        "com.sun.star.image.ImageMapPolygonObject",
+        u"com.sun.star.drawing.DashTable"_ustr,
+        u"com.sun.star.drawing.GradientTable"_ustr,
+        u"com.sun.star.drawing.HatchTable"_ustr,
+        u"com.sun.star.drawing.BitmapTable"_ustr,
+        u"com.sun.star.drawing.TransparencyGradientTable"_ustr,
+        u"com.sun.star.drawing.MarkerTable"_ustr,
+        u"com.sun.star.text.NumberingRules"_ustr,
+        u"com.sun.star.image.ImageMapRectangleObject"_ustr,
+        u"com.sun.star.image.ImageMapCircleObject"_ustr,
+        u"com.sun.star.image.ImageMapPolygonObject"_ustr,
 
-        "com.sun.star.presentation.TitleTextShape",
-        "com.sun.star.presentation.OutlinerShape",
-        "com.sun.star.presentation.SubtitleShape",
-        "com.sun.star.presentation.GraphicObjectShape",
-        "com.sun.star.presentation.ChartShape",
-        "com.sun.star.presentation.PageShape",
-        "com.sun.star.presentation.OLE2Shape",
-        "com.sun.star.presentation.TableShape",
-        "com.sun.star.presentation.OrgChartShape",
-        "com.sun.star.presentation.NotesShape",
-        "com.sun.star.presentation.HandoutShape"
+        u"com.sun.star.presentation.TitleTextShape"_ustr,
+        u"com.sun.star.presentation.OutlinerShape"_ustr,
+        u"com.sun.star.presentation.SubtitleShape"_ustr,
+        u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+        u"com.sun.star.presentation.ChartShape"_ustr,
+        u"com.sun.star.presentation.PageShape"_ustr,
+        u"com.sun.star.presentation.OLE2Shape"_ustr,
+        u"com.sun.star.presentation.TableShape"_ustr,
+        u"com.sun.star.presentation.OrgChartShape"_ustr,
+        u"com.sun.star.presentation.NotesShape"_ustr,
+        u"com.sun.star.presentation.HandoutShape"_ustr
     };
 
     return comphelper::concatSequences( aSNS_ORG, aSNS );
@@ -499,7 +499,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
 {
-    return "SvxUnoDrawingModel";
+    return u"SvxUnoDrawingModel"_ustr;
 }
 
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
@@ -509,7 +509,7 @@ sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.DrawingDocument" };
+    return { u"com.sun.star.drawing.DrawingDocument"_ustr };
 }
 
 // XAnyCompareFactory
@@ -626,7 +626,7 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
 
 OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  )
 {
-    return "SvxUnoDrawPagesAccess";
+    return u"SvxUnoDrawPagesAccess"_ustr;
 }
 
 sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName )
@@ -636,7 +636,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.DrawPages" };
+    return { u"com.sun.star.drawing.DrawPages"_ustr };
 }
 
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel)

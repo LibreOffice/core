@@ -122,9 +122,9 @@ GalleryBrowser1::GalleryBrowser1(
     Gallery* pGallery)//,
     //std::function<void ()> aThemeSelectionHandler)
     :
-    mxNewTheme(rBuilder.weld_button("insert")),
-    mxThemes(rBuilder.weld_tree_view("themelist")),
-    mxMoreGalleries(rBuilder.weld_button("btnMoreGalleries")),
+    mxNewTheme(rBuilder.weld_button(u"insert"_ustr)),
+    mxThemes(rBuilder.weld_tree_view(u"themelist"_ustr)),
+    mxMoreGalleries(rBuilder.weld_button(u"btnMoreGalleries"_ustr)),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
@@ -132,15 +132,15 @@ GalleryBrowser1::GalleryBrowser1(
     aImgReadOnly          ( RID_SVXBMP_THEME_READONLY )
     //maThemeSelectionHandler(std::move(aThemeSelectionHandler))
     , mpCurTheme(nullptr)
-    , mxIconView(new GalleryIconView(this, rBuilder.weld_scrolled_window("galleryscroll", true)))
-    , mxIconViewWin(new weld::CustomWeld(rBuilder, "gallery", *mxIconView))
-    , mxListView(rBuilder.weld_tree_view("gallerylist"))
-    , mxPreview(new GalleryPreview(this, rBuilder.weld_scrolled_window("previewscroll")))
-    , mxPreviewWin(new weld::CustomWeld(rBuilder, "preview", *mxPreview))
-    , mxIconButton(rBuilder.weld_toggle_button("icon"))
-    , mxListButton(rBuilder.weld_toggle_button("list"))
-    , mxSearchField(rBuilder.weld_entry("search"))
-    , mxInfoBar(rBuilder.weld_label("label"))
+    , mxIconView(new GalleryIconView(this, rBuilder.weld_scrolled_window(u"galleryscroll"_ustr, true)))
+    , mxIconViewWin(new weld::CustomWeld(rBuilder, u"gallery"_ustr, *mxIconView))
+    , mxListView(rBuilder.weld_tree_view(u"gallerylist"_ustr))
+    , mxPreview(new GalleryPreview(this, rBuilder.weld_scrolled_window(u"previewscroll"_ustr)))
+    , mxPreviewWin(new weld::CustomWeld(rBuilder, u"preview"_ustr, *mxPreview))
+    , mxIconButton(rBuilder.weld_toggle_button(u"icon"_ustr))
+    , mxListButton(rBuilder.weld_toggle_button(u"list"_ustr))
+    , mxSearchField(rBuilder.weld_entry(u"search"_ustr))
+    , mxInfoBar(rBuilder.weld_label(u"label"_ustr))
     , maPreviewSize(28, 28)
     , mnCurActionPos      ( 0xffffffff )
     , meMode              ( GALLERYBROWSERMODE_NONE )
@@ -174,7 +174,7 @@ GalleryBrowser1::GalleryBrowser1(
 
     m_xTransformer.set(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.util.URLTransformer", m_xContext ),
+            u"com.sun.star.util.URLTransformer"_ustr, m_xContext ),
         css::uno::UNO_QUERY );
 
     mxIconButton->connect_toggled( LINK( this, GalleryBrowser1, SelectTbxHdl ) );
@@ -220,7 +220,7 @@ void GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
     else
         pImage = &aImgNormal;
 
-    mxThemes->append("", pEntry->GetThemeName(), *pImage);
+    mxThemes->append(u""_ustr, pEntry->GetThemeName(), *pImage);
 }
 
 void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData )
@@ -369,8 +369,8 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
     }
     else if (rIdent == u"delete")
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxThemes.get(), "svx/ui/querydeletethemedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteThemeDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxThemes.get(), u"svx/ui/querydeletethemedialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"QueryDeleteThemeDialog"_ustr));
         if (xQuery->run() == RET_YES)
             mpGallery->RemoveTheme( mxThemes->get_selected_text() );
     }
@@ -492,9 +492,9 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 IMPL_STATIC_LINK_NOARG( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue("AdditionsTag", OUString("Gallery"))
+        comphelper::makePropertyValue(u"AdditionsTag"_ustr, u"Gallery"_ustr)
     };
-    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 IMPL_LINK(GalleryBrowser1, KeyInputHdl1, const KeyEvent&, rKEvt, bool)
@@ -572,14 +572,14 @@ IMPL_LINK(GalleryBrowser1, PopupMenuHdl1, const CommandEvent&, rCEvt, bool)
     if (aExecVector.empty())
         return true;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxThemes.get(), "svx/ui/gallerymenu1.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxThemes.get(), u"svx/ui/gallerymenu1.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
-    xMenu->set_visible("update", std::find( aExecVector.begin(), aExecVector.end(), "update" ) != aExecVector.end());
-    xMenu->set_visible("rename", std::find( aExecVector.begin(), aExecVector.end(), "rename" ) != aExecVector.end());
-    xMenu->set_visible("delete", std::find( aExecVector.begin(), aExecVector.end(), "delete" ) != aExecVector.end());
-    xMenu->set_visible("assign", std::find( aExecVector.begin(), aExecVector.end(), "assign" ) != aExecVector.end());
-    xMenu->set_visible("properties", std::find( aExecVector.begin(), aExecVector.end(), "properties" ) != aExecVector.end());
+    xMenu->set_visible(u"update"_ustr, std::find( aExecVector.begin(), aExecVector.end(), "update" ) != aExecVector.end());
+    xMenu->set_visible(u"rename"_ustr, std::find( aExecVector.begin(), aExecVector.end(), "rename" ) != aExecVector.end());
+    xMenu->set_visible(u"delete"_ustr, std::find( aExecVector.begin(), aExecVector.end(), "delete" ) != aExecVector.end());
+    xMenu->set_visible(u"assign"_ustr, std::find( aExecVector.begin(), aExecVector.end(), "assign" ) != aExecVector.end());
+    xMenu->set_visible(u"properties"_ustr, std::find( aExecVector.begin(), aExecVector.end(), "properties" ) != aExecVector.end());
 
     OUString sCommand(xMenu->popup_at_rect(mxThemes.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     ImplExecute(sCommand);
@@ -1030,7 +1030,7 @@ void GalleryBrowser1::ImplUpdateViews( sal_uInt16 nSelectionId )
             if (aFoundIter->maThemeName == aThemeName)
             {
                mxIconView->InsertItem(aFoundIter->mnIdInTheme + 1); // skip reserved id 0
-               mxListView->append(OUString::number(aFoundIter->mnIdInTheme),""); // create on-demand in VisRowsScrolledHdl
+               mxListView->append(OUString::number(aFoundIter->mnIdInTheme),u""_ustr); // create on-demand in VisRowsScrolledHdl
 
                if (inserted == nAlwaysUpToDate) // fill in the first block
                     UpdateRows(false);
@@ -1276,7 +1276,7 @@ void GalleryBrowser1::DispatchAdd(
         m_xTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch(
             aURL,
-            "_self",
+            u"_self"_ustr,
             css::frame::FrameSearchFlag::SELF );
     }
 
@@ -1353,8 +1353,8 @@ void GalleryBrowser1::Execute(std::u16string_view rIdent)
     {
         if (!mpCurTheme->IsReadOnly())
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewWindow(), "svx/ui/querydeleteobjectdialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteObjectDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewWindow(), u"svx/ui/querydeleteobjectdialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"QueryDeleteObjectDialog"_ustr));
             if (xQuery->run() == RET_YES)
             {
                 mpCurTheme->RemoveObject( mnCurActionPos );
@@ -1575,23 +1575,23 @@ GalleryThemePopup::GalleryThemePopup(
     : mpTheme( pTheme )
     , mnObjectPos( nObjectPos )
     , mbPreview( bPreview )
-    , mxBuilder(Application::CreateBuilder(pParent, "svx/ui/gallerymenu2.ui"))
-    , mxPopupMenu(mxBuilder->weld_menu("menu"))
-    , mxBackgroundPopup(mxBuilder->weld_menu("backgroundmenu"))
+    , mxBuilder(Application::CreateBuilder(pParent, u"svx/ui/gallerymenu2.ui"_ustr))
+    , mxPopupMenu(mxBuilder->weld_menu(u"menu"_ustr))
+    , mxBackgroundPopup(mxBuilder->weld_menu(u"backgroundmenu"_ustr))
     , mpBrowser( pBrowser )
 {
     // SID_GALLERY_ENABLE_ADDCOPY
     m_aCommandInfo.emplace(
             SID_GALLERY_ENABLE_ADDCOPY,
-            CommandInfo( ".uno:GalleryEnableAddCopy" ));
+            CommandInfo( u".uno:GalleryEnableAddCopy"_ustr ));
     // SID_GALLERY_BG_BRUSH
     m_aCommandInfo.emplace(
             SID_GALLERY_BG_BRUSH,
-            CommandInfo( ".uno:BackgroundImage" ));
+            CommandInfo( u".uno:BackgroundImage"_ustr ));
     // SID_GALLERY_FORMATS
     m_aCommandInfo.emplace(
             SID_GALLERY_FORMATS,
-            CommandInfo( ".uno:InsertGalleryPic" ));
+            CommandInfo( u".uno:InsertGalleryPic"_ustr ));
 
 }
 
@@ -1603,7 +1603,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
     {
         if ( !rEvent.IsEnabled )
         {
-            mxPopupMenu->set_visible("add", false);
+            mxPopupMenu->set_visible(u"add"_ustr, false);
         }
     }
     else if ( rURL == ".uno:BackgroundImage" )
@@ -1662,27 +1662,27 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
 
-    mxPopupMenu->set_visible("add", bValidURL && SgaObjKind::Sound != eObjKind);
+    mxPopupMenu->set_visible(u"add"_ustr, bValidURL && SgaObjKind::Sound != eObjKind);
 
-    mxPopupMenu->set_visible("preview", bValidURL);
-    mxPopupMenu->set_active("preview", mbPreview);
+    mxPopupMenu->set_visible(u"preview"_ustr, bValidURL);
+    mxPopupMenu->set_active(u"preview"_ustr, mbPreview);
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
     {
-        mxPopupMenu->set_visible("delete", false);
-        mxPopupMenu->set_visible("title", false);
+        mxPopupMenu->set_visible(u"delete"_ustr, false);
+        mxPopupMenu->set_visible(u"title"_ustr, false);
         if (mpTheme->IsReadOnly())
-            mxPopupMenu->set_visible("paste", false);
+            mxPopupMenu->set_visible(u"paste"_ustr, false);
 
         if (!mpTheme->GetObjectCount())
-            mxPopupMenu->set_visible("copy", false);
+            mxPopupMenu->set_visible(u"copy"_ustr, false);
     }
     else
     {
-        mxPopupMenu->set_visible("delete", !mbPreview);
-        mxPopupMenu->set_visible("title", true);
-        mxPopupMenu->set_visible("copy", true);
-        mxPopupMenu->set_visible("paste", true);
+        mxPopupMenu->set_visible(u"delete"_ustr, !mbPreview);
+        mxPopupMenu->set_visible(u"title"_ustr, true);
+        mxPopupMenu->set_visible(u"copy"_ustr, true);
+        mxPopupMenu->set_visible(u"paste"_ustr, true);
     }
 
     // update status
@@ -1702,7 +1702,7 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
             {
                 rCmdInfo.Dispatch = xDispatchProvider->queryDispatch(
                     rCmdInfo.URL,
-                    "_self",
+                    u"_self"_ustr,
                     css::frame::FrameSearchFlag::SELF );
             }
 
@@ -1717,9 +1717,9 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     }
 
     if( !mxBackgroundPopup->n_children() || ( eObjKind == SgaObjKind::SvDraw ) || ( eObjKind == SgaObjKind::Sound ) )
-        mxPopupMenu->set_visible("background", false);
+        mxPopupMenu->set_visible(u"background"_ustr, false);
     else
-        mxPopupMenu->set_visible("background", true);
+        mxPopupMenu->set_visible(u"background"_ustr, true);
 
     MenuSelectHdl(mxPopupMenu->popup_at_rect(pParent, tools::Rectangle(rPos, Size(1,1))));
 }
@@ -1752,12 +1752,12 @@ void GalleryThemePopup::BackgroundMenuSelectHdl(sal_uInt16 nPos)
     OUString aFilterName( mpBrowser->GetFilterName() );
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs{
-        comphelper::makePropertyValue("Background.Transparent", sal_Int32( 0 )), // 0 - 100
-        comphelper::makePropertyValue("Background.BackColor", sal_Int32( - 1 )),
-        comphelper::makePropertyValue("Background.URL", aURL),
-        comphelper::makePropertyValue("Background.Filtername", aFilterName), // FIXME name should be FilterName
-        comphelper::makePropertyValue("Background.Position", css::style::GraphicLocation_TILED),
-        comphelper::makePropertyValue("Position", nPos)
+        comphelper::makePropertyValue(u"Background.Transparent"_ustr, sal_Int32( 0 )), // 0 - 100
+        comphelper::makePropertyValue(u"Background.BackColor"_ustr, sal_Int32( - 1 )),
+        comphelper::makePropertyValue(u"Background.URL"_ustr, aURL),
+        comphelper::makePropertyValue(u"Background.Filtername"_ustr, aFilterName), // FIXME name should be FilterName
+        comphelper::makePropertyValue(u"Background.Position"_ustr, css::style::GraphicLocation_TILED),
+        comphelper::makePropertyValue(u"Position"_ustr, nPos)
     };
 
     const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_BG_BRUSH );

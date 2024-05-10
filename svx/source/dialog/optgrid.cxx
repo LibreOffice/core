@@ -101,43 +101,43 @@ bool  SvxGridItem::GetPresentation
 
 // TabPage Screen Settings
 SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
+    : SfxTabPage(pPage, pController, u"svx/ui/optgridpage.ui"_ustr, u"OptGridPage"_ustr, &rCoreSet)
     , bAttrModified(false)
     , m_Emode(WRITER_MODE)
-    , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
-    , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget("lockusegridsnap"))
-    , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
-    , m_xCbxGridVisibleImg(m_xBuilder->weld_widget("lockgridvisible"))
-    , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button("mtrflddrawx", FieldUnit::CM))
-    , m_xMtrFldDrawXImg(m_xBuilder->weld_widget("lockmtrflddrawx"))
-    , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button("mtrflddrawy", FieldUnit::CM))
-    , m_xMtrFldDrawYImg(m_xBuilder->weld_widget("lockmtrflddrawy"))
-    , m_xNumFldDivisionX(m_xBuilder->weld_spin_button("numflddivisionx"))
-    , m_xNumFldDivisionXImg(m_xBuilder->weld_widget("locknumflddivisionx"))
-    , m_xNumFldDivisionY(m_xBuilder->weld_spin_button("numflddivisiony"))
-    , m_xNumFldDivisionYImg(m_xBuilder->weld_widget("locknumflddivisiony"))
-    , m_xCbxSynchronize(m_xBuilder->weld_check_button("synchronize"))
-    , m_xCbxSynchronizeImg(m_xBuilder->weld_widget("locksynchronize"))
-    , m_xSnapFrames(m_xBuilder->weld_widget("snapframes"))
-    , m_xCbxSnapHelplines(m_xBuilder->weld_check_button("snaphelplines"))
-    , m_xCbxSnapHelplinesImg(m_xBuilder->weld_widget("locksnaphelplines"))
-    , m_xCbxSnapBorder(m_xBuilder->weld_check_button("snapborder"))
-    , m_xCbxSnapBorderImg(m_xBuilder->weld_widget("locksnapborder"))
-    , m_xCbxSnapFrame(m_xBuilder->weld_check_button("snapframe"))
-    , m_xCbxSnapFrameImg(m_xBuilder->weld_widget("locksnapframe"))
-    , m_xCbxSnapPoints(m_xBuilder->weld_check_button("snappoints"))
-    , m_xCbxSnapPointsImg(m_xBuilder->weld_widget("locksnappoints"))
-    , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button("mtrfldsnaparea", FieldUnit::PIXEL))
-    , m_xMtrFldSnapAreaImg(m_xBuilder->weld_widget("lockmtrfldsnaparea"))
-    , m_xCbxOrtho(m_xBuilder->weld_check_button("ortho"))
-    , m_xCbxOrthoImg(m_xBuilder->weld_widget("lockortho"))
-    , m_xCbxBigOrtho(m_xBuilder->weld_check_button("bigortho"))
-    , m_xCbxBigOrthoImg(m_xBuilder->weld_widget("lockbigortho"))
-    , m_xCbxRotate(m_xBuilder->weld_check_button("rotate"))
-    , m_xCbxRotateImg(m_xBuilder->weld_widget("lockrotate"))
-    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("mtrfldangle", FieldUnit::DEGREE))
-    , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button("mtrfldbezangle", FieldUnit::DEGREE))
-    , m_xMtrFldBezAngleImg(m_xBuilder->weld_widget("lockmtrfldbezangle"))
+    , m_xCbxUseGridsnap(m_xBuilder->weld_check_button(u"usegridsnap"_ustr))
+    , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget(u"lockusegridsnap"_ustr))
+    , m_xCbxGridVisible(m_xBuilder->weld_check_button(u"gridvisible"_ustr))
+    , m_xCbxGridVisibleImg(m_xBuilder->weld_widget(u"lockgridvisible"_ustr))
+    , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button(u"mtrflddrawx"_ustr, FieldUnit::CM))
+    , m_xMtrFldDrawXImg(m_xBuilder->weld_widget(u"lockmtrflddrawx"_ustr))
+    , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button(u"mtrflddrawy"_ustr, FieldUnit::CM))
+    , m_xMtrFldDrawYImg(m_xBuilder->weld_widget(u"lockmtrflddrawy"_ustr))
+    , m_xNumFldDivisionX(m_xBuilder->weld_spin_button(u"numflddivisionx"_ustr))
+    , m_xNumFldDivisionXImg(m_xBuilder->weld_widget(u"locknumflddivisionx"_ustr))
+    , m_xNumFldDivisionY(m_xBuilder->weld_spin_button(u"numflddivisiony"_ustr))
+    , m_xNumFldDivisionYImg(m_xBuilder->weld_widget(u"locknumflddivisiony"_ustr))
+    , m_xCbxSynchronize(m_xBuilder->weld_check_button(u"synchronize"_ustr))
+    , m_xCbxSynchronizeImg(m_xBuilder->weld_widget(u"locksynchronize"_ustr))
+    , m_xSnapFrames(m_xBuilder->weld_widget(u"snapframes"_ustr))
+    , m_xCbxSnapHelplines(m_xBuilder->weld_check_button(u"snaphelplines"_ustr))
+    , m_xCbxSnapHelplinesImg(m_xBuilder->weld_widget(u"locksnaphelplines"_ustr))
+    , m_xCbxSnapBorder(m_xBuilder->weld_check_button(u"snapborder"_ustr))
+    , m_xCbxSnapBorderImg(m_xBuilder->weld_widget(u"locksnapborder"_ustr))
+    , m_xCbxSnapFrame(m_xBuilder->weld_check_button(u"snapframe"_ustr))
+    , m_xCbxSnapFrameImg(m_xBuilder->weld_widget(u"locksnapframe"_ustr))
+    , m_xCbxSnapPoints(m_xBuilder->weld_check_button(u"snappoints"_ustr))
+    , m_xCbxSnapPointsImg(m_xBuilder->weld_widget(u"locksnappoints"_ustr))
+    , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button(u"mtrfldsnaparea"_ustr, FieldUnit::PIXEL))
+    , m_xMtrFldSnapAreaImg(m_xBuilder->weld_widget(u"lockmtrfldsnaparea"_ustr))
+    , m_xCbxOrtho(m_xBuilder->weld_check_button(u"ortho"_ustr))
+    , m_xCbxOrthoImg(m_xBuilder->weld_widget(u"lockortho"_ustr))
+    , m_xCbxBigOrtho(m_xBuilder->weld_check_button(u"bigortho"_ustr))
+    , m_xCbxBigOrthoImg(m_xBuilder->weld_widget(u"lockbigortho"_ustr))
+    , m_xCbxRotate(m_xBuilder->weld_check_button(u"rotate"_ustr))
+    , m_xCbxRotateImg(m_xBuilder->weld_widget(u"lockrotate"_ustr))
+    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button(u"mtrfldangle"_ustr, FieldUnit::DEGREE))
+    , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button(u"mtrfldbezangle"_ustr, FieldUnit::DEGREE))
+    , m_xMtrFldBezAngleImg(m_xBuilder->weld_widget(u"lockmtrfldbezangle"_ustr))
 {
     // This page requires exchange Support
     SetExchangeSupport();
@@ -205,8 +205,8 @@ OUString SvxGridTabPage::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[]
-        = { "label1",    "label2", "flddrawx",  "flddrawy", "label6", "label7", "label3",
-            "divisionx", "label4", "divisiony", "label5",   "label8", "label9" };
+        = { u"label1"_ustr,    u"label2"_ustr, u"flddrawx"_ustr,  u"flddrawy"_ustr, u"label6"_ustr, u"label7"_ustr, u"label3"_ustr,
+            u"divisionx"_ustr, u"label4"_ustr, u"divisiony"_ustr, u"label5"_ustr,   u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
@@ -215,8 +215,8 @@ OUString SvxGridTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "usegridsnap", "gridvisible", "synchronize", "snaphelplines", "snapborder",
-            "snapframe",   "snappoints",  "ortho",       "bigortho",      "rotate" };
+        = { u"usegridsnap"_ustr, u"gridvisible"_ustr, u"synchronize"_ustr, u"snaphelplines"_ustr, u"snapborder"_ustr,
+            u"snapframe"_ustr,   u"snappoints"_ustr,  u"ortho"_ustr,       u"bigortho"_ustr,      u"rotate"_ustr };
 
     for (const auto& check : checkButton)
     {

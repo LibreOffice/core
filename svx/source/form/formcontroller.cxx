@@ -454,7 +454,7 @@ public:
     {
     }
 
-    virtual OUString GetComponentServiceName() const override {return "Edit";}
+    virtual OUString GetComponentServiceName() const override {return u"Edit"_ustr;}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) override;
 
 protected:
@@ -534,7 +534,7 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aFilterListeners(m_aMutex)
                   ,m_aTabActivationIdle("svx FormController m_aTabActivationIdle")
                   ,m_aFeatureInvalidationTimer("svx FormController m_aFeatureInvalidationTimer")
-                  ,m_aMode( OUString( "DataMode"  ) )
+                  ,m_aMode( u"DataMode"_ustr )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
@@ -649,14 +649,14 @@ sal_Bool SAL_CALL FormController::supportsService(const OUString& ServiceName)
 
 OUString SAL_CALL FormController::getImplementationName()
 {
-    return "org.openoffice.comp.svx.FormController";
+    return u"org.openoffice.comp.svx.FormController"_ustr;
 }
 
 Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames()
 {
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
-    Sequence<OUString> aNonCreatableServiceNames { "com.sun.star.form.FormControllerDispatcher" };
+    Sequence<OUString> aNonCreatableServiceNames { u"com.sun.star.form.FormControllerDispatcher"_ustr };
 
     // services which can be used to created an instance at a service factory
     Sequence< OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );
@@ -682,8 +682,8 @@ Sequence< OUString> const & FormController::getSupportedServiceNames_Static()
 {
     static Sequence< OUString> const aServices
     {
-        "com.sun.star.form.runtime.FormController",
-        "com.sun.star.awt.control.TabController"
+        u"com.sun.star.form.runtime.FormController"_ustr,
+        u"com.sun.star.awt.control.TabController"_ustr
     };
     return aServices;
 }
@@ -2972,7 +2972,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         {
             Reference< XMultiServiceFactory > xFactory( xConnection, UNO_QUERY_THROW );
             m_xComposer.set(
-                xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
+                xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
                 UNO_QUERY_THROW );
 
             Reference< XPropertySet > xSet( xForm, UNO_QUERY );
@@ -3041,7 +3041,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(rRefValue.Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue("RealName") >>= aRealName;
+                        xSet->getPropertyValue(u"RealName"_ustr) >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, rRefValue.Name))
@@ -3054,7 +3054,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue("RealName") >>= aRealName;
+                            xSet->getPropertyValue(u"RealName"_ustr) >>= aRealName;
                             if (aCompare(aRealName, rRefValue.Name))
                             {
                                 // get the column by its alias
@@ -3200,7 +3200,7 @@ void FormController::startFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( "FilterMode" );
+                xSelector->setMode( u"FilterMode"_ustr );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3326,7 +3326,7 @@ void FormController::stopFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( "DataMode" );
+                xSelector->setMode( u"DataMode"_ustr );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3421,8 +3421,8 @@ Sequence< OUString > SAL_CALL FormController::getSupportedModes()
 
     static Sequence< OUString > const aModes
     {
-        "DataMode",
-        "FilterMode"
+        u"DataMode"_ustr,
+        u"FilterMode"_ustr
     };
     return aModes;
 }
@@ -3561,7 +3561,7 @@ namespace
                 return true;
 
             Reference< XPropertySet > xDataSourceSettings(
-                xDataSource->getPropertyValue("Settings"),
+                xDataSource->getPropertyValue(u"Settings"_ustr),
                 UNO_QUERY_THROW );
 
             bool bShouldValidate = true;

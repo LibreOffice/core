@@ -303,16 +303,16 @@ void NavigationBar::PositionDataSource(sal_Int32 nRecord)
 }
 
 NavigationBar::NavigationBar(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "svx/ui/navigationbar.ui", "NavigationBar")
-    , m_xRecordText(m_xBuilder->weld_label("recordtext"))
-    , m_xAbsolute(new NavigationBar::AbsolutePos(m_xBuilder->weld_entry("entry-noframe"), this))
-    , m_xRecordOf(m_xBuilder->weld_label("recordof"))
-    , m_xRecordCount(m_xBuilder->weld_label("recordcount"))
-    , m_xFirstBtn(m_xBuilder->weld_button("first"))
-    , m_xPrevBtn(m_xBuilder->weld_button("prev"))
-    , m_xNextBtn(m_xBuilder->weld_button("next"))
-    , m_xLastBtn(m_xBuilder->weld_button("last"))
-    , m_xNewBtn(m_xBuilder->weld_button("new"))
+    : InterimItemWindow(pParent, u"svx/ui/navigationbar.ui"_ustr, u"NavigationBar"_ustr)
+    , m_xRecordText(m_xBuilder->weld_label(u"recordtext"_ustr))
+    , m_xAbsolute(new NavigationBar::AbsolutePos(m_xBuilder->weld_entry(u"entry-noframe"_ustr), this))
+    , m_xRecordOf(m_xBuilder->weld_label(u"recordof"_ustr))
+    , m_xRecordCount(m_xBuilder->weld_label(u"recordcount"_ustr))
+    , m_xFirstBtn(m_xBuilder->weld_button(u"first"_ustr))
+    , m_xPrevBtn(m_xBuilder->weld_button(u"prev"_ustr))
+    , m_xNextBtn(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xLastBtn(m_xBuilder->weld_button(u"last"_ustr))
+    , m_xNewBtn(m_xBuilder->weld_button(u"new"_ustr))
     , m_xPrevRepeater(std::make_shared<weld::ButtonPressRepeater>(*m_xPrevBtn, LINK(this,NavigationBar,OnClick)))
     , m_xNextRepeater(std::make_shared<weld::ButtonPressRepeater>(*m_xNextBtn, LINK(this,NavigationBar,OnClick)))
     , m_nCurrentPos(-1)
@@ -1195,7 +1195,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
         // retrieve the datebase of the Numberformatter
         try
         {
-            xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= m_aNullDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr) >>= m_aNullDate;
         }
         catch(Exception&)
         {
@@ -2406,8 +2406,8 @@ void DbGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
     // if only a blank row is selected then do not delete
     bDelete = bDelete && !((m_nOptions & DbGridControlOptions::Insert) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
 
-    rMenu.set_visible("delete", bDelete);
-    rMenu.set_visible("save", IsModified());
+    rMenu.set_visible(u"delete"_ustr, bDelete);
+    rMenu.set_visible(u"save"_ustr, IsModified());
 
     // the undo is more difficult
     bool bCanUndo = IsModified();
@@ -2416,7 +2416,7 @@ void DbGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
         nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
     bCanUndo &= ( 0 != nState );
 
-    rMenu.set_visible("undo", bCanUndo);
+    rMenu.set_visible(u"undo"_ustr, bCanUndo);
 }
 
 void DbGridControl::PostExecuteRowContextMenu(const OUString& rExecutionResult)
@@ -2523,8 +2523,8 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 
 void DbGridControl::executeRowContextMenu(const Point& _rPreferredPos)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/rowsmenu.ui"));
-    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"svx/ui/rowsmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
 
     tools::Rectangle aRect(_rPreferredPos, Size(1,1));
     weld::Window* pParent = weld::GetPopupParent(*this, aRect);
@@ -2570,8 +2570,8 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             {
                 ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
                 weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/cellmenu.ui"));
-                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"svx/ui/cellmenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
                 if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                     copyCellText(nRow, nColId);
             }

@@ -120,7 +120,7 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
         = graphic::GraphicProvider::create(xContext);
 
     uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
-        "InputStream", xInputStream) };
+        u"InputStream"_ustr, xInputStream) };
     uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
     return xGraphic;
 }
@@ -144,12 +144,14 @@ void setShapeCertificate(const SdrView* pView,
     // Remember the selected certificate.
     uno::Reference<drawing::XShape> xShape = pSignatureLine->getUnoShape();
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
-    aMap["SignatureCertificate"] <<= xCertificate;
-    xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
+    aMap[u"SignatureCertificate"_ustr] <<= xCertificate;
+    xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                  uno::Any(aMap.getAsConstPropertyValueList()));
 
     // Read svg and replace placeholder texts.
-    OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage("signature-line-draw.svg"));
+    OUString aSvgImage(
+        svx::SignatureLineHelper::getSignatureImage(u"signature-line-draw.svg"_ustr));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", SvxResId(RID_SVXSTR_SIGNATURELINE_DSIGNED_BY));
     OUString aSignerName = svx::SignatureLineHelper::getSignerName(xCertificate);
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", aSignerName);
@@ -158,7 +160,7 @@ void setShapeCertificate(const SdrView* pView,
     aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
     uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
-    xShapeProps->setPropertyValue("Graphic", uno::Any(xGraphic));
+    xShapeProps->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
 }
 }
 

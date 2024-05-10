@@ -22,7 +22,7 @@
 namespace svx::sidebar
 {
 EmptyPanel::EmptyPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "EmptyPanel", "svx/ui/sidebarempty.ui")
+    : PanelLayout(pParent, u"EmptyPanel"_ustr, u"svx/ui/sidebarempty.ui"_ustr)
 {
 }
 

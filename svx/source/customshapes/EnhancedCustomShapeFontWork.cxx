@@ -103,7 +103,7 @@ static bool InitializeFontWorkData(
         nTextAreaCount >>= 1;
 
     const SdrCustomShapeGeometryItem& rGeometryItem( rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "ScaleX" );
+    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"ScaleX"_ustr );
     if (pAny)
         *pAny >>= rFWData.bScaleX;
     else
@@ -517,7 +517,7 @@ static bool GetFontWorkOutline(
 
     bool bSameLetterHeights = false;
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
+    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
 

@@ -84,7 +84,7 @@ void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, s
     {
         for(const auto& rColor : rColorSet)
         {
-            InsertItem(nStartIndex, rColor, "");
+            InsertItem(nStartIndex, rColor, u""_ustr);
             nStartIndex++;
         }
     }

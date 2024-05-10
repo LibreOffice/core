@@ -42,10 +42,12 @@ MapUnit GetUnit(const SfxBindings* pBindings, sal_uInt16 nWhich)
 namespace svx::sidebar
 {
 TextColumnsPropertyPanel::TextColumnsPropertyPanel(weld::Widget* pParent, SfxBindings* pBindings)
-    : PanelLayout(pParent, "TextColumnsPropertyPanel", "svx/ui/sidebartextcolumnspanel.ui")
+    : PanelLayout(pParent, u"TextColumnsPropertyPanel"_ustr,
+                  u"svx/ui/sidebartextcolumnspanel.ui"_ustr)
     , mpBindings(pBindings)
-    , m_xColumnsNumber(m_xBuilder->weld_spin_button("FLD_COL_NUMBER"))
-    , m_xColumnsSpacing(m_xBuilder->weld_metric_spin_button("MTR_FLD_COL_SPACING", FieldUnit::CM))
+    , m_xColumnsNumber(m_xBuilder->weld_spin_button(u"FLD_COL_NUMBER"_ustr))
+    , m_xColumnsSpacing(
+          m_xBuilder->weld_metric_spin_button(u"MTR_FLD_COL_SPACING"_ustr, FieldUnit::CM))
     , maColumnsNumberController(SID_ATTR_TEXTCOLUMNS_NUMBER, *pBindings, *this)
     , maColumnsSpacingController(SID_ATTR_TEXTCOLUMNS_SPACING, *pBindings, *this)
 {
@@ -107,10 +109,10 @@ std::unique_ptr<PanelLayout> TextColumnsPropertyPanel::Create(weld::Widget* pPar
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no parent Window given to TextColumnsPropertyPanel::Create", nullptr, 0);
+            u"no parent Window given to TextColumnsPropertyPanel::Create"_ustr, nullptr, 0);
     if (pBindings == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no SfxBindings given to TextColumnsPropertyPanel::Create", nullptr, 2);
+            u"no SfxBindings given to TextColumnsPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<TextColumnsPropertyPanel>(pParent, pBindings);
 }

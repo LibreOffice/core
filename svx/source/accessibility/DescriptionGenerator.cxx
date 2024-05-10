@@ -79,7 +79,7 @@ void DescriptionGenerator::Initialize(std::u16string_view sPrefix)
     {
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue("Style");
+            uno::Any aValue = mxSet->getPropertyValue(u"Style"_ustr);
             uno::Reference<container::XNamed> xStyle(aValue, uno::UNO_QUERY);
             if (xStyle.is())
                 msDescription.append(xStyle->getName());

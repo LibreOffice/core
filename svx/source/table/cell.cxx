@@ -1254,7 +1254,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 
     const sal_Int32 nCount = aPropertyNames.getLength();
     if (nCount != aValues.getLength())
-        throw css::lang::IllegalArgumentException("lengths do not match",
+        throw css::lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                                   getXWeak(), -1);
 
     const OUString* pNames = aPropertyNames.getConstArray();

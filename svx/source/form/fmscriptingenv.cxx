@@ -825,7 +825,7 @@ namespace svxform
                 {
                     Reference< XControl > xControl( aEvent.Source, UNO_QUERY_THROW );
                     Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
-                    aCaller = xProps->getPropertyValue("Name");
+                    aCaller = xProps->getPropertyValue(u"Name"_ustr);
                 }
                 catch( Exception& ) {}
             }

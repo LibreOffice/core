@@ -55,12 +55,12 @@ SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) noexcept
 
 OUString SAL_CALL SvxUnoHatchTable::getImplementationName()
 {
-    return "SvxUnoHatchTable";
+    return u"SvxUnoHatchTable"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.HatchTable" };
+    return { u"com.sun.star.drawing.HatchTable"_ustr };
 }
 
 NameOrIndex* SvxUnoHatchTable::createItem() const

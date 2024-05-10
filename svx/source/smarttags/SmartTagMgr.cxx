@@ -214,7 +214,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
         try
         {
-            mxConfigurationSettings->setPropertyValue( "RecognizeSmartTags", aEnabled );
+            mxConfigurationSettings->setPropertyValue( u"RecognizeSmartTags"_ustr, aEnabled );
             bCommit = true;
         }
         catch ( css::uno::Exception& )
@@ -230,7 +230,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
         try
         {
-            mxConfigurationSettings->setPropertyValue( "ExcludedSmartTagTypes", aNewTypes );
+            mxConfigurationSettings->setPropertyValue( u"ExcludedSmartTagTypes"_ustr, aNewTypes );
             bCommit = true;
         }
         catch ( css::uno::Exception& )
@@ -316,7 +316,7 @@ void SmartTagMgr::LoadLibraries()
     Reference< container::XContentEnumerationAccess > rContent( mxContext->getServiceManager(), UNO_QUERY_THROW );
 
     // load recognizers: No recognizers -> nothing to do.
-    Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagRecognizer");
+    Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( u"com.sun.star.smarttags.SmartTagRecognizer"_ustr);
     if ( !rEnum.is() || !rEnum->hasMoreElements() )
         return;
 
@@ -343,7 +343,7 @@ void SmartTagMgr::LoadLibraries()
     }
 
     // load actions: No actions -> nothing to do.
-    rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagAction");
+    rEnum = rContent->createContentEnumeration( u"com.sun.star.smarttags.SmartTagAction"_ustr);
     if ( !rEnum.is() )
         return;
 
@@ -386,7 +386,7 @@ void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupN
     try
     {
         xConfigurationAccess = xConfProv->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationUpdateAccess", aArguments );
+            u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArguments );
     }
     catch ( uno::Exception& )
     {
@@ -398,7 +398,7 @@ void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupN
         try
         {
             xConfigurationAccess = xConfProv->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess", aArguments );
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArguments );
         }
         catch ( uno::Exception& )
         {
@@ -421,7 +421,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
     {
         maDisabledSmartTagTypes.clear();
 
-        Any aAny = mxConfigurationSettings->getPropertyValue( "ExcludedSmartTagTypes" );
+        Any aAny = mxConfigurationSettings->getPropertyValue( u"ExcludedSmartTagTypes"_ustr );
         Sequence< OUString > aValues;
         aAny >>= aValues;
 
@@ -431,7 +431,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
 
     if ( bRecognize )
     {
-        Any aAny = mxConfigurationSettings->getPropertyValue( "RecognizeSmartTags" );
+        Any aAny = mxConfigurationSettings->getPropertyValue( u"RecognizeSmartTags"_ustr );
         bool bValue = true;
         aAny >>= bValue;
 

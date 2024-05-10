@@ -100,7 +100,7 @@ XPropertyList::XPropertyList(
     XPropertyListType type,
     OUString aPath, OUString aReferer
 ) : meType           ( type ),
-    maName           ( "standard" ),
+    maName           ( u"standard"_ustr ),
     maPath           (std::move( aPath )),
     maReferer        (std::move( aReferer )),
     mbListDirty      ( true ),
@@ -361,7 +361,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     aPathURL.removeFinalSlash();
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
+        t, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), u""_ustr );
     pList->SetName( aURL.getName() );
 
     return pList;

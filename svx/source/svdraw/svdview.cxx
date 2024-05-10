@@ -479,10 +479,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                         // that data
                         static SvxURLField aSvxURLField;
 
-                        aSvxURLField.SetURL(pTextHierarchyFieldPrimitive2D->getValue("URL"));
-                        aSvxURLField.SetRepresentation(pTextHierarchyFieldPrimitive2D->getValue("Representation"));
-                        aSvxURLField.SetTargetFrame(pTextHierarchyFieldPrimitive2D->getValue("TargetFrame"));
-                        const OUString aFormat(pTextHierarchyFieldPrimitive2D->getValue("SvxURLFormat"));
+                        aSvxURLField.SetURL(pTextHierarchyFieldPrimitive2D->getValue(u"URL"_ustr));
+                        aSvxURLField.SetRepresentation(pTextHierarchyFieldPrimitive2D->getValue(u"Representation"_ustr));
+                        aSvxURLField.SetTargetFrame(pTextHierarchyFieldPrimitive2D->getValue(u"TargetFrame"_ustr));
+                        const OUString aFormat(pTextHierarchyFieldPrimitive2D->getValue(u"SvxURLFormat"_ustr));
 
                         if (!aFormat.isEmpty())
                         {

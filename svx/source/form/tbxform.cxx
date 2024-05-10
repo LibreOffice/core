@@ -49,8 +49,8 @@ void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
 
     Any a;
     aPositionParam.QueryValue( a );
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Position", a) };
-    m_pController->Dispatch( ".uno:AbsoluteRecord",
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"Position"_ustr, a) };
+    m_pController->Dispatch( u".uno:AbsoluteRecord"_ustr,
                              aArgs );
     m_pController->updateStatus();
 }
@@ -156,7 +156,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 VclPtr<InterimItemWindow> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
     m_xFixedText.reset(VclPtr<LabelItemWindow>::Create(pParent, "123456"));
-    m_xFixedText->set_label("");
+    m_xFixedText->set_label(u""_ustr);
 
     m_xFixedText->Show();
 

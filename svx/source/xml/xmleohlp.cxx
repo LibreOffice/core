@@ -375,8 +375,8 @@ void SvXMLEmbeddedObjectHelper::ImplReadObject(
                 // This is an ole object
                 uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    "MediaType",
-                    uno::Any( OUString( "application/vnd.sun.star.oleobject" ) ) );
+                    u"MediaType"_ustr,
+                    uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
 
                 xStm->getOutputStream()->closeOutput();
             }
@@ -558,7 +558,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetRuntimeException(
-            "SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException",
+            u"SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException"_ustr,
             getXWeak(), anyEx);
     }
     return sRet;
@@ -625,7 +625,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 mxTempStorage =
                                     comphelper::OStorageHelper::GetTemporaryStorage();
                             Sequence < beans::PropertyValue > aDummy,
-                                aEmbDescr{ comphelper::makePropertyValue("StoreVisualReplacement",
+                                aEmbDescr{ comphelper::makePropertyValue(u"StoreVisualReplacement"_ustr,
                                                                          !bOasisFormat) };
                             if ( !bOasisFormat )
                             {

@@ -320,7 +320,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
             // and in Impress' "Bullets and Numbering" dialog
 
             //#i5153# painting gray or black rectangles as 'normal' numbering text
-            tools::Long nWidth = pVDev->GetTextWidth("Preview");
+            tools::Long nWidth = pVDev->GetTextWidth(u"Preview"_ustr);
             tools::Long nTextHeight = pVDev->GetTextHeight();
             tools::Long nRectHeight = nTextHeight * 2 / 3;
             tools::Long nTopOffset = nTextHeight - nRectHeight;

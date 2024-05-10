@@ -148,7 +148,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
 ONeutralParseContext::ONeutralParseContext()
     : OSystemParseContext(false)
 {
-    std::locale aLocale = Translate::Create("svx", LanguageTag("en-US"));
+    std::locale aLocale = Translate::Create("svx", LanguageTag(u"en-US"_ustr));
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_RSC_SQL_INTERNATIONAL); ++i)
         m_aLocalizedKeywords.push_back(Translate::get(RID_RSC_SQL_INTERNATIONAL[i], aLocale));
 }

@@ -39,7 +39,7 @@ namespace svx::sidebar {
 GraphicPropertyPanel::GraphicPropertyPanel(
     weld::Widget* pParent,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui"),
+:   PanelLayout(pParent, u"GraphicPropertyPanel"_ustr, u"svx/ui/sidebargraphic.ui"_ustr),
     maBrightControl(SID_ATTR_GRAF_LUMINANCE, *pBindings, *this),
     maContrastControl(SID_ATTR_GRAF_CONTRAST, *pBindings, *this),
     maTransparenceControl(SID_ATTR_GRAF_TRANSPARENCE, *pBindings, *this),
@@ -49,10 +49,10 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     maGammaControl(SID_ATTR_GRAF_GAMMA, *pBindings, *this),
     maModeControl(SID_ATTR_GRAF_MODE, *pBindings, *this),
     mpBindings(pBindings),
-    mxMtrBrightness(m_xBuilder->weld_metric_spin_button("setbrightness", FieldUnit::PERCENT)),
-    mxMtrContrast(m_xBuilder->weld_metric_spin_button("setcontrast", FieldUnit::PERCENT)),
-    mxLBColorMode(m_xBuilder->weld_combo_box("setcolormode")),
-    mxMtrTrans(m_xBuilder->weld_metric_spin_button("setgraphtransparency", FieldUnit::PERCENT))
+    mxMtrBrightness(m_xBuilder->weld_metric_spin_button(u"setbrightness"_ustr, FieldUnit::PERCENT)),
+    mxMtrContrast(m_xBuilder->weld_metric_spin_button(u"setcontrast"_ustr, FieldUnit::PERCENT)),
+    mxLBColorMode(m_xBuilder->weld_combo_box(u"setcolormode"_ustr)),
+    mxMtrTrans(m_xBuilder->weld_metric_spin_button(u"setgraphtransparency"_ustr, FieldUnit::PERCENT))
 {
     mxLBColorMode->set_size_request(mxLBColorMode->get_preferred_size().Width(), -1);
     Initialize();
@@ -128,9 +128,9 @@ std::unique_ptr<PanelLayout> GraphicPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to GraphicPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to GraphicPropertyPanel::Create"_ustr, nullptr, 0);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to GraphicPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<GraphicPropertyPanel>(pParent, pBindings);
 }

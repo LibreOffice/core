@@ -29,10 +29,10 @@ ListsPropertyPanel::Create(weld::Widget* pParent,
                            const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ListsPropertyPanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            u"no parent Window given to ListsPropertyPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ListsPropertyPanel::Create",
+        throw lang::IllegalArgumentException(u"no XFrame given to ListsPropertyPanel::Create"_ustr,
                                              nullptr, 1);
 
     return std::make_unique<ListsPropertyPanel>(pParent, rxFrame);
@@ -40,10 +40,10 @@ ListsPropertyPanel::Create(weld::Widget* pParent,
 
 ListsPropertyPanel::ListsPropertyPanel(weld::Widget* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui")
-    , mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet"))
+    : PanelLayout(pParent, u"ListsPropertyPanel"_ustr, u"svx/ui/sidebarlists.ui"_ustr)
+    , mxTBxNumBullet(m_xBuilder->weld_toolbar(u"numberbullet"_ustr))
     , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, *m_xBuilder, rxFrame))
-    , mxTBxOutline(m_xBuilder->weld_toolbar("outline"))
+    , mxTBxOutline(m_xBuilder->weld_toolbar(u"outline"_ustr))
     , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, *m_xBuilder, rxFrame))
 {
 }

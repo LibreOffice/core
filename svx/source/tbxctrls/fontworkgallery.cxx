@@ -60,13 +60,13 @@ namespace svx
 
 FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSdrView,
                                              Reference<css::frame::XFrame> xFrame)
-    : GenericDialogController(pParent, "svx/ui/fontworkgallerydialog.ui", "FontworkGalleryDialog")
+    : GenericDialogController(pParent, u"svx/ui/fontworkgallerydialog.ui"_ustr, u"FontworkGalleryDialog"_ustr)
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
     , mbInsertIntoPage(true)
     , mpDestModel(nullptr)
-    , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
-    , mxOKButton(m_xBuilder->weld_button("ok"))
+    , maCtlFavorites(m_xBuilder->weld_icon_view(u"ctlFavoriteswin"_ustr))
+    , mxOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     , mxFrame(std::move(xFrame))
 {
     Size aSize(530, 400);
@@ -324,12 +324,12 @@ private:
 constexpr OUString gsFontworkAlignment(u".uno:FontworkAlignment"_ustr);
 
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkalignmentcontrol.ui", "FontworkAlignmentControl")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/fontworkalignmentcontrol.ui"_ustr, u"FontworkAlignmentControl"_ustr)
     , mxControl(pControl)
-    , mxLeft(m_xBuilder->weld_radio_button("left"))
-    , mxCenter(m_xBuilder->weld_radio_button("center"))
-    , mxRight(m_xBuilder->weld_radio_button("right"))
-    , mxStretch(m_xBuilder->weld_radio_button("stretch"))
+    , mxLeft(m_xBuilder->weld_radio_button(u"left"_ustr))
+    , mxCenter(m_xBuilder->weld_radio_button(u"center"_ustr))
+    , mxRight(m_xBuilder->weld_radio_button(u"right"_ustr))
+    , mxStretch(m_xBuilder->weld_radio_button(u"stretch"_ustr))
     , mbSettingValue(false)
 {
     mxLeft->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
@@ -424,7 +424,7 @@ public:
 }
 
 FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkAlignment" )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), u".uno:FontworkAlignment"_ustr )
 {
 }
 
@@ -465,13 +465,13 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 
 OUString FontworkAlignmentControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.FontworkAlignmentController";
+    return u"com.sun.star.comp.svx.FontworkAlignmentController"_ustr;
 }
 
 
 Sequence< OUString > FontworkAlignmentControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 
@@ -520,15 +520,15 @@ constexpr OUString gsFontworkCharacterSpacing(u".uno:FontworkCharacterSpacing"_u
 constexpr OUString gsFontworkKernCharacterPairs(u".uno:FontworkKernCharacterPairs"_ustr);
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkcharacterspacingcontrol.ui", "FontworkCharacterSpacingControl")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/fontworkcharacterspacingcontrol.ui"_ustr, u"FontworkCharacterSpacingControl"_ustr)
     , mxControl(pControl)
-    , mxVeryTight(m_xBuilder->weld_radio_button("verytight"))
-    , mxTight(m_xBuilder->weld_radio_button("tight"))
-    , mxNormal(m_xBuilder->weld_radio_button("normal"))
-    , mxLoose(m_xBuilder->weld_radio_button("loose"))
-    , mxVeryLoose(m_xBuilder->weld_radio_button("veryloose"))
-    , mxCustom(m_xBuilder->weld_radio_button("custom"))
-    , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
+    , mxVeryTight(m_xBuilder->weld_radio_button(u"verytight"_ustr))
+    , mxTight(m_xBuilder->weld_radio_button(u"tight"_ustr))
+    , mxNormal(m_xBuilder->weld_radio_button(u"normal"_ustr))
+    , mxLoose(m_xBuilder->weld_radio_button(u"loose"_ustr))
+    , mxVeryLoose(m_xBuilder->weld_radio_button(u"veryloose"_ustr))
+    , mxCustom(m_xBuilder->weld_radio_button(u"custom"_ustr))
+    , mxKernPairs(m_xBuilder->weld_check_button(u"kernpairs"_ustr))
     , mnCharacterSpacing(0)
     , mbSettingValue(false)
     , mbCommandDispatched(false)
@@ -659,7 +659,7 @@ void FontworkCharacterSpacingWindow::DispatchSpacingDialog()
 
     rtl::Reference<svt::PopupWindowController> xControl(mxControl);
     xControl->EndPopupMode();
-    xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
+    xControl->dispatchCommand(u".uno:FontworkCharacterSpacingDialog"_ustr, aArgs);
     mbCommandDispatched = true;
 }
 
@@ -744,7 +744,7 @@ public:
 }
 
 FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkCharacterSpacingFloater" )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), u".uno:FontworkCharacterSpacingFloater"_ustr )
 {
 }
 
@@ -785,13 +785,13 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
 
 OUString FontworkCharacterSpacingControl::getImplementationName()
 {
-    return "com.sun.star.comp.svx.FontworkCharacterSpacingController";
+    return u"com.sun.star.comp.svx.FontworkCharacterSpacingController"_ustr;
 }
 
 
 Sequence< OUString > FontworkCharacterSpacingControl::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
+    Sequence<OUString> aSNS { u"com.sun.star.frame.ToolbarController"_ustr };
     return aSNS;
 }
 
@@ -805,8 +805,8 @@ com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
 }
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog(weld::Window* pParent, sal_Int32 nScale)
-    : GenericDialogController(pParent, "svx/ui/fontworkspacingdialog.ui", "FontworkSpacingDialog")
-    , m_xMtrScale(m_xBuilder->weld_metric_spin_button("entry", FieldUnit::PERCENT))
+    : GenericDialogController(pParent, u"svx/ui/fontworkspacingdialog.ui"_ustr, u"FontworkSpacingDialog"_ustr)
+    , m_xMtrScale(m_xBuilder->weld_metric_spin_button(u"entry"_ustr, FieldUnit::PERCENT))
 {
     m_xMtrScale->set_value(nScale, FieldUnit::PERCENT);
 }

@@ -243,8 +243,8 @@ void SearchAttrItemList::Remove(size_t nPos)
 
 SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
-                                  IsMobile() ? OUString("svx/ui/findreplacedialog-mobile.ui") : OUString("svx/ui/findreplacedialog.ui"),
-                                  "FindReplaceDialog")
+                                  IsMobile() ? u"svx/ui/findreplacedialog-mobile.ui"_ustr : u"svx/ui/findreplacedialog.ui"_ustr,
+                                  u"FindReplaceDialog"_ustr)
     , rBindings(rBind)
     , m_aPresentIdle("Bring SvxSearchDialog to Foreground")
     , bWriter(false)
@@ -257,55 +257,55 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , nModifyFlag(ModifyFlags::NONE)
     , pReplaceList(new SearchAttrItemList)
     , nTransliterationFlags(TransliterationFlags::NONE)
-    , m_xSearchFrame(m_xBuilder->weld_frame("searchframe"))
-    , m_xSearchLB(m_xBuilder->weld_combo_box("searchterm"))
-    , m_xSearchTmplLB(m_xBuilder->weld_combo_box("searchlist"))
-    , m_xSearchAttrText(m_xBuilder->weld_label("searchdesc"))
-    , m_xSearchLabel(m_xBuilder->weld_label("searchlabel"))
-    , m_xSearchIcon(m_xBuilder->weld_image("searchicon"))
-    , m_xSearchBox(m_xBuilder->weld_box("searchbox"))
-    , m_xReplaceFrame(m_xBuilder->weld_frame("replaceframe"))
-    , m_xReplaceLB(m_xBuilder->weld_combo_box("replaceterm"))
-    , m_xReplaceTmplLB(m_xBuilder->weld_combo_box("replacelist"))
-    , m_xReplaceAttrText(m_xBuilder->weld_label("replacedesc"))
-    , m_xSearchBtn(m_xBuilder->weld_button("search"))
-    , m_xBackSearchBtn(m_xBuilder->weld_button("backsearch"))
-    , m_xSearchAllBtn(m_xBuilder->weld_button("searchall"))
-    , m_xReplaceBtn(m_xBuilder->weld_button("replace"))
-    , m_xReplaceAllBtn(m_xBuilder->weld_button("replaceall"))
-    , m_xComponentFrame(m_xBuilder->weld_frame("componentframe"))
-    , m_xSearchComponent1PB(m_xBuilder->weld_button("component1"))
-    , m_xSearchComponent2PB(m_xBuilder->weld_button("component2"))
-    , m_xMatchCaseCB(m_xBuilder->weld_check_button("matchcase"))
-    , m_xSearchFormattedCB(m_xBuilder->weld_check_button("searchformatted"))
-    , m_xWordBtn(m_xBuilder->weld_check_button("wholewords"))
-    , m_xCloseBtn(m_xBuilder->weld_button("close"))
-    , m_xHelpBtn(m_xBuilder->weld_button("help"))
-    , m_xIncludeDiacritics(m_xBuilder->weld_check_button("includediacritics"))
-    , m_xIncludeKashida(m_xBuilder->weld_check_button("includekashida"))
-    , m_xOtherOptionsExpander(m_xBuilder->weld_expander("OptionsExpander"))
-    , m_xSelectionBtn(m_xBuilder->weld_check_button("selection"))
-    , m_xRegExpBtn(m_xBuilder->weld_check_button("regexp"))
-    , m_xWildcardBtn(m_xBuilder->weld_check_button("wildcard"))
-    , m_xSimilarityBox(m_xBuilder->weld_check_button("similarity"))
-    , m_xSimilarityBtn(m_xBuilder->weld_button("similaritybtn"))
-    , m_xLayoutBtn(m_xBuilder->weld_check_button("layout"))
-    , m_xNotesBtn(m_xBuilder->weld_check_button("notes"))
-    , m_xJapMatchFullHalfWidthCB(m_xBuilder->weld_check_button("matchcharwidth"))
-    , m_xJapOptionsCB(m_xBuilder->weld_check_button("soundslike"))
-    , m_xReplaceBackwardsCB(m_xBuilder->weld_check_button("replace_backwards"))
-    , m_xJapOptionsBtn(m_xBuilder->weld_button("soundslikebtn"))
-    , m_xAttributeBtn(m_xBuilder->weld_button("attributes"))
-    , m_xFormatBtn(m_xBuilder->weld_button("format"))
-    , m_xNoFormatBtn(m_xBuilder->weld_button("noformat"))
-    , m_xCalcGrid(m_xBuilder->weld_widget("calcgrid"))
-    , m_xCalcSearchInFT(m_xBuilder->weld_label("searchinlabel"))
-    , m_xCalcSearchInLB(m_xBuilder->weld_combo_box("calcsearchin"))
-    , m_xCalcSearchDirFT(m_xBuilder->weld_label("searchdir"))
-    , m_xRowsBtn(m_xBuilder->weld_radio_button("rows"))
-    , m_xColumnsBtn(m_xBuilder->weld_radio_button("cols"))
-    , m_xAllSheetsCB(m_xBuilder->weld_check_button("allsheets"))
-    , m_xCalcStrFT(m_xBuilder->weld_label("entirecells"))
+    , m_xSearchFrame(m_xBuilder->weld_frame(u"searchframe"_ustr))
+    , m_xSearchLB(m_xBuilder->weld_combo_box(u"searchterm"_ustr))
+    , m_xSearchTmplLB(m_xBuilder->weld_combo_box(u"searchlist"_ustr))
+    , m_xSearchAttrText(m_xBuilder->weld_label(u"searchdesc"_ustr))
+    , m_xSearchLabel(m_xBuilder->weld_label(u"searchlabel"_ustr))
+    , m_xSearchIcon(m_xBuilder->weld_image(u"searchicon"_ustr))
+    , m_xSearchBox(m_xBuilder->weld_box(u"searchbox"_ustr))
+    , m_xReplaceFrame(m_xBuilder->weld_frame(u"replaceframe"_ustr))
+    , m_xReplaceLB(m_xBuilder->weld_combo_box(u"replaceterm"_ustr))
+    , m_xReplaceTmplLB(m_xBuilder->weld_combo_box(u"replacelist"_ustr))
+    , m_xReplaceAttrText(m_xBuilder->weld_label(u"replacedesc"_ustr))
+    , m_xSearchBtn(m_xBuilder->weld_button(u"search"_ustr))
+    , m_xBackSearchBtn(m_xBuilder->weld_button(u"backsearch"_ustr))
+    , m_xSearchAllBtn(m_xBuilder->weld_button(u"searchall"_ustr))
+    , m_xReplaceBtn(m_xBuilder->weld_button(u"replace"_ustr))
+    , m_xReplaceAllBtn(m_xBuilder->weld_button(u"replaceall"_ustr))
+    , m_xComponentFrame(m_xBuilder->weld_frame(u"componentframe"_ustr))
+    , m_xSearchComponent1PB(m_xBuilder->weld_button(u"component1"_ustr))
+    , m_xSearchComponent2PB(m_xBuilder->weld_button(u"component2"_ustr))
+    , m_xMatchCaseCB(m_xBuilder->weld_check_button(u"matchcase"_ustr))
+    , m_xSearchFormattedCB(m_xBuilder->weld_check_button(u"searchformatted"_ustr))
+    , m_xWordBtn(m_xBuilder->weld_check_button(u"wholewords"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xIncludeDiacritics(m_xBuilder->weld_check_button(u"includediacritics"_ustr))
+    , m_xIncludeKashida(m_xBuilder->weld_check_button(u"includekashida"_ustr))
+    , m_xOtherOptionsExpander(m_xBuilder->weld_expander(u"OptionsExpander"_ustr))
+    , m_xSelectionBtn(m_xBuilder->weld_check_button(u"selection"_ustr))
+    , m_xRegExpBtn(m_xBuilder->weld_check_button(u"regexp"_ustr))
+    , m_xWildcardBtn(m_xBuilder->weld_check_button(u"wildcard"_ustr))
+    , m_xSimilarityBox(m_xBuilder->weld_check_button(u"similarity"_ustr))
+    , m_xSimilarityBtn(m_xBuilder->weld_button(u"similaritybtn"_ustr))
+    , m_xLayoutBtn(m_xBuilder->weld_check_button(u"layout"_ustr))
+    , m_xNotesBtn(m_xBuilder->weld_check_button(u"notes"_ustr))
+    , m_xJapMatchFullHalfWidthCB(m_xBuilder->weld_check_button(u"matchcharwidth"_ustr))
+    , m_xJapOptionsCB(m_xBuilder->weld_check_button(u"soundslike"_ustr))
+    , m_xReplaceBackwardsCB(m_xBuilder->weld_check_button(u"replace_backwards"_ustr))
+    , m_xJapOptionsBtn(m_xBuilder->weld_button(u"soundslikebtn"_ustr))
+    , m_xAttributeBtn(m_xBuilder->weld_button(u"attributes"_ustr))
+    , m_xFormatBtn(m_xBuilder->weld_button(u"format"_ustr))
+    , m_xNoFormatBtn(m_xBuilder->weld_button(u"noformat"_ustr))
+    , m_xCalcGrid(m_xBuilder->weld_widget(u"calcgrid"_ustr))
+    , m_xCalcSearchInFT(m_xBuilder->weld_label(u"searchinlabel"_ustr))
+    , m_xCalcSearchInLB(m_xBuilder->weld_combo_box(u"calcsearchin"_ustr))
+    , m_xCalcSearchDirFT(m_xBuilder->weld_label(u"searchdir"_ustr))
+    , m_xRowsBtn(m_xBuilder->weld_radio_button(u"rows"_ustr))
+    , m_xColumnsBtn(m_xBuilder->weld_radio_button(u"cols"_ustr))
+    , m_xAllSheetsCB(m_xBuilder->weld_check_button(u"allsheets"_ustr))
+    , m_xCalcStrFT(m_xBuilder->weld_label(u"entirecells"_ustr))
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -320,7 +320,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xSearchAttrText->hide();
 
     m_xSearchLabel->set_font_color(Color(0x00, 0x47, 0x85));
-    this->SetSearchLabel(""); // hide the message but keep the box height
+    this->SetSearchLabel(u""_ustr); // hide the message but keep the box height
     m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
 
     m_xReplaceTmplLB->make_sorted();
@@ -454,7 +454,7 @@ void SvxSearchDialog::Construct_Impl()
     bool bSearchComponent2 = false;
     if(xDispatchProv.is())
     {
-        OUString sTarget("_self");
+        OUString sTarget(u"_self"_ustr);
         pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0);
         if (pImpl->xCommand1Dispatch.is())
             bSearchComponent1 = true;
@@ -471,22 +471,22 @@ void SvxSearchDialog::Construct_Impl()
         uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                 configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
         uno::Sequence< uno::Any > aArgs {
-                    Any(OUString( "/org.openoffice.Office.Common/SearchOptions/")) };
+                    Any(u"/org.openoffice.Office.Common/SearchOptions/"_ustr) };
 
         uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess",
+                    u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                     aArgs);
         uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
         if(xDirectAccess.is())
         {
             OUString sTemp;
-            uno::Any aRet = xDirectAccess->getByName("ComponentSearchGroupLabel");
+            uno::Any aRet = xDirectAccess->getByName(u"ComponentSearchGroupLabel"_ustr);
             aRet >>= sTemp;
             m_xComponentFrame->set_label(sTemp);
-            aRet = xDirectAccess->getByName("ComponentSearchCommandLabel1");
+            aRet = xDirectAccess->getByName(u"ComponentSearchCommandLabel1"_ustr);
             aRet >>= sTemp;
             m_xSearchComponent1PB->set_label( sTemp );
-            aRet = xDirectAccess->getByName("ComponentSearchCommandLabel2");
+            aRet = xDirectAccess->getByName(u"ComponentSearchCommandLabel2"_ustr);
             aRet >>= sTemp;
             m_xSearchComponent2PB->set_label( sTemp );
         }
@@ -2039,7 +2039,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
     if ( bSearch )
     {
         pSearchList->Clear();
-        m_xSearchAttrText->set_label( "" );
+        m_xSearchAttrText->set_label( u""_ustr );
         if (m_xSearchAttrText->get_visible())
         {
             m_xSearchAttrText->hide();
@@ -2049,7 +2049,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
     else
     {
         pReplaceList->Clear();
-        m_xReplaceAttrText->set_label( "" );
+        m_xReplaceAttrText->set_label( u""_ustr );
         if (m_xReplaceAttrText->get_visible())
         {
             m_xReplaceAttrText->hide();
@@ -2211,7 +2211,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
         nModifyFlag |= ModifyFlags::Search;
         m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Normal);
         if (!SvxSearchDialogWrapper::GetSearchLabel().isEmpty())
-            SvxSearchDialogWrapper::SetSearchLabel("");
+            SvxSearchDialogWrapper::SetSearchLabel(u""_ustr);
     }
     else if ( m_xReplaceLB.get() == pCtrl )
         nModifyFlag |= ModifyFlags::Replace;
@@ -2355,9 +2355,9 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFr
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             rViewFrame.GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     css::uno::Reference< css::ui::XUIElement > xUIElement =
-        xLayoutManager->getElement("private:resource/toolbar/findbar");
+        xLayoutManager->getElement(u"private:resource/toolbar/findbar"_ustr);
     if (!xUIElement.is())
         return;
     css::uno::Reference< css::awt::XWindow > xWindow(
@@ -2387,11 +2387,11 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (!xLayoutManager.is())
         return OUString();
     css::uno::Reference< css::ui::XUIElement > xUIElement =
-        xLayoutManager->getElement("private:resource/toolbar/findbar");
+        xLayoutManager->getElement(u"private:resource/toolbar/findbar"_ustr);
     if (!xUIElement.is())
         return OUString();
     css::uno::Reference< css::awt::XWindow > xWindow(

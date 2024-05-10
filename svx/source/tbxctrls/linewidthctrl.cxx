@@ -34,7 +34,7 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    addStatusListener( ".uno:MetricUnit");
+    addStatusListener( u".uno:MetricUnit"_ustr);
 }
 
 
