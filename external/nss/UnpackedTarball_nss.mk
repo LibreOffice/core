@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss-restore-manual-pre-dependencies.patch.1 \
     external/nss/Wincompatible-function-pointer-types.patch.0 \
     $(if $(filter LINUX,$(OS)), \
+        external/nss/nss.disablefsync.patch \
         external/nss/nss.getrandom.patch) \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \

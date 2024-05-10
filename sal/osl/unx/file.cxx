@@ -1387,7 +1387,11 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
     if (result != osl_File_E_None)
         return result;
 
-    if (fsync(pImpl->m_fd) == -1)
+    static bool disabled = getenv("SAL_DISABLE_FSYNC") != nullptr;
+
+    if (disabled)
+        SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): Disabled");
+    else if (fsync(pImpl->m_fd) == -1)
     {
         int e = errno;
         SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): " << UnixErrnoString(e));
