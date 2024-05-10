@@ -144,24 +144,23 @@ namespace svxform
 
                 // depending on this script type, use the right property from the document's style which controls the
                 // default locale for document content
-                const char* pCharLocalePropertyName = "CharLocale";
+                OUString sCharLocalePropertyName = u"CharLocale"_ustr;
                 switch ( eSysLocaleScriptType )
                 {
                 case ScriptType::LATIN:
                     // already defaulted above
                     break;
                 case ScriptType::ASIAN:
-                    pCharLocalePropertyName = "CharLocaleAsian";
+                    sCharLocalePropertyName = u"CharLocaleAsian"_ustr;
                     break;
                 case ScriptType::COMPLEX:
-                    pCharLocalePropertyName = "CharLocaleComplex";
+                    sCharLocalePropertyName = u"CharLocaleComplex"_ustr;
                     break;
                 default:
                     OSL_FAIL( "lcl_initializeControlFont: unexpected script type for system locale!" );
                     break;
                 }
 
-                OUString sCharLocalePropertyName = OUString::createFromAscii( pCharLocalePropertyName );
                 Locale aDocumentCharLocale;
                 if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
                 {
