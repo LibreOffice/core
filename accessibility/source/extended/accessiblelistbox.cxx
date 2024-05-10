@@ -343,9 +343,13 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
+        VclPtr<SvTreeListBox> pListBox = getListBox();
+        if (!pListBox)
+            return AccessibleRole::LIST;
+
         //o is: return AccessibleRole::TREE;
-        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if(!bHasButtons && (getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN))
+        bool bHasButtons = (pListBox->GetStyle() & WB_HASBUTTONS) != 0;
+        if (!bHasButtons && (pListBox->GetTreeFlags() & SvTreeFlags::CHKBTN))
             return AccessibleRole::LIST;
         else
             if (GetRoleType() == 0)
