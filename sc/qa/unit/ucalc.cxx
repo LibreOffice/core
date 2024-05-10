@@ -2927,6 +2927,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "SORT",
         "SORTBY",
         "STYLE",
+        "UNIQUE",
         "VLOOKUP",
         "XLOOKUP",
         "XMATCH",

@@ -281,6 +281,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.FILTER" , SC_OPCODE_FILTER },
     { "COM.MICROSOFT.SORT" , SC_OPCODE_SORT },
     { "COM.MICROSOFT.SORTBY" , SC_OPCODE_SORTBY },
+    { "COM.MICROSOFT.UNIQUE" , SC_OPCODE_UNIQUE },
     { "ORG.OPENOFFICE.MULTIRANGE" , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -735,6 +736,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn._xlws.FILTER" , SC_OPCODE_FILTER },
     { "_xlfn._xlws.SORT" , SC_OPCODE_SORT },
     { "_xlfn.SORTBY" , SC_OPCODE_SORTBY },
+    { "_xlfn.UNIQUE" , SC_OPCODE_UNIQUE },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -1192,6 +1194,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "FILTER" , SC_OPCODE_FILTER },
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
+    { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -1650,6 +1653,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "FILTER" , SC_OPCODE_FILTER },
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
+    { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },  // ?? first character = I ??
@@ -2106,6 +2110,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "FILTER" , SC_OPCODE_FILTER },
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
+    { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -2543,6 +2548,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "FILTER") , SC_OPCODE_FILTER },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "SORT") , SC_OPCODE_SORT },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "SORTBY") , SC_OPCODE_SORTBY },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "UNIQUE") , SC_OPCODE_UNIQUE },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OFFSET") , SC_OPCODE_OFFSET },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "INDEX") , SC_OPCODE_INDEX }, // ?? first character = I ??

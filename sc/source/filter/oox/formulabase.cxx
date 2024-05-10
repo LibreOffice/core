@@ -882,6 +882,7 @@ const FunctionData saFuncTable2021[] =
     { "COM.MICROSOFT.SORTBY",              "SORTBY",              NOID,   NOID,   2,  MX, V, { RO, RO, VR }, FuncFlags::MACROCALL_NEW | FuncFlags::PARAMPAIRS },
     { "COM.MICROSOFT.SEQUENCE",            "SEQUENCE",            NOID,   NOID,   1,  4,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.RANDARRAY",           "RANDARRAY",           NOID,   NOID,   0,  5,  A, { VO }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.UNIQUE",              "UNIQUE",              NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
 };
 
 
