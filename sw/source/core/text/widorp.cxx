@@ -427,7 +427,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
             "WidowsAndOrphans::FindWidows with swapped frame" );
 
-    if( !m_nWidLines || !pFrame->IsFollow() )
+    if( !pFrame->IsFollow() )
         return false;
 
     rLine.Bottom();
@@ -517,6 +517,10 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             }
         }
     }
+
+    // no widow (e.g. in tables) and no hyphenation-keep
+    if( !m_nWidLines && !nExtraWidLines )
+        return false;
 
     // below the Widows-threshold..., with an extra hyphenated line
     if( rLine.GetLineNr() >= m_nWidLines + nExtraWidLines )
