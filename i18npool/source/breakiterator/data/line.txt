@@ -55,7 +55,7 @@ $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
 $ID = [:LineBreak =  Ideographic:];
-$IN = [:LineBreak =  Inseperable:];
+$IN = [:LineBreak =  Inseparable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $JL = [:LineBreak =  JL:];
 $JV = [:LineBreak =  JV:];
