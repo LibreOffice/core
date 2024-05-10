@@ -57,15 +57,15 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-static const char* aIndexServiceMap[] =
+constexpr OUString aIndexServiceMap[]
 {
-    "com.sun.star.text.ContentIndex",
-    "com.sun.star.text.DocumentIndex",
-    "com.sun.star.text.TableIndex",
-    "com.sun.star.text.ObjectIndex",
-    "com.sun.star.text.Bibliography",
-    "com.sun.star.text.UserIndex",
-    "com.sun.star.text.IllustrationsIndex"
+    u"com.sun.star.text.ContentIndex"_ustr,
+    u"com.sun.star.text.DocumentIndex"_ustr,
+    u"com.sun.star.text.TableIndex"_ustr,
+    u"com.sun.star.text.ObjectIndex"_ustr,
+    u"com.sun.star.text.Bibliography"_ustr,
+    u"com.sun.star.text.UserIndex"_ustr,
+    u"com.sun.star.text.IllustrationsIndex"_ustr
 };
 
 const XMLTokenEnum aIndexSourceElementMap[] =
@@ -169,9 +169,7 @@ void XMLIndexTOCContext::startFastElement(
                                              UNO_QUERY);
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc =
-            xFactory->createInstance(
-                OUString::createFromAscii(aIndexServiceMap[eIndexType]));
+        Reference<XInterface> xIfc = xFactory->createInstance(aIndexServiceMap[eIndexType]);
         if( xIfc.is() )
         {
             // get Property set
