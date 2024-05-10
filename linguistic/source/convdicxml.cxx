@@ -253,7 +253,7 @@ bool ConvDicXMLExport::Export()
 
 ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
-    GetNamespaceMap_().Add( "tcd",
+    GetNamespaceMap_().Add( u"tcd"_ustr,
             XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
 
     GetDocHandler()->startDocument();
@@ -261,17 +261,17 @@ ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass
     // Add xmlns line and some other arguments
     AddAttribute( GetNamespaceMap_().GetAttrNameByKey( XML_NAMESPACE_TCD ),
                   GetNamespaceMap_().GetNameByKey( XML_NAMESPACE_TCD ) );
-    AddAttribute( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
+    AddAttribute( XML_NAMESPACE_TCD, u"package"_ustr, u"org.openoffice.Office"_ustr );
 
     OUString aIsoLang( LanguageTag::convertToBcp47( rDic.nLanguage ) );
-    AddAttribute( XML_NAMESPACE_TCD, "lang", aIsoLang );
+    AddAttribute( XML_NAMESPACE_TCD, u"lang"_ustr, aIsoLang );
     OUString aConvType( ConversionTypeToText( rDic.nConversionType ) );
-    AddAttribute( XML_NAMESPACE_TCD, "conversion-type", aConvType );
+    AddAttribute( XML_NAMESPACE_TCD, u"conversion-type"_ustr, aConvType );
 
     //!! block necessary in order to have SvXMLElementExport d-tor called
     //!! before the call to endDocument
     {
-        SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, "text-conversion-dictionary", true, true );
+        SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, u"text-conversion-dictionary"_ustr, true, true );
         ExportContent_();
     }
 
@@ -291,7 +291,7 @@ void ConvDicXMLExport::ExportContent_()
 
     for (const OUString& aLeftText : aKeySet)
     {
-        AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
+        AddAttribute( XML_NAMESPACE_TCD, u"left-text"_ustr, aLeftText );
         if (rDic.pConvPropType) // property-type list available?
         {
             sal_Int16 nPropertyType = -1;
@@ -301,10 +301,10 @@ void ConvDicXMLExport::ExportContent_()
             DBG_ASSERT( nPropertyType, "property-type not found" );
             if (nPropertyType == -1)
                 nPropertyType = ConversionPropertyType::NOT_DEFINED;
-            AddAttribute( XML_NAMESPACE_TCD, "property-type", OUString::number(  nPropertyType ) );
+            AddAttribute( XML_NAMESPACE_TCD, u"property-type"_ustr, OUString::number(  nPropertyType ) );
         }
         SvXMLElementExport aEntryMain( *this, XML_NAMESPACE_TCD,
-                "entry" , true, true );
+                u"entry"_ustr , true, true );
 
         std::pair< ConvMap::iterator, ConvMap::iterator > aRange =
                 rDic.aFromLeft.equal_range(aLeftText);
@@ -313,7 +313,7 @@ void ConvDicXMLExport::ExportContent_()
             DBG_ASSERT( aLeftText == (*aIt).first, "key <-> entry mismatch" );
             OUString aRightText( (*aIt).second );
             SvXMLElementExport aEntryRightText( *this, XML_NAMESPACE_TCD,
-                    "right-text" , true, false );
+                    u"right-text"_ustr , true, false );
             Characters( aRightText );
         }
     }
@@ -321,7 +321,7 @@ void ConvDicXMLExport::ExportContent_()
 
     //!!  see comment for pDic member
 ConvDicXMLImport::ConvDicXMLImport( ConvDic *pConvDic ) :
-    SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
+    SvXMLImport ( comphelper::getProcessComponentContext(), u"com.sun.star.lingu2.ConvDicXMLImport"_ustr, SvXMLImportFlags::ALL ),
     pDic        ( pConvDic ), nLanguage(LANGUAGE_NONE), nConversionType(-1)
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_TCD), GetXMLToken(XML_N_TCD), XML_NAMESPACE_TCD);

@@ -91,7 +91,7 @@ struct WID_Name
 //! since the WID is used as index in this table!
 WID_Name const aWID_Name[] =
 {
-    { 0,                                  "" },
+    { 0,                                  u""_ustr },
     { UPH_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST },
     { UPH_IS_IGNORE_CONTROL_CHARACTERS,   UPN_IS_IGNORE_CONTROL_CHARACTERS },
     { UPH_IS_SPELL_UPPER_CASE,            UPN_IS_SPELL_UPPER_CASE },
@@ -101,16 +101,16 @@ WID_Name const aWID_Name[] =
     { UPH_HYPH_MIN_WORD_LENGTH,           UPN_HYPH_MIN_WORD_LENGTH },
     { UPH_DEFAULT_LOCALE,                 UPN_DEFAULT_LOCALE },
     { UPH_IS_SPELL_AUTO,                  UPN_IS_SPELL_AUTO },
-    { 0,                                  "" },
-    { 0,                                  "" },
+    { 0,                                  u""_ustr },
+    { 0,                                  u""_ustr },
     { UPH_IS_SPELL_SPECIAL,               UPN_IS_SPELL_SPECIAL },
     { UPH_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO },
     { UPH_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL },
     { UPH_IS_WRAP_REVERSE,                UPN_IS_WRAP_REVERSE },
-    { 0,                                  "" },
-    { 0,                                  "" },
-    { 0,                                  "" },
-    { 0,                                  "" },
+    { 0,                                  u""_ustr },
+    { 0,                                  u""_ustr },
+    { 0,                                  u""_ustr },
+    { 0,                                  u""_ustr },
     { UPH_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE },
     { UPH_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK },
     { UPH_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL },
@@ -369,7 +369,7 @@ void SAL_CALL
 // XServiceInfo
 OUString SAL_CALL LinguProps::getImplementationName()
 {
-    return "com.sun.star.lingu2.LinguProps";
+    return u"com.sun.star.lingu2.LinguProps"_ustr;
 }
 
 // XServiceInfo
@@ -381,7 +381,7 @@ sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 {
-    return { "com.sun.star.linguistic2.LinguProperties" };
+    return { u"com.sun.star.linguistic2.LinguProperties"_ustr };
 }
 
 bool LinguProps::getPropertyBool(const OUString& aPropertyName)

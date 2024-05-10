@@ -396,7 +396,7 @@ void LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 
 
 LngSvcMgr::LngSvcMgr()
-    : utl::ConfigItem("Office.Linguistic")
+    : utl::ConfigItem(u"Office.Linguistic"_ustr)
     , aEvtListeners(GetLinguMutex())
     , aUpdateIdle("LngSvcMgr aUpdateIdle")
 {
@@ -404,10 +404,10 @@ LngSvcMgr::LngSvcMgr()
 
     // request notify events when properties (i.e. something in the subtree) changes
     uno::Sequence< OUString > aNames{
-        "ServiceManager/SpellCheckerList",
-        "ServiceManager/GrammarCheckerList",
-        "ServiceManager/HyphenatorList",
-        "ServiceManager/ThesaurusList"
+        u"ServiceManager/SpellCheckerList"_ustr,
+        u"ServiceManager/GrammarCheckerList"_ustr,
+        u"ServiceManager/HyphenatorList"_ustr,
+        u"ServiceManager/ThesaurusList"_ustr
     };
     EnableNotification( aNames );
 
@@ -1152,7 +1152,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
 
-    OUString aNode("ServiceManager/SpellCheckerList");
+    OUString aNode(u"ServiceManager/SpellCheckerList"_ustr);
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
@@ -1185,7 +1185,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
 
-    OUString aNode("ServiceManager/GrammarCheckerList");
+    OUString aNode(u"ServiceManager/GrammarCheckerList"_ustr);
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
@@ -1222,7 +1222,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
 
-    OUString aNode("ServiceManager/HyphenatorList");
+    OUString aNode(u"ServiceManager/HyphenatorList"_ustr);
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
@@ -1259,7 +1259,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
 
-    OUString aNode("ServiceManager/ThesaurusList");
+    OUString aNode(u"ServiceManager/ThesaurusList"_ustr);
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
@@ -1703,7 +1703,7 @@ uno::Sequence< OUString > SAL_CALL
     OUString *pNames = aNames.getArray();
     if ( rServiceName == SN_SPELLCHECKER )
     {
-        OUString aNode( "ServiceManager/SpellCheckerList");
+        OUString aNode( u"ServiceManager/SpellCheckerList"_ustr);
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1715,7 +1715,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( rServiceName == SN_GRAMMARCHECKER )
     {
-        OUString aNode( "ServiceManager/GrammarCheckerList");
+        OUString aNode( u"ServiceManager/GrammarCheckerList"_ustr);
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1727,7 +1727,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( rServiceName == SN_HYPHENATOR )
     {
-        OUString aNode( "ServiceManager/HyphenatorList");
+        OUString aNode( u"ServiceManager/HyphenatorList"_ustr);
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1739,7 +1739,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( rServiceName == SN_THESAURUS )
     {
-        OUString aNode( "ServiceManager/ThesaurusList");
+        OUString aNode( u"ServiceManager/ThesaurusList"_ustr);
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1814,7 +1814,7 @@ bool LngSvcMgr::AddLngSvcEvtBroadcaster(
 OUString SAL_CALL
     LngSvcMgr::getImplementationName()
 {
-    return "com.sun.star.lingu2.LngSvcMgr";
+    return u"com.sun.star.lingu2.LngSvcMgr"_ustr;
 }
 
 
@@ -1828,7 +1828,7 @@ sal_Bool SAL_CALL
 uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getSupportedServiceNames()
 {
-    return { "com.sun.star.linguistic2.LinguServiceManager" };
+    return { u"com.sun.star.linguistic2.LinguServiceManager"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

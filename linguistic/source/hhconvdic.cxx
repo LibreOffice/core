@@ -99,7 +99,7 @@ void SAL_CALL HHConvDic::addEntry(
 
 OUString SAL_CALL HHConvDic::getImplementationName(  )
 {
-    return "com.sun.star.lingu2.HHConvDic";
+    return u"com.sun.star.lingu2.HHConvDic"_ustr;
 }
 
 

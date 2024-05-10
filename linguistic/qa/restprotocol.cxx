@@ -35,7 +35,7 @@ class MockServerThread : public ::osl::Thread
 {
 public:
     MockServerThread()
-        : m_aSocketAddr("localhost", 2022)
+        : m_aSocketAddr(u"localhost"_ustr, 2022)
     {
     }
 
@@ -137,7 +137,7 @@ private:
 
 void TestRestProtocol::testProofreading()
 {
-    css::lang::Locale aLocale("en", "US", "");
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
     using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
     auto batch(comphelper::ConfigurationChanges::create());
 
@@ -150,14 +150,14 @@ void TestRestProtocol::testProofreading()
 
     batch->commit();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("duden"), *LanguageToolCfg::RestProtocol::get());
+    CPPUNIT_ASSERT_EQUAL(u"duden"_ustr, *LanguageToolCfg::RestProtocol::get());
 
     Reference<::com::sun::star::linguistic2::XProofreader> xProofreader(
-        m_xSFactory->createInstance("com.sun.star.linguistic2.Proofreader"), UNO_QUERY);
+        m_xSFactory->createInstance(u"com.sun.star.linguistic2.Proofreader"_ustr), UNO_QUERY);
     CPPUNIT_ASSERT(xProofreader.is());
 
     com::sun::star::linguistic2::ProofreadingResult aResult
-        = xProofreader->doProofreading("id", "ths is a tst", aLocale, 0, 0, {});
+        = xProofreader->doProofreading(u"id"_ustr, u"ths is a tst"_ustr, aLocale, 0, 0, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aResult.aErrors.getLength());
 }

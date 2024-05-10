@@ -399,7 +399,7 @@ bool    IsReadOnly( const OUString &rURL, bool *pbExist )
             bExists = aContent.isDocument();
             if (bExists)
             {
-                Any aAny( aContent.getPropertyValue( "IsReadOnly" ) );
+                Any aAny( aContent.getPropertyValue( u"IsReadOnly"_ustr ) );
                 aAny >>= bRes;
             }
         }
@@ -693,7 +693,7 @@ uno::Reference< XDictionary > GetIgnoreAllList()
     if (xDL.is())
     {
         const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
-                                    ? LanguageTag("en-US")
+                                    ? LanguageTag(u"en-US"_ustr)
                                     : SvtSysLocale().GetUILanguageTag();
         std::locale loc(Translate::Create("svt", tag));
         xRes = xDL->getDictionaryByName( Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) );

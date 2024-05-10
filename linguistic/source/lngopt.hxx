@@ -122,7 +122,7 @@ public:
     virtual sal_Bool SAL_CALL getIsSpellCapitalization() override
         { return false; }
     virtual void SAL_CALL setIsSpellCapitalization(sal_Bool /*p1*/) override
-        { throw new css::beans::UnknownPropertyException( "this deprecated property has been removed"); }
+        { throw new css::beans::UnknownPropertyException( u"this deprecated property has been removed"_ustr); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) override

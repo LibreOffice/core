@@ -253,7 +253,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                     uno::Reference< css::ucb::XCommandEnvironment >(),
                                     comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( "delete", Any( true ) );
+            aCnt.executeCommand( u"delete"_ustr, Any( true ) );
         }
         catch( ... )
         {
@@ -515,7 +515,7 @@ void SAL_CALL ConvDicList::removeEventListener(
 
 OUString SAL_CALL ConvDicList::getImplementationName()
 {
-    return "com.sun.star.lingu2.ConvDicList";
+    return u"com.sun.star.lingu2.ConvDicList"_ustr;
 }
 
 sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL ConvDicList::getSupportedServiceNames()
 {
-    return { "com.sun.star.linguistic2.ConversionDictionaryList" };
+    return { u"com.sun.star.linguistic2.ConversionDictionaryList"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

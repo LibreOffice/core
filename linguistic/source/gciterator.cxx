@@ -602,10 +602,10 @@ lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_In
             xFlatPara, uno::UNO_QUERY_THROW);
     css::uno::Any a (nProofInfo);
     return comphelper::InitPropertySequence({
-        { "FieldPositions", xProps->getPropertyValue("FieldPositions") },
-        { "FootnotePositions", xProps->getPropertyValue("FootnotePositions") },
-        { "SortedTextId", xProps->getPropertyValue("SortedTextId") },
-        { "DocumentElementsCount", xProps->getPropertyValue("DocumentElementsCount") },
+        { "FieldPositions", xProps->getPropertyValue(u"FieldPositions"_ustr) },
+        { "FootnotePositions", xProps->getPropertyValue(u"FootnotePositions"_ustr) },
+        { "SortedTextId", xProps->getPropertyValue(u"SortedTextId"_ustr) },
+        { "DocumentElementsCount", xProps->getPropertyValue(u"DocumentElementsCount"_ustr) },
         { "ProofInfo", a }
     });
 }
@@ -1098,11 +1098,11 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
             // get configuration update access
             beans::PropertyValue aValue;
             aValue.Name  = "nodepath";
-            aValue.Value <<= OUString("org.openoffice.Office.Linguistic/ServiceManager");
+            aValue.Value <<= u"org.openoffice.Office.Linguistic/ServiceManager"_ustr;
             uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
             m_xUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess", aProps ),
+                        u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps ),
                         uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
@@ -1122,7 +1122,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
     {
         // get node names (locale iso strings) for configured grammar checkers
         uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( "GrammarCheckerList" ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( u"GrammarCheckerList"_ustr ), uno::UNO_QUERY_THROW );
         const uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
 
         for (const OUString& rElementName : aElementNames)
@@ -1167,13 +1167,13 @@ sal_Bool SAL_CALL GrammarCheckingIterator::supportsService(
 
 OUString SAL_CALL GrammarCheckingIterator::getImplementationName(  )
 {
-    return "com.sun.star.lingu2.ProofreadingIterator";
+    return u"com.sun.star.lingu2.ProofreadingIterator"_ustr;
 }
 
 
 uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceNames(  )
 {
-    return  { "com.sun.star.linguistic2.ProofreadingIterator" };
+    return  { u"com.sun.star.linguistic2.ProofreadingIterator"_ustr };
 }
 
 

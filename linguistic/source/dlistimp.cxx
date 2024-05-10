@@ -281,7 +281,7 @@ void DicList::SearchForDictionaries(
     {
         LanguageType nLang = LANGUAGE_NONE;
         bool         bNeg  = false;
-        OUString     aDicTitle = "";
+        OUString     aDicTitle = u""_ustr;
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg, aDicTitle ))
         {
@@ -588,7 +588,7 @@ void DicList::CreateDicList()
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
     const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
-                                ? LanguageTag("en-US")
+                                ? LanguageTag(u"en-US"_ustr)
                                 : SvtSysLocale().GetUILanguageTag();
     std::locale loc(Translate::Create("svt", tag));
     uno::Reference< XDictionary > xIgnAll(
@@ -661,7 +661,7 @@ void DicList::SaveDics()
 
 OUString SAL_CALL DicList::getImplementationName(  )
 {
-    return "com.sun.star.lingu2.DicList";
+    return u"com.sun.star.lingu2.DicList"_ustr;
 }
 
 
@@ -672,7 +672,7 @@ sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.linguistic2.DictionaryList" };
+    return { u"com.sun.star.linguistic2.DictionaryList"_ustr };
 }
 
 
@@ -718,7 +718,7 @@ static void AddInternal(
         return;
 
     //! TL TODO: word iterator should be used to break up the text
-    OUString aDelim("!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n");
+    OUString aDelim(u"!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n"_ustr);
     OSL_ENSURE(aDelim.indexOf(u'.') == -1,
         "ensure no '.'");
 
