@@ -85,630 +85,628 @@ css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
     return { "com.sun.star.rdf.URI" };
 }
 
-const char s_nsXSD      [] = "http://www.w3.org/2001/XMLSchema-datatypes#";
-const char s_nsRDF      [] = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-const char s_nsRDFs     [] = "http://www.w3.org/2000/01/rdf-schema#";
-const char s_nsOWL      [] = "http://www.w3.org/2002/07/owl#";
-const char s_nsPkg      [] =
-    "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#";
-const char s_nsODF      [] =
-    "http://docs.oasis-open.org/ns/office/1.2/meta/odf#";
-const char s_nsLO_EXT   [] =
-    "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#";
+constexpr OUString s_nsXSD = u"http://www.w3.org/2001/XMLSchema-datatypes#"_ustr;
+constexpr OUString s_nsRDF = u"http://www.w3.org/1999/02/22-rdf-syntax-ns#"_ustr;
+constexpr OUString s_nsRDFs = u"http://www.w3.org/2000/01/rdf-schema#"_ustr;
+constexpr OUString s_nsOWL = u"http://www.w3.org/2002/07/owl#"_ustr;
+constexpr OUString s_nsPkg = u"http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"_ustr;
+constexpr OUString s_nsODF = u"http://docs.oasis-open.org/ns/office/1.2/meta/odf#"_ustr;
+constexpr OUString s_nsLO_EXT =
+    u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#"_ustr;
 
 void CURI::initFromConstant(const sal_Int16 i_Constant)
 {
-    const char *ns(nullptr);
-    const char *ln(nullptr);
+    OUString ns;
+    OUString ln;
     switch (i_Constant)
     {
         case css::rdf::URIs::XSD_NCNAME:
             ns = s_nsXSD;
-            ln = "NCName";
+            ln = u"NCName"_ustr;
             break;
 
         case css::rdf::URIs::XSD_STRING:
             ns = s_nsXSD;
-            ln = "string";
+            ln = u"string"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NORMALIZEDSTRING:
             ns = s_nsXSD;
-            ln = "normalizedString";
+            ln = u"normalizedString"_ustr;
             break;
 
         case css::rdf::URIs::XSD_BOOLEAN:
             ns = s_nsXSD;
-            ln = "boolean";
+            ln = u"boolean"_ustr;
             break;
 
         case css::rdf::URIs::XSD_DECIMAL:
             ns = s_nsXSD;
-            ln = "decimal";
+            ln = u"decimal"_ustr;
             break;
 
         case css::rdf::URIs::XSD_FLOAT:
             ns = s_nsXSD;
-            ln = "float";
+            ln = u"float"_ustr;
             break;
 
         case css::rdf::URIs::XSD_DOUBLE:
             ns = s_nsXSD;
-            ln = "double";
+            ln = u"double"_ustr;
             break;
 
         case css::rdf::URIs::XSD_INTEGER:
             ns = s_nsXSD;
-            ln = "integer";
+            ln = u"integer"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NONNEGATIVEINTEGER:
             ns = s_nsXSD;
-            ln = "nonNegativeInteger";
+            ln = u"nonNegativeInteger"_ustr;
             break;
 
         case css::rdf::URIs::XSD_POSITIVEINTEGER:
             ns = s_nsXSD;
-            ln = "positiveInteger";
+            ln = u"positiveInteger"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NONPOSITIVEINTEGER:
             ns = s_nsXSD;
-            ln = "nonPositiveInteger";
+            ln = u"nonPositiveInteger"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NEGATIVEINTEGER:
             ns = s_nsXSD;
-            ln = "negativeInteger";
+            ln = u"negativeInteger"_ustr;
             break;
 
         case css::rdf::URIs::XSD_LONG:
             ns = s_nsXSD;
-            ln = "long";
+            ln = u"long"_ustr;
             break;
 
         case css::rdf::URIs::XSD_INT:
             ns = s_nsXSD;
-            ln = "int";
+            ln = u"int"_ustr;
             break;
 
         case css::rdf::URIs::XSD_SHORT:
             ns = s_nsXSD;
-            ln = "short";
+            ln = u"short"_ustr;
             break;
 
         case css::rdf::URIs::XSD_BYTE:
             ns = s_nsXSD;
-            ln = "byte";
+            ln = u"byte"_ustr;
             break;
 
         case css::rdf::URIs::XSD_UNSIGNEDLONG:
             ns = s_nsXSD;
-            ln = "unsignedLong";
+            ln = u"unsignedLong"_ustr;
             break;
 
         case css::rdf::URIs::XSD_UNSIGNEDINT:
             ns = s_nsXSD;
-            ln = "unsignedInt";
+            ln = u"unsignedInt"_ustr;
             break;
 
         case css::rdf::URIs::XSD_UNSIGNEDSHORT:
             ns = s_nsXSD;
-            ln = "unsignedShort";
+            ln = u"unsignedShort"_ustr;
             break;
 
         case css::rdf::URIs::XSD_UNSIGNEDBYTE:
             ns = s_nsXSD;
-            ln = "unsignedByte";
+            ln = u"unsignedByte"_ustr;
             break;
 
         case css::rdf::URIs::XSD_HEXBINARY:
             ns = s_nsXSD;
-            ln = "hexBinary";
+            ln = u"hexBinary"_ustr;
             break;
 
         case css::rdf::URIs::XSD_BASE64BINARY:
             ns = s_nsXSD;
-            ln = "base64Binary";
+            ln = u"base64Binary"_ustr;
             break;
 
         case css::rdf::URIs::XSD_DATETIME:
             ns = s_nsXSD;
-            ln = "dateTime";
+            ln = u"dateTime"_ustr;
             break;
 
         case css::rdf::URIs::XSD_TIME:
             ns = s_nsXSD;
-            ln = "time";
+            ln = u"time"_ustr;
             break;
 
         case css::rdf::URIs::XSD_DATE:
             ns = s_nsXSD;
-            ln = "date";
+            ln = u"date"_ustr;
             break;
 
         case css::rdf::URIs::XSD_GYEARMONTH:
             ns = s_nsXSD;
-            ln = "gYearMonth";
+            ln = u"gYearMonth"_ustr;
             break;
 
         case css::rdf::URIs::XSD_GYEAR:
             ns = s_nsXSD;
-            ln = "gYear";
+            ln = u"gYear"_ustr;
             break;
 
         case css::rdf::URIs::XSD_GMONTHDAY:
             ns = s_nsXSD;
-            ln = "gMonthDay";
+            ln = u"gMonthDay"_ustr;
             break;
 
         case css::rdf::URIs::XSD_GDAY:
             ns = s_nsXSD;
-            ln = "gDay";
+            ln = u"gDay"_ustr;
             break;
 
         case css::rdf::URIs::XSD_GMONTH:
             ns = s_nsXSD;
-            ln = "gMonth";
+            ln = u"gMonth"_ustr;
             break;
 
         case css::rdf::URIs::XSD_ANYURI:
             ns = s_nsXSD;
-            ln = "anyURI";
+            ln = u"anyURI"_ustr;
             break;
 
         case css::rdf::URIs::XSD_TOKEN:
             ns = s_nsXSD;
-            ln = "token";
+            ln = u"token"_ustr;
             break;
 
         case css::rdf::URIs::XSD_LANGUAGE:
             ns = s_nsXSD;
-            ln = "language";
+            ln = u"language"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NMTOKEN:
             ns = s_nsXSD;
-            ln = "NMTOKEN";
+            ln = u"NMTOKEN"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NAME:
             ns = s_nsXSD;
-            ln = "Name";
+            ln = u"Name"_ustr;
             break;
 
         case css::rdf::URIs::XSD_DURATION:
             ns = s_nsXSD;
-            ln = "duration";
+            ln = u"duration"_ustr;
             break;
 
         case css::rdf::URIs::XSD_QNAME:
             ns = s_nsXSD;
-            ln = "QName";
+            ln = u"QName"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NOTATION:
             ns = s_nsXSD;
-            ln = "NOTATION";
+            ln = u"NOTATION"_ustr;
             break;
 
         case css::rdf::URIs::XSD_NMTOKENS:
             ns = s_nsXSD;
-            ln = "NMTOKENS";
+            ln = u"NMTOKENS"_ustr;
             break;
 
         case css::rdf::URIs::XSD_ID:
             ns = s_nsXSD;
-            ln = "ID";
+            ln = u"ID"_ustr;
             break;
 
         case css::rdf::URIs::XSD_IDREF:
             ns = s_nsXSD;
-            ln = "IDREF";
+            ln = u"IDREF"_ustr;
             break;
 
         case css::rdf::URIs::XSD_IDREFS:
             ns = s_nsXSD;
-            ln = "IDREFS";
+            ln = u"IDREFS"_ustr;
             break;
 
         case css::rdf::URIs::XSD_ENTITY:
             ns = s_nsXSD;
-            ln = "ENTITY";
+            ln = u"ENTITY"_ustr;
             break;
 
         case css::rdf::URIs::XSD_ENTITIES:
             ns = s_nsXSD;
-            ln = "ENTITIES";
+            ln = u"ENTITIES"_ustr;
             break;
 
         case css::rdf::URIs::RDF_TYPE:
             ns = s_nsRDF;
-            ln = "type";
+            ln = u"type"_ustr;
             break;
 
         case css::rdf::URIs::RDF_SUBJECT:
             ns = s_nsRDF;
-            ln = "subject";
+            ln = u"subject"_ustr;
             break;
 
         case css::rdf::URIs::RDF_PREDICATE:
             ns = s_nsRDF;
-            ln = "predicate";
+            ln = u"predicate"_ustr;
             break;
 
         case css::rdf::URIs::RDF_OBJECT:
             ns = s_nsRDF;
-            ln = "object";
+            ln = u"object"_ustr;
             break;
 
         case css::rdf::URIs::RDF_PROPERTY:
             ns = s_nsRDF;
-            ln = "Property";
+            ln = u"Property"_ustr;
             break;
 
         case css::rdf::URIs::RDF_STATEMENT:
             ns = s_nsRDF;
-            ln = "Statement";
+            ln = u"Statement"_ustr;
             break;
 
         case css::rdf::URIs::RDF_VALUE:
             ns = s_nsRDF;
-            ln = "value";
+            ln = u"value"_ustr;
             break;
 
         case css::rdf::URIs::RDF_FIRST:
             ns = s_nsRDF;
-            ln = "first";
+            ln = u"first"_ustr;
             break;
 
         case css::rdf::URIs::RDF_REST:
             ns = s_nsRDF;
-            ln = "rest";
+            ln = u"rest"_ustr;
             break;
 
         case css::rdf::URIs::RDF_NIL:
             ns = s_nsRDF;
-            ln = "nil";
+            ln = u"nil"_ustr;
             break;
 
         case css::rdf::URIs::RDF_XMLLITERAL:
             ns = s_nsRDF;
-            ln = "XMLLiteral";
+            ln = u"XMLLiteral"_ustr;
             break;
 
         case css::rdf::URIs::RDF_ALT:
             ns = s_nsRDF;
-            ln = "Alt";
+            ln = u"Alt"_ustr;
             break;
 
         case css::rdf::URIs::RDF_BAG:
             ns = s_nsRDF;
-            ln = "Bag";
+            ln = u"Bag"_ustr;
             break;
 
         case css::rdf::URIs::RDF_LIST:
             ns = s_nsRDF;
-            ln = "List";
+            ln = u"List"_ustr;
             break;
 
         case css::rdf::URIs::RDF_SEQ:
             ns = s_nsRDF;
-            ln = "Seq";
+            ln = u"Seq"_ustr;
             break;
 
         case css::rdf::URIs::RDF_1:
             ns = s_nsRDF;
-            ln = "_1";
+            ln = u"_1"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_COMMENT:
             ns = s_nsRDFs;
-            ln = "comment";
+            ln = u"comment"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_LABEL:
             ns = s_nsRDFs;
-            ln = "label";
+            ln = u"label"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_DOMAIN:
             ns = s_nsRDFs;
-            ln = "domain";
+            ln = u"domain"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_RANGE:
             ns = s_nsRDFs;
-            ln = "range";
+            ln = u"range"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_SUBCLASSOF:
             ns = s_nsRDFs;
-            ln = "subClassOf";
+            ln = u"subClassOf"_ustr;
             break;
 
         case css::rdf::URIs::RDFS_LITERAL:
             ns = s_nsRDFs;
-            ln = "Literal";
+            ln = u"Literal"_ustr;
             break;
 
         case css::rdf::URIs::OWL_CLASS:
             ns = s_nsOWL;
-            ln = "Class";
+            ln = u"Class"_ustr;
             break;
 
         case css::rdf::URIs::OWL_OBJECTPROPERTY:
             ns = s_nsOWL;
-            ln = "ObjectProperty";
+            ln = u"ObjectProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DATATYPEPROPERTY:
             ns = s_nsOWL;
-            ln = "DatatypeProperty";
+            ln = u"DatatypeProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_FUNCTIONALPROPERTY:
             ns = s_nsOWL;
-            ln = "FunctionalProperty";
+            ln = u"FunctionalProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_THING:
             ns = s_nsOWL;
-            ln = "Thing";
+            ln = u"Thing"_ustr;
             break;
 
         case css::rdf::URIs::OWL_NOTHING:
             ns = s_nsOWL;
-            ln = "Nothing";
+            ln = u"Nothing"_ustr;
             break;
 
         case css::rdf::URIs::OWL_INDIVIDUAL:
             ns = s_nsOWL;
-            ln = "Individual";
+            ln = u"Individual"_ustr;
             break;
 
         case css::rdf::URIs::OWL_EQUIVALENTCLASS:
             ns = s_nsOWL;
-            ln = "equivalentClass";
+            ln = u"equivalentClass"_ustr;
             break;
 
         case css::rdf::URIs::OWL_EQUIVALENTPROPERTY:
             ns = s_nsOWL;
-            ln = "equivalentProperty";
+            ln = u"equivalentProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_SAMEAS:
             ns = s_nsOWL;
-            ln = "sameAs";
+            ln = u"sameAs"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DIFFERENTFROM:
             ns = s_nsOWL;
-            ln = "differentFrom";
+            ln = u"differentFrom"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ALLDIFFERENT:
             ns = s_nsOWL;
-            ln = "AllDifferent";
+            ln = u"AllDifferent"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DISTINCTMEMBERS:
             ns = s_nsOWL;
-            ln = "distinctMembers";
+            ln = u"distinctMembers"_ustr;
             break;
 
         case css::rdf::URIs::OWL_INVERSEOF:
             ns = s_nsOWL;
-            ln = "inverseOf";
+            ln = u"inverseOf"_ustr;
             break;
 
         case css::rdf::URIs::OWL_TRANSITIVEPROPERTY:
             ns = s_nsOWL;
-            ln = "TransitiveProperty";
+            ln = u"TransitiveProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_SYMMETRICPROPERTY:
             ns = s_nsOWL;
-            ln = "SymmetricProperty";
+            ln = u"SymmetricProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_INVERSEFUNCTIONALPROPERTY:
             ns = s_nsOWL;
-            ln = "InverseFunctionalProperty";
+            ln = u"InverseFunctionalProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_RESTRICTION:
             ns = s_nsOWL;
-            ln = "Restriction";
+            ln = u"Restriction"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ONPROPERTY:
             ns = s_nsOWL;
-            ln = "onProperty";
+            ln = u"onProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ALLVALUESFROM:
             ns = s_nsOWL;
-            ln = "allValuesFrom";
+            ln = u"allValuesFrom"_ustr;
             break;
 
         case css::rdf::URIs::OWL_SOMEVALUESFROM:
             ns = s_nsOWL;
-            ln = "someValuesFrom";
+            ln = u"someValuesFrom"_ustr;
             break;
 
         case css::rdf::URIs::OWL_MINCARDINALITY:
             ns = s_nsOWL;
-            ln = "minCardinality";
+            ln = u"minCardinality"_ustr;
             break;
 
         case css::rdf::URIs::OWL_MAXCARDINALITY:
             ns = s_nsOWL;
-            ln = "maxCardinality";
+            ln = u"maxCardinality"_ustr;
             break;
 
         case css::rdf::URIs::OWL_CARDINALITY:
             ns = s_nsOWL;
-            ln = "cardinality";
+            ln = u"cardinality"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ONTOLOGY:
             ns = s_nsOWL;
-            ln = "Ontology";
+            ln = u"Ontology"_ustr;
             break;
 
         case css::rdf::URIs::OWL_IMPORTS:
             ns = s_nsOWL;
-            ln = "imports";
+            ln = u"imports"_ustr;
             break;
 
         case css::rdf::URIs::OWL_VERSIONINFO:
             ns = s_nsOWL;
-            ln = "versionInfo";
+            ln = u"versionInfo"_ustr;
             break;
 
         case css::rdf::URIs::OWL_PRIORVERSION:
             ns = s_nsOWL;
-            ln = "priorVersion";
+            ln = u"priorVersion"_ustr;
             break;
 
         case css::rdf::URIs::OWL_BACKWARDCOMPATIBLEWITH:
             ns = s_nsOWL;
-            ln = "backwardCompatibleWith";
+            ln = u"backwardCompatibleWith"_ustr;
             break;
 
         case css::rdf::URIs::OWL_INCOMPATIBLEWITH:
             ns = s_nsOWL;
-            ln = "incompatibleWith";
+            ln = u"incompatibleWith"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DEPRECATEDCLASS:
             ns = s_nsOWL;
-            ln = "DeprecatedClass";
+            ln = u"DeprecatedClass"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DEPRECATEDPROPERTY:
             ns = s_nsOWL;
-            ln = "DeprecatedProperty";
+            ln = u"DeprecatedProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ANNOTATIONPROPERTY:
             ns = s_nsOWL;
-            ln = "AnnotationProperty";
+            ln = u"AnnotationProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ONTOLOGYPROPERTY:
             ns = s_nsOWL;
-            ln = "OntologyProperty";
+            ln = u"OntologyProperty"_ustr;
             break;
 
         case css::rdf::URIs::OWL_ONEOF:
             ns = s_nsOWL;
-            ln = "oneOf";
+            ln = u"oneOf"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DATARANGE:
             ns = s_nsOWL;
-            ln = "dataRange";
+            ln = u"dataRange"_ustr;
             break;
 
         case css::rdf::URIs::OWL_DISJOINTWITH:
             ns = s_nsOWL;
-            ln = "disjointWith";
+            ln = u"disjointWith"_ustr;
             break;
 
         case css::rdf::URIs::OWL_UNIONOF:
             ns = s_nsOWL;
-            ln = "unionOf";
+            ln = u"unionOf"_ustr;
             break;
 
         case css::rdf::URIs::OWL_COMPLEMENTOF:
             ns = s_nsOWL;
-            ln = "complementOf";
+            ln = u"complementOf"_ustr;
             break;
 
         case css::rdf::URIs::OWL_INTERSECTIONOF:
             ns = s_nsOWL;
-            ln = "intersectionOf";
+            ln = u"intersectionOf"_ustr;
             break;
 
         case css::rdf::URIs::OWL_HASVALUE:
             ns = s_nsOWL;
-            ln = "hasValue";
+            ln = u"hasValue"_ustr;
             break;
 
 
         case css::rdf::URIs::PKG_HASPART:
             ns = s_nsPkg;
-            ln = "hasPart";
+            ln = u"hasPart"_ustr;
             break;
 
         case css::rdf::URIs::PKG_MIMETYPE:
             ns = s_nsPkg;
-            ln = "mimeType";
+            ln = u"mimeType"_ustr;
             break;
 
         case css::rdf::URIs::PKG_PACKAGE:
             ns = s_nsPkg;
-            ln = "Package";
+            ln = u"Package"_ustr;
             break;
 
         case css::rdf::URIs::PKG_ELEMENT:
             ns = s_nsPkg;
-            ln = "Element";
+            ln = u"Element"_ustr;
             break;
 
         case css::rdf::URIs::PKG_FILE:
             ns = s_nsPkg;
-            ln = "File";
+            ln = u"File"_ustr;
             break;
 
         case css::rdf::URIs::PKG_METADATAFILE:
             ns = s_nsPkg;
-            ln = "MetadataFile";
+            ln = u"MetadataFile"_ustr;
             break;
 
         case css::rdf::URIs::PKG_DOCUMENT:
             ns = s_nsPkg;
-            ln = "Document";
+            ln = u"Document"_ustr;
             break;
 
         case css::rdf::URIs::ODF_PREFIX:
             ns = s_nsODF;
-            ln = "prefix";
+            ln = u"prefix"_ustr;
             break;
 
         case css::rdf::URIs::ODF_SUFFIX:
             ns = s_nsODF;
-            ln = "suffix";
+            ln = u"suffix"_ustr;
             break;
 
         case css::rdf::URIs::ODF_ELEMENT:
             ns = s_nsODF;
-            ln = "Element";
+            ln = u"Element"_ustr;
             break;
 
         case css::rdf::URIs::ODF_CONTENTFILE:
             ns = s_nsODF;
-            ln = "ContentFile";
+            ln = u"ContentFile"_ustr;
             break;
 
         case css::rdf::URIs::ODF_STYLESFILE:
             ns = s_nsODF;
-            ln = "StylesFile";
+            ln = u"StylesFile"_ustr;
             break;
 
         case css::rdf::URIs::LO_EXT_SHADING:
             ns = s_nsLO_EXT;
-            ln = "shading";
+            ln = u"shading"_ustr;
             break;
 
         default:
             throw css::lang::IllegalArgumentException(
                 "CURI::initialize: invalid URIs constant argument", *this, 0);
     }
-    m_Namespace = OUString::createFromAscii(ns);
-    m_LocalName = OUString::createFromAscii(ln);
+    m_Namespace = ns;
+    m_LocalName = ln;
 }
 
 // css::lang::XInitialization:
