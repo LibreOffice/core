@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <span>
 
 using namespace ::com::sun::star::uno;
 
@@ -77,47 +78,35 @@ namespace svxform
 
     struct Ascii2Int16
     {
-        const char* pAscii;
+        OUString    aAscii;
         sal_Int16   nValue;
     };
 
     }
 
-    static const Ascii2Int16* lcl_getSearchForTypeValueMap()
+    constexpr Ascii2Int16 s_aSearchForTypeMap[]
     {
-        static const Ascii2Int16 s_aSearchForTypeMap[] =
-        {
-            { "text",       0 },
-            { "null",       1 },
-            { "non-null",   2 },
-            { nullptr,         -1 }
-        };
-        return s_aSearchForTypeMap;
-    }
+        { u"text"_ustr,       0 },
+        { u"null"_ustr,       1 },
+        { u"non-null"_ustr,   2 },
+    };
 
-    static const Ascii2Int16* lcl_getSearchPositionValueMap()
+    constexpr Ascii2Int16 s_aSearchPositionMap[]
     {
-        static const Ascii2Int16 s_aSearchPositionMap[] =
-        {
-            { "anywhere-in-field",      MATCHING_ANYWHERE },
-            { "beginning-of-field",     MATCHING_BEGINNING },
-            { "end-of-field",           MATCHING_END },
-            { "complete-field",         MATCHING_WHOLETEXT },
-            { nullptr,                     -1 }
-        };
-        return s_aSearchPositionMap;
-    }
+        { u"anywhere-in-field"_ustr,      MATCHING_ANYWHERE },
+        { u"beginning-of-field"_ustr,     MATCHING_BEGINNING },
+        { u"end-of-field"_ustr,           MATCHING_END },
+        { u"complete-field"_ustr,         MATCHING_WHOLETEXT },
+    };
 
-    static sal_Int16 lcl_implMapAsciiValue( const OUString& _rAsciiValue, const Ascii2Int16* _pMap )
+    static sal_Int16 lcl_implMapAsciiValue( const OUString& _rAsciiValue, std::span<const Ascii2Int16> _rMap )
     {
         // search the map for the given ascii value
-        const Ascii2Int16* pSearch = _pMap;
-        while ( pSearch && pSearch->pAscii )
+        for (const auto & rSearch : _rMap)
         {
-            if ( _rAsciiValue.equalsAscii( pSearch->pAscii ) )
+            if ( _rAsciiValue == rSearch.aAscii )
                 // found
-                return pSearch->nValue;
-            ++pSearch;
+                return rSearch.nValue;
         }
 
         SAL_WARN(
@@ -125,21 +114,19 @@ namespace svxform
         return -1;
     }
 
-    static const char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
+    static const OUString& lcl_implMapIntValue( const sal_Int16 _nValue, std::span<const Ascii2Int16> _rMap )
     {
         // search the map for the given integer value
-        const Ascii2Int16* pSearch = _pMap;
-        while ( pSearch && pSearch->pAscii )
+        for (const Ascii2Int16& rSearch : _rMap)
         {
-            if ( _nValue == pSearch->nValue )
+            if ( _nValue == rSearch.nValue )
                 // found
-                return pSearch->pAscii;
-            ++pSearch;
+                return rSearch.aAscii;
         }
 
         SAL_WARN( "svx", "lcl_implMapIntValue: could not convert the integer value "
                     << _nValue <<  " !");
-        static const char* const s_pDummy = "";
+        static constexpr OUString s_pDummy = u""_ustr;
             // just as a fallback...
         return s_pDummy;
     }
@@ -201,10 +188,10 @@ namespace svxform
     void FmSearchConfigItem::implTranslateFromConfig( )
     {
         // the search-for string
-        nSearchForType = lcl_implMapAsciiValue( m_sSearchForType, lcl_getSearchForTypeValueMap() );
+        nSearchForType = lcl_implMapAsciiValue( m_sSearchForType, s_aSearchForTypeMap );
 
         // the search position
-        nPosition = lcl_implMapAsciiValue( m_sSearchPosition, lcl_getSearchPositionValueMap() );
+        nPosition = lcl_implMapAsciiValue( m_sSearchPosition, s_aSearchPositionMap );
 
         // the transliteration flags
         nTransliterationFlags = TransliterationFlags::NONE;
@@ -234,10 +221,10 @@ namespace svxform
     void FmSearchConfigItem::implTranslateToConfig( )
     {
         // the search-for string
-        m_sSearchForType = OUString::createFromAscii( lcl_implMapIntValue( nSearchForType, lcl_getSearchForTypeValueMap() ) );
+        m_sSearchForType = lcl_implMapIntValue( nSearchForType, s_aSearchForTypeMap );
 
         // the search position
-        m_sSearchPosition = OUString::createFromAscii( lcl_implMapIntValue( nPosition, lcl_getSearchPositionValueMap() ) );
+        m_sSearchPosition = lcl_implMapIntValue( nPosition, s_aSearchPositionMap );
 
         // the transliteration flags
 
