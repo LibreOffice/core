@@ -45,12 +45,6 @@ namespace configmgr::update {
 
 namespace {
 
-std::set< OUString > seqToSet(
-    css::uno::Sequence< OUString > const & sequence)
-{
-    return std::set< OUString >( sequence.begin(), sequence.end() );
-}
-
 class Service:
     public cppu::WeakImplHelper< css::configuration::XUpdate, css::lang::XServiceInfo >
 {
@@ -144,7 +138,7 @@ void Service::insertModificationXcuFile(
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertModificationXcuFile(
-            fileUri, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);
+            fileUri, includedPaths, excludedPaths, &mods);
         components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }

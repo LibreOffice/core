@@ -33,8 +33,8 @@ public:
     enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
 
     Partial(
-        std::set< OUString > const & includedPaths,
-        std::set< OUString > const & excludedPaths);
+        css::uno::Sequence< OUString > const & includedPaths,
+        css::uno::Sequence< OUString > const & excludedPaths);
 
     ~Partial();
 
