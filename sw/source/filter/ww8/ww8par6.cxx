@@ -2844,7 +2844,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 }
 
 void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
-                               const bool bFirstLineOfStSet,
+                               const bool bFirstLineOfstSet,
                                const bool bLeftIndentSet )
 {
     if( m_bNoAttrImport ) // for ignoring styles during doc inserts
@@ -2867,7 +2867,7 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
     {
         m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), rAttr);
         // #i103711#
-        if ( bFirstLineOfStSet )
+        if (bFirstLineOfstSet)
         {
             const SwNode* pNd = &(m_pPaM->GetPoint()->GetNode());
             m_aTextNodesHavingFirstLineOfstSet.insert( pNd );
@@ -4346,7 +4346,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         }
     }
 
-    bool bFirstLinOfstSet( false ); // #i103711#
+    bool bFirstLineOfstSet(false); // #i103711#
     bool bLeftIndentSet( false ); // #i105414#
 
     switch (nId)
@@ -4412,7 +4412,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             {
                 m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
             }
-            bFirstLinOfstSet = true; // #i103711#
+            bFirstLineOfstSet = true; // #i103711#
             break;
         //sprmPDxaRight
         case NS_sprm::v6::sprmPDxaRight:
@@ -4424,7 +4424,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             return;
     }
 
-    NewAttr(*pFirstLine, bFirstLinOfstSet, false); // #i103711#, #i105414#
+    NewAttr(*pFirstLine, bFirstLineOfstSet, false); // #i103711#, #i105414#
     NewAttr(*pLeftMargin, false, bLeftIndentSet);
     NewAttr(*pRightMargin, false, false);
 }
