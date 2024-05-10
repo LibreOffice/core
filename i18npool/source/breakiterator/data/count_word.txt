@@ -78,7 +78,7 @@ $FormatEx     = $Format    $Extend*;
 #  Words.  Alpha-numerics.  Rule 5, 6, 7, 9, 10
 #     - must include at least one letter. 
 #     - may include both letters and numbers.
-#     - may include  MideLetter, MidNumber punctuation.
+#     - may include MidLetter, MidNumber punctuation.
 #
 $LetterSequence = $ALetterEx ($FormatEx* $ALetterEx)*;     # rules #6, #7
 $LetterSequence {200};
