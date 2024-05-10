@@ -1237,6 +1237,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocSort :
         case ocSortBy :
         case ocRandArray :
+        case ocUnique :
             return true;
         default:
         {

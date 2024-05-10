@@ -8755,6 +8755,148 @@ void ScInterpreter::ScSortBy()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScUnique()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 3))
+        return;
+
+    // 3rd argument optional - Exactly_once: default FALSE
+    bool bExactly_once = false;
+    if (nParamCount == 3)
+        bExactly_once = GetBoolWithDefault(false);
+
+    // 2nd argument optional - default: By_Col = false --> bByRow = true
+    bool bByRow = true;
+    if (nParamCount >= 2)
+        bByRow = !GetBoolWithDefault(false);
+
+    // 1st argument: take unique search range
+    ScMatrixRef pMatSource = nullptr;
+    SCSIZE nsC = 0, nsR = 0;
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSource = GetMatrix();
+            if (!pMatSource)
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            pMatSource->GetDimensions(nsC, nsR);
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    // Create unique dataset
+    std::unordered_set<OUString> aStrSet;
+    std::vector<std::pair<SCSIZE, OUString>> aResPos;
+    SCSIZE nOut = bByRow ? nsR : nsC;
+    SCSIZE nIn = bByRow ? nsC : nsR;
+
+    for (SCSIZE i = 0; i < nOut; i++)
+    {
+        OUString aStr;
+        for (SCSIZE j = 0; j < nIn; j++)
+        {
+            OUString aCellStr = bByRow ? pMatSource->GetString(mrContext, j, i).getString() :
+                pMatSource->GetString(mrContext, i, j).getString();
+            aStr += aCellStr + u"\x0001";
+        }
+
+        if (aStrSet.insert(aStr).second) // unique if inserted
+        {
+            aResPos.emplace_back(std::make_pair(i, aStr));
+        }
+        else
+        {
+            if (bExactly_once)
+            {
+                auto it = std::find_if(aResPos.begin(), aResPos.end(),
+                    [&aStr](const std::pair<SCSIZE, OUString>& aRes)
+                    {
+                        return aRes.second.equals(aStr);
+                    }
+                );
+                if (it != aResPos.end())
+                    aResPos.erase(it);
+            }
+        }
+    }
+    // No result
+    if (aResPos.size() == 0)
+    {
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushIllegalArgument();
+        }
+        else
+        {
+            PushNA();
+        }
+        return;
+    }
+    // fill result matrix with unique values
+    ScMatrixRef pResMat = bByRow ? GetNewMat(nsC, aResPos.size(), /*bEmpty*/true) :
+        GetNewMat(aResPos.size(), nsR, /*bEmpty*/true);
+    for (SCSIZE iPos = 0; iPos < aResPos.size(); iPos++)
+    {
+        if (bByRow)
+        {
+            for (SCSIZE col = 0; col < nsC; col++)
+            {
+                if (!pMatSource->IsStringOrEmpty(col, aResPos[iPos].first))
+                {
+                    pResMat->PutDouble(pMatSource->GetDouble(col, aResPos[iPos].first), col, iPos);
+                }
+                else
+                {
+                    pResMat->PutString(pMatSource->GetString(col, aResPos[iPos].first), col, iPos);
+                }
+            }
+        }
+        else
+        {
+            for (SCSIZE row = 0; row < nsR; row++)
+            {
+                if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, row))
+                {
+                    pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, row), iPos, row);
+                }
+                else
+                {
+                    pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, row), iPos, row);
+                }
+            }
+        }
+    }
+
+    if (!pResMat)
+    {
+        PushIllegalArgument();
+    }
+    else
+    {
+        PushMatrix(pResMat);
+    }
+}
+
 void ScInterpreter::ScSubTotal()
 {
     sal_uInt8 nParamCount = GetByte();

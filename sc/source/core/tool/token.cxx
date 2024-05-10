@@ -1549,6 +1549,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocAveDev:
             case ocMatSequence:
             case ocRandArray:
+            case ocUnique:
             // Don't change the state.
             break;
             default:

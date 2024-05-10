@@ -716,6 +716,7 @@ private:
     void ScFilter();
     void ScSort();
     void ScSortBy();
+    void ScUnique();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be
