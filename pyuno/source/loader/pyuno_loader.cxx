@@ -97,7 +97,7 @@ static PyRef getLoaderModule()
     raiseRuntimeExceptionWhenNeeded();
     if( !module.is() )
     {
-        throw RuntimeException( "pythonloader: Couldn't load pythonloader module" );
+        throw RuntimeException( u"pythonloader: Couldn't load pythonloader module"_ustr );
     }
     return PyRef( PyModule_GetDict( module.get() ));
 }
@@ -187,7 +187,7 @@ static void prependPythonPath( std::u16string_view pythonPathBootstrap )
         bufPYTHONPATH.append( OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
     }
 
-    OUString envVar("PYTHONPATH");
+    OUString envVar(u"PYTHONPATH"_ustr);
     OUString envValue(bufPYTHONPATH.makeStringAndClear());
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
@@ -203,7 +203,7 @@ void pythonInit() {
 #endif
     OUString pythonPath;
     OUString pythonHome;
-    OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
+    OUString path( u"$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ) ""_ustr);
     rtl::Bootstrap::expandMacros(path); //TODO: detect failure
     rtl::Bootstrap bootstrap(path);
 #if PY_VERSION_HEX >= 0x03080000
@@ -211,8 +211,8 @@ void pythonInit() {
 #endif
 
     // look for pythonhome
-    bootstrap.getFrom( "PYUNO_LOADER_PYTHONHOME", pythonHome );
-    bootstrap.getFrom( "PYUNO_LOADER_PYTHONPATH", pythonPath );
+    bootstrap.getFrom( u"PYUNO_LOADER_PYTHONHOME"_ustr, pythonHome );
+    bootstrap.getFrom( u"PYUNO_LOADER_PYTHONPATH"_ustr, pythonPath );
 
     // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
     // sadly, there is no api for setting the pythonpath, we have to use the environment variable

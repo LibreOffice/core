@@ -88,7 +88,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 {
     assert( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return "void";
+        return u"void"_ustr;
 
     OUStringBuffer buf( 64 );
     buf.append( "(" + OUString::unacquired(&pTypeRef->pTypeName) + ")" );
@@ -559,10 +559,10 @@ static void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& n
     Sequence<short> aOutParamIndex;
     Sequence<Any> aOutParam;
     Sequence<Any> aParams;
-    Any aRet = me->members->xInvocation->invoke ( "getRows", aParams, aOutParamIndex, aOutParam );
+    Any aRet = me->members->xInvocation->invoke ( u"getRows"_ustr, aParams, aOutParamIndex, aOutParam );
     Reference< XIndexAccess > xIndexAccessRows( aRet, UNO_QUERY );
     nRows = xIndexAccessRows->getCount();
-    aRet = me->members->xInvocation->invoke ( "getColumns", aParams, aOutParamIndex, aOutParam );
+    aRet = me->members->xInvocation->invoke ( u"getColumns"_ustr, aParams, aOutParamIndex, aOutParam );
     Reference< XIndexAccess > xIndexAccessCols( aRet, UNO_QUERY );
     nColumns = xIndexAccessCols->getCount();
 }
@@ -596,7 +596,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
         {
             PyThreadDetach antiguard;
             aRet = me->members->xInvocation->invoke (
-                "getCellRangeByName", aParams, aOutParamIndex, aOutParam );
+                u"getCellRangeByName"_ustr, aParams, aOutParamIndex, aOutParam );
         }
         PyRef rRet = runtime.any2PyObject ( aRet );
         return rRet.getAcquired();
@@ -634,7 +634,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
         {
             PyThreadDetach antiguard;
             aRet = me->members->xInvocation->invoke (
-                "getCellByPosition", aParams, aOutParamIndex, aOutParam );
+                u"getCellByPosition"_ustr, aParams, aOutParamIndex, aOutParam );
         }
         PyRef rRet = runtime.any2PyObject( aRet );
         return rRet.getAcquired();
@@ -657,7 +657,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
         {
             PyThreadDetach antiguard;
 
-            if ( lcl_hasInterfaceByName( me->members->wrappedObject, "com.sun.star.table.XColumnRowRange" ) )
+            if ( lcl_hasInterfaceByName( me->members->wrappedObject, u"com.sun.star.table.XColumnRowRange"_ustr ) )
             {
                 lcl_getRowsColumns (me, nLen0, nLen1);
             }
@@ -680,7 +680,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
             {
                 PyThreadDetach antiguard;
                 aRet = me->members->xInvocation->invoke (
-                    "getCellRangeByPosition", aParams, aOutParamIndex, aOutParam );
+                    u"getCellRangeByPosition"_ustr, aParams, aOutParamIndex, aOutParam );
             }
             PyRef rRet = runtime.any2PyObject( aRet );
             return rRet.getAcquired();
@@ -825,7 +825,7 @@ static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
         {
             PyThreadDetach antiguard;
 
-            hasXCellRange = lcl_hasInterfaceByName( me->members->wrappedObject, "com.sun.star.table.XCellRange" );
+            hasXCellRange = lcl_hasInterfaceByName( me->members->wrappedObject, u"com.sun.star.table.XCellRange"_ustr );
         }
         if ( hasXCellRange )
         {

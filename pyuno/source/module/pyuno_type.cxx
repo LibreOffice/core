@@ -129,13 +129,13 @@ sal_Unicode PyChar2Unicode( PyObject *obj )
     if( ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
-            "attribute value of uno.Char is not a unicode string" );
+            u"attribute value of uno.Char is not a unicode string"_ustr );
     }
 
     if( PyUnicode_GetLength( value.get() ) < 1 )
     {
         throw RuntimeException(
-            "uno.Char contains an empty unicode string");
+            u"uno.Char contains an empty unicode string"_ustr);
     }
 
     sal_Unicode c = static_cast<sal_Unicode>(PyUnicode_ReadChar( value.get(), 0));
@@ -150,7 +150,7 @@ Any PyEnum2Enum( PyObject *obj )
     if( !PyUnicode_Check( typeName.get() ) || ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
-            "attributes typeName and/or value of uno.Enum are not strings" );
+            u"attributes typeName and/or value of uno.Enum are not strings"_ustr );
     }
 
     OUString strTypeName( OUString::createFromAscii( PyUnicode_AsUTF8( typeName.get() ) ) );
@@ -198,7 +198,7 @@ Type PyType2Type( PyObject * o )
     if( !PyUnicode_Check( pyName.get() ) )
     {
         throw RuntimeException(
-            "type object does not have typeName property" );
+            u"type object does not have typeName property"_ustr );
     }
 
     PyRef pyTC( PyObject_GetAttrString( o, "typeClass" ), SAL_NO_ACQUIRE );

@@ -96,7 +96,7 @@ public:
         , nPosConsumed (0)
     {
         if ( ! used )
-            throw RuntimeException("pyuno._createUnoStructHelper failed to create new dictionary");
+            throw RuntimeException(u"pyuno._createUnoStructHelper failed to create new dictionary"_ustr);
     }
     ~fillStructState()
     {
@@ -205,7 +205,7 @@ OUString getLibDir()
         if (Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getLibDir), libDir))
         {
             libDir = libDir.copy(0, libDir.lastIndexOf('/'));
-            OUString name("PYUNOLIBDIR");
+            OUString name(u"PYUNOLIBDIR"_ustr);
             rtl_bootstrap_set(name.pData, libDir.pData);
         }
         return libDir;
