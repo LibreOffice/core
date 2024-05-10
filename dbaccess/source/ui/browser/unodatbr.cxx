@@ -2159,9 +2159,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, const weld::TreeIter&, rParent, b
 
         // it could be that we already have a connection
         SharedConnection xConnection;
-        ensureConnection(xFirstParent.get(), xConnection);
-
-        if ( xConnection.is() )
+        if (ensureConnection(xFirstParent.get(), xConnection) && xConnection.is())
         {
             SQLExceptionInfo aInfo;
             try
