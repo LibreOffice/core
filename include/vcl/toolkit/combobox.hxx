@@ -31,15 +31,44 @@
 #define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
 #define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
+class ImplBtn;
+class ImplListBox;
 class ImplListBoxWindow;
+class ImplListBoxFloatingWindow;
 class UserDrawEvent;
+struct ComboBoxBounds;
 
 /// A widget used to choose from a list of items and which has an entry.
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
-    struct SAL_DLLPRIVATE Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    VclPtr<Edit> m_pSubEdit;
+    VclPtr<ImplListBox> m_pImplLB;
+    VclPtr<ImplBtn> m_pBtn;
+    VclPtr<ImplListBoxFloatingWindow> m_pFloatWin;
+    sal_uInt16 m_nDDHeight;
+    sal_Unicode m_cMultiSep;
+    bool m_isDDAutoSize : 1;
+    bool m_isSyntheticModify : 1;
+    bool m_isKeyBoardModify : 1;
+    bool m_isMatchCase : 1;
+    sal_Int32 m_nMaxWidthChars;
+    sal_Int32 m_nWidthInChars;
+    Link<ComboBox&, void> m_SelectHdl;
+
+    void ImplInitComboBoxData();
+    void ImplUpdateFloatSelection();
+    ComboBoxBounds calcComboBoxDropDownComponentBounds(
+        const Size &rOutSize, const Size &rBorderOutSize) const;
+
+    DECL_LINK(ImplSelectHdl, LinkParamNone*, void);
+    DECL_LINK(ImplCancelHdl, LinkParamNone*, void);
+    DECL_LINK(ImplDoubleClickHdl, ImplListBoxWindow*, void);
+    DECL_LINK(ImplClickBtnHdl, void*, void);
+    DECL_LINK(ImplPopupModeEndHdl, FloatingWindow*, void);
+    DECL_LINK(ImplSelectionChangedHdl, sal_Int32, void);
+    DECL_LINK(ImplAutocompleteHdl, Edit&, void);
+    DECL_LINK(ImplListItemSelectHdl , LinkParamNone*, void);
 
 protected:
     using Window::ImplInit;
