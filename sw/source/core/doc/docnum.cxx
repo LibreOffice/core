@@ -2543,7 +2543,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     if( IsInMailMerge() && !pChkStr )
     {
         OUString newName = "MailMergeNumRule"
-            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( mpNumRuleTable->size() + 1 );
         return newName;
     }

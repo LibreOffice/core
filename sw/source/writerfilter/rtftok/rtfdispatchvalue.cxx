@@ -1446,9 +1446,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTFKeyword::REVDTTM:
         case RTFKeyword::REVDTTMDEL:
         {
-            OUString aStr(
-                OStringToOUString(DTTM22OString(nParam), m_aStates.top().getCurrentEncoding()));
-            auto pValue = new RTFValue(aStr);
+            auto pValue = new RTFValue(DTTM22OUString(nParam));
             putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_date, pValue);
         }

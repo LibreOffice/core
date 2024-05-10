@@ -9,10 +9,12 @@
 
 #include <tools/datetimeutils.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 /// Append the number as 2-digit when less than 10.
-static void lcl_AppendTwoDigits( OStringBuffer &rBuffer, sal_Int32 nNum )
+template<class TStringBuffer>
+static void lcl_AppendTwoDigits( TStringBuffer &rBuffer, sal_Int32 nNum )
 {
     if ( nNum < 0 || nNum > 99 )
     {
@@ -26,14 +28,15 @@ static void lcl_AppendTwoDigits( OStringBuffer &rBuffer, sal_Int32 nNum )
     rBuffer.append( nNum );
 }
 
-OString DateTimeToOString( const DateTime& rDateTime )
+template<class TString, class TStringBuffer>
+static TString DateTimeToStringImpl( const DateTime& rDateTime )
 {
     const DateTime& aInUTC( rDateTime );
 // HACK: this is correct according to the spec, but MSOffice believes everybody lives
 // in UTC+0 when reading it back
 //    aInUTC.ConvertToUTC();
 
-    OStringBuffer aBuffer( 25 );
+    TStringBuffer aBuffer( 25 );
     aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
     aBuffer.append( '-' );
 
@@ -55,15 +58,25 @@ OString DateTimeToOString( const DateTime& rDateTime )
     return aBuffer.makeStringAndClear();
 }
 
+OString DateTimeToOString( const DateTime& rDateTime )
+{
+    return DateTimeToStringImpl<OString,OStringBuffer>(rDateTime);
+}
+
+OUString DateTimeToOUString( const DateTime& rDateTime )
+{
+    return DateTimeToStringImpl<OUString,OUStringBuffer>(rDateTime);
+}
+
 OString DateToOString( const Date& rDate )
 {
     tools::Time aTime( tools::Time::EMPTY );
     return DateTimeToOString( DateTime( rDate, aTime ) );
 }
 
-OString DateToDDMMYYYYOString( const Date& rDate )
+OUString DateToDDMMYYYYOUString( const Date& rDate )
 {
-    OStringBuffer aBuffer( 25 );
+    OUStringBuffer aBuffer( 25 );
     lcl_AppendTwoDigits( aBuffer, rDate.GetDay() );
     aBuffer.append( '/' );
 

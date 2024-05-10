@@ -1388,7 +1388,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
     if( IsInMailMerge())
     {
         OUString newName = "MailMergeSection"
-            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( mpSectionFormatTable->size() + 1 );
         if( pChkStr )
             newName += *pChkStr;

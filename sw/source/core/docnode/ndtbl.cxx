@@ -3946,7 +3946,7 @@ OUString SwDoc::GetUniqueTableName() const
     if( IsInMailMerge())
     {
         OUString newName = "MailMergeTable"
-            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( mpTableFrameFormatTable->size() + 1 );
         return newName;
     }

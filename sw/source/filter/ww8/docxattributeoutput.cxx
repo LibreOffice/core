@@ -5611,7 +5611,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             bHasDate = true;
             Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
             sDate = DateToOString(aDate);
-            aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate));
+            aContentText = DateToDDMMYYYYOUString(aDate);
             sDateFormat = "dd/MM/yyyy";
         }
         else

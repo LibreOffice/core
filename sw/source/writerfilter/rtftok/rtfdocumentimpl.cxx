@@ -210,9 +210,9 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
         pAttributes->set(nId, pValue);
 }
 
-OString DTTM22OString(tools::Long nDTTM)
+OUString DTTM22OUString(tools::Long nDTTM)
 {
-    return DateTimeToOString(msfilter::util::DTTM2DateTime(nDTTM));
+    return DateTimeToOUString(msfilter::util::DTTM2DateTime(nDTTM));
 }
 
 static RTFSprms lcl_getBookmarkProperties(int nPos, const OUString& rString)
@@ -2835,8 +2835,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             OUStringBuffer* pCurrentDestinationText = m_aStates.top().getCurrentDestinationText();
             if (&m_aStates.top().getDestinationText() != pCurrentDestinationText)
                 break; // not for nested group
-            OUString aStr(OStringToOUString(DTTM22OString(o3tl::toInt32(*pCurrentDestinationText)),
-                                            rState.getCurrentEncoding()));
+            OUString aStr(DTTM22OUString(o3tl::toInt32(*pCurrentDestinationText)));
             pCurrentDestinationText->setLength(0);
             auto pValue = new RTFValue(aStr);
             RTFSprms aAnnAttributes;

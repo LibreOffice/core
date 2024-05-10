@@ -1326,7 +1326,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
     if (rDoc.IsInMailMerge())
     {
         OUString newName = "MailMergeFly"
-            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( rDoc.GetSpzFrameFormats()->size() + 1 );
         return newName;
     }

@@ -14,12 +14,14 @@
 
 // This function converts a 'DateTime' object to an 'OString' object
 TOOLS_DLLPUBLIC OString DateTimeToOString(const DateTime& rDateTime);
+// This function converts a 'DateTime' object to an 'OUString' object
+TOOLS_DLLPUBLIC OUString DateTimeToOUString(const DateTime& rDateTime);
 
 // This function converts a 'Date' object to an 'OString' object in ISO-8601 representation
 TOOLS_DLLPUBLIC OString DateToOString(const Date& rDate);
 
-// This function converts a 'Date' object to an 'OString' object in DD/MM/YYYY format
-TOOLS_DLLPUBLIC OString DateToDDMMYYYYOString(const Date& rDate);
+// This function converts a 'Date' object to an 'OUString' object in DD/MM/YYYY format
+TOOLS_DLLPUBLIC OUString DateToDDMMYYYYOUString(const Date& rDate);
 
 #endif
 

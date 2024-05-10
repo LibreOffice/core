@@ -1807,7 +1807,7 @@ namespace sw::mark
         if( m_rDoc.IsInMailMerge())
         {
             OUString newName = rName + "MailMergeMark"
-                    + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+                    + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
                     + OUString::number( m_vAllMarks.size() + 1 );
             return newName;
         }

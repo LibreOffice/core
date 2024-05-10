@@ -643,7 +643,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     if( IsInMailMerge())
     {
         OUString newName = "MailMergeTOX"
-            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( mpSectionFormatTable->size() + 1 );
         if( !sChkStr.isEmpty())
             newName += sChkStr;
