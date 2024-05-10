@@ -49,7 +49,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     Sequence< sal_Int8 > aData;
     bool bSuccess = m_rManager.getPasteData( m_aSelection ? m_aSelection : XA_PRIMARY, rFlavor.MimeType, aData );
     if( ! bSuccess && m_aSelection == 0 )
-        bSuccess = m_rManager.getPasteData( m_rManager.getAtom( "CLIPBOARD" ), rFlavor.MimeType, aData );
+        bSuccess = m_rManager.getPasteData( m_rManager.getAtom( u"CLIPBOARD"_ustr ), rFlavor.MimeType, aData );
 
     if( ! bSuccess )
     {
@@ -74,7 +74,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     Sequence< DataFlavor > aFlavorList;
     bool bSuccess = m_rManager.getPasteDataTypes( m_aSelection ? m_aSelection : XA_PRIMARY, aFlavorList );
     if( ! bSuccess && m_aSelection == 0 )
-        m_rManager.getPasteDataTypes( m_rManager.getAtom( "CLIPBOARD" ), aFlavorList );
+        m_rManager.getPasteDataTypes( m_rManager.getAtom( u"CLIPBOARD"_ustr ), aFlavorList );
 
     return aFlavorList;
 }

@@ -127,7 +127,7 @@ public:
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
-    virtual OUString getRenderBackendName() const override { return "gtk3svp"; }
+    virtual OUString getRenderBackendName() const override { return u"gtk3svp"_ustr; }
 
     GtkStyleContext* createStyleContext(GtkControlPart ePart);
 #if !GTK_CHECK_VERSION(4, 0, 0)

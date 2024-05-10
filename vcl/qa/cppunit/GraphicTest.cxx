@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testEmfToWmfConversion)
     // - Expected: WMF
     // - Actual  : EMF
     // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
-    CPPUNIT_ASSERT_EQUAL(OUString("WMF"),
+    CPPUNIT_ASSERT_EQUAL(u"WMF"_ustr,
                          vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 
     // Import the WMF result and check for traces of EMF+ in it.
@@ -638,8 +638,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
     // Origin URL
-    aGraphic.setOriginURL("Origin URL");
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    aGraphic.setOriginURL(u"Origin URL"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     //Set PrefMapMode
     CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, aGraphic.GetPrefMapMode().GetMapUnit());
@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -688,8 +688,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
     // Origin URL
-    aGraphic.setOriginURL("Origin URL");
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    aGraphic.setOriginURL(u"Origin URL"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     //Set PrefMapMode
     CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, aGraphic.GetPrefMapMode().GetMapUnit());
@@ -710,7 +710,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -890,8 +890,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
     // Origin URL
-    aGraphic.setOriginURL("Origin URL");
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    aGraphic.setOriginURL(u"Origin URL"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     // Check size in pixels
     CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
@@ -911,7 +911,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
     CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
@@ -924,7 +924,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Check properties
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
     CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
@@ -957,8 +957,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Origin URL
-    aGraphic.setOriginURL("Origin URL");
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    aGraphic.setOriginURL(u"Origin URL"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     // Check size in pixels
     CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -990,7 +990,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());

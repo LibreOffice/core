@@ -108,8 +108,8 @@ void WebpFilterTest::testRoundtrip(bool lossy)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(u"webp");
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("Lossless", !lossy),
-        comphelper::makePropertyValue("Quality", sal_Int32(100))
+        comphelper::makePropertyValue(u"Lossless"_ustr, !lossy),
+        comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(100))
     };
     rFilter.ExportGraphic(Graphic(aBitmapEx), u"none", aStream, nFilterFormat, &aFilterData);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -148,7 +148,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
     }
 
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
-    vcl::GraphicFormatDetector aDetector(aStream, "");
+    vcl::GraphicFormatDetector aDetector(aStream, u""_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, aDetector.detect());
     CPPUNIT_ASSERT_EQUAL(true, aDetector.checkWEBP());

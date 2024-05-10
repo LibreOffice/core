@@ -52,7 +52,7 @@ SalGenericInstance::~SalGenericInstance()
 
 OUString SalGenericInstance::getOSVersion()
 {
-    OUString aKernelVer = "unknown";
+    OUString aKernelVer = u"unknown"_ustr;
 #if defined(LINUX)
     FILE* pVersion = fopen( "/proc/version", "r" );
     if ( pVersion )

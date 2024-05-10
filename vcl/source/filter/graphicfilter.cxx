@@ -180,7 +180,7 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( std::u16string_view rPath, SvStream&
             else if ( pConfig->GetImportFilterType( rFormat ).equalsIgnoreAsciiCase( "pcd_Photo_CD_Base16" ) )
                 nBase = 0;
             FilterConfigItem aFilterConfigItem( u"Office.Common/Filter/Graphic/Import/PCD" );
-            aFilterConfigItem.WriteInt32( "Resolution", nBase );
+            aFilterConfigItem.WriteInt32( u"Resolution"_ustr, nBase );
         }
     }
 
@@ -191,12 +191,12 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 {
     Graphic     aGraphic;
 
-    sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( "LogicalWidth", 0 );
-    sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( "LogicalHeight", 0 );
+    sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( u"LogicalWidth"_ustr, 0 );
+    sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( u"LogicalHeight"_ustr, 0 );
 
     if ( rGraphic.GetType() != GraphicType::NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( "ExportMode", -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( u"ExportMode"_ustr, -1 );
 
         if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
         {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
@@ -225,7 +225,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
                 MapMode     aMap( MapUnit::Map100thInch );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( u"Resolution"_ustr, 75 );
                 Fraction    aFrac( 1, std::clamp( nDPI, sal_Int32(75), sal_Int32(600) ) );
 
                 aMap.SetScaleX( aFrac );
@@ -247,7 +247,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( "Color", 0 );
+            sal_Int32 nColors = rConfigItem.ReadInt32( u"Color"_ustr, 0 );
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -317,7 +317,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-        OUString url("$BRAND_BASE_DIR/" LIBO_LIB_FOLDER);
+        OUString url(u"$BRAND_BASE_DIR/" LIBO_LIB_FOLDER ""_ustr);
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
         osl::FileBase::getSystemPathFromFileURL(url, aFilterPath);
     }
@@ -1230,7 +1230,7 @@ ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
     std::unique_ptr<FilterConfigItem> pFilterConfigItem;
     if (!comphelper::IsFuzzing())
     {
-        OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
+        OUString aFilterConfigPath( u"Office.Common/Filter/Graphic/Import/PCD"_ustr );
         pFilterConfigItem = std::make_unique<FilterConfigItem>(aFilterConfigPath);
     }
 
@@ -1577,7 +1577,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
             }
             else if( aFilterName.equalsIgnoreAsciiCase( EXP_SVMETAFILE ) )
             {
-                sal_Int32 nVersion = aConfigItem.ReadInt32( "Version", 0 ) ;
+                sal_Int32 nVersion = aConfigItem.ReadInt32( u"Version"_ustr, 0 ) ;
                 if ( nVersion )
                     rOStm.SetVersion( nVersion );
 
@@ -1753,7 +1753,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                         css::uno::Sequence< css::uno::Any > aArguments{ css::uno::Any(
                             aConfigItem.GetFilterData()) };
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
-                            xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.svg.SVGWriter", aArguments, xContext),
+                            xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.svg.SVGWriter"_ustr, aArguments, xContext),
                                 css::uno::UNO_QUERY );
                         if( xSaxWriter.is() && xSVGWriter.is() )
                         {
@@ -1952,7 +1952,7 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
 ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
 {
     css::uno::Sequence< css::beans::PropertyValue > aFilterData{ comphelper::makePropertyValue(
-        "Compression", sal_uInt32(9)) };
+        u"Compression"_ustr, sal_uInt32(9)) };
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName(u"PNG");
     return ExportGraphic(rGraphic, u"", rOutputStream, nFilterFormat, &aFilterData);

@@ -610,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testFont)
 
     // Use Dejavu fonts, they are shipped with LO, so they should be ~always available.
     // Use Sans variant for simpler glyph shapes (no serifs).
-    vcl::Font font("DejaVu Sans", "Book", Size(0, 36));
+    vcl::Font font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 36));
     font.SetColor(COL_BLACK);
     font.SetFillColor(COL_RED);
 
@@ -657,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFont)
 
     // Use Dejavu fonts, they are shipped with LO, so they should be ~always available.
     // Use Sans variant for simpler glyph shapes (no serifs).
-    vcl::Font font("DejaVu Sans", "Book", Size(0, 36));
+    vcl::Font font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 36));
     font.SetColor(COL_TRANSPARENT);
 
     GDIMetaFile aMtf;

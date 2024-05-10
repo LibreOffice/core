@@ -48,7 +48,7 @@ public:
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
-    virtual OUString getRenderBackendName() const override { return "qt5svp"; }
+    virtual OUString getRenderBackendName() const override { return u"qt5svp"_ustr; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

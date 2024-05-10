@@ -225,9 +225,9 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     //Under Linux, positioning of letters within pstoedit is very approximate.
     //Using the -nfw option delegates the positioning to the reader, and we
     //will do a proper job.  The option is ignored on Windows.
-    OUString arg1("-usebbfrominput");   //-usebbfrominput use the original ps bounding box
-    OUString arg2("-f");
-    OUString arg3("emf:-OO -drawbb -nfw"); //-drawbb mark out the bounding box extent with bg pixels
+    OUString arg1(u"-usebbfrominput"_ustr);   //-usebbfrominput use the original ps bounding box
+    OUString arg2(u"-f"_ustr);
+    OUString arg3(u"emf:-OO -drawbb -nfw"_ustr); //-drawbb mark out the bounding box extent with bg pixels
                                            //-nfw delegate letter placement to us
     rtl_uString *args[] =
     {
@@ -238,7 +238,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
     oslProcessError eErr = runProcessWithPathSearch(
-            "pstoedit" EXESUFFIX,
+            u"pstoedit" EXESUFFIX ""_ustr,
             args, SAL_N_ELEMENTS(args),
             &aProcess, &pIn, &pOut, &pErr);
 
@@ -362,14 +362,14 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     Graphic &rGraphic)
 {
     // density in pixel/inch
-    OUString arg1("-density");
+    OUString arg1(u"-density"_ustr);
     // since the preview is also used for PDF-Export & printing on non-PS-printers,
     // use some better quality - 300x300 should allow some resizing as well
-    OUString arg2("300x300");
+    OUString arg2(u"300x300"_ustr);
     // read eps from STDIN
-    OUString arg3("eps:-");
+    OUString arg3(u"eps:-"_ustr);
     // write bmp to STDOUT
-    OUString arg4("bmp:-");
+    OUString arg4(u"bmp:-"_ustr);
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
@@ -383,17 +383,17 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
 static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
-    OUString arg1("-q");
-    OUString arg2("-dBATCH");
-    OUString arg3("-dNOPAUSE");
-    OUString arg4("-dPARANOIDSAFER");
-    OUString arg5("-dEPSCrop");
-    OUString arg6("-dTextAlphaBits=4");
-    OUString arg7("-dGraphicsAlphaBits=4");
-    OUString arg8("-r300x300");
-    OUString arg9("-sDEVICE=bmp16m");
-    OUString arg10("-sOutputFile=-");
-    OUString arg11("-");
+    OUString arg1(u"-q"_ustr);
+    OUString arg2(u"-dBATCH"_ustr);
+    OUString arg3(u"-dNOPAUSE"_ustr);
+    OUString arg4(u"-dPARANOIDSAFER"_ustr);
+    OUString arg5(u"-dEPSCrop"_ustr);
+    OUString arg6(u"-dTextAlphaBits=4"_ustr);
+    OUString arg7(u"-dGraphicsAlphaBits=4"_ustr);
+    OUString arg8(u"-r300x300"_ustr);
+    OUString arg9(u"-sDEVICE=bmp16m"_ustr);
+    OUString arg10(u"-sOutputFile=-"_ustr);
+    OUString arg11(u"-"_ustr);
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,

@@ -96,7 +96,7 @@ PrinterInfoManager& PrinterInfoManager::get()
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_eType( eType ),
-    m_aSystemDefaultPaper( "A4" )
+    m_aSystemDefaultPaper( u"A4"_ustr )
 {
     if( eType == Type::Default )
         m_pQueueInfo.reset( new SystemQueueInfo );
@@ -184,7 +184,7 @@ void PrinterInfoManager::initialize()
     m_aGlobalDefaults = PrinterInfo();
 
     // need a parser for the PPDContext. generic printer should do.
-    m_aGlobalDefaults.m_pParser = PPDParser::getParser( "SGENPRT" );
+    m_aGlobalDefaults.m_pParser = PPDParser::getParser( u"SGENPRT"_ustr );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
 
     if( ! m_aGlobalDefaults.m_pParser )
@@ -471,8 +471,8 @@ void PrinterInfoManager::initialize()
     {
         PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
 
-        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( "PageSize" );
-        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( "PageSize" );
+        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( u"PageSize"_ustr );
+        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( u"PageSize"_ustr );
         const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
         const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : nullptr;
         if( pMergeKey && pMergeValue )
@@ -571,7 +571,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if(  ! rContext.getParser() )
         return;
 
-    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( "PageSize" );
+    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( u"PageSize"_ustr );
     if( ! pPageSizeKey )
         return;
 

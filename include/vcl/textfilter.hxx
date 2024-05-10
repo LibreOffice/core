@@ -22,7 +22,7 @@ public:
 
     virtual OUString filter(const OUString& rText);
 
-    TextFilter(OUString aForbiddenChars = OUString(" "));
+    TextFilter(OUString aForbiddenChars = u" "_ustr);
     virtual ~TextFilter();
 };
 

@@ -1088,11 +1088,11 @@ SystemWindow* DockingWindow::GetFloatingWindow() const
 
 DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
     : DockingWindow(pParent,
-                    !bTearable ? OUString("InterimDockParent") : OUString("InterimTearableParent"),
-                    !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
+                    !bTearable ? u"InterimDockParent"_ustr : u"InterimTearableParent"_ustr,
+                    !bTearable ? u"vcl/ui/interimdockparent.ui"_ustr : u"vcl/ui/interimtearableparent.ui"_ustr,
                     "vcl::DropdownDockingWindow maLayoutIdle",
                     rFrame)
-    , m_xBox(m_pUIBuilder->get("box"))
+    , m_xBox(m_pUIBuilder->get(u"box"_ustr))
 {
 }
 
@@ -1108,8 +1108,8 @@ void DropdownDockingWindow::dispose()
 }
 
 ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
-    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui", "vcl::ResizableDockingWindow maLayoutIdle", rFrame)
-    , m_xBox(m_pUIBuilder->get("box"))
+    : DockingWindow(pParent, u"DockingWindow"_ustr, u"vcl/ui/dockingwindow.ui"_ustr, "vcl::ResizableDockingWindow maLayoutIdle", rFrame)
+    , m_xBox(m_pUIBuilder->get(u"box"_ustr))
 {
 }
 

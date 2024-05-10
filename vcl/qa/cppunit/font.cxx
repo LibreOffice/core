@@ -58,10 +58,10 @@ void VclFontTest::testName()
 
     CPPUNIT_ASSERT_MESSAGE( "Family name should be empty", aFont.GetFamilyName().isEmpty());
     CPPUNIT_ASSERT_MESSAGE( "Style name should be empty", aFont.GetStyleName().isEmpty());
-    aFont.SetFamilyName("Test family name");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Family name should not be empty", OUString("Test family name"), aFont.GetFamilyName());
-    aFont.SetStyleName("Test style name");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Style name should not be empty", OUString("Test style name"), aFont.GetStyleName());
+    aFont.SetFamilyName(u"Test family name"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Family name should not be empty", u"Test family name"_ustr, aFont.GetFamilyName());
+    aFont.SetStyleName(u"Test style name"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Style name should not be empty", u"Test style name"_ustr, aFont.GetStyleName());
 }
 
 void VclFontTest::testWeight()

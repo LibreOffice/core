@@ -56,9 +56,9 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     if (comphelper::LibreOfficeKit::isActive())
     {
         if (!bPreferDarkIconTheme)
-            return "colibre";
+            return u"colibre"_ustr;
         else
-            return "colibre_dark";
+            return u"colibre_dark"_ustr;
     }
 
 #ifdef _WIN32

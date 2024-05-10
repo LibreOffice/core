@@ -241,7 +241,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
             tools::Rectangle(Point(), Size(0x7fffffff, 0x7fffffff)), aText, nTextStyle);
         // If the button text doesn't fit into it, put it into a tooltip (might happen in sidebar)
         if (GetQuickHelpText()!= aText && mpButtonData->mbGeneratedTooltip)
-            SetQuickHelpText("");
+            SetQuickHelpText(u""_ustr);
         if (GetQuickHelpText().isEmpty() && textRect.getOpenWidth() > rSize.getWidth())
         {
             SetQuickHelpText(aText);
@@ -1786,7 +1786,7 @@ void PushButton::ShowFocus(const tools::Rectangle& rRect)
 
 void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    set_id("ok");
+    set_id(u"ok"_ustr);
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( GetStandardText( StandardButtonType::OK ) );
@@ -1833,7 +1833,7 @@ void OKButton::Click()
 
 void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    set_id("cancel");
+    set_id(u"cancel"_ustr);
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( GetStandardText( StandardButtonType::Cancel ) );
@@ -1885,7 +1885,7 @@ CloseButton::CloseButton( vcl::Window* pParent )
 
 void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    set_id("help");
+    set_id(u"help"_ustr);
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
     SetText( GetStandardText( StandardButtonType::Help ) );

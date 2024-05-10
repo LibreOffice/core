@@ -1036,10 +1036,10 @@ static bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl
     QtFontFace::fillAttributesFromQFont(rQFont, aFA);
 
     bool bFound = psp::PrintFontManager::get().matchFont(aFA, rLocale);
-    SAL_INFO("vcl.qt", "font match result for '"
-                           << rQFont.family() << "': "
-                           << (bFound ? OUString::Concat("'") + aFA.GetFamilyName() + "'"
-                                      : OUString("failed")));
+    SAL_INFO("vcl.qt",
+             "font match result for '"
+                 << rQFont.family() << "': "
+                 << (bFound ? OUString::Concat("'") + aFA.GetFamilyName() + "'" : u"failed"_ustr));
 
     if (!bFound)
         return false;

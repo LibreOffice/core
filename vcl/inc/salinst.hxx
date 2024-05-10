@@ -203,7 +203,7 @@ public:
     virtual void            releaseMainThread() {}
 
     /// get information about underlying versions
-    virtual OUString        getOSVersion() { return "-"; }
+    virtual OUString        getOSVersion() { return u"-"_ustr; }
 
     virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 

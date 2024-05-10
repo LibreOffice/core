@@ -2707,7 +2707,7 @@ namespace vcl
 VclPtr<PopupMenu> Edit::CreatePopupMenu()
 {
     if (!mpUIBuilder)
-        mpUIBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), "vcl/ui/editmenu.ui", ""));
+        mpUIBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), u"vcl/ui/editmenu.ui"_ustr, u""_ustr));
     VclPtr<PopupMenu> pPopup = mpUIBuilder->get_menu(u"menu");
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (rStyleSettings.GetHideDisabledMenuItems())

@@ -113,7 +113,7 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-01_rectangle_test-rectangle.png", aBitmap);
+        exportImage(u"01-01_rectangle_test-rectangle.png"_ustr, aBitmap);
 
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -126,7 +126,7 @@ public:
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-02_rectangle_test-pixel.png", aBitmap);
+        exportImage(u"01-02_rectangle_test-pixel.png"_ustr, aBitmap);
 
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -139,7 +139,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-03_rectangle_test-line.png", aBitmap);
+        exportImage(u"01-03_rectangle_test-line.png"_ustr, aBitmap);
 
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -152,7 +152,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-04_rectangle_test-polygon.png", aBitmap);
+        exportImage(u"01-04_rectangle_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -164,7 +164,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-05_rectangle_test-polyline.png", aBitmap);
+        exportImage(u"01-05_rectangle_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -176,7 +176,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-06_rectangle_test-polyline_b2d.png", aBitmap);
+        exportImage(u"01-06_rectangle_test-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -188,7 +188,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-07_rectangle_test-polypolygon.png", aBitmap);
+        exportImage(u"01-07_rectangle_test-polypolygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -200,7 +200,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
-        exportImage("01-08_rectangle_test-polypolygon_b2d.png", aBitmap);
+        exportImage(u"01-08_rectangle_test-polypolygon_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -212,7 +212,7 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-01_rectangle_AA_test-rectangle.png", aBitmap);
+        exportImage(u"02-01_rectangle_AA_test-rectangle.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -224,7 +224,7 @@ public:
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-02_rectangle_AA_test-pixel.png", aBitmap);
+        exportImage(u"02-02_rectangle_AA_test-pixel.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -236,7 +236,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-03_rectangle_AA_test-line.png", aBitmap);
+        exportImage(u"02-03_rectangle_AA_test-line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -248,7 +248,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-04_rectangle_AA_test-polygon.png", aBitmap);
+        exportImage(u"02-04_rectangle_AA_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -260,7 +260,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-05_rectangle_AA_test-polyline.png", aBitmap);
+        exportImage(u"02-05_rectangle_AA_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -272,7 +272,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-06_rectangle_AA_test-polyline_b2d.png", aBitmap);
+        exportImage(u"02-06_rectangle_AA_test-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -284,7 +284,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-07_rectangle_AA_test-polypolygon.png", aBitmap);
+        exportImage(u"02-07_rectangle_AA_test-polypolygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -296,7 +296,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-        exportImage("02-08_rectangle_AA_test-polypolygon_b2d.png", aBitmap);
+        exportImage(u"02-08_rectangle_AA_test-polypolygon_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -308,12 +308,12 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-        exportImage("03-01_filled_rectangle_test-rectangle_noline.png", aBitmap);
+        exportImage(u"03-01_filled_rectangle_test-rectangle_noline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
         aBitmap = aOutDevTest.setupFilledRectangle(true);
         eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-        exportImage("03-01_filled_rectangle_test-rectangle_line.png", aBitmap);
+        exportImage(u"03-01_filled_rectangle_test-rectangle_line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -325,12 +325,12 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-        exportImage("03-02_filled_rectangle_test-polygon_noline.png", aBitmap);
+        exportImage(u"03-02_filled_rectangle_test-polygon_noline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
         aBitmap = aOutDevTest.setupFilledRectangle(true);
         eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-        exportImage("03-02_filled_rectangle_test-polygon_line.png", aBitmap);
+        exportImage(u"03-02_filled_rectangle_test-polygon_line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -342,12 +342,12 @@ public:
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-        exportImage("03-03_filled_rectangle_test-polypolygon_noline.png", aBitmap);
+        exportImage(u"03-03_filled_rectangle_test-polypolygon_noline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
         aBitmap = aOutDevTest.setupFilledRectangle(true);
         eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-        exportImage("03-03_filled_rectangle_test-polypolygon_line.png", aBitmap);
+        exportImage(u"03-03_filled_rectangle_test-polypolygon_line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -359,12 +359,12 @@ public:
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-        exportImage("03-04_filled_rectangle_test-polypolygon_b2d_noline.png", aBitmap);
+        exportImage(u"03-04_filled_rectangle_test-polypolygon_b2d_noline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
         aBitmap = aOutDevTest.setupFilledRectangle(true);
         eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-        exportImage("03-04_filled_rectangle_test-polypolygon_b2d_line.png", aBitmap);
+        exportImage(u"03-04_filled_rectangle_test-polypolygon_b2d_line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -374,7 +374,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-        exportImage("04-01_diamond_test-polygon.png", aBitmap);
+        exportImage(u"04-01_diamond_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -384,7 +384,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-        exportImage("04-02_diamond_test-line.png", aBitmap);
+        exportImage(u"04-02_diamond_test-line.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -394,7 +394,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-        exportImage("04-03_diamond_test-polyline.png", aBitmap);
+        exportImage(u"04-03_diamond_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -404,7 +404,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-        exportImage("04-04_diamond_test-polyline_b2d.png", aBitmap);
+        exportImage(u"04-04_diamond_test-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -414,7 +414,7 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
-        exportImage("05-01_invert_test-rectangle.png", aBitmap);
+        exportImage(u"05-01_invert_test-rectangle.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -424,7 +424,7 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupInvert_N50();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
-        exportImage("05-02_invert_N50_test-rectangle.png", aBitmap);
+        exportImage(u"05-02_invert_N50_test-rectangle.png"_ustr, aBitmap);
         if (SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp")
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -434,7 +434,7 @@ public:
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
-        exportImage("05-03_invert_TrackFrame_test-rectangle.png", aBitmap);
+        exportImage(u"05-03_invert_TrackFrame_test-rectangle.png"_ustr, aBitmap);
         if (SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp")
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -446,7 +446,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-        exportImage("06-01_bezier_test-polyline_b2d.png", aBitmap);
+        exportImage(u"06-01_bezier_test-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -458,7 +458,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAABezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-        exportImage("07-01_bezier_AA_test-polyline_b2d.png", aBitmap);
+        exportImage(u"07-01_bezier_AA_test-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -469,7 +469,7 @@ public:
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N24_BPP);
-        exportImage("08-01_bitmap_test_24bpp.png", aBitmap);
+        exportImage(u"08-01_bitmap_test_24bpp.png"_ustr, aBitmap);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -482,7 +482,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-        exportImage("08-02_transformed_bitmap_test_24bpp.png", aBitmap);
+        exportImage(u"08-02_transformed_bitmap_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -494,7 +494,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupComplexDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkComplexTransformedBitmap(aBitmap);
-        exportImage("08-03_transformed_bitmap_test_24bpp.png", aBitmap);
+        exportImage(u"08-03_transformed_bitmap_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -506,7 +506,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-        exportImage("08-04_bitmapex_with_alpha_test_24bpp.png", aBitmap);
+        exportImage(u"08-04_bitmapex_with_alpha_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -518,7 +518,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-        exportImage("08-05_mask_test_24bpp.png", aBitmap);
+        exportImage(u"08-05_mask_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -530,7 +530,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage("08-06_blend_test_24bpp.png", aBitmapEx);
+        exportImage(u"08-06_blend_test_24bpp.png"_ustr, aBitmapEx);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -541,7 +541,7 @@ public:
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
-        exportImage("09-01_bitmap_test_32bpp.png", aBitmap);
+        exportImage(u"09-01_bitmap_test_32bpp.png"_ustr, aBitmap);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
         if (SHOULD_ASSERT && is32bppSupported())
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -554,7 +554,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-        exportImage("09-02_transformed_bitmap_test_32bpp.png", aBitmap);
+        exportImage(u"09-02_transformed_bitmap_test_32bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT && is32bppSupported())
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -566,7 +566,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-        exportImage("09-03_bitmapex_with_alpha_test_32bpp.png", aBitmap);
+        exportImage(u"09-03_bitmapex_with_alpha_test_32bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT && is32bppSupported())
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -578,7 +578,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-        exportImage("09-04_mask_test_32bpp.png", aBitmap);
+        exportImage(u"09-04_mask_test_32bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT && is32bppSupported())
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -590,7 +590,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage("09-05_blend_test_32bpp.png", aBitmapEx);
+        exportImage(u"09-05_blend_test_32bpp.png"_ustr, aBitmapEx);
         if (SHOULD_ASSERT && is32bppSupported())
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -601,7 +601,7 @@ public:
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N8_BPP, true);
-        exportImage("010-01_bitmap_test_8bpp_greyscale.png", aBitmap);
+        exportImage(u"010-01_bitmap_test_8bpp_greyscale.png"_ustr, aBitmap);
         auto eResult
             = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
         if (SHOULD_ASSERT)
@@ -616,7 +616,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N8_BPP, true);
         auto eResult
             = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
-        exportImage("010-02_transformed_bitmap_test_8bpp_greyscale.png", aBitmap);
+        exportImage(u"010-02_transformed_bitmap_test_8bpp_greyscale.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -628,7 +628,7 @@ public:
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupXOR();
         auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
-        exportImage("08-06_xor_test.png", aBitmap);
+        exportImage(u"08-06_xor_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -682,7 +682,7 @@ public:
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipRectangle();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-        exportImage("09-01_clip_rectangle_test.png", aBitmap);
+        exportImage(u"09-01_clip_rectangle_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -694,7 +694,7 @@ public:
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-        exportImage("09-02_clip_polygon_test.png", aBitmap);
+        exportImage(u"09-02_clip_polygon_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -706,7 +706,7 @@ public:
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-        exportImage("09-03_clip_polypolygon_test.png", aBitmap);
+        exportImage(u"09-03_clip_polypolygon_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -718,7 +718,7 @@ public:
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-        exportImage("09-04_clip_b2dpolypolygon_test.png", aBitmap);
+        exportImage(u"09-04_clip_b2dpolypolygon_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -730,7 +730,7 @@ public:
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
         auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
-        exportImage("10-01_draw_out_dev_test.png", aBitmap);
+        exportImage(u"10-01_draw_out_dev_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -743,7 +743,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawOutDevScaledClipped();
         auto eResult
             = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevScaledClipped(aBitmap);
-        exportImage("10-02_draw_out_dev_scaled_clipped_test.png", aBitmap);
+        exportImage(u"10-02_draw_out_dev_scaled_clipped_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -755,7 +755,7 @@ public:
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawOutDevSelf();
         auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevSelf(aBitmap);
-        exportImage("10-03_draw_out_dev_self_test.png", aBitmap);
+        exportImage(u"10-03_draw_out_dev_self_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -767,7 +767,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDashedLine();
         auto eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
-        exportImage("11-01_dashed_line_test.png", aBitmap);
+        exportImage(u"11-01_dashed_line_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -784,21 +784,21 @@ public:
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
             device->Erase();
-            exportDevice("12-01_erase.png", device);
+            exportDevice(u"12-01_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
             // Erase with black, check it's black.
             device->SetBackground(Wallpaper(COL_BLACK));
             device->Erase();
-            exportDevice("12-02_erase.png", device);
+            exportDevice(u"12-02_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
             // Erase with cyan, check it's cyan.
             device->SetBackground(Wallpaper(COL_CYAN));
             device->Erase();
-            exportDevice("12-03_erase.png", device);
+            exportDevice(u"12-03_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
@@ -811,28 +811,28 @@ public:
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
             device->Erase();
-            exportDevice("12-04_erase.png", device);
+            exportDevice(u"12-04_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
             // Erase with black, check it's black.
             device->SetBackground(Wallpaper(COL_BLACK));
             device->Erase();
-            exportDevice("12-05_erase.png", device);
+            exportDevice(u"12-05_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
             // Erase with cyan, check it's cyan.
             device->SetBackground(Wallpaper(COL_CYAN));
             device->Erase();
-            exportDevice("12-06_erase.png", device);
+            exportDevice(u"12-06_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
             // Erase with transparent, check it's transparent.
             device->SetBackground(Wallpaper(COL_TRANSPARENT));
             device->Erase();
-            exportDevice("12-07_erase.png", device);
+            exportDevice(u"12-07_erase.png"_ustr, device);
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(0, 0)).GetAlpha());
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(9, 9)).GetAlpha());
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(5, 5)).GetAlpha());
@@ -846,7 +846,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
-        exportImage("13-01_linear_gradient_test.png", aBitmap);
+        exportImage(u"13-01_linear_gradient_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -858,7 +858,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
-        exportImage("13-02_linear_gradient_angled_test.png", aBitmap);
+        exportImage(u"13-02_linear_gradient_angled_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -868,7 +868,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap);
-        exportImage("13-03_linear_gradient_border_test.png", aBitmap);
+        exportImage(u"13-03_linear_gradient_border_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -880,7 +880,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
-        exportImage("13-04_linear_gradient_intensity_test.png", aBitmap);
+        exportImage(u"13-04_linear_gradient_intensity_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -892,7 +892,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
-        exportImage("13-05_linear_gradient_steps_test.png", aBitmap);
+        exportImage(u"13-05_linear_gradient_steps_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -904,7 +904,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAxialGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
-        exportImage("13-06_axial_gradient_test.png", aBitmap);
+        exportImage(u"13-06_axial_gradient_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -916,7 +916,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRadialGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
-        exportImage("13-07_radial_gradient_test.png", aBitmap);
+        exportImage(u"13-07_radial_gradient_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -926,7 +926,7 @@ public:
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkRadialGradientOfs(aBitmap);
-        exportImage("13-08_radial_gradient_ofs_test.png", aBitmap);
+        exportImage(u"13-08_radial_gradient_ofs_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -936,7 +936,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
-        exportImage("14-01_line_join_bevel_test.png", aBitmap);
+        exportImage(u"14-01_line_join_bevel_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -946,7 +946,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
-        exportImage("14-02_line_join_round_test.png", aBitmap);
+        exportImage(u"14-02_line_join_round_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -956,7 +956,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
-        exportImage("14-03_line_join_miter_test.png", aBitmap);
+        exportImage(u"14-03_line_join_miter_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -966,7 +966,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
-        exportImage("14-04_line_join_none_test.png", aBitmap);
+        exportImage(u"14-04_line_join_none_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -976,7 +976,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineCapRound();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
-        exportImage("14-05_line_cap_round_test.png", aBitmap);
+        exportImage(u"14-05_line_cap_round_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -986,7 +986,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
-        exportImage("14-06_line_cap_square_test.png", aBitmap);
+        exportImage(u"14-06_line_cap_square_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -996,7 +996,7 @@ public:
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLineCapButt();
         auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
-        exportImage("14-07_line_cap_butt_test.png", aBitmap);
+        exportImage(u"14-07_line_cap_butt_test.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1006,7 +1006,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDropShape();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
-        exportImage("15-01_drop_shape_test-polyline.png", aBitmap);
+        exportImage(u"15-01_drop_shape_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1016,7 +1016,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAADropShape();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-        exportImage("15-02_drop_shape_AA_test-polyline.png", aBitmap);
+        exportImage(u"15-02_drop_shape_AA_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1026,7 +1026,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDropShape();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
-        exportImage("16-01_drop_shape_test-polygon.png", aBitmap);
+        exportImage(u"16-01_drop_shape_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1036,7 +1036,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAADropShape();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-        exportImage("16-02_drop_shape_AA_test-polygon.png", aBitmap);
+        exportImage(u"16-02_drop_shape_AA_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1046,7 +1046,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap);
-        exportImage("17-01_half_ellipse_test-polyline.png", aBitmap);
+        exportImage(u"17-01_half_ellipse_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1056,7 +1056,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap, true);
-        exportImage("17-02_half_ellipse_AA_test-polyline.png", aBitmap);
+        exportImage(u"17-02_half_ellipse_AA_test-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1066,7 +1066,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap);
-        exportImage("17-03_half_ellipse_test-polylineb2d.png", aBitmap);
+        exportImage(u"17-03_half_ellipse_test-polylineb2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1076,7 +1076,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap, true);
-        exportImage("17-03_half_ellipse_AA_test-polylineb2d.png", aBitmap);
+        exportImage(u"17-03_half_ellipse_AA_test-polylineb2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1086,7 +1086,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap);
-        exportImage("17-04_half_ellipse_test-polygon.png", aBitmap);
+        exportImage(u"17-04_half_ellipse_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1096,7 +1096,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap, true);
-        exportImage("17-05_half_ellipse_AA_test-polygon.png", aBitmap);
+        exportImage(u"17-05_half_ellipse_AA_test-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1106,7 +1106,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClosedBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
-        exportImage("18-01_closed_bezier-polyline.png", aBitmap);
+        exportImage(u"18-01_closed_bezier-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1116,7 +1116,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClosedBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
-        exportImage("18-02_closed_bezier-polygon.png", aBitmap);
+        exportImage(u"18-02_closed_bezier-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1127,7 +1127,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupFilledAsymmetricalDropShape();
         vcl::test::TestResult eResult
             = vcl::test::OutputDeviceTestLine::checkFilledAsymmetricalDropShape(aBitmap);
-        exportImage("19-01_filled_drop_shape-polygon.png", aBitmap);
+        exportImage(u"19-01_filled_drop_shape-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1153,7 +1153,7 @@ public:
         // No alpha, this will actually call SalGraphics::DrawBitmap(), but still check
         // the alpha of the device is handled correctly.
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap));
-        exportDevice("blend_extended_01.png", device);
+        exportDevice(u"blend_extended_01.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
         // Check pixels outside of the bitmap aren't affected.
@@ -1164,14 +1164,14 @@ public:
         AlphaMask alpha(Size(5, 5));
         alpha.Erase(0); // opaque
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("blend_extended_02.png", device);
+        exportDevice(u"blend_extended_02.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
 
         device->Erase();
         alpha.Erase(255); // transparent
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("blend_extended_03.png", device);
+        exportDevice(u"blend_extended_03.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
 
@@ -1184,7 +1184,7 @@ public:
         alphaWrite->SetPixelIndex(0, 0, 255); // opaque
         alphaWrite.reset();
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("blend_extended_04.png", device);
+        exportDevice(u"blend_extended_04.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
     }
@@ -1222,7 +1222,7 @@ public:
         // Normal device.
         device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
         device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
-        exportDevice("draw_alpha_bitmap_mirrored_01.png", device);
+        exportDevice(u"draw_alpha_bitmap_mirrored_01.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(2, 2)));
@@ -1230,7 +1230,7 @@ public:
         device->Erase();
         device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
         device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
-        exportDevice("draw_alpha_bitmap_mirrored_02.png", device);
+        exportDevice(u"draw_alpha_bitmap_mirrored_02.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(2, 2)));
@@ -1239,7 +1239,7 @@ public:
         // Now with alpha device.
         alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
         alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
-        exportDevice("draw_alpha_bitmap_mirrored_03.png", alphaDevice);
+        exportDevice(u"draw_alpha_bitmap_mirrored_03.png"_ustr, alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(2, 2)));
@@ -1247,7 +1247,7 @@ public:
         alphaDevice->Erase();
         alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
         alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
-        exportDevice("draw_alpha_bitmap_mirrored_04.png", alphaDevice);
+        exportDevice(u"draw_alpha_bitmap_mirrored_04.png"_ustr, alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(2, 2)));
@@ -1261,7 +1261,7 @@ public:
         vcl::test::OutputDeviceTestText aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupTextBitmap();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkTextLocation(aBitmap);
-        exportImage("17-01_test_text_Drawing.png", aBitmap);
+        exportImage(u"17-01_test_text_Drawing.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
 #endif
@@ -1273,7 +1273,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
         auto eResult
             = vcl::test::OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(aBitmap);
-        exportImage("18-01_test_Even-Odd-rule_intersecting_Recs.png", aBitmap);
+        exportImage(u"18-01_test_Even-Odd-rule_intersecting_Recs.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1283,7 +1283,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
-        exportImage("19-01_open_polygon-polyline.png", aBitmap);
+        exportImage(u"19-01_open_polygon-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1293,7 +1293,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
-        exportImage("19-02_open_polygon-polyline_b2d.png", aBitmap);
+        exportImage(u"19-02_open_polygon-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1303,7 +1303,7 @@ public:
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
-        exportImage("19-03_open_polygon-polygon.png", aBitmap);
+        exportImage(u"19-03_open_polygon-polygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1313,7 +1313,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
-        exportImage("19-04_open_polygon-polypolygon.png", aBitmap);
+        exportImage(u"19-04_open_polygon-polypolygon.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1323,7 +1323,7 @@ public:
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
-        exportImage("19-04_open_polygon-polypolygon_b2d.png", aBitmap);
+        exportImage(u"19-04_open_polygon-polypolygon_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1333,7 +1333,7 @@ public:
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
-        exportImage("19-01_open_bezier-polyline.png", aBitmap);
+        exportImage(u"19-01_open_bezier-polyline.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1343,7 +1343,7 @@ public:
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupOpenBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
-        exportImage("19-01_open_bezier-polyline_b2d.png", aBitmap);
+        exportImage(u"19-01_open_bezier-polyline_b2d.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1370,7 +1370,7 @@ public:
         CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
                                                   basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } },
                                                   100, 0, nullptr, basegfx::B2DLineJoin::Miter));
-        exportDevice("tdf124848-1.png", device);
+        exportDevice(u"tdf124848-1.png"_ustr, device);
         // 100px wide line should fill the entire width of the upper half
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(2, 2)));
 
@@ -1379,7 +1379,7 @@ public:
         CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
                                                   basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 0,
                                                   0, nullptr, basegfx::B2DLineJoin::Miter));
-        exportDevice("tdf124848-2.png", device);
+        exportDevice(u"tdf124848-2.png"_ustr, device);
         // 1px wide
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(50, 20)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(49, 20)));
@@ -1404,7 +1404,7 @@ public:
         // Draw a blue bitmap to the device. The bug was that there was no alpha, but OutputDevice::DrawTransformBitmapExDirect()
         // supplied a fully opaque alpha done with Erase() on the alpha bitmap, and Skia backend didn't handle such alpha correctly.
         device->DrawTransformedBitmapEx(matrix, BitmapEx(bitmap));
-        exportDevice("tdf136171.png", device);
+        exportDevice(u"tdf136171.png"_ustr, device);
         // The whole virtual device content now should be blue.
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 0)));
@@ -1436,7 +1436,7 @@ public:
             = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
         device2->SetOutputSizePixel(Size(100, 100));
         device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
-        exportDevice("tdf145811-1.png", device2);
+        exportDevice(u"tdf145811-1.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(1, 1)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(98, 98)));
@@ -1451,7 +1451,7 @@ public:
         // Copy device1->device2 offset by 10,10.
         graphics2->CopyBits(SalTwoRect(0, 0, 100, 100, 10, 10, 100, 100), *graphics1, *device2,
                             *device1);
-        exportDevice("tdf145811-2.png", device2);
+        exportDevice(u"tdf145811-2.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0))); // unmodified
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(9, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(10, 10)));
@@ -1461,7 +1461,7 @@ public:
         device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
         // Copy area of device2 offset by 10,10.
         graphics2->CopyArea(10, 10, 0, 0, 100, 100, *device1);
-        exportDevice("tdf145811-3.png", device2);
+        exportDevice(u"tdf145811-3.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0))); // unmodified
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(9, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(10, 10)));
@@ -1472,7 +1472,7 @@ public:
         // Copy device1->device2 offset by -20,-20.
         graphics2->CopyBits(SalTwoRect(0, 0, 100, 100, -20, -20, 100, 100), *graphics1, *device2,
                             *device1);
-        exportDevice("tdf145811-4.png", device2);
+        exportDevice(u"tdf145811-4.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(78, 78)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(79, 79)));
@@ -1482,7 +1482,7 @@ public:
         device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
         // Copy area of device2 offset by -20,-20.
         graphics2->CopyArea(-20, -20, 0, 0, 100, 100, *device1);
-        exportDevice("tdf145811-5.png", device2);
+        exportDevice(u"tdf145811-5.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(78, 78)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(79, 79)));
@@ -1494,7 +1494,7 @@ public:
         // (i.e. outside in all directions).
         graphics2->CopyBits(SalTwoRect(-20, -20, 150, 150, -30, -30, 150, 150), *graphics1,
                             *device2, *device1);
-        exportDevice("tdf145811-6.png", device2);
+        exportDevice(u"tdf145811-6.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(88, 88)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(89, 89)));
@@ -1504,7 +1504,7 @@ public:
         // Copy area of device2 offset by -10,-10 starting from -20,-20 at 150x150 size
         // (i.e. outside in all directions).
         graphics2->CopyArea(-30, -30, -20, -20, 150, 150, *device1);
-        exportDevice("tdf145811-7.png", device2);
+        exportDevice(u"tdf145811-7.png"_ustr, device2);
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(88, 88)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(89, 89)));

@@ -393,7 +393,7 @@ namespace vcl
                     int nPages = nRoadmapItems;
                     for (int i = nPages - 1; i >= nItemIndex; --i)
                     {
-                        m_xAssistant->set_page_title(m_xAssistant->get_page_ident(i), "");
+                        m_xAssistant->set_page_title(m_xAssistant->get_page_ident(i), u""_ustr);
                         --nRoadmapItems;
                     }
                     break;
@@ -406,7 +406,7 @@ namespace vcl
                     WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
-                        m_xAssistant->set_page_title(OUString::number(nPresentItemId), "");
+                        m_xAssistant->set_page_title(OUString::number(nPresentItemId), u""_ustr);
                         bInsertItem = true;
                     }
                 }

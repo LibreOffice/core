@@ -167,13 +167,13 @@ void VclPhysicalFontFaceTest::testShouldCompareAsGreaterFontFaceWitHigherAlphabe
     FontAttributes aFontAttrs1;
     aFontAttrs1.SetWidthType(WIDTH_NORMAL);
     aFontAttrs1.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs1.SetFamilyName("B family");
+    aFontAttrs1.SetFamilyName(u"B family"_ustr);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs1, FONTID));
 
     FontAttributes aFontAttrs2;
     aFontAttrs2.SetWidthType(WIDTH_NORMAL);
     aFontAttrs2.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs2.SetFamilyName("A Family");
+    aFontAttrs2.SetFamilyName(u"A Family"_ustr);
     rtl::Reference<TestFontFace> aComparedToFontFace(new TestFontFace(aFontAttrs2, FONTID));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
@@ -185,13 +185,13 @@ void VclPhysicalFontFaceTest::testShouldCompareAsGreaterFontFaceWitLesserAlphabe
     FontAttributes aFontAttrs1;
     aFontAttrs1.SetWidthType(WIDTH_NORMAL);
     aFontAttrs1.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs1.SetFamilyName("A family");
+    aFontAttrs1.SetFamilyName(u"A family"_ustr);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs1, FONTID));
 
     FontAttributes aFontAttrs2;
     aFontAttrs2.SetWidthType(WIDTH_NORMAL);
     aFontAttrs2.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs2.SetFamilyName("B Family");
+    aFontAttrs2.SetFamilyName(u"B Family"_ustr);
     rtl::Reference<TestFontFace> aComparedToFontFace(new TestFontFace(aFontAttrs2, FONTID));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
@@ -203,15 +203,15 @@ void VclPhysicalFontFaceTest::testShouldCompareAsGreaterFontFaceWithHigherAlphab
     FontAttributes aFontAttrs1;
     aFontAttrs1.SetWidthType(WIDTH_NORMAL);
     aFontAttrs1.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs1.SetFamilyName("DejaVu Sans");
-    aFontAttrs1.SetStyleName("B Style");
+    aFontAttrs1.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs1.SetStyleName(u"B Style"_ustr);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs1, FONTID));
 
     FontAttributes aFontAttrs2;
     aFontAttrs2.SetWidthType(WIDTH_NORMAL);
     aFontAttrs2.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs2.SetFamilyName("DejaVu Sans");
-    aFontAttrs2.SetStyleName("A Style");
+    aFontAttrs2.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs2.SetStyleName(u"A Style"_ustr);
     rtl::Reference<TestFontFace> aComparedToFontFace(new TestFontFace(aFontAttrs2, FONTID));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
@@ -223,15 +223,15 @@ void VclPhysicalFontFaceTest::testShouldCompareAsGreaterFontFaceWithLesserAlphab
     FontAttributes aFontAttrs1;
     aFontAttrs1.SetWidthType(WIDTH_NORMAL);
     aFontAttrs1.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs1.SetFamilyName("DejaVu Sans");
-    aFontAttrs1.SetStyleName("A Style");
+    aFontAttrs1.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs1.SetStyleName(u"A Style"_ustr);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs1, FONTID));
 
     FontAttributes aFontAttrs2;
     aFontAttrs2.SetWidthType(WIDTH_NORMAL);
     aFontAttrs2.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs2.SetFamilyName("DejaVu Sans");
-    aFontAttrs2.SetStyleName("B Style");
+    aFontAttrs2.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs2.SetStyleName(u"B Style"_ustr);
     rtl::Reference<TestFontFace> aComparedToFontFace(new TestFontFace(aFontAttrs2, FONTID));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
@@ -243,15 +243,15 @@ void VclPhysicalFontFaceTest::testShouldCompareAsSameFontFace()
     FontAttributes aFontAttrs1;
     aFontAttrs1.SetWidthType(WIDTH_NORMAL);
     aFontAttrs1.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs1.SetFamilyName("DejaVu Sans");
-    aFontAttrs1.SetStyleName("Style");
+    aFontAttrs1.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs1.SetStyleName(u"Style"_ustr);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs1, FONTID));
 
     FontAttributes aFontAttrs2;
     aFontAttrs2.SetWidthType(WIDTH_NORMAL);
     aFontAttrs2.SetWeight(WEIGHT_NORMAL);
-    aFontAttrs2.SetFamilyName("DejaVu Sans");
-    aFontAttrs2.SetStyleName("Style");
+    aFontAttrs2.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs2.SetStyleName(u"Style"_ustr);
     rtl::Reference<TestFontFace> aComparedToFontFace(new TestFontFace(aFontAttrs2, FONTID));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
@@ -261,19 +261,19 @@ void VclPhysicalFontFaceTest::testShouldCompareAsSameFontFace()
 void VclPhysicalFontFaceTest::testMatchStatusValue()
 {
     FontAttributes aFontAttrs;
-    aFontAttrs.SetFamilyName("DejaVu Sans");
-    aFontAttrs.SetStyleName("Book");
+    aFontAttrs.SetFamilyName(u"DejaVu Sans"_ustr);
+    aFontAttrs.SetStyleName(u"Book"_ustr);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetWidthType(WIDTH_NORMAL);
     aFontAttrs.SetWeight(WEIGHT_BOLD);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs, FONTID));
 
-    std::unique_ptr<OUString> pTargetStyleName(new OUString("Book"));
+    std::unique_ptr<OUString> pTargetStyleName(new OUString(u"Book"_ustr));
     vcl::font::FontMatchStatus aFontMatchStatus = { 0, pTargetStyleName.get() };
 
-    vcl::Font aTestFont("DejaVu Sans", "Book", Size(0, 36));
+    vcl::Font aTestFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 36));
 
-    vcl::font::FontSelectPattern aFSP(aTestFont, "DejaVu Sans", Size(0, 36), 36, true);
+    vcl::font::FontSelectPattern aFSP(aTestFont, u"DejaVu Sans"_ustr, Size(0, 36), 36, true);
     aFSP.mbEmbolden = false;
     aFSP.mnOrientation = Degree10(10);
     aFSP.SetWeight(WEIGHT_BOLD);

@@ -35,8 +35,8 @@ void QtDragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgument
 {
     if (rArguments.getLength() < 2)
     {
-        throw uno::RuntimeException("DragSource::initialize: Cannot install window event handler",
-                                    getXWeak());
+        throw uno::RuntimeException(
+            u"DragSource::initialize: Cannot install window event handler"_ustr, getXWeak());
     }
 
     sal_IntPtr nFrame = 0;
@@ -44,7 +44,7 @@ void QtDragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgument
 
     if (!nFrame)
     {
-        throw uno::RuntimeException("DragSource::initialize: missing SalFrame", getXWeak());
+        throw uno::RuntimeException(u"DragSource::initialize: missing SalFrame"_ustr, getXWeak());
     }
 
     m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
@@ -91,7 +91,7 @@ void QtDragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
 
 OUString SAL_CALL QtDragSource::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclQtDragSource";
+    return u"com.sun.star.datatransfer.dnd.VclQtDragSource"_ustr;
 }
 
 sal_Bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.QtDragSource" };
+    return { u"com.sun.star.datatransfer.dnd.QtDragSource"_ustr };
 }
 
 QtDropTarget::QtDropTarget()
@@ -114,7 +114,7 @@ QtDropTarget::QtDropTarget()
 
 OUString SAL_CALL QtDropTarget::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclQtDropTarget";
+    return u"com.sun.star.datatransfer.dnd.VclQtDropTarget"_ustr;
 }
 
 sal_Bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.QtDropTarget" };
+    return { u"com.sun.star.datatransfer.dnd.QtDropTarget"_ustr };
 }
 
 QtDropTarget::~QtDropTarget() {}
@@ -139,8 +139,8 @@ void QtDropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
-        throw uno::RuntimeException("DropTarget::initialize: Cannot install window event handler",
-                                    getXWeak());
+        throw uno::RuntimeException(
+            u"DropTarget::initialize: Cannot install window event handler"_ustr, getXWeak());
     }
 
     sal_IntPtr nFrame = 0;
@@ -148,7 +148,7 @@ void QtDropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 
     if (!nFrame)
     {
-        throw uno::RuntimeException("DropTarget::initialize: missing SalFrame", getXWeak());
+        throw uno::RuntimeException(u"DropTarget::initialize: missing SalFrame"_ustr, getXWeak());
     }
 
     m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;

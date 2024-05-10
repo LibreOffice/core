@@ -84,7 +84,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbPrevIn                = false;
     mbNextIn                = false;
 
-    OUString aGregorian( "gregorian");
+    OUString aGregorian( u"gregorian"_ustr);
     maCalendarWrapper.loadCalendar( aGregorian,
             Application::GetAppLocaleDataWrapper().getLanguageTag().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
@@ -97,7 +97,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
          * rewrite would be necessary to internally replace use of class Date
          * with proper class CalendarWrapper methods, get rid of fixed 12
          * months, fixed 7 days, ... */
-        maCalendarWrapper.loadCalendar( aGregorian, lang::Locale( "en", "US", ""));
+        maCalendarWrapper.loadCalendar( aGregorian, lang::Locale( u"en"_ustr, u"US"_ustr, u""_ustr));
     }
 
     SetFirstDate( maCurDate );
@@ -204,7 +204,7 @@ void Calendar::ImplFormat()
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
 
-        tools::Long n99TextWidth = GetTextWidth( "99" );
+        tools::Long n99TextWidth = GetTextWidth( u"99"_ustr );
         tools::Long nTextHeight = GetTextHeight();
 
         // calculate width and x-position
@@ -1503,7 +1503,7 @@ void Calendar::EndSelection()
 Size Calendar::CalcWindowSizePixel() const
 {
     Size    aSize;
-    tools::Long    n99TextWidth = GetTextWidth( "99" );
+    tools::Long    n99TextWidth = GetTextWidth( u"99"_ustr );
     tools::Long    nTextHeight = GetTextHeight();
 
     aSize.AdjustWidth((n99TextWidth+DAY_OFFX)*7);
@@ -1547,11 +1547,11 @@ namespace
 
     public:
         ImplCFieldFloat(vcl::Window* pContainer)
-            : mxBuilder(Application::CreateInterimBuilder(pContainer, "svt/ui/calendar.ui", false))
-            , mxContainer(mxBuilder->weld_container("Calendar"))
-            , mxCalendar(mxBuilder->weld_calendar("date"))
-            , mxTodayBtn(mxBuilder->weld_button("today"))
-            , mxNoneBtn(mxBuilder->weld_button("none"))
+            : mxBuilder(Application::CreateInterimBuilder(pContainer, u"svt/ui/calendar.ui"_ustr, false))
+            , mxContainer(mxBuilder->weld_container(u"Calendar"_ustr))
+            , mxCalendar(mxBuilder->weld_calendar(u"date"_ustr))
+            , mxTodayBtn(mxBuilder->weld_button(u"today"_ustr))
+            , mxNoneBtn(mxBuilder->weld_button(u"none"_ustr))
         {
         }
 

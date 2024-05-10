@@ -34,7 +34,7 @@ protected:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.graphic.GraphicMapper";
+        return u"com.sun.star.comp.graphic.GraphicMapper"_ustr;
     }
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
@@ -42,7 +42,7 @@ protected:
     }
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.graphic.GraphicMapper" };
+        return { u"com.sun.star.graphic.GraphicMapper"_ustr };
     }
 
     // XTypeProvider

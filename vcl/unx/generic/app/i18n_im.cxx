@@ -330,7 +330,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
         if ((maMethod == nullptr) && (getenv("XMODIFIERS") != nullptr))
         {
-                OUString envVar("XMODIFIERS");
+                OUString envVar(u"XMODIFIERS"_ustr);
                 osl_clearEnvironment(envVar.pData);
                 XSetLocaleModifiers("");
                 maMethod = XOpenIM(pDisplay, nullptr, nullptr, nullptr);

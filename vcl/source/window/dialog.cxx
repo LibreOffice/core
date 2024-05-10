@@ -556,7 +556,7 @@ void VclBuilderContainer::disposeBuilder()
 
 OUString AllSettings::GetUIRootDir()
 {
-    OUString sShareLayer("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/");
+    OUString sShareLayer(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/"_ustr);
     rtl::Bootstrap::expandMacros(sShareLayer);
     return sShareLayer;
 }
@@ -641,7 +641,7 @@ void Dialog::dispose()
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
             if (bTunnelingEnabled)
-                pNotifier->notifyWindow(GetLOKWindowId(), "close");
+                pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
             ReleaseLOKNotifier();
         }
     }
@@ -773,8 +773,8 @@ void Dialog::StateChanged( StateChangedType nType )
 
             if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
             {
-                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+                pNotifier->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
+                pNotifier->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
             }
             else
             {
@@ -782,7 +782,7 @@ void Dialog::StateChanged( StateChangedType nType )
                 if (pViewShell)
                 {
                     SetLOKNotifier(pViewShell);
-                    pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+                    pViewShell->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
                 }
             }
         }
@@ -807,7 +807,7 @@ void Dialog::StateChanged( StateChangedType nType )
         {
             std::vector<vcl::LOKPayloadItem> aPayload;
             aPayload.emplace_back("title", GetText().toUtf8());
-            pNotifier->notifyWindow(GetLOKWindowId(), "title_changed", aPayload);
+            pNotifier->notifyWindow(GetLOKWindowId(), u"title_changed"_ustr, aPayload);
         }
     }
 
@@ -826,7 +826,7 @@ void Dialog::StateChanged( StateChangedType nType )
         {
             std::vector<vcl::LOKPayloadItem> aPayload;
             aPayload.emplace_back("title", GetText().toUtf8());
-            pNotifier->notifyWindow(GetLOKWindowId(), IsVisible()? OUString("show"): OUString("hide"), aPayload);
+            pNotifier->notifyWindow(GetLOKWindowId(), IsVisible()? u"show"_ustr: u"hide"_ustr, aPayload);
         }
     }
 }
@@ -1049,7 +1049,7 @@ bool Dialog::ImplStartExecute()
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("size", GetSizePixel().toString());
             aItems.emplace_back("unique_id", this->get_id().toUtf8());
-            pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+            pNotifier->notifyWindow(GetLOKWindowId(), u"size_changed"_ustr, aItems);
         }
     }
 
@@ -1147,7 +1147,7 @@ void Dialog::EndDialog( tools::Long nResult )
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
             if (mpDialogImpl->m_bLOKTunneling)
-                pNotifier->notifyWindow(GetLOKWindowId(), "close");
+                pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
             ReleaseLOKNotifier();
         }
     }
@@ -1439,7 +1439,7 @@ void Dialog::Resize()
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("size", GetSizePixel().toString());
         aItems.emplace_back("unique_id", this->get_id().toUtf8());
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+        pNotifier->notifyWindow(GetLOKWindowId(), u"size_changed"_ustr, aItems);
     }
 }
 

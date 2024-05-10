@@ -94,7 +94,7 @@ GraphicProvider::GraphicProvider()
 
 OUString SAL_CALL GraphicProvider::getImplementationName()
 {
-    return "com.sun.star.comp.graphic.GraphicProvider";
+    return u"com.sun.star.comp.graphic.GraphicProvider"_ustr;
 }
 
 sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.graphic.GraphicProvider" };
+    return { u"com.sun.star.graphic.GraphicProvider"_ustr };
 }
 
 uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()

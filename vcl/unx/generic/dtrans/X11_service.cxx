@@ -32,17 +32,17 @@ using namespace x11;
 
 Sequence< OUString > x11::X11Clipboard_getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
 }
 
 Sequence< OUString > x11::Xdnd_getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.X11DragSource" };
+    return { u"com.sun.star.datatransfer.dnd.X11DragSource"_ustr };
 }
 
 Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.X11DropTarget" };
+    return { u"com.sun.star.datatransfer.dnd.X11DropTarget"_ustr };
 }
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
@@ -59,7 +59,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
         sel = "CLIPBOARD";
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
-            "bad X11SalInstance::CreateClipboard arguments",
+            u"bad X11SalInstance::CreateClipboard arguments"_ustr,
             css::uno::Reference<css::uno::XInterface>(), -1);
     }
     Atom nSelection = rManager.getAtom(sel);

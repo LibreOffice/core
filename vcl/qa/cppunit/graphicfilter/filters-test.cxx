@@ -113,9 +113,9 @@ void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
     css::uno::Sequence< css::beans::PropertyValue > aFilterData{
-        comphelper::makePropertyValue("Interlaced", sal_Int32(0)),
-        comphelper::makePropertyValue("Compression", sal_Int32(1)),
-        comphelper::makePropertyValue("Quality", sal_Int32(90))
+        comphelper::makePropertyValue(u"Interlaced"_ustr, sal_Int32(0)),
+        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
+        comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(90))
     };
 
     sal_uInt16 aFilterType = mpGraphicFilter->GetExportFormatNumberForShortName(aFilterShortName);

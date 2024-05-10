@@ -340,17 +340,17 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                 if (aOptionName == "sides")
                 {
                     // Duplex key is used throughout for checking Duplex Support
-                    aOptionName = OUString("Duplex");
+                    aOptionName = u"Duplex"_ustr;
                 }
                 else if (aOptionName == "printer-resolution")
                 {
                     // Resolution key is used in places
-                    aOptionName = OUString("Resolution");
+                    aOptionName = u"Resolution"_ustr;
                 }
                 else if (aOptionName == "media")
                 {
                     // PageSize key is used in many places
-                    aOptionName = OUString("PageSize");
+                    aOptionName = u"PageSize"_ustr;
                 }
                 default_values.push_back(aDefaultValue);
                 pKey = new PPDKey(aOptionName);
@@ -371,15 +371,15 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                         // Duplex key matches against very specific Values
                         if (aValueName == "one-sided")
                         {
-                            aValueName = OUString("None");
+                            aValueName = u"None"_ustr;
                         }
                         else if (aValueName == "two-sided-long-edge")
                         {
-                            aValueName = OUString("DuplexNoTumble");
+                            aValueName = u"DuplexNoTumble"_ustr;
                         }
                         else if (aValueName == "two-sided-short-edge")
                         {
-                            aValueName = OUString("DuplexTumble");
+                            aValueName = u"DuplexTumble"_ustr;
                         }
                     }
 
@@ -404,7 +404,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                 keys.emplace_back(pKey);
             }
 
-            pKey = new PPDKey("ModelName");
+            pKey = new PPDKey(u"ModelName"_ustr);
             aValueName = OStringToOUString("", aEncoding);
             pValue = pKey->insertValue(aValueName, eQuoted);
             if (pValue)
@@ -412,7 +412,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
             pKey->m_pDefaultValue = pValue;
             keys.emplace_back(pKey);
 
-            pKey = new PPDKey("NickName");
+            pKey = new PPDKey(u"NickName"_ustr);
             aValueName = OStringToOUString(pDest->name, aEncoding);
             pValue = pKey->insertValue(aValueName, eQuoted);
             if (pValue)
@@ -460,7 +460,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
     if (!pNewParser)
     {
         // get the default PPD
-        pNewParser = PPDParser::getParser("SGENPRT");
+        pNewParser = PPDParser::getParser(u"SGENPRT"_ustr);
         SAL_WARN("vcl.unx.print", "Parsing default SGENPRT PPD");
 
         PrinterInfo& rInfo = m_aPrinters[aPrinter].m_aInfo;

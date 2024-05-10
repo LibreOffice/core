@@ -23,7 +23,7 @@ class GenTest : public UnoApiTest
 {
 public:
     GenTest()
-        : UnoApiTest("/vcl/qa/cppunit/gen/data/")
+        : UnoApiTest(u"/vcl/qa/cppunit/gen/data/"_ustr)
     {
     }
 
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
     Color aPixel(pAccess->GetPixel(0, 0));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 000000;
     // Actual: ffffff', i.e. the top left pixel was white, not black.
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aPixel.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"000000"_ustr, aPixel.AsRGBHexString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

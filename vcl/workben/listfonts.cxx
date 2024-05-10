@@ -40,256 +40,256 @@ OUString GetOctetTextEncodingName(sal_uInt16 encoding)
     switch (encoding)
     {
         case RTL_TEXTENCODING_APPLE_ARABIC:
-            return "Arabic (Apple Macintosh)";
+            return u"Arabic (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_IBM_864:
-            return "Arabic (DOS/OS2-864)";
+            return u"Arabic (DOS/OS2-864)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_6:
-            return "Arabic (ISO-8859-6)";
+            return u"Arabic (ISO-8859-6)"_ustr;
 
         case RTL_TEXTENCODING_MS_1256:
-            return "Arabic (Windows-1256)";
+            return u"Arabic (Windows-1256)"_ustr;
 
         case RTL_TEXTENCODING_IBM_775:
-            return "Baltic (DOS/OS2-775)";
+            return u"Baltic (DOS/OS2-775)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_4:
-            return "Baltic (ISO-8859-4)";
+            return u"Baltic (ISO-8859-4)"_ustr;
 
         case RTL_TEXTENCODING_MS_1257:
-            return "Baltic (Windows-1257)";
+            return u"Baltic (Windows-1257)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_CENTEURO:
-            return "Central European (Apple Macintosh)";
+            return u"Central European (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_CROATIAN:
-            return "Central European (Apple Macintosh/Croatian)";
+            return u"Central European (Apple Macintosh/Croatian)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_ROMANIAN:
-            return "Central European (Apple Macintosh/Romanian)";
+            return u"Central European (Apple Macintosh/Romanian)"_ustr;
 
         case RTL_TEXTENCODING_IBM_852:
-            return "Central European (DOS/OS2-852)";
+            return u"Central European (DOS/OS2-852)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_2:
-            return "Central European (ISO-8859-2)";
+            return u"Central European (ISO-8859-2)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_10:
-            return "Central European (ISO-8859-10)";
+            return u"Central European (ISO-8859-10)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_13:
-            return "Central European (ISO-8859-13)";
+            return u"Central European (ISO-8859-13)"_ustr;
 
         case RTL_TEXTENCODING_MS_1250:
-            return "Central European (Windows-1250/WinLatin 2)";
+            return u"Central European (Windows-1250/WinLatin 2)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_CHINSIMP:
-            return "Chinese Simplified (Apple Macintosh)";
+            return u"Chinese Simplified (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_EUC_CN:
-            return "Chinese Simplified (EUC-CN)";
+            return u"Chinese Simplified (EUC-CN)"_ustr;
 
         case RTL_TEXTENCODING_GB_2312:
-            return "Chinese Simplified (GB-2312)";
+            return u"Chinese Simplified (GB-2312)"_ustr;
 
         case RTL_TEXTENCODING_GBK:
-            return "Chinese Simplified (GBK/GB-2312-80)";
+            return u"Chinese Simplified (GBK/GB-2312-80)"_ustr;
 
         case RTL_TEXTENCODING_ISO_2022_CN:
-            return "Chinese Simplified (ISO-2022-CN)";
+            return u"Chinese Simplified (ISO-2022-CN)"_ustr;
 
         case RTL_TEXTENCODING_MS_936:
-            return "Chinese Simplified (Windows-936)";
+            return u"Chinese Simplified (Windows-936)"_ustr;
 
         case RTL_TEXTENCODING_GB_18030:
-            return "Chinese Simplified (GB-18030)";
+            return u"Chinese Simplified (GB-18030)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_CHINTRAD:
-            return "Chinese Traditional (Apple Macintosh)";
+            return u"Chinese Traditional (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_BIG5:
-            return "Chinese Traditional (BIG5)";
+            return u"Chinese Traditional (BIG5)"_ustr;
 
         case RTL_TEXTENCODING_EUC_TW:
-            return "Chinese Traditional (EUC-TW)";
+            return u"Chinese Traditional (EUC-TW)"_ustr;
 
         case RTL_TEXTENCODING_GBT_12345:
-            return "Chinese Traditional (GBT-12345)";
+            return u"Chinese Traditional (GBT-12345)"_ustr;
 
         case RTL_TEXTENCODING_MS_950:
-            return "Chinese Traditional (Windows-950)";
+            return u"Chinese Traditional (Windows-950)"_ustr;
 
         case RTL_TEXTENCODING_BIG5_HKSCS:
-            return "Chinese Traditional (BIG5-HKSCS)";
+            return u"Chinese Traditional (BIG5-HKSCS)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_CYRILLIC:
-            return "Cyrillic (Apple Macintosh)";
+            return u"Cyrillic (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_UKRAINIAN:
-            return "Cyrillic (Apple Macintosh/Ukrainian)";
+            return u"Cyrillic (Apple Macintosh/Ukrainian)"_ustr;
 
         case RTL_TEXTENCODING_IBM_855:
-            return "Cyrillic (DOS/OS2-855)";
+            return u"Cyrillic (DOS/OS2-855)"_ustr;
 
         case RTL_TEXTENCODING_IBM_866:
-            return "Cyrillic (DOS/OS2-866/Russian)";
+            return u"Cyrillic (DOS/OS2-866/Russian)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_5:
-            return "Cyrillic (ISO-8859-5)";
+            return u"Cyrillic (ISO-8859-5)"_ustr;
 
         case RTL_TEXTENCODING_KOI8_R:
-            return "Cyrillic (KOI8-R)";
+            return u"Cyrillic (KOI8-R)"_ustr;
 
         case RTL_TEXTENCODING_KOI8_U:
-            return "Cyrillic (KOI8-U)";
+            return u"Cyrillic (KOI8-U)"_ustr;
 
         case RTL_TEXTENCODING_MS_1251:
-            return "Cyrillic (Windows-1251)";
+            return u"Cyrillic (Windows-1251)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_GREEK:
-            return "Greek (Apple Macintosh)";
+            return u"Greek (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_IBM_737:
-            return "Greek (DOS/OS2-737)";
+            return u"Greek (DOS/OS2-737)"_ustr;
 
         case RTL_TEXTENCODING_IBM_869:
-            return "Greek (DOS/OS2-869/Modern)";
+            return u"Greek (DOS/OS2-869/Modern)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_7:
-            return "Greek (ISO-8859-7)";
+            return u"Greek (ISO-8859-7)"_ustr;
 
         case RTL_TEXTENCODING_MS_1253:
-            return "Greek (Windows-1253)";
+            return u"Greek (Windows-1253)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_HEBREW:
-            return "Hebrew (Apple Macintosh)";
+            return u"Hebrew (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_IBM_862:
-            return "Hebrew (DOS/OS2-862)";
+            return u"Hebrew (DOS/OS2-862)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_8:
-            return "Hebrew (ISO-8859-8)";
+            return u"Hebrew (ISO-8859-8)"_ustr;
 
         case RTL_TEXTENCODING_MS_1255:
-            return "Hebrew (Windows-1255)";
+            return u"Hebrew (Windows-1255)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_KOREAN:
-            return "Korean (Apple Macintosh)";
+            return u"Korean (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_EUC_KR:
-            return "Korean (EUC-KR)";
+            return u"Korean (EUC-KR)"_ustr;
 
         case RTL_TEXTENCODING_ISO_2022_KR:
-            return "Korean (ISO-2022-KR)";
+            return u"Korean (ISO-2022-KR)"_ustr;
 
         case RTL_TEXTENCODING_MS_949:
-            return "Korean (Windows-Wansung-949)";
+            return u"Korean (Windows-Wansung-949)"_ustr;
 
         case RTL_TEXTENCODING_MS_1361:
-            return "Korean (Windows-Johab-1361)";
+            return u"Korean (Windows-Johab-1361)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_3:
-            return "Latin 3 (ISO-8859-3)";
+            return u"Latin 3 (ISO-8859-3)"_ustr;
 
         case RTL_TEXTENCODING_ISCII_DEVANAGARI:
-            return "Indian (ISCII Devanagari)";
+            return u"Indian (ISCII Devanagari)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_JAPANESE:
-            return "Japanese (Apple Macintosh)";
+            return u"Japanese (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_EUC_JP:
-            return "Japanese (EUC-JP)";
+            return u"Japanese (EUC-JP)"_ustr;
 
         case RTL_TEXTENCODING_ISO_2022_JP:
-            return "Japanese (ISO-2022-JP)";
+            return u"Japanese (ISO-2022-JP)"_ustr;
 
         case RTL_TEXTENCODING_SHIFT_JIS:
-            return "Japanese (Shift-JIS)";
+            return u"Japanese (Shift-JIS)"_ustr;
 
         case RTL_TEXTENCODING_MS_932:
-            return "Japanese (Windows-932)";
+            return u"Japanese (Windows-932)"_ustr;
 
         case RTL_TEXTENCODING_SYMBOL:
-            return "Symbol";
+            return u"Symbol"_ustr;
 
         case RTL_TEXTENCODING_APPLE_THAI:
-            return "Thai (Apple Macintosh)";
+            return u"Thai (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_MS_874:
-            return "Thai (Dos/Windows-874)";
+            return u"Thai (Dos/Windows-874)"_ustr;
 
         case RTL_TEXTENCODING_TIS_620:
-            return "Thai (TIS 620)";
+            return u"Thai (TIS 620)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_TURKISH:
-            return "Turkish (Apple Macintosh)";
+            return u"Turkish (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_IBM_857:
-            return "Turkish (DOS/OS2-857)";
+            return u"Turkish (DOS/OS2-857)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_9:
-            return "Turkish (ISO-8859-9)";
+            return u"Turkish (ISO-8859-9)"_ustr;
 
         case RTL_TEXTENCODING_MS_1254:
-            return "Turkish (Windows-1254)";
+            return u"Turkish (Windows-1254)"_ustr;
 
         case RTL_TEXTENCODING_UTF7:
-            return "Unicode (UTF-7)";
+            return u"Unicode (UTF-7)"_ustr;
 
         case RTL_TEXTENCODING_UTF8:
-            return "Unicode (UTF-8)";
+            return u"Unicode (UTF-8)"_ustr;
 
         case RTL_TEXTENCODING_JAVA_UTF8:
-            return "Unicode (Java's modified UTF-8)";
+            return u"Unicode (Java's modified UTF-8)"_ustr;
 
         case RTL_TEXTENCODING_MS_1258:
-            return "Vietnamese (Windows-1258)";
+            return u"Vietnamese (Windows-1258)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_ROMAN:
-            return "Western (Apple Macintosh)";
+            return u"Western (Apple Macintosh)"_ustr;
 
         case RTL_TEXTENCODING_APPLE_ICELAND:
-            return "Western (Apple Macintosh/Icelandic)";
+            return u"Western (Apple Macintosh/Icelandic)"_ustr;
 
         case RTL_TEXTENCODING_ASCII_US:
-            return "Western (ASCII/US)";
+            return u"Western (ASCII/US)"_ustr;
 
         case RTL_TEXTENCODING_IBM_437:
-            return "Western (DOS/OS2-437/US)";
+            return u"Western (DOS/OS2-437/US)"_ustr;
 
         case RTL_TEXTENCODING_IBM_850:
-            return "Western (DOS/OS2-850/International)";
+            return u"Western (DOS/OS2-850/International)"_ustr;
 
         case RTL_TEXTENCODING_IBM_860:
-            return "Western (DOS/OS2-860/Portuguese)";
+            return u"Western (DOS/OS2-860/Portuguese)"_ustr;
 
         case RTL_TEXTENCODING_IBM_861:
-            return "Western (DOS/OS2-861/Icelandic)";
+            return u"Western (DOS/OS2-861/Icelandic)"_ustr;
 
         case RTL_TEXTENCODING_IBM_863:
-            return "Western (DOS/OS2-863/Canadian-French)";
+            return u"Western (DOS/OS2-863/Canadian-French)"_ustr;
 
         case RTL_TEXTENCODING_IBM_865:
-            return "Western (DOS/OS2-865/Nordic)";
+            return u"Western (DOS/OS2-865/Nordic)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_1:
-            return "Western (ISO-8859-1)";
+            return u"Western (ISO-8859-1)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_14:
-            return "Western (ISO-8859-14)";
+            return u"Western (ISO-8859-14)"_ustr;
 
         case RTL_TEXTENCODING_ISO_8859_15:
-            return "Western (ISO-8859-15/EURO)";
+            return u"Western (ISO-8859-15/EURO)"_ustr;
 
         case RTL_TEXTENCODING_MS_1252:
-            return "Western (Window-1252/WinLatin 1)";
+            return u"Western (Window-1252/WinLatin 1)"_ustr;
 
         case RTL_TEXTENCODING_UCS4:
-            return "UCS4";
+            return u"UCS4"_ustr;
 
         case RTL_TEXTENCODING_UCS2:
-            return "UCS2 (aka Unicode)";
+            return u"UCS2 (aka Unicode)"_ustr;
 
         default:
         {
@@ -516,7 +516,7 @@ void ListFonts::Init()
     xServiceManager.set(xContext->getServiceManager(), css::uno::UNO_QUERY);
 
     if (!xServiceManager.is())
-        Application::Abort("Bootstrap failure - no service manager");
+        Application::Abort(u"Bootstrap failure - no service manager"_ustr);
 
     comphelper::setProcessServiceFactory(xServiceManager);
 

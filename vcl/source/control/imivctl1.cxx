@@ -2042,7 +2042,7 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThi
 
 Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
 {
-    Size aTextSize( pView->GetTextWidth( "XXX" ), pView->GetTextHeight() );
+    Size aTextSize( pView->GetTextWidth( u"XXX"_ustr ), pView->GetTextHeight() );
     if (nWinBits & WB_DETAILS)
         return Size(aTextSize.Width(), aTextSize.Height());
 

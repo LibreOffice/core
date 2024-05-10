@@ -848,7 +848,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     if (!comphelper::IsFuzzing())
     {
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-        LanguageTag aLanguageTag("en");
+        LanguageTag aLanguageTag(u"en"_ustr);
         OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
         pFoundData = FindFontFamilyByTokenNames( aFontname );
 
@@ -1159,7 +1159,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     // if a target symbol font is not available use a default symbol font
     if( rFSD.IsMicrosoftSymbolEncoded() )
     {
-        LanguageTag aDefaultLanguageTag("en");
+        LanguageTag aDefaultLanguageTag(u"en"_ustr);
         if (comphelper::IsFuzzing())
             aSearchName = "OpenSymbol";
         else

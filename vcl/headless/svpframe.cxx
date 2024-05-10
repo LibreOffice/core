@@ -416,7 +416,7 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
         vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 14 ) );
         aStdFont.SetCharSet( osl_getThreadTextEncoding() );
         aStdFont.SetWeight( WEIGHT_NORMAL );
-        aStdFont.SetFamilyName( "Liberation Sans" );
+        aStdFont.SetFamilyName( u"Liberation Sans"_ustr );
         aStyleSettings.BatchSetFonts( aStdFont, aStdFont );
 
         aStdFont.SetFontSize(Size(0, 12));

@@ -84,7 +84,7 @@ public:
     {
         vcl::test::setActiveGraphicsRenderTest(OUString::Concat("GraphicsRenderTest__") + name);
     }
-    ~GraphicsTestZone() { vcl::test::setActiveGraphicsRenderTest(""); }
+    ~GraphicsTestZone() { vcl::test::setActiveGraphicsRenderTest(u""_ustr); }
 };
 }
 
@@ -93,25 +93,25 @@ OUString GraphicsRenderTests::returnTestStatus(vcl::test::TestResult const resul
     switch (result)
     {
         case vcl::test::TestResult::Passed:
-            return "PASSED";
+            return u"PASSED"_ustr;
         case vcl::test::TestResult::PassedWithQuirks:
-            return "QUIRKY";
+            return u"QUIRKY"_ustr;
         case vcl::test::TestResult::Failed:
-            return "FAILED";
+            return u"FAILED"_ustr;
     }
-    return "SKIPPED";
+    return u"SKIPPED"_ustr;
 }
 
 void GraphicsRenderTests::testDrawRectWithRectangle()
 {
-    OUString aTestName = "testDrawRectWithRectangle";
+    OUString aTestName = u"testDrawRectWithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -126,13 +126,13 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
 
 void GraphicsRenderTests::testDrawRectWithPixel()
 {
-    OUString aTestName = "testDrawRectWithPixel";
+    OUString aTestName = u"testDrawRectWithPixel"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -147,13 +147,13 @@ void GraphicsRenderTests::testDrawRectWithPixel()
 
 void GraphicsRenderTests::testDrawRectWithLine()
 {
-    OUString aTestName = "testDrawRectWithLine";
+    OUString aTestName = u"testDrawRectWithLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -168,13 +168,13 @@ void GraphicsRenderTests::testDrawRectWithLine()
 
 void GraphicsRenderTests::testDrawRectWithPolygon()
 {
-    OUString aTestName = "testDrawRectWithPolygon";
+    OUString aTestName = u"testDrawRectWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -189,13 +189,13 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
 
 void GraphicsRenderTests::testDrawRectWithPolyLine()
 {
-    OUString aTestName = "testDrawRectWithPolyLine";
+    OUString aTestName = u"testDrawRectWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -210,13 +210,13 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
 
 void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
 {
-    OUString aTestName = "testDrawRectWithPolyLineB2D";
+    OUString aTestName = u"testDrawRectWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -231,13 +231,13 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygon()
 {
-    OUString aTestName = "testDrawRectWithPolyPolygon";
+    OUString aTestName = u"testDrawRectWithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -252,13 +252,13 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
 {
-    OUString aTestName = "testDrawRectWithPolyPolygonB2D";
+    OUString aTestName = u"testDrawRectWithPolyPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -273,13 +273,13 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
 
 void GraphicsRenderTests::testDrawRectAAWithRectangle()
 {
-    OUString aTestName = "testDrawRectAAWithRectangle";
+    OUString aTestName = u"testDrawRectAAWithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -294,13 +294,13 @@ void GraphicsRenderTests::testDrawRectAAWithRectangle()
 
 void GraphicsRenderTests::testDrawRectAAWithPixel()
 {
-    OUString aTestName = "testDrawRectAAWithPixel";
+    OUString aTestName = u"testDrawRectAAWithPixel"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -315,13 +315,13 @@ void GraphicsRenderTests::testDrawRectAAWithPixel()
 
 void GraphicsRenderTests::testDrawRectAAWithLine()
 {
-    OUString aTestName = "testDrawRectAAWithLine";
+    OUString aTestName = u"testDrawRectAAWithLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -336,13 +336,13 @@ void GraphicsRenderTests::testDrawRectAAWithLine()
 
 void GraphicsRenderTests::testDrawRectAAWithPolygon()
 {
-    OUString aTestName = "testDrawRectAAWithPolygon";
+    OUString aTestName = u"testDrawRectAAWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -357,13 +357,13 @@ void GraphicsRenderTests::testDrawRectAAWithPolygon()
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLine()
 {
-    OUString aTestName = "testDrawRectAAWithPolyLine";
+    OUString aTestName = u"testDrawRectAAWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -378,13 +378,13 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLine()
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
 {
-    OUString aTestName = "testDrawRectAAWithPolyLineB2D";
+    OUString aTestName = u"testDrawRectAAWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -399,13 +399,13 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
 {
-    OUString aTestName = "testDrawRectAAWithPolyPolygon";
+    OUString aTestName = u"testDrawRectAAWithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -420,13 +420,13 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
 {
-    OUString aTestName = "testDrawRectAAWithPolyPolygonB2D";
+    OUString aTestName = u"testDrawRectAAWithPolyPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -441,13 +441,13 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
 
 void GraphicsRenderTests::testDrawFilledRectWithRectangle()
 {
-    OUString aTestName = "testDrawFilledRectWithRectangle";
+    OUString aTestName = u"testDrawFilledRectWithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -473,13 +473,13 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
 
 void GraphicsRenderTests::testDrawFilledRectWithPolygon()
 {
-    OUString aTestName = "testDrawFilledRectWithPolygon";
+    OUString aTestName = u"testDrawFilledRectWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -505,13 +505,13 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
 {
-    OUString aTestName = "testDrawFilledRectWithPolyPolygon";
+    OUString aTestName = u"testDrawFilledRectWithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -537,13 +537,13 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
 {
-    OUString aTestName = "testDrawFilledRectWithPolyPolygon2D";
+    OUString aTestName = u"testDrawFilledRectWithPolyPolygon2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -569,13 +569,13 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
 
 void GraphicsRenderTests::testDrawDiamondWithPolygon()
 {
-    OUString aTestName = "testDrawDiamondWithPolygon";
+    OUString aTestName = u"testDrawDiamondWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
@@ -590,13 +590,13 @@ void GraphicsRenderTests::testDrawDiamondWithPolygon()
 
 void GraphicsRenderTests::testDrawDiamondWithLine()
 {
-    OUString aTestName = "testDrawDiamondWithLine";
+    OUString aTestName = u"testDrawDiamondWithLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
@@ -611,13 +611,13 @@ void GraphicsRenderTests::testDrawDiamondWithLine()
 
 void GraphicsRenderTests::testDrawDiamondWithPolyline()
 {
-    OUString aTestName = "testDrawDiamondWithPolyline";
+    OUString aTestName = u"testDrawDiamondWithPolyline"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
@@ -632,13 +632,13 @@ void GraphicsRenderTests::testDrawDiamondWithPolyline()
 
 void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
 {
-    OUString aTestName = "testDrawDiamondWithPolylineB2D";
+    OUString aTestName = u"testDrawDiamondWithPolylineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
@@ -653,13 +653,13 @@ void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
 
 void GraphicsRenderTests::testDrawInvertWithRectangle()
 {
-    OUString aTestName = "testDrawInvertWithRectangle";
+    OUString aTestName = u"testDrawInvertWithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -675,13 +675,13 @@ void GraphicsRenderTests::testDrawInvertWithRectangle()
 
 void GraphicsRenderTests::testDrawInvertN50WithRectangle()
 {
-    OUString aTestName = "testDrawInvertN50WithRectangle";
+    OUString aTestName = u"testDrawInvertN50WithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_N50();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -697,13 +697,13 @@ void GraphicsRenderTests::testDrawInvertN50WithRectangle()
 
 void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
 {
-    OUString aTestName = "testDrawInvertTrackFrameWithRectangle";
+    OUString aTestName = u"testDrawInvertTrackFrameWithRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
     if (!(SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp"))
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -719,13 +719,13 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
 
 void GraphicsRenderTests::testDrawDropShapeWithPolyline()
 {
-    OUString aTestName = "testDrawDropShapeWithPolyline";
+    OUString aTestName = u"testDrawDropShapeWithPolyline"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDropShape();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
@@ -740,13 +740,13 @@ void GraphicsRenderTests::testDrawDropShapeWithPolyline()
 
 void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
 {
-    OUString aTestName = "testDrawDropShapeAAWithPolyline";
+    OUString aTestName = u"testDrawDropShapeAAWithPolyline"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAADropShape();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -762,13 +762,13 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
 
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
-    OUString aTestName = "testDrawBezierWithPolylineB2D";
+    OUString aTestName = u"testDrawBezierWithPolylineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupBezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
@@ -783,13 +783,13 @@ void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 
 void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
 {
-    OUString aTestName = "testDrawBezierAAWithPolylineB2D";
+    OUString aTestName = u"testDrawBezierAAWithPolylineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAABezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
@@ -804,13 +804,13 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
 
 void GraphicsRenderTests::testDrawDropShapeWithPolygon()
 {
-    OUString aTestName = "testDrawDropShapeWithPolygon";
+    OUString aTestName = u"testDrawDropShapeWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDropShape();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
@@ -825,13 +825,13 @@ void GraphicsRenderTests::testDrawDropShapeWithPolygon()
 
 void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
 {
-    OUString aTestName = "testDrawDropShapeAAWithPolygon";
+    OUString aTestName = u"testDrawDropShapeAAWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAADropShape();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -847,13 +847,13 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
 
 void GraphicsRenderTests::testDrawBitmap24bpp()
 {
-    OUString aTestName = "testDrawBitmap24bpp";
+    OUString aTestName = u"testDrawBitmap24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -869,13 +869,13 @@ void GraphicsRenderTests::testDrawBitmap24bpp()
 
 void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
 {
-    OUString aTestName = "testDrawTransformedBitmap24bpp";
+    OUString aTestName = u"testDrawTransformedBitmap24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -891,13 +891,13 @@ void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
 
 void GraphicsRenderTests::testComplexDrawTransformedBitmap24bpp()
 {
-    OUString aTestName = "testComplexDrawTransformedBitmap24bpp";
+    OUString aTestName = u"testComplexDrawTransformedBitmap24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupComplexDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -913,13 +913,13 @@ void GraphicsRenderTests::testComplexDrawTransformedBitmap24bpp()
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
 {
-    OUString aTestName = "testDrawBitmapExWithAlpha24bpp";
+    OUString aTestName = u"testDrawBitmapExWithAlpha24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -935,13 +935,13 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
 
 void GraphicsRenderTests::testDrawMask24bpp()
 {
-    OUString aTestName = "testDrawMask24bpp";
+    OUString aTestName = u"testDrawMask24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
@@ -956,13 +956,13 @@ void GraphicsRenderTests::testDrawMask24bpp()
 
 void GraphicsRenderTests::testDrawBlend24bpp()
 {
-    OUString aTestName = "testDrawBlend24bpp";
+    OUString aTestName = u"testDrawBlend24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
@@ -976,13 +976,13 @@ void GraphicsRenderTests::testDrawBlend24bpp()
 
 void GraphicsRenderTests::testDrawXor()
 {
-    OUString aTestName = "testDrawXor";
+    OUString aTestName = u"testDrawXor"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupXOR();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
@@ -997,13 +997,13 @@ void GraphicsRenderTests::testDrawXor()
 
 void GraphicsRenderTests::testClipRectangle()
 {
-    OUString aTestName = "testClipRectangle";
+    OUString aTestName = u"testClipRectangle"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipRectangle();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -1018,13 +1018,13 @@ void GraphicsRenderTests::testClipRectangle()
 
 void GraphicsRenderTests::testClipPolygon()
 {
-    OUString aTestName = "testClipPolygon";
+    OUString aTestName = u"testClipPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -1039,13 +1039,13 @@ void GraphicsRenderTests::testClipPolygon()
 
 void GraphicsRenderTests::testClipPolyPolygon()
 {
-    OUString aTestName = "testClipPolyPolygon";
+    OUString aTestName = u"testClipPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -1060,13 +1060,13 @@ void GraphicsRenderTests::testClipPolyPolygon()
 
 void GraphicsRenderTests::testClipB2DPolyPolygon()
 {
-    OUString aTestName = "testClipB2DPolyPolygon";
+    OUString aTestName = u"testClipB2DPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -1081,13 +1081,13 @@ void GraphicsRenderTests::testClipB2DPolyPolygon()
 
 void GraphicsRenderTests::testDrawOutDev()
 {
-    OUString aTestName = "testDrawOutDev";
+    OUString aTestName = u"testDrawOutDev"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1103,13 +1103,13 @@ void GraphicsRenderTests::testDrawOutDev()
 
 void GraphicsRenderTests::testDrawOutDevScaledClipped()
 {
-    OUString aTestName = "testDrawOutDevScaledClipped";
+    OUString aTestName = u"testDrawOutDevScaledClipped"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawOutDevScaledClipped();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1125,13 +1125,13 @@ void GraphicsRenderTests::testDrawOutDevScaledClipped()
 
 void GraphicsRenderTests::testDrawOutDevSelf()
 {
-    OUString aTestName = "testDrawOutDevSelf";
+    OUString aTestName = u"testDrawOutDevSelf"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawOutDevSelf();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1147,13 +1147,13 @@ void GraphicsRenderTests::testDrawOutDevSelf()
 
 void GraphicsRenderTests::testDashedLine()
 {
-    OUString aTestName = "testDashedLine";
+    OUString aTestName = u"testDashedLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDashedLine();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
@@ -1168,13 +1168,13 @@ void GraphicsRenderTests::testDashedLine()
 
 void GraphicsRenderTests::testLinearGradient()
 {
-    OUString aTestName = "testLinearGradient";
+    OUString aTestName = u"testLinearGradient"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradient();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1190,13 +1190,13 @@ void GraphicsRenderTests::testLinearGradient()
 
 void GraphicsRenderTests::testLinearGradientAngled()
 {
-    OUString aTestName = "testLinearGradientAngled";
+    OUString aTestName = u"testLinearGradientAngled"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1212,13 +1212,13 @@ void GraphicsRenderTests::testLinearGradientAngled()
 
 void GraphicsRenderTests::testLinearGradientBorder()
 {
-    OUString aTestName = "testLinearGradientBorder";
+    OUString aTestName = u"testLinearGradientBorder"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1234,13 +1234,13 @@ void GraphicsRenderTests::testLinearGradientBorder()
 
 void GraphicsRenderTests::testLinearGradientIntensity()
 {
-    OUString aTestName = "testLinearGradientIntensity";
+    OUString aTestName = u"testLinearGradientIntensity"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1256,13 +1256,13 @@ void GraphicsRenderTests::testLinearGradientIntensity()
 
 void GraphicsRenderTests::testLinearGradientSteps()
 {
-    OUString aTestName = "testLinearGradientSteps";
+    OUString aTestName = u"testLinearGradientSteps"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1278,13 +1278,13 @@ void GraphicsRenderTests::testLinearGradientSteps()
 
 void GraphicsRenderTests::testAxialGradient()
 {
-    OUString aTestName = "testAxialGradient";
+    OUString aTestName = u"testAxialGradient"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAxialGradient();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1300,13 +1300,13 @@ void GraphicsRenderTests::testAxialGradient()
 
 void GraphicsRenderTests::testRadialGradient()
 {
-    OUString aTestName = "testRadialGradient";
+    OUString aTestName = u"testRadialGradient"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradient();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1322,13 +1322,13 @@ void GraphicsRenderTests::testRadialGradient()
 
 void GraphicsRenderTests::testRadialGradientOfs()
 {
-    OUString aTestName = "testRadialGradientOfs";
+    OUString aTestName = u"testRadialGradientOfs"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1339,13 +1339,13 @@ void GraphicsRenderTests::testRadialGradientOfs()
 
 void GraphicsRenderTests::testLineJoinBevel()
 {
-    OUString aTestName = "testLineJoinBevel";
+    OUString aTestName = u"testLineJoinBevel"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
@@ -1360,13 +1360,13 @@ void GraphicsRenderTests::testLineJoinBevel()
 
 void GraphicsRenderTests::testLineJoinRound()
 {
-    OUString aTestName = "testLineJoinRound";
+    OUString aTestName = u"testLineJoinRound"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
@@ -1381,13 +1381,13 @@ void GraphicsRenderTests::testLineJoinRound()
 
 void GraphicsRenderTests::testLineJoinMiter()
 {
-    OUString aTestName = "testLineJoinMiter";
+    OUString aTestName = u"testLineJoinMiter"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
@@ -1402,13 +1402,13 @@ void GraphicsRenderTests::testLineJoinMiter()
 
 void GraphicsRenderTests::testLineJoinNone()
 {
-    OUString aTestName = "testLineJoinNone";
+    OUString aTestName = u"testLineJoinNone"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
@@ -1423,13 +1423,13 @@ void GraphicsRenderTests::testLineJoinNone()
 
 void GraphicsRenderTests::testLineCapRound()
 {
-    OUString aTestName = "testLineCapRound";
+    OUString aTestName = u"testLineCapRound"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapRound();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
@@ -1444,13 +1444,13 @@ void GraphicsRenderTests::testLineCapRound()
 
 void GraphicsRenderTests::testLineCapSquare()
 {
-    OUString aTestName = "testLineCapSquare";
+    OUString aTestName = u"testLineCapSquare"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
@@ -1465,13 +1465,13 @@ void GraphicsRenderTests::testLineCapSquare()
 
 void GraphicsRenderTests::testLineCapButt()
 {
-    OUString aTestName = "testLineCapButt";
+    OUString aTestName = u"testLineCapButt"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapButt();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
@@ -1486,13 +1486,13 @@ void GraphicsRenderTests::testLineCapButt()
 
 void GraphicsRenderTests::testHalfEllipseWithPolyLine()
 {
-    OUString aTestName = "testHalfEllipseWithPolyLine";
+    OUString aTestName = u"testHalfEllipseWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
@@ -1507,13 +1507,13 @@ void GraphicsRenderTests::testHalfEllipseWithPolyLine()
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolyLine()
 {
-    OUString aTestName = "testHalfEllipseAAWithPolyLine";
+    OUString aTestName = u"testHalfEllipseAAWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1529,13 +1529,13 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolyLine()
 
 void GraphicsRenderTests::testHalfEllipseWithPolyLineB2D()
 {
-    OUString aTestName = "testHalfEllipseWithPolyLineB2D";
+    OUString aTestName = u"testHalfEllipseWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
@@ -1550,13 +1550,13 @@ void GraphicsRenderTests::testHalfEllipseWithPolyLineB2D()
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolyLineB2D()
 {
-    OUString aTestName = "testHalfEllipseAAWithPolyLineB2D";
+    OUString aTestName = u"testHalfEllipseAAWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1572,13 +1572,13 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolyLineB2D()
 
 void GraphicsRenderTests::testHalfEllipseWithPolygon()
 {
-    OUString aTestName = "testHalfEllipseWithPolygon";
+    OUString aTestName = u"testHalfEllipseWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
@@ -1593,13 +1593,13 @@ void GraphicsRenderTests::testHalfEllipseWithPolygon()
 
 void GraphicsRenderTests::testClosedBezierWithPolyline()
 {
-    OUString aTestName = "testClosedBezierWithPolyline";
+    OUString aTestName = u"testClosedBezierWithPolyline"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClosedBezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
@@ -1614,13 +1614,13 @@ void GraphicsRenderTests::testClosedBezierWithPolyline()
 
 void GraphicsRenderTests::testClosedBezierWithPolygon()
 {
-    OUString aTestName = "testClosedBezierWithPolygon";
+    OUString aTestName = u"testClosedBezierWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClosedBezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
@@ -1635,13 +1635,13 @@ void GraphicsRenderTests::testClosedBezierWithPolygon()
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
 {
-    OUString aTestName = "testHalfEllipseAAWithPolygon";
+    OUString aTestName = u"testHalfEllipseAAWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1657,7 +1657,7 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
 
 void GraphicsRenderTests::testFilledAsymmetricalDropShape()
 {
-    OUString aTestName = "testFilledAsymmetricalDropShape";
+    OUString aTestName = u"testFilledAsymmetricalDropShape"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledAsymmetricalDropShape();
@@ -1674,13 +1674,13 @@ void GraphicsRenderTests::testFilledAsymmetricalDropShape()
 
 void GraphicsRenderTests::testTextDrawing()
 {
-    OUString aTestName = "testTextDrawing";
+    OUString aTestName = u"testTextDrawing"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestText aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupTextBitmap();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkTextLocation(aBitmap);
@@ -1695,13 +1695,13 @@ void GraphicsRenderTests::testTextDrawing()
 
 void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygon()
 {
-    OUString aTestName = "testEvenOddRuleInIntersectingRectsWithPolyPolygon";
+    OUString aTestName = u"testEvenOddRuleInIntersectingRectsWithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1717,13 +1717,13 @@ void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygon()
 
 void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
 {
-    OUString aTestName = "testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D";
+    OUString aTestName = u"testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1739,13 +1739,13 @@ void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
 
 void GraphicsRenderTests::testDrawBitmap8bppGreyScale()
 {
-    OUString aTestName = "testDrawBitmap8bppGreyScale";
+    OUString aTestName = u"testDrawBitmap8bppGreyScale"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N8_BPP, true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1761,13 +1761,13 @@ void GraphicsRenderTests::testDrawBitmap8bppGreyScale()
 
 void GraphicsRenderTests::testDrawTransformedBitmap8bppGreyScale()
 {
-    OUString aTestName = "testDrawTransformedBitmap8bppGreyScale";
+    OUString aTestName = u"testDrawTransformedBitmap8bppGreyScale"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N8_BPP, true);
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1783,13 +1783,13 @@ void GraphicsRenderTests::testDrawTransformedBitmap8bppGreyScale()
 
 void GraphicsRenderTests::testDrawBitmap32bpp()
 {
-    OUString aTestName = "testDrawBitmap32bpp";
+    OUString aTestName = u"testDrawBitmap32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT || !is32bppSupported())
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1805,13 +1805,13 @@ void GraphicsRenderTests::testDrawBitmap32bpp()
 
 void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
 {
-    OUString aTestName = "testDrawTransformedBitmap32bpp";
+    OUString aTestName = u"testDrawTransformedBitmap32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT || !is32bppSupported())
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1827,13 +1827,13 @@ void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
 {
-    OUString aTestName = "testDrawBitmapExWithAlpha32bpp";
+    OUString aTestName = u"testDrawBitmapExWithAlpha32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT || !is32bppSupported())
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult
@@ -1849,13 +1849,13 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
 
 void GraphicsRenderTests::testDrawMask32bpp()
 {
-    OUString aTestName = "testDrawMask32bpp";
+    OUString aTestName = u"testDrawMask32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT || !is32bppSupported())
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
@@ -1870,13 +1870,13 @@ void GraphicsRenderTests::testDrawMask32bpp()
 
 void GraphicsRenderTests::testDrawBlend32bpp()
 {
-    OUString aTestName = "testDrawBlend32bpp";
+    OUString aTestName = u"testDrawBlend32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT || !is32bppSupported())
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
@@ -1890,14 +1890,14 @@ void GraphicsRenderTests::testDrawBlend32bpp()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithRect()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithRect";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithRect"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -1912,14 +1912,14 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithRect()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithRect()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithRect";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithRect"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -1934,13 +1934,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithRect()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPixel()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPixel";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPixel"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -1955,13 +1955,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPixel()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPixel()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPixel";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPixel"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -1976,13 +1976,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPixel()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithLine()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithLine";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -1997,13 +1997,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithLine()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithLine()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithLine";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2018,13 +2018,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithLine()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLine()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPolyLine";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2039,13 +2039,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLine()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLine()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPolyLine";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2060,13 +2060,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLine()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolygon()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPolygon";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2081,13 +2081,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolygon()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygon()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPolygon";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2102,13 +2102,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygon()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLineB2D()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPolyLineB2D";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2123,13 +2123,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLineB2D()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLineB2D()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPolyLineB2D";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2144,13 +2144,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLineB2D()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygon()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPolyPolygon";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2165,13 +2165,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygon()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyPolygon()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPolyPolygon";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2186,13 +2186,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyPolygon()
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygonB2D()
 {
-    OUString aTestName = "testDrawRectangleOnSize1028WithPolyPolygonB2D";
+    OUString aTestName = u"testDrawRectangleOnSize1028WithPolyPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize1028();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2207,13 +2207,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygonB2D()
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
 {
-    OUString aTestName = "testDrawRectangleOnSize4096WithPolygonPolygonB2D";
+    OUString aTestName = u"testDrawRectangleOnSize4096WithPolygonPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangleOnSize4096();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
@@ -2228,13 +2228,13 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyLine()
 {
-    OUString aTestName = "testDrawOpenPolygonWithPolyLine";
+    OUString aTestName = u"testDrawOpenPolygonWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
@@ -2249,13 +2249,13 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyLine()
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyLineB2D()
 {
-    OUString aTestName = "testDrawOpenPolygonWithPolyLineB2D";
+    OUString aTestName = u"testDrawOpenPolygonWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
@@ -2270,13 +2270,13 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyLineB2D()
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolygon()
 {
-    OUString aTestName = "testDrawOpenPolygonWithPolygon";
+    OUString aTestName = u"testDrawOpenPolygonWithPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
@@ -2291,13 +2291,13 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolygon()
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygon()
 {
-    OUString aTestName = "testDrawOpenPolygonWithPolyPolygon";
+    OUString aTestName = u"testDrawOpenPolygonWithPolyPolygon"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
@@ -2312,13 +2312,13 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygon()
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
 {
-    OUString aTestName = "testDrawOpenPolygonWithPolyPolygonB2D";
+    OUString aTestName = u"testDrawOpenPolygonWithPolyPolygonB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
@@ -2333,13 +2333,13 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
 
 void GraphicsRenderTests::testDrawOpenBezierWithPolyLine()
 {
-    OUString aTestName = "testDrawOpenBezierWithPolyLine";
+    OUString aTestName = u"testDrawOpenBezierWithPolyLine"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenBezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
@@ -2354,13 +2354,13 @@ void GraphicsRenderTests::testDrawOpenBezierWithPolyLine()
 
 void GraphicsRenderTests::testDrawOpenBezierWithPolyLineB2D()
 {
-    OUString aTestName = "testDrawOpenBezierWithPolyLineB2D";
+    OUString aTestName = u"testDrawOpenBezierWithPolyLineB2D"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupOpenBezier();
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(aTestName, "SKIPPED");
+        appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
@@ -2556,9 +2556,9 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
         aTests[tests.getStatus()].push_back(tests.getTestName());
     }
     OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
-    if (static_cast<int>(aTests["FAILED"].size()) > 0)
+    if (static_cast<int>(aTests[u"FAILED"_ustr].size()) > 0)
     {
-        for (const class OUString& tests : aTests["FAILED"])
+        for (const class OUString& tests : aTests[u"FAILED"_ustr])
         {
             writeResult += tests + "\n";
         }
@@ -2568,9 +2568,9 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
         writeResult += "No test has been failed.\n";
     }
     writeResult += "\n---Name of the tests that were Quirky---\n";
-    if (static_cast<int>(aTests["QUIRKY"].size()) > 0)
+    if (static_cast<int>(aTests[u"QUIRKY"_ustr].size()) > 0)
     {
-        for (const class OUString& tests : aTests["QUIRKY"])
+        for (const class OUString& tests : aTests[u"QUIRKY"_ustr])
         {
             writeResult += tests + "\n";
         }
@@ -2580,9 +2580,9 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
         writeResult += "No test was Quirky.\n";
     }
     writeResult += "\n---Name of the tests that were Skipped---\n";
-    if (static_cast<int>(aTests["SKIPPED"].size()) > 0)
+    if (static_cast<int>(aTests[u"SKIPPED"_ustr].size()) > 0)
     {
-        for (const class OUString& tests : aTests["SKIPPED"])
+        for (const class OUString& tests : aTests[u"SKIPPED"_ustr])
         {
             writeResult += tests + "\n";
         }

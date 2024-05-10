@@ -1848,7 +1848,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if( !pParent->HasChildren() )
-        InsertEntry( "<dummy>", pParent );
+        InsertEntry( u"<dummy>"_ustr, pParent );
 }
 
 void SvTreeListBox::GetFocus()

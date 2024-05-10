@@ -53,7 +53,7 @@ using namespace rtl;
 
 OUString getShaderFolder()
 {
-    OUString aUrl("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER);
+    OUString aUrl(u"$BRAND_BASE_DIR/" LIBO_ETC_FOLDER ""_ustr);
     rtl::Bootstrap::expandMacros(aUrl);
 
     return aUrl + "/opengl/";
@@ -229,7 +229,7 @@ namespace
 
     OString getCacheFolder()
     {
-        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+        OUString url(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr);
         rtl::Bootstrap::expandMacros(url);
 
         osl::Directory::create(url);
@@ -425,7 +425,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     // Check Vertex Shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
     if (!Result)
-        return LogCompilerError(VertexShaderID, "vertex",
+        return LogCompilerError(VertexShaderID, u"vertex"_ustr,
                                 rVertexShaderName, true);
 
     // Compile Fragment Shader
@@ -438,7 +438,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     // Check Fragment Shader
     glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
     if (!Result)
-        return LogCompilerError(FragmentShaderID, "fragment",
+        return LogCompilerError(FragmentShaderID, u"fragment"_ustr,
                                 rFragmentShaderName, true);
 
     if (bHasGeometryShader)
@@ -453,7 +453,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         // Check Geometry Shader
         glGetShaderiv(GeometryShaderID, GL_COMPILE_STATUS, &Result);
         if (!Result)
-            return LogCompilerError(GeometryShaderID, "geometry",
+            return LogCompilerError(GeometryShaderID, u"geometry"_ustr,
                                     rGeometryShaderName, true);
     }
 
@@ -471,7 +471,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         if (!Result)
         {
             SAL_WARN("vcl.opengl", "linking failed: " << Result );
-            return LogCompilerError(ProgramID, "program", "<both>", false);
+            return LogCompilerError(ProgramID, u"program"_ustr, u"<both>"_ustr, false);
         }
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
@@ -490,7 +490,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
     if (!Result)
-        return LogCompilerError(ProgramID, "program", "<both>", false);
+        return LogCompilerError(ProgramID, u"program"_ustr, u"<both>"_ustr, false);
 
     CHECK_GL_ERROR();
 

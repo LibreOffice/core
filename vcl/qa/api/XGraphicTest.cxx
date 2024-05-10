@@ -74,44 +74,44 @@ void XGraphicTest::testGraphicDescriptor()
 
     //[property] byte GraphicType;
     sal_Int8 nType;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("GraphicType") >>= nType);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"GraphicType"_ustr) >>= nType);
     CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nType);
 
     //[property] string MimeType;
     OUString sMimeType;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("MimeType") >>= sMimeType);
-    CPPUNIT_ASSERT_EQUAL(OUString("image/x-vclgraphic"), sMimeType);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"MimeType"_ustr) >>= sMimeType);
+    CPPUNIT_ASSERT_EQUAL(u"image/x-vclgraphic"_ustr, sMimeType);
 
     //[optional, property] ::com::sun::star::awt::Size SizePixel;
     awt::Size aSizePixel;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"SizePixel"_ustr) >>= aSizePixel);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aSizePixel.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aSizePixel.Height);
 
     //[optional, property] ::com::sun::star::awt::Size Size100thMM;
     awt::Size aSize100thMM;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Size100thMM") >>= aSize100thMM);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Size100thMM"_ustr) >>= aSize100thMM);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSize100thMM.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSize100thMM.Height);
 
     //[optional, property] byte BitsPerPixel;
     sal_Int8 nBitsPerPixel;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"BitsPerPixel"_ustr) >>= nBitsPerPixel);
     CPPUNIT_ASSERT_EQUAL(sal_Int8(24), nBitsPerPixel);
 
     //[optional, property] boolean Transparent;
     bool bTransparent;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Transparent") >>= bTransparent);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Transparent"_ustr) >>= bTransparent);
     CPPUNIT_ASSERT_EQUAL(false, bTransparent);
 
     //[optional, property] boolean Alpha;
     bool bAlpha;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Alpha") >>= bAlpha);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Alpha"_ustr) >>= bAlpha);
     CPPUNIT_ASSERT_EQUAL(false, bAlpha);
 
     //[optional, property] boolean Animated;
     bool bAnimated;
-    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Animated") >>= bAnimated);
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Animated"_ustr) >>= bAnimated);
     CPPUNIT_ASSERT_EQUAL(false, bAnimated);
 }
 
@@ -139,20 +139,20 @@ void XGraphicTest::testGraphicProvider()
         uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
 
         sal_Int8 nType;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("GraphicType") >>= nType);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"GraphicType"_ustr) >>= nType);
         CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nType);
 
         awt::Size aSizePixel;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"SizePixel"_ustr) >>= aSizePixel);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Width);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Height);
 
         bool bLinked;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Linked") >>= bLinked);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Linked"_ustr) >>= bLinked);
         CPPUNIT_ASSERT_EQUAL(false, bLinked);
 
         OUString sOriginURL;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("OriginURL") >>= sOriginURL);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"OriginURL"_ustr) >>= sOriginURL);
         CPPUNIT_ASSERT_EQUAL(OUString(), sOriginURL);
 
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -178,20 +178,20 @@ void XGraphicTest::testGraphicProvider()
         uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
 
         sal_Int8 nType;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("GraphicType") >>= nType);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"GraphicType"_ustr) >>= nType);
         CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nType);
 
         awt::Size aSizePixel;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"SizePixel"_ustr) >>= aSizePixel);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Width);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Height);
 
         bool bLinked;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Linked") >>= bLinked);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Linked"_ustr) >>= bLinked);
         CPPUNIT_ASSERT_EQUAL(true, bLinked);
 
         OUString sOriginURL;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("OriginURL") >>= sOriginURL);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"OriginURL"_ustr) >>= sOriginURL);
         CPPUNIT_ASSERT_EQUAL(aGraphicURL, sOriginURL);
     }
 
@@ -216,20 +216,20 @@ void XGraphicTest::testGraphicProvider()
         uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
 
         sal_Int8 nType;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("GraphicType") >>= nType);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"GraphicType"_ustr) >>= nType);
         CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nType);
 
         awt::Size aSizePixel;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"SizePixel"_ustr) >>= aSizePixel);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Width);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aSizePixel.Height);
 
         bool bLinked;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Linked") >>= bLinked);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"Linked"_ustr) >>= bLinked);
         CPPUNIT_ASSERT_EQUAL(true, bLinked);
 
         OUString sOriginURL;
-        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("OriginURL") >>= sOriginURL);
+        CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue(u"OriginURL"_ustr) >>= sOriginURL);
         CPPUNIT_ASSERT_EQUAL(aGraphicURL, sOriginURL);
 
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());

@@ -68,8 +68,8 @@ UITestLogger::UITestLogger()
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
     if (pFile)
     {
-        OUString aDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                          "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/uitest/");
+        OUString aDirPath(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                          "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/uitest/"_ustr);
         rtl::Bootstrap::expandMacros(aDirPath);
         osl::Directory::createPath(aDirPath);
         OUString aFilePath = aDirPath + OUString::fromUtf8(pFile);
@@ -320,7 +320,7 @@ namespace
 OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
 {
     if (rParameters.empty())
-        return "";
+        return u""_ustr;
 
     OUStringBuffer aParameterString(static_cast<int>(rParameters.size() * 32));
     aParameterString.append(" {");

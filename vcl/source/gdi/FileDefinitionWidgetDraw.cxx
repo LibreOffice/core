@@ -47,7 +47,7 @@ namespace
 {
 OUString lcl_getThemeDefinitionPath()
 {
-    OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/theme_definitions/");
+    OUString sPath(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/theme_definitions/"_ustr);
     rtl::Bootstrap::expandMacros(sPath);
     return sPath;
 }
@@ -476,7 +476,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 {
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
-                    vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
+                    vcl::bitmap::loadFromSvg(aFileStream, u""_ustr, aBitmap, nScaleFactor);
                     if (!aBitmap.IsEmpty())
                     {
                         rCacheImages.insert(std::make_pair(rCacheKey, aBitmap));
@@ -536,7 +536,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     uno::Reference<io::XInputStream> aInputStream(
                         new comphelper::SequenceInputStream(aData));
 
-                    uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, "");
+                    uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, u""_ustr);
                     if (aAny.has<sal_uInt64>())
                     {
                         auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
@@ -1091,7 +1091,7 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     vcl::Font aFont(FAMILY_SWISS, Size(0, nFontSize));
     aFont.SetCharSet(osl_getThreadTextEncoding());
     aFont.SetWeight(WEIGHT_NORMAL);
-    aFont.SetFamilyName("Liberation Sans");
+    aFont.SetFamilyName(u"Liberation Sans"_ustr);
     aStyleSet.SetAppFont(aFont);
     aStyleSet.SetHelpFont(aFont);
     aStyleSet.SetMenuFont(aFont);

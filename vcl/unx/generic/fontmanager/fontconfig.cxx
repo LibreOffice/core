@@ -935,7 +935,7 @@ namespace
     OUString getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
     {
         if (isEmoji(currentChar))
-            return "und-zsye";
+            return u"und-zsye"_ustr;
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
         UScriptCode eScript = static_cast<UScriptCode>(script);
         OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
@@ -951,7 +951,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     {
         using namespace org::freedesktop::PackageKit;
         css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-        xSyncDbusSessionHelper->InstallFontconfigResources(comphelper::containerToSequence(m_aCurrentRequests), "hide-finished");
+        xSyncDbusSessionHelper->InstallFontconfigResources(comphelper::containerToSequence(m_aCurrentRequests), u"hide-finished"_ustr);
     }
     catch (const css::uno::Exception&)
     {

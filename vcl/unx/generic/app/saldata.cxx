@@ -388,7 +388,7 @@ static Display *OpenX11Display(OString& rDisplay)
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                OUString envVar("DISPLAY");
+                OUString envVar(u"DISPLAY"_ustr);
                 osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;

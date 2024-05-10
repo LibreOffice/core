@@ -81,7 +81,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     if (!pObj)
-        throw css::uno::RuntimeException("UITest::getFocusTopWindow did not find a window");
+        throw css::uno::RuntimeException(u"UITest::getFocusTopWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 
@@ -90,13 +90,13 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFloatWin
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFloatWindow();
     if (!pObj)
-        throw css::uno::RuntimeException("UITest::getFloatWindow did not find a window");
+        throw css::uno::RuntimeException(u"UITest::getFloatWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 
 OUString SAL_CALL UITestUnoObj::getImplementationName()
 {
-    return "org.libreoffice.uitest.UITest";
+    return u"org.libreoffice.uitest.UITest"_ustr;
 }
 
 sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)
@@ -106,7 +106,7 @@ sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.test.UITest" };
+    return { u"com.sun.star.ui.test.UITest"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

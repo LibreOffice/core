@@ -70,7 +70,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
         if( !xServiceManager.is() )
-            Application::Abort( "Failed to bootstrap" );
+            Application::Abort( u"Failed to bootstrap"_ustr );
 
         comphelper::setProcessServiceFactory( xServiceManager );
 
@@ -120,7 +120,7 @@ public:
 void Main()
 {
     ScopedVclPtrInstance< MyWin > aMainWin( nullptr, WB_STDWORK );
-    aMainWin->SetText( "SvpClient" );
+    aMainWin->SetText( u"SvpClient"_ustr );
     aMainWin->Show();
 
     Application::Execute();
@@ -134,7 +134,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     m_aQuitButton(VclPtr<PushButton>::Create(this, 0))
 {
     m_aListButton->SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
-    m_aListButton->SetText( "List Elements" );
+    m_aListButton->SetText( u"List Elements"_ustr );
     m_aListButton->SetClickHdl( LINK( this, MyWin, ListHdl ) );
     m_aListButton->Show();
 
@@ -146,7 +146,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     m_aImage->Show();
 
     m_aQuitButton->SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
-    m_aQuitButton->SetText( "Quit SVP server" );
+    m_aQuitButton->SetText( u"Quit SVP server"_ustr );
     m_aQuitButton->SetClickHdl( LINK( this, MyWin, QuitHdl ) );
     m_aQuitButton->Show();
 }

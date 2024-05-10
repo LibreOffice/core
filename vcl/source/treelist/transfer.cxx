@@ -289,7 +289,7 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 
 OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
 {
-    return "com.sun.star.comp.svt.TransferableHelperTerminateListener";
+    return u"com.sun.star.comp.svt.TransferableHelperTerminateListener"_ustr;
 }
 
 sal_Bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
@@ -2097,7 +2097,7 @@ std::unique_ptr<SvStream> TransferableDataHelper::GetSotStorageStream( const Dat
     if (!aSeq.hasElements())
         return nullptr;
 
-    std::unique_ptr<SvStream> xStream = SotTempStream::Create( "" );
+    std::unique_ptr<SvStream> xStream = SotTempStream::Create( u""_ustr );
     xStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
     xStream->Seek(0);
     return xStream;

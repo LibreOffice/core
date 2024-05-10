@@ -1260,7 +1260,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     //m_StructElementStack.push(0);
 
     Font aFont;
-    aFont.SetFamilyName( "Times" );
+    aFont.SetFamilyName( u"Times"_ustr );
     aFont.SetFontSize( Size( 0, 12 ) );
 
     // tdf#150786 use the same settings for widgets regardless of theme
@@ -1738,7 +1738,7 @@ void PDFWriterImpl::endPage()
 
     // reset the default font
     Font aFont;
-    aFont.SetFamilyName( "Times" );
+    aFont.SetFamilyName( u"Times"_ustr );
     aFont.SetFontSize( Size( 0, 12 ) );
 
     m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -4174,7 +4174,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    Font aDummyFont( "Helvetica", aFont.GetFontSize() );
+    Font aDummyFont( u"Helvetica"_ustr, aFont.GetFontSize() );
     sal_Int32 nDummyBuildin = getBestBuildinFont( aDummyFont );
     aDA.append( ' ' );
     aDA.append(pdf::BuildinFontFace::Get(nDummyBuildin).getNameObject());
@@ -4405,7 +4405,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // being present, but our own OpenSymbol - N.B. PDF/A for good
     // reasons require even the standard PS fonts to be embedded!
     Push();
-    SetFont( Font( OUString( "OpenSymbol" ), aFont.GetFontSize() ) );
+    SetFont( Font( u"OpenSymbol"_ustr, aFont.GetFontSize() ) );
     const LogicalFontInstance* pFontInstance = GetFontInstance();
     const vcl::font::PhysicalFontFace* pFace = pFontInstance->GetFontFace();
     Pop();
@@ -7764,7 +7764,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, Fo
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? OUString( "/" ) : OUString( "X" );
+    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? u"/"_ustr : u"X"_ustr;
     OUString aStrikeout = aStrikeoutChar;
     while( GetTextWidth( aStrikeout ) < nWidth )
         aStrikeout += aStrikeout;

@@ -125,17 +125,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
         Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
         if( !xServiceManager.is() )
-            Application::Abort( "Failed to bootstrap" );
+            Application::Abort( u"Failed to bootstrap"_ustr );
         comphelper::setProcessServiceFactory( xServiceManager );
         comphelper::EnableFuzzing();
 
         // initialise unconfigured UCB:
         css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
-            createInstance("com.sun.star.ucb.UniversalContentBroker"), css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence<css::uno::Any> aArgs{ css::uno::Any(OUString("NoConfig")) };
+            createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr), css::uno::UNO_QUERY_THROW);
+        css::uno::Sequence<css::uno::Any> aArgs{ css::uno::Any(u"NoConfig"_ustr) };
         css::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
-            createInstanceWithArguments("com.sun.star.ucb.FileContentProvider", aArgs), css::uno::UNO_QUERY_THROW);
-        xUcb->registerContentProvider(xFileProvider, "file", true);
+            createInstanceWithArguments(u"com.sun.star.ucb.FileContentProvider"_ustr, aArgs), css::uno::UNO_QUERY_THROW);
+        xUcb->registerContentProvider(xFileProvider, u"file"_ustr, true);
 
         Application::EnableHeadlessMode(false);
         InitVCL();

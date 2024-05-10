@@ -284,7 +284,7 @@ bool IsHeadlessModeRequested()
 SalInstance *CreateSalInstance()
 {
     OUString aUsePlugin;
-    rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", aUsePlugin);
+    rtl::Bootstrap::get(u"SAL_USE_VCLPLUGIN"_ustr, aUsePlugin);
     SAL_INFO_IF(!aUsePlugin.isEmpty(), "vcl.plugadapt", "Requested VCL plugin: " << aUsePlugin);
 
     if (Application::IsBitmapRendering() || (aUsePlugin.isEmpty() && IsHeadlessModeRequested()))
@@ -402,7 +402,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         std::fprintf( stderr, "Unspecified Application Error\n" );
     else
     {
-        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
+        CrashReporter::addKeyValue(u"AbortMessage"_ustr, rErrorText, CrashReporter::Write);
         std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
     }
 #endif

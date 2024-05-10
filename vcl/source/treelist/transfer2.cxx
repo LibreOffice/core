@@ -511,9 +511,9 @@ Reference<XClipboard> GetSystemPrimarySelection()
 #if USING_X11
         // A hack, making the primary selection available as an instance
         // of the SystemClipboard service on X11:
-        Sequence< Any > args{ Any(OUString("PRIMARY")) };
+        Sequence< Any > args{ Any(u"PRIMARY"_ustr) };
         xSelection.set(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.datatransfer.clipboard.SystemClipboard", args, xContext), UNO_QUERY_THROW);
+            u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, args, xContext), UNO_QUERY_THROW);
 #else
         static Reference< XClipboard > s_xSelection(
             xContext->getServiceManager()->createInstanceWithContext(

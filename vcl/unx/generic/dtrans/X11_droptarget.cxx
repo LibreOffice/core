@@ -161,7 +161,7 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) noexcept
 // XServiceInfo
 OUString DropTarget::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.XdndDropTarget";
+    return u"com.sun.star.datatransfer.dnd.XdndDropTarget"_ustr;
 }
 
 sal_Bool DropTarget::supportsService( const OUString& ServiceName )

@@ -236,8 +236,8 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             mpData->maTimer.Start();
         else if ( !mpData->mbCurVisible )
             ImplDraw();
-        LOKNotify( pWindow, "cursor_invalidate" );
-        LOKNotify( pWindow, "cursor_visible" );
+        LOKNotify( pWindow, u"cursor_invalidate"_ustr );
+        LOKNotify( pWindow, u"cursor_visible"_ustr );
     }
 }
 
@@ -297,7 +297,7 @@ bool vcl::Cursor::ImplDoHide( bool bSuspend )
 
         if ( !bSuspend )
         {
-            LOKNotify( mpData->mpWindow, "cursor_visible" );
+            LOKNotify( mpData->mpWindow, u"cursor_visible"_ustr );
             mpData->maTimer.Stop();
             mpData->mpWindow = nullptr;
         }
@@ -336,7 +336,7 @@ void vcl::Cursor::ImplNew()
     ImplDraw();
     if ( !mpWindow )
     {
-        LOKNotify( mpData->mpWindow, "cursor_invalidate" );
+        LOKNotify( mpData->mpWindow, u"cursor_invalidate"_ustr );
         if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
             mpData->maTimer.Start();
     }

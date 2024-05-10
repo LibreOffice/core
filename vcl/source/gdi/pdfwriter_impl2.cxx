@@ -203,8 +203,8 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         Graphic aGraphic(BitmapEx(aBitmapEx.GetBitmap()));
 
         Sequence< PropertyValue > aFilterData{
-            comphelper::makePropertyValue("Quality", sal_Int32(i_rContext.m_nJPEGQuality)),
-            comphelper::makePropertyValue("ColorMode", sal_Int32(0))
+            comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(i_rContext.m_nJPEGQuality)),
+            comphelper::makePropertyValue(u"ColorMode"_ustr, sal_Int32(0))
         };
 
         try
@@ -216,9 +216,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
             uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
             uno::Sequence< beans::PropertyValue > aOutMediaProperties{
-                comphelper::makePropertyValue("OutputStream", xOut),
-                comphelper::makePropertyValue("MimeType", OUString("image/jpeg")),
-                comphelper::makePropertyValue("FilterData", aFilterData)
+                comphelper::makePropertyValue(u"OutputStream"_ustr, xOut),
+                comphelper::makePropertyValue(u"MimeType"_ustr, u"image/jpeg"_ustr),
+                comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
             };
             xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
             xOut->flush();
@@ -231,13 +231,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 pStrm->Seek( STREAM_SEEK_TO_END );
 
                 xSeekable->seek( 0 );
-                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream",
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"InputStream"_ustr,
                                                                                xStream) };
                 uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
                 if ( xPropSet.is() )
                 {
                     sal_Int16 nBitsPerPixel = 24;
-                    if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
+                    if ( xPropSet->getPropertyValue(u"BitsPerPixel"_ustr) >>= nBitsPerPixel )
                     {
                         bTrueColorJPG = nBitsPerPixel != 8;
                     }

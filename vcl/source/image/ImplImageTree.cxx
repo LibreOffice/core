@@ -113,7 +113,7 @@ OUString getIconCacheUrl(std::u16string_view sVariant, ImageRequestParameters co
     // the macro expansion can be expensive in bulk, so cache that
     static OUString CACHE_DIR = []()
     {
-        OUString sDir = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/";
+        OUString sDir = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr;
         rtl::Bootstrap::expandMacros(sDir);
         return sDir;
     }();

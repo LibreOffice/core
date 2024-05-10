@@ -132,14 +132,16 @@ void BitmapScaleTest::testScale()
             }
             if (bExportBitmap)
             {
-                SvFileStream aStream("~/scale_before.png", StreamMode::WRITE | StreamMode::TRUNC);
+                SvFileStream aStream(u"~/scale_before.png"_ustr,
+                                     StreamMode::WRITE | StreamMode::TRUNC);
                 GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
                 rFilter.compressAsPNG(BitmapEx(bitmap), aStream);
             }
             CPPUNIT_ASSERT(bitmap.Scale(scaleSize.destSize, scaleMethod));
             if (bExportBitmap)
             {
-                SvFileStream aStream("~/scale_after.png", StreamMode::WRITE | StreamMode::TRUNC);
+                SvFileStream aStream(u"~/scale_after.png"_ustr,
+                                     StreamMode::WRITE | StreamMode::TRUNC);
                 GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
                 rFilter.compressAsPNG(BitmapEx(bitmap), aStream);
             }
@@ -201,7 +203,7 @@ void BitmapScaleTest::testScale2()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("scale_before.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"scale_before.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aBitmap24Bit), aStream);
     }
@@ -214,7 +216,7 @@ void BitmapScaleTest::testScale2()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("scale_after_65x65.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"scale_after_65x65.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
@@ -231,7 +233,7 @@ void BitmapScaleTest::testScale2()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("scale_after_64x64.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"scale_after_64x64.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
@@ -248,7 +250,7 @@ void BitmapScaleTest::testScale2()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("scale_after_63x63.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"scale_after_63x63.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
@@ -283,7 +285,7 @@ void BitmapScaleTest::testScaleSymmetry()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("~/scale_before.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"~/scale_before.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aBitmap24Bit), aStream);
     }
@@ -299,7 +301,7 @@ void BitmapScaleTest::testScaleSymmetry()
 
     if (bExportBitmap)
     {
-        SvFileStream aStream("~/scale_after.png", StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aStream(u"~/scale_after.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aBitmap24Bit), aStream);
     }

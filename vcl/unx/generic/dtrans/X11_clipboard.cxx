@@ -63,7 +63,7 @@ X11Clipboard::create( SelectionManager& rManager, Atom aSelection )
     else
     {
         rManager.registerHandler(XA_PRIMARY, *cb);
-        rManager.registerHandler(rManager.getAtom("CLIPBOARD"), *cb);
+        rManager.registerHandler(rManager.getAtom(u"CLIPBOARD"_ustr), *cb);
     }
     return cb;
 }
@@ -85,7 +85,7 @@ X11Clipboard::~X11Clipboard()
     else
     {
         m_xSelectionManager->deregisterHandler( XA_PRIMARY );
-        m_xSelectionManager->deregisterHandler( m_xSelectionManager->getAtom( "CLIPBOARD" ) );
+        m_xSelectionManager->deregisterHandler( m_xSelectionManager->getAtom( u"CLIPBOARD"_ustr ) );
     }
 }
 
@@ -159,7 +159,7 @@ void SAL_CALL X11Clipboard::setContents(
     else
     {
         m_xSelectionManager->requestOwnership( XA_PRIMARY );
-        m_xSelectionManager->requestOwnership( m_xSelectionManager->getAtom( "CLIPBOARD" ) );
+        m_xSelectionManager->requestOwnership( m_xSelectionManager->getAtom( u"CLIPBOARD"_ustr ) );
     }
 
     // notify old owner on loss of ownership

@@ -62,7 +62,7 @@ void VclMnemonicTest::testMnemonic()
     {
         static constexpr OUString TEST = u"\u4E00"_ustr;
         OUString sResult = aGenerator.CreateMnemonic(TEST);
-        CPPUNIT_ASSERT_EQUAL(OUString("(~C)"), sResult.copy(sResult.getLength() - 4));
+        CPPUNIT_ASSERT_EQUAL(u"(~C)"_ustr, sResult.copy(sResult.getLength() - 4));
         sResult = MnemonicGenerator::EraseAllMnemonicChars(sResult);
         CPPUNIT_ASSERT_EQUAL(TEST, sResult);
     }
@@ -71,56 +71,60 @@ void VclMnemonicTest::testMnemonic()
 void VclMnemonicTest::testRemoveMnemonicFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("this is a ~test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this is a test"), sNonMnemonicString);
+    OUString sNonMnemonicString = removeMnemonicFromString(u"this is a ~test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this is a test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveDoubleMarkedMnemonicFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("this ~~is a test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this ~is a test"), sNonMnemonicString);
+    OUString sNonMnemonicString
+        = removeMnemonicFromString(u"this ~~is a test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this ~is a test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveMultipleMnemonicsFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("t~his is a ~test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this is a test"), sNonMnemonicString);
+    OUString sNonMnemonicString
+        = removeMnemonicFromString(u"t~his is a ~test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this is a test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveDoubleMarkingsThenMnemonicFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("t~~his is a ~test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("t~his is a test"), sNonMnemonicString);
+    OUString sNonMnemonicString
+        = removeMnemonicFromString(u"t~~his is a ~test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"t~his is a test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveMnemonicThenDoubleMarkingsFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("t~his is a ~~test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this is a ~test"), sNonMnemonicString);
+    OUString sNonMnemonicString
+        = removeMnemonicFromString(u"t~his is a ~~test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this is a ~test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveMnemonicFromEndOfString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("this is a test~", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this is a test~"), sNonMnemonicString);
+    OUString sNonMnemonicString = removeMnemonicFromString(u"this is a test~"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this is a test~"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), nMnemonicIndex);
 }
 
 void VclMnemonicTest::testRemoveNoMnemonicFromString()
 {
     sal_Int32 nMnemonicIndex;
-    OUString sNonMnemonicString = removeMnemonicFromString("this is a test", nMnemonicIndex);
-    CPPUNIT_ASSERT_EQUAL(OUString("this is a test"), sNonMnemonicString);
+    OUString sNonMnemonicString = removeMnemonicFromString(u"this is a test"_ustr, nMnemonicIndex);
+    CPPUNIT_ASSERT_EQUAL(u"this is a test"_ustr, sNonMnemonicString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), nMnemonicIndex);
 }
 

@@ -183,7 +183,7 @@ void IconTestApp::DoItWithVcl( const OUString& sImageFile)
     {
         VclPtrInstance<MyWorkWindow> pWindow( nullptr, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
 
-        pWindow->SetText("VCL Image Test");
+        pWindow->SetText(u"VCL Image Test"_ustr);
 
         pWindow->LoadGraphic( sImageFile );
         pWindow->mpFixedBitmap = VclPtr<FixedBitmap>::Create( pWindow );

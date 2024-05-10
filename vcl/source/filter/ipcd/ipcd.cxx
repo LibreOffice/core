@@ -111,7 +111,7 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     eResolution = PCDRES_BASE;
     if ( pConfigItem )
     {
-        sal_Int32 nResolution = pConfigItem->ReadInt32( "Resolution", 2 );
+        sal_Int32 nResolution = pConfigItem->ReadInt32( u"Resolution"_ustr, 2 );
         if ( nResolution == 1 )
             eResolution = PCDRES_BASE4;
         else if ( nResolution == 0 )

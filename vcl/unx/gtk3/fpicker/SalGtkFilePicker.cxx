@@ -1653,7 +1653,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     uno::Any aAny;
     if( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(
-            "no arguments",
+            u"no arguments"_ustr,
             static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
@@ -1661,7 +1661,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( ( aAny.getValueType() != cppu::UnoType<sal_Int16>::get()) &&
          (aAny.getValueType() != cppu::UnoType<sal_Int8>::get()) )
          throw lang::IllegalArgumentException(
-            "invalid argument type",
+            u"invalid argument type"_ustr,
             static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -1775,7 +1775,7 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
                 break;
         default:
                 throw lang::IllegalArgumentException(
-                "Unknown template",
+                u"Unknown template"_ustr,
                 static_cast< XFilePicker2* >( this ),
                 1 );
     }

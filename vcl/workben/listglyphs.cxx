@@ -202,7 +202,7 @@ void ListGlyphs::Init()
     xServiceManager.set(xContext->getServiceManager(), css::uno::UNO_QUERY);
 
     if (!xServiceManager.is())
-        Application::Abort("Bootstrap failure - no service manager");
+        Application::Abort(u"Bootstrap failure - no service manager"_ustr);
 
     comphelper::setProcessServiceFactory(xServiceManager);
 

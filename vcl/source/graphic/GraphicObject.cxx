@@ -58,10 +58,10 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
     uno::Reference<beans::XPropertySet> xPropertySet(xInterface, UNO_QUERY);
     if (xPropertySet.is())
     {
-        if (xPropertySet->getPropertySetInfo()->hasPropertyByName("ImageURL"))
+        if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"ImageURL"_ustr))
         {
             OUString sURL;
-            xPropertySet->getPropertyValue("ImageURL") >>= sURL;
+            xPropertySet->getPropertyValue(u"ImageURL"_ustr) >>= sURL;
             if (!sURL.isEmpty() && !GraphicObject::isGraphicObjectUniqueIdURL(sURL))
             {
                 Graphic aGraphic = vcl::graphic::loadFromURL(sURL);
@@ -70,10 +70,10 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
                     raGraphicList.push_back(aGraphic.GetXGraphic());
                 }
             }
-        } else if (xPropertySet->getPropertySetInfo()->hasPropertyByName("Graphic"))
+        } else if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Graphic"_ustr))
         {
             uno::Reference<css::graphic::XGraphic> xGraphic;
-            xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+            xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
             if (xGraphic.is())
             {
                 raGraphicList.push_back(xGraphic);

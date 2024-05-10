@@ -66,7 +66,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
             uno::Sequence< beans::PropertyValue > aViewParameters = {
-                comphelper::makePropertyValue("RangeUnit", static_cast<sal_Int32>(eTargetUnit)),
+                comphelper::makePropertyValue(u"RangeUnit"_ustr, static_cast<sal_Int32>(eTargetUnit)),
             };
             geometry::RealRectangle2D aRealRect;
 
@@ -225,7 +225,7 @@ void VectorGraphicData::ensureSequenceAndRange()
 
                 if (!mbEnableEMFPlus)
                 {
-                    aPropertySequence = { comphelper::makePropertyValue("EMFPlusEnable", uno::Any(false)) };
+                    aPropertySequence = { comphelper::makePropertyValue(u"EMFPlusEnable"_ustr, uno::Any(false)) };
                 }
 
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));

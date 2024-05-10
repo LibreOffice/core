@@ -102,13 +102,13 @@ static Reference< XInterface > openConfig(const char* sPackage)
         // define cfg path for open
         aParam.Name = "nodepath";
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
-            aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
+            aParam.Value <<= u"/org.openoffice.TypeDetection.Types/Types"_ustr;
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
-            aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
+            aParam.Value <<= u"/org.openoffice.TypeDetection.GraphicFilter/Filters"_ustr;
         Sequence< Any > lParams{ Any(aParam) };
 
         // get access to file
-        xCfg = xConfigProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", lParams);
+        xCfg = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess"_ustr, lParams);
     }
     catch(const RuntimeException&)
         { throw; }

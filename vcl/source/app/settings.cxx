@@ -643,9 +643,9 @@ void ImplStyleData::SetStandardStyles()
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
     if (!comphelper::IsFuzzing())
-        aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
+        aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag(u"en"_ustr)));
     else
-        aStdFont.SetFamilyName("Liberation Sans");
+        aStdFont.SetFamilyName(u"Liberation Sans"_ustr);
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -2446,7 +2446,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     if ( !aName.isEmpty() )
     {
-        OUString gallery("");
+        OUString gallery(u""_ustr);
         // try the gallery first, then the program path:
         if ( aPersona == "own" && !aPersonaSettings.startsWith( "vnd.sun.star.expand" ) )
         {
@@ -2469,8 +2469,8 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if( rHeaderFooterBitmap.IsEmpty() )
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::Persona::set( "no", batch );
-        officecfg::Office::Common::Misc::PersonaSettings::set( "", batch );
+        officecfg::Office::Common::Misc::Persona::set( u"no"_ustr, batch );
+        officecfg::Office::Common::Misc::PersonaSettings::set( u""_ustr, batch );
         batch->commit();
     }
 }
@@ -2685,8 +2685,8 @@ bool MiscSettings::GetDisablePrinting() const
     {
         OUString aEnable =
             vcl::SettingsConfigItem::get()->
-            getValue( "DesktopManagement",
-                      "DisablePrinting" );
+            getValue( u"DesktopManagement"_ustr,
+                      u"DisablePrinting"_ustr );
         mxData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
@@ -2751,8 +2751,8 @@ bool MiscSettings::GetEnableATToolSupport() const
         {
             OUString aEnable =
                 vcl::SettingsConfigItem::get()->
-                getValue( "Accessibility",
-                          "EnableATToolSupport" );
+                getValue( u"Accessibility"_ustr,
+                          u"EnableATToolSupport"_ustr );
             mxData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         else
@@ -3100,7 +3100,7 @@ namespace
             nUIMirroring = 0; // ask configuration only once
             utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
                 comphelper::getProcessComponentContext(),
-                "org.openoffice.Office.Common/I18N/CTL" );    // note: case sensitive !
+                u"org.openoffice.Office.Common/I18N/CTL"_ustr );    // note: case sensitive !
             if ( aNode.isValid() )
             {
                 bool bTmp = bool();
@@ -3146,7 +3146,7 @@ const LanguageTag& AllSettings::GetLanguageTag() const
 {
     if (comphelper::IsFuzzing())
     {
-        static LanguageTag aRet("en-US");
+        static LanguageTag aRet(u"en-US"_ustr);
         return aRet;
     }
 
@@ -3164,7 +3164,7 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
 {
     if (comphelper::IsFuzzing())
     {
-        static LanguageTag aRet("en-US");
+        static LanguageTag aRet(u"en-US"_ustr);
         return aRet;
     }
 
@@ -3198,7 +3198,7 @@ const LocaleDataWrapper& AllSettings::GetNeutralLocaleDataWrapper() const
 {
     if ( !mxData->mpNeutralLocaleDataWrapper )
         const_cast<AllSettings*>(this)->mxData->mpNeutralLocaleDataWrapper.reset( new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), LanguageTag("en-US") ) );
+            comphelper::getProcessComponentContext(), LanguageTag(u"en-US"_ustr) ) );
     return *mxData->mpNeutralLocaleDataWrapper;
 }
 

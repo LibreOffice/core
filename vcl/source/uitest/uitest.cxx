@@ -23,7 +23,7 @@ bool UITest::executeCommand(const OUString& rCommand)
 {
     return comphelper::dispatchCommand(
         rCommand,
-        {{"SynchronMode", -1, css::uno::Any(true),
+        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}});
 }
 
@@ -31,7 +31,7 @@ bool UITest::executeCommandWithParameters(const OUString& rCommand,
     const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     css::uno::Sequence< css::beans::PropertyValue > lNewArgs =
-        {{"SynchronMode", -1, css::uno::Any(true),
+        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}};
 
     if ( rArgs.hasElements() )
@@ -48,7 +48,7 @@ bool UITest::executeDialog(const OUString& rCommand)
 {
     return comphelper::dispatchCommand(
         rCommand,
-        {{"SynchronMode", -1, css::uno::Any(false),
+        {{u"SynchronMode"_ustr, -1, css::uno::Any(false),
           css::beans::PropertyState_DIRECT_VALUE}});
 }
 

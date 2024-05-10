@@ -54,8 +54,8 @@ class IconThemeInfoTest : public CppUnit::TestFixture
 void
 IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 {
-    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName("katze");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("theme id is properly uppercased", OUString("Katze"), displayName);
+    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(u"katze"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("theme id is properly uppercased", u"Katze"_ustr, displayName);
 }
 
 void
@@ -76,7 +76,7 @@ void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {
     OUString sname = vcl::IconThemeInfo::FileNameToThemeId(u"images_colibre.zip");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme id is returned for 'images_colibre.zip'", OUString("colibre"), sname);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme id is returned for 'images_colibre.zip'", u"colibre"_ustr, sname);
 }
 
 void

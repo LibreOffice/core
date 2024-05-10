@@ -642,7 +642,7 @@ void OutputDevice::ImplInitFontList() const
     // There is absolutely no way there should be no fonts available on the device
     if( !mxFontCollection->Count() )
     {
-        OUString aError( "Application error: no fonts and no vcl resource found on your system" );
+        OUString aError( u"Application error: no fonts and no vcl resource found on your system"_ustr );
         OUString aResStr(VclResId(SV_ACCESSERROR_NO_FONTS));
         if (!aResStr.isEmpty())
             aError = aResStr;

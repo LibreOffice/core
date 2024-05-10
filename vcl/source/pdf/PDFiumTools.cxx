@@ -43,7 +43,7 @@ OUString convertPdfDateToISO8601(std::u16string_view rInput)
     if (rInput.size() >= 16)
         sSeconds = rInput.substr(14, 2);
 
-    OUString sTimeZoneMark("Z");
+    OUString sTimeZoneMark(u"Z"_ustr);
     if (rInput.size() >= 17)
         sTimeZoneMark = rInput.substr(16, 1);
 

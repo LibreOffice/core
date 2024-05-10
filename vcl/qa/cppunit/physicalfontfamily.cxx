@@ -47,15 +47,14 @@ public:
 
 void VclPhysicalFontFamilyTest::testCreateFontFamily()
 {
-    PhysicalFontFamily aFamily("Test font face");
+    PhysicalFontFamily aFamily(u"Test font face"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString(""), aFamily.GetFamilyName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
-                                 aFamily.GetSearchName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", u""_ustr, aFamily.GetFamilyName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", u"Test font face"_ustr, aFamily.GetSearchName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", -1, aFamily.GetMinQuality());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Type faces", FontTypeFaces::NONE, aFamily.GetTypeFaces());
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Match family name", OUString(""), aFamily.GetMatchFamilyName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Match family name", u""_ustr, aFamily.GetMatchFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match type", ImplFontAttrs::None, aFamily.GetMatchType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match weight", WEIGHT_DONTKNOW, aFamily.GetMatchWeight());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match width", WIDTH_DONTKNOW, aFamily.GetMatchWidth());
@@ -63,13 +62,12 @@ void VclPhysicalFontFamilyTest::testCreateFontFamily()
 
 void VclPhysicalFontFamilyTest::testAddFontFace_Default()
 {
-    PhysicalFontFamily aFamily("Test font face");
+    PhysicalFontFamily aFamily(u"Test font face"_ustr);
 
     aFamily.AddFontFace(new TestFontFace(1));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString(""), aFamily.GetFamilyName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
-                                 aFamily.GetSearchName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", u""_ustr, aFamily.GetFamilyName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", u"Test font face"_ustr, aFamily.GetSearchName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 0, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace
         = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol | FontTypeFaces::NoneItalic;
@@ -78,10 +76,10 @@ void VclPhysicalFontFamilyTest::testAddFontFace_Default()
 
 void VclPhysicalFontFamilyTest::testAddOneFontFace()
 {
-    PhysicalFontFamily aFamily("Test font face");
+    PhysicalFontFamily aFamily(u"Test font face"_ustr);
 
     FontAttributes aFontAttrs;
-    aFontAttrs.SetFamilyName("Test font face");
+    aFontAttrs.SetFamilyName(u"Test font face"_ustr);
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NONE);
@@ -91,10 +89,8 @@ void VclPhysicalFontFamilyTest::testAddOneFontFace()
 
     aFamily.AddFontFace(new TestFontFace(aFontAttrs, 1));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString("Test font face"),
-                                 aFamily.GetFamilyName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
-                                 aFamily.GetSearchName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", u"Test font face"_ustr, aFamily.GetFamilyName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", u"Test font face"_ustr, aFamily.GetSearchName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 10, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol
                               | FontTypeFaces::Bold | FontTypeFaces::NoneItalic;
@@ -103,10 +99,10 @@ void VclPhysicalFontFamilyTest::testAddOneFontFace()
 
 void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
 {
-    PhysicalFontFamily aFamily("Test font face");
+    PhysicalFontFamily aFamily(u"Test font face"_ustr);
 
     FontAttributes aFontAttrs;
-    aFontAttrs.SetFamilyName("Test font face");
+    aFontAttrs.SetFamilyName(u"Test font face"_ustr);
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NONE);
@@ -116,7 +112,7 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
 
     aFamily.AddFontFace(new TestFontFace(aFontAttrs, 1));
 
-    aFontAttrs.SetFamilyName("Test font face");
+    aFontAttrs.SetFamilyName(u"Test font face"_ustr);
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NORMAL);
@@ -126,10 +122,8 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
 
     aFamily.AddFontFace(new TestFontFace(aFontAttrs, 2));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString("Test font face"),
-                                 aFamily.GetFamilyName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
-                                 aFamily.GetSearchName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", u"Test font face"_ustr, aFamily.GetFamilyName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", u"Test font face"_ustr, aFamily.GetSearchName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 5, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol
                               | FontTypeFaces::Light | FontTypeFaces::Bold

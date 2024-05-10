@@ -58,7 +58,7 @@ static void clearDir( const OUString& path )
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
-    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/";
     clearDir( path + "fromdocs/" );
@@ -191,7 +191,7 @@ void EmbeddedFontsHelper::activateFonts()
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra )
 {
-    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromdocs/";
     osl::Directory::createPath( path );
@@ -242,7 +242,7 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, tools::Long siz
 OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, FontRights rights )
 {
-    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromsystem/";
     osl::Directory::createPath( path );
@@ -357,7 +357,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
             }
         }
     }
-    return ok ? url : "";
+    return ok ? url : u""_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

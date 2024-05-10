@@ -1679,7 +1679,7 @@ bool ToolBox::AlwaysLocked()
 
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
-            "/org.openoffice.Office.UI.GlobalSettings/Toolbars" );    // note: case sensitive !
+            u"/org.openoffice.Office.UI.GlobalSettings/Toolbars"_ustr );    // note: case sensitive !
         if ( aNode.isValid() )
         {
             // feature enabled ?
@@ -1692,7 +1692,7 @@ bool ToolBox::AlwaysLocked()
                     // now read the locking state
                     utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
                         comphelper::getProcessComponentContext(),
-                        "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" );    // note: case sensitive !
+                        u"/org.openoffice.Office.UI.GlobalSettings/Toolbars/States"_ustr );    // note: case sensitive !
 
                     bool bLocked = bool();
                     css::uno::Any aValue2 = aNode2.getNodeValue( "Locked" );

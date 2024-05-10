@@ -234,12 +234,12 @@ namespace toolkitform
                             {
                                 xElement.set( xCurrentContainer->getByIndex( i ), UNO_QUERY_THROW );
                                 Reference< XServiceInfo > xModelSI( xElement, UNO_QUERY_THROW );
-                                if ( xModelSI->supportsService("com.sun.star.awt.UnoControlRadioButtonModel") )
+                                if ( xModelSI->supportsService(u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr) )
                                 {
                                     Reference< XPropertySet >  aProps( xElement, UNO_QUERY_THROW );
 
                                     OUString sGroupName;
-                                    aProps->getPropertyValue("GroupName") >>= sGroupName;
+                                    aProps->getPropertyValue(u"GroupName"_ustr) >>= sGroupName;
                                     if ( !sGroupName.isEmpty() )
                                     {
                                         // map: unique key is the group name, so attempts to add a different ID value
@@ -301,7 +301,7 @@ namespace toolkitform
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
         {
             Sequence< OUString > aListEntries;
-            if( ! (_rxModel->getPropertyValue( "StringItemList" ) >>= aListEntries) ) {
+            if( ! (_rxModel->getPropertyValue( u"StringItemList"_ustr ) >>= aListEntries) ) {
                 SAL_WARN("toolkit.helper", "getStringItemVector: unable to get property StringItemList");
             }
             _rVector.insert( _rVector.end(), std::cbegin(aListEntries), std::cend(aListEntries) );
@@ -342,7 +342,7 @@ namespace toolkitform
             if( ! (xModelProps->getPropertyValue( FM_PROP_NAME ) >>= Descriptor->Name) ) {
                 SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_NAME);
             }
-            if( ! (xModelProps->getPropertyValue( "HelpText" ) >>= Descriptor->Description) ) {
+            if( ! (xModelProps->getPropertyValue( u"HelpText"_ustr ) >>= Descriptor->Description) ) {
                 SAL_INFO("toolkit.helper", "describePDFControl: unable to get property HelpText");
             }
             Any aText;
@@ -384,7 +384,7 @@ namespace toolkitform
                         SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_BORDER);
                     Descriptor->Border = ( nBorderType != 0 );
 
-                    OUString sBorderColorPropertyName( "BorderColor" );
+                    OUString sBorderColorPropertyName( u"BorderColor"_ustr );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
                         Color nBorderColor = COL_TRANSPARENT;
@@ -454,7 +454,7 @@ namespace toolkitform
 
             // vertical alignment
             {
-                OUString sVertAlignPropertyName( "VerticalAlign" );
+                OUString sVertAlignPropertyName( u"VerticalAlign"_ustr );
                 if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                 {
                     VerticalAlignment nAlign = VerticalAlignment_MIDDLE;
@@ -481,7 +481,7 @@ namespace toolkitform
             }
 
             // tab order
-            OUString aTabIndexString( "TabIndex" );
+            OUString aTabIndexString( u"TabIndex"_ustr );
             if ( xPSI->hasPropertyByName( aTabIndexString ) )
             {
                 sal_Int16 nIndex = -1;
@@ -502,7 +502,7 @@ namespace toolkitform
                 pEditWidget->MultiLine = bool( Descriptor->TextStyle & DrawTextFlags::MultiLine );
 
                 // password input
-                OUString sEchoCharPropName( "EchoChar" );
+                OUString sEchoCharPropName( u"EchoChar"_ustr );
                 if ( xPSI->hasPropertyByName( sEchoCharPropName ) )
                 {
                     sal_Int16 nEchoChar = 0;
@@ -511,7 +511,7 @@ namespace toolkitform
                 }
 
                 // file select
-                if ( xSI->supportsService( "com.sun.star.form.component.FileControl" ) )
+                if ( xSI->supportsService( u"com.sun.star.form.component.FileControl"_ustr ) )
                     pEditWidget->FileSelect = true;
 
                 // maximum text length
@@ -646,7 +646,7 @@ namespace toolkitform
             {
                 vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
-                if( ! (xModelProps->getPropertyValue("ButtonType") >>= eButtonType) )
+                if( ! (xModelProps->getPropertyValue(u"ButtonType"_ustr) >>= eButtonType) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property ButtonType");
                 static constexpr OUString FM_PROP_TARGET_URL = u"TargetURL"_ustr;
                 if ( eButtonType == FormButtonType_SUBMIT )
@@ -659,13 +659,13 @@ namespace toolkitform
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );
-                        if ( xParentSI.is() && xParentSI->supportsService("com.sun.star.form.component.HTMLForm") )
+                        if ( xParentSI.is() && xParentSI->supportsService(u"com.sun.star.form.component.HTMLForm"_ustr) )
                         {
                             if( ! (xParentProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= pButtonWidget->URL) )
                                 SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_TARGET_URL);
                             pButtonWidget->Submit = true;
                             FormSubmitMethod eMethod = FormSubmitMethod_POST;
-                            if( ! (xParentProps->getPropertyValue("SubmitMethod") >>= eMethod) )
+                            if( ! (xParentProps->getPropertyValue(u"SubmitMethod"_ustr) >>= eMethod) )
                                 SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_TARGET_URL);
                             pButtonWidget->SubmitGet = (eMethod == FormSubmitMethod_GET);
                         }
@@ -721,7 +721,7 @@ namespace toolkitform
 
                 try
                 {
-                    xModelProps->getPropertyValue( "RefValue" ) >>= pCheckBoxWidget->OnValue;
+                    xModelProps->getPropertyValue( u"RefValue"_ustr ) >>= pCheckBoxWidget->OnValue;
                 }
                 catch(...)
                 {
@@ -729,7 +729,7 @@ namespace toolkitform
 
                 try
                 {
-                    xModelProps->getPropertyValue( "SecondaryRefValue" ) >>= pCheckBoxWidget->OffValue;
+                    xModelProps->getPropertyValue( u"SecondaryRefValue"_ustr ) >>= pCheckBoxWidget->OffValue;
                 }
                 catch(...)
                 {
@@ -748,7 +748,7 @@ namespace toolkitform
                 pRadioWidget->RadioGroup = determineRadioGroupId( xModelProps );
                 try
                 {
-                    xModelProps->getPropertyValue( "RefValue" ) >>= pRadioWidget->OnValue;
+                    xModelProps->getPropertyValue( u"RefValue"_ustr ) >>= pRadioWidget->OnValue;
                 }
                 catch(...)
                 {
@@ -756,7 +756,7 @@ namespace toolkitform
 
                 try
                 {
-                    xModelProps->getPropertyValue( "SecondaryRefValue" ) >>= pRadioWidget->OffValue;
+                    xModelProps->getPropertyValue( u"SecondaryRefValue"_ustr ) >>= pRadioWidget->OffValue;
                 }
                 catch(...)
                 {
@@ -770,11 +770,11 @@ namespace toolkitform
                 vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
-                if( ! (xModelProps->getPropertyValue( "Dropdown" ) >>= pListWidget->DropDown) )
+                if( ! (xModelProps->getPropertyValue( u"Dropdown"_ustr ) >>= pListWidget->DropDown) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property Dropdown");
 
                 // multi selection
-                if( ! (xModelProps->getPropertyValue("MultiSelection") >>= pListWidget->MultiSelect) )
+                if( ! (xModelProps->getPropertyValue(u"MultiSelection"_ustr) >>= pListWidget->MultiSelect) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property MultiSelection");
 
                 // entries
@@ -782,7 +782,7 @@ namespace toolkitform
 
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
-                if( ! (xModelProps->getPropertyValue("SelectedItems") >>= aSelectIndices) )
+                if( ! (xModelProps->getPropertyValue(u"SelectedItems"_ustr) >>= aSelectIndices) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property SelectedItems");
                 if( aSelectIndices.hasElements() )
                 {

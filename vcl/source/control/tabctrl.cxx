@@ -259,7 +259,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
     // shorten Text if needed
     if ( aSize.Width()+4 >= nMaxWidth )
     {
-        OUString aAppendStr("...");
+        OUString aAppendStr(u"..."_ustr);
         pItem->maFormatText += aAppendStr;
         do
         {

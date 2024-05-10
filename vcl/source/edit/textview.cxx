@@ -2321,7 +2321,7 @@ void TextView::ToggleComment()
             std::u16string_view sLine(sText);
             if (o3tl::trim(sLine).length() > 0)
             {
-                pEngine->ImpInsertText(TextPaM(n, nCommentPos), "' ");
+                pEngine->ImpInsertText(TextPaM(n, nCommentPos), u"' "_ustr);
                 bChanged = true;
             }
         }

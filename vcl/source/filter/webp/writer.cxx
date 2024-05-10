@@ -195,10 +195,10 @@ bool ExportWebpGraphic(SvStream& rStream, const Graphic& rGraphic,
 {
     BitmapEx bitmap = rGraphic.GetBitmapEx();
     // If lossless, neither presets nor quality matter.
-    bool lossless = pFilterConfigItem->ReadBool("Lossless", true);
+    bool lossless = pFilterConfigItem->ReadBool(u"Lossless"_ustr, true);
     // Preset is WebPPreset values.
-    const OUString preset = pFilterConfigItem->ReadString("Preset", "");
-    int quality = pFilterConfigItem->ReadInt32("Quality", 75);
+    const OUString preset = pFilterConfigItem->ReadString(u"Preset"_ustr, u""_ustr);
+    int quality = pFilterConfigItem->ReadInt32(u"Quality"_ustr, 75);
     return writeWebp(rStream, bitmap, lossless, preset, quality);
 }
 

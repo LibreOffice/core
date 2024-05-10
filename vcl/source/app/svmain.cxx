@@ -371,7 +371,7 @@ bool InitVCL()
         if (!aLocaleString.isEmpty())
         {
             MsLangId::getSystemUILanguage(); //call this now to pin what the system UI really was
-            OUString envVar("LANGUAGE");
+            OUString envVar(u"LANGUAGE"_ustr);
             osl_setEnvironment(envVar.pData, aLocaleString.pData);
         }
     }

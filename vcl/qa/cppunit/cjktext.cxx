@@ -135,7 +135,7 @@ void VclCjkTextTest::testVerticalText()
         OUString fontName = OUString::fromUtf8(ptrfontName);
         if (!device->IsFontAvailable(fontName))
             continue;
-        baseFont = vcl::Font(fontName, "Book", Size(0, 36));
+        baseFont = vcl::Font(fontName, u"Book"_ustr, Size(0, 36));
         baseFont.SetLanguage(LANGUAGE_JAPANESE);
         baseFont.SetVertical(true);
         baseFont.SetOrientation(2700_deg10);
@@ -157,7 +157,7 @@ void VclCjkTextTest::testVerticalText()
     device->Erase();
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
-    exportDevice("vertical-text-36.png", device);
+    exportDevice(u"vertical-text-36.png"_ustr, device);
     // Height of U+30E8 with font 36 size should be roughly 28 pixels,
     // but since we don't know which font will be used, allow even more range.
     tools::Long height36 = getCharacterRightSideHeight(device, Point(99, 22));
@@ -172,7 +172,7 @@ void VclCjkTextTest::testVerticalText()
     device->Erase();
     device->SetFont(font);
     device->DrawText(Point(10, 10), text);
-    exportDevice("vertical-text-36-0deg.png", device);
+    exportDevice(u"vertical-text-36-0deg.png"_ustr, device);
     // Here width and height should be the same, since the glyphs actually
     // not rotated compared to the vertical writing.
     tools::Long height36Rotated = getCharacterRightSideHeight(device, Point(99, 35));
@@ -185,7 +185,7 @@ void VclCjkTextTest::testVerticalText()
     device->Erase();
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
-    exportDevice("vertical-text-72.png", device);
+    exportDevice(u"vertical-text-72.png"_ustr, device);
     // Font size is doubled, so pixel sizes should also roughly double.
     tools::Long height72 = getCharacterRightSideHeight(device, Point(99, 35));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 * 2, height72, 4);
@@ -197,7 +197,7 @@ void VclCjkTextTest::testVerticalText()
     device->Erase();
     device->SetFont(font);
     device->DrawText(Point(10, 10), text);
-    exportDevice("vertical-text-72-0deg.png", device);
+    exportDevice(u"vertical-text-72-0deg.png"_ustr, device);
     tools::Long height72Rotated = getCharacterRightSideHeight(device, Point(99, 60));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height72, height72Rotated, 1);
     tools::Long width72Rotated = getCharacterTopWidth(device, Point(45, 0));
@@ -219,7 +219,7 @@ void VclCjkTextTest::testVerticalText()
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
     // Double "width" with vertical text makes the height doubled.
-    exportDevice("vertical-text-36-200pct.png", device);
+    exportDevice(u"vertical-text-36-200pct.png"_ustr, device);
     tools::Long height36pct200 = getCharacterRightSideHeight(device, Point(99, 35));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 * 2, height36pct200, 4);
     tools::Long width36pct200 = getCharacterTopWidth(device, Point(65, 0));
@@ -234,7 +234,7 @@ void VclCjkTextTest::testVerticalText()
     device->Erase();
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
-    exportDevice("vertical-text-36-50pct.png", device);
+    exportDevice(u"vertical-text-36-50pct.png"_ustr, device);
     tools::Long height36pct50 = getCharacterRightSideHeight(device, Point(99, 16));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 / 2, height36pct50, 2);
     tools::Long width36pct50 = getCharacterTopWidth(device, Point(65, 0));

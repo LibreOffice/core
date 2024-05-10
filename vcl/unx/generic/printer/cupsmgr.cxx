@@ -532,7 +532,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     if( ! pNewParser )
     {
         // get the default PPD
-        pNewParser = PPDParser::getParser( "SGENPRT" );
+        pNewParser = PPDParser::getParser( u"SGENPRT"_ustr );
         SAL_INFO("vcl.unx.print", "Parsing default SGENPRT PPD" );
 
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
@@ -713,19 +713,19 @@ namespace
     };
 
     RTSPWDialog::RTSPWDialog(weld::Window* pParent, std::string_view rServer, std::string_view rUserName)
-        : GenericDialogController(pParent, "vcl/ui/cupspassworddialog.ui", "CUPSPasswordDialog")
-        , m_xText(m_xBuilder->weld_label("text"))
-        , m_xDomainLabel(m_xBuilder->weld_label("label3"))
-        , m_xDomainEdit(m_xBuilder->weld_entry("domain"))
-        , m_xUserLabel(m_xBuilder->weld_label("label1"))
-        , m_xUserEdit(m_xBuilder->weld_entry("user"))
-        , m_xPassLabel(m_xBuilder->weld_label("label2"))
-        , m_xPassEdit(m_xBuilder->weld_entry("pass"))
+        : GenericDialogController(pParent, u"vcl/ui/cupspassworddialog.ui"_ustr, u"CUPSPasswordDialog"_ustr)
+        , m_xText(m_xBuilder->weld_label(u"text"_ustr))
+        , m_xDomainLabel(m_xBuilder->weld_label(u"label3"_ustr))
+        , m_xDomainEdit(m_xBuilder->weld_entry(u"domain"_ustr))
+        , m_xUserLabel(m_xBuilder->weld_label(u"label1"_ustr))
+        , m_xUserEdit(m_xBuilder->weld_entry(u"user"_ustr))
+        , m_xPassLabel(m_xBuilder->weld_label(u"label2"_ustr))
+        , m_xPassEdit(m_xBuilder->weld_entry(u"pass"_ustr))
     {
         OUString aText(m_xText->get_label());
         aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
         m_xText->set_label(aText);
-        m_xDomainEdit->set_text("WORKGROUP");
+        m_xDomainEdit->set_text(u"WORKGROUP"_ustr);
         if (rUserName.empty())
             m_xUserEdit->grab_focus();
         else

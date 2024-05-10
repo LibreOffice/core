@@ -151,7 +151,7 @@ Any SAL_CALL FontIdentificator::getMaterial()
 // XServiceInfo
 OUString SAL_CALL FontIdentificator::getImplementationName()
 {
-    return "vcl::FontIdentificator";
+    return u"vcl::FontIdentificator"_ustr;
 }
 
 sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rService
 
 Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.FontIdentificator" };
+    return { u"com.sun.star.awt.FontIdentificator"_ustr };
 }
 
 } // namespace vcl

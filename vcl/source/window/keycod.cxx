@@ -66,7 +66,7 @@ vcl::KeyCode::KeyCode( KeyFuncType eFunction )
 OUString vcl::KeyCode::GetName() const
 {
     vcl::Window* pWindow = ImplGetDefaultWindow();
-    return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
+    return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : u""_ustr;
 }
 
 KeyFuncType vcl::KeyCode::GetFunction() const

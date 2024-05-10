@@ -2449,7 +2449,7 @@ void MessageDialog::create_message_area()
             pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
-            pBtn->set_id("ok");
+            pBtn->set_id(u"ok"_ustr);
             add_button(pBtn, RET_OK, true);
             nDefaultResponse = RET_OK;
             break;
@@ -2457,7 +2457,7 @@ void MessageDialog::create_message_area()
             pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
-            pBtn->set_id("close");
+            pBtn->set_id(u"close"_ustr);
             add_button(pBtn, RET_CLOSE, true);
             nDefaultResponse = RET_CLOSE;
             break;
@@ -2465,7 +2465,7 @@ void MessageDialog::create_message_area()
             pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
-            pBtn->set_id("cancel");
+            pBtn->set_id(u"cancel"_ustr);
             add_button(pBtn, RET_CANCEL, true);
             nDefaultResponse = RET_CANCEL;
             break;
@@ -2473,25 +2473,25 @@ void MessageDialog::create_message_area()
             pBtn = VclPtr<PushButton>::Create(pButtonBox);
             pBtn->SetText(GetStandardText(StandardButtonType::Yes));
             pBtn->Show();
-            pBtn->set_id("yes");
+            pBtn->set_id(u"yes"_ustr);
             add_button(pBtn, RET_YES, true);
 
             pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
             pBtn->SetText(GetStandardText(StandardButtonType::No));
             pBtn->Show();
-            pBtn->set_id("no");
+            pBtn->set_id(u"no"_ustr);
             add_button(pBtn, RET_NO, true);
             nDefaultResponse = RET_NO;
             break;
         case VclButtonsType::OkCancel:
             pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
             pBtn->Show();
-            pBtn->set_id("ok");
+            pBtn->set_id(u"ok"_ustr);
             add_button(pBtn, RET_OK, true);
 
             pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
             pBtn->Show();
-            pBtn->set_id("cancel");
+            pBtn->set_id(u"cancel"_ustr);
             add_button(pBtn, RET_CANCEL, true);
             nDefaultResponse = RET_CANCEL;
             break;

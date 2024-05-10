@@ -662,7 +662,7 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
             std::make_pair("rectangle"_ostr, aRect.toString())
         };
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
+        pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
     }
 }
 
@@ -708,13 +708,13 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
             }
             aItems.emplace_back("size", GetSizePixel().toString());
-            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
+            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)
         {
             if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
             {
-                pNotifier->notifyWindow(GetLOKWindowId(), "close");
+                pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
                 ReleaseLOKNotifier();
             }
         }

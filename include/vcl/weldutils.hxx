@@ -68,12 +68,12 @@ public:
     // css::awt::XWindow
     void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
     {
-        throw css::uno::RuntimeException("not implemented");
+        throw css::uno::RuntimeException(u"not implemented"_ustr);
     }
 
     css::awt::Rectangle SAL_CALL getPosSize() override
     {
-        throw css::uno::RuntimeException("not implemented");
+        throw css::uno::RuntimeException(u"not implemented"_ustr);
     }
 
     void SAL_CALL setVisible(sal_Bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }

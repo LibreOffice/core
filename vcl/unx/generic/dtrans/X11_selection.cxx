@@ -364,29 +364,29 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
     XSynchronize( m_pDisplay, True );
 #endif
     // special targets
-    m_nTARGETSAtom      = getAtom( "TARGETS" );
-    m_nTIMESTAMPAtom    = getAtom( "TIMESTAMP" );
-    m_nTEXTAtom         = getAtom( "TEXT" );
-    m_nINCRAtom         = getAtom( "INCR" );
-    m_nCOMPOUNDAtom     = getAtom( "COMPOUND_TEXT" );
-    m_nMULTIPLEAtom     = getAtom( "MULTIPLE" );
-    m_nImageBmpAtom     = getAtom( "image/bmp" );
+    m_nTARGETSAtom      = getAtom( u"TARGETS"_ustr );
+    m_nTIMESTAMPAtom    = getAtom( u"TIMESTAMP"_ustr );
+    m_nTEXTAtom         = getAtom( u"TEXT"_ustr );
+    m_nINCRAtom         = getAtom( u"INCR"_ustr );
+    m_nCOMPOUNDAtom     = getAtom( u"COMPOUND_TEXT"_ustr );
+    m_nMULTIPLEAtom     = getAtom( u"MULTIPLE"_ustr );
+    m_nImageBmpAtom     = getAtom( u"image/bmp"_ustr );
 
     // Atoms for Xdnd protocol
-    m_nXdndAware        = getAtom( "XdndAware" );
-    m_nXdndEnter        = getAtom( "XdndEnter" );
-    m_nXdndLeave        = getAtom( "XdndLeave" );
-    m_nXdndPosition     = getAtom( "XdndPosition" );
-    m_nXdndStatus       = getAtom( "XdndStatus" );
-    m_nXdndDrop         = getAtom( "XdndDrop" );
-    m_nXdndFinished     = getAtom( "XdndFinished" );
-    m_nXdndSelection    = getAtom( "XdndSelection" );
-    m_nXdndTypeList     = getAtom( "XdndTypeList" );
-    m_nXdndProxy        = getAtom( "XdndProxy" );
-    m_nXdndActionCopy   = getAtom( "XdndActionCopy" );
-    m_nXdndActionMove   = getAtom( "XdndActionMove" );
-    m_nXdndActionLink   = getAtom( "XdndActionLink" );
-    m_nXdndActionAsk    = getAtom( "XdndActionAsk" );
+    m_nXdndAware        = getAtom( u"XdndAware"_ustr );
+    m_nXdndEnter        = getAtom( u"XdndEnter"_ustr );
+    m_nXdndLeave        = getAtom( u"XdndLeave"_ustr );
+    m_nXdndPosition     = getAtom( u"XdndPosition"_ustr );
+    m_nXdndStatus       = getAtom( u"XdndStatus"_ustr );
+    m_nXdndDrop         = getAtom( u"XdndDrop"_ustr );
+    m_nXdndFinished     = getAtom( u"XdndFinished"_ustr );
+    m_nXdndSelection    = getAtom( u"XdndSelection"_ustr );
+    m_nXdndTypeList     = getAtom( u"XdndTypeList"_ustr );
+    m_nXdndProxy        = getAtom( u"XdndProxy"_ustr );
+    m_nXdndActionCopy   = getAtom( u"XdndActionCopy"_ustr );
+    m_nXdndActionMove   = getAtom( u"XdndActionMove"_ustr );
+    m_nXdndActionLink   = getAtom( u"XdndActionLink"_ustr );
+    m_nXdndActionAsk    = getAtom( u"XdndActionAsk"_ustr );
 
     // initialize map with member none
     m_aAtomToString[ 0 ]= "None";
@@ -825,7 +825,7 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
             rOutTypeList.push_front( XA_STRING );
             rOutTypeList.push_front( m_nCOMPOUNDAtom );
         }
-        convertTypeToNative( "text/plain;charset=utf-8", targetselection, nFormat, rOutTypeList, true );
+        convertTypeToNative( u"text/plain;charset=utf-8"_ustr, targetselection, nFormat, rOutTypeList, true );
     }
     if( targetselection != m_nXdndSelection )
         rOutTypeList.push_back( m_nMULTIPLEAtom );
@@ -4141,7 +4141,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.XdndSupport";
+    return u"com.sun.star.datatransfer.dnd.XdndSupport"_ustr;
 }
 
 sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )

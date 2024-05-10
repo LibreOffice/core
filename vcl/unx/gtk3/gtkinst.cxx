@@ -247,7 +247,7 @@ void GtkInstance::EnsureInit()
 #ifdef GTK_TOOLKIT_NAME
     pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
 #else
-    pSVData->maAppData.mxToolkitName = OUString("gtk3");
+    pSVData->maAppData.mxToolkitName = u"gtk3"_ustr;
 #endif
 
     bNeedsInit = false;
@@ -991,12 +991,12 @@ public:
 
 OUString VclGtkClipboard::getImplementationName()
 {
-    return "com.sun.star.datatransfer.VclGtkClipboard";
+    return u"com.sun.star.datatransfer.VclGtkClipboard"_ustr;
 }
 
 Sequence< OUString > VclGtkClipboard::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    Sequence<OUString> aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
     return aRet;
 }
 
@@ -1552,7 +1552,7 @@ void VclGtkClipboard::setContents(
 
 OUString VclGtkClipboard::getName()
 {
-    return (m_eSelection == SELECTION_CLIPBOARD) ? OUString("CLIPBOARD") : OUString("PRIMARY");
+    return (m_eSelection == SELECTION_CLIPBOARD) ? u"CLIPBOARD"_ustr : u"PRIMARY"_ustr;
 }
 
 sal_Int8 VclGtkClipboard::getRenderingCapabilities()
@@ -1584,7 +1584,7 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
         sel = "CLIPBOARD";
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
-            "bad GtkInstance::CreateClipboard arguments",
+            u"bad GtkInstance::CreateClipboard arguments"_ustr,
             css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
@@ -1612,7 +1612,7 @@ GtkInstDropTarget::GtkInstDropTarget()
 
 OUString SAL_CALL GtkInstDropTarget::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclGtkDropTarget";
+    return u"com.sun.star.datatransfer.dnd.VclGtkDropTarget"_ustr;
 }
 
 sal_Bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
@@ -1622,7 +1622,7 @@ sal_Bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL GtkInstDropTarget::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDropTarget" };
+    Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDropTarget"_ustr };
     return aRet;
 }
 
@@ -1642,7 +1642,7 @@ void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
-        throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
+        throw RuntimeException(u"DropTarget::initialize: Cannot install window event handler"_ustr,
                                getXWeak());
     }
 
@@ -1651,7 +1651,7 @@ void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
 
     if (!nFrame)
     {
-        throw RuntimeException("DropTarget::initialize: missing SalFrame",
+        throw RuntimeException(u"DropTarget::initialize: missing SalFrame"_ustr,
                                getXWeak());
     }
 
@@ -1778,7 +1778,7 @@ void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rAr
 {
     if (rArguments.getLength() < 2)
     {
-        throw RuntimeException("DragSource::initialize: Cannot install window event handler",
+        throw RuntimeException(u"DragSource::initialize: Cannot install window event handler"_ustr,
                                getXWeak());
     }
 
@@ -1787,7 +1787,7 @@ void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rAr
 
     if (!nFrame)
     {
-        throw RuntimeException("DragSource::initialize: missing SalFrame",
+        throw RuntimeException(u"DragSource::initialize: missing SalFrame"_ustr,
                                getXWeak());
     }
 
@@ -1797,7 +1797,7 @@ void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rAr
 
 OUString SAL_CALL GtkInstDragSource::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclGtkDragSource";
+    return u"com.sun.star.datatransfer.dnd.VclGtkDragSource"_ustr;
 }
 
 sal_Bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
@@ -1807,7 +1807,7 @@ sal_Bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDragSource" };
+    Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDragSource"_ustr };
     return aRet;
 }
 
@@ -4893,7 +4893,7 @@ namespace
 
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
-            "Compression", sal_Int32(1)) };
+            u"Compression"_ustr, sal_Int32(1)) };
         auto aBitmapEx = aImage.GetBitmapEx();
         vcl::PngImageWriter aWriter(aMemStm);
         aWriter.setParameters(aFilterData);
@@ -4920,7 +4920,7 @@ namespace
 
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
-            "Compression", sal_Int32(1)) };
+            u"Compression"_ustr, sal_Int32(1)) };
         auto aBitmapEx = aImage.GetBitmapEx();
         vcl::PngImageWriter aWriter(*pStream);
         aWriter.setParameters(aFilterData);
@@ -7532,7 +7532,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
 #endif
-        ::set_buildable_id(GTK_BUILDABLE(m_pBack), "previous");
+        ::set_buildable_id(GTK_BUILDABLE(m_pBack), u"previous"_ustr);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack));
 #else
@@ -7543,7 +7543,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
 #endif
-        ::set_buildable_id(GTK_BUILDABLE(m_pNext), "next");
+        ::set_buildable_id(GTK_BUILDABLE(m_pNext), u"next"_ustr);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext));
 #else
@@ -7564,7 +7564,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
 #endif
-        ::set_buildable_id(GTK_BUILDABLE(m_pFinish), "finish");
+        ::set_buildable_id(GTK_BUILDABLE(m_pFinish), u"finish"_ustr);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish));
 #else
@@ -8948,7 +8948,7 @@ private:
         disable_notify_events();
 
         GtkWidget *pTabWidget = gtk_fixed_new();
-        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), "useless");
+        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), u"useless"_ustr);
 
         GtkWidget *pChild = gtk_grid_new();
         gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
@@ -14421,7 +14421,7 @@ private:
             if (!bRet)
             {
                 GtkTreeIter subiter;
-                OUString sDummy("<dummy>");
+                OUString sDummy(u"<dummy>"_ustr);
                 insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr);
             }
             m_aExpandingPlaceHolderParents.erase(pPlaceHolderPath);
@@ -15187,7 +15187,7 @@ public:
         if (bChildrenOnDemand)
         {
             GtkTreeIter subiter;
-            OUString sDummy("<dummy>");
+            OUString sDummy(u"<dummy>"_ustr);
             insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr);
         }
         if (pRet)
@@ -16242,7 +16242,7 @@ public:
         if (bChildrenOnDemand && !bPlaceHolder)
         {
             GtkTreeIter subiter;
-            OUString sDummy("<dummy>");
+            OUString sDummy(u"<dummy>"_ustr);
             insert_row(subiter, &rGtkIter.iter, -1, nullptr, &sDummy, nullptr, nullptr);
         }
         else if (!bChildrenOnDemand && bPlaceHolder)
@@ -21913,7 +21913,7 @@ private:
         }
 
         if (m_nMRUCount && !nMRUCount)
-            insert_separator_including_mru(m_nMRUCount, "separator");
+            insert_separator_including_mru(m_nMRUCount, u"separator"_ustr);
         else if (!m_nMRUCount && nMRUCount)
             remove_including_mru(m_nMRUCount);  // remove separator
     }
@@ -22844,7 +22844,7 @@ public:
         while (nIndex >= 0);
 
         if (nMRUCount && !m_nMRUCount)
-            insert_separator_including_mru(nMRUCount, "separator");
+            insert_separator_including_mru(nMRUCount, u"separator"_ustr);
         else if (!nMRUCount && m_nMRUCount)
             remove_including_mru(m_nMRUCount);  // remove separator
 
@@ -24200,7 +24200,7 @@ public:
         OUString sPageHelpId;
         // check to see if there is a notebook called tabcontrol and get the
         // helpid for the current page of that
-        std::unique_ptr<weld::Notebook> xNotebook(weld_notebook("tabcontrol"));
+        std::unique_ptr<weld::Notebook> xNotebook(weld_notebook(u"tabcontrol"_ustr));
         if (xNotebook)
         {
             if (GtkInstanceContainer* pPage = dynamic_cast<GtkInstanceContainer*>(xNotebook->get_page(xNotebook->get_current_page_ident())))

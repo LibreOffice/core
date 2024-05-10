@@ -45,7 +45,7 @@ public:
 
     virtual void DeInit() override;
 
-    virtual OUString getRenderBackendName() const override { return "skia"; }
+    virtual OUString getRenderBackendName() const override { return u"skia"_ustr; }
 
     const vcl::Region& getClipRegion() const;
     virtual void setClipRegion(const vcl::Region&) override;

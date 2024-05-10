@@ -29,8 +29,8 @@
 
 static OUString getCustomizedUIRootDir()
 {
-    OUString sShareLayer("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
-        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/");
+    OUString sShareLayer(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
+        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/"_ustr);
     rtl::Bootstrap::expandMacros(sShareLayer);
     return sShareLayer;
 }
@@ -106,7 +106,7 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
         int i = 0;
         do
         {
-            OUString aName = "ContextContainer";
+            OUString aName = u"ContextContainer"_ustr;
             if (i)
                 aName += OUString::number(i);
 

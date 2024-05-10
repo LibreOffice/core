@@ -1692,7 +1692,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         }
 
         comphelper::SequenceAsHashMap aMap(pFConfigItem->GetFilterData());
-        auto it = aMap.find("EmbedEMF");
+        auto it = aMap.find(u"EmbedEMF"_ustr);
         if (it != aMap.end())
         {
             it->second >>= bEmbedEMF;

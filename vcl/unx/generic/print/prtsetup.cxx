@@ -68,14 +68,14 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
  */
 
 RTSDialog::RTSDialog(const PrinterInfo& rJobData, weld::Window* pParent)
-    : GenericDialogController(pParent, "vcl/ui/printerpropertiesdialog.ui", "PrinterPropertiesDialog")
+    : GenericDialogController(pParent, u"vcl/ui/printerpropertiesdialog.ui"_ustr, u"PrinterPropertiesDialog"_ustr)
     , m_aJobData(rJobData)
     , m_bDataModified(false)
-    , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
-    , m_xPaperPage(new RTSPaperPage(m_xTabControl->get_page("paper"), this))
-    , m_xDevicePage(new RTSDevicePage(m_xTabControl->get_page("device"), this))
+    , m_xTabControl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancelButton(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xPaperPage(new RTSPaperPage(m_xTabControl->get_page(u"paper"_ustr), this))
+    , m_xDevicePage(new RTSDevicePage(m_xTabControl->get_page(u"device"_ustr), this))
 {
     OUString aTitle(m_xDialog->get_title());
     m_xDialog->set_title(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
@@ -127,18 +127,18 @@ IMPL_LINK( RTSDialog, ClickButton, weld::Button&, rButton, void )
  */
 
 RTSPaperPage::RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog)
-    : m_xBuilder(Application::CreateBuilder(pPage, "vcl/ui/printerpaperpage.ui"))
+    : m_xBuilder(Application::CreateBuilder(pPage, u"vcl/ui/printerpaperpage.ui"_ustr))
     , m_pParent(pDialog)
-    , m_xContainer(m_xBuilder->weld_widget("PrinterPaperPage"))
-    , m_xCbFromSetup(m_xBuilder->weld_check_button("papersizefromsetup"))
-    , m_xPaperText(m_xBuilder->weld_label("paperft"))
-    , m_xPaperBox(m_xBuilder->weld_combo_box("paperlb"))
-    , m_xOrientText(m_xBuilder->weld_label("orientft"))
-    , m_xOrientBox(m_xBuilder->weld_combo_box("orientlb"))
-    , m_xDuplexText(m_xBuilder->weld_label("duplexft"))
-    , m_xDuplexBox(m_xBuilder->weld_combo_box("duplexlb"))
-    , m_xSlotText(m_xBuilder->weld_label("slotft"))
-    , m_xSlotBox(m_xBuilder->weld_combo_box("slotlb"))
+    , m_xContainer(m_xBuilder->weld_widget(u"PrinterPaperPage"_ustr))
+    , m_xCbFromSetup(m_xBuilder->weld_check_button(u"papersizefromsetup"_ustr))
+    , m_xPaperText(m_xBuilder->weld_label(u"paperft"_ustr))
+    , m_xPaperBox(m_xBuilder->weld_combo_box(u"paperlb"_ustr))
+    , m_xOrientText(m_xBuilder->weld_label(u"orientft"_ustr))
+    , m_xOrientBox(m_xBuilder->weld_combo_box(u"orientlb"_ustr))
+    , m_xDuplexText(m_xBuilder->weld_label(u"duplexft"_ustr))
+    , m_xDuplexBox(m_xBuilder->weld_combo_box(u"duplexlb"_ustr))
+    , m_xSlotText(m_xBuilder->weld_label(u"slotft"_ustr))
+    , m_xSlotBox(m_xBuilder->weld_combo_box(u"slotlb"_ustr))
 {
     //PrinterPaperPage
     m_xPaperBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
@@ -163,7 +163,7 @@ void RTSPaperPage::update()
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "Duplex" )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( u"Duplex"_ustr )) )
     {
         m_pParent->insertAllPPDValues( *m_xDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -175,7 +175,7 @@ void RTSPaperPage::update()
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "PageSize" )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( u"PageSize"_ustr )) )
     {
         m_pParent->insertAllPPDValues( *m_xPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -187,7 +187,7 @@ void RTSPaperPage::update()
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "InputSlot" )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( u"InputSlot"_ustr )) )
     {
         m_pParent->insertAllPPDValues( *m_xSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -221,17 +221,17 @@ IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBox&, rBox, void )
     if( &rBox == m_xPaperBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( "PageSize" );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( u"PageSize"_ustr );
     }
     else if( &rBox == m_xDuplexBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( "Duplex" );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( u"Duplex"_ustr );
     }
     else if( &rBox == m_xSlotBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( "InputSlot" );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( u"InputSlot"_ustr );
     }
     else if( &rBox == m_xOrientBox.get() )
     {
@@ -262,15 +262,15 @@ IMPL_LINK_NOARG(RTSPaperPage, CheckBoxHdl, weld::Toggleable&, void)
  * RTSDevicePage
  */
 RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
-    : m_xBuilder(Application::CreateBuilder(pPage, "vcl/ui/printerdevicepage.ui"))
+    : m_xBuilder(Application::CreateBuilder(pPage, u"vcl/ui/printerdevicepage.ui"_ustr))
     , m_pCustomValue(nullptr)
     , m_pParent(pParent)
-    , m_xContainer(m_xBuilder->weld_widget("PrinterDevicePage"))
-    , m_xPPDKeyBox(m_xBuilder->weld_tree_view("options"))
-    , m_xPPDValueBox(m_xBuilder->weld_tree_view("values"))
-    , m_xCustomEdit(m_xBuilder->weld_entry("custom"))
-    , m_xSpaceBox(m_xBuilder->weld_combo_box("colorspace"))
-    , m_xDepthBox(m_xBuilder->weld_combo_box("colordepth"))
+    , m_xContainer(m_xBuilder->weld_widget(u"PrinterDevicePage"_ustr))
+    , m_xPPDKeyBox(m_xBuilder->weld_tree_view(u"options"_ustr))
+    , m_xPPDValueBox(m_xBuilder->weld_tree_view(u"values"_ustr))
+    , m_xCustomEdit(m_xBuilder->weld_entry(u"custom"_ustr))
+    , m_xSpaceBox(m_xBuilder->weld_combo_box(u"colorspace"_ustr))
+    , m_xDepthBox(m_xBuilder->weld_combo_box(u"colordepth"_ustr))
     , m_aReselectCustomIdle("RTSDevicePage m_aReselectCustomIdle")
 {
     m_aReselectCustomIdle.SetInvokeHandler(LINK(this, RTSDevicePage, ImplHandleReselectHdl));

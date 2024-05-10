@@ -35,11 +35,11 @@ namespace
 OUString lcl_ConvertCharEscapement(sal_Int16 nEscapement)
 {
     if (nEscapement > 0)
-        return "super";
+        return u"super"_ustr;
     if (nEscapement < 0)
-        return "sub";
+        return u"sub"_ustr;
 
-    return "baseline";
+    return u"baseline"_ustr;
 }
 
 OUString lcl_ConverCharStrikeout(sal_Int16 nStrikeout)
@@ -92,24 +92,24 @@ OUString lcl_ConverCharStrikeout(sal_Int16 nStrikeout)
 OUString lcl_convertFontWeight(double fontWeight)
 {
     if (fontWeight == css::awt::FontWeight::THIN || fontWeight == css::awt::FontWeight::ULTRALIGHT)
-        return "100";
+        return u"100"_ustr;
     if (fontWeight == css::awt::FontWeight::LIGHT)
-        return "200";
+        return u"200"_ustr;
     if (fontWeight == css::awt::FontWeight::SEMILIGHT)
-        return "300";
+        return u"300"_ustr;
     if (fontWeight == css::awt::FontWeight::NORMAL)
-        return "normal";
+        return u"normal"_ustr;
     if (fontWeight == css::awt::FontWeight::SEMIBOLD)
-        return "500";
+        return u"500"_ustr;
     if (fontWeight == css::awt::FontWeight::BOLD)
-        return "bold";
+        return u"bold"_ustr;
     if (fontWeight == css::awt::FontWeight::ULTRABOLD)
-        return "800";
+        return u"800"_ustr;
     if (fontWeight == css::awt::FontWeight::BLACK)
-        return "900";
+        return u"900"_ustr;
 
     // awt::FontWeight::DONTKNOW || fontWeight == awt::FontWeight::NORMAL
-    return "normal";
+    return u"normal"_ustr;
 }
 
 OUString lcl_ConvertFontSlant(css::awt::FontSlant eFontSlant)
@@ -117,17 +117,17 @@ OUString lcl_ConvertFontSlant(css::awt::FontSlant eFontSlant)
     switch (eFontSlant)
     {
         case css::awt::FontSlant::FontSlant_NONE:
-            return "normal";
+            return u"normal"_ustr;
         case css::awt::FontSlant::FontSlant_OBLIQUE:
         case css::awt::FontSlant::FontSlant_REVERSE_OBLIQUE:
-            return "oblique";
+            return u"oblique"_ustr;
         case css::awt::FontSlant::FontSlant_ITALIC:
         case css::awt::FontSlant::FontSlant_REVERSE_ITALIC:
-            return "italic";
+            return u"italic"_ustr;
         case css::awt::FontSlant::FontSlant_DONTKNOW:
         case css::awt::FontSlant::FontSlant_MAKE_FIXED_SIZE:
         default:
-            return "";
+            return u""_ustr;
     }
 }
 

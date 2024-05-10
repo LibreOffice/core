@@ -165,7 +165,7 @@ class PngFilterTest : public test::BootstrapFixture
 public:
     PngFilterTest()
         : BootstrapFixture(true, false)
-        , maDataUrl("/vcl/qa/cppunit/png/data/")
+        , maDataUrl(u"/vcl/qa/cppunit/png/data/"_ustr)
     {
     }
 
@@ -198,7 +198,7 @@ public:
 
 void PngFilterTest::testPng()
 {
-    for (const OUString& aFileName : { OUString("rect-1bit-pal.png") })
+    for (const OUString& aFileName : { u"rect-1bit-pal.png"_ustr })
     {
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
@@ -240,9 +240,9 @@ void PngFilterTest::testPng()
     }
 
     OUString aFilenames[] = {
-        OUString("color-rect-8bit-RGB.png"),
-        OUString("color-rect-8bit-RGB-interlaced.png"),
-        OUString("color-rect-4bit-pal.png"),
+        u"color-rect-8bit-RGB.png"_ustr,
+        u"color-rect-8bit-RGB-interlaced.png"_ustr,
+        u"color-rect-4bit-pal.png"_ustr,
     };
 
     for (const OUString& aFileName : aFilenames)
@@ -284,7 +284,7 @@ void PngFilterTest::testPng()
             }
         }
     }
-    for (const OUString& aFileName : { OUString("alpha-rect-8bit-RGBA.png") })
+    for (const OUString& aFileName : { u"alpha-rect-8bit-RGBA.png"_ustr })
     {
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
@@ -1729,20 +1729,20 @@ void PngFilterTest::testPngSuite()
     }
 
     OUString aCorruptedFilenames[] = {
-        "xs1n0g01.png", // signature byte 1 MSBit reset to zero
-        "xs2n0g01.png", // signature byte 2 is a 'Q'
-        "xs4n0g01.png", // signature byte 4 lowercase
-        "xs7n0g01.png", // 7th byte a space instead of control-Z
-        "xcrn0g04.png", // added cr bytes
-        "xlfn0g04.png", // added lf bytes
-        "xhdn0g08.png", // incorrect IHDR checksum
-        "xc1n0g08.png", // color type 1
-        "xc9n2c08.png", // color type 9
-        "xd0n2c08.png", // bit-depth 0
-        "xd3n2c08.png", // bit-depth 3
-        "xd9n2c08.png", // bit-depth 99
-        "xdtn0g01.png", // missing IDAT chunk
-        "xcsn0g01.png", // incorrect IDAT checksum
+        u"xs1n0g01.png"_ustr, // signature byte 1 MSBit reset to zero
+        u"xs2n0g01.png"_ustr, // signature byte 2 is a 'Q'
+        u"xs4n0g01.png"_ustr, // signature byte 4 lowercase
+        u"xs7n0g01.png"_ustr, // 7th byte a space instead of control-Z
+        u"xcrn0g04.png"_ustr, // added cr bytes
+        u"xlfn0g04.png"_ustr, // added lf bytes
+        u"xhdn0g08.png"_ustr, // incorrect IHDR checksum
+        u"xc1n0g08.png"_ustr, // color type 1
+        u"xc9n2c08.png"_ustr, // color type 9
+        u"xd0n2c08.png"_ustr, // bit-depth 0
+        u"xd3n2c08.png"_ustr, // bit-depth 3
+        u"xd9n2c08.png"_ustr, // bit-depth 99
+        u"xdtn0g01.png"_ustr, // missing IDAT chunk
+        u"xcsn0g01.png"_ustr, // incorrect IDAT checksum
     };
 
     for (const auto& aFilename : aCorruptedFilenames)

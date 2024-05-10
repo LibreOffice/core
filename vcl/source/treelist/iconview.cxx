@@ -262,7 +262,7 @@ static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
     SvMemoryStream aOStm(65535, 65535);
     // Use fastest compression "1"
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("Compression", sal_Int32(1)),
+        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
     };
     vcl::PngImageWriter aPNGWriter(aOStm);
     aPNGWriter.setParameters(aFilterData);

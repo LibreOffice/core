@@ -479,7 +479,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     catch (const css::uno::Exception &rExcept)
     {
         TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << sUIDir << sUIFile);
-        CrashReporter::addKeyValue("VclBuilderException", "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
+        CrashReporter::addKeyValue(u"VclBuilderException"_ustr, "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
         assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
         throw;
     }
@@ -796,7 +796,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
     if (bHideHelp)
     {
-        if (vcl::Window *pHelpButton = get("help"))
+        if (vcl::Window *pHelpButton = get(u"help"_ustr))
             pHelpButton->Hide();
     }
 }
@@ -829,7 +829,7 @@ namespace
     bool extractHasFrame(VclBuilder::stringmap& rMap)
     {
         bool bHasFrame = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("has-frame");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"has-frame"_ustr);
         if (aFind != rMap.end())
         {
             bHasFrame = toBool(aFind->second);
@@ -841,7 +841,7 @@ namespace
     bool extractDrawValue(VclBuilder::stringmap& rMap)
     {
         bool bDrawValue = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("draw-value");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"draw-value"_ustr);
         if (aFind != rMap.end())
         {
             bDrawValue = toBool(aFind->second);
@@ -853,7 +853,7 @@ namespace
     OUString extractPopupMenu(VclBuilder::stringmap& rMap)
     {
         OUString sRet;
-        VclBuilder::stringmap::iterator aFind = rMap.find("popup");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"popup"_ustr);
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -865,7 +865,7 @@ namespace
     OUString extractWidgetName(VclBuilder::stringmap& rMap)
     {
         OUString sRet;
-        VclBuilder::stringmap::iterator aFind = rMap.find("name");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"name"_ustr);
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -876,8 +876,8 @@ namespace
 
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
-        OUString sRet("top");
-        VclBuilder::stringmap::iterator aFind = rMap.find("value-pos");
+        OUString sRet(u"top"_ustr);
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"value-pos"_ustr);
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -888,8 +888,8 @@ namespace
 
     OUString extractTypeHint(VclBuilder::stringmap &rMap)
     {
-        OUString sRet("normal");
-        VclBuilder::stringmap::iterator aFind = rMap.find("type-hint");
+        OUString sRet(u"normal"_ustr);
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"type-hint"_ustr);
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -901,7 +901,7 @@ namespace
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("resizable");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"resizable"_ustr);
         if (aFind != rMap.end())
         {
             bResizable = toBool(aFind->second);
@@ -914,7 +914,7 @@ namespace
     bool extractModal(VclBuilder::stringmap &rMap)
     {
         bool bModal = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("modal");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"modal"_ustr);
         if (aFind != rMap.end())
         {
             bModal = toBool(aFind->second);
@@ -927,7 +927,7 @@ namespace
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
         bool bDecorated = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("decorated");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"decorated"_ustr);
         if (aFind != rMap.end())
         {
             bDecorated = toBool(aFind->second);
@@ -939,7 +939,7 @@ namespace
     bool extractCloseable(VclBuilder::stringmap &rMap)
     {
         bool bCloseable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("deletable");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"deletable"_ustr);
         if (aFind != rMap.end())
         {
             bCloseable = toBool(aFind->second);
@@ -951,7 +951,7 @@ namespace
     bool extractEntry(VclBuilder::stringmap &rMap)
     {
         bool bHasEntry = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("has-entry");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"has-entry"_ustr);
         if (aFind != rMap.end())
         {
             bHasEntry = toBool(aFind->second);
@@ -963,7 +963,7 @@ namespace
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("orientation");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"orientation"_ustr);
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
@@ -975,7 +975,7 @@ namespace
     bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("tab-pos");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"tab-pos"_ustr);
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCase("left") ||
@@ -988,7 +988,7 @@ namespace
     bool extractVerticalTabsWithIcons(VclBuilder::stringmap &rMap)
     {
         bool bWithIcons = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("group-name");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"group-name"_ustr);
         if (aFind != rMap.end())
         {
             bWithIcons = aFind->second.equalsIgnoreAsciiCase("icons");
@@ -1000,7 +1000,7 @@ namespace
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("inconsistent");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"inconsistent"_ustr);
         if (aFind != rMap.end())
         {
             bInconsistent = toBool(aFind->second);
@@ -1014,7 +1014,7 @@ namespace
         OUString sIconName;
         // allow pixbuf, but prefer icon-name
         {
-            VclBuilder::stringmap::iterator aFind = rMap.find("pixbuf");
+            VclBuilder::stringmap::iterator aFind = rMap.find(u"pixbuf"_ustr);
             if (aFind != rMap.end())
             {
                 sIconName = aFind->second;
@@ -1022,7 +1022,7 @@ namespace
             }
         }
         {
-            VclBuilder::stringmap::iterator aFind = rMap.find("icon-name");
+            VclBuilder::stringmap::iterator aFind = rMap.find(u"icon-name"_ustr);
             if (aFind != rMap.end())
             {
                 sIconName = aFind->second;
@@ -1038,7 +1038,7 @@ namespace
     WinBits extractRelief(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK;
-        VclBuilder::stringmap::iterator aFind = rMap.find("relief");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"relief"_ustr);
         if (aFind != rMap.end())
         {
             assert(aFind->second != "half" && "relief of 'half' unsupported");
@@ -1052,7 +1052,7 @@ namespace
     OUString extractLabel(VclBuilder::stringmap &rMap)
     {
         OUString sType;
-        VclBuilder::stringmap::iterator aFind = rMap.find("label");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"label"_ustr);
         if (aFind != rMap.end())
         {
             sType = aFind->second;
@@ -1064,7 +1064,7 @@ namespace
     OUString extractActionName(VclBuilder::stringmap &rMap)
     {
         OUString sActionName;
-        VclBuilder::stringmap::iterator aFind = rMap.find("action-name");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"action-name"_ustr);
         if (aFind != rMap.end())
         {
             sActionName = aFind->second;
@@ -1076,7 +1076,7 @@ namespace
     bool extractVisible(VclBuilder::stringmap &rMap)
     {
         bool bRet = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("visible");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"visible"_ustr);
         if (aFind != rMap.end())
         {
             bRet = toBool(aFind->second);
@@ -1087,15 +1087,15 @@ namespace
 
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
     {
-        OUString sWidthRequest("0");
-        OUString sHeightRequest("0");
-        VclBuilder::stringmap::iterator aFind = rMap.find("width-request");
+        OUString sWidthRequest(u"0"_ustr);
+        OUString sHeightRequest(u"0"_ustr);
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"width-request"_ustr);
         if (aFind != rMap.end())
         {
             sWidthRequest = aFind->second;
             rMap.erase(aFind);
         }
-        aFind = rMap.find("height-request");
+        aFind = rMap.find(u"height-request"_ustr);
         if (aFind != rMap.end())
         {
             sHeightRequest = aFind->second;
@@ -1107,9 +1107,9 @@ namespace
     OUString extractTooltipText(VclBuilder::stringmap &rMap)
     {
         OUString sTooltipText;
-        VclBuilder::stringmap::iterator aFind = rMap.find("tooltip-text");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"tooltip-text"_ustr);
         if (aFind == rMap.end())
-            aFind = rMap.find("tooltip-markup");
+            aFind = rMap.find(u"tooltip-markup"_ustr);
         if (aFind != rMap.end())
         {
             sTooltipText = aFind->second;
@@ -1121,7 +1121,7 @@ namespace
     float extractAlignment(VclBuilder::stringmap &rMap)
     {
         float f = 0.0;
-        VclBuilder::stringmap::iterator aFind = rMap.find("alignment");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"alignment"_ustr);
         if (aFind != rMap.end())
         {
             f = aFind->second.toFloat();
@@ -1133,7 +1133,7 @@ namespace
     OUString extractTitle(VclBuilder::stringmap &rMap)
     {
         OUString sTitle;
-        VclBuilder::stringmap::iterator aFind = rMap.find("title");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"title"_ustr);
         if (aFind != rMap.end())
         {
             sTitle = aFind->second;
@@ -1145,7 +1145,7 @@ namespace
     bool extractHeadersVisible(VclBuilder::stringmap &rMap)
     {
         bool bHeadersVisible = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("headers-visible");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"headers-visible"_ustr);
         if (aFind != rMap.end())
         {
             bHeadersVisible = toBool(aFind->second);
@@ -1157,7 +1157,7 @@ namespace
     bool extractSortIndicator(VclBuilder::stringmap &rMap)
     {
         bool bSortIndicator = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("sort-indicator");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"sort-indicator"_ustr);
         if (aFind != rMap.end())
         {
             bSortIndicator = toBool(aFind->second);
@@ -1169,7 +1169,7 @@ namespace
     bool extractClickable(VclBuilder::stringmap &rMap)
     {
         bool bClickable = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("clickable");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"clickable"_ustr);
         if (aFind != rMap.end())
         {
             bClickable = toBool(aFind->second);
@@ -1259,7 +1259,7 @@ namespace
 
 void VclBuilder::extractGroup(const OUString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("group");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"group"_ustr);
     if (aFind != rMap.end())
     {
         OUString sID = aFind->second;
@@ -1285,7 +1285,7 @@ void VclBuilder::connectFormattedFormatterAdjustment(const OUString &id, const O
 
 bool VclBuilder::extractAdjustmentToMap(const OUString& id, VclBuilder::stringmap& rMap, std::vector<WidgetAdjustmentMap>& rAdjustmentMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("adjustment");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"adjustment"_ustr);
     if (aFind != rMap.end())
     {
         rAdjustmentMap.emplace_back(id, aFind->second);
@@ -1300,7 +1300,7 @@ namespace
     sal_Int32 extractActive(VclBuilder::stringmap &rMap)
     {
         sal_Int32 nActiveId = 0;
-        VclBuilder::stringmap::iterator aFind = rMap.find("active");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"active"_ustr);
         if (aFind != rMap.end())
         {
             nActiveId = aFind->second.toInt32();
@@ -1312,7 +1312,7 @@ namespace
     bool extractSelectable(VclBuilder::stringmap &rMap)
     {
         bool bSelectable = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("selectable");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"selectable"_ustr);
         if (aFind != rMap.end())
         {
             bSelectable = toBool(aFind->second);
@@ -1324,7 +1324,7 @@ namespace
     OUString extractAdjustment(VclBuilder::stringmap &rMap)
     {
         OUString sAdjustment;
-        VclBuilder::stringmap::iterator aFind = rMap.find("adjustment");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"adjustment"_ustr);
         if (aFind != rMap.end())
         {
             sAdjustment= aFind->second;
@@ -1337,7 +1337,7 @@ namespace
     bool extractDrawIndicator(VclBuilder::stringmap &rMap)
     {
         bool bDrawIndicator = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find("draw-indicator");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"draw-indicator"_ustr);
         if (aFind != rMap.end())
         {
             bDrawIndicator = toBool(aFind->second);
@@ -1349,7 +1349,7 @@ namespace
 
 void VclBuilder::extractModel(const OUString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("model");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"model"_ustr);
     if (aFind != rMap.end())
     {
         m_pParserState->m_aModelMaps.emplace_back(id, aFind->second,
@@ -1360,7 +1360,7 @@ void VclBuilder::extractModel(const OUString &id, stringmap &rMap)
 
 void VclBuilder::extractBuffer(const OUString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("buffer");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"buffer"_ustr);
     if (aFind != rMap.end())
     {
         m_pParserState->m_aTextBufferMaps.emplace_back(id, aFind->second);
@@ -1371,7 +1371,7 @@ void VclBuilder::extractBuffer(const OUString &id, stringmap &rMap)
 int VclBuilder::getImageSize(const stringmap &rMap)
 {
     int nSize = 4;
-    auto aFind = rMap.find("icon-size");
+    auto aFind = rMap.find(u"icon-size"_ustr);
     if (aFind != rMap.end())
         nSize = aFind->second.toInt32();
     return nSize;
@@ -1379,7 +1379,7 @@ int VclBuilder::getImageSize(const stringmap &rMap)
 
 void VclBuilder::extractButtonImage(const OUString &id, stringmap &rMap, bool bRadio)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("image");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"image"_ustr);
     if (aFind != rMap.end())
     {
         m_pParserState->m_aButtonImageWidgetMaps.emplace_back(id, aFind->second, bRadio);
@@ -1389,7 +1389,7 @@ void VclBuilder::extractButtonImage(const OUString &id, stringmap &rMap, bool bR
 
 void VclBuilder::extractMnemonicWidget(const OUString &rLabelID, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find("mnemonic-widget");
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"mnemonic-widget"_ustr);
     if (aFind != rMap.end())
     {
         OUString sID = aFind->second;
@@ -1423,9 +1423,9 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 {
     //remove the redundant scrolling parent
     sal_Int32 nWidthReq = pScrollParent->get_width_request();
-    rMap["width-request"] = OUString::number(nWidthReq);
+    rMap[u"width-request"_ustr] = OUString::number(nWidthReq);
     sal_Int32 nHeightReq = pScrollParent->get_height_request();
-    rMap["height-request"] = OUString::number(nHeightReq);
+    rMap[u"height-request"_ustr] = OUString::number(nHeightReq);
 
     m_pParserState->m_aRedundantParentWidgets[pScrollParent] = pWindow;
 }
@@ -1529,7 +1529,7 @@ namespace
 // Takes a string like "sfxlo-NotebookbarToolBox"
 VclBuilder::customMakeWidget GetCustomMakeWidget(const OUString& rName)
 {
-    const OUString name = rName == "sfxlo-SidebarToolBox" ? "sfxlo-NotebookbarToolBox" : rName;
+    const OUString name = rName == "sfxlo-SidebarToolBox" ? u"sfxlo-NotebookbarToolBox"_ustr : rName;
     VclBuilder::customMakeWidget pFunction = nullptr;
     if (sal_Int32 nDelim = name.indexOf('-'); nDelim != -1)
     {
@@ -1884,7 +1884,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkIconView")
     {
-        assert(rMap.find("model") != rMap.end() && "GtkIconView must have a model");
+        assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkIconView must have a model");
 
         //window we want to apply the packing props for this GtkIconView to
         VclPtr<vcl::Window> xWindowForPackingProps;
@@ -1907,7 +1907,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     {
         if (!m_bLegacy)
         {
-            assert(rMap.find("model") != rMap.end() && "GtkTreeView must have a model");
+            assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkTreeView must have a model");
         }
 
         //window we want to apply the packing props for this GtkTreeView to
@@ -2022,7 +2022,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         //full screen windows
         if (!pParent)
         {
-            rMap["visible"] = "false";
+            rMap[u"visible"_ustr] = "false";
         }
     }
     else if (name == "GtkSeparator")
@@ -2115,7 +2115,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if(name == "NotebookBarAddonsToolMergePoint")
     {
-        customMakeWidget pFunction = GetCustomMakeWidget("sfxlo-NotebookbarToolBox");
+        customMakeWidget pFunction = GetCustomMakeWidget(u"sfxlo-NotebookbarToolBox"_ustr);
         if(pFunction != nullptr)
             NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, pFunction, m_xFrame, *m_pNotebookBarAddonsItem, rMap);
         return nullptr;
@@ -2288,7 +2288,7 @@ namespace BuilderUtils
     OUString extractCustomProperty(VclBuilder::stringmap &rMap)
     {
         OUString sCustomProperty;
-        VclBuilder::stringmap::iterator aFind = rMap.find("customproperty");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"customproperty"_ustr);
         if (aFind != rMap.end())
         {
             sCustomProperty = aFind->second;
@@ -2299,7 +2299,7 @@ namespace BuilderUtils
 
     void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
     {
-        OUString sWidthChars("width-chars");
+        OUString sWidthChars(u"width-chars"_ustr);
         VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
         if (aFind == rMap.end())
             rMap[sWidthChars] = "20";
@@ -2308,7 +2308,7 @@ namespace BuilderUtils
     bool extractDropdown(VclBuilder::stringmap &rMap)
     {
         bool bDropdown = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("dropdown");
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"dropdown"_ustr);
         if (aFind != rMap.end())
         {
             bDropdown = toBool(aFind->second);
@@ -2541,7 +2541,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OUStrin
         // tdf#119827 handle size before scale so we can trivially
         // scale on the current font size whether size is present
         // or not.
-        VclBuilder::stringmap::iterator aSize = rPango.find("size");
+        VclBuilder::stringmap::iterator aSize = rPango.find(u"size"_ustr);
         if (aSize != rPango.end())
         {
             pCurrentChild->set_font_attribute(aSize->first, aSize->second);
@@ -2599,7 +2599,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                         {
-                            aProperties["customproperty"] = sID.copy(nDelim + 1);
+                            aProperties[u"customproperty"_ustr] = sID.copy(nDelim + 1);
                             sID = sID.copy(0, nDelim);
                         }
                         sIDs.push_back(sID);
@@ -2638,7 +2638,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
         static_cast<VerticalTabControl*>(pParent) : nullptr;
     assert(pTabControl || pVerticalTabControl);
-    VclBuilder::stringmap::iterator aFind = aProperties.find("label");
+    VclBuilder::stringmap::iterator aFind = aProperties.find(u"label"_ustr);
     if (aFind != aProperties.end())
     {
         OUString sTooltip(extractTooltipText(aProperties));
@@ -2960,7 +2960,7 @@ void BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringma
     }
 
     if (!sProperty.isEmpty())
-        rMap["role"] = sProperty;
+        rMap[u"role"_ustr] = sProperty;
 }
 
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OUString &rID)
@@ -3339,7 +3339,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
     accelmap aAccelerators;
 
     if (!sCustomProperty.isEmpty())
-        aProperties["customproperty"] = sCustomProperty;
+        aProperties[u"customproperty"_ustr] = sCustomProperty;
 
     while(true)
     {
@@ -3656,7 +3656,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     std::vector<ComboBoxTextItem> aItems;
 
     if (!sCustomProperty.isEmpty())
-        aProperties["customproperty"] = sCustomProperty;
+        aProperties[u"customproperty"_ustr] = sCustomProperty;
 
     VclPtr<vcl::Window> pCurrentChild;
     while(true)

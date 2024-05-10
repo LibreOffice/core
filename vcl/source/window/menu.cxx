@@ -84,7 +84,7 @@ static bool ImplAccelDisabled()
     {
         OUString aStr =
             vcl::SettingsConfigItem::get()->
-            getValue( "Menu", "SuppressAccelerators" );
+            getValue( u"Menu"_ustr, u"SuppressAccelerators"_ustr );
         nAccelDisabled = aStr.equalsIgnoreAsciiCase("true") ? 1 : 0;
     }
     return nAccelDisabled == 1;

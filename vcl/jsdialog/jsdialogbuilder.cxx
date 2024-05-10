@@ -439,7 +439,7 @@ void JSDropTarget::setDefaultActions(sal_Int8 /*actions*/) {}
 
 OUString JSDropTarget::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.JSDropTarget";
+    return u"com.sun.star.datatransfer.dnd.JSDropTarget"_ustr;
 }
 
 sal_Bool JSDropTarget::supportsService(OUString const& ServiceName)
@@ -449,7 +449,7 @@ sal_Bool JSDropTarget::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.JSDropTarget" };
+    css::uno::Sequence<OUString> aRet{ u"com.sun.star.datatransfer.dnd.JSDropTarget"_ustr };
     return aRet;
 }
 
@@ -495,7 +495,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("dialog")
+    , m_sTypeOfJSON(u"dialog"_ustr)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -529,7 +529,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_nWindowId(nLOKWindowId)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("sidebar")
+    , m_sTypeOfJSON(u"sidebar"_ustr)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -573,7 +573,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("notebookbar")
+    , m_sTypeOfJSON(u"notebookbar"_ustr)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -604,7 +604,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_nWindowId(nLOKWindowId)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("formulabar")
+    , m_sTypeOfJSON(u"formulabar"_ustr)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -663,7 +663,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
     // tab page closed -> refresh parent window
     if (m_bIsNestedBuilder && m_sTypeOfJSON == "dialog")
     {
-        jsdialog::SendFullUpdate(OUString::number(m_nWindowId), "__DIALOG__");
+        jsdialog::SendFullUpdate(OUString::number(m_nWindowId), u"__DIALOG__"_ustr);
     }
 
     if (m_sTypeOfJSON == "popup")
@@ -838,7 +838,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
 
         pRet.reset(new JSDialog(this, pDialog, this, false));
 
-        RememberWidget("__DIALOG__", pRet.get());
+        RememberWidget(u"__DIALOG__"_ustr, pRet.get());
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         m_bSentInitialUpdate = true;
@@ -866,7 +866,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
 
         pRet.reset(new JSAssistant(this, pDialog, this, false));
 
-        RememberWidget("__DIALOG__", pRet.get());
+        RememberWidget(u"__DIALOG__"_ustr, pRet.get());
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         m_bSentInitialUpdate = true;
@@ -899,7 +899,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
     pRet.reset(pMessageDialog ? new JSMessageDialog(this, pMessageDialog, this, false) : nullptr);
 
     if (pRet)
-        RememberWidget("__DIALOG__", pRet.get());
+        RememberWidget(u"__DIALOG__"_ustr, pRet.get());
 
     return pRet;
 }
@@ -1223,7 +1223,7 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OUString& i
     }
 
     if (pWeldWidget)
-        RememberWidget("__POPOVER__", pWeldWidget.get());
+        RememberWidget(u"__POPOVER__"_ustr, pWeldWidget.get());
 
     return pWeldWidget;
 }
@@ -1800,7 +1800,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
                                  bool bTakeOwnership)
     : JSWidget<SalInstanceMessageDialog, ::MessageDialog>(nullptr, pDialog, pBuilder,
                                                           bTakeOwnership)
-    , m_pOwnedSender(new JSDialogSender(pDialog, pDialog, "dialog"))
+    , m_pOwnedSender(new JSDialogSender(pDialog, pDialog, u"dialog"_ustr))
 {
     m_pSender = m_pOwnedSender.get();
 
@@ -2318,7 +2318,7 @@ void JSPopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRe
                               weld::Placement ePlace)
 {
     SalInstancePopover::popup_at_rect(pParent, rRect, ePlace);
-    sendPopup(getWidget()->GetChild(0), "_POPOVER_", "_POPOVER_");
+    sendPopup(getWidget()->GetChild(0), u"_POPOVER_"_ustr, u"_POPOVER_"_ustr);
 }
 
 void JSPopover::popdown()

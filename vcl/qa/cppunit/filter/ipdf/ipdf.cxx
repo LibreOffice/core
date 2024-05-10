@@ -35,7 +35,7 @@ private:
 
 public:
     VclFilterIpdfTest()
-        : UnoApiTest("/vcl/qa/cppunit/filter/ipdf/data/")
+        : UnoApiTest(u"/vcl/qa/cppunit/filter/ipdf/data/"_ustr)
     {
     }
 
@@ -49,7 +49,7 @@ public:
 void VclFilterIpdfTest::setUp()
 {
     UnoApiTest::setUp();
-    MacrosTest::setUpX509(m_directories, "vcl_filter_ipdf");
+    MacrosTest::setUpX509(m_directories, u"vcl_filter_ipdf"_ustr);
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
@@ -65,9 +65,10 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     createTempCopy(u"add-visible-signature-last-page.pdf");
 
     // Open it.
-    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.drawing.DrawingDocument", aArgs);
+        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.drawing.DrawingDocument"_ustr, aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -76,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     // Add a signature line to the 2nd page.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     xShape->setPosition(awt::Point(1000, 15000));
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);

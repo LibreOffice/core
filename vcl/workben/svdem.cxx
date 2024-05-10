@@ -51,7 +51,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
         if( !xServiceManager.is() )
-            Application::Abort( "Failed to bootstrap" );
+            Application::Abort( u"Failed to bootstrap"_ustr );
 
         comphelper::setProcessServiceFactory( xServiceManager );
 
@@ -91,7 +91,7 @@ public:
 void Main()
 {
     ScopedVclPtrInstance< MyWin > aMainWin( nullptr, WB_APP | WB_STDWORK );
-    aMainWin->SetText("VCL - Workbench");
+    aMainWin->SetText(u"VCL - Workbench"_ustr);
     aMainWin->Show();
 
     Application::Execute();

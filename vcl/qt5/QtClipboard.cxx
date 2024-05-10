@@ -189,11 +189,14 @@ void QtClipboard::handleChanged(QClipboard::Mode aMode)
         listener->changedContents(aEv);
 }
 
-OUString QtClipboard::getImplementationName() { return "com.sun.star.datatransfer.QtClipboard"; }
+OUString QtClipboard::getImplementationName()
+{
+    return u"com.sun.star.datatransfer.QtClipboard"_ustr;
+}
 
 css::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
 }
 
 sal_Bool QtClipboard::supportsService(const OUString& ServiceName)

@@ -72,9 +72,9 @@ void ManagedMenuButton::PrepareExecute()
     {}
 
     css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::Any(comphelper::makePropertyValue("ModuleIdentifier", aModuleName)),
-        css::uno::Any(comphelper::makePropertyValue("Frame", css::uno::Any(xFrame))),
-        css::uno::Any(comphelper::makePropertyValue("InToolbar", css::uno::Any(true)))
+        css::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, aModuleName)),
+        css::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, css::uno::Any(xFrame))),
+        css::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, css::uno::Any(true)))
     };
 
     const OUString aCommand(GetCommand());
@@ -91,7 +91,7 @@ void ManagedMenuButton::PrepareExecute()
     // No registered controller found, use one the can handle arbitrary menus (e.g. defined in .ui file).
     if (!m_xPopupController.is())
         m_xPopupController.set(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);
 
     if (m_xPopupController.is())
         m_xPopupController->setPopupMenu(m_xPopupMenu);

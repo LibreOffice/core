@@ -34,12 +34,12 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_invalid_softbreak)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
-    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+    device->SetFont(vcl::Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 11)));
 
     vcl::DefaultTextLayout aTextLayout(*device);
 
     const OUString sTestStr = u"textline_ text_"_ustr;
-    const auto nTextWidth = device->GetTextWidth("text");
+    const auto nTextWidth = device->GetTextWidth(u"text"_ustr);
 
     css::uno::Reference<css::linguistic2::XHyphenator> xHyph;
     css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
@@ -59,12 +59,12 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphens)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
-    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+    device->SetFont(vcl::Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 11)));
 
     vcl::DefaultTextLayout aTextLayout(*device);
 
     const OUString sTestStr = u"textline text-moretext"_ustr;
-    const auto nTextWidth = device->GetTextWidth("textline text-moretex");
+    const auto nTextWidth = device->GetTextWidth(u"textline text-moretex"_ustr);
 
     css::uno::Reference<css::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());
@@ -85,12 +85,12 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphen_word_under_two_cha
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
-    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+    device->SetFont(vcl::Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 11)));
 
     vcl::DefaultTextLayout aTextLayout(*device);
 
     const OUString sTestStr = u"textline text-moretext"_ustr;
-    const auto nTextWidth = device->GetTextWidth("te-moretex");
+    const auto nTextWidth = device->GetTextWidth(u"te-moretex"_ustr);
 
     css::uno::Reference<css::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());

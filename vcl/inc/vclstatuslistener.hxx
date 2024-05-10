@@ -61,7 +61,7 @@ void VclStatusListener<T>::startListening()
     if (!xDispatchProvider.is())
         return;
 
-    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, "", 0);
+    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, u""_ustr, 0);
     if (mxDispatch.is())
         mxDispatch->addStatusListener(this, maCommandURL);
 }

@@ -34,13 +34,13 @@ StringMap TreeListUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectionCount"] = OUString::number(mxTreeList->GetSelectionCount());
-    aMap["VisibleCount"] = OUString::number(mxTreeList->GetVisibleCount());
-    aMap["Children"] = OUString::number(mxTreeList->GetChildCount(nullptr));
-    aMap["LevelChildren"] = OUString::number(mxTreeList->GetLevelChildCount(nullptr));
-    aMap["CheckBoxList"] = OUString::boolean(isCheckBoxList(mxTreeList));
+    aMap[u"SelectionCount"_ustr] = OUString::number(mxTreeList->GetSelectionCount());
+    aMap[u"VisibleCount"_ustr] = OUString::number(mxTreeList->GetVisibleCount());
+    aMap[u"Children"_ustr] = OUString::number(mxTreeList->GetChildCount(nullptr));
+    aMap[u"LevelChildren"_ustr] = OUString::number(mxTreeList->GetLevelChildCount(nullptr));
+    aMap[u"CheckBoxList"_ustr] = OUString::boolean(isCheckBoxList(mxTreeList));
     SvTreeListEntry* pEntry = mxTreeList->FirstSelected();
-    aMap["SelectEntryText"] = pEntry ? mxTreeList->GetEntryText(pEntry) : OUString();
+    aMap[u"SelectEntryText"_ustr] = pEntry ? mxTreeList->GetEntryText(pEntry) : OUString();
 
     return aMap;
 }
@@ -96,7 +96,7 @@ std::set<OUString> TreeListUIObject::get_children() const
 
 OUString TreeListUIObject::get_name() const
 {
-    return "TreeListUIObject";
+    return u"TreeListUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> TreeListUIObject::create(vcl::Window* pWindow)
@@ -130,16 +130,16 @@ StringMap TreeListEntryUIObject::get_state()
 
     StringMap aMap;
 
-    aMap["Text"] = mxTreeList->GetEntryText(pEntry);
-    aMap["Children"] = OUString::number(mxTreeList->GetLevelChildCount(pEntry));
-    aMap["VisibleChildCount"] = OUString::number(mxTreeList->GetVisibleChildCount(pEntry));
-    aMap["IsSelected"] = OUString::boolean(mxTreeList->IsSelected(pEntry));
+    aMap[u"Text"_ustr] = mxTreeList->GetEntryText(pEntry);
+    aMap[u"Children"_ustr] = OUString::number(mxTreeList->GetLevelChildCount(pEntry));
+    aMap[u"VisibleChildCount"_ustr] = OUString::number(mxTreeList->GetVisibleChildCount(pEntry));
+    aMap[u"IsSelected"_ustr] = OUString::boolean(mxTreeList->IsSelected(pEntry));
 
-    aMap["IsSemiTransparent"] = OUString::boolean(bool(pEntry->GetFlags() & SvTLEntryFlags::SEMITRANSPARENT));
+    aMap[u"IsSemiTransparent"_ustr] = OUString::boolean(bool(pEntry->GetFlags() & SvTLEntryFlags::SEMITRANSPARENT));
 
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
     if (pItem)
-        aMap["IsChecked"] = OUString::boolean(pItem->IsStateChecked());
+        aMap[u"IsChecked"_ustr] = OUString::boolean(pItem->IsStateChecked());
 
     return aMap;
 }
@@ -214,7 +214,7 @@ std::set<OUString> TreeListEntryUIObject::get_children() const
 
 OUString TreeListEntryUIObject::get_type() const
 {
-    return "TreeListEntry";
+    return u"TreeListEntry"_ustr;
 }
 
 bool TreeListEntryUIObject::equals(const UIObject& rOther) const

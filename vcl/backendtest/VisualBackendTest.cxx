@@ -830,7 +830,7 @@ public:
         {
             ScopedVclPtrInstance<VisualBackendTestWindow> aMainWindow;
 
-            aMainWindow->SetText("VCL Test");
+            aMainWindow->SetText(u"VCL Test"_ustr);
             aMainWindow->Show();
 
             Application::Execute();
@@ -857,7 +857,7 @@ protected:
             uno::Reference<lang::XMultiServiceFactory> xMSF(xComponentContext->getServiceManager(), uno::UNO_QUERY);
 
             if (!xMSF.is())
-                Application::Abort("Bootstrap failure - no service manager");
+                Application::Abort(u"Bootstrap failure - no service manager"_ustr);
 
             comphelper::setProcessServiceFactory(xMSF);
         }

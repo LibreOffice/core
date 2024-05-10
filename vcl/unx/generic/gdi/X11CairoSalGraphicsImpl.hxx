@@ -35,7 +35,7 @@ public:
 
     void Init() override;
 
-    OUString getRenderBackendName() const override { return "gen"; }
+    OUString getRenderBackendName() const override { return u"gen"_ustr; }
 
     // get the depth of the device
     sal_uInt16 GetBitCount() const override { return mrParent.GetVisual().GetDepth(); }

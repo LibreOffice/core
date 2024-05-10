@@ -1668,11 +1668,11 @@ void SalInstanceWindow::change_default_widget(weld::Widget* pOld, weld::Widget* 
     SalInstanceWidget* pVclOld = dynamic_cast<SalInstanceWidget*>(pOld);
     vcl::Window* pWidgetOld = pVclOld ? pVclOld->getWidget() : nullptr;
     if (pWidgetOld)
-        pWidgetOld->set_property("has-default", OUString::boolean(false));
+        pWidgetOld->set_property(u"has-default"_ustr, OUString::boolean(false));
     else
         recursively_unset_default_buttons();
     if (pWidgetNew)
-        pWidgetNew->set_property("has-default", OUString::boolean(true));
+        pWidgetNew->set_property(u"has-default"_ustr, OUString::boolean(true));
 }
 
 bool SalInstanceWindow::is_default_widget(const weld::Widget* pCandidate) const
@@ -1894,19 +1894,19 @@ void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const O
     switch (nResponse)
     {
         case RET_OK:
-            xButton->set_id("ok");
+            xButton->set_id(u"ok"_ustr);
             break;
         case RET_CLOSE:
-            xButton->set_id("close");
+            xButton->set_id(u"close"_ustr);
             break;
         case RET_CANCEL:
-            xButton->set_id("cancel");
+            xButton->set_id(u"cancel"_ustr);
             break;
         case RET_YES:
-            xButton->set_id("yes");
+            xButton->set_id(u"yes"_ustr);
             break;
         case RET_NO:
-            xButton->set_id("no");
+            xButton->set_id(u"no"_ustr);
             break;
     }
 
@@ -1943,7 +1943,7 @@ IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt,
 
         aMenu->InsertItem(nLocalID, VclResId(SV_BUTTONTEXT_SCREENSHOT));
         aMenu->SetHelpText(nLocalID, VclResId(SV_HELPTEXT_SCREENSHOT));
-        aMenu->SetHelpId(nLocalID, "InteractiveScreenshotMode");
+        aMenu->SetHelpId(nLocalID, u"InteractiveScreenshotMode"_ustr);
         aMenu->EnableItem(nLocalID);
 
         const sal_uInt16 nId(aMenu->Execute(m_xDialog, aMenuPos));
@@ -2716,7 +2716,7 @@ void SalInstanceNotebook::set_tab_label_text(const OUString& rIdent, const OUStr
 
 void SalInstanceNotebook::set_show_tabs(bool bShow)
 {
-    m_xNotebook->set_property("show-tabs", OUString::boolean(bShow));
+    m_xNotebook->set_property(u"show-tabs"_ustr, OUString::boolean(bShow));
 }
 
 SalInstanceNotebook::~SalInstanceNotebook()
@@ -2812,7 +2812,7 @@ void SalInstanceVerticalNotebook::insert_page(const OUString& rIdent, const OUSt
     VclPtrInstance<VclGrid> xGrid(m_xNotebook->GetPageParent());
     xGrid->set_hexpand(true);
     xGrid->set_vexpand(true);
-    m_xNotebook->InsertPage(rIdent, rLabel, Image(), "", xGrid, nPos);
+    m_xNotebook->InsertPage(rIdent, rLabel, Image(), u""_ustr, xGrid, nPos);
 
     if (nPos != -1)
     {
@@ -3674,7 +3674,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
         pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
 
     if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
-        AddStringItem(pEntry, "", -1);
+        AddStringItem(pEntry, u""_ustr, -1);
 
     if (pIconName || pImageSurface)
     {
@@ -3700,7 +3700,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
     if (bChildrenOnDemand)
     {
         SvTreeListEntry* pPlaceHolder
-            = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            = m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, false, 0, nullptr);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
         pViewData->SetSelectable(false);
     }
@@ -3796,7 +3796,7 @@ void SalInstanceTreeView::set_toggle(SvTreeListEntry* pEntry, TriState eState, i
 
     // blank out missing entries
     for (int i = pEntry->ItemCount(); i < col; ++i)
-        AddStringItem(pEntry, "", i - 1);
+        AddStringItem(pEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
@@ -4051,7 +4051,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
     {
         aVclIter.iter = new SvTreeListEntry;
         if (bHasAutoCheckButton)
-            AddStringItem(aVclIter.iter, "", -1);
+            AddStringItem(aVclIter.iter, u""_ustr, -1);
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
         func(aVclIter, i);
@@ -4263,7 +4263,7 @@ void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rTex
 
     // blank out missing entries
     for (int i = pEntry->ItemCount(); i < col; ++i)
-        AddStringItem(pEntry, "", i - 1);
+        AddStringItem(pEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
@@ -4507,7 +4507,7 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
 
     // blank out missing entries
     for (int i = pEntry->ItemCount(); i < col; ++i)
-        AddStringItem(pEntry, "", i - 1);
+        AddStringItem(pEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
@@ -4801,7 +4801,7 @@ void SalInstanceTreeView::set_children_on_demand(const weld::TreeIter& rIter,
 
     if (bChildrenOnDemand && !pPlaceHolder)
     {
-        pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", rVclIter.iter, false, 0, nullptr);
+        pPlaceHolder = m_xTreeView->InsertEntry(u"<dummy>"_ustr, rVclIter.iter, false, 0, nullptr);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
         pViewData->SetSelectable(false);
     }
@@ -5113,7 +5113,7 @@ void SalInstanceTreeView::vadjustment_set_value(int nValue)
 
 void SalInstanceTreeView::set_show_expanders(bool bShow)
 {
-    m_xTreeView->set_property("show-expanders", OUString::boolean(bShow));
+    m_xTreeView->set_property(u"show-expanders"_ustr, OUString::boolean(bShow));
 }
 
 bool SalInstanceTreeView::changed_by_hover() const { return m_xTreeView->IsSelectDueToHover(); }
@@ -5353,7 +5353,7 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
         //expand disallowed, restore placeholder
         if (!bRet)
         {
-            pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            pPlaceHolder = m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, false, 0, nullptr);
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
             pViewData->SetSelectable(false);
         }
@@ -7406,7 +7406,7 @@ std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()
 
 OUString SalInstanceBuilder::get_current_page_help_id() const
 {
-    vcl::Window* pCtrl = m_xBuilder->get("tabcontrol");
+    vcl::Window* pCtrl = m_xBuilder->get(u"tabcontrol"_ustr);
     if (!pCtrl)
         return {};
     VclPtr<vcl::Window> xTabPage;

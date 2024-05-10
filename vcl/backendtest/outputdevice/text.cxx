@@ -22,12 +22,12 @@ Bitmap OutputDeviceTestText::setupTextBitmap()
     tools::Long midX = (maVDRectangle.Right() - maVDRectangle.Left()) / 2.0;
     tools::Long midY = (maVDRectangle.Bottom() - maVDRectangle.Top()) / 2.0;
 
-    vcl::Font Font("DejaVu Sans", "Book", Size(0, 10));
+    vcl::Font Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 10));
 
     mpVirtualDevice->Erase();
     mpVirtualDevice->SetFont(Font);
     mpVirtualDevice->SetTextColor(COL_LIGHTRED);
-    mpVirtualDevice->DrawText(Point(midX, midY - midY / 2), "I");
+    mpVirtualDevice->DrawText(Point(midX, midY - midY / 2), u"I"_ustr);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }

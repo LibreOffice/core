@@ -493,8 +493,8 @@ int GetMinimumEditHeight()
 {
     // load this little .ui just to measure the height of an Entry
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(nullptr, "cui/ui/namedialog.ui"));
-    std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry("name_entry"));
+        Application::CreateBuilder(nullptr, u"cui/ui/namedialog.ui"_ustr));
+    std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry(u"name_entry"_ustr));
     return xEntry->get_preferred_size().Height();
 }
 
@@ -527,7 +527,7 @@ void WidgetStatusListener::startListening()
     if (!xDispatchProvider.is())
         return;
 
-    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, "", 0);
+    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, u""_ustr, 0);
     if (mxDispatch.is())
         mxDispatch->addStatusListener(this, maCommandURL);
 }

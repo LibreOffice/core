@@ -38,7 +38,7 @@ public:
 
     void freeResources() override;
 
-    OUString getRenderBackendName() const override { return "svp"; }
+    OUString getRenderBackendName() const override { return u"svp"_ustr; }
 
     void setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;

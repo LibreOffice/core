@@ -120,9 +120,9 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
     mpExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( pFilterData );
-    mbGreys = aConfigItem.ReadInt32( "ColorMode", 0 ) != 0;
-    mnQuality = aConfigItem.ReadInt32( "Quality", 75 );
-    maChromaSubsampling = aConfigItem.ReadInt32( "ChromaSubsamplingMode", 0 );
+    mbGreys = aConfigItem.ReadInt32( u"ColorMode"_ustr, 0 ) != 0;
+    mnQuality = aConfigItem.ReadInt32( u"Quality"_ustr, 75 );
+    maChromaSubsampling = aConfigItem.ReadInt32( u"ChromaSubsamplingMode"_ustr, 0 );
 
     if ( pFilterData )
     {

@@ -124,7 +124,7 @@ void BitmapFilterTest::testBlurCorrectness()
 
     if (constWriteResultBitmap)
     {
-        savePNG("~/blurBefore.png", aBitmap24Bit);
+        savePNG(u"~/blurBefore.png"_ustr, aBitmap24Bit);
     }
 
     // Perform blur
@@ -135,7 +135,7 @@ void BitmapFilterTest::testBlurCorrectness()
 
     if (constWriteResultBitmap)
     {
-        savePNG("~/blurAfter.png", aBitmap24Bit);
+        savePNG(u"~/blurAfter.png"_ustr, aBitmap24Bit);
     }
 
     // Check blurred bitmap parameters
@@ -166,21 +166,21 @@ void BitmapFilterTest::testBasicMorphology()
     BitmapEx aTransformBitmap = aOrigBitmap;
     BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(1));
     if (constWriteResultBitmap)
-        savePNG("~/Dilated1.png", aTransformBitmap);
+        savePNG(u"~/Dilated1.png"_ustr, aTransformBitmap);
     CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated1.GetChecksum(), aTransformBitmap.GetChecksum());
     BitmapFilter::Filter(aTransformBitmap, BitmapErodeFilter(1));
     if (constWriteResultBitmap)
-        savePNG("~/Dilated1Eroded1.png", aTransformBitmap);
+        savePNG(u"~/Dilated1Eroded1.png"_ustr, aTransformBitmap);
     CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated1Eroded1.GetChecksum(), aTransformBitmap.GetChecksum());
 
     aTransformBitmap = aOrigBitmap;
     BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(2));
     if (constWriteResultBitmap)
-        savePNG("~/Dilated2.png", aTransformBitmap);
+        savePNG(u"~/Dilated2.png"_ustr, aTransformBitmap);
     CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated2.GetChecksum(), aTransformBitmap.GetChecksum());
     BitmapFilter::Filter(aTransformBitmap, BitmapErodeFilter(1));
     if (constWriteResultBitmap)
-        savePNG("~/Dilated2Eroded1.png", aTransformBitmap);
+        savePNG(u"~/Dilated2Eroded1.png"_ustr, aTransformBitmap);
     CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated2Eroded1.GetChecksum(), aTransformBitmap.GetChecksum());
 }
 
@@ -218,12 +218,12 @@ void BitmapFilterTest::testPerformance()
 
     if (constWriteResultBitmap)
     {
-        std::unique_ptr<SvFileStream> pStream(
-            new SvFileStream("~/BlurBigPerformance.png", StreamMode::WRITE | StreamMode::TRUNC));
+        std::unique_ptr<SvFileStream> pStream(new SvFileStream(
+            u"~/BlurBigPerformance.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC));
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(BitmapEx(aResult), *pStream);
 
-        pStream.reset(new SvFileStream("~/BlurBigPerformance.txt", StreamMode::WRITE));
+        pStream.reset(new SvFileStream(u"~/BlurBigPerformance.txt"_ustr, StreamMode::WRITE));
         pStream->WriteOString("Blur average time: ");
         pStream->WriteOString(OString::number(
             std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()));

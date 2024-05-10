@@ -40,10 +40,10 @@ OUString getOfficePath( whichOfficePath ePath )
 {
     static const auto aPaths = [] {
         OUString sRoot, sUser, sConfig;
-        Bootstrap::get("BRAND_BASE_DIR", sRoot);
+        Bootstrap::get(u"BRAND_BASE_DIR"_ustr, sRoot);
         Bootstrap aBootstrap(sRoot + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap"));
-        aBootstrap.getFrom("UserInstallation", sUser);
-        aBootstrap.getFrom("CustomDataUrl", sConfig);
+        aBootstrap.getFrom(u"UserInstallation"_ustr, sUser);
+        aBootstrap.getFrom(u"CustomDataUrl"_ustr, sConfig);
         OUString aUPath = sUser + "/user/psprint";
         if (sRoot.startsWith("file://"))
         {

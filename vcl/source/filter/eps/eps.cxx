@@ -304,20 +304,20 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     if ( pFilterConfigItem )
     {
 #ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
-        mnPreview = pFilterConfigItem->ReadInt32( "Preview", 0 );
+        mnPreview = pFilterConfigItem->ReadInt32( u"Preview"_ustr, 0 );
 #else
         mnPreview = pFilterConfigItem->ReadInt32( "Preview", 1 );
 #endif
-        mnLevel = pFilterConfigItem->ReadInt32( "Version", 2 );
+        mnLevel = pFilterConfigItem->ReadInt32( u"Version"_ustr, 2 );
         if ( mnLevel != 1 )
             mnLevel = 2;
-        mbGrayScale = pFilterConfigItem->ReadInt32( "ColorFormat", 1 ) == 2;
+        mbGrayScale = pFilterConfigItem->ReadInt32( u"ColorFormat"_ustr, 1 ) == 2;
 #ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
-        mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 0 ) != 0;
+        mbCompression = pFilterConfigItem->ReadInt32( u"CompressionMode"_ustr, 0 ) != 0;
 #else
         mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 1 ) == 1;
 #endif
-        mnTextMode = pFilterConfigItem->ReadInt32( "TextMode", 0 );
+        mnTextMode = pFilterConfigItem->ReadInt32( u"TextMode"_ustr, 0 );
         if ( mnTextMode > 2 )
             mnTextMode = 0;
     }

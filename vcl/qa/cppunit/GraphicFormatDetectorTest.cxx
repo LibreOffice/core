@@ -86,7 +86,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
 void GraphicFormatDetectorTest::testDetectMET()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.met"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "MET");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"MET"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkMET());
@@ -95,13 +95,13 @@ void GraphicFormatDetectorTest::testDetectMET()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("MET"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"MET"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectBMP()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.bmp"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "BMP");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"BMP"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkBMP());
@@ -110,13 +110,13 @@ void GraphicFormatDetectorTest::testDetectBMP()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("BMP"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"BMP"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectWMF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.wmf"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "WMF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"WMF"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkWMF());
@@ -125,13 +125,13 @@ void GraphicFormatDetectorTest::testDetectWMF()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"WMF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectWMZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.wmz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "WMZ");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"WMZ"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkWMF());
@@ -140,13 +140,13 @@ void GraphicFormatDetectorTest::testDetectWMZ()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("WMZ"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"WMZ"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPCX()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.pcx"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "PCX");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"PCX"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkPCX());
@@ -155,13 +155,13 @@ void GraphicFormatDetectorTest::testDetectPCX()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("PCX"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"PCX"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectJPG()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.jpg"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "JPG");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"JPG"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkJPG());
@@ -170,13 +170,13 @@ void GraphicFormatDetectorTest::testDetectJPG()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("JPG"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"JPG"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPNG()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.png"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "PNG");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"PNG"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkPNG());
@@ -185,13 +185,13 @@ void GraphicFormatDetectorTest::testDetectPNG()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("PNG"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"PNG"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectAPNG()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.apng"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "APNG");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"APNG"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkAPNG());
@@ -200,13 +200,13 @@ void GraphicFormatDetectorTest::testDetectAPNG()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("APNG"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"APNG"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectGIF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.gif"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "GIF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"GIF"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkGIF());
@@ -215,13 +215,13 @@ void GraphicFormatDetectorTest::testDetectGIF()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("GIF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"GIF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPSD()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.psd"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "PSD");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"PSD"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkPSD());
@@ -230,28 +230,28 @@ void GraphicFormatDetectorTest::testDetectPSD()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("PSD"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"PSD"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectTGA()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.tga"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "TGA");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"TGA"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkTGA());
 
     aFileStream.Seek(aDetector.mnStreamPosition);
 
-    OUString rFormatExtension("TGA"); // detection is based on extension only
+    OUString rFormatExtension(u"TGA"_ustr); // detection is based on extension only
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("TGA"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"TGA"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectTIF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.tif"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "TIF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"TIF"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkTIF());
@@ -260,13 +260,13 @@ void GraphicFormatDetectorTest::testDetectTIF()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("TIF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"TIF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectXBM()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.xbm"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "XBM");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"XBM"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkXBM());
@@ -275,13 +275,13 @@ void GraphicFormatDetectorTest::testDetectXBM()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("XBM"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"XBM"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectXPM()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.xpm"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "XPM");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"XPM"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkXPM());
@@ -290,13 +290,13 @@ void GraphicFormatDetectorTest::testDetectXPM()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("XPM"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"XPM"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectSVG()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.svg"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "SVG");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"SVG"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkSVG());
@@ -305,13 +305,13 @@ void GraphicFormatDetectorTest::testDetectSVG()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("SVG"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"SVG"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectSVGZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.svgz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "SVGZ");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"SVGZ"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkSVG());
@@ -320,13 +320,13 @@ void GraphicFormatDetectorTest::testDetectSVGZ()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("SVGZ"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"SVGZ"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPDF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.pdf"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "PDF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"PDF"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkPDF());
@@ -335,13 +335,13 @@ void GraphicFormatDetectorTest::testDetectPDF()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("PDF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"PDF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectEPS()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.eps"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "EPS");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"EPS"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkEPS());
@@ -350,13 +350,13 @@ void GraphicFormatDetectorTest::testDetectEPS()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("EPS"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"EPS"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectWEBP()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.webp"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "WEBP");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"WEBP"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkWEBP());
@@ -365,13 +365,13 @@ void GraphicFormatDetectorTest::testDetectWEBP()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("WEBP"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"WEBP"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectEMF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emf"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "EMF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"EMF"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkEMF());
@@ -380,13 +380,13 @@ void GraphicFormatDetectorTest::testDetectEMF()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("EMF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"EMF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectEMZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "EMZ");
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"EMZ"_ustr);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkEMF());
@@ -395,7 +395,7 @@ void GraphicFormatDetectorTest::testDetectEMZ()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("EMZ"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(u"EMZ"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()

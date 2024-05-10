@@ -87,7 +87,7 @@ class VCLSession:
     virtual sal_Bool SAL_CALL cancelShutdown() override;
 
     OUString SAL_CALL getImplementationName() override {
-        return "com.sun.star.frame.VCLSessionManagerClient";
+        return u"com.sun.star.frame.VCLSessionManagerClient"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override {
@@ -95,7 +95,7 @@ class VCLSession:
     }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
-        return {"com.sun.star.frame.SessionManagerClient"};
+        return {u"com.sun.star.frame.SessionManagerClient"_ustr};
     }
 
     void disposing(std::unique_lock<std::mutex>& rGuard) override;

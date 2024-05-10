@@ -40,7 +40,7 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
 {
-    return "com.sun.star.datatransfer.MimeCntTypeFactory";
+    return u"com.sun.star.datatransfer.MimeCntTypeFactory"_ustr;
 }
 
 sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
@@ -50,7 +50,7 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
 
 Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
 {
-    return { "com.sun.star.datatransfer.MimeContentTypeFactory" };
+    return { u"com.sun.star.datatransfer.MimeContentTypeFactory"_ustr };
 }
 
 

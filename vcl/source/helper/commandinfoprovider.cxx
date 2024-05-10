@@ -244,30 +244,30 @@ static OUString GetCommandProperty(const OUString& rsProperty, const Sequence<be
 
 OUString GetLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    return GetCommandProperty("Name", rProperties);
+    return GetCommandProperty(u"Name"_ustr, rProperties);
 }
 
 OUString GetMenuLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
-    return GetCommandProperty("Label", rProperties);
+    return GetCommandProperty(u"Label"_ustr, rProperties);
 }
 
 OUString GetPopupLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    OUString sPopupLabel(GetCommandProperty("PopupLabel", rProperties));
+    OUString sPopupLabel(GetCommandProperty(u"PopupLabel"_ustr, rProperties));
     if (!sPopupLabel.isEmpty())
         return sPopupLabel;
-    return GetCommandProperty("Label", rProperties);
+    return GetCommandProperty(u"Label"_ustr, rProperties);
 }
 
 OUString GetTooltipLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    OUString sLabel(GetCommandProperty("TooltipLabel", rProperties));
+    OUString sLabel(GetCommandProperty(u"TooltipLabel"_ustr, rProperties));
     if (!sLabel.isEmpty())
         return sLabel;
-    return GetCommandProperty("Label", rProperties);
+    return GetCommandProperty(u"Label"_ustr, rProperties);
 }
 
 OUString GetTooltipForCommand(
@@ -275,7 +275,7 @@ OUString GetTooltipForCommand(
     const css::uno::Sequence<css::beans::PropertyValue>& rProperties,
     const Reference<frame::XFrame>& rxFrame)
 {
-    OUString sLabel(GetCommandProperty("TooltipLabel", rProperties));
+    OUString sLabel(GetCommandProperty(u"TooltipLabel"_ustr, rProperties));
     if (sLabel.isEmpty()) {
         sLabel = GetPopupLabelForCommand(rProperties);
         // Remove '...' at the end and mnemonics (we don't want those in tooltips)
@@ -334,7 +334,7 @@ vcl::KeyCode GetCommandKeyCodeShortcut (const OUString& rsCommandName, const Ref
 
 OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    return GetCommandProperty("TargetURL", rProperties);
+    return GetCommandProperty(u"TargetURL"_ustr, rProperties);
 }
 
 Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,
@@ -416,12 +416,12 @@ sal_Int32 GetPropertiesForCommand (
 
 bool IsRotated(const OUString& rsCommandName, const OUString& rsModuleName)
 {
-    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName, rsModuleName);
+    return ResourceHasKey(u"private:resource/image/commandrotateimagelist"_ustr, rsCommandName, rsModuleName);
 }
 
 bool IsMirrored(const OUString& rsCommandName, const OUString& rsModuleName)
 {
-    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName, rsModuleName);
+    return ResourceHasKey(u"private:resource/image/commandmirrorimagelist"_ustr, rsCommandName, rsModuleName);
 }
 
 bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)

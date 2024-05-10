@@ -112,7 +112,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
     m_pAcc.reset();
 
     if ( pFilterConfigItem )
-        nInterlaced = pFilterConfigItem->ReadInt32( "Interlaced", 0 );
+        nInterlaced = pFilterConfigItem->ReadInt32( u"Interlaced"_ustr, 0 );
 
     m_rGIF.SetEndian( SvStreamEndian::LITTLE );
 

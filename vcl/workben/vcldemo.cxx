@@ -143,7 +143,7 @@ public:
 #endif
     {
         if (!Application::LoadBrandBitmap(u"intro", maIntro))
-            Application::Abort("Failed to load intro image");
+            Application::Abort(u"Failed to load intro image"_ustr);
 
         maIntroBW = maIntro.GetBitmap();
 
@@ -554,7 +554,7 @@ public:
             for (size_t i = 0; i < std::size(aRuns); ++i)
             {
                 // Legend
-                vcl::Font aIndexFont("sans", Size(0,20));
+                vcl::Font aIndexFont(u"sans"_ustr, Size(0,20));
                 aIndexFont.SetColor( COL_BLACK);
                 tools::Rectangle aTextRect;
                 rDev.SetFont(aIndexFont);
@@ -764,11 +764,11 @@ public:
             {
                 auto aRegions = partition(rCtx, 2, 2);
                 doInvert(rDev, aRegions[0], InvertFlags::NONE);
-                rDev.DrawText(aRegions[0], "InvertFlags::NONE");
+                rDev.DrawText(aRegions[0], u"InvertFlags::NONE"_ustr);
                 doInvert(rDev, aRegions[1], InvertFlags::N50);
-                rDev.DrawText(aRegions[1], "InvertFlags::N50");
+                rDev.DrawText(aRegions[1], u"InvertFlags::N50"_ustr);
                 doInvert(rDev, aRegions[3], InvertFlags::TrackFrame);
-                rDev.DrawText(aRegions[3], "InvertFlags::TrackFrame");
+                rDev.DrawText(aRegions[3], u"InvertFlags::TrackFrame"_ustr);
             }
         }
     };
@@ -851,7 +851,7 @@ public:
         // be done with a shader / gradient
         static void SimulateBorderStretch(OutputDevice &rDev, const tools::Rectangle& r)
         {
-            BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
+            BitmapEx aPageShadowMask(u"sw/res/page-shadow-mask.png"_ustr);
 
             BitmapEx aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
@@ -1773,7 +1773,7 @@ public:
         else
         { // spawn another window
             VclPtrInstance<DemoWin> pNewWin(mrRenderer, testThreads);
-            pNewWin->SetText("Another interactive VCL demo window");
+            pNewWin->SetText(u"Another interactive VCL demo window"_ustr);
             pNewWin->Show();
         }
     }
@@ -1911,9 +1911,9 @@ public:
         mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
         mpButton(VclPtrInstance<PushButton>(mpBox.get()))
     {
-        SetText("VCL widget demo");
+        SetText(u"VCL widget demo"_ustr);
 
-        Wallpaper aWallpaper(BitmapEx("sfx2/res/128x128_writer_doc-p.png"));
+        Wallpaper aWallpaper(BitmapEx(u"sfx2/res/128x128_writer_doc-p.png"_ustr));
         aWallpaper.SetStyle(WallpaperStyle::BottomRight);
         aWallpaper.SetColor(COL_RED);
 
@@ -1921,13 +1921,13 @@ public:
         mpBox->Show();
 
         Help::EnableBalloonHelp();
-        mpToolbox->SetHelpText("Help text");
-        mpToolbox->InsertItem(ToolBoxItemId(0), "Toolbar item", OUString());
-        mpToolbox->SetQuickHelpText(ToolBoxItemId(0), "This is a tooltip popup");
+        mpToolbox->SetHelpText(u"Help text"_ustr);
+        mpToolbox->InsertItem(ToolBoxItemId(0), u"Toolbar item"_ustr, OUString());
+        mpToolbox->SetQuickHelpText(ToolBoxItemId(0), u"This is a tooltip popup"_ustr);
         mpToolbox->InsertSeparator();
         mpToolbox->Show();
 
-        mpButton->SetText("Click me; go on");
+        mpButton->SetText(u"Click me; go on"_ustr);
         mpButton->Show();
 
         int i = 0;
@@ -1950,9 +1950,9 @@ public:
         }
 
         mpBar = VclPtr<MenuBar>::Create();
-        mpBar->InsertItem(0,"File");
+        mpBar->InsertItem(0,u"File"_ustr);
         VclPtrInstance<PopupMenu> pPopup;
-        pPopup->InsertItem(0,"Item");
+        pPopup->InsertItem(0,u"Item"_ustr);
         mpBar->SetPopupMenu(0, pPopup);
         SetMenuBar(mpBar);
 
@@ -2038,7 +2038,7 @@ class DemoPopup : public FloatingWindow
 
         SetTextColor(COL_BLACK);
         SetTextAlign(ALIGN_TOP);
-        rRenderContext.DrawText(aTextRect, "This is a standalone help text test",
+        rRenderContext.DrawText(aTextRect, u"This is a standalone help text test"_ustr,
                  DrawTextFlags::MultiLine|DrawTextFlags::WordBreak|
                  DrawTextFlags::Left|DrawTextFlags::Top);
 
@@ -2194,7 +2194,7 @@ public:
             VclPtr<DemoWidgets> xWidgets;
             VclPtr<DemoPopup> xPopup;
 
-            aMainWin->SetText("Interactive VCL demo #1");
+            aMainWin->SetText(u"Interactive VCL demo #1"_ustr);
             if (bWidgets)
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
@@ -2234,7 +2234,7 @@ protected:
             uno::Reference<lang::XMultiServiceFactory> xMSF;
             xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
             if(!xMSF.is())
-                Application::Abort("Bootstrap failure - no service manager");
+                Application::Abort(u"Bootstrap failure - no service manager"_ustr);
 
             ::comphelper::setProcessServiceFactory(xMSF);
         }

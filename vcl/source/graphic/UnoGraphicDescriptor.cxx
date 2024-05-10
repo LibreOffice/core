@@ -195,7 +195,7 @@ void SAL_CALL GraphicDescriptor::release()
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
 {
-    return "com.sun.star.comp.graphic.GraphicDescriptor";
+    return u"com.sun.star.comp.graphic.GraphicDescriptor"_ustr;
 }
 
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceNam
 
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
 {
-    return { "com.sun.star.graphic.GraphicDescriptor" };
+    return { u"com.sun.star.graphic.GraphicDescriptor"_ustr };
 }
 
 
@@ -232,16 +232,16 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicDescriptor::createPropertyS
 {
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString( "GraphicType" ), static_cast< sal_Int32 >( UnoGraphicProperty::GraphicType ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "MimeType" ), static_cast< sal_Int32 >( UnoGraphicProperty::MimeType ), cppu::UnoType< OUString >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "SizePixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::SizePixel ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "Size100thMM" ), static_cast< sal_Int32 >( UnoGraphicProperty::Size100thMM ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "BitsPerPixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "Transparent" ), static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "Alpha" ), static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "Animated" ), static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Linked"), sal_Int32(UnoGraphicProperty::Linked), cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("OriginURL"), sal_Int32(UnoGraphicProperty::OriginURL), cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"GraphicType"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::GraphicType ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"MimeType"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::MimeType ), cppu::UnoType< OUString >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"SizePixel"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::SizePixel ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Size100thMM"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Size100thMM ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"BitsPerPixel"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Transparent"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Alpha"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Animated"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Linked"_ustr, sal_Int32(UnoGraphicProperty::Linked), cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"OriginURL"_ustr, sal_Int32(UnoGraphicProperty::OriginURL), cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
 
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );

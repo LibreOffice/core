@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
 #if HAVE_MORE_FONTS
     OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ"_ustr);
 
-    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont( aFont );
@@ -188,11 +188,11 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName )
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaching)
 {
     // Just something basic, no font fallback.
-    testCachedGlyphs( "test", "Dejavu Sans" );
+    testCachedGlyphs( u"test"_ustr, u"Dejavu Sans"_ustr );
     // This font does not have latin characters, will need fallback.
-    testCachedGlyphs( "test", "Noto Kufi Arabic" );
+    testCachedGlyphs( u"test"_ustr, u"Noto Kufi Arabic"_ustr );
     // see tdf#103492
-    testCachedGlyphs( u"يوسف My name is"_ustr, "Liberation Sans");
+    testCachedGlyphs( u"يوسف My name is"_ustr, u"Liberation Sans"_ustr);
 }
 
 static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aFontName, bool rtl )
@@ -234,14 +234,14 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCachingSubstring)
 {
     // Just something basic.
-    testCachedGlyphsSubstring( "test", "Dejavu Sans", false );
+    testCachedGlyphsSubstring( u"test"_ustr, u"Dejavu Sans"_ustr, false );
     // And complex arabic text, taken from tdf104649.docx .
     OUString text(u"فصل (پاره 2): درخواست حاجت از ديگران و برآوردن حاجت ديگران 90"_ustr);
-    testCachedGlyphsSubstring( text, "Dejavu Sans", true );
+    testCachedGlyphsSubstring( text, u"Dejavu Sans"_ustr, true );
     // The text is RTL, but Writer will sometimes try to lay it out as LTR, for whatever reason
     // (tdf#149264)./ So make sure that gets handled properly too (SalLayoutGlyphsCache should
     // not use glyph subsets in that case).
-    testCachedGlyphsSubstring( text, "Dejavu Sans", false );
+    testCachedGlyphsSubstring( text, u"Dejavu Sans"_ustr, false );
 }
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     // Test caret placement in fonts *without* ligature carets in GDEF table.
 
     // Set font size to its UPEM to decrease rounding issues
-    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont( aFont );
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 
     // A. RTL text
     // Set font size to its UPEM to decrease rounding issues
-    aFont = vcl::Font("Noto Sans Arabic", "Regular", Size(0, 1000));
+    aFont = vcl::Font(u"Noto Sans Arabic"_ustr, u"Regular"_ustr, Size(0, 1000));
     pOutDev->SetFont(aFont);
 
     aText = u"لا بلا"_ustr;
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 
     // B. LTR text
     // Set font size to its UPEM to decrease rounding issues
-    aFont = vcl::Font("Amiri", "Regular", Size(0, 1000));
+    aFont = vcl::Font(u"Amiri"_ustr, u"Regular"_ustr, Size(0, 1000));
     pOutDev->SetFont(aFont);
 
     aText = u"fi ffi fl ffl fb ffb"_ustr;
@@ -507,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
     vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
     pOutDev->SetFont( aFont );
 
-    vcl::Font aFallbackFont("DejaVu Sans", "Book", Size(0, 72));
+    vcl::Font aFallbackFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 72));
     pOutDev->ForceFallbackFont(aFallbackFont);
 
     // absolute character widths AKA text array.

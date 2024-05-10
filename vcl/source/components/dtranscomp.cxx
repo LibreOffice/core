@@ -111,13 +111,13 @@ public:
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
-    Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    Sequence< OUString > aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
     return aRet;
 }
 
 OUString GenericClipboard::getImplementationName()
 {
-    return "com.sun.star.datatransfer.VCLGenericClipboard";
+    return u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
 }
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames()
@@ -161,7 +161,7 @@ void GenericClipboard::setContents(
 
 OUString GenericClipboard::getName()
 {
-    return "CLIPBOARD";
+    return u"CLIPBOARD"_ustr;
 }
 
 sal_Int8 GenericClipboard::getRenderingCapabilities()
@@ -225,7 +225,7 @@ public:
     virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.datatransfer.dnd.VclGenericDragSource"; }
+    { return u"com.sun.star.datatransfer.dnd.VclGenericDragSource"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -235,7 +235,7 @@ public:
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
-       return { "com.sun.star.datatransfer.dnd.GenericDragSource" };
+       return { u"com.sun.star.datatransfer.dnd.GenericDragSource"_ustr };
     }
 };
 
@@ -277,7 +277,7 @@ Sequence< OUString > DragSource_getSupportedServiceNames()
 #if defined MACOSX
     return { "com.sun.star.datatransfer.dnd.OleDragSource" };
 #elif defined UNX
-    return { "com.sun.star.datatransfer.dnd.X11DragSource" };
+    return { u"com.sun.star.datatransfer.dnd.X11DragSource"_ustr };
 #else
     return { "com.sun.star.datatransfer.dnd.VclGenericDragSource" };
 #endif
@@ -288,7 +288,7 @@ OUString DragSource_getImplementationName()
 #if defined MACOSX
     return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 #elif defined UNX
-    return "com.sun.star.datatransfer.dnd.XdndSupport";
+    return u"com.sun.star.datatransfer.dnd.XdndSupport"_ustr;
 #else
     return "com.sun.star.datatransfer.dnd.VclGenericDragSource";
 #endif
@@ -328,7 +328,7 @@ public:
     virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.datatransfer.dnd.VclGenericDropTarget"; }
+    { return u"com.sun.star.datatransfer.dnd.VclGenericDropTarget"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -338,7 +338,7 @@ public:
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
-      return { "com.sun.star.datatransfer.dnd.GenericDropTarget" };
+      return { u"com.sun.star.datatransfer.dnd.GenericDropTarget"_ustr };
     }
 };
 
@@ -379,7 +379,7 @@ Sequence< OUString > DropTarget_getSupportedServiceNames()
 #if defined MACOSX
     return {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
 #elif defined UNX
-    return { "com.sun.star.datatransfer.dnd.X11DropTarget" };
+    return { u"com.sun.star.datatransfer.dnd.X11DropTarget"_ustr };
 #else
     return GenericDropTarget::getSupportedServiceNames_static();
 #endif
@@ -391,7 +391,7 @@ OUString DropTarget_getImplementationName()
     #if defined MACOSX
     "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
     #elif defined UNX
-    "com.sun.star.datatransfer.dnd.XdndDropTarget"
+    u"com.sun.star.datatransfer.dnd.XdndDropTarget"_ustr
     #else
     "com.sun.star.datatransfer.dnd.VclGenericDropTarget"
     #endif
@@ -414,7 +414,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
 {
     if (arguments.hasElements()) {
         throw css::lang::IllegalArgumentException(
-            "non-empty SalInstance::CreateClipboard arguments", {}, -1);
+            u"non-empty SalInstance::CreateClipboard arguments"_ustr, {}, -1);
     }
 #ifdef IOS
     return getXWeak(new vcl::GenericClipboard());

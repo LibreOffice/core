@@ -111,11 +111,11 @@ namespace
      *  QueryString
      */
     QueryString::QueryString(weld::Window* pParent, OUString const & rQuery, OUString& rRet)
-        : GenericDialogController(pParent, "vcl/ui/querydialog.ui", "QueryDialog")
+        : GenericDialogController(pParent, u"vcl/ui/querydialog.ui"_ustr, u"QueryDialog"_ustr)
         , m_rReturnValue( rRet )
-        , m_xOKButton(m_xBuilder->weld_button("ok"))
-        , m_xFixedText(m_xBuilder->weld_label("label"))
-        , m_xEdit(m_xBuilder->weld_entry("entry"))
+        , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xFixedText(m_xBuilder->weld_label(u"label"_ustr))
+        , m_xEdit(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         m_xOKButton->connect_clicked(LINK(this, QueryString, ClickBtnHdl));
         m_xFixedText->set_label(rQuery);
@@ -184,7 +184,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->SetPaperBin( 0 );
     if( rData.m_pParser )
-        pKey                    = rData.m_pParser->getKey( "InputSlot" );
+        pKey                    = rData.m_pParser->getKey( u"InputSlot"_ustr );
     if( pKey )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -204,7 +204,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->SetDuplexMode( DuplexMode::Unknown );
     if( rData.m_pParser )
-        pKey = rData.m_pParser->getKey( "Duplex" );
+        pKey = rData.m_pParser->getKey( u"Duplex"_ustr );
     if( pKey )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -362,7 +362,7 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     if( !m_aJobData.m_pParser )
         return;
 
-    const PPDKey* pKey = m_aJobData.m_pParser->getKey( "PageSize" );
+    const PPDKey* pKey = m_aJobData.m_pParser->getKey( u"PageSize"_ustr );
     if( pKey )
     {
         int nValues = pKey->countValues();
@@ -487,7 +487,7 @@ bool PspSalInfoPrinter::SetData(
             else
                 aPaper = OStringToOUString(PaperInfo::toPSName(pJobSetup->GetPaperFormat()), RTL_TEXTENCODING_ISO_8859_1);
 
-            pKey = aData.m_pParser->getKey( "PageSize" );
+            pKey = aData.m_pParser->getKey( u"PageSize"_ustr );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
 
             // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
@@ -509,7 +509,7 @@ bool PspSalInfoPrinter::SetData(
         // merge paperbin if necessary
         if( nSetDataFlags & JobSetFlags::PAPERBIN )
         {
-            pKey = aData.m_pParser->getKey( "InputSlot" );
+            pKey = aData.m_pParser->getKey( u"InputSlot"_ustr );
             if( pKey )
             {
                 int nPaperBin = pJobSetup->GetPaperBin();
@@ -529,22 +529,22 @@ bool PspSalInfoPrinter::SetData(
         // merge duplex if necessary
         if( nSetDataFlags & JobSetFlags::DUPLEXMODE )
         {
-            pKey = aData.m_pParser->getKey( "Duplex" );
+            pKey = aData.m_pParser->getKey( u"Duplex"_ustr );
             if( pKey )
             {
                 pValue = nullptr;
                 switch( pJobSetup->GetDuplexMode() )
                 {
                 case DuplexMode::Off:
-                    pValue = pKey->getValue( "None" );
+                    pValue = pKey->getValue( u"None"_ustr );
                     if( pValue == nullptr )
-                        pValue = pKey->getValue( "SimplexNoTumble" );
+                        pValue = pKey->getValue( u"SimplexNoTumble"_ustr );
                     break;
                 case DuplexMode::ShortEdge:
-                    pValue = pKey->getValue( "DuplexTumble" );
+                    pValue = pKey->getValue( u"DuplexTumble"_ustr );
                     break;
                 case DuplexMode::LongEdge:
-                    pValue = pKey->getValue( "DuplexNoTumble" );
+                    pValue = pKey->getValue( u"DuplexNoTumble"_ustr );
                     break;
                 case DuplexMode::Unknown:
                 default:
@@ -616,7 +616,7 @@ sal_uInt16 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
 
-    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( "InputSlot" ): nullptr;
+    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( u"InputSlot"_ustr ): nullptr;
     return pKey ? pKey->countValues() : 0;
 }
 
@@ -627,7 +627,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
 
     if( aData.m_pParser )
     {
-        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( "InputSlot" ): nullptr;
+        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( u"InputSlot"_ustr ): nullptr;
         if( ! pKey || nPaperBin >= o3tl::make_unsigned(pKey->countValues()) )
             return aData.m_pParser->getDefaultInputSlot();
         const PPDValue* pValue = pKey->getValue( nPaperBin );
@@ -675,7 +675,7 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
                 JobData aData = PrinterInfoManager::get().getPrinterInfo(pJobSetup->GetPrinterName());
                 if( pJobSetup->GetDriverData() )
                     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
-                const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey("Dial") : nullptr;
+                const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey(u"Dial"_ustr) : nullptr;
                 const PPDValue* pValue = pKey ? aData.m_aContext.getValue(pKey) : nullptr;
                 if (pValue && !pValue->m_aOption.equalsIgnoreAsciiCase("Manually"))
                     return 1;
@@ -778,7 +778,7 @@ struct PDFPrintFile
 bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
-    SAL_INFO( "vcl.unx.print", "StartJob with controller: pFilename = " << (i_pFileName ? *i_pFileName : "<nil>") );
+    SAL_INFO( "vcl.unx.print", "StartJob with controller: pFilename = " << (i_pFileName ? *i_pFileName : u"<nil>"_ustr) );
     // reset IsLastPage
     i_rController.setLastPage( false );
     // is this a fax device

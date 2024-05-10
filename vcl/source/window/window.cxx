@@ -1059,7 +1059,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         {
             // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
             throw RuntimeException(
-                "Could not create system window!",
+                u"Could not create system window!"_ustr,
                 Reference< XInterface >() );
         }
 
@@ -1921,7 +1921,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
                 if( !aStrHelpId.isEmpty() )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( OOO_HELP_INDEX, this );
+                    pHelp->Start( u"" OOO_HELP_INDEX ""_ustr, this );
             }
         }
     }
@@ -3783,8 +3783,8 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         {
             xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                              bSpriteCanvas ?
-                             OUString( "com.sun.star.rendering.SpriteCanvas" ) :
-                             OUString( "com.sun.star.rendering.Canvas" ),
+                             u"com.sun.star.rendering.SpriteCanvas"_ustr :
+                             u"com.sun.star.rendering.Canvas"_ustr,
                              aArg,
                              xContext ),
                          UNO_QUERY );

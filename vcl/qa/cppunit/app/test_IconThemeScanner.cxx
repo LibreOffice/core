@@ -42,7 +42,7 @@ void
 IconThemeScannerTest::AddedThemeIsFoundById()
 {
     vcl::IconThemeScanner scanner;
-    scanner.AddIconThemeByPath("file:://images_katze.zip");
+    scanner.AddIconThemeByPath(u"file:://images_katze.zip"_ustr);
     OUString id = vcl::IconThemeInfo::FileNameToThemeId(u"images_katze.zip");
     bool found = scanner.IconThemeIsInstalled(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("icon theme could be added by url", true, found);
@@ -52,7 +52,7 @@ void
 IconThemeScannerTest::AddedThemeInfoIsReturned()
 {
     vcl::IconThemeScanner scanner;
-    OUString theme("file:://images_katze.zip");
+    OUString theme(u"file:://images_katze.zip"_ustr);
     scanner.AddIconThemeByPath(theme);
     OUString id = vcl::IconThemeInfo::FileNameToThemeId(u"images_katze.zip");
     const vcl::IconThemeInfo& info = scanner.GetIconThemeInfo(id);
@@ -63,11 +63,11 @@ void
 IconThemeScannerTest::ExceptionIsThrownIfInvalidInfoIsRequested()
 {
     vcl::IconThemeScanner scanner;
-    scanner.AddIconThemeByPath("file:://images_katze.zip");
+    scanner.AddIconThemeByPath(u"file:://images_katze.zip"_ustr);
     bool thrown = false;
     try
     {
-        scanner.GetIconThemeInfo("hund");
+        scanner.GetIconThemeInfo(u"hund"_ustr);
     }
     catch (const std::runtime_error&)
     {

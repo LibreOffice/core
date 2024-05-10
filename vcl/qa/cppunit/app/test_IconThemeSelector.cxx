@@ -75,8 +75,8 @@ IconThemeSelectorTest::BreezeIsReturnedForKde5Desktop()
 {
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     vcl::IconThemeSelector s;
-    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, "plasma5");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is returned for Plasma 5 desktop", OUString("breeze"), r);
+    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, u"plasma5"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is returned for Plasma 5 desktop", u"breeze"_ustr, r);
 }
 
 void
@@ -84,18 +84,18 @@ IconThemeSelectorTest::ElementaryIsReturnedForGnomeDesktop()
 {
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     vcl::IconThemeSelector s;
-    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, "gnome");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'elementary' theme is returned for gnome desktop", OUString("elementary"), r);
+    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, u"gnome"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'elementary' theme is returned for gnome desktop", u"elementary"_ustr, r);
 }
 
 void
 IconThemeSelectorTest::ThemeIsOverriddenByPreferredTheme()
 {
     vcl::IconThemeSelector s;
-    OUString preferred("breeze");
+    OUString preferred(u"breeze"_ustr);
     s.SetPreferredIconTheme(preferred, false);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
-    OUString selected = s.SelectIconThemeForDesktopEnvironment(themes, "gnome");
+    OUString selected = s.SelectIconThemeForDesktopEnvironment(themes, u"gnome"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'elementary' theme is overridden by breeze", preferred, selected);
 }
 
@@ -105,23 +105,23 @@ IconThemeSelectorTest::ThemeIsOverriddenByHighContrastMode()
     vcl::IconThemeSelector s;
     s.SetUseHighContrastTheme(true);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
-    OUString selected = s.SelectIconTheme(themes, "breeze");
+    OUString selected = s.SelectIconTheme(themes, u"breeze"_ustr);
     bool sifr = selected.startsWith("sifr");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is overridden by high contrast mode", true, sifr);
     s.SetUseHighContrastTheme(false);
-    selected = s.SelectIconTheme(themes, "breeze");
+    selected = s.SelectIconTheme(themes, u"breeze"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is no longer overridden by high contrast mode",
-            OUString("breeze"), selected);
+            u"breeze"_ustr, selected);
 }
 
 void
 IconThemeSelectorTest::NotInstalledThemeDoesNotOverride()
 {
     vcl::IconThemeSelector s;
-    s.SetPreferredIconTheme("breeze_foo", false);
+    s.SetPreferredIconTheme(u"breeze_foo"_ustr, false);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
-    OUString selected = s.SelectIconTheme(themes, "colibre");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme is not overridden by 'breeze_foo'", OUString("colibre"), selected);
+    OUString selected = s.SelectIconTheme(themes, u"colibre"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme is not overridden by 'breeze_foo'", u"colibre"_ustr, selected);
 }
 
 void
@@ -129,8 +129,8 @@ IconThemeSelectorTest::InstalledThemeIsFound()
 {
     vcl::IconThemeSelector s;
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
-    OUString selected = s.SelectIconTheme(themes, "colibre");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme is found", OUString("colibre"), selected);
+    OUString selected = s.SelectIconTheme(themes, u"colibre"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme is found", u"colibre"_ustr, selected);
 }
 
 void
@@ -138,7 +138,7 @@ IconThemeSelectorTest::FirstThemeIsReturnedIfRequestedThemeIsNotFound()
 {
     vcl::IconThemeSelector s;
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
-    OUString selected = s.SelectIconTheme(themes, "breeze_foo");
+    OUString selected = s.SelectIconTheme(themes, u"breeze_foo"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is found", themes.front().GetThemeId(), selected);
 }
 
@@ -146,7 +146,7 @@ void
 IconThemeSelectorTest::FallbackThemeIsReturnedForEmptyInput()
 {
     vcl::IconThemeSelector s;
-    OUString selected = s.SelectIconTheme(std::vector<vcl::IconThemeInfo>(), "colibre");
+    OUString selected = s.SelectIconTheme(std::vector<vcl::IconThemeInfo>(), u"colibre"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fallback is returned for empty input",
             vcl::IconThemeSelector::FALLBACK_LIGHT_ICON_THEME_ID, selected);
 }
@@ -167,7 +167,7 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
 {
     vcl::IconThemeSelector s1;
     vcl::IconThemeSelector s2;
-    s1.SetPreferredIconTheme("breeze", false);
+    s1.SetPreferredIconTheme(u"breeze"_ustr, false);
     s2.SetUseHighContrastTheme(true);
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);

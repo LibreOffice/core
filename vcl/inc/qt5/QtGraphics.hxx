@@ -67,7 +67,7 @@ public:
 
     void freeResources() override {}
 
-    OUString getRenderBackendName() const override { return "qt5"; }
+    OUString getRenderBackendName() const override { return u"qt5"_ustr; }
 
     void setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;

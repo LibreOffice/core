@@ -80,7 +80,7 @@ namespace
         for ( const auto& rImageURL : aImageURLs )
         {
             Reference< XGraphic > xGraphic;
-            aMediaProperties.put( "URL", rImageURL );
+            aMediaProperties.put( u"URL"_ustr, rImageURL );
             xGraphic = xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() );
             aImages.emplace_back( xGraphic );
         }

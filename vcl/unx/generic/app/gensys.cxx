@@ -46,7 +46,7 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
 
     ImplHideSplash();
 
-    aButtons.push_back( "OK" );
+    aButtons.push_back( u"OK"_ustr );
     nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
     int nResult = ShowNativeDialog( rTitle, rMessage, aButtons );
 
@@ -98,10 +98,10 @@ const char* SalGenericSystem::getFrameClassName()
     if( aClassName.isEmpty() )
     {
         OUString aIni, aProduct;
-        rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );
+        rtl::Bootstrap::get( u"BRAND_BASE_DIR"_ustr, aIni );
         aIni += "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
         rtl::Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( "ProductKey", aProduct );
+        aBootstrap.getFrom( u"ProductKey"_ustr, aProduct );
 
         if( !aProduct.isEmpty() )
             aClassName.append( OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );

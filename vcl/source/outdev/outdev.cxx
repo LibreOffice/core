@@ -797,8 +797,8 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
     {
         xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                          bSpriteCanvas ?
-                         OUString( "com.sun.star.rendering.SpriteCanvas" ) :
-                         OUString( "com.sun.star.rendering.Canvas" ),
+                         u"com.sun.star.rendering.SpriteCanvas"_ustr :
+                         u"com.sun.star.rendering.Canvas"_ustr,
                          aArg,
                          xContext ),
                      UNO_QUERY );

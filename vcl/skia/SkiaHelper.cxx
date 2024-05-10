@@ -98,8 +98,8 @@ namespace SkiaHelper
 {
 static OUString getCacheFolder()
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+    OUString url(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr);
     rtl::Bootstrap::expandMacros(url);
     osl::Directory::create(url);
     return url;
@@ -135,7 +135,7 @@ static void writeToLog(SvStream& stream, const char* key, std::u16string_view va
 
 static OUString getDenylistFile()
 {
-    OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
+    OUString url(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER ""_ustr);
     rtl::Bootstrap::expandMacros(url);
 
     return url + "/skia/skia_denylist_vulkan.xml";
@@ -167,14 +167,14 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
     OUString apiVersion = versionAsString(props.apiVersion);
     const char* deviceType = types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)];
 
-    CrashReporter::addKeyValue("VulkanVendor", vendorIdStr, CrashReporter::AddItem);
-    CrashReporter::addKeyValue("VulkanDevice", deviceIdStr, CrashReporter::AddItem);
-    CrashReporter::addKeyValue("VulkanAPI", apiVersion, CrashReporter::AddItem);
-    CrashReporter::addKeyValue("VulkanDriver", driverVersionString, CrashReporter::AddItem);
-    CrashReporter::addKeyValue("VulkanDeviceType", OUString::createFromAscii(deviceType),
+    CrashReporter::addKeyValue(u"VulkanVendor"_ustr, vendorIdStr, CrashReporter::AddItem);
+    CrashReporter::addKeyValue(u"VulkanDevice"_ustr, deviceIdStr, CrashReporter::AddItem);
+    CrashReporter::addKeyValue(u"VulkanAPI"_ustr, apiVersion, CrashReporter::AddItem);
+    CrashReporter::addKeyValue(u"VulkanDriver"_ustr, driverVersionString, CrashReporter::AddItem);
+    CrashReporter::addKeyValue(u"VulkanDeviceType"_ustr, OUString::createFromAscii(deviceType),
                                CrashReporter::AddItem);
-    CrashReporter::addKeyValue("VulkanDeviceName", OUString::createFromAscii(props.deviceName),
-                               CrashReporter::Write);
+    CrashReporter::addKeyValue(u"VulkanDeviceName"_ustr,
+                               OUString::createFromAscii(props.deviceName), CrashReporter::Write);
 
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE | StreamMode::TRUNC);
     writeToLog(logFile, "RenderMethod", "vulkan");
@@ -409,7 +409,7 @@ bool isVCLSkiaEnabled()
     if (bRet)
         WatchdogThread::start();
 
-    CrashReporter::addKeyValue("UseSkia", OUString::boolean(bRet), CrashReporter::Write);
+    CrashReporter::addKeyValue(u"UseSkia"_ustr, OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
 }

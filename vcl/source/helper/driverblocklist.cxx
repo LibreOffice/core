@@ -101,23 +101,23 @@ static OUString GetVendorId(std::string_view rString)
 {
     if (rString == "all")
     {
-        return "";
+        return u""_ustr;
     }
     else if (rString == "intel")
     {
-        return "0x8086";
+        return u"0x8086"_ustr;
     }
     else if (rString == "nvidia")
     {
-        return "0x10de";
+        return u"0x10de"_ustr;
     }
     else if (rString == "amd")
     {
-        return "0x1002";
+        return u"0x1002"_ustr;
     }
     else if (rString == "microsoft")
     {
-        return "0x1414";
+        return u"0x1414"_ustr;
     }
     else
     {
@@ -133,15 +133,15 @@ OUString GetVendorId(DeviceVendor id)
     switch (id)
     {
         case VendorAll:
-            return "";
+            return u""_ustr;
         case VendorIntel:
-            return "0x8086";
+            return u"0x8086"_ustr;
         case VendorNVIDIA:
-            return "0x10de";
+            return u"0x10de"_ustr;
         case VendorAMD:
-            return "0x1002";
+            return u"0x1002"_ustr;
         case VendorMicrosoft:
-            return "0x1414";
+            return u"0x1414"_ustr;
     }
     abort();
 }
@@ -636,7 +636,7 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
         }
 
         if (std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(),
-                         compareIgnoreAsciiCase("all"))
+                         compareIgnoreAsciiCase(u"all"_ustr))
             && std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(),
                             compareIgnoreAsciiCase(sAdapterDeviceID)))
         {

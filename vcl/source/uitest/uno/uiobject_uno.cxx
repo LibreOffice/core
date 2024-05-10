@@ -189,7 +189,7 @@ OUString SAL_CALL UIObjectUnoObj::getType()
 
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()
 {
-    return "org.libreoffice.uitest.UIObject";
+    return u"org.libreoffice.uitest.UIObject"_ustr;
 }
 
 sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
@@ -199,7 +199,7 @@ sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.test.UIObject" };
+    return { u"com.sun.star.ui.test.UIObject"_ustr };
 }
 
 OUString SAL_CALL UIObjectUnoObj::getHierarchy()

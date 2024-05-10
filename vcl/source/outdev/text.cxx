@@ -681,12 +681,12 @@ float OutputDevice::approximate_char_width() const
     //note pango uses "The quick brown fox jumps over the lazy dog." for english
     //and has a bunch of per-language strings which corresponds somewhat with
     //makeRepresentativeText in include/svtools/sampletext.hxx
-    return GetTextWidth("aemnnxEM") / 8.0;
+    return GetTextWidth(u"aemnnxEM"_ustr) / 8.0;
 }
 
 float OutputDevice::approximate_digit_width() const
 {
-    return GetTextWidth("0123456789") / 10.0;
+    return GetTextWidth(u"0123456789"_ustr) / 10.0;
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,

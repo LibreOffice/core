@@ -56,10 +56,10 @@ bool Application::LoadBrandBitmap (std::u16string_view pName, BitmapEx &rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
-    OUString aBaseDir( "$BRAND_BASE_DIR");
+    OUString aBaseDir( u"$BRAND_BASE_DIR"_ustr);
     rtl::Bootstrap::expandMacros( aBaseDir );
     OUString aBaseName(OUStringChar('/') + pName);
-    OUString aPng( ".png" );
+    OUString aPng( u".png"_ustr );
 
     rtl_Locale *pLoc = nullptr;
     osl_getProcessLocale (&pLoc);

@@ -52,13 +52,13 @@ void Options::ReadFromConfig(bool i_bFile)
             css::beans::PropertyValue aVal;
             aVal.Name = "nodepath";
             if (i_bFile)
-                aVal.Value <<= OUString("/org.openoffice.Office.Common/Print/Option/File");
+                aVal.Value <<= u"/org.openoffice.Office.Common/Print/Option/File"_ustr;
             else
-                aVal.Value <<= OUString("/org.openoffice.Office.Common/Print/Option/Printer");
-            xConfigAccess.set(
-                xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess", { css::uno::Any(aVal) }),
-                css::uno::UNO_QUERY);
+                aVal.Value <<= u"/org.openoffice.Office.Common/Print/Option/Printer"_ustr;
+            xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
+                                  u"com.sun.star.configuration.ConfigurationAccess"_ustr,
+                                  { css::uno::Any(aVal) }),
+                              css::uno::UNO_QUERY);
             if (xConfigAccess.is())
             {
                 css::uno::Reference<css::beans::XPropertySet> xSet(xConfigAccess,
@@ -67,25 +67,26 @@ void Options::ReadFromConfig(bool i_bFile)
                 {
                     sal_Int32 nValue = 0;
                     bool bValue = false;
-                    if (xSet->getPropertyValue("ReduceTransparency") >>= bValue)
+                    if (xSet->getPropertyValue(u"ReduceTransparency"_ustr) >>= bValue)
                         SetReduceTransparency(bValue);
-                    if (xSet->getPropertyValue("ReducedTransparencyMode") >>= nValue)
+                    if (xSet->getPropertyValue(u"ReducedTransparencyMode"_ustr) >>= nValue)
                         SetReducedTransparencyMode(static_cast<TransparencyMode>(nValue));
-                    if (xSet->getPropertyValue("ReduceGradients") >>= bValue)
+                    if (xSet->getPropertyValue(u"ReduceGradients"_ustr) >>= bValue)
                         SetReduceGradients(bValue);
-                    if (xSet->getPropertyValue("ReducedGradientMode") >>= nValue)
+                    if (xSet->getPropertyValue(u"ReducedGradientMode"_ustr) >>= nValue)
                         SetReducedGradientMode(static_cast<GradientMode>(nValue));
-                    if (xSet->getPropertyValue("ReducedGradientStepCount") >>= nValue)
+                    if (xSet->getPropertyValue(u"ReducedGradientStepCount"_ustr) >>= nValue)
                         SetReducedGradientStepCount(static_cast<sal_uInt16>(nValue));
-                    if (xSet->getPropertyValue("ReduceBitmaps") >>= bValue)
+                    if (xSet->getPropertyValue(u"ReduceBitmaps"_ustr) >>= bValue)
                         SetReduceBitmaps(bValue);
-                    if (xSet->getPropertyValue("ReducedBitmapMode") >>= nValue)
+                    if (xSet->getPropertyValue(u"ReducedBitmapMode"_ustr) >>= nValue)
                         SetReducedBitmapMode(static_cast<BitmapMode>(nValue));
-                    if (xSet->getPropertyValue("ReducedBitmapResolution") >>= nValue)
+                    if (xSet->getPropertyValue(u"ReducedBitmapResolution"_ustr) >>= nValue)
                         SetReducedBitmapResolution(static_cast<sal_uInt16>(nValue));
-                    if (xSet->getPropertyValue("ReducedBitmapIncludesTransparency") >>= bValue)
+                    if (xSet->getPropertyValue(u"ReducedBitmapIncludesTransparency"_ustr)
+                        >>= bValue)
                         SetReducedBitmapIncludesTransparency(bValue);
-                    if (xSet->getPropertyValue("ConvertToGreyscales") >>= bValue)
+                    if (xSet->getPropertyValue(u"ConvertToGreyscales"_ustr) >>= bValue)
                         SetConvertToGreyscales(bValue);
 
                     bSuccess = true;

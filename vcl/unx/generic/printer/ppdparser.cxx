@@ -450,7 +450,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
         INetURLObject aPPDDir( path, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
-    if( rPPDCache.xAllPPDFiles->find( OUString( "SGENPRT" ) ) != rPPDCache.xAllPPDFiles->end() )
+    if( rPPDCache.xAllPPDFiles->find( u"SGENPRT"_ustr ) != rPPDCache.xAllPPDFiles->end() )
         return;
 
     // last try: search in directory of executable (mainly for setup)
@@ -463,7 +463,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
                 << aDir.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         scanPPDDir( aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         SAL_INFO("vcl.unx.print", "SGENPRT "
-                << (rPPDCache.xAllPPDFiles->find("SGENPRT") ==
+                << (rPPDCache.xAllPPDFiles->find(u"SGENPRT"_ustr) ==
                     rPPDCache.xAllPPDFiles->end() ? "not found" : "found"));
     }
 }
@@ -608,11 +608,11 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     // fill in shortcuts
     const PPDKey* pKey;
 
-    pKey = getKey( "PageSize" );
+    pKey = getKey( u"PageSize"_ustr );
 
     if ( pKey ) {
-        std::unique_ptr<PPDKey> pImageableAreas(new PPDKey("ImageableArea"));
-        std::unique_ptr<PPDKey> pPaperDimensions(new PPDKey("PaperDimension"));
+        std::unique_ptr<PPDKey> pImageableAreas(new PPDKey(u"ImageableArea"_ustr));
+        std::unique_ptr<PPDKey> pPaperDimensions(new PPDKey(u"PaperDimension"_ustr));
 #if defined(CUPS_VERSION_MAJOR)
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 7) || CUPS_VERSION_MAJOR > 1
         for (int i = 0; i < pKey->countValues(); i++) {
@@ -648,7 +648,7 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
         insertKey(std::move(pPaperDimensions));
     }
 
-    m_pImageableAreas = getKey( "ImageableArea" );
+    m_pImageableAreas = getKey( u"ImageableArea"_ustr );
     const PPDValue* pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
         pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
@@ -659,7 +659,7 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
-    m_pPaperDimensions = getKey( "PaperDimension" );
+    m_pPaperDimensions = getKey( u"PaperDimension"_ustr );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == nullptr) {
@@ -669,7 +669,7 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    auto pResolutions = getKey( "Resolution" );
+    auto pResolutions = getKey( u"Resolution"_ustr );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
     if (pResolutions == nullptr) {
@@ -677,7 +677,7 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    auto pInputSlots = getKey( "InputSlot" );
+    auto pInputSlots = getKey( u"InputSlot"_ustr );
     if( pInputSlots )
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
@@ -796,7 +796,7 @@ PPDParser::PPDParser( OUString aFile ) :
     }
 #endif
 
-    m_pImageableAreas = getKey( "ImageableArea" );
+    m_pImageableAreas = getKey( u"ImageableArea"_ustr );
     const PPDValue * pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
         pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
@@ -807,7 +807,7 @@ PPDParser::PPDParser( OUString aFile ) :
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
-    m_pPaperDimensions = getKey( "PaperDimension" );
+    m_pPaperDimensions = getKey( u"PaperDimension"_ustr );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == nullptr) {
@@ -817,7 +817,7 @@ PPDParser::PPDParser( OUString aFile ) :
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    auto pResolutions = getKey( "Resolution" );
+    auto pResolutions = getKey( u"Resolution"_ustr );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
     if (pResolutions == nullptr) {
@@ -825,7 +825,7 @@ PPDParser::PPDParser( OUString aFile ) :
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    auto pInputSlots = getKey( "InputSlot" );
+    auto pInputSlots = getKey( u"InputSlot"_ustr );
     if( pInputSlots )
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
@@ -1007,7 +1007,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
             if(keyit != m_aKeys.end())
             {
                 PPDKey* pKey = keyit->second.get();
-                pKey->insertValue("Custom", eInvocation, true);
+                pKey->insertValue(u"Custom"_ustr, eInvocation, true);
             }
             continue;
         }
@@ -1717,9 +1717,9 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     if( ! pKey || ! m_pParser || ! m_pParser->hasKey( pKey ) )
         return false;
 
-    const PPDValue* pResetValue = pKey->getValue( "None" );
+    const PPDValue* pResetValue = pKey->getValue( u"None"_ustr );
     if( ! pResetValue )
-        pResetValue = pKey->getValue( "False" );
+        pResetValue = pKey->getValue( u"False"_ustr );
     if( ! pResetValue && bDefaultable )
         pResetValue = pKey->getDefaultValue();
 
@@ -1884,7 +1884,7 @@ void PPDContext::rebuildFromStreamBuffer(const std::vector<char> &rBuffer)
                 SAL_INFO("vcl.unx.print",
                     "PPDContext::rebuildFromStreamBuffer: read PPDKeyValue { "
                     << pKey->getKey() << " , "
-                    << (pValue ? aOption : "<nil>")
+                    << (pValue ? aOption : u"<nil>"_ustr)
                     << " }");
             }
         }
@@ -1899,7 +1899,7 @@ int PPDContext::getRenderResolution() const
     if( m_pParser )
     {
         int nDPIx = 300, nDPIy = 300;
-        const PPDKey* pKey = m_pParser->getKey( "Resolution" );
+        const PPDKey* pKey = m_pParser->getKey( u"Resolution"_ustr );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );
@@ -1925,7 +1925,7 @@ void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) cons
     if( !m_pParser )
         return;
 
-    const PPDKey* pKey = m_pParser->getKey( "PageSize" );
+    const PPDKey* pKey = m_pParser->getKey( u"PageSize"_ustr );
     if( !pKey )
         return;
 

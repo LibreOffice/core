@@ -189,9 +189,9 @@ void TextEngine::SetFont( const vcl::Font& rFont )
 
     maFont.SetAlignment( ALIGN_TOP );
     mpRefDev->SetFont( maFont );
-    mnDefTab = mpRefDev->GetTextWidth("    ");
+    mnDefTab = mpRefDev->GetTextWidth(u"    "_ustr);
     if ( !mnDefTab )
-        mnDefTab = mpRefDev->GetTextWidth("XXXX");
+        mnDefTab = mpRefDev->GetTextWidth(u"XXXX"_ustr);
     if ( !mnDefTab )
         mnDefTab = 1;
     mnCharHeight = mpRefDev->GetTextHeight();

@@ -153,7 +153,7 @@ DesktopType get_desktop_environment()
     }
 
     OUString plugin;
-    rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", plugin);
+    rtl::Bootstrap::get(u"SAL_USE_VCLPLUGIN"_ustr, plugin);
 
     if (plugin == "svp")
         return DESKTOP_NONE;

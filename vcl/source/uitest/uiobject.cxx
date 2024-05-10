@@ -54,7 +54,7 @@ UIObject::~UIObject()
 StringMap UIObject::get_state()
 {
     StringMap aMap;
-    aMap["NotImplemented"] = "NotImplemented";
+    aMap[u"NotImplemented"_ustr] = "NotImplemented";
     return aMap;
 }
 
@@ -67,7 +67,7 @@ void UIObject::execute(const OUString& /*rAction*/,
 
 OUString UIObject::get_type() const
 {
-    return "Generic UIObject";
+    return u"Generic UIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
@@ -296,19 +296,19 @@ StringMap WindowUIObject::get_state()
         mxWindow->RequestDoubleBuffering(false);
 
     StringMap aMap;
-    aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
-    aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
-    aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
-    aMap["HasFocus"] = OUString::boolean(mxWindow->HasChildPathFocus());
-    aMap["WindowType"] = OUString::number(static_cast<sal_uInt16>(mxWindow->GetType()), 16);
+    aMap[u"Visible"_ustr] = OUString::boolean(mxWindow->IsVisible());
+    aMap[u"ReallyVisible"_ustr] = OUString::boolean(mxWindow->IsReallyVisible());
+    aMap[u"Enabled"_ustr] = OUString::boolean(mxWindow->IsEnabled());
+    aMap[u"HasFocus"_ustr] = OUString::boolean(mxWindow->HasChildPathFocus());
+    aMap[u"WindowType"_ustr] = OUString::number(static_cast<sal_uInt16>(mxWindow->GetType()), 16);
 
     Point aPos = mxWindow->GetPosPixel();
-    aMap["RelPosition"] = to_string(aPos);
-    aMap["Size"] = to_string(mxWindow->GetSizePixel());
-    aMap["ID"] = mxWindow->get_id();
+    aMap[u"RelPosition"_ustr] = to_string(aPos);
+    aMap[u"Size"_ustr] = to_string(mxWindow->GetSizePixel());
+    aMap[u"ID"_ustr] = mxWindow->get_id();
     vcl::Window* pParent = mxWindow->GetParent();
     if (pParent)
-        aMap["Parent"] = mxWindow->GetParent()->get_id();
+        aMap[u"Parent"_ustr] = mxWindow->GetParent()->get_id();
 
     bool bIgnoreAllExceptTop = isDialogWindow(mxWindow.get());
     while(pParent)
@@ -327,9 +327,9 @@ StringMap WindowUIObject::get_state()
         if (!pParent && bIgnoreAllExceptTop)
             aPos += aParentPos;
     }
-    aMap["AbsPosition"] = to_string(aPos);
-    aMap["Text"] = mxWindow->GetText();
-    aMap["DisplayText"] = mxWindow->GetDisplayText();
+    aMap[u"AbsPosition"_ustr] = to_string(aPos);
+    aMap[u"Text"_ustr] = mxWindow->GetText();
+    aMap[u"DisplayText"_ustr] = mxWindow->GetDisplayText();
 
     return aMap;
 }
@@ -346,7 +346,7 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "TYPE")
     {
-        auto it = rParameters.find("TEXT");
+        auto it = rParameters.find(u"TEXT"_ustr);
         if (it != rParameters.end())
         {
             const OUString& rText = it->second;
@@ -356,9 +356,9 @@ void WindowUIObject::execute(const OUString& rAction,
                 mxWindow->KeyInput(keyEvent);
             }
         }
-        else if (rParameters.find("KEYCODE") != rParameters.end())
+        else if (rParameters.find(u"KEYCODE"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("KEYCODE");
+            auto itr = rParameters.find(u"KEYCODE"_ustr);
             const OUString rText = itr->second;
             auto aKeyEvents = generate_key_events_from_keycode(rText);
             for (auto const& keyEvent : aKeyEvents)
@@ -514,7 +514,7 @@ std::set<OUString> WindowUIObject::get_children() const
 
 OUString WindowUIObject::get_name() const
 {
-    return "WindowUIObject";
+    return u"WindowUIObject"_ustr;
 }
 
 namespace {
@@ -615,7 +615,7 @@ StringMap ButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     // Move that to a Control base class
-    aMap["Label"] = mxButton->GetDisplayText();
+    aMap[u"Label"_ustr] = mxButton->GetDisplayText();
 
     return aMap;
 }
@@ -640,7 +640,7 @@ void ButtonUIObject::execute(const OUString& rAction,
 
 OUString ButtonUIObject::get_name() const
 {
-    return "ButtonUIObject";
+    return u"ButtonUIObject"_ustr;
 }
 
 OUString ButtonUIObject::get_action(VclEventId nEvent) const
@@ -649,33 +649,33 @@ OUString ButtonUIObject::get_action(VclEventId nEvent) const
     {
         if(mxButton->get_id()=="writer_all")
         {
-            UITestLogger::getInstance().setAppName("writer");
-            return "Start writer" ;
+            UITestLogger::getInstance().setAppName(u"writer"_ustr);
+            return u"Start writer"_ustr ;
         }
         else if(mxButton->get_id()=="calc_all")
         {
-            UITestLogger::getInstance().setAppName("calc");
-            return "Start calc" ;
+            UITestLogger::getInstance().setAppName(u"calc"_ustr);
+            return u"Start calc"_ustr ;
         }
         else if(mxButton->get_id()=="impress_all")
         {
-            UITestLogger::getInstance().setAppName("impress");
-            return "Start impress" ;
+            UITestLogger::getInstance().setAppName(u"impress"_ustr);
+            return u"Start impress"_ustr ;
         }
         else if(mxButton->get_id()=="draw_all")
         {
-            UITestLogger::getInstance().setAppName("draw");
-            return "Start draw" ;
+            UITestLogger::getInstance().setAppName(u"draw"_ustr);
+            return u"Start draw"_ustr ;
         }
         else if(mxButton->get_id()=="math_all")
         {
-            UITestLogger::getInstance().setAppName("math");
-            return "Start math" ;
+            UITestLogger::getInstance().setAppName(u"math"_ustr);
+            return u"Start math"_ustr ;
         }
         else if(mxButton->get_id()=="database_all")
         {
-            UITestLogger::getInstance().setAppName("database");
-            return "Start database" ;
+            UITestLogger::getInstance().setAppName(u"database"_ustr);
+            return u"Start database"_ustr ;
         }
         else{
             if (get_top_parent(mxButton)->get_id().isEmpty()){
@@ -710,14 +710,14 @@ DialogUIObject::~DialogUIObject()
 StringMap DialogUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Modal"] = OUString::boolean(mxDialog->IsModalInputMode());
+    aMap[u"Modal"_ustr] = OUString::boolean(mxDialog->IsModalInputMode());
 
     return aMap;
 }
 
 OUString DialogUIObject::get_name() const
 {
-    return "DialogUIObject";
+    return u"DialogUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
@@ -743,7 +743,7 @@ void EditUIObject::execute(const OUString& rAction,
     bool bHandled = true;
     if (rAction == "TYPE")
     {
-        auto it = rParameters.find("TEXT");
+        auto it = rParameters.find(u"TEXT"_ustr);
         if (it != rParameters.end())
         {
             const OUString& rText = it->second;
@@ -760,7 +760,7 @@ void EditUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SET")
     {
-        auto it = rParameters.find("TEXT");
+        auto it = rParameters.find(u"TEXT"_ustr);
         if (it != rParameters.end())
         {
             mxEdit->SetText(it->second);
@@ -771,18 +771,18 @@ void EditUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find("FROM") != rParameters.end() &&
-                rParameters.find("TO") != rParameters.end())
+        if (rParameters.find(u"FROM"_ustr) != rParameters.end() &&
+                rParameters.find(u"TO"_ustr) != rParameters.end())
         {
-            tools::Long nMin = rParameters.find("FROM")->second.toInt32();
-            tools::Long nMax = rParameters.find("TO")->second.toInt32();
+            tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
+            tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
             Selection aSelection(nMin, nMax);
             mxEdit->SetSelection(aSelection);
         }
     }
     else if (rAction == "CLEAR")
     {
-        mxEdit->SetText("");
+        mxEdit->SetText(u""_ustr);
         mxEdit->Modify();
         bHandled = true;
     }
@@ -798,10 +798,10 @@ void EditUIObject::execute(const OUString& rAction,
 StringMap EditUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["MaxTextLength"] = OUString::number(mxEdit->GetMaxTextLen());
-    aMap["QuickHelpText"] = mxEdit->GetQuickHelpText();
-    aMap["SelectedText"] = mxEdit->GetSelected();
-    aMap["Text"] = mxEdit->GetText();
+    aMap[u"MaxTextLength"_ustr] = OUString::number(mxEdit->GetMaxTextLen());
+    aMap[u"QuickHelpText"_ustr] = mxEdit->GetQuickHelpText();
+    aMap[u"SelectedText"_ustr] = mxEdit->GetSelected();
+    aMap[u"Text"_ustr] = mxEdit->GetText();
 
     return aMap;
 }
@@ -834,7 +834,7 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
 
 OUString EditUIObject::get_name() const
 {
-    return "EditUIObject";
+    return u"EditUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> EditUIObject::create(vcl::Window* pWindow)
@@ -865,11 +865,11 @@ void MultiLineEditUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find("FROM") != rParameters.end() &&
-                rParameters.find("TO") != rParameters.end())
+        if (rParameters.find(u"FROM"_ustr) != rParameters.end() &&
+                rParameters.find(u"TO"_ustr) != rParameters.end())
         {
-            tools::Long nMin = rParameters.find("FROM")->second.toInt32();
-            tools::Long nMax = rParameters.find("TO")->second.toInt32();
+            tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
+            tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
             Selection aSelection(nMin, nMax);
             mxEdit->SetSelection(aSelection);
         }
@@ -886,16 +886,16 @@ void MultiLineEditUIObject::execute(const OUString& rAction,
 StringMap MultiLineEditUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["MaxTextLength"] = OUString::number(mxEdit->GetMaxTextLen());
-    aMap["SelectedText"] = mxEdit->GetSelected();
-    aMap["Text"] = mxEdit->GetText();
+    aMap[u"MaxTextLength"_ustr] = OUString::number(mxEdit->GetMaxTextLen());
+    aMap[u"SelectedText"_ustr] = mxEdit->GetSelected();
+    aMap[u"Text"_ustr] = mxEdit->GetText();
 
     return aMap;
 }
 
 OUString MultiLineEditUIObject::get_name() const
 {
-    return "MultiLineEditUIObject";
+    return u"MultiLineEditUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> MultiLineEditUIObject::create(vcl::Window* pWindow)
@@ -932,13 +932,13 @@ void ExpanderUIObject::execute(const OUString& rAction, const StringMap& rParame
 StringMap ExpanderUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Expanded"] = OUString::boolean(mxExpander->get_expanded());
+    aMap[u"Expanded"_ustr] = OUString::boolean(mxExpander->get_expanded());
     return aMap;
 }
 
 OUString ExpanderUIObject::get_name() const
 {
-    return "ExpanderUIObject";
+    return u"ExpanderUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> ExpanderUIObject::create(vcl::Window* pWindow)
@@ -973,14 +973,14 @@ void CheckBoxUIObject::execute(const OUString& rAction,
 StringMap CheckBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Selected"] = OUString::boolean(mxCheckBox->IsChecked());
-    aMap["TriStateEnabled"] = OUString::boolean(mxCheckBox->IsTriStateEnabled());
+    aMap[u"Selected"_ustr] = OUString::boolean(mxCheckBox->IsChecked());
+    aMap[u"TriStateEnabled"_ustr] = OUString::boolean(mxCheckBox->IsTriStateEnabled());
     return aMap;
 }
 
 OUString CheckBoxUIObject::get_name() const
 {
-    return "CheckBoxUIObject";
+    return u"CheckBoxUIObject"_ustr;
 }
 
 OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
@@ -1029,15 +1029,15 @@ void RadioButtonUIObject::execute(const OUString& rAction,
 StringMap RadioButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Checked"] = OUString::boolean(mxRadioButton->IsChecked());
-    aMap["Enabled"] = OUString::boolean(mxRadioButton->IsEnabled());
+    aMap[u"Checked"_ustr] = OUString::boolean(mxRadioButton->IsChecked());
+    aMap[u"Enabled"_ustr] = OUString::boolean(mxRadioButton->IsEnabled());
 
     return aMap;
 }
 
 OUString RadioButtonUIObject::get_name() const
 {
-    return "RadioButtonUIObject";
+    return u"RadioButtonUIObject"_ustr;
 }
 
 OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
@@ -1087,7 +1087,7 @@ StringMap TabPageUIObject::get_state()
 
 OUString TabPageUIObject::get_name() const
 {
-    return "TabPageUIObject";
+    return u"TabPageUIObject"_ustr;
 }
 
 ListBoxUIObject::ListBoxUIObject(const VclPtr<ListBox>& xListBox):
@@ -1113,16 +1113,16 @@ void ListBoxUIObject::execute(const OUString& rAction,
     if (rAction == "SELECT")
     {
         bool bSelect = true;
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = aVal.toInt32();
             mxListBox->SelectEntryPos(nPos, bSelect);
         }
-        else if (rParameters.find("TEXT") != rParameters.end())
+        else if (rParameters.find(u"TEXT"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("TEXT");
+            auto itr = rParameters.find(u"TEXT"_ustr);
             OUString aText = itr->second;
             mxListBox->SelectEntry(aText, bSelect);
         }
@@ -1135,19 +1135,19 @@ void ListBoxUIObject::execute(const OUString& rAction,
 StringMap ListBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["ReadOnly"] = OUString::boolean(mxListBox->IsReadOnly());
-    aMap["MultiSelect"] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
-    aMap["EntryCount"] = OUString::number(mxListBox->GetEntryCount());
-    aMap["SelectEntryCount"] = OUString::number(mxListBox->GetSelectedEntryCount());
-    aMap["SelectEntryPos"] = OUString::number(mxListBox->GetSelectedEntryPos());
-    aMap["SelectEntryText"] = mxListBox->GetSelectedEntry();
+    aMap[u"ReadOnly"_ustr] = OUString::boolean(mxListBox->IsReadOnly());
+    aMap[u"MultiSelect"_ustr] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
+    aMap[u"EntryCount"_ustr] = OUString::number(mxListBox->GetEntryCount());
+    aMap[u"SelectEntryCount"_ustr] = OUString::number(mxListBox->GetSelectedEntryCount());
+    aMap[u"SelectEntryPos"_ustr] = OUString::number(mxListBox->GetSelectedEntryPos());
+    aMap[u"SelectEntryText"_ustr] = mxListBox->GetSelectedEntry();
 
     return aMap;
 }
 
 OUString ListBoxUIObject::get_name() const
 {
-    return "ListBoxUIObject";
+    return u"ListBoxUIObject"_ustr;
 }
 
 OUString ListBoxUIObject::get_action(VclEventId nEvent) const
@@ -1199,15 +1199,15 @@ void ComboBoxUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = aVal.toInt32();
             mxComboBox->SelectEntryPos(nPos);
         }
-        else if(rParameters.find("TEXT") != rParameters.end()){
-            auto itr = rParameters.find("TEXT");
+        else if(rParameters.find(u"TEXT"_ustr) != rParameters.end()){
+            auto itr = rParameters.find(u"TEXT"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = mxComboBox->GetEntryPos(aVal);
             mxComboBox->SelectEntryPos(nPos);
@@ -1231,14 +1231,14 @@ void ComboBoxUIObject::execute(const OUString& rAction,
 StringMap ComboBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["SelectedText"] = mxComboBox->GetSelected();
-    aMap["EntryCount"] = OUString::number(mxComboBox->GetEntryCount());
+    aMap[u"SelectedText"_ustr] = mxComboBox->GetSelected();
+    aMap[u"EntryCount"_ustr] = OUString::number(mxComboBox->GetEntryCount());
     return aMap;
 }
 
 OUString ComboBoxUIObject::get_name() const
 {
-    return "ComboBoxUIObject";
+    return u"ComboBoxUIObject"_ustr;
 }
 
 OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
@@ -1294,10 +1294,10 @@ void SpinUIObject::execute(const OUString& rAction,
 StringMap SpinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Min"] = OUString::number(mxSpinButton->GetRangeMin());
-    aMap["Max"] = OUString::number(mxSpinButton->GetRangeMax());
-    aMap["Step"] = OUString::number(mxSpinButton->GetValueStep());
-    aMap["Value"] = OUString::number(mxSpinButton->GetValue());
+    aMap[u"Min"_ustr] = OUString::number(mxSpinButton->GetRangeMin());
+    aMap[u"Max"_ustr] = OUString::number(mxSpinButton->GetRangeMax());
+    aMap[u"Step"_ustr] = OUString::number(mxSpinButton->GetValueStep());
+    aMap[u"Value"_ustr] = OUString::number(mxSpinButton->GetValue());
 
     return aMap;
 }
@@ -1320,7 +1320,7 @@ OUString SpinUIObject::get_action(VclEventId nEvent) const
 
 OUString SpinUIObject::get_name() const
 {
-    return "SpinUIObject";
+    return u"SpinUIObject"_ustr;
 }
 
 SpinFieldUIObject::SpinFieldUIObject(const VclPtr<SpinField>& xSpinField):
@@ -1392,7 +1392,7 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
 
 OUString SpinFieldUIObject::get_name() const
 {
-    return "SpinFieldUIObject";
+    return u"SpinFieldUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
@@ -1418,7 +1418,7 @@ void MetricFieldUIObject::execute(const OUString& rAction,
 {
     if (rAction == "VALUE")
     {
-        auto itPos = rParameters.find("VALUE");
+        auto itPos = rParameters.find(u"VALUE"_ustr);
         if (itPos != rParameters.end())
         {
             mxMetricField->SetValueFromString(itPos->second);
@@ -1431,14 +1431,14 @@ void MetricFieldUIObject::execute(const OUString& rAction,
 StringMap MetricFieldUIObject::get_state()
 {
     StringMap aMap = EditUIObject::get_state();
-    aMap["Value"] = mxMetricField->GetValueString();
+    aMap[u"Value"_ustr] = mxMetricField->GetValueString();
 
     return aMap;
 }
 
 OUString MetricFieldUIObject::get_name() const
 {
-    return "MetricFieldUIObject";
+    return u"MetricFieldUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> MetricFieldUIObject::create(vcl::Window* pWindow)
@@ -1463,7 +1463,7 @@ void FormattedFieldUIObject::execute(const OUString& rAction,
 {
     if (rAction == "VALUE")
     {
-        auto itPos = rParameters.find("VALUE");
+        auto itPos = rParameters.find(u"VALUE"_ustr);
         if (itPos != rParameters.end())
         {
             mxFormattedField->SetValueFromString(itPos->second);
@@ -1476,14 +1476,14 @@ void FormattedFieldUIObject::execute(const OUString& rAction,
 StringMap FormattedFieldUIObject::get_state()
 {
     StringMap aMap = EditUIObject::get_state();
-    aMap["Value"] = OUString::number(mxFormattedField->GetFormatter().GetValue());
+    aMap[u"Value"_ustr] = OUString::number(mxFormattedField->GetFormatter().GetValue());
 
     return aMap;
 }
 
 OUString FormattedFieldUIObject::get_name() const
 {
-    return "FormattedFieldUIObject";
+    return u"FormattedFieldUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> FormattedFieldUIObject::create(vcl::Window* pWindow)
@@ -1508,9 +1508,9 @@ void TabControlUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
             std::vector<sal_uInt16> aIds = mxTabControl->GetPageIDs();
             mxTabControl->SelectTabPage(aIds[nPos]);
@@ -1523,11 +1523,11 @@ void TabControlUIObject::execute(const OUString& rAction,
 StringMap TabControlUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["PageCount"] = OUString::number(mxTabControl->GetPageCount());
+    aMap[u"PageCount"_ustr] = OUString::number(mxTabControl->GetPageCount());
 
     sal_uInt16 nPageId = mxTabControl->GetCurPageId();
-    aMap["CurrPageId"] = OUString::number(nPageId);
-    aMap["CurrPagePos"] = OUString::number(mxTabControl->GetPagePos(nPageId));
+    aMap[u"CurrPageId"_ustr] = OUString::number(nPageId);
+    aMap[u"CurrPagePos"_ustr] = OUString::number(mxTabControl->GetPagePos(nPageId));
 
     return aMap;
 }
@@ -1553,7 +1553,7 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
 
 OUString TabControlUIObject::get_name() const
 {
-    return "TabControlUIObject";
+    return u"TabControlUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> TabControlUIObject::create(vcl::Window* pWindow)
@@ -1578,9 +1578,9 @@ void RoadmapWizardUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
             mxRoadmapWizard->SelectRoadmapItemByID(nPos);
         }
@@ -1593,14 +1593,14 @@ StringMap RoadmapWizardUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["CurrentStep"] = OUString::number(mxRoadmapWizard->GetCurrentRoadmapItemID());
+    aMap[u"CurrentStep"_ustr] = OUString::number(mxRoadmapWizard->GetCurrentRoadmapItemID());
 
     return aMap;
 }
 
 OUString RoadmapWizardUIObject::get_name() const
 {
-    return "RoadmapWizardUIObject";
+    return u"RoadmapWizardUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> RoadmapWizardUIObject::create(vcl::Window* pWindow)
@@ -1625,9 +1625,9 @@ void VerticalTabControlUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt32 nPos = itr->second.toUInt32();
             OUString xid = mxTabControl->GetPageId(nPos);
             mxTabControl->SetCurPageId(xid);
@@ -1640,18 +1640,18 @@ void VerticalTabControlUIObject::execute(const OUString& rAction,
 StringMap VerticalTabControlUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["PageCount"] = OUString::number(mxTabControl->GetPageCount());
+    aMap[u"PageCount"_ustr] = OUString::number(mxTabControl->GetPageCount());
 
     OUString nPageId = mxTabControl->GetCurPageId();
-    aMap["CurrPageTitel"] = mxTabControl->GetPageText(nPageId);
-    aMap["CurrPagePos"] = OUString::number(mxTabControl->GetPagePos(nPageId));
+    aMap[u"CurrPageTitel"_ustr] = mxTabControl->GetPageText(nPageId);
+    aMap[u"CurrPagePos"_ustr] = OUString::number(mxTabControl->GetPagePos(nPageId));
 
     return aMap;
 }
 
 OUString VerticalTabControlUIObject::get_name() const
 {
-    return "VerticalTabControlUIObject";
+    return u"VerticalTabControlUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> VerticalTabControlUIObject::create(vcl::Window* pWindow)
@@ -1677,9 +1677,9 @@ void ToolBoxUIObject::execute(const OUString& rAction,
 {
     if (rAction == "CLICK")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("POS");
+            auto itr = rParameters.find(u"POS"_ustr);
             sal_uInt16 nPos = itr->second.toUInt32();
             mxToolBox->SetCurItemId(mxToolBox->GetItemId(nPos));
             mxToolBox->Click();
@@ -1705,16 +1705,16 @@ StringMap ToolBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     ToolBoxItemId nCurItemId = mxToolBox->GetCurItemId();
-    aMap["CurrSelectedItemID"] = OUString::number(sal_uInt16(nCurItemId));
-    aMap["CurrSelectedItemText"] = nCurItemId ? mxToolBox->GetItemText(nCurItemId) : "";
-    aMap["CurrSelectedItemCommand"] = nCurItemId ? mxToolBox->GetItemCommand(nCurItemId) : "";
-    aMap["ItemCount"] = OUString::number(mxToolBox->GetItemCount());
+    aMap[u"CurrSelectedItemID"_ustr] = OUString::number(sal_uInt16(nCurItemId));
+    aMap[u"CurrSelectedItemText"_ustr] = nCurItemId ? mxToolBox->GetItemText(nCurItemId) : u""_ustr;
+    aMap[u"CurrSelectedItemCommand"_ustr] = nCurItemId ? mxToolBox->GetItemCommand(nCurItemId) : u""_ustr;
+    aMap[u"ItemCount"_ustr] = OUString::number(mxToolBox->GetItemCount());
     return aMap;
 }
 
 OUString ToolBoxUIObject::get_name() const
 {
-    return "ToolBoxUIObject";
+    return u"ToolBoxUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> ToolBoxUIObject::create(vcl::Window* pWindow)
@@ -1737,8 +1737,8 @@ MenuButtonUIObject::~MenuButtonUIObject()
 StringMap MenuButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Label"] = mxMenuButton->GetDisplayText();
-    aMap["CurrentItem"] = mxMenuButton->GetCurItemIdent();
+    aMap[u"Label"_ustr] = mxMenuButton->GetDisplayText();
+    aMap[u"CurrentItem"_ustr] = mxMenuButton->GetCurItemIdent();
     return aMap;
 }
 
@@ -1756,7 +1756,7 @@ void MenuButtonUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "OPENFROMLIST")
     {
-        auto itr = rParameters.find("POS");
+        auto itr = rParameters.find(u"POS"_ustr);
         assert(itr != rParameters.end());
         sal_uInt32 nPos = itr->second.toUInt32();
 
@@ -1775,7 +1775,7 @@ void MenuButtonUIObject::execute(const OUString& rAction,
 
 OUString MenuButtonUIObject::get_name() const
 {
-    return "MenuButtonUIObject";
+    return u"MenuButtonUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> MenuButtonUIObject::create(vcl::Window* pWindow)
@@ -1802,11 +1802,11 @@ void DrawingAreaUIObject::execute(const OUString& rAction, const StringMap& rPar
     if (rAction == "CLICK")
     {
         // POSX and POSY are percentage of width/height dimensions
-        if (rParameters.find("POSX") != rParameters.end() &&
-            rParameters.find("POSY") != rParameters.end())
+        if (rParameters.find(u"POSX"_ustr) != rParameters.end() &&
+            rParameters.find(u"POSY"_ustr) != rParameters.end())
         {
-            auto aPosX = rParameters.find("POSX");
-            auto aPosY = rParameters.find("POSY");
+            auto aPosX = rParameters.find(u"POSX"_ustr);
+            auto aPosY = rParameters.find(u"POSY"_ustr);
 
             OString sPosX2 = OUStringToOString(aPosX->second, RTL_TEXTENCODING_ASCII_US);
             OString sPoxY2 = OUStringToOString(aPosY->second, RTL_TEXTENCODING_ASCII_US);
@@ -1849,18 +1849,18 @@ StringMap IconViewUIObject::get_state()
 
     OUString* pId = static_cast<OUString*>(pEntry->GetUserData());
     if (pId)
-        aMap["SelectedItemId"] = *pId;
+        aMap[u"SelectedItemId"_ustr] = *pId;
 
     SvTreeList* pModel = mxTreeList->GetModel();
     if (pModel)
-        aMap["SelectedItemPos"] = OUString::number(pModel->GetAbsPos(pEntry));
+        aMap[u"SelectedItemPos"_ustr] = OUString::number(pModel->GetAbsPos(pEntry));
 
     return aMap;
 }
 
 OUString IconViewUIObject::get_name() const
 {
-    return "IconViewUIObject";
+    return u"IconViewUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> IconViewUIObject::create(vcl::Window* pWindow)

@@ -64,7 +64,7 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     //Detect the magic bytes - we need to be sure the file is actually a JPEG
     aStream.Seek(0);
-    vcl::GraphicFormatDetector aDetector(aStream, "");
+    vcl::GraphicFormatDetector aDetector(aStream, u""_ustr);
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkJPG());
     // IMPORT JPEG

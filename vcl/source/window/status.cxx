@@ -1173,8 +1173,8 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     tools::Long nWidth;
     if (nCharsWidth != -1)
     {
-        nWidth = GetTextWidth("0",0,-1,nullptr,
-                    SalLayoutGlyphsCache::self()->GetLayoutGlyphs(GetOutDev(),"0"));
+        nWidth = GetTextWidth(u"0"_ustr,0,-1,nullptr,
+                    SalLayoutGlyphsCache::self()->GetLayoutGlyphs(GetOutDev(),u"0"_ustr));
         nWidth = nWidth * nCharsWidth + nFudge;
     }
     else

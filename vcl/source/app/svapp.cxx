@@ -153,7 +153,7 @@ Application* GetpApp()
 Application::Application()
 {
     // useful for themes at least, perhaps extensions too
-    OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
+    OUString aVar(u"LIBO_VERSION"_ustr), aValue(u"" LIBO_VERSION_DOTTED ""_ustr);
     osl_setEnvironment(aVar.pData, aValue.pData);
 
     ImplGetSVData()->mpApp = this;
@@ -273,7 +273,7 @@ void Application::Exception( ExceptionCategory nCategory )
         case ExceptionCategory::UserInterface:
             break;
         default:
-            Abort("Unknown Error");
+            Abort(u"Unknown Error"_ustr);
             break;
     }
 }
@@ -1166,7 +1166,7 @@ static OUString Localize(TranslateId aId, const bool bLocalize)
     if (bLocalize)
         return VclResId(aId);
     else
-        return Translate::get(aId, Translate::Create("vcl", LanguageTag("en-US")));
+        return Translate::get(aId, Translate::Create("vcl", LanguageTag(u"en-US"_ustr)));
 }
 
 OUString Application::GetOSVersion()

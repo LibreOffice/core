@@ -319,7 +319,7 @@ namespace vcl
             m_pHelp= VclPtr<HelpButton>::Create(this, WB_TABSTOP);
             m_pHelp->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
             m_pHelp->Show();
-            m_pHelp->set_id("help");
+            m_pHelp->set_id(u"help"_ustr);
             AddButtonResponse(m_pHelp, RET_HELP);
             AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X);
         }
@@ -332,7 +332,7 @@ namespace vcl
             m_pPrevPage->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
             m_pPrevPage->SetText(VclResId(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
-            m_pPrevPage->set_id("previous");
+            m_pPrevPage->set_id(u"previous"_ustr);
 
             if (_nButtonFlags & WizardButtonFlags::NEXT)
                 AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
@@ -350,7 +350,7 @@ namespace vcl
             m_pNextPage->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
             m_pNextPage->SetText(VclResId(STR_WIZDLG_NEXT));
             m_pNextPage->Show();
-            m_pNextPage->set_id("next");
+            m_pNextPage->set_id(u"next"_ustr);
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             mpNextBtn = m_pNextPage;
@@ -364,7 +364,7 @@ namespace vcl
             m_pFinish->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
             m_pFinish->SetText(VclResId(STR_WIZDLG_FINISH));
             m_pFinish->Show();
-            m_pFinish->set_id("finish");
+            m_pFinish->set_id(u"finish"_ustr);
 
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             m_pFinish->SetClickHdl( LINK( this, RoadmapWizard, OnFinish ) );
@@ -802,7 +802,7 @@ namespace vcl
     }
 
     WizardMachine::WizardMachine(weld::Window* pParent, WizardButtonFlags nButtonFlags)
-        : AssistantController(pParent, "vcl/ui/wizard.ui", "Wizard")
+        : AssistantController(pParent, u"vcl/ui/wizard.ui"_ustr, u"Wizard"_ustr)
         , m_pCurTabPage(nullptr)
         , m_nCurState(0)
         , m_pFirstPage(nullptr)

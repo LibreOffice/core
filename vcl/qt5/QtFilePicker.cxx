@@ -80,8 +80,9 @@ namespace
 {
 uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.FilePicker", "com.sun.star.ui.dialogs.SystemFilePicker",
-             "com.sun.star.ui.dialogs.QtFilePicker" };
+    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.QtFilePicker"_ustr };
 }
 }
 
@@ -733,14 +734,15 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
     // parameter checking
     uno::Any arg;
     if (args.getLength() == 0)
-        throw lang::IllegalArgumentException("no arguments", static_cast<XFilePicker2*>(this), 1);
+        throw lang::IllegalArgumentException(u"no arguments"_ustr, static_cast<XFilePicker2*>(this),
+                                             1);
 
     arg = args[0];
 
     if ((arg.getValueType() != cppu::UnoType<sal_Int16>::get())
         && (arg.getValueType() != cppu::UnoType<sal_Int8>::get()))
     {
-        throw lang::IllegalArgumentException("invalid argument type",
+        throw lang::IllegalArgumentException(u"invalid argument type"_ustr,
                                              static_cast<XFilePicker2*>(this), 1);
     }
 
@@ -839,7 +841,7 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
             break;
 
         default:
-            throw lang::IllegalArgumentException("Unknown template",
+            throw lang::IllegalArgumentException(u"Unknown template"_ustr,
                                                  static_cast<XFilePicker2*>(this), 1);
     }
 
@@ -913,7 +915,7 @@ void SAL_CALL QtFilePicker::notifyTermination(const css::lang::EventObject&)
 
 OUString SAL_CALL QtFilePicker::getImplementationName()
 {
-    return "com.sun.star.ui.dialogs.QtFilePicker";
+    return u"com.sun.star.ui.dialogs.QtFilePicker"_ustr;
 }
 
 sal_Bool SAL_CALL QtFilePicker::supportsService(const OUString& ServiceName)

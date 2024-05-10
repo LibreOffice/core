@@ -60,12 +60,12 @@ void IMapObject::AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100)
 
 void IMapObject::AppendCERNURL(OStringBuffer& rBuf) const
 {
-    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative("", aURL), osl_getThreadTextEncoding()));
+    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(u""_ustr, aURL), osl_getThreadTextEncoding()));
 }
 
 void IMapObject::AppendNCSAURL(OStringBuffer& rBuf) const
 {
-    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative("", aURL), osl_getThreadTextEncoding()));
+    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(u""_ustr, aURL), osl_getThreadTextEncoding()));
     rBuf.append(' ');
 }
 

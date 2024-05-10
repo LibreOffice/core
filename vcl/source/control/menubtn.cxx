@@ -106,7 +106,7 @@ void MenuButton::ExecuteMenu()
         mnCurItemId = 0;
         msCurItemIdent.clear();
     }
-    collectUIInformation(aID,"OPENLIST","","");
+    collectUIInformation(aID,u"OPENLIST"_ustr,u""_ustr,u""_ustr);
 }
 
 void MenuButton::CancelMenu()
@@ -125,7 +125,7 @@ void MenuButton::CancelMenu()
         else
             vcl::Window::GetDockingManager()->EndPopupMode(mpFloatingWindow);
     }
-    collectUIInformation(get_id(),"CLOSELIST","","");
+    collectUIInformation(get_id(),u"CLOSELIST"_ustr,u""_ustr,u""_ustr);
 }
 
 bool MenuButton::InPopupMode() const
@@ -235,7 +235,7 @@ void MenuButton::Activate()
 void MenuButton::Select()
 {
     if (mnCurItemId)
-        collectUIInformation(get_id(),"OPENFROMLIST","POS",OUString::number(mnCurItemId));
+        collectUIInformation(get_id(),u"OPENFROMLIST"_ustr,u"POS"_ustr,OUString::number(mnCurItemId));
 
     maSelectHdl.Call( this );
 }

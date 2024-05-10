@@ -556,7 +556,7 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     }
     else if (arguments.getLength() != 1 || !(arguments[0] >>= sel))
     {
-        throw css::lang::IllegalArgumentException("bad QtInstance::CreateClipboard arguments",
+        throw css::lang::IllegalArgumentException(u"bad QtInstance::CreateClipboard arguments"_ustr,
                                                   css::uno::Reference<css::uno::XInterface>(), -1);
     }
 

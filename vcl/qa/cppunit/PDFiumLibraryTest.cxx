@@ -137,12 +137,12 @@ void PDFiumLibraryTest::testPageObjects()
 
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPageObject->getType());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("The quick, brown fox jumps over a lazy dog. DJs flock by when "
-                                  "MTV ax quiz prog. Junk MTV quiz "),
+    CPPUNIT_ASSERT_EQUAL(u"The quick, brown fox jumps over a lazy dog. DJs flock by when "
+                         "MTV ax quiz prog. Junk MTV quiz "_ustr,
                          pPageObject->getText(pTextPage));
 
     CPPUNIT_ASSERT_EQUAL(12.0, pPageObject->getFontSize());
-    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), pPageObject->getFontName());
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr, pPageObject->getFontName());
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFTextRenderMode::Fill, pPageObject->getTextRenderMode());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getStrokeColor());
@@ -191,10 +191,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+        CPPUNIT_ASSERT_EQUAL(u"quikee"_ustr, aPopupString);
 
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Annotation test"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Annotation test"_ustr, aContentsString);
 
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
         auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
@@ -205,7 +205,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
 
         OUString sDateTimeString
             = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
-        CPPUNIT_ASSERT_EQUAL(OUString("D:20200612201322+02'00"), sDateTimeString);
+        CPPUNIT_ASSERT_EQUAL(u"D:20200612201322+02'00"_ustr, sDateTimeString);
     }
 
     {
@@ -247,10 +247,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+        CPPUNIT_ASSERT_EQUAL(u"quikee"_ustr, aPopupString);
 
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("YEEEY"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"YEEEY"_ustr, aContentsString);
 
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
         auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
@@ -272,10 +272,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+        CPPUNIT_ASSERT_EQUAL(u"quikee"_ustr, aPopupString);
 
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Note"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Note"_ustr, aContentsString);
 
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
         auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
@@ -359,7 +359,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::FreeText, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Inline Note"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Inline Note"_ustr, aContentsString);
         auto const& rLineGeometry = pAnnotation->getLineGeometry();
         CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
@@ -370,7 +370,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Ink, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Freehand Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Freehand Text"_ustr, aContentsString);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnotation->getInkStrokes().size());
         auto const& aInkStrokes = pAnnotation->getInkStrokes();
         auto const& aPoints = aInkStrokes[0];
@@ -386,7 +386,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Line, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Line Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Line Text"_ustr, aContentsString);
         auto const& rLineGeometry = pAnnotation->getLineGeometry();
         CPPUNIT_ASSERT_EQUAL(false, rLineGeometry.empty());
     }
@@ -398,7 +398,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"_ostr));
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Polygon Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Polygon Text"_ustr, aContentsString);
         auto const& aVertices = pAnnotation->getVertices();
         CPPUNIT_ASSERT_EQUAL(size_t(3), aVertices.size());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
@@ -412,7 +412,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Circle, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Ellipse Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Ellipse Text"_ustr, aContentsString);
         auto const& rLineGeometry = pAnnotation->getLineGeometry();
         CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
@@ -423,7 +423,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Square, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-        CPPUNIT_ASSERT_EQUAL(OUString("Rectangle Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(u"Rectangle Text"_ustr, aContentsString);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xE0, 0x00), pAnnotation->getColor());
         CPPUNIT_ASSERT_EQUAL(false, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor));
         auto const& rLineGeometry = pAnnotation->getLineGeometry();

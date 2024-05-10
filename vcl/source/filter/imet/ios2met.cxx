@@ -917,7 +917,7 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     }
     else aP0=aAttr.aCurPos;
     if (nOrderLen > pOS2MET->remainingSize())
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
     nPolySize=nOrderLen/2;
     if (nPolySize==0) return;
     tools::Polygon aPolygon(nPolySize);
@@ -1061,7 +1061,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
             nLen = nOrderLen-4;
     }
     if (!pOS2MET->good() || nLen > pOS2MET->remainingSize())
-        throw css::uno::Exception("attempt to read past end of input", nullptr);
+        throw css::uno::Exception(u"attempt to read past end of input"_ustr, nullptr);
     std::unique_ptr<char[]> pChr(new char[nLen+1]);
     for (sal_uInt16 i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
