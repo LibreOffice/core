@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -1398,6 +1399,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159438)
     assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "bookmark-end"_ostr);
     assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "name"_ostr,
                 u"bookmark3"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
+{
+    // Given a document with an empty numbered paragraph, and a cross-reference to it
+    loadAndReload("tdf160700.odt");
+
+    // Refresh fields and ensure cross-reference to numbered para is okay
+    auto xTextFieldsSupplier(mxComponent.queryThrow<text::XTextFieldsSupplier>());
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    xFieldsAccess.queryThrow<util::XRefreshable>()->refresh();
+
+    auto xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    auto xTextField(xFields->nextElement().queryThrow<text::XTextField>());
+    // Save must not create markup with text:bookmark-end element before text:bookmark-start
+    // Withoud the fix, this would fail with
+    // - Expected: 1
+    // - Actual  : Error: Reference source not found
+    // i.e., the bookmark wasn't imported, and the field had no proper source
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xTextField->getPresentation(false));
+
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // Check that we export the bookmark in the empty paragraph as a single text:bookmark
+    // element. Another walid markup is text:bookmark-start followed by text:bookmark-end
+    // (in that order). The problem was, that text:bookmark-end was before text:bookmark-start.
+    assertXPathChildren(pXmlDoc, "//office:text/text:list/text:list-item/text:p"_ostr, 1);
+    assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark"_ostr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

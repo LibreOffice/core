@@ -4,5 +4,3 @@ port=29418
 project=core
 defaultremote=logerrit
 defaultbranch=feature/cib_contract49c
-
-

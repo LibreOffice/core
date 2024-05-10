@@ -150,8 +150,11 @@ namespace
         bool const hasOther = isExpanded && rStartPos != rEndPos;
         bool const bStartPosInNode = rStartPos.GetNode() == rOwnNode;
         bool const bEndPosInNode = rEndPos.GetNode() == rOwnNode;
+        // tdf#160700: Crossrefbookmarks only need separate start and end, when the start
+        // isn't in the end position (so in empty nodes, no need to handle them specially)
         sw::mark::CrossRefBookmark* const pCrossRefMark
             = !isExpanded && bStartPosInNode
+                      && rStartPos.GetContentIndex() < rStartPos.GetContentNode()->Len()
                   ? dynamic_cast<sw::mark::CrossRefBookmark*>(pBkmk)
                   : nullptr;
 
