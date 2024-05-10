@@ -53,7 +53,7 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
     ,m_xFormulaData(new FormEditData())
     ,m_xRowSet(std::move(_xRowSet))
     ,m_pEdit(nullptr)
-    ,m_sFormula("=")
+    ,m_sFormula(u"="_ustr)
     ,m_nStart(0)
     ,m_nEnd(1)
     ,mrStringPool(rStrPool)
@@ -65,7 +65,7 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
         else
             m_sFormula = _sFormula;
     }
-    m_xParser.set(_xServiceFactory->createInstance("org.libreoffice.report.pentaho.SOFormulaParser"),uno::UNO_QUERY);
+    m_xParser.set(_xServiceFactory->createInstance(u"org.libreoffice.report.pentaho.SOFormulaParser"_ustr),uno::UNO_QUERY);
     if ( m_xParser.is() )
         m_xOpCodeMapper = m_xParser->getFormulaOpCodeMapper();
     fill();
@@ -87,7 +87,7 @@ FormulaDialog::~FormulaDialog()
 {
     if ( m_xAddField )
     {
-        SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
+        SvtViewOptions aDlgOpt( EViewType::Window, u"" HID_RPT_FIELD_SEL_WIN ""_ustr );
         aDlgOpt.SetWindowState(m_xAddField->getDialog()->get_window_state(vcl::WindowDataMask::Pos | vcl::WindowDataMask::State | vcl::WindowDataMask::Minimized));
 
         if (m_xAddField->getDialog()->get_visible())
@@ -210,7 +210,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_xAddField = std::make_shared<OAddFieldWindow>(m_xDialog.get(), m_xRowSet);
         m_xAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
+        SvtViewOptions aDlgOpt( EViewType::Window, u"" HID_RPT_FIELD_SEL_WIN ""_ustr );
         if ( aDlgOpt.Exists() )
         {
             m_xAddField->getDialog()->set_window_state(aDlgOpt.GetWindowState());

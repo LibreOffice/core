@@ -74,7 +74,7 @@ void SAL_CALL OReportEngineJFree::dispose()
 
 OUString OReportEngineJFree::getImplementationName_Static(  )
 {
-    return "com.sun.star.comp.report.OReportEngineJFree";
+    return u"com.sun.star.comp.report.OReportEngineJFree"_ustr;
 }
 
 
@@ -85,7 +85,7 @@ OUString SAL_CALL OReportEngineJFree::getImplementationName(  )
 
 uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  )
 {
-    uno::Sequence< OUString > aServices { "com.sun.star.report.ReportEngine" };
+    uno::Sequence< OUString > aServices { u"com.sun.star.report.ReportEngine"_ustr };
 
     return aServices;
 }
@@ -153,7 +153,7 @@ OUString OReportEngineJFree::getNewOutputName()
     MimeConfigurationHelper aConfighelper(m_xContext);
     const OUString sMimeType = m_xReport->getMimeType();
     std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
-    OUString sExt(".rpt");
+    OUString sExt(u".rpt"_ustr);
     if ( pFilter )
         sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
 
@@ -200,13 +200,13 @@ OUString OReportEngineJFree::getNewOutputName()
         aUserOpts.GetLastName();
 
     uno::Sequence< beans::NamedValue > aConvertedProperties{
-        {"InputStorage", uno::Any(xTemp) },
-        {"OutputStorage", uno::Any(xOut) },
+        {u"InputStorage"_ustr, uno::Any(xTemp) },
+        {u"OutputStorage"_ustr, uno::Any(xOut) },
         {PROPERTY_REPORTDEFINITION, uno::Any(m_xReport) },
         {PROPERTY_ACTIVECONNECTION, uno::Any(m_xActiveConnection) },
         {PROPERTY_MAXROWS, uno::Any(m_nMaxRows) },
-        {"Author", uno::Any(sAuthor) },
-        {"Title", uno::Any(m_xReport->getCaption()) }
+        {u"Author"_ustr, uno::Any(sAuthor) },
+        {u"Title"_ustr, uno::Any(m_xReport->getCaption()) }
     };
 
     OUString sOutputName;
@@ -258,7 +258,7 @@ uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const u
             // if there is no frame given, find the right
             xFrameLoad = frame::Desktop::create(m_xContext);
             sal_Int32 const nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-            uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame("_blank",nFrameSearchFlag);
+            uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(u"_blank"_ustr,nFrameSearchFlag);
             xFrameLoad.set( xFrame,uno::UNO_QUERY);
         }
 

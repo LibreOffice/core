@@ -39,7 +39,7 @@ SotClipboardFormatId OReportExchange::getDescriptorFormatId()
     static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
     if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
     {
-        s_nFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"report.ReportObjectsTransfer\"");
+        s_nFormat = SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"report.ReportObjectsTransfer\""_ustr);
         OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OReportExchange::getDescriptorFormatId: bad exchange id!");
     }
     return s_nFormat;

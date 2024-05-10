@@ -71,7 +71,7 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
 
 OUString SAL_CALL DataProviderHandler::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.DataProviderHandler";
+    return u"com.sun.star.comp.report.DataProviderHandler"_ustr;
 }
 
 sal_Bool SAL_CALL DataProviderHandler::supportsService( const OUString& ServiceName )
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL DataProviderHandler::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.report.inspection.DataProviderHandler" };
+    return { u"com.sun.star.report.inspection.DataProviderHandler"_ustr };
 }
 
 // override WeakComponentImplHelperBase::disposing()
@@ -125,7 +125,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             }
         }
         m_xDataProvider.set(m_xFormComponent,uno::UNO_QUERY);
-        m_xReportComponent.set( xNameCont->getByName("ReportComponent"), uno::UNO_QUERY );
+        m_xReportComponent.set( xNameCont->getByName(u"ReportComponent"_ustr), uno::UNO_QUERY );
         if ( m_xDataProvider.is() )
         {
             auto aNoConverter = std::make_shared<AnyConverter>();
@@ -219,7 +219,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     if ( !xTitle.is() )
     {
-        xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.chart2.Title",m_xContext),uno::UNO_QUERY);
+        xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.chart2.Title"_ustr,m_xContext),uno::UNO_QUERY);
         xTitled->setTitleObject(xTitle);
     }
     if ( xTitle.is() )
@@ -427,10 +427,10 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
             bool bModified = xReport->isModified();
             // this fills the chart again
             ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
-            aArgs.put( "HasCategories", uno::Any( true ) );
-            aArgs.put( "FirstCellAsLabel", uno::Any( true ) );
-            aArgs.put( "DataRowSource", uno::Any( chart::ChartDataRowSource_COLUMNS ) );
+            aArgs.put( u"CellRangeRepresentation"_ustr, uno::Any( u"all"_ustr ) );
+            aArgs.put( u"HasCategories"_ustr, uno::Any( true ) );
+            aArgs.put( u"FirstCellAsLabel"_ustr, uno::Any( true ) );
+            aArgs.put( u"DataRowSource"_ustr, uno::Any( chart::ChartDataRowSource_COLUMNS ) );
             uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY_THROW);
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
@@ -467,7 +467,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 {
     uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
     {
-        {"ParentWindow", m_xContext->getValueByName("DialogParentWindow")},
+        {"ParentWindow", m_xContext->getValueByName(u"DialogParentWindow"_ustr)},
         {"Detail", uno::Any(m_xDataProvider)},
         {"Master", uno::Any(m_xReportComponent->getSection()->getReportDefinition())},
         {"Explanation", uno::Any(RptResId(TranslateId(nullptr, RID_STR_EXPLANATION)))},
@@ -477,7 +477,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "org.openoffice.comp.form.ui.MasterDetailLinkDialog", aSeq, m_xContext),
+            u"org.openoffice.comp.form.ui.MasterDetailLinkDialog"_ustr, aSeq, m_xContext),
         uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();
@@ -488,13 +488,13 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 {
     uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
     {
-        {"ParentWindow", m_xContext->getValueByName("DialogParentWindow")},
+        {"ParentWindow", m_xContext->getValueByName(u"DialogParentWindow"_ustr)},
         {"ChartModel", uno::Any(m_xChartModel)}
     }));
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.chart2.ChartTypeDialog", aSeq, m_xContext),
+            u"com.sun.star.comp.chart2.ChartTypeDialog"_ustr, aSeq, m_xContext),
         uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();

@@ -163,7 +163,7 @@ void SAL_CALL OSection::disposing()
 
 OUString SAL_CALL OSection::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.Section";
+    return u"com.sun.star.comp.report.Section"_ustr;
 }
 
 uno::Sequence< OUString> OSection::getSupportedServiceNames_Static()

@@ -422,15 +422,15 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
     uno::Reference<frame::XFrame> xFrame = rController.getFrame();
     css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::Any(comphelper::makePropertyValue("Value", OUString("report"))),
-        css::uno::Any(comphelper::makePropertyValue("Frame", xFrame)),
-        css::uno::Any(comphelper::makePropertyValue("IsContextMenu", true))
+        css::uno::Any(comphelper::makePropertyValue(u"Value"_ustr, u"report"_ustr)),
+        css::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, xFrame)),
+        css::uno::Any(comphelper::makePropertyValue(u"IsContextMenu"_ustr, true))
     };
 
     css::uno::Reference<css::uno::XComponentContext> xContext(rController.getORB());
     css::uno::Reference<css::frame::XPopupMenuController> xMenuController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+        u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);
 
     if (!xMenuController.is())
         return;

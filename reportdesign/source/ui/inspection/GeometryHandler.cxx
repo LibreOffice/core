@@ -219,7 +219,7 @@ GeometryHandler::~GeometryHandler()
 
 OUString SAL_CALL GeometryHandler::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.GeometryHandler";
+    return u"com.sun.star.comp.report.GeometryHandler"_ustr;
 }
 
 sal_Bool SAL_CALL GeometryHandler::supportsService( const OUString& ServiceName )
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL GeometryHandler::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL GeometryHandler::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.report.inspection.GeometryHandler" };
+    return { u"com.sun.star.report.inspection.GeometryHandler"_ustr };
 }
 
 // override WeakComponentImplHelperBase::disposing()
@@ -280,7 +280,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
             m_xReportComponent->removePropertyChangeListener(PROPERTY_DATAFIELD,static_cast< beans::XPropertyChangeListener* >( this ));
 
         const uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
-        m_xReportComponent.set( xObjectAsContainer->getByName("ReportComponent"), uno::UNO_QUERY );
+        m_xReportComponent.set( xObjectAsContainer->getByName(u"ReportComponent"_ustr), uno::UNO_QUERY );
 
         static constexpr OUString sRowSet(u"RowSet"_ustr);
         if ( xObjectAsContainer->hasByName( sRowSet ) )
@@ -925,14 +925,14 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
     {
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            aPropertyValue = getConstantValue(false,RID_STR_FORCENEWPAGE_CONST,_rControlValue,"com.sun.star.report.ForceNewPage",PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_FORCENEWPAGE_CONST,_rControlValue,u"com.sun.star.report.ForceNewPage"_ustr,PropertyName);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            aPropertyValue = getConstantValue(false,RID_STR_GROUPKEEPTOGETHER_CONST,_rControlValue,"com.sun.star.report.GroupKeepTogether",PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_GROUPKEEPTOGETHER_CONST,_rControlValue,u"com.sun.star.report.GroupKeepTogether"_ustr,PropertyName);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            aPropertyValue = getConstantValue(false,RID_STR_REPORTPRINTOPTION_CONST,_rControlValue,"com.sun.star.report.ReportPrintOption",PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_REPORTPRINTOPTION_CONST,_rControlValue,u"com.sun.star.report.ReportPrintOption"_ustr,PropertyName);
             break;
         case PROPERTY_ID_BACKCOLOR:
         case PROPERTY_ID_CONTROLBACKGROUND:
@@ -946,7 +946,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
-                aPropertyValue = getConstantValue(false,RID_STR_KEEPTOGETHER_CONST,_rControlValue,"com.sun.star.report.KeepTogether",PropertyName);
+                aPropertyValue = getConstantValue(false,RID_STR_KEEPTOGETHER_CONST,_rControlValue,u"com.sun.star.report.KeepTogether"_ustr,PropertyName);
                 break;
             }
             [[fallthrough]];
@@ -1118,19 +1118,19 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             break;
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            aControlValue = getConstantValue(true,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,"com.sun.star.report.ForceNewPage",PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,u"com.sun.star.report.ForceNewPage"_ustr,PropertyName);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            aControlValue = getConstantValue(true,RID_STR_GROUPKEEPTOGETHER_CONST,aPropertyValue,"com.sun.star.report.GroupKeepTogether",PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_GROUPKEEPTOGETHER_CONST,aPropertyValue,u"com.sun.star.report.GroupKeepTogether"_ustr,PropertyName);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            aControlValue = getConstantValue(true,RID_STR_REPORTPRINTOPTION_CONST,aPropertyValue,"com.sun.star.report.ReportPrintOption",PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_REPORTPRINTOPTION_CONST,aPropertyValue,u"com.sun.star.report.ReportPrintOption"_ustr,PropertyName);
             break;
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
-                aControlValue = getConstantValue(true,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,"com.sun.star.report.KeepTogether",PropertyName);
+                aControlValue = getConstantValue(true,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,u"com.sun.star.report.KeepTogether"_ustr,PropertyName);
                 break;
             }
             [[fallthrough]];
@@ -1275,7 +1275,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         ,PROPERTY_VISIBLE
         ,PROPERTY_PAGEHEADEROPTION
         ,PROPERTY_PAGEFOOTEROPTION
-        ,OUString("ControlLabel")
+        ,u"ControlLabel"_ustr
         ,PROPERTY_POSITIONX
         ,PROPERTY_POSITIONY
         ,PROPERTY_WIDTH
@@ -1394,7 +1394,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName(u"DialogParentWindow"_ustr) ,uno::UNO_QUERY);
         const uno::Reference< report::XReportControlFormat> xReportControlFormat(m_xReportComponent,uno::UNO_QUERY);
         aGuard.clear();
 
@@ -1416,7 +1416,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
 
         OUString sFormula;
         m_xReportComponent->getPropertyValue(PropertyName) >>= sFormula;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName(u"DialogParentWindow"_ustr) ,uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext > xContext = m_xContext;
         uno::Reference< beans::XPropertySet > xRowSet( m_xRowSet,uno::UNO_QUERY);
         aGuard.clear();
@@ -1434,7 +1434,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName(u"DialogParentWindow"_ustr) ,uno::UNO_QUERY);
         const uno::Reference< report::XShape> xShape(m_xReportComponent,uno::UNO_QUERY);
         aGuard.clear();
 
@@ -1551,15 +1551,15 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
     try
     {
         xFactory = m_xContext->getServiceManager();
-        xInspectorWindow.set(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
-        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName("ActiveConnection") ,uno::UNO_QUERY);
+        xInspectorWindow.set(m_xContext->getValueByName(u"DialogParentWindow"_ustr) ,uno::UNO_QUERY);
+        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName(u"ActiveConnection"_ustr) ,uno::UNO_QUERY);
         if ( !xCon.is() )
             return false;
 
         uno::Reference< beans::XPropertySet> xRowSetProp(m_xRowSet,uno::UNO_QUERY);
         if ( !m_xRowSet.is() )
         {
-            m_xRowSet.set(xFactory->createInstanceWithContext("com.sun.star.sdb.RowSet",m_xContext),uno::UNO_QUERY);
+            m_xRowSet.set(xFactory->createInstanceWithContext(u"com.sun.star.sdb.RowSet"_ustr,m_xContext),uno::UNO_QUERY);
             xRowSetProp.set(m_xRowSet,uno::UNO_QUERY);
             xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::Any(xCon));
             ::comphelper::copyProperties(m_xReportComponent,xRowSetProp);
@@ -2024,7 +2024,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     _rFieldNames.realloc(0);
     try
     {
-        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
+        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName(u"DialogParentWindow"_ustr) ,uno::UNO_QUERY);
         weld::WaitObject aWaitCursor(Application::GetFrameWeld(xInspectorWindow));
 
         // get the form of the control we're inspecting
@@ -2035,7 +2035,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
         OUString sObjectName;
         OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName );
         // when there is no command we don't need to ask for columns
-        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName("ActiveConnection") ,uno::UNO_QUERY);
+        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName(u"ActiveConnection"_ustr) ,uno::UNO_QUERY);
         if ( !sObjectName.isEmpty() && xCon.is() )
         {
             sal_Int32 nObjectType = sdb::CommandType::COMMAND;

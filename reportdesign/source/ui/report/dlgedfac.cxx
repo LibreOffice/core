@@ -50,24 +50,24 @@ IMPL_STATIC_LINK(
         {
             case SdrObjKind::ReportDesignFixedText:
                     pNewObj = new OUnoObject(aParams.rSdrModel
-                                                        ,"com.sun.star.form.component.FixedText"
+                                                        ,u"com.sun.star.form.component.FixedText"_ustr
                                                         ,SdrObjKind::ReportDesignFixedText);
                     break;
             case SdrObjKind::ReportDesignImageControl:
                     pNewObj = new OUnoObject(aParams.rSdrModel
-                                                        ,"com.sun.star.form.component.DatabaseImageControl"
+                                                        ,u"com.sun.star.form.component.DatabaseImageControl"_ustr
                                                         ,SdrObjKind::ReportDesignImageControl);
                     break;
             case SdrObjKind::ReportDesignFormattedField:
                     pNewObj = new OUnoObject(aParams.rSdrModel
-                                                        ,"com.sun.star.form.component.FormattedField"
+                                                        ,u"com.sun.star.form.component.FormattedField"_ustr
                                                         ,SdrObjKind::ReportDesignFormattedField);
                     break;
             case SdrObjKind::ReportDesignVerticalFixedLine:
             case SdrObjKind::ReportDesignHorizontalFixedLine:
                 {
                     rtl::Reference<OUnoObject> pObj = new OUnoObject(aParams.rSdrModel
-                                                        ,"com.sun.star.awt.UnoControlFixedLineModel"
+                                                        ,u"com.sun.star.awt.UnoControlFixedLineModel"_ustr
                                                         ,aParams.nObjIdentifier);
                     pNewObj = pObj;
                     if ( aParams.nObjIdentifier == SdrObjKind::ReportDesignHorizontalFixedLine )

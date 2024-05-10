@@ -60,7 +60,7 @@ namespace rptui
 
     OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  )
     {
-        return "com.sun.star.comp.report.DefaultComponentInspectorModel";
+        return u"com.sun.star.comp.report.DefaultComponentInspectorModel"_ustr;
     }
 
     sal_Bool SAL_CALL DefaultComponentInspectorModel::supportsService( const OUString& ServiceName )
@@ -70,17 +70,17 @@ namespace rptui
 
     Sequence< OUString > SAL_CALL DefaultComponentInspectorModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.report.inspection.DefaultComponentInspectorModel" };
+        return { u"com.sun.star.report.inspection.DefaultComponentInspectorModel"_ustr };
     }
 
     Sequence< Any > SAL_CALL DefaultComponentInspectorModel::getHandlerFactories()
     {
         // service names for all our handlers
         return Sequence<Any> {
-            Any(OUString( "com.sun.star.report.inspection.ReportComponentHandler")),
-            Any(OUString( "com.sun.star.form.inspection.EditPropertyHandler")),
-            Any(OUString( "com.sun.star.report.inspection.DataProviderHandler")),
-            Any(OUString( "com.sun.star.report.inspection.GeometryHandler"))
+            Any(u"com.sun.star.report.inspection.ReportComponentHandler"_ustr),
+            Any(u"com.sun.star.form.inspection.EditPropertyHandler"_ustr),
+            Any(u"com.sun.star.report.inspection.DataProviderHandler"_ustr),
+            Any(u"com.sun.star.report.inspection.GeometryHandler"_ustr)
         };
     }
 
@@ -190,7 +190,7 @@ namespace rptui
         if ( !m_xComponent.is() )
             try
             {
-                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.form.inspection.DefaultFormComponentInspectorModel",m_xContext),UNO_QUERY_THROW);
+                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.form.inspection.DefaultFormComponentInspectorModel"_ustr,m_xContext),UNO_QUERY_THROW);
             }
             catch(const Exception &)
             {

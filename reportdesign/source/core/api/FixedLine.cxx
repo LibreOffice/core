@@ -202,7 +202,7 @@ void SAL_CALL OFixedLine::dispose()
 
 OUString OFixedLine::getImplementationName_Static(  )
 {
-    return "com.sun.star.comp.report.OFixedLine";
+    return u"com.sun.star.comp.report.OFixedLine"_ustr;
 }
 
 
@@ -519,7 +519,7 @@ OUString SAL_CALL OFixedLine::getShapeType(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
-    return "com.sun.star.drawing.ControlShape";
+    return u"com.sun.star.drawing.ControlShape"_ustr;
 }
 
 OUString SAL_CALL OFixedLine::getHyperLinkURL()

@@ -48,13 +48,13 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-    OUString sTemp = aTemp.getUnpackedValueOrDefault("URL",OUString());
+    OUString sTemp = aTemp.getUnpackedValueOrDefault(u"URL"_ustr,OUString());
 
     if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
         if ( aURL.GetFileExtension().equalsIgnoreAsciiCase("orp") )
-            return "StarBaseReport";
+            return u"StarBaseReport"_ustr;
         else
         {
             try
@@ -63,9 +63,9 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
                 if ( xProp.is() )
                 {
                     OUString sMediaType;
-                    xProp->getPropertyValue("MediaType") >>= sMediaType;
+                    xProp->getPropertyValue(u"MediaType"_ustr) >>= sMediaType;
                     if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
-                        return "StarBaseReport";
+                        return u"StarBaseReport"_ustr;
                     ::comphelper::disposeComponent(xProp);
                 }
             }
@@ -80,7 +80,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
 // XServiceInfo
 OUString SAL_CALL ORptTypeDetection::getImplementationName()
 {
-    return "com.sun.star.comp.report.ORptTypeDetection";
+    return u"com.sun.star.comp.report.ORptTypeDetection"_ustr;
 }
 
 
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 

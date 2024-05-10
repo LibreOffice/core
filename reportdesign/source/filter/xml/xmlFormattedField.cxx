@@ -48,7 +48,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport
                     _xComponent->setDataField(ORptFilter::convertFormula(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_SELECT_PAGE):
-                    _xComponent->setDataField("rpt:PageNumber()");
+                    _xComponent->setDataField(u"rpt:PageNumber()"_ustr);
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
@@ -57,7 +57,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport
         }
         if ( _bPageCount )
         {
-            _xComponent->setDataField("rpt:PageCount()");
+            _xComponent->setDataField(u"rpt:PageCount()"_ustr);
         }
     }
     catch(Exception&)

@@ -440,11 +440,11 @@ namespace
         // create an AWT font
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
-        lcl_pushBack( _out_rProperties, "Font", uno::Any( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, u"Font"_ustr, uno::Any( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
-        lcl_pushBack( _out_rProperties, "FontAsian", uno::Any( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, u"FontAsian"_ustr, uno::Any( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
-        lcl_pushBack( _out_rProperties, "FontComplex", uno::Any( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, u"FontComplex"_ustr, uno::Any( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( const SvxShadowedItem* pShadowedItem = _rItemSet.GetItemIfSet( ITEMID_SHADOWED) )
@@ -556,7 +556,7 @@ static ItemInfoPackage& getItemInfoPackageOpenCharDlg()
         ItemInfoArrayOpenCharDlg maItemInfos {{
             // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
             { XATTR_FILLSTYLE, new XFillStyleItem, 0, SFX_ITEMINFOFLAG_NONE },
-            { XATTR_FILLCOLOR, new XFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLCOLOR, new XFillColorItem(u""_ustr, COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
             { XATTR_FILLGRADIENT, new XFillGradientItem(basegfx::BGradient()), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLHATCH, new XFillHatchItem(COL_DEFAULT_SHAPE_STROKE), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBITMAP, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
@@ -567,7 +567,7 @@ static ItemInfoPackage& getItemInfoPackageOpenCharDlg()
             { XATTR_FILLBMP_SIZEX, new XFillBmpSizeXItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_SIZEY, new XFillBmpSizeYItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLFLOATTRANSPARENCE, new XFillFloatTransparenceItem(basegfx::BGradient(), false), 0, SFX_ITEMINFOFLAG_NONE },
-            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem(u""_ustr, COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_SIZELOG, new XFillBmpSizeLogItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_TILEOFFSETX, new XFillBmpTileOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_TILEOFFSETY, new XFillBmpTileOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
@@ -663,7 +663,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         ITEMID_FONT, ITEMID_WEIGHT_COMPLEX
     >);
 
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties"));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool(u"ReportCharProperties"_ustr));
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
 
     // here we have to use the callback to create all needed default entries.
@@ -686,10 +686,10 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         lcl_CharPropertiesToItems( _rxReportControlFormat, aDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(Application::GetFrameWeld(_rxParentWindow), &aDescriptor, "CharDialog");
+            ORptPageDialog aDlg(Application::GetFrameWeld(_rxParentWindow), &aDescriptor, u"CharDialog"_ustr);
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
-                aDlg.RemoveTabPage("background");
+                aDlg.RemoveTabPage(u"background"_ustr);
             bSuccess = aDlg.run() == RET_OK;
             if ( bSuccess )
             {
@@ -753,21 +753,21 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     try
     {
         awt::FontDescriptor aAwtFont;
-        if ( aSettings.get( "Font" ) >>= aAwtFont )
+        if ( aSettings.get( u"Font"_ustr ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
             aAwtFont.Name.clear(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
         }
-        if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
+        if ( aSettings.get( u"FontAsian"_ustr ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
             aAwtFont.Name.clear(); // hack to
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
         }
-        if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
+        if ( aSettings.get( u"FontComplex"_ustr ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
             aAwtFont.Name.clear(); // hack to
@@ -994,7 +994,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
         xFactory = _xContext->getServiceManager();
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
 
-        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
+        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(u"org.libreoffice.report.pentaho.SOFunctionManager"_ustr,_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
             auto pFormulaManager = std::make_shared<FunctionManager>(xMgr);

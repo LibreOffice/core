@@ -94,7 +94,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
     ,m_bDeleted( false )
 {
-    SetHelpId(UID_RPT_RPT_APP_VIEW);
+    SetHelpId(u"" UID_RPT_RPT_APP_VIEW ""_ustr);
     ImplInitSettings();
 
     SetMapMode( MapMode( MapUnit::Map100thMM ) );
@@ -132,7 +132,7 @@ void ODesignView::dispose()
     }
     if ( m_xAddField )
     {
-        SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
+        SvtViewOptions aDlgOpt( EViewType::Window, u"" UID_RPT_RPT_APP_VIEW ""_ustr );
         aDlgOpt.SetWindowState(m_xAddField->getDialog()->get_window_state(vcl::WindowDataMask::All));
 
         if (m_xAddField->getDialog()->get_visible())
@@ -513,7 +513,7 @@ void ODesignView::toggleAddField()
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
         m_xAddField = std::make_shared<OAddFieldWindow>(GetFrameWeld(), xSet);
         m_xAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
-        SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
+        SvtViewOptions aDlgOpt( EViewType::Window, u"" UID_RPT_RPT_APP_VIEW ""_ustr );
         if ( aDlgOpt.Exists() )
             m_xAddField->getDialog()->set_window_state(aDlgOpt.GetWindowState());
         m_xAddField->Update();

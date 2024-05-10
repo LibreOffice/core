@@ -693,9 +693,9 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 
                 ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
                 weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/dbreport/ui/groupsortmenu.ui"));
-                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
-                xContextMenu->set_sensitive("delete", IsDeleteAllowed() && bEnable);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/dbreport/ui/groupsortmenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
+                xContextMenu->set_sensitive(u"delete"_ustr, IsDeleteAllowed() && bEnable);
                 if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                 {
                     if( m_nDeleteEvent )
@@ -784,21 +784,21 @@ Size OFieldExpressionControl::GetOptimalSize() const
 
 OGroupsSortingDialog::OGroupsSortingDialog(weld::Window* pParent, bool bReadOnly,
                                            OReportController* pController)
-    : GenericDialogController(pParent, "modules/dbreport/ui/floatingsort.ui", "FloatingSort")
+    : GenericDialogController(pParent, u"modules/dbreport/ui/floatingsort.ui"_ustr, u"FloatingSort"_ustr)
     , OPropertyChangeListener(m_aMutex)
     , m_pController(pController)
     , m_xGroups(m_pController->getReportDefinition()->getGroups())
     , m_bReadOnly(bReadOnly)
-    , m_xToolBox(m_xBuilder->weld_toolbar("toolbox"))
-    , m_xProperties(m_xBuilder->weld_widget("properties"))
-    , m_xOrderLst(m_xBuilder->weld_combo_box("sorting"))
-    , m_xHeaderLst(m_xBuilder->weld_combo_box("header"))
-    , m_xFooterLst(m_xBuilder->weld_combo_box("footer"))
-    , m_xGroupOnLst(m_xBuilder->weld_combo_box("group"))
-    , m_xGroupIntervalEd(m_xBuilder->weld_spin_button("interval"))
-    , m_xKeepTogetherLst(m_xBuilder->weld_combo_box("keep"))
-    , m_xHelpWindow(m_xBuilder->weld_label("helptext"))
-    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xToolBox(m_xBuilder->weld_toolbar(u"toolbox"_ustr))
+    , m_xProperties(m_xBuilder->weld_widget(u"properties"_ustr))
+    , m_xOrderLst(m_xBuilder->weld_combo_box(u"sorting"_ustr))
+    , m_xHeaderLst(m_xBuilder->weld_combo_box(u"header"_ustr))
+    , m_xFooterLst(m_xBuilder->weld_combo_box(u"footer"_ustr))
+    , m_xGroupOnLst(m_xBuilder->weld_combo_box(u"group"_ustr))
+    , m_xGroupIntervalEd(m_xBuilder->weld_spin_button(u"interval"_ustr))
+    , m_xKeepTogetherLst(m_xBuilder->weld_combo_box(u"keep"_ustr))
+    , m_xHelpWindow(m_xBuilder->weld_label(u"helptext"_ustr))
+    , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xTableCtrlParent(m_xBox->CreateChildFrame())
     , m_xFieldExpression(VclPtr<OFieldExpressionControl>::Create(this, m_xTableCtrlParent))
 {
@@ -1149,30 +1149,30 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 
     if (bEnabled && _nRow > 0 )
     {
-        m_xToolBox->set_item_sensitive("up", true);
+        m_xToolBox->set_item_sensitive(u"up"_ustr, true);
     }
     else
     {
-        m_xToolBox->set_item_sensitive("up", false);
+        m_xToolBox->set_item_sensitive(u"up"_ustr, false);
     }
     if (bEnabled && _nRow < (nRowCount - 1) )
     {
-        m_xToolBox->set_item_sensitive("down", true);
+        m_xToolBox->set_item_sensitive(u"down"_ustr, true);
     }
     else
     {
-        m_xToolBox->set_item_sensitive("down", false);
+        m_xToolBox->set_item_sensitive(u"down"_ustr, false);
     }
 
     sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos != NO_GROUP )
     {
         bool bEnableDelete = nGroupCount > 0;
-        m_xToolBox->set_item_sensitive("delete", bEnableDelete);
+        m_xToolBox->set_item_sensitive(u"delete"_ustr, bEnableDelete);
     }
     else
     {
-        m_xToolBox->set_item_sensitive("delete", false);
+        m_xToolBox->set_item_sensitive(u"delete"_ustr, false);
     }
 }
 

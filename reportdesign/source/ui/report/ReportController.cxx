@@ -239,12 +239,12 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
 
 OUString SAL_CALL OReportController::getImplementationName()
 {
-    return "com.sun.star.report.comp.ReportDesign";
+    return u"com.sun.star.report.comp.ReportDesign"_ustr;
 }
 
 Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames()
 {
-    return { "com.sun.star.sdb.ReportDesign" };
+    return { u"com.sun.star.sdb.ReportDesign"_ustr };
 }
 
 #define PROPERTY_ID_ZOOMVALUE   1
@@ -254,7 +254,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     :OReportController_BASE(xContext)
     ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
     ,m_aSelectionListeners( getMutex() )
-    ,m_sMode("normal")
+    ,m_sMode(u"normal"_ustr)
     ,m_nSplitPos(-1)
     ,m_nPageNum(-1)
     ,m_nSelectionCount(0)
@@ -272,7 +272,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 {
     // new Observer
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
-    registerProperty("ZoomValue", PROPERTY_ID_ZOOMVALUE,
+    registerProperty(u"ZoomValue"_ustr, PROPERTY_ID_ZOOMVALUE,
                      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::TRANSIENT,
                      &m_nZoomValue, ::cppu::UnoType<sal_Int16>::get());
 
@@ -1641,7 +1641,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
 
     rArguments.get_ensureType( PROPERTY_REPORTNAME, m_sName );
     if ( m_sName.isEmpty() )
-        rArguments.get_ensureType( "DocumentTitle", m_sName );
+        rArguments.get_ensureType( u"DocumentTitle"_ustr, m_sName );
 
     try
     {
@@ -1657,7 +1657,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
             clearUndoManager();
             UndoSuppressor aSuppressUndo( getUndoManager() );
 
-            setMode(::comphelper::NamedValueCollection::getOrDefault(getModel()->getArgs(), u"Mode", OUString("normal")));
+            setMode(::comphelper::NamedValueCollection::getOrDefault(getModel()->getArgs(), u"Mode", u"normal"_ustr));
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
@@ -1665,7 +1665,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
             utl::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
-            OUString sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString());
+            OUString sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(u"HierarchicalDocumentName"_ustr,OUString());
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
             {
@@ -1700,7 +1700,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
                 const OReportPage* pPage = dynamic_cast<OReportPage*>(m_aReportModel->GetPage(static_cast<sal_uInt16>(m_nPageNum)));
                 if ( pPage )
                 {
-                    executeUnChecked(SID_SELECT,{ comphelper::makePropertyValue("", pPage->getSection() ) });
+                    executeUnChecked(SID_SELECT,{ comphelper::makePropertyValue(u""_ustr, pPage->getSection() ) });
                 }
             }
             else
@@ -1773,273 +1773,273 @@ void OReportController::describeSupportedFeatures()
 {
     DBSubComponentController::describeSupportedFeatures();
 
-    implDescribeSupportedFeature( ".uno:TextDocument",              SID_RPT_TEXTDOCUMENT,           CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:Spreadsheet",               SID_RPT_SPREADSHEET,            CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( u".uno:TextDocument"_ustr,              SID_RPT_TEXTDOCUMENT,           CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( u".uno:Spreadsheet"_ustr,               SID_RPT_SPREADSHEET,            CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:Redo",                      SID_REDO,                       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Undo",                      SID_UNDO,                       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectAll",                 SID_SELECTALL,                  CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectAllInSection",        SID_SELECTALL_IN_SECTION,       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Delete",                    SID_DELETE,                     CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectReport",              SID_SELECT_REPORT,              CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:ExecuteReport",             SID_EXECUTE_REPORT,             CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Redo"_ustr,                      SID_REDO,                       CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Undo"_ustr,                      SID_UNDO,                       CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:SelectAll"_ustr,                 SID_SELECTALL,                  CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:SelectAllInSection"_ustr,        SID_SELECTALL_IN_SECTION,       CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:Delete"_ustr,                    SID_DELETE,                     CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:SelectReport"_ustr,              SID_SELECT_REPORT,              CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:ExecuteReport"_ustr,             SID_EXECUTE_REPORT,             CommandGroup::EDIT );
 
-    implDescribeSupportedFeature( ".uno:GridVisible",               SID_GRID_VISIBLE,               CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:GridUse",                   SID_GRID_USE,                   CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:HelplinesMove",             SID_HELPLINES_MOVE,             CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ShowRuler",                 SID_RULER,                      CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:AddField",                  SID_FM_ADD_FIELD,               CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ReportNavigator",           SID_RPT_SHOWREPORTEXPLORER,     CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ControlProperties",         SID_SHOW_PROPERTYBROWSER,       CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DbSortingAndGrouping",      SID_SORTINGANDGROUPING,         CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:PageHeaderFooter",          SID_PAGEHEADERFOOTER,           CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ReportHeaderFooter",        SID_REPORTHEADERFOOTER,         CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ZoomSlider",                SID_ATTR_ZOOMSLIDER );
-    implDescribeSupportedFeature( ".uno:Zoom",                      SID_ATTR_ZOOM,                  CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:GridVisible"_ustr,               SID_GRID_VISIBLE,               CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:GridUse"_ustr,                   SID_GRID_USE,                   CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:HelplinesMove"_ustr,             SID_HELPLINES_MOVE,             CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:ShowRuler"_ustr,                 SID_RULER,                      CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:AddField"_ustr,                  SID_FM_ADD_FIELD,               CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:ReportNavigator"_ustr,           SID_RPT_SHOWREPORTEXPLORER,     CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:ControlProperties"_ustr,         SID_SHOW_PROPERTYBROWSER,       CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:DbSortingAndGrouping"_ustr,      SID_SORTINGANDGROUPING,         CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:PageHeaderFooter"_ustr,          SID_PAGEHEADERFOOTER,           CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:ReportHeaderFooter"_ustr,        SID_REPORTHEADERFOOTER,         CommandGroup::VIEW );
+    implDescribeSupportedFeature( u".uno:ZoomSlider"_ustr,                SID_ATTR_ZOOMSLIDER );
+    implDescribeSupportedFeature( u".uno:Zoom"_ustr,                      SID_ATTR_ZOOM,                  CommandGroup::VIEW );
 
-    implDescribeSupportedFeature( ".uno:ConditionalFormatting",     SID_CONDITIONALFORMATTING,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:PageDialog",                SID_PAGEDIALOG,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ResetAttributes",           SID_SETCONTROLDEFAULTS,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ConditionalFormatting"_ustr,     SID_CONDITIONALFORMATTING,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:PageDialog"_ustr,                SID_PAGEDIALOG,                 CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ResetAttributes"_ustr,           SID_SETCONTROLDEFAULTS,         CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:Bold",                      SID_ATTR_CHAR_WEIGHT,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Italic",                    SID_ATTR_CHAR_POSTURE,          CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Underline",                 SID_ATTR_CHAR_UNDERLINE,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DBBackgroundColor",         SID_ATTR_CHAR_COLOR_BACKGROUND, CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BackgroundColor",           SID_BACKGROUND_COLOR,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:CharColorExt",              SID_ATTR_CHAR_COLOR_EXT);
-    implDescribeSupportedFeature( ".uno:Color",                     SID_ATTR_CHAR_COLOR);
-    implDescribeSupportedFeature( ".uno:FontColor",                 SID_ATTR_CHAR_COLOR2,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FontDialog",                SID_CHAR_DLG,                   CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:LeftPara",                  SID_ATTR_PARA_ADJUST_LEFT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:CenterPara",                SID_ATTR_PARA_ADJUST_CENTER,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:RightPara",                 SID_ATTR_PARA_ADJUST_RIGHT,     CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:JustifyPara",               SID_ATTR_PARA_ADJUST_BLOCK,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:Bold"_ustr,                      SID_ATTR_CHAR_WEIGHT,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:Italic"_ustr,                    SID_ATTR_CHAR_POSTURE,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:Underline"_ustr,                 SID_ATTR_CHAR_UNDERLINE,        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DBBackgroundColor"_ustr,         SID_ATTR_CHAR_COLOR_BACKGROUND, CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:BackgroundColor"_ustr,           SID_BACKGROUND_COLOR,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:CharColorExt"_ustr,              SID_ATTR_CHAR_COLOR_EXT);
+    implDescribeSupportedFeature( u".uno:Color"_ustr,                     SID_ATTR_CHAR_COLOR);
+    implDescribeSupportedFeature( u".uno:FontColor"_ustr,                 SID_ATTR_CHAR_COLOR2,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:FontDialog"_ustr,                SID_CHAR_DLG,                   CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:LeftPara"_ustr,                  SID_ATTR_PARA_ADJUST_LEFT,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:CenterPara"_ustr,                SID_ATTR_PARA_ADJUST_CENTER,    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:RightPara"_ustr,                 SID_ATTR_PARA_ADJUST_RIGHT,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:JustifyPara"_ustr,               SID_ATTR_PARA_ADJUST_BLOCK,     CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:FontHeight",                SID_ATTR_CHAR_FONTHEIGHT,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:CharFontName",              SID_ATTR_CHAR_FONT,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:FontHeight"_ustr,                SID_ATTR_CHAR_FONTHEIGHT,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:CharFontName"_ustr,              SID_ATTR_CHAR_FONT,             CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ArrangeMenu",               SID_ARRANGEMENU,                CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BringToFront",              SID_FRAME_TO_TOP,               CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectBackOne",             SID_FRAME_DOWN,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectForwardOne",          SID_FRAME_UP,                   CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SendToBack",                SID_FRAME_TO_BOTTOM,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SetObjectToForeground",     SID_OBJECT_HEAVEN,              CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SetObjectToBackground",     SID_OBJECT_HELL,                CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ArrangeMenu"_ustr,               SID_ARRANGEMENU,                CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:BringToFront"_ustr,              SID_FRAME_TO_TOP,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectBackOne"_ustr,             SID_FRAME_DOWN,                 CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectForwardOne"_ustr,          SID_FRAME_UP,                   CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SendToBack"_ustr,                SID_FRAME_TO_BOTTOM,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SetObjectToForeground"_ustr,     SID_OBJECT_HEAVEN,              CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SetObjectToBackground"_ustr,     SID_OBJECT_HELL,                CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ObjectAlign",               SID_OBJECT_ALIGN,               CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectAlignLeft",           SID_OBJECT_ALIGN_LEFT,          CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignCenter",               SID_OBJECT_ALIGN_CENTER,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectAlignRight",          SID_OBJECT_ALIGN_RIGHT,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignUp",                   SID_OBJECT_ALIGN_UP,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignMiddle",               SID_OBJECT_ALIGN_MIDDLE,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignDown",                 SID_OBJECT_ALIGN_DOWN,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectAlign"_ustr,               SID_OBJECT_ALIGN,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectAlignLeft"_ustr,           SID_OBJECT_ALIGN_LEFT,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:AlignCenter"_ustr,               SID_OBJECT_ALIGN_CENTER,        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectAlignRight"_ustr,          SID_OBJECT_ALIGN_RIGHT,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:AlignUp"_ustr,                   SID_OBJECT_ALIGN_UP,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:AlignMiddle"_ustr,               SID_OBJECT_ALIGN_MIDDLE,        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:AlignDown"_ustr,                 SID_OBJECT_ALIGN_DOWN,          CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:SectionAlign",              SID_SECTION_ALIGN );
-    implDescribeSupportedFeature( ".uno:SectionAlignLeft",          SID_SECTION_ALIGN_LEFT,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignCenter",        SID_SECTION_ALIGN_CENTER,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignRight",         SID_SECTION_ALIGN_RIGHT,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignTop",           SID_SECTION_ALIGN_UP,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignMiddle",        SID_SECTION_ALIGN_MIDDLE,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignBottom",        SID_SECTION_ALIGN_DOWN,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionShrink",             SID_SECTION_SHRINK,             CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionShrinkTop",          SID_SECTION_SHRINK_TOP,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionShrinkBottom",       SID_SECTION_SHRINK_BOTTOM,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlign"_ustr,              SID_SECTION_ALIGN );
+    implDescribeSupportedFeature( u".uno:SectionAlignLeft"_ustr,          SID_SECTION_ALIGN_LEFT,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlignCenter"_ustr,        SID_SECTION_ALIGN_CENTER,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlignRight"_ustr,         SID_SECTION_ALIGN_RIGHT,        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlignTop"_ustr,           SID_SECTION_ALIGN_UP,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlignMiddle"_ustr,        SID_SECTION_ALIGN_MIDDLE,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionAlignBottom"_ustr,        SID_SECTION_ALIGN_DOWN,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionShrink"_ustr,             SID_SECTION_SHRINK,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionShrinkTop"_ustr,          SID_SECTION_SHRINK_TOP,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SectionShrinkBottom"_ustr,       SID_SECTION_SHRINK_BOTTOM,      CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ObjectResize",              SID_OBJECT_RESIZING,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SmallestWidth",             SID_OBJECT_SMALLESTWIDTH,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SmallestHeight",            SID_OBJECT_SMALLESTHEIGHT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:GreatestWidth",             SID_OBJECT_GREATESTWIDTH,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:GreatestHeight",            SID_OBJECT_GREATESTHEIGHT,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectResize"_ustr,              SID_OBJECT_RESIZING,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SmallestWidth"_ustr,             SID_OBJECT_SMALLESTWIDTH,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SmallestHeight"_ustr,            SID_OBJECT_SMALLESTHEIGHT,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:GreatestWidth"_ustr,             SID_OBJECT_GREATESTWIDTH,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:GreatestHeight"_ustr,            SID_OBJECT_GREATESTHEIGHT,      CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:DistributeSelection",       SID_DISTRIBUTE_DLG,             CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeHorzLeft",        SID_DISTRIBUTE_HLEFT,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeHorzCenter",      SID_DISTRIBUTE_HCENTER,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeHorzDistance",    SID_DISTRIBUTE_HDISTANCE,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeHorzRight",       SID_DISTRIBUTE_HRIGHT,          CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeVertTop",         SID_DISTRIBUTE_VTOP,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeVertCenter",      SID_DISTRIBUTE_VCENTER,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeVertDistance",    SID_DISTRIBUTE_VDISTANCE,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DistributeVertBottom",      SID_DISTRIBUTE_VBOTTOM,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeSelection"_ustr,       SID_DISTRIBUTE_DLG,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeHorzLeft"_ustr,        SID_DISTRIBUTE_HLEFT,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeHorzCenter"_ustr,      SID_DISTRIBUTE_HCENTER,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeHorzDistance"_ustr,    SID_DISTRIBUTE_HDISTANCE,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeHorzRight"_ustr,       SID_DISTRIBUTE_HRIGHT,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeVertTop"_ustr,         SID_DISTRIBUTE_VTOP,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeVertCenter"_ustr,      SID_DISTRIBUTE_VCENTER,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeVertDistance"_ustr,    SID_DISTRIBUTE_VDISTANCE,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:DistributeVertBottom"_ustr,      SID_DISTRIBUTE_VBOTTOM,         CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ExportTo",                  SID_EXPORTDOC,                  CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:ExportToPDF",               SID_EXPORTDOCASPDF,             CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:PrintPreview",              SID_PRINTPREVIEW,               CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( u".uno:ExportTo"_ustr,                  SID_EXPORTDOC,                  CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( u".uno:ExportToPDF"_ustr,               SID_EXPORTDOCASPDF,             CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( u".uno:PrintPreview"_ustr,              SID_PRINTPREVIEW,               CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:NewDoc",                    SID_NEWDOC,                     CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:Save",                      SID_SAVEDOC,                    CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SaveAs",                    SID_SAVEASDOC,                  CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SaveACopy",                 SID_SAVEACOPY,                  CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:NewDoc"_ustr,                    SID_NEWDOC,                     CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:Save"_ustr,                      SID_SAVEDOC,                    CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:SaveAs"_ustr,                    SID_SAVEASDOC,                  CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( u".uno:SaveACopy"_ustr,                 SID_SAVEACOPY,                  CommandGroup::DOCUMENT );
 
-    implDescribeSupportedFeature( ".uno:InsertPageNumberField",     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertDateTimeField",       SID_DATETIME,                   CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertObjectChart",         SID_INSERT_DIAGRAM,             CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertGraphic",             SID_INSERT_GRAPHIC,             CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:InsertPageNumberField"_ustr,     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:InsertDateTimeField"_ustr,       SID_DATETIME,                   CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:InsertObjectChart"_ustr,         SID_INSERT_DIAGRAM,             CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:InsertGraphic"_ustr,             SID_INSERT_GRAPHIC,             CommandGroup::INSERT );
     // controls
-    implDescribeSupportedFeature( ".uno:SelectObject",              SID_OBJECT_SELECT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Label",                     SID_FM_FIXEDTEXT,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Edit",                      SID_FM_EDIT,                    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ImageControl",              SID_FM_IMAGECONTROL,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:HFixedLine",                SID_INSERT_HFIXEDLINE,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:VFixedLine",                SID_INSERT_VFIXEDLINE,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SelectObject"_ustr,              SID_OBJECT_SELECT,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Label"_ustr,                     SID_FM_FIXEDTEXT,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Edit"_ustr,                      SID_FM_EDIT,                    CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ImageControl"_ustr,              SID_FM_IMAGECONTROL,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:HFixedLine"_ustr,                SID_INSERT_HFIXEDLINE,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:VFixedLine"_ustr,                SID_INSERT_VFIXEDLINE,          CommandGroup::INSERT );
 
     // shapes
-    implDescribeSupportedFeature( ".uno:BasicShapes",               SID_DRAWTBX_CS_BASIC,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.rectangle",     SID_DRAWTBX_CS_BASIC1,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.round-rectangle",SID_DRAWTBX_CS_BASIC2,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.quadrat",       SID_DRAWTBX_CS_BASIC3,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.round-quadrat", SID_DRAWTBX_CS_BASIC4,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.circle",        SID_DRAWTBX_CS_BASIC5,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.ellipse",       SID_DRAWTBX_CS_BASIC6,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.circle-pie",    SID_DRAWTBX_CS_BASIC7,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.isosceles-triangle",SID_DRAWTBX_CS_BASIC8,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.right-triangle",SID_DRAWTBX_CS_BASIC9,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.trapezoid",     SID_DRAWTBX_CS_BASIC10,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.diamond",       SID_DRAWTBX_CS_BASIC11,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.parallelogram", SID_DRAWTBX_CS_BASIC12,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.pentagon",      SID_DRAWTBX_CS_BASIC13,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.hexagon",       SID_DRAWTBX_CS_BASIC14,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.octagon",       SID_DRAWTBX_CS_BASIC15,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.cross",         SID_DRAWTBX_CS_BASIC16,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.ring",          SID_DRAWTBX_CS_BASIC17,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.block-arc",     SID_DRAWTBX_CS_BASIC18,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.can",           SID_DRAWTBX_CS_BASIC19,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.cube",          SID_DRAWTBX_CS_BASIC20,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.paper",         SID_DRAWTBX_CS_BASIC21,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.frame",         SID_DRAWTBX_CS_BASIC22,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes"_ustr,               SID_DRAWTBX_CS_BASIC,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.rectangle"_ustr,     SID_DRAWTBX_CS_BASIC1,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.round-rectangle"_ustr,SID_DRAWTBX_CS_BASIC2,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.quadrat"_ustr,       SID_DRAWTBX_CS_BASIC3,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.round-quadrat"_ustr, SID_DRAWTBX_CS_BASIC4,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.circle"_ustr,        SID_DRAWTBX_CS_BASIC5,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.ellipse"_ustr,       SID_DRAWTBX_CS_BASIC6,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.circle-pie"_ustr,    SID_DRAWTBX_CS_BASIC7,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.isosceles-triangle"_ustr,SID_DRAWTBX_CS_BASIC8,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.right-triangle"_ustr,SID_DRAWTBX_CS_BASIC9,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.trapezoid"_ustr,     SID_DRAWTBX_CS_BASIC10,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.diamond"_ustr,       SID_DRAWTBX_CS_BASIC11,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.parallelogram"_ustr, SID_DRAWTBX_CS_BASIC12,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.pentagon"_ustr,      SID_DRAWTBX_CS_BASIC13,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.hexagon"_ustr,       SID_DRAWTBX_CS_BASIC14,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.octagon"_ustr,       SID_DRAWTBX_CS_BASIC15,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.cross"_ustr,         SID_DRAWTBX_CS_BASIC16,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.ring"_ustr,          SID_DRAWTBX_CS_BASIC17,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.block-arc"_ustr,     SID_DRAWTBX_CS_BASIC18,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.can"_ustr,           SID_DRAWTBX_CS_BASIC19,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.cube"_ustr,          SID_DRAWTBX_CS_BASIC20,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.paper"_ustr,         SID_DRAWTBX_CS_BASIC21,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes.frame"_ustr,         SID_DRAWTBX_CS_BASIC22,         CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:SymbolShapes",              SID_DRAWTBX_CS_SYMBOL,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes"_ustr,              SID_DRAWTBX_CS_SYMBOL,          CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:SymbolShapes.smiley" ,      SID_DRAWTBX_CS_SYMBOL1,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.sun" ,         SID_DRAWTBX_CS_SYMBOL2,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.moon" ,        SID_DRAWTBX_CS_SYMBOL3,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.lightning" ,   SID_DRAWTBX_CS_SYMBOL4,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.heart" ,       SID_DRAWTBX_CS_SYMBOL5,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.flower" ,      SID_DRAWTBX_CS_SYMBOL6,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.cloud" ,       SID_DRAWTBX_CS_SYMBOL7,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.forbidden" ,   SID_DRAWTBX_CS_SYMBOL8,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.puzzle" ,      SID_DRAWTBX_CS_SYMBOL9,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.bracket-pair" ,SID_DRAWTBX_CS_SYMBOL10,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.left-bracket" ,SID_DRAWTBX_CS_SYMBOL11,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.right-bracket",SID_DRAWTBX_CS_SYMBOL12,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.brace-pair" ,  SID_DRAWTBX_CS_SYMBOL13,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.left-brace" ,  SID_DRAWTBX_CS_SYMBOL14,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.right-brace" , SID_DRAWTBX_CS_SYMBOL15,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.quad-bevel" ,  SID_DRAWTBX_CS_SYMBOL16,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.octagon-bevel",SID_DRAWTBX_CS_SYMBOL17,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.diamond-bevel",SID_DRAWTBX_CS_SYMBOL18,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.smiley"_ustr ,      SID_DRAWTBX_CS_SYMBOL1,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.sun"_ustr ,         SID_DRAWTBX_CS_SYMBOL2,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.moon"_ustr ,        SID_DRAWTBX_CS_SYMBOL3,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.lightning"_ustr ,   SID_DRAWTBX_CS_SYMBOL4,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.heart"_ustr ,       SID_DRAWTBX_CS_SYMBOL5,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.flower"_ustr ,      SID_DRAWTBX_CS_SYMBOL6,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.cloud"_ustr ,       SID_DRAWTBX_CS_SYMBOL7,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.forbidden"_ustr ,   SID_DRAWTBX_CS_SYMBOL8,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.puzzle"_ustr ,      SID_DRAWTBX_CS_SYMBOL9,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.bracket-pair"_ustr ,SID_DRAWTBX_CS_SYMBOL10,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.left-bracket"_ustr ,SID_DRAWTBX_CS_SYMBOL11,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.right-bracket"_ustr,SID_DRAWTBX_CS_SYMBOL12,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.brace-pair"_ustr ,  SID_DRAWTBX_CS_SYMBOL13,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.left-brace"_ustr ,  SID_DRAWTBX_CS_SYMBOL14,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.right-brace"_ustr , SID_DRAWTBX_CS_SYMBOL15,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.quad-bevel"_ustr ,  SID_DRAWTBX_CS_SYMBOL16,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.octagon-bevel"_ustr,SID_DRAWTBX_CS_SYMBOL17,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes.diamond-bevel"_ustr,SID_DRAWTBX_CS_SYMBOL18,        CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow" ,           SID_DRAWTBX_CS_ARROW1,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow" ,          SID_DRAWTBX_CS_ARROW2,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow" ,             SID_DRAWTBX_CS_ARROW3,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow" ,           SID_DRAWTBX_CS_ARROW4,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow" ,     SID_DRAWTBX_CS_ARROW5,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow" ,        SID_DRAWTBX_CS_ARROW6,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow" ,       SID_DRAWTBX_CS_ARROW7,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-down-arrow" ,  SID_DRAWTBX_CS_ARROW8,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow" ,           SID_DRAWTBX_CS_ARROW9,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.corner-right-arrow" ,   SID_DRAWTBX_CS_ARROW10, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.split-arrow" ,          SID_DRAWTBX_CS_ARROW11, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.striped-right-arrow" ,  SID_DRAWTBX_CS_ARROW12, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.notched-right-arrow" ,  SID_DRAWTBX_CS_ARROW13, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.pentagon-right" ,       SID_DRAWTBX_CS_ARROW14, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.chevron" ,              SID_DRAWTBX_CS_ARROW15, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow-callout" ,  SID_DRAWTBX_CS_ARROW16, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow-callout" ,   SID_DRAWTBX_CS_ARROW17, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow-callout" ,     SID_DRAWTBX_CS_ARROW18, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow-callout" ,   SID_DRAWTBX_CS_ARROW19, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow-callout",SID_DRAWTBX_CS_ARROW20,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow-callout" ,SID_DRAWTBX_CS_ARROW21, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow-callout",SID_DRAWTBX_CS_ARROW22, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow-callout" ,   SID_DRAWTBX_CS_ARROW23, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.circular-arrow" ,       SID_DRAWTBX_CS_ARROW24, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.split-round-arrow" ,    SID_DRAWTBX_CS_ARROW25, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.s-sharped-arrow" ,      SID_DRAWTBX_CS_ARROW26, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.left-arrow"_ustr ,           SID_DRAWTBX_CS_ARROW1,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.right-arrow"_ustr ,          SID_DRAWTBX_CS_ARROW2,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-arrow"_ustr ,             SID_DRAWTBX_CS_ARROW3,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.down-arrow"_ustr ,           SID_DRAWTBX_CS_ARROW4,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.left-right-arrow"_ustr ,     SID_DRAWTBX_CS_ARROW5,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-down-arrow"_ustr ,        SID_DRAWTBX_CS_ARROW6,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-right-arrow"_ustr ,       SID_DRAWTBX_CS_ARROW7,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-right-down-arrow"_ustr ,  SID_DRAWTBX_CS_ARROW8,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.quad-arrow"_ustr ,           SID_DRAWTBX_CS_ARROW9,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.corner-right-arrow"_ustr ,   SID_DRAWTBX_CS_ARROW10, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.split-arrow"_ustr ,          SID_DRAWTBX_CS_ARROW11, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.striped-right-arrow"_ustr ,  SID_DRAWTBX_CS_ARROW12, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.notched-right-arrow"_ustr ,  SID_DRAWTBX_CS_ARROW13, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.pentagon-right"_ustr ,       SID_DRAWTBX_CS_ARROW14, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.chevron"_ustr ,              SID_DRAWTBX_CS_ARROW15, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.right-arrow-callout"_ustr ,  SID_DRAWTBX_CS_ARROW16, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.left-arrow-callout"_ustr ,   SID_DRAWTBX_CS_ARROW17, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-arrow-callout"_ustr ,     SID_DRAWTBX_CS_ARROW18, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.down-arrow-callout"_ustr ,   SID_DRAWTBX_CS_ARROW19, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.left-right-arrow-callout"_ustr,SID_DRAWTBX_CS_ARROW20,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-down-arrow-callout"_ustr ,SID_DRAWTBX_CS_ARROW21, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.up-right-arrow-callout"_ustr,SID_DRAWTBX_CS_ARROW22, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.quad-arrow-callout"_ustr ,   SID_DRAWTBX_CS_ARROW23, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.circular-arrow"_ustr ,       SID_DRAWTBX_CS_ARROW24, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.split-round-arrow"_ustr ,    SID_DRAWTBX_CS_ARROW25, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes.s-sharped-arrow"_ustr ,      SID_DRAWTBX_CS_ARROW26, CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:StarShapes.bang" ,                  SID_DRAWTBX_CS_STAR1,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star4" ,                 SID_DRAWTBX_CS_STAR2,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star5" ,                 SID_DRAWTBX_CS_STAR3,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star6" ,                 SID_DRAWTBX_CS_STAR4,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star8" ,                 SID_DRAWTBX_CS_STAR5,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star12" ,                SID_DRAWTBX_CS_STAR6,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star24" ,                SID_DRAWTBX_CS_STAR7,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.concave-star6" ,         SID_DRAWTBX_CS_STAR8,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.vertical-scroll" ,       SID_DRAWTBX_CS_STAR9,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.horizontal-scroll" ,     SID_DRAWTBX_CS_STAR10,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.signet" ,                SID_DRAWTBX_CS_STAR11,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.doorplate" ,             SID_DRAWTBX_CS_STAR12,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.bang"_ustr ,                  SID_DRAWTBX_CS_STAR1,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star4"_ustr ,                 SID_DRAWTBX_CS_STAR2,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star5"_ustr ,                 SID_DRAWTBX_CS_STAR3,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star6"_ustr ,                 SID_DRAWTBX_CS_STAR4,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star8"_ustr ,                 SID_DRAWTBX_CS_STAR5,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star12"_ustr ,                SID_DRAWTBX_CS_STAR6,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.star24"_ustr ,                SID_DRAWTBX_CS_STAR7,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.concave-star6"_ustr ,         SID_DRAWTBX_CS_STAR8,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.vertical-scroll"_ustr ,       SID_DRAWTBX_CS_STAR9,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.horizontal-scroll"_ustr ,     SID_DRAWTBX_CS_STAR10,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.signet"_ustr ,                SID_DRAWTBX_CS_STAR11,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes.doorplate"_ustr ,             SID_DRAWTBX_CS_STAR12,          CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-process" ,            SID_DRAWTBX_CS_FLOWCHART1,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-alternate-process" ,  SID_DRAWTBX_CS_FLOWCHART2,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-decision" ,           SID_DRAWTBX_CS_FLOWCHART3,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-data" ,               SID_DRAWTBX_CS_FLOWCHART4,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-predefined-process" , SID_DRAWTBX_CS_FLOWCHART5,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-internal-storage" ,   SID_DRAWTBX_CS_FLOWCHART6,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-document" ,           SID_DRAWTBX_CS_FLOWCHART7,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-multidocument" ,      SID_DRAWTBX_CS_FLOWCHART8,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-terminator" ,         SID_DRAWTBX_CS_FLOWCHART9,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-preparation" ,        SID_DRAWTBX_CS_FLOWCHART10,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-input" ,       SID_DRAWTBX_CS_FLOWCHART11,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-operation" ,   SID_DRAWTBX_CS_FLOWCHART12,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-connector" ,          SID_DRAWTBX_CS_FLOWCHART13,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-off-page-connector" , SID_DRAWTBX_CS_FLOWCHART14,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-card" ,               SID_DRAWTBX_CS_FLOWCHART15,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-punched-tape" ,       SID_DRAWTBX_CS_FLOWCHART16,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-summing-junction" ,   SID_DRAWTBX_CS_FLOWCHART17,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-or" ,                 SID_DRAWTBX_CS_FLOWCHART18,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-collate" ,            SID_DRAWTBX_CS_FLOWCHART19,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sort" ,               SID_DRAWTBX_CS_FLOWCHART20,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-extract" ,            SID_DRAWTBX_CS_FLOWCHART21,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-merge" ,              SID_DRAWTBX_CS_FLOWCHART22,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-stored-data" ,        SID_DRAWTBX_CS_FLOWCHART23,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-delay" ,              SID_DRAWTBX_CS_FLOWCHART24,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sequential-access" ,  SID_DRAWTBX_CS_FLOWCHART25,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-magnetic-disk" ,      SID_DRAWTBX_CS_FLOWCHART26,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-direct-access-storage",SID_DRAWTBX_CS_FLOWCHART27,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-display" ,            SID_DRAWTBX_CS_FLOWCHART28,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-process"_ustr ,            SID_DRAWTBX_CS_FLOWCHART1,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-alternate-process"_ustr ,  SID_DRAWTBX_CS_FLOWCHART2,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-decision"_ustr ,           SID_DRAWTBX_CS_FLOWCHART3,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-data"_ustr ,               SID_DRAWTBX_CS_FLOWCHART4,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-predefined-process"_ustr , SID_DRAWTBX_CS_FLOWCHART5,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-internal-storage"_ustr ,   SID_DRAWTBX_CS_FLOWCHART6,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-document"_ustr ,           SID_DRAWTBX_CS_FLOWCHART7,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-multidocument"_ustr ,      SID_DRAWTBX_CS_FLOWCHART8,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-terminator"_ustr ,         SID_DRAWTBX_CS_FLOWCHART9,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-preparation"_ustr ,        SID_DRAWTBX_CS_FLOWCHART10,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-manual-input"_ustr ,       SID_DRAWTBX_CS_FLOWCHART11,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-manual-operation"_ustr ,   SID_DRAWTBX_CS_FLOWCHART12,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-connector"_ustr ,          SID_DRAWTBX_CS_FLOWCHART13,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-off-page-connector"_ustr , SID_DRAWTBX_CS_FLOWCHART14,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-card"_ustr ,               SID_DRAWTBX_CS_FLOWCHART15,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-punched-tape"_ustr ,       SID_DRAWTBX_CS_FLOWCHART16,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-summing-junction"_ustr ,   SID_DRAWTBX_CS_FLOWCHART17,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-or"_ustr ,                 SID_DRAWTBX_CS_FLOWCHART18,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-collate"_ustr ,            SID_DRAWTBX_CS_FLOWCHART19,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-sort"_ustr ,               SID_DRAWTBX_CS_FLOWCHART20,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-extract"_ustr ,            SID_DRAWTBX_CS_FLOWCHART21,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-merge"_ustr ,              SID_DRAWTBX_CS_FLOWCHART22,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-stored-data"_ustr ,        SID_DRAWTBX_CS_FLOWCHART23,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-delay"_ustr ,              SID_DRAWTBX_CS_FLOWCHART24,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-sequential-access"_ustr ,  SID_DRAWTBX_CS_FLOWCHART25,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-magnetic-disk"_ustr ,      SID_DRAWTBX_CS_FLOWCHART26,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-direct-access-storage"_ustr,SID_DRAWTBX_CS_FLOWCHART27,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes.flowchart-display"_ustr ,            SID_DRAWTBX_CS_FLOWCHART28,         CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:CalloutShapes.rectangular-callout" ,        SID_DRAWTBX_CS_CALLOUT1,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.round-rectangular-callout" ,  SID_DRAWTBX_CS_CALLOUT2,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.round-callout" ,              SID_DRAWTBX_CS_CALLOUT3,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.cloud-callout" ,              SID_DRAWTBX_CS_CALLOUT4,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-1" ,             SID_DRAWTBX_CS_CALLOUT5,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-2" ,             SID_DRAWTBX_CS_CALLOUT6,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-3" ,             SID_DRAWTBX_CS_CALLOUT7,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.rectangular-callout"_ustr ,        SID_DRAWTBX_CS_CALLOUT1,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.round-rectangular-callout"_ustr ,  SID_DRAWTBX_CS_CALLOUT2,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.round-callout"_ustr ,              SID_DRAWTBX_CS_CALLOUT3,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.cloud-callout"_ustr ,              SID_DRAWTBX_CS_CALLOUT4,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.line-callout-1"_ustr ,             SID_DRAWTBX_CS_CALLOUT5,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.line-callout-2"_ustr ,             SID_DRAWTBX_CS_CALLOUT6,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes.line-callout-3"_ustr ,             SID_DRAWTBX_CS_CALLOUT7,            CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:ArrowShapes",               SID_DRAWTBX_CS_ARROW,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes"_ustr,               SID_DRAWTBX_CS_ARROW,           CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:FlowChartShapes",           SID_DRAWTBX_CS_FLOWCHART,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes",             SID_DRAWTBX_CS_CALLOUT,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes",                SID_DRAWTBX_CS_STAR,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes"_ustr,           SID_DRAWTBX_CS_FLOWCHART,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes"_ustr,             SID_DRAWTBX_CS_CALLOUT,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes"_ustr,                SID_DRAWTBX_CS_STAR,            CommandGroup::INSERT );
 
 
     // keys
-    implDescribeSupportedFeature( ".uno:Escape",                    SID_ESCAPE);
+    implDescribeSupportedFeature( u".uno:Escape"_ustr,                    SID_ESCAPE);
 
     // internal one
-    implDescribeSupportedFeature( ".uno:RPT_RPTHEADER_UNDO",            SID_REPORTHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_RPTFOOTER_UNDO",            SID_REPORTFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_PGHEADER_UNDO",             SID_PAGEHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_PGFOOTER_UNDO",             SID_PAGEFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER",               SID_GROUPHEADER);
-    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER_WITHOUT_UNDO",  SID_GROUPHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER",               SID_GROUPFOOTER);
-    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER_WITHOUT_UNDO",  SID_GROUPFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:SID_GROUP_REMOVE",              SID_GROUP_REMOVE);
-    implDescribeSupportedFeature( ".uno:SID_GROUP_APPEND",              SID_GROUP_APPEND);
-    implDescribeSupportedFeature( ".uno:SID_ADD_CONTROL_PAIR",          SID_ADD_CONTROL_PAIR);
-    implDescribeSupportedFeature( ".uno:SplitPosition",                 SID_SPLIT_POSITION);
-    implDescribeSupportedFeature( ".uno:LastPropertyBrowserPage",       SID_PROPERTYBROWSER_LAST_PAGE);
-    implDescribeSupportedFeature( ".uno:Select",                        SID_SELECT);
-    implDescribeSupportedFeature( ".uno:InsertFunction",                SID_RPT_NEW_FUNCTION);
-    implDescribeSupportedFeature( ".uno:NextMark",                      SID_NEXT_MARK);
-    implDescribeSupportedFeature( ".uno:PrevMark",                      SID_PREV_MARK);
-    implDescribeSupportedFeature( ".uno:TerminateInplaceActivation",    SID_TERMINATE_INPLACEACTIVATION);
-    implDescribeSupportedFeature( ".uno:SelectAllLabels",               SID_SELECT_ALL_LABELS);
-    implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
-    implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
-    implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
-    implDescribeSupportedFeature( ".uno:GetUndoStrings",            SID_GETUNDOSTRINGS);
-    implDescribeSupportedFeature( ".uno:GetRedoStrings",            SID_GETREDOSTRINGS);
+    implDescribeSupportedFeature( u".uno:RPT_RPTHEADER_UNDO"_ustr,            SID_REPORTHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:RPT_RPTFOOTER_UNDO"_ustr,            SID_REPORTFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:RPT_PGHEADER_UNDO"_ustr,             SID_PAGEHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:RPT_PGFOOTER_UNDO"_ustr,             SID_PAGEFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:SID_GROUPHEADER"_ustr,               SID_GROUPHEADER);
+    implDescribeSupportedFeature( u".uno:SID_GROUPHEADER_WITHOUT_UNDO"_ustr,  SID_GROUPHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:SID_GROUPFOOTER"_ustr,               SID_GROUPFOOTER);
+    implDescribeSupportedFeature( u".uno:SID_GROUPFOOTER_WITHOUT_UNDO"_ustr,  SID_GROUPFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( u".uno:SID_GROUP_REMOVE"_ustr,              SID_GROUP_REMOVE);
+    implDescribeSupportedFeature( u".uno:SID_GROUP_APPEND"_ustr,              SID_GROUP_APPEND);
+    implDescribeSupportedFeature( u".uno:SID_ADD_CONTROL_PAIR"_ustr,          SID_ADD_CONTROL_PAIR);
+    implDescribeSupportedFeature( u".uno:SplitPosition"_ustr,                 SID_SPLIT_POSITION);
+    implDescribeSupportedFeature( u".uno:LastPropertyBrowserPage"_ustr,       SID_PROPERTYBROWSER_LAST_PAGE);
+    implDescribeSupportedFeature( u".uno:Select"_ustr,                        SID_SELECT);
+    implDescribeSupportedFeature( u".uno:InsertFunction"_ustr,                SID_RPT_NEW_FUNCTION);
+    implDescribeSupportedFeature( u".uno:NextMark"_ustr,                      SID_NEXT_MARK);
+    implDescribeSupportedFeature( u".uno:PrevMark"_ustr,                      SID_PREV_MARK);
+    implDescribeSupportedFeature( u".uno:TerminateInplaceActivation"_ustr,    SID_TERMINATE_INPLACEACTIVATION);
+    implDescribeSupportedFeature( u".uno:SelectAllLabels"_ustr,               SID_SELECT_ALL_LABELS);
+    implDescribeSupportedFeature( u".uno:SelectAllEdits"_ustr,                SID_SELECT_ALL_EDITS);
+    implDescribeSupportedFeature( u".uno:CollapseSection"_ustr,           SID_COLLAPSE_SECTION);
+    implDescribeSupportedFeature( u".uno:ExpandSection"_ustr,             SID_EXPAND_SECTION);
+    implDescribeSupportedFeature( u".uno:GetUndoStrings"_ustr,            SID_GETUNDOSTRINGS);
+    implDescribeSupportedFeature( u".uno:GetRedoStrings"_ustr,            SID_GETREDOSTRINGS);
 }
 
 void OReportController::impl_onModifyChanged()
@@ -2334,7 +2334,7 @@ static ItemInfoPackage& getItemInfoPackageOpenPageDlg()
             { RPTUI_ID_END, new SfxUInt16Item(RPTUI_ID_END,PAPER_E), SID_PAPER_END, SFX_ITEMINFOFLAG_NONE },
             { RPTUI_ID_BRUSH, new SvxBrushItem(RPTUI_ID_BRUSH), SID_ATTR_BRUSH, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLSTYLE, new XFillStyleItem, 0, SFX_ITEMINFOFLAG_NONE },
-            { XATTR_FILLCOLOR, new XFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLCOLOR, new XFillColorItem(u""_ustr, COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
             { XATTR_FILLGRADIENT, new XFillGradientItem(basegfx::BGradient()), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLHATCH, new XFillHatchItem(XHatch(COL_DEFAULT_SHAPE_STROKE)), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBITMAP, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
@@ -2345,7 +2345,7 @@ static ItemInfoPackage& getItemInfoPackageOpenPageDlg()
             { XATTR_FILLBMP_SIZEX, new XFillBmpSizeXItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_SIZEY, new XFillBmpSizeYItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLFLOATTRANSPARENCE, new XFillFloatTransparenceItem(basegfx::BGradient(), false), 0, SFX_ITEMINFOFLAG_NONE },
-            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem(u""_ustr, COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_SIZELOG, new XFillBmpSizeLogItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_TILEOFFSETX, new XFillBmpTileOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
             { XATTR_FILLBMP_TILEOFFSETY, new XFillBmpTileOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
@@ -2399,7 +2399,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     // UNO->ItemSet
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     FieldUnit eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportPageProperties"));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool(u"ReportPageProperties"_ustr));
     pPool->registerItemInfoPackage(getItemInfoPackageOpenPageDlg());
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
 
@@ -2439,8 +2439,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         {   // want the dialog to be destroyed before our set
             ORptPageDialog aDlg(
                 getFrameWeld(), &aDescriptor,_xSection.is()
-                           ? OUString("BackgroundDialog")
-                           : OUString("PageDialog"));
+                           ? u"BackgroundDialog"_ustr
+                           : u"PageDialog"_ustr);
             if (aDlg.run() == RET_OK)
             {
 
@@ -2711,7 +2711,7 @@ uno::Any SAL_CALL OReportController::getViewData()
     }
 
     ::comphelper::NamedValueCollection aViewData;
-    aViewData.put( "CommandProperties", aCommandProperties.getPropertyValues() );
+    aViewData.put( u"CommandProperties"_ustr, aCommandProperties.getPropertyValues() );
 
     if ( getDesignView() )
     {
@@ -2730,17 +2730,17 @@ uno::Any SAL_CALL OReportController::getViewData()
                 ++i;
             }
 
-            aViewData.put( "CollapsedSections", aCollapsedSections );
+            aViewData.put( u"CollapsedSections"_ustr, aCollapsedSections );
         }
 
         OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
         if ( pSectionWindow )
         {
-            aViewData.put( "MarkedSection", static_cast<sal_Int32>(pSectionWindow->getReportSection().getPage()->GetPageNum()) );
+            aViewData.put( u"MarkedSection"_ustr, static_cast<sal_Int32>(pSectionWindow->getReportSection().getPage()->GetPageNum()) );
         }
     }
 
-    aViewData.put( "ZoomFactor", m_nZoomValue );
+    aViewData.put( u"ZoomFactor"_ustr, m_nZoomValue );
     return uno::Any( aViewData.getPropertyValues() );
 }
 
@@ -2752,15 +2752,15 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
     {
         const ::comphelper::NamedValueCollection aViewData( i_data );
 
-        m_aCollapsedSections = aViewData.getOrDefault( "CollapsedSections", m_aCollapsedSections );
-        m_nPageNum = aViewData.getOrDefault( "MarkedSection", m_nPageNum );
-        m_nZoomValue = aViewData.getOrDefault( "ZoomFactor", m_nZoomValue );
+        m_aCollapsedSections = aViewData.getOrDefault( u"CollapsedSections"_ustr, m_aCollapsedSections );
+        m_nPageNum = aViewData.getOrDefault( u"MarkedSection"_ustr, m_nPageNum );
+        m_nZoomValue = aViewData.getOrDefault( u"ZoomFactor"_ustr, m_nZoomValue );
         // TODO: setting those 3 members is not enough - in theory, restoreViewData can be called when the
         // view is fully alive, so we need to reflect those 3 values in the view.
         // (At the moment, the method is called only during construction phase)
 
 
-        ::comphelper::NamedValueCollection aCommandProperties( aViewData.get( "CommandProperties" ) );
+        ::comphelper::NamedValueCollection aCommandProperties( aViewData.get( u"CommandProperties"_ustr ) );
         const ::std::vector< OUString > aCommandNames( aCommandProperties.getNames() );
 
         for ( const auto& rCommandName : aCommandNames )
@@ -2774,7 +2774,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
                 util::URL aCommand;
                 aCommand.Complete = ".uno:" + rCommandName;
 
-                executeUnChecked( aCommand, { comphelper::makePropertyValue("Value", rCommandValue) } );
+                executeUnChecked( aCommand, { comphelper::makePropertyValue(u"Value"_ustr, rCommandValue) } );
             }
             else
             {
@@ -2808,7 +2808,7 @@ Reference<XFrame> OReportController::getXFrame()
         m_xFrameLoader.set( frame::Desktop::create(m_xContext) );
     }
     const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-    Reference<XFrame> xFrame = m_xFrameLoader->findFrame("_blank",nFrameSearchFlag);
+    Reference<XFrame> xFrame = m_xFrameLoader->findFrame(u"_blank"_ustr,nFrameSearchFlag);
     return xFrame;
 }
 
@@ -2937,7 +2937,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
     try
     {
         uno::Reference< sdbc::XRowSet > xRowSet(
-            getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", getORB()),
+            getORB()->getServiceManager()->createInstanceWithContext(u"com.sun.star.sdb.RowSet"_ustr, getORB()),
             uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet> xRowSetProp( xRowSet, uno::UNO_QUERY_THROW );
 
@@ -3303,7 +3303,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
             svx::ODataAccessDescriptor aDescriptor(aValue);
             SequenceAsHashMap aMap(aValue);
-            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault("Section",xCurrentSection);
+            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault(u"Section"_ustr,xCurrentSection);
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
             getDesignView()->setMarked(xSection, true);
@@ -3315,7 +3315,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 aPos.X = nLeftMargin;
 
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
-            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault("DNDAction", sal_Int8(0));
+            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(u"DNDAction"_ustr, sal_Int8(0));
             pSectionWindow[1] = pSectionWindow[0];
             bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
@@ -3388,7 +3388,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         uno::Reference< beans::XPropertySet > xParamCol( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
                         OUString sParamName;
-                        OSL_VERIFY( xParamCol->getPropertyValue("Name") >>= sParamName );
+                        OSL_VERIFY( xParamCol->getPropertyValue(u"Name"_ustr) >>= sParamName );
                         if ( sParamName == sColumnName )
                         {
                             xField = xParamCol;
@@ -3968,7 +3968,7 @@ void OReportController::checkChartEnabled()
     try
     {
         ::utl::OConfigurationTreeRoot aConfiguration(
-            ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, "/org.openoffice.Office.ReportDesign" ) );
+            ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, u"/org.openoffice.Office.ReportDesign"_ustr ) );
 
         bool bChartEnabled = false;
         static constexpr OUString sPropertyName( u"UserData/Chart"_ustr );
@@ -4033,7 +4033,7 @@ OUString SAL_CALL OReportController::getMode(  )
 }
 css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  )
 {
-    return uno::Sequence< OUString> { OUString("remote"), OUString("normal") };
+    return uno::Sequence< OUString> { u"remote"_ustr, u"normal"_ustr };
 }
 sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode )
 {
@@ -4196,7 +4196,7 @@ static ItemInfoPackage& getItemInfoPackageOpenZoomDlg()
 void OReportController::openZoomDialog()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ZoomProperties"));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool(u"ZoomProperties"_ustr));
     pPool->registerItemInfoPackage(getItemInfoPackageOpenZoomDlg());
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
 

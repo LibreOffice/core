@@ -99,7 +99,7 @@ void SAL_CALL OFormattedField::dispose()
 
 OUString OFormattedField::getImplementationName_Static(  )
 {
-    return "com.sun.star.comp.report.OFormattedField";
+    return u"com.sun.star.comp.report.OFormattedField"_ustr;
 }
 
 
@@ -110,7 +110,7 @@ OUString SAL_CALL OFormattedField::getImplementationName(  )
 
 uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  )
 {
-    return { SERVICE_FORMATTEDFIELD, "com.sun.star.awt.UnoControlFormattedFieldModel" };
+    return { SERVICE_FORMATTEDFIELD, u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr };
 }
 
 uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  )
@@ -246,7 +246,7 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
         {
             uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
             if ( xProp.is() )
-                m_xFormatsSupplier.set(xProp->getPropertyValue("NumberFormatsSupplier"),uno::UNO_QUERY);
+                m_xFormatsSupplier.set(xProp->getPropertyValue(u"NumberFormatsSupplier"_ustr),uno::UNO_QUERY);
         }
     }
     return m_xFormatsSupplier;
@@ -351,7 +351,7 @@ OUString SAL_CALL OFormattedField::getShapeType(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
-    return "com.sun.star.drawing.ControlShape";
+    return u"com.sun.star.drawing.ControlShape"_ustr;
 }
 
 

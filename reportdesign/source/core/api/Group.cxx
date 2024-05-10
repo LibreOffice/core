@@ -59,7 +59,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
 
 OUString SAL_CALL OGroup::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.Group";
+    return u"com.sun.star.comp.report.Group"_ustr;
 }
 
 uno::Sequence< OUString> OGroup::getSupportedServiceNames_Static()

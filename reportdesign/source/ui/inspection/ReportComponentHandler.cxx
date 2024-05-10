@@ -47,7 +47,7 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
 
 OUString SAL_CALL ReportComponentHandler::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.ReportComponentHandler";
+    return u"com.sun.star.comp.report.ReportComponentHandler"_ustr;
 }
 
 sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& ServiceName )
@@ -57,7 +57,7 @@ sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& Servi
 
 uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.report.inspection.ReportComponentHandler" };
+    return { u"com.sun.star.report.inspection.ReportComponentHandler"_ustr };
 }
 
 // override WeakComponentImplHelperBase::disposing()

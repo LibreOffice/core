@@ -30,7 +30,7 @@ namespace rptui
         static SotClipboardFormatId s_nReportFormat = static_cast<SotClipboardFormatId>(-1);
         if ( static_cast<SotClipboardFormatId>(-1) == s_nReportFormat )
         {
-            s_nReportFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"reportdesign.GroupFormat\"");
+            s_nReportFormat = SotExchange::RegisterFormatName(u"application/x-openoffice;windows_formatname=\"reportdesign.GroupFormat\""_ustr);
             OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nReportFormat, "Bad exchange id!");
         }
         return s_nReportFormat;

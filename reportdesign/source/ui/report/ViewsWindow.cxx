@@ -969,7 +969,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
         {
             rtl::Reference<SdrObject> pNewObj = new SdrUnoObj(
                 rView.getSdrModelFromSdrView(),
-                "com.sun.star.form.component.FixedText");
+                u"com.sun.star.form.component.FixedText"_ustr);
 
             pNewObj->SetLogicRect(_aRect);
             pNewObj->Move(Size(0, aNewPos.Y()));

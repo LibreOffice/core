@@ -67,7 +67,7 @@ namespace rptxml
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
         return cppu::acquire(new ORptExport(context,
-            "com.sun.star.comp.report.XMLSettingsExporter",
+            u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
             SvXMLExportFlags::SETTINGS ));
     }
 
@@ -80,7 +80,7 @@ namespace rptxml
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
         return cppu::acquire(new ORptExport(context,
-            "com.sun.star.comp.report.XMLContentExporter",
+            u"com.sun.star.comp.report.XMLContentExporter"_ustr,
             SvXMLExportFlags::CONTENT ));
     }
 
@@ -93,7 +93,7 @@ namespace rptxml
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
         return cppu::acquire(new ORptExport(context,
-            "com.sun.star.comp.report.XMLStylesExporter",
+            u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
             SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
                 SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS ));
     }
@@ -107,7 +107,7 @@ namespace rptxml
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
         return cppu::acquire(new ORptExport(context,
-            "com.sun.star.comp.report.XMLMetaExporter",
+            u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
             SvXMLExportFlags::META ));
     }
 
@@ -120,7 +120,7 @@ namespace rptxml
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
         return cppu::acquire(new ORptExport(context,
-            "com.sun.star.comp.report.XMLFullExporter",
+            u"com.sun.star.comp.report.XMLFullExporter"_ustr,
             SvXMLExportFlags::ALL));
     }
 
@@ -259,7 +259,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
 
     const OUString& sFamily( GetXMLToken(XML_PARAGRAPH) );
     GetAutoStylePool()->AddFamily( XmlStyleFamily::TEXT_PARAGRAPH, sFamily,
-                              m_xParaPropMapper, "P" );
+                              m_xParaPropMapper, u"P"_ustr );
 
     GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
         m_xCellStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
@@ -276,7 +276,7 @@ reportdesign_ORptExport_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ORptExport(context,
-        "com.sun.star.comp.report.ExportFilter",
+        u"com.sun.star.comp.report.ExportFilter"_ustr,
         SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
 
@@ -826,7 +826,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         if (!bIsStandard)
                         {
                             if ( nCellType == util::NumberFormat::TEXT )
-                                aHelper.SetNumberFormatAttributes("", u"");
+                                aHelper.SetNumberFormatAttributes(u""_ustr, u"");
                             else
                                 aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
                         }
@@ -1365,14 +1365,14 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                 {
                     if ( sToken == s_sPageNumber )
                     {
-                        AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, "current" );
+                        AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, u"current"_ustr );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, false, false);
-                        Characters("1");
+                        Characters(u"1"_ustr);
                     }
                     else if ( sToken == u"PageCount()" )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, false, false);
-                        Characters("1");
+                        Characters(u"1"_ustr);
                     }
                     else
                     {
@@ -1420,7 +1420,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
         if ( xShape.is() )
         {
             ::std::unique_ptr<SvXMLElementExport> pSubDocument;
-            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue("Model"),uno::UNO_QUERY);
+            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(u"Model"_ustr),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, false, false));
@@ -1485,7 +1485,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     {
                         sFunction = "INT";
                         uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                        xCountFunction->setInitialFormula(beans::Optional< OUString>(true,OUString("rpt:0")));
+                        xCountFunction->setInitialFormula(beans::Optional< OUString>(true,u"rpt:0"_ustr));
                         OUString sCountName = sFunction + "_count_" + sExpression;
                         xCountFunction->setName(sCountName);
                         xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );

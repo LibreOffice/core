@@ -35,13 +35,13 @@ using namespace ::comphelper;
 OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
                                      uno::Reference< report::XReportDefinition > _xHoldAlive,
                                      OReportController* _pController)
-    : GenericDialogController(pParent, "modules/dbreport/ui/pagenumberdialog.ui", "PageNumberDialog")
+    : GenericDialogController(pParent, u"modules/dbreport/ui/pagenumberdialog.ui"_ustr, u"PageNumberDialog"_ustr)
     , m_pController(_pController)
     , m_xHoldAlive(std::move(_xHoldAlive))
-    , m_xPageNofM(m_xBuilder->weld_radio_button("pagenofm"))
-    , m_xTopPage(m_xBuilder->weld_radio_button("toppage"))
-    , m_xAlignmentLst(m_xBuilder->weld_combo_box("alignment"))
-    , m_xShowNumberOnFirstPage(m_xBuilder->weld_check_button("shownumberonfirstpage"))
+    , m_xPageNofM(m_xBuilder->weld_radio_button(u"pagenofm"_ustr))
+    , m_xTopPage(m_xBuilder->weld_radio_button(u"toppage"_ustr))
+    , m_xAlignmentLst(m_xBuilder->weld_combo_box(u"alignment"_ustr))
+    , m_xShowNumberOnFirstPage(m_xBuilder->weld_check_button(u"shownumberonfirstpage"_ustr))
 {
     m_xShowNumberOnFirstPage->hide();
 }

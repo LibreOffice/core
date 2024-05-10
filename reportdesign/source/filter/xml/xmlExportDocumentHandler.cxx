@@ -43,7 +43,7 @@ static void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHa
 {
     if ( officecfg::Office::Common::Save::Document::PrettyPrinting::get() )
     {
-        _xDelegatee->ignorableWhitespace(" ");
+        _xDelegatee->ignorableWhitespace(u" "_ustr);
     }
 }
 
@@ -91,7 +91,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
 
 OUString SAL_CALL ExportDocumentHandler::getImplementationName(  )
 {
-    return "com.sun.star.comp.report.ExportDocumentHandler";
+    return u"com.sun.star.comp.report.ExportDocumentHandler"_ustr;
 }
 
 sal_Bool SAL_CALL ExportDocumentHandler::supportsService( const OUString& ServiceName )
@@ -104,7 +104,7 @@ uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNam
     uno::Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
         aSupported = m_xServiceInfo->getSupportedServiceNames();
-    return ::comphelper::concatSequences(uno::Sequence< OUString > { "com.sun.star.report.ExportDocumentHandler" },aSupported);
+    return ::comphelper::concatSequences(uno::Sequence< OUString > { u"com.sun.star.report.ExportDocumentHandler"_ustr },aSupported);
 }
 
 // xml::sax::XDocumentHandler:
@@ -154,7 +154,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         const OUString sTableCalc = lcl_createAttribute(XML_NP_TABLE,XML_CALCULATION_SETTINGS);
         m_xDelegatee->startElement(sTableCalc,nullptr);
         pList = new comphelper::AttributeList();
-        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),"1899-12-30");
+        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),u"1899-12-30"_ustr);
 
         const OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
         m_xDelegatee->startElement(sNullDate,pList);
@@ -189,7 +189,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     {
         comphelper::AttributeList* pList = dynamic_cast<comphelper::AttributeList*>(xAttribs.get());
         assert(pList && "can only succeed");
-        pList->RemoveAttribute("table:cell-range-address");
+        pList->RemoveAttribute(u"table:cell-range-address"_ustr);
     }
     else if ( _sName == "chart:categories" )
     {
@@ -275,16 +275,16 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     std::unique_lock aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDelegatee);
-    m_xModel = aArgs.getUnpackedValueOrDefault("Model",m_xModel);
+    m_xDelegatee = aArgs.getUnpackedValueOrDefault(u"DocumentHandler"_ustr,m_xDelegatee);
+    m_xModel = aArgs.getUnpackedValueOrDefault(u"Model"_ustr,m_xModel);
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler available!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )
-        throw uno::Exception("no delegatee and no model", nullptr);
+        throw uno::Exception(u"no delegatee and no model"_ustr, nullptr);
 
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY_THROW);
     if ( !m_xDatabaseDataProvider->getActiveConnection().is() )
-        throw uno::Exception("no active connection", nullptr);
+        throw uno::Exception(u"no active connection"_ustr, nullptr);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee);
@@ -349,7 +349,7 @@ void ExportDocumentHandler::exportTableRows()
     static constexpr OUString s_sFloat = u"float"_ustr;
 
     rtl::Reference<comphelper::AttributeList> pCellAtt = new comphelper::AttributeList();
-    pCellAtt->AddAttribute(sValueType, "string");
+    pCellAtt->AddAttribute(sValueType, u"string"_ustr);
 
     bool bRemoveString = true;
     const sal_Int32 nCount = m_aColumns.getLength();

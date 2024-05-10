@@ -176,7 +176,7 @@ namespace rptui
         // initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), "", PropUIFlags::NONE);
+        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), u""_ustr, PropUIFlags::NONE);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );

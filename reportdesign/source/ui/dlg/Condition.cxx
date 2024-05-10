@@ -45,7 +45,7 @@ ConditionField::ConditionField(Condition* pParent, std::unique_ptr<weld::Entry> 
     , m_xSubEdit(std::move(xSubEdit))
     , m_xFormula(std::move(xFormula))
 {
-    m_xFormula->set_label("...");
+    m_xFormula->set_label(u"..."_ustr);
     m_xFormula->connect_clicked( LINK( this, ConditionField, OnFormula ) );
 }
 
@@ -88,21 +88,21 @@ Condition::Condition(weld::Container* pParent, weld::Window* pDialog, ICondition
     , m_rAction(_rAction)
     , m_nCondIndex(0)
     , m_pDialog(pDialog)
-    , m_xBuilder(Application::CreateBuilder(pParent, "modules/dbreport/ui/conditionwin.ui"))
-    , m_xContainer(m_xBuilder->weld_container("ConditionWin"))
-    , m_xHeader(m_xBuilder->weld_label("headerLabel"))
-    , m_xConditionType(m_xBuilder->weld_combo_box("typeCombobox"))
-    , m_xOperationList(m_xBuilder->weld_combo_box("opCombobox"))
-    , m_xOperandGlue(m_xBuilder->weld_label("andLabel"))
-    , m_xActions(m_xBuilder->weld_toolbar("formatToolbox"))
-    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "previewDrawingarea", m_aPreview))
-    , m_xMoveUp(m_xBuilder->weld_button("upButton"))
-    , m_xMoveDown(m_xBuilder->weld_button("downButton"))
-    , m_xAddCondition(m_xBuilder->weld_button("addButton"))
-    , m_xRemoveCondition(m_xBuilder->weld_button("removeButton"))
+    , m_xBuilder(Application::CreateBuilder(pParent, u"modules/dbreport/ui/conditionwin.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"ConditionWin"_ustr))
+    , m_xHeader(m_xBuilder->weld_label(u"headerLabel"_ustr))
+    , m_xConditionType(m_xBuilder->weld_combo_box(u"typeCombobox"_ustr))
+    , m_xOperationList(m_xBuilder->weld_combo_box(u"opCombobox"_ustr))
+    , m_xOperandGlue(m_xBuilder->weld_label(u"andLabel"_ustr))
+    , m_xActions(m_xBuilder->weld_toolbar(u"formatToolbox"_ustr))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, u"previewDrawingarea"_ustr, m_aPreview))
+    , m_xMoveUp(m_xBuilder->weld_button(u"upButton"_ustr))
+    , m_xMoveDown(m_xBuilder->weld_button(u"downButton"_ustr))
+    , m_xAddCondition(m_xBuilder->weld_button(u"addButton"_ustr))
+    , m_xRemoveCondition(m_xBuilder->weld_button(u"removeButton"_ustr))
 {
-    m_xCondLHS.reset(new ConditionField(this, m_xBuilder->weld_entry("lhsEntry"), m_xBuilder->weld_button("lhsButton")));
-    m_xCondRHS.reset(new ConditionField(this, m_xBuilder->weld_entry("rhsEntry"), m_xBuilder->weld_button("rhsButton")));
+    m_xCondLHS.reset(new ConditionField(this, m_xBuilder->weld_entry(u"lhsEntry"_ustr), m_xBuilder->weld_button(u"lhsButton"_ustr)));
+    m_xCondRHS.reset(new ConditionField(this, m_xBuilder->weld_entry(u"rhsEntry"_ustr), m_xBuilder->weld_button(u"rhsButton"_ustr)));
 
     m_xCondLHS->grab_focus();
 
@@ -157,11 +157,11 @@ void Condition::SetBackgroundDropdownClick()
                             m_aColorStatus,
                             SID_BACKGROUND_COLOR,
                             nullptr,
-                            MenuOrToolMenuButton(m_xActions.get(), "background"),
+                            MenuOrToolMenuButton(m_xActions.get(), u"background"_ustr),
                             [this]{ return m_pDialog; },
                             m_aBackColorWrapper));
 
-    m_xActions->set_item_popover("background", m_xBackColorFloat->getTopLevel());
+    m_xActions->set_item_popover(u"background"_ustr, m_xBackColorFloat->getTopLevel());
 }
 
 void Condition::SetForegroundDropdownClick()
@@ -172,11 +172,11 @@ void Condition::SetForegroundDropdownClick()
                             m_aColorStatus,
                             SID_ATTR_CHAR_COLOR2,
                             nullptr,
-                            MenuOrToolMenuButton(m_xActions.get(), "foreground"),
+                            MenuOrToolMenuButton(m_xActions.get(), u"foreground"_ustr),
                             [this]{ return m_pDialog; },
                             m_aForeColorWrapper));
 
-    m_xActions->set_item_popover("foreground", m_xForeColorFloat->getTopLevel());
+    m_xActions->set_item_popover(u"foreground"_ustr, m_xForeColorFloat->getTopLevel());
 }
 
 
@@ -304,7 +304,7 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
 
 void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat >& _xReportControlFormat)
 {
-    OUString aItems[] = { "bold", "italic", "underline", "fontdialog" };
+    OUString aItems[] = { u"bold"_ustr, u"italic"_ustr, u"underline"_ustr, u"fontdialog"_ustr };
 
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( !_xReportControlFormat.is() )

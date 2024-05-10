@@ -60,12 +60,12 @@ IMPL_LINK(OAddFieldWindow, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 }
 
 OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::XPropertySet > xRowSet)
-    : GenericDialogController(pParent, "modules/dbreport/ui/floatingfield.ui", "FloatingField")
+    : GenericDialogController(pParent, u"modules/dbreport/ui/floatingfield.ui"_ustr, u"FloatingField"_ustr)
     , ::comphelper::OPropertyChangeListener(m_aMutex)
     , ::comphelper::OContainerListener(m_aMutex)
     , m_xRowSet(std::move(xRowSet))
-    , m_xActions(m_xBuilder->weld_toolbar("toolbox"))
-    , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
+    , m_xActions(m_xBuilder->weld_toolbar(u"toolbox"_ustr))
+    , m_xListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr))
     , m_nCommandType(0)
     , m_bEscapeProcessing(false)
 {
@@ -78,12 +78,12 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::X
 
     m_xDialog->connect_container_focus_changed(LINK(this, OAddFieldWindow, FocusChangeHdl));
 
-    m_xDialog->set_help_id(HID_RPT_FIELD_SEL_WIN);
+    m_xDialog->set_help_id(u"" HID_RPT_FIELD_SEL_WIN ""_ustr);
 
     m_xActions->connect_clicked(LINK(this, OAddFieldWindow, OnSortAction));
-    m_xActions->set_item_active("up", true);
+    m_xActions->set_item_active(u"up"_ustr, true);
     m_xListBox->make_sorted();
-    m_xActions->set_item_sensitive("insert", false);
+    m_xActions->set_item_sensitive(u"insert"_ustr, false);
 
     m_xListBox->connect_row_activated(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_xListBox->connect_changed(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -187,7 +187,7 @@ void OAddFieldWindow::Update()
         // ListBox loeschen
         m_xListBox->clear();
         m_aListBoxData.clear();
-        const OUString aIds[] = { "up", "down" };
+        const OUString aIds[] = { u"up"_ustr, u"down"_ustr };
         for (size_t j = 0; j< std::size(aIds); ++j)
             m_xActions->set_item_sensitive(aIds[j], false);
 
@@ -309,7 +309,7 @@ void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEve
 
 IMPL_LINK_NOARG( OAddFieldWindow, OnSelectHdl, weld::TreeView&, void )
 {
-    m_xActions->set_item_sensitive("insert", m_xListBox->get_selected_index() != -1);
+    m_xActions->set_item_sensitive(u"insert"_ustr, m_xListBox->get_selected_index() != -1);
 }
 
 IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl, weld::TreeView&, bool )
@@ -326,7 +326,7 @@ IMPL_LINK(OAddFieldWindow, OnSortAction, const OUString&, rCurItem, void)
         return;
     }
 
-    const OUString aIds[] = { "up", "down" };
+    const OUString aIds[] = { u"up"_ustr, u"down"_ustr };
 
     if (rCurItem == "delete")
     {
@@ -342,7 +342,7 @@ IMPL_LINK(OAddFieldWindow, OnSortAction, const OUString&, rCurItem, void)
         m_xActions->set_item_active(aIds[j], rCurItem == aIds[j]);
 
     m_xListBox->make_sorted();
-    if (m_xActions->get_item_active("down"))
+    if (m_xActions->get_item_active(u"down"_ustr))
         m_xListBox->set_sort_order(false);
 }
 

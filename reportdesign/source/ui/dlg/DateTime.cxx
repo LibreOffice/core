@@ -38,17 +38,17 @@ using namespace ::com::sun::star;
 
 ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, uno::Reference< report::XSection > _xHoldAlive,
                                  OReportController* _pController)
-    : GenericDialogController(_pParent, "modules/dbreport/ui/datetimedialog.ui", "DateTimeDialog")
+    : GenericDialogController(_pParent, u"modules/dbreport/ui/datetimedialog.ui"_ustr, u"DateTimeDialog"_ustr)
 
     , m_pController(_pController)
     , m_xHoldAlive(std::move(_xHoldAlive))
-    , m_xDate(m_xBuilder->weld_check_button("date"))
-    , m_xFTDateFormat(m_xBuilder->weld_label("datelistbox_label"))
-    , m_xDateListBox(m_xBuilder->weld_combo_box("datelistbox"))
-    , m_xTime(m_xBuilder->weld_check_button("time"))
-    , m_xFTTimeFormat(m_xBuilder->weld_label("timelistbox_label"))
-    , m_xTimeListBox(m_xBuilder->weld_combo_box("timelistbox"))
-    , m_xPB_OK(m_xBuilder->weld_button("ok"))
+    , m_xDate(m_xBuilder->weld_check_button(u"date"_ustr))
+    , m_xFTDateFormat(m_xBuilder->weld_label(u"datelistbox_label"_ustr))
+    , m_xDateListBox(m_xBuilder->weld_combo_box(u"datelistbox"_ustr))
+    , m_xTime(m_xBuilder->weld_check_button(u"time"_ustr))
+    , m_xFTTimeFormat(m_xBuilder->weld_label(u"timelistbox_label"_ustr))
+    , m_xTimeListBox(m_xBuilder->weld_combo_box(u"timelistbox"_ustr))
+    , m_xPB_OK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     try
     {
@@ -148,7 +148,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     uno::Reference< beans::XPropertySet> xFormSet = _xFormats->getByKey(_nNumberFormatKey);
     OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
     OUString sFormat;
-    xFormSet->getPropertyValue("FormatString") >>= sFormat;
+    xFormSet->getPropertyValue(u"FormatString"_ustr) >>= sFormat;
 
     double nValue = 0;
     if ( _bTime )

@@ -122,7 +122,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
-            rtl::Reference<SvxOle2Shape> pShape = new SvxOle2Shape( pObj, "" /*TODO?*/ );
+            rtl::Reference<SvxOle2Shape> pShape = new SvxOle2Shape( pObj, u""_ustr /*TODO?*/ );
             xShape = pShape;
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
