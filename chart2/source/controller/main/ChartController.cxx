@@ -1550,7 +1550,7 @@ void ChartController::impl_initializeAccessible()
     auto pChartWindow(GetChartWindow());
     if( !pChartWindow )
         return;
-    Reference< XInterface > xInit( pChartWindow->GetAccessible(false) );
+    Reference<XAccessible> xInit = pChartWindow->GetAccessible(false);
     if(xInit.is())
         impl_initializeAccessible( dynamic_cast<AccessibleChartView&>(*xInit) );
 #endif
