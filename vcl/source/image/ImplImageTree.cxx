@@ -108,15 +108,17 @@ OUString createPath(std::u16string_view name, sal_Int32 pos, std::u16string_view
     return OUString::Concat(name.substr(0, pos + 1)) + locale + name.substr(pos);
 }
 
+OUString getIconCacheUrlImpl()
+{
+    OUString sDir = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr;
+    rtl::Bootstrap::expandMacros(sDir);
+    return sDir;
+}
+
 OUString getIconCacheUrl(std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
     // the macro expansion can be expensive in bulk, so cache that
-    static OUString CACHE_DIR = []()
-    {
-        OUString sDir = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr;
-        rtl::Bootstrap::expandMacros(sDir);
-        return sDir;
-    }();
+    static OUString CACHE_DIR = getIconCacheUrlImpl();
     return CACHE_DIR + rParameters.msStyle + "/" + sVariant + "/" + rParameters.msName;
 }
 

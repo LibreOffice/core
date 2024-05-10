@@ -196,21 +196,24 @@ void fillStruct(
     }
 }
 
+OUString getLibDir();
+OUString getLibDirImpl()
+{
+    OUString libDir;
+
+    // workarounds the $(ORIGIN) until it is available
+    if (Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getLibDir), libDir))
+    {
+        libDir = libDir.copy(0, libDir.lastIndexOf('/'));
+        OUString name(u"PYUNOLIBDIR"_ustr);
+        rtl_bootstrap_set(name.pData, libDir.pData);
+    }
+    return libDir;
+}
+
 OUString getLibDir()
 {
-    static OUString sLibDir = []() {
-        OUString libDir;
-
-        // workarounds the $(ORIGIN) until it is available
-        if (Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getLibDir), libDir))
-        {
-            libDir = libDir.copy(0, libDir.lastIndexOf('/'));
-            OUString name(u"PYUNOLIBDIR"_ustr);
-            rtl_bootstrap_set(name.pData, libDir.pData);
-        }
-        return libDir;
-    }();
-
+    static OUString sLibDir = getLibDirImpl();
     return sLibDir;
 }
 
