@@ -21,8 +21,8 @@
         <property name="xalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="accessibilityCheckEntryLabel-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLabel - Acessible Name">Document accessibility issue text label</property>
-            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLabel - Acessible Description">This is a document accessibility issue text label, which describes the issue.</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLabel - Accessible Name">Document accessibility issue text label</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLabel - Accessible Description">This is a document accessibility issue text label, which describes the issue.</property>
             <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
@@ -42,8 +42,8 @@
         <property name="xalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="accessibilityCheckEntryLinkButton-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLinkButton - Acessible Name">Document accessibility issue text link button</property>
-            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLinkButton - Acessible Description">This is a document accessibility issue link button, which describes the issue and provides a link, which will jump to the place of the issue in the document when clicked.</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLinkButton - Accessible Name">Document accessibility issue text link button</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryLinkButton - Accessible Description">This is a document accessibility issue link button, which describes the issue and provides a link, which will jump to the place of the issue in the document when clicked.</property>
           </object>
         </child>
       </object>
@@ -62,8 +62,8 @@
         <property name="valign">center</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="accessibilityCheckEntryFixButton-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton - Acessible Name">Document accessibility issue fix button</property>
-            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton - Acessible Description">This is a document accessibility issue fix button, which will provide a way to fix the issue if clicked.</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton - Accessible Name">Document accessibility issue fix button</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton - Accessible Description">This is a document accessibility issue fix button, which will provide a way to fix the issue if clicked.</property>
           </object>
         </child>
       </object>
@@ -74,8 +74,8 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="accessibilityCheckEntryBox-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryBox - Acessible Name">Document accessibility issue container</property>
-        <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryBox - Acessible Description">This is a document accessibility issue container, which describes an document accessibility issue and potentially provides a solution how to fix the issue.</property>
+        <property name="AtkObject::accessible-name" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryBox - Accessible Name">Document accessibility issue container</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryBox - Accessible Description">This is a document accessibility issue container, which describes an document accessibility issue and potentially provides a solution how to fix the issue.</property>
       </object>
     </child>
   </object>
