@@ -37,6 +37,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/sprintf.patch.0 \
 	external/cppunit/clang.patch.0 \
 	external/cppunit/0001-cid-1546460-COPY_INSTEAD_OF_MOVE.patch.1 \
+	external/cppunit/help-msvc-analyzer.patch \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\

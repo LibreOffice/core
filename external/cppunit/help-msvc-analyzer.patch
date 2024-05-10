@@ -1,0 +1,60 @@
+--- misc/cppunit-1.14.0/include/cppunit/TestAssert.h
++++ misc/build/cppunit-1.14.0/include/cppunit/TestAssert.h
+@@ -261,6 +261,13 @@
+                                message );
+     }
+ }
++
++#ifdef _MSC_VER
++#  define ANALYSIS_ASSUME(condition) __analysis_assume(condition)
++#else
++#  define ANALYSIS_ASSUME(condition) static_cast<void>(0)
++#endif
++
+ /* A set of macros which allow us to get the line number
+  * and file name at the point of an error.
+  * Just goes to show that preprocessors do have some
+@@ -271,15 +278,17 @@
+  * \ingroup Assertions
+  */
+ #define CPPUNIT_ASSERT(condition)                                                 \
+-  ( CPPUNIT_NS::Asserter::failIf( !(condition),                                   \
++  do { ( CPPUNIT_NS::Asserter::failIf( !(condition),                              \
+                                  CPPUNIT_NS::Message( "assertion failed",         \
+                                                       "Expression: " #condition), \
+-                                 CPPUNIT_SOURCELINE() ) )
++                                 CPPUNIT_SOURCELINE() ) );                        \
++       ANALYSIS_ASSUME(condition); } while(0)
+ #else
+ #define CPPUNIT_ASSERT(condition)                                            \
+-  ( CPPUNIT_NS::Asserter::failIf( !(condition),                              \
++  do { ( CPPUNIT_NS::Asserter::failIf( !(condition),                         \
+                                   CPPUNIT_NS::Message( "assertion failed" ), \
+-                                  CPPUNIT_SOURCELINE() ) )
++                                  CPPUNIT_SOURCELINE() ) );                  \
++       ANALYSIS_ASSUME(condition); } while(0)
+ #endif
+ 
+ /** Assertion with a user specified message.
+@@ -289,13 +298,14 @@
+  * \param condition If this condition evaluates to \c false then the
+  *                  test failed.
+  */
+-#define CPPUNIT_ASSERT_MESSAGE(message,condition)                          \
+-  ( CPPUNIT_NS::Asserter::failIf( !(condition),                            \
+-                                  CPPUNIT_NS::Message( "assertion failed", \
+-                                                       "Expression: "      \
+-                                                       #condition,         \
+-                                                       CPPUNIT_NS::message_to_string(message) ),          \
+-                                  CPPUNIT_SOURCELINE() ) )
++#define CPPUNIT_ASSERT_MESSAGE(message,condition)                                                \
++  do { ( CPPUNIT_NS::Asserter::failIf( !(condition),                                             \
++                                  CPPUNIT_NS::Message( "assertion failed",                       \
++                                                       "Expression: "                            \
++                                                       #condition,                               \
++                                                       CPPUNIT_NS::message_to_string(message) ), \
++                                  CPPUNIT_SOURCELINE() ) );                                      \
++       ANALYSIS_ASSUME(condition); } while(0)
+ 
+ /** Fails with the specified message.
+  * \ingroup Assertions
