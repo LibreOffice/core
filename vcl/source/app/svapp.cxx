@@ -1758,11 +1758,17 @@ void dumpState(rtl::OStringBuffer &rState)
     vcl::Window *pWin = Application::GetFirstTopLevelWindow();
     while (pWin)
     {
-        tools::JsonWriter props;
-        pWin->DumpAsPropertyTree(props);
+        tools::JsonWriter aProps;
+        pWin->DumpAsPropertyTree(aProps);
 
         rState.append("\n\tWindow: ");
-        rState.append(props.finishAndGetAsOString());
+        OString aPropStr = aProps.finishAndGetAsOString();
+        if (aPropStr.getLength() > 256)
+        {
+            rState.append(aPropStr.subView(0, 256));
+            rState.append("...");
+        } else
+            rState.append(aPropStr);
 
         pWin = Application::GetNextTopLevelWindow( pWin );
     }
