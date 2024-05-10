@@ -98,7 +98,7 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
     {
         m_aCountStack.top() += 1;
         if ( nIndex < 0 )
-            m_aNamespaceStack.emplace_back( OUString( "default" ), sValue );
+            m_aNamespaceStack.emplace_back( u"default"_ustr, sValue );
         else
             m_aNamespaceStack.emplace_back( sName.copy( nIndex + 1 ), sValue );
     }
@@ -136,7 +136,7 @@ void SAL_CALL TestDocumentHandler::startDocument()
 {
     m_aStr.clear();
     m_aNamespaceStack.clear();
-    m_aNamespaceStack.emplace_back( std::make_pair( OUString( "default" ), OUString() ) );
+    m_aNamespaceStack.emplace_back( std::make_pair( u"default"_ustr, OUString() ) );
     m_aCountStack = std::stack<sal_uInt16>();
     m_aCountStack.emplace(0);
 }
@@ -158,13 +158,13 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
         if (!sAttrName.isEmpty())
             sAttributes += sAttrName + sAttrValue;
     }
-    m_aStr += canonicalform(aName, "", true) + sAttributes;
+    m_aStr += canonicalform(aName, u""_ustr, true) + sAttributes;
 }
 
 
 void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 {
-    m_aStr += canonicalform(aName, "", true);
+    m_aStr += canonicalform(aName, u""_ustr, true);
     sal_uInt16 nPopQty = m_aCountStack.top();
     for (sal_uInt16 i=0; i<nPopQty; i++)
         m_aNamespaceStack.pop_back();
@@ -351,7 +351,7 @@ void XMLImportTest::setUp()
     m_xParser = Parser::create( xContext );
     m_xParser->setDocumentHandler( m_xDocumentHandler );
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
-                    ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
+                    ( u"com.sun.star.xml.sax.LegacyFastParser"_ustr, xContext ), UNO_QUERY );
     m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler );
 
     Reference< XFastTokenHandler > xTokenHandler;
@@ -363,7 +363,7 @@ void XMLImportTest::setUp()
     sal_Int32 nNamespaceCount = SAL_N_ELEMENTS(DummyTokenHandler::namespaceURIs);
     uno::Sequence<uno::Any> namespaceArgs( nNamespaceCount + 1 );
     auto p_namespaceArgs = namespaceArgs.getArray();
-    p_namespaceArgs[0] <<= OUString( "registerNamespaces" );
+    p_namespaceArgs[0] <<= u"registerNamespaces"_ustr;
     for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )
     {
         css::beans::Pair<OUString, sal_Int32> rPair( OUString(DummyTokenHandler::namespaceURIs[i - 1]), i << 16 );
@@ -376,9 +376,9 @@ void XMLImportTest::setUp()
 
 void XMLImportTest::parse()
 {
-    OUString fileNames[] = {"simple.xml", "defaultns.xml", "inlinens.xml",
-                            "multiplens.xml", "multiplepfx.xml",
-                            "nstoattributes.xml", "nestedns.xml", "testthreading.xml"};
+    OUString fileNames[] = {u"simple.xml"_ustr, u"defaultns.xml"_ustr, u"inlinens.xml"_ustr,
+                            u"multiplens.xml"_ustr, u"multiplepfx.xml"_ustr,
+                            u"nstoattributes.xml"_ustr, u"nestedns.xml"_ustr, u"testthreading.xml"_ustr};
 
     for (size_t i = 0; i < std::size( fileNames ); i++)
     {
@@ -401,11 +401,11 @@ void XMLImportTest::parse()
 
 void XMLImportTest::testMissingNamespaceDeclaration()
 {
-    OUString fileNames[] = { "manifestwithnsdecl.xml", "manifestwithoutnsdecl.xml" };
+    OUString fileNames[] = { u"manifestwithnsdecl.xml"_ustr, u"manifestwithoutnsdecl.xml"_ustr };
 
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
-    xInit->initialize({ uno::Any(OUString("IgnoreMissingNSDecl")) });
+    xInit->initialize({ uno::Any(u"IgnoreMissingNSDecl"_ustr) });
 
     for (sal_uInt16 i = 0; i < std::size( fileNames ); i++)
     {

@@ -1038,7 +1038,7 @@ void FastSaxParserImpl::pushEntity(const ParserData& rEntityData,
         xml::sax::InputSource const& rSource)
 {
     if (!rSource.aInputStream.is())
-        throw SAXException("No input source", Reference<XInterface>(), Any());
+        throw SAXException(u"No input source"_ustr, Reference<XInterface>(), Any());
 
     maEntities.emplace(rEntityData);
     mpTop = &maEntities.top();
@@ -1097,7 +1097,7 @@ void FastSaxParserImpl::parse()
             rEntity.mpParser = xmlCreatePushParserCtxt( &callbacks, this,
                 reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, nullptr );
             if( !rEntity.mpParser )
-                throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
+                throw SAXException(u"Couldn't create parser"_ustr, Reference< XInterface >(), Any() );
 
             // Tell libxml2 parser to decode entities in attribute values.
             // Also allow XML attribute values which are larger than 10MB, because this used to work
@@ -1136,7 +1136,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     if( rEntity.maNamespaceCount.empty() )
     {
         rEntity.maNamespaceCount.push(0);
-        DefineNamespace( "xml"_ostr, "http://www.w3.org/XML/1998/namespace");
+        DefineNamespace( "xml"_ostr, u"http://www.w3.org/XML/1998/namespace"_ustr);
     }
     else
     {
@@ -1512,7 +1512,7 @@ void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XF
 
 OUString FastSaxParser::getImplementationName()
 {
-    return "com.sun.star.comp.extensions.xml.sax.FastParser";
+    return u"com.sun.star.comp.extensions.xml.sax.FastParser"_ustr;
 }
 
 void FastSaxParser::setCustomEntityNames(
@@ -1528,7 +1528,7 @@ sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
 
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.sax.FastParser" };
+    return { u"com.sun.star.xml.sax.FastParser"_ustr };
 }
 
 } // namespace sax_fastparser

@@ -417,7 +417,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
     if( ! entity.structSource.aInputStream.is() )
     {
-        throw SAXException("No input source",
+        throw SAXException(u"No input source"_ustr,
                             css::uno::Reference< css::uno::XInterface > () , css::uno::Any() );
     }
 
@@ -432,7 +432,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     entity.pParser = XML_ParserCreate( nullptr );
     if( ! entity.pParser )
     {
-        throw SAXException("Couldn't create parser",
+        throw SAXException(u"Couldn't create parser"_ustr,
                             css::uno::Reference< css::uno::XInterface > (), css::uno::Any() );
     }
 
@@ -516,7 +516,7 @@ void SaxExpatParser::setLocale( const Locale & )
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName()
 {
-    return "com.sun.star.comp.extensions.xml.sax.ParserExpat";
+    return u"com.sun.star.comp.extensions.xml.sax.ParserExpat"_ustr;
 }
 
 // XServiceInfo
@@ -528,7 +528,7 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName)
 // XServiceInfo
 css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.sax.Parser" };
+    return { u"com.sun.star.xml.sax.Parser"_ustr };
 }
 
 
@@ -764,7 +764,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
         SAL_INFO("sax","SaxExpatParser: internal entity declaration, stopping");
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
         pImpl->exception = SAXParseException(
-            "SaxExpatParser: internal entity declaration, stopping",
+            u"SaxExpatParser: internal entity declaration, stopping"_ustr,
             nullptr, css::uno::Any(),
             pImpl->rDocumentLocator->getPublicId(),
             pImpl->rDocumentLocator->getSystemId(),
