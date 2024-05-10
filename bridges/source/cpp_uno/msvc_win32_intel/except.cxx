@@ -160,6 +160,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
 
     // info count accompanied by type info ptrs: type, base type, base base type, ...
     _types = std::malloc( sizeof(sal_Int32) + (sizeof(ExceptionType *) * nLen) );
+    assert(_types && "Don't handle OOM conditions");
     *(sal_Int32 *)_types = nLen;
 
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
