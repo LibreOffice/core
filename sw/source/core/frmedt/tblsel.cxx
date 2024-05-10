@@ -1883,7 +1883,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
             {
                 SwRowFrame* pRowFrame = pTable->GetFirstNonHeadlineRow();
                 //tdf#159027: follow returns a frame without height if
-                // merged cells are invoved
+                // merged cells are involved
                 if (pRowFrame->getFrameArea().IsEmpty())
                     pRowFrame = static_cast<SwRowFrame*>(pRowFrame->GetNext());
                 pRow = pRowFrame;
