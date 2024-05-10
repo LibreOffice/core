@@ -56,7 +56,23 @@ VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindo
 void VCLXAccessibleTextComponent::SetText( const OUString& sText )
 {
     Any aOldValue, aNewValue;
-    if ( implInitTextChangedEvent( m_sText, sText, aOldValue, aNewValue ) )
+    bool bChanged = false;
+    if (!PreferFullTextInTextChangedEvent())
+    {
+        bChanged = implInitTextChangedEvent(m_sText, sText, aOldValue, aNewValue);
+
+    }
+    else if (sText != m_sText)
+    {
+        // use the full old/new text as old/new value
+        TextSegment aDeletedText(m_sText, 0, m_sText.getLength());
+        aOldValue <<= aDeletedText;
+        TextSegment aInsertedText(sText, 0, sText.getLength());
+        aNewValue <<= aInsertedText;
+        bChanged = true;
+    }
+
+    if (bChanged)
     {
         m_sText = sText;
         NotifyAccessibleEvent( AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue );

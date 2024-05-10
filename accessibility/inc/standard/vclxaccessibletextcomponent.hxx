@@ -40,6 +40,11 @@ class VCLXAccessibleTextComponent : public cppu::ImplInheritanceHelper<
 protected:
     void                                    SetText( const OUString& sText );
 
+    // Whether text segments for old/new value in AccessibleEventId::TEXT_CHANGED
+    // event should always include the whole old and new text instead of just
+    // the characters that changed between the two
+    virtual bool                            PreferFullTextInTextChangedEvent() { return false; };
+
     virtual void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     // OCommonAccessibleText

@@ -162,6 +162,22 @@ void VCLXAccessibleEdit::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nE
     nEndIndex = aSelection.Max();
 }
 
+// VCLXAccessibleTextComponent
+bool VCLXAccessibleEdit::PreferFullTextInTextChangedEvent()
+{
+    // for a combobox subedit, the Orca screen reader announces the new/added text
+    // so always send the whole old and new text and not just
+    // the changed characters, so the whole entry text gets announced
+    Reference<XAccessible> xParent = getAccessibleParent();
+    if (xParent.is())
+    {
+        Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
+        if (xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::COMBO_BOX)
+            return true;
+    }
+
+    return false;
+}
 
 // XServiceInfo
 

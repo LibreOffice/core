@@ -50,6 +50,9 @@ protected:
     virtual OUString            implGetText() override;
     virtual void                implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
+    // VCLXAccessibleTextComponent
+    virtual bool                PreferFullTextInTextChangedEvent() override;
+
 public:
     VCLXAccessibleEdit( VCLXWindow* pVCLXindow );
 
