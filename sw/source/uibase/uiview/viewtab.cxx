@@ -1153,7 +1153,15 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                         auto & rEntry = aTabRows.GetEntry(nIndex);
                         tools::Long nNewPosition = rEntry.nPos + nOffset;
                         nNewPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        tools::Long nActualOffset = nNewPosition - rEntry.nPos;
                         rEntry.nPos = nNewPosition;
+                        // Maintain the size of the other rows
+                        for (size_t i = nIndex + 1; i < aTabRows.Count(); ++i)
+                        {
+                            auto& rNextEntry = aTabRows.GetEntry(i);
+                            rNextEntry.nPos += nActualOffset;
+                        }
+                        aTabRows.SetRight(aTabRows.GetRight() + nActualOffset);
                     }
 
                     rSh.SetTabRows(aTabRows, false);
