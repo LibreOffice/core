@@ -136,7 +136,7 @@ const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
 
 static sal_Int64 sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode** pEnd )
 {
-    sal_Int64 accum = 0, prev = 0;
+    sal_Int64 accum = 0;
     bool is_neg = false;
 
     if( *p == '-' )
@@ -147,15 +147,20 @@ static sal_Int64 sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode**
     else if( *p == '+' )
         p++;
 
+    const sal_Int64 cutoff = is_neg ? -(std::numeric_limits<sal_Int64>::min() / 10)
+                                    : std::numeric_limits<sal_Int64>::max() / 10;
+    const sal_Int64 cutlim = is_neg ? -(std::numeric_limits<sal_Int64>::min() % 10)
+                                    : std::numeric_limits<sal_Int64>::max() % 10;
+
     while (rtl::isAsciiDigit( *p ))
     {
-        accum = accum * 10 + *p - '0';
-        if( accum < prev )
+        int val = *p - '0';
+        if (accum > cutoff || (accum == cutoff && val > cutlim))
         {
             *pEnd = nullptr;
             return 0;
         }
-        prev = accum;
+        accum = accum * 10 + val;
         p++;
     }
 
