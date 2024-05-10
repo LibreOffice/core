@@ -90,7 +90,7 @@ $ExtPictUnassigned = [\p{Extended_Pictographic} & \p{Cn}];
 
 # By LB9, a ZWJ also behaves as a CM. Including it in the definition of CM avoids having to explicitly
 #         list it in the numerous rules that use CM.
-# By LB1, SA characters with general categor of Mn or Mc also resolve to CM.
+# By LB1, SA characters with general category of Mn or Mc also resolve to CM.
 
 $CM = [[:LineBreak = Combining_Mark:] $ZWJ [$SA & [[:Mn:][:Mc:]]]];
 $CMX = [[$CM] - [$ZWJ]];
