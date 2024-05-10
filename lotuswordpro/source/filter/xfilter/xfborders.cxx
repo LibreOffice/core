@@ -333,33 +333,33 @@ void    XFBorders::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !m_aBorderLeft.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( "style:border-line-width-left", m_aBorderLeft.GetLineWidth() );
+        pAttrList->AddAttribute( u"style:border-line-width-left"_ustr, m_aBorderLeft.GetLineWidth() );
     if( !m_aBorderRight.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( "style:border-line-width-right", m_aBorderRight.GetLineWidth() );
+        pAttrList->AddAttribute( u"style:border-line-width-right"_ustr, m_aBorderRight.GetLineWidth() );
     if( !m_aBorderTop.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( "style:border-line-width-top", m_aBorderTop.GetLineWidth() );
+        pAttrList->AddAttribute( u"style:border-line-width-top"_ustr, m_aBorderTop.GetLineWidth() );
     if( !m_aBorderBottom.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( "style:border-line-width-bottom", m_aBorderBottom.GetLineWidth() );
+        pAttrList->AddAttribute( u"style:border-line-width-bottom"_ustr, m_aBorderBottom.GetLineWidth() );
 
     if( !m_aBorderLeft.ToString().isEmpty() )
-        pAttrList->AddAttribute( "fo:border-left", m_aBorderLeft.ToString() );
+        pAttrList->AddAttribute( u"fo:border-left"_ustr, m_aBorderLeft.ToString() );
     else
-        pAttrList->AddAttribute( "fo:border-left", "none" );
+        pAttrList->AddAttribute( u"fo:border-left"_ustr, u"none"_ustr );
 
     if( !m_aBorderRight.ToString().isEmpty() )
-        pAttrList->AddAttribute( "fo:border-right", m_aBorderRight.ToString() );
+        pAttrList->AddAttribute( u"fo:border-right"_ustr, m_aBorderRight.ToString() );
     else
-        pAttrList->AddAttribute( "fo:border-right", "none" );
+        pAttrList->AddAttribute( u"fo:border-right"_ustr, u"none"_ustr );
 
     if( !m_aBorderTop.ToString().isEmpty() )
-        pAttrList->AddAttribute( "fo:border-top", m_aBorderTop.ToString() );
+        pAttrList->AddAttribute( u"fo:border-top"_ustr, m_aBorderTop.ToString() );
     else
-        pAttrList->AddAttribute( "fo:border-top", "none" );
+        pAttrList->AddAttribute( u"fo:border-top"_ustr, u"none"_ustr );
 
     if( !m_aBorderBottom.ToString().isEmpty() )
-        pAttrList->AddAttribute( "fo:border-bottom", m_aBorderBottom.ToString() );
+        pAttrList->AddAttribute( u"fo:border-bottom"_ustr, m_aBorderBottom.ToString() );
     else
-        pAttrList->AddAttribute( "fo:border-bottom", "none" );
+        pAttrList->AddAttribute( u"fo:border-bottom"_ustr, u"none"_ustr );
 
 }
 

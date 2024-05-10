@@ -83,12 +83,12 @@ void XFParagraph::ToXml(IXFStream* pStrm)
 
     pAttrList->Clear();
     if (!GetStyleName().isEmpty())
-        pAttrList->AddAttribute("text:style-name", GetStyleName());
-    pStrm->StartElement("text:p");
+        pAttrList->AddAttribute(u"text:style-name"_ustr, GetStyleName());
+    pStrm->StartElement(u"text:p"_ustr);
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement("text:p");
+    pStrm->EndElement(u"text:p"_ustr);
 }
 
 bool XFParagraph::HasContents() const { return GetCount() > 0; }

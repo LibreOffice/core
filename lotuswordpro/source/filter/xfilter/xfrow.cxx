@@ -108,10 +108,10 @@ void    XFRow::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "table:style-name", GetStyleName() );
+        pAttrList->AddAttribute( u"table:style-name"_ustr, GetStyleName() );
     if( m_nRepeat )
-        pAttrList->AddAttribute( "table:number-rows-repeated", OUString::number(m_nRepeat) );
-    pStrm->StartElement( "table:table-row" );
+        pAttrList->AddAttribute( u"table:number-rows-repeated"_ustr, OUString::number(m_nRepeat) );
+    pStrm->StartElement( u"table:table-row"_ustr );
 
     for (size_t nIndex = 0, nCount = m_aCells.size(); nIndex < nCount; ++nIndex)
     {
@@ -130,6 +130,6 @@ void    XFRow::ToXml(IXFStream *pStrm)
         lastCol = col;
     }
 
-    pStrm->EndElement( "table:table-row" );
+    pStrm->EndElement( u"table:table-row"_ustr );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

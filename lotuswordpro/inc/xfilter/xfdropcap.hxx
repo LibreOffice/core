@@ -121,13 +121,13 @@ inline void XFDropcap::ToXml(IXFStream *pStrm)
 
     if( m_nCharCount < 1 || m_nLines < 2 )
         return;
-    pAttrList->AddAttribute("style:length", OUString::number(m_nCharCount) );
-    pAttrList->AddAttribute("style:lines", OUString::number(m_nLines) );
-    pAttrList->AddAttribute("style:distance", OUString::number(m_fDistance) + "cm" );
+    pAttrList->AddAttribute(u"style:length"_ustr, OUString::number(m_nCharCount) );
+    pAttrList->AddAttribute(u"style:lines"_ustr, OUString::number(m_nLines) );
+    pAttrList->AddAttribute(u"style:distance"_ustr, OUString::number(m_fDistance) + "cm" );
     if( !m_strStyleName.isEmpty() )
-        pAttrList->AddAttribute("style:style-name", m_strStyleName );
-    pStrm->StartElement( "style:drop-cap" );
-    pStrm->EndElement( "style:drop-cap" );
+        pAttrList->AddAttribute(u"style:style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"style:drop-cap"_ustr );
+    pStrm->EndElement( u"style:drop-cap"_ustr );
 }
 
 inline bool operator==(XFDropcap const & dc1, XFDropcap const & dc2)

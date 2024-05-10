@@ -70,8 +70,8 @@ void XFDrawRect::ToXml(IXFStream* pStrm)
 
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement("draw:rect");
+    pStrm->StartElement(u"draw:rect"_ustr);
     ContentToXml(pStrm);
-    pStrm->EndElement("draw:rect");
+    pStrm->EndElement(u"draw:rect"_ustr);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

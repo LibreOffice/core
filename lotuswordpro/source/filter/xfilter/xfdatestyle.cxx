@@ -76,84 +76,84 @@ void    XFDatePart::ToXml(IXFStream *pStrm)
     case enumXFDateYear:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:year" );
-        pStrm->EndElement( "number:year" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:year"_ustr );
+        pStrm->EndElement( u"number:year"_ustr );
         break;
     case enumXFDateMonth:
         pAttrList->Clear();
         if( m_bTexture )
-            pAttrList->AddAttribute( "number:textual", "true" );
+            pAttrList->AddAttribute( u"number:textual"_ustr, u"true"_ustr );
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:month" );
-        pStrm->EndElement( "number:month" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:month"_ustr );
+        pStrm->EndElement( u"number:month"_ustr );
         break;
     case enumXFDateMonthDay:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:day" );
-        pStrm->EndElement( "number:day" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:day"_ustr );
+        pStrm->EndElement( u"number:day"_ustr );
         break;
     case enumXFDateWeekDay:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:day-of-week" );
-        pStrm->EndElement( "number:day-of-week" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:day-of-week"_ustr );
+        pStrm->EndElement( u"number:day-of-week"_ustr );
         break;
     case enumXFDateYearWeek:
         pAttrList->Clear();
-        pStrm->StartElement( "number:week-of-year" );
-        pStrm->EndElement( "number:week-of-year" );
+        pStrm->StartElement( u"number:week-of-year"_ustr );
+        pStrm->EndElement( u"number:week-of-year"_ustr );
         break;
     case enumXFDateEra:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:era" );
-        pStrm->EndElement( "number:era" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:era"_ustr );
+        pStrm->EndElement( u"number:era"_ustr );
         break;
     case enumXFDateQuarter:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:quarter" );
-        pStrm->EndElement( "number:quarter" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:quarter"_ustr );
+        pStrm->EndElement( u"number:quarter"_ustr );
         break;
     case enumXFDateHour:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:hours" );
-        pStrm->EndElement( "number:hours" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:hours"_ustr );
+        pStrm->EndElement( u"number:hours"_ustr );
         break;
     case enumXFDateMinute:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:minutes" );
-        pStrm->EndElement( "number:minutes" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:minutes"_ustr );
+        pStrm->EndElement( u"number:minutes"_ustr );
         break;
     case enumXFDateSecond:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
         if( m_nDecimalPos )
-            pAttrList->AddAttribute( "number:decimal-places", OUString::number(m_nDecimalPos) );
-        pStrm->StartElement( "number:seconds" );
-        pStrm->EndElement( "number:seconds" );
+            pAttrList->AddAttribute( u"number:decimal-places"_ustr, OUString::number(m_nDecimalPos) );
+        pStrm->StartElement( u"number:seconds"_ustr );
+        pStrm->EndElement( u"number:seconds"_ustr );
         break;
     case enumXFDateAmPm:
-        pStrm->StartElement( "number:am-pm" );
-        pStrm->EndElement( "number:am-pm" );
+        pStrm->StartElement( u"number:am-pm"_ustr );
+        pStrm->EndElement( u"number:am-pm"_ustr );
         break;
     case enumXFDateText:
         pAttrList->Clear();
-        pStrm->StartElement( "number:text" );
+        pStrm->StartElement( u"number:text"_ustr );
         pStrm->Characters( m_strText );
-        pStrm->EndElement( "number:text" );
+        pStrm->EndElement( u"number:text"_ustr );
         break;
     }
 }
@@ -176,14 +176,14 @@ void    XFDateStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
-    pAttrList->AddAttribute( "style:family", "data-style" );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"data-style"_ustr );
 
-    pStrm->StartElement( "number:date-style" );
+    pStrm->StartElement( u"number:date-style"_ustr );
 
     m_aParts.ToXml(pStrm);
 
-    pStrm->EndElement( "number:date-style" );
+    pStrm->EndElement( u"number:date-style"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

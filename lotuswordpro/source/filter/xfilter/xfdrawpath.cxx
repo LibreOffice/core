@@ -86,7 +86,7 @@ void    XFDrawPath::MoveTo(XFPoint pt)
 {
     XFSvgPathEntry  entry;
 
-    entry.SetCommand("M");
+    entry.SetCommand(u"M"_ustr);
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
@@ -95,7 +95,7 @@ void    XFDrawPath::LineTo(XFPoint pt)
 {
     XFSvgPathEntry  entry;
 
-    entry.SetCommand("L");
+    entry.SetCommand(u"L"_ustr);
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
@@ -104,7 +104,7 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2)
 {
     XFSvgPathEntry  entry;
 
-    entry.SetCommand("C");
+    entry.SetCommand(u"C"_ustr);
     entry.AddPoint(ctrl1);
     entry.AddPoint(ctrl2);
     entry.AddPoint(dest);
@@ -116,7 +116,7 @@ void    XFDrawPath::ClosePath()
 {
     XFSvgPathEntry  entry;
 
-    entry.SetCommand("Z");
+    entry.SetCommand(u"Z"_ustr);
 
     m_aPaths.push_back(entry);
 }
@@ -132,7 +132,7 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     OUString strViewBox = "0 0 " +
         OUString::number(rect.GetWidth()*1000) + " " +
         OUString::number(rect.GetHeight()*1000);
-    pAttrList->AddAttribute( "svg:viewBox", strViewBox);
+    pAttrList->AddAttribute( u"svg:viewBox"_ustr, strViewBox);
 
     //points
     OUStringBuffer strPath;
@@ -142,14 +142,14 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     }
     if (!strPath.isEmpty())
         strPath.setLength(strPath.getLength()-1);
-    pAttrList->AddAttribute( "svg:d", strPath.makeStringAndClear());
+    pAttrList->AddAttribute( u"svg:d"_ustr, strPath.makeStringAndClear());
 
     SetPosition(rect);
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( "draw:path" );
+    pStrm->StartElement( u"draw:path"_ustr );
     ContentToXml(pStrm);
-    pStrm->EndElement( "draw:path" );
+    pStrm->EndElement( u"draw:path"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

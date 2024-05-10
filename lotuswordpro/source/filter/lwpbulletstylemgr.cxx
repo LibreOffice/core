@@ -223,7 +223,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, const LwpBulletO
                     }
 
                     pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber),
-                        "Times New Roman", aPrefix, aSuffix);
+                        u"Times New Roman"_ustr, aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);

@@ -367,7 +367,7 @@ void LwpDocument::RegisterFootnoteStyles()
             = dynamic_cast<LwpFootnoteOptions*>(m_FootnoteOpts.obj().get());
         if (pFootnoteOpts)
         {
-            pFootnoteOpts->SetMasterPage("Endnote");
+            pFootnoteOpts->SetMasterPage(u"Endnote"_ustr);
             pFootnoteOpts->RegisterStyle();
         }
     }
@@ -788,7 +788,7 @@ void LwpDocument::ChangeStyleName()
     XFTextStyle* pStyle = dynamic_cast<XFTextStyle*>(pXFStyleManager->FindStyle(u"ClickHere"));
     if (pStyle)
     {
-        pStyle->SetStyleName("Placeholder");
+        pStyle->SetStyleName(u"Placeholder"_ustr);
     }
 }
 LwpDocSock::LwpDocSock(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)

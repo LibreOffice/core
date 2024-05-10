@@ -90,49 +90,49 @@ void    XFOfficeMeta::ToXml(IXFStream *pStream)
     IXFAttrList *pAttrList = pStream->GetAttrList();
 
     pAttrList->Clear();
-    pStream->StartElement( "office:meta" );
+    pStream->StartElement( u"office:meta"_ustr );
 
     //generator:
-    pStream->StartElement( "meta:generator" );
+    pStream->StartElement( u"meta:generator"_ustr );
     pStream->Characters( m_strGenerator );
-    pStream->EndElement( "meta:generator" );
+    pStream->EndElement( u"meta:generator"_ustr );
 
     //title
-    pStream->StartElement( "dc:title" );
+    pStream->StartElement( u"dc:title"_ustr );
     pStream->Characters( m_strTitle );
-    pStream->EndElement( "dc:title" );
+    pStream->EndElement( u"dc:title"_ustr );
 
     //keywords
-    pStream->StartElement( "meta:keywords" );
-    pStream->StartElement( "meta:keyword" );
+    pStream->StartElement( u"meta:keywords"_ustr );
+    pStream->StartElement( u"meta:keyword"_ustr );
     pStream->Characters( m_strKeywords );
-    pStream->EndElement( "meta:keyword" );
-    pStream->EndElement( "meta:keywords" );
+    pStream->EndElement( u"meta:keyword"_ustr );
+    pStream->EndElement( u"meta:keywords"_ustr );
 
     //creation time
-    pStream->StartElement( "meta:creation-date" );
+    pStream->StartElement( u"meta:creation-date"_ustr );
     pStream->Characters( m_strCrtime);
-    pStream->EndElement( "meta:creation-date" );
+    pStream->EndElement( u"meta:creation-date"_ustr );
 
     //last revision time
-    pStream->StartElement( "dc:date" );
+    pStream->StartElement( u"dc:date"_ustr );
     pStream->Characters( m_strLstime);
-    pStream->EndElement( "dc:date" );
+    pStream->EndElement( u"dc:date"_ustr );
     //total edit time
-    pStream->StartElement( "meta:editing-duration" );
+    pStream->StartElement( u"meta:editing-duration"_ustr );
     pStream->Characters( m_strEdtime);
-    pStream->EndElement( "meta:editing-duration" );
+    pStream->EndElement( u"meta:editing-duration"_ustr );
 
     //description
-    pStream->StartElement( "dc:description" );
+    pStream->StartElement( u"dc:description"_ustr );
     pStream->Characters( m_strDsr );
-    pStream->EndElement( "dc:description" );
+    pStream->EndElement( u"dc:description"_ustr );
     //creator
-    pStream->StartElement( "meta:initial-creator" );
+    pStream->StartElement( u"meta:initial-creator"_ustr );
     pStream->Characters( m_strCreator );
-    pStream->EndElement( "meta:initial-creator" );
+    pStream->EndElement( u"meta:initial-creator"_ustr );
 
-    pStream->EndElement( "office:meta" );
+    pStream->EndElement( u"office:meta"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

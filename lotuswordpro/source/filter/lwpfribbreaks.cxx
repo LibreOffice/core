@@ -75,7 +75,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara* pPara)
 
     std::unique_ptr<XFParaStyle> pOverStyle(new XFParaStyle);
     *pOverStyle = *pBaseStyle;
-    pOverStyle->SetStyleName("");
+    pOverStyle->SetStyleName(u""_ustr);
 
     //New code
     LwpStory* pStory = dynamic_cast<LwpStory*>(pPara->GetStoryID().obj().get());
@@ -128,7 +128,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 
     std::unique_ptr<XFParaStyle> pOverStyle(new XFParaStyle);
     *pOverStyle = *pBaseStyle;
-    pOverStyle->SetStyleName("");
+    pOverStyle->SetStyleName(u""_ustr);
     pOverStyle->SetMasterPage(pBaseStyle->GetMasterPage());
 
     if (!GetNext() || GetNext()->GetType() == FRIB_TAG_EOP)

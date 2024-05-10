@@ -75,33 +75,33 @@ void XFEntry::ToXml(IXFStream* pStrm)
     IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute("text:string-value", m_strValue);
+    pAttrList->AddAttribute(u"text:string-value"_ustr, m_strValue);
 
     if (m_eType == enumXFEntryTOC)
     {
-        pAttrList->AddAttribute("text:outline-level", OUString::number(m_nOutlineLevel));
-        pStrm->StartElement("text:toc-mark");
+        pAttrList->AddAttribute(u"text:outline-level"_ustr, OUString::number(m_nOutlineLevel));
+        pStrm->StartElement(u"text:toc-mark"_ustr);
         //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement("text:toc-mark");
+        pStrm->EndElement(u"text:toc-mark"_ustr);
     }
     else if (m_eType == enumXFEntryAlphabetical)
     {
-        pAttrList->AddAttribute("text:key1", m_strKey1);
+        pAttrList->AddAttribute(u"text:key1"_ustr, m_strKey1);
         if (!m_strKey2.isEmpty())
-            pAttrList->AddAttribute("text:key2", m_strKey2);
+            pAttrList->AddAttribute(u"text:key2"_ustr, m_strKey2);
 
-        pStrm->StartElement("text:alphabetical-index-mark");
+        pStrm->StartElement(u"text:alphabetical-index-mark"_ustr);
         //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement("text:alphabetical-index-mark");
+        pStrm->EndElement(u"text:alphabetical-index-mark"_ustr);
     }
     else if (m_eType == enumXFEntryUserIndex)
     {
-        pAttrList->AddAttribute("text:outline-level", OUString::number(m_nOutlineLevel));
-        pAttrList->AddAttribute("text:index-name", m_strName);
+        pAttrList->AddAttribute(u"text:outline-level"_ustr, OUString::number(m_nOutlineLevel));
+        pAttrList->AddAttribute(u"text:index-name"_ustr, m_strName);
 
-        pStrm->StartElement("text:user-index-mark");
+        pStrm->StartElement(u"text:user-index-mark"_ustr);
         //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement("text:user-index-mark");
+        pStrm->EndElement(u"text:user-index-mark"_ustr);
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

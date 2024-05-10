@@ -77,12 +77,12 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
-    pAttrList->AddAttribute( "style:family", "graphics" );
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
+    pAttrList->AddAttribute( u"style:family"_ustr, u"graphics"_ustr );
     //parent style name ignore now.
-    pStrm->StartElement( "style:style" );
+    pStrm->StartElement( u"style:style"_ustr );
 
     m_aMargins.ToXml(pStrm);
 
@@ -90,39 +90,39 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
 
     if( m_eWrap == enumXFWrapBackground )
     {
-        pAttrList->AddAttribute( "style:run-through", "background" );
+        pAttrList->AddAttribute( u"style:run-through"_ustr, u"background"_ustr );
     }
     else
     {
-        pAttrList->AddAttribute( "style:run-through", "foreground" );
+        pAttrList->AddAttribute( u"style:run-through"_ustr, u"foreground"_ustr );
 
         if( m_eWrap == enumXFWrapNone )
-            pAttrList->AddAttribute( "style:wrap", "none" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"none"_ustr );
         else if( m_eWrap == enumXFWrapLeft )
-            pAttrList->AddAttribute( "style:wrap", "left" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"left"_ustr );
         else if( m_eWrap == enumXFWrapRight )
-            pAttrList->AddAttribute( "style:wrap", "right" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"right"_ustr );
         else if( m_eWrap == enumXFWrapParallel )
-            pAttrList->AddAttribute( "style:wrap", "parallel" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"parallel"_ustr );
         else if( m_eWrap == enumXFWrapRunThrough )
-            pAttrList->AddAttribute( "style:wrap", "run-through" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"run-through"_ustr );
         else if( m_eWrap == enumXFWrapBest )
-            pAttrList->AddAttribute( "style:wrap", "dynamic" );
+            pAttrList->AddAttribute( u"style:wrap"_ustr, u"dynamic"_ustr );
     }
     //background
     if( m_aBackColor.IsValid() )
-        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, m_aBackColor.ToString() );
     //pad
     m_aPad.ToXml(pStrm);
     //margin:
     m_aMargins.ToXml(pStrm);
 
     if( m_nBrightness )
-        pAttrList->AddAttribute( "draw:luminance", OUString::number(m_nBrightness) + "%" );
+        pAttrList->AddAttribute( u"draw:luminance"_ustr, OUString::number(m_nBrightness) + "%" );
     if( m_nContrast )
-        pAttrList->AddAttribute( "draw:contrast", OUString::number(m_nContrast) + "%" );
+        pAttrList->AddAttribute( u"draw:contrast"_ustr, OUString::number(m_nContrast) + "%" );
 
-    pAttrList->AddAttribute("draw:color-mode", GetColorMode(enumXFColorStandard));
+    pAttrList->AddAttribute(u"draw:color-mode"_ustr, GetColorMode(enumXFColorStandard));
     //border
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
@@ -130,7 +130,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     if( m_pShadow )
         m_pShadow->ToXml(pStrm);
 
-    pAttrList->AddAttribute( "style:print-content", "true" );
+    pAttrList->AddAttribute( u"style:print-content"_ustr, u"true"_ustr );
     //protect:
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
@@ -149,13 +149,13 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
                 protect += " ";
             protect += "position";
         }
-        pAttrList->AddAttribute( "style:protect", protect );
+        pAttrList->AddAttribute( u"style:protect"_ustr, protect );
     }
     //vertical pos and horizon pos:
-    pAttrList->AddAttribute( "style:vertical-pos", GetFrameYPos(m_eYPos) );
-    pAttrList->AddAttribute( "style:vertical-rel", GetFrameYRel(m_eYRel) );
-    pAttrList->AddAttribute( "style:horizontal-pos", GetFrameXPos(m_eXPos) );
-    pAttrList->AddAttribute( "style:horizontal-rel", GetFrameXRel(m_eXRel) );
+    pAttrList->AddAttribute( u"style:vertical-pos"_ustr, GetFrameYPos(m_eYPos) );
+    pAttrList->AddAttribute( u"style:vertical-rel"_ustr, GetFrameYRel(m_eYRel) );
+    pAttrList->AddAttribute( u"style:horizontal-pos"_ustr, GetFrameXPos(m_eXPos) );
+    pAttrList->AddAttribute( u"style:horizontal-rel"_ustr, GetFrameXRel(m_eXRel) );
 
     //clip:
     if( FABS(m_fClipLeft)>FLOAT_MIN || FABS(m_fClipRight)>FLOAT_MIN || FABS(m_fClipTop)>FLOAT_MIN || FABS(m_fClipBottom)>FLOAT_MIN )
@@ -164,13 +164,13 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
             OUString::number(m_fClipRight) + "cm " +
             OUString::number(m_fClipBottom) + "cm " +
             OUString::number(m_fClipLeft) + "cm)";
-        pAttrList->AddAttribute("fo:clip",clip);
+        pAttrList->AddAttribute(u"fo:clip"_ustr,clip);
     }
 
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 
 }
 

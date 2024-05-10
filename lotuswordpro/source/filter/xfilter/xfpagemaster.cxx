@@ -194,37 +194,37 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     IXFAttrList *pAttrList = pStream->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute("style:name",GetStyleName());
+    pAttrList->AddAttribute(u"style:name"_ustr,GetStyleName());
 
     if( m_eUsage != enumXFPageUsageNone )
-        pAttrList->AddAttribute("style:page-usage", GetPageUsageName(m_eUsage));
+        pAttrList->AddAttribute(u"style:page-usage"_ustr, GetPageUsageName(m_eUsage));
 
-    pStream->StartElement( "style:page-master" );
+    pStream->StartElement( u"style:page-master"_ustr );
 
     //style:properties
     pAttrList->Clear();
     if( m_fPageWidth != 0 )
-        pAttrList->AddAttribute( "fo:page-width", OUString::number(m_fPageWidth) + "cm" );
+        pAttrList->AddAttribute( u"fo:page-width"_ustr, OUString::number(m_fPageWidth) + "cm" );
     if( m_fPageHeight != 0 )
-        pAttrList->AddAttribute( "fo:page-height", OUString::number(m_fPageHeight) + "cm" );
+        pAttrList->AddAttribute( u"fo:page-height"_ustr, OUString::number(m_fPageHeight) + "cm" );
 
     m_aMargin.ToXml(pStream);
 
-    pAttrList->AddAttribute( "style:print-orientation", "portrait" );
+    pAttrList->AddAttribute( u"style:print-orientation"_ustr, u"portrait"_ustr );
 
     if( m_pBorders )
         m_pBorders->ToXml(pStream);
     if( m_pShadow )
-        pAttrList->AddAttribute( "style:shadow", m_pShadow->ToString() );
+        pAttrList->AddAttribute( u"style:shadow"_ustr, m_pShadow->ToString() );
 
     if( m_aBackColor.IsValid() )
-        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, m_aBackColor.ToString() );
 
     //text directory
     if( m_eTextDir != enumXFTextDirNone )
-        pAttrList->AddAttribute( "style:writing-mode", GetTextDirName(m_eTextDir) );
+        pAttrList->AddAttribute( u"style:writing-mode"_ustr, GetTextDirName(m_eTextDir) );
 
-    pStream->StartElement( "style:properties" );
+    pStream->StartElement( u"style:properties"_ustr );
     if( m_pColumns )
         m_pColumns->ToXml(pStream);
 
@@ -234,22 +234,22 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     if( m_eSepAlign || m_nSepLengthPercent>0 || m_fSepSpaceAbove>0 || m_fSepSpaceBelow>0 )
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute( "style:width", OUString::number(m_fSepWidth) + "cm" );
-        pAttrList->AddAttribute( "style:distance-before-sep", OUString::number(m_fSepSpaceAbove) + "cm" );
-        pAttrList->AddAttribute( "style:distance-after-sep", OUString::number(m_fSepSpaceBelow) + "cm" );
-        pAttrList->AddAttribute( "style:color", m_aSepColor.ToString() );
+        pAttrList->AddAttribute( u"style:width"_ustr, OUString::number(m_fSepWidth) + "cm" );
+        pAttrList->AddAttribute( u"style:distance-before-sep"_ustr, OUString::number(m_fSepSpaceAbove) + "cm" );
+        pAttrList->AddAttribute( u"style:distance-after-sep"_ustr, OUString::number(m_fSepSpaceBelow) + "cm" );
+        pAttrList->AddAttribute( u"style:color"_ustr, m_aSepColor.ToString() );
         if( m_eSepAlign == enumXFAlignStart )
-            pAttrList->AddAttribute( "style:adjustment", "left" );
+            pAttrList->AddAttribute( u"style:adjustment"_ustr, u"left"_ustr );
         else if( m_eSepAlign == enumXFAlignCenter )
-            pAttrList->AddAttribute( "style:adjustment", "center" );
+            pAttrList->AddAttribute( u"style:adjustment"_ustr, u"center"_ustr );
         else if( m_eSepAlign == enumXFAlignEnd )
-            pAttrList->AddAttribute( "style:adjustment", "right" );
-        pAttrList->AddAttribute( "style:rel-width", OUString::number(m_nSepLengthPercent) + "%" );
-        pStream->StartElement( "style:footnote-sep" );
-        pStream->EndElement( "style:footnote-sep" );
+            pAttrList->AddAttribute( u"style:adjustment"_ustr, u"right"_ustr );
+        pAttrList->AddAttribute( u"style:rel-width"_ustr, OUString::number(m_nSepLengthPercent) + "%" );
+        pStream->StartElement( u"style:footnote-sep"_ustr );
+        pStream->EndElement( u"style:footnote-sep"_ustr );
     }
 
-    pStream->EndElement( "style:properties" );
+    pStream->EndElement( u"style:properties"_ustr );
 
     //header style:
     if( m_pHeaderStyle )
@@ -258,7 +258,7 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     if( m_pFooterStyle )
         m_pFooterStyle->ToXml(pStream);
 
-    pStream->EndElement( "style:page-master" );
+    pStream->EndElement( u"style:page-master"_ustr );
 
 }
 

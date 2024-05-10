@@ -74,23 +74,23 @@ void XFSection::ToXml(IXFStream* pStrm)
     pAttrList->Clear();
     OUString style = GetStyleName();
     if (!style.isEmpty())
-        pAttrList->AddAttribute("text:style-name", style);
+        pAttrList->AddAttribute(u"text:style-name"_ustr, style);
     //section name
     if (!m_strSectionName.isEmpty())
-        pAttrList->AddAttribute("text:name", m_strSectionName);
+        pAttrList->AddAttribute(u"text:name"_ustr, m_strSectionName);
 
-    pStrm->StartElement("text:section");
+    pStrm->StartElement(u"text:section"_ustr);
     if (!m_strSourceLink.isEmpty())
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute("xlink:href", m_strSourceLink);
-        pAttrList->AddAttribute("text:filter-name", "wordpro");
-        pStrm->StartElement("text:section-source");
-        pStrm->EndElement("text:section-source");
+        pAttrList->AddAttribute(u"xlink:href"_ustr, m_strSourceLink);
+        pAttrList->AddAttribute(u"text:filter-name"_ustr, u"wordpro"_ustr);
+        pStrm->StartElement(u"text:section-source"_ustr);
+        pStrm->EndElement(u"text:section-source"_ustr);
     }
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement("text:section");
+    pStrm->EndElement(u"text:section"_ustr);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

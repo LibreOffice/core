@@ -76,21 +76,21 @@ void XFList::ToXml(IXFStream* pStrm)
 
     pAttrList->Clear();
     if (!GetStyleName().isEmpty())
-        pAttrList->AddAttribute("text:style-name", GetStyleName());
+        pAttrList->AddAttribute(u"text:style-name"_ustr, GetStyleName());
     if (m_bContinueNumber)
-        pAttrList->AddAttribute("text:continue-numbering", "true");
+        pAttrList->AddAttribute(u"text:continue-numbering"_ustr, u"true"_ustr);
 
     if (m_bOrdered)
-        pStrm->StartElement("text:ordered-list");
+        pStrm->StartElement(u"text:ordered-list"_ustr);
     else
-        pStrm->StartElement("text:unordered-list");
+        pStrm->StartElement(u"text:unordered-list"_ustr);
 
     XFContentContainer::ToXml(pStrm);
 
     if (m_bOrdered)
-        pStrm->EndElement("text:ordered-list");
+        pStrm->EndElement(u"text:ordered-list"_ustr);
     else
-        pStrm->EndElement("text:unordered-list");
+        pStrm->EndElement(u"text:unordered-list"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

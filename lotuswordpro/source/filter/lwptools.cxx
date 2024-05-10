@@ -588,7 +588,7 @@ std::unique_ptr<XFDateStyle> LwpTools::GetSystemDateStyle(bool bLongFormat)
             }
             case '"':
             {
-                pDateStyle->AddText("'");
+                pDateStyle->AddText(u"'"_ustr);
                 break;
             }
             default:
@@ -810,7 +810,7 @@ std::unique_ptr<XFTimeStyle> LwpTools::GetSystemTimeStyle()
             }
             case '"':
             {
-                pTimeStyle->AddText("'");
+                pTimeStyle->AddText(u"'"_ustr);
                 break;
             }
             default:

@@ -101,14 +101,14 @@ inline void XFArrowStyle::ToXml(IXFStream* pStrm)
     pAttrList->Clear();
 
     if (!m_strName.isEmpty())
-        pAttrList->AddAttribute("draw:name", m_strName);
+        pAttrList->AddAttribute(u"draw:name"_ustr, m_strName);
     else
-        pAttrList->AddAttribute("draw:name", GetStyleName());
+        pAttrList->AddAttribute(u"draw:name"_ustr, GetStyleName());
 
-    pAttrList->AddAttribute("svg:viewBox", m_strViewBox);
-    pAttrList->AddAttribute("svg:d", m_strPath);
-    pStrm->StartElement("draw:marker");
-    pStrm->EndElement("draw:marker");
+    pAttrList->AddAttribute(u"svg:viewBox"_ustr, m_strViewBox);
+    pAttrList->AddAttribute(u"svg:d"_ustr, m_strPath);
+    pStrm->StartElement(u"draw:marker"_ustr);
+    pStrm->EndElement(u"draw:marker"_ustr);
 }
 
 #endif

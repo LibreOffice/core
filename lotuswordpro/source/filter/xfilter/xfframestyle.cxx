@@ -111,37 +111,37 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( GetParentStyleName().getLength() > 0 )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
-    pAttrList->AddAttribute( "style:family", "graphics" );
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
+    pAttrList->AddAttribute( u"style:family"_ustr, u"graphics"_ustr );
     //parent style name ignore now.
-    pStrm->StartElement( "style:style" );
+    pStrm->StartElement( u"style:style"_ustr );
 
     m_aMargins.ToXml(pStrm);
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:run-through", "foreground" );
+    pAttrList->AddAttribute( u"style:run-through"_ustr, u"foreground"_ustr );
 
     if( m_eWrap == enumXFWrapNone )
-        pAttrList->AddAttribute( "style:wrap", "none" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"none"_ustr );
     else if( m_eWrap == enumXFWrapLeft )
-        pAttrList->AddAttribute( "style:wrap", "left" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"left"_ustr );
     else if( m_eWrap == enumXFWrapRight )
-        pAttrList->AddAttribute( "style:wrap", "right" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"right"_ustr );
     else if( m_eWrap == enumXFWrapParallel )
-        pAttrList->AddAttribute( "style:wrap", "parallel" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"parallel"_ustr );
     else if( m_eWrap == enumXFWrapRunThrough )
-        pAttrList->AddAttribute( "style:wrap", "run-through" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"run-through"_ustr );
     else if( m_eWrap == enumXFWrapBest )
-        pAttrList->AddAttribute( "style:wrap", "dynamic" );
+        pAttrList->AddAttribute( u"style:wrap"_ustr, u"dynamic"_ustr );
     //}
     //background
     if( m_aBackColor.IsValid() )
     {
-        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
-        pAttrList->AddAttribute( "style:background-transparency", OUString::number(static_cast<sal_Int32>(m_nTransparency)) + "%");
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, m_aBackColor.ToString() );
+        pAttrList->AddAttribute( u"style:background-transparency"_ustr, OUString::number(static_cast<sal_Int32>(m_nTransparency)) + "%");
     }
 
     //pad
@@ -152,15 +152,15 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
     else
-        pAttrList->AddAttribute( "fo:border", "none" );
+        pAttrList->AddAttribute( u"fo:border"_ustr, u"none"_ustr );
     //shadow
     if( m_pShadow )
         m_pShadow->ToXml(pStrm);
     //print
-    pAttrList->AddAttribute( "style:print-content", "true" );
+    pAttrList->AddAttribute( u"style:print-content"_ustr, u"true"_ustr );
     //text directory
     if( m_eTextDir != enumXFTextDirNone )
-        pAttrList->AddAttribute( "style:writing-mode", GetTextDirName(m_eTextDir) );
+        pAttrList->AddAttribute( u"style:writing-mode"_ustr, GetTextDirName(m_eTextDir) );
     //protect:
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
@@ -179,21 +179,21 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
                 protect += " ";
             protect += "position";
         }
-        pAttrList->AddAttribute( "style:protect", protect );
+        pAttrList->AddAttribute( u"style:protect"_ustr, protect );
     }
     //vertical pos and horizon pos:
-    pAttrList->AddAttribute( "style:vertical-pos", GetFrameYPos(m_eYPos) );
-    pAttrList->AddAttribute( "style:vertical-rel", GetFrameYRel(m_eYRel) );
-    pAttrList->AddAttribute( "style:horizontal-pos", GetFrameXPos(m_eXPos) );
-    pAttrList->AddAttribute( "style:horizontal-rel", GetFrameXRel(m_eXRel) );
+    pAttrList->AddAttribute( u"style:vertical-pos"_ustr, GetFrameYPos(m_eYPos) );
+    pAttrList->AddAttribute( u"style:vertical-rel"_ustr, GetFrameYRel(m_eYRel) );
+    pAttrList->AddAttribute( u"style:horizontal-pos"_ustr, GetFrameXPos(m_eXPos) );
+    pAttrList->AddAttribute( u"style:horizontal-rel"_ustr, GetFrameXRel(m_eXRel) );
 
-    pStrm->StartElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
     if( m_pColumns )
         m_pColumns->ToXml(pStrm);
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
-    pStrm->EndElement( "style:properties" );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

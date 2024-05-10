@@ -91,41 +91,41 @@ OUString   GetUnderlineName(enumXFUnderline type)
     switch(type)
     {
     case enumXFUnderlineNone:
-        return "none";
+        return u"none"_ustr;
     case enumXFUnderlineSingle:
-        return "single";
+        return u"single"_ustr;
     case enumXFUnderlineDouble:
-        return "double";
+        return u"double"_ustr;
     case enumXFUnderlineDotted:
-        return "dotted";
+        return u"dotted"_ustr;
     case enumXFUnderlineDash:
-        return "dash";
+        return u"dash"_ustr;
     case enumXFUnderlineLongDash:
-        return "long-dash";
+        return u"long-dash"_ustr;
     case enumXFUnderlineDotDash:
-        return "dot-dash";
+        return u"dot-dash"_ustr;
     case enumXFUnderlineDotDotDash:
-        return "dot-dot-dash";
+        return u"dot-dot-dash"_ustr;
     case enumXFUnderlineWave:
-        return "wave";
+        return u"wave"_ustr;
     case enumXFUnderlineBold:
-        return "bold";
+        return u"bold"_ustr;
     case enumXFUnderlineBoldDotted:
-        return "bold-dotted";
+        return u"bold-dotted"_ustr;
     case enumXFUnderlineBoldDash:
-        return "bold-dash";
+        return u"bold-dash"_ustr;
     case enumXFUnderlineBoldLongDash:
-        return "bold-long-dash";
+        return u"bold-long-dash"_ustr;
     case enumXFUnderlineBoldDotDash:
-        return "bold-dot-dash";
+        return u"bold-dot-dash"_ustr;
     case enumXFUnderlineBoldDotDotDash:
-        return "bold-dot-dot-dash";
+        return u"bold-dot-dot-dash"_ustr;
     case enumXFUnderlineBoldWave:
-        return "bold-wave";
+        return u"bold-wave"_ustr;
     case enumXFUnderlineDoubleWave:
-        return "double-wave";
+        return u"double-wave"_ustr;
     case enumXFUnderlineSmallWave:
-        return "small-wave";
+        return u"small-wave"_ustr;
     }
     return OUString();
 }
@@ -135,15 +135,15 @@ OUString   GetCrossoutName(enumXFCrossout type)
     switch(type)
     {
     case enumXFCrossoutSignel:
-        return "single-line";
+        return u"single-line"_ustr;
     case enumXFCrossoutDouble:
-        return "double-line";
+        return u"double-line"_ustr;
     case enumXFCrossoutThick:
-        return "thick-line";
+        return u"thick-line"_ustr;
     case enumXFCrossoutSlash:
-        return "slash";
+        return u"slash"_ustr;
     case enumXFCrossoutX:
-        return "X";
+        return u"X"_ustr;
     default:
         break;
     }
@@ -154,13 +154,13 @@ OUString   GetTransformName(enumXFTransform type)
 {
     switch(type) {
     case enumXFTransformUpper:
-        return "uppercase";
+        return u"uppercase"_ustr;
     case enumXFTransformLower:
-        return "lowercase";
+        return u"lowercase"_ustr;
     case enumXFTransformCapitalize:
-        return "capitalize";
+        return u"capitalize"_ustr;
     case enumXFTransformSmallCaps:
-        return "small-caps";
+        return u"small-caps"_ustr;
     default:
         break;
     }
@@ -172,21 +172,21 @@ OUString   GetTextDirName(enumXFTextDir dir)
     switch(dir)
     {
     case enumXFTextDirLR:
-        return "lr";
+        return u"lr"_ustr;
     case enumXFTextDirLR_TB:
-        return "lr-tb";
+        return u"lr-tb"_ustr;
     case enumXFTextDirPage:
-        return "page";
+        return u"page"_ustr;
     case enumXFTextDirRL:
-        return "rl";
+        return u"rl"_ustr;
     case enumXFTextDirRL_TB:
-        return "rl-tb";
+        return u"rl-tb"_ustr;
     case enumXFTextDirTB:
-        return "tb";
+        return u"tb"_ustr;
     case enumXFTextDirTB_LR:
-        return "tb-lr";
+        return u"tb-lr"_ustr;
     case enumXFTextDirTB_RL:
-        return "tb-rl";
+        return u"tb-rl"_ustr;
     default:
         break;
     }
@@ -198,13 +198,13 @@ OUString   GetFrameXPos(enumXFFrameXPos pos)
     switch(pos)
     {
     case enumXFFrameXPosLeft:
-        return "left";
+        return u"left"_ustr;
     case enumXFFrameXPosRight:
-        return "right";
+        return u"right"_ustr;
     case enumXFFrameXPosCenter:
-        return "center";
+        return u"center"_ustr;
     case enumXFFrameXPosFromLeft:
-        return "from-left";
+        return u"from-left"_ustr;
     default:
         break;
     }
@@ -216,31 +216,31 @@ OUString   GetFrameXRel(enumXFFrameXRel rel)
     switch(rel)
     {
     case enumXFFrameXRelPage:
-        return "page";
+        return u"page"_ustr;
     case enumXFFrameXRelPageContent:
-        return "page-content";
+        return u"page-content"_ustr;
     case enumXFFrameXRelPageEndMargin:
-        return "page-end-margin";
+        return u"page-end-margin"_ustr;
     case enumXFFrameXRelPageStartMargin:
-        return "page-start-margin";
+        return u"page-start-margin"_ustr;
     case enumXFFrameXRelPara:
-        return "paragraph";
+        return u"paragraph"_ustr;
     case enumXFFrameXRelParaContent:
-        return "paragraph-content";
+        return u"paragraph-content"_ustr;
     case enumXFFrameXRelParaEndMargin:
-        return "paragraph-end-margin";
+        return u"paragraph-end-margin"_ustr;
     case enumXFFrameXRelParaStartMargin:
-        return "paragraph-start-margin";
+        return u"paragraph-start-margin"_ustr;
     case enumXFFrameXRelChar:
-        return "char";
+        return u"char"_ustr;
     case enumXFFrameXRelFrame:
-        return "frame";
+        return u"frame"_ustr;
     case enumXFFrameXRelFrameContent:
-        return "frame-content";
+        return u"frame-content"_ustr;
     case enumXFFrameXRelFrameEndMargin:
-        return "frame-end-margin";
+        return u"frame-end-margin"_ustr;
     case enumXFFrameXRelFrameStartMargin:
-        return "frame-start-margin";
+        return u"frame-start-margin"_ustr;
     default:
         break;
     }
@@ -252,15 +252,15 @@ OUString   GetFrameYPos(enumXFFrameYPos pos)
     switch(pos)
     {
     case enumXFFrameYPosTop:
-        return "top";
+        return u"top"_ustr;
     case enumXFFrameYPosMiddle:
-        return "middle";
+        return u"middle"_ustr;
     case enumXFFrameYPosBottom:
-        return "bottom";
+        return u"bottom"_ustr;
     case enumXFFrameYPosFromTop:
-        return "from-top";
+        return u"from-top"_ustr;
     case enumXFFrameYPosBelow:
-        return "below";
+        return u"below"_ustr;
     }
     return OUString();
 }
@@ -270,25 +270,25 @@ OUString   GetFrameYRel(enumXFFrameYRel rel)
     switch(rel)
     {
     case enumXFFrameYRelBaseLine:
-        return "baseline";
+        return u"baseline"_ustr;
     case enumXFFrameYRelChar:
-        return "char";
+        return u"char"_ustr;
     case enumXFFrameYRelFrame:
-        return "frame";
+        return u"frame"_ustr;
     case enumXFFrameYRelFrameContent:
-        return "frame-content";
+        return u"frame-content"_ustr;
     case enumXFFrameYRelLine:
-        return "line";
+        return u"line"_ustr;
     case enumXFFrameYRelPage:
-        return "page";
+        return u"page"_ustr;
     case enumXFFrameYRelPageContent:
-        return "page-content";
+        return u"page-content"_ustr;
     case enumXFFrameYRelPara:
-        return "paragraph";
+        return u"paragraph"_ustr;
     case enumXFFrameYRelParaContent:
-        return "paragraph-content";
+        return u"paragraph-content"_ustr;
     case enumXFFrameYRelText:
-        return "text";
+        return u"text"_ustr;
     }
     return OUString();
 }
@@ -296,21 +296,21 @@ OUString   GetFrameYRel(enumXFFrameYRel rel)
 OUString   GetAlignName(enumXFAlignType align)
 {
     if( align == enumXFAlignStart )
-        return "start";
+        return u"start"_ustr;
     else if( align == enumXFAlignCenter )
-        return "center";
+        return u"center"_ustr;
     else if( align == enumXFAlignEnd )
-        return "end";
+        return u"end"_ustr;
     else if( align == enumXFAlignJustify )
-        return "justify";
+        return u"justify"_ustr;
     else if( align == enumXFAlignBottom )
-        return "bottom";
+        return u"bottom"_ustr;
     else if( align == enumXFAlignTop )
-        return "top";
+        return u"top"_ustr;
     else if( align == enumXFAlignMiddle )
-        return "middle";
+        return u"middle"_ustr;
     else if( align == enumXFALignMargins )
-        return "margins";
+        return u"margins"_ustr;
 
     return OUString();
 }
@@ -377,13 +377,13 @@ OUString   GetColorMode(enumXFColorMode mode)
     switch(mode)
     {
     case enumXFColorStandard:
-        return "standard";
+        return u"standard"_ustr;
     case enumXFColorGreyscale:
-        return "greyscale";
+        return u"greyscale"_ustr;
     case enumXFColorWatermark:
-        return "watermark";
+        return u"watermark"_ustr;
     case enumXFColorMono:
-        return "mono";
+        return u"mono"_ustr;
     }
     return OUString();
 }

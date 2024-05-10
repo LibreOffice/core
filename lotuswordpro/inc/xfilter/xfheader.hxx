@@ -75,9 +75,9 @@ public:
         IXFAttrList* pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
-        pStrm->StartElement("style:header");
+        pStrm->StartElement(u"style:header"_ustr);
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement("style:header");
+        pStrm->EndElement(u"style:header"_ustr);
     }
 };
 

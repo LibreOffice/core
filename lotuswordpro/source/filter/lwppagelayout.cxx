@@ -400,7 +400,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Add master page
     std::unique_ptr<XFMasterPage> p1(new XFMasterPage);
-    p1->SetStyleName("Endnote");
+    p1->SetStyleName(u"Endnote"_ustr);
     p1->SetPageMaster(pmname);
 
     //Set footer style

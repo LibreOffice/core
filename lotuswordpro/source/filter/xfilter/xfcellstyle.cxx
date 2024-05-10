@@ -188,17 +188,17 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute("style:name",GetStyleName());
+        pAttrList->AddAttribute(u"style:name"_ustr,GetStyleName());
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
 
-    pAttrList->AddAttribute("style:family", "table-cell");
+    pAttrList->AddAttribute(u"style:family"_ustr, u"table-cell"_ustr);
     if( !m_strParentStyleName.isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",m_strParentStyleName);
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,m_strParentStyleName);
     if( !m_strDataStyle.isEmpty() )
-        pAttrList->AddAttribute( "style:data-style-name", m_strDataStyle );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strDataStyle );
 
-    pStrm->StartElement("style:style");
+    pStrm->StartElement(u"style:style"_ustr);
 
     //Paragraph properties:
     pAttrList->Clear();
@@ -211,11 +211,11 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     //text horizontal align:
     if( m_eHoriAlign != enumXFAlignNone )
     {
-        pAttrList->AddAttribute("fo:text-align", GetAlignName(m_eHoriAlign) );
+        pAttrList->AddAttribute(u"fo:text-align"_ustr, GetAlignName(m_eHoriAlign) );
     }
     //text vertical align
     if( m_eVertAlign != enumXFAlignNone )
-        pAttrList->AddAttribute( "fo:vertical-align", GetAlignName(m_eVertAlign) );
+        pAttrList->AddAttribute( u"fo:vertical-align"_ustr, GetAlignName(m_eVertAlign) );
 
     //shadow:
     m_aShadow.ToXml(pStrm);
@@ -226,20 +226,20 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     //background color:
     if( m_aBackColor.IsValid() && !m_xBackImage )
     {
-        pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
+        pAttrList->AddAttribute(u"fo:background-color"_ustr, m_aBackColor.ToString() );
     }
     //Font properties:
     if( m_pFont.is() )
         m_pFont->ToXml(pStrm);
 
-    pStrm->StartElement("style:properties");
+    pStrm->StartElement(u"style:properties"_ustr);
 
     if( m_xBackImage )
         m_xBackImage->ToXml(pStrm);
 
-    pStrm->EndElement("style:properties");
+    pStrm->EndElement(u"style:properties"_ustr);
 
-    pStrm->EndElement("style:style");
+    pStrm->EndElement(u"style:style"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

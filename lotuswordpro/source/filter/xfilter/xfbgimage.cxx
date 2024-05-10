@@ -89,11 +89,11 @@ void    XFBGImage::ToXml(IXFStream *pStrm)
 
     if( m_bUserFileLink )
     {
-        pAttrList->AddAttribute( "xlink:href", m_strFileName);
+        pAttrList->AddAttribute( u"xlink:href"_ustr, m_strFileName);
     }
 
-    pAttrList->AddAttribute( "xlink:type", "simple" );
-    pAttrList->AddAttribute( "xlink:actuate", "onLoad");
+    pAttrList->AddAttribute( u"xlink:type"_ustr, u"simple"_ustr );
+    pAttrList->AddAttribute( u"xlink:actuate"_ustr, u"onLoad"_ustr);
 
     if( m_bPosition )
     {
@@ -105,25 +105,25 @@ void    XFBGImage::ToXml(IXFStream *pStrm)
         else if( m_eHoriAlign == enumXFAlignEnd )
             str += "right";
 
-        pAttrList->AddAttribute( "style:position", str );
-        pAttrList->AddAttribute( "style:repeat", "no-repeat" );
+        pAttrList->AddAttribute( u"style:position"_ustr, str );
+        pAttrList->AddAttribute( u"style:repeat"_ustr, u"no-repeat"_ustr );
     }
     else if( m_bRepeate )
-        pAttrList->AddAttribute( "style:repeat", "repeat" );
+        pAttrList->AddAttribute( u"style:repeat"_ustr, u"repeat"_ustr );
     else if( m_bStretch )
-        pAttrList->AddAttribute( "style:repeat", "stretch" );
+        pAttrList->AddAttribute( u"style:repeat"_ustr, u"stretch"_ustr );
 
-    pStrm->StartElement( "style:background-image" );
+    pStrm->StartElement( u"style:background-image"_ustr );
 
     if( !m_bUserFileLink )
     {
         pAttrList->Clear();
-        pStrm->StartElement( "office:binary-data" );
+        pStrm->StartElement( u"office:binary-data"_ustr );
         pStrm->Characters(m_strData);
-        pStrm->EndElement( "office:binary-data" );
+        pStrm->EndElement( u"office:binary-data"_ustr );
     }
 
-    pStrm->EndElement( "style:background-image" );
+    pStrm->EndElement( u"style:background-image"_ustr );
 }
 
 bool operator==(XFBGImage const & img1, XFBGImage const & img2)

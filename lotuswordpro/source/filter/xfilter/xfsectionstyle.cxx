@@ -97,37 +97,37 @@ void XFSectionStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
-    pAttrList->AddAttribute( "style:family", "section" );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"section"_ustr );
 
-    pStrm->StartElement( "style:style" );
+    pStrm->StartElement( u"style:style"_ustr );
 
     pAttrList->Clear();
     if( m_fMarginLeft != 0 )
     {
-        pAttrList->AddAttribute( "fo:margin-left", OUString::number(m_fMarginLeft) + "cm" );
+        pAttrList->AddAttribute( u"fo:margin-left"_ustr, OUString::number(m_fMarginLeft) + "cm" );
     }
     if( m_fMarginRight != 0 )
     {
-        pAttrList->AddAttribute( "fo:margin-right", OUString::number(m_fMarginRight) + "cm" );
+        pAttrList->AddAttribute( u"fo:margin-right"_ustr, OUString::number(m_fMarginRight) + "cm" );
     }
     if( m_aBackColor.IsValid() )
     {
-        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, m_aBackColor.ToString() );
     }
     else
     {
-        pAttrList->AddAttribute( "fo:background-color", "transparent" );
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, u"transparent"_ustr );
     }
 
-    pStrm->StartElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
 
     if( m_pColumns )
         m_pColumns->ToXml(pStrm);
 
-    pStrm->EndElement( "style:properties" );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,32 +75,32 @@ void    XFTimePart::ToXml(IXFStream *pStrm)
     case enumXFDateHour:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:hours" );
-        pStrm->EndElement( "number:hours" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:hours"_ustr );
+        pStrm->EndElement( u"number:hours"_ustr );
         break;
     case enumXFDateMinute:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
         if( m_nDecimalPos>0 )
-            pAttrList->AddAttribute( "number:decimal-places", OUString::number(m_nDecimalPos) );
+            pAttrList->AddAttribute( u"number:decimal-places"_ustr, OUString::number(m_nDecimalPos) );
 
-        pStrm->StartElement( "number:minutes" );
-        pStrm->EndElement( "number:minutes" );
+        pStrm->StartElement( u"number:minutes"_ustr );
+        pStrm->EndElement( u"number:minutes"_ustr );
         break;
     case enumXFDateSecond:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( "number:style", "long" );
-        pStrm->StartElement( "number:seconds" );
-        pStrm->EndElement( "number:seconds" );
+            pAttrList->AddAttribute( u"number:style"_ustr, u"long"_ustr );
+        pStrm->StartElement( u"number:seconds"_ustr );
+        pStrm->EndElement( u"number:seconds"_ustr );
         break;
     case enumXFDateText:
         pAttrList->Clear();
-        pStrm->StartElement( "number:text" );
+        pStrm->StartElement( u"number:text"_ustr );
         pStrm->Characters( m_strText );
-        pStrm->EndElement( "number:text" );
+        pStrm->EndElement( u"number:text"_ustr );
         break;
     default:
         break;
@@ -127,13 +127,13 @@ void    XFTimeStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
-    pAttrList->AddAttribute( "style:family", "data-style" );
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
+    pAttrList->AddAttribute( u"style:family"_ustr, u"data-style"_ustr );
     if (!m_bTruncate)
-        pAttrList->AddAttribute( "number:truncate-on-overflow", "false" );
-    pStrm->StartElement( "number:time-style" );
+        pAttrList->AddAttribute( u"number:truncate-on-overflow"_ustr, u"false"_ustr );
+    pStrm->StartElement( u"number:time-style"_ustr );
 
     for (auto & part : m_aParts)
     {
@@ -142,9 +142,9 @@ void    XFTimeStyle::ToXml(IXFStream *pStrm)
     if( m_bAmPm )
     {
         pAttrList->Clear();
-        pStrm->StartElement( "number:am-pm" );
-        pStrm->EndElement( "number:am-pm" );
+        pStrm->StartElement( u"number:am-pm"_ustr );
+        pStrm->EndElement( u"number:am-pm"_ustr );
     }
-    pStrm->EndElement( "number:time-style" );
+    pStrm->EndElement( u"number:time-style"_ustr );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

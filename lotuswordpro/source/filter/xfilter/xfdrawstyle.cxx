@@ -168,14 +168,14 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
-    pAttrList->AddAttribute( "style:family", "graphics" );
-    pStrm->StartElement( "style:style" );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"graphics"_ustr );
+    pStrm->StartElement( u"style:style"_ustr );
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:run-through", "foreground" );
-    pAttrList->AddAttribute( "style:wrap", "none" );
+    pAttrList->AddAttribute( u"style:run-through"_ustr, u"foreground"_ustr );
+    pAttrList->AddAttribute( u"style:wrap"_ustr, u"none"_ustr );
 
     //line style:
     if( m_pLineStyle )
@@ -184,69 +184,69 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         if( !m_pLineStyle->IsSolid() )
         {
 //          pAttrList->Clear();
-            pAttrList->AddAttribute( "draw:stroke", "dash" );
-            pAttrList->AddAttribute( "draw:stroke-dash", m_pLineStyle->GetStyleName() );
+            pAttrList->AddAttribute( u"draw:stroke"_ustr, u"dash"_ustr );
+            pAttrList->AddAttribute( u"draw:stroke-dash"_ustr, m_pLineStyle->GetStyleName() );
         }
         else
         {
-            pAttrList->AddAttribute( "draw:stroke", "solid" );
+            pAttrList->AddAttribute( u"draw:stroke"_ustr, u"solid"_ustr );
         }
 
         if( m_pLineStyle->GetWidth() > 0 )
-            pAttrList->AddAttribute( "svg:stroke-width", OUString::number(m_pLineStyle->GetWidth()) + "cm" );
+            pAttrList->AddAttribute( u"svg:stroke-width"_ustr, OUString::number(m_pLineStyle->GetWidth()) + "cm" );
 
         XFColor color = m_pLineStyle->GetColor();
         if( color.IsValid() )
-            pAttrList->AddAttribute( "svg:stroke-color", color.ToString() );
+            pAttrList->AddAttribute( u"svg:stroke-color"_ustr, color.ToString() );
 
         if( m_pLineStyle->GetTransparency()>0 )
-            pAttrList->AddAttribute( "svg:stroke-opacity", OUString::number(m_pLineStyle->GetTransparency()) + "%" );
+            pAttrList->AddAttribute( u"svg:stroke-opacity"_ustr, OUString::number(m_pLineStyle->GetTransparency()) + "%" );
     }
     else
-        pAttrList->AddAttribute( "draw:stroke", "none" );
+        pAttrList->AddAttribute( u"draw:stroke"_ustr, u"none"_ustr );
     //area style:
     if( m_pAreaStyle )
     {
         if( enumXFAreaSolid == m_pAreaStyle->GetAreaStyle() )
         {
-            pAttrList->AddAttribute( "draw:fill", "solid" );
+            pAttrList->AddAttribute( u"draw:fill"_ustr, u"solid"_ustr );
             XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
-                pAttrList->AddAttribute( "draw:fill-color", color.ToString() );
+                pAttrList->AddAttribute( u"draw:fill-color"_ustr, color.ToString() );
         }
         else if( enumXFAreaHatch == m_pAreaStyle->GetAreaStyle() )
         {
-            pAttrList->AddAttribute( "draw:fill", "hatch" );
-            pAttrList->AddAttribute( "draw:fill-hatch-name", m_pAreaStyle->GetStyleName() );
+            pAttrList->AddAttribute( u"draw:fill"_ustr, u"hatch"_ustr );
+            pAttrList->AddAttribute( u"draw:fill-hatch-name"_ustr, m_pAreaStyle->GetStyleName() );
             XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
             {
-                pAttrList->AddAttribute( "draw:fill-hatch-solid", "true" );
-                pAttrList->AddAttribute( "draw:fill-color", color.ToString() );
+                pAttrList->AddAttribute( u"draw:fill-hatch-solid"_ustr, u"true"_ustr );
+                pAttrList->AddAttribute( u"draw:fill-color"_ustr, color.ToString() );
             }
         }
     }
     else
-        pAttrList->AddAttribute( "draw:fill", "none" );
+        pAttrList->AddAttribute( u"draw:fill"_ustr, u"none"_ustr );
 
     if( !m_strArrowStart.isEmpty() )
     {
-        pAttrList->AddAttribute( "draw:marker-start", m_strArrowStart );
-        pAttrList->AddAttribute( "draw:marker-start-width", OUString::number(m_fArrowStartSize)+"cm" );
+        pAttrList->AddAttribute( u"draw:marker-start"_ustr, m_strArrowStart );
+        pAttrList->AddAttribute( u"draw:marker-start-width"_ustr, OUString::number(m_fArrowStartSize)+"cm" );
         if( m_bArrowStartCenter )
-            pAttrList->AddAttribute( "draw:draw:marker-start-center", "true"  );
+            pAttrList->AddAttribute( u"draw:draw:marker-start-center"_ustr, u"true"_ustr  );
     }
     if( !m_strArrowEnd.isEmpty() )
     {
-        pAttrList->AddAttribute( "draw:marker-end", m_strArrowEnd );
-        pAttrList->AddAttribute( "draw:marker-end-width", OUString::number(m_fArrowEndSize)+"cm" );
+        pAttrList->AddAttribute( u"draw:marker-end"_ustr, m_strArrowEnd );
+        pAttrList->AddAttribute( u"draw:marker-end-width"_ustr, OUString::number(m_fArrowEndSize)+"cm" );
         if( m_bArrowEndCenter )
-            pAttrList->AddAttribute( "draw:draw:marker-end-center", "true"  );
+            pAttrList->AddAttribute( u"draw:draw:marker-end-center"_ustr, u"true"_ustr  );
     }
     if (m_pFontWorkStyle)
     {
         // style
-        OUString aStr = "";
+        OUString aStr = u""_ustr;
         switch (m_pFontWorkStyle->GetStyleType())
         {
         default: // fall through!
@@ -267,7 +267,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute("draw:fontwork-style", aStr);
+            pAttrList->AddAttribute(u"draw:fontwork-style"_ustr, aStr);
         }
 
         //adjust
@@ -290,7 +290,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute("draw:fontwork-adjust", aStr);
+            pAttrList->AddAttribute(u"draw:fontwork-adjust"_ustr, aStr);
         }
 
         //form
@@ -309,7 +309,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute("draw:fontwork-form", aStr);
+            pAttrList->AddAttribute(u"draw:fontwork-form"_ustr, aStr);
         }
 
         // distance
@@ -317,11 +317,11 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         //  OUString::number(m_pFontWorkStyle->GetFWDistance())+"cm");
     }
 
-    pStrm->StartElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:properties" );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

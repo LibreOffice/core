@@ -1285,7 +1285,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
         }
     }
 
-    xOverStyle->SetStyleName("");
+    xOverStyle->SetStyleName(u""_ustr);
     OUString StyleName
         = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
 

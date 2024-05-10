@@ -104,8 +104,8 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    pStrm->StartElement( "text:span" );
+        pAttrList->AddAttribute( u"text:style-name"_ustr, GetStyleName() );
+    pStrm->StartElement( u"text:span"_ustr );
 
     for (auto const& content : m_aContents)
     {
@@ -114,7 +114,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
             pContent->DoToXml(pStrm);
     }
 
-    pStrm->EndElement( "text:span" );
+    pStrm->EndElement( u"text:span"_ustr );
 }
 
 void    XFTextSpanStart::ToXml(IXFStream *pStrm)
@@ -126,8 +126,8 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    pStrm->StartElement( "text:span" );
+        pAttrList->AddAttribute( u"text:style-name"_ustr, GetStyleName() );
+    pStrm->StartElement( u"text:span"_ustr );
 
     for (auto const& content : m_aContents)
     {
@@ -144,7 +144,7 @@ void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
         if( pContent )
             pContent->DoToXml(pStrm);
     }
-    pStrm->EndElement( "text:span" );
+    pStrm->EndElement( u"text:span"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

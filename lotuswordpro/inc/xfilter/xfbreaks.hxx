@@ -105,19 +105,19 @@ inline void XFBreaks::ToXml(IXFStream *pStrm)
     case enumXFBreakAuto:
         break;
     case enumXFBreakBefPage:
-        pAttrList->AddAttribute( "fo:break-before", "page" );
+        pAttrList->AddAttribute( u"fo:break-before"_ustr, u"page"_ustr );
         break;
     case enumXFBreakBefColumn:
-        pAttrList->AddAttribute( "fo:break-before", "column" );
+        pAttrList->AddAttribute( u"fo:break-before"_ustr, u"column"_ustr );
         break;
     case enumXFBreakAftPage:
-        pAttrList->AddAttribute( "fo:break-after", "page" );
+        pAttrList->AddAttribute( u"fo:break-after"_ustr, u"page"_ustr );
         break;
     case enumXFBreakAftColumn:
-        pAttrList->AddAttribute( "fo:break-after", "column" );
+        pAttrList->AddAttribute( u"fo:break-after"_ustr, u"column"_ustr );
         break;
     case enumXFBreakKeepWithNext:
-        pAttrList->AddAttribute( "fo:keep-with-next", "true" );
+        pAttrList->AddAttribute( u"fo:keep-with-next"_ustr, u"true"_ustr );
         break;
     }
 }

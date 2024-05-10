@@ -74,28 +74,28 @@ void    XFTextBoxStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
-    pAttrList->AddAttribute( "style:family", "graphics" );
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
+    pAttrList->AddAttribute( u"style:family"_ustr, u"graphics"_ustr );
     //parent style name ignore now.
-    pStrm->StartElement( "style:style" );
+    pStrm->StartElement( u"style:style"_ustr );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "draw:stroke", "none" );
-    pAttrList->AddAttribute( "svg:stroke-color", "#000000" );
-    pAttrList->AddAttribute( "draw:fill", "none" );
-    pAttrList->AddAttribute( "draw:fill-color", "#ffffff" );
-    pAttrList->AddAttribute( "draw:auto-grow-height", "true" );
-    pAttrList->AddAttribute( "style:run-through", "foreground" );
-    pAttrList->AddAttribute( "style:wrap", "run-through" );
-    pAttrList->AddAttribute( "style:wrap", "run-through" );
-    pAttrList->AddAttribute( "style:number-wrapped-paragraphs", "no-limit" );
-    pAttrList->AddAttribute( "style:wrap-contour", "false" );
+    pAttrList->AddAttribute( u"draw:stroke"_ustr, u"none"_ustr );
+    pAttrList->AddAttribute( u"svg:stroke-color"_ustr, u"#000000"_ustr );
+    pAttrList->AddAttribute( u"draw:fill"_ustr, u"none"_ustr );
+    pAttrList->AddAttribute( u"draw:fill-color"_ustr, u"#ffffff"_ustr );
+    pAttrList->AddAttribute( u"draw:auto-grow-height"_ustr, u"true"_ustr );
+    pAttrList->AddAttribute( u"style:run-through"_ustr, u"foreground"_ustr );
+    pAttrList->AddAttribute( u"style:wrap"_ustr, u"run-through"_ustr );
+    pAttrList->AddAttribute( u"style:wrap"_ustr, u"run-through"_ustr );
+    pAttrList->AddAttribute( u"style:number-wrapped-paragraphs"_ustr, u"no-limit"_ustr );
+    pAttrList->AddAttribute( u"style:wrap-contour"_ustr, u"false"_ustr );
 
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

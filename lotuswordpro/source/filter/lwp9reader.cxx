@@ -162,7 +162,7 @@ bool Lwp9Reader::ParseDocument()
 
     //Parse document content
     m_pStream->GetAttrList()->Clear();
-    m_pStream->StartElement("office:body");
+    m_pStream->StartElement(u"office:body"_ustr);
 
     //Parse change list
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
@@ -170,7 +170,7 @@ bool Lwp9Reader::ParseDocument()
     pChangeMgr->ConvertAllChange(m_pStream);
 
     doc->Parse(m_pStream);
-    m_pStream->EndElement("office:body");
+    m_pStream->EndElement(u"office:body"_ustr);
 
     WriteDocEnd();
     return true;
@@ -185,29 +185,29 @@ void Lwp9Reader::WriteDocHeader()
 
     IXFAttrList* pAttrList = m_pStream->GetAttrList();
 
-    pAttrList->AddAttribute("xmlns:office", "http://openoffice.org/2000/office");
-    pAttrList->AddAttribute("xmlns:style", "http://openoffice.org/2000/style");
-    pAttrList->AddAttribute("xmlns:text", "http://openoffice.org/2000/text");
-    pAttrList->AddAttribute("xmlns:table", "http://openoffice.org/2000/table");
-    pAttrList->AddAttribute("xmlns:draw", "http://openoffice.org/2000/drawing");
+    pAttrList->AddAttribute(u"xmlns:office"_ustr, u"http://openoffice.org/2000/office"_ustr);
+    pAttrList->AddAttribute(u"xmlns:style"_ustr, u"http://openoffice.org/2000/style"_ustr);
+    pAttrList->AddAttribute(u"xmlns:text"_ustr, u"http://openoffice.org/2000/text"_ustr);
+    pAttrList->AddAttribute(u"xmlns:table"_ustr, u"http://openoffice.org/2000/table"_ustr);
+    pAttrList->AddAttribute(u"xmlns:draw"_ustr, u"http://openoffice.org/2000/drawing"_ustr);
 
-    pAttrList->AddAttribute("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
-    pAttrList->AddAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    pAttrList->AddAttribute("xmlns:number", "http://openoffice.org/2000/datastyle");
-    pAttrList->AddAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    pAttrList->AddAttribute("xmlns:chart", "http://openoffice.org/2000/chart");
+    pAttrList->AddAttribute(u"xmlns:fo"_ustr, u"http://www.w3.org/1999/XSL/Format"_ustr);
+    pAttrList->AddAttribute(u"xmlns:xlink"_ustr, u"http://www.w3.org/1999/xlink"_ustr);
+    pAttrList->AddAttribute(u"xmlns:number"_ustr, u"http://openoffice.org/2000/datastyle"_ustr);
+    pAttrList->AddAttribute(u"xmlns:svg"_ustr, u"http://www.w3.org/2000/svg"_ustr);
+    pAttrList->AddAttribute(u"xmlns:chart"_ustr, u"http://openoffice.org/2000/chart"_ustr);
 
-    pAttrList->AddAttribute("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
-    pAttrList->AddAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
-    pAttrList->AddAttribute("xmlns:form", "http://openoffice.org/2000/form");
-    pAttrList->AddAttribute("xmlns:script", "http://openoffice.org/2000/script");
-    pAttrList->AddAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    pAttrList->AddAttribute(u"xmlns:dr3d"_ustr, u"http://openoffice.org/2000/dr3d"_ustr);
+    pAttrList->AddAttribute(u"xmlns:math"_ustr, u"http://www.w3.org/1998/Math/MathML"_ustr);
+    pAttrList->AddAttribute(u"xmlns:form"_ustr, u"http://openoffice.org/2000/form"_ustr);
+    pAttrList->AddAttribute(u"xmlns:script"_ustr, u"http://openoffice.org/2000/script"_ustr);
+    pAttrList->AddAttribute(u"xmlns:dc"_ustr, u"http://purl.org/dc/elements/1.1/"_ustr);
 
-    pAttrList->AddAttribute("xmlns:meta", "http://openoffice.org/2000/meta");
-    pAttrList->AddAttribute("office:class", "text");
-    pAttrList->AddAttribute("office:version", "1.0");
+    pAttrList->AddAttribute(u"xmlns:meta"_ustr, u"http://openoffice.org/2000/meta"_ustr);
+    pAttrList->AddAttribute(u"office:class"_ustr, u"text"_ustr);
+    pAttrList->AddAttribute(u"office:version"_ustr, u"1.0"_ustr);
 
-    m_pStream->StartElement("office:document");
+    m_pStream->StartElement(u"office:document"_ustr);
     pAttrList->Clear();
 }
 /**
@@ -215,7 +215,7 @@ void Lwp9Reader::WriteDocHeader()
  */
 void Lwp9Reader::WriteDocEnd()
 {
-    m_pStream->EndElement("office:document");
+    m_pStream->EndElement(u"office:document"_ustr);
     m_pStream->EndDocument();
 }
 

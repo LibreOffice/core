@@ -84,26 +84,26 @@ void XFRubyStart::ToXml(IXFStream* pStrm)
     IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!GetStyleName().isEmpty())
-        pAttrList->AddAttribute("text:style-name", GetStyleName());
-    pStrm->StartElement("text:ruby");
+        pAttrList->AddAttribute(u"text:style-name"_ustr, GetStyleName());
+    pStrm->StartElement(u"text:ruby"_ustr);
     pAttrList->Clear();
-    pStrm->StartElement("text:ruby-base");
+    pStrm->StartElement(u"text:ruby-base"_ustr);
 }
 
 void XFRubyEnd::SetText(const OUString& sText) { m_strText = sText; }
 
 void XFRubyEnd::ToXml(IXFStream* pStrm)
 {
-    pStrm->EndElement("text:ruby-base");
+    pStrm->EndElement(u"text:ruby-base"_ustr);
     IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!GetStyleName().isEmpty())
-        pAttrList->AddAttribute("text:style-name", GetStyleName());
-    pStrm->StartElement("text:ruby-text");
+        pAttrList->AddAttribute(u"text:style-name"_ustr, GetStyleName());
+    pStrm->StartElement(u"text:ruby-text"_ustr);
     if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
-    pStrm->EndElement("text:ruby-text");
-    pStrm->EndElement("text:ruby");
+    pStrm->EndElement(u"text:ruby-text"_ustr);
+    pStrm->EndElement(u"text:ruby"_ustr);
 }
 
 #endif

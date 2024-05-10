@@ -72,30 +72,30 @@ void RegisteArrowStyles()
         return;
     //reversed arrow:
     std::unique_ptr<XFArrowStyle> pArrowStyle100(new XFArrowStyle());
-    pArrowStyle100->SetArrowName("arrow100");
-    pArrowStyle100->SetViewbox("0 0 140 200");
-    pArrowStyle100->SetSVGPath("M0 180 L70 0 L140 180 L120 180 L70 30 L20 180 L0 180");
+    pArrowStyle100->SetArrowName(u"arrow100"_ustr);
+    pArrowStyle100->SetViewbox(u"0 0 140 200"_ustr);
+    pArrowStyle100->SetSVGPath(u"M0 180 L70 0 L140 180 L120 180 L70 30 L20 180 L0 180"_ustr);
     pXFStyleManager->AddStyle(std::move(pArrowStyle100));
 
     //reversed arrow:
     std::unique_ptr<XFArrowStyle> pArrowStyle1(new XFArrowStyle());
-    pArrowStyle1->SetArrowName("reverse arrow");
-    pArrowStyle1->SetViewbox("0 0 140 200");
-    pArrowStyle1->SetSVGPath("M0 0 L70 200 L140 0");
+    pArrowStyle1->SetArrowName(u"reverse arrow"_ustr);
+    pArrowStyle1->SetViewbox(u"0 0 140 200"_ustr);
+    pArrowStyle1->SetSVGPath(u"M0 0 L70 200 L140 0"_ustr);
     pXFStyleManager->AddStyle(std::move(pArrowStyle1));
 
     //reversed concave arrow
     std::unique_ptr<XFArrowStyle> pArrowStyle2(new XFArrowStyle());
-    pArrowStyle2->SetArrowName("reverse concave arrow");
-    pArrowStyle2->SetViewbox("0 0 140 200");
-    pArrowStyle2->SetSVGPath("M0 0 L80 200 L160 0 L80 100");
+    pArrowStyle2->SetArrowName(u"reverse concave arrow"_ustr);
+    pArrowStyle2->SetViewbox(u"0 0 140 200"_ustr);
+    pArrowStyle2->SetSVGPath(u"M0 0 L80 200 L160 0 L80 100"_ustr);
     pXFStyleManager->AddStyle(std::move(pArrowStyle2));
 
     //reversed line arrow
     std::unique_ptr<XFArrowStyle> pArrowStyle3(new XFArrowStyle());
-    pArrowStyle3->SetArrowName("reverse line arrow");
-    pArrowStyle3->SetViewbox("0 0 140 200");
-    pArrowStyle3->SetSVGPath("M0 0 L70 200 L140 0L110 0 L70 160 L20 0 L0 0");
+    pArrowStyle3->SetArrowName(u"reverse line arrow"_ustr);
+    pArrowStyle3->SetViewbox(u"0 0 140 200"_ustr);
+    pArrowStyle3->SetSVGPath(u"M0 0 L70 200 L140 0L110 0 L70 160 L20 0 L0 0"_ustr);
     pXFStyleManager->AddStyle(std::move(pArrowStyle3));
 }
 

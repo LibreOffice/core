@@ -157,66 +157,66 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     if( !m_strCitationStyle.isEmpty() )
-        pAttrList->AddAttribute( "text:citation-style-name", m_strCitationStyle);
+        pAttrList->AddAttribute( u"text:citation-style-name"_ustr, m_strCitationStyle);
 
     if( !m_strBodyStyle.isEmpty() )
-        pAttrList->AddAttribute( "text:citation-body-style-name", m_strBodyStyle);
+        pAttrList->AddAttribute( u"text:citation-body-style-name"_ustr, m_strBodyStyle);
 
     if( !m_strNumPrefix.isEmpty() )
-        pAttrList->AddAttribute( "style:num-prefix", m_strNumPrefix);
+        pAttrList->AddAttribute( u"style:num-prefix"_ustr, m_strNumPrefix);
 
     if( !m_strNumSuffix.isEmpty() )
-        pAttrList->AddAttribute( "style:num-suffix", m_strNumSuffix);
+        pAttrList->AddAttribute( u"style:num-suffix"_ustr, m_strNumSuffix);
 
     if( !m_strNumFmt.isEmpty() )
-        pAttrList->AddAttribute( "style:num-format", m_strNumFmt);
+        pAttrList->AddAttribute( u"style:num-format"_ustr, m_strNumFmt);
 
     if( !m_strDefaultStyle.isEmpty() )
-        pAttrList->AddAttribute( "text:default-style-name", m_strDefaultStyle);
+        pAttrList->AddAttribute( u"text:default-style-name"_ustr, m_strDefaultStyle);
 
     if( !m_strMasterPage.isEmpty() )
-        pAttrList->AddAttribute( "text:master-page-name", m_strMasterPage);
+        pAttrList->AddAttribute( u"text:master-page-name"_ustr, m_strMasterPage);
 
-    pAttrList->AddAttribute( "text:start-value", OUString::number(m_nStartValue) );
+    pAttrList->AddAttribute( u"text:start-value"_ustr, OUString::number(m_nStartValue) );
 
     if( m_bIsFootnote )
     {
         if( m_nRestartType == -1 )
-            pAttrList->AddAttribute( "text:start-numbering-at", "document" );
+            pAttrList->AddAttribute( u"text:start-numbering-at"_ustr, u"document"_ustr );
         else if( m_nRestartType == 0 )
-            pAttrList->AddAttribute( "text:start-numbering-at", "page" );
+            pAttrList->AddAttribute( u"text:start-numbering-at"_ustr, u"page"_ustr );
         else if( m_nRestartType == 1 )
-            pAttrList->AddAttribute( "text:start-numbering-at", "chapter" );
+            pAttrList->AddAttribute( u"text:start-numbering-at"_ustr, u"chapter"_ustr );
 
         if( m_bInsertInPage )
-            pAttrList->AddAttribute( "text:footnotes-position", "page" );
+            pAttrList->AddAttribute( u"text:footnotes-position"_ustr, u"page"_ustr );
         else
-            pAttrList->AddAttribute( "text:footnotes-position", "document" );
+            pAttrList->AddAttribute( u"text:footnotes-position"_ustr, u"document"_ustr );
     }
 
     if(m_bIsFootnote)
     {
-        pStrm->StartElement( "text:footnotes-configuration" );
+        pStrm->StartElement( u"text:footnotes-configuration"_ustr );
         if( !m_strMessageOn.isEmpty() )
         {
-            pStrm->StartElement( "text:footnote-continuation-notice-forward" );
+            pStrm->StartElement( u"text:footnote-continuation-notice-forward"_ustr );
             pStrm->Characters(m_strMessageOn);
-            pStrm->EndElement( "text:footnote-continuation-notice-forward" );
+            pStrm->EndElement( u"text:footnote-continuation-notice-forward"_ustr );
         }
 
         if( !m_strMessageFrom.isEmpty() )
         {
-            pStrm->StartElement( "text:footnote-continuation-notice-backward" );
+            pStrm->StartElement( u"text:footnote-continuation-notice-backward"_ustr );
             pStrm->Characters(m_strMessageFrom);
-            pStrm->EndElement( "text:footnote-continuation-notice-backward" );
+            pStrm->EndElement( u"text:footnote-continuation-notice-backward"_ustr );
         }
 
-        pStrm->EndElement( "text:footnotes-configuration" );
+        pStrm->EndElement( u"text:footnotes-configuration"_ustr );
     }
     else
     {
-        pStrm->StartElement( "text:endnotes-configuration" );
-        pStrm->EndElement( "text:endnotes-configuration" );
+        pStrm->StartElement( u"text:endnotes-configuration"_ustr );
+        pStrm->EndElement( u"text:endnotes-configuration"_ustr );
     }
 
 }

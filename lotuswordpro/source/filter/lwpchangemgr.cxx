@@ -121,12 +121,12 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     if (m_ChangeList.empty())
         return;
     // Add for disable change tracking
-    pStream->GetAttrList()->AddAttribute("text:track-changes", "false");
-    pStream->StartElement("text:tracked-changes");
+    pStream->GetAttrList()->AddAttribute(u"text:track-changes"_ustr, u"false"_ustr);
+    pStream->StartElement(u"text:tracked-changes"_ustr);
     for (auto const& elem : m_ChangeList)
         elem->ToXml(pStream);
 
-    pStream->EndElement("text:tracked-changes");
+    pStream->EndElement(u"text:tracked-changes"_ustr);
 
     m_ChangeList.clear();
 }

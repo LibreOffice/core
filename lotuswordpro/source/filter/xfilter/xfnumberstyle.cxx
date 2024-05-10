@@ -141,32 +141,32 @@ void XFNumberStyle::ToXml_StartElement(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
 
-    pAttrList->AddAttribute( "style:family", "data-style" );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"data-style"_ustr );
 
     if( m_eType == enumXFNumberNumber )
     {
-        pStrm->StartElement( "number:number-style" );
+        pStrm->StartElement( u"number:number-style"_ustr );
     }
     else if( m_eType == enumXFNumberPercent )
     {
-        pStrm->StartElement( "number:percentage-style" );
+        pStrm->StartElement( u"number:percentage-style"_ustr );
     }
     else if( m_eType == enuMXFNumberCurrency )
     {
-        pStrm->StartElement( "number:currency-style" );
+        pStrm->StartElement( u"number:currency-style"_ustr );
     }
     else if( m_eType == enumXFNumberScientific )
     {
-        pStrm->StartElement( "number:number-style" );
+        pStrm->StartElement( u"number:number-style"_ustr );
     }
     // for Text content number format
     else if (m_eType == enumXFText)
     {
-        pStrm->StartElement( "number:text-content");
+        pStrm->StartElement( u"number:text-content"_ustr);
     }
 
 }
@@ -176,29 +176,29 @@ void XFNumberStyle::ToXml_EndElement(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
-    pAttrList->AddAttribute( "style:family", "data-style" );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"data-style"_ustr );
 
     if( m_eType == enumXFNumberNumber )
     {
-        pStrm->EndElement( "number:number-style" );
+        pStrm->EndElement( u"number:number-style"_ustr );
     }
     else if( m_eType == enumXFNumberPercent )
     {
-        pStrm->EndElement( "number:percentage-style" );
+        pStrm->EndElement( u"number:percentage-style"_ustr );
     }
     else if( m_eType == enuMXFNumberCurrency )
     {
-        pStrm->EndElement( "number:currency-style" );
+        pStrm->EndElement( u"number:currency-style"_ustr );
     }
     else if( m_eType == enumXFNumberScientific )
     {
-        pStrm->EndElement( "number:number-style" );
+        pStrm->EndElement( u"number:number-style"_ustr );
     }
     // for Text content number format
     else if (m_eType == enumXFText)
     {
-        pStrm->EndElement( "number:text-content");
+        pStrm->EndElement( u"number:text-content"_ustr);
     }
     // END for Text content number format
 
@@ -229,10 +229,10 @@ void XFNumberStyle::ToXml_Negative(IXFStream *pStrm)
     ToXml_Content(pStrm,true);
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:condition", "value()>=0" );
-    pAttrList->AddAttribute( "style:apply-style-name", strGEStyle );
-    pStrm->StartElement( "style:map" );
-    pStrm->EndElement( "style:map" );
+    pAttrList->AddAttribute( u"style:condition"_ustr, u"value()>=0"_ustr );
+    pAttrList->AddAttribute( u"style:apply-style-name"_ustr, strGEStyle );
+    pStrm->StartElement( u"style:map"_ustr );
+    pStrm->EndElement( u"style:map"_ustr );
 
     ToXml_EndElement(pStrm);
 }
@@ -243,20 +243,20 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
     pAttrList->Clear();
     //color:
     if( !nagetive )
-        pAttrList->AddAttribute( "fo:color", m_aColor.ToString() );
+        pAttrList->AddAttribute( u"fo:color"_ustr, m_aColor.ToString() );
     else
-        pAttrList->AddAttribute( "fo:color", m_aNegativeColor.ToString() );
+        pAttrList->AddAttribute( u"fo:color"_ustr, m_aNegativeColor.ToString() );
 
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
     if( !nagetive )
     {
         if( !m_strPrefix.isEmpty() )
         {
-            pStrm->StartElement( "number:text" );
+            pStrm->StartElement( u"number:text"_ustr );
             pStrm->Characters(m_strPrefix);
-            pStrm->EndElement( "number:text" );
+            pStrm->EndElement( u"number:text"_ustr );
         }
     }
     else
@@ -265,16 +265,16 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
             m_strNegativePrefix = m_strPrefix;
         if( !m_strNegativePrefix.isEmpty() )
         {
-            pStrm->StartElement( "number:text" );
+            pStrm->StartElement( u"number:text"_ustr );
             // pStrm->Characters(m_strNegativePrefix);
             pStrm->Characters(m_strNegativePrefix + "-");
-            pStrm->EndElement( "number:text" );
+            pStrm->EndElement( u"number:text"_ustr );
         }
         else
         {
-            pStrm->StartElement( "number:text" );
-            pStrm->Characters("-");
-            pStrm->EndElement( "number:text" );
+            pStrm->StartElement( u"number:text"_ustr );
+            pStrm->Characters(u"-"_ustr);
+            pStrm->EndElement( u"number:text"_ustr );
         }
     }
 
@@ -282,9 +282,9 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
     {
         if( !m_strCurrencySymbol.isEmpty() )
         {
-            pStrm->StartElement( "number:currency-symbol" );
+            pStrm->StartElement( u"number:currency-symbol"_ustr );
             pStrm->Characters(m_strCurrencySymbol);
-            pStrm->EndElement( "number:currency-symbol" );
+            pStrm->EndElement( u"number:currency-symbol"_ustr );
         }
     }
 
@@ -292,42 +292,42 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
     if ( m_eType == enumXFNumberScientific )
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute("number:decimal-places", OUString::number(m_nDecimalDigits));
-        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(1));
-        pAttrList->AddAttribute("number:min-exponent-digits", OUString::number(2));
-        pStrm->StartElement( "number:scientific-number" );
-        pStrm->EndElement( "number:scientific-number" );
+        pAttrList->AddAttribute(u"number:decimal-places"_ustr, OUString::number(m_nDecimalDigits));
+        pAttrList->AddAttribute(u"number:min-integer-digits"_ustr, OUString::number(1));
+        pAttrList->AddAttribute(u"number:min-exponent-digits"_ustr, OUString::number(2));
+        pStrm->StartElement( u"number:scientific-number"_ustr );
+        pStrm->EndElement( u"number:scientific-number"_ustr );
     }
     else
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute("number:decimal-places", OUString::number(m_nDecimalDigits));
-        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(1));
+        pAttrList->AddAttribute(u"number:decimal-places"_ustr, OUString::number(m_nDecimalDigits));
+        pAttrList->AddAttribute(u"number:min-integer-digits"_ustr, OUString::number(1));
 
         if( m_bGroup )
-            pAttrList->AddAttribute("number:grouping","true");
+            pAttrList->AddAttribute(u"number:grouping"_ustr,u"true"_ustr);
         else
-            pAttrList->AddAttribute("number:grouping","false");
+            pAttrList->AddAttribute(u"number:grouping"_ustr,u"false"_ustr);
 
-        pStrm->StartElement( "number:number" );
-        pStrm->EndElement( "number:number" );
+        pStrm->StartElement( u"number:number"_ustr );
+        pStrm->EndElement( u"number:number"_ustr );
     }
 
     if( !nagetive )
     {
         if( !m_strSuffix.isEmpty() )
         {
-            pStrm->StartElement( "number:text" );
+            pStrm->StartElement( u"number:text"_ustr );
             pStrm->Characters(m_strSuffix);
-            pStrm->EndElement( "number:text" );
+            pStrm->EndElement( u"number:text"_ustr );
         }
         else
         {
             if( m_eType == enumXFNumberPercent )
             {
-                pStrm->StartElement( "number:text" );
-                pStrm->Characters("%");
-                pStrm->EndElement( "number:text" );
+                pStrm->StartElement( u"number:text"_ustr );
+                pStrm->Characters(u"%"_ustr);
+                pStrm->EndElement( u"number:text"_ustr );
             }
         }
     }
@@ -337,17 +337,17 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
             m_strNegativeSuffix = m_strSuffix;
         if( !m_strNegativeSuffix.isEmpty() )
         {
-            pStrm->StartElement( "number:text" );
+            pStrm->StartElement( u"number:text"_ustr );
             pStrm->Characters(m_strNegativeSuffix);
-            pStrm->EndElement( "number:text" );
+            pStrm->EndElement( u"number:text"_ustr );
         }
         else
         {
             if( m_eType == enumXFNumberPercent )
             {
-                pStrm->StartElement( "number:text" );
-                pStrm->Characters("%");
-                pStrm->EndElement( "number:text" );
+                pStrm->StartElement( u"number:text"_ustr );
+                pStrm->Characters(u"%"_ustr);
+                pStrm->EndElement( u"number:text"_ustr );
             }
         }
     }

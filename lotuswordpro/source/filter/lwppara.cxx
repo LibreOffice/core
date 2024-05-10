@@ -87,11 +87,11 @@ LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     , m_nFlags(0)
     , m_nLevel(0)
     , m_FontID(0)
-    , m_AllText("")
+    , m_AllText(u""_ustr)
     , m_bHasBullet(false)
     , m_pSilverBullet(nullptr)
     , m_bBullContinue(false)
-    , m_SectionStyleName("")
+    , m_SectionStyleName(u""_ustr)
     , m_bHasDropcap(false)
     , m_nLines(0)
     , m_nChars(0)
@@ -260,7 +260,7 @@ void LwpPara::RegisterMasterPage(XFParaStyle const * pBaseStyle)
     //register master page style
     std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
     *xOverStyle = *pBaseStyle;
-    xOverStyle->SetStyleName( "");
+    xOverStyle->SetStyleName( u""_ustr);
     xOverStyle->SetMasterPage(pLayout->GetStyleName());
     if (!m_ParentStyleName.isEmpty())
         xOverStyle->SetParentStyleName(m_ParentStyleName);
@@ -300,7 +300,7 @@ void LwpPara::RegisterStyle()
         bool noIndent = true;
         xOverStyle.reset(new XFParaStyle);
         *xOverStyle = *pBaseStyle;
-        xOverStyle->SetStyleName("");
+        xOverStyle->SetStyleName(u""_ustr);
         sal_uInt32 PropType;
         LwpParaStyle& rParaStyle = dynamic_cast<LwpParaStyle&>(*m_ParaStyle.obj());
         for (auto & pProps : m_vProps)

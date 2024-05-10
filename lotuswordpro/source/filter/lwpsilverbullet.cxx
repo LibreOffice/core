@@ -172,7 +172,7 @@ void LwpSilverBullet::RegisterStyle()
                     }
 
                     xListStyle->SetListBullet(nPos, GetNumCharByStyleID(pParaNumber),
-                        "Times New Roman", aPrefix, aSuffix);
+                        u"Times New Roman"_ustr, aPrefix, aSuffix);
                 }
 
                 xListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
@@ -258,7 +258,7 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber const * pParaNum
         return OUString();
     }
 
-    OUString strNumChar("1");
+    OUString strNumChar(u"1"_ustr);
     sal_uInt16 nStyleID = pParaNumber->GetStyleID();
 
     switch (nStyleID)

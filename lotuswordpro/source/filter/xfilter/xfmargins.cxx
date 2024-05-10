@@ -81,22 +81,22 @@ void    XFMargins::ToXml(IXFStream *pStrm)
     //margin left:
     if( m_nFlag&XFMARGINS_FLAG_LEFT )
     {
-        pAttrList->AddAttribute( "fo:margin-left", OUString::number(m_fLeft) + "cm" );
+        pAttrList->AddAttribute( u"fo:margin-left"_ustr, OUString::number(m_fLeft) + "cm" );
     }
     //margin right:
     if( m_nFlag&XFMARGINS_FLAG_RIGHT )
     {
-        pAttrList->AddAttribute("fo:margin-right", OUString::number(m_fRight) + "cm" );
+        pAttrList->AddAttribute(u"fo:margin-right"_ustr, OUString::number(m_fRight) + "cm" );
     }
     //margin top:
     if( m_nFlag&XFMARGINS_FLAG_TOP )
     {
-        pAttrList->AddAttribute("fo:margin-top", OUString::number(m_fTop) + "cm" );
+        pAttrList->AddAttribute(u"fo:margin-top"_ustr, OUString::number(m_fTop) + "cm" );
     }
     //margin bottom:
     if( m_nFlag&XFMARGINS_FLAG_BOTTOM )
     {
-        pAttrList->AddAttribute("fo:margin-bottom", OUString::number(m_fBottom) + "cm" );
+        pAttrList->AddAttribute(u"fo:margin-bottom"_ustr, OUString::number(m_fBottom) + "cm" );
     }
 }
 

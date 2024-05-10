@@ -219,7 +219,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                         pTemplate->AddTextEntry(sSep, m_TabStyleName);
                     }
                     //"TOC Page Number Text Style" style always exists in Word Pro file
-                    pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
+                    pTemplate->AddEntry(enumXFIndexTemplatePage, u"TOC Page Number Text Style"_ustr);
                 }
 
                 xToc->AddTemplate(OUString::number(static_cast<sal_Int32>(i)),  m_pFoundry->FindActualStyleName(pLevel->GetSearchStyle()), pTemplate);

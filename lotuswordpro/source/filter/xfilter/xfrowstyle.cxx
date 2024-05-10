@@ -76,25 +76,25 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
 
-    pAttrList->AddAttribute( "style:family", "table-row" );
-    pStrm->StartElement( "style:style" );
+    pAttrList->AddAttribute( u"style:family"_ustr, u"table-row"_ustr );
+    pStrm->StartElement( u"style:style"_ustr );
 
     pAttrList->Clear();
     if( m_fMinHeight )
-        pAttrList->AddAttribute( "style:min-row-height", OUString::number(m_fMinHeight) + "cm" );
+        pAttrList->AddAttribute( u"style:min-row-height"_ustr, OUString::number(m_fMinHeight) + "cm" );
     else if( m_fHeight )
-        pAttrList->AddAttribute( "style:row-height", OUString::number(m_fHeight) + "cm" );
+        pAttrList->AddAttribute( u"style:row-height"_ustr, OUString::number(m_fHeight) + "cm" );
 
     if( m_aBackColor.IsValid() )
-        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+        pAttrList->AddAttribute( u"fo:background-color"_ustr, m_aBackColor.ToString() );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement( u"style:style"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -193,16 +193,16 @@ void LwpCHBlkMarker::ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 n
         switch(nAction)
         {
         case CLICKHERE_CHBEHAVIORTEXT:
-            pHolder->SetType("text");
+            pHolder->SetType(u"text"_ustr);
             break;
         case CLICKHERE_CHBEHAVIORTABLE:
-            pHolder->SetType("table");
+            pHolder->SetType(u"table"_ustr);
             break;
         case CLICKHERE_CHBEHAVIORPICTURE:
-            pHolder->SetType("image");
+            pHolder->SetType(u"image"_ustr);
             break;
         case CLICKHERE_CHBEHAVIOROLEOBJECT:
-            pHolder->SetType("object");
+            pHolder->SetType(u"object"_ustr);
             break;
         default:
             break;
@@ -230,7 +230,7 @@ void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType
     if (nType == MARKER_START)
     {
         XFHolderStart* pHolder= new XFHolderStart;
-        pHolder->SetType("text");
+        pHolder->SetType(u"text"_ustr);
         if (bHelpFlag)
             pHolder->SetDesc(m_Help.str());
         pHolder->SetPrompt(GetPromptText());
@@ -273,7 +273,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
             pXFPara->Add(pList);
 
             XFHolderStart* pHolder= new XFHolderStart;
-            pHolder->SetType("text");
+            pHolder->SetType(u"text"_ustr);
             pHolder->SetPrompt(GetPromptText());
             pXFPara->Add(pHolder);
         }
@@ -297,9 +297,9 @@ bool LwpCHBlkMarker::IsBubbleHelp() const
 
 void LwpCHBlkMarker::EnumAllKeywords()
 {
-    OUString name1("");
-    OUString value1("");
-    OUString name2("start");
+    OUString name1(u""_ustr);
+    OUString value1(u""_ustr);
+    OUString name2(u"start"_ustr);
     LwpPropList* pProp = GetPropList();
     if (!pProp)
         return;

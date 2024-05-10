@@ -46,7 +46,7 @@ namespace
         test::BootstrapFixture::setUp();
 
         m_xFilter.set(m_xSFactory->createInstance(
-            "com.sun.star.comp.Writer.LotusWordProImportFilter"),
+            u"com.sun.star.comp.Writer.LotusWordProImportFilter"_ustr),
             uno::UNO_QUERY_THROW);
     }
 
@@ -54,7 +54,7 @@ namespace
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
-        uno::Sequence aDescriptor{ comphelper::makePropertyValue("URL", rURL) };
+        uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"URL"_ustr, rURL) };
         return m_xFilter->filter(aDescriptor);
     }
 

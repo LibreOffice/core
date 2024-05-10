@@ -68,10 +68,10 @@ void XFChangeList::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     // Add for disable change tracking
-    pAttrList->AddAttribute( "text:track-changes","false");
-    pStrm->StartElement( "text:tracked-changes" );
+    pAttrList->AddAttribute( u"text:track-changes"_ustr,u"false"_ustr);
+    pStrm->StartElement( u"text:tracked-changes"_ustr );
     XFContentContainer::ToXml(pStrm);
-    pStrm->EndElement("text:tracked-changes");
+    pStrm->EndElement(u"text:tracked-changes"_ustr);
 }
 
 void XFChangeRegion::ToXml(IXFStream * /*pStrm*/)
@@ -85,17 +85,17 @@ void XFChangeInsert::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if(m_sID.isEmpty())
         return;
-    pAttrList->AddAttribute( "text:id",m_sID);
+    pAttrList->AddAttribute( u"text:id"_ustr,m_sID);
 
-    pStrm->StartElement( "text:changed-region" );
-    pStrm->StartElement( "text:insertion" );
+    pStrm->StartElement( u"text:changed-region"_ustr );
+    pStrm->StartElement( u"text:insertion"_ustr );
     pAttrList->Clear();
-    pAttrList->AddAttribute( "office:chg-author",m_sEditor);
-    pAttrList->AddAttribute( "office:chg-date-time","0000-00-00T00:00:00");
-    pStrm->StartElement( "office:change-info" );
-    pStrm->EndElement( "office:change-info" );
-    pStrm->EndElement( "text:insertion" );
-    pStrm->EndElement( "text:changed-region" );
+    pAttrList->AddAttribute( u"office:chg-author"_ustr,m_sEditor);
+    pAttrList->AddAttribute( u"office:chg-date-time"_ustr,u"0000-00-00T00:00:00"_ustr);
+    pStrm->StartElement( u"office:change-info"_ustr );
+    pStrm->EndElement( u"office:change-info"_ustr );
+    pStrm->EndElement( u"text:insertion"_ustr );
+    pStrm->EndElement( u"text:changed-region"_ustr );
 }
 
 void XFChangeDelete::ToXml(IXFStream *pStrm)
@@ -105,18 +105,18 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if(m_sID.isEmpty())
         return;
-    pAttrList->AddAttribute( "text:id",m_sID);
+    pAttrList->AddAttribute( u"text:id"_ustr,m_sID);
 
-    pStrm->StartElement( "text:changed-region" );
-    pStrm->StartElement( "text:deletion" );
+    pStrm->StartElement( u"text:changed-region"_ustr );
+    pStrm->StartElement( u"text:deletion"_ustr );
     pAttrList->Clear();
-    pAttrList->AddAttribute( "office:chg-author",m_sEditor);
-    pAttrList->AddAttribute( "office:chg-date-time","0000-00-00T00:00:00");
-    pStrm->StartElement( "office:change-info" );
-    pStrm->EndElement( "office:change-info" );
+    pAttrList->AddAttribute( u"office:chg-author"_ustr,m_sEditor);
+    pAttrList->AddAttribute( u"office:chg-date-time"_ustr,u"0000-00-00T00:00:00"_ustr);
+    pStrm->StartElement( u"office:change-info"_ustr );
+    pStrm->EndElement( u"office:change-info"_ustr );
 
-    pStrm->EndElement( "text:deletion" );
-    pStrm->EndElement( "text:changed-region" );
+    pStrm->EndElement( u"text:deletion"_ustr );
+    pStrm->EndElement( u"text:changed-region"_ustr );
 }
 
 void XFChangeStart::ToXml(IXFStream *pStrm)
@@ -126,10 +126,10 @@ void XFChangeStart::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if(m_sID.isEmpty())
         return;
-    pAttrList->AddAttribute( "text:change-id",m_sID);
+    pAttrList->AddAttribute( u"text:change-id"_ustr,m_sID);
 
-    pStrm->StartElement( "text:change-start" );
-    pStrm->EndElement( "text:change-start" );
+    pStrm->StartElement( u"text:change-start"_ustr );
+    pStrm->EndElement( u"text:change-start"_ustr );
 }
 
 void XFChangeEnd::ToXml(IXFStream *pStrm)
@@ -139,10 +139,10 @@ void XFChangeEnd::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if(m_sID.isEmpty())
         return;
-    pAttrList->AddAttribute( "text:change-id",m_sID);
+    pAttrList->AddAttribute( u"text:change-id"_ustr,m_sID);
 
-    pStrm->StartElement( "text:change-end" );
-    pStrm->EndElement( "text:change-end" );
+    pStrm->StartElement( u"text:change-end"_ustr );
+    pStrm->EndElement( u"text:change-end"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

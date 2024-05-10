@@ -252,7 +252,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
             *pNewStyle = *pNamedStyle;
 
-            pNewStyle->SetStyleName("");
+            pNewStyle->SetStyleName(u""_ustr);
             pFont = pFoundry->GetFontManager().CreateOverrideFont(pCharStyle->GetFinalFontID(),
                                                                   m_pModifiers->FontID);
             pNewStyle->SetFont(pFont);

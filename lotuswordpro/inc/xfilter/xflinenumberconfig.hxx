@@ -131,42 +131,42 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !m_strTextStyle.isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", m_strTextStyle );
-    pAttrList->AddAttribute( "text:offset", OUString::number(m_fOffset) + "cm" );
-    pAttrList->AddAttribute( "style:num-format", m_strNumFmt );
+        pAttrList->AddAttribute( u"text:style-name"_ustr, m_strTextStyle );
+    pAttrList->AddAttribute( u"text:offset"_ustr, OUString::number(m_fOffset) + "cm" );
+    pAttrList->AddAttribute( u"style:num-format"_ustr, m_strNumFmt );
     //position:
     if( m_ePosition == enumXFLineNumberLeft )
-        pAttrList->AddAttribute( "text:number-position", "left" );
+        pAttrList->AddAttribute( u"text:number-position"_ustr, u"left"_ustr );
     else if( m_ePosition == enumXFLineNumberRight )
-        pAttrList->AddAttribute( "text:number-position", "right" );
+        pAttrList->AddAttribute( u"text:number-position"_ustr, u"right"_ustr );
     else if( m_ePosition == enumXFLineNumberInner )
-        pAttrList->AddAttribute( "text:number-position", "inner" );
+        pAttrList->AddAttribute( u"text:number-position"_ustr, u"inner"_ustr );
     else if( m_ePosition == enumXFLineNumberOuter )
-        pAttrList->AddAttribute( "text:number-position", "outer" );
+        pAttrList->AddAttribute( u"text:number-position"_ustr, u"outer"_ustr );
 
-    pAttrList->AddAttribute( "text:increment", OUString::number(m_nIncrement) );
+    pAttrList->AddAttribute( u"text:increment"_ustr, OUString::number(m_nIncrement) );
 
     if( m_bRestartOnPage )
-        pAttrList->AddAttribute( "text:restart-on-page", "true" );
+        pAttrList->AddAttribute( u"text:restart-on-page"_ustr, u"true"_ustr );
     else
-        pAttrList->AddAttribute( "text:restart-on-page", "false" );
+        pAttrList->AddAttribute( u"text:restart-on-page"_ustr, u"false"_ustr );
 
     if( m_bCountEmptyLines )
-        pAttrList->AddAttribute( "text:count-empty-lines", "true" );
+        pAttrList->AddAttribute( u"text:count-empty-lines"_ustr, u"true"_ustr );
     else
-        pAttrList->AddAttribute( "text:count-empty-lines", "false" );
+        pAttrList->AddAttribute( u"text:count-empty-lines"_ustr, u"false"_ustr );
 
-    pAttrList->AddAttribute( "text:count-in-floating-frames", "false" );
+    pAttrList->AddAttribute( u"text:count-in-floating-frames"_ustr, u"false"_ustr );
 
-    pStrm->StartElement( "text:linenumbering-configuration" );
+    pStrm->StartElement( u"text:linenumbering-configuration"_ustr );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:increment", OUString::number(m_nSepIncrement) );
-    pStrm->StartElement( "text:linenumbering-separator" );
+    pAttrList->AddAttribute( u"text:increment"_ustr, OUString::number(m_nSepIncrement) );
+    pStrm->StartElement( u"text:linenumbering-separator"_ustr );
     pStrm->Characters(m_strSeparator);
-    pStrm->EndElement( "text:linenumbering-separator" );
+    pStrm->EndElement( u"text:linenumbering-separator"_ustr );
 
-    pStrm->EndElement( "text:linenumbering-configuration" );
+    pStrm->EndElement( u"text:linenumbering-configuration"_ustr );
 }
 
 #endif

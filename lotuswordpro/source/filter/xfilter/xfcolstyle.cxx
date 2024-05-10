@@ -72,15 +72,15 @@ void XFColStyle::ToXml(IXFStream* pStrm)
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute("style:name", GetStyleName());
-    pAttrList->AddAttribute("style:family", "table-column");
-    pStrm->StartElement("style:style");
+    pAttrList->AddAttribute(u"style:name"_ustr, GetStyleName());
+    pAttrList->AddAttribute(u"style:family"_ustr, u"table-column"_ustr);
+    pStrm->StartElement(u"style:style"_ustr);
 
     pAttrList->Clear();
-    pAttrList->AddAttribute("style:column-width", OUString::number(m_fWidth) + "cm");
-    pStrm->StartElement("style:properties");
-    pStrm->EndElement("style:properties");
+    pAttrList->AddAttribute(u"style:column-width"_ustr, OUString::number(m_fWidth) + "cm");
+    pStrm->StartElement(u"style:properties"_ustr);
+    pStrm->EndElement(u"style:properties"_ustr);
 
-    pStrm->EndElement("style:style");
+    pStrm->EndElement(u"style:style"_ustr);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

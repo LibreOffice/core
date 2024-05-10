@@ -94,25 +94,25 @@ inline void XFHyperlink::ToXml(IXFStream* pStrm)
     IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute("xlink:type", "simple");
-    pAttrList->AddAttribute("xlink:href", m_strHRef);
+    pAttrList->AddAttribute(u"xlink:type"_ustr, u"simple"_ustr);
+    pAttrList->AddAttribute(u"xlink:href"_ustr, m_strHRef);
     if (!m_strName.isEmpty())
-        pAttrList->AddAttribute("office:name", m_strName);
-    pAttrList->AddAttribute("office:target-frame-name", m_strFrame);
-    pAttrList->AddAttribute("xlink:show", "replace");
-    pStrm->StartElement("text:a");
+        pAttrList->AddAttribute(u"office:name"_ustr, m_strName);
+    pAttrList->AddAttribute(u"office:target-frame-name"_ustr, m_strFrame);
+    pAttrList->AddAttribute(u"xlink:show"_ustr, u"replace"_ustr);
+    pStrm->StartElement(u"text:a"_ustr);
 
     pAttrList->Clear();
     if (!GetStyleName().isEmpty())
-        pAttrList->AddAttribute("text:style-name", GetStyleName());
-    pStrm->StartElement("text:span");
+        pAttrList->AddAttribute(u"text:style-name"_ustr, GetStyleName());
+    pStrm->StartElement(u"text:span"_ustr);
     if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
     else
         pStrm->Characters(m_strHRef);
-    pStrm->EndElement("text:span");
+    pStrm->EndElement(u"text:span"_ustr);
 
-    pStrm->EndElement("text:a");
+    pStrm->EndElement(u"text:a"_ustr);
 }
 
 #endif

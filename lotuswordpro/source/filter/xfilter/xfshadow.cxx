@@ -99,7 +99,7 @@ void    XFShadow::ToXml(IXFStream *pStrm)
     if( m_ePosition == enumXFShadowNone )
         return;
     else
-        pAttrList->AddAttribute( "style:shadow", ToString() );
+        pAttrList->AddAttribute( u"style:shadow"_ustr, ToString() );
 }
 
 bool operator==(XFShadow const & s1, XFShadow const & s2)

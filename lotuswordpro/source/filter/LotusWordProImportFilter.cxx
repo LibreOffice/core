@@ -90,7 +90,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttribs) override
     {
         m_handler->startElement(aName, xAttribs);
-        m_debug->ignorableWhitespace(" "); // NOTE: needed for pretty-printing
+        m_debug->ignorableWhitespace(u" "_ustr); // NOTE: needed for pretty-printing
         m_debug->startElement(aName, xAttribs);
     }
 
@@ -98,7 +98,7 @@ public:
     endElement(const OUString& aName) override
     {
         m_handler->endElement(aName);
-        m_debug->ignorableWhitespace(" "); // NOTE: needed for pretty-printing
+        m_debug->ignorableWhitespace(u" "_ustr); // NOTE: needed for pretty-printing
         m_debug->endElement(aName);
     }
 
@@ -168,7 +168,7 @@ bool LotusWordProImportFilter::importImpl( const Sequence< css::beans::PropertyV
 
     // An XML import service: what we push sax messages to...
     uno::Reference< XDocumentHandler > xInternalHandler(
-        mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.Writer.XMLImporter", mxContext ), UNO_QUERY );
+        mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.comp.Writer.XMLImporter"_ustr, mxContext ), UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
     std::unique_ptr<osl::File> pDebugFile;
@@ -224,7 +224,7 @@ void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference<
 // XExtendedFilterDetection
 OUString SAL_CALL LotusWordProImportFilter::detect( css::uno::Sequence< PropertyValue >& Descriptor )
 {
-    OUString sTypeName( "writer_LotusWordPro_Document" );
+    OUString sTypeName( u"writer_LotusWordPro_Document"_ustr );
     OUString sURL;
     uno::Reference < XInputStream > xInputStream;
     for (const PropertyValue& rValue : Descriptor)
@@ -271,7 +271,7 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& /*aAr
 // XServiceInfo
 OUString SAL_CALL LotusWordProImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.LotusWordProImportFilter";
+    return u"com.sun.star.comp.Writer.LotusWordProImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL LotusWordProImportFilter::supportsService(const OUString& rServiceName)
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::supportsService(const OUString& rSer
 
 Sequence<OUString> SAL_CALL LotusWordProImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

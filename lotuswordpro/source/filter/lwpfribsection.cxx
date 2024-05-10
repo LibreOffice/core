@@ -177,35 +177,35 @@ void LwpFribSection::ParseSection()
 void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
 {
     LwpFoundry* pFoundry = m_pPara->GetFoundry();
-    OUString styleName = pFoundry->FindActualStyleName("Separator");
+    OUString styleName = pFoundry->FindActualStyleName(u"Separator"_ustr);
 
     LwpIndexSection* pIndexSection = dynamic_cast<LwpIndexSection*>(m_Section.obj().get());
     XFIndexTemplate* pTemplateSep = new XFIndexTemplate();
     if (pIndexSection && pIndexSection->IsFormatSeparator())
     {
         pXFIndex->SetSeparator(true);
-        pTemplateSep->AddEntry(enumXFIndexTemplateText, "");
+        pTemplateSep->AddEntry(enumXFIndexTemplateText, u""_ustr);
     }
     //pXFIndex->AddTemplate("separator","Separator",pTemplateSep);
-    pXFIndex->AddTemplate("separator", styleName, pTemplateSep);
+    pXFIndex->AddTemplate(u"separator"_ustr, styleName, pTemplateSep);
 
-    styleName = pFoundry->FindActualStyleName("Primary");
+    styleName = pFoundry->FindActualStyleName(u"Primary"_ustr);
 
     XFIndexTemplate* pTemplate1 = new XFIndexTemplate();
-    pTemplate1->AddEntry(enumXFIndexTemplateText, "");
-    pTemplate1->AddEntry(enumXFIndexTemplateTab, "");
-    pTemplate1->AddEntry(enumXFIndexTemplatePage, "");
+    pTemplate1->AddEntry(enumXFIndexTemplateText, u""_ustr);
+    pTemplate1->AddEntry(enumXFIndexTemplateTab, u""_ustr);
+    pTemplate1->AddEntry(enumXFIndexTemplatePage, u""_ustr);
     //pXFIndex->AddTemplate(OUString::number(1),"Primary",pTemplate1);
     pXFIndex->AddTemplate(OUString::number(1), styleName, pTemplate1);
 
     XFIndexTemplate* pTemplate2 = new XFIndexTemplate();
-    pTemplate2->AddEntry(enumXFIndexTemplateText, "");
-    pTemplate2->AddEntry(enumXFIndexTemplateTab, "");
-    pTemplate2->AddEntry(enumXFIndexTemplatePage, "");
+    pTemplate2->AddEntry(enumXFIndexTemplateText, u""_ustr);
+    pTemplate2->AddEntry(enumXFIndexTemplateTab, u""_ustr);
+    pTemplate2->AddEntry(enumXFIndexTemplatePage, u""_ustr);
     XFIndexTemplate* pTemplate3 = new XFIndexTemplate();
-    pTemplate3->AddEntry(enumXFIndexTemplateText, "");
-    pTemplate3->AddEntry(enumXFIndexTemplateTab, "");
-    pTemplate3->AddEntry(enumXFIndexTemplatePage, "");
+    pTemplate3->AddEntry(enumXFIndexTemplateText, u""_ustr);
+    pTemplate3->AddEntry(enumXFIndexTemplateTab, u""_ustr);
+    pTemplate3->AddEntry(enumXFIndexTemplatePage, u""_ustr);
 
     if (pIndexSection && pIndexSection->IsFormatRunin())
     {
@@ -218,7 +218,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
     {
         //pXFIndex->AddTemplate(OUString::number(2),"Secondary",pTemplate2);
         //pXFIndex->AddTemplate(OUString::number(3),"Secondary",pTemplate3);
-        styleName = pFoundry->FindActualStyleName("Secondary");
+        styleName = pFoundry->FindActualStyleName(u"Secondary"_ustr);
         pXFIndex->AddTemplate(OUString::number(2), styleName, pTemplate2);
         pXFIndex->AddTemplate(OUString::number(3), styleName, pTemplate3);
     }
@@ -254,7 +254,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 
     std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
     *xOverStyle = *(m_pPara->GetXFParaStyle());
-    xOverStyle->SetStyleName("");
+    xOverStyle->SetStyleName(u""_ustr);
 
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
     switch (eUserType)
@@ -430,7 +430,7 @@ void LwpMasterPage::RegisterFillerPageStyle()
     {
         std::unique_ptr<XFParaStyle> pPagebreakStyle(new XFParaStyle);
         *pPagebreakStyle = *(m_pPara->GetXFParaStyle());
-        pPagebreakStyle->SetStyleName("");
+        pPagebreakStyle->SetStyleName(u""_ustr);
         pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
         m_FillerPageStyleName

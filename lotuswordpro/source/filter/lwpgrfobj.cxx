@@ -643,7 +643,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 
     //convert equation
     XFParagraph* pXFPara = new XFParagraph;
-    pXFPara->Add("Formula:");
+    pXFPara->Add(u"Formula:"_ustr);
     //add notes
     XFAnnotation* pXFNote = new XFAnnotation;
     //add equation to comment notes

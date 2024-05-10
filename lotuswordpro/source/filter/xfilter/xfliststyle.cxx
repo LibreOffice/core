@@ -80,34 +80,34 @@ void XFListlevelNumber::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:level", OUString::number(static_cast<sal_Int32>(m_nLevel)) );
+    pAttrList->AddAttribute( u"text:level"_ustr, OUString::number(static_cast<sal_Int32>(m_nLevel)) );
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     if( m_nDisplayLevel )
-        pAttrList->AddAttribute( "text:display-levels", OUString::number(static_cast<sal_Int32>(m_nDisplayLevel)) );
+        pAttrList->AddAttribute( u"text:display-levels"_ustr, OUString::number(static_cast<sal_Int32>(m_nDisplayLevel)) );
 
-    pStrm->StartElement( "text:list-level-style-number" );
+    pStrm->StartElement( u"text:list-level-style-number"_ustr );
 
     //<style:properties>...</style:properties>
     pAttrList->Clear();
     if( m_fIndent > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:space-before", OUString::number(m_fIndent) + "cm" );
+        pAttrList->AddAttribute( u"text:space-before"_ustr, OUString::number(m_fIndent) + "cm" );
     }
     if( m_fMinLabelWidth > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:min-label-width", OUString::number(m_fMinLabelWidth) + "cm" );
+        pAttrList->AddAttribute( u"text:min-label-width"_ustr, OUString::number(m_fMinLabelWidth) + "cm" );
     }
     if( m_fMinLabelDistance > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:min-label-distance", OUString::number(m_fMinLabelDistance) + "cm" );
+        pAttrList->AddAttribute( u"text:min-label-distance"_ustr, OUString::number(m_fMinLabelDistance) + "cm" );
     }
-    pAttrList->AddAttribute( "fo:text-align", GetAlignName(m_eAlign) );
+    pAttrList->AddAttribute( u"fo:text-align"_ustr, GetAlignName(m_eAlign) );
 
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "text:list-level-style-number" );
+    pStrm->EndElement( u"text:list-level-style-number"_ustr );
 }
 
 void    XFListLevelBullet::ToXml(IXFStream *pStrm)
@@ -115,46 +115,46 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:level", OUString::number(static_cast<sal_Int32>(m_nLevel)) );
+    pAttrList->AddAttribute( u"text:level"_ustr, OUString::number(static_cast<sal_Int32>(m_nLevel)) );
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     //bullet-char
-    pAttrList->AddAttribute( "text:bullet-char", m_chBullet );
+    pAttrList->AddAttribute( u"text:bullet-char"_ustr, m_chBullet );
 
-    pStrm->StartElement( "text:list-level-style-bullet" );
+    pStrm->StartElement( u"text:list-level-style-bullet"_ustr );
 
     //<style:properties>...</style:properties>
     pAttrList->Clear();
     if( m_fIndent != 0 )
     {
-        pAttrList->AddAttribute( "text:space-before", OUString::number(m_fIndent) + "cm" );
+        pAttrList->AddAttribute( u"text:space-before"_ustr, OUString::number(m_fIndent) + "cm" );
     }
     if( m_fMinLabelWidth != 0 )
     {
-        pAttrList->AddAttribute( "text:min-label-width", OUString::number(m_fMinLabelWidth) + "cm" );
+        pAttrList->AddAttribute( u"text:min-label-width"_ustr, OUString::number(m_fMinLabelWidth) + "cm" );
     }
     if( m_fMinLabelDistance != 0 )
     {
-        pAttrList->AddAttribute( "text:min-label-distance", OUString::number(m_fMinLabelDistance) + "cm" );
+        pAttrList->AddAttribute( u"text:min-label-distance"_ustr, OUString::number(m_fMinLabelDistance) + "cm" );
     }
 
-    pAttrList->AddAttribute( "fo:text-align", GetAlignName(m_eAlign) );
+    pAttrList->AddAttribute( u"fo:text-align"_ustr, GetAlignName(m_eAlign) );
 
     if( !m_strFontName.isEmpty() )
     {
-        pAttrList->AddAttribute( "style:font-name", m_strFontName );
+        pAttrList->AddAttribute( u"style:font-name"_ustr, m_strFontName );
     }
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pStrm->StartElement( u"style:properties"_ustr );
+    pStrm->EndElement( u"style:properties"_ustr );
 
-    pStrm->EndElement( "text:list-level-style-bullet" );
+    pStrm->EndElement( u"text:list-level-style-bullet"_ustr );
 }
 
 XFListStyle::XFListStyle()
 {
     XFNumFmt    nf;
-    nf.SetSuffix( "." );
-    nf.SetFormat( "1" );
+    nf.SetSuffix( u"."_ustr );
+    nf.SetFormat( u"1"_ustr );
 
     for( int i=0; i<10; i++ )
     {
@@ -273,10 +273,10 @@ void XFListStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( u"style:name"_ustr, GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
-    pStrm->StartElement( "text:list-style" );
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
+    pStrm->StartElement( u"text:list-style"_ustr );
 
     for(auto const & pLevel : m_pListLevels)
     {
@@ -284,7 +284,7 @@ void XFListStyle::ToXml(IXFStream *pStrm)
             pLevel->ToXml(pStrm);
     }
 
-    pStrm->EndElement( "text:list-style" );
+    pStrm->EndElement( u"text:list-style"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

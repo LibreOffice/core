@@ -71,90 +71,90 @@ void XFFileName::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (m_strType == "FileName")
-        pAttrList->AddAttribute( "text:display", "name-and-extension" );
+        pAttrList->AddAttribute( u"text:display"_ustr, u"name-and-extension"_ustr );
     else if (m_strType == "Path")
-        pAttrList->AddAttribute( "text:display", "path" );
-    pStrm->StartElement( "text:file-name" );
-    pStrm->EndElement( "text:file-name" );
+        pAttrList->AddAttribute( u"text:display"_ustr, u"path"_ustr );
+    pStrm->StartElement( u"text:file-name"_ustr );
+    pStrm->EndElement( u"text:file-name"_ustr );
 }
 
 void XFWordCount::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:word-count" );
-    pStrm->EndElement( "text:word-count" );
+    pStrm->StartElement( u"text:word-count"_ustr );
+    pStrm->EndElement( u"text:word-count"_ustr );
 }
 
 void XFCharCount::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:character-count" );
-    pStrm->EndElement( "text:character-count" );
+    pStrm->StartElement( u"text:character-count"_ustr );
+    pStrm->EndElement( u"text:character-count"_ustr );
 }
 
 void XFDescription::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:description" );
-    pStrm->EndElement( "text:description" );
+    pStrm->StartElement( u"text:description"_ustr );
+    pStrm->EndElement( u"text:description"_ustr );
 }
 
 void XFPageCountStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:page-count" );
+    pStrm->StartElement( u"text:page-count"_ustr );
 }
 void XFPageCountEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:page-count" );
+    pStrm->EndElement( u"text:page-count"_ustr );
 }
 
 void XFWordCountStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:word-count" );
+    pStrm->StartElement( u"text:word-count"_ustr );
 }
 
 void XFCharCountStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:character-count" );
+    pStrm->StartElement( u"text:character-count"_ustr );
 }
 
 void XFDescriptionStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:description" );
+    pStrm->StartElement( u"text:description"_ustr );
 }
 
 void XFWordCountEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:word-count" );
+    pStrm->EndElement( u"text:word-count"_ustr );
 }
 
 void XFCharCountEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:character-count" );
+    pStrm->EndElement( u"text:character-count"_ustr );
 }
 
 void XFDescriptionEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:description" );
+    pStrm->EndElement( u"text:description"_ustr );
 }
 
 void XFKeywords::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:keywords" );
-    pStrm->EndElement( "text:keywords" );
+    pStrm->StartElement( u"text:keywords"_ustr );
+    pStrm->EndElement( u"text:keywords"_ustr );
 }
 
 void XFTotalEditTime::ToXml(IXFStream *pStrm)
@@ -162,39 +162,39 @@ void XFTotalEditTime::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:editing-duration" );
-    pStrm->EndElement( "text:editing-duration" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:editing-duration"_ustr );
+    pStrm->EndElement( u"text:editing-duration"_ustr );
 }
 void XFTotalEditTimeStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:editing-duration" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:editing-duration"_ustr );
 }
 void XFTotalEditTimeEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:editing-duration" );
+    pStrm->EndElement( u"text:editing-duration"_ustr );
 }
 void XFCreateTime::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:creation-time" );
-    pStrm->EndElement( "text:creation-time" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:creation-time"_ustr );
+    pStrm->EndElement( u"text:creation-time"_ustr );
 }
 void XFLastEditTime::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:modification-time" );
-    pStrm->EndElement( "text:modification-time" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:modification-time"_ustr );
+    pStrm->EndElement( u"text:modification-time"_ustr );
 }
 
 void XFCreateTimeStart::ToXml(IXFStream *pStrm)
@@ -202,8 +202,8 @@ void XFCreateTimeStart::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:creation-time" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:creation-time"_ustr );
 }
 
 void XFLastEditTimeStart::ToXml(IXFStream *pStrm)
@@ -211,24 +211,24 @@ void XFLastEditTimeStart::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     if (!m_strStyleName.isEmpty())
-        pAttrList->AddAttribute( "style:data-style-name", m_strStyleName );
-    pStrm->StartElement( "text:modification-time" );
+        pAttrList->AddAttribute( u"style:data-style-name"_ustr, m_strStyleName );
+    pStrm->StartElement( u"text:modification-time"_ustr );
 }
 void XFCreateTimeEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:creation-time" );
+    pStrm->EndElement( u"text:creation-time"_ustr );
 }
 
 void XFLastEditTimeEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( "text:modification-time" );
+    pStrm->EndElement( u"text:modification-time"_ustr );
 }
 
 void XFInitialCreator::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pStrm->StartElement( "text:initial-creator" );
-    pStrm->EndElement( "text:initial-creator" );
+    pStrm->StartElement( u"text:initial-creator"_ustr );
+    pStrm->EndElement( u"text:initial-creator"_ustr );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

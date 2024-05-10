@@ -97,10 +97,10 @@ inline void XFHolderStart::ToXml(IXFStream* pStrm)
 {
     IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pAttrList->AddAttribute("text:placeholder-type", m_strType);
+    pAttrList->AddAttribute(u"text:placeholder-type"_ustr, m_strType);
     if (!m_strDesc.isEmpty())
-        pAttrList->AddAttribute("text:description", m_strDesc);
-    pStrm->StartElement("text:placeholder");
+        pAttrList->AddAttribute(u"text:description"_ustr, m_strDesc);
+    pStrm->StartElement(u"text:placeholder"_ustr);
     if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
 }
@@ -117,7 +117,7 @@ XFHolderEnd::XFHolderEnd() {}
 
 XFHolderEnd::~XFHolderEnd() {}
 
-inline void XFHolderEnd::ToXml(IXFStream* pStrm) { pStrm->EndElement("text:placeholder"); }
+inline void XFHolderEnd::ToXml(IXFStream* pStrm) { pStrm->EndElement(u"text:placeholder"_ustr); }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

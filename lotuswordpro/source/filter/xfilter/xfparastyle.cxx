@@ -357,14 +357,14 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute("style:name",GetStyleName());
-    pAttrList->AddAttribute("style:family", "paragraph");
+        pAttrList->AddAttribute(u"style:name"_ustr,GetStyleName());
+    pAttrList->AddAttribute(u"style:family"_ustr, u"paragraph"_ustr);
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+        pAttrList->AddAttribute(u"style:parent-style-name"_ustr,GetParentStyleName());
 
     if( !m_strMasterPage.isEmpty() )
-        pAttrList->AddAttribute("style:master-page-name",m_strMasterPage);
-    pStrm->StartElement("style:style");
+        pAttrList->AddAttribute(u"style:master-page-name"_ustr,m_strMasterPage);
+    pStrm->StartElement(u"style:style"_ustr);
 
     //Paragraph properties:
     pAttrList->Clear();
@@ -372,7 +372,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //text indent:
     if( m_fTextIndent )
     {
-        pAttrList->AddAttribute("fo:text-indent", OUString::number(m_fTextIndent) + "cm" );
+        pAttrList->AddAttribute(u"fo:text-indent"_ustr, OUString::number(m_fTextIndent) + "cm" );
     }
     //padding:
     m_aPadding.ToXml(pStrm);
@@ -382,11 +382,11 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //text align:
     if( m_eAlignType != enumXFAlignNone )
     {
-        pAttrList->AddAttribute("fo:text-align", GetAlignName(m_eAlignType) );
+        pAttrList->AddAttribute(u"fo:text-align"_ustr, GetAlignName(m_eAlignType) );
     }
     //line number:
-    pAttrList->AddAttribute( "text:number-lines", "true" );
-    pAttrList->AddAttribute( "text:line-number", OUString::number(0) );
+    pAttrList->AddAttribute( u"text:number-lines"_ustr, u"true"_ustr );
+    pAttrList->AddAttribute( u"text:line-number"_ustr, OUString::number(0) );
 
     //shadow:
     m_aShadow.ToXml(pStrm);
@@ -399,7 +399,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //background color:
     if( m_nFlag&XFPARA_FLAG_BACKCOLOR && m_aBackColor.IsValid() )
     {
-        pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
+        pAttrList->AddAttribute(u"fo:background-color"_ustr, m_aBackColor.ToString() );
     }
     //Font properties:
     if( m_pFont.is() )
@@ -408,7 +408,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //page breaks:
     m_aBreaks.ToXml(pStrm);
 
-    pStrm->StartElement("style:properties");
+    pStrm->StartElement(u"style:properties"_ustr);
 
     //dropcap:
     m_aDropcap.ToXml(pStrm);
@@ -417,18 +417,18 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     if( m_aTabs.GetCount() > 0 )
     {
         pAttrList->Clear();
-        pStrm->StartElement( "style:tab-stops" );
+        pStrm->StartElement( u"style:tab-stops"_ustr );
         m_aTabs.ToXml(pStrm);
-        pStrm->EndElement( "style:tab-stops" );
+        pStrm->EndElement( u"style:tab-stops"_ustr );
     }
 
     //background color:
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
-    pStrm->EndElement("style:properties");
+    pStrm->EndElement(u"style:properties"_ustr);
 
-    pStrm->EndElement("style:style");
+    pStrm->EndElement(u"style:style"_ustr);
 }
 
 XFDefaultParaStyle::XFDefaultParaStyle()
@@ -445,17 +445,17 @@ void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pAttrList->AddAttribute("style:family", "paragraph");
-    pStrm->StartElement("style:default-style");
+    pAttrList->AddAttribute(u"style:family"_ustr, u"paragraph"_ustr);
+    pStrm->StartElement(u"style:default-style"_ustr);
 
     //Paragraph properties:
     pAttrList->Clear();
 
-    pAttrList->AddAttribute("style:tab-stop-distance", OUString::number(m_fTabDistance) + "cm" );
+    pAttrList->AddAttribute(u"style:tab-stop-distance"_ustr, OUString::number(m_fTabDistance) + "cm" );
 
-    pStrm->StartElement("style:properties");
-    pStrm->EndElement("style:properties");
-    pStrm->EndElement("style:default-style");
+    pStrm->StartElement(u"style:properties"_ustr);
+    pStrm->EndElement(u"style:properties"_ustr);
+    pStrm->EndElement(u"style:default-style"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

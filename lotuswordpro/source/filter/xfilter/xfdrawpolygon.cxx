@@ -75,7 +75,7 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
     OUString strViewBox = "0 0 " +
         OUString::number(rect.GetWidth()*1000) + " " +
         OUString::number(rect.GetHeight()*1000);
-    pAttrList->AddAttribute( "svg:viewBox", strViewBox);
+    pAttrList->AddAttribute( u"svg:viewBox"_ustr, strViewBox);
 
     //points
     OUStringBuffer strPoints;
@@ -86,14 +86,14 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
         strPoints.append( OUString::number(x) + " " + OUString::number(y) + " ");
     }
     strPoints.stripEnd(' ');
-    pAttrList->AddAttribute( "draw:points", strPoints.makeStringAndClear());
+    pAttrList->AddAttribute( u"draw:points"_ustr, strPoints.makeStringAndClear());
 
     SetPosition(rect.GetX(),rect.GetY(),rect.GetWidth(),rect.GetHeight());
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( "draw:polygon" );
+    pStrm->StartElement( u"draw:polygon"_ustr );
     ContentToXml(pStrm);
-    pStrm->EndElement( "draw:polygon" );
+    pStrm->EndElement( u"draw:polygon"_ustr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

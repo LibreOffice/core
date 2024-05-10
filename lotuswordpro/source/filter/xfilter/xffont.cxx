@@ -195,96 +195,96 @@ void XFFont::ToXml(IXFStream *pStrm)
 
     if( m_nFlag & XFFONT_FLAG_NAME )
     {
-        pAttrList->AddAttribute("style:font-name",m_strFontName );
+        pAttrList->AddAttribute(u"style:font-name"_ustr,m_strFontName );
     }
 
     if( m_nFlag & XFFONT_FLAG_NAME_ASIA )
     {
-        pAttrList->AddAttribute("style:font-name-asian",m_strFontNameAsia );
+        pAttrList->AddAttribute(u"style:font-name-asian"_ustr,m_strFontNameAsia );
     }
 
     if( m_nFlag & XFFONT_FLAG_NAME_COMPLEX )
     {
-        pAttrList->AddAttribute("style:font-name-complex", m_strFontNameComplex);
+        pAttrList->AddAttribute(u"style:font-name-complex"_ustr, m_strFontNameComplex);
     }
 
     //font size:
     if( (m_nFlag & XFFONT_FLAG_SIZE) && m_nFontSize != 0 )
     {
         OUString strSize = OUString::number(m_nFontSize) + "pt";
-        pAttrList->AddAttribute("fo:font-size",strSize);
+        pAttrList->AddAttribute(u"fo:font-size"_ustr,strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_ASIA) && m_nFontSizeAsia )
     {
         OUString strSize = OUString::number(m_nFontSizeAsia) + "pt";
-        pAttrList->AddAttribute("style:font-size-asian",strSize);
+        pAttrList->AddAttribute(u"style:font-size-asian"_ustr,strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_COMPLEX) && m_nFontSizeComplex )
     {
         OUString strSize = OUString::number(m_nFontSizeComplex) + "pt";
-        pAttrList->AddAttribute("style:font-size-complex",strSize);
+        pAttrList->AddAttribute(u"style:font-size-complex"_ustr,strSize);
     }
 
     //italic flag:
     if( ( m_nFlag & XFFONT_FLAG_ITALIC) && m_bItalic )
     {
-        pAttrList->AddAttribute("fo:font-style", "italic");
+        pAttrList->AddAttribute(u"fo:font-style"_ustr, u"italic"_ustr);
     }
     if( (m_nFlag & XFFONT_FLAG_ITALIC_ASIA) && m_bItalicAsia )
     {
-        pAttrList->AddAttribute("style:font-style-asian", "italic");
+        pAttrList->AddAttribute(u"style:font-style-asian"_ustr, u"italic"_ustr);
     }
     if( (m_nFlag & XFFONT_FLAG_ITALIC_COMPLEX) && m_bItalicComplex )
     {
-        pAttrList->AddAttribute("style:font-style-complex", "italic");
+        pAttrList->AddAttribute(u"style:font-style-complex"_ustr, u"italic"_ustr);
     }
 
     //Bold flag:
     if( (m_nFlag & XFFONT_FLAG_BOLD) && m_bBold )
     {
-        pAttrList->AddAttribute("fo:font-weight", "bold");
+        pAttrList->AddAttribute(u"fo:font-weight"_ustr, u"bold"_ustr);
     }
     if( (m_nFlag & XFFONT_FLAG_BOLD_ASIA) && m_bBoldAsia )
     {
-        pAttrList->AddAttribute("style:font-weight-asian", "bold");
+        pAttrList->AddAttribute(u"style:font-weight-asian"_ustr, u"bold"_ustr);
     }
     if( (m_nFlag & XFFONT_FLAG_BOLD_ASIA) && m_bBoldComplex )
     {
-        pAttrList->AddAttribute("style:font-weight-complex", "bold");
+        pAttrList->AddAttribute(u"style:font-weight-complex"_ustr, u"bold"_ustr);
     }
     //underline:
     if( (m_nFlag & XFFONT_FLAG_UNDERLINE) && m_eUnderline )
     {
-        pAttrList->AddAttribute("style:text-underline", GetUnderlineName(m_eUnderline) );
+        pAttrList->AddAttribute(u"style:text-underline"_ustr, GetUnderlineName(m_eUnderline) );
         if( m_nFlag & XFFONT_FLAG_UNDERLINECOLOR )
         {
-            pAttrList->AddAttribute( "style:text-underline-color", m_aUnderlineColor.ToString() );
+            pAttrList->AddAttribute( u"style:text-underline-color"_ustr, m_aUnderlineColor.ToString() );
         }
         else
-            pAttrList->AddAttribute( "style:text-underline-color", "font-color" );
+            pAttrList->AddAttribute( u"style:text-underline-color"_ustr, u"font-color"_ustr );
     }
 
     //enumCrossoutType  m_eCrossout;
     if( (m_nFlag & XFFONT_FLAG_CROSSOUT) && m_eCrossout )
     {
-        pAttrList->AddAttribute("style:text-crossing-out", GetCrossoutName(m_eCrossout) );
+        pAttrList->AddAttribute(u"style:text-crossing-out"_ustr, GetCrossoutName(m_eCrossout) );
     }
 
     if( m_nFlag & XFFONT_FLAG_UNDERLINE || m_nFlag & XFFONT_FLAG_CROSSOUT )
     {
         if( m_bWordByWord )
-            pAttrList->AddAttribute("fo:score-spaces", "false" );
+            pAttrList->AddAttribute(u"fo:score-spaces"_ustr, u"false"_ustr );
         else
-            pAttrList->AddAttribute("fo:score-spaces", "true" );
+            pAttrList->AddAttribute(u"fo:score-spaces"_ustr, u"true"_ustr );
     }
 
     if( (m_nFlag & XFFONT_FLAG_TRANSFORM) && m_eTransform )
     {
         //enumTransformSmallCap is different:
         if( m_eTransform == enumXFTransformSmallCaps )
-            pAttrList->AddAttribute("fo:font-variant", GetTransformName(m_eTransform) );
+            pAttrList->AddAttribute(u"fo:font-variant"_ustr, GetTransformName(m_eTransform) );
         else
-            pAttrList->AddAttribute("fo:text-transform", GetTransformName(m_eTransform) );
+            pAttrList->AddAttribute(u"fo:text-transform"_ustr, GetTransformName(m_eTransform) );
     }
 
     //position & scale:
@@ -294,21 +294,21 @@ void XFFont::ToXml(IXFStream *pStrm)
     {
         OUString tmp = OUString::number(m_nPosition) + "% "
                         + OUString::number(m_nScale) + "%";
-        pAttrList->AddAttribute("style:text-position", tmp );
+        pAttrList->AddAttribute(u"style:text-position"_ustr, tmp );
     }
 
     //Color:
     if( m_nFlag & XFFONT_FLAG_COLOR )
     {
-        pAttrList->AddAttribute( "fo:color", m_aColor.ToString() );
+        pAttrList->AddAttribute( u"fo:color"_ustr, m_aColor.ToString() );
     }
 
     if( m_nFlag & XFFONT_FLAG_BGCOLOR )
     {
         if (m_bTransparent)
-            pAttrList->AddAttribute( "style:text-background-color", "transparent");
+            pAttrList->AddAttribute( u"style:text-background-color"_ustr, u"transparent"_ustr);
         else
-            pAttrList->AddAttribute( "style:text-background-color", m_aBackColor.ToString() );
+            pAttrList->AddAttribute( u"style:text-background-color"_ustr, m_aBackColor.ToString() );
     }
 }
 

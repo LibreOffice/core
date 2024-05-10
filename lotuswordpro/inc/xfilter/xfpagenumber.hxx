@@ -86,9 +86,9 @@ inline void XFPageNumber::ToXml(IXFStream* pStrm)
     pAttrList->Clear();
 
     m_aNumFmt.ToXml(pStrm);
-    pAttrList->AddAttribute("text:select-page", "current");
-    pStrm->StartElement("text:page-number");
-    pStrm->EndElement("text:page-number");
+    pAttrList->AddAttribute(u"text:select-page"_ustr, u"current"_ustr);
+    pStrm->StartElement(u"text:page-number"_ustr);
+    pStrm->EndElement(u"text:page-number"_ustr);
 }
 
 #endif
