@@ -767,11 +767,6 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     m_pFormShell(nullptr),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
-    m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame().GetWindow(), m_pEditWin,
-                            SvxRulerSupportFlags::TABS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL|
-                                SvxRulerSupportFlags::BORDERS | SvxRulerSupportFlags::REDUCED_METRIC,
-                            GetViewFrame().GetBindings(),
-                            WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     m_pLastTableFormat(nullptr),
     m_pLastFlyFormat(nullptr),
     m_pFormatClipboard(new SwFormatClipboard()),
@@ -942,6 +937,15 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
                 SvxRulerSupportFlags::REDUCED_METRIC,
                 GetViewFrame().GetBindings(),
                 WB_STDRULER | WB_EXTRAFIELD | WB_BORDER);
+
+    m_pVRuler = VclPtr<SwCommentRuler>::Create(m_pWrtShell.get(), &GetViewFrame().GetWindow(), m_pEditWin,
+                SvxRulerSupportFlags::TABS |
+                SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL |
+                SvxRulerSupportFlags::BORDERS |
+                SvxRulerSupportFlags::NEGATIVE_MARGINS|
+                SvxRulerSupportFlags::REDUCED_METRIC,
+                GetViewFrame().GetBindings(),
+                WB_VSCROLL | WB_EXTRAFIELD | WB_BORDER);
 
     // assure that modified state of document
     // isn't reset, if document is already modified.

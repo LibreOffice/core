@@ -581,7 +581,7 @@ typedef enum
      */
     LOK_CALLBACK_CELL_ADDRESS = 34,
     /**
-     * The key ruler related properties on change are reported by this.
+     * The key horizontal ruler related properties on change are reported by this.
      *
      * The payload format is:
      *
@@ -1051,6 +1051,23 @@ typedef enum
      *  Payload contains the rectangle details
      */
     LOK_CALLBACK_SHAPE_INNER_TEXT = 72,
+        /**
+     * The key vertical ruler related properties on change are reported by this.
+     *
+     * The payload format is:
+     *
+     * {
+     *      "margin1": "...",
+     *      "margin2": "...",
+     *      "leftOffset": "...",
+     *      "pageOffset": "...",
+     *      "pageWidth": "...",
+     *      "unit": "..."
+     *  }
+     *
+     * Here all aproperties are same as described in svxruler.
+     */
+    LOK_CALLBACK_VERTICAL_RULER_UPDATE = 73
 
 }
 LibreOfficeKitCallbackType;
@@ -1152,6 +1169,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_COMMENT";
     case LOK_CALLBACK_RULER_UPDATE:
         return "LOK_CALLBACK_RULER_UPDATE";
+    case LOK_CALLBACK_VERTICAL_RULER_UPDATE:
+        return "LOK_CALLBACK_VERTICAL_RULER_UPDATE";
     case LOK_CALLBACK_WINDOW:
         return "LOK_CALLBACK_WINDOW";
     case LOK_CALLBACK_VALIDITY_LIST_BUTTON:

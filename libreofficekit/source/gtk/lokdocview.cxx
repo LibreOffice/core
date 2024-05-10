@@ -1376,6 +1376,9 @@ callback (gpointer pData)
     case LOK_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
+    case LOK_CALLBACK_VERTICAL_RULER_UPDATE:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
+        break;
     case LOK_CALLBACK_WINDOW:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[WINDOW], 0, pCallback->m_aPayload.c_str());
         break;

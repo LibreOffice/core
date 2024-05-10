@@ -1547,6 +1547,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_TAB_STOP_LIST, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 }
 
@@ -1878,6 +1879,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
+            case LOK_CALLBACK_VERTICAL_RULER_UPDATE:
             case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
             case LOK_CALLBACK_A11Y_CARET_CHANGED:
             case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:

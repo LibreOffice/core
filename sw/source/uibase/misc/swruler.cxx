@@ -96,6 +96,7 @@ SwCommentRuler::SwCommentRuler(SwViewShell* pViewSh, vcl::Window* pParent, SwEdi
     vcl::Font aFont(maVirDev->GetFont());
     aFont.SetFontHeight(aFont.GetFontHeight() + 1);
     maVirDev->SetFont(aFont);
+    mbHorizontal = nWinStyle & WB_HSCROLL;
 }
 
 SwCommentRuler::~SwCommentRuler() { disposeOnce(); }
@@ -259,7 +260,6 @@ void SwCommentRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
     // GetPageWidth() on the other hand does return a value in twips.
     // So here convertTwipToMm100() really does produce actual mm100. Fun.
     rJsonWriter.put("pageWidth", convertTwipToMm100(GetPageWidth()));
-
     {
         auto tabsNode = rJsonWriter.startNode("tabs");
 
@@ -285,8 +285,16 @@ void SwCommentRuler::NotifyKit()
     tools::JsonWriter aJsonWriter;
     CreateJsonNotification(aJsonWriter);
     OString pJsonData = aJsonWriter.finishAndGetAsOString();
-    mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE,
-                                                               pJsonData);
+    if (mbHorizontal)
+    {
+        mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE,
+                                                                   pJsonData);
+    }
+    else
+    {
+        mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(
+            LOK_CALLBACK_VERTICAL_RULER_UPDATE, pJsonData);
+    }
 }
 
 void SwCommentRuler::Update()
