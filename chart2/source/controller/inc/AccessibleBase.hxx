@@ -283,9 +283,6 @@ private:
     Color getColor( eColorType eColType );
 
 private:
-    /** type of the vector containing the accessible children
-     */
-    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > ChildListVectorType;
     /** type of the hash containing a vector index for every AccessibleUniqueId
         of the object in the child list
      */
@@ -294,7 +291,7 @@ private:
     bool                                  m_bIsDisposed;
     const bool                            m_bMayHaveChildren;
     bool                                  m_bChildrenInitialized;
-    ChildListVectorType                   m_aChildList;
+    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aChildList;
 
     ChildOIDMap                           m_aChildOIDMap;
 

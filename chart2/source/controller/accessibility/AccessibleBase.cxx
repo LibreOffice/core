@@ -144,7 +144,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
         ClearableMutexGuard aGuard( m_aMutex );
         // make local copy for notification
-        ChildListVectorType aLocalChildList( m_aChildList );
+        std::vector<Reference<XAccessible>> aLocalChildList(m_aChildList);
         aGuard.clear();
 
         for (auto const& localChild : aLocalChildList)
@@ -285,8 +285,7 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
     m_aChildOIDMap.erase( aIt );
 
     // search child in vector
-    ChildListVectorType::iterator aVecIter =
-        std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
+    auto aVecIter = std::find(m_aChildList.begin(), m_aChildList.end(), xChild);
 
     OSL_ENSURE( aVecIter != m_aChildList.end(),
                 "Inconsistent ChildMap" );
@@ -361,7 +360,7 @@ void AccessibleBase::KillAllChildren()
     ClearableMutexGuard aGuard( m_aMutex );
 
     // make local copy for notification, and remove all children
-    ChildListVectorType aLocalChildList;
+    std::vector<Reference<XAccessible>> aLocalChildList;
     aLocalChildList.swap( m_aChildList );
     m_aChildOIDMap.clear();
 
@@ -586,7 +585,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
         ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
     {
         ClearableMutexGuard aGuard( m_aMutex );
-        ChildListVectorType aLocalChildList( m_aChildList );
+        std::vector<Reference<XAccessible>> aLocalChildList( m_aChildList );
         aGuard.clear();
 
         Reference< XAccessibleComponent > aComp;
