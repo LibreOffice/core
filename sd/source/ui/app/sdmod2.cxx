@@ -484,9 +484,9 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
                 nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
         else
             if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get());
             else
-                nMetric = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
+                nMetric = static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get());
 
     if( nMetric == FieldUnit(0xffff) )
         nMetric = GetFieldUnit();
@@ -739,9 +739,9 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
                 eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
         else
             if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get());
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get());
             else
-                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get());
+                eUIUnit = static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get());
 
         pDoc->SetUIUnit(eUIUnit);
 
