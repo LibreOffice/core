@@ -62,7 +62,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
         {
             css::uno::Reference<css::container::XNameAccess> xParaStyles;
             xStylesSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>= xParaStyles;
-            static const std::vector<OUString> aWriterStyles = {
+            static constexpr OUString aWriterStyles[]{
                 u"Standard"_ustr,   u"Text body"_ustr,        u"Heading 1"_ustr, u"Heading 2"_ustr,
                 u"Heading 3"_ustr,  u"Heading 4"_ustr,        u"Title"_ustr,     u"Subtitle"_ustr,
                 u"Quotations"_ustr, u"Preformatted Text"_ustr
@@ -88,15 +88,16 @@ void StylesPreviewToolBoxControl::InitializeStyles(
         }
         else if (xServices->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
         {
-            static const char* aCalcStyles[] = { "Default",   "Accent 1",  "Accent 2", "Accent 3",
-                                                 "Heading 1", "Heading 2", "Result" };
+            static constexpr OUString aCalcStyles[]{ u"Default"_ustr,   u"Accent 1"_ustr,
+                                                     u"Accent 2"_ustr,  u"Accent 3"_ustr,
+                                                     u"Heading 1"_ustr, u"Heading 2"_ustr,
+                                                     u"Result"_ustr };
             css::uno::Reference<css::container::XNameAccess> xCellStyles;
             xStylesSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr) >>= xCellStyles;
-            for (const char* pCalcStyle : aCalcStyles)
+            for (const OUString& sStyleName : aCalcStyles)
             {
                 try
                 {
-                    const OUString sStyleName(OUString::createFromAscii(pCalcStyle));
                     if (xCellStyles->hasByName(sStyleName))
                     {
                         css::uno::Reference<css::beans::XPropertySet> xStyle(
