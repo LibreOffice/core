@@ -711,6 +711,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
     CPPUNIT_ASSERT_MESSAGE("Third shape should be printable.", getProperty<bool>(xShape, "Printable"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf156484, "tdf156484.docx")
+{
+    auto xShape(getShape(1));
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT_MESSAGE("First shape should not be visible.", !getProperty<bool>(xShape, "Visible"));
+    CPPUNIT_ASSERT_MESSAGE("First shape should not be printable.", !getProperty<bool>(xShape, "Printable"));
+    xShape = getShape(2);
+    CPPUNIT_ASSERT_MESSAGE("Second shape should not be visible.", !getProperty<bool>(xShape, "Visible"));
+    CPPUNIT_ASSERT_MESSAGE("Second shape should not be printable.", !getProperty<bool>(xShape, "Printable"));
+    xShape = getShape(3);
+    CPPUNIT_ASSERT_MESSAGE("Third shape should not be visible.", !getProperty<bool>(xShape, "Visible"));
+    CPPUNIT_ASSERT_MESSAGE("Third shape should not be printable.", !getProperty<bool>(xShape, "Printable"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 {
     xmlDocUniquePtr pDump = parseLayoutDump();
