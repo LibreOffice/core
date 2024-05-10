@@ -293,7 +293,7 @@ int INetURLObject::SubString::compare(SubString const & rOther,
 struct INetURLObject::SchemeInfo
 {
     OUString m_sScheme;
-    char const * m_pPrefix;
+    OUString m_aPrefix;
     bool m_bAuthority;
     bool m_bUser;
     bool m_bAuth;
@@ -350,89 +350,89 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     static o3tl::enumarray<INetProtocol, SchemeInfo> constexpr map = {
         // [-loplugin:redundantfcast]:
         SchemeInfo{
-            EMPTY, "", false, false, false, false, false, false, false, false},
+            EMPTY, u""_ustr, false, false, false, false, false, false, false, false},
         SchemeInfo{
-            FTP, "ftp://", true, true, false, true, true, true, true,
+            FTP, u"ftp://"_ustr, true, true, false, true, true, true, true,
             false},
         SchemeInfo{
-            HTTP, "http://", true, false, false, false, true, true, true,
+            HTTP, u"http://"_ustr, true, false, false, false, true, true, true,
             true},
         SchemeInfo{
-            FILE1, "file://", true, false, false, false, true, false, true,
+            FILE1, u"file://"_ustr, true, false, false, false, true, false, true,
             false},
         SchemeInfo{
-            MAILTO, "mailto:", false, false, false, false, false, false,
+            MAILTO, u"mailto:"_ustr, false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            VND_WEBDAV, "vnd.sun.star.webdav://", true, false,
+            VND_WEBDAV, u"vnd.sun.star.webdav://"_ustr, true, false,
             false, false, true, true, true, true},
         SchemeInfo{
-            PRIVATE, "private:", false, false, false, false, false, false,
+            PRIVATE, u"private:"_ustr, false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            VND_HELP, "vnd.sun.star.help://", true, false, false,
+            VND_HELP, u"vnd.sun.star.help://"_ustr, true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            HTTPS, "https://", true, false, false, false, true, true,
+            HTTPS, u"https://"_ustr, true, false, false, false, true, true,
             true, true},
         SchemeInfo{
-            SLOT, "slot:", false, false, false, false, false, false, false,
+            SLOT, u"slot:"_ustr, false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            MACRO, "macro:", false, false, false, false, false, false,
+            MACRO, u"macro:"_ustr, false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            JAVASCRIPT, "javascript:", false, false, false, false, false,
+            JAVASCRIPT, u"javascript:"_ustr, false, false, false, false, false,
             false, false, false},
         SchemeInfo{
-            DATA, "data:", false, false, false, false, false, false, false,
+            DATA, u"data:"_ustr, false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            CID, "cid:", false, false, false, false, false, false, false,
+            CID, u"cid:"_ustr, false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            VND_HIER, "vnd.sun.star.hier:", true, false, false,
+            VND_HIER, u"vnd.sun.star.hier:"_ustr, true, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            UNO, ".uno:", false, false, false, false, false, false, false,
+            UNO, u".uno:"_ustr, false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            COMPONENT, ".component:", false, false, false, false, false,
+            COMPONENT, u".component:"_ustr, false, false, false, false, false,
             false, false, true},
         SchemeInfo{
-            VND_PKG, "vnd.sun.star.pkg://", true, false, false,
+            VND_PKG, u"vnd.sun.star.pkg://"_ustr, true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            LDAP, "ldap://", true, false, false, false, true, true,
+            LDAP, u"ldap://"_ustr, true, false, false, false, true, true,
             false, true},
         SchemeInfo{
-            DB, "db:", false, false, false, false, false, false, false,
+            DB, u"db:"_ustr, false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            VND_CMD, "vnd.sun.star.cmd:", false, false, false,
+            VND_CMD, u"vnd.sun.star.cmd:"_ustr, false, false, false,
             false, false, false, false, false},
         SchemeInfo{
-            TELNET, "telnet://", true, true, false, true, true, true,
+            TELNET, u"telnet://"_ustr, true, true, false, true, true, true,
             true, false},
         SchemeInfo{
-            VND_EXPAND, "vnd.sun.star.expand:", false, false,
+            VND_EXPAND, u"vnd.sun.star.expand:"_ustr, false, false,
             false, false, false, false, false, false},
         SchemeInfo{
-            VND_TDOC, "vnd.sun.star.tdoc:", false, false, false,
+            VND_TDOC, u"vnd.sun.star.tdoc:"_ustr, false, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            EMPTY, "", false, false, false, false, true, true, true, false },
+            EMPTY, u""_ustr, false, false, false, false, true, true, true, false },
         SchemeInfo{
-            SMB, "smb://", true, true, false, true, true, true, true,
+            SMB, u"smb://"_ustr, true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            HID, "hid:", false, false, false, false, false, false, false,
+            HID, u"hid:"_ustr, false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            SFTP, "sftp://", true, true, false, true, true, true, true,
+            SFTP, u"sftp://"_ustr, true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            VND_CMIS, "vnd.libreoffice.cmis://", true, true,
+            VND_CMIS, u"vnd.libreoffice.cmis://"_ustr, true, true,
             false, false, true, false, true, true} };
     return map[eTheScheme];
 };
@@ -4007,7 +4007,7 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
 // static
 OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 {
-    return OUString::createFromAscii(getSchemeInfo(eTheScheme).m_pPrefix);
+    return getSchemeInfo(eTheScheme).m_aPrefix;
 }
 
 // static
