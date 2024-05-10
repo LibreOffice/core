@@ -232,6 +232,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             {
                 xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE,
                                                  uno::Any(ePieChartSubType));
+                // Reset the diagram-level property so it's not persistent.
+                xDiagram->setPropertyValue(u"SubPieType"_ustr, uno::Any(PieChartSubType_NONE));
             }
 
             if (nT == 0)

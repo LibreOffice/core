@@ -1147,11 +1147,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_barOfPie)
             xChartType->getChartType());
 
     // Verify that it saves and loads as bar-of-pie
-    Reference< chart2::XDiagram> xDia(xChartDoc->getFirstDiagram());
-    CPPUNIT_ASSERT(xDia.is());
-    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-    CPPUNIT_ASSERT(xDiaProp.is());
-    uno::Any aAny = xDiaProp->getPropertyValue(u"SubPieType"_ustr);
+    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
+    uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     chart2::PieChartSubType subPieType;
     aAny >>= subPieType;
@@ -1173,11 +1170,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_pieOfPie)
             xChartType->getChartType());
 
     // Verify that it saves and loads as pie-of-pie
-    Reference< chart2::XDiagram> xDia(xChartDoc->getFirstDiagram());
-    CPPUNIT_ASSERT(xDia.is());
-    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-    CPPUNIT_ASSERT(xDiaProp.is());
-    uno::Any aAny = xDiaProp->getPropertyValue(u"SubPieType"_ustr);
+    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
+    uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     chart2::PieChartSubType subPieType;
     aAny >>= subPieType;

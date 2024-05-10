@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
